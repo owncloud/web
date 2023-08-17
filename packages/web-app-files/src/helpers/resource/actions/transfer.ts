@@ -23,19 +23,24 @@ export class ResourceTransfer extends ConflictDialog {
     hideModal: () => void,
     showMessage: (data: object) => void,
     showErrorMessage: (data: object) => void,
-    $gettext: (msg: string) => string,
-    $ngettext: (msgid: string, plural: string, n: number) => string,
-    $gettextInterpolate: (msg: string, context: object, disableHtmlEscaping?: boolean) => string
+    $gettext: (
+      msgid: string,
+      parameters?: {
+        [key: string]: string
+      },
+      disableHtmlEscaping?: boolean
+    ) => string,
+    $ngettext: (
+      msgid: string,
+      plural: string,
+      n: number,
+      parameters?: {
+        [key: string]: string
+      },
+      disableHtmlEscaping?: boolean
+    ) => string
   ) {
-    super(
-      createModal,
-      hideModal,
-      showMessage,
-      showErrorMessage,
-      $gettext,
-      $ngettext,
-      $gettextInterpolate
-    )
+    super(createModal, hideModal, showMessage, showErrorMessage, $gettext, $ngettext)
   }
 
   hasRecursion(): boolean {
@@ -63,40 +68,37 @@ export class ResourceTransfer extends ConflictDialog {
       if (count === 0) {
         return
       }
-      const ntitle =
+      const title =
         transferType === TransferType.COPY
           ? this.$ngettext(
               '%{count} item was copied successfully',
               '%{count} items were copied successfully',
-              count
+              count,
+              { count: count.toString() },
+              true
             )
           : this.$ngettext(
               '%{count} item was moved successfully',
               '%{count} items were moved successfully',
-              count
+              count,
+              { count: count.toString() },
+              true
             )
-      const title = this.$gettextInterpolate(ntitle, { count }, true)
       this.showMessage({
         title,
         status: 'success'
       })
       return
     }
-    let title = this.$gettextInterpolate(
+    let title =
       transferType === TransferType.COPY
-        ? this.$gettext('Failed to copy %{count} resources')
-        : this.$gettext('Failed to move %{count} resources'),
-      { count: errors.length },
-      true
-    )
+        ? this.$gettext('Failed to copy %{count} resources', { count: errors.length }, true)
+        : this.$gettext('Failed to move %{count} resources', { count: errors.length }, true)
     if (errors.length === 1) {
-      title = this.$gettextInterpolate(
+      title =
         transferType === TransferType.COPY
-          ? this.$gettext('Failed to copy "%{name}"')
-          : this.$gettext('Failed to move "%{name}"'),
-        { name: errors[0]?.resourceName },
-        true
-      )
+          ? this.$gettext('Failed to copy "%{name}"', { name: errors[0]?.resourceName }, true)
+          : this.$gettext('Failed to move "%{name}"', { name: errors[0]?.resourceName }, true)
     }
     this.showErrorMessage({
       title,

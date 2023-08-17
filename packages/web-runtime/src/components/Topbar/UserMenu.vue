@@ -183,20 +183,17 @@ export default defineComponent({
       if (!this.limitedPersonalStorage) {
         return this.$gettext('Personal storage')
       }
-      return this.$gettextInterpolate(this.$gettext('Personal storage (%{percentage}% used)'), {
+      return this.$gettext('Personal storage (%{percentage}% used)', {
         percentage: this.quotaUsagePercent || 0
       })
     },
     personalStorageDetailsLabel() {
       const total = this.quota.definition === 'none' ? 0 : this.quota.total || 0
       const used = this.quota.used || 0
-      return this.$gettextInterpolate(
-        total ? this.$gettext('%{used} of %{total} used') : this.$gettext('%{used} used'),
-        {
-          used: filesize(used),
-          total: filesize(total)
-        }
-      )
+      return this.$gettext(total ? '%{used} of %{total} used' : '%{used} used', {
+        used: filesize(used),
+        total: filesize(total)
+      })
     },
     limitedPersonalStorage() {
       if (!this.useLegacyQuota) {

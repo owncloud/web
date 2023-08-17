@@ -30,7 +30,7 @@ import { LoadingTaskCallbackArguments } from 'web-pkg'
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
+  const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
 
@@ -99,8 +99,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         (...args) => store.dispatch('showMessage', ...args),
         (...args) => store.dispatch('showErrorMessage', ...args),
         $gettext,
-        $ngettext,
-        $gettextInterpolate
+        $ngettext
       )
       const resolvedConflict: ResolveConflict = await conflictDialog.resolveFileExists(
         { name: conflict.name, isFolder } as Resource,
@@ -185,17 +184,18 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
     // success handler (for partial and full success)
     if (restoredResources.length) {
       store.dispatch('Files/removeFilesFromTrashbin', restoredResources)
-      let translated
-      const translateParams: any = {}
+      let title
       if (restoredResources.length === 1) {
-        translated = $gettext('%{resource} was restored successfully')
-        translateParams.resource = restoredResources[0].name
+        title = $gettext('%{resource} was restored successfully', {
+          resource: restoredResources[0].name
+        })
       } else {
-        translated = $gettext('%{resourceCount} files restored successfully')
-        translateParams.resourceCount = restoredResources.length
+        title = $gettext('%{resourceCount} files restored successfully', {
+          resourceCount: restoredResources.length.toString()
+        })
       }
       store.dispatch('showMessage', {
-        title: $gettextInterpolate(translated, translateParams, true)
+        title
       })
     }
 
@@ -204,14 +204,14 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
       let translated
       const translateParams: any = {}
       if (failedResources.length === 1) {
-        translated = $gettext('Failed to restore "%{resource}"')
         translateParams.resource = failedResources[0].name
+        translated = $gettext('Failed to restore "%{resource}"', translateParams, true)
       } else {
-        translated = $gettext('Failed to restore %{resourceCount} files')
         translateParams.resourceCount = failedResources.length
+        translated = $gettext('Failed to restore %{resourceCount} files', translateParams, true)
       }
       store.dispatch('showErrorMessage', {
-        title: $gettextInterpolate(translated, translateParams, true),
+        title: translated,
         errors
       })
     }

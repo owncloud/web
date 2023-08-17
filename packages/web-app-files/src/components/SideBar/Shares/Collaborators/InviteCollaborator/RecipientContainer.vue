@@ -54,9 +54,7 @@ export default defineComponent({
     ...mapGetters(['configuration', 'capabilities']),
 
     btnDeselectRecipientLabel() {
-      const translated = this.$gettext('Deselect %{name}')
-
-      return this.$gettextInterpolate(translated, { name: this.recipient.label })
+      return this.$gettext('Deselect %{name}', { name: this.recipient.label })
     }
   },
 

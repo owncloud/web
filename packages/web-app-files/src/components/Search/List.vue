@@ -339,19 +339,18 @@ export default defineComponent({
     },
     searchResultExceedsLimitText() {
       if (!this.rangeSupported) {
-        const translated = this.$gettext('Showing up to %{searchLimit} results')
-        return this.$gettextInterpolate(translated, {
+        return this.$gettext('Showing up to %{searchLimit} results', {
           searchLimit
         })
       }
 
-      const translated = this.$gettext(
-        'Found %{totalResults}, showing the %{itemCount} best matching results'
+      return this.$gettext(
+        'Found %{totalResults}, showing the %{itemCount} best matching results',
+        {
+          itemCount: this.itemCount,
+          totalResults: this.searchResult.totalResults
+        }
       )
-      return this.$gettextInterpolate(translated, {
-        itemCount: this.itemCount,
-        totalResults: this.searchResult.totalResults
-      })
     }
   },
   watch: {

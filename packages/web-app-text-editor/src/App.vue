@@ -95,7 +95,7 @@ export default defineComponent({
     const isReadOnly = ref(true)
     const resource: Ref<Resource> = ref()
     const store = useStore()
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     let autosaveIntervalId = null
 
     const errorPopup = (error) => {
@@ -154,10 +154,9 @@ export default defineComponent({
             )
             if (space) {
               errorPopup(
-                $gettextInterpolate(
-                  $gettext('There is not enough quota on "%{spaceName}" to save this file'),
-                  { spaceName: space.name }
-                )
+                $gettext('There is not enough quota on "%{spaceName}" to save this file', {
+                  spaceName: space.name
+                })
               )
               break
             }

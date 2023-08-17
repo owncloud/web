@@ -215,12 +215,10 @@ export default defineComponent({
       }
 
       if (this.filesInProgressCount && !this.inPreparation) {
-        return this.$gettextInterpolate(
-          this.$ngettext(
-            '%{ filesInProgressCount } item uploading...',
-            '%{ filesInProgressCount } items uploading...',
-            this.filesInProgressCount
-          ),
+        return this.$ngettext(
+          '%{ filesInProgressCount } item uploading...',
+          '%{ filesInProgressCount } items uploading...',
+          this.filesInProgressCount,
           { filesInProgressCount: this.filesInProgressCount }
         )
       }
@@ -238,21 +236,17 @@ export default defineComponent({
     uploadingLabel() {
       if (Object.keys(this.errors).length) {
         const count = this.successful.length + Object.keys(this.errors).length
-        return this.$gettextInterpolate(
-          this.$ngettext(
-            '%{ errors } of %{ uploads } item failed',
-            '%{ errors } of %{ uploads } items failed',
-            count
-          ),
+        return $ngettext(
+          '%{ errors } of %{ uploads } item failed',
+          '%{ errors } of %{ uploads } items failed',
+          count,
           { uploads: count, errors: Object.keys(this.errors).length }
         )
       }
-      return this.$gettextInterpolate(
-        this.$ngettext(
-          '%{ successfulUploads } item uploaded',
-          '%{ successfulUploads } items uploaded',
-          this.successful.length
-        ),
+      return this.$ngettext(
+        '%{ successfulUploads } item uploaded',
+        '%{ successfulUploads } items uploaded',
+        this.successful.length,
         { successfulUploads: this.successful.length }
       )
     },
@@ -437,24 +431,20 @@ export default defineComponent({
     getRemainingTime(remainingMilliseconds) {
       const roundedRemainingMinutes = Math.round(remainingMilliseconds / 1000 / 60)
       if (roundedRemainingMinutes >= 1 && roundedRemainingMinutes < 60) {
-        return this.$gettextInterpolate(
-          this.$ngettext(
-            '%{ roundedRemainingMinutes } minute left',
-            '%{ roundedRemainingMinutes } minutes left',
-            roundedRemainingMinutes
-          ),
+        return this.$ngettext(
+          '%{ roundedRemainingMinutes } minute left',
+          '%{ roundedRemainingMinutes } minutes left',
+          roundedRemainingMinutes,
           { roundedRemainingMinutes }
         )
       }
 
       const roundedRemainingHours = Math.round(remainingMilliseconds / 1000 / 60 / 60)
       if (roundedRemainingHours > 0) {
-        return this.$gettextInterpolate(
-          this.$ngettext(
-            '%{ roundedRemainingHours } hour left',
-            '%{ roundedRemainingHours } hours left',
-            roundedRemainingHours
-          ),
+        return this.$ngettext(
+          '%{ roundedRemainingHours } hour left',
+          '%{ roundedRemainingHours } hours left',
+          roundedRemainingHours,
           { roundedRemainingHours }
         )
       }

@@ -249,12 +249,14 @@ export default defineComponent({
       if (this.selectedFiles.length === 0) {
         return this.$gettext('No items selected.')
       }
-      const translated = this.$ngettext(
+      return this.$ngettext(
         '%{ amount } item selected. Actions are available above the table.',
         '%{ amount } items selected. Actions are available above the table.',
-        this.selectedFiles.length
+        this.selectedFiles.length,
+        {
+          amount: this.selectedFiles.length
+        }
       )
-      return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
   },
   mounted() {

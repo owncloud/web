@@ -463,15 +463,14 @@ export default defineComponent({
         return this.$gettext('Show all results')
       }
 
-      const translated = this.$ngettext(
+      return this.$ngettext(
         'Show %{totalResults} result',
         'Show %{totalResults} results',
-        searchResult.totalResults
+        searchResult.totalResults,
+        {
+          totalResults: searchResult.totalResults
+        }
       )
-
-      return this.$gettextInterpolate(translated, {
-        totalResults: searchResult.totalResults
-      })
     },
     isPreviewElementActive(searchId) {
       const previewElements = this.optionsDrop.$el.querySelectorAll('.preview')

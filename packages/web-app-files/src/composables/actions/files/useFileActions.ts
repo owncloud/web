@@ -42,7 +42,7 @@ export interface GetFileActionsOptions extends FileActionOptions {
 export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+  const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
   const appProviders = useCapabilityFilesAppProviders()
   const appProvidersEnabled = computed(() => {
@@ -91,8 +91,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
             if (editor.label) {
               return $gettext(editor.label)
             }
-            const translated = $gettext('Open in %{app}')
-            return $gettextInterpolate(translated, { app: apps.meta[editor.app].name }, true)
+            return $gettext('Open in %{app}', { app: apps.meta[editor.app].name }, true)
           },
           icon: apps.meta[editor.app].icon,
           ...(apps.meta[editor.app].iconFillType && {
@@ -303,7 +302,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
         hasPriority: defaultApplication === app.name,
         handler: () =>
           openExternalApp(app.name, driveAliasAndItem, webDavPath, fileId, options.space.shareId),
-        label: () => $gettextInterpolate(label, { appName: app.name })
+        label: () => $gettext(label, { appName: app.name })
       }
     })
   }
