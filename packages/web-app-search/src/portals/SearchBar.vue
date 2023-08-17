@@ -401,6 +401,7 @@ export default defineComponent({
     },
 
     onKeyUpUp() {
+      console.log("KEYUO")
       const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
@@ -416,6 +417,7 @@ export default defineComponent({
       this.scrollToActivePreviewOption()
     },
     onKeyUpDown() {
+      console.log("KEYD")
       const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
 
       if (!previewElementsCount) {
