@@ -6,7 +6,7 @@ import {
   useRouteQueryPersisted,
   PaginationConstants
 } from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg'
+import { eventBus } from 'web-pkg/src/services/eventBus'
 import { findIndex } from 'lodash-es'
 import { useRoute, useRouter } from 'vue-router'
 
