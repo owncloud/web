@@ -10,8 +10,8 @@
 import { mapGetters } from 'vuex'
 import BackupsSection from '../components/BackupsSection.vue'
 import { defineComponent } from 'vue'
-import FilesViewWrapper from 'web-app-backups/src/components/FilesViewWrapper.vue'
-import AppBar from 'web-app-backups/src/components/AppBar/AppBar.vue'
+import FilesViewWrapper from '../components/FilesViewWrapper.vue'
+import AppBar from '../components/AppBar/AppBar.vue'
 
 export default defineComponent({
   components: {

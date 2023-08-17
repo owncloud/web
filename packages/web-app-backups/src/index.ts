@@ -1,12 +1,13 @@
-import translations from '../l10n/translations'
+import translations from '../l10n/translations.json'
 import Backups from './views/Backups.vue'
 
 const appInfo = {
-  name: 'Backups',
+  name: 'web-app-backups',
   id: 'backups',
   icon: 'arrow-go-back',
   isFileEditor: false
 }
+console.log('test index.ts')
 
 const routes = [
   {
