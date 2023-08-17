@@ -60,10 +60,8 @@
         >
           <oc-icon name="more-2" />
           <oc-drop
-            :drop-id="'show-more-share-options-btn' +
-             "
-            :toggle="'#show-more-share-options-btn' +
-             "
+            :drop-id="'show-more-share-options-btn'"
+            :toggle="'#show-more-share-options-btn'"
             mode="click"
             padding-size="small"
           >
