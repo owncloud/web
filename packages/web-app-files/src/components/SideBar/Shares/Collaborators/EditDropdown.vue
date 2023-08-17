@@ -28,11 +28,7 @@
                 @click="togglePopover"
               >
                 <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
-                <span
-                  class="oc-ml-s"
-                  v-if="isExpirationDateSet"
-                  v-text="$gettext('Edit expiration date')"
-                />
+                <span v-if="isExpirationDateSet" v-text="$gettext('Edit expiration date')" />
                 <span v-else v-text="$gettext('Set expiration date')" />
               </oc-button>
             </template>
@@ -190,7 +186,10 @@ export default defineComponent({
     },
 
     isExpirationSupported() {
-      return this.editingUser || this.editingGroup
+      return (
+        (this.editingUser && this.userExpirationDate) ||
+        (this.editingGroup && this.groupExpirationDate)
+      )
     },
 
     isExpirationDateSet() {
@@ -249,14 +248,14 @@ export default defineComponent({
 
     isExpirationDateEnforced() {
       if (this.editingUser) {
-        return this.userExpirationDate?.enforced
+        return this.userExpirationDate.enforced
       }
 
       if (this.editingGroup) {
-        return this.groupExpirationDate?.enforced
+        return this.groupExpirationDate.enforced
       }
 
-      return this.userExpirationDate?.enforced || this.groupExpirationDate?.enforced
+      return this.userExpirationDate.enforced || this.groupExpirationDate.enforced
     },
 
     maxExpirationDate() {
