@@ -4,7 +4,7 @@ exports[`FileShares collaborators list renders sharedWithLabel and sharee list 1
 <div class="oc-position-relative" id="oc-files-sharing-sidebar">
   <div class="oc-flex">
     <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Share with people">Share with people</h3>
-    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" text="Use the input field to search for users and groups. Select them to share the item." title="Share with people"></oc-contextual-helper-stub>
+    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Use the input field to search for users and groups. Select them to share the item." title="Share with people"></oc-contextual-helper-stub>
   </div>
   <invite-collaborator-form-stub class="oc-my-s" invitelabel="" savebuttonlabel="Share"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
@@ -35,7 +35,7 @@ exports[`FileShares current space loads space members if a space is given and th
 <div class="oc-position-relative" id="oc-files-sharing-sidebar">
   <div class="oc-flex">
     <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Share with people">Share with people</h3>
-    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" text="Use the input field to search for users and groups. Select them to share the item." title="Share with people"></oc-contextual-helper-stub>
+    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/webui/next/owncloud_web/web_for_users.html#sharing" text="Use the input field to search for users and groups. Select them to share the item." title="Share with people"></oc-contextual-helper-stub>
   </div>
   <invite-collaborator-form-stub class="oc-my-s" invitelabel="" savebuttonlabel="Share"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
