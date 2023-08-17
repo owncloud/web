@@ -99,7 +99,7 @@ import type { PropType } from 'vue'
 
 // other imports
 import { Resource } from 'web-client/src'
-//import { any } from 'jest-mock-extended'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 
 // declaring some const & references
 const { ViewportType } = Enums
@@ -122,15 +122,22 @@ cornerstoneDICOMImageLoader.configure({
 })
 
 // configure web worker framework
+// from cornerstone 3d tutorial
+let maxWebWorkers = 1
+
+if (navigator.hardwareConcurrency) {
+  maxWebWorkers = Math.min(navigator.hardwareConcurrency, 7)
+}
+
 var config = {
-  maxWebWorkers: navigator.hardwareConcurrency || 1,
-  startWebWorkersOnDemand: true,
+  maxWebWorkers, //: navigator.hardwareConcurrency || 1,
+  startWebWorkersOnDemand: false, // true,
   // the following config items are added from a sample - TODO: further look into the specifics of the configuration
-  webWorkerTaskPaths: [],
+  // webWorkerTaskPaths: [],
   taskConfiguration: {
     decodeTask: {
-      initializeCodecsOnStartup: true,
-      strict: true
+      initializeCodecsOnStartup: false, // true,
+      strict: false // true
     }
   }
 }
@@ -150,7 +157,11 @@ cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 export default defineComponent({
   name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps?!?
   components: {}, // only needed if there are child components
-  setup() {}, // maybe not needed with the streamlined version
+  setup() {
+    return {
+      ...useDownloadFile()
+    }
+  }, // maybe not needed with the streamlined version
   props: {
     url: {
       type: String,
@@ -163,6 +174,12 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       default: null
+    },
+    downloadURL: {
+      type: String
+    },
+    currentFile: {
+      type: Object as PropType<File>
     }
   },
   data() {
@@ -175,9 +192,9 @@ export default defineComponent({
     }
   },
   watch: {}, // most likely not needed
-  // runs before DOM is rendered, data and events are already accessible
+  // "created" runs before DOM is rendered, data and events are already accessible
   created() {},
-  // called when component has been added to DOM-
+  // "mounted" is called when component has been added to DOM
   async mounted() {
     console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
 
@@ -190,39 +207,47 @@ export default defineComponent({
     // set reference to HTML element for viewport
     this.element = document.getElementById('dicom-canvas') as HTMLDivElement
   },
-  // implementing any change in the component
+  // "beforeUpdate" is implementing any change in the component
   async beforeUpdate() {
-    console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
+    console.log('cornerstone init status before unpdate: ' + this.isCornerstoneInitialized)
+
+    // check if cornerstone core and tools are initalized
+    if (!this.isCornerstoneInitialized) {
+      // initalize cornerstone core
+      await this.initCornerstoneCore()
+    }
+
+    // logging some data for testing purpose only
+    console.log('current resource url: ' + this.url)
+    console.log('current content: ' + this.currentContent) // string
+    console.log('resource name: ' + this.resource.name)
+    console.log('webdav URL: ' + this.resource.webDavPath)
+
+    let dicomImage = this.url.replace('blob', 'wadouri') // wadouri
+    console.log('modified url (with wadouri): ' + dicomImage)
+
+    // get resource
+    /*
+    const dicomFile = this.downloadFile(this.resource)
+    console.log('dicom file: ' + dicomFile.name)
+    */
+
+    // currently loading only one resource at a time
+    // file manager is only needed if resource is passed along as file
+
+    /*
+    let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**) //
+    console.log('image id: ' + imageId)
+    */
 
     // instantiate/register rendering engine
     this.renderingEngine = new RenderingEngine('dicomRenderingEngine')
-    // console.log('render engine instantiated')
-
-    // logging some data
-    console.log(
-      'url length: ' +
-        (this.url as String).length +
-        ' / ' +
-        typeof this.url + // string
-        ' / this url: ' +
-        this.url
-    )
-    console.log('current content: ' + this.currentContent + ' / ' + typeof this.currentContent) // string
-    console.log('resource name: ' + this.resource.name)
-
-    let dicomImage = this.url.replace('blob', 'wadouri')
-    console.log('modified url: ' + dicomImage)
-
-    // get resource
-    // only needed if resource is passed along as file?
-    let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.currentContent)
 
     // create a stack viewport
     const { ViewportType } = Enums
 
     const viewportId = 'CT_STACK' // additional types of viewports see: https://www.cornerstonejs.org/docs/concepts/cornerstone-core/renderingengine/
     const element = this.element
-    // console.log('element id: ' + element.id)
 
     const viewportInput = {
       viewportId,
@@ -242,24 +267,35 @@ export default defineComponent({
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
 
+    // static url for testing purpose
+    let imageId =
+      'wadouri:https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
+    console.log('static image id: ' + imageId)
+
     // define a stack containing a single image
-    const dicomStack = [imageId] //dicomImage imageId
+    const dicomStack = [imageId] // dicomImage
+    //'wadouri:https://host.docker.internal:9200/files/link/public/TYOJQxraaUFSrkx/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
+
+    //dicomImage imageId
     console.log('number of items in stack: ' + dicomStack.length)
     console.log('first stack item: ' + dicomStack[0])
 
+    // preload imageIds meta data into memory
+    // might only be needed if there is a stack of files
+    // await this.prefetchMetadataInformation([imageId])
+
     // set stack on the viewport (only one image in the stack, therefore no frame # required)
-    //await this.viewport.setStack(dicomStack)
+    await this.viewport.setStack(dicomStack)
 
     // render the image
     // updates every viewport in the rendering engine
-    //
     this.viewport.render()
 
     // get metadata
     this.imageData = this.viewport.getImageData()
 
     // setting metadata
-    //this.setMetadata(imageId)
+    this.setMetadata(imageId)
   },
   // updated gets called anytime some change is made in the component
   updated() {
@@ -278,6 +314,13 @@ export default defineComponent({
         console.error('Error initalizing cornerstone core', e)
       } finally {
         this.isCornerstoneInitialized = true
+      }
+    },
+    async prefetchMetadataInformation(imageIdsToPrefetch) {
+      console.log('prefetching meta data information')
+      for (let i = 0; i < imageIdsToPrefetch.length; i++) {
+        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageIdsToPrefetch[i]).promise
+        console.log('data fetched for: ' + imageIdsToPrefetch[i])
       }
     },
     // TODO: add type for image id
@@ -356,6 +399,26 @@ export default defineComponent({
         console.log('no image meta data available')
       }
     }
+    /*
+    async syncWriteFile(filename: string, data: any) {
+      /**
+       * flags:
+       *  - w = Open file for reading and writing. File is created if not exists
+       *  - a+ = Open file for reading and appending. The file is created if not exists
+       */
+
+    /*
+      const file = writeFileSync(filename, data, {
+        flag: 'w'
+      })
+      return file
+
+      const contents = readFileSync(filename, 'utf-8')
+      console.log(contents);
+
+      return contents
+    }
+    */
     /*
     ,
     async waitingForURL() {
