@@ -381,7 +381,7 @@ export default defineComponent({
       if (!this.link.indirect) {
         return null
       }
-      return this.$gettextInterpolate(
+      return (
         this.$gettext('Navigate to the parent (%{folderName})'),
         { folderName: basename(this.link.path) },
         true

@@ -218,9 +218,8 @@ export default defineComponent({
     title() {
       // share might not be loaded
       if (this.share) {
-        const translated = this.$gettext('%{owner} shared this folder with you for uploading')
-        return this.$gettextInterpolate(
-          translated,
+        return this.$gettext(
+          '%{owner} shared this folder with you for uploading',
           { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) },
           true
         )

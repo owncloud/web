@@ -43,7 +43,7 @@ export default defineComponent({
   },
   computed: {
     modalTitle() {
-      return this.$gettextInterpolate(this.$gettext('Edit description for space %{name}'), {
+      return this.$gettext('Edit description for space %{name}', {
         name: this.space.name
       })
     }

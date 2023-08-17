@@ -14,15 +14,14 @@ export class ResourceConflict extends ConflictDialog {
   store: Store<any>
 
   constructor(store: Store<any>, language: Language) {
-    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
+    const { $gettext, $ngettext } = language
     super(
       (modal) => store.dispatch('createModal', modal),
       () => store.dispatch('hideModal'),
       (msg) => store.dispatch('showMessage', msg),
       (msg) => store.dispatch('showErrorMessage', msg),
       $gettext,
-      $ngettext,
-      $gettextInterpolate
+      $ngettext
     )
 
     this.store = store

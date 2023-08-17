@@ -310,8 +310,9 @@ export default defineComponent({
     },
 
     indirectLinksHeading() {
-      const translated = this.$gettext('Indirect links (%{ count })')
-      return this.$gettextInterpolate(translated, { count: this.indirectLinks.length })
+      return this.$gettext('Indirect links (%{ count })', {
+        count: this.indirectLinks.length.toString()
+      })
     },
 
     displayLinks() {

@@ -79,7 +79,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const id = useRouteParam('fileId')
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
     const resource: Ref<Resource> = ref()
     const sharedParentResource: Ref<Resource> = ref()
@@ -216,18 +216,20 @@ export default defineComponent({
 
         let translated
         if (unref(resource).type === 'file') {
-          translated = $gettext(
-            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          return $gettext(
+            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
+            {
+              parentShareName: unref(sharedParentResource).name
+            }
           )
         } else {
-          translated = $gettext(
-            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          return $gettext(
+            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
+            {
+              parentShareName: unref(sharedParentResource).name
+            }
           )
         }
-
-        return $gettextInterpolate(translated, {
-          parentShareName: unref(sharedParentResource).name
-        })
       }
 
       if (resolvePrivateLinkTask.isError) {

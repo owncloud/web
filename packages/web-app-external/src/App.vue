@@ -76,14 +76,12 @@ export default defineComponent({
     ...mapGetters(['capabilities']),
 
     pageTitle() {
-      const translated = this.$gettext('"%{appName}" app page')
-      return this.$gettextInterpolate(translated, {
+      return this.$gettext('"%{appName}" app page', {
         appName: this.applicationName
       })
     },
     iFrameTitle() {
-      const translated = this.$gettext('"%{appName}" app content area')
-      return this.$gettextInterpolate(translated, {
+      return this.$gettext('"%{appName}" app content area', {
         appName: this.applicationName
       })
     },

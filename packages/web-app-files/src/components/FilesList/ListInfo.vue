@@ -52,62 +52,82 @@ export default defineComponent({
       return this.files + this.folders + (this.showSpaces ? this.spaces : 0)
     },
     text() {
-      const filesStr = this.$gettextInterpolate(
-        this.$ngettext('%{ filesCount } file', '%{ filesCount } files', this.files),
+      const filesStr = this.$ngettext('%{ filesCount } file', '%{ filesCount } files', this.files, {
+        filesCount: this.files.toString()
+      })
+
+      const foldersStr = this.$ngettext(
+        '%{ foldersCount } folder',
+        '%{ foldersCount } folders',
+        this.folders,
         {
-          filesCount: this.files
+          foldersCount: this.folders.toString()
         }
       )
-      const foldersStr = this.$gettextInterpolate(
-        this.$ngettext('%{ foldersCount } folder', '%{ foldersCount } folders', this.folders),
+      const spacesStr = this.$ngettext(
+        '%{ spacesCount } space',
+        '%{ spacesCount } spaces',
+        this.spaces,
         {
-          foldersCount: this.folders
+          spacesCount: this.spaces.toString()
         }
       )
-      const spacesStr = this.$gettextInterpolate(
-        this.$ngettext('%{ spacesCount } space', '%{ spacesCount } spaces', this.spaces),
-        {
-          spacesCount: this.spaces
-        }
-      )
+
       const itemSize = formatFileSize(this.size, this.$language.current)
       const size = parseFloat(this.size?.toString())
-      let translated
       if (this.showSpaces) {
-        translated =
-          size > 0
-            ? this.$ngettext(
-                '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-                '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-                this.items
-              )
-            : this.$ngettext(
-                '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-                '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-                this.items
-              )
+        return size > 0
+          ? this.$ngettext(
+              '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
+              '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
+              this.items,
+              {
+                itemsCount: this.items.toString(),
+                itemSize,
+                filesStr,
+                foldersStr,
+                spacesStr
+              }
+            )
+          : this.$ngettext(
+              '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
+              '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
+              this.items,
+              {
+                itemsCount: this.items.toString(),
+                itemSize,
+                filesStr,
+                foldersStr,
+                spacesStr
+              }
+            )
       } else {
-        translated =
-          size > 0
-            ? this.$ngettext(
-                '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
-                '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
-                this.items
-              )
-            : this.$ngettext(
-                '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr})',
-                '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr})',
-                this.items
-              )
+        return size > 0
+          ? this.$ngettext(
+              '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
+              '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
+              this.items,
+              {
+                itemsCount: this.items.toString(),
+                itemSize,
+                filesStr,
+                foldersStr,
+                spacesStr
+              }
+            )
+          : this.$ngettext(
+              '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr})',
+              '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr})',
+              this.items,
+              {
+                itemsCount: this.items.toString(),
+                itemSize,
+                filesStr,
+                foldersStr,
+                spacesStr
+              }
+            )
       }
-
-      return this.$gettextInterpolate(translated, {
-        itemsCount: this.items,
-        itemSize,
-        filesStr,
-        foldersStr,
-        spacesStr
-      })
     }
   }
 })

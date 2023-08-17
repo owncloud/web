@@ -27,7 +27,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
-  const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
+  const { $gettext, $ngettext } = language
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
@@ -59,26 +59,32 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
     if (currentResources.length === 1) {
       if (isFolder) {
-        title = $gettext('Permanently delete folder %{name}')
+        title = $gettext(
+          'Permanently delete folder %{name}',
+          {
+            name: currentResources[0].name
+          },
+          true
+        )
       } else {
-        title = $gettext('Permanently delete file %{name}')
+        title = $gettext(
+          'Permanently delete file %{name}',
+          {
+            name: currentResources[0].name
+          },
+          true
+        )
       }
-      return $gettextInterpolate(
-        title,
-        {
-          name: currentResources[0].name
-        },
-        true
-      )
+      return title
     }
 
-    title = $ngettext(
+    return $ngettext(
       'Permanently delete selected resource?',
       'Permanently delete %{amount} selected resources?',
-      currentResources.length
+      currentResources.length,
+      { amount: currentResources.length },
+      false
     )
-
-    return $gettextInterpolate(title, { amount: currentResources.length }, false)
   })
 
   const dialogMessage = computed(() => {
@@ -110,9 +116,13 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       .clearTrashBin(path, resource.id)
       .then(() => {
         store.dispatch('Files/removeFilesFromTrashbin', [resource])
-        const translated = $gettext('"%{file}" was deleted successfully')
+        const translated = $gettext(
+          '"%{file}" was deleted successfully',
+          { file: resource.name },
+          true
+        )
         store.dispatch('showMessage', {
-          title: $gettextInterpolate(translated, { file: resource.name }, true)
+          title: translated
         })
       })
       .catch((error) => {
@@ -126,9 +136,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
         }
 
         console.error(error)
-        const translated = $gettext('Failed to delete "%{file}"')
+        const translated = $gettext('Failed to delete "%{file}"', { file: resource.name }, true)
         store.dispatch('showErrorMessage', {
-          title: $gettextInterpolate(translated, { file: resource.name }, true),
+          title: translated,
           error
         })
       })

@@ -30,7 +30,7 @@
             v-else
             key="set-expiration-date-label"
             class="oc-text-truncate"
-            v-text="$gettextInterpolate($gettext('Expires %{expires}'), { expires: dateExpire })"
+            v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
           />
           <oc-icon v-if="!dateCurrent" name="arrow-down-s" />
         </oc-button>

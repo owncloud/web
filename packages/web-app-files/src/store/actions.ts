@@ -83,7 +83,6 @@ export default {
       showMessage,
       showErrorMessage,
       $gettext,
-      $gettextInterpolate,
       $ngettext,
       sourceSpace,
       resources
@@ -101,8 +100,7 @@ export default {
       showMessage,
       showErrorMessage,
       $gettext,
-      $ngettext,
-      $gettextInterpolate
+      $ngettext
     )
     let movedResourcesPromise
     if (context.state.clipboardAction === ClipboardActions.Cut) {

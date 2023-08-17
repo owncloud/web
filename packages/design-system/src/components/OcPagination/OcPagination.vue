@@ -144,9 +144,7 @@ export default defineComponent({
 
   methods: {
     pageLabel(page) {
-      const translated = this.$gettext('Go to page %{ page }')
-
-      return this.$gettextInterpolate(translated, { page })
+      return this.$gettext('Go to page %{ page }', { page })
     },
 
     isCurrentPage(page) {
