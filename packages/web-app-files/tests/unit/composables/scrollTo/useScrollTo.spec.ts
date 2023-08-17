@@ -119,6 +119,28 @@ describe('useScrollTo', () => {
         }
       )
     })
+    it('does not scroll when resource is processing', () => {
+      const mocks = {
+        ...defaultComponentMocks({
+          currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
+        })
+      }
+
+      getComposableWrapper(
+        () => {
+          const resource = mockDeep<Resource>({ id: resourceId, processing: true })
+          const { scrollToResourceFromRoute } = useScrollTo()
+          const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
+          scrollToResourceFromRoute([resource])
+          expect(querySelectorAllSpy).not.toHaveBeenCalled()
+        },
+        {
+          mocks,
+          provide: mocks,
+          store: defaultStoreMockOptions
+        }
+      )
+    })
     it('scrolls to the resource when the "scrollTo" param is given and a resource is found', () => {
       const store = { commit: jest.fn() }
       const mocks = {
