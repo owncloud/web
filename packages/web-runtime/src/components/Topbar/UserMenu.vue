@@ -190,10 +190,15 @@ export default defineComponent({
     personalStorageDetailsLabel() {
       const total = this.quota.definition === 'none' ? 0 : this.quota.total || 0
       const used = this.quota.used || 0
-      return this.$gettext(total ? '%{used} of %{total} used' : '%{used} used', {
-        used: filesize(used),
-        total: filesize(total)
-      })
+      return total
+        ? this.$gettext('%{used} of %{total} used', {
+            used: filesize(used),
+            total: filesize(total)
+          })
+        : this.$gettext('%{used} used', {
+            used: filesize(used),
+            total: filesize(total)
+          })
     },
     limitedPersonalStorage() {
       if (!this.useLegacyQuota) {
