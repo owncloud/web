@@ -28,6 +28,7 @@ export const useScrollTo = (): ScrollToResult => {
     )[0] as HTMLElement
 
     if (!resourceElement) {
+      eventBus.publish('app.files.navigate.page', { resourceId, forceScroll: options.forceScroll })
       return
     }
 
@@ -43,6 +44,11 @@ export const useScrollTo = (): ScrollToResult => {
       resourceElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
+  eventBus.subscribe(
+    'app.files.navigate.scrollTo',
+    (data: { resourceId: string; forceScroll: boolean }) =>
+      scrollToResource(data.resourceId, { forceScroll: data.forceScroll })
+  )
 
   const scrollToResourceFromRoute = (resources: Resource[]) => {
     if (!unref(scrollTo) || !resources.length) {

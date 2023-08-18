@@ -6,6 +6,9 @@ import {
   useRouteQueryPersisted,
   PaginationConstants
 } from 'web-pkg/src/composables'
+import { eventBus } from 'web-pkg/src/services/eventBus'
+import { findIndex } from 'lodash-es'
+import { useRoute, useRouter } from 'vue-router'
 
 interface PaginationOptions<T> {
   items: MaybeRef<Array<T>>
@@ -24,6 +27,8 @@ interface PaginationResult<T> {
 }
 
 export function usePagination<T>(options: PaginationOptions<T>): PaginationResult<T> {
+  const router = useRouter()
+  const route = useRoute()
   const page = createPageRef<T>(options)
   const perPage = createPerPageRef<T>(options)
   const total = computed(() => {
@@ -39,6 +44,19 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
 
     return unref(options.items).slice(start, end)
   })
+
+  eventBus.subscribe(
+    'app.files.navigate.page',
+    ({ resourceId, forceScroll }: { resourceId: string; forceScroll: boolean }) => {
+      const index = findIndex(unref(options.items), (item: any) => item.id === resourceId)
+      if (index >= 0) {
+        const page = Math.ceil((index + 1) / Number(unref(perPage)))
+        router.push({ ...unref(route), query: { ...unref(route).query, page } }).then(() => {
+          eventBus.publish('app.files.navigate.scrollTo', { resourceId, forceScroll })
+        })
+      }
+    }
+  )
 
   return {
     items,
