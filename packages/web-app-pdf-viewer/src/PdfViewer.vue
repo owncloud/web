@@ -11,24 +11,6 @@ export default defineComponent({
       type: String,
       required: true
     }
-  },
-  created() {
-    console.log('pdf viewer "created" hook called')
-    console.log('pdf url: ' + this.url + ' / ' + typeof this.url)
-    console.log('pdf data: ' + this.$data + ' / ' + typeof this.url)
-    console.log('url length: ' + (this.url as String).length)
-  },
-  mounted() {
-    console.log('pdf viewer "mounted" hook called')
-    console.log('pdf url: ' + this.url + ' / ' + typeof this.url)
-    console.log('pdf data: ' + this.$data + ' / ' + typeof this.url)
-    console.log('url length: ' + (this.url as String).length)
-  },
-  beforeUpdate() {
-    console.log('pdf viewer "before update" hook called')
-    console.log('pdf url: ' + this.url + ' / ' + typeof this.url)
-    console.log('pdf data: ' + this.$data + ' / ' + typeof this.url)
-    console.log('url length: ' + (this.url as String).length)
   }
 })
 </script>
