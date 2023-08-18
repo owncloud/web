@@ -1,6 +1,17 @@
 <template>
   <!-- check ouf if definition of type="application/octet-stream" plus "application/dcm" might be needed below -->
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
+    <!-- dicom file upload -->
+    <form ref="form" style="margin-bottom: 20px">
+      <p>file upload (for testing only)</p>
+      <input
+        id="select-dicom-file"
+        type="file"
+        @change="uploadDicomFile"
+        tabindex="-1"
+        accept="application/dicom, application/octet-stream"
+      />
+    </form>
     <!-- check ouf if the classes of the div below are still accurate/needed -->
     <div
       class="oc-height-1-1 oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium"
@@ -100,6 +111,9 @@ import type { PropType } from 'vue'
 // other imports
 import { Resource } from 'web-client/src'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import uids from './helper/uids'
+
+import path, { join } from 'path'
 
 // declaring some const & references
 const { ViewportType } = Enums
@@ -188,7 +202,8 @@ export default defineComponent({
       element: null,
       renderingEngine: null,
       viewport: null,
-      imageData: null
+      imageData: null,
+      imageName: null
     }
   },
   watch: {}, // most likely not needed
@@ -221,9 +236,11 @@ export default defineComponent({
     console.log('current resource url: ' + this.url)
     console.log('current content: ' + this.currentContent) // string
     console.log('resource name: ' + this.resource.name)
+    this.imageName = this.resource.name
     console.log('webdav URL: ' + this.resource.webDavPath)
 
-    let dicomImage = this.url.replace('blob', 'wadouri') // wadouri
+    //let dicomImage = this.url.replace('blob', 'wadouri') // wadouri
+    let dicomImage = 'wadouri:' + this.url // wadouri
     console.log('modified url (with wadouri): ' + dicomImage)
 
     // get resource
@@ -267,13 +284,17 @@ export default defineComponent({
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
 
+    /*
     // static url for testing purpose
     let imageId =
+      //'wadouri:https://neumann.in-nepal.de/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
+      //'wadouri:https://jankaritech.ocloud.de/index.php/s/kglXzMBDEYTOLLy/download'
       'wadouri:https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
     console.log('static image id: ' + imageId)
+    */
 
     // define a stack containing a single image
-    const dicomStack = [imageId] // dicomImage
+    const dicomStack = [dicomImage] // dicomImage
     //'wadouri:https://host.docker.internal:9200/files/link/public/TYOJQxraaUFSrkx/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
 
     //dicomImage imageId
@@ -295,7 +316,8 @@ export default defineComponent({
     this.imageData = this.viewport.getImageData()
 
     // setting metadata
-    this.setMetadata(imageId)
+    //this.setMetadata(imageId)
+    this.clearMetadata()
   },
   // updated gets called anytime some change is made in the component
   updated() {
@@ -326,7 +348,7 @@ export default defineComponent({
     // TODO: add type for image id
     setMetadata(imageId) {
       // filename - maybe not needed?
-      document.getElementById('filename').innerHTML = this.resource.name
+      document.getElementById('filename').innerHTML = this.imageName //this.resource.name
 
       if (imageId != null && typeof imageId == 'string') {
         console.log('setting meta data')
@@ -339,6 +361,7 @@ export default defineComponent({
           highBit,
           photometricInterpretation
         } = metaData.get('imagePixelModule', imageId)
+
         const voiLutModuleLocal = metaData.get('voiLutModule', imageId)
         const sopCommonModule = metaData.get('sopCommonModule', imageId)
         const transferSyntax = metaData.get('transferSyntax', imageId)
@@ -347,8 +370,8 @@ export default defineComponent({
         document.getElementById('transfer-syntax').innerHTML = transferSyntax.transferSyntaxUID
 
         //sop class uid
-        document.getElementById('sop-class-uid').innerHTML = sopCommonModule.sopClassUID
-        //uids[sopCommonModule.sopClassUID]
+        document.getElementById('sop-class-uid').innerHTML =
+          sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']'
 
         //sop instance uid
         document.getElementById('sop-instance-uid').innerHTML = sopCommonModule.sopInstanceUID
@@ -398,6 +421,73 @@ export default defineComponent({
       } else {
         console.log('no image meta data available')
       }
+    },
+    clearMetadata() {
+      document.getElementById('filename').innerHTML = ''
+      document.getElementById('transfer-syntax').innerHTML = ''
+      document.getElementById('sop-class-uid').innerHTML = ''
+      document.getElementById('sop-instance-uid').innerHTML = ''
+      document.getElementById('rows').innerHTML = ''
+      document.getElementById('columns').innerHTML = ''
+      document.getElementById('spacing').innerHTML = ''
+      document.getElementById('direction').innerHTML = ''
+      document.getElementById('origin').innerHTML = ''
+      document.getElementById('modality').innerHTML = ''
+      document.getElementById('pixel-representation').innerHTML = ''
+      document.getElementById('bits-allocated').innerHTML = ''
+      document.getElementById('bits-stored').innerHTML = ''
+      document.getElementById('high-bit').innerHTML = ''
+      document.getElementById('photometric-interpretation').innerHTML = ''
+      document.getElementById('window-width').innerHTML = ''
+      document.getElementById('window-center').innerHTML = ''
+    },
+    uploadDicomFile(event) {
+      // process your files, read as DataUrl or upload...
+      const dicomFile = event.target.files[0] as File
+
+      // for testing only
+      console.log('file uploaded: ' + dicomFile)
+      console.log('file type: ' + typeof (dicomFile as File))
+      console.log('file name: ' + typeof dicomFile.name)
+
+      this.displayDicomFile(dicomFile)
+    },
+
+    async displayDicomFile(f: File) {
+      console.log('display dicom file function called for file: ' + f.name)
+      this.imageName = f.name
+
+      // for testing only
+      /*
+      let reader = new FileReader()
+      reader.readAsDataURL(f)
+      reader.onloadend = function () {
+        console.log('reading file: ' + reader.result)
+      }
+      */
+
+      const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
+      console.log('added image id: ' + imageId)
+
+      // define a stack containing a single image
+      const dicomStack = [imageId]
+
+      //dicomImage imageId
+      console.log('number of items in stack: ' + dicomStack.length)
+      console.log('first stack item: ' + dicomStack[0])
+
+      // set stack on the viewport (only one image in the stack, therefore no frame # required)
+      await this.viewport.setStack(dicomStack)
+
+      // render the image
+      // updates every viewport in the rendering engine
+      this.viewport.render()
+
+      // get metadata
+      this.imageData = this.viewport.getImageData()
+
+      // setting metadata
+      this.setMetadata(imageId)
     }
     /*
     async syncWriteFile(filename: string, data: any) {
