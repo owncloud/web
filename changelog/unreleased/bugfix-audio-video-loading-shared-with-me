@@ -1,0 +1,6 @@
+Bugfix: Audio- & video-loading on Shared with me page
+
+Loading audio and video on the Shared with me page with the preview app has been fixed.
+
+https://github.com/owncloud/web/issues/9593
+https://github.com/owncloud/web/pull/9595
