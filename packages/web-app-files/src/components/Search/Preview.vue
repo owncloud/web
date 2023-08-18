@@ -3,7 +3,7 @@
     :type="resource.isFolder ? 'router-link' : 'button'"
     justify-content="left"
     class="files-search-preview oc-flex oc-width-1-1"
-    :class="{ 'files-search-preview-disabled': resource.processing }"
+    :class="{ 'files-search-preview-disabled': resourceDisabled }"
     appearance="raw"
     v-bind="attrs"
     v-on="listeners"
@@ -57,6 +57,7 @@ export default defineComponent({
   setup(props) {
     const { getInternalSpace } = useGetMatchingSpace()
     const previewData = ref()
+
     const resource = computed((): Resource => {
       return {
         ...(props.searchResult.data as Resource),
@@ -66,12 +67,18 @@ export default defineComponent({
           } as Resource))
       }
     })
+
+    const resourceDisabled = computed(() => {
+      return unref(resource).disabled === true
+    })
+
     return {
       ...useFileActions(),
       getInternalSpace,
       hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
-      resource
+      resource,
+      resourceDisabled
     }
   },
   computed: {
