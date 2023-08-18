@@ -13,7 +13,7 @@ const routes = [
     component: AppWrapperRoute(DicomViewer, {
       applicationId: 'dicom-viewer',
       urlForResourceOptions: {
-        disposition: 'inline'
+        //disposition: 'inline'
       }
     }),
     name: 'dicom-viewer',
