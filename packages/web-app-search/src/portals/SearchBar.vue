@@ -399,36 +399,27 @@ export default defineComponent({
       this.term = ''
       this.optionsDrop.hide()
     },
+    findNextPreviewIndex(previous = false) {
+      const elements = Array.from(document.querySelectorAll('li.preview'))
+      let index =
+        this.activePreviewIndex !== null ? this.activePreviewIndex : previous ? elements.length : 0
+      const increment = previous ? -1 : 1
 
+      do {
+        index += increment
+        if (index < 0 || index > elements.length - 1) {
+          return null
+        }
+      } while (elements[index].classList.contains('disabled'))
+
+      return index
+    },
     onKeyUpUp() {
-      const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
-
-      if (!previewElementsCount) {
-        return
-      }
-
-      if (this.activePreviewIndex === null) {
-        this.activePreviewIndex = previewElementsCount - 1
-      } else {
-        this.activePreviewIndex = this.activePreviewIndex === 0 ? null : this.activePreviewIndex - 1
-      }
-
+      this.activePreviewIndex = this.findNextPreviewIndex(true)
       this.scrollToActivePreviewOption()
     },
     onKeyUpDown() {
-      const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
-
-      if (!previewElementsCount) {
-        return
-      }
-
-      if (this.activePreviewIndex === null) {
-        this.activePreviewIndex = 0
-      } else {
-        this.activePreviewIndex =
-          this.activePreviewIndex === previewElementsCount - 1 ? null : this.activePreviewIndex + 1
-      }
-
+      this.activePreviewIndex = this.findNextPreviewIndex(false)
       this.scrollToActivePreviewOption()
     },
     scrollToActivePreviewOption() {
