@@ -3,7 +3,6 @@
     :type="resource.isFolder ? 'router-link' : 'button'"
     justify-content="left"
     class="files-search-preview oc-flex oc-width-1-1"
-    :class="{ 'files-search-preview-disabled': resourceDisabled }"
     appearance="raw"
     v-bind="attrs"
     v-on="listeners"
@@ -175,7 +174,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    if (this.resource.processing === true) {
+    if (this.resourceDisabled) {
       this.$el.parentElement.classList.add('disabled')
     }
 
