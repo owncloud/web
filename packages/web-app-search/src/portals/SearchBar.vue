@@ -583,7 +583,7 @@ export default defineComponent({
           font-size: var(--oc-font-size-xsmall);
         }
 
-        &.preview > * {
+        &.preview {
           min-height: 44px;
           font-size: inherit;
           padding: var(--oc-space-xsmall) var(--oc-space-small);
@@ -591,6 +591,12 @@ export default defineComponent({
           &:hover,
           &.active {
             background-color: var(--oc-color-background-highlight);
+          }
+          &.disabled {
+            background-color: var(--oc-color-background-muted);
+            pointer-events: none;
+            opacity: 0.7;
+            filter: grayscale(0.6);
           }
         }
       }

@@ -175,6 +175,10 @@ export default defineComponent({
     }
   },
   mounted() {
+    if (this.resource.processing === true) {
+      this.$el.parentElement.classList.add('disabled')
+    }
+
     if (!this.displayThumbnails) {
       return
     }
@@ -214,14 +218,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.files-search-preview {
-  &-disabled {
-    pointer-events: none;
-    background-color: var(--oc-color-background-muted);
-    opacity: 0.7;
-    filter: grayscale(0.6);
-  }
-}
-</style>
