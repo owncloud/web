@@ -30,23 +30,16 @@ After cloning the source code, install the dependencies via `pnpm install`.
 
 ### Starting the Server
 
-You can start the server by running `docker-compose up ocis`.
+Web supports oCIS and oC10 as servers. You can start both of them by running `docker-compose up ocis oc10`.
 
-Note that the container needs a short while to start because it is waiting for `tika` to be initialized. This is the case as soon as the `tika-service` container has stopped running.
+Note that `ocis` needs a short while to start because it is waiting for `tika` to be initialized. This is the case as soon as the `tika-service` container has stopped running.
 
 ### Building and Accessing Web
 
 After the docker containers are running (and `tika` is being initialized), run `pnpm build:w` to build Web. This also includes hot-reloading after changes you make, although it will take a while to rebuild the project. See down below for some details on how to enable instant hot-reloading.
 
-Now you can access Web via https://host.docker.internal:9200.
+Now you can access Web via https://host.docker.internal:9200 (oCIS) and http://host.docker.internal:8080 (OC10).
 
 ### Using Instant Hot-Reload via Vite
 
-To work with instant hot-reloading, you can also build Web by running `pnpm vite`. The port to access Web is slightly different then: https://host.docker.internal:9201. Also note that the initial page load may take a bit longer than usual. This is normal and to be expected.
-
-### Running Web with oC10
-
-Older versions of Web (< 7.1.0) also support running oC10 as server. The development setup is nearly the same as mentioned above, the only differences are:
-
-* The server can be started via `docker-compose up oc10`
-* The server port is `8080` (`8081` when running Web via `pnpm vite:oc10`)
+To work with instant hot-reloading, you can also build Web by running `pnpm vite`. The ports to access Web are slightly different then: https://host.docker.internal:9201 (oCIS) and http://host.docker.internal:8081 (OC10). Also note that the initial page load may take a bit longer than usual. This is normal and to be expected.
