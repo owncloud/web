@@ -2057,6 +2057,7 @@ def logTracingResult(ctx, suite):
             "status": status,
             "event": [
                 "pull_request",
+                "cron",
             ],
         },
     }]
