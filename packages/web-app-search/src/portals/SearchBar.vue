@@ -402,7 +402,7 @@ export default defineComponent({
     findNextPreviewIndex(previous = false) {
       const elements = Array.from(document.querySelectorAll('li.preview'))
       let index =
-        this.activePreviewIndex !== null ? this.activePreviewIndex : previous ? elements.length : 0
+        this.activePreviewIndex !== null ? this.activePreviewIndex : previous ? elements.length : -1
       const increment = previous ? -1 : 1
 
       do {
