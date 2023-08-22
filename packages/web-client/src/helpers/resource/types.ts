@@ -52,6 +52,7 @@ export interface Resource {
   status?: number
   processing?: boolean
   locked?: boolean
+  lockOwner?: string
   spaceRoles?: {
     [k: string]: SpaceRole[]
   }
