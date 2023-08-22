@@ -213,16 +213,16 @@ export default defineComponent({
     }
   },
   watch: {}, // most likely not needed
+  // --------------------------
+  // vue js lifecylce functions
+  // --------------------------
   // "created" runs before DOM is rendered, data and events are already accessible
-  created() {},
+  created() {}, // most likely not needed
   // "mounted" is called when component has been added to DOM
   async mounted() {
-    console.log('cornerstone init status: ' + this.isCornerstoneInitialized)
-
-    // check if cornerstone core and tools are initalized
+    // check if cornerstone core (TODO and tools) are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
-      console.log('init cornerstone core triggered at mounted')
       await this.initCornerstoneCore()
     }
 
@@ -261,21 +261,22 @@ export default defineComponent({
     this.countLoaded++
     console.log('before update called: ' + this.countLoaded)
 
-    /*
-    console.log('cornerstone init status before unpdate: ' + this.isCornerstoneInitialized)
-
-    // check if cornerstone core and tools are initalized
+    // check if cornerstone core (TODO and tools) are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
       console.log('init cornerstone core triggered at before update')
       await this.initCornerstoneCore()
     }
-    */
+
+    // get resource
 
     // logging some data for testing purpose only
     console.log('current resource url: ' + this.url)
-    //console.log('current content lenght: ' + this.currentContent.length) // string
-    if (this.resource != null) {
+
+    if (this.currentContent != (null || undefined)) {
+      console.log('current content lenght: ' + this.currentContent.length) // string
+    }
+    if (this.resource != (null || undefined)) {
       console.log('resource name: ' + this.resource.name)
       console.log('resource: ' + this.resource + ' / ' + typeof this.resource)
       console.log('resource mimetype: ' + this.resource.mimeType)
@@ -292,49 +293,29 @@ export default defineComponent({
     let dicomImage = 'wadouri:' + this.url // wadouri
     console.log('modified url (with wadouri): ' + dicomImage)
 
-    // for testing only
     /*
-      const [first, ...rest] = dicomImage.split('?')
-      const credentials = rest.join('?')
-      console.log('first part of url (without credentials): ' + first)
-      console.log('remainder of url (credentaials): ' + credentials)
-      */
-
-    // get resource
-    //this.dicomFile = this.createDicomFile()
-
-    // for testing only
-    /*
-    let reader = new FileReader()
-
-    // reader.readAsDataURL(f)
-    reader.readAsText(this.dicomFile, 'UTF-8') // creates the same output as current content
-    //reader.readAsArrayBuffer(dicomFile)
-    const result = reader.result as String
-    console.log('reading dicom file, lenght before onloaded: ' + result.length)
-    reader.onloadend = function () {
-      const result = reader.result as String
-      console.log('reading dicom file, lenght: ' + result.length)
-    }
-
-
-    const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
-    console.log('added image id: ' + imageId)
+    // for testing only (separating credentails from dicom image url)
+    const [url, credentials] = this.separateCredentialsFromUrl(dicomImage)
+    console.log(url)
+    console.log(credentials)
     */
 
-    // currently loading only one resource at a time
-    // file manager is only needed if resource is passed along as file
+    this.dicomFile = this.createDicomFile()
+
+    // for testing only
+    //this.readMyFile(this.dicomFile)
 
     /*
-    let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**) //
-    console.log('image id: ' + imageId)
+    // currently loading only one resource at a time
+    // file manager is only needed if resource is passed along as file
+    const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
+    console.log('added image id: ' + imageId)
     */
 
     /*
     // static url for testing purpose
     let imageId =
       //'wadouri:https://neumann.in-nepal.de/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
-      //'wadouri:https://jankaritech.ocloud.de/index.php/s/kglXzMBDEYTOLLy/download'
       'wadouri:https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
     console.log('static image id: ' + imageId)
     */
@@ -342,7 +323,6 @@ export default defineComponent({
     // define a stack containing a single image
     const dicomStack = [dicomImage]
     //const dicomStack = [imageId]
-    //'wadouri:https://host.docker.internal:9200/files/link/public/TYOJQxraaUFSrkx/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
 
     //dicomImage imageId
     console.log('number of items in stack: ' + dicomStack.length)
@@ -363,8 +343,8 @@ export default defineComponent({
     this.imageData = this.viewport.getImageData()
 
     // setting metadata
-    //this.setMetadata(imageId)
-    this.clearMetadata()
+    this.setMetadata(dicomImage) // (imageId)
+
     //}
     //this.countLoaded++
   },
@@ -394,22 +374,41 @@ export default defineComponent({
       }
     },
     async createDicomFile() {
+      // TODO check if already exist?
+      // TODO delete content after unloading the package?
+
       console.log('creating dicom file')
-      console.log('file size before creation: ' + this.dicomFile.size)
-      console.log('content: ' + this.currentContent)
+      if (this.dicomFile != (null || undefined)) {
+        console.log('file size before creation: ' + this.dicomFile.size)
+      }
+
+      // for testing only
+      console.log('current file content: ' + this.currentContent)
       console.log('resource name: ' + this.resource.name)
       console.log('resource mime type: ' + this.resource.mimeType)
+
       this.dicomFile = await new File([this.currentContent], this.resource.name, {
-        type: this.resource.mimeType != '' ? this.resource.mimeType : 'application/octet-stream' // dicom //octet-stream
+        type:
+          this.resource.mimeType != (null || undefined)
+            ? this.resource.mimeType
+            : 'application/dicom' // set default mime type, maybe application/octet-stream ?
       })
-      console.log('file size: ' + this.dicomFile.size)
+
+      console.log('file size after creation: ' + this.dicomFile.size)
     },
     // TODO: add type for image id
+    // precondition: have image data
     setMetadata(imageId) {
+      // clear previous data
+      this.clearMetadata()
+
+      // get metadata from viewport
+      this.imageData = this.viewport.getImageData()
+
       // filename - maybe not needed?
       document.getElementById('filename').innerHTML = this.imageName //this.resource.name
 
-      if (imageId != null && typeof imageId == 'string') {
+      if (imageId != (null || undefined) && typeof imageId == 'string') {
         const {
           pixelRepresentation,
           bitsAllocated,
@@ -497,14 +496,22 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
+    separateCredentialsFromUrl(url: String) {
+      const [urlWithoutCredentials, ...rest] = url.split('?')
+      const credentials = rest.join('?')
+      console.log('url without credentials: ' + urlWithoutCredentials)
+      console.log('credentaials (remainder of url): ' + credentials)
+      return [urlWithoutCredentials, credentials] as const
+    },
     uploadDicomFile(event) {
-      // process your files, read as DataUrl or upload...
+      // get first file (upload should support only single file anyway)
       const dicomFile = event.target.files[0] as File
 
       // for testing only
-      console.log('file uploaded: ' + dicomFile)
-      console.log('file type: ' + typeof (dicomFile as File))
+      console.log('file uploaded: ' + dicomFile + ' / ' + typeof (dicomFile as File))
       console.log('file name: ' + typeof dicomFile.name)
+      console.log('file size: ' + dicomFile.size + ' bytes')
+      console.log('file mime type: ' + dicomFile.type)
 
       this.displayDicomFile(dicomFile)
     },
@@ -513,14 +520,7 @@ export default defineComponent({
       this.imageName = f.name
 
       // for testing only
-      let reader = new FileReader()
-      // reader.readAsDataURL(f)
-      reader.readAsText(f, 'UTF-8') // creates the same output as current content
-      //reader.readAsArrayBuffer(f)
-      reader.onloadend = function () {
-        let result = reader.result as String
-        console.log('reading file lenght: ' + result.length)
-      }
+      this.readMyFile(f)
 
       const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
       console.log('added image id: ' + imageId)
@@ -539,11 +539,18 @@ export default defineComponent({
       // updates every viewport in the rendering engine
       this.viewport.render()
 
-      // get metadata
-      this.imageData = this.viewport.getImageData()
-
       // setting metadata
       this.setMetadata(imageId)
+    },
+    readMyFile(f: File) {
+      let reader = new FileReader()
+      // reader.readAsDataURL(f)
+      reader.readAsText(f, 'UTF-8') // creates the same output as current content
+      //reader.readAsArrayBuffer(f)
+      reader.onloadend = function () {
+        let result = reader.result as String
+        console.log('reading file lenght: ' + result.length)
+      }
     }
     /*
     ,
