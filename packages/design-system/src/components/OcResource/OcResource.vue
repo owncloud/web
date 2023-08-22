@@ -15,8 +15,9 @@
         class="oc-resource-thumbnail"
         width="40"
         height="40"
+        v-oc-tooltip="tooltipLabelIcon"
       />
-      <oc-resource-icon v-else :resource="resource">
+      <oc-resource-icon v-oc-tooltip="tooltipLabelIcon" v-else :resource="resource">
         <template v-if="showStatusIcon" #status>
           <oc-icon v-bind="statusIconAttrs" size="xsmall" />
         </template>
@@ -214,6 +215,17 @@ export default defineComponent({
 
     showStatusIcon() {
       return this.resource.locked || this.resource.processing
+    },
+
+    tooltipLabelIcon() {
+      if (this.resource.locked) {
+        return this.$gettext('This item is locked')
+      }
+
+      if (this.resource.processing) {
+        return this.$gettext('This item is processing')
+      }
+      return null
     },
 
     statusIconAttrs() {
