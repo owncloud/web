@@ -148,9 +148,6 @@
         :indicators="item.indicators"
       />
     </template>
-    <template #locked="{ item }">
-      <oc-icon v-if="item.locked" name="lock" size="small" class="oc-flex oc-flex-right" />
-    </template>
     <template #sdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.sdate)"
@@ -565,14 +562,6 @@ export default defineComponent({
           {
             name: 'indicators',
             title: this.$gettext('Shares'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'locked',
-            title: this.$gettext('Locked'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
