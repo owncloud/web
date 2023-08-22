@@ -17,13 +17,6 @@ export const me = async ({ user }: { user: User }): Promise<Me> => {
 }
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
-  // test users are created in keycloak. need only store user uuid
-  // if (config.keycloak) {
-  //   const uuid = await getUserId({ user, admin })
-  //   usersEnvironment.storeCreatedUser({ user: { ...user, uuid: uuid } })
-  //   return user
-  // }
-
   const body = JSON.stringify({
     displayName: user.displayName,
     mail: user.email,
@@ -78,13 +71,6 @@ export const createGroup = async ({
   group: Group
   admin: User
 }): Promise<Group> => {
-  // test groups are created in keycloak. need only store group uuid
-  // if (config.keycloak) {
-  //   const uuid = await getGroupId({ group, admin })
-  //   usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: uuid } })
-  //   return group
-  // }
-
   const body = JSON.stringify({
     displayName: group.displayName
   })

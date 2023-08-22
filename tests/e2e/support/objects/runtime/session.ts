@@ -11,20 +11,20 @@ export class Session {
     this.#page = page
   }
 
-  signUp(username: string, password: string): Promise<void> {
+  signIn(username: string, password: string): Promise<void> {
     if (config.keycloak) {
-      return this.keycloakSignUp(username, password)
+      return this.keycloakSignIn(username, password)
     }
-    return this.idpSignUp(username, password)
+    return this.idpSignIn(username, password)
   }
 
-  async idpSignUp(username: string, password: string): Promise<void> {
+  async idpSignIn(username: string, password: string): Promise<void> {
     await this.#page.locator('#oc-login-username').fill(username)
     await this.#page.locator('#oc-login-password').fill(password)
     await this.#page.locator('button[type="submit"]').click()
   }
 
-  async keycloakSignUp(username: string, password: string): Promise<void> {
+  async keycloakSignIn(username: string, password: string): Promise<void> {
     await this.#page.locator('#username').fill(username)
     await this.#page.locator('#password').fill(password)
     await this.#page.locator('#kc-login').click()
@@ -40,10 +40,10 @@ export class Session {
           resp.status() === 200 &&
           resp.request().method() === 'POST'
       ),
-      this.signUp(id, password)
+      this.signIn(id, password)
     ])
 
-    if (config.apiToken || config.keycloak) {
+    if (config.apiToken) {
       const body = await response.json()
 
       if (!createdTokenStore.has(user.id)) {

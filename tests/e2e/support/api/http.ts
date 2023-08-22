@@ -23,7 +23,7 @@ export const request = async ({
     Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
   }
 
-  if (config.token || config.keycloak) {
+  if (config.apiToken) {
     authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
   }
 
