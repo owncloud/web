@@ -105,13 +105,16 @@ import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
 // vue imports
-import { defineComponent } from 'vue'
+import { defineComponent, unref } from 'vue'
 import type { PropType } from 'vue'
 
 // other imports
 import { Resource } from 'web-client/src'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import uids from './helper/uids'
+// import fs from 'fs'
+// import * as fs from 'fs/promises'
+import * as fs from 'fs'
 
 import path, { join } from 'path'
 
@@ -187,6 +190,7 @@ export default defineComponent({
     },
     resource: {
       type: Object as PropType<Resource>,
+      //required: true,
       default: null
     },
     downloadURL: {
@@ -202,8 +206,10 @@ export default defineComponent({
       element: null,
       renderingEngine: null,
       viewport: null,
+      dicomFile: null,
       imageData: null,
-      imageName: null
+      imageName: null,
+      countLoaded: 0
     }
   },
   watch: {}, // most likely not needed
@@ -216,46 +222,12 @@ export default defineComponent({
     // check if cornerstone core and tools are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
+      console.log('init cornerstone core triggered at mounted')
       await this.initCornerstoneCore()
     }
 
     // set reference to HTML element for viewport
     this.element = document.getElementById('dicom-canvas') as HTMLDivElement
-  },
-  // "beforeUpdate" is implementing any change in the component
-  async beforeUpdate() {
-    console.log('cornerstone init status before unpdate: ' + this.isCornerstoneInitialized)
-
-    // check if cornerstone core and tools are initalized
-    if (!this.isCornerstoneInitialized) {
-      // initalize cornerstone core
-      await this.initCornerstoneCore()
-    }
-
-    // logging some data for testing purpose only
-    console.log('current resource url: ' + this.url)
-    console.log('current content: ' + this.currentContent) // string
-    console.log('resource name: ' + this.resource.name)
-    this.imageName = this.resource.name
-    console.log('webdav URL: ' + this.resource.webDavPath)
-
-    //let dicomImage = this.url.replace('blob', 'wadouri') // wadouri
-    let dicomImage = 'wadouri:' + this.url // wadouri
-    console.log('modified url (with wadouri): ' + dicomImage)
-
-    // get resource
-    /*
-    const dicomFile = this.downloadFile(this.resource)
-    console.log('dicom file: ' + dicomFile.name)
-    */
-
-    // currently loading only one resource at a time
-    // file manager is only needed if resource is passed along as file
-
-    /*
-    let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**) //
-    console.log('image id: ' + imageId)
-    */
 
     // instantiate/register rendering engine
     this.renderingEngine = new RenderingEngine('dicomRenderingEngine')
@@ -279,10 +251,84 @@ export default defineComponent({
 
     // enable element
     this.renderingEngine.enableElement(viewportInput)
-    // console.log('element (& viewport id & rendering engine id) enabled')
 
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
+  },
+  // "beforeUpdate" is implementing any change in the component
+  async beforeUpdate() {
+    //if (this.countLoaded == 1) {
+    this.countLoaded++
+    console.log('before update called: ' + this.countLoaded)
+
+    /*
+    console.log('cornerstone init status before unpdate: ' + this.isCornerstoneInitialized)
+
+    // check if cornerstone core and tools are initalized
+    if (!this.isCornerstoneInitialized) {
+      // initalize cornerstone core
+      console.log('init cornerstone core triggered at before update')
+      await this.initCornerstoneCore()
+    }
+    */
+
+    // logging some data for testing purpose only
+    console.log('current resource url: ' + this.url)
+    //console.log('current content lenght: ' + this.currentContent.length) // string
+    if (this.resource != null) {
+      console.log('resource name: ' + this.resource.name)
+      console.log('resource: ' + this.resource + ' / ' + typeof this.resource)
+      console.log('resource mimetype: ' + this.resource.mimeType)
+      console.log(
+        'unref resource & type: ' + unref(this.resource) + ' / ' + typeof unref(this.resource)
+      )
+      this.imageName = this.resource.name
+      console.log('webdav URL: ' + this.resource.webDavPath)
+    } else {
+      console.log('no resource loaded')
+    }
+
+    //let dicomImage = this.url.replace('blob', 'wadouri') // wadouri
+    let dicomImage = 'wadouri:' + this.url // wadouri
+    console.log('modified url (with wadouri): ' + dicomImage)
+
+    // for testing only
+    /*
+      const [first, ...rest] = dicomImage.split('?')
+      const credentials = rest.join('?')
+      console.log('first part of url (without credentials): ' + first)
+      console.log('remainder of url (credentaials): ' + credentials)
+      */
+
+    // get resource
+    //this.dicomFile = this.createDicomFile()
+
+    // for testing only
+    /*
+    let reader = new FileReader()
+
+    // reader.readAsDataURL(f)
+    reader.readAsText(this.dicomFile, 'UTF-8') // creates the same output as current content
+    //reader.readAsArrayBuffer(dicomFile)
+    const result = reader.result as String
+    console.log('reading dicom file, lenght before onloaded: ' + result.length)
+    reader.onloadend = function () {
+      const result = reader.result as String
+      console.log('reading dicom file, lenght: ' + result.length)
+    }
+
+
+    const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
+    console.log('added image id: ' + imageId)
+    */
+
+    // currently loading only one resource at a time
+    // file manager is only needed if resource is passed along as file
+
+    /*
+    let imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(**file**) //
+    console.log('image id: ' + imageId)
+    */
 
     /*
     // static url for testing purpose
@@ -294,7 +340,8 @@ export default defineComponent({
     */
 
     // define a stack containing a single image
-    const dicomStack = [dicomImage] // dicomImage
+    const dicomStack = [dicomImage]
+    //const dicomStack = [imageId]
     //'wadouri:https://host.docker.internal:9200/files/link/public/TYOJQxraaUFSrkx/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
 
     //dicomImage imageId
@@ -318,6 +365,8 @@ export default defineComponent({
     // setting metadata
     //this.setMetadata(imageId)
     this.clearMetadata()
+    //}
+    //this.countLoaded++
   },
   // updated gets called anytime some change is made in the component
   updated() {
@@ -332,10 +381,9 @@ export default defineComponent({
     async initCornerstoneCore() {
       try {
         await cornerstone.init()
+        this.isCornerstoneInitialized = true
       } catch (e) {
         console.error('Error initalizing cornerstone core', e)
-      } finally {
-        this.isCornerstoneInitialized = true
       }
     },
     async prefetchMetadataInformation(imageIdsToPrefetch) {
@@ -345,15 +393,23 @@ export default defineComponent({
         console.log('data fetched for: ' + imageIdsToPrefetch[i])
       }
     },
+    async createDicomFile() {
+      console.log('creating dicom file')
+      console.log('file size before creation: ' + this.dicomFile.size)
+      console.log('content: ' + this.currentContent)
+      console.log('resource name: ' + this.resource.name)
+      console.log('resource mime type: ' + this.resource.mimeType)
+      this.dicomFile = await new File([this.currentContent], this.resource.name, {
+        type: this.resource.mimeType != '' ? this.resource.mimeType : 'application/octet-stream' // dicom //octet-stream
+      })
+      console.log('file size: ' + this.dicomFile.size)
+    },
     // TODO: add type for image id
     setMetadata(imageId) {
       // filename - maybe not needed?
       document.getElementById('filename').innerHTML = this.imageName //this.resource.name
 
       if (imageId != null && typeof imageId == 'string') {
-        console.log('setting meta data')
-        console.log('image id type: ' + typeof imageId) //IImageData
-
         const {
           pixelRepresentation,
           bitsAllocated,
@@ -452,21 +508,21 @@ export default defineComponent({
 
       this.displayDicomFile(dicomFile)
     },
-
     async displayDicomFile(f: File) {
       console.log('display dicom file function called for file: ' + f.name)
       this.imageName = f.name
 
       // for testing only
-      /*
       let reader = new FileReader()
-      reader.readAsDataURL(f)
+      // reader.readAsDataURL(f)
+      reader.readAsText(f, 'UTF-8') // creates the same output as current content
+      //reader.readAsArrayBuffer(f)
       reader.onloadend = function () {
-        console.log('reading file: ' + reader.result)
+        let result = reader.result as String
+        console.log('reading file lenght: ' + result.length)
       }
-      */
 
-      const imageId = cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
+      const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
       console.log('added image id: ' + imageId)
 
       // define a stack containing a single image
@@ -489,26 +545,6 @@ export default defineComponent({
       // setting metadata
       this.setMetadata(imageId)
     }
-    /*
-    async syncWriteFile(filename: string, data: any) {
-      /**
-       * flags:
-       *  - w = Open file for reading and writing. File is created if not exists
-       *  - a+ = Open file for reading and appending. The file is created if not exists
-       */
-
-    /*
-      const file = writeFileSync(filename, data, {
-        flag: 'w'
-      })
-      return file
-
-      const contents = readFileSync(filename, 'utf-8')
-      console.log(contents);
-
-      return contents
-    }
-    */
     /*
     ,
     async waitingForURL() {
