@@ -49,13 +49,3 @@ export interface Token {
   accessToken: string
   refreshToken: string
 }
-
-export interface Cookie {
-  userId: string
-  authSessionId: string
-  keycloakIdentity: string
-  authSessionIdLegacy: string
-  keycloakSession: string
-  keycloakSessionLegacy: string
-  keycloakIdentityLegacy: string
-}

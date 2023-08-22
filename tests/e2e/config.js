@@ -1,4 +1,4 @@
-const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
+const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `https://${url}`)
 
 exports.config = {
   // environment

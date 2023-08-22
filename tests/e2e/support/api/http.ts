@@ -15,9 +15,7 @@ export const request = async ({
   path: string
   body?: BodyInit
   user?: User
-  formatJson?: boolean
   header?: object
-  keycloakAdminUrl?: boolean
 }): Promise<Response> => {
   const tokenEnvironment = new TokenEnvironment()
 

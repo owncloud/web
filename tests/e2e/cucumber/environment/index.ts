@@ -68,8 +68,6 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   })
   if (config.apiToken) {
     await setAdminToken(state.browser)
-  } else if (config.keycloak) {
-    await setKeycloakAdminToken(state.browser)
   }
 })
 
@@ -171,22 +169,6 @@ const setAdminToken = async (browser: Browser) => {
   const admin = usersEnvironment.getUser({ key: 'admin' })
   await page.goto(config.frontendUrl)
   await new Session({ page }).login({ user: admin })
-
-  await page.close()
-  await ctx.close()
-}
-
-const setKeycloakAdminToken = async (browser: Browser) => {
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
-  const page = await ctx.newPage()
-  const admin = usersEnvironment.getUser({ key: 'admin' })
-  await page.goto(config.frontendUrl)
-  await new Session({ page }).login({ user: admin })
-  // await new Session({ page }).loginInAdminConsole()
-  // const cookie = await ctx.cookies()
-
-  // set cookie to keycloakCookieStore and use it in refresh token request
-  // keycloakCookieStore.set()
 
   await page.close()
   await ctx.close()

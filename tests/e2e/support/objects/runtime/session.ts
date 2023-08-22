@@ -11,7 +11,7 @@ export class Session {
     this.#page = page
   }
 
-  async signUp(username: string, password: string): Promise<void> {
+  signUp(username: string, password: string): Promise<void> {
     if (config.keycloak) {
       return this.keycloakSignUp(username, password)
     }
@@ -64,25 +64,4 @@ export class Session {
     await this.#page.locator('#_userMenuButton').click()
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
-
-  //   async loginInAdminConsole(): Promise<void> {
-  //     await this.#page.locator('#username').fill('admin')
-  //     await this.#page
-  //       .locator('#password')
-  //       .fill(process.env.KEYCLOAK_ADMIN_CONSOLE_PASSWORD || 'admin')
-
-  //     const [response] = await Promise.all([
-  //       this.#page.waitForResponse(
-  //         (resp) =>
-  //           resp.url().includes('token') &&
-  //           resp.status() === 200 &&
-  //           resp.request().method() === 'POST'
-  //       ),
-  //       this.#page.locator('#kc-login').click()
-  //     ])
-  //     const body = await response.json()
-
-  //     createdKeycloakAccessTokenStore.set('keycloakAdmin', body.access_token)
-  //     createdKeycloakRefreshTokenStore.set('keycloakAdmin', body.refresh_token)
-  //   }
 }
