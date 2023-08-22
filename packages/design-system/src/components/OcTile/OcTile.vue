@@ -28,6 +28,7 @@
       <div
         class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center"
         v-oc-tooltip="tooltipLabelIcon"
+        :aria-label="tooltipLabelIcon"
       >
         <div class="oc-tile-card-hover"></div>
         <slot name="imageField" :item="resource">

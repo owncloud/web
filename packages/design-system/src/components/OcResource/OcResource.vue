@@ -16,8 +16,14 @@
         width="40"
         height="40"
         v-oc-tooltip="tooltipLabelIcon"
+        :aria-label="tooltipLabelIcon"
       />
-      <oc-resource-icon v-oc-tooltip="tooltipLabelIcon" v-else :resource="resource">
+      <oc-resource-icon
+        v-oc-tooltip="tooltipLabelIcon"
+        :aria-label="tooltipLabelIcon"
+        v-else
+        :resource="resource"
+      >
         <template v-if="showStatusIcon" #status>
           <oc-icon v-bind="statusIconAttrs" size="xsmall" />
         </template>
