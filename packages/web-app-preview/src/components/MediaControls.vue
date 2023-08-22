@@ -171,6 +171,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.preview-details {
+  bottom: calc(22vh - 1rem);
+}
+
 .preview-details.lightbox {
   z-index: 1000;
   opacity: 0.9;
