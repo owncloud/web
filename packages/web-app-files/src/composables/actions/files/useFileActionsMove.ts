@@ -53,6 +53,10 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
           return false
         }
 
+        if (resources.length === 1 && resources[0].locked) {
+          return false
+        }
+
         const moveDisabled = resources.some((resource) => {
           return canBeMoved(resource, store.getters['Files/currentFolder'].path) === false
         })
