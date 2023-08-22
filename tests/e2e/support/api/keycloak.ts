@@ -3,7 +3,6 @@ import { User } from '../types'
 import join from 'join-path'
 import { createdKeycloakRefreshTokenStore } from '../store/token'
 
-
 export const refreshToken = async (): Promise<void> => {
   const body = JSON.stringify({
     grant_type: 'refresh_token',
@@ -24,18 +23,18 @@ export const refreshToken = async (): Promise<void> => {
 
 export const getUser = async ({ user }: { user: User }): Promise<User> => {
   // refreshToken()
-  
+
   const response = await request({
     method: 'GET',
     path: join('admin', 'realms', 'oCIS', 'ui-ext', 'brute-force-user'),
     header: { 'Content-Type': 'application/json' },
     keycloakAdminUrl: true
   })
-  
+
   checkResponseStatus(response, 'Failed while getting user in keycloak admin console')
   // I could not get response body
   console.log(response.text(), 'repsdkvopcks')
-  
+
   return user
 }
 

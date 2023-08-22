@@ -1,4 +1,4 @@
-import { createdKeycloakAccessTokenStore, createdKeycloakRefreshTokenStore, createdTokenStore } from '../store/token'
+import { createdTokenStore } from '../store/token'
 import { Token, User } from '../types'
 
 export class TokenEnvironment {
@@ -19,27 +19,27 @@ export class TokenEnvironment {
     createdTokenStore.delete(user.id)
   }
 
-  createKeycloakAccessToken({ token }: { token: Token }): Token {
-    createdKeycloakAccessTokenStore.set('keycloakAdmin', token)
-    return token
-  }
+  // createKeycloakAccessToken({ token }: { token: Token }): Token {
+  //   createdKeycloakAccessTokenStore.set('keycloakAdmin', token)
+  //   return token
+  // }
 
-  getKeycloakAccessToken(): Token {
-    if (!createdKeycloakAccessTokenStore.has('keycloakAdmin')) {
-      throw new Error(`token for user 'keycloakAdmin' not found`)
-    }
-    return createdKeycloakAccessTokenStore.get('keycloakAdmin')
-  }
+  // getKeycloakAccessToken(): Token {
+  //   if (!createdKeycloakAccessTokenStore.has('keycloakAdmin')) {
+  //     throw new Error(`token for user 'keycloakAdmin' not found`)
+  //   }
+  //   return createdKeycloakAccessTokenStore.get('keycloakAdmin')
+  // }
 
-  createKeycloakRefreshToken({ token }: { token: Token }): Token {
-    createdKeycloakRefreshTokenStore.set('keycloakAdmin', token)
-    return token
-  }
+  // createKeycloakRefreshToken({ token }: { token: Token }): Token {
+  //   createdKeycloakRefreshTokenStore.set('keycloakAdmin', token)
+  //   return token
+  // }
 
-  getKeycloakRefreshToken(): Token {
-    if (!createdKeycloakRefreshTokenStore.has('keycloakAdmin')) {
-      throw new Error(`token for user 'keycloakAdmin' not found`)
-    }
-    return createdKeycloakRefreshTokenStore.get('keycloakAdmin')
-  }
+  // getKeycloakRefreshToken(): Token {
+  //   if (!createdKeycloakRefreshTokenStore.has('keycloakAdmin')) {
+  //     throw new Error(`token for user 'keycloakAdmin' not found`)
+  //   }
+  //   return createdKeycloakRefreshTokenStore.get('keycloakAdmin')
+  // }
 }

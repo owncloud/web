@@ -17,14 +17,12 @@ export const me = async ({ user }: { user: User }): Promise<Me> => {
 }
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
-  const usersEnvironment = new UsersEnvironment()
-
   // test users are created in keycloak. need only store user uuid
-  if (config.keycloak) {
-    const uuid = await getUserId({ user, admin })
-    usersEnvironment.storeCreatedUser({ user: { ...user, uuid: uuid } })
-    return user
-  }
+  // if (config.keycloak) {
+  //   const uuid = await getUserId({ user, admin })
+  //   usersEnvironment.storeCreatedUser({ user: { ...user, uuid: uuid } })
+  //   return user
+  // }
 
   const body = JSON.stringify({
     displayName: user.displayName,
@@ -42,6 +40,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   checkResponseStatus(response, 'Failed while creating user')
 
+  const usersEnvironment = new UsersEnvironment()
   usersEnvironment.storeCreatedUser({ user: { ...user, uuid: (await response.json()).id } })
   return user
 }
@@ -79,13 +78,12 @@ export const createGroup = async ({
   group: Group
   admin: User
 }): Promise<Group> => {
-  const usersEnvironment = new UsersEnvironment()
   // test groups are created in keycloak. need only store group uuid
-  if (config.keycloak) {
-    const uuid = await getGroupId({ group, admin })
-    usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: uuid } })
-    return group
-  }
+  // if (config.keycloak) {
+  //   const uuid = await getGroupId({ group, admin })
+  //   usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: uuid } })
+  //   return group
+  // }
 
   const body = JSON.stringify({
     displayName: group.displayName
@@ -100,6 +98,7 @@ export const createGroup = async ({
 
   checkResponseStatus(response, 'Failed while creating group')
 
+  const usersEnvironment = new UsersEnvironment()
   usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: (await response.json()).id } })
   return group
 }

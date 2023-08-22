@@ -3,16 +3,13 @@ import fetch, { BodyInit, Response } from 'node-fetch'
 import { User } from '../types'
 import { config } from '../../config'
 import { TokenEnvironment } from '../environment'
-import { createdKeycloakAccessTokenStore } from '../store/token'
 
 export const request = async ({
   method,
   path,
   body,
   user,
-  formatJson = true,
-  header = {},
-  keycloakAdminUrl = false
+  header = {}
 }: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL' | 'PROPFIND' | 'PATCH'
   path: string
@@ -24,24 +21,17 @@ export const request = async ({
 }): Promise<Response> => {
   const tokenEnvironment = new TokenEnvironment()
 
-  let url
-  let token
+  const authHeader = {
+    Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
+  }
 
-  if (keycloakAdminUrl) {
-    url = process.env.KEYCLOAK_ADMIN_CONSOLE_URL || 'https://keycloak.owncloud.test'
-    token = createdKeycloakAccessTokenStore.get('keycloakAdmin')
-  } else {
-    url = config.backendUrl
-    token = tokenEnvironment.getToken({ user }).tokenValue
+  if (config.token || config.keycloak) {
+    authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
   }
 
   const basicHeader = {
     'OCS-APIREQUEST': true as any,
-    ...(user && {
-      Authorization: config.apiToken
-        ? 'Bearer ' + token
-        : 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
-    }),
+    ...(user.id && authHeader),
     ...header
   }
 

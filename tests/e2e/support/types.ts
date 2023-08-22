@@ -46,7 +46,8 @@ export interface Group {
 
 export interface Token {
   userId: string
-  tokenValue: string
+  accessToken: string
+  refreshToken: string
 }
 
 export interface Cookie {

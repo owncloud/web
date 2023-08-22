@@ -8,10 +8,10 @@ exports.config = {
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   apiToken: process.env.API_TOKEN === 'true',
   get backendUrl() {
-    return withHttp(process.env.BACKEND_HOST || 'https://' + this.baseUrlOcis)
+    return withHttp(process.env.BACKEND_HOST || this.baseUrlOcis)
   },
   get frontendUrl() {
-    return withHttp(process.env.SERVER_HOST || 'https://' + this.baseUrlOcis)
+    return withHttp(process.env.SERVER_HOST || this.baseUrlOcis)
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',

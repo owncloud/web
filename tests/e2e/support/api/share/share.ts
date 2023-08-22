@@ -82,8 +82,7 @@ const getShareId = async ({
   const response = await request({
     method: 'GET',
     path: join('ocs', 'v2.php', 'apps', 'files_sharing', 'api', 'v1', 'shares', `?${params}`),
-    user: user,
-    formatJson: false
+    user: user
   })
   checkResponseStatus(response, 'Failed while geting share id')
   const fileData = JSON.parse(convert.xml2json(await response.text(), { compact: true }))

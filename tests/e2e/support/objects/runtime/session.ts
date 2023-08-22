@@ -2,8 +2,7 @@ import { Page } from 'playwright'
 import { User } from '../../types'
 import { config } from '../../../config'
 import { TokenEnvironment } from '../../environment'
-import { createdKeycloakAccessTokenStore, createdTokenStore } from '../../store/token'
-import { createdKeycloakRefreshTokenStore } from '../../store/token'
+import { createdTokenStore } from '../../store/token'
 
 export class Session {
   #page: Page
@@ -12,11 +11,28 @@ export class Session {
     this.#page = page
   }
 
+  async signUp(username: string, password: string): Promise<void> {
+    if (config.keycloak) {
+      return this.keycloakSignUp(username, password)
+    }
+    return this.idpSignUp(username, password)
+  }
+
+  async idpSignUp(username: string, password: string): Promise<void> {
+    await this.#page.locator('#oc-login-username').fill(username)
+    await this.#page.locator('#oc-login-password').fill(password)
+    await this.#page.locator('button[type="submit"]').click()
+  }
+
+  async keycloakSignUp(username: string, password: string): Promise<void> {
+    await this.#page.locator('#username').fill(username)
+    await this.#page.locator('#password').fill(password)
+    await this.#page.locator('#kc-login').click()
+  }
+
   async login({ user }: { user: User }): Promise<void> {
     const { id, password } = user
 
-    await this.#page.locator('#oc-login-username').fill(id)
-    await this.#page.locator('#oc-login-password').fill(password)
     const [response] = await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
@@ -24,17 +40,21 @@ export class Session {
           resp.status() === 200 &&
           resp.request().method() === 'POST'
       ),
-      this.#page.locator('button[type="submit"]').click()
+      this.signUp(id, password)
     ])
 
-    if (config.apiToken) {
+    if (config.apiToken || config.keycloak) {
       const body = await response.json()
 
       if (!createdTokenStore.has(user.id)) {
         const tokenEnvironment = new TokenEnvironment()
         tokenEnvironment.createToken({
           user: { ...user },
-          token: { userId: user.id, tokenValue: body.access_token }
+          token: {
+            userId: user.id,
+            accessToken: body.access_token,
+            refreshToken: body.refresh_token
+          }
         })
       }
     }
@@ -45,24 +65,24 @@ export class Session {
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
 
-  async loginInAdminConsole(): Promise<void> {
-    await this.#page.locator('#username').fill('admin')
-    await this.#page
-      .locator('#password')
-      .fill(process.env.KEYCLOAK_ADMIN_CONSOLE_PASSWORD || 'admin')
+  //   async loginInAdminConsole(): Promise<void> {
+  //     await this.#page.locator('#username').fill('admin')
+  //     await this.#page
+  //       .locator('#password')
+  //       .fill(process.env.KEYCLOAK_ADMIN_CONSOLE_PASSWORD || 'admin')
 
-    const [response] = await Promise.all([
-      this.#page.waitForResponse(
-        (resp) =>
-          resp.url().includes('token') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'POST'
-      ),
-      this.#page.locator('#kc-login').click()
-    ])
-    const body = await response.json()
+  //     const [response] = await Promise.all([
+  //       this.#page.waitForResponse(
+  //         (resp) =>
+  //           resp.url().includes('token') &&
+  //           resp.status() === 200 &&
+  //           resp.request().method() === 'POST'
+  //       ),
+  //       this.#page.locator('#kc-login').click()
+  //     ])
+  //     const body = await response.json()
 
-    createdKeycloakAccessTokenStore.set('keycloakAdmin', body.access_token)
-    createdKeycloakRefreshTokenStore.set('keycloakAdmin', body.refresh_token)
-  }
+  //     createdKeycloakAccessTokenStore.set('keycloakAdmin', body.access_token)
+  //     createdKeycloakRefreshTokenStore.set('keycloakAdmin', body.refresh_token)
+  //   }
 }
