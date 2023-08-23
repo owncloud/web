@@ -17,14 +17,12 @@ describe('move', () => {
       it.each([
         {
           resources: [{ isReceivedShare: () => true, canBeDeleted: () => true }] as Resource[],
-          invalidLocation: false,
           expectedStatus: true
         },
         {
           resources: [
             { isReceivedShare: () => true, canBeDeleted: () => true, locked: true }
           ] as Resource[],
-          invalidLocation: false,
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
