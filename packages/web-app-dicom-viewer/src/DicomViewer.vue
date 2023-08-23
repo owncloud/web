@@ -102,8 +102,6 @@ import { Resource } from 'web-client/src'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import uids from './helper/uids'
 
-import * as fs from 'fs'
-
 import path, { join } from 'path'
 
 // declaring some const & references
@@ -191,27 +189,21 @@ export default defineComponent({
       dicomFile: null,
       dicomFileName: null,
       imageData: null,
-      metaDataHTMLelement: null,
-      metaDataHTMLitems: null
+      metaDataElement: null,
+      metaDataItems: null
     }
   },
-  watch: {}, // most likely not needed
+  watch: {},
 
   // --------------------------
   // vue js lifecylce functions
   // --------------------------
 
   // "created" runs before DOM is rendered, data and events are already accessible
-  created() {
-    console.log('vue lifecycle created called')
-    // most likely not needed
-  },
+  created() {},
   // "mounted" is called when component has been added to DOM
-  beforeMount() {
-    console.log('vue lifecycle before mount called')
-  },
+  beforeMount() {},
   async mounted() {
-    console.log('vue lifecycle mounted called')
     // check if cornerstone core (TODO and tools) are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
@@ -247,20 +239,19 @@ export default defineComponent({
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
 
-    // set reference to HTML element for viewport
-    this.metaDataHTMLelement = document.getElementById('dicom-metadata') as HTMLDivElement
-    this.metaDataHTMLitems = document.getElementsByClassName(
+    // set reference to HTML element for metadata
+    // metadata root element
+    this.metaDataElement = document.getElementById('dicom-metadata') as HTMLDivElement
+    // child elements
+    this.metaDataItems = document.getElementsByClassName(
       'dicom-metadata-item'
     ) as HTMLCollectionOf<HTMLDivElement>
   },
   // "beforeUpdate" is implementing any change in the component
   async beforeUpdate() {
-    console.log('vue lifecycle before update called')
-
     // check if cornerstone core (TODO and tools) are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
-      console.log('init cornerstone core triggered at before update')
       await this.initCornerstoneCore()
     }
 
@@ -280,9 +271,6 @@ export default defineComponent({
 
       // define a stack containing a single image
       const dicomStack = [dicomImageURL]
-
-      //dicomImage imageId
-      console.log('first stack item: ' + dicomStack[0])
 
       // maybe preload meta data into memory?
       // might only be needed if there is a stack of files
@@ -306,26 +294,17 @@ export default defineComponent({
   },
   // updated gets called anytime some change is made in the component
   updated() {
-    console.log('vue lifecycle update called')
     // this.viewport.resize()
   },
   // cleaning up component, leaving no variables or events that could cause memory leaks to app
   beforeUnmount() {
-    console.log('vue lifecycle before unmount called')
-
-    // clear meta data
-    this.clearMetadata()
-
     this.renderingEngine.destroy()
-
-    // reset variables
     this.isDicomFileRendered = false
     this.isMetaDataSet = false
     this.updateDisplayOfMetaData()
+    this.clearMetadata()
   },
-  unmounted() {
-    console.log('vue lifecycle unmounted called')
-  },
+  unmounted() {},
   methods: {
     async initCornerstoneCore() {
       try {
@@ -364,9 +343,7 @@ export default defineComponent({
     async addWadouriPrefix(url: String) {
       return 'wadouri:' + url
     },
-
-    // TODO: add type for image id
-    setMetadata(imageId) {
+    setMetadata(imageId: String) {
       // get metadata from viewport
       this.imageData = this.viewport.getImageData() // returns IImageData object, see https://www.cornerstonejs.org/api/core/namespace/Types#IImageData
 
@@ -447,19 +424,12 @@ export default defineComponent({
     },
     updateDisplayOfMetaData() {
       if (this.isMetaDataSet) {
-        this.metaDataHTMLelement.style.display = 'block'
-        console.log('number of html items: ' + this.metaDataHTMLitems.length)
-
-        for (let i = 0; i < this.metaDataHTMLitems.length; i++) {
-          // item in this.metaDataHTMLitems as HTMLCollectionOf<HTMLDivElement>) {
-          this.metaDataHTMLitems[i].style.display = 'block'
+        for (let i = 0; i < this.metaDataItems.length; i++) {
+          this.metaDataItems[i].style.display = 'block'
         }
       } else {
-        //this.metaDataHTMLelement.style.display = 'none'
-
-        for (let i = 0; i < this.metaDataHTMLitems.length; i++) {
-          // item in this.metaDataHTMLitems as HTMLCollectionOf<HTMLDivElement>) {
-          this.metaDataHTMLitems[i].style.display = 'none'
+        for (let i = 0; i < this.metaDataItems.length; i++) {
+          this.metaDataItems[i].style.display = 'none'
         }
       }
     },
@@ -482,7 +452,6 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
-
     separateCredentialsFromUrl(url: String) {
       const [urlWithoutCredentials, ...rest] = url.split('?')
       const credentials = rest.join('?')
@@ -511,9 +480,6 @@ export default defineComponent({
 
       // define a stack containing a single image
       const dicomStack = [imageId]
-
-      //dicomImage imageId
-      console.log('first stack item: ' + dicomStack[0])
 
       // set stack on the viewport (only one image in the stack, therefore no frame # required)
       await this.viewport.setStack(dicomStack)
@@ -553,8 +519,11 @@ export default defineComponent({
 
 .dicom-metadata {
   border: 10px solid green; //none
-  width: auto;
+  width: 500px;
   height: 500px; // 100%;
   //display: block;
+}
+.dicom-metadata-item {
+  display: none;
 }
 </style>
