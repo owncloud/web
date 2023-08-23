@@ -9,13 +9,6 @@ geekdocFilePath: oc10-app.md
 
 {{< toc >}}
 
-
-## Compatibility
-
-Please note that the usage of Web UI and ownCloud 10 as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
-
-## Introduction
-
 ownCloud Web is being deployed as an app to [ownCloud marketplace](https://marketplace.owncloud.com/) to enable easy integration into existing ownCloud 10 instances.
 After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/index.php/apps/web`.
 
@@ -85,7 +78,6 @@ There are a few config values which need to be set in order for ownCloud Web to 
   "apps" : [
     "files",
     "preview",
-    "search",
     "draw-io"
   ],
   "applications" : [
