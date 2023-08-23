@@ -49,3 +49,9 @@ export interface Token {
   accessToken: string
   refreshToken: string
 }
+
+// keycloak realm role
+export interface KeycloakRealmRole {
+  id: string
+  name: string
+}

@@ -1,8 +1,7 @@
 import { Page } from 'playwright'
 import { User } from '../../types'
 import { config } from '../../../config'
-import { TokenEnvironment } from '../../environment'
-import { createdTokenStore } from '../../store/token'
+import { TokenEnvironmentFactory, TokenProviderType } from '../../environment'
 
 export class Session {
   #page: Page
@@ -30,7 +29,13 @@ export class Session {
     await this.#page.locator('#kc-login').click()
   }
 
-  async login({ user }: { user: User }): Promise<void> {
+  async login({
+    user,
+    tokenType = null
+  }: {
+    user: User
+    tokenType?: TokenProviderType
+  }): Promise<void> {
     const { id, password } = user
 
     const [response] = await Promise.all([
@@ -46,9 +51,10 @@ export class Session {
     if (config.apiToken) {
       const body = await response.json()
 
-      if (!createdTokenStore.has(user.id)) {
-        const tokenEnvironment = new TokenEnvironment()
-        tokenEnvironment.createToken({
+      const tokenEnvironment = TokenEnvironmentFactory(tokenType)
+
+      if (!tokenEnvironment.getToken({ user })) {
+        tokenEnvironment.setToken({
           user: { ...user },
           token: {
             userId: user.id,

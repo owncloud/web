@@ -2,22 +2,24 @@ import join from 'join-path'
 import fetch, { BodyInit, Response } from 'node-fetch'
 import { User } from '../types'
 import { config } from '../../config'
-import { TokenEnvironment } from '../environment'
+import { TokenEnvironmentFactory } from '../environment'
 
 export const request = async ({
   method,
   path,
   body,
   user,
-  header = {}
+  header = {},
+  isKeycloakRequest = false
 }: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL' | 'PROPFIND' | 'PATCH'
   path: string
   body?: BodyInit
   user?: User
   header?: object
+  isKeycloakRequest?: boolean
 }): Promise<Response> => {
-  const tokenEnvironment = new TokenEnvironment()
+  const tokenEnvironment = TokenEnvironmentFactory(isKeycloakRequest ? 'keycloak' : null)
 
   const authHeader = {
     Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
@@ -33,7 +35,9 @@ export const request = async ({
     ...header
   }
 
-  return await fetch(join(config.backendUrl, path), {
+  const baseUrl = isKeycloakRequest ? config.keycloakUrl : config.backendUrl
+
+  return await fetch(join(baseUrl, path), {
     method,
     body,
     headers: basicHeader

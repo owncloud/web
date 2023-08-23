@@ -6,12 +6,19 @@ exports.config = {
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
+  baseUrlKeycloak: process.env.KEYCLOAK_URL ?? 'keycloak.owncloud.test',
   apiToken: process.env.API_TOKEN === 'true' || process.env.KEYCLOAK === 'true',
   get backendUrl() {
     return withHttp(process.env.BACKEND_HOST || this.baseUrlOcis)
   },
   get frontendUrl() {
     return withHttp(process.env.SERVER_HOST || this.baseUrlOcis)
+  },
+  get keycloakUrl() {
+    return withHttp(this.baseUrlKeycloak)
+  },
+  get keycloakLoginUrl() {
+    return withHttp(this.baseUrlKeycloak + '/admin/master/console')
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',

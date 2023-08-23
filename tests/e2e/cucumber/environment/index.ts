@@ -23,6 +23,7 @@ import {
 } from '../../support/store'
 import { User } from '../../support/types'
 import { Session } from '../../support/objects/runtime/session'
+import { TokenProviderType } from '../../support/environment'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 
@@ -66,7 +67,10 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
-  if (config.apiToken) {
+
+  if (config.apiToken && config.keycloak) {
+    await Promise.all([setAdminToken(state.browser), setKeycloakAdminToken(state.browser)])
+  } else if (config.apiToken) {
     await setAdminToken(state.browser)
   }
 })
@@ -124,7 +128,7 @@ setWorldConstructor(World)
 const cleanUpUser = async (adminUser: User) => {
   const requests = []
   createdUserStore.forEach((user) => {
-    requests.push(api.graph.deleteUser({ user, admin: adminUser }))
+    requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
   createdUserStore.clear()
@@ -163,13 +167,21 @@ const cleanUpGroup = async (adminUser: User) => {
   createdGroupStore.clear()
 }
 
-const setAdminToken = async (browser: Browser) => {
+const getTokenFromLogin = async (browser: Browser, url: string, tokenType?: TokenProviderType) => {
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
   const page = await ctx.newPage()
   const admin = usersEnvironment.getUser({ key: 'admin' })
-  await page.goto(config.frontendUrl)
-  await new Session({ page }).login({ user: admin })
+  await page.goto(url)
+  await new Session({ page }).login({ user: admin, tokenType })
 
   await page.close()
   await ctx.close()
+}
+
+const setAdminToken = async (browser: Browser) => {
+  return getTokenFromLogin(browser, config.frontendUrl)
+}
+
+const setKeycloakAdminToken = async (browser: Browser) => {
+  return getTokenFromLogin(browser, config.keycloakLoginUrl, 'keycloak')
 }
