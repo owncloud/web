@@ -1,17 +1,5 @@
 <template>
-  <!-- check ouf if definition of type="application/octet-stream" plus "application/dcm" might be needed below -->
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
-    <!-- dicom file upload, for testing only -->
-    <form ref="form" style="margin-bottom: 20px">
-      <p>file upload (for testing only)</p>
-      <input
-        id="select-dicom-file"
-        type="file"
-        @change="uploadDicomFile"
-        tabindex="-1"
-        accept="application/dicom, application/octet-stream"
-      />
-    </form>
     <!-- check ouf if the classes of the div below are still accurate/needed/consistent with overall app design -->
     <div
       class="oc-height-1-1 oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium"
@@ -21,71 +9,71 @@
       <!-- div element for displaying meta data -->
       <div id="dicom-metadata" class="dicom-metadata">
         <h2>metadata for current dicom image</h2>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Filename:</span>
           <span id="filename"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Transfer Syntax:</span>
           <span id="transfer-syntax"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>SOPClassUID:</span>
           <span id="sop-class-uid"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>SOPInstanceUID:</span>
           <span id="sop-instance-uid"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Rows:</span>
           <span id="rows"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Columns:</span>
           <span id="columns"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Spacing:</span>
           <span id="spacing"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Direction:</span>
           <span id="direction"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Origin:</span>
           <span id="origin"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Modality:</span>
           <span id="modality"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Pixel Representation:</span>
           <span id="pixel-representation"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Bits Allocated:</span>
           <span id="bits-allocated"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Bits Stored:</span>
           <span id="bits-stored"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>High Bit:</span>
           <span id="high-bit"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Photometric Interpretation:</span>
           <span id="photometric-interpretation"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Window Width:</span>
           <span id="window-width"></span>
         </div>
-        <div>
+        <div class="dicom-metadata-item">
           <span>Window Center:</span>
           <span id="window-center"></span>
         </div>
@@ -113,8 +101,7 @@ import type { PropType } from 'vue'
 import { Resource } from 'web-client/src'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import uids from './helper/uids'
-// import fs from 'fs'
-// import * as fs from 'fs/promises'
+
 import * as fs from 'fs'
 
 import path, { join } from 'path'
@@ -140,7 +127,6 @@ cornerstoneDICOMImageLoader.configure({
 })
 
 // configure web worker framework
-// from cornerstone 3d tutorial
 let maxWebWorkers = 1
 
 if (navigator.hardwareConcurrency) {
@@ -148,9 +134,9 @@ if (navigator.hardwareConcurrency) {
 }
 
 var config = {
-  maxWebWorkers, //: navigator.hardwareConcurrency || 1,
+  maxWebWorkers,
   startWebWorkersOnDemand: false, // true,
-  // the following config items are added from a sample - TODO: further look into the specifics of the configuration
+  // TODO: further look into the specifics of the configuration
   // webWorkerTaskPaths: [],
   taskConfiguration: {
     decodeTask: {
@@ -173,7 +159,7 @@ cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
 export default defineComponent({
-  name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps?!?
+  //name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps?!?
   components: {}, // only needed if there are child components
   setup() {
     return {
@@ -191,36 +177,35 @@ export default defineComponent({
     },
     resource: {
       type: Object as PropType<Resource>,
-      //required: true,
       default: null
-    },
-    downloadURL: {
-      type: String
-    },
-    currentFile: {
-      type: Object as PropType<File>
     }
   },
   data() {
     return {
       isCornerstoneInitialized: false,
+      isDicomFileRendered: false,
+      isMetaDataSet: false,
       element: null,
       renderingEngine: null,
       viewport: null,
       dicomFile: null,
+      dicomFileName: null,
       imageData: null,
-      imageName: null,
-      countLoaded: 0
+      metaDataHTMLelement: null,
+      metaDataHTMLitems: null
     }
   },
   watch: {}, // most likely not needed
+
   // --------------------------
   // vue js lifecylce functions
   // --------------------------
+
   // "created" runs before DOM is rendered, data and events are already accessible
   created() {
     console.log('vue lifecycle created called')
-  }, // most likely not needed
+    // most likely not needed
+  },
   // "mounted" is called when component has been added to DOM
   beforeMount() {
     console.log('vue lifecycle before mount called')
@@ -251,7 +236,7 @@ export default defineComponent({
       element,
       defaultOptions: {
         background: <Types.Point3>[0.2, 0, 0.2]
-        // more settings, TODO: check what other settings are needed
+        // more settings, TODO: check what other settings are needed/useful
         // orientation: Enums.OrientationAxis.AXIAL,
       }
     }
@@ -261,13 +246,16 @@ export default defineComponent({
 
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
+
+    // set reference to HTML element for viewport
+    this.metaDataHTMLelement = document.getElementById('dicom-metadata') as HTMLDivElement
+    this.metaDataHTMLitems = document.getElementsByClassName(
+      'dicom-metadata-item'
+    ) as HTMLCollectionOf<HTMLDivElement>
   },
   // "beforeUpdate" is implementing any change in the component
   async beforeUpdate() {
     console.log('vue lifecycle before update called')
-
-    this.countLoaded++
-    console.log('before update called: ' + this.countLoaded)
 
     // check if cornerstone core (TODO and tools) are initalized
     if (!this.isCornerstoneInitialized) {
@@ -279,84 +267,46 @@ export default defineComponent({
     // get resource
     // ensure resource url is not empty
     if (this.url != null && this.url != undefined && this.url != '') {
-      // logging some data for testing purpose only
-      console.log('current resource url: ' + this.url)
-
-      if (this.currentContent != (null || undefined)) {
-        console.log('current content lenght: ' + this.currentContent.length) // string
-      }
       if (this.resource != (null || undefined)) {
-        console.log('resource name: ' + this.resource.name)
-        console.log('resource: ' + this.resource + ' / ' + typeof this.resource)
-        console.log('resource mimetype: ' + this.resource.mimeType)
-        console.log(
-          'unref resource & type: ' + unref(this.resource) + ' / ' + typeof unref(this.resource)
-        )
-        this.imageName = this.resource.name
-        console.log('webdav URL: ' + this.resource.webDavPath)
+        this.dicomFileName = this.resource.name
       }
 
-      //let dicomImage = this.url.replace('blob', 'wadouri') // wadouri
-      let dicomImage = 'wadouri:' + this.url // wadouri
-      console.log('modified url (with wadouri): ' + dicomImage)
+      let dicomImageURL = await this.addWadouriPrefix(this.url)
 
       /*
-      // for testing only (separating credentails from dicom image url)
-      const [url, credentials] = this.separateCredentialsFromUrl(dicomImage)
-      console.log(url)
-      console.log(credentials)
-      */
-
-      //this.dicomFile = this.createDicomFile()
-
-      // for testing only
-      //this.readMyFile(this.dicomFile)
-
-      /*
-      // currently loading only one resource at a time
       // file manager is only needed if resource is passed along as file
       const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
-      console.log('added image id: ' + imageId)
-      */
-
-      /*
-      // static url for testing purpose
-      let imageId =
-        'wadouri:https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
       */
 
       // define a stack containing a single image
-      const dicomStack = [dicomImage]
-      //const dicomStack = [imageId]
+      const dicomStack = [dicomImageURL]
 
       //dicomImage imageId
-      console.log('number of items in stack: ' + dicomStack.length)
       console.log('first stack item: ' + dicomStack[0])
 
-      // preload imageIds meta data into memory
+      // maybe preload meta data into memory?
       // might only be needed if there is a stack of files
-      // await this.prefetchMetadataInformation([imageId])
+      // await this.prefetchMetadataInformation(dicomStack)
 
-      // set stack on the viewport (only one image in the stack, therefore no frame # required)
+      // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
       await this.viewport.setStack(dicomStack)
 
-      // render the image
-      // updates every viewport in the rendering engine
+      // render the image (updates every viewport in the rendering engine)
       this.viewport.render()
+      this.isDicomFileRendered = true
 
       // get metadata
       this.imageData = this.viewport.getImageData()
 
       // setting metadata
-      this.setMetadata(dicomImage) // (imageId)
+      this.setMetadata(dicomImageURL)
     } else {
-      console.log('no resource url available')
+      console.log('no valid resource url available')
     }
   },
   // updated gets called anytime some change is made in the component
   updated() {
     console.log('vue lifecycle update called')
-    // console.log('update')
     // this.viewport.resize()
   },
   // cleaning up component, leaving no variables or events that could cause memory leaks to app
@@ -367,10 +317,14 @@ export default defineComponent({
     this.clearMetadata()
 
     this.renderingEngine.destroy()
+
+    // reset variables
+    this.isDicomFileRendered = false
+    this.isMetaDataSet = false
+    this.updateDisplayOfMetaData()
   },
   unmounted() {
     console.log('vue lifecycle unmounted called')
-    //this.renderingEngine.destroy()
   },
   methods: {
     async initCornerstoneCore() {
@@ -395,12 +349,8 @@ export default defineComponent({
       console.log('creating dicom file')
       if (this.dicomFile != (null || undefined)) {
         console.log('file size before creation: ' + this.dicomFile.size)
+        this.dicomFile = null
       }
-
-      // for testing only
-      console.log('current file content: ' + this.currentContent)
-      console.log('resource name: ' + this.resource.name)
-      console.log('resource mime type: ' + this.resource.mimeType)
 
       this.dicomFile = await new File([this.currentContent], this.resource.name, {
         type:
@@ -411,14 +361,17 @@ export default defineComponent({
 
       console.log('file size after creation: ' + this.dicomFile.size)
     },
+    async addWadouriPrefix(url: String) {
+      return 'wadouri:' + url
+    },
+
     // TODO: add type for image id
-    // precondition: have image data
     setMetadata(imageId) {
       // get metadata from viewport
-      this.imageData = this.viewport.getImageData()
+      this.imageData = this.viewport.getImageData() // returns IImageData object, see https://www.cornerstonejs.org/api/core/namespace/Types#IImageData
 
-      // filename - maybe not needed?
-      document.getElementById('filename').innerHTML = this.imageName //this.resource.name
+      // filename (for testing only) - not needed since filename is displayed in the header of the app
+      document.getElementById('filename').innerHTML = this.dicomFileName //this.resource.name
 
       if (imageId != (null || undefined) && typeof imageId == 'string') {
         const {
@@ -485,8 +438,29 @@ export default defineComponent({
 
         //window center
         document.getElementById('window-center').innerHTML = voiLutModuleLocal.windowCenter
+
+        this.isMetaDataSet = true
+        this.updateDisplayOfMetaData()
       } else {
         console.log('no image meta data available')
+      }
+    },
+    updateDisplayOfMetaData() {
+      if (this.isMetaDataSet) {
+        this.metaDataHTMLelement.style.display = 'block'
+        console.log('number of html items: ' + this.metaDataHTMLitems.length)
+
+        for (let i = 0; i < this.metaDataHTMLitems.length; i++) {
+          // item in this.metaDataHTMLitems as HTMLCollectionOf<HTMLDivElement>) {
+          this.metaDataHTMLitems[i].style.display = 'block'
+        }
+      } else {
+        //this.metaDataHTMLelement.style.display = 'none'
+
+        for (let i = 0; i < this.metaDataHTMLitems.length; i++) {
+          // item in this.metaDataHTMLitems as HTMLCollectionOf<HTMLDivElement>) {
+          this.metaDataHTMLitems[i].style.display = 'none'
+        }
       }
     },
     clearMetadata() {
@@ -508,11 +482,10 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
+
     separateCredentialsFromUrl(url: String) {
       const [urlWithoutCredentials, ...rest] = url.split('?')
       const credentials = rest.join('?')
-      console.log('url without credentials: ' + urlWithoutCredentials)
-      console.log('credentaials (remainder of url): ' + credentials)
       return [urlWithoutCredentials, credentials] as const
     },
     uploadDicomFile(event) {
@@ -529,26 +502,23 @@ export default defineComponent({
     },
     async displayDicomFile(f: File) {
       console.log('display dicom file function called for file: ' + f.name)
-      this.imageName = f.name
+      this.dicomFileName = f.name
 
       // for testing only
-      this.readMyFile(f)
+      // this.readMyFile(f)
 
       const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
-      console.log('added image id: ' + imageId)
 
       // define a stack containing a single image
       const dicomStack = [imageId]
 
       //dicomImage imageId
-      console.log('number of items in stack: ' + dicomStack.length)
       console.log('first stack item: ' + dicomStack[0])
 
       // set stack on the viewport (only one image in the stack, therefore no frame # required)
       await this.viewport.setStack(dicomStack)
 
       // render the image
-      // updates every viewport in the rendering engine
       this.viewport.render()
 
       // setting metadata
@@ -556,43 +526,19 @@ export default defineComponent({
     },
     readMyFile(f: File) {
       let reader = new FileReader()
-      // reader.readAsDataURL(f)
-      reader.readAsText(f, 'UTF-8') // creates the same output as current content
-      //reader.readAsArrayBuffer(f)
+      reader.readAsText(f, 'UTF-8')
       reader.onloadend = function () {
         let result = reader.result as String
         console.log('reading file lenght: ' + result.length)
       }
     }
-    /*
-    ,
-    async waitingForURL() {
-      console.log('waiting for URL...')
-
-      let i = 0
-      let size = (this.url as String).length
-      console.log('url length: ' + size)
-      console.log('i: ' + i)
-      while (i < 3) {
-        this.$nextTick(() => {
-          size = (this.url as String).length
-          console.log('i: ' + i)
-          console.log('url length: ' + size)
-          console.log('url : ' + this.url)
-          i++
-        })
-      }
-
-      console.log('url length: ' + size)
-    }
-    */
   }
 })
 </script>
 
 <style lang="scss" scoped>
 .dicom-viewer {
-  border: 10px solid blue; // none
+  border: none; //10px solid blue;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -609,5 +555,6 @@ export default defineComponent({
   border: 10px solid green; //none
   width: auto;
   height: 500px; // 100%;
+  //display: block;
 }
 </style>
