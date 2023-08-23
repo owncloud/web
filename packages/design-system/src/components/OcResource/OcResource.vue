@@ -237,6 +237,12 @@ export default defineComponent({
           fillType: 'fill'
         }
       }
+      if (this.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
 
       return {}
     }

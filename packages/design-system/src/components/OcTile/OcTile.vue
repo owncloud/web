@@ -151,12 +151,6 @@ export default defineComponent({
       if (props.resource.locked) {
         return $gettext('This item is locked')
       }
-      if (props.resource.processing) {
-        return {
-          name: 'loop-right',
-          fillType: 'line'
-        }
-      }
       return null
     })
 
