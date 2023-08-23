@@ -6,7 +6,6 @@ import { resourceExists, waitForResources } from './utils'
 import { sidebar, editor } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
-import { config } from '../../../../config'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -869,7 +868,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
           }
           // waiting for GET response after all the resource are deleted with batch action
           return (
-            resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
+            resp.url().includes('graph/v1.0/drives') &&
             resp.status() === 200 &&
             resp.request().method() === 'GET'
           )

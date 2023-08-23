@@ -1,15 +1,10 @@
-const { program, Option } = require('commander')
+const { program } = require('commander')
 const getRepoInfo = require('git-repo-info')
 const pkg = require('../../../../package.json')
 const reporter = require('cucumber-html-reporter')
 const os = require('os')
 
 program
-  .addOption(
-    new Option('--backend-name <name>', 'which backend is used')
-      .default('ocis')
-      .choices(['ocis', 'oc10'])
-  )
   .option('--backend-version <semver>', 'version of used backend')
   .option('--environment <type>', 'test environment e.g. docker, local, remote ...')
   .option('--report-open', 'open report in browser', false)

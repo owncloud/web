@@ -1,7 +1,4 @@
 export * as http from './http'
-export * as user from './userManagement'
-export * as config from './config'
-export * as settings from './settings'
 export * as graph from './graph'
 export * as dav from './davSpaces'
 export * as share from './share'
