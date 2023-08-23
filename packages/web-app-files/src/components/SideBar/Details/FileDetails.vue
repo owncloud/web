@@ -45,12 +45,6 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="showLockedBy">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
-          <td>
-            <span v-text="lockedByDisplayName" />
-          </td>
-        </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
           <td>
@@ -241,7 +235,6 @@ export default defineComponent({
     const clientService = useClientService()
     const previewService = usePreviewService()
     const preview = ref(undefined)
-    const lockedByDisplayName = ref('')
 
     const directLink = computed(() => {
       return !unref(isPublicLinkContext)
@@ -301,10 +294,6 @@ export default defineComponent({
         )
       }
       await Promise.all(calls.map((p) => p.catch((e) => e)))
-      const lockedUserResult = await clientService.graphAuthenticated.users.getUser(
-        unref(resource).lockOwner.split('@')[0]
-      )
-      lockedByDisplayName.value = lockedUserResult?.data?.displayName
     }
 
     const isFolder = computed(() => {
@@ -338,10 +327,6 @@ export default defineComponent({
       )
     })
 
-    const showLockedBy = computed(() => {
-      return !!unref(resource).lockOwner
-    })
-
     watch(
       resource,
       () => {
@@ -370,9 +355,7 @@ export default defineComponent({
       hasTags: useCapabilityFilesTags(),
       isPreviewLoading,
       ancestorMetaData,
-      sharedAncestor,
-      showLockedBy,
-      lockedByDisplayName
+      sharedAncestor
     }
   },
   computed: {
