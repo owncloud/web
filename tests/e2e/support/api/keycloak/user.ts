@@ -61,7 +61,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 }
 
 const initializeUser = async (username: string): Promise<void> => {
-  return getTokenFromLogin({ browser: state.browser, username })
+  return getTokenFromLogin({ browser: state.browser, username, waitForSelector: '#web-content' })
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {

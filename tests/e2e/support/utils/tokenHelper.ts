@@ -8,12 +8,14 @@ export const getTokenFromLogin = async ({
   browser,
   url = config.frontendUrl,
   username = null,
-  tokenType = null
+  tokenType = null,
+  waitForSelector = null
 }: {
   browser: Browser
   url?: string
   username?: string
   tokenType?: TokenProviderType
+  waitForSelector?: string
 }): Promise<void> => {
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
   const page = await ctx.newPage()
@@ -23,6 +25,8 @@ export const getTokenFromLogin = async ({
 
   await page.goto(url)
   await new Session({ page }).login({ user: loginUser, tokenType })
+
+  waitForSelector && (await page.locator(waitForSelector).waitFor())
 
   await page.close()
   await ctx.close()
