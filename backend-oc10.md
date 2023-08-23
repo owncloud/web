@@ -9,6 +9,10 @@ geekdocFilePath: backend-oc10.md
 
 {{< toc >}}
 
+## Compatibility
+
+Please note that the usage of Web UI and ownCloud 10 as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
+
 ## Prerequisites
 
 Decide on which host and port Web will be served, for example `https://web-host:9100/web-path/`.
