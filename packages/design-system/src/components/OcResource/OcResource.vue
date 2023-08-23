@@ -227,10 +227,6 @@ export default defineComponent({
       if (this.resource.locked) {
         return this.$gettext('This item is locked')
       }
-
-      if (this.resource.processing) {
-        return this.$gettext('This item is processing')
-      }
       return null
     },
 
@@ -239,13 +235,6 @@ export default defineComponent({
         return {
           name: 'lock',
           fillType: 'fill'
-        }
-      }
-
-      if (this.resource.processing) {
-        return {
-          name: 'loop-right',
-          fillType: 'line'
         }
       }
 
