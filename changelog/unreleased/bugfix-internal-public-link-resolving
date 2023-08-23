@@ -1,0 +1,6 @@
+Bugfix: Internal public link resolving
+
+An issue where internally resolved public links instantly triggered the default file action has been fixed.
+
+https://github.com/owncloud/web/pull/9587
+https://github.com/owncloud/web/issues/9578
