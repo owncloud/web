@@ -85,7 +85,6 @@ There are a few config values which need to be set in order for ownCloud Web to 
   "apps" : [
     "files",
     "preview",
-    "search",
     "draw-io"
   ],
   "applications" : [
