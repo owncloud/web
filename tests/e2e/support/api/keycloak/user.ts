@@ -61,18 +61,20 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 }
 
 const initializeUser = async (username: string): Promise<void> => {
-  return getTokenFromLogin({ browser: state.browser, username, tokenType: 'keycloak' })
+  return getTokenFromLogin({ browser: state.browser, username })
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   // first delete ocis user
   await graphDeleteUser({ user, admin })
 
-  await request({
+  const response = await request({
     method: 'DELETE',
     path: join(realmBasePath, 'users', user.uuid),
     user: admin
   })
+  checkResponseStatus(response, 'Failed to delete keycloak user: ' + user.id)
+
   return user
 }
 
