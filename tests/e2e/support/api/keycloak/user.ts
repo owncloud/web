@@ -5,6 +5,8 @@ import { checkResponseStatus } from '../http'
 import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
+import { state } from '../../../cucumber/environment/shared'
+import { getTokenFromLogin } from '../../utils/tokenHelper'
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   const fullName = user.displayName.split(' ')
@@ -51,7 +53,15 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   const usersEnvironment = new UsersEnvironment()
   usersEnvironment.storeCreatedUser({ user: { ...user, uuid } })
+
+  // initialize user
+  await initializeUser(user.id)
+
   return user
+}
+
+const initializeUser = async (username: string): Promise<void> => {
+  return getTokenFromLogin({ browser: state.browser, username, tokenType: 'keycloak' })
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {

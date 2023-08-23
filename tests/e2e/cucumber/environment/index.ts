@@ -12,7 +12,7 @@ import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from 'playwright'
 
 import { config } from '../../config'
-import { api, environment } from '../../support'
+import { api } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import {
@@ -22,14 +22,12 @@ import {
   createdUserStore
 } from '../../support/store'
 import { User } from '../../support/types'
-import { Session } from '../../support/objects/runtime/session'
-import { TokenProviderType } from '../../support/environment'
+import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 
 export { World }
 
-const usersEnvironment = new environment.UsersEnvironment()
 const logger = pino({
   level: config.logLevel,
   transport: {
@@ -167,21 +165,14 @@ const cleanUpGroup = async (adminUser: User) => {
   createdGroupStore.clear()
 }
 
-const getTokenFromLogin = async (browser: Browser, url: string, tokenType?: TokenProviderType) => {
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
-  const page = await ctx.newPage()
-  const admin = usersEnvironment.getUser({ key: 'admin' })
-  await page.goto(url)
-  await new Session({ page }).login({ user: admin, tokenType })
-
-  await page.close()
-  await ctx.close()
-}
-
 const setAdminToken = async (browser: Browser) => {
-  return getTokenFromLogin(browser, config.frontendUrl)
+  return getTokenFromLogin({ browser })
 }
 
 const setKeycloakAdminToken = async (browser: Browser) => {
-  return getTokenFromLogin(browser, config.keycloakLoginUrl, 'keycloak')
+  return getTokenFromLogin({
+    browser,
+    url: config.keycloakLoginUrl,
+    tokenType: 'keycloak'
+  })
 }
