@@ -868,7 +868,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
           }
           // waiting for GET response after all the resource are deleted with batch action
           return (
-            resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
+            resp.url().includes('graph/v1.0/drives') &&
             resp.status() === 200 &&
             resp.request().method() === 'GET'
           )

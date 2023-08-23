@@ -1247,7 +1247,7 @@ def webService():
         ],
     }]
 
-def ocisService(type, tika_enabled = False):
+def ocisService(type):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
