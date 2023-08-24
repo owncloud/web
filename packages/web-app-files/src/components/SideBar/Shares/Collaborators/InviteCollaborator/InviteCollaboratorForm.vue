@@ -54,6 +54,7 @@
           <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
         </div>
         <oc-button
+          class="oc-mx-s"
           id="show-more-share-options-btn"
           :aria-label="$gettext('Show more actions')"
           appearance="raw"
@@ -182,8 +183,7 @@ export default defineComponent({
 
     const contextMenuButtonRef = ref(undefined)
 
-    const showContextMenuOnBtnClick = (data) => {
-      const { dropdown, event } = data
+    const showContextMenuOnBtnClick = ({ dropdown, event }) => {
       if (dropdown?.tippy === undefined) {
         return
       }
@@ -472,10 +472,5 @@ export default defineComponent({
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;
-}
-
-#show-more-share-options-btn {
-  margin-left: $oc-space-small;
-  margin-right: $oc-space-small;
 }
 </style>
