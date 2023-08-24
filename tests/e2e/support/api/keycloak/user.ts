@@ -1,5 +1,5 @@
 import join from 'join-path'
-import { getUserIdFromResponse, request, realmBasePath } from './utils'
+import { getUserIdFromResponse, request, realmBasePath, refreshToken } from './utils'
 import { deleteUser as graphDeleteUser } from '../graph'
 import { checkResponseStatus } from '../http'
 import { User, KeycloakRealmRole } from '../../types'
@@ -9,6 +9,7 @@ import { state } from '../../../cucumber/environment/shared'
 import { getTokenFromLogin } from '../../utils/tokenHelper'
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
+  await refreshToken({ user: admin })
   const fullName = user.displayName.split(' ')
   const body = JSON.stringify({
     username: user.id,
