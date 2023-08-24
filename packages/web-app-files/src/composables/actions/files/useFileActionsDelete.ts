@@ -86,6 +86,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
           return false
         }
 
+        if (resources.length === 1 && resources[0].locked) {
+          return false
+        }
+
         if (isLocationCommonActive(router, 'files-common-search')) {
           return resources.some(
             (r) =>

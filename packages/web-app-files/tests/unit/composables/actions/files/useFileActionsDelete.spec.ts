@@ -33,6 +33,11 @@ describe('delete', () => {
           resources: [{ canBeDeleted: () => false }] as Resource[],
           invalidLocation: false,
           expectedStatus: false
+        },
+        {
+          resources: [{ canBeDeleted: () => true, locked: true }] as Resource[],
+          invalidLocation: false,
+          expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
         const { wrapper } = getWrapper({

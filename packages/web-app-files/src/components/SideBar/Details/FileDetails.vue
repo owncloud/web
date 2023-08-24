@@ -218,6 +218,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { $gettext } = useGettext()
+    const client = useClientService()
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)

@@ -240,6 +240,10 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
           return false
         }
 
+        if (resources.length === 1 && resources[0].locked) {
+          return false
+        }
+
         const renameDisabled = resources.some((resource) => {
           return !resource.canRename()
         })

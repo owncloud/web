@@ -25,7 +25,11 @@
       >
         <span v-text="$gettext('Disabled')" />
       </oc-tag>
-      <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
+      <div
+        class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center"
+        v-oc-tooltip="tooltipLabelIcon"
+        :aria-label="tooltipLabelIcon"
+      >
         <div class="oc-tile-card-hover"></div>
         <slot name="imageField" :item="resource">
           <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
@@ -76,6 +80,7 @@ import OcResource from '../OcResource/OcResource.vue'
 import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
 import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
 import OcTag from '../OcTag/OcTag.vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'OcTile',
@@ -119,6 +124,7 @@ export default defineComponent({
   },
   emits: ['click', 'contextmenu'],
   setup(props) {
+    const { $gettext } = useGettext()
     const showStatusIcon = computed(() => {
       return props.resource.locked || props.resource.processing
     })
@@ -141,9 +147,17 @@ export default defineComponent({
       return {}
     })
 
+    const tooltipLabelIcon = computed(() => {
+      if (props.resource.locked) {
+        return $gettext('This item is locked')
+      }
+      return null
+    })
+
     return {
       statusIconAttrs,
-      showStatusIcon
+      showStatusIcon,
+      tooltipLabelIcon
     }
   }
 })
