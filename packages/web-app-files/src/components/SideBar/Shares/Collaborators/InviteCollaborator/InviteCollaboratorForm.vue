@@ -34,31 +34,67 @@
         <span />
       </template>
     </oc-select>
-    <div class="oc-flex oc-flex-middle oc-flex-between oc-mb-l oc-mt-s">
+    <div class="oc-flex oc-flex-between oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
         mode="create"
         class="role-selection-dropdown"
         @option-change="collaboratorRoleChanged"
       />
-      <expiration-datepicker
-        v-if="!saving"
-        :share-types="selectedCollaborators.map((c) => c.value.shareType)"
-        @option-change="collaboratorExpiryChanged"
-      />
-      <oc-button
-        id="new-collaborators-form-create-button"
-        key="new-collaborator-save-button"
-        data-testid="new-collaborators-form-create-button"
-        :disabled="!$_isValid || saving"
-        :variation="saving ? 'passive' : 'primary'"
-        :appearance="saving ? 'outline' : 'filled'"
-        submit="submit"
-        :show-spinner="savingDelayed"
-        @click="share"
-      >
-        <span v-text="$gettext(saveButtonLabel)" />
-      </oc-button>
+      <div class="oc-flex">
+        <div v-if="expirationDate" class="oc-flex oc-flex-middle">
+          <oc-icon
+            v-oc-tooltip="formattedExpirationDate"
+            class="files-collaborators-collaborator-expiration"
+            data-testid="recipient-info-expiration-date"
+            :aria-label="formattedExpirationDate"
+            name="calendar-event"
+            fill-type="line"
+          />
+          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+        </div>
+        <oc-button
+          class="oc-mx-s"
+          id="show-more-share-options-btn"
+          :aria-label="$gettext('Show more actions')"
+          appearance="raw"
+        >
+          <oc-icon name="more-2" />
+          <oc-drop
+            ref="showMoreShareOptionsDropRef"
+            :drop-id="'show-more-share-options-drop'"
+            :toggle="'#show-more-share-options-btn'"
+            mode="click"
+            padding-size="small"
+          >
+            <oc-list
+              class="collaborator-edit-dropdown-options-list"
+              :aria-label="'shareEditOptions'"
+            >
+              <li class="oc-rounded oc-menu-item-hover">
+                <expiration-datepicker
+                  v-if="!saving"
+                  :share-types="selectedCollaborators.map((c) => c.value.shareType)"
+                  @option-change="collaboratorExpiryChanged"
+                />
+              </li>
+            </oc-list>
+          </oc-drop>
+        </oc-button>
+        <oc-button
+          id="new-collaborators-form-create-button"
+          key="new-collaborator-save-button"
+          data-testid="new-collaborators-form-create-button"
+          :disabled="!$_isValid || saving"
+          :variation="saving ? 'passive' : 'primary'"
+          :appearance="saving ? 'outline' : 'filled'"
+          submit="submit"
+          :show-spinner="savingDelayed"
+          @click="share"
+        >
+          <span v-text="$gettext(saveButtonLabel)" />
+        </oc-button>
+      </div>
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
@@ -92,6 +128,12 @@ import {
 import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
 import { useShares } from 'web-app-files/src/composables'
+import {
+  displayPositionedDropdown,
+  formatDateFromDateTime,
+  formatRelativeDateFromDateTime
+} from 'web-pkg'
+import { DateTime } from 'luxon'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -138,6 +180,16 @@ export default defineComponent({
         savingDelayed.value = true
       }, 700)
     })
+
+    const contextMenuButtonRef = ref(undefined)
+
+    const showContextMenuOnBtnClick = ({ dropdown, event }) => {
+      if (dropdown?.tippy === undefined) {
+        return
+      }
+      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
+    }
+
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -147,7 +199,9 @@ export default defineComponent({
       clientService,
       saving,
       savingDelayed,
-      ...useShares()
+      ...useShares(),
+      showContextMenuOnBtnClick,
+      contextMenuButtonRef
     }
   },
 
@@ -184,6 +238,28 @@ export default defineComponent({
 
     resourceIsSpace() {
       return this.resource.type === 'space'
+    },
+    formattedExpirationDate() {
+      return this.expirationDate === null
+        ? null
+        : formatDateFromDateTime(
+            DateTime.fromISO(this.expirationDate).endOf('day'),
+            this.$language.current
+          )
+    },
+    expirationDateRelative() {
+      return this.expirationDate === null
+        ? null
+        : formatRelativeDateFromDateTime(
+            DateTime.fromISO(this.expirationDate).endOf('day'),
+            this.$language.current
+          )
+    },
+    screenreaderShareExpiration() {
+      return this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })', {
+        expiryDateRelative: this.expirationDateRelative,
+        expiryDate: this.expirationDate
+      })
     }
   },
   mounted() {
@@ -392,6 +468,7 @@ export default defineComponent({
 .role-selection-dropdown {
   max-width: 150px;
 }
+
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;

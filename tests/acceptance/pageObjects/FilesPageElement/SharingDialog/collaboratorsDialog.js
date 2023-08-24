@@ -51,9 +51,8 @@ module.exports = {
     },
     expandExpirationDatePicker: function (collaborator) {
       if (!collaborator) {
-        this.waitForElementVisible('@expirationDatePickerTrigger').click(
-          '@expirationDatePickerTrigger'
-        )
+        this.waitForElementVisible('@threeDotsTrigger').click('@threeDotsTrigger')
+        this.waitForElementVisible('@setExpirationDateButton').click('@setExpirationDateButton')
         return client.page.FilesPageElement.expirationDatePicker()
       }
       const informationSelector = util.format(
@@ -310,6 +309,12 @@ module.exports = {
       selector:
         '//p[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../..//span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
+    },
+    threeDotsTrigger: {
+      selector: 'button#show-more-share-options-btn'
+    },
+    setExpirationDateButton: {
+      selector: '.files-recipient-expiration-datepicker'
     },
     expirationDatePickerTrigger: {
       selector: '//button[contains(@class, "files-collaborators-expiration-button")]',
