@@ -66,6 +66,7 @@ Summary
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
+* Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
 
 Details
 -------
@@ -562,6 +563,13 @@ Details
    https://github.com/owncloud/web/pull/9585
    https://github.com/owncloud/web/pull/9590
    https://github.com/owncloud/web/pull/9596
+
+* Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
+
+   We've added indicators and information in case a file is locked.
+
+   https://github.com/owncloud/web/issues/6682
+   https://github.com/owncloud/web/pull/9566
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
