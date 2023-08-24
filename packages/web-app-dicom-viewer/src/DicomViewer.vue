@@ -289,7 +289,7 @@ export default defineComponent({
       // setting metadata
       this.setMetadata(dicomImageURL)
     } else {
-      console.log('no valid resource url available')
+      // console.log('no valid resource url available')
     }
   },
   // updated gets called anytime some change is made in the component
