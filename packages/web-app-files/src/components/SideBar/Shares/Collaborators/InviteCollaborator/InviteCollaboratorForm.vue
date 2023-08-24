@@ -60,7 +60,8 @@
         >
           <oc-icon name="more-2" />
           <oc-drop
-            :drop-id="'show-more-share-options-btn'"
+            ref="showMoreShareOptionsDropRef"
+            :drop-id="'show-more-share-options-drop'"
             :toggle="'#show-more-share-options-btn'"
             mode="click"
             padding-size="small"
@@ -181,7 +182,7 @@ export default defineComponent({
 
     const contextMenuButtonRef = ref(undefined)
 
-    const showContextMenuOnBtnClick = (data, user) => {
+    const showContextMenuOnBtnClick = (data) => {
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
