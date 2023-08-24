@@ -134,6 +134,7 @@ import {
   formatRelativeDateFromDateTime
 } from 'web-pkg'
 import { DateTime } from 'luxon'
+import { OcDrop } from 'design-system/src/components'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -382,6 +383,7 @@ export default defineComponent({
 
     collaboratorExpiryChanged({ expirationDate }) {
       this.expirationDate = expirationDate
+      ;(this.$refs.showMoreShareOptionsDropRef as InstanceType<typeof OcDrop>).hide()
     },
 
     async share() {
