@@ -63,11 +63,11 @@ Summary
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
-* Enhancement - Moving share's "set expiration date" function: [#9493](https://github.com/owncloud/web/issues/9493)
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 * Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
+* Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
 
 Details
 -------
@@ -530,14 +530,6 @@ Details
    https://github.com/owncloud/web/issues/9434
    https://github.com/owncloud/web/pull/9451
 
-* Enhancement - Moving share's "set expiration date" function: [#9493](https://github.com/owncloud/web/issues/9493)
-
-   Moving "set expiration date" function to a three dots menu to help reduce visual load on simple
-   shares in sharing pane
-
-   https://github.com/owncloud/web/issues/9493
-   https://github.com/owncloud/web/pull/9584
-
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 
    We've improved the tags form in various ways, including visual appearance as well as
@@ -579,6 +571,15 @@ Details
 
    https://github.com/owncloud/web/issues/6682
    https://github.com/owncloud/web/pull/9566
+
+* Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
+
+   Moving "set expiration date" function to a three dots menu to help reduce visual load on simple
+   shares in sharing pane
+
+   https://github.com/owncloud/web/issues/9493
+   https://github.com/owncloud/web/pull/9584
+   https://github.com/owncloud/web/pull/9612
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
