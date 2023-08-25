@@ -12,7 +12,7 @@ import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from 'playwright'
 
 import { config } from '../../config'
-import { api } from '../../support'
+import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import {
@@ -26,7 +26,6 @@ import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import { refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
-import { environment } from '../../support'
 
 export { World }
 

@@ -66,6 +66,7 @@ const initializeUser = async (username: string): Promise<void> => {
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   // first delete ocis user
+  // deletes the user data
   await graphDeleteUser({ user, admin })
 
   const response = await request({
