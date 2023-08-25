@@ -285,13 +285,27 @@ export default defineComponent({
 
     //this.setToolInfo()
 
-    // adding some buttons
+    // adding some buttons for image manipulation
+    // invert image
     this.addButton({
       id: 'invert-tool',
       title: 'Invert',
       onClick: () => {
         const { invert } = this.viewport.getProperties()
         this.viewport.setProperties({ invert: !invert })
+        this.viewport.render()
+      }
+    })
+
+    // reset image
+    this.addButton({
+      id: 'reset-tool',
+      title: 'Reset',
+      onClick: () => {
+        // Resets the viewport's camera
+        this.viewport.resetCamera()
+        // Resets the viewport's properties
+        this.viewport.resetProperties()
         this.viewport.render()
       }
     })
