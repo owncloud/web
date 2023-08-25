@@ -287,24 +287,38 @@ export default defineComponent({
 
     // adding some buttons for image manipulation
 
-    // flip image horizontal
+    // zoom in
     this.addButton({
-      id: 'flip-horizontal-tool',
-      title: 'Flip H',
+      id: 'zoom-in-tool',
+      title: 'Zoom+',
       onClick: () => {
-        const { flipHorizontal } = this.viewport.getCamera()
-        this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
+        const camera = this.viewport.getCamera()
+
+        const newCamera = {
+          parallelScale: camera.parallelScale * 0.8,
+          position: camera.position,
+          focalPoint: camera.focalPoint
+        }
+
+        this.viewport.setCamera(newCamera)
         this.viewport.render()
       }
     })
 
-    // flip image vertical
+    // zoom out
     this.addButton({
-      id: 'flip-vertical-tool',
-      title: 'Flip V',
+      id: 'zoom-out-tool',
+      title: 'Zoom-',
       onClick: () => {
-        const { flipVertical } = this.viewport.getCamera()
-        this.viewport.setCamera({ flipVertical: !flipVertical })
+        const camera = this.viewport.getCamera()
+
+        const newCamera = {
+          parallelScale: camera.parallelScale * 1.25,
+          position: camera.position,
+          focalPoint: camera.focalPoint
+        }
+
+        this.viewport.setCamera(newCamera)
         this.viewport.render()
       }
     })
@@ -327,6 +341,28 @@ export default defineComponent({
       onClick: () => {
         const { rotation } = this.viewport.getProperties()
         this.viewport.setProperties({ rotation: rotation + 90 })
+        this.viewport.render()
+      }
+    })
+
+    // flip image horizontal
+    this.addButton({
+      id: 'flip-horizontal-tool',
+      title: 'Flip H',
+      onClick: () => {
+        const { flipHorizontal } = this.viewport.getCamera()
+        this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
+        this.viewport.render()
+      }
+    })
+
+    // flip image vertical
+    this.addButton({
+      id: 'flip-vertical-tool',
+      title: 'Flip V',
+      onClick: () => {
+        const { flipVertical } = this.viewport.getCamera()
+        this.viewport.setCamera({ flipVertical: !flipVertical })
         this.viewport.render()
       }
     })
