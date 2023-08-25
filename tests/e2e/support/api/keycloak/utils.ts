@@ -1,6 +1,6 @@
 import join from 'join-path'
 import { BodyInit, Response } from 'node-fetch'
-import { request as httpRequest } from '../http'
+import { request as httpRequest, checkResponseStatus } from '../http'
 import { User } from '../../types'
 import { TokenEnvironmentFactory } from '../../environment'
 
@@ -35,6 +35,7 @@ export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
     header: { 'Content-Type': 'application/x-www-form-urlencoded' },
     user
   })
+  checkResponseStatus(response, 'Failed refresh access token')
 
   const resBody = await response.json()
 

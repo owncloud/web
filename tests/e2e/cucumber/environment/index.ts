@@ -25,6 +25,7 @@ import { User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
+import { refreshToken } from '../../support/api/keycloak'
 
 export { World }
 
@@ -108,6 +109,10 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
 
   if (result.status !== Status.PASSED) {
     await this.actorsEnvironment.close()
+  }
+
+  if (config.keycloak) {
+    await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
   }
 
   await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
