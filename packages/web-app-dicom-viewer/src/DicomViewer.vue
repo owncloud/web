@@ -286,6 +286,18 @@ export default defineComponent({
     //this.setToolInfo()
 
     // adding some buttons for image manipulation
+
+    // rotate image clockwise
+    this.addButton({
+      id: 'rotate-tool',
+      title: 'Rotate +90',
+      onClick: () => {
+        const { rotation } = this.viewport.getProperties()
+        this.viewport.setProperties({ rotation: rotation + 90 })
+        this.viewport.render()
+      }
+    })
+
     // invert image
     this.addButton({
       id: 'invert-tool',
