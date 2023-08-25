@@ -3,8 +3,9 @@ import { BodyInit, Response } from 'node-fetch'
 import { request as httpRequest, checkResponseStatus } from '../http'
 import { User } from '../../types'
 import { TokenEnvironmentFactory } from '../../environment'
+import { config } from '../../../config'
 
-export const realmBasePath = 'admin/realms/oCIS'
+export const realmBasePath = `admin/realms/${config.keycloakRealm}`
 
 export const request = async (args: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL' | 'PROPFIND' | 'PATCH'
@@ -48,4 +49,9 @@ export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
       refreshToken: resBody.refresh_token
     }
   })
+}
+
+export const setupKeycloakAdminUser = (user: User) => {
+  user.id = config.keycloakAdminUser
+  user.password = config.keycloakAdminPassword
 }

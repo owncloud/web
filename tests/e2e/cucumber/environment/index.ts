@@ -25,7 +25,8 @@ import { User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
-import { refreshToken } from '../../support/api/keycloak'
+import { refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
+import { environment } from '../../support'
 
 export { World }
 
@@ -92,6 +93,12 @@ BeforeAll(async (): Promise<void> => {
       await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
     chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
   }[config.browser]()
+
+  // setup keycloak admin user
+  if (config.keycloak) {
+    const usersEnvironment = new environment.UsersEnvironment()
+    setupKeycloakAdminUser(usersEnvironment.getUser({ key: 'admin' }))
+  }
 })
 
 const defaults = {
@@ -111,6 +118,7 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
     await this.actorsEnvironment.close()
   }
 
+  // refresh keycloak admin access token
   if (config.keycloak) {
     await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
   }

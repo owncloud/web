@@ -6,7 +6,10 @@ exports.config = {
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
-  baseUrlKeycloak: process.env.KEYCLOAK_URL ?? 'keycloak.owncloud.test',
+  keycloakHost: process.env.KEYCLOAK_HOST ?? 'keycloak.owncloud.test',
+  keycloakRealm: process.env.KEYCLOAK_REALM ?? 'oCIS',
+  keycloakAdminUser: process.env.KEYCLOAK_ADMIN_USER ?? 'admin',
+  keycloakAdminPassword: process.env.KEYCLOAK_ADMIN_PASSWORD ?? 'admin',
   apiToken: process.env.API_TOKEN === 'true' || process.env.KEYCLOAK === 'true',
   get backendUrl() {
     return withHttp(process.env.BACKEND_HOST || this.baseUrlOcis)
@@ -15,10 +18,10 @@ exports.config = {
     return withHttp(process.env.SERVER_HOST || this.baseUrlOcis)
   },
   get keycloakUrl() {
-    return withHttp(this.baseUrlKeycloak)
+    return withHttp(this.keycloakHost)
   },
   get keycloakLoginUrl() {
-    return withHttp(this.baseUrlKeycloak + '/admin/master/console')
+    return withHttp(this.keycloakHost + '/admin/master/console')
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',
