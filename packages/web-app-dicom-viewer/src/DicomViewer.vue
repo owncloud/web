@@ -94,15 +94,13 @@ import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
 // vue imports
-import { defineComponent, unref } from 'vue'
+import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
 // other imports
 import { Resource } from 'web-client/src'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import uids from './helper/uids'
-
-import path, { join } from 'path'
 
 // declaring some const & references
 const { ViewportType } = Enums
@@ -157,13 +155,8 @@ cornerstone.registerImageLoader('http', cornerstoneDICOMImageLoader.loadImage)
 cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
 export default defineComponent({
-  //name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps?!?
-  components: {}, // only needed if there are child components
-  setup() {
-    return {
-      ...useDownloadFile()
-    }
-  }, // maybe not needed with the streamlined version
+  //name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps
+  components: {}, // only needed if are child components
   props: {
     url: {
       type: String,
@@ -176,6 +169,11 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       default: null
+    }
+  }, // only needed if there are child components
+  setup() {
+    return {
+      ...useDownloadFile()
     }
   },
   data() {

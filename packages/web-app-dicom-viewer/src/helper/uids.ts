@@ -16,8 +16,7 @@
 
 const uids = {
   '1.2.840.10008.1.1': 'Verification SOP Class',
-  '1.2.840.10008.1.2':
-    'Implicit VR Little Endian: Default Transfer Syntax for DICOM',
+  '1.2.840.10008.1.2': 'Implicit VR Little Endian: Default Transfer Syntax for DICOM',
   '1.2.840.10008.1.2.1': 'Explicit VR Little Endian',
   '1.2.840.10008.1.2.1.99': 'Deflated Explicit VR Little Endian',
   '1.2.840.10008.1.2.2': 'Explicit VR Big Endian (Retired)',
@@ -26,54 +25,36 @@ const uids = {
   '1.2.840.10008.1.2.4.51':
     'JPEG Extended (Process 2 & 4): Default Transfer Syntax for Lossy JPEG 12 Bit Image Compression (Process 4 only)',
   '1.2.840.10008.1.2.4.52': 'JPEG Extended (Process 3 & 5) (Retired)',
-  '1.2.840.10008.1.2.4.53':
-    'JPEG Spectral Selection, Non-Hierarchical (Process 6 & 8) (Retired)',
-  '1.2.840.10008.1.2.4.54':
-    'JPEG Spectral Selection, Non-Hierarchical (Process 7 & 9) (Retired)',
-  '1.2.840.10008.1.2.4.55':
-    'JPEG Full Progression, Non-Hierarchical (Process 10 & 12) (Retired)',
-  '1.2.840.10008.1.2.4.56':
-    'JPEG Full Progression, Non-Hierarchical (Process 11 & 13) (Retired)',
+  '1.2.840.10008.1.2.4.53': 'JPEG Spectral Selection, Non-Hierarchical (Process 6 & 8) (Retired)',
+  '1.2.840.10008.1.2.4.54': 'JPEG Spectral Selection, Non-Hierarchical (Process 7 & 9) (Retired)',
+  '1.2.840.10008.1.2.4.55': 'JPEG Full Progression, Non-Hierarchical (Process 10 & 12) (Retired)',
+  '1.2.840.10008.1.2.4.56': 'JPEG Full Progression, Non-Hierarchical (Process 11 & 13) (Retired)',
   '1.2.840.10008.1.2.4.57': 'JPEG Lossless, Non-Hierarchical (Process 14)',
-  '1.2.840.10008.1.2.4.58':
-    'JPEG Lossless, Non-Hierarchical (Process 15) (Retired)',
-  '1.2.840.10008.1.2.4.59':
-    'JPEG Extended, Hierarchical (Process 16 & 18) (Retired)',
-  '1.2.840.10008.1.2.4.60':
-    'JPEG Extended, Hierarchical (Process 17 & 19) (Retired)',
-  '1.2.840.10008.1.2.4.61':
-    'JPEG Spectral Selection, Hierarchical (Process 20 & 22) (Retired)',
-  '1.2.840.10008.1.2.4.62':
-    'JPEG Spectral Selection, Hierarchical (Process 21 & 23) (Retired)',
-  '1.2.840.10008.1.2.4.63':
-    'JPEG Full Progression, Hierarchical (Process 24 & 26) (Retired)',
-  '1.2.840.10008.1.2.4.64':
-    'JPEG Full Progression, Hierarchical (Process 25 & 27) (Retired)',
-  '1.2.840.10008.1.2.4.65':
-    'JPEG Lossless, Hierarchical (Process 28) (Retired)',
-  '1.2.840.10008.1.2.4.66':
-    'JPEG Lossless, Hierarchical (Process 29) (Retired)',
+  '1.2.840.10008.1.2.4.58': 'JPEG Lossless, Non-Hierarchical (Process 15) (Retired)',
+  '1.2.840.10008.1.2.4.59': 'JPEG Extended, Hierarchical (Process 16 & 18) (Retired)',
+  '1.2.840.10008.1.2.4.60': 'JPEG Extended, Hierarchical (Process 17 & 19) (Retired)',
+  '1.2.840.10008.1.2.4.61': 'JPEG Spectral Selection, Hierarchical (Process 20 & 22) (Retired)',
+  '1.2.840.10008.1.2.4.62': 'JPEG Spectral Selection, Hierarchical (Process 21 & 23) (Retired)',
+  '1.2.840.10008.1.2.4.63': 'JPEG Full Progression, Hierarchical (Process 24 & 26) (Retired)',
+  '1.2.840.10008.1.2.4.64': 'JPEG Full Progression, Hierarchical (Process 25 & 27) (Retired)',
+  '1.2.840.10008.1.2.4.65': 'JPEG Lossless, Hierarchical (Process 28) (Retired)',
+  '1.2.840.10008.1.2.4.66': 'JPEG Lossless, Hierarchical (Process 29) (Retired)',
   '1.2.840.10008.1.2.4.70':
     'JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14 [Selection Value 1]): Default Transfer Syntax for Lossless JPEG Image Compression',
   '1.2.840.10008.1.2.4.80': 'JPEG-LS Lossless Image Compression',
   '1.2.840.10008.1.2.4.81': 'JPEG-LS Lossy (Near-Lossless) Image Compression',
   '1.2.840.10008.1.2.4.90': 'JPEG 2000 Image Compression (Lossless Only)',
   '1.2.840.10008.1.2.4.91': 'JPEG 2000 Image Compression',
-  '1.2.840.10008.1.2.4.92':
-    'JPEG 2000 Part 2 Multi-component Image Compression (Lossless Only)',
-  '1.2.840.10008.1.2.4.93':
-    'JPEG 2000 Part 2 Multi-component Image Compression',
+  '1.2.840.10008.1.2.4.92': 'JPEG 2000 Part 2 Multi-component Image Compression (Lossless Only)',
+  '1.2.840.10008.1.2.4.93': 'JPEG 2000 Part 2 Multi-component Image Compression',
   '1.2.840.10008.1.2.4.94': 'JPIP Referenced',
   '1.2.840.10008.1.2.4.95': 'JPIP Referenced Deflate',
   '1.2.840.10008.1.2.4.100': 'MPEG2 Main Profile @ Main Level',
   '1.2.840.10008.1.2.4.101': 'MPEG2 Main Profile @ High Level',
   '1.2.840.10008.1.2.4.102': 'MPEG-4 AVC/H.264 High Profile / Level 4.1',
-  '1.2.840.10008.1.2.4.103':
-    'MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1',
-  '1.2.840.10008.1.2.4.104':
-    'MPEG-4 AVC/H.264 High Profile / Level 4.2 For 2D Video',
-  '1.2.840.10008.1.2.4.105':
-    'MPEG-4 AVC/H.264 High Profile / Level 4.2 For 3D Video',
+  '1.2.840.10008.1.2.4.103': 'MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1',
+  '1.2.840.10008.1.2.4.104': 'MPEG-4 AVC/H.264 High Profile / Level 4.2 For 2D Video',
+  '1.2.840.10008.1.2.4.105': 'MPEG-4 AVC/H.264 High Profile / Level 4.2 For 3D Video',
   '1.2.840.10008.1.2.4.106': 'MPEG-4 AVC/H.264 Stereo High Profile / Level 4.2',
   '1.2.840.10008.1.2.5': 'RLE Lossless',
   '1.2.840.10008.1.2.6.1': 'RFC 2557 MIME encapsulation',
@@ -107,8 +88,7 @@ const uids = {
   '1.2.840.10008.1.20.1': 'Storage Commitment Push Model SOP Class',
   '1.2.840.10008.1.20.1.1': 'Storage Commitment Push Model SOP Instance',
   '1.2.840.10008.1.20.2': 'Storage Commitment Pull Model SOP Class (Retired)',
-  '1.2.840.10008.1.20.2.1':
-    'Storage Commitment Pull Model SOP Instance (Retired)',
+  '1.2.840.10008.1.20.2.1': 'Storage Commitment Pull Model SOP Instance (Retired)',
   '1.2.840.10008.1.40': 'Procedural Event Logging SOP Class',
   '1.2.840.10008.1.40.1': 'Procedural Event Logging SOP Instance',
   '1.2.840.10008.1.42': 'Substance Administration Logging SOP Class',
@@ -117,23 +97,17 @@ const uids = {
   '1.2.840.10008.2.16.4': 'DICOM Controlled Terminology',
   '1.2.840.10008.3.1.1.1': 'DICOM Application Context Name',
   '1.2.840.10008.3.1.2.1.1': 'Detached Patient Management SOP Class (Retired)',
-  '1.2.840.10008.3.1.2.1.4':
-    'Detached Patient Management Meta SOP Class (Retired)',
+  '1.2.840.10008.3.1.2.1.4': 'Detached Patient Management Meta SOP Class (Retired)',
   '1.2.840.10008.3.1.2.2.1': 'Detached Visit Management SOP Class (Retired)',
   '1.2.840.10008.3.1.2.3.1': 'Detached Study Management SOP Class (Retired)',
   '1.2.840.10008.3.1.2.3.2': 'Study Component Management SOP Class (Retired)',
   '1.2.840.10008.3.1.2.3.3': 'Modality Performed Procedure Step SOP Class',
-  '1.2.840.10008.3.1.2.3.4':
-    'Modality Performed Procedure Step Retrieve SOP Class',
-  '1.2.840.10008.3.1.2.3.5':
-    'Modality Performed Procedure Step Notification SOP Class',
+  '1.2.840.10008.3.1.2.3.4': 'Modality Performed Procedure Step Retrieve SOP Class',
+  '1.2.840.10008.3.1.2.3.5': 'Modality Performed Procedure Step Notification SOP Class',
   '1.2.840.10008.3.1.2.5.1': 'Detached Results Management SOP Class (Retired)',
-  '1.2.840.10008.3.1.2.5.4':
-    'Detached Results Management Meta SOP Class (Retired)',
-  '1.2.840.10008.3.1.2.5.5':
-    'Detached Study Management Meta SOP Class (Retired)',
-  '1.2.840.10008.3.1.2.6.1':
-    'Detached Interpretation Management SOP Class (Retired)',
+  '1.2.840.10008.3.1.2.5.4': 'Detached Results Management Meta SOP Class (Retired)',
+  '1.2.840.10008.3.1.2.5.5': 'Detached Study Management Meta SOP Class (Retired)',
+  '1.2.840.10008.3.1.2.6.1': 'Detached Interpretation Management SOP Class (Retired)',
   '1.2.840.10008.4.2': 'Storage Service Class',
   '1.2.840.10008.5.1.1.1': 'Basic Film Session SOP Class',
   '1.2.840.10008.5.1.1.2': 'Basic Film Box SOP Class',
@@ -141,8 +115,7 @@ const uids = {
   '1.2.840.10008.5.1.1.4.1': 'Basic Color Image Box SOP Class',
   '1.2.840.10008.5.1.1.4.2': 'Referenced Image Box SOP Class (Retired)',
   '1.2.840.10008.5.1.1.9': 'Basic Grayscale Print Management Meta SOP Class',
-  '1.2.840.10008.5.1.1.9.1':
-    'Referenced Grayscale Print Management Meta SOP Class (Retired)',
+  '1.2.840.10008.5.1.1.9.1': 'Referenced Grayscale Print Management Meta SOP Class (Retired)',
   '1.2.840.10008.5.1.1.14': 'Print Job SOP Class',
   '1.2.840.10008.5.1.1.15': 'Basic Annotation Box SOP Class',
   '1.2.840.10008.5.1.1.16': 'Printer SOP Class',
@@ -150,38 +123,28 @@ const uids = {
   '1.2.840.10008.5.1.1.17': 'Printer SOP Instance',
   '1.2.840.10008.5.1.1.17.376': 'Printer Configuration Retrieval SOP Instance',
   '1.2.840.10008.5.1.1.18': 'Basic Color Print Management Meta SOP Class',
-  '1.2.840.10008.5.1.1.18.1':
-    'Referenced Color Print Management Meta SOP Class (Retired)',
+  '1.2.840.10008.5.1.1.18.1': 'Referenced Color Print Management Meta SOP Class (Retired)',
   '1.2.840.10008.5.1.1.22': 'VOI LUT Box SOP Class',
   '1.2.840.10008.5.1.1.23': 'Presentation LUT SOP Class',
   '1.2.840.10008.5.1.1.24': 'Image Overlay Box SOP Class (Retired)',
-  '1.2.840.10008.5.1.1.24.1':
-    'Basic Print Image Overlay Box SOP Class (Retired)',
+  '1.2.840.10008.5.1.1.24.1': 'Basic Print Image Overlay Box SOP Class (Retired)',
   '1.2.840.10008.5.1.1.25': 'Print Queue SOP Instance (Retired)',
   '1.2.840.10008.5.1.1.26': 'Print Queue Management SOP Class (Retired)',
   '1.2.840.10008.5.1.1.27': 'Stored Print Storage SOP Class (Retired)',
-  '1.2.840.10008.5.1.1.29':
-    'Hardcopy Grayscale Image Storage SOP Class (Retired)',
+  '1.2.840.10008.5.1.1.29': 'Hardcopy Grayscale Image Storage SOP Class (Retired)',
   '1.2.840.10008.5.1.1.30': 'Hardcopy Color Image Storage SOP Class (Retired)',
   '1.2.840.10008.5.1.1.31': 'Pull Print Request SOP Class (Retired)',
-  '1.2.840.10008.5.1.1.32':
-    'Pull Stored Print Management Meta SOP Class (Retired)',
+  '1.2.840.10008.5.1.1.32': 'Pull Stored Print Management Meta SOP Class (Retired)',
   '1.2.840.10008.5.1.1.33': 'Media Creation Management SOP Class UID',
   '1.2.840.10008.5.1.1.40': 'Display System SOP Class',
   '1.2.840.10008.5.1.1.40.1': 'Display System SOP Instance',
   '1.2.840.10008.5.1.4.1.1.1': 'Computed Radiography Image Storage',
-  '1.2.840.10008.5.1.4.1.1.1.1':
-    'Digital X-Ray Image Storage - For Presentation',
-  '1.2.840.10008.5.1.4.1.1.1.1.1':
-    'Digital X-Ray Image Storage - For Processing',
-  '1.2.840.10008.5.1.4.1.1.1.2':
-    'Digital Mammography X-Ray Image Storage - For Presentation',
-  '1.2.840.10008.5.1.4.1.1.1.2.1':
-    'Digital Mammography X-Ray Image Storage - For Processing',
-  '1.2.840.10008.5.1.4.1.1.1.3':
-    'Digital Intra-Oral X-Ray Image Storage - For Presentation',
-  '1.2.840.10008.5.1.4.1.1.1.3.1':
-    'Digital Intra-Oral X-Ray Image Storage - For Processing',
+  '1.2.840.10008.5.1.4.1.1.1.1': 'Digital X-Ray Image Storage - For Presentation',
+  '1.2.840.10008.5.1.4.1.1.1.1.1': 'Digital X-Ray Image Storage - For Processing',
+  '1.2.840.10008.5.1.4.1.1.1.2': 'Digital Mammography X-Ray Image Storage - For Presentation',
+  '1.2.840.10008.5.1.4.1.1.1.2.1': 'Digital Mammography X-Ray Image Storage - For Processing',
+  '1.2.840.10008.5.1.4.1.1.1.3': 'Digital Intra-Oral X-Ray Image Storage - For Presentation',
+  '1.2.840.10008.5.1.4.1.1.1.3.1': 'Digital Intra-Oral X-Ray Image Storage - For Processing',
   '1.2.840.10008.5.1.4.1.1.2': 'CT Image Storage',
   '1.2.840.10008.5.1.4.1.1.2.1': 'Enhanced CT Image Storage',
   '1.2.840.10008.5.1.4.1.1.2.2': 'Legacy Converted Enhanced CT Image Storage',
@@ -197,14 +160,10 @@ const uids = {
   '1.2.840.10008.5.1.4.1.1.6.1': 'Ultrasound Image Storage',
   '1.2.840.10008.5.1.4.1.1.6.2': 'Enhanced US Volume Storage',
   '1.2.840.10008.5.1.4.1.1.7': 'Secondary Capture Image Storage',
-  '1.2.840.10008.5.1.4.1.1.7.1':
-    'Multi-frame Single Bit Secondary Capture Image Storage',
-  '1.2.840.10008.5.1.4.1.1.7.2':
-    'Multi-frame Grayscale Byte Secondary Capture Image Storage',
-  '1.2.840.10008.5.1.4.1.1.7.3':
-    'Multi-frame Grayscale Word Secondary Capture Image Storage',
-  '1.2.840.10008.5.1.4.1.1.7.4':
-    'Multi-frame True Color Secondary Capture Image Storage',
+  '1.2.840.10008.5.1.4.1.1.7.1': 'Multi-frame Single Bit Secondary Capture Image Storage',
+  '1.2.840.10008.5.1.4.1.1.7.2': 'Multi-frame Grayscale Byte Secondary Capture Image Storage',
+  '1.2.840.10008.5.1.4.1.1.7.3': 'Multi-frame Grayscale Word Secondary Capture Image Storage',
+  '1.2.840.10008.5.1.4.1.1.7.4': 'Multi-frame True Color Secondary Capture Image Storage',
   '1.2.840.10008.5.1.4.1.1.8': 'Standalone Overlay Storage (Retired)',
   '1.2.840.10008.5.1.4.1.1.9': 'Standalone Curve Storage (Retired)',
   '1.2.840.10008.5.1.4.1.1.9.1': 'Waveform Storage - Trial (Retired)',
@@ -219,29 +178,21 @@ const uids = {
   '1.2.840.10008.5.1.4.1.1.9.6.1': 'Respiratory Waveform Storage',
   '1.2.840.10008.5.1.4.1.1.10': 'Standalone Modality LUT Storage (Retired)',
   '1.2.840.10008.5.1.4.1.1.11': 'Standalone VOI LUT Storage (Retired)',
-  '1.2.840.10008.5.1.4.1.1.11.1':
-    'Grayscale Softcopy Presentation State Storage SOP Class',
-  '1.2.840.10008.5.1.4.1.1.11.2':
-    'Color Softcopy Presentation State Storage SOP Class',
-  '1.2.840.10008.5.1.4.1.1.11.3':
-    'Pseudo-Color Softcopy Presentation State Storage SOP Class',
-  '1.2.840.10008.5.1.4.1.1.11.4':
-    'Blending Softcopy Presentation State Storage SOP Class',
-  '1.2.840.10008.5.1.4.1.1.11.5':
-    'XA/XRF Grayscale Softcopy Presentation State Storage',
+  '1.2.840.10008.5.1.4.1.1.11.1': 'Grayscale Softcopy Presentation State Storage SOP Class',
+  '1.2.840.10008.5.1.4.1.1.11.2': 'Color Softcopy Presentation State Storage SOP Class',
+  '1.2.840.10008.5.1.4.1.1.11.3': 'Pseudo-Color Softcopy Presentation State Storage SOP Class',
+  '1.2.840.10008.5.1.4.1.1.11.4': 'Blending Softcopy Presentation State Storage SOP Class',
+  '1.2.840.10008.5.1.4.1.1.11.5': 'XA/XRF Grayscale Softcopy Presentation State Storage',
   '1.2.840.10008.5.1.4.1.1.12.1': 'X-Ray Angiographic Image Storage',
   '1.2.840.10008.5.1.4.1.1.12.1.1': 'Enhanced XA Image Storage',
   '1.2.840.10008.5.1.4.1.1.12.2': 'X-Ray Radiofluoroscopic Image Storage',
   '1.2.840.10008.5.1.4.1.1.12.2.1': 'Enhanced XRF Image Storage',
-  '1.2.840.10008.5.1.4.1.1.12.3':
-    'X-Ray Angiographic Bi-Plane Image Storage (Retired)',
+  '1.2.840.10008.5.1.4.1.1.12.3': 'X-Ray Angiographic Bi-Plane Image Storage (Retired)',
   '1.2.840.10008.5.1.4.1.1.13.1.1': 'X-Ray 3D Angiographic Image Storage',
   '1.2.840.10008.5.1.4.1.1.13.1.2': 'X-Ray 3D Craniofacial Image Storage',
   '1.2.840.10008.5.1.4.1.1.13.1.3': 'Breast Tomosynthesis Image Storage',
-  '1.2.840.10008.5.1.4.1.1.13.1.4':
-    'Breast Projection X-Ray Image Storage - For Presentation',
-  '1.2.840.10008.5.1.4.1.1.13.1.5':
-    'Breast Projection X-Ray Image Storage - For Processing',
+  '1.2.840.10008.5.1.4.1.1.13.1.4': 'Breast Projection X-Ray Image Storage - For Presentation',
+  '1.2.840.10008.5.1.4.1.1.13.1.5': 'Breast Projection X-Ray Image Storage - For Processing',
   '1.2.840.10008.5.1.4.1.1.14.1':
     'Intravascular Optical Coherence Tomography Image Storage - For Presentation',
   '1.2.840.10008.5.1.4.1.1.14.2':
@@ -258,20 +209,16 @@ const uids = {
   '1.2.840.10008.5.1.4.1.1.68.1': 'Surface Scan Mesh Storage',
   '1.2.840.10008.5.1.4.1.1.68.2': 'Surface Scan Point Cloud Storage',
   '1.2.840.10008.5.1.4.1.1.77.1': 'VL Image Storage - Trial (Retired)',
-  '1.2.840.10008.5.1.4.1.1.77.2':
-    'VL Multi-frame Image Storage - Trial (Retired)',
+  '1.2.840.10008.5.1.4.1.1.77.2': 'VL Multi-frame Image Storage - Trial (Retired)',
   '1.2.840.10008.5.1.4.1.1.77.1.1': 'VL Endoscopic Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.1.1': 'Video Endoscopic Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.2': 'VL Microscopic Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.2.1': 'Video Microscopic Image Storage',
-  '1.2.840.10008.5.1.4.1.1.77.1.3':
-    'VL Slide-Coordinates Microscopic Image Storage',
+  '1.2.840.10008.5.1.4.1.1.77.1.3': 'VL Slide-Coordinates Microscopic Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.4': 'VL Photographic Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.4.1': 'Video Photographic Image Storage',
-  '1.2.840.10008.5.1.4.1.1.77.1.5.1':
-    'Ophthalmic Photography 8 Bit Image Storage',
-  '1.2.840.10008.5.1.4.1.1.77.1.5.2':
-    'Ophthalmic Photography 16 Bit Image Storage',
+  '1.2.840.10008.5.1.4.1.1.77.1.5.1': 'Ophthalmic Photography 8 Bit Image Storage',
+  '1.2.840.10008.5.1.4.1.1.77.1.5.2': 'Ophthalmic Photography 16 Bit Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.5.3': 'Stereometric Relationship Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.5.4': 'Ophthalmic Tomography Image Storage',
   '1.2.840.10008.5.1.4.1.1.77.1.5.5':
@@ -287,10 +234,8 @@ const uids = {
   '1.2.840.10008.5.1.4.1.1.78.6': 'Spectacle Prescription Report Storage',
   '1.2.840.10008.5.1.4.1.1.78.7': 'Ophthalmic Axial Measurements Storage',
   '1.2.840.10008.5.1.4.1.1.78.8': 'Intraocular Lens Calculations Storage',
-  '1.2.840.10008.5.1.4.1.1.79.1':
-    'Macular Grid Thickness and Volume Report Storage',
-  '1.2.840.10008.5.1.4.1.1.80.1':
-    'Ophthalmic Visual Field Static Perimetry Measurements Storage',
+  '1.2.840.10008.5.1.4.1.1.79.1': 'Macular Grid Thickness and Volume Report Storage',
+  '1.2.840.10008.5.1.4.1.1.80.1': 'Ophthalmic Visual Field Static Perimetry Measurements Storage',
   '1.2.840.10008.5.1.4.1.1.81.1': 'Ophthalmic Thickness Map Storage',
   '1.2.840.10008.5.1.4.1.1.82.1': 'Corneal Topography Map Storage',
   '1.2.840.10008.5.1.4.1.1.88.1': 'Text SR Storage - Trial (Retired)',
@@ -307,15 +252,13 @@ const uids = {
   '1.2.840.10008.5.1.4.1.1.88.59': 'Key Object Selection Document Storage',
   '1.2.840.10008.5.1.4.1.1.88.65': 'Chest CAD SR Storage',
   '1.2.840.10008.5.1.4.1.1.88.67': 'X-Ray Radiation Dose SR Storage',
-  '1.2.840.10008.5.1.4.1.1.88.68':
-    'Radiopharmaceutical Radiation Dose SR Storage',
+  '1.2.840.10008.5.1.4.1.1.88.68': 'Radiopharmaceutical Radiation Dose SR Storage',
   '1.2.840.10008.5.1.4.1.1.88.69': 'Colon CAD SR Storage',
   '1.2.840.10008.5.1.4.1.1.88.70': 'Implantation Plan SR Storage',
   '1.2.840.10008.5.1.4.1.1.104.1': 'Encapsulated PDF Storage',
   '1.2.840.10008.5.1.4.1.1.104.2': 'Encapsulated CDA Storage',
   '1.2.840.10008.5.1.4.1.1.128': 'Positron Emission Tomography Image Storage',
-  '1.2.840.10008.5.1.4.1.1.128.1':
-    'Legacy Converted Enhanced PET Image Storage',
+  '1.2.840.10008.5.1.4.1.1.128.1': 'Legacy Converted Enhanced PET Image Storage',
   '1.2.840.10008.5.1.4.1.1.129': 'Standalone PET Curve Storage (Retired)',
   '1.2.840.10008.5.1.4.1.1.130': 'Enhanced PET Image Storage',
   '1.2.840.10008.5.1.4.1.1.131': 'Basic Structured Display Storage',
@@ -329,28 +272,20 @@ const uids = {
   '1.2.840.10008.5.1.4.1.1.481.8': 'RT Ion Plan Storage',
   '1.2.840.10008.5.1.4.1.1.481.9': 'RT Ion Beams Treatment Record Storage',
   '1.2.840.10008.5.1.4.1.1.501.1': 'DICOS CT Image Storage',
-  '1.2.840.10008.5.1.4.1.1.501.2.1':
-    'DICOS Digital X-Ray Image Storage - For Presentation',
-  '1.2.840.10008.5.1.4.1.1.501.2.2':
-    'DICOS Digital X-Ray Image Storage - For Processing',
+  '1.2.840.10008.5.1.4.1.1.501.2.1': 'DICOS Digital X-Ray Image Storage - For Presentation',
+  '1.2.840.10008.5.1.4.1.1.501.2.2': 'DICOS Digital X-Ray Image Storage - For Processing',
   '1.2.840.10008.5.1.4.1.1.501.3': 'DICOS Threat Detection Report Storage',
   '1.2.840.10008.5.1.4.1.1.501.4': 'DICOS 2D AIT Storage',
   '1.2.840.10008.5.1.4.1.1.501.5': 'DICOS 3D AIT Storage',
   '1.2.840.10008.5.1.4.1.1.501.6': 'DICOS Quadrupole Resonance (QR) Storage',
   '1.2.840.10008.5.1.4.1.1.601.1': 'Eddy Current Image Storage',
   '1.2.840.10008.5.1.4.1.1.601.2': 'Eddy Current Multi-frame Image Storage',
-  '1.2.840.10008.5.1.4.1.2.1.1':
-    'Patient Root Query/Retrieve Information Model - FIND',
-  '1.2.840.10008.5.1.4.1.2.1.2':
-    'Patient Root Query/Retrieve Information Model - MOVE',
-  '1.2.840.10008.5.1.4.1.2.1.3':
-    'Patient Root Query/Retrieve Information Model - GET',
-  '1.2.840.10008.5.1.4.1.2.2.1':
-    'Study Root Query/Retrieve Information Model - FIND',
-  '1.2.840.10008.5.1.4.1.2.2.2':
-    'Study Root Query/Retrieve Information Model - MOVE',
-  '1.2.840.10008.5.1.4.1.2.2.3':
-    'Study Root Query/Retrieve Information Model - GET',
+  '1.2.840.10008.5.1.4.1.2.1.1': 'Patient Root Query/Retrieve Information Model - FIND',
+  '1.2.840.10008.5.1.4.1.2.1.2': 'Patient Root Query/Retrieve Information Model - MOVE',
+  '1.2.840.10008.5.1.4.1.2.1.3': 'Patient Root Query/Retrieve Information Model - GET',
+  '1.2.840.10008.5.1.4.1.2.2.1': 'Study Root Query/Retrieve Information Model - FIND',
+  '1.2.840.10008.5.1.4.1.2.2.2': 'Study Root Query/Retrieve Information Model - MOVE',
+  '1.2.840.10008.5.1.4.1.2.2.3': 'Study Root Query/Retrieve Information Model - GET',
   '1.2.840.10008.5.1.4.1.2.3.1':
     'Patient/Study Only Query/Retrieve Information Model - FIND (Retired)',
   '1.2.840.10008.5.1.4.1.2.3.2':
@@ -359,37 +294,24 @@ const uids = {
     'Patient/Study Only Query/Retrieve Information Model - GET (Retired)',
   '1.2.840.10008.5.1.4.1.2.4.2': 'Composite Instance Root Retrieve - MOVE',
   '1.2.840.10008.5.1.4.1.2.4.3': 'Composite Instance Root Retrieve - GET',
-  '1.2.840.10008.5.1.4.1.2.5.3':
-    'Composite Instance Retrieve Without Bulk Data - GET',
+  '1.2.840.10008.5.1.4.1.2.5.3': 'Composite Instance Retrieve Without Bulk Data - GET',
   '1.2.840.10008.5.1.4.31': 'Modality Worklist Information Model - FIND',
-  '1.2.840.10008.5.1.4.32':
-    'General Purpose Worklist Management Meta SOP Class (Retired)',
-  '1.2.840.10008.5.1.4.32.1':
-    'General Purpose Worklist Information Model - FIND (Retired)',
-  '1.2.840.10008.5.1.4.32.2':
-    'General Purpose Scheduled Procedure Step SOP Class (Retired)',
-  '1.2.840.10008.5.1.4.32.3':
-    'General Purpose Performed Procedure Step SOP Class (Retired)',
+  '1.2.840.10008.5.1.4.32': 'General Purpose Worklist Management Meta SOP Class (Retired)',
+  '1.2.840.10008.5.1.4.32.1': 'General Purpose Worklist Information Model - FIND (Retired)',
+  '1.2.840.10008.5.1.4.32.2': 'General Purpose Scheduled Procedure Step SOP Class (Retired)',
+  '1.2.840.10008.5.1.4.32.3': 'General Purpose Performed Procedure Step SOP Class (Retired)',
   '1.2.840.10008.5.1.4.33': 'Instance Availability Notification SOP Class',
-  '1.2.840.10008.5.1.4.34.1':
-    'RT Beams Delivery Instruction Storage - Trial (Retired)',
-  '1.2.840.10008.5.1.4.34.2':
-    'RT Conventional Machine Verification - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.1': 'RT Beams Delivery Instruction Storage - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.2': 'RT Conventional Machine Verification - Trial (Retired)',
   '1.2.840.10008.5.1.4.34.3': 'RT Ion Machine Verification - Trial (Retired)',
-  '1.2.840.10008.5.1.4.34.4':
-    'Unified Worklist and Procedure Step Service Class - Trial (Retired)',
-  '1.2.840.10008.5.1.4.34.4.1':
-    'Unified Procedure Step - Push SOP Class - Trial (Retired)',
-  '1.2.840.10008.5.1.4.34.4.2':
-    'Unified Procedure Step - Watch SOP Class - Trial (Retired)',
-  '1.2.840.10008.5.1.4.34.4.3':
-    'Unified Procedure Step - Pull SOP Class - Trial (Retired)',
-  '1.2.840.10008.5.1.4.34.4.4':
-    'Unified Procedure Step - Event SOP Class - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.4': 'Unified Worklist and Procedure Step Service Class - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.4.1': 'Unified Procedure Step - Push SOP Class - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.4.2': 'Unified Procedure Step - Watch SOP Class - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.4.3': 'Unified Procedure Step - Pull SOP Class - Trial (Retired)',
+  '1.2.840.10008.5.1.4.34.4.4': 'Unified Procedure Step - Event SOP Class - Trial (Retired)',
   '1.2.840.10008.5.1.4.34.5': 'UPS Global Subscription SOP Instance',
   '1.2.840.10008.5.1.4.34.5.1': 'UPS Filtered Global Subscription SOP Instance',
-  '1.2.840.10008.5.1.4.34.6':
-    'Unified Worklist and Procedure Step Service Class',
+  '1.2.840.10008.5.1.4.34.6': 'Unified Worklist and Procedure Step Service Class',
   '1.2.840.10008.5.1.4.34.6.1': 'Unified Procedure Step - Push SOP Class',
   '1.2.840.10008.5.1.4.34.6.2': 'Unified Procedure Step - Watch SOP Class',
   '1.2.840.10008.5.1.4.34.6.3': 'Unified Procedure Step - Pull SOP Class',
@@ -398,8 +320,7 @@ const uids = {
   '1.2.840.10008.5.1.4.34.8': 'RT Conventional Machine Verification',
   '1.2.840.10008.5.1.4.34.9': 'RT Ion Machine Verification',
   '1.2.840.10008.5.1.4.37.1': 'General Relevant Patient Information Query',
-  '1.2.840.10008.5.1.4.37.2':
-    'Breast Imaging Relevant Patient Information Query',
+  '1.2.840.10008.5.1.4.37.2': 'Breast Imaging Relevant Patient Information Query',
   '1.2.840.10008.5.1.4.37.3': 'Cardiac Relevant Patient Information Query',
   '1.2.840.10008.5.1.4.38.1': 'Hanging Protocol Storage',
   '1.2.840.10008.5.1.4.38.2': 'Hanging Protocol Information Model - FIND',
@@ -412,19 +333,13 @@ const uids = {
   '1.2.840.10008.5.1.4.41': 'Product Characteristics Query SOP Class',
   '1.2.840.10008.5.1.4.42': 'Substance Approval Query SOP Class',
   '1.2.840.10008.5.1.4.43.1': 'Generic Implant Template Storage',
-  '1.2.840.10008.5.1.4.43.2':
-    'Generic Implant Template Information Model - FIND',
-  '1.2.840.10008.5.1.4.43.3':
-    'Generic Implant Template Information Model - MOVE',
-  '1.2.840.10008.5.1.4.43.4':
-    'Generic Implant Template Information Model - GET',
+  '1.2.840.10008.5.1.4.43.2': 'Generic Implant Template Information Model - FIND',
+  '1.2.840.10008.5.1.4.43.3': 'Generic Implant Template Information Model - MOVE',
+  '1.2.840.10008.5.1.4.43.4': 'Generic Implant Template Information Model - GET',
   '1.2.840.10008.5.1.4.44.1': 'Implant Assembly Template Storage',
-  '1.2.840.10008.5.1.4.44.2':
-    'Implant Assembly Template Information Model - FIND',
-  '1.2.840.10008.5.1.4.44.3':
-    'Implant Assembly Template Information Model - MOVE',
-  '1.2.840.10008.5.1.4.44.4':
-    'Implant Assembly Template Information Model - GET',
+  '1.2.840.10008.5.1.4.44.2': 'Implant Assembly Template Information Model - FIND',
+  '1.2.840.10008.5.1.4.44.3': 'Implant Assembly Template Information Model - MOVE',
+  '1.2.840.10008.5.1.4.44.4': 'Implant Assembly Template Information Model - GET',
   '1.2.840.10008.5.1.4.45.1': 'Implant Template Group Storage',
   '1.2.840.10008.5.1.4.45.2': 'Implant Template Group Information Model - FIND',
   '1.2.840.10008.5.1.4.45.3': 'Implant Template Group Information Model - MOVE',
@@ -471,7 +386,7 @@ const uids = {
   '1.2.840.10008.15.0.4.6': 'dicomNetworkConnection',
   '1.2.840.10008.15.0.4.7': 'dicomUniqueAETitle',
   '1.2.840.10008.15.0.4.8': 'dicomTransferCapability',
-  '1.2.840.10008.15.1.1': 'Universal Coordinated Time',
-};
+  '1.2.840.10008.15.1.1': 'Universal Coordinated Time'
+}
 
-export default uids;
+export default uids
