@@ -287,6 +287,39 @@ export default defineComponent({
 
     // adding some buttons for image manipulation
 
+    // flip image horizontal
+    this.addButton({
+      id: 'flip-horizontal-tool',
+      title: 'Flip H',
+      onClick: () => {
+        const { flipHorizontal } = this.viewport.getCamera()
+        this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
+        this.viewport.render()
+      }
+    })
+
+    // flip image vertical
+    this.addButton({
+      id: 'flip-vertical-tool',
+      title: 'Flip V',
+      onClick: () => {
+        const { flipVertical } = this.viewport.getCamera()
+        this.viewport.setCamera({ flipVertical: !flipVertical })
+        this.viewport.render()
+      }
+    })
+
+    // rotate image anti clockwise
+    this.addButton({
+      id: 'backrotate-tool',
+      title: 'Rotate -90',
+      onClick: () => {
+        const { rotation } = this.viewport.getProperties()
+        this.viewport.setProperties({ rotation: rotation - 90 })
+        this.viewport.render()
+      }
+    })
+
     // rotate image clockwise
     this.addButton({
       id: 'rotate-tool',
