@@ -1,9 +1,7 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
     <!-- check ouf if the classes of the div below are still accurate/needed/consistent with overall app design -->
-    <div
-      class="oc-height-1-1 oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium"
-    >
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium">
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas"></div>
       <!-- div element for displaying meta data -->
@@ -79,6 +77,35 @@
         </div>
       </div>
     </div>
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium">
+      <!-- viewport manipulations -->
+      <div id="tools"></div>
+      <div id="tool-info">
+        <!--
+        <h2>viewport manipulations</h2>
+        <div>
+          <span>Rotation:</span>
+          <span id="rotation"></span>
+        </div>
+        <div>
+          <span>Flip Horizontal:</span>
+          <span id="flip-horizontal"></span>
+        </div>
+        <div>
+          <span>Flip Vertical:</span>
+          <span id="flip-vertical"></span>
+        </div>
+        <div>
+          <span>Zoom:</span>
+          <span id="zoom"></span>
+        </div>
+        <div>
+          <span>Inverted:</span>
+          <span id="inverted"></span>
+        </div>
+        -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -90,6 +117,8 @@ import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
 import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
+
+import { init as csToolsInit } from '@cornerstonejs/tools'
 
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
@@ -103,7 +132,7 @@ import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFil
 import uids from './helper/uids'
 
 // declaring some const & references
-const { ViewportType } = Enums
+const { ViewportType, Events } = Enums
 
 // specify external dependencies
 cornerstoneTools.external.Hammer = Hammer
@@ -179,6 +208,7 @@ export default defineComponent({
   data() {
     return {
       isCornerstoneInitialized: false,
+      isCornerstoneToolsInitialized: false,
       isDicomFileRendered: false,
       isMetaDataSet: false,
       element: null,
@@ -188,7 +218,8 @@ export default defineComponent({
       dicomFileName: null,
       imageData: null,
       metaDataElement: null,
-      metaDataItems: null
+      metaDataItems: null,
+      toolInfoElement: null
     }
   },
   watch: {},
@@ -207,6 +238,9 @@ export default defineComponent({
       // initalize cornerstone core
       await this.initCornerstoneCore()
     }
+
+    //await csToolsInit()
+    //await this.initCornerstoneTools()
 
     // set reference to HTML element for viewport
     this.element = document.getElementById('dicom-canvas') as HTMLDivElement
@@ -244,6 +278,23 @@ export default defineComponent({
     this.metaDataItems = document.getElementsByClassName(
       'dicom-metadata-item'
     ) as HTMLCollectionOf<HTMLDivElement>
+    // root element for tool info, maybe not needed
+    this.toolInfoElement = document.getElementById('tool-info') as HTMLDivElement
+
+    //const invertBtn = document.getElementById('invert-tool') as HTMLButtonElement
+
+    //this.setToolInfo()
+
+    // adding some buttons
+    this.addButton({
+      id: 'invert-tool',
+      title: 'Invert',
+      onClick: () => {
+        const { invert } = this.viewport.getProperties()
+        this.viewport.setProperties({ invert: !invert })
+        this.viewport.render()
+      }
+    })
   },
   // "beforeUpdate" is implementing any change in the component
   async beforeUpdate() {
@@ -252,6 +303,7 @@ export default defineComponent({
       // initalize cornerstone core
       await this.initCornerstoneCore()
     }
+    //await this.initCornerstoneTools()
 
     // get resource
     // ensure resource url is not empty
@@ -310,6 +362,16 @@ export default defineComponent({
         this.isCornerstoneInitialized = true
       } catch (e) {
         console.error('Error initalizing cornerstone core', e)
+      }
+    },
+    async initCornerstoneTools() {
+      console.log('initializing cornerstone tools')
+      try {
+        await cornerstoneTools.init()
+        console.log('cornerstone tools initalized')
+      } catch (e) {
+        console.error('Error initalizing cornerstone tools', e)
+        console.log('error initalizing cornerstone tools')
       }
     },
     async prefetchMetadataInformation(imageIdsToPrefetch) {
@@ -450,6 +512,23 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
+    setToolInfo() {
+      // adding event listener
+      this.element.addEventListener(Events.CAMERA_MODIFIED, (_) => {
+        if (!this.viewport) {
+          return
+        }
+
+        const { flipHorizontal, flipVertical } = this.viewport.getCamera()
+        const { rotation, invert } = this.viewport.getProperties()
+
+        document.getElementById('rotation').innerHTML = `${Math.round(rotation)}`
+        document.getElementById('flip-horizontal').innerHTML = `${flipHorizontal}`
+        document.getElementById('flip-vertical').innerHTML = `${flipVertical}`
+        document.getElementById('zoom').innerHTML = `TODO`
+        document.getElementById('inverted').innerHTML = `${invert}`
+      })
+    },
     separateCredentialsFromUrl(url: String) {
       const [urlWithoutCredentials, ...rest] = url.split('?')
       const credentials = rest.join('?')
@@ -495,6 +574,31 @@ export default defineComponent({
         let result = reader.result as String
         console.log('reading file lenght: ' + result.length)
       }
+    },
+    addButton({
+      id,
+      title,
+      container,
+      onClick
+    }: {
+      id?: string
+      title: string
+      container?: HTMLElement
+      onClick: () => void
+    }) {
+      const button = document.createElement('button')
+
+      button.id = id
+      //button.className = 'dicom-manipulation-btn'
+
+      button.style.padding = '12px'
+      button.style.margin = '12px'
+
+      button.innerHTML = title
+      button.onclick = onClick
+
+      container = container ?? document.getElementById('tools')
+      container.append(button)
     }
   }
 })
