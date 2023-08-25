@@ -238,7 +238,7 @@ Before(function () {
   } catch (err) {
     console.log(
       '\x1b[33m%s\x1b[0m',
-      `\tCould not read config file.\n\tSet correct path of config file in WEB_UI_CONFIG env variable to fix this.\n\tSome tests may fail as a result.`
+      `\tCould not read config file.\n\tSet correct path of config file in WEB_UI_CONFIG_FILE env variable to fix this.\n\tSome tests may fail as a result.`
     )
   }
 })
