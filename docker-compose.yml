@@ -22,6 +22,17 @@ services:
       FRONTEND_OCS_ENABLE_DENIALS: "true"
       FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
 
+
+      # activate s3ng storage driver
+      STORAGE_USERS_DRIVER: s3ng
+      STORAGE_SYSTEM_DRIVER: ocis # keep system data on ocis storage since this are only small files atm
+      # s3ng specific settings
+      STORAGE_USERS_S3NG_ENDPOINT: http://minio:9000
+      STORAGE_USERS_S3NG_REGION: default
+      STORAGE_USERS_S3NG_ACCESS_KEY: ${MINIO_ACCESS_KEY:-ocis}
+      STORAGE_USERS_S3NG_SECRET_KEY: ${MINIO_SECRET_KEY:-ocis-secret-key}
+      STORAGE_USERS_S3NG_BUCKET: ${MINIO_BUCKET:-ocis-bucket}
+
       # IDM
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
       IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # override the random admin password from `ocis init`
@@ -33,9 +44,9 @@ services:
       IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
 
       # STORAGE
-      STORAGE_HOME_DRIVER: "${STORAGE_HOME_DRIVER:-ocis}"
-      STORAGE_USERS_DRIVER: "${STORAGE_USERS_DRIVER:-ocis}"
-      STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
+      # STORAGE_HOME_DRIVER: "${STORAGE_HOME_DRIVER:-ocis}"
+      # STORAGE_USERS_DRIVER: "${STORAGE_USERS_DRIVER:-ocis}"
+      # STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
 
       # LDAP
       GROUPS_LDAP_BIND_PASSWORD: "${GROUPS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
@@ -52,11 +63,6 @@ services:
 
       # CORS
       OCIS_CORS_ALLOW_ORIGINS: "https://host.docker.internal:9201"
-
-      # TIKA
-      SEARCH_EXTRACTOR_TYPE: "tika"
-      SEARCH_EXTRACTOR_TIKA_TIKA_URL: "http://host.docker.internal:9998"
-      SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: "true"
       GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
       # make the registry available to the app provider containers
       MICRO_REGISTRY: "mdns"
@@ -80,7 +86,6 @@ services:
     restart: unless-stopped
     depends_on:
       - traefik
-      - tika-service
 
   selenium:
     build:
@@ -275,6 +280,30 @@ services:
     depends_on:
       - traefik
 
+  minio:
+    image: minio/minio:latest
+    entrypoint:
+      - /bin/sh
+    command:
+      [
+        "-c",
+        "mkdir -p /data/${MINIO_BUCKET:-ocis-bucket} && minio server --console-address ':9001' /data",
+      ]
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-ocis}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-ocis-secret-key}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.minio.tls: true
+      traefik.http.routers.minio.rule: PathPrefix(`/`)
+      traefik.http.routers.minio.entrypoints: minio
+      traefik.http.services.minio.loadbalancer.server.port: 9001
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    restart: always
+
   traefik:
     image: traefik:v2.10.1
     restart: unless-stopped
@@ -291,6 +320,7 @@ services:
       - "--entrypoints.ocis.address=:9200"
       - "--entrypoints.collabora.address=:9980"
       - "--entrypoints.wopi.address=:8880"
+      - "--entrypoints.minio.address=:9001"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.middlewares=https_config@docker"
       - "--entrypoints.websecure.http.tls.options=default"
@@ -315,6 +345,7 @@ services:
       - "9980:9980"
       - "8880:8880"
       - "9981:443"
+      - "9001:9001"
     volumes:
       - "./dev/docker/traefik/certificates:/certificates"
       - "./dev/docker/traefik/configs:/configs"
@@ -338,3 +369,4 @@ volumes:
   uploads:
   uppy_companion_datadir:
   ocis-config:
+  minio-data:
