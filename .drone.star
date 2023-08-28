@@ -181,7 +181,7 @@ config = {
                 "RUN_ON_OCIS": "true",
                 "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
                 "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
-                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
+                "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
@@ -1266,7 +1266,7 @@ def ocisService(type, tika_enabled = False):
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "mdns"
     else:
-        environment["WEB_UI_CONFIG"] = "%s" % dir["ocisConfig"]
+        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
         environment["STORAGE_HOME_DRIVER"] = "ocis"
         environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
         environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
@@ -1384,7 +1384,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["COMMENTS_FILE"] = "%s" % dir["commentsFile"]
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
     environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
-    environment["WEB_UI_CONFIG"] = "%s/dist/config.json" % dir["web"]
+    environment["WEB_UI_CONFIG_FILE"] = "%s/dist/config.json" % dir["web"]
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
