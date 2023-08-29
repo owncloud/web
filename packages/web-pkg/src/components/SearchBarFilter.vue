@@ -109,7 +109,7 @@ export default defineComponent({
         }
 
         currentSelection.value = unref(locationOptions).find(
-          ({ id }) => id === SearchLocationFilterConstants.inHere
+          ({ id }) => id === SearchLocationFilterConstants.everywhere
         )
       },
       { immediate: true }
