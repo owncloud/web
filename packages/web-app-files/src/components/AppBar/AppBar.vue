@@ -117,7 +117,6 @@ import {
   useSpaceActionsRestore
 } from 'web-pkg/src/composables/actions'
 import { QuotaModal } from 'web-pkg'
-import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
