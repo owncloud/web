@@ -25,7 +25,8 @@ describe('restore', () => {
         id: '1',
         root: {
           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -39,7 +40,8 @@ describe('restore', () => {
         root: {
           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }],
           deleted: { state: 'trashed' }
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
@@ -53,7 +55,8 @@ describe('restore', () => {
         root: {
           permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }],
           deleted: { state: 'trashed' }
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {

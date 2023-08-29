@@ -25,7 +25,8 @@ describe('disable', () => {
         id: '1',
         root: {
           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
@@ -52,7 +53,8 @@ describe('disable', () => {
         id: '1',
         root: {
           permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
