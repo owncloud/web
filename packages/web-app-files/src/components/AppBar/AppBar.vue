@@ -1,6 +1,13 @@
 <template>
   <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
+    <quota-modal
+      v-if="quotaModalIsOpen"
+      :cancel="closeQuotaModal"
+      :spaces="selectedFiles"
+      :max-quota="maxQuota"
+    />
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
+
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
@@ -91,7 +98,12 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-app-files/src/composables/actions'
-import { useRouteMeta, useStore, ViewModeConstants } from 'web-pkg/src/composables'
+import {
+  useCapabilitySpacesMaxQuota,
+  useRouteMeta,
+  useStore,
+  ViewModeConstants
+} from 'web-pkg/src/composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
@@ -103,6 +115,7 @@ import {
   useSpaceActionsEditQuota,
   useSpaceActionsRestore
 } from 'web-pkg/src/composables/actions'
+import { QuotaModal } from 'web-pkg'
 
 export default defineComponent({
   components: {
@@ -110,7 +123,8 @@ export default defineComponent({
     ContextActions,
     SharesNavigation,
     SidebarToggle,
-    ViewOptions
+    ViewOptions,
+    QuotaModal
   },
   props: {
     viewModeDefault: {
@@ -240,7 +254,10 @@ export default defineComponent({
       breadcrumbMaxWidth,
       breadcrumbTruncationOffset,
       fileDroppedBreadcrumb,
-      pageTitle
+      pageTitle,
+      quotaModalIsOpen,
+      closeQuotaModal,
+      maxQuota: useCapabilitySpacesMaxQuota()
     }
   },
   data: function () {
