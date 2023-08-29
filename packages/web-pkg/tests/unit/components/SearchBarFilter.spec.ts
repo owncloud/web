@@ -9,17 +9,17 @@ const selectors = {
 }
 
 describe('SearchBarFilter', () => {
+  it('shows "Everywhere" as default option', () => {
+    const { wrapper } = getWrapper({ currentFolderAvailable: true })
+    const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
+    expect(filterLabel).toBe('Everywhere')
+  })
   it('shows "Everywhere" as current option if no In here available', () => {
     const { wrapper } = getWrapper()
     const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
     expect(filterLabel).toBe('Everywhere')
   })
-  it('shows "In here" as current option if In here available', () => {
-    const { wrapper } = getWrapper({ currentFolderAvailable: true })
-    const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
-    expect(filterLabel).toBe('In here')
-  })
-  it('shows "In here" as current option if given via scipe', () => {
+  it('shows "In here" as current option if given via scope', () => {
     const { wrapper } = getWrapper({ useScope: 'true' })
     const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
     expect(filterLabel).toBe('In here')
