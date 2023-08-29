@@ -69,7 +69,9 @@ describe('disable', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [mock<SpaceResource>({ id: 1, canDisable: () => true })]
+            resources: [
+              mock<SpaceResource>({ id: 1, canDisable: () => true, driveType: 'project' })
+            ]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
@@ -80,7 +82,9 @@ describe('disable', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [mock<SpaceResource>({ id: 1, canDisable: () => false })]
+            resources: [
+              mock<SpaceResource>({ id: 1, canDisable: () => false, driveType: 'project' })
+            ]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
@@ -94,7 +98,9 @@ describe('disable', () => {
       const { wrapper, mocks } = getWrapper({
         setup: async ({ disableSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.disableDrive.mockResolvedValue(mockAxiosResolve())
-          await disableSpaces([mock<SpaceResource>({ id: 1, canDisable: () => true })])
+          await disableSpaces([
+            mock<SpaceResource>({ id: 1, canDisable: () => true, driveType: 'project' })
+          ])
 
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
         }
@@ -106,7 +112,9 @@ describe('disable', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions, disableSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.disableDrive.mockRejectedValue(new Error())
-          await disableSpaces([mock<SpaceResource>({ id: 1, canDisable: () => true })])
+          await disableSpaces([
+            mock<SpaceResource>({ id: 1, canDisable: () => true, driveType: 'project' })
+          ])
 
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }

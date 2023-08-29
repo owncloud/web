@@ -71,7 +71,9 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [mock<SpaceResource>({ id: 1, canRestore: () => true })]
+            resources: [
+              mock<SpaceResource>({ id: 1, canRestore: () => true, driveType: 'project' })
+            ]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
