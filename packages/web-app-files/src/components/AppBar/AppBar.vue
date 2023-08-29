@@ -199,10 +199,9 @@ export default defineComponent({
       ]
 
       /**
-       * We show mixed results in search result page, including resources like files and folder but also spaces.
-       * Space actions shouldn't be possible in that context
+       * We show mixed results in search result page, including resources like files and folders but also spaces.
+       * Space actions shouldn't be possible in that context.
        **/
-
       if (!isSearchLocation.value) {
         actions = [
           ...actions,
