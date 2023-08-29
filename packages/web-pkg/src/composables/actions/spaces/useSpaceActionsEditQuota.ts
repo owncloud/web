@@ -31,12 +31,7 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
         if (!resources || !resources.length) {
           return false
         }
-
-        if (!resources.every((r) => isProjectSpaceResource(r))) {
-          return false
-        }
-
-        if (resources.some((r) => r.spaceQuota === false)) {
+        if (resources.some((r) => !isProjectSpaceResource(r) || r.spaceQuota === false)) {
           return false
         }
         return ability.can('set-quota-all', 'Drive')
