@@ -58,7 +58,7 @@ const globalSearchBarFilter = '.oc-search-bar-filter'
 const globalSearchDirFilterDropdown =
   '//div[@id="files-global-search"]//button[contains(@id, "oc-filter")]'
 const globalSearchBarFilterAllFiles = '//*[@data-test-id="everywhere"]'
-const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="in-files"]'
+const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="in-here"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
