@@ -97,6 +97,12 @@ import { useActiveLocation } from 'web-app-files/src/composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
+import {
+  useSpaceActionsDelete,
+  useSpaceActionsDisable,
+  useSpaceActionsEditQuota,
+  useSpaceActionsRestore
+} from 'web-pkg/src/composables/actions'
 
 export default defineComponent({
   components: {
@@ -152,6 +158,14 @@ export default defineComponent({
     const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
     const { actions: moveActions } = useFileActionsMove({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
+    const { actions: deleteSpaceActions } = useSpaceActionsDelete({ store })
+    const { actions: disableSpaceActions } = useSpaceActionsDisable({ store })
+    const {
+      actions: editSpaceQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal
+    } = useSpaceActionsEditQuota({ store })
+    const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
 
     const breadcrumbMaxWidth = ref<number>(0)
 
@@ -165,7 +179,11 @@ export default defineComponent({
         ...unref(copyActions),
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
-        ...unref(restoreActions)
+        ...unref(restoreActions),
+        ...unref(editSpaceQuotaActions),
+        ...unref(restoreSpaceActions),
+        ...unref(deleteSpaceActions),
+        ...unref(disableSpaceActions)
       ].filter((item) =>
         item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
       )

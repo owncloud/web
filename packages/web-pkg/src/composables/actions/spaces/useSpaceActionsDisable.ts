@@ -121,13 +121,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
     {
       name: 'disable',
       icon: 'stop-circle',
-      label: ({ resources }) => {
-        if (resources.length === 1) {
-          return $gettext('Disable')
-        }
-        const allowedCount = filterResourcesToDisable(resources).length
-        return $gettext('Disable (%{count})', { count: allowedCount.toString() })
-      },
+      label: () => $gettext('Disable'),
       handler,
       isEnabled: ({ resources }) => {
         return !!filterResourcesToDisable(resources).length

@@ -125,13 +125,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
     {
       name: 'restore',
       icon: 'play-circle',
-      label: ({ resources }) => {
-        if (resources.length === 1) {
-          return $gettext('Enable')
-        }
-        const allowedCount = filterResourcesToRestore(resources).length
-        return $gettext('Enable (%{count})', { count: allowedCount.toString() })
-      },
+      label: () => $gettext('Enable'),
       handler,
       isEnabled: ({ resources }) => {
         return !!filterResourcesToRestore(resources).length
