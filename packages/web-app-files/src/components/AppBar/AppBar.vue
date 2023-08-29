@@ -82,7 +82,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { isLocationTrashActive } from '../../router'
+import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
 import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
@@ -110,12 +110,14 @@ import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
 import {
+  FileAction,
   useSpaceActionsDelete,
   useSpaceActionsDisable,
   useSpaceActionsEditQuota,
   useSpaceActionsRestore
 } from 'web-pkg/src/composables/actions'
 import { QuotaModal } from 'web-pkg'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -182,9 +184,10 @@ export default defineComponent({
     const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
 
     const breadcrumbMaxWidth = ref<number>(0)
+    const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
 
     const batchActions = computed(() => {
-      return [
+      let actions = [
         ...unref(acceptShareActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),
@@ -193,12 +196,25 @@ export default defineComponent({
         ...unref(copyActions),
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
-        ...unref(restoreActions),
-        ...unref(editSpaceQuotaActions),
-        ...unref(restoreSpaceActions),
-        ...unref(deleteSpaceActions),
-        ...unref(disableSpaceActions)
-      ].filter((item) =>
+        ...unref(restoreActions)
+      ]
+
+      /**
+       * We show mixed results in search result page, including resources like files and folder but also spaces.
+       * Space actions shouldn't be possible in that context
+       **/
+
+      if (!isSearchLocation.value) {
+        actions = [
+          ...actions,
+          ...unref(editSpaceQuotaActions),
+          ...unref(restoreSpaceActions),
+          ...unref(deleteSpaceActions),
+          ...unref(disableSpaceActions)
+        ] as FileAction[]
+      }
+
+      return actions.filter((item) =>
         item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
       )
     })

@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { SpaceAction } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
   const { $gettext } = useGettext()
@@ -30,6 +31,11 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
         if (!resources || !resources.length) {
           return false
         }
+
+        if (!resources.every((r) => isProjectSpaceResource(r))) {
+          return false
+        }
+
         if (resources.some((r) => r.spaceQuota === false)) {
           return false
         }

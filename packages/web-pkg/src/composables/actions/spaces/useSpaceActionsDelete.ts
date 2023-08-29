@@ -7,6 +7,7 @@ import { useAbility } from '../../ability'
 import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { Store } from 'vuex'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -17,7 +18,9 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   const route = useRoute()
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
-    return resources.filter((r) => r.canBeDeleted({ user: store.getters.user, ability }))
+    return resources.filter(
+      (r) => isProjectSpaceResource(r) && r.canBeDeleted({ user: store.getters.user, ability })
+    )
   }
 
   const deleteSpaces = async (spaces: SpaceResource[]) => {
