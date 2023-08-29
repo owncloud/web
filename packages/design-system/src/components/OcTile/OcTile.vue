@@ -26,8 +26,8 @@
         <span v-text="$gettext('Disabled')" />
       </oc-tag>
       <div
-        class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center"
         v-oc-tooltip="tooltipLabelIcon"
+        class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center"
         :aria-label="tooltipLabelIcon"
       >
         <div class="oc-tile-card-hover"></div>

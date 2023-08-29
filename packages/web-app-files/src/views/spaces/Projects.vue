@@ -162,7 +162,6 @@ import { formatFileSize } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
-import { useResourcesViewDefaults } from '../../composables'
 import {
   useKeyboardTableNavigation,
   useKeyboardTableMouseActions,
