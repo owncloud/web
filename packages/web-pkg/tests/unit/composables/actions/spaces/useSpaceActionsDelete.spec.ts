@@ -71,7 +71,9 @@ describe('delete', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [mock<SpaceResource>({ id: 1, canBeDeleted: () => true })]
+            resources: [
+              mock<SpaceResource>({ id: 1, canBeDeleted: () => true, driveType: 'project' })
+            ]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
@@ -82,7 +84,9 @@ describe('delete', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [mock<SpaceResource>({ id: 1, canBeDeleted: () => false })]
+            resources: [
+              mock<SpaceResource>({ id: 1, canBeDeleted: () => false, driveType: 'project' })
+            ]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
@@ -97,7 +101,9 @@ describe('delete', () => {
         setup: async ({ actions, deleteSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
 
-          await deleteSpaces([mock<SpaceResource>({ id: 1, canBeDeleted: () => true })])
+          await deleteSpaces([
+            mock<SpaceResource>({ id: 1, canBeDeleted: () => true, driveType: 'project' })
+          ])
 
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
           expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
@@ -110,7 +116,9 @@ describe('delete', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions, deleteSpaces }, { clientService, storeOptions }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
-          await deleteSpaces([mock<SpaceResource>({ id: 1, canBeDeleted: () => true })])
+          await deleteSpaces([
+            mock<SpaceResource>({ id: 1, canBeDeleted: () => true, driveType: 'project' })
+          ])
 
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }

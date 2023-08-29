@@ -89,18 +89,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         handler: async (args) => {
           await loadingService.addTask(() => handler(args))
         },
-        label: ({ resources }) => {
-          const downloadLabel = $gettext('Download')
-
-          if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
-            const downloadableResourcesCount = resources.filter(
-              (r) => r.canDownload() && !isProjectSpaceResource(r)
-            ).length
-            return `${downloadLabel} (${downloadableResourcesCount.toString()})`
-          }
-
-          return downloadLabel
-        },
+        label: () => $gettext('Download'),
         disabledTooltip: ({ resources }) => {
           return areArchiverLimitsExceeded(resources)
             ? $gettext('The selection exceeds the allowed archive size (max. %{maxSize})', {
