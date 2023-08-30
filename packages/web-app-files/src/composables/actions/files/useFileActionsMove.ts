@@ -43,16 +43,13 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
           !isLocationPublicActive(router, 'files-public-link') &&
           !isLocationCommonActive(router, 'files-common-favorites')
         ) {
-          console.log('A')
           return false
         }
         if (resources.length === 0) {
-          console.log('B')
           return false
         }
 
         if (!store.getters['Files/currentFolder']) {
-          console.log('C')
           return false
         }
 

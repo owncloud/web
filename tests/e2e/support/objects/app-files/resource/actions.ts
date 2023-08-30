@@ -57,8 +57,8 @@ const globalSearchInput = '.oc-search-input'
 const globalSearchBarFilter = '.oc-search-bar-filter'
 const globalSearchDirFilterDropdown =
   '//div[@id="files-global-search"]//button[contains(@id, "oc-filter")]'
-const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
-const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="current-folder"]'
+const globalSearchBarFilterAllFiles = '//*[@data-test-id="everywhere"]'
+const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="in-here"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
@@ -1075,7 +1075,7 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
 
   return true
 }
-export type searchFilter = 'all files' | 'current folder'
+export type searchFilter = 'everywhere' | 'in here'
 
 export interface searchResourceGlobalSearchArgs {
   keyword: string
@@ -1097,7 +1097,7 @@ export const searchResourceGlobalSearch = async (
     await page.locator(globalSearchDirFilterDropdown).click()
     await page
       .locator(
-        filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+        filter === 'everywhere' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
       )
       .click()
   }
