@@ -323,7 +323,7 @@ export default defineConfig(async ({ mode, command }) => {
               const re = new RegExp(/(web-app-.*)/)
               const map = Object.fromEntries(
                 moduleNames
-                  // remove out sourceMaps
+                  // remove sourceMaps
                   .filter((m: string) => !m.endsWith('.map'))
                   .map((m) => {
                     const appName = re.exec(bundle?.[m]?.name || m)?.[1]
