@@ -109,6 +109,7 @@ export const historyModePlugins = () =>
   ] as const
 
 export default defineConfig(async ({ mode, command }) => {
+  const watch = process.argv.includes('--watch')
   const production = mode === 'production'
   let config: UserConfig
 
@@ -150,6 +151,7 @@ export default defineConfig(async ({ mode, command }) => {
         // c.f. https://github.com/vitejs/vite-plugin-vue2/issues/18
         // That's why we need to put all styles of our monorepo apps into a monolithic css file for now
         // Once the above issue is resolved or we switch to @vitejs/plugin-vue, we can remove the `cssCodeSplit` setting here
+        sourcemap: watch,
         cssCodeSplit: false,
         rollupOptions: {
           preserveEntrySignatures: 'strict',
@@ -306,6 +308,7 @@ export default defineConfig(async ({ mode, command }) => {
               // Build an import map for loading internal (as in: shipped and built within this mono repo) apps
               let moduleNames: string[]
               let buildModulePath: any
+
               if (bundle) {
                 moduleNames = Object.keys(bundle)
                 // We are in production mode here and need to provide paths relative to the module that contains the import, i.e. web-runtime-*.mjs
@@ -320,6 +323,8 @@ export default defineConfig(async ({ mode, command }) => {
               const re = new RegExp(/(web-app-.*)/)
               const map = Object.fromEntries(
                 moduleNames
+                  // remove out sourceMaps
+                  .filter((m: string) => !m.endsWith('.map'))
                   .map((m) => {
                     const appName = re.exec(bundle?.[m]?.name || m)?.[1]
                     if (appName) {
