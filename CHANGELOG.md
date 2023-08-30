@@ -68,6 +68,7 @@ Summary
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 * Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
 * Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
+* Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
 
 Details
 -------
@@ -580,6 +581,13 @@ Details
    https://github.com/owncloud/web/issues/9493
    https://github.com/owncloud/web/pull/9584
    https://github.com/owncloud/web/pull/9612
+
+* Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
+
+   We've added batch actions to spaces view
+
+   https://github.com/owncloud/web/issues/9626
+   https://github.com/owncloud/web/pull/9627
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================
