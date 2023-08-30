@@ -93,40 +93,6 @@ describe('delete', () => {
   })
   describe('search context', () => {
     describe('computed property "actions"', () => {
-      describe('label', () => {
-        it.each([
-          {
-            resources: [
-              { canBeDeleted: () => true, isShareRoot: () => false },
-              { canBeDeleted: () => true, isShareRoot: () => false }
-            ] as Resource[],
-            deletableCount: 2
-          },
-          {
-            resources: [
-              { canBeDeleted: () => true, isShareRoot: () => false },
-              { canBeDeleted: () => true, isShareRoot: () => false },
-              { canBeDeleted: () => true, isShareRoot: () => false },
-              { canBeDeleted: () => false, isShareRoot: () => false },
-              { canBeDeleted: () => true, isShareRoot: () => true },
-              { canBeDeleted: () => true, isShareRoot: () => false, driveType: 'project' }
-            ] as Resource[],
-            deletableCount: 3
-          }
-        ])('should be set correctly', ({ resources, deletableCount }) => {
-          const { wrapper } = getWrapper({
-            searchLocation: true,
-            setup: () => {
-              const store = useStore()
-              const { actions } = useFileActionsDelete({ store })
-
-              expect(unref(actions)[0].label({ space: null, resources })).toContain(
-                `(${deletableCount.toString()})`
-              )
-            }
-          })
-        })
-      })
       describe('handler', () => {
         it.each([
           {

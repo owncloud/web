@@ -5,7 +5,7 @@
         :breadcrumbs="breadcrumbs"
         :has-sidebar-toggle="true"
         :show-actions-on-selection="true"
-        :has-bulk-actions="false"
+        :has-bulk-actions="true"
         :has-hidden-files="false"
         :has-file-extensions="false"
         :has-pagination="false"

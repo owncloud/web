@@ -11,17 +11,17 @@
       <oc-img
         v-if="hasThumbnail"
         :key="thumbnail"
+        v-oc-tooltip="tooltipLabelIcon"
         :src="thumbnail"
         class="oc-resource-thumbnail"
         width="40"
         height="40"
-        v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
       />
       <oc-resource-icon
+        v-else
         v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
-        v-else
         :resource="resource"
       >
         <template v-if="showStatusIcon" #status>

@@ -54,8 +54,8 @@
           <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
         </div>
         <oc-button
-          class="oc-mx-s"
           id="show-more-share-options-btn"
+          class="oc-mx-s"
           :aria-label="$gettext('Show more actions')"
           appearance="raw"
         >
