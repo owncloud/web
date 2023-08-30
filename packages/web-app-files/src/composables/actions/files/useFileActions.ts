@@ -19,6 +19,7 @@ import {
 import {
   useFileActionsAcceptShare,
   useFileActionsCopy,
+  useFileActionsDuplicate,
   useFileActionsDeclineShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
@@ -53,6 +54,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
+  const { actions: duplicateActions } = useFileActionsDuplicate({ store })
   const { actions: deleteActions } = useFileActionsDelete({ store })
   const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
   const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
@@ -71,6 +73,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     ...unref(deleteActions),
     ...unref(moveActions),
     ...unref(copyActions),
+    ...unref(duplicateActions),
     ...unref(renameActions),
     ...unref(createSpaceFromResource),
     ...unref(showEditTagsActions),

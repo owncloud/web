@@ -90,6 +90,7 @@ import { ViewMode } from 'web-pkg/src/ui/types'
 import {
   useFileActionsAcceptShare,
   useFileActionsCopy,
+  useFileActionsDuplicate,
   useFileActionsDeclineShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
@@ -166,6 +167,7 @@ export default defineComponent({
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
+    const { actions: duplicateActions } = useFileActionsDuplicate({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
@@ -193,6 +195,7 @@ export default defineComponent({
         ...unref(downloadFileActions),
         ...unref(moveActions),
         ...unref(copyActions),
+        ...unref(duplicateActions),
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
         ...unref(restoreActions)

@@ -77,6 +77,12 @@ export class ResourceTransfer extends ConflictDialog {
               { count: count.toString() },
               true
             )
+          : transferType === TransferType.DUPLICATE
+          ? this.$ngettext(
+              '%{count} item was duplicated successfully',
+              '%{count} items were duplicated successfully',
+              count
+            )
           : this.$ngettext(
               '%{count} item was moved successfully',
               '%{count} items were moved successfully',
@@ -93,11 +99,15 @@ export class ResourceTransfer extends ConflictDialog {
     let title =
       transferType === TransferType.COPY
         ? this.$gettext('Failed to copy %{count} resources', { count: errors.length }, true)
+        : transferType === TransferType.DUPLICATE
+        ? this.$gettext('Failed to duplicate %{count} resources', { count: errors.length }, true)
         : this.$gettext('Failed to move %{count} resources', { count: errors.length }, true)
     if (errors.length === 1) {
       title =
         transferType === TransferType.COPY
           ? this.$gettext('Failed to copy "%{name}"', { name: errors[0]?.resourceName }, true)
+          : transferType === TransferType.DUPLICATE
+          ? this.$gettext('Failed to duplicate "%{name}"', { name: errors[0]?.resourceName }, true)
           : this.$gettext('Failed to move "%{name}"', { name: errors[0]?.resourceName }, true)
     }
     this.showErrorMessage({
@@ -123,10 +133,14 @@ export class ResourceTransfer extends ConflictDialog {
       await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
     ).children
 
+    const enforceStrategyForAllConflicts =
+      transferType === TransferType.DUPLICATE ? ResolveStrategy.KEEP_BOTH : false
+
     const resolvedConflicts = await this.resolveAllConflicts(
       this.resourcesToMove,
       this.targetFolder,
-      targetFolderResources
+      targetFolderResources,
+      enforceStrategyForAllConflicts
     )
 
     return this.loadingService.addTask(
@@ -199,7 +213,7 @@ export class ResourceTransfer extends ConflictDialog {
         ) {
           continue
         }
-        if (transferType === TransferType.COPY) {
+        if (transferType === TransferType.COPY || transferType === TransferType.DUPLICATE) {
           await this.clientService.webdav.copyFiles(
             this.sourceSpace,
             resource,

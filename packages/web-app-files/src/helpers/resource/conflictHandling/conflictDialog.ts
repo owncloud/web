@@ -35,7 +35,8 @@ export class ConflictDialog {
   async resolveAllConflicts(
     resourcesToMove: Resource[],
     targetFolder: Resource,
-    targetFolderResources: Resource[]
+    targetFolderResources: Resource[],
+    enforceStrategyForAllConflicts?: ResolveStrategy | boolean
   ): Promise<FileConflict[]> {
     // Collect all conflicting resources
     const allConflicts: FileConflict[] = []
@@ -47,8 +48,8 @@ export class ConflictDialog {
       }
     }
     let count = 0
-    let doForAllConflicts = false
-    let doForAllConflictsStrategy = null
+    let doForAllConflicts = enforceStrategyForAllConflicts ? true : false
+    let doForAllConflictsStrategy = enforceStrategyForAllConflicts || null
     const resolvedConflicts: FileConflict[] = []
     for (const conflict of allConflicts) {
       // Resolve conflicts accordingly

@@ -109,6 +109,61 @@ export default {
     if (context.state.clipboardAction === ClipboardActions.Copy) {
       movedResourcesPromise = copyMove.perform(TransferType.COPY)
     }
+
+    return movedResourcesPromise.then((movedResources) => {
+      const loadingResources = []
+      const fetchedResources = []
+      for (const resource of movedResources) {
+        loadingResources.push(
+          (async () => {
+            const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
+              targetSpace,
+              resource
+            )
+            fetchedResources.push(movedResource)
+          })()
+        )
+      }
+
+      return Promise.all(loadingResources).then(() => {
+        const currentFolder = context.getters.currentFolder
+        context.commit('UPSERT_RESOURCES', fetchedResources)
+        context.commit('LOAD_INDICATORS', currentFolder.path)
+      })
+    })
+  },
+  async duplicateSelectedFiles(
+    context,
+    {
+      targetSpace,
+      clientService,
+      loadingService,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $gettextInterpolate,
+      $ngettext,
+      sourceSpace,
+      resources
+    }
+  ) {
+    const copyMove = new ResourceTransfer(
+      sourceSpace,
+      resources,
+      targetSpace,
+      context.state.currentFolder,
+      clientService,
+      loadingService,
+      createModal,
+      hideModal,
+      showMessage,
+      $gettext,
+      $ngettext,
+      $gettextInterpolate
+    )
+    let movedResourcesPromise = copyMove.perform(TransferType.DUPLICATE)
+
     return movedResourcesPromise.then((movedResources) => {
       const loadingResources = []
       const fetchedResources = []
