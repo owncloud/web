@@ -81,7 +81,9 @@ export class ResourceTransfer extends ConflictDialog {
           ? this.$ngettext(
               '%{count} item was duplicated successfully',
               '%{count} items were duplicated successfully',
-              count
+              count,
+              { count: count.toString() },
+              true
             )
           : this.$ngettext(
               '%{count} item was moved successfully',
