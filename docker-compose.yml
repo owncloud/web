@@ -93,6 +93,7 @@ services:
       - 4444:4444
       - 5900:5900
       - 7900:7900
+      - 6080:7900
     volumes:
       - /dev/shm:/dev/shm
       - uploads:/uploads:ro
