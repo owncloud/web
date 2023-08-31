@@ -116,7 +116,6 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 import { SearchBarFilter } from 'web-pkg/src/components'
-import { SHARE_JAIL_ID } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -128,7 +127,7 @@ export default defineComponent({
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
     const shareId = useRouteQuery('shareId')
-    const locationFilterId = ref(SearchLocationFilterConstants.inHere)
+    const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
@@ -166,41 +165,36 @@ export default defineComponent({
       return unref(providerStore)?.availableProviders
     })
 
-    const buildLocationScopeId = () => {
-      const currentFolder = store.getters['Files/currentFolder']
-      const path = currentFolder.path === '/' ? '' : currentFolder.path
-      if (isShareRoute()) {
-        return `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${shareId.value}${path}`
-      }
-      const spaceId = currentFolder.fileId.split('!')[0]
-      return `${spaceId}${path}`
-    }
-
     const search = async () => {
       searchResults.value = []
       if (!unref(term)) {
         return
       }
-      let searchTerm = unref(term)
+      const terms = [`name:"*${unref(term)}*"`]
+
       if (
         unref(currentFolderAvailable) &&
         unref(locationFilterId) === SearchLocationFilterConstants.inHere
       ) {
         const currentFolder = store.getters['Files/currentFolder']
         let scope
+
         if (currentFolder?.fileId) {
-          scope = buildLocationScopeId()
+          scope = currentFolder?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
-        searchTerm = `${unref(term)} scope:${scope}`
+
+        terms.push(`scope:${scope}`)
       }
+
       loading.value = true
+
       for (const availableProvider of unref(availableProviders)) {
         if (availableProvider.previewSearch?.available) {
           searchResults.value.push({
             providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(unref(searchTerm))
+            result: await availableProvider.previewSearch.search(terms.join(' '))
           })
         }
       }
@@ -215,9 +209,10 @@ export default defineComponent({
       if (unref(activePreviewIndex) === null) {
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
+
         let scope
         if (unref(currentFolderAvailable) && currentFolder?.fileId) {
-          scope = buildLocationScopeId()
+          scope = currentFolder?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
@@ -583,6 +578,7 @@ export default defineComponent({
           &.active {
             background-color: var(--oc-color-background-highlight);
           }
+
           &.disabled {
             background-color: var(--oc-color-background-muted);
             pointer-events: none;
