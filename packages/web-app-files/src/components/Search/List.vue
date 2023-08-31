@@ -242,24 +242,33 @@ export default defineComponent({
     }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      let term = ''
-      if (unref(searchTerm)) {
-        term = `+Name:*${unref(searchTerm)}*`
+      let query = ''
+
+      const add = (k: string, v: string) => {
+        query = (query + ` ${k}:${v}`).trimStart()
       }
 
-      const fullTextQuery = queryItemAsString(unref(fullTextParam))
-      if (fullTextQuery) {
-        term = `+Content:"${unref(searchTerm)}"`
-      }
-      if (unref(scopeQuery) && unref(doUseScope) === 'true') {
-        term += ` scope:${unref(scopeQuery)}`
+      const humanSearchTerm = unref(searchTerm)
+      if (humanSearchTerm) {
+        add('name', `"*${humanSearchTerm}*"`)
       }
 
-      const tagsQuery = queryItemAsString(unref(tagParam))
-      if (tagsQuery) {
-        tagsQuery.split('+')?.forEach((tag) => {
-          term += ` +Tags:"${unref(tag)}"`
-        })
+      const fullTextQuerySupported = queryItemAsString(unref(fullTextParam))
+      if (fullTextQuerySupported) {
+        add('content', `"${humanSearchTerm}"`)
+      }
+
+      const humanScopeQuery = unref(scopeQuery)
+      const scopeQuerySupported = humanScopeQuery && unref(doUseScope) === 'true'
+      if (scopeQuerySupported) {
+        add('scope', `${humanScopeQuery}`)
+      }
+
+      const humanTagsParams = queryItemAsString(unref(tagParam))
+      if (humanTagsParams) {
+        // in the legacy implementation there was the option to query by multiple tags, e.g. string.split("+")
+        // this was not in use(?) and is removed.
+        add('tag', `"${humanTagsParams}"`)
 
         if (manuallyUpdateFilterChip && unref(tagFilter)) {
           /**
@@ -272,7 +281,7 @@ export default defineComponent({
         }
       }
 
-      return term.trimStart()
+      return query
     }
 
     const breadcrumbs = computed(() => {
