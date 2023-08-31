@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { computed, ComputedRef } from 'vue'
 import { useStore } from '../store'
-import { AppProviderCapability } from 'web-client/src/ocs/capabilities'
+import { AppProviderCapability, PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
 
 export const useCapability = <T>(
   store: Store<any>,
@@ -134,4 +134,15 @@ export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
 export const useCapabilityNotifications = createCapabilityComposable(
   'notifications.ocs-endpoints',
   []
+)
+export const useCapabilityPasswordPolicy = createCapabilityComposable<PasswordPolicyCapability>(
+  'password_policy',
+  {
+    min_characters: 8,
+    min_lower_case_characters: 2,
+    min_upper_case_characters: 2,
+    min_digits: 1,
+    min_special_characters: 1,
+    allowed_special_characters: '!"§="'
+  }
 )

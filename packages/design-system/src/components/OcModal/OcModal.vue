@@ -42,6 +42,7 @@
               :error-message="inputError"
               :label="inputLabel"
               :type="inputType"
+              :password-policy="inputPasswordPolicy"
               :description-message="inputDescription"
               :disabled="inputDisabled"
               :fix-message-line="true"
@@ -346,6 +347,14 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    /**
+     * Password policy for the input
+     */
+    inputPasswordPolicy: {
+      type: Object,
+      required: false,
+      default: () => {}
     },
     /**
      * Overwrite default focused element

@@ -188,6 +188,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { OcDrop } from 'design-system/src/components'
+import {useCapabilityPasswordPolicy} from "web-pkg";
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -226,7 +227,8 @@ export default defineComponent({
   setup() {
     return {
       space: inject<Ref<SpaceResource>>('space'),
-      resource: inject<Ref<Resource>>('resource')
+      resource: inject<Ref<Resource>>('resource'),
+      passwordPolicy: useCapabilityPasswordPolicy()
     }
   },
   data() {
@@ -483,6 +485,7 @@ export default defineComponent({
         hasInput: true,
         confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
+        inputPasswordPolicy: this.passwordPolicy,
         inputType: 'password',
         onCancel: this.hideModal,
         onInput: (password) => this.checkPassword(password),

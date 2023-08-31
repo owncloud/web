@@ -8,7 +8,8 @@
         size="small"
         class="oc-mt-s oc-ml-s oc-position-absolute"
       />
-      <input
+      <component
+        :is="inputComponent"
         :id="id"
         v-bind="additionalAttributes"
         ref="input"
@@ -73,6 +74,7 @@ import { defineComponent, HTMLAttributes, PropType } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import OcTextInputPassword from '../_OcTextInputPassword/_OcTextInputPassword.vue'
 
 /**
  * Form Inputs are used to allow users to provide text input when the expected
@@ -89,10 +91,10 @@ import OcIcon from '../OcIcon/OcIcon.vue'
  */
 export default defineComponent({
   name: 'OcTextInput',
-  components: { OcIcon, OcButton },
+  components: { OcIcon, OcButton, OcTextInputPassword },
   status: 'ready',
   release: '1.0.0',
-  inheritAttrs: false,
+  inheritAttrs: true,
   props: {
     /**
      * The ID of the element.
@@ -201,19 +203,15 @@ export default defineComponent({
       default: null
     },
     /**
-     * Determines if the input field is read only.
-     *
-     * Read only field will be visualized by a lock item and additionally behaves like a disabled field.
-     * Read only takes effect if the server won't allow to change the value at all,
-     * disabled should be used instead, if the value can't be changed in a specific context.
-     *
-     * For example: If the backend doesn't allow to set the login states for users in general, use read only.
-     * If it's not allowed to change for the current logged-in User, use disabled.
-     *
+     * The password policy object
      */
     readOnly: {
       type: Boolean,
       default: false
+    },
+    passwordPolicy: {
+      type: Object,
+      default: () => {}
     }
   },
   emits: ['change', 'update:modelValue', 'focus'],
@@ -238,6 +236,11 @@ export default defineComponent({
       if (this.defaultValue) {
         additionalAttrs['placeholder'] = this.defaultValue
       }
+
+      if (this.type === 'password') {
+        additionalAttrs['password-policy'] = this.passwordPolicy
+      }
+
       // Exclude listeners for events which are handled via methods in this component
       // eslint-disable-next-line no-unused-vars
       const { change, input, focus, class: classes, ...attrs } = this.$attrs
@@ -266,6 +269,9 @@ export default defineComponent({
     },
     displayValue() {
       return this.modelValue || ''
+    },
+    inputComponent() {
+      return this.type === 'password' ? 'oc-text-input-password' : 'input'
     }
   },
   methods: {
