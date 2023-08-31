@@ -1,5 +1,5 @@
 import DicomViewer from '../../src/DicomViewer.vue'
-/*
+
 import { nextTick, ref } from 'vue'
 import {
   createStore,
@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
-*/
+
 import { mock } from 'jest-mock-extended'
 
 // -------------------------------------------------
@@ -51,6 +51,7 @@ const dicomURL = 'https://dav/spaces/path/to/file.dcm?OC-Credential=xyz'
 const wadouriDicomURL = 'wadouri:https://dav/spaces/path/to/file.dcm?OC-Credential=xyz'
 
 // test cases
+// dummy test case that doesn't use DicomViewer, passes as expected
 describe('Dicom viewer app', () => {
   describe('dummy test', () => {
     it('do nothing :)', () => {
@@ -60,13 +61,12 @@ describe('Dicom viewer app', () => {
   })
 })
 
-/*
+// test addWadouriPrefix() method
+// any test case that uses DicomViewer causes the whole test suit to fail
 describe('Dicom viewer app', () => {
   describe('Method "addWadouriPrefix"', () => {
     it('should add wadouri prefix to dicom file path', async () => {
-      const newURL = DicomViewer.addWadouriPrefix(dicomURL)
-      expect(DicomViewer.addWadouriPrefix(dicomURL)).toBe(wadouriDicomURL)
+      expect(DicomViewer.methods.addWadouriPrefix(dicomURL)).toBe(wadouriDicomURL)
     })
   })
 })
-*/
