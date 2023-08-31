@@ -203,12 +203,23 @@ export default defineComponent({
       default: null
     },
     /**
-     * The password policy object
+     * Determines if the input field is read only.
+     *
+     * Read only field will be visualized by a lock item and additionally behaves like a disabled field.
+     * Read only takes effect if the server won't allow to change the value at all,
+     * disabled should be used instead, if the value can't be changed in a specific context.
+     *
+     * For example: If the backend doesn't allow to set the login states for users in general, use read only.
+     * If it's not allowed to change for the current logged-in User, use disabled.
+     *
      */
     readOnly: {
       type: Boolean,
       default: false
     },
+    /**
+     * The password policy object
+     */
     passwordPolicy: {
       type: Object,
       default: () => {}
