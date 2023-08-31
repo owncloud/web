@@ -248,11 +248,9 @@ export default defineComponent({
       if (this.defaultValue) {
         additionalAttrs['placeholder'] = this.defaultValue
       }
-
       if (this.type === 'password') {
         additionalAttrs['password-policy'] = this.passwordPolicy
       }
-
       // Exclude listeners for events which are handled via methods in this component
       // eslint-disable-next-line no-unused-vars
       const { change, input, focus, class: classes, ...attrs } = this.$attrs
