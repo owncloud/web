@@ -7,6 +7,8 @@
         :side-bar-open="sideBarOpen"
         :space="space"
       />
+
+      <trashbin-date-picker @range-changed="rangeChanged" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -68,6 +70,7 @@ import ContextActions from '../../components/FilesList/ContextActions.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import TrashbinDatePicker from '../../components/FilesList/TrashbinDatePicker.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
@@ -75,13 +78,14 @@ import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
+import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref, ref } from 'vue'
 import { Resource } from 'web-client'
 import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from 'web-pkg/src/composables'
 import { createLocationTrash } from '../../router'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'GenericTrash',
@@ -95,7 +99,8 @@ export default defineComponent({
     NoContentMessage,
     Pagination,
     ResourceTable,
-    SideBar
+    SideBar,
+    TrashbinDatePicker
   },
 
   props: {
@@ -113,6 +118,7 @@ export default defineComponent({
 
   setup(props) {
     const { $gettext } = useGettext()
+    const router = useRouter()
     let loadResourcesEventToken
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
@@ -130,9 +136,17 @@ export default defineComponent({
     })
     useDocumentTitle({ titleSegments })
 
+    const query =
+      router.currentRoute.value.query.from && router.currentRoute.value.query.to
+        ? ref({
+            from: router.currentRoute.value.query.from,
+            to: router.currentRoute.value.query.to
+          })
+        : ref(null)
+
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const performLoaderTask = async () => {
-      await resourcesViewDefaults.loadResourcesTask.perform(props.space)
+      await resourcesViewDefaults.loadResourcesTask.perform(props.space, query)
       resourcesViewDefaults.refreshFileListHeaderPosition()
       resourcesViewDefaults.scrollToResourceFromRoute(
         unref(resourcesViewDefaults.paginatedResources)
@@ -146,6 +160,12 @@ export default defineComponent({
       })
     })
 
+    function rangeChanged(data) {
+      query.value =
+        data.range?.from && data.range?.to ? { from: data.range.from, to: data.range.to } : null
+      performLoaderTask()
+    }
+
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
@@ -153,7 +173,8 @@ export default defineComponent({
     return {
       ...resourcesViewDefaults,
       hasShareJail: useCapabilityShareJailEnabled(),
-      noContentMessage
+      noContentMessage,
+      rangeChanged
     }
   },
 

@@ -27,14 +27,20 @@ export class FolderLoaderTrashbin implements FolderLoader {
     } = context
     const hasShareJail = useCapabilityShareJailEnabled(store)
 
-    return useTask(function* (signal1, signal2, space: Resource) {
+    return useTask(function* (signal1, signal2, space: Resource, query) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       store.commit('Files/SET_ANCESTOR_META_DATA', {})
 
       const path = unref(hasShareJail)
         ? buildWebDavSpacesTrashPath(space.id)
         : buildWebDavFilesTrashPath(space.id)
-      const resources = yield client.fileTrash.list(path, '1', DavProperties.Trashbin)
+
+      let resources
+      if (query.value) {
+        resources = yield client.fileTrash.list(path, '1', DavProperties.Trashbin, unref(query))
+      } else {
+        resources = yield client.fileTrash.list(path, '1', DavProperties.Trashbin)
+      }
 
       store.commit('Files/LOAD_FILES', {
         currentFolder: buildResource(resources[0]),
