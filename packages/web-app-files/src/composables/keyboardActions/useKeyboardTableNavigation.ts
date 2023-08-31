@@ -1,4 +1,4 @@
-import { useStore, ViewModeConstants } from 'web-pkg'
+import { QueryValue, useStore, ViewModeConstants } from 'web-pkg'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { computed, Ref, ref, unref, nextTick, watchEffect } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
@@ -12,7 +12,7 @@ const enum Direction {
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,
   paginatedResources: Ref<Resource[]>,
-  viewMode: Ref<string>
+  viewMode: Ref<string | QueryValue>
 ) => {
   const store = useStore()
   const { scrollToResource } = useScrollTo()

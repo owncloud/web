@@ -161,6 +161,12 @@ import { sortFields as availableSortFields } from '../../helpers/ui/resourceTile
 import { formatFileSize } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import {
+  useKeyboardTableNavigation,
+  useKeyboardTableMouseActions,
+  useKeyboardTableActions
+} from 'web-app-files/src/composables/keyboardActions'
 
 export default defineComponent({
   components: {
@@ -232,6 +238,11 @@ export default defineComponent({
       name: `${unref(routeName)}-${ViewModeConstants.queryName}`,
       defaultValue: ViewModeConstants.tilesView.name
     })
+
+    const keyActions = useKeyboardActions()
+    useKeyboardTableNavigation(keyActions, runtimeSpaces, viewMode)
+    useKeyboardTableMouseActions(keyActions, viewMode)
+    useKeyboardTableActions(keyActions)
 
     const getManagerNames = (space: SpaceResource) => {
       const allManagers = space.spaceRoles[spaceRoleManager.name]
