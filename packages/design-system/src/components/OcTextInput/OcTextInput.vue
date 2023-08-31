@@ -65,6 +65,7 @@
         v-text="messageText"
       />
     </div>
+    <portal-target name="app.design-system.password-policy" />
   </div>
 </template>
 
@@ -94,7 +95,7 @@ export default defineComponent({
   components: { OcIcon, OcButton, OcTextInputPassword },
   status: 'ready',
   release: '1.0.0',
-  inheritAttrs: true,
+  inheritAttrs: false,
   props: {
     /**
      * The ID of the element.
@@ -221,8 +222,8 @@ export default defineComponent({
      * The password policy object
      */
     passwordPolicy: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     }
   },
   emits: ['change', 'update:modelValue', 'focus'],
@@ -346,6 +347,12 @@ export default defineComponent({
 .oc-text-input {
   &-description {
     color: var(--oc-color-text-muted);
+  }
+
+  &-success,
+  &-success:focus {
+    border-color: var(--oc-color-swatch-success-default) !important;
+    color: var(--oc-color-swatch-success-default) !important;
   }
 
   &-warning,

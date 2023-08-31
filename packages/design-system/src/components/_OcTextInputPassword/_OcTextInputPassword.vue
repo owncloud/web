@@ -1,14 +1,37 @@
 <template>
-  hello!
-
-  {{ passwordPolicy }}
-  <input v-bind="$attrs" />
+  <div ref="inputPasswordWrapper" class="oc-text-input-password-wrapper">
+    <input v-bind="$attrs" :type="showPassword ? 'text' : 'password'" @input="onInput" />
+    <oc-button
+      class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
+      appearance="raw"
+      size="small"
+      @click="showPassword = !showPassword"
+    >
+      <oc-icon size="small" :name="showPassword ? 'eye-off' : 'eye'" />
+    </oc-button>
+  </div>
+  <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
+    <div class="oc-text-small oc-flex oc-flex-column">
+      <div v-for="(rule, index) in passwordPolicy" :key="index" class="oc-flex oc-flex-middle">
+        <oc-icon
+          size="small"
+          :name="isPolicyRuleFulfilled(rule) ? 'check' : 'close'"
+          :variation="isPolicyRuleFulfilled(rule) ? 'success' : 'danger'"
+        />
+        <span :class="getPolicyMessageClass(rule)" v-text="getPolicyRuleMessage(rule)"></span>
+      </div>
+    </div>
+  </portal>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
+import OcIcon from '../OcIcon/OcIcon.vue'
+import OcButton from '../OcButton/OcButton.vue'
+import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'OCTextInputPassword',
+  components: { OcButton, OcIcon },
   status: 'ready',
   release: '1.0.0',
   inheritAttrs: true,
@@ -17,10 +40,70 @@ export default defineComponent({
      * The ID of the element.
      */
     passwordPolicy: {
-      type: Object,
-      required: false,
-      default: () => {}
+      type: Array,
+      default: () => []
+    }
+  },
+  setup(props) {
+    const { $gettext } = useGettext()
+    const showPassword = ref(false)
+    const passwordEntered = ref(false)
+    console.log(props.passwordPolicy)
+    const showPasswordPolicyInformation = computed(() => {
+      return !!(props.passwordPolicy.length && unref(passwordEntered))
+    })
+
+    const onInput = () => {
+      passwordEntered.value = true
+    }
+
+    const getPolicyRuleMessage = (policyRule) => {
+      const explained = policyRule.explain()[0]
+      return $gettext(explained.message, { param: explained.format[0] })
+    }
+
+    const isPolicyRuleFulfilled = (policyRule) => {
+      return policyRule.check('abcjsdjd13')
+    }
+
+    const getPolicyMessageClass = (policyRule) => {
+      return policyRule.check('adadsadsaasd23') ? 'oc-text-input-success' : 'oc-text-input-danger'
+    }
+
+    return {
+      onInput,
+      showPassword,
+      showPasswordPolicyInformation,
+      isPolicyRuleFulfilled,
+      getPolicyRuleMessage,
+      getPolicyMessageClass
     }
   }
 })
 </script>
+<style lang="scss">
+.oc-text-input-password-wrapper {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  border-radius: 5px;
+  border: 1px solid var(--oc-color-input-border);
+  background-color: var(--oc-color-background-highlight);
+
+  input {
+    flex-grow: 2;
+    border: none;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  button {
+    background-color: var(--oc-color-background-highlight) !important;
+  }
+}
+.oc-text-input-password-wrapper:focus-within {
+  border-color: var(--oc-color-swatch-passive-default);
+}
+</style>

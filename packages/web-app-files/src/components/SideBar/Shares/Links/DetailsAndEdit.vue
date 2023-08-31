@@ -188,7 +188,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { OcDrop } from 'design-system/src/components'
-import {useCapabilityPasswordPolicy} from "web-pkg";
+import { usePasswordPolicyService } from 'web-pkg/src/composables/passwordPolicyService'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -225,10 +225,12 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup() {
+    const passwordPolicy = usePasswordPolicyService()
+
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
-      passwordPolicy: useCapabilityPasswordPolicy()
+      passwordPolicy
     }
   },
   data() {
