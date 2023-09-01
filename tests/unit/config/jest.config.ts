@@ -3,7 +3,17 @@ import { compilerOptions } from '../../../vite.config'
 const rootDir = path.resolve(__dirname, '../../../')
 
 // We need to transpile these modules as they are using esm syntax
-const esmModules = ['lodash-es', 'mark.js', 'fuse.js', 'filesize'].map((m) => `.pnpm/${m}@.*`)
+const esmModules = [
+  'lodash-es',
+  'mark.js',
+  'fuse.js',
+  'filesize',
+  '@kitware\\+vtk.js',
+  'd3-array',
+  'd3-scale',
+  'd3-time',
+  'internmap'
+].map((m) => `.pnpm/${m}@.*`)
 process.env.TZ = 'GMT'
 module.exports = {
   globals: {
