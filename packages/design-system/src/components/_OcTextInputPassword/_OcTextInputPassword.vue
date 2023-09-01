@@ -12,6 +12,7 @@
   </div>
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
     <div class="oc-text-small oc-flex oc-flex-column">
+      <span v-text="$gettext('Please enter a password that meets the following criteria:')" />
       <div v-for="(rule, index) in passwordPolicy" :key="index" class="oc-flex oc-flex-middle">
         <oc-icon
           size="small"
@@ -48,13 +49,14 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const showPassword = ref(false)
     const passwordEntered = ref(false)
-    console.log(props.passwordPolicy)
+    const password = ref('')
     const showPasswordPolicyInformation = computed(() => {
       return !!(props.passwordPolicy.length && unref(passwordEntered))
     })
 
-    const onInput = () => {
+    const onInput = (event) => {
       passwordEntered.value = true
+      password.value = event.target.value
     }
 
     const getPolicyRuleMessage = (policyRule) => {
@@ -63,14 +65,15 @@ export default defineComponent({
     }
 
     const isPolicyRuleFulfilled = (policyRule) => {
-      return policyRule.check('abcjsdjd13')
+      return policyRule.check(password.value)
     }
 
     const getPolicyMessageClass = (policyRule) => {
-      return policyRule.check('adadsadsaasd23') ? 'oc-text-input-success' : 'oc-text-input-danger'
+      return policyRule.check(password.value) ? 'oc-text-input-success' : 'oc-text-input-danger'
     }
 
     return {
+      $gettext,
       onInput,
       showPassword,
       showPasswordPolicyInformation,

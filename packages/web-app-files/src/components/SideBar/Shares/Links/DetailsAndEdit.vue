@@ -466,16 +466,7 @@ export default defineComponent({
     },
 
     checkPassword(password) {
-      if (password === '') {
-        this.setModalConfirmButtonDisabled(true)
-        return this.setModalInputErrorMessage(this.$gettext("Password can't be empty"))
-      }
-      if (password.length > 72) {
-        this.setModalConfirmButtonDisabled(true)
-        return this.setModalInputErrorMessage(this.$gettext("Password can't exceed 72 characters"))
-      }
-      this.setModalConfirmButtonDisabled(false)
-      return this.setModalInputErrorMessage(null)
+      //TODO Use Password Component Events
     },
 
     showPasswordModal() {
