@@ -127,7 +127,7 @@ export default defineComponent({
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
     const shareId = useRouteQuery('shareId')
-    const locationFilterId = ref(SearchLocationFilterConstants.inHere)
+    const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
@@ -170,26 +170,31 @@ export default defineComponent({
       if (!unref(term)) {
         return
       }
-      let searchTerm = unref(term)
+      const terms = [`name:"*${unref(term)}*"`]
+
       if (
         unref(currentFolderAvailable) &&
         unref(locationFilterId) === SearchLocationFilterConstants.inHere
       ) {
         const currentFolder = store.getters['Files/currentFolder']
         let scope
+
         if (currentFolder?.fileId) {
           scope = currentFolder?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
-        searchTerm = `"*${unref(term)}*" scope:${scope}`
+
+        terms.push(`scope:${scope}`)
       }
+
       loading.value = true
+
       for (const availableProvider of unref(availableProviders)) {
         if (availableProvider.previewSearch?.available) {
           searchResults.value.push({
             providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(unref(searchTerm))
+            result: await availableProvider.previewSearch.search(terms.join(' '))
           })
         }
       }
@@ -204,6 +209,7 @@ export default defineComponent({
       if (unref(activePreviewIndex) === null) {
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
+
         let scope
         if (unref(currentFolderAvailable) && currentFolder?.fileId) {
           scope = currentFolder?.fileId

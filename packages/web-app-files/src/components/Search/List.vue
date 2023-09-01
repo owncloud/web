@@ -243,24 +243,22 @@ export default defineComponent({
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let query = ''
-
       const add = (k: string, v: string) => {
         query = (query + ` ${k}:${v}`).trimStart()
       }
 
       const humanSearchTerm = unref(searchTerm)
-      if (humanSearchTerm) {
+      const isContentOnlySearch = queryItemAsString(unref(fullTextParam)) == 'true'
+
+      if (isContentOnlySearch && !!humanSearchTerm) {
+        add('content', `"${humanSearchTerm}"`)
+      } else if (!!humanSearchTerm) {
         add('name', `"*${humanSearchTerm}*"`)
       }
 
-      const fullTextQuerySupported = queryItemAsString(unref(fullTextParam))
-      if (fullTextQuerySupported) {
-        add('content', `"${humanSearchTerm}"`)
-      }
-
       const humanScopeQuery = unref(scopeQuery)
-      const scopeQuerySupported = humanScopeQuery && unref(doUseScope) === 'true'
-      if (scopeQuerySupported) {
+      const isScopedSearch = unref(doUseScope) === 'true'
+      if (isScopedSearch && humanScopeQuery) {
         add('scope', `${humanScopeQuery}`)
       }
 
