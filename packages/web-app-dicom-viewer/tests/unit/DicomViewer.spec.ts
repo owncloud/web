@@ -47,26 +47,25 @@ const dicomFiles = [
 ] // so far not used in any test case
 
 const dicomTestFilePath = './testfiles/MRBRAIN.dcm' // check if this needs to be an import or a const
-const dicomURL = 'https://dav/spaces/path/to/file.dcm?OC-Credential=xyz'
-const wadouriDicomURL = 'wadouri:https://dav/spaces/path/to/file.dcm?OC-Credential=xyz'
 
 // test cases
-// dummy test case that doesn't use DicomViewer, passes as expected
+// dummy test case
 describe('Dicom viewer app', () => {
   describe('dummy test', () => {
     it('do nothing :)', () => {
-      console.log(dicomTestFilePath)
       expect(dicomTestFilePath).toBe(dicomTestFilePath)
     })
   })
 })
 
 // test addWadouriPrefix() method
-// any test case that uses DicomViewer causes the whole test suit to fail
 describe('Dicom viewer app', () => {
   describe('Method "addWadouriPrefix"', () => {
     it('should add wadouri prefix to dicom file path', async () => {
-      expect(DicomViewer.methods.addWadouriPrefix(dicomURL)).toBe(wadouriDicomURL)
+      const dicomURL = 'https://dav/spaces/path/to/file.dcm?OC-Credential=xyz'
+      const wadouriDicomURL = 'wadouri:https://dav/spaces/path/to/file.dcm?OC-Credential=xyz'
+      const modifiedURL = await DicomViewer.methods.addWadouriPrefix(dicomURL)
+      expect(modifiedURL).toEqual(wadouriDicomURL)
     })
   })
 })
