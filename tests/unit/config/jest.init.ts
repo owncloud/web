@@ -12,3 +12,11 @@ import fetchMock from 'jest-fetch-mock'
     unobserve: jest.fn()
   }))
 fetchMock.enableMocks()
+
+// required for @cornerstonejs/dicom-image-loader
+// issue: https://github.com/cornerstonejs/cornerstoneWADOImageLoader/issues/441
+const script = global.document.createElement('script')
+script.setAttribute('src', '/')
+Object.defineProperty(global.document, 'currentScript', {
+  value: script
+})
