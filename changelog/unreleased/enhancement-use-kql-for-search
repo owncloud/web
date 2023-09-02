@@ -1,0 +1,8 @@
+Enhancement: Keyword Query Language (KQL) search syntax support
+
+Use [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference) as default search syntax.
+
+https://github.com/owncloud/web/issues/9636
+https://github.com/owncloud/web/pull/9644
+https://github.com/owncloud/ocis/pull/7196
+https://github.com/owncloud/ocis/pull/7043
