@@ -1448,7 +1448,6 @@ def restoreOcisCache():
     }]
 
 def buildOcis():
-    ocis_repo_url = "https://github.com/owncloud/ocis.git"
     return [
         {
             "name": "clone-ocis",
@@ -1458,7 +1457,7 @@ def buildOcis():
                 "cd $GOPATH/src",
                 "mkdir -p github.com/owncloud",
                 "cd github.com/owncloud",
-                "git clone -b $OCIS_BRANCH --single-branch %s" % ocis_repo_url,
+                "git clone -b $OCIS_BRANCH --single-branch %s" % $OCIS_REPO_URL,
                 "cd ocis",
                 "git checkout $OCIS_COMMITID",
             ],
