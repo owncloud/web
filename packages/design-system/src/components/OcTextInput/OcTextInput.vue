@@ -219,7 +219,12 @@ export default defineComponent({
       default: false
     },
     /**
-     * The password policy object
+     * Array of password policy rules, if type is password and password policy is given,
+     * the entered value will be checked against these rules.
+     *
+     * Password policy rules must be compliant with auth0/password-sheriff
+     * https://github.com/auth0/password-sheriff
+     *
      */
     passwordPolicy: {
       type: Array,

@@ -37,9 +37,6 @@ export default defineComponent({
   release: '1.0.0',
   inheritAttrs: true,
   props: {
-    /**
-     * The ID of the element.
-     */
     passwordPolicy: {
       type: Array,
       default: () => []
