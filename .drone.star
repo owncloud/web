@@ -1457,7 +1457,7 @@ def buildOcis():
                 "cd $GOPATH/src",
                 "mkdir -p github.com/owncloud",
                 "cd github.com/owncloud",
-                "git clone -b $OCIS_BRANCH --single-branch %s" % $OCIS_REPO_URL,
+                "git clone -b $OCIS_BRANCH --single-branch $OCIS_REPO_URL",
                 "cd ocis",
                 "git checkout $OCIS_COMMITID",
             ],
