@@ -58,7 +58,15 @@ export default defineComponent({
 
     const getPolicyRuleMessage = (policyRule) => {
       const explained = policyRule.explain()[0]
-      return $gettext(explained.message, { param: explained.format[0] })
+      const paramObj = {}
+
+      for (var formatKey = 0; formatKey < explained.format.length; formatKey++) {
+        paramObj[`param${formatKey + 1}`] = explained.format[formatKey]
+      }
+
+      console.log(paramObj)
+
+      return $gettext(explained.message, paramObj)
     }
 
     const isPolicyRuleFulfilled = (policyRule) => {

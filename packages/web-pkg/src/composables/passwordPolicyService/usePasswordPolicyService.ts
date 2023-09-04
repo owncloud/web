@@ -1,6 +1,6 @@
 import { useCapabilityPasswordPolicy } from 'web-pkg'
 import { PasswordPolicy } from 'password-sheriff'
-import { isObject, isNaN, isNumber } from 'lodash-es'
+import { isObject, isNaN, isNumber, isString } from 'lodash-es'
 import { unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
@@ -24,6 +24,42 @@ export class MustNotBeEmptyRule {
   }
   validate() {
     return true
+  }
+  missing(options, password) {
+    return this.explain(options, this.assert(options, password))
+  }
+}
+
+export class MustContainRule {
+  protected $gettext
+
+  constructor({ $gettext }: any) {
+    this.$gettext = $gettext
+  }
+  explain(options, verified) {
+    return {
+      code: 'mustContain',
+      message: this.$gettext('At least %{param1} of the special characters: %{param2}'),
+      format: [options.minLength, options.characters],
+      ...(verified & { verified })
+    }
+  }
+
+  assert(options, password) {
+    return password.length > 0
+  }
+  validate(options) {
+    if (!isObject(options)) {
+      throw new Error('options should be an object')
+    }
+
+    if (!isNumber(options.minLength) || isNaN(options.minLength)) {
+      throw new Error('minLength should be a non-zero number')
+    }
+
+    if (!isString(options.characters)) {
+      throw new Error('characters should be a character sequence')
+    }
   }
   missing(options, password) {
     return this.explain(options, this.assert(options, password))
@@ -108,8 +144,8 @@ export class AtLeastCharactersRule extends AtLeastBaseRule {
     return {
       code: 'atLeastCharacters',
       message: this.$ngettext(
-        'At least %{param} character long',
-        'At least %{param} characters long',
+        'At least %{param1} character long',
+        'At least %{param1} characters long',
         options.minLength
       ),
       format: [options.minLength],
@@ -131,8 +167,8 @@ export class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
     return {
       code: 'atLeastUppercaseCharacters',
       message: this.$ngettext(
-        'At least %{param} uppercase character',
-        'At least %{param} uppercase characters',
+        'At least %{param1} uppercase character',
+        'At least %{param1} uppercase characters',
         options.minLength
       ),
       format: [options.minLength],
@@ -155,8 +191,8 @@ export class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
     return {
       code: 'atLeastLowercaseCharacters',
       message: this.$ngettext(
-        'At least %{param} lowercase character',
-        'At least %{param} lowercase characters',
+        'At least %{param1} lowercase character',
+        'At least %{param1} lowercase characters',
         options.minLength
       ),
       format: [options.minLength],
@@ -179,8 +215,8 @@ export class AtLeastDigitsRule extends AtLeastBaseRule {
     return {
       code: 'atLeastDigits',
       message: this.$ngettext(
-        'At least %{param} number',
-        'At least %{param} numbers',
+        'At least %{param1} number',
+        'At least %{param1} numbers',
         options.minLength
       ),
       format: [options.minLength],
@@ -248,6 +284,20 @@ export function usePasswordPolicyService(
       new PasswordPolicy(
         { atLeastDigits: { minLength: passwordPolicyCapability.min_digits } },
         { atLeastDigits: new AtLeastDigitsRule({ ...useGettext() }) }
+      )
+    )
+  }
+
+  if (passwordPolicyCapability.min_special_characters) {
+    passwordPolicyRules.push(
+      new PasswordPolicy(
+        {
+          mustContain: {
+            minLength: passwordPolicyCapability.min_special_characters,
+            characters: passwordPolicyCapability.allowed_special_characters
+          }
+        },
+        { mustContain: new MustContainRule({ ...useGettext() }) }
       )
     )
   }
