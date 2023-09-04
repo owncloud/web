@@ -225,12 +225,12 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup() {
-    const passwordPolicy = usePasswordPolicyService()
+    const passwordPolicyService = usePasswordPolicyService()
 
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
-      passwordPolicy
+      passwordPolicy: passwordPolicyService.getPolicies()
     }
   },
   data() {
