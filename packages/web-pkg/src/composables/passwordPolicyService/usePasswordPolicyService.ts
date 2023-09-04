@@ -98,8 +98,8 @@ export class AtMostCharactersRule extends AtMostBaseRule {
     return {
       code: 'atMostCharacters',
       message: this.$ngettext(
-        'At most %{param} character long',
-        'At most %{param} characters long',
+        'At most %{param1} character long',
+        'At most %{param1} characters long',
         options.maxLength
       ),
       format: [options.maxLength],
