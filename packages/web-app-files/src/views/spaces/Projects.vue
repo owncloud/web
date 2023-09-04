@@ -237,7 +237,7 @@ export default defineComponent({
         return spaces
       }
       const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
-      return = searchEngine.search(filterTerm).map((r) => r.item)
+      return searchEngine.search(filterTerm).map((r) => r.item)
     }
     const items = computed(() =>
       orderBy(
@@ -333,15 +333,11 @@ export default defineComponent({
       )
     }
 
-    const isSpaceSelected = (space: SpaceResource) => {
-      return unref(selectedResourcesIds).some((id) => id === space.id)
-    }
-
     onMounted(async () => {
       await loadResourcesTask.perform()
       scrollToResourceFromRoute(unref(spaces))
       nextTick(() => {
-        markInstance.value = new Mark(unref(tableRef).$el)
+        markInstance.value = new Mark('.spaces-table')
       })
     })
 
