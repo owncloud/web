@@ -29,12 +29,19 @@
             <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
-        <div v-else class="spaces-list oc-mt-l">
+        <div v-else class="spaces-list oc-mt-l" ref="tableRef">
+          <oc-text-input
+            id="spaces-filter"
+            v-model="filterTerm"
+            class="oc-ml-m oc-my-s"
+            :label="$gettext('Search')"
+            autocomplete="off"
+          />
           <resource-tiles
             v-if="viewMode === ViewModeConstants.tilesView.name"
             v-model:selectedIds="selectedResourcesIds"
             class="oc-px-m"
-            :data="spaces"
+            :data="paginatedItems"
             :resizable="true"
             :sort-fields="sortFields"
             :sort-by="sortBy"
@@ -68,7 +75,7 @@
           <resource-table
             v-else
             v-model:selectedIds="selectedResourcesIds"
-            :resources="spaces"
+            :resources="paginatedItems"
             class="spaces-table"
             :class="{ 'spaces-table-squashed': sideBarOpen }"
             :sticky="false"
@@ -127,9 +134,11 @@
 </template>
 
 <script lang="ts">
-import { onMounted, computed, defineComponent, unref } from 'vue'
+import { onMounted, computed, defineComponent, unref, ref, watch, nextTick } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { mapMutations, mapGetters } from 'vuex'
+import Mark from 'mark.js'
+import Fuse from 'fuse.js'
 
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
@@ -143,7 +152,11 @@ import {
   useRouteQueryPersisted,
   useSort,
   useStore,
-  useRouteName
+  useRouteName,
+  SortDir,
+  usePagination,
+  useRouter,
+  useRoute
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
@@ -158,7 +171,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
 import { useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
-import { formatFileSize } from 'web-pkg/src'
+import { defaultFuseOptions, formatFileSize } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
@@ -167,6 +180,7 @@ import {
   useKeyboardTableMouseActions,
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { orderBy } from 'lodash-es'
 
 export default defineComponent({
   components: {
@@ -182,10 +196,15 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
     const clientService = useClientService()
     const { selectedResourcesIds } = useSelectedResources({ store })
     const { can } = useAbility()
     const { current: currentLanguage, $gettext } = useGettext()
+    const filterTerm = ref('')
+    const markInstance = ref(undefined)
+    const tableRef = ref(undefined)
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -212,6 +231,41 @@ export default defineComponent({
     } = useSort<SpaceResource>({
       items: runtimeSpaces,
       fields: sortFields
+    })
+    const filter = (spaces, filterTerm) => {
+      if (!(filterTerm || '').trim()) {
+        return spaces
+      }
+      const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
+      const test = searchEngine.search(filterTerm).map((r) => r.item)
+      console.log(test)
+      return test
+    }
+    const items = computed(() =>
+      orderBy(
+        filter(unref(spaces), unref(filterTerm)),
+        unref(sortBy),
+        unref(sortDir) === SortDir.Desc
+      )
+    )
+    const {
+      items: paginatedItems,
+      page: currentPage,
+      total: totalPages
+    } = usePagination({ items, perPageDefault: '100', perPageStoragePrefix: 'spaces-list' })
+
+    watch(filterTerm, async () => {
+      const instance = unref(markInstance)
+      if (!instance) {
+        return
+      }
+      await router.push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
+      instance.unmark()
+      instance.mark(unref(filterTerm), {
+        element: 'span',
+        className: 'highlight-mark',
+        exclude: ['th *', 'tfoot *']
+      })
     })
 
     const { scrollToResourceFromRoute } = useScrollTo()
@@ -281,9 +335,16 @@ export default defineComponent({
       )
     }
 
+    const isSpaceSelected = (space: SpaceResource) => {
+      return unref(selectedResourcesIds).some((id) => id === space.id)
+    }
+
     onMounted(async () => {
       await loadResourcesTask.perform()
       scrollToResourceFromRoute(unref(spaces))
+      nextTick(() => {
+        markInstance.value = new Mark(unref(tableRef).$el)
+      })
     })
 
     return {
@@ -306,7 +367,9 @@ export default defineComponent({
       getTotalQuota,
       getUsedQuota,
       getRemainingQuota,
-      getMemberCount
+      getMemberCount,
+      paginatedItems,
+      tableRef
     }
   },
   data: function () {
