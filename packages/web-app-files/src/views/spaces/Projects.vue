@@ -125,6 +125,13 @@
               />
               <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
             </template>
+            <template #footer>
+              <pagination :pages="totalPages" :current-page="currentPage" />
+              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+                <p class="oc-text-muted">{{ footerTextTotal }}</p>
+                <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
+              </div>
+            </template>
           </resource-table>
         </div>
       </template>
@@ -159,6 +166,7 @@ import {
   useRoute
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
+import Pagination from 'web-pkg/src/components/Pagination.vue'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
@@ -189,6 +197,7 @@ export default defineComponent({
     CreateSpace,
     FilesViewWrapper,
     NoContentMessage,
+    Pagination,
     ResourceTiles,
     ResourceTable,
     SideBar,
@@ -341,6 +350,17 @@ export default defineComponent({
       })
     })
 
+    const footerTextTotal = computed(() => {
+      return $gettext('%{spaceCount} spaces in total', {
+        spaceCount: unref(spaces).length.toString()
+      })
+    })
+    const footerTextFilter = computed(() => {
+      return $gettext('%{spaceCount} matching spaces', {
+        spaceCount: unref(items).length.toString()
+      })
+    })
+
     return {
       ...useSideBar(),
       spaces,
@@ -364,7 +384,11 @@ export default defineComponent({
       getMemberCount,
       paginatedItems,
       filterTerm,
-      tableRef
+      tableRef,
+      totalPages,
+      currentPage,
+      footerTextTotal,
+      footerTextFilter
     }
   },
   data: function () {
