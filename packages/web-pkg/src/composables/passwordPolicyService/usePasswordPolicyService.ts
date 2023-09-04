@@ -4,7 +4,7 @@ import { isObject, isNaN, isNumber } from 'lodash-es'
 import { unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-class MustNotBeEmptyRule {
+export class MustNotBeEmptyRule {
   protected $gettext
 
   constructor({ $gettext }: any) {
@@ -30,7 +30,7 @@ class MustNotBeEmptyRule {
   }
 }
 
-class AtMostBaseRule {
+export class AtMostBaseRule {
   protected $ngettext
   protected override explain(options, password)
   protected override assert(options, password)
@@ -53,7 +53,7 @@ class AtMostBaseRule {
   }
 }
 
-class AtMostCharactersRule extends AtMostBaseRule {
+export class AtMostCharactersRule extends AtMostBaseRule {
   constructor(args) {
     super(args)
   }
@@ -76,7 +76,7 @@ class AtMostCharactersRule extends AtMostBaseRule {
   }
 }
 
-class AtLeastBaseRule {
+export class AtLeastBaseRule {
   protected $ngettext
   protected override explain(options, password)
   protected override assert(options, password)
@@ -99,7 +99,7 @@ class AtLeastBaseRule {
   }
 }
 
-class AtLeastCharactersRule extends AtLeastBaseRule {
+export class AtLeastCharactersRule extends AtLeastBaseRule {
   constructor(args) {
     super(args)
   }
@@ -122,7 +122,7 @@ class AtLeastCharactersRule extends AtLeastBaseRule {
   }
 }
 
-class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
+export class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
   constructor(args) {
     super(args)
   }
@@ -146,7 +146,7 @@ class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
   }
 }
 
-class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
+export class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
   constructor(args) {
     super(args)
   }
@@ -170,7 +170,7 @@ class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
   }
 }
 
-class AtLeastDigitsRule extends AtLeastBaseRule {
+export class AtLeastDigitsRule extends AtLeastBaseRule {
   constructor(args) {
     super(args)
   }
