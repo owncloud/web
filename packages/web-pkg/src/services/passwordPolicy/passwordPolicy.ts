@@ -92,6 +92,9 @@ export class PasswordPolicyService {
       )
     }
 
+    /**
+     * Not configurable, backend limitation
+     */
     this.policies.push(
       new PasswordPolicy(
         { atMostCharacters: { maxLength: 72 } },
