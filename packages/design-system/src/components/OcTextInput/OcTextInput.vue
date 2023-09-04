@@ -25,6 +25,8 @@
         :disabled="disabled || readOnly"
         @change="onChange(($event.target as HTMLInputElement).value)"
         @input="onInput(($event.target as HTMLInputElement).value)"
+        @password-challenge-completed="$emit('passwordChallengeCompleted')"
+        @password-challenge-failed="$emit('passwordChallengeFailed')"
         @focus="onFocus($event.target)"
       />
       <oc-button

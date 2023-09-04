@@ -65,8 +65,6 @@ export default defineComponent({
         paramObj[`param${formatKey + 1}`] = explained.format[formatKey]
       }
 
-      console.log(paramObj)
-
       return $gettext(explained.message, paramObj)
     }
 

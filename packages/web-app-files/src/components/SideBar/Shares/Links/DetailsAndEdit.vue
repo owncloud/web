@@ -465,10 +465,6 @@ export default defineComponent({
       this.createModal(modal)
     },
 
-    checkPassword(password) {
-      //TODO Use Password Component Events
-    },
-
     showPasswordModal() {
       const modal = {
         variation: 'passive',
@@ -481,13 +477,8 @@ export default defineComponent({
         inputPasswordPolicy: this.passwordPolicy,
         inputType: 'password',
         onCancel: this.hideModal,
-        onPasswordChallengeCompleted: () => {
-          console.log('Lol')
-        },
-        onPasswordChallengeFailed: () => {
-          console.log('oh no ')
-        },
-        onInput: (password) => this.checkPassword(password),
+        onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
+        onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
         onConfirm: (password) => {
           this.updateLink({
             link: {

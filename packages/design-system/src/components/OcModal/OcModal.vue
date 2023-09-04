@@ -47,6 +47,8 @@
               :disabled="inputDisabled"
               :fix-message-line="true"
               :selection-range="inputSelectionRange"
+              @password-challenge-completed="$emit('passwordChallengeCompleted')"
+              @password-challenge-failed="$emit('passwordChallengeFailed')"
               @update:model-value="inputOnInput"
               @keydown.enter.prevent="confirm"
             />
