@@ -105,7 +105,8 @@ export default defineComponent({
     onMounted(async () => {
       const space = unref(resolvedDrive.space)
       if (space && isPublicSpaceResource(space)) {
-        if (unref(isUserContext) && unref(fileId)) {
+        const isRunningOnEos = store.getters.configuration?.options?.runningOnEos
+        if (unref(isUserContext) && unref(fileId) && !isRunningOnEos) {
           try {
             const path = await clientService.owncloudSdk.files.getPathForFileId(unref(fileId))
             await resolveToInternalLocation(path)
