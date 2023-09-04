@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref, watch } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { useGettext } from 'vue3-gettext'
@@ -42,7 +42,8 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup(props) {
+  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
     const showPassword = ref(false)
     const passwordEntered = ref(false)
@@ -76,6 +77,15 @@ export default defineComponent({
     const getPolicyMessageClass = (policyRule) => {
       return policyRule.check(password.value) ? 'oc-text-input-success' : 'oc-text-input-danger'
     }
+
+    watch(password, (value) => {
+      for (const passwordPolicyRule of props.passwordPolicy) {
+        if (!passwordPolicyRule.check(value)) {
+          return emit('passwordChallengeFailed')
+        }
+      }
+      emit('passwordChallengeCompleted')
+    })
 
     return {
       $gettext,
