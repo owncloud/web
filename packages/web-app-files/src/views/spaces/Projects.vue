@@ -237,9 +237,7 @@ export default defineComponent({
         return spaces
       }
       const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
-      const test = searchEngine.search(filterTerm).map((r) => r.item)
-      console.log(test)
-      return test
+      return = searchEngine.search(filterTerm).map((r) => r.item)
     }
     const items = computed(() =>
       orderBy(
@@ -369,6 +367,7 @@ export default defineComponent({
       getRemainingQuota,
       getMemberCount,
       paginatedItems,
+      filterTerm,
       tableRef
     }
   },
