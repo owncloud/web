@@ -179,7 +179,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { selectedResourcesIds } = useSelectedResources({ store })
     const { can } = useAbility()
-    const { current: currentLanguage } = useGettext()
+    const { current: currentLanguage, $gettext } = useGettext()
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -244,6 +244,10 @@ export default defineComponent({
     }
 
     const getTotalQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.total === 0) {
+        return $gettext('Unrestricted')
+      }
+
       return formatFileSize(space.spaceQuota.total, currentLanguage)
     }
     const getUsedQuota = (space: SpaceResource) => {
