@@ -1,5 +1,30 @@
 import { isNaN, isNumber, isObject, isString } from 'lodash-es'
 
+export class MustNotBeEmptyRule {
+  protected $gettext
+
+  constructor({ $gettext }: any) {
+    this.$gettext = $gettext
+  }
+  explain(options, verified) {
+    return {
+      code: 'mustNotBeEmpty',
+      message: this.$gettext('Must not be empty'),
+      format: [],
+      ...(verified & { verified })
+    }
+  }
+
+  assert(options, password) {
+    return password.length > 0
+  }
+  validate() {
+    return true
+  }
+  missing(options, password) {
+    return this.explain(options, this.assert(options, password))
+  }
+}
 export class MustContainRule {
   protected $gettext
 

@@ -5,7 +5,8 @@ import {
   AtLeastLowercaseCharactersRule,
   AtLeastUppercaseCharactersRule,
   AtMostCharactersRule,
-  MustContainRule
+  MustContainRule,
+  MustNotBeEmptyRule
 } from './rules'
 import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
 import { PasswordPolicy } from 'password-sheriff'
@@ -17,28 +18,24 @@ export class PasswordPolicyService {
   private policies = []
 
   constructor({ store, language }) {
-    this.capability = get(store, 'getters.capabilities.password_policy', {
-      min_characters: 8,
-      min_lower_case_characters: 2,
-      min_upper_case_characters: 2,
-      min_digits: 1,
-      min_special_characters: 2,
-      special_characters: '!#?§'
-    })
+    this.capability = get(store, 'getters.capabilities.password_policy', {})
     this.language = language
     this.buildPolicies()
   }
 
   private buildPolicies() {
-    if (!Object.keys(this.capability)) {
-      return
-    }
-
     if (this.capability.min_characters) {
       this.policies.push(
         new PasswordPolicy(
           { atLeastCharacters: { minLength: this.capability.min_characters } },
           { atLeastCharacters: new AtLeastCharactersRule({ ...this.language }) }
+        )
+      )
+    } else {
+      this.policies.push(
+        new PasswordPolicy(
+          { mustNotBeEmpty: {} },
+          { mustNotBeEmpty: new MustNotBeEmptyRule({ ...this.language }) }
         )
       )
     }
