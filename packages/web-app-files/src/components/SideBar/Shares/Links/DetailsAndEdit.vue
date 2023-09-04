@@ -477,6 +477,7 @@ export default defineComponent({
         inputPasswordPolicy: this.passwordPolicy,
         inputType: 'password',
         onCancel: this.hideModal,
+        onInput: (password) => this.checkPassword(password),
         onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
         onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
         onConfirm: (password) => {
@@ -492,6 +493,24 @@ export default defineComponent({
         }
       }
       this.createModal(modal)
+    },
+
+    checkPassword(password) {
+      // Password checks will be handled via password policy
+      if (this.passwordPolicy.length) {
+        return
+      }
+
+      if (password === '') {
+        this.setModalConfirmButtonDisabled(true)
+        return this.setModalInputErrorMessage(this.$gettext("Password can't be empty"))
+      }
+      if (password.length > 72) {
+        this.setModalConfirmButtonDisabled(true)
+        return this.setModalInputErrorMessage(this.$gettext("Password can't exceed 72 characters"))
+      }
+      this.setModalConfirmButtonDisabled(false)
+      return this.setModalInputErrorMessage(null)
     }
   }
 })

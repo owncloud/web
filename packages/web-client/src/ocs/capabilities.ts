@@ -16,7 +16,7 @@ export interface PasswordPolicyCapability {
   min_upper_case_characters?: number
   min_digits?: number
   min_special_characters?: number
-  allowed_special_characters?: string
+  special_characters?: string
 }
 
 export interface Capabilities {

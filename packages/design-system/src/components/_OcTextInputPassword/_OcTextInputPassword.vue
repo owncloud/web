@@ -65,7 +65,7 @@ export default defineComponent({
         paramObj[`param${formatKey + 1}`] = explained.format[formatKey]
       }
 
-      return $gettext(explained.message, paramObj)
+      return $gettext(explained.message, paramObj, true)
     }
 
     const isPolicyRuleFulfilled = (policyRule) => {

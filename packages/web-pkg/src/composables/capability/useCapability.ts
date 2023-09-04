@@ -142,7 +142,7 @@ export const useCapabilityPasswordPolicy = createCapabilityComposable<PasswordPo
     min_lower_case_characters: 2,
     min_upper_case_characters: 2,
     min_digits: 1,
-    min_special_characters: 1,
-    allowed_special_characters: '!"§="'
+    min_special_characters: 2,
+    special_characters: '!#?§'
   }
 )

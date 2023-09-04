@@ -3,33 +3,6 @@ import { PasswordPolicy } from 'password-sheriff'
 import { isObject, isNaN, isNumber, isString } from 'lodash-es'
 import { unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-
-export class MustNotBeEmptyRule {
-  protected $gettext
-
-  constructor({ $gettext }: any) {
-    this.$gettext = $gettext
-  }
-  explain(options, verified) {
-    return {
-      code: 'mustNotBeEmpty',
-      message: this.$gettext('Must not be empty'),
-      format: [],
-      ...(verified & { verified })
-    }
-  }
-
-  assert(options, password) {
-    return password.length > 0
-  }
-  validate() {
-    return true
-  }
-  missing(options, password) {
-    return this.explain(options, this.assert(options, password))
-  }
-}
-
 export class MustContainRule {
   protected $gettext
 
@@ -46,7 +19,11 @@ export class MustContainRule {
   }
 
   assert(options, password) {
-    return password.length > 0
+    const charsCount = Array.from(password).filter((char) =>
+      options.characters.includes(char)
+    ).length
+
+    return charsCount >= options.minLength
   }
   validate(options) {
     if (!isObject(options)) {
@@ -229,20 +206,14 @@ export class AtLeastDigitsRule extends AtLeastBaseRule {
     return digitCount >= options.minLength
   }
 }
-export function usePasswordPolicyService(
-  { useDefaultRules = true } = { useDefaultRules: Boolean }
-): Array<any> {
+export function usePasswordPolicyService(): Array<any> {
   const passwordPolicyCapability = unref(useCapabilityPasswordPolicy())
-  const passwordPolicyRules = []
 
-  if (useDefaultRules && !passwordPolicyCapability.min_characters) {
-    passwordPolicyRules.push(
-      new PasswordPolicy(
-        { mustNotBeEmpty: {} },
-        { mustNotBeEmpty: new MustNotBeEmptyRule({ ...useGettext() }) }
-      )
-    )
+  if (!Object.keys(passwordPolicyCapability).length) {
+    return []
   }
+
+  const passwordPolicyRules = []
 
   if (passwordPolicyCapability.min_characters) {
     passwordPolicyRules.push(
@@ -294,7 +265,7 @@ export function usePasswordPolicyService(
         {
           mustContain: {
             minLength: passwordPolicyCapability.min_special_characters,
-            characters: passwordPolicyCapability.allowed_special_characters
+            characters: passwordPolicyCapability.special_characters
           }
         },
         { mustContain: new MustContainRule({ ...useGettext() }) }
@@ -302,14 +273,12 @@ export function usePasswordPolicyService(
     )
   }
 
-  if (useDefaultRules) {
-    passwordPolicyRules.push(
-      new PasswordPolicy(
-        { atMostCharacters: { maxLength: 72 } },
-        { atMostCharacters: new AtMostCharactersRule({ ...useGettext() }) }
-      )
+  passwordPolicyRules.push(
+    new PasswordPolicy(
+      { atMostCharacters: { maxLength: 72 } },
+      { atMostCharacters: new AtMostCharactersRule({ ...useGettext() }) }
     )
-  }
+  )
 
   return passwordPolicyRules
 }
