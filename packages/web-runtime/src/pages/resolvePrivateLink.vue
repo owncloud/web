@@ -87,6 +87,9 @@ export default defineComponent({
 
     const clientService = useClientService()
 
+    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const openWithDefaultApp = computed(() => queryItemAsString(unref(openWithDefaultAppQuery)))
+
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
       return queryItemAsString(unref(detailsQuery))
@@ -163,9 +166,10 @@ export default defineComponent({
               ? matchingSpace.shareId
               : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
-          ...(configurationManager.options.openLinksWithDefaultApp && {
-            openWithDefaultApp: 'true'
-          })
+          ...(configurationManager.options.openLinksWithDefaultApp &&
+            unref(openWithDefaultApp) !== 'false' && {
+              openWithDefaultApp: 'true'
+            })
         }
       }
       router.push(location)

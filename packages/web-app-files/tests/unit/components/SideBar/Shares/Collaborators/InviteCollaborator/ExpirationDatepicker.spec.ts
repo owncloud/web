@@ -43,6 +43,11 @@ const enforcedCapabilities = merge({}, enabledCapabilities, {
 })
 
 describe('InviteCollaborator ExpirationDatepicker', () => {
+  it('only gets displayed if share expiration is supported', () => {
+    const { wrapper } = createWrapper()
+    expect(wrapper.html()).toMatchSnapshot()
+  })
+
   it('renders a button to open the datepicker and set an expiration date', () => {
     const { wrapper } = createWrapper({ capabilities: bareCapabilities })
     expect(wrapper.find('[data-testid="recipient-datepicker-btn"]').exists()).toBe(true)

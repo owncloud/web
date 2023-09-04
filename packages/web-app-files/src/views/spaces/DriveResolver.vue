@@ -86,7 +86,6 @@ export default defineComponent({
           fileId: resourceId,
           path: resourcePath
         })
-
         return router.push(
           createLocationSpaces('files-spaces-generic', {
             params,
@@ -96,7 +95,11 @@ export default defineComponent({
       }
 
       // no internal space found -> share -> resolve via private link as it holds all the necessary logic
-      return router.push({ name: 'resolvePrivateLink', params: { fileId: unref(fileId) } })
+      return router.push({
+        name: 'resolvePrivateLink',
+        params: { fileId: unref(fileId) },
+        query: { openWithDefaultApp: 'false' }
+      })
     }
 
     onMounted(async () => {

@@ -4,7 +4,7 @@
       <oc-filter-chip
         :is-toggle="false"
         :is-toggle-active="false"
-        :filter-label="currentSelectionTitle"
+        :filter-label="currentSelection.title"
         :selected-item-names="[]"
         class="oc-search-bar-filter"
         raw
@@ -57,14 +57,15 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const useSopeQueryValue = useRouteQuery('useScope')
 
+    const currentFolderEnabled = computed(() => props.currentFolderAvailable)
+
     const currentSelection = ref<LocationOption>()
     const userSelection = ref<LocationOption>()
-    const currentSelectionTitle = computed(() => $gettext(currentSelection.value?.title))
     const locationOptions = computed<LocationOption[]>(() => [
       {
         id: SearchLocationFilterConstants.inHere,
         title: $gettext('In here'),
-        enabled: props.currentFolderAvailable
+        enabled: currentFolderEnabled
       },
       {
         id: SearchLocationFilterConstants.everywhere,
@@ -121,13 +122,7 @@ export default defineComponent({
       emit('update:modelValue', { value: option })
     }
 
-    return {
-      currentSelection,
-      currentSelectionTitle,
-      isIndexGreaterZero,
-      onOptionSelected,
-      locationOptions
-    }
+    return { currentSelection, isIndexGreaterZero, onOptionSelected, locationOptions }
   }
 })
 </script>

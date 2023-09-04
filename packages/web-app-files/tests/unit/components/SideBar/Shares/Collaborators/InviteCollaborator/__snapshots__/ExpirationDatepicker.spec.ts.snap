@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InviteCollaborator ExpirationDatepicker only gets displayed if share expiration is supported 1`] = `<!--v-if-->`;

@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex oc-flex-middle oc-flex-nowrap">
+  <div v-if="available" class="oc-flex oc-flex-middle oc-flex-nowrap">
     <oc-datepicker
       v-model="dateCurrent"
       :min-date="dateMin"
@@ -70,6 +70,7 @@ export default defineComponent({
     const capabilities = computed(() => store.getters.capabilities)
     const optionsUser = computed(() => capabilities.value.files_sharing.user?.expire_date)
     const optionsGroup = computed(() => capabilities.value.files_sharing.group?.expire_date)
+    const available = computed(() => optionsUser.value || optionsGroup.value)
     const enforced = computed(() => optionsUser.value?.enforced || optionsGroup.value?.enforced)
     const dateMin = DateTime.now().setLocale(language.current).toJSDate()
     const dateDefault = computed(() => {
@@ -148,6 +149,7 @@ export default defineComponent({
     return {
       language,
       enforced,
+      available,
       dateCurrent,
       dateMin,
       dateMax,

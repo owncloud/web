@@ -15,7 +15,6 @@
           :items="availableTags"
           :option-filter-label="$gettext('Filter tags')"
           :show-option-filter="true"
-          :close-on-click="true"
           class="files-search-filter-tags oc-mr-s"
           display-name-attribute="label"
           filter-name="tags"

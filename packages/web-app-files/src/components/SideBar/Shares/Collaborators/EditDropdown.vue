@@ -190,7 +190,10 @@ export default defineComponent({
     },
 
     isExpirationSupported() {
-      return this.editingUser || this.editingGroup
+      return (
+        (this.editingUser && this.userExpirationDate) ||
+        (this.editingGroup && this.groupExpirationDate)
+      )
     },
 
     isExpirationDateSet() {
@@ -249,14 +252,14 @@ export default defineComponent({
 
     isExpirationDateEnforced() {
       if (this.editingUser) {
-        return this.userExpirationDate?.enforced
+        return this.userExpirationDate.enforced
       }
 
       if (this.editingGroup) {
-        return this.groupExpirationDate?.enforced
+        return this.groupExpirationDate.enforced
       }
 
-      return this.userExpirationDate?.enforced || this.groupExpirationDate?.enforced
+      return this.userExpirationDate.enforced || this.groupExpirationDate.enforced
     },
 
     maxExpirationDate() {
