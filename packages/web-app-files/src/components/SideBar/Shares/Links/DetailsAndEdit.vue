@@ -481,6 +481,12 @@ export default defineComponent({
         inputPasswordPolicy: this.passwordPolicy,
         inputType: 'password',
         onCancel: this.hideModal,
+        onPasswordChallengeCompleted: () => {
+          console.log('Lol')
+        },
+        onPasswordChallengeFailed: () => {
+          console.log('oh no ')
+        },
         onInput: (password) => this.checkPassword(password),
         onConfirm: (password) => {
           this.updateLink({

@@ -366,7 +366,15 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['cancel', 'confirm', 'confirm-secondary', 'input', 'checkbox-changed'],
+  emits: [
+    'cancel',
+    'confirm',
+    'confirm-secondary',
+    'input',
+    'checkbox-changed',
+    'passwordChallengeCompleted',
+    'passwordChallengeFailed'
+  ],
   data() {
     return {
       userInputValue: null,

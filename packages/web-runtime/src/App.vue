@@ -34,6 +34,8 @@
       @input="modal.onInput"
       @checkbox-changed="modal.onCheckboxValueChanged"
       @confirm-secondary="modal.onConfirmSecondary"
+      @passwordChallengeCompleted="modal.onPasswordChallengeCompleted"
+      @passwordChallengeFailed="modal.onPasswordChallengeFailed"
       @mounted="focusModal"
       @before-unmount="focusModal"
     >

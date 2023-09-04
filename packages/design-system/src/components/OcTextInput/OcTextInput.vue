@@ -231,7 +231,13 @@ export default defineComponent({
       default: () => []
     }
   },
-  emits: ['change', 'update:modelValue', 'focus'],
+  emits: [
+    'change',
+    'update:modelValue',
+    'focus',
+    'passwordChallengeCompleted',
+    'passwordChallengeFailed'
+  ],
   computed: {
     showMessageLine() {
       return (

@@ -84,6 +84,8 @@ const mutations = {
     state.contextualHelperLabel = modal.contextualHelperLabel
     state.contextualHelperData = modal.contextualHelperData
     state.customContent = modal.customContent || ''
+    state.onPasswordChallengeCompleted = modal.onPasswordChallengeCompleted
+    state.onPasswordChallengeFailed = modal.onPasswordChallengeFailed
   },
 
   HIDE_MODAL(state) {
