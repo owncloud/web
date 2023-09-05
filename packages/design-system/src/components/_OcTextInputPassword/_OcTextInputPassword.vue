@@ -45,10 +45,12 @@ export interface PasswordPolicy {
   rules: unknown[]
   check(password: string): boolean
   missing(password: string): {
-    code: string
-    message: string
-    format: (number | string)[]
-    verified: boolean
+    rules: {
+      code: string
+      message: string
+      format: (number | string)[]
+      verified: boolean
+    }[]
   }
 }
 export default defineComponent({
