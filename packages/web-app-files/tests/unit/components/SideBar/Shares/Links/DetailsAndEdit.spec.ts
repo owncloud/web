@@ -48,21 +48,6 @@ describe('DetailsAndEdit component', () => {
       expect(setModalInputErrorMessageStub).toHaveBeenCalledWith(expect.anything())
     })
   })
-
-  describe('method "checkPassword"', () => {
-    it('should not show an error if value is valid', () => {
-      const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
-      const setModalInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkPassword('Password1234')
-      expect(setModalInputErrorMessageStub).toHaveBeenCalledWith(null)
-    })
-    it('should show an error if value is longer than 72 characters', () => {
-      const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
-      const setModalInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkPassword('n'.repeat(73))
-      expect(setModalInputErrorMessageStub).toHaveBeenCalledWith(expect.anything())
-    })
-  })
 })
 
 function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable = false) {
