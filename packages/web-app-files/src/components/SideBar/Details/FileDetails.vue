@@ -45,6 +45,12 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
+        <tr v-if="showLockedBy">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
+          <td>
+            <span v-text="lockedByDisplayName" />
+          </td>
+        </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
           <td>
@@ -53,10 +59,10 @@
             </router-link>
           </td>
         </tr>
-        <tr v-if="showSharedBy" data-testid="shared-by">
+        <tr data-testid="locked-by">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
           <td>
-            <span v-text="sharedByDisplayName" />
+            <span :v-text="resource.lockOwnerName" />
           </td>
         </tr>
         <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
@@ -325,6 +331,9 @@ export default defineComponent({
           a.path !== unref(resource).path &&
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
+    })
+    const showLockedBy = computed(() => {
+      return !!unref(resource).lockOwnerName
     })
 
     watch(

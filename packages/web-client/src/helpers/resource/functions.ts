@@ -92,6 +92,7 @@ export function buildResource(resource): Resource {
     activeLock = lock[DavProperty.ActiveLock]
   }
   const id = resource.fileInfo[DavProperty.FileId]
+  console.log(activeLock)
   const r = {
     id,
     fileId: id,
@@ -105,7 +106,8 @@ export function buildResource(resource): Resource {
     type: isFolder ? 'folder' : resource.type,
     isFolder,
     locked: activeLock ? true : false,
-    lockOwner: activeLock ? activeLock[DavProperty.LockOwner] : '',
+    lockOwnerName: activeLock ? activeLock[DavProperty.LockOwnerName] : '',
+    lockTime: activeLock ? activeLock[DavProperty.LockTime] : '',
     processing: resource.processing || false,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
