@@ -14,21 +14,21 @@
     <div class="oc-text-small oc-flex oc-flex-column">
       <span v-text="$gettext('Please enter a password that meets the following criteria:')" />
       <div
-        v-for="(checkedRule, index) in checkedPasswordPolicy.rules"
+        v-for="(testedRule, index) in testedPasswordPolicy.rules"
         :key="index"
         class="oc-flex oc-flex-middle"
       >
         <oc-icon
           size="small"
-          :name="checkedRule.verified ? 'check' : 'close'"
-          :variation="checkedRule.verified ? 'success' : 'danger'"
+          :name="testedRule.verified ? 'check' : 'close'"
+          :variation="testedRule.verified ? 'success' : 'danger'"
         />
         <span
           :class="[
-            { 'oc-text-input-success': checkedRule.verified },
-            { 'oc-text-input-danger': !checkedRule.verified }
+            { 'oc-text-input-success': testedRule.verified },
+            { 'oc-text-input-danger': !testedRule.verified }
           ]"
-          v-text="getPasswordPolicyRuleMessage(checkedRule)"
+          v-text="getPasswordPolicyRuleMessage(testedRule)"
         ></span>
       </div>
     </div>
@@ -44,7 +44,7 @@ import { useGettext } from 'vue3-gettext'
 interface PasswordPolicy {
   rules: unknown[]
   check(password: string): boolean
-  missing: {
+  missing(password: string): {
     code: string
     message: string
     format: (number | string)[]
@@ -72,7 +72,7 @@ export default defineComponent({
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
     })
-    const checkedPasswordPolicy = computed(() => {
+    const testedPasswordPolicy = computed(() => {
       return props.passwordPolicy.missing(unref(password))
     })
 
@@ -108,7 +108,7 @@ export default defineComponent({
       onInput,
       showPassword,
       showPasswordPolicyInformation,
-      checkedPasswordPolicy,
+      testedPasswordPolicy,
       getPasswordPolicyRuleMessage
     }
   }

@@ -42,7 +42,7 @@ export class PasswordPolicyService {
       mustContain: new MustContainRule({ ...this.language }),
       atMostCharacters: new AtMostCharactersRule({ ...this.language })
     }
-    const rules = {} as unknown
+    const rules = {} as any
 
     if (this.capability.min_characters) {
       rules.atLeastCharacters = { minLength: this.capability.min_characters }
