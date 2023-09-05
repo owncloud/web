@@ -8,7 +8,8 @@
         size="small"
         class="oc-mt-s oc-ml-s oc-position-absolute"
       />
-      <input
+      <component
+        :is="inputComponent"
         :id="id"
         v-bind="additionalAttributes"
         ref="input"
@@ -24,6 +25,8 @@
         :disabled="disabled || readOnly"
         @change="onChange(($event.target as HTMLInputElement).value)"
         @input="onInput(($event.target as HTMLInputElement).value)"
+        @password-challenge-completed="$emit('passwordChallengeCompleted')"
+        @password-challenge-failed="$emit('passwordChallengeFailed')"
         @focus="onFocus($event.target)"
       />
       <oc-button
@@ -64,6 +67,7 @@
         v-text="messageText"
       />
     </div>
+    <portal-target name="app.design-system.password-policy" />
   </div>
 </template>
 
@@ -73,6 +77,9 @@ import { defineComponent, HTMLAttributes, PropType } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import OcTextInputPassword, {
+  PasswordPolicy
+} from '../_OcTextInputPassword/_OcTextInputPassword.vue'
 
 /**
  * Form Inputs are used to allow users to provide text input when the expected
@@ -89,7 +96,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
  */
 export default defineComponent({
   name: 'OcTextInput',
-  components: { OcIcon, OcButton },
+  components: { OcIcon, OcButton, OcTextInputPassword },
   status: 'ready',
   release: '1.0.0',
   inheritAttrs: false,
@@ -214,9 +221,27 @@ export default defineComponent({
     readOnly: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Array of password policy rules, if type is password and password policy is given,
+     * the entered value will be checked against these rules.
+     *
+     * Password policy rules must be compliant with auth0/password-sheriff
+     * https://github.com/auth0/password-sheriff
+     *
+     */
+    passwordPolicy: {
+      type: Object as PropType<PasswordPolicy>,
+      default: () => ({})
     }
   },
-  emits: ['change', 'update:modelValue', 'focus'],
+  emits: [
+    'change',
+    'update:modelValue',
+    'focus',
+    'passwordChallengeCompleted',
+    'passwordChallengeFailed'
+  ],
   computed: {
     showMessageLine() {
       return (
@@ -237,6 +262,9 @@ export default defineComponent({
       // FIXME: placeholder usage is discouraged, we need to find a better UX concept
       if (this.defaultValue) {
         additionalAttrs['placeholder'] = this.defaultValue
+      }
+      if (this.type === 'password') {
+        additionalAttrs['password-policy'] = this.passwordPolicy
       }
       // Exclude listeners for events which are handled via methods in this component
       // eslint-disable-next-line no-unused-vars
@@ -266,6 +294,9 @@ export default defineComponent({
     },
     displayValue() {
       return this.modelValue || ''
+    },
+    inputComponent() {
+      return this.type === 'password' ? 'oc-text-input-password' : 'input'
     }
   },
   methods: {
@@ -329,6 +360,12 @@ export default defineComponent({
 .oc-text-input {
   &-description {
     color: var(--oc-color-text-muted);
+  }
+
+  &-success,
+  &-success:focus {
+    border-color: var(--oc-color-swatch-success-default) !important;
+    color: var(--oc-color-swatch-success-default) !important;
   }
 
   &-warning,

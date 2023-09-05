@@ -133,7 +133,7 @@ describe('OcTextInput', () => {
     it.each(['text', 'number', 'email', 'password'])(
       'should set the provided type for the input',
       (type) => {
-        const wrapper = getShallowWrapper({ type: type })
+        const wrapper = getMountedWrapper({ props: { type: type } })
         expect(wrapper.find('input').attributes('type')).toBe(type)
       }
     )

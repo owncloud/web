@@ -40,12 +40,16 @@
               v-model="userInputValue"
               class="oc-modal-body-input"
               :error-message="inputError"
+              :placeholder="inputPlaceholder"
               :label="inputLabel"
               :type="inputType"
+              :password-policy="inputPasswordPolicy"
               :description-message="inputDescription"
               :disabled="inputDisabled"
               :fix-message-line="true"
               :selection-range="inputSelectionRange"
+              @password-challenge-completed="$emit('passwordChallengeCompleted')"
+              @password-challenge-failed="$emit('passwordChallengeFailed')"
               @update:model-value="inputOnInput"
               @keydown.enter.prevent="confirm"
             />
@@ -99,6 +103,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
+import { PasswordPolicy } from '../_OcTextInputPassword/_OcTextInputPassword.vue'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -324,6 +329,14 @@ export default defineComponent({
       default: null
     },
     /**
+     * Placeholder of the text input field
+     */
+    inputPlaceholder: {
+      type: String,
+      required: false,
+      default: null
+    },
+    /**
      * Additional description message for the input field
      */
     inputDescription: {
@@ -348,6 +361,14 @@ export default defineComponent({
       default: false
     },
     /**
+     * Password policy for the input
+     */
+    inputPasswordPolicy: {
+      type: Object as PropType<PasswordPolicy>,
+      required: false,
+      default: () => ({})
+    },
+    /**
      * Overwrite default focused element
      * Can be `#id, .class`.
      */
@@ -357,7 +378,15 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['cancel', 'confirm', 'confirm-secondary', 'input', 'checkbox-changed'],
+  emits: [
+    'cancel',
+    'confirm',
+    'confirm-secondary',
+    'input',
+    'checkbox-changed',
+    'passwordChallengeCompleted',
+    'passwordChallengeFailed'
+  ],
   data() {
     return {
       userInputValue: null,
@@ -558,6 +587,12 @@ export default defineComponent({
       .oc-button {
         border-radius: 4px;
       }
+    }
+  }
+
+  .oc-text-input-password-wrapper {
+    button {
+      background-color: var(--oc-color-background-highlight) !important;
     }
   }
 }
