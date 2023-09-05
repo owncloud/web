@@ -4,7 +4,8 @@ import {
   createStore,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  defaultComponentMocks
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
@@ -52,6 +53,7 @@ describe('DetailsAndEdit component', () => {
 
 function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable = false) {
   const storeOptions = defaultStoreMockOptions
+  const mocks = defaultComponentMocks()
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(DetailsAndEdit, {
@@ -70,9 +72,11 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
         file: mockDeep<Resource>()
       },
       global: {
+        mocks,
         renderStubDefaultSlot: true,
         stubs: { OcDatepicker: false, 'date-picker': true },
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins(), store],
+        provide: mocks
       }
     })
   }
