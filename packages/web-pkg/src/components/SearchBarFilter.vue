@@ -55,7 +55,7 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
-    const useSopeQueryValue = useRouteQuery('useScope')
+    const useScopeQueryValue = useRouteQuery('useScope')
 
     const currentSelection = ref<LocationOption>()
     const userSelection = ref<LocationOption>()
@@ -80,8 +80,8 @@ export default defineComponent({
     watch(
       () => props.currentFolderAvailable,
       () => {
-        if (unref(useSopeQueryValue)) {
-          const useScope = unref(useSopeQueryValue).toString() === 'true'
+        if (unref(useScopeQueryValue)) {
+          const useScope = unref(useScopeQueryValue).toString() === 'true'
           if (useScope) {
             currentSelection.value = unref(locationOptions).find(
               ({ id }) => id === SearchLocationFilterConstants.inHere
