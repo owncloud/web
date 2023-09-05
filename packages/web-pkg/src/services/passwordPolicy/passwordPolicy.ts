@@ -6,18 +6,20 @@ import {
   AtLeastUppercaseCharactersRule,
   AtMostCharactersRule,
   MustContainRule,
-  MustNotBeEmptyRule
+  MustNotBeEmptyRule,
+  Rule
 } from './rules'
 import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
 import { PasswordPolicy } from 'password-sheriff'
 import get from 'lodash-es/get'
+import { Store } from 'vuex'
 
 export class PasswordPolicyService {
   private readonly capability: PasswordPolicyCapability
   private readonly language: Language
-  private policies = []
+  private policies: Rule[]
 
-  constructor({ store, language }) {
+  constructor({ store, language }: { store: Store<unknown>; language: Language }) {
     this.capability = get(store, 'getters.capabilities.password_policy', {})
     this.language = language
     this.buildPolicies()
@@ -89,18 +91,17 @@ export class PasswordPolicyService {
       )
     }
 
-    /**
-     * Not configurable, backend limitation
-     */
-    this.policies.push(
-      new PasswordPolicy(
-        { atMostCharacters: { maxLength: 72 } },
-        { atMostCharacters: new AtMostCharactersRule({ ...this.language }) }
+    if (this.capability.max_characters) {
+      this.policies.push(
+        new PasswordPolicy(
+          { atMostCharacters: { maxLength: this.capability.max_characters } },
+          { atMostCharacters: new AtMostCharactersRule({ ...this.language }) }
+        )
       )
-    )
+    }
   }
 
-  public getPolicies() {
+  public getPolicies(): Rule[] {
     return this.policies
   }
 }

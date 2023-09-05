@@ -2,7 +2,7 @@
 
 exports[`MembersPanel should display an empty result if no matching members found 1`] = `
 <div class="oc-ml-s">
-  <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-3" label="Filter members" modelvalue="no-match" readonly="false" type="text"></oc-text-input-stub>
+  <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-3" label="Filter members" modelvalue="no-match" passwordpolicy="" readonly="false" type="text"></oc-text-input-stub>
   <div>
     <div>
       <h3 class="oc-text-bold oc-text-medium">No members found</h3>
@@ -14,7 +14,7 @@ exports[`MembersPanel should display an empty result if no matching members foun
 
 exports[`MembersPanel should render all members accordingly to their role assignments 1`] = `
 <div class="oc-ml-s">
-  <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-1" label="Filter members" modelvalue="" readonly="false" type="text"></oc-text-input-stub>
+  <oc-text-input-stub class="oc-text-truncate oc-mr-s oc-mt-m" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-1" label="Filter members" modelvalue="" passwordpolicy="" readonly="false" type="text"></oc-text-input-stub>
   <div>
     <!--v-if-->
     <div class="oc-mb-m">

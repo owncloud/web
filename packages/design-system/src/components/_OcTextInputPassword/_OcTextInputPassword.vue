@@ -61,7 +61,7 @@ export default defineComponent({
       const explained = policyRule.explain()[0]
       const paramObj = {}
 
-      for (var formatKey = 0; formatKey < explained.format.length; formatKey++) {
+      for (let formatKey = 0; formatKey < explained.format.length; formatKey++) {
         paramObj[`param${formatKey + 1}`] = explained.format[formatKey]
       }
 
@@ -78,7 +78,7 @@ export default defineComponent({
 
     watch(password, (value) => {
       for (const passwordPolicyRule of props.passwordPolicy) {
-        if (!passwordPolicyRule.check(value)) {
+        if (!(passwordPolicyRule as any)?.check(value)) {
           return emit('passwordChallengeFailed')
         }
       }

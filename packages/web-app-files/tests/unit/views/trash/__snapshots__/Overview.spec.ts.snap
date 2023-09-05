@@ -13,6 +13,7 @@ exports[`TrashOverview view states should render spaces list 1`] = `
           <!--v-if-->
         </div>
         <!--v-if-->
+        <portal-target name="app.design-system.password-policy"></portal-target>
       </div>
       <table class="oc-table oc-table-hover oc-table-sticky has-item-context-menu spaces-table">
         <thead class="oc-thead">

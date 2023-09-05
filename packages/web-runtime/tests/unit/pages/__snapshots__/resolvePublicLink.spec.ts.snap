@@ -8,7 +8,7 @@ exports[`resolvePublicLink password required form should display if password is 
     </h2>
   </div>
   <div class="oc-card-body">
-    <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-2" label="Enter password for public link" modelvalue="" readonly="false" type="password"></oc-text-input-stub>
+    <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-2" label="Enter password for public link" modelvalue="" passwordpolicy="" readonly="false" type="password"></oc-text-input-stub>
     <oc-button-stub appearance="filled" class="oc-login-authorize-button" disabled="true" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="submit" type="button" variation="primary"></oc-button-stub>
   </div>
 </form>

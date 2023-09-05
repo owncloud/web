@@ -1,53 +1,79 @@
 import { isNaN, isNumber, isObject, isString } from 'lodash-es'
+import { Language } from 'vue3-gettext'
 
-export class MustNotBeEmptyRule {
+export interface RuleOptions {
+  minLength?: number
+  maxLength?: number
+  characters?: string
+}
+
+export interface RuleExplained {
+  code: string
+  message: string
+  format: (number | string)[]
+  verified?: boolean
+}
+
+export interface Rule {
+  assert(options: RuleOptions, password: string): boolean
+  explain(options: RuleOptions, verified?: boolean): RuleExplained
+  missing(options: RuleOptions, password: string): RuleExplained
+  validate(options?: RuleOptions): boolean
+}
+
+export class MustNotBeEmptyRule implements Rule {
   protected $gettext
 
-  constructor({ $gettext }: any) {
+  constructor({ $gettext }: Language) {
     this.$gettext = $gettext
   }
-  explain(options, verified) {
+
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'mustNotBeEmpty',
       message: this.$gettext('Must not be empty'),
       format: [],
-      ...(verified & { verified })
+      ...(verified && { verified })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string): boolean {
     return password.length > 0
   }
-  validate() {
+
+  validate(): boolean {
     return true
   }
-  missing(options, password) {
+
+  missing(options: RuleOptions, password: string): RuleExplained {
     return this.explain(options, this.assert(options, password))
   }
 }
-export class MustContainRule {
+export class MustContainRule implements Rule {
   protected $gettext
 
-  constructor({ $gettext }: any) {
+  constructor({ $gettext }: Language) {
     this.$gettext = $gettext
   }
-  explain(options, verified) {
+
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'mustContain',
       message: this.$gettext('At least %{param1} of the special characters: %{param2}'),
       format: [options.minLength, options.characters],
-      ...(verified & { verified })
+      ...(verified && { verified })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string) {
     const charsCount = Array.from(password).filter((char) =>
       options.characters.includes(char)
     ).length
 
     return charsCount >= options.minLength
   }
-  validate(options) {
+
+  validate(options: RuleOptions): boolean {
     if (!isObject(options)) {
       throw new Error('options should be an object')
     }
@@ -59,19 +85,29 @@ export class MustContainRule {
     if (!isString(options.characters)) {
       throw new Error('characters should be a character sequence')
     }
+
+    return true
   }
   missing(options, password) {
     return this.explain(options, this.assert(options, password))
   }
 }
-export class AtMostBaseRule {
+export class AtMostBaseRule implements Rule {
   protected $ngettext
-  protected override explain(options, password)
-  protected override assert(options, password)
-  constructor({ $ngettext }) {
+
+  constructor({ $ngettext }: Language) {
     this.$ngettext = $ngettext
   }
-  validate(options) {
+
+  assert(options: RuleOptions, password: string): boolean {
+    throw new Error('Method not implemented.')
+  }
+
+  explain(options: RuleOptions, verified?: boolean): RuleExplained {
+    throw new Error('Method not implemented.')
+  }
+
+  validate(options: RuleOptions): boolean {
     if (!isObject(options)) {
       throw new Error('options should be an object')
     }
@@ -82,17 +118,18 @@ export class AtMostBaseRule {
 
     return true
   }
-  missing(options, password) {
+
+  missing(options: RuleOptions, password: string): RuleExplained {
     return this.explain(options, this.assert(options, password))
   }
 }
 
 export class AtMostCharactersRule extends AtMostBaseRule {
-  constructor(args) {
+  constructor(args: Language) {
     super(args)
   }
 
-  explain(options, verified) {
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'atMostCharacters',
       message: this.$ngettext(
@@ -101,23 +138,31 @@ export class AtMostCharactersRule extends AtMostBaseRule {
         options.maxLength
       ),
       format: [options.maxLength],
-      ...(verified & { verified })
+      ...(verified && { verified })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string): boolean {
     return password.length <= options.maxLength
   }
 }
 
-export class AtLeastBaseRule {
+export class AtLeastBaseRule implements Rule {
   protected $ngettext
-  protected override explain(options, password)
-  protected override assert(options, password)
-  constructor({ $ngettext }) {
+
+  constructor({ $ngettext }: Language) {
     this.$ngettext = $ngettext
   }
-  validate(options) {
+
+  assert(options: RuleOptions, password: string): boolean {
+    throw new Error('Method not implemented.')
+  }
+
+  explain(options: RuleOptions, verified?: boolean): RuleExplained {
+    throw new Error('Method not implemented.')
+  }
+
+  validate(options: RuleOptions): boolean {
     if (!isObject(options)) {
       throw new Error('options should be an object')
     }
@@ -128,17 +173,18 @@ export class AtLeastBaseRule {
 
     return true
   }
-  missing(options, password) {
+
+  missing(options: RuleOptions, password: string): RuleExplained {
     return this.explain(options, this.assert(options, password))
   }
 }
 
-export class AtLeastCharactersRule extends AtLeastBaseRule {
-  constructor(args) {
+export class AtLeastCharactersRule extends AtLeastBaseRule implements Rule {
+  constructor(args: Language) {
     super(args)
   }
 
-  explain(options, verified) {
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'atLeastCharacters',
       message: this.$ngettext(
@@ -147,21 +193,21 @@ export class AtLeastCharactersRule extends AtLeastBaseRule {
         options.minLength
       ),
       format: [options.minLength],
-      ...(verified & { verified })
+      ...(verified && { verified })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string): boolean {
     return password.length >= options.minLength
   }
 }
 
 export class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
-  constructor(args) {
+  constructor(args: Language) {
     super(args)
   }
 
-  explain(options, verified) {
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'atLeastUppercaseCharacters',
       message: this.$ngettext(
@@ -170,22 +216,22 @@ export class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
         options.minLength
       ),
       format: [options.minLength],
-      ...(verified & { verified })
+      ...(verified && { verified })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string): boolean {
     const uppercaseCount = (password || '').match(/[A-Z\xC0-\xD6\xD8-\xDE]/g)?.length
     return uppercaseCount >= options.minLength
   }
 }
 
 export class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
-  constructor(args) {
+  constructor(args: Language) {
     super(args)
   }
 
-  explain(options, verified) {
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'atLeastLowercaseCharacters',
       message: this.$ngettext(
@@ -194,22 +240,22 @@ export class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
         options.minLength
       ),
       format: [options.minLength],
-      ...(verified & { verified })
+      ...(verified && { verified })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string): boolean {
     const lowercaseCount = (password || '').match(/[a-z\xDF-\xF6\xF8-\xFF]/g)?.length
     return lowercaseCount >= options.minLength
   }
 }
 
 export class AtLeastDigitsRule extends AtLeastBaseRule {
-  constructor(args) {
+  constructor(args: Language) {
     super(args)
   }
 
-  explain(options, verified) {
+  explain(options: RuleOptions, verified: boolean): RuleExplained {
     return {
       code: 'atLeastDigits',
       message: this.$ngettext(
@@ -218,11 +264,11 @@ export class AtLeastDigitsRule extends AtLeastBaseRule {
         options.minLength
       ),
       format: [options.minLength],
-      ...(verified & { verified })
+      ...(verified && { verified: false })
     }
   }
 
-  assert(options, password) {
+  assert(options: RuleOptions, password: string): boolean {
     const digitCount = (password || '').match(/\d/g)?.length
     return digitCount >= options.minLength
   }

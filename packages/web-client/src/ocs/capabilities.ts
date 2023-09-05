@@ -12,6 +12,7 @@ export interface AppProviderCapability {
 
 export interface PasswordPolicyCapability {
   min_characters?: number
+  max_characters?: number
   min_lower_case_characters?: number
   min_upper_case_characters?: number
   min_digits?: number

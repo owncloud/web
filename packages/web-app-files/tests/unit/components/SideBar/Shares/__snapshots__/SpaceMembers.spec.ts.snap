@@ -46,6 +46,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
             <!--v-if-->
           </div>
           <!--v-if-->
+          <portal-target name="app.design-system.password-policy"></portal-target>
         </div>
         <button aria-label="Close filter" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw close-filter-btn" type="button">
           <!--v-if-->
