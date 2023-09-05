@@ -29,7 +29,7 @@
             <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
-        <div v-else ref="tilesTableRef" class="spaces-list oc-mt-l">
+        <div v-else class="spaces-list oc-mt-l">
           <oc-text-input
             id="spaces-filter"
             v-model="filterTerm"
@@ -220,7 +220,6 @@ export default defineComponent({
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
     const markInstance = ref(undefined)
-    const tilesTableRef = ref(undefined)
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -396,7 +395,6 @@ export default defineComponent({
       getMemberCount,
       paginatedItems,
       filterTerm,
-      tilesTableRef,
       totalPages,
       currentPage,
       footerTextTotal,
