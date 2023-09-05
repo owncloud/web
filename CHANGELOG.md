@@ -14,6 +14,7 @@ Summary
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
 * Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
 * Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+* Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
@@ -74,6 +75,13 @@ Details
 
    https://github.com/owncloud/web/issues/9593
    https://github.com/owncloud/web/pull/9595
+
+* Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
+
+   We've added the option to search for spaces in the project space overview.
+
+   https://github.com/owncloud/web/issues/9650
+   https://github.com/owncloud/web/pull/9649
 
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 
