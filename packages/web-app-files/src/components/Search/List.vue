@@ -264,8 +264,6 @@ export default defineComponent({
 
       const humanTagsParams = queryItemAsString(unref(tagParam))
       if (humanTagsParams) {
-        // in the legacy implementation there was the option to query by multiple tags, e.g. string.split("+")
-        // this was not in use(?) and is removed.
         add('tag', `"${humanTagsParams}"`)
 
         if (manuallyUpdateFilterChip && unref(tagFilter)) {
