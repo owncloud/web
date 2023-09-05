@@ -25,6 +25,7 @@ Summary
 * Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
 * Enhancement - Add keyboard navigation to spaces overview: [#9625](https://github.com/owncloud/web/pull/9625)
 * Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
+* Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 
 Details
 -------
@@ -170,6 +171,33 @@ Details
 
    https://github.com/owncloud/web/issues/9626
    https://github.com/owncloud/web/pull/9627
+
+* Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
+
+   We've introduced
+   [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference)
+   as our default query language. Previously we used our own simple language for queries which is
+   now replaced by kql.
+
+   `sample.tx* Tags:important Tags:report Content:annual*`
+
+   Becomes
+
+   `name:"sample.tx*" AND tag:important AND tag:report AND content:"annual*"`
+
+   By default KQL uses `AND` as property restriction and the query described above can also be
+   formulated as follows
+
+   `name:"sample.tx*" tag:important tag:report content:"annual*"`
+
+   More advanced syntax like grouping combined with boolean property restriction is supported
+   too
+
+   `(name:"sample*" name:"*txt") tag:important OR tag:report content:"annual*"`
+
+   https://github.com/owncloud/web/issues/9636
+   https://github.com/owncloud/web/issues/9646
+   https://github.com/owncloud/web/pull/9653
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
