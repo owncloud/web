@@ -6,7 +6,7 @@ exports[`Projects view different files view states lists all available project s
     <div id="files-view">
       <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" sidebaropen="false" viewmodedefault="resource-tiles" viewmodes="[object Object],[object Object]"></app-bar-stub>
       <div class="spaces-list oc-mt-l">
-        <div class="oc-ml-m oc-my-s">
+        <div class="oc-ml-m oc-my-m">
           <label class="oc-label" for="spaces-filter">Search</label>
           <div class="oc-position-relative">
             <!--v-if-->
