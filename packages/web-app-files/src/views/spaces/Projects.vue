@@ -163,7 +163,9 @@ import {
   SortDir,
   usePagination,
   useRouter,
-  useRoute
+  useRoute,
+  useRouteQuery,
+  queryItemAsString
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
@@ -255,11 +257,16 @@ export default defineComponent({
         unref(sortDir) === SortDir.Desc
       )
     )
+
     const {
       items: paginatedItems,
       page: currentPage,
       total: totalPages
-    } = usePagination({ items, perPageDefault: '100', perPageStoragePrefix: 'spaces-list' })
+    } = usePagination({
+      items,
+      perPageDefault: '50',
+      perPageStoragePrefix: 'spaces-list'
+    })
 
     watch(filterTerm, async () => {
       const instance = unref(markInstance)

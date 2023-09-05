@@ -5,8 +5,17 @@ exports[`Projects view different files view states lists all available project s
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
       <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" sidebaropen="false" viewmodedefault="resource-tiles" viewmodes="[object Object],[object Object]"></app-bar-stub>
-      <div class="oc-flex oc-flex-middle oc-flex-center oc-height-1-1 oc-width-1-1">
-        <oc-spinner-stub aria-hidden="true" aria-label="" id="app-loading-spinner" size="large"></oc-spinner-stub>
+      <div class="spaces-list oc-mt-l">
+        <div class="oc-ml-m oc-my-s">
+          <label class="oc-label" for="spaces-filter">Search</label>
+          <div class="oc-position-relative">
+            <!--v-if-->
+            <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+            <!--v-if-->
+          </div>
+          <!--v-if-->
+        </div>
+        <resource-table-stub arepathsdisplayed="false" areresourcesclickable="true" arethumbnailsdisplayed="true" class="spaces-table" dragdrop="false" fieldsdisplayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" hasactions="true" headerposition="0" hover="true" isselectable="true" paddingx="small" resourcedomselector="[Function]" resources="" selectedids="" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sortby="[Function]" sortdir="desc" sticky="false" viewmode="resource-table"></resource-table-stub>
       </div>
     </div>
   </div>

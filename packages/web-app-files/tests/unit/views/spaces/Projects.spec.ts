@@ -1,5 +1,6 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { mock } from 'jest-mock-extended'
+import { queryItemAsString } from 'web-pkg'
 
 import {
   createStore,
@@ -10,6 +11,12 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+
+jest.mock('web-pkg/src/helpers', () => ({
+  ...jest.requireActual('web-pkg/src/helpers'),
+  displayPositionedDropdown: jest.fn()
+}))
+jest.mock('web-pkg/src/composables/appDefaults')
 
 const spacesResources = [
   {
@@ -75,6 +82,8 @@ describe('Projects view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
