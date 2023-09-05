@@ -19,15 +19,7 @@ export class PasswordPolicyService {
   private policy: PasswordPolicy
 
   constructor({ store, language }: { store: Store<unknown>; language: Language }) {
-    this.capability = get(store, 'getters.capabilities.password_policy', {
-      min_characters: 10,
-      max_characters: 72,
-      min_lower_case_characters: 2,
-      min_upper_case_characters: 2,
-      min_digits: 2,
-      min_special_characters: 2,
-      special_characters: '!*?'
-    })
+    this.capability = get(store, 'getters.capabilities.password_policy', {})
     this.language = language
     this.buildPolicy()
   }
