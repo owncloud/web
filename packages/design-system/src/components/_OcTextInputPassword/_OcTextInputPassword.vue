@@ -2,6 +2,16 @@
   <div ref="inputPasswordWrapper" class="oc-text-input-password-wrapper">
     <input v-bind="$attrs" :type="showPassword ? 'text' : 'password'" @input="onInput" />
     <oc-button
+      v-if="password"
+      class="oc-text-input-copy-password-button oc-px-s oc-background-default"
+      appearance="raw"
+      size="small"
+      @click="copyPasswordToClipboard"
+    >
+      <oc-icon size="small" :name="copyPasswordIcon" />
+    </oc-button>
+    <oc-button
+      v-if="password"
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
       appearance="raw"
       size="small"
@@ -71,6 +81,8 @@ export default defineComponent({
     const showPassword = ref(false)
     const passwordEntered = ref(false)
     const password = ref('')
+    const copyPasswordIconInitial = 'file-copy'
+    const copyPasswordIcon = ref(copyPasswordIconInitial)
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
     })
@@ -93,6 +105,12 @@ export default defineComponent({
       return $gettext(rule.message, paramObj, true)
     }
 
+    const copyPasswordToClipboard = () => {
+      navigator.clipboard.writeText(unref(password))
+      copyPasswordIcon.value = 'check'
+      setTimeout(() => (copyPasswordIcon.value = copyPasswordIconInitial), 500)
+    }
+
     watch(password, (value) => {
       if (!Object.keys(props.passwordPolicy).length) {
         return
@@ -108,10 +126,13 @@ export default defineComponent({
     return {
       $gettext,
       onInput,
+      password,
       showPassword,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
-      getPasswordPolicyRuleMessage
+      getPasswordPolicyRuleMessage,
+      copyPasswordToClipboard,
+      copyPasswordIcon
     }
   }
 })
@@ -132,10 +153,6 @@ export default defineComponent({
 
   input:focus {
     outline: none;
-  }
-
-  button {
-    background-color: var(--oc-color-background-highlight) !important;
   }
 }
 .oc-text-input-password-wrapper:focus-within {

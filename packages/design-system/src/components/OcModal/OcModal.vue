@@ -40,6 +40,7 @@
               v-model="userInputValue"
               class="oc-modal-body-input"
               :error-message="inputError"
+              :placeholder="inputPlaceholder"
               :label="inputLabel"
               :type="inputType"
               :password-policy="inputPasswordPolicy"
@@ -328,6 +329,14 @@ export default defineComponent({
       default: null
     },
     /**
+     * Placeholder of the text input field
+     */
+    inputPlaceholder: {
+      type: String,
+      required: false,
+      default: null
+    },
+    /**
      * Additional description message for the input field
      */
     inputDescription: {
@@ -578,6 +587,12 @@ export default defineComponent({
       .oc-button {
         border-radius: 4px;
       }
+    }
+  }
+
+  .oc-text-input-password-wrapper {
+    button {
+      background-color: var(--oc-color-background-highlight) !important;
     }
   }
 }

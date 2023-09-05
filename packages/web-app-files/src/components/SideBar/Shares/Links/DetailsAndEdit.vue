@@ -475,6 +475,7 @@ export default defineComponent({
         confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
         inputPasswordPolicy: this.passwordPolicy,
+        inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
         inputType: 'password',
         onCancel: this.hideModal,
         onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
