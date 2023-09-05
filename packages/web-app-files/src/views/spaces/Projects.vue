@@ -395,7 +395,8 @@ export default defineComponent({
       totalPages,
       currentPage,
       footerTextTotal,
-      footerTextFilter
+      footerTextFilter,
+      items
     }
   },
   data: function () {

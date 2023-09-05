@@ -1,5 +1,6 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { mock } from 'jest-mock-extended'
+import { nextTick } from 'vue'
 import { queryItemAsString } from 'web-pkg'
 
 import {
@@ -70,6 +71,12 @@ describe('Projects view', () => {
       expect(wrapper.html()).toMatchSnapshot()
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
+    })
+    it('shows only filtered spaces if filter applied', async () => {
+      const { wrapper } = getMountedWrapper({ spaces: spacesResources })
+      wrapper.vm.filterTerm = 'Some other space'
+      await nextTick()
+      expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
   })
   it('should display the "Create Space"-button when permission given', () => {
