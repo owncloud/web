@@ -1,0 +1,6 @@
+Bugfix: Add project space filter
+
+We've added the option to search for spaces in the project space overview.
+
+https://github.com/owncloud/web/pull/9649
+https://github.com/owncloud/web/issues/9650

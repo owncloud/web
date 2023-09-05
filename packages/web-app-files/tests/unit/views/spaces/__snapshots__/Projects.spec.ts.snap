@@ -6,7 +6,16 @@ exports[`Projects view different files view states lists all available project s
     <div id="files-view">
       <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassharesnavigation="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" sidebaropen="false" viewmodedefault="resource-tiles" viewmodes="[object Object],[object Object]"></app-bar-stub>
       <div class="spaces-list oc-mt-l">
-        <resource-table-stub arepathsdisplayed="false" areresourcesclickable="true" arethumbnailsdisplayed="true" class="spaces-table" dragdrop="false" fieldsdisplayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" hasactions="true" headerposition="0" hover="true" isselectable="true" paddingx="small" resourcedomselector="[Function]" resources="[object Object],[object Object]" selectedids="" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sortby="[Function]" sortdir="desc" sticky="false" viewmode="resource-table"></resource-table-stub>
+        <div class="oc-ml-m oc-my-m">
+          <label class="oc-label" for="spaces-filter">Search</label>
+          <div class="oc-position-relative">
+            <!--v-if-->
+            <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+            <!--v-if-->
+          </div>
+          <!--v-if-->
+        </div>
+        <resource-table-stub arepathsdisplayed="false" areresourcesclickable="true" arethumbnailsdisplayed="true" class="spaces-table" dragdrop="false" fieldsdisplayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" hasactions="true" headerposition="0" hover="true" isselectable="true" paddingx="small" resourcedomselector="[Function]" resources="" selectedids="" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sortby="[Function]" sortdir="desc" sticky="false" viewmode="resource-table"></resource-table-stub>
       </div>
     </div>
   </div>
