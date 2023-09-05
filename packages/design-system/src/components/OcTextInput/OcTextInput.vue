@@ -77,7 +77,9 @@ import { defineComponent, HTMLAttributes, PropType } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
-import OcTextInputPassword from '../_OcTextInputPassword/_OcTextInputPassword.vue'
+import OcTextInputPassword, {
+  PasswordPolicy
+} from '../_OcTextInputPassword/_OcTextInputPassword.vue'
 
 /**
  * Form Inputs are used to allow users to provide text input when the expected
@@ -229,8 +231,8 @@ export default defineComponent({
      *
      */
     passwordPolicy: {
-      type: Object,
-      default: () => {}
+      type: Object as PropType<PasswordPolicy>,
+      default: () => ({})
     }
   },
   emits: [

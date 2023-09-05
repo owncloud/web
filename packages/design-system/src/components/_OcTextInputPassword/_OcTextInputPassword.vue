@@ -41,7 +41,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { useGettext } from 'vue3-gettext'
 
-interface PasswordPolicy {
+export interface PasswordPolicy {
   rules: unknown[]
   check(password: string): boolean
   missing(password: string): {
@@ -60,7 +60,7 @@ export default defineComponent({
   props: {
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
-      default: () => {}
+      default: () => ({})
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],

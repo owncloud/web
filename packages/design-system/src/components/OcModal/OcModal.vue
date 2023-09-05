@@ -102,6 +102,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
+import { PasswordPolicy } from '../_OcTextInputPassword/_OcTextInputPassword.vue'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -354,9 +355,9 @@ export default defineComponent({
      * Password policy for the input
      */
     inputPasswordPolicy: {
-      type: Object,
+      type: Object as PropType<PasswordPolicy>,
       required: false,
-      default: () => {}
+      default: () => ({})
     },
     /**
      * Overwrite default focused element
