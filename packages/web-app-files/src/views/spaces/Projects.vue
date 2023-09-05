@@ -33,7 +33,7 @@
           <oc-text-input
             id="spaces-filter"
             v-model="filterTerm"
-            class="oc-ml-m oc-my-s"
+            class="oc-ml-m oc-my-m"
             :label="$gettext('Search')"
             autocomplete="off"
           />
@@ -175,7 +175,7 @@ import {
 import { ImageDimension } from 'web-pkg/src/constants'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
-import { isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
@@ -248,7 +248,7 @@ export default defineComponent({
       items: runtimeSpaces,
       fields: sortFields
     })
-    const filter = (spaces, filterTerm) => {
+    const filter = (spaces: Array<Resource>, filterTerm: string) => {
       if (!(filterTerm || '').trim()) {
         return spaces
       }
