@@ -29,7 +29,7 @@
             <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
-        <div v-else class="spaces-list oc-mt-l" ref="tableRef">
+        <div v-else ref="tilesTableRef" class="spaces-list oc-mt-l">
           <oc-text-input
             id="spaces-filter"
             v-model="filterTerm"
@@ -163,9 +163,7 @@ import {
   SortDir,
   usePagination,
   useRouter,
-  useRoute,
-  useRouteQuery,
-  queryItemAsString
+  useRoute
 } from 'web-pkg/src/composables'
 import { ImageDimension } from 'web-pkg/src/constants'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
@@ -215,7 +213,7 @@ export default defineComponent({
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
     const markInstance = ref(undefined)
-    const tableRef = ref(undefined)
+    const tilesTableRef = ref(undefined)
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -391,7 +389,7 @@ export default defineComponent({
       getMemberCount,
       paginatedItems,
       filterTerm,
-      tableRef,
+      tilesTableRef,
       totalPages,
       currentPage,
       footerTextTotal,
