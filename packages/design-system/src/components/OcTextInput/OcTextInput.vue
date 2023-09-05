@@ -229,8 +229,8 @@ export default defineComponent({
      *
      */
     passwordPolicy: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     }
   },
   emits: [

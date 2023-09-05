@@ -230,7 +230,7 @@ export default defineComponent({
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
-      passwordPolicy: passwordPolicyService.getPolicies()
+      passwordPolicy: passwordPolicyService.getPolicy()
     }
   },
   data() {

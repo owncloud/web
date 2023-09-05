@@ -6,8 +6,7 @@ import {
   AtLeastUppercaseCharactersRule,
   AtMostCharactersRule,
   MustContainRule,
-  MustNotBeEmptyRule,
-  Rule
+  MustNotBeEmptyRule
 } from './rules'
 import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
 import { PasswordPolicy } from 'password-sheriff'
@@ -17,91 +16,71 @@ import { Store } from 'vuex'
 export class PasswordPolicyService {
   private readonly capability: PasswordPolicyCapability
   private readonly language: Language
-  private policies: Rule[]
+  private policy: PasswordPolicy
 
   constructor({ store, language }: { store: Store<unknown>; language: Language }) {
-    this.capability = get(store, 'getters.capabilities.password_policy', {})
+    this.capability = get(store, 'getters.capabilities.password_policy', {
+      min_characters: 10,
+      max_characters: 72,
+      min_lower_case_characters: 2,
+      min_upper_case_characters: 2,
+      min_digits: 2,
+      min_special_characters: 2,
+      special_characters: '!*?'
+    })
     this.language = language
-    this.buildPolicies()
+    this.buildPolicy()
   }
 
-  private buildPolicies() {
+  private buildPolicy() {
+    const ruleset = {
+      atLeastCharacters: new AtLeastCharactersRule({ ...this.language }),
+      mustNotBeEmpty: new MustNotBeEmptyRule({ ...this.language }),
+      atLeastUppercaseCharacters: new AtLeastUppercaseCharactersRule({ ...this.language }),
+      atLeastLowercaseCharacters: new AtLeastLowercaseCharactersRule({ ...this.language }),
+      atLeastDigits: new AtLeastDigitsRule({ ...this.language }),
+      mustContain: new MustContainRule({ ...this.language }),
+      atMostCharacters: new AtMostCharactersRule({ ...this.language })
+    }
+    const rules = {} as unknown
+
     if (this.capability.min_characters) {
-      this.policies.push(
-        new PasswordPolicy(
-          { atLeastCharacters: { minLength: this.capability.min_characters } },
-          { atLeastCharacters: new AtLeastCharactersRule({ ...this.language }) }
-        )
-      )
+      rules.atLeastCharacters = { minLength: this.capability.min_characters }
     } else {
-      this.policies.push(
-        new PasswordPolicy(
-          { mustNotBeEmpty: {} },
-          { mustNotBeEmpty: new MustNotBeEmptyRule({ ...this.language }) }
-        )
-      )
+      rules.mustNotBeEmpty = {}
     }
 
     if (this.capability.min_upper_case_characters) {
-      this.policies.push(
-        new PasswordPolicy(
-          {
-            atLeastUppercaseCharacters: {
-              minLength: this.capability.min_upper_case_characters
-            }
-          },
-          { atLeastUppercaseCharacters: new AtLeastUppercaseCharactersRule({ ...this.language }) }
-        )
-      )
+      rules.atLeastUppercaseCharacters = {
+        minLength: this.capability.min_upper_case_characters
+      }
     }
 
     if (this.capability.min_lower_case_characters) {
-      this.policies.push(
-        new PasswordPolicy(
-          {
-            atLeastLowercaseCharacters: {
-              minLength: this.capability.min_lower_case_characters
-            }
-          },
-          { atLeastLowercaseCharacters: new AtLeastLowercaseCharactersRule({ ...this.language }) }
-        )
-      )
+      rules.atLeastLowercaseCharacters = {
+        minLength: this.capability.min_lower_case_characters
+      }
     }
 
     if (this.capability.min_digits) {
-      this.policies.push(
-        new PasswordPolicy(
-          { atLeastDigits: { minLength: this.capability.min_digits } },
-          { atLeastDigits: new AtLeastDigitsRule({ ...this.language }) }
-        )
-      )
+      rules.atLeastDigits = { minLength: this.capability.min_digits }
     }
 
     if (this.capability.min_special_characters) {
-      this.policies.push(
-        new PasswordPolicy(
-          {
-            mustContain: {
-              minLength: this.capability.min_special_characters,
-              characters: this.capability.special_characters
-            }
-          },
-          { mustContain: new MustContainRule({ ...this.language }) }
-        )
-      )
+      rules.mustContain = {
+        minLength: this.capability.min_special_characters,
+        characters: this.capability.special_characters
+      }
     }
 
     if (this.capability.max_characters) {
-      this.policies.push(
-        new PasswordPolicy(
-          { atMostCharacters: { maxLength: this.capability.max_characters } },
-          { atMostCharacters: new AtMostCharactersRule({ ...this.language }) }
-        )
-      )
+      rules.atMostCharacters = { maxLength: this.capability.max_characters }
     }
+
+    this.policy = new PasswordPolicy(rules, ruleset)
   }
 
-  public getPolicies(): Rule[] {
-    return this.policies
+  public getPolicy(): PasswordPolicy {
+    return this.policy
   }
 }

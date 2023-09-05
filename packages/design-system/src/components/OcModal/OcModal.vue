@@ -354,9 +354,9 @@ export default defineComponent({
      * Password policy for the input
      */
     inputPasswordPolicy: {
-      type: Array,
+      type: Object,
       required: false,
-      default: () => []
+      default: () => {}
     },
     /**
      * Overwrite default focused element

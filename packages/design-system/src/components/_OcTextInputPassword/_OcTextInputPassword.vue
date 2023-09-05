@@ -13,23 +13,44 @@
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
     <div class="oc-text-small oc-flex oc-flex-column">
       <span v-text="$gettext('Please enter a password that meets the following criteria:')" />
-      <div v-for="(rule, index) in passwordPolicy" :key="index" class="oc-flex oc-flex-middle">
+      <div
+        v-for="(checkedRule, index) in checkedPasswordPolicy.rules"
+        :key="index"
+        class="oc-flex oc-flex-middle"
+      >
         <oc-icon
           size="small"
-          :name="isPolicyRuleFulfilled(rule) ? 'check' : 'close'"
-          :variation="isPolicyRuleFulfilled(rule) ? 'success' : 'danger'"
+          :name="checkedRule.verified ? 'check' : 'close'"
+          :variation="checkedRule.verified ? 'success' : 'danger'"
         />
-        <span :class="getPolicyMessageClass(rule)" v-text="getPolicyRuleMessage(rule)"></span>
+        <span
+          :class="[
+            { 'oc-text-input-success': checkedRule.verified },
+            { 'oc-text-input-danger': !checkedRule.verified }
+          ]"
+          v-text="getPasswordPolicyRuleMessage(checkedRule)"
+        ></span>
       </div>
     </div>
   </portal>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, unref, watch } from 'vue'
+import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { useGettext } from 'vue3-gettext'
+
+interface PasswordPolicy {
+  rules: unknown[]
+  check(password: string): boolean
+  missing: {
+    code: string
+    message: string
+    format: (number | string)[]
+    verified: boolean
+  }
+}
 export default defineComponent({
   name: 'OCTextInputPassword',
   components: { OcButton, OcIcon },
@@ -38,8 +59,8 @@ export default defineComponent({
   inheritAttrs: true,
   props: {
     passwordPolicy: {
-      type: Array,
-      default: () => []
+      type: Object as PropType<PasswordPolicy>,
+      default: () => {}
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
@@ -49,7 +70,10 @@ export default defineComponent({
     const passwordEntered = ref(false)
     const password = ref('')
     const showPasswordPolicyInformation = computed(() => {
-      return !!(props.passwordPolicy.length && unref(passwordEntered))
+      return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
+    })
+    const checkedPasswordPolicy = computed(() => {
+      return props.passwordPolicy.missing(unref(password))
     })
 
     const onInput = (event) => {
@@ -57,31 +81,25 @@ export default defineComponent({
       password.value = event.target.value
     }
 
-    const getPolicyRuleMessage = (policyRule) => {
-      const explained = policyRule.explain()[0]
+    const getPasswordPolicyRuleMessage = (rule) => {
       const paramObj = {}
 
-      for (let formatKey = 0; formatKey < explained.format.length; formatKey++) {
-        paramObj[`param${formatKey + 1}`] = explained.format[formatKey]
+      for (let formatKey = 0; formatKey < rule.format.length; formatKey++) {
+        paramObj[`param${formatKey + 1}`] = rule.format[formatKey]
       }
 
-      return $gettext(explained.message, paramObj, true)
-    }
-
-    const isPolicyRuleFulfilled = (policyRule) => {
-      return policyRule.check(password.value)
-    }
-
-    const getPolicyMessageClass = (policyRule) => {
-      return policyRule.check(password.value) ? 'oc-text-input-success' : 'oc-text-input-danger'
+      return $gettext(rule.message, paramObj, true)
     }
 
     watch(password, (value) => {
-      for (const passwordPolicyRule of props.passwordPolicy) {
-        if (!(passwordPolicyRule as any)?.check(value)) {
-          return emit('passwordChallengeFailed')
-        }
+      if (!Object.keys(props.passwordPolicy).length) {
+        return
       }
+
+      if (!props.passwordPolicy.check(value)) {
+        return emit('passwordChallengeFailed')
+      }
+
       emit('passwordChallengeCompleted')
     })
 
@@ -90,9 +108,8 @@ export default defineComponent({
       onInput,
       showPassword,
       showPasswordPolicyInformation,
-      isPolicyRuleFulfilled,
-      getPolicyRuleMessage,
-      getPolicyMessageClass
+      checkedPasswordPolicy,
+      getPasswordPolicyRuleMessage
     }
   }
 })
