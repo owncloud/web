@@ -157,6 +157,7 @@ Details
 
    https://github.com/owncloud/web/issues/6682
    https://github.com/owncloud/web/pull/9566
+   https://github.com/owncloud/web/pull/9658
 
 * Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
 
