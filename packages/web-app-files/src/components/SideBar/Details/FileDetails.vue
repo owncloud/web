@@ -45,6 +45,12 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
+        <tr v-if="resource.locked" data-testid="locked-by">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
+          <td>
+            <span>{{ resource.lockOwnerName }} ({{ formatDateRelative(resource.lockTime) }})</span>
+          </td>
+        </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
           <td>
@@ -53,10 +59,10 @@
             </router-link>
           </td>
         </tr>
-        <tr v-if="resource.locked" data-testid="locked-by">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
+        <tr v-if="showSharedBy" data-testid="shared-by">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
           <td>
-            <span>{{ resource.lockOwnerName }} ({{ formatDateRelative(resource.lockTime) }})</span>
+            <span v-text="sharedByDisplayName" />
           </td>
         </tr>
         <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
