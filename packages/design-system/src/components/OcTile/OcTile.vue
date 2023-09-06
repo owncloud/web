@@ -12,6 +12,7 @@
       class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm"
       :resource="resource"
       :folder-link="resourceRoute"
+      tabindex="-1"
       @click="$emit('click')"
     >
       <div class="oc-tile-card-selection">
