@@ -28,6 +28,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
       unref(ctrl).abort()
       throw new Error('Too many retries')
     }
+    let doRetry = false
     const setupSSE = async () => {
       retryCounter.value++
       try {
@@ -42,6 +43,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
           },
           async onopen(response) {
             if (response.status === 401) {
+              doRetry = true
               unref(ctrl).abort()
               return
             }
@@ -57,6 +59,9 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
       }
     }
     setupSSE().then(() => {
+      if (!doRetry) {
+        return
+      }
       setupServerSentEvents()
     })
   }
