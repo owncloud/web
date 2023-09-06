@@ -37,7 +37,8 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
           headers: {
             Authorization: `Bearer ${accessToken.value}`,
             'Accept-Language': unref(language).current,
-            'X-Request-ID': uuidV4()
+            'X-Request-ID': uuidV4(),
+            'X-Requested-With': 'XMLHttpRequest'
           },
           async onopen(response) {
             if (response.status === 401) {
