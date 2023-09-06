@@ -45,12 +45,6 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
-        <tr v-if="showLockedBy">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
-          <td>
-            <span v-text="lockedByDisplayName" />
-          </td>
-        </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
           <td>
@@ -59,10 +53,10 @@
             </router-link>
           </td>
         </tr>
-        <tr data-testid="locked-by">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
+        <tr v-if="resource.locked" data-testid="locked-by">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
           <td>
-            <span :v-text="resource.lockOwnerName" />
+            <span>{{ resource.lockOwnerName }} ({{ formatDateRelative(resource.lockTime) }})</span>
           </td>
         </tr>
         <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
@@ -210,7 +204,11 @@ import {
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
 import { encodePath } from 'web-pkg/src/utils'
-import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
+import {
+  formatDateFromHTTP,
+  formatFileSize,
+  formatRelativeDateFromJSDate
+} from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource, SpaceResource } from 'web-client'
@@ -224,6 +222,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { $gettext } = useGettext()
+    const language = useGettext()
     const client = useClientService()
 
     const copiedDirect = ref(false)
@@ -332,9 +331,9 @@ export default defineComponent({
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
     })
-    const showLockedBy = computed(() => {
-      return !!unref(resource).lockOwnerName
-    })
+    const formatDateRelative = (date) => {
+      return formatRelativeDateFromJSDate(new Date(date), language.current)
+    }
 
     watch(
       resource,
@@ -364,7 +363,8 @@ export default defineComponent({
       hasTags: useCapabilityFilesTags(),
       isPreviewLoading,
       ancestorMetaData,
-      sharedAncestor
+      sharedAncestor,
+      formatDateRelative
     }
   },
   computed: {
