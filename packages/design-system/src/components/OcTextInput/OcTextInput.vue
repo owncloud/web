@@ -67,7 +67,7 @@
         v-text="messageText"
       />
     </div>
-    <portal-target name="app.design-system.password-policy" />
+    <portal-target v-if="type === 'password'" name="app.design-system.password-policy" />
   </div>
 </template>
 
