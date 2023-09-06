@@ -17,7 +17,8 @@ const getResourceMock = ({
   thumbnail = null,
   shareTypes = [],
   share = null,
-  path = '/somePath/someResource'
+  path = '/somePath/someResource',
+  locked = false
 } = {}) =>
   mock<Resource>({
     id: '1',
@@ -33,7 +34,8 @@ const getResourceMock = ({
     path,
     thumbnail,
     shareTypes,
-    share
+    share,
+    locked
   })
 
 const selectors = {
@@ -43,6 +45,7 @@ const selectors = {
   ownerDisplayName: '[data-testid="ownerDisplayName"]',
   preview: '[data-testid="preview"]',
   resourceIcon: '.details-icon',
+  lockedBy: '[data-testid="locked-by"]',
   sharedBy: '[data-testid="shared-by"]',
   sharedVia: '[data-testid="shared-via"]',
   sharingInfo: '[data-testid="sharingInfo"]',
@@ -92,6 +95,13 @@ describe('Details SideBar Panel', () => {
       const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource })
       expect(wrapper.find(selectors.timestamp).exists()).toBeTruthy()
+    })
+  })
+  describe('locked by', () => {
+    it('shows if the resource is locked', () => {
+      const resource = getResourceMock({ locked: true })
+      const { wrapper } = createWrapper({ resource })
+      expect(wrapper.find(selectors.lockedBy).exists()).toBeTruthy()
     })
   })
   describe('shared via', () => {

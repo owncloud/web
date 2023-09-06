@@ -44,6 +44,7 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
             <!--v-if-->
             <!--v-if-->
             <!--v-if-->
+            <!--v-if-->
             <tr>
               <th class="oc-pr-s oc-font-semibold" scope="col">Size</th>
               <td>24 kB</td>
