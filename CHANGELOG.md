@@ -112,7 +112,9 @@ Details
    instantly and from the server without polling every few seconds.
 
    https://github.com/owncloud/web/issues/9434
+   https://github.com/owncloud/web/issues/9635
    https://github.com/owncloud/web/pull/9451
+   https://github.com/owncloud/web/pull/9654
 
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 
