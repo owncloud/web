@@ -20,6 +20,7 @@ export interface OptionsConfiguration {
   logoutUrl?: string
   contextHelpersReadMore?: boolean
   contextHelpers?: boolean
+  openAppsInTab?: boolean
   openLinksWithDefaultApp?: boolean
   tokenStorageLocal?: boolean
 }
