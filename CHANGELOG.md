@@ -28,6 +28,7 @@ Summary
 * Enhancement - Add keyboard navigation to spaces overview: [#9625](https://github.com/owncloud/web/pull/9625)
 * Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
 * Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
+* Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
 
 Details
 -------
@@ -218,6 +219,13 @@ Details
    https://github.com/owncloud/web/issues/9636
    https://github.com/owncloud/web/issues/9646
    https://github.com/owncloud/web/pull/9653
+
+* Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
+
+   We've adjusted the button widths for every modal so the options look more equal.
+
+   https://github.com/owncloud/web/issues/9641
+   https://github.com/owncloud/web/pull/9671
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
