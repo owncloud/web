@@ -1,42 +1,12 @@
 const util = require('util')
 const { client } = require('nightwatch-api')
 const { join } = require('../helpers/path')
-const { defaultUsers } = require('../helpers/userSettings')
 
 module.exports = {
   url: function () {
     return join(this.api.launchUrl, '/')
   },
   commands: {
-    /**
-     *
-     * @param {string} searchTerm
-     */
-    search: async function (searchTerm) {
-      // wait for search indexing to be finished
-      await this.pause(2000)
-      return this.initAjaxCounters()
-        .isVisible(
-          {
-            selector: '@openSearchButton',
-            suppressNotFoundErrors: true
-          },
-          (result) => {
-            if (result.value === true) {
-              this.click('@openSearchButton')
-                .waitForElementVisible('@searchInputField')
-                .setValue('@searchInputField', [searchTerm, this.api.Keys.ENTER])
-            } else {
-              this.waitForElementVisible('@searchInputField').setValue('@searchInputField', [
-                searchTerm,
-                this.api.Keys.ENTER
-              ])
-            }
-          }
-        )
-        .waitForElementNotVisible('@searchLoadingIndicator')
-        .waitForOutstandingAjaxCalls()
-    },
     /**
      * @param {string} page
      */
