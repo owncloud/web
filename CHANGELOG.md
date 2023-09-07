@@ -15,6 +15,7 @@ Summary
 * Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
 * Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
+* Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
@@ -82,6 +83,14 @@ Details
 
    https://github.com/owncloud/web/issues/9650
    https://github.com/owncloud/web/pull/9649
+
+* Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
+
+   The `WEB_OPTION_OPEN_APPS_IN_TAB` is now being respected correctly when opening files with
+   external apps.
+
+   https://github.com/owncloud/web/issues/9630
+   https://github.com/owncloud/web/pull/9663
 
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 
