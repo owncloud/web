@@ -325,8 +325,10 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       ...routeOpts.query
     } as any
 
-    // TODO: Let users configure whether to open in same/new tab (`_blank` vs `_self`)
-    openUrl(router.resolve(routeOpts).href, '_blank')
+    openUrl(
+      router.resolve(routeOpts).href,
+      configurationManager.options.openAppsInTab ? '_blank' : '_self'
+    )
   }
 
   return {
