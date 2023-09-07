@@ -402,19 +402,23 @@ export default defineComponent({
     const cancelButton = ref(null)
 
     const setButtonsEqualWidth = () => {
-      const primaryWidth = unref(primaryButton) ? unref(primaryButton).$el.offsetWidth : 0
-      const secondaryWidth = unref(secondaryButton) ? unref(secondaryButton).$el.offsetWidth : 0
-      const cancelWidth = unref(cancelButton) ? unref(cancelButton).$el.offsetWidth : 0
+      const _primaryButton = unref(primaryButton)
+      const _secondaryButton = unref(secondaryButton)
+      const _cancelButton = unref(cancelButton)
+
+      const primaryWidth = _primaryButton ? _primaryButton.$el.offsetWidth : 0
+      const secondaryWidth = _secondaryButton ? _secondaryButton.$el.offsetWidth : 0
+      const cancelWidth = _cancelButton ? _cancelButton.$el.offsetWidth : 0
       const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
 
-      if (unref(primaryButton) && unref(primaryButton).$el) {
-        unref(primaryButton).$el.style.minWidth = `${maxWidth}px`
+      if (_primaryButton && _primaryButton.$el) {
+        _primaryButton.$el.style.minWidth = `${maxWidth}px`
       }
-      if (unref(secondaryButton) && unref(secondaryButton).$el) {
-        unref(secondaryButton).$el.style.minWidth = `${maxWidth}px`
+      if (_secondaryButton && _secondaryButton.$el) {
+        _secondaryButton.$el.style.minWidth = `${maxWidth}px`
       }
-      if (unref(cancelButton) && unref(cancelButton).$el) {
-        unref(cancelButton).$el.style.minWidth = `${maxWidth}px`
+      if (_cancelButton && _cancelButton.$el) {
+        _cancelButton.$el.style.minWidth = `${maxWidth}px`
       }
     }
     onMounted(() => {
