@@ -4,6 +4,8 @@ import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { configurationManager, useAccessToken, useStore } from 'web-pkg/src'
 
+class FatalError extends Error {}
+
 export interface ServerSentEventsOptions {
   url: string
   onOpen?: (response: Response) => void
@@ -28,7 +30,6 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
       unref(ctrl).abort()
       throw new Error('Too many retries')
     }
-    let doRetry = false
     const setupSSE = async () => {
       retryCounter.value++
       try {
@@ -43,12 +44,18 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
           },
           async onopen(response) {
             if (response.status === 401) {
-              doRetry = true
               unref(ctrl).abort()
               return
+            } else if (response.status >= 500 && response.status === 404) {
+              throw new FatalError()
             }
             retryCounter.value = 0
             await options.onOpen?.(response)
+          },
+          onerror(err) {
+            if (err instanceof FatalError) {
+              throw err
+            }
           },
           onmessage(msg) {
             options.onMessage?.(msg)
@@ -59,9 +66,6 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
       }
     }
     setupSSE().then(() => {
-      if (!doRetry) {
-        return
-      }
       setupServerSentEvents()
     })
   }
