@@ -4,6 +4,8 @@ import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import { configurationManager, useAccessToken, useStore } from 'web-pkg/src'
 
+class FatalError extends Error {}
+
 export interface ServerSentEventsOptions {
   url: string
   onOpen?: (response: Response) => void
@@ -15,6 +17,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const language = useGettext()
   const accessToken = useAccessToken({ store })
   const ctrl = ref(new AbortController())
+  const maxRetries = 3
   const retryCounter = ref(0)
 
   watch(
@@ -24,7 +27,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
     }
   )
   const setupServerSentEvents = () => {
-    if (unref(retryCounter) >= 5) {
+    if (unref(retryCounter) >= maxRetries) {
       unref(ctrl).abort()
       throw new Error('Too many retries')
     }
@@ -44,9 +47,18 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
             if (response.status === 401) {
               unref(ctrl).abort()
               return
+            } else if (response.status >= 500 || response.status === 404) {
+              retryCounter.value = maxRetries
+              throw new FatalError()
+            } else {
+              retryCounter.value = 0
+              await options.onOpen?.(response)
             }
-            retryCounter.value = 0
-            await options.onOpen?.(response)
+          },
+          onerror(err) {
+            if (err instanceof FatalError) {
+              throw err
+            }
           },
           onmessage(msg) {
             options.onMessage?.(msg)
