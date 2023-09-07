@@ -407,9 +407,15 @@ export default defineComponent({
       const cancelWidth = unref(cancelButton) ? unref(cancelButton).$el.offsetWidth : 0
       const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
 
-      unref(primaryButton) ? (unref(primaryButton).$el.style.minWidth = `${maxWidth}px`) : null
-      unref(secondaryButton) ? (unref(secondaryButton).$el.style.minWidth = `${maxWidth}px`) : null
-      unref(cancelWidth) ? (unref(cancelWidth).$el.style.minWidth = `${maxWidth}px`) : null
+      if (unref(primaryButton) && unref(primaryButton).$el) {
+        unref(primaryButton).$el.style.minWidth = `${maxWidth}px`
+      }
+      if (unref(secondaryButton) && unref(secondaryButton).$el) {
+        unref(secondaryButton).$el.style.minWidth = `${maxWidth}px`
+      }
+      if (unref(cancelButton) && unref(cancelButton).$el) {
+        unref(cancelButton).$el.style.minWidth = `${maxWidth}px`
+      }
     }
     onMounted(() => {
       setButtonsEqualWidth()
