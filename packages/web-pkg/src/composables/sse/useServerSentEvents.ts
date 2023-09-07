@@ -26,7 +26,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
     }
   )
   const setupServerSentEvents = () => {
-    if (unref(retryCounter) >= 5) {
+    if (unref(retryCounter) >= 3) {
       unref(ctrl).abort()
       throw new Error('Too many retries')
     }
@@ -47,6 +47,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
               unref(ctrl).abort()
               return
             } else if (response.status >= 500 || response.status === 404) {
+              retryCounter.value = 3
               throw new FatalError()
             } else {
               retryCounter.value = 0
