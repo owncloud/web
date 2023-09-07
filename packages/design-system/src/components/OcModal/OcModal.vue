@@ -67,6 +67,7 @@
         <div class="oc-modal-body-actions oc-flex oc-flex-right">
           <oc-button
             class="oc-modal-body-actions-cancel"
+            ref="cancelButton"
             :variation="buttonCancelVariation"
             :appearance="buttonCancelAppearance"
             @click="cancelModalAction"
@@ -74,6 +75,7 @@
           />
           <oc-button
             v-if="buttonSecondaryText"
+            ref="secondaryButton"
             class="oc-modal-body-actions-secondary oc-ml-s"
             :variation="buttonSecondaryVariation"
             :appearance="buttonSecondaryAppearance"
@@ -82,6 +84,7 @@
           />
           <oc-button
             v-if="!withoutButtonConfirm"
+            ref="primaryButton"
             class="oc-modal-body-actions-confirm oc-ml-s"
             variation="primary"
             :appearance="buttonConfirmAppearance"
@@ -96,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, onMounted, unref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcCheckbox from '../OcCheckbox/OcCheckbox.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -391,6 +394,31 @@ export default defineComponent({
     return {
       userInputValue: null,
       checkboxValue: false
+    }
+  },
+  setup() {
+    const primaryButton = ref(null)
+    const secondaryButton = ref(null)
+    const cancelButton = ref(null)
+
+    const setButtonsEqualWidth = () => {
+      const primaryWidth = unref(primaryButton) ? unref(primaryButton).$el.offsetWidth : 0
+      const secondaryWidth = unref(secondaryButton) ? unref(secondaryButton).$el.offsetWidth : 0
+      const cancelWidth = unref(cancelButton) ? unref(cancelButton).$el.offsetWidth : 0
+      const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
+
+      unref(primaryButton) ? (unref(primaryButton).$el.style.minWidth = `${maxWidth}px`) : null
+      unref(secondaryButton) ? (unref(secondaryButton).$el.style.minWidth = `${maxWidth}px`) : null
+      unref(cancelWidth) ? (unref(cancelWidth).$el.style.minWidth = `${maxWidth}px`) : null
+    }
+    onMounted(() => {
+      setButtonsEqualWidth()
+    })
+
+    return {
+      primaryButton,
+      secondaryButton,
+      cancelButton
     }
   },
   computed: {
