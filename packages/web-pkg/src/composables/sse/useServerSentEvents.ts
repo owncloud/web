@@ -17,6 +17,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
   const language = useGettext()
   const accessToken = useAccessToken({ store })
   const ctrl = ref(new AbortController())
+  const maxRetries = 3
   const retryCounter = ref(0)
 
   watch(
@@ -26,7 +27,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
     }
   )
   const setupServerSentEvents = () => {
-    if (unref(retryCounter) >= 3) {
+    if (unref(retryCounter) >= maxRetries) {
       unref(ctrl).abort()
       throw new Error('Too many retries')
     }
@@ -47,7 +48,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
               unref(ctrl).abort()
               return
             } else if (response.status >= 500 || response.status === 404) {
-              retryCounter.value = 3
+              retryCounter.value = maxRetries
               throw new FatalError()
             } else {
               retryCounter.value = 0
