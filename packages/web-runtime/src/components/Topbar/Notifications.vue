@@ -127,7 +127,7 @@ export default {
     let setupServerSentEvents
     if (unref(sseEnabled)) {
       setupServerSentEvents = useServerSentEvents({
-        url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
+        url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse2',
         onOpen: (response): void => {
           fetchNotificationsTask.perform()
           if (!response.ok) {
