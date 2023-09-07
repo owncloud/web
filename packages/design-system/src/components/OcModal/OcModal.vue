@@ -411,13 +411,13 @@ export default defineComponent({
       const cancelWidth = _cancelButton?.$el?.offsetWidth || 0
       const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
 
-      if (_primaryButton && _primaryButton.$el) {
+      if (_primaryButton?.$el) {
         _primaryButton.$el.style.minWidth = `${maxWidth}px`
       }
-      if (_secondaryButton && _secondaryButton.$el) {
+      if (_secondaryButton?.$el) {
         _secondaryButton.$el.style.minWidth = `${maxWidth}px`
       }
-      if (_cancelButton && _cancelButton.$el) {
+      if (_cancelButton?.$el) {
         _cancelButton.$el.style.minWidth = `${maxWidth}px`
       }
     }
