@@ -406,9 +406,9 @@ export default defineComponent({
       const _secondaryButton = unref(secondaryButton)
       const _cancelButton = unref(cancelButton)
 
-      const primaryWidth = _primaryButton ? _primaryButton.$el.offsetWidth : 0
-      const secondaryWidth = _secondaryButton ? _secondaryButton.$el.offsetWidth : 0
-      const cancelWidth = _cancelButton ? _cancelButton.$el.offsetWidth : 0
+      const primaryWidth = _primaryButton?.$el?.offsetWidth || 0
+      const secondaryWidth = _secondaryButton?.$el?.offsetWidth || 0
+      const cancelWidth = _cancelButton?.$el?.offsetWidth || 0
       const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
 
       if (_primaryButton && _primaryButton.$el) {
