@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
-import { sidebar, editor } from '../utils'
+import { editor, sidebar } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
 
@@ -281,18 +281,17 @@ const createDocumentFile = async (
   }
   await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
   await page.locator(resourceNameInput).fill(name)
-  const [editorPage] = await Promise.all([
-    page.waitForEvent('popup'),
+  await Promise.all([
+    page.waitForLoadState(),
+    page.waitForURL('**/external/personal/**'),
     page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
-  await editorPage.waitForLoadState()
-  await editorPage.waitForURL('**/external/personal/**')
-  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
+  const editorMainFrame = await page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
       await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
-      await editorPage.keyboard.press('Escape')
+      await page.keyboard.press('Escape')
       await editorMainFrame.locator(collaboraDocTextAreaSelector).type(content)
       const saveModified = await editorMainFrame.locator(collaboraEditorSaveSelector)
       await expect(saveModified).toBeVisible()
@@ -310,7 +309,6 @@ const createDocumentFile = async (
         "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
       )
   }
-  await editorPage.close()
 }
 
 export const openAndGetContentOfDocument = async ({
@@ -320,14 +318,13 @@ export const openAndGetContentOfDocument = async ({
   page: Page
   editorToOpen: string
 }): Promise<string> => {
-  const editorPage = await page.waitForEvent('popup')
-  await editorPage.waitForLoadState()
-  await editorPage.waitForURL('**/external/public/**')
-  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
+  await page.waitForLoadState()
+  await page.waitForURL('**/external/public/**')
+  const editorMainFrame = await page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
       await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
-      await editorPage.keyboard.press('Escape')
+      await page.keyboard.press('Escape')
       await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
       break
     case 'OnlyOffice':
@@ -341,11 +338,9 @@ export const openAndGetContentOfDocument = async ({
       )
   }
   // copying and getting the value with keyboard requires some
-  await editorPage.keyboard.press('Control+A', { delay: 200 })
-  await editorPage.keyboard.press('Control+C', { delay: 200 })
-  const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())
-  await editorPage.close()
-  return actualContentOfEditor
+  await page.keyboard.press('Control+A', { delay: 200 })
+  await page.keyboard.press('Control+C', { delay: 200 })
+  return await page.evaluate(() => navigator.clipboard.readText())
 }
 
 const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page, type) => {
