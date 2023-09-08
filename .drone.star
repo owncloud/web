@@ -764,10 +764,10 @@ def e2eTests(ctx):
             # oCIS specific steps
             steps += copyFilesForUpload() + \
                      (tikaService() if params["tikaNeeded"] else []) + \
-                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"]) + \
-                     getSkeletonFiles()
+                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
 
-        steps += [{
+        steps += getSkeletonFiles() + \
+                 [{
                      "name": "e2e-tests",
                      "image": OC_CI_NODEJS,
                      "environment": environment,
