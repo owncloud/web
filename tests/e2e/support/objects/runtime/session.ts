@@ -1,8 +1,7 @@
 import { Page } from 'playwright'
 import { User } from '../../types'
 import { config } from '../../../config'
-import { TokenEnvironment } from '../../environment'
-import { createdTokenStore } from '../../store/token'
+import { TokenEnvironmentFactory, TokenProviderType } from '../../environment'
 
 export class Session {
   #page: Page
@@ -11,29 +10,57 @@ export class Session {
     this.#page = page
   }
 
-  async login({ user }: { user: User }): Promise<void> {
+  signIn(username: string, password: string): Promise<void> {
+    if (config.keycloak) {
+      return this.keycloakSignIn(username, password)
+    }
+    return this.idpSignIn(username, password)
+  }
+
+  async idpSignIn(username: string, password: string): Promise<void> {
+    await this.#page.locator('#oc-login-username').fill(username)
+    await this.#page.locator('#oc-login-password').fill(password)
+    await this.#page.locator('button[type="submit"]').click()
+  }
+
+  async keycloakSignIn(username: string, password: string): Promise<void> {
+    await this.#page.locator('#username').fill(username)
+    await this.#page.locator('#password').fill(password)
+    await this.#page.locator('#kc-login').click()
+  }
+
+  async login({
+    user,
+    tokenType = null
+  }: {
+    user: User
+    tokenType?: TokenProviderType
+  }): Promise<void> {
     const { id, password } = user
 
-    await this.#page.locator('#oc-login-username').fill(id)
-    await this.#page.locator('#oc-login-password').fill(password)
     const [response] = await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
-          resp.url().includes('v1/token') &&
+          resp.url().endsWith('/token') &&
           resp.status() === 200 &&
           resp.request().method() === 'POST'
       ),
-      this.#page.locator('button[type="submit"]').click()
+      this.signIn(id, password)
     ])
 
     if (config.apiToken) {
       const body = await response.json()
 
-      if (!createdTokenStore.has(user.id)) {
-        const tokenEnvironment = new TokenEnvironment()
-        tokenEnvironment.createToken({
+      const tokenEnvironment = TokenEnvironmentFactory(tokenType)
+
+      if (!tokenEnvironment.getToken({ user })) {
+        tokenEnvironment.setToken({
           user: { ...user },
-          token: { userId: user.id, tokenValue: body.access_token }
+          token: {
+            userId: user.id,
+            accessToken: body.access_token,
+            refreshToken: body.refresh_token
+          }
         })
       }
     }

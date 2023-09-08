@@ -10,7 +10,7 @@ Given(
 
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
-      await api.graph.createUser({ user, admin })
+      await api.provision.createUser({ user, admin })
     }
   }
 )
