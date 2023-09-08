@@ -441,8 +441,8 @@ export default defineComponent({
       // setting metadata
       this.setMetadata(dicomImageURL)
 
-      // fetch additional meta data (for testing only, not yet implemented)
-      // await this.fetchAdditionalMetadataInformation(dicomImageURL)
+      // fetch additional meta data (for testing only, doen't put data into UI yet)
+      await this.fetchAdditionalMetadataInformation(dicomImageURL)
     } else {
       // console.log('no valid resource url available')
     }
@@ -487,7 +487,18 @@ export default defineComponent({
         console.log('data fetched for: ' + imageIdsToPrefetch[i])
       }
     },
-    async fetchAdditionalMetadataInformation(imageId) {},
+    // currently only printing values in console
+    async fetchAdditionalMetadataInformation(imageId) {
+      console.log('fetch additional meta data information for: ' + imageId)
+      await cornerstoneDICOMImageLoader.wadouri
+        .loadImage(imageId)
+        .promise.then(async function (dicomImage) {
+          const patientName = dicomImage.data.string('x00100010')
+          const patientBirthdate = dicomImage.data.string('x00100030')
+          console.log('patient name: ' + patientName)
+          console.log('patient birthdate: ' + patientBirthdate)
+        })
+    },
     async createDicomFile() {
       // TODO check if already exist?
       // TODO delete content after unloading the package?
