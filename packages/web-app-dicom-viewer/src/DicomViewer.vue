@@ -160,16 +160,23 @@ if (navigator.hardwareConcurrency) {
 
 var config = {
   maxWebWorkers,
-  startWebWorkersOnDemand: false, // true,
+  startWebWorkersOnDemand: true,
   // TODO: further look into the specifics of the configuration
   // webWorkerTaskPaths: [],
   taskConfiguration: {
     decodeTask: {
-      initializeCodecsOnStartup: false, // true,
+      initializeCodecsOnStartup: true,
       strict: false // true
     }
   }
 }
+
+/*
+var config = {
+  maxWebWorkers: navigator.hardwareConcurrency || 1,
+  startWebWorkersOnDemand: true
+}
+*/
 
 try {
   cornerstoneDICOMImageLoader.webWorkerManager.initialize(config)
@@ -433,6 +440,9 @@ export default defineComponent({
 
       // setting metadata
       this.setMetadata(dicomImageURL)
+
+      // fetch additional meta data (for testing only, not yet implemented)
+      // await this.fetchAdditionalMetadataInformation(dicomImageURL)
     } else {
       // console.log('no valid resource url available')
     }
@@ -469,6 +479,7 @@ export default defineComponent({
         console.log('error initalizing cornerstone tools')
       }
     },
+    // from cornerstone3D example project, currently not used
     async prefetchMetadataInformation(imageIdsToPrefetch) {
       console.log('prefetching meta data information')
       for (let i = 0; i < imageIdsToPrefetch.length; i++) {
@@ -476,6 +487,7 @@ export default defineComponent({
         console.log('data fetched for: ' + imageIdsToPrefetch[i])
       }
     },
+    async fetchAdditionalMetadataInformation(imageId) {},
     async createDicomFile() {
       // TODO check if already exist?
       // TODO delete content after unloading the package?
@@ -518,6 +530,7 @@ export default defineComponent({
         const sopCommonModule = metaData.get('sopCommonModule', imageId)
         const transferSyntax = metaData.get('transferSyntax', imageId)
 
+        // setting the data to UI elements
         //transfer syntax
         document.getElementById('transfer-syntax').innerHTML = transferSyntax.transferSyntaxUID
 
