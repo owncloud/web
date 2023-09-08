@@ -56,9 +56,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Listing shares via ocs API does not show path for parent folders](https://github.com/owncloud/ocis/issues/1231)
 -   [webUISharingPublicManagement/shareByPublicLink.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L111)
 
-### [Propfind response to trashbin endpoint is different in ocis](https://github.com/owncloud/product/issues/186)
--   [webUIFilesSearch/search.feature:60](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L60)
-
 ### [Conflict / overwrite issues with TUS](https://github.com/owncloud/ocis/issues/1294)
 -   [webUIUpload/uploadFileGreaterThanQuotaSize.feature:11](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadFileGreaterThanQuotaSize.feature#L11)
 

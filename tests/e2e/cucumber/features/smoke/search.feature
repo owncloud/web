@@ -34,6 +34,7 @@ Feature: Search
       | resource                   | type   |
       | folder                     | folder |
       | FolDer/child-one/child-two | folder |
+      | strängéनेपालीName          | folder |
     And "Alice" enables the option to display the hidden file
     And "Alice" uploads the following resources
       | resource         |
@@ -104,6 +105,21 @@ Feature: Search
       | resource |
       | folder   |
       | FolDer   |
+
+
+    # search difficult names
+    When "Alice" searches "strängéनेपालीName" using the global search and the "everywhere" filter and presses enter
+    Then following resources should be displayed in the files list for user "Alice"
+      | strängéनेपालीName |
+
+    # deleting folder from search result and search deleted resource
+    When "Alice" deletes the following resource using the sidebar panel
+      | resource          | from |
+      | strängéनेपालीName |      |
+    And "Alice" searches "forDeleting" using the global search and the "everywhere" filter
+    Then following resources should not be displayed in the search list for user "Alice"
+      | resource          |
+      | strängéनेपालीName |
 
     And "Alice" navigates to the shared with me page
     When "Alice" reshares the following resource
