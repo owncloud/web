@@ -61,7 +61,7 @@ Bundle the web frontend with the following command:
 $ pnpm build:w
 ```
 
-Our compose setup automatically mounts it into an oC10 and oCIS backend, respectively. Web also gets recompiled on changes.
+Our compose setup automatically mounts it into an oCIS backend, respectively. Web also gets recompiled on changes.
 
 #### Run E2E Tests
 

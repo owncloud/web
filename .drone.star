@@ -746,8 +746,6 @@ def e2eTests(ctx):
 
         # oCIS specific environment variables
         environment["BASE_URL_OCIS"] = "ocis:9200"
-        environment["OCIS"] = "true"
-        environment["API_TOKEN"] = "true"
 
         # oCIS specific dependencies
         depends_on = ["cache-ocis"]

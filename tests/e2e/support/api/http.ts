@@ -22,25 +22,14 @@ export const request = async ({
   const tokenEnvironment = TokenEnvironmentFactory(isKeycloakRequest ? 'keycloak' : null)
 
   const authHeader = {
-    Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
-  }
-
-  if (config.apiToken) {
-    authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
-  }
-
-  const basicHeader = {
-    'OCS-APIREQUEST': true as any,
-    ...(user.id && authHeader),
-    ...header
+    Authorization: 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
   }
 
   const baseUrl = isKeycloakRequest ? config.keycloakUrl : config.backendUrl
-
   return await fetch(join(baseUrl, path), {
     method,
     body,
-    headers: basicHeader
+    headers: authHeader
   })
 }
 

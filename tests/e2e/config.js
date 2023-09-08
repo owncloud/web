@@ -11,8 +11,6 @@ exports.config = {
   keycloakRealm: process.env.KEYCLOAK_REALM ?? 'oCIS',
   keycloakAdminUser: process.env.KEYCLOAK_ADMIN_USER ?? 'admin',
   keycloakAdminPassword: process.env.KEYCLOAK_ADMIN_PASSWORD ?? 'admin',
-  // do API requests with access token instead of basic auth
-  apiToken: process.env.API_TOKEN === 'true' || process.env.KEYCLOAK === 'true',
   get backendUrl() {
     return withHttp(process.env.BACKEND_HOST || this.baseUrlOcis)
   },
