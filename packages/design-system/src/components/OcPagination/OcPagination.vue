@@ -10,12 +10,12 @@
           <oc-icon name="arrow-drop-left" fill-type="line" />
         </router-link>
       </li>
-      <li v-for="(page, index) in displayedPages" :key="index" class="oc-pagination-list-item">
+      <li v-for="page in displayedPages" :key="page.key" class="oc-pagination-list-item">
         <component
-          :is="pageComponent(page)"
-          :class="pageClass(page)"
-          v-bind="bindPageProps(page)"
-          v-text="page"
+          :is="pageComponent(page.value)"
+          :class="pageClass(page.value)"
+          v-bind="bindPageProps(page.value)"
+          v-text="page.value"
         />
       </li>
       <li v-if="isNextPageAvailable" class="oc-pagination-list-item">
@@ -34,6 +34,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
+import { uniqueId } from 'lodash'
 
 /**
  * A list of links used for switching to different pages
@@ -115,7 +116,12 @@ export default defineComponent({
             : pages.push(this.pages)
         }
 
-        return pages
+        return pages.map((page, index) => {
+          return {
+            value: page,
+            key: index + uniqueId()
+          }
+        })
       }
 
       return pages
