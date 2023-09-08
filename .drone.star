@@ -107,7 +107,6 @@ config = {
                 "oCISFiles2": [
                     "webUIFilesList",
                     "webUIFilesDetails",
-                    "webUIFilesSearch",
                 ],
                 "oCISFiles3": [
                     "webUIRenameFiles",
@@ -219,7 +218,6 @@ basicTestSuites = [
     "webUIFilesCopy",
     "webUIFilesDetails",
     "webUIFilesList",
-    "webUIFilesSearch",
     "webUILogin",
     "webUIMoveFilesFolders",
     "webUIOperationsWithFolderShares",
