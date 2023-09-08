@@ -244,7 +244,7 @@ export default {
     grid-template-columns: 30% 30% 40%;
 
     @media (min-width: $oc-breakpoint-small-default) {
-      grid-template-columns: v-bind(logoWidth) 1fr 1fr; // todo
+      grid-template-columns: v-bind(logoWidth) 1fr 1fr;
     }
   }
 
