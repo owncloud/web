@@ -7,7 +7,6 @@ export default {
   clipboardResources: [],
   clipboardAction: null,
   versions: [],
-  ancestorMetaData: {},
 
   /**
    * Shares

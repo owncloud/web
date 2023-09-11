@@ -221,7 +221,7 @@ import { Resource, SpaceResource } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
-import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -328,7 +328,7 @@ export default defineComponent({
     })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['Files/ancestorMetaData']
+      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
     )
     const sharedAncestor = computed(() => {
       return Object.values(unref(ancestorMetaData)).find(

@@ -209,7 +209,9 @@ function getWrapper({
       }))
     }
   }
-  storeOptions.modules.Files.getters.ancestorMetaData.mockReturnValue(ancestorMetaData)
+  storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
+    ancestorMetaData
+  )
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
     () => spaceMembers
   )

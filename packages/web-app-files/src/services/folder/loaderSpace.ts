@@ -69,14 +69,14 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        yield store.dispatch('Files/loadAncestorMetaData', {
+        yield store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
           folder: currentFolder,
           space,
           client: webdav
         })
 
         if (options.loadShares) {
-          const ancestorMetaData = store.getters['Files/ancestorMetaData']
+          const ancestorMetaData = store.getters['runtime/ancestorMetaData/ancestorMetaData']
           for (const file of resources) {
             file.indicators = getIndicators({ resource: file, ancestorMetaData })
           }
