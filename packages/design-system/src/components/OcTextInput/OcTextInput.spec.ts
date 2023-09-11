@@ -74,7 +74,7 @@ describe('OcTextInput', () => {
         await wrapper.find(selectors.inputField).setValue('password')
         expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeTruthy()
       })
-      it('should copy password to password if clicked', async () => {
+      it('should copy password to clipboard if clicked', async () => {
         const wrapper = getMountedWrapper({ props: { type: 'password' } })
         await wrapper.find(selectors.inputField).setValue('password')
         await wrapper.find(selectors.copyPasswordBtn).trigger('click')
@@ -94,7 +94,7 @@ describe('OcTextInput', () => {
         await wrapper.find(selectors.inputField).setValue('password')
         expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeTruthy()
       })
-      it('should should show password plaintext/veiled if clicked', async () => {
+      it('should show password plaintext/veiled if clicked', async () => {
         const wrapper = getMountedWrapper({ props: { type: 'password' } })
         await wrapper.find(selectors.inputField).setValue('password')
         await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
