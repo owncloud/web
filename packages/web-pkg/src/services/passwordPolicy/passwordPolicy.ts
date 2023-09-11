@@ -36,10 +36,17 @@ export class PasswordPolicyService {
     }
     const rules = {} as any
 
+    // add default rule
+    if (
+      Object.keys(this.capability).length === 0 ||
+      (Object.keys(this.capability).length === 1 &&
+        Object.keys(this.capability)[0] === 'max_characters')
+    ) {
+      rules.mustNotBeEmpty = {}
+    }
+
     if (this.capability.min_characters) {
       rules.atLeastCharacters = { minLength: this.capability.min_characters }
-    } else {
-      rules.mustNotBeEmpty = {}
     }
 
     if (this.capability.min_upper_case_characters) {
@@ -61,7 +68,7 @@ export class PasswordPolicyService {
     if (this.capability.min_special_characters) {
       rules.mustContain = {
         minLength: this.capability.min_special_characters,
-        characters: this.capability.special_characters
+        characters: ' "!#\\$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"'
       }
     }
 
