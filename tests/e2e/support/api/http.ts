@@ -25,7 +25,7 @@ export const request = async ({
     Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
   }
 
-  if (config.apiToken) {
+  if (!config.basicAuth) {
     authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
   }
 

@@ -48,9 +48,8 @@ export class Session {
       this.signIn(id, password)
     ])
 
-    if (config.apiToken) {
+    if (!config.basicAuth) {
       const body = await response.json()
-
       const tokenEnvironment = TokenEnvironmentFactory(tokenType)
 
       if (!tokenEnvironment.getToken({ user })) {
