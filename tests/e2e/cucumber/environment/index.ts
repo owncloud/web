@@ -66,7 +66,10 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
-  await setAdminToken(state.browser)
+  if (!config.basicAuth) {
+    await setAdminToken(state.browser)
+  }
+
   if (config.keycloak) {
     await setKeycloakAdminToken(state.browser)
   }

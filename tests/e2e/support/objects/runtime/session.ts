@@ -48,18 +48,20 @@ export class Session {
       this.signIn(id, password)
     ])
 
-    const body = await response.json()
-    const tokenEnvironment = TokenEnvironmentFactory(tokenType)
+    if (!config.basicAuth) {
+      const body = await response.json()
+      const tokenEnvironment = TokenEnvironmentFactory(tokenType)
 
-    if (!tokenEnvironment.getToken({ user })) {
-      tokenEnvironment.setToken({
-        user: { ...user },
-        token: {
-          userId: user.id,
-          accessToken: body.access_token,
-          refreshToken: body.refresh_token
-        }
-      })
+      if (!tokenEnvironment.getToken({ user })) {
+        tokenEnvironment.setToken({
+          user: { ...user },
+          token: {
+            userId: user.id,
+            accessToken: body.access_token,
+            refreshToken: body.refresh_token
+          }
+        })
+      }
     }
   }
 
