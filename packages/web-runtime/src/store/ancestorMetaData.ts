@@ -26,27 +26,13 @@ const mutations = {
 }
 
 const actions = {
-  loadAncestorMetaData({ commit, state }, { folder, space, client }) {
-    const ancestorMetaData: AncestorMetaData = {
-      [folder.path]: {
-        id: folder.fileId,
-        shareTypes: folder.shareTypes,
-        parentFolderId: folder.parentFolderId,
-        spaceId: space.id,
-        path: folder.path
-      }
-    }
+  loadAncestorMetaData({ commit, state }, { space, path, client }) {
+    const ancestorMetaData: AncestorMetaData = {}
     const promises = []
     const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
-    const parentPaths = getParentPaths(folder.path)
 
-    for (const path of parentPaths) {
-      const cachedData = state.ancestorMetaData[path] ?? null
-      if (cachedData?.spaceId === space.id) {
-        ancestorMetaData[path] = cachedData
-        continue
-      }
-
+    path = path || '/'
+    if (!state.ancestorMetaData[path]) {
       promises.push(
         client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
           ancestorMetaData[path] = {
@@ -57,6 +43,30 @@ const actions = {
             path
           }
         })
+      )
+    }
+
+    const parentPaths = getParentPaths(path)
+
+    for (const parentPath of parentPaths) {
+      const cachedData = state.ancestorMetaData[parentPath] ?? null
+      if (cachedData?.spaceId === space.id) {
+        ancestorMetaData[parentPath] = cachedData
+        continue
+      }
+
+      promises.push(
+        client
+          .listFiles(space, { path: parentPath }, { depth: 0, davProperties })
+          .then(({ resource }) => {
+            ancestorMetaData[parentPath] = {
+              id: resource.fileId,
+              shareTypes: resource.shareTypes,
+              parentFolderId: resource.parentFolderId,
+              spaceId: space.id,
+              path: parentPath
+            }
+          })
       )
     }
 

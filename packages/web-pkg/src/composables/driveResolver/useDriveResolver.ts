@@ -140,6 +140,13 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           //   (s) =>
           //     isMountPointSpaceResource(s) && currentFolder.path.startsWith(s.root.remoteItem.path)
           // )
+
+          loading.value = true
+          await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
+            path,
+            space: matchingSpace,
+            client: clientService.webdav
+          })
         }
       }
       space.value = matchingSpace

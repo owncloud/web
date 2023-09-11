@@ -263,7 +263,7 @@ export default defineComponent({
     })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['Files/ancestorMetaData']
+      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
     )
 
     const viewModes = computed(() => [
@@ -379,6 +379,7 @@ export default defineComponent({
         }
       }
 
+      console.log(1, unref(ancestorMetaData))
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
