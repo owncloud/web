@@ -67,8 +67,11 @@ const publicLinkEditRoleButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
   `div/button[contains(@class, "edit-public-link-role-dropdown-toggle")]`
 const addPublicLinkButton = '#files-file-link-add'
-const getMostRecentLink = '//div[@id="oc-files-file-link"]//ul/li[1]'
-const publicLink = `//ul/li/div/h4[contains(text(),'%s')]/following-sibling::div//p`
+const publicLinkNameList =
+  '//div[@id="oc-files-file-link"]//ul//h4[contains(@class,"oc-files-file-link-name")]'
+const publicLinkUrlList =
+  '//div[@id="oc-files-file-link"]//ul//p[contains(@class,"oc-files-file-link-url")]'
+const publicLink = `//ul//h4[text()='%s']/following-sibling::div//p`
 const publicLinkCurrentRole =
   '//button[contains(@class,"edit-public-link-role-dropdown-toggle")]//span[contains(@class,"link-current-role")]'
 const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")]'
@@ -89,6 +92,14 @@ const deleteLinkButton =
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 const notificationContainer = 'div.oc-notification'
 
+const getRecentLinkUrl = async (page: Page): Promise<string> => {
+  return page.locator(publicLinkUrlList).first().textContent()
+}
+
+const getRecentLinkName = async (page: Page): Promise<string> => {
+  return page.locator(publicLinkNameList).first().textContent()
+}
+
 export const createLink = async (args: createLinkArgs): Promise<string> => {
   const { space, page, resource } = args
   if (!space) {
@@ -102,7 +113,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   }
   await page.locator(addPublicLinkButton).click()
   await clearCurrentPopup(page)
-  return await page.locator(util.format(publicLink, 'Link')).textContent()
+  return await getRecentLinkUrl(page)
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
@@ -161,7 +172,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
   await page.locator(editPublicLinkRenameConfirm).click()
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
-  return await page.locator(getMostRecentLink + '//h4').textContent()
+  return await getRecentLinkName(page)
 }
 
 export const addPassword = async (args: addPasswordArgs): Promise<void> => {

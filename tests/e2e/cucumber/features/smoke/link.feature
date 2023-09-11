@@ -65,7 +65,7 @@ Feature: link
     And "Alice" logs out
 
 
-  Scenario: public link for folder (by authenticated user)
+  Scenario: public link for folder and file (by authenticated user)
     Given "Admin" creates following user using API
       | id    |
       | Brian |
@@ -73,19 +73,47 @@ Feature: link
     And "Alice" creates the following resources
       | resource     | type   |
       | folderPublic | folder |
+    And "Alice" creates the following resources
+      | resource                      | type    | content   |
+      | folderPublic/shareToBrian.txt | txtFile | some text |
+      | folderPublic/shareToBrian.md  | mdFile  | readme    |
+    And "Alice" uploads the following resources via drag-n-drop
+      | resource       |
+      | simple.pdf     |
+      | testavatar.jpg |
     And "Alice" shares the following resources using the sidebar panel
-      | resource     | recipient | type | role     |
-      | folderPublic | Brian     | user | Can edit |
+      | resource       | recipient | type | role     |
+      | folderPublic   | Brian     | user | Can edit |
+      | simple.pdf     | Brian     | user | Can edit |
+      | testavatar.jpg | Brian     | user | Can edit |
     And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "folderLink"
+    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.txt" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.txt" to "textLink"
+    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.md" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.md" to "markdownLink"
+    And "Alice" creates a public link for the resource "simple.pdf" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
+    And "Alice" creates a public link for the resource "testavatar.jpg" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
-      | name         |
-      | folderPublic |
+      | name           |
+      | folderPublic   |
+      | simple.pdf     |
+      | testavatar.jpg |
     When "Brian" opens the public link "folderLink"
     And "Brian" uploads the following resources
       | resource  |
       | lorem.txt |
+    When "Brian" opens the public link "textLink"
+    Then for "Brian" file "shareToBrian.txt" should be selected
+    When "Brian" opens the public link "markdownLink"
+    Then for "Brian" file "shareToBrian.md" should be selected
+    When "Brian" opens the public link "pdfLink"
+    Then for "Brian" file "simple.pdf" should be selected
+    When "Brian" opens the public link "imageLink"
+    Then for "Brian" file "testavatar.jpg" should be selected
     And "Brian" logs out
