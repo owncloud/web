@@ -13,7 +13,7 @@ import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
 import { useClientService } from 'web-pkg/src/composables'
-import { useLoadFileInfoById } from 'web-pkg/src/composables/fileInfo'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -41,23 +41,22 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const item: Ref<string> = ref(null)
   const loading = ref(false)
 
-  const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
   const findMatchingMountPoint = (id: string | number): SpaceResource => {
     return store.getters['runtime/spaces/spaces'].find(
       (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
     )
   }
 
-  const findMountPoint = async (fileId: Resource['id']) => {
+  const ancestorMetaData = computed<AncestorMetaData>(
+    () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
+  )
+
+  const findMountPoint = (fileId: Resource['id']) => {
     let mountPoint = findMatchingMountPoint(fileId)
-    let resource = await loadFileInfoByIdTask.perform(fileId)
+    let resource = unref(ancestorMetaData)[fileId]
     const sharePathSegments = mountPoint ? [] : [unref(resource).name]
     while (!mountPoint) {
-      try {
-        resource = await loadFileInfoByIdTask.perform(resource.parentFolderId)
-      } catch (e) {
-        throw Error(e)
-      }
+      resource = unref(ancestorMetaData)[resource.parentFolderId]
       mountPoint = findMatchingMountPoint(resource.id)
       if (!mountPoint) {
         sharePathSegments.unshift(resource.name)
@@ -65,6 +64,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
     }
 
     return mountPoint
+  }
+
+  const currentAncestorRequest = {
+    spaceId: null,
+    fileId: null
   }
 
   watch(
@@ -129,32 +133,33 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
           if (
             isPersonalSpaceResource(matchingSpace) &&
-            matchingSpace.ownerId !== store.getters.user.uuid &&
-            driveAliasAndItem.includes('...') //FIXME
+            matchingSpace.ownerId !== store.getters.user.uuid
           ) {
-            const resource = await clientService.webdav.listFiles(
-              matchingSpace,
-              { fileId: unref(fileId) },
-              { depth: 0 }
-            )
-            console.log('resource', resource)
-
-            const mountPoint = await findMountPoint(unref(fileId))
+            if (
+              currentAncestorRequest.fileId === unref(fileId) &&
+              currentAncestorRequest.spaceId === matchingSpace.id
+            ) {
+              return
+            }
+            currentAncestorRequest.fileId = unref(fileId)
+            currentAncestorRequest.spaceId = matchingSpace.id
+            await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
+              space: matchingSpace,
+              client: clientService.webdav,
+              fileId: unref(fileId)
+            })
+            const mountPoint = findMountPoint(unref(fileId))
             path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
             path = `${urlJoin(mountPoint.root.remoteItem.path, path.split('/').slice(3).join('/'))}`
           } else {
             path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
+            await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
+              path,
+              space: matchingSpace,
+              client: clientService.webdav,
+              fileId: unref(fileId)
+            })
           }
-          // const mountPoint = store.getters['runtime/spaces/spaces'].find(
-          //   (s) =>
-          //     isMountPointSpaceResource(s) && currentFolder.path.startsWith(s.root.remoteItem.path)
-          // )
-
-          await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
-            path,
-            space: matchingSpace,
-            client: clientService.webdav
-          })
         }
       }
       space.value = matchingSpace

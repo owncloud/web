@@ -1,3 +1,5 @@
+import { SpaceResource } from 'web-client/src'
+import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { getParentPaths } from 'web-pkg/src/helpers/path'
 import { AncestorMetaData } from 'web-pkg/src/types'
@@ -26,53 +28,59 @@ const mutations = {
 }
 
 const actions = {
-  loadAncestorMetaData({ commit, state }, { space, path, client }) {
+  async loadAncestorMetaData(
+    { commit, state },
+    {
+      space,
+      path, // TODO: remove?
+      client,
+      fileId
+    }: { space: SpaceResource; path: string; client: WebDAV; fileId: string }
+  ) {
     const ancestorMetaData: AncestorMetaData = {}
-    const promises = []
-    const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
+    const davProperties = [
+      DavProperty.FileId,
+      DavProperty.ShareTypes,
+      DavProperty.FileParent,
+      DavProperty.Name
+    ]
 
-    path = path || '/'
-    if (!state.ancestorMetaData[path]) {
-      promises.push(
-        client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
-          ancestorMetaData[path] = {
-            id: resource.fileId,
-            shareTypes: resource.shareTypes,
-            parentFolderId: resource.parentFolderId,
-            spaceId: space.id,
-            path
-          }
-        })
+    const addAncestor = async (fileId: string) => {
+      const { resource } = await client.listFiles(
+        space,
+        { fileId, path },
+        { depth: 0, davProperties }
       )
+      ancestorMetaData[resource.fileId] = {
+        id: resource.fileId,
+        shareTypes: resource.shareTypes,
+        parentFolderId: resource.parentFolderId,
+        spaceId: space.id.toString(),
+        name: resource.name
+      }
+      return resource
     }
 
-    const parentPaths = getParentPaths(path)
-
-    for (const parentPath of parentPaths) {
-      const cachedData = state.ancestorMetaData[parentPath] ?? null
+    let resource = await addAncestor(fileId)
+    while (resource.parentFolderId && resource.parentFolderId !== resource.storageId) {
+      const cachedData = state.ancestorMetaData[resource.parentFolderId]
+      // TODO: still need the space check?
       if (cachedData?.spaceId === space.id) {
-        ancestorMetaData[parentPath] = cachedData
+        ancestorMetaData[resource.parentFolderId] = cachedData
         continue
       }
-
-      promises.push(
-        client
-          .listFiles(space, { path: parentPath }, { depth: 0, davProperties })
-          .then(({ resource }) => {
-            ancestorMetaData[parentPath] = {
-              id: resource.fileId,
-              shareTypes: resource.shareTypes,
-              parentFolderId: resource.parentFolderId,
-              spaceId: space.id,
-              path: parentPath
-            }
-          })
-      )
+      const oldResource = resource
+      try {
+        resource = await addAncestor(resource.parentFolderId)
+      } catch (e) {
+        console.error(e)
+        ancestorMetaData[oldResource.fileId].parentFolderId = null
+        break
+      }
     }
 
-    return Promise.allSettled(promises).then(() => {
-      commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
-    })
+    console.log('ancestorMetaData', ancestorMetaData)
+    commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
   }
 }
 

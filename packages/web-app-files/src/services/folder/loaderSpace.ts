@@ -55,10 +55,12 @@ export class FolderLoaderSpace implements FolderLoader {
         if (mountPoint && !configurationManager.options.routing.fullShareOwnerPaths) {
           currentFolder.path = mountPoint.root.remoteItem.path
           const hiddenPath = currentFolder.path.split('/').slice(0, -1).join('/')
-          currentFolder.visiblePath = currentFolder.path.replace(hiddenPath, '...')
+          console.log('before', currentFolder.path)
+          currentFolder.visiblePath = currentFolder.path.replace(`/${hiddenPath}`, '')
+          console.log('after', currentFolder.visiblePath)
           resources.forEach((r) => {
             r.path = urlJoin(path, r.path)
-            r.visiblePath = r.path.replace(hiddenPath, '...')
+            r.visiblePath = r.path.replace(`/${hiddenPath}`, '')
           })
         } else {
           currentFolder.path = path

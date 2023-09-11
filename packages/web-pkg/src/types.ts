@@ -3,7 +3,8 @@ export interface AncestorMetaDataValue {
   shareTypes: number[]
   parentFolderId: string
   spaceId: string
-  path: string
+  path?: string // TODO: remove?
+  name: string
 }
 
 export type AncestorMetaData = Record<string, AncestorMetaDataValue>
