@@ -66,7 +66,6 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
       } catch (e) {
         if (e.statusCode === 404 && fileId) {
-          console.log(2222)
           return listFilesCorrectedPath()
         }
         throw e

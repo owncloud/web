@@ -54,14 +54,11 @@ export class FolderLoaderSpace implements FolderLoader {
         )
         if (mountPoint && !configurationManager.options.routing.fullShareOwnerPaths) {
           currentFolder.path = mountPoint.root.remoteItem.path
-          console.log('currentFolder.path', currentFolder.path)
           const hiddenPath = currentFolder.path.split('/').slice(0, -1).join('/')
-          console.log('hidden', hiddenPath)
           currentFolder.visiblePath = currentFolder.path.replace(hiddenPath, '...')
           resources.forEach((r) => {
             r.path = urlJoin(path, r.path)
             r.visiblePath = r.path.replace(hiddenPath, '...')
-            console.log('r path', r.path)
           })
         } else {
           currentFolder.path = path
@@ -69,8 +66,6 @@ export class FolderLoaderSpace implements FolderLoader {
             r.path = urlJoin(path, r.path)
           })
         }
-
-        console.log('current folder path', currentFolder.path)
 
         // if current folder has no id (= singe file public link) we must not correct the route
         if (currentFolder.id) {
