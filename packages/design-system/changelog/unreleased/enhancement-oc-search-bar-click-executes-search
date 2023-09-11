@@ -1,0 +1,5 @@
+Enhancement: OcSearchBar click executes search
+
+We've changed the behaviour of the search icon in the OcSearchBar, so when the user clicks it the search gets executed
+
+https://github.com/owncloud/web/issues/9664

@@ -6,7 +6,7 @@
     :class="{ 'oc-search-small': small }"
   >
     <div class="oc-width-expand oc-position-relative">
-      <span v-if="icon" class="oc-search-icon" @click="focusSearchInput">
+      <span v-if="icon" class="oc-search-icon" @click="onSearch">
         <oc-icon v-show="!loading" :name="icon" fill-type="line" />
         <oc-spinner
           v-show="loading"
@@ -265,9 +265,6 @@ export default defineComponent({
     }
   },
   methods: {
-    focusSearchInput() {
-      ;(this.$refs.searchInput as HTMLElement).focus()
-    },
     onSearch() {
       /**
        * Search event on filter or search user input
