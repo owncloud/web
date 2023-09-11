@@ -12,9 +12,6 @@ export default {
   currentFolder: (state) => {
     return state.currentFolder
   },
-  ancestorMetaData: (state) => {
-    return state.ancestorMetaData
-  },
   clipboardResources: (state) => {
     return state.clipboardResources
   },

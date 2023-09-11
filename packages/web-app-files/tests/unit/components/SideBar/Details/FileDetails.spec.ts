@@ -201,7 +201,9 @@ function createWrapper({
   storeOptions.getters.configuration.mockReturnValue({ options: { runningOnEos, cernFeatures } })
   storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
   storeOptions.getters.capabilities.mockReturnValue({ files: { tags: true } })
-  storeOptions.modules.Files.getters.ancestorMetaData.mockReturnValue(ancestorMetaData)
+  storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
+    ancestorMetaData
+  )
   storeOptions.modules.runtime.modules.auth.getters.isPublicLinkContextReady.mockReturnValue(
     isPublicLinkContext
   )

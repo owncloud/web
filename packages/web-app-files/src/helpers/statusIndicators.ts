@@ -3,7 +3,7 @@ import { eventBus } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { createLocationShares } from 'web-app-files/src/router'
 import { Resource } from 'web-client'
-import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {

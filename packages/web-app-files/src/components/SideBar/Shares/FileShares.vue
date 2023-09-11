@@ -97,7 +97,7 @@ import {
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { isProjectSpaceResource, Resource, SpaceResource, User } from 'web-client/src/helpers'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
-import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
+import { AncestorMetaData } from 'web-pkg/src/types'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from 'web-pkg'
 
@@ -132,7 +132,7 @@ export default defineComponent({
     })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['Files/ancestorMetaData']
+      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
     )
     const getSharedAncestor = (fileId) => {
       return Object.values(unref(ancestorMetaData)).find((a) => a.id === fileId)
