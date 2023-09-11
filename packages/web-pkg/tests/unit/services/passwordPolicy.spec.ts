@@ -3,18 +3,18 @@ import { createStore, defaultStoreMockOptions } from 'web-test-helpers'
 import { Language } from 'vue3-gettext'
 import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
 
-describe('passwordPolicy', () => {
+describe('PasswordPolicyService', () => {
   describe('policy', () => {
     describe('contains the rules according to the capability', () => {
       it.each([
         [{} as PasswordPolicyCapability, ['mustNotBeEmpty']],
         [{ min_characters: 2 } as PasswordPolicyCapability, ['atLeastCharacters']],
         [
-          { min_lower_case_characters: 2 } as PasswordPolicyCapability,
+          { min_lowercase_characters: 2 } as PasswordPolicyCapability,
           ['atLeastLowercaseCharacters']
         ],
         [
-          { min_upper_case_characters: 2 } as PasswordPolicyCapability,
+          { min_uppercase_characters: 2 } as PasswordPolicyCapability,
           ['atLeastUppercaseCharacters']
         ],
         [{ min_digits: 2 } as PasswordPolicyCapability, ['atLeastDigits']],
@@ -27,8 +27,8 @@ describe('passwordPolicy', () => {
         [
           {
             min_characters: 2,
-            min_lower_case_characters: 2,
-            min_upper_case_characters: 2,
+            min_lowercase_characters: 2,
+            min_uppercase_characters: 2,
             min_digits: 2,
             min_special_characters: 2,
             max_characters: 72
@@ -57,12 +57,12 @@ describe('passwordPolicy', () => {
             [false, false, true, true]
           ],
           [
-            { min_lower_case_characters: 2 } as PasswordPolicyCapability,
+            { min_lowercase_characters: 2 } as PasswordPolicyCapability,
             ['', 'o', 'oWNCLOUD', 'ownCloud'],
             [false, false, false, true]
           ],
           [
-            { min_upper_case_characters: 2 } as PasswordPolicyCapability,
+            { min_uppercase_characters: 2 } as PasswordPolicyCapability,
             ['', 'o', 'ownCloud', 'ownCLoud'],
             [false, false, false, true]
           ],
@@ -84,8 +84,8 @@ describe('passwordPolicy', () => {
           [
             {
               min_characters: 8,
-              min_lower_case_characters: 2,
-              min_upper_case_characters: 2,
+              min_lowercase_characters: 2,
+              min_uppercase_characters: 2,
               min_digits: 2,
               min_special_characters: 2,
               max_characters: 72

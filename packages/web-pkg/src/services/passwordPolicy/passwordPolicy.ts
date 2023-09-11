@@ -49,15 +49,15 @@ export class PasswordPolicyService {
       rules.atLeastCharacters = { minLength: this.capability.min_characters }
     }
 
-    if (this.capability.min_upper_case_characters) {
+    if (this.capability.min_uppercase_characters) {
       rules.atLeastUppercaseCharacters = {
-        minLength: this.capability.min_upper_case_characters
+        minLength: this.capability.min_uppercase_characters
       }
     }
 
-    if (this.capability.min_lower_case_characters) {
+    if (this.capability.min_lowercase_characters) {
       rules.atLeastLowercaseCharacters = {
-        minLength: this.capability.min_lower_case_characters
+        minLength: this.capability.min_lowercase_characters
       }
     }
 
