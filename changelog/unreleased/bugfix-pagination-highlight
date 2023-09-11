@@ -1,0 +1,7 @@
+Bugfix: Pagination highlight
+
+An issue was found where pagination highlight was displayed after navigation in number of pages.
+Resolved by ensuring unique index for each page.
+
+https://github.com/owncloud/web/pull/9678
+https://github.com/owncloud/web/issues/9665
