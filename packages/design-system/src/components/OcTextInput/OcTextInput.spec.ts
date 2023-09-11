@@ -5,6 +5,12 @@ const defaultProps = {
   label: 'label'
 }
 
+Object.assign(navigator, {
+  clipboard: {
+    writeText: jest.fn(),
+    readText: jest.fn()
+  }
+})
 describe('OcTextInput', () => {
   function getShallowWrapper(props = {}) {
     return shallowMount(OcTextInput, {
@@ -29,7 +35,9 @@ describe('OcTextInput', () => {
     textInputMessage: '.oc-text-input-message span',
     clearInputButton: '.oc-text-input-btn-clear',
     inputField: '.oc-text-input',
-    infoIcon: '.oc-text-input-message .oc-icon'
+    infoIcon: '.oc-text-input-message .oc-icon',
+    showPasswordToggleBtn: '.oc-text-input-show-password-toggle',
+    copyPasswordBtn: '.oc-text-input-copy-password-button'
   }
 
   describe('id prop', () => {
@@ -49,6 +57,51 @@ describe('OcTextInput', () => {
     it('should set provided label to the input', () => {
       const wrapper = getShallowWrapper()
       expect(wrapper.find('label').text()).toBe('label')
+    })
+  })
+
+  describe('password input field', () => {
+    describe('copy password button', () => {
+      it('should not exist if type is not "password" or no value entered', () => {
+        const wrapper = getMountedWrapper()
+        expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
+
+        const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
+        expect(wrapper2.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
+      })
+      it('should exist if type is "password" and value entered', async () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        await wrapper.find(selectors.inputField).setValue('password')
+        expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeTruthy()
+      })
+      it('should copy password to password if clicked', async () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        await wrapper.find(selectors.inputField).setValue('password')
+        await wrapper.find(selectors.copyPasswordBtn).trigger('click')
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith('password')
+      })
+    })
+    describe('show hide password toggle button', () => {
+      it('should not exist if type is not "password" or no value entered', () => {
+        const wrapper = getMountedWrapper()
+        expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
+
+        const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
+        expect(wrapper2.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
+      })
+      it('should exist if type is "password" and value entered', async () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        await wrapper.find(selectors.inputField).setValue('password')
+        expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeTruthy()
+      })
+      it('should should show password plaintext/veiled if clicked', async () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        await wrapper.find(selectors.inputField).setValue('password')
+        await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
+        expect(wrapper.find(selectors.inputField).attributes().type).toBe('text')
+        await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
+        expect(wrapper.find(selectors.inputField).attributes().type).toBe('password')
+      })
     })
   })
 
