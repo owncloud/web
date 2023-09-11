@@ -217,8 +217,7 @@ export default defineComponent({
         padding: var(--oc-space-xsmall) var(--oc-space-small);
         transition: background-color $transition-duration-short ease-in-out;
 
-        &:not(span):hover,
-        &:not(span):focus {
+        &:not(span):hover {
           background-color: var(--oc-color-swatch-passive-default);
           color: var(--oc-color-text-inverse);
           text-decoration: none;
