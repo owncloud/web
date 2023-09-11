@@ -125,11 +125,20 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           })
         }
         if (matchingSpace) {
+          loading.value = true
+
           if (
             isPersonalSpaceResource(matchingSpace) &&
             matchingSpace.ownerId !== store.getters.user.uuid &&
             driveAliasAndItem.includes('...') //FIXME
           ) {
+            const resource = await clientService.webdav.listFiles(
+              matchingSpace,
+              { fileId: unref(fileId) },
+              { depth: 0 }
+            )
+            console.log('resource', resource)
+
             const mountPoint = await findMountPoint(unref(fileId))
             path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
             path = `${urlJoin(mountPoint.root.remoteItem.path, path.split('/').slice(3).join('/'))}`
@@ -141,7 +150,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           //     isMountPointSpaceResource(s) && currentFolder.path.startsWith(s.root.remoteItem.path)
           // )
 
-          loading.value = true
           await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
             path,
             space: matchingSpace,

@@ -379,7 +379,6 @@ export default defineComponent({
         }
       }
 
-      console.log(1, unref(ancestorMetaData))
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,

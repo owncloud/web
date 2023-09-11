@@ -88,15 +88,11 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        try {
-          if (options.loadShares) {
-            const ancestorMetaData = store.getters['runtime/ancestorMetaData/ancestorMetaData']
-            for (const file of resources) {
-              file.indicators = getIndicators({ resource: file, ancestorMetaData })
-            }
+        if (options.loadShares) {
+          const ancestorMetaData = store.getters['runtime/ancestorMetaData/ancestorMetaData']
+          for (const file of resources) {
+            file.indicators = getIndicators({ resource: file, ancestorMetaData })
           }
-        } catch (e) {
-          console.error(e)
         }
 
         store.commit('Files/LOAD_FILES', {
