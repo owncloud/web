@@ -29,6 +29,7 @@ Summary
 * Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
 * Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
+* Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
 
 Details
 -------
@@ -226,6 +227,16 @@ Details
 
    https://github.com/owncloud/web/issues/9641
    https://github.com/owncloud/web/pull/9671
+
+* Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
+
+   We consume password policy rules from the server and test public link passwords against those.
+   Additionally we added a show/hide toggle button to password input field
+
+   https://github.com/owncloud/web/issues/9638
+   https://github.com/owncloud/web/issues/9657
+   https://github.com/owncloud/web/pull/9682
+   https://github.com/owncloud/web/pull/9634
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
