@@ -61,7 +61,7 @@ Bundle the web frontend with the following command:
 $ pnpm build:w
 ```
 
-Our compose setup automatically mounts it into an oC10 and oCIS backend, respectively. Web also gets recompiled on changes.
+Our compose setup automatically mounts it into an oCIS backend, respectively. Web also gets recompiled on changes.
 
 #### Run E2E Tests
 
@@ -77,6 +77,7 @@ To run a particular test, simply add the feature file and line number to the tes
 
 Various options are available via ENV variables, e.g.
 
+- `BASIC_AUTH=true` use basic authorization for api requests. 
 - `RETRY=n` to retry failures `n` times
 - `SLOW_MO=n` to slow the execution time by `n` milliseconds
 - `TIMEOUT=n` to set tests to timeout after `n` milliseconds
