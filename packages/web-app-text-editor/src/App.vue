@@ -1,5 +1,8 @@
 <template>
-  <div :class="showPreview ? 'oc-flex' : ''" class="oc-text-editor oc-width-1-1 oc-height-1-1">
+  <div
+    :class="showPreview ? '' : 'oc-text-editor--no-preview'"
+    class="oc-text-editor oc-width-1-1 oc-height-1-1"
+  >
     <oc-textarea
       id="text-editor-input"
       :model-value="currentContent"
@@ -68,6 +71,11 @@ export default defineComponent({
 
   @media (min-width: $oc-breakpoint-medium-default) {
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  &--no-preview {
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr;
   }
 
