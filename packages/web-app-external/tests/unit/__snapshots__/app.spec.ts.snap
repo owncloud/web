@@ -1,62 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The app provider extension should be able to load an iFrame via get 1`] = `
-<main class="oc-height-1-1">
-  <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <app-top-bar-stub dropdownactions="" mainactions="" resource="undefined"></app-top-bar-stub>
-  <!--v-if-->
-  <iframe allowfullscreen="" class="oc-width-1-1 oc-height-1-1" src="https://example.test/d12ab86/loe009157-MzBw" title="&quot;exampleApp&quot; app content area"></iframe>
-  <!--v-if-->
-</main>
+<!--v-if-->
+
+<!--v-if-->
 `;
 
 exports[`The app provider extension should be able to load an iFrame via post 1`] = `
-<main class="oc-height-1-1">
-  <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <app-top-bar-stub dropdownactions="" mainactions="" resource="undefined"></app-top-bar-stub>
-  <!--v-if-->
-  <!--v-if-->
-  <div class="oc-height-1-1">
-    <form action="https://example.test/d12ab86/loe009157-MzBw" method="post" target="app-iframe">
-      <input class="oc-hidden" type="submit" value="[object Object]">
-      <div>
-        <input name="access_token" type="hidden" value="asdfsadfsadf">
-      </div>
-      <div>
-        <input name="access_token_ttl" type="hidden" value="123456">
-      </div>
-    </form>
-    <iframe allowfullscreen="" class="oc-width-1-1 oc-height-1-1" name="app-iframe" title="&quot;exampleApp&quot; app content area"></iframe>
-  </div>
-</main>
+<!--v-if-->
+
+<!--v-if-->
 `;
 
 exports[`The app provider extension should fail for unauthenticated users 1`] = `
-<main class="oc-height-1-1 oc-flex oc-flex-center oc-flex-middle">
-  <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <!--v-if-->
-  <error-screen-stub message="Error retrieving file information"></error-screen-stub>
-  <!--v-if-->
-  <!--v-if-->
-</main>
+<!--v-if-->
+
+<!--v-if-->
 `;
 
 exports[`The app provider extension should show a loading spinner while loading 1`] = `
-<main class="oc-height-1-1 oc-flex oc-flex-center oc-flex-middle">
-  <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <!--v-if-->
-  <loading-screen-stub></loading-screen-stub>
-  <!--v-if-->
-  <!--v-if-->
-</main>
+<!--v-if-->
+
+<!--v-if-->
 `;
 
 exports[`The app provider extension should show a meaningful message if an error occurs during loading 1`] = `
-<main class="oc-height-1-1 oc-flex oc-flex-center oc-flex-middle">
-  <h1 class="oc-invisible-sr">"exampleApp" app page</h1>
-  <!--v-if-->
-  <error-screen-stub message="Error retrieving file information"></error-screen-stub>
-  <!--v-if-->
-  <!--v-if-->
-</main>
+<!--v-if-->
+
+<!--v-if-->
 `;

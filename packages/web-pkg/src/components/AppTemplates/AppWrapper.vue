@@ -48,6 +48,7 @@ import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { HttpError } from 'web-pkg/src/errors'
 import { ModifierKey, Key, useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useAppMeta } from 'web-pkg/src/composables/appDefaults/useAppMeta'
 
 export interface AppWrapperSlotArgs {
   applicationConfig: AppConfigObject

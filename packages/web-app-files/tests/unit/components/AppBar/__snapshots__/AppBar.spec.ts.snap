@@ -17,6 +17,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
+        <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
@@ -41,7 +42,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
-        <button class="action-slot">Click</button>
+        <button class="action-slot">Click</button> <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
@@ -66,6 +67,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
+        <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
