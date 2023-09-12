@@ -24,6 +24,14 @@ export class PasswordPolicyService {
     this.buildPolicy()
   }
 
+  private useDefaultRules(): boolean {
+    return (
+      Object.keys(this.capability).length === 0 ||
+      (Object.keys(this.capability).length === 1 &&
+        Object.keys(this.capability)[0] === 'max_characters')
+    )
+  }
+
   private buildPolicy() {
     const ruleset = {
       atLeastCharacters: new AtLeastCharactersRule({ ...this.language }),
@@ -36,12 +44,7 @@ export class PasswordPolicyService {
     }
     const rules = {} as any
 
-    // add default rule
-    if (
-      Object.keys(this.capability).length === 0 ||
-      (Object.keys(this.capability).length === 1 &&
-        Object.keys(this.capability)[0] === 'max_characters')
-    ) {
+    if (this.useDefaultRules()) {
       rules.mustNotBeEmpty = {}
     }
 
