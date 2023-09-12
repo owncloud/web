@@ -3,6 +3,7 @@
     <oc-filter-chip
       :filter-label="filterLabel"
       :selected-item-names="selectedItems.map((i) => i[displayNameAttribute])"
+      :close-on-click="closeOnClick"
       @clear-filter="clearFilter"
       @show-drop="showDrop"
     >
@@ -107,6 +108,10 @@ export default defineComponent({
       type: Array,
       required: false,
       default: () => []
+    },
+    closeOnClick: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['selectionChange'],

@@ -1,4 +1,5 @@
 import { Resource, SpaceResource } from '../helpers'
+import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
 import { WebDavOptions } from './types'
 
@@ -28,7 +29,7 @@ export const GetFileUrlFactory = (
       let signed = true
       if (!downloadURL && !inlineDisposition) {
         // compute unsigned url
-        const webDavPath = `${space.webDavPath}/${path}`
+        const webDavPath = urlJoin(space.webDavPath, path)
         downloadURL = sdk.files.getFileUrl(webDavPath)
 
         // sign url

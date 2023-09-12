@@ -34,13 +34,14 @@ Feature: Search
       | resource                   | type   |
       | folder                     | folder |
       | FolDer/child-one/child-two | folder |
+      | strängéनेपालीName          | folder |
     And "Alice" enables the option to display the hidden file
     And "Alice" uploads the following resources
       | resource         |
       | .hidden-file.txt |
 
     # search for objects of personal space
-    When "Alice" searches "foldeR" using the global search and the "all files" filter
+    When "Alice" searches "foldeR" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource |
       | folder   |
@@ -52,7 +53,7 @@ Feature: Search
       | .hidden-file.txt     |
 
     # search for hidden file
-    When "Alice" searches "hidden" using the global search and the "all files" filter
+    When "Alice" searches "hidden" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource         |
       | .hidden-file.txt |
@@ -64,7 +65,7 @@ Feature: Search
       | new-lorem-big.txt |
 
     # subfolder search
-    And "Alice" searches "child" using the global search and the "all files" filter
+    And "Alice" searches "child" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource  |
       | child-one |
@@ -78,7 +79,7 @@ Feature: Search
       | new-lorem-big.txt |
 
     # received shares search
-    And "Alice" searches "NEW" using the global search and the "all files" filter
+    And "Alice" searches "NEW" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource             |
       | new_share_from_brian |
@@ -95,7 +96,7 @@ Feature: Search
       | resource | as            |
       | folder   | renamedFolder |
       | FolDer   | renamedFolDer |
-    And "Alice" searches "rena" using the global search and the "all files" filter
+    And "Alice" searches "rena" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource      |
       | renamedFolder |
@@ -104,6 +105,21 @@ Feature: Search
       | resource |
       | folder   |
       | FolDer   |
+
+
+    # search difficult names
+    When "Alice" searches "strängéनेपालीName" using the global search and the "everywhere" filter and presses enter
+    Then following resources should be displayed in the files list for user "Alice"
+      | strängéनेपालीName |
+
+    # deleting folder from search result and search deleted resource
+    When "Alice" deletes the following resource using the sidebar panel
+      | resource          | from |
+      | strängéनेपालीName |      |
+    And "Alice" searches "forDeleting" using the global search and the "everywhere" filter
+    Then following resources should not be displayed in the search list for user "Alice"
+      | resource          |
+      | strängéनेपालीName |
 
     And "Alice" navigates to the shared with me page
     When "Alice" reshares the following resource
@@ -123,7 +139,7 @@ Feature: Search
     And "Carol" creates the following resources
       | resource | type   |
       | folder   | folder |
-    And "Carol" searches "NEW" using the global search and the "all files" filter
+    And "Carol" searches "NEW" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Carol"
       | resource             |
       | new_share_from_brian |
@@ -149,14 +165,14 @@ Feature: Search
       | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
     And "Alice" opens the "files" app
     When "Alice" opens folder "mainFolder"
-    And "Alice" searches "example" using the global search and the "all files" filter
+    And "Alice" searches "example" using the global search and the "everywhere" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource                          |
       | exampleInsideThePersonalSpace.txt |
       | exampleInsideTheMainFolder.txt    |
       | exampleInsideTheSubFolder.txt     |
 
-    When "Alice" searches "example" using the global search and the "current folder" filter
+    When "Alice" searches "example" using the global search and the "in here" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource                       |
       | exampleInsideTheMainFolder.txt |

@@ -27,6 +27,10 @@ export abstract class DavProperty {
   static readonly ETag: string = '{DAV:}getetag'
   static readonly MimeType: string = '{DAV:}getcontenttype'
   static readonly ResourceType: string = '{DAV:}resourcetype'
+  static readonly LockDiscovery: string = '{DAV:}lockdiscovery'
+  static readonly LockOwnerName: string = '{http://owncloud.org/ns}ownername'
+  static readonly LockTime: string = '{http://owncloud.org/ns}locktime'
+  static readonly ActiveLock: string = '{DAV:}activelock'
   static readonly DownloadURL: string = '{http://owncloud.org/ns}downloadURL'
   static readonly Highlights: string = '{http://owncloud.org/ns}highlights'
 
@@ -58,6 +62,8 @@ export abstract class DavProperties {
     DavProperty.FileId,
     DavProperty.FileParent,
     DavProperty.Name,
+    DavProperty.LockDiscovery,
+    DavProperty.ActiveLock,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
     DavProperty.ShareId,

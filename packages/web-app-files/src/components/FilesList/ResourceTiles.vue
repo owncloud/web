@@ -62,7 +62,7 @@
               size="large"
               class="oc-flex-inline oc-p-s"
               :model-value="isResourceSelected(resource)"
-              @click.stop.prevent="toggleSelection(resource)"
+              @click.stop.prevent="toggleTile([resource, $event])"
             />
           </template>
           <template #imageField>
@@ -110,6 +110,7 @@ import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/Contex
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
 import { useResourceRouteResolver } from '../../composables/filesList'
+import { eventBus } from 'web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -249,6 +250,22 @@ export default defineComponent({
       return props.selectedIds.includes(resource.id)
     }
 
+    const toggleTile = (data) => {
+      const resource = data[0]
+      const eventData = data[1]
+
+      if (eventData && eventData.metaKey) {
+        return eventBus.publish('app.files.list.clicked.meta', resource)
+      }
+      if (eventData && eventData.shiftKey) {
+        return eventBus.publish('app.files.list.clicked.shift', {
+          resource,
+          skipTargetSelection: false
+        })
+      }
+      toggleSelection(resource)
+    }
+
     const toggleSelection = (resource) => {
       const selectedIds = !isResourceSelected(resource)
         ? [...props.selectedIds, resource.id]
@@ -354,6 +371,7 @@ export default defineComponent({
       showContextMenu,
       tileRefs,
       isResourceSelected,
+      toggleTile,
       toggleSelection,
       getResourceCheckboxLabel,
       selectSorting,

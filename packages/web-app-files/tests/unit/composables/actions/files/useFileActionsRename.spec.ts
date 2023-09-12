@@ -24,6 +24,10 @@ describe('rename', () => {
         {
           resources: [{ canRename: () => true }, { canRename: () => true }] as Resource[],
           expectedStatus: false
+        },
+        {
+          resources: [{ canRename: () => true, locked: true }] as Resource[],
+          expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
         const { wrapper } = getWrapper({

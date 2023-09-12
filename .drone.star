@@ -11,12 +11,12 @@ OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_DRONE_ANSIBLE = "owncloudci/drone-ansible:latest"
 OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
-OC_CI_GOLANG = "owncloudci/golang:1.19"
+OC_CI_GOLANG = "owncloudci/golang:1.20"
 OC_CI_HUGO = "owncloudci/hugo:0.115.2"
 OC_CI_NODEJS = "owncloudci/nodejs:18"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
-OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.8.3"
+OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.8.5"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GH_PAGES = "plugins/gh-pages:1"
@@ -107,7 +107,6 @@ config = {
                 "oCISFiles2": [
                     "webUIFilesList",
                     "webUIFilesDetails",
-                    "webUIFilesSearch",
                 ],
                 "oCISFiles3": [
                     "webUIRenameFiles",
@@ -181,7 +180,7 @@ config = {
                 "RUN_ON_OCIS": "true",
                 "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
                 "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
-                "WEB_UI_CONFIG": "%s" % dir["ocisConfig"],
+                "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
                 "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
             },
             "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
@@ -219,7 +218,6 @@ basicTestSuites = [
     "webUIFilesCopy",
     "webUIFilesDetails",
     "webUIFilesList",
-    "webUIFilesSearch",
     "webUILogin",
     "webUIMoveFilesFolders",
     "webUIOperationsWithFolderShares",
@@ -721,7 +719,7 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
-        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower():
+        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             continue
 
         if params["skip"]:
@@ -748,8 +746,6 @@ def e2eTests(ctx):
 
         # oCIS specific environment variables
         environment["BASE_URL_OCIS"] = "ocis:9200"
-        environment["OCIS"] = "true"
-        environment["API_TOKEN"] = "true"
 
         # oCIS specific dependencies
         depends_on = ["cache-ocis"]
@@ -766,10 +762,10 @@ def e2eTests(ctx):
             # oCIS specific steps
             steps += copyFilesForUpload() + \
                      (tikaService() if params["tikaNeeded"] else []) + \
-                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"]) + \
-                     getSkeletonFiles()
+                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
 
-        steps += [{
+        steps += getSkeletonFiles() + \
+                 [{
                      "name": "e2e-tests",
                      "image": OC_CI_NODEJS,
                      "environment": environment,
@@ -1266,7 +1262,7 @@ def ocisService(type, tika_enabled = False):
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "mdns"
     else:
-        environment["WEB_UI_CONFIG"] = "%s" % dir["ocisConfig"]
+        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
         environment["STORAGE_HOME_DRIVER"] = "ocis"
         environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
         environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
@@ -1384,7 +1380,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     environment["COMMENTS_FILE"] = "%s" % dir["commentsFile"]
     environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
     environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
-    environment["WEB_UI_CONFIG"] = "%s/dist/config.json" % dir["web"]
+    environment["WEB_UI_CONFIG_FILE"] = "%s/dist/config.json" % dir["web"]
 
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
@@ -2057,6 +2053,7 @@ def logTracingResult(ctx, suite):
             "status": status,
             "event": [
                 "pull_request",
+                "cron",
             ],
         },
     }]

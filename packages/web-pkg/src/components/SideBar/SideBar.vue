@@ -166,8 +166,7 @@ export default defineComponent({
       return this.availablePanels.find((panel) => panel.default)
     },
     accessibleLabelBack() {
-      const translated = this.$gettext('Back to %{panel} panel')
-      return this.$gettextInterpolate(translated, {
+      return this.$gettext('Back to %{panel} panel', {
         panel: this.defaultPanel.title
       })
     }

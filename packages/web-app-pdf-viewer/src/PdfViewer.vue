@@ -11,6 +11,15 @@ export default defineComponent({
       type: String,
       required: true
     }
+  },
+  setup() {
+    const isSafari =
+      navigator.userAgent?.includes('Safari') && !navigator.userAgent?.includes('Chrome')
+
+    const objectType = isSafari ? undefined : 'application/pdf'
+    return {
+      objectType
+    }
   }
 })
 </script>

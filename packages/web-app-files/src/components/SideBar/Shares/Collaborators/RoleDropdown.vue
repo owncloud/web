@@ -366,7 +366,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 .files-recipient {
   &-role-drop {
-    width: 400px;
+    @media (max-width: $oc-breakpoint-medium-default) {
+      width: 100%;
+    }
+    @media (min-width: $oc-breakpoint-medium-default) {
+      width: 400px;
+    }
 
     &-list {
       li {

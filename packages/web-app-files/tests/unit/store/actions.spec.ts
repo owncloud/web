@@ -113,8 +113,14 @@ describe('vuex store actions', () => {
     const stateMock = {
       sharesLoading: false,
       outgoingShares: [],
-      incomingShares: [],
-      ancestorMetaData: {}
+      incomingShares: []
+    }
+    const rootStateMock = {
+      runtime: {
+        ancestorMetaData: {
+          ancestorMetaData: {}
+        }
+      }
     }
     const gettersMock = {
       highlightedFile: () => mock<Resource>({ path: 'someFolder/someFile.txt' })
@@ -142,7 +148,7 @@ describe('vuex store actions', () => {
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 2 } }])
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 4 } }])
       await actions.loadShares(
-        { state: stateMock, getters: gettersMock, commit: commitMock },
+        { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
           path: '/someFolder/someFile.txt',
@@ -166,7 +172,7 @@ describe('vuex store actions', () => {
       stateMock.outgoingShares = [loadedShare]
       const clientMock = mockDeep<OwnCloudSdk>()
       await actions.loadShares(
-        { state: stateMock, getters: gettersMock, commit: commitMock },
+        { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
           path: '/someFile.txt',
@@ -182,28 +188,54 @@ describe('vuex store actions', () => {
 
   describe('updateCurrentFileShareTypes', () => {
     const stateMock = { outgoingShares: [], ancestorMetaData: {} }
+    const getRootStateMock = (highlightedFile: Resource) => ({
+      runtime: {
+        ancestorMetaData: {
+          ancestorMetaData: highlightedFile ? { [highlightedFile.path]: {} } : {}
+        }
+      }
+    })
     const commitSpy = jest.fn()
 
     it('updates the resource if given', () => {
-      const getters = { highlightedFile: mockDeep<Resource>() }
-      actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
+      const highlightedFile = mockDeep<Resource>()
+      const getters = { highlightedFile }
+      actions.updateCurrentFileShareTypes({
+        state: stateMock,
+        rootState: getRootStateMock(null),
+        getters,
+        commit: commitSpy
+      })
       expect(commitSpy).toHaveBeenCalledTimes(1)
     })
     it('does not update the resource if not given', () => {
-      const getters = { highlightedFile: undefined }
-      actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
+      const highlightedFile = undefined
+      const getters = { highlightedFile }
+      actions.updateCurrentFileShareTypes({
+        state: stateMock,
+        rootState: getRootStateMock(highlightedFile),
+        getters,
+        commit: commitSpy
+      })
       expect(commitSpy).toHaveBeenCalledTimes(0)
     })
     it('does not update project space resources', () => {
-      const getters = { highlightedFile: mockDeep<SpaceResource>({ driveType: 'project' }) }
-      actions.updateCurrentFileShareTypes({ state: stateMock, getters, commit: commitSpy })
+      const highlightedFile = mockDeep<SpaceResource>({ driveType: 'project' })
+      const getters = { highlightedFile }
+      actions.updateCurrentFileShareTypes({
+        state: stateMock,
+        rootState: getRootStateMock(highlightedFile),
+        getters,
+        commit: commitSpy
+      })
       expect(commitSpy).toHaveBeenCalledTimes(0)
     })
     it('updates the ancestor if found', () => {
       const highlightedFile = mockDeep<Resource>({ path: '/path' })
       const getters = { highlightedFile }
       actions.updateCurrentFileShareTypes({
-        state: { outgoingShares: [], ancestorMetaData: { [highlightedFile.path]: {} } },
+        state: { outgoingShares: [] },
+        rootState: getRootStateMock(highlightedFile),
         getters,
         commit: commitSpy
       })

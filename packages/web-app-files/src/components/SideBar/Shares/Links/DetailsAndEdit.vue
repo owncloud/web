@@ -188,6 +188,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { OcDrop } from 'design-system/src/components'
+import { usePasswordPolicyService } from 'web-pkg/src/composables/passwordPolicyService'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -224,9 +225,12 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup() {
+    const passwordPolicyService = usePasswordPolicyService()
+
     return {
       space: inject<Ref<SpaceResource>>('space'),
-      resource: inject<Ref<Resource>>('resource')
+      resource: inject<Ref<Resource>>('resource'),
+      passwordPolicy: passwordPolicyService.getPolicy()
     }
   },
   data() {
@@ -381,7 +385,7 @@ export default defineComponent({
       if (!this.link.indirect) {
         return null
       }
-      return this.$gettextInterpolate(
+      return (
         this.$gettext('Navigate to the parent (%{folderName})'),
         { folderName: basename(this.link.path) },
         true
@@ -461,19 +465,6 @@ export default defineComponent({
       this.createModal(modal)
     },
 
-    checkPassword(password) {
-      if (password === '') {
-        this.setModalConfirmButtonDisabled(true)
-        return this.setModalInputErrorMessage(this.$gettext("Password can't be empty"))
-      }
-      if (password.length > 72) {
-        this.setModalConfirmButtonDisabled(true)
-        return this.setModalInputErrorMessage(this.$gettext("Password can't exceed 72 characters"))
-      }
-      this.setModalConfirmButtonDisabled(false)
-      return this.setModalInputErrorMessage(null)
-    },
-
     showPasswordModal() {
       const modal = {
         variation: 'passive',
@@ -483,9 +474,12 @@ export default defineComponent({
         hasInput: true,
         confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
+        inputPasswordPolicy: this.passwordPolicy,
+        inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
         inputType: 'password',
         onCancel: this.hideModal,
-        onInput: (password) => this.checkPassword(password),
+        onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
+        onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
         onConfirm: (password) => {
           this.updateLink({
             link: {
@@ -511,8 +505,15 @@ export default defineComponent({
   justify-content: flex-end;
 }
 
-.edit-public-link-role-dropdown {
-  width: 400px;
+@media (max-width: $oc-breakpoint-medium-default) {
+  .edit-public-link-role-dropdown {
+    width: 100%;
+  }
+}
+@media (min-width: $oc-breakpoint-medium-default) {
+  .edit-public-link-role-dropdown {
+    width: 400px;
+  }
 }
 
 .role-dropdown-list span {

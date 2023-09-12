@@ -71,8 +71,10 @@ const mutations = {
     state.onConfirm = modal.onConfirm
     state.hasInput = modal.hasInput || false
     state.inputValue = modal.inputValue || null
+    state.inputPasswordPolicy = modal.inputPasswordPolicy || {}
     state.inputSelectionRange = modal.inputSelectionRange
     state.inputDescription = modal.inputDescription || null
+    state.inputPlaceholder = modal.inputPlaceholder || null
     state.inputLabel = modal.inputLabel || null
     state.inputError = modal.inputError || null
     state.inputDisabled = modal.inputDisabled || false
@@ -83,6 +85,8 @@ const mutations = {
     state.contextualHelperLabel = modal.contextualHelperLabel
     state.contextualHelperData = modal.contextualHelperData
     state.customContent = modal.customContent || ''
+    state.onPasswordChallengeCompleted = modal.onPasswordChallengeCompleted
+    state.onPasswordChallengeFailed = modal.onPasswordChallengeFailed
   },
 
   HIDE_MODAL(state) {

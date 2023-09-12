@@ -5,8 +5,8 @@ import { useStore } from 'web-pkg/src/composables'
 export function useShares() {
   const store = useStore()
   const outgoingLinks: Ref<Share[]> = computed(() => store.getters['Files/outgoingLinks'])
-  const outgoingCollaborators: Ref<Share[]> = computed(
-    () => store.getters['Files/outgoingCollaborators']
+  const outgoingCollaborators: Ref<Share[]> = computed(() =>
+    store.getters['Files/outgoingCollaborators'].filter((s) => s.collaborator.displayName)
   )
   return { outgoingCollaborators, outgoingLinks }
 }

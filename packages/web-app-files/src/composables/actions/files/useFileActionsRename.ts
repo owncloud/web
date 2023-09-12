@@ -20,7 +20,7 @@ import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capa
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+  const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const canRename = useCapabilityFilesSharingCanRename()
@@ -65,7 +65,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       const translated = $gettext('The name "%{name}" is already taken')
       return store.dispatch(
         'setModalInputErrorMessage',
-        $gettextInterpolate(translated, { name: newName }, true)
+        $gettext(translated, { name: newName }, true)
       )
     }
 
@@ -79,7 +79,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
 
         return store.dispatch(
           'setModalInputErrorMessage',
-          $gettextInterpolate(translated, { name: newName }, true)
+          $gettext(translated, { name: newName }, true)
         )
       }
     }
@@ -138,11 +138,18 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
     } catch (error) {
       console.error(error)
       store.dispatch('toggleModalConfirmButton')
-      let translated = $gettext('Failed to rename "%{file}" to "%{newName}"')
+      let title = $gettext(
+        'Failed to rename "%{file}" to "%{newName}"',
+        { file: resource.name, newName },
+        true
+      )
       if (error.statusCode === 423) {
-        translated = $gettext('Failed to rename "%{file}" to "%{newName}" - the file is locked')
+        title = $gettext(
+          'Failed to rename "%{file}" to "%{newName}" - the file is locked',
+          { file: resource.name, newName },
+          true
+        )
       }
-      const title = $gettextInterpolate(translated, { file: resource.name, newName }, true)
       store.dispatch('showErrorMessage', {
         title,
         error
@@ -180,10 +187,9 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
     const modalTitle =
       !resources[0].isFolder && !areFileExtensionsShown ? nameWithoutExtension : resources[0].name
 
-    const title = $gettextInterpolate(
-      resources[0].isFolder ? $gettext('Rename folder %{name}') : $gettext('Rename file %{name}'),
-      { name: modalTitle }
-    )
+    const title = resources[0].isFolder
+      ? $gettext('Rename folder %{name}', { name: modalTitle })
+      : $gettext('Rename file %{name}', { name: modalTitle })
 
     const inputValue =
       !resources[0].isFolder && !areFileExtensionsShown ? nameWithoutExtension : resources[0].name
@@ -231,6 +237,10 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
         // see https://github.com/owncloud/ocis/issues/4866
         const rootShareIncluded = resources.some((r) => r.shareId && r.path === '/')
         if (rootShareIncluded) {
+          return false
+        }
+
+        if (resources.length === 1 && resources[0].locked) {
           return false
         }
 

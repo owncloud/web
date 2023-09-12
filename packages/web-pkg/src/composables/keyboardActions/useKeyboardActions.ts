@@ -11,6 +11,8 @@ export enum Key {
   Space = ' ',
   ArrowUp = 'ArrowUp',
   ArrowDown = 'ArrowDown',
+  ArrowLeft = 'ArrowLeft',
+  ArrowRight = 'ArrowRight',
   Esc = 'Escape'
 }
 

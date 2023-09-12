@@ -13,7 +13,7 @@ services:
       OCIS_LOG_COLOR: "${OCIS_LOG_COLOR:-true}"
 
       # WEB
-      WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
+      WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
       WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
 
@@ -92,6 +92,8 @@ services:
     ports:
       - 4444:4444
       - 5900:5900
+      - 7900:7900
+      - 6080:7900
     volumes:
       - /dev/shm:/dev/shm
       - uploads:/uploads:ro
@@ -117,16 +119,6 @@ services:
       BACKEND_HOST: "https://host.docker.internal:9200"
       REMOTE_UPLOAD_DIR: "/uploads"
       TEST_WITH_GRAPH_API: "true"
-
-  vnc:
-    build:
-      dockerfile: vnc.Dockerfile
-      context: ./dev/docker
-    container_name: web_vnc
-    ports:
-      - 6080:6080
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
 
   companion:
     image: owncloud/uppy-companion:3.12.13-owncloud

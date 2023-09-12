@@ -1,17 +1,17 @@
 <template>
-  <div v-if="available" class="oc-flex oc-flex-middle oc-flex-nowrap">
+  <div class="oc-flex oc-flex-middle oc-flex-nowrap">
     <oc-datepicker
       v-model="dateCurrent"
       :min-date="dateMin"
       :max-date="dateMax"
       :locale="language.current"
       :is-required="enforced"
-      class="files-recipient-expiration-datepicker"
+      class="files-recipient-expiration-datepicker oc-width-1-1"
       data-testid="recipient-datepicker"
     >
       <template #default="{ togglePopover }">
         <oc-button
-          class="files-collaborators-expiration-button"
+          class="files-collaborators-expiration-button oc-p-s action-menu-item"
           data-testid="recipient-datepicker-btn"
           appearance="raw"
           gap-size="none"
@@ -20,19 +20,17 @@
           "
           @click="togglePopover"
         >
+          <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
           <span
             v-if="!dateCurrent"
             key="no-expiration-date-label"
-            class="oc-text-truncate"
             v-text="$gettext('Set expiration date')"
           />
           <span
             v-else
             key="set-expiration-date-label"
-            class="oc-text-truncate"
-            v-text="$gettextInterpolate($gettext('Expires %{expires}'), { expires: dateExpire })"
+            v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
           />
-          <oc-icon v-if="!dateCurrent" name="arrow-down-s" />
         </oc-button>
       </template>
     </oc-datepicker>
@@ -72,7 +70,6 @@ export default defineComponent({
     const capabilities = computed(() => store.getters.capabilities)
     const optionsUser = computed(() => capabilities.value.files_sharing.user?.expire_date)
     const optionsGroup = computed(() => capabilities.value.files_sharing.group?.expire_date)
-    const available = computed(() => optionsUser.value || optionsGroup.value)
     const enforced = computed(() => optionsUser.value?.enforced || optionsGroup.value?.enforced)
     const dateMin = DateTime.now().setLocale(language.current).toJSDate()
     const dateDefault = computed(() => {
@@ -151,7 +148,6 @@ export default defineComponent({
     return {
       language,
       enforced,
-      available,
       dateCurrent,
       dateMin,
       dateMax,
@@ -164,8 +160,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 .recipient-edit-expiration-btn-remove {
   vertical-align: middle;
-}
-.files-collaborators-expiration-button {
-  max-width: 160px;
 }
 </style>

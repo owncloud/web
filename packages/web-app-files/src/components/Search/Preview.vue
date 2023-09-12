@@ -26,7 +26,7 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { debounce } from 'lodash-es'
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
@@ -35,13 +35,14 @@ import { buildShareSpaceResource, isProjectSpaceResource, Resource } from 'web-c
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { SearchResultValue } from 'web-app-search/src/types'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   props: {
     searchResult: {
-      type: Object,
+      type: Object as PropType<SearchResultValue>,
       default: function () {
         return {}
       }
@@ -56,6 +57,7 @@ export default defineComponent({
   setup(props) {
     const { getInternalSpace } = useGetMatchingSpace()
     const previewData = ref()
+
     const resource = computed((): Resource => {
       return {
         ...(props.searchResult.data as Resource),
@@ -65,12 +67,18 @@ export default defineComponent({
           } as Resource))
       }
     })
+
+    const resourceDisabled = computed(() => {
+      return unref(resource).disabled === true
+    })
+
     return {
       ...useFileActions(),
       getInternalSpace,
       hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
-      resource
+      resource,
+      resourceDisabled
     }
   },
   computed: {
@@ -166,6 +174,10 @@ export default defineComponent({
     }
   },
   mounted() {
+    if (this.resourceDisabled) {
+      this.$el.parentElement.classList.add('disabled')
+    }
+
     if (!this.displayThumbnails) {
       return
     }
@@ -205,8 +217,3 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-.files-search-preview {
-  font-size: inherit;
-}
-</style>

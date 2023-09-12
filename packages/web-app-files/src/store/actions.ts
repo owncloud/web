@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 
-import { getParentPaths } from '../helpers/path'
+import { getParentPaths } from 'web-pkg/src/helpers/path'
 import { buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
@@ -17,9 +17,8 @@ import {
 import { WebDAV } from 'web-client/src/webdav'
 import { ClientService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 import { Language } from 'vue3-gettext'
-import { DavProperty } from 'web-client/src/webdav/constants'
-import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
 import { eventBus } from 'web-pkg/src/services/eventBus'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 const allowSharePermissions = (getters) => {
   return (
@@ -83,7 +82,6 @@ export default {
       showMessage,
       showErrorMessage,
       $gettext,
-      $gettextInterpolate,
       $ngettext,
       sourceSpace,
       resources
@@ -101,8 +99,7 @@ export default {
       showMessage,
       showErrorMessage,
       $gettext,
-      $ngettext,
-      $gettextInterpolate
+      $ngettext
     )
     let movedResourcesPromise
     if (context.state.clipboardAction === ClipboardActions.Cut) {
@@ -244,7 +241,7 @@ export default {
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
   },
-  updateCurrentFileShareTypes({ state, getters, commit }) {
+  updateCurrentFileShareTypes({ state, getters, commit, rootState }) {
     const highlighted = getters.highlightedFile
     if (!highlighted || isProjectSpaceResource(highlighted)) {
       return
@@ -255,13 +252,19 @@ export default {
       value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
     })
 
-    const ancestorEntry = state.ancestorMetaData[highlighted.path] ?? null
+    const ancestorEntry =
+      (rootState.runtime.ancestorMetaData.ancestorMetaData as AncestorMetaData)[highlighted.path] ??
+      null
     if (ancestorEntry) {
-      commit('UPDATE_ANCESTOR_FIELD', {
-        path: ancestorEntry.path,
-        field: 'shareTypes',
-        value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
-      })
+      commit(
+        'runtime/ancestorMetaData/UPDATE_ANCESTOR_FIELD',
+        {
+          path: ancestorEntry.path,
+          field: 'shareTypes',
+          value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
+        },
+        { root: true }
+      )
     }
   },
   async changeShare(
@@ -376,7 +379,10 @@ export default {
     }
 
     parentPaths.forEach((queryPath) => {
-      const ancestorMetaData = context.state.ancestorMetaData[queryPath] ?? null
+      const ancestorMetaData =
+        (context.rootState.runtime.ancestorMetaData.ancestorMetaData as AncestorMetaData)[
+          queryPath
+        ] ?? null
       const indirect = path !== queryPath
       const spaceRef = indirect ? ancestorMetaData?.id : storageId
       // no need to fetch cached shares again, only adjust the "indirect" state
@@ -425,7 +431,10 @@ export default {
     context.commit('SET_VERSIONS', response)
   },
 
-  addLink({ commit, dispatch, getters, rootGetters, state }, { path, client, params, storageId }) {
+  addLink(
+    { commit, dispatch, getters, rootGetters, state, rootState },
+    { path, client, params, storageId }
+  ) {
     return new Promise((resolve, reject) => {
       client.shares
         .shareFileWithLink(path, { ...params, spaceRef: storageId })
@@ -442,15 +451,21 @@ export default {
           dispatch('updateCurrentFileShareTypes')
           if (indirect) {
             // we might need to update the share types for the ancestor resource as well
-            const ancestor = state.ancestorMetaData[path] ?? null
+            const ancestor =
+              (rootState.runtime.ancestorMetaData.ancestorMetaData as AncestorMetaData)[path] ??
+              null
             if (ancestor) {
               const { shareTypes } = ancestor
               if (!shareTypes.includes(ShareTypes.link.value)) {
-                commit('UPDATE_ANCESTOR_FIELD', {
-                  path: ancestor.path,
-                  field: 'shareTypes',
-                  value: [...shareTypes, ShareTypes.link.value]
-                })
+                commit(
+                  'runtime/ancestorMetaData/UPDATE_ANCESTOR_FIELD',
+                  {
+                    path: ancestor.path,
+                    field: 'shareTypes',
+                    value: [...shareTypes, ShareTypes.link.value]
+                  },
+                  { root: true }
+                )
               }
             }
           }
@@ -531,45 +546,6 @@ export default {
     if (preview) {
       commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: type, value: preview })
     }
-  },
-
-  loadAncestorMetaData({ commit, state }, { folder, space, client }) {
-    const ancestorMetaData: AncestorMetaData = {
-      [folder.path]: {
-        id: folder.fileId,
-        shareTypes: folder.shareTypes,
-        parentFolderId: folder.parentFolderId,
-        spaceId: space.id,
-        path: folder.path
-      }
-    }
-    const promises = []
-    const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
-    const parentPaths = getParentPaths(folder.path)
-
-    for (const path of parentPaths) {
-      const cachedData = state.ancestorMetaData[path] ?? null
-      if (cachedData?.spaceId === space.id) {
-        ancestorMetaData[path] = cachedData
-        continue
-      }
-
-      promises.push(
-        client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
-          ancestorMetaData[path] = {
-            id: resource.fileId,
-            shareTypes: resource.shareTypes,
-            parentFolderId: resource.parentFolderId,
-            spaceId: space.id,
-            path
-          }
-        })
-      )
-    }
-
-    return Promise.all(promises).then(() => {
-      commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
-    })
   }
 }
 

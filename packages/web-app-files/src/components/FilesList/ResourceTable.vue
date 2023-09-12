@@ -7,7 +7,7 @@
     :data="resources"
     :fields="fields"
     :highlighted="selectedIds"
-    :disabled="disabled"
+    :disabled="disabledResources"
     :sticky="true"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
@@ -209,7 +209,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref, ref } from 'vue'
+import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { basename, dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
@@ -348,14 +348,6 @@ export default defineComponent({
       default: true
     },
     /**
-     * The ids of disabled resources. Null or an empty string/array for no disabled resources.
-     */
-    disabled: {
-      type: [String, Array],
-      required: false,
-      default: null
-    },
-    /**
      * Sets the padding size for x axis
      * @values xsmall, small, medium, large, xlarge
      */
@@ -458,12 +450,26 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
+    const isResourceDisabled = (resource) => {
+      return resource.processing === true
+    }
+
+    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
+      return (
+        props.resources
+          ?.filter((resource) => isResourceDisabled(resource) === true)
+          ?.map((resource) => resource.id) || []
+      )
+    })
+
     return {
       getTagToolTip,
       renameActions,
       renameHandler,
       ViewModeConstants,
       hasTags,
+      disabledResources,
+      isResourceDisabled,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
@@ -683,7 +689,7 @@ export default defineComponent({
       return this.configuration?.options?.displayResourcesLazy
     },
     areAllResourcesSelected() {
-      return this.selectedResources.length === this.resources.length
+      return this.selectedResources.length === this.resources.length - this.disabledResources.length
     },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
@@ -809,6 +815,10 @@ export default defineComponent({
       this.toggleFileSelection(file)
     },
     showContextMenuOnBtnClick(data, item) {
+      if (this.isResourceDisabled(item)) {
+        return false
+      }
+
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
@@ -820,6 +830,11 @@ export default defineComponent({
     },
     showContextMenu(row, event, item) {
       event.preventDefault()
+
+      if (this.isResourceDisabled(item)) {
+        return false
+      }
+
       const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
       if (instance === undefined) {
         return
@@ -843,6 +858,11 @@ export default defineComponent({
        * @property {object} resource The resource for which the event is triggered
        */
       const resource = data[0]
+
+      if (this.isResourceDisabled(resource)) {
+        return
+      }
+
       const eventData = data[1]
       const skipTargetSelection = data[2] ?? false
 
@@ -883,7 +903,11 @@ export default defineComponent({
       if (this.areAllResourcesSelected) {
         return this.emitSelect([])
       }
-      this.emitSelect(this.resources.map((resource) => resource.id))
+      this.emitSelect(
+        this.resources
+          .filter((resource) => !this.disabledResources.includes(resource.id))
+          .map((resource) => resource.id)
+      )
     },
     emitFileClick(resource) {
       const space = this.getMatchingSpace(resource)
@@ -898,9 +922,8 @@ export default defineComponent({
       if (!this.areResourcesClickable) {
         return false
       }
-      return Array.isArray(this.disabled)
-        ? !this.disabled.includes(resourceId)
-        : this.disabled !== resourceId
+
+      return !this.disabledResources.includes(resourceId)
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {
@@ -930,17 +953,16 @@ export default defineComponent({
             )
           : ''
       const description = [shareText, linkText].join(' ')
-      return this.$gettextInterpolate(description, {
+      return this.$gettext(description, {
         resourceType,
         shareCount,
         linkCount
       })
     },
     getOwnerAvatarDescription(resource: Resource) {
-      const translated = this.$gettext('This %{ resourceType } is owned by %{ ownerName }')
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      return this.$gettextInterpolate(translated, {
+      return this.$gettext('This %{ resourceType } is owned by %{ ownerName }', {
         resourceType,
         ownerName: resource.owner[0].displayName
       })
@@ -1224,6 +1246,52 @@ export default defineComponent({
 #files-shared-with-me-declined-section .files-table .oc-table-data-cell-sharedWith {
   @media only screen and (max-width: 1199px) {
     display: none;
+  }
+}
+.oc-resource-icon-status-badge,
+.oc-resource-thumbnail-status-badge {
+  .oc-icon {
+    margin-top: -2px;
+    margin-left: -1.5px;
+    svg {
+      fill: var(--oc-color-background-default) !important;
+    }
+  }
+  .oc-spinner {
+    margin-left: -2px;
+    margin-top: -2px;
+    color: var(--oc-color-background-default) !important;
+  }
+}
+
+// reduce the bottom spacing of the status badge in condensed mode
+.condensed {
+  .oc-resource-icon-status-badge {
+    bottom: 2px !important;
+  }
+}
+// on table row hover change the status badge background color
+.oc-tbody-tr:hover .oc-resource-icon-status-badge {
+  background: var(--oc-color-background-hover) !important;
+  .oc-icon {
+    svg {
+      fill: var(--oc-color-background-hover) !important;
+    }
+  }
+  .oc-spinner {
+    color: var(--oc-color-background-hover) !important;
+  }
+}
+// on table row highlight change the status badge background color
+.oc-table-highlighted .oc-resource-icon-status-badge {
+  background: var(--oc-color-background-highlight) !important;
+  .oc-icon {
+    svg {
+      fill: var(--oc-color-background-highlight) !important;
+    }
+  }
+  .oc-spinner {
+    color: var(--oc-color-background-highlight) !important;
   }
 }
 </style>

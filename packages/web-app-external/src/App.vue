@@ -43,7 +43,7 @@ export default defineComponent({
     const language = useGettext()
     const store = useStore()
 
-    const { $gettext, interpolate: $gettextInterpolate } = language
+    const { $gettext } = language
     const { makeRequest } = useRequest()
 
     const appNameQuery = useRouteQuery('app')
@@ -60,8 +60,7 @@ export default defineComponent({
     })
 
     const iFrameTitle = computed(() => {
-      const translated = $gettext('"%{appName}" app content area')
-      return $gettextInterpolate(translated, {
+      return $gettext('"%{appName}" app content area', {
         appName: unref(applicationName)
       })
     })
@@ -76,7 +75,6 @@ export default defineComponent({
 
     const loadAppUrl = useTask(function* () {
       const fileId = props.resource.fileId
-
       const baseUrl = urlJoin(
         configurationManager.serverUrl,
         unref(capabilities).files.app_providers[0].open_url
