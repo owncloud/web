@@ -199,10 +199,10 @@ export default defineComponent({
           )
           url.value = tmpUrl
         }
+        loading.value = false
       } catch (e) {
         console.error(e)
         loadingError.value = e
-      } finally {
         loading.value = false
       }
     }).restartable()
@@ -333,7 +333,7 @@ export default defineComponent({
         isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',
-        id: 'text-editor-controls-save',
+        id: 'app-save-action',
         label: () => 'Save',
         handler: () => {
           save()
