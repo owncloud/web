@@ -2,7 +2,6 @@ import { shallowMount, mount, defaultPlugins } from 'web-test-helpers'
 import OcTextInput from './OcTextInput.vue'
 import { PasswordPolicy } from '../../helpers'
 import { mock } from 'jest-mock-extended'
-import { bool } from '@noble/hashes/_assert'
 
 const defaultProps = {
   label: 'label'
