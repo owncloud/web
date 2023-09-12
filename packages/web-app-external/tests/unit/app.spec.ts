@@ -5,11 +5,14 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
-import { useRequest } from 'web-pkg/src/composables'
+import { useRequest, useRouteQuery } from 'web-pkg/src/composables'
+import { ref } from 'vue'
+
 import { Resource } from 'web-client'
 import App from '../../src/App.vue'
 
 jest.mock('web-pkg/src/composables/authContext/useRequest')
+jest.mock('web-pkg/src/composables/router/useRouteQuery')
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
 
@@ -36,17 +39,17 @@ describe('The app provider extension', () => {
     jest.clearAllMocks()
   })
 
-  // it('should fail for unauthenticated users', async () => {
-  //   const makeRequest = jest.fn().mockResolvedValue({
-  //     ok: true,
-  //     status: 401,
-  //     message: 'Login Required'
-  //   })
-  //   const { wrapper } = createShallowMountWrapper(makeRequest)
-  //   await wrapper.vm.$nextTick()
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.html()).toMatchSnapshot()
-  // })
+  it('should fail for unauthenticated users', async () => {
+    const makeRequest = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 401,
+      message: 'Login Required'
+    })
+    const { wrapper } = createShallowMountWrapper(makeRequest)
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.html()).toMatchSnapshot()
+  })
   it('should be able to load an iFrame via get', async () => {
     const makeRequest = jest.fn().mockResolvedValue({
       ok: true,
@@ -55,31 +58,31 @@ describe('The app provider extension', () => {
     })
 
     const { wrapper } = createShallowMountWrapper(makeRequest)
-    console.log(wrapper.html())
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
-  // it('should be able to load an iFrame via post', async () => {
-  //   const makeRequest = jest.fn().mockResolvedValue({
-  //     ok: true,
-  //     status: 200,
-  //     data: providerSuccessResponsePost
-  //   })
-  //   const { wrapper } = createShallowMountWrapper(makeRequest)
-  //   console.log(wrapper.html())
-  //   await wrapper.vm.$nextTick()
-  //   await wrapper.vm.$nextTick()
-  //   await wrapper.vm.$nextTick()
-  //   expect(wrapper.html()).toMatchSnapshot()
-  // })
+  it('should be able to load an iFrame via post', async () => {
+    const makeRequest = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      data: providerSuccessResponsePost
+    })
+    const { wrapper } = createShallowMountWrapper(makeRequest)
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 })
 
 function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ status: 200 })) {
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest
   }))
+
+  jest.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
 
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockImplementation(() => ({
