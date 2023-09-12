@@ -5,6 +5,32 @@ const defaultProps = {
   label: 'label'
 }
 
+class basicPasswordPolicy {
+  verified = false
+
+  rules = [{ minLength: {} }]
+  check(password) {
+    const result = password.length >= 8
+    this.verified = result
+    return result
+  }
+
+  missing(password) {
+    const result = this.check(password)
+    this.verified = result
+    return {
+      rules: [
+        {
+          code: 'minLength',
+          message: 'At least %{param1} characters',
+          format: ['8'],
+          verified: result
+        }
+      ]
+    }
+  }
+}
+
 Object.assign(navigator, {
   clipboard: {
     writeText: jest.fn(),
@@ -65,7 +91,6 @@ describe('OcTextInput', () => {
       it('should not exist if type is not "password" or no value entered', () => {
         const wrapper = getMountedWrapper()
         expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
-
         const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
         expect(wrapper2.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
       })
@@ -101,6 +126,36 @@ describe('OcTextInput', () => {
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('text')
         await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('password')
+      })
+    })
+    describe('password policy', () => {
+      it('should emit "passwordChallengeFailed" if password does not match criteria', async () => {
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', passwordPolicy: new basicPasswordPolicy() }
+        })
+        await wrapper.find(selectors.inputField).setValue('pass')
+        expect(wrapper.emitted('passwordChallengeCompleted')).toBeFalsy()
+      })
+      it('should emit "passwordChallengeCompleted" if password matches criteria', async () => {
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', passwordPolicy: new basicPasswordPolicy() }
+        })
+        await wrapper.find(selectors.inputField).setValue('password123')
+        expect(wrapper.emitted('passwordChallengeCompleted')).toBeTruthy()
+      })
+      it('displays error state if password does not match criteria', async () => {
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', passwordPolicy: new basicPasswordPolicy() }
+        })
+        await wrapper.find(selectors.inputField).setValue('pass')
+        expect(wrapper.html()).toMatchSnapshot()
+      })
+      it('displays success state if password matches criteria', async () => {
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', passwordPolicy: new basicPasswordPolicy() }
+        })
+        await wrapper.find(selectors.inputField).setValue('password123')
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
   })
