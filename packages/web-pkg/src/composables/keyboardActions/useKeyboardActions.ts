@@ -1,5 +1,5 @@
 import { useEventListener } from '@vueuse/core'
-import { onBeforeUnmount, onMounted, Ref, ref, unref } from 'vue'
+import { Ref, ref, unref } from 'vue'
 import * as uuid from 'uuid'
 
 export enum Key {
