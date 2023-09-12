@@ -1,22 +1,17 @@
 <template>
-  <div class="oc-width-1-1 oc-height-1-1">
-    <div class="oc-height-1-1">
-      <oc-textarea
-        id="text-editor-input"
-        :model-value="currentContent"
-        name="input"
-        full-width
-        label=""
-        class="oc-height-1-1"
-        :rows="20"
-        :disabled="isReadOnly"
-        @update:model-value="$emit('update:currentContent', $event)"
-      />
-    </div>
-    <div v-if="showPreview" class="">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div id="text-editor-preview" v-html="renderedMarkdown" />
-    </div>
+  <div :class="showPreview ? 'oc-flex' : ''" class="oc-text-editor oc-width-1-1 oc-height-1-1">
+    <oc-textarea
+      id="text-editor-input"
+      :model-value="currentContent"
+      name="input"
+      label=""
+      class="oc-height-1-1"
+      :rows="20"
+      :disabled="isReadOnly"
+      @update:model-value="$emit('update:currentContent', $event)"
+    />
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div v-if="showPreview" id="text-editor-preview" v-html="renderedMarkdown" />
   </div>
 </template>
 
@@ -66,11 +61,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#text-editor-preview {
-  max-height: 100%;
-  overflow-y: auto;
-}
-#text-editor-input {
-  resize: vertical;
+.oc-text-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  @media (min-width: $oc-breakpoint-medium-default) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  #text-editor-preview {
+    max-height: 100%;
+    overflow-y: auto;
+    padding: var(--oc-space-xsmall) var(--oc-space-small);
+    word-break: break-word;
+  }
+
+  #text-editor-input {
+    resize: vertical;
+  }
 }
 </style>
