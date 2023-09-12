@@ -1,7 +1,7 @@
+import { join } from 'path'
 import { SpaceResource } from 'web-client/src'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { getParentPaths } from 'web-pkg/src/helpers/path'
 import { AncestorMetaData } from 'web-pkg/src/types'
 
 const state = {
@@ -20,7 +20,7 @@ const mutations = {
   },
 
   UPDATE_ANCESTOR_FIELD(state, params) {
-    const resource = state.ancestorMetaData[params.path] ?? null
+    const resource = state.ancestorMetaData[params.id] ?? null
     if (resource) {
       resource[params.field] = params.value
     }
@@ -37,7 +37,6 @@ const actions = {
       fileId
     }: { space: SpaceResource; path: string; client: WebDAV; fileId: string }
   ) {
-    const ancestorMetaData: AncestorMetaData = {}
     const davProperties = [
       DavProperty.FileId,
       DavProperty.ShareTypes,
@@ -45,41 +44,58 @@ const actions = {
       DavProperty.Name
     ]
 
-    const addAncestor = async (fileId: string) => {
+    const loadMetaDataValue = async (fileId: string) => {
       const { resource } = await client.listFiles(
         space,
-        { fileId, path },
+        {
+          ...(fileId && { fileId }),
+          ...(!fileId && path && { path })
+        },
         { depth: 0, davProperties }
       )
-      ancestorMetaData[resource.fileId] = {
+      const value = {
         id: resource.fileId,
         shareTypes: resource.shareTypes,
         parentFolderId: resource.parentFolderId,
         spaceId: space.id.toString(),
-        name: resource.name
+        name: resource.name,
+        path: ''
       }
-      return resource
+      ancestorMetaData[resource.fileId] = value
+      return value
     }
 
-    let resource = await addAncestor(fileId)
-    while (resource.parentFolderId && resource.parentFolderId !== resource.storageId) {
-      const cachedData = state.ancestorMetaData[resource.parentFolderId]
-      // TODO: still need the space check?
-      if (cachedData?.spaceId === space.id) {
-        ancestorMetaData[resource.parentFolderId] = cachedData
+    const ancestorMetaData: AncestorMetaData = {}
+
+    let value = await loadMetaDataValue(fileId)
+    const ancestorList = [value]
+    while (value && value.parentFolderId !== value.spaceId) {
+      const lastValue = value
+      const cachedData = (state.ancestorMetaData as AncestorMetaData)[value.parentFolderId]
+      // FIXME: checking for Boolean(cachedData) should be enough, space id should be contained in the file/folder id
+      if (cachedData && cachedData?.spaceId === space.id) {
+        value = { ...cachedData }
+        ancestorMetaData[lastValue.parentFolderId] = value
+        ancestorList.unshift(value)
         continue
       }
-      const oldResource = resource
+
       try {
-        resource = await addAncestor(resource.parentFolderId)
+        value = await loadMetaDataValue(value.parentFolderId)
+        ancestorMetaData[value.parentFolderId] = value
+        ancestorList.unshift(value)
       } catch (e) {
         console.error(e)
-        ancestorMetaData[oldResource.fileId].parentFolderId = null
+        ancestorMetaData[lastValue.id].parentFolderId = null
         break
       }
     }
 
-    console.log('ancestorMetaData', ancestorMetaData)
+    ancestorList[0].path = `/`
+    for (let i = 1; i < ancestorList.length; i++) {
+      ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
+    }
+
     commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
   }
 }

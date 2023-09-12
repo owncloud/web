@@ -259,7 +259,7 @@ export default {
       commit(
         'runtime/ancestorMetaData/UPDATE_ANCESTOR_FIELD',
         {
-          path: ancestorEntry.path,
+          id: ancestorEntry.id,
           field: 'shareTypes',
           value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
         },
@@ -460,7 +460,7 @@ export default {
                 commit(
                   'runtime/ancestorMetaData/UPDATE_ANCESTOR_FIELD',
                   {
-                    path: ancestor.path,
+                    id: ancestor.id,
                     field: 'shareTypes',
                     value: [...shareTypes, ShareTypes.link.value]
                   },

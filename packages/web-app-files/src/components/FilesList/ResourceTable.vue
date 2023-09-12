@@ -211,7 +211,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { basename, dirname } from 'path'
+import { dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
 import {

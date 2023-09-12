@@ -46,12 +46,22 @@ export class FolderLoaderSpace implements FolderLoader {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
         let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
-          fileId
+          fileId,
+          path
         })
 
-        const mountPoint = store.getters['runtime/spaces/spaces'].find(
-          (s) => isMountPointSpaceResource(s) && path.startsWith(s.root.remoteItem.path)
-        )
+        currentFolder.path = path
+
+        // space
+        const mountPoint = store.getters['runtime/spaces/spaces'].find((s) => {
+          return (
+            isMountPointSpaceResource(s) &&
+            (s.root.remoteItem as any).rootId === currentFolder.storageId &&
+            path.startsWith(s.root.remoteItem.path)
+          )
+        })
+
+        // FIXME: does this still work / have effect?!
         if (mountPoint && !configurationManager.options.routing.fullShareOwnerPaths) {
           currentFolder.path = mountPoint.root.remoteItem.path
           const hiddenPath = currentFolder.path.split('/').slice(0, -1).join('/')
@@ -62,17 +72,13 @@ export class FolderLoaderSpace implements FolderLoader {
             r.path = urlJoin(path, r.path)
             r.visiblePath = r.path.replace(`/${hiddenPath}`, '')
           })
-        } else {
-          currentFolder.path = path
-          resources.forEach((r) => {
-            r.path = urlJoin(path, r.path)
-          })
         }
 
-        // if current folder has no id (= singe file public link) we must not correct the route
-        if (currentFolder.id) {
-          yield replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
-        }
+        // // if current folder has no id (= singe file public link) we must not correct the route
+        // if (currentFolder.id) {
+        //   console.log('currentFolder.id', currentFolder.id)
+        //   yield replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
+        // }
 
         if (path === '/') {
           if (space.driveType === 'share') {

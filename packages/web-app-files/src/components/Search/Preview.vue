@@ -29,7 +29,7 @@ import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
-import { basename, dirname } from 'path'
+import { dirname } from 'path'
 import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
 import {
   extractParentFolderName,

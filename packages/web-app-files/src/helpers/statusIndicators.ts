@@ -70,10 +70,20 @@ export const getIndicators = ({
   ancestorMetaData: AncestorMetaData
 }) => {
   const indicators = []
-  const parentShareTypes = Object.values(ancestorMetaData).reduce((acc: any, data: any) => {
+  let ancestor = ancestorMetaData[resource.parentFolderId]
+  const ancestors = []
+  while (ancestor && ancestor.parentFolderId !== ancestor.spaceId) {
+    ancestor = ancestorMetaData[ancestor.parentFolderId]
+    if (ancestor) {
+      ancestors.unshift(ancestor)
+    }
+  }
+
+  const parentShareTypes = ancestors.reduce((acc: any, data: any) => {
     acc.push(...(data.shareTypes || []))
     return acc
   }, [])
+
   const isDirectUserShare = isUserShare(resource.shareTypes)
   if (isDirectUserShare || isUserShare(parentShareTypes)) {
     indicators.push(getUserIndicator({ resource, isDirect: isDirectUserShare }))

@@ -191,7 +191,7 @@ import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
+import { breadcrumbsFor, breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { AncestorMetaData, ResourceTransfer, TransferType } from '../../helpers/resource'
@@ -346,17 +346,6 @@ export default defineComponent({
             })
           })
         }
-      } else if (isMountPointSpaceResource(space)) {
-        // FIXME: Remove?
-        spaceBreadcrumbItem = {
-          id: uuidv4(),
-          allowContextActions: true,
-          text: space.driveAlias.split('/')[1],
-          to: createLocationSpaces('files-spaces-generic', {
-            params,
-            query: omit(query, 'fileId')
-          })
-        }
       } else if (isPublicSpaceResource(space)) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
@@ -379,12 +368,18 @@ export default defineComponent({
         }
       }
 
-      return concatBreadcrumbs(
+      const concatted = concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
         // FIXME: needs file ids for each parent folder path
-        ...breadcrumbsFromPath(unref(route), props.item, unref(ancestorMetaData))
+        ...breadcrumbsFor(
+          unref(route),
+          props.itemId?.toString(),
+          props.item,
+          unref(ancestorMetaData)
+        )
       )
+      return concatted
     })
 
     const focusAndAnnounceBreadcrumb = (sameRoute) => {

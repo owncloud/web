@@ -2,33 +2,57 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { RouteLocation } from 'vue-router'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { v4 as uuidv4 } from 'uuid'
-import { AncestorMetaData } from 'web-app-files/src/helpers/resource'
 import omit from 'lodash-es/omit'
+import { AncestorMetaData } from 'web-pkg/src/types'
+import { join } from 'path'
 
-export const breadcrumbsFromPath = (
+export const breadcrumbsFor = (
   currentRoute: RouteLocation,
+  resourceId: string,
   resourcePath: string,
-  anbestorMetaData: AncestorMetaData
+  ancestorMetaData: AncestorMetaData
 ): BreadcrumbItem[] => {
+  // if the resource is no file id but a storageId we have no breadcrumbs
+  if (resourceId && !resourceId.includes('!')) {
+    return []
+  }
+
   const pathSplit = (p = '') => p.split('/').filter(Boolean)
   const current = pathSplit(currentRoute.path)
-  const resource = pathSplit(resourcePath)
 
-  return resource.map(
-    (text, i) =>
-      ({
-        id: uuidv4(),
-        allowContextActions: true,
-        text,
-        ...(i >= resource.length - Object.keys(anbestorMetaData).length && {
-          to: {
-            path: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/'),
-            query: omit(currentRoute.query, 'fileId', 'page') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
-          }
-        }),
-        isStaticNav: false
-      } as BreadcrumbItem)
-  )
+  const breadcrumbs = [] as BreadcrumbItem[]
+  let currentAncestorMetaDataValue
+  if (resourceId) {
+    currentAncestorMetaDataValue = ancestorMetaData[resourceId]
+  } else {
+    currentAncestorMetaDataValue = Object.values(ancestorMetaData).find((v) => {
+      return v.path === resourcePath
+    })
+  }
+
+  // FIXME: triggers flickering ...
+  if (!currentAncestorMetaDataValue) {
+    return []
+  }
+
+  const basePath =
+    '/' + current.slice(0, -pathSplit(currentAncestorMetaDataValue.path).length).join('/')
+  while (currentAncestorMetaDataValue && currentAncestorMetaDataValue.path !== '/') {
+    const item: BreadcrumbItem = {
+      id: uuidv4(),
+      allowContextActions: true,
+      text: currentAncestorMetaDataValue.name,
+      to: {
+        path: join(basePath, currentAncestorMetaDataValue.path),
+        query: { ...omit(currentRoute.query, 'page'), fileId: currentAncestorMetaDataValue.id }
+      },
+      isStaticNav: false
+    } as BreadcrumbItem
+    breadcrumbs.unshift(item)
+    currentAncestorMetaDataValue = ancestorMetaData[currentAncestorMetaDataValue.parentFolderId]
+  }
+
+  return breadcrumbs
 }
 
 export const concatBreadcrumbs = (...items: BreadcrumbItem[]): BreadcrumbItem[] => {
