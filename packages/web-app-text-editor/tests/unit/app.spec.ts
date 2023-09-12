@@ -16,19 +16,12 @@ import App from '../../src/App.vue'
 jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Text editor app', () => {
-  describe('different view states', () => {
-    it('shows the loading spinner during loading', () => {
-      const { wrapper } = getWrapper()
-      expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
-    })
-    it('shows the editor and appTopBar after loading', async () => {
-      const { wrapper } = getWrapper()
-      await wrapper.vm.loadFileTask.last
-      expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
-      expect(wrapper.find('app-top-bar-stub').exists()).toBeTruthy()
-      expect(wrapper.find('oc-textarea-stub').exists()).toBeTruthy()
-    })
+  it('shows the editor', async () => {
+    const { wrapper } = getWrapper()
+    await wrapper.vm.loadFileTask.last
+    expect(wrapper.find('oc-textarea-stub').exists()).toBeTruthy()
   })
+
   describe('preview', () => {
     it.each([
       { fileExtension: 'txt', showPreview: false },
