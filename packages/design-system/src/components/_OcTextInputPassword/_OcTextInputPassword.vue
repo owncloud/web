@@ -50,7 +50,7 @@ import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { useGettext } from 'vue3-gettext'
-import { PasswordPolicy } from './../../helpers'
+import { PasswordPolicy } from '../../helpers'
 export default defineComponent({
   name: 'OCTextInputPassword',
   components: { OcButton, OcIcon },

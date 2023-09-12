@@ -1,6 +1,6 @@
 import { shallowMount, mount, defaultPlugins } from 'web-test-helpers'
 import OcTextInput from './OcTextInput.vue'
-import { PasswordPolicy } from './../../helpers'
+import { PasswordPolicy } from '../../helpers'
 import { mock } from 'jest-mock-extended'
 
 const defaultProps = {
@@ -106,15 +106,39 @@ describe('OcTextInput', () => {
     })
     describe('password policy', () => {
       it('should emit "passwordChallengeFailed" if password does not match criteria', async () => {
+        const passwordPolicyMock = mock<PasswordPolicy>()
+        passwordPolicyMock.check.mockReturnValue(false)
+        passwordPolicyMock.missing.mockReturnValue({
+          rules: [
+            {
+              code: 'minLength',
+              message: 'At least %{param1} characters',
+              format: ['8'],
+              verified: false
+            }
+          ]
+        })
         const wrapper = getMountedWrapper({
-          props: { type: 'password', passwordPolicy: new basicPasswordPolicy() }
+          props: { type: 'password', passwordPolicy: passwordPolicyMock }
         })
         await wrapper.find(selectors.inputField).setValue('pass')
         expect(wrapper.emitted('passwordChallengeCompleted')).toBeFalsy()
       })
       it('should emit "passwordChallengeCompleted" if password matches criteria', async () => {
+        const passwordPolicyMock = mock<PasswordPolicy>()
+        passwordPolicyMock.missing.mockReturnValue({
+          rules: [
+            {
+              code: 'minLength',
+              message: 'At least %{param1} characters',
+              format: ['8'],
+              verified: true
+            }
+          ]
+        })
+        passwordPolicyMock.check.mockReturnValue(true)
         const wrapper = getMountedWrapper({
-          props: { type: 'password', passwordPolicy: new basicPasswordPolicy() }
+          props: { type: 'password', passwordPolicy: passwordPolicyMock }
         })
         await wrapper.find(selectors.inputField).setValue('password123')
         expect(wrapper.emitted('passwordChallengeCompleted')).toBeTruthy()
