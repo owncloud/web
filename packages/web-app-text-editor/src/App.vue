@@ -1,6 +1,6 @@
 <template>
   <div class="oc-width-1-1 oc-height-1-1">
-    <div v-if="resource" class="oc-height-1-1">
+    <div class="oc-height-1-1">
       <oc-textarea
         id="text-editor-input"
         :model-value="currentContent"

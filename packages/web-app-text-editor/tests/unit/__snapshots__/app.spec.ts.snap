@@ -2,7 +2,9 @@
 
 exports[`Text editor app shows the editor 1`] = `
 <div class="oc-width-1-1 oc-height-1-1">
-  <!--v-if-->
+  <div class="oc-height-1-1">
+    <oc-textarea class="oc-height-1-1" disabled="false" full-width="" id="text-editor-input" label="" name="input" rows="20"></oc-textarea>
+  </div>
   <!--v-if-->
 </div>
 `;
