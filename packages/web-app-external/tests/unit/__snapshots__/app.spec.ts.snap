@@ -17,15 +17,3 @@ exports[`The app provider extension should fail for unauthenticated users 1`] = 
 
 <!--v-if-->
 `;
-
-exports[`The app provider extension should show a loading spinner while loading 1`] = `
-<!--v-if-->
-
-<!--v-if-->
-`;
-
-exports[`The app provider extension should show a meaningful message if an error occurs during loading 1`] = `
-<!--v-if-->
-
-<!--v-if-->
-`;

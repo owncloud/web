@@ -86,10 +86,14 @@ export default defineComponent({
         ...(unref(applicationName) && { app_name: unref(applicationName) })
       })
 
+      console.log(query)
+
       const url = `${baseUrl}?${query}`
       const response = yield makeRequest('POST', url, {
         validateStatus: () => true
       })
+
+      console.log(url, response.status, response.data)
 
       if (response.status !== 200) {
         switch (response.status) {
@@ -117,6 +121,9 @@ export default defineComponent({
 
       appUrl.value = response.data.app_url
       method.value = response.data.method
+
+      console.log(appUrl.value, method.value)
+
       if (response.data.form_parameters) {
         formParameters.value = response.data.form_parameters
       }
@@ -131,6 +138,7 @@ export default defineComponent({
     watch(
       props.resource,
       () => {
+        console.log('loadAppUrl', props)
         loadAppUrl.perform()
       },
       { immediate: true }
