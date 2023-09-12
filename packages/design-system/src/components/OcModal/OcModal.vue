@@ -106,7 +106,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
-import { PasswordPolicy } from '../_OcTextInputPassword/_OcTextInputPassword.vue'
+import { PasswordPolicy } from '../../helpers'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.

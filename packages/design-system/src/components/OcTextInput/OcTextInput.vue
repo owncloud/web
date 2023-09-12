@@ -77,9 +77,8 @@ import { defineComponent, HTMLAttributes, PropType } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
-import OcTextInputPassword, {
-  PasswordPolicy
-} from '../_OcTextInputPassword/_OcTextInputPassword.vue'
+import OcTextInputPassword from '../_OcTextInputPassword/_OcTextInputPassword.vue'
+import { PasswordPolicy } from '../../helpers'
 
 /**
  * Form Inputs are used to allow users to provide text input when the expected

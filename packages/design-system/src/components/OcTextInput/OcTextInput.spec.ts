@@ -1,5 +1,7 @@
 import { shallowMount, mount, defaultPlugins } from 'web-test-helpers'
 import OcTextInput from './OcTextInput.vue'
+import { PasswordPolicy } from '../../helpers'
+import { mock } from 'jest-mock-extended'
 
 const defaultProps = {
   label: 'label'
@@ -22,7 +24,24 @@ describe('OcTextInput', () => {
     })
   }
 
-  function getMountedWrapper(options = {}) {
+  function getMountedWrapper(options = {} as any, passwordPolicy = { active: false, pass: false }) {
+    const passwordPolicyMock = mock<PasswordPolicy>()
+    passwordPolicyMock.missing.mockReturnValueOnce({
+      rules: [
+        {
+          code: 'minLength',
+          message: 'At least %{param1} characters',
+          format: ['8'],
+          verified: passwordPolicy.pass
+        }
+      ]
+    })
+    passwordPolicyMock.check.mockReturnValueOnce(passwordPolicy.pass)
+
+    if (passwordPolicy.active) {
+      options.props = { ...(options.props || {}), passwordPolicy: passwordPolicyMock }
+    }
+
     return mount(OcTextInput, {
       ...options,
       global: {
@@ -65,7 +84,6 @@ describe('OcTextInput', () => {
       it('should not exist if type is not "password" or no value entered', () => {
         const wrapper = getMountedWrapper()
         expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
-
         const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
         expect(wrapper2.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
       })
@@ -101,6 +119,48 @@ describe('OcTextInput', () => {
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('text')
         await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('password')
+      })
+    })
+    describe('password policy', () => {
+      it('should emit "passwordChallengeFailed" if password does not match criteria', async () => {
+        const wrapper = getMountedWrapper(
+          {
+            props: { type: 'password' }
+          },
+          { active: true, pass: false }
+        )
+        await wrapper.find(selectors.inputField).setValue('pass')
+        expect(wrapper.emitted('passwordChallengeCompleted')).toBeFalsy()
+      })
+      it('should emit "passwordChallengeCompleted" if password matches criteria', async () => {
+        const wrapper = getMountedWrapper(
+          {
+            props: { type: 'password' }
+          },
+          { active: true, pass: true }
+        )
+        await wrapper.find(selectors.inputField).setValue('password123')
+        expect(wrapper.emitted('passwordChallengeCompleted')).toBeTruthy()
+      })
+      it('displays error state if password does not match criteria', async () => {
+        const wrapper = getMountedWrapper(
+          {
+            props: { type: 'password' }
+          },
+          { active: true, pass: false }
+        )
+        await wrapper.find(selectors.inputField).setValue('pass')
+        expect(wrapper.html()).toMatchSnapshot()
+      })
+      it('displays success state if password matches criteria', async () => {
+        const wrapper = getMountedWrapper(
+          {
+            props: { type: 'password' }
+          },
+          { active: true, pass: true }
+        )
+        await wrapper.find(selectors.inputField).setValue('password123')
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
   })
