@@ -73,7 +73,6 @@ export class PasswordPolicyService {
       ),
       minDigits: Math.max(this.capability.min_digits || 0, DEFAULT_MIN_DIGITS)
     }
-    console.log(this.generatePasswordRules)
   }
 
   private buildPolicy(): void {
