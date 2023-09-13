@@ -1,0 +1,9 @@
+Enhancement: Application unification
+
+The existing apps have been refactored and their common functionality has been extracted.
+This enables developers to more easily create custom apps, and brings unified behavior like auto-saving, shortcut handling and success/error messages across all file viewer/editor apps.
+
+https://github.com/owncloud/web/issues/9302
+https://github.com/owncloud/web/issues/9303
+https://github.com/owncloud/web/issues/9617
+https://github.com/owncloud/web/pull/9485

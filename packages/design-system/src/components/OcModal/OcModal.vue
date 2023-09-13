@@ -66,8 +66,8 @@
 
         <div class="oc-modal-body-actions oc-flex oc-flex-right">
           <oc-button
-            class="oc-modal-body-actions-cancel"
             ref="cancelButton"
+            class="oc-modal-body-actions-cancel"
             :variation="buttonCancelVariation"
             :appearance="buttonCancelAppearance"
             @click="cancelModalAction"
@@ -390,12 +390,6 @@ export default defineComponent({
     'passwordChallengeCompleted',
     'passwordChallengeFailed'
   ],
-  data() {
-    return {
-      userInputValue: null,
-      checkboxValue: false
-    }
-  },
   setup() {
     const primaryButton = ref(null)
     const secondaryButton = ref(null)
@@ -429,6 +423,12 @@ export default defineComponent({
       primaryButton,
       secondaryButton,
       cancelButton
+    }
+  },
+  data() {
+    return {
+      userInputValue: null,
+      checkboxValue: false
     }
   },
   computed: {

@@ -29,7 +29,7 @@
           <span
             v-else
             key="set-expiration-date-label"
-            v-text="$gettextInterpolate($gettext('Expires %{expires}'), { expires: dateExpire })"
+            v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
           />
         </oc-button>
       </template>

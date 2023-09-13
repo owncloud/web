@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text editor app shows the editor 1`] = `
+<div class="oc-text-editor--no-preview oc-text-editor oc-width-1-1 oc-height-1-1">
+  <oc-textarea class="oc-height-1-1" disabled="false" id="text-editor-input" label="" name="input" rows="20"></oc-textarea> <!-- eslint-disable-next-line vue/no-v-html -->
+  <!--v-if-->
+</div>
+`;
