@@ -17,6 +17,7 @@ Summary
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
+* Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
@@ -102,6 +103,18 @@ Details
    https://github.com/owncloud/web/issues/7600
    https://github.com/owncloud/web/issues/7601
    https://github.com/owncloud/web/pulls/8145
+
+* Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
+
+   The existing apps have been refactored and their common functionality has been extracted.
+   This enables developers to more easily create custom apps, and brings unified behavior like
+   auto-saving, shortcut handling and success/error messages across all file viewer/editor
+   apps.
+
+   https://github.com/owncloud/web/issues/9302
+   https://github.com/owncloud/web/issues/9303
+   https://github.com/owncloud/web/issues/9617
+   https://github.com/owncloud/web/pull/9485
 
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 
