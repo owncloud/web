@@ -44,12 +44,34 @@ export class PasswordPolicyService {
   }
 
   private buildGeneratePasswordRules(): void {
+    const DEFAULT_LENGTH = 12
+    const DEFAULT_MIN_LOWERCASE_CHARACTERS = 2
+    const DEFAULT_MIN_UPPERCASE_CHARACTERS = 2
+    const DEFAULT_MIN_SPECIAL_CHARACTERS = 2
+    const DEFAULT_MIN_DIGITS = 2
+
     this.generatePasswordRules = {
-      length: Math.max(this.capability.min_characters || 0, 12),
-      minLowercaseCharacters: Math.max(this.capability.min_lowercase_characters || 0, 2),
-      minUppercaseCharacters: Math.max(this.capability.min_uppercase_characters || 0, 2),
-      minSpecialCharacters: Math.max(this.capability.min_special_characters || 0, 2),
-      minDigits: Math.max(this.capability.min_digits || 0, 2)
+      length: Math.max(
+        this.capability.min_characters || 0,
+        (this.capability.min_lowercase_characters || 0) +
+          (this.capability.min_uppercase_characters || 0) +
+          (this.capability.min_digits || 0) +
+          (this.capability.min_special_characters || 0),
+        DEFAULT_LENGTH
+      ),
+      minLowercaseCharacters: Math.max(
+        this.capability.min_lowercase_characters || 0,
+        DEFAULT_MIN_LOWERCASE_CHARACTERS
+      ),
+      minUppercaseCharacters: Math.max(
+        this.capability.min_uppercase_characters || 0,
+        DEFAULT_MIN_UPPERCASE_CHARACTERS
+      ),
+      minSpecialCharacters: Math.max(
+        this.capability.min_special_characters || 0,
+        DEFAULT_MIN_SPECIAL_CHARACTERS
+      ),
+      minDigits: Math.max(this.capability.min_digits || 0, DEFAULT_MIN_DIGITS)
     }
     console.log(this.generatePasswordRules)
   }

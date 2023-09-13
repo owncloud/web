@@ -1,11 +1,6 @@
 <template>
   <div class="oc-text-input-password-wrapper">
-    <input
-      ref="input"
-      v-bind="attributes"
-      :type="showPassword ? 'text' : 'password'"
-      v-model="password"
-    />
+    <input v-bind="$attrs" :type="showPassword ? 'text' : 'password'" v-model="password" />
     <oc-button
       v-if="password"
       class="oc-text-input-copy-password-button oc-px-s oc-background-default"
@@ -89,22 +84,17 @@ export default defineComponent({
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
   setup(props, { emit, attrs }) {
     const { $gettext } = useGettext()
-    const input = ref(null)
+    const password = ref(props.value)
     const showPassword = ref(false)
     const passwordEntered = ref(false)
-    const password = ref(props.value)
     const copyPasswordIconInitial = 'file-copy'
     const copyPasswordIcon = ref(copyPasswordIconInitial)
+
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
     })
     const testedPasswordPolicy = computed(() => {
       return props.passwordPolicy.missing(unref(password))
-    })
-
-    const attributes = computed(() => {
-      console.log(attrs)
-      return attrs
     })
 
     const getPasswordPolicyRuleMessage = (rule) => {
@@ -124,10 +114,9 @@ export default defineComponent({
     }
 
     const showGeneratedPassword = () => {
-      console.log("SHOW")
       const generatedPassword = props.generatePasswordMethod()
-      showPassword.value = true
       password.value = generatedPassword
+      showPassword.value = true
     }
 
     watch(password, (value) => {
@@ -146,7 +135,6 @@ export default defineComponent({
 
     return {
       $gettext,
-      input,
       password,
       showPassword,
       showPasswordPolicyInformation,
@@ -154,8 +142,7 @@ export default defineComponent({
       getPasswordPolicyRuleMessage,
       copyPasswordToClipboard,
       showGeneratedPassword,
-      copyPasswordIcon,
-      attributes
+      copyPasswordIcon
     }
   }
 })
