@@ -59,7 +59,7 @@ export const concatBreadcrumbs = (...items: BreadcrumbItem[]): BreadcrumbItem[] 
   const last = items.pop()
 
   return [
-    ...items,
+    ...items.filter(Boolean),
     {
       id: uuidv4(),
       allowContextActions: last.allowContextActions,

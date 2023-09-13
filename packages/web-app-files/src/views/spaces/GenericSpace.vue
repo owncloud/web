@@ -315,7 +315,7 @@ export default defineComponent({
           to: createLocationSpaces('files-spaces-projects'),
           isStaticNav: true
         })
-      } else if (isMountPointSpaceResource(space)) {
+      } else if (isPersonalSpaceResource(space) && space.ownerId !== store.getters.user.uuid) {
         rootBreadcrumbItems.push(
           {
             id: uuidv4(),
@@ -335,7 +335,7 @@ export default defineComponent({
       let spaceBreadcrumbItem: BreadcrumbItem
       let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
       query = omit({ ...unref(route).query, ...query }, 'page')
-      if (isPersonalSpaceResource(space)) {
+      if (isPersonalSpaceResource(space) && space.ownerId === store.getters.user.uuid) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           text: space.name,
@@ -356,7 +356,7 @@ export default defineComponent({
           }),
           isStaticNav: true
         }
-      } else {
+      } else if (isProjectSpaceResource(space)) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           allowContextActions: !unref(hasSpaceHeader),
