@@ -10,7 +10,12 @@
       appearance="raw"
       @click="isToggle ? $emit('toggleFilter') : false"
     >
-      <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
+      <oc-icon
+        :class="{ 'filter-check-active': filterActive, 'filter-check-inactive': !filterActive }"
+        name="check"
+        size="small"
+        color="var(--oc-color-text-inverse)"
+      />
       <span
         class="oc-text-truncate oc-filter-chip-label"
         v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterLabel"
@@ -159,5 +164,14 @@ export default defineComponent({
     background-color: transparent !important;
     border: none !important;
   }
+}
+.filter-check-active {
+  transition: all 0.15s;
+  transform: scale(1) !important;
+}
+.filter-check-inactive {
+  transition: all 0.15;
+  transform: scale(0) !important;
+  width: 0px !important;
 }
 </style>
