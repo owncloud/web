@@ -166,11 +166,11 @@ export default defineComponent({
   }
 }
 .oc-filter-check-icon-active {
-  transition: all 0.25s cubic-bezier(0.51, 0.06, 0.56, 2.5);
+  transition: all 0.25s ease-in;
   transform: scale(1) !important;
 }
 .oc-filter-check-icon-inactive {
-  transition: all 0.25 cubic-bezier(0.51, 0.06, 0.56, 2.5);
+  transition: all 0.25 ease-in;
   transform: scale(0) !important;
   width: 0px !important;
 }
