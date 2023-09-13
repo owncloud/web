@@ -61,6 +61,11 @@ export default defineComponent({
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
       default: () => ({})
+    },
+    generatePasswordMethod: {
+      type: Function,
+      required: false,
+      default: null
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
@@ -81,6 +86,7 @@ export default defineComponent({
     const onInput = (event) => {
       passwordEntered.value = true
       password.value = event.target.value
+      console.log(this.generatePasswordMethod())
     }
 
     const getPasswordPolicyRuleMessage = (rule) => {

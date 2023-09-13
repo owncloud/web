@@ -16,6 +16,7 @@
       :input-description="modal.inputDescription"
       :input-placeholder="modal.inputPlaceholder"
       :input-password-policy="modal.inputPasswordPolicy"
+      :input-generate-password-method="modal.generatePasswordMethod"
       :input-disabled="modal.inputDisabled"
       :input-error="modal.inputError"
       :input-label="modal.inputLabel"
