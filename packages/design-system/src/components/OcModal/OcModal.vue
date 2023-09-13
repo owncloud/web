@@ -373,7 +373,7 @@ export default defineComponent({
       default: () => ({})
     },
     /**
-     * Method to generate random password
+     * Method to generate random password for the input
      */
     inputGeneratePasswordMethod: {
       type: Function,
