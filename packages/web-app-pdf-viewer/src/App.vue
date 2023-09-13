@@ -1,5 +1,5 @@
 <template>
-  <object class="pdf-viewer oc-width-1-1 oc-height-1-1" :data="url" type="application/pdf" />
+  <object class="pdf-viewer oc-width-1-1 oc-height-1-1" :data="url" :type="objectType" />
 </template>
 
 <script lang="ts">
@@ -15,8 +15,8 @@ export default defineComponent({
   setup() {
     const isSafari =
       navigator.userAgent?.includes('Safari') && !navigator.userAgent?.includes('Chrome')
-
     const objectType = isSafari ? undefined : 'application/pdf'
+
     return {
       objectType
     }
