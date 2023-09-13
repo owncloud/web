@@ -32,7 +32,7 @@ const actions = {
     { commit, state },
     {
       space,
-      path, // TODO: remove?
+      path,
       client,
       fileId
     }: { space: SpaceResource; path: string; client: WebDAV; fileId: string }
@@ -45,14 +45,12 @@ const actions = {
     ]
 
     const loadMetaDataValue = async (fileId: string) => {
-      const { resource } = await client.listFiles(
-        space,
-        {
-          ...(fileId && { fileId }),
-          ...(!fileId && path && { path })
-        },
-        { depth: 0, davProperties }
-      )
+      const options = {
+        ...(fileId && { fileId }),
+        ...(!fileId && path && { path })
+      }
+
+      const { resource } = await client.listFiles(space, options, { depth: 0, davProperties })
       const value = {
         id: resource.fileId,
         shareTypes: resource.shareTypes,

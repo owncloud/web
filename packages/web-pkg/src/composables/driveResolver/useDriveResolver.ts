@@ -12,7 +12,7 @@ import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService, useConfigurationManager } from 'web-pkg/src/composables'
 import { AncestorMetaData } from 'web-pkg/src/types'
 
 interface DriveResolverOptions {
@@ -40,6 +40,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
   const loading = ref(false)
+  const configurationManager = useConfigurationManager()
 
   const findMatchingMountPoint = (id: string | number): SpaceResource => {
     return store.getters['runtime/spaces/spaces'].find(
@@ -68,7 +69,42 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
   const currentAncestorRequest = {
     spaceId: null,
-    fileId: null
+    fileId: null,
+    path: null
+  }
+
+  const loadAncestorMetaData = async ({
+    space,
+    fileId,
+    path
+  }: {
+    space: SpaceResource
+    fileId?: string
+    path?: string
+  }) => {
+    if (
+      currentAncestorRequest.spaceId === space.id &&
+      (currentAncestorRequest.fileId === fileId || currentAncestorRequest.path === path)
+    ) {
+      return
+    }
+
+    // TODO: cancel ongoing request
+
+    loading.value = true
+
+    currentAncestorRequest.spaceId = space.id
+    currentAncestorRequest.fileId = fileId
+    currentAncestorRequest.path = item
+
+    await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
+      space: space,
+      client: clientService.webdav,
+      fileId,
+      path
+    })
+
+    loading.value = false
   }
 
   watch(
@@ -83,9 +119,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       const isOnlyItemPathChanged =
         unref(space) && driveAliasAndItem.startsWith(unref(space).driveAlias)
       if (isOnlyItemPathChanged) {
-        item.value = urlJoin(driveAliasAndItem.slice(unref(space).driveAlias.length), {
+        const path = urlJoin(driveAliasAndItem.slice(unref(space).driveAlias.length), {
           leadingSlash: true
         })
+        item.value = path
+        await loadAncestorMetaData({ space: unref(space), fileId: unref(fileId) })
         return
       }
 
@@ -133,32 +171,16 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
           if (
             isPersonalSpaceResource(matchingSpace) &&
-            matchingSpace.ownerId !== store.getters.user.uuid
+            matchingSpace.ownerId !== store.getters.user.uuid &&
+            !configurationManager.options.routing.fullShareOwnerPaths
           ) {
-            if (
-              currentAncestorRequest.fileId === unref(fileId) &&
-              currentAncestorRequest.spaceId === matchingSpace.id
-            ) {
-              return
-            }
-            currentAncestorRequest.fileId = unref(fileId)
-            currentAncestorRequest.spaceId = matchingSpace.id
-            await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
-              space: matchingSpace,
-              client: clientService.webdav,
-              fileId: unref(fileId)
-            })
+            await loadAncestorMetaData({ space: matchingSpace, fileId: unref(fileId) })
             const mountPoint = findMountPoint(unref(fileId))
             path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
             path = `${urlJoin(mountPoint.root.remoteItem.path, path.split('/').slice(3).join('/'))}`
           } else {
             path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
-            await store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
-              path,
-              space: matchingSpace,
-              client: clientService.webdav,
-              fileId: unref(fileId)
-            })
+            await loadAncestorMetaData({ space: matchingSpace, fileId: unref(fileId), path })
           }
         }
       }
