@@ -11,7 +11,7 @@
       @click="isToggle ? $emit('toggleFilter') : false"
     >
       <oc-icon
-        :class="{ 'filter-check-active': filterActive, 'filter-check-inactive': !filterActive }"
+        :class="filterActive ? 'oc-filter-check-icon-active' : 'oc-filter-check-icon-inactive'"
         name="check"
         size="small"
         color="var(--oc-color-text-inverse)"
@@ -165,11 +165,11 @@ export default defineComponent({
     border: none !important;
   }
 }
-.filter-check-active {
+.oc-filter-check-icon-active {
   transition: all 0.15s;
   transform: scale(1) !important;
 }
-.filter-check-inactive {
+.oc-filter-check-icon-inactive {
   transition: all 0.15;
   transform: scale(0) !important;
   width: 0px !important;
