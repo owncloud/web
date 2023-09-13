@@ -2,7 +2,7 @@ import { join } from 'path'
 import { SpaceResource } from 'web-client/src'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { AncestorMetaData } from 'web-pkg/src/types'
+import { AncestorMetaData, AncestorMetaDataValue } from 'web-pkg/src/types'
 
 const state = {
   ancestorMetaData: {}
@@ -44,7 +44,13 @@ const actions = {
       DavProperty.Name
     ]
 
-    const loadMetaDataValue = async (fileId: string) => {
+    const loadMetaDataValue = async (fileId: string): Promise<AncestorMetaDataValue> => {
+      const cachedData = (state.ancestorMetaData as AncestorMetaData)[fileId]
+      if (cachedData) {
+        return { ...cachedData }
+      }
+
+      // if we have no fileId, we query by path - after the first request we have a fileId
       const options = {
         ...(fileId && { fileId }),
         ...(!fileId && path && { path })
@@ -59,35 +65,25 @@ const actions = {
         name: resource.name,
         path: ''
       }
-      ancestorMetaData[resource.fileId] = value
       return value
     }
 
     const ancestorMetaData: AncestorMetaData = {}
+    const ancestorList = [] as AncestorMetaDataValue[]
 
-    let value = await loadMetaDataValue(fileId)
-    const ancestorList = [value]
-    while (value && value.parentFolderId !== value.spaceId) {
-      const lastValue = value
-      const cachedData = (state.ancestorMetaData as AncestorMetaData)[value.parentFolderId]
-      // FIXME: checking for Boolean(cachedData) should be enough, space id should be contained in the file/folder id
-      if (cachedData && cachedData?.spaceId === space.id) {
-        value = { ...cachedData }
-        ancestorMetaData[lastValue.parentFolderId] = value
-        ancestorList.unshift(value)
-        continue
-      }
-
+    let value: AncestorMetaDataValue
+    let lastValue: AncestorMetaDataValue
+    do {
       try {
-        value = await loadMetaDataValue(value.parentFolderId)
-        ancestorMetaData[value.parentFolderId] = value
+        lastValue = value
+        value = await loadMetaDataValue(value?.parentFolderId || fileId)
+        ancestorMetaData[value.id] = value
         ancestorList.unshift(value)
       } catch (e) {
-        console.error(e)
+        value = null
         ancestorMetaData[lastValue.id].parentFolderId = null
-        break
       }
-    }
+    } while (value && value.parentFolderId !== value.spaceId && value.parentFolderId !== null)
 
     ancestorList[0].path =
       ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
