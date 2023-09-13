@@ -14,6 +14,7 @@ import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
 import { useClientService, useConfigurationManager } from 'web-pkg/src/composables'
 import { AncestorMetaData } from 'web-pkg/src/types'
+import { findPathToMountPoint } from 'web-pkg'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -41,31 +42,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const item: Ref<string> = ref(null)
   const loading = ref(false)
   const configurationManager = useConfigurationManager()
-
-  const findMatchingMountPoint = (id: string | number): SpaceResource => {
-    return store.getters['runtime/spaces/spaces'].find(
-      (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
-    )
-  }
-
-  const ancestorMetaData = computed<AncestorMetaData>(
-    () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-  )
-
-  const findMountPoint = (fileId: Resource['id']) => {
-    let mountPoint = findMatchingMountPoint(fileId)
-    let resource = unref(ancestorMetaData)[fileId]
-    const sharePathSegments = mountPoint ? [] : [unref(resource).name]
-    while (!mountPoint) {
-      resource = unref(ancestorMetaData)[resource.parentFolderId]
-      mountPoint = findMatchingMountPoint(resource.id)
-      if (!mountPoint) {
-        sharePathSegments.unshift(resource.name)
-      }
-    }
-
-    return mountPoint
-  }
 
   const currentAncestorRequest = {
     spaceId: null,
@@ -107,7 +83,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
-    async ([driveAliasAndItem]) => {
+    async ([driveAliasAndItem, areSpacesLoading], [driveAliasAndItemOld, areSpacesLoadingOld]) => {
+      if (driveAliasAndItem === driveAliasAndItemOld && areSpacesLoading === areSpacesLoadingOld) {
+        return
+      }
+
       if (!driveAliasAndItem || driveAliasAndItem.startsWith('virtual/')) {
         space.value = null
         item.value = null
@@ -120,8 +100,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         const path = urlJoin(driveAliasAndItem.slice(unref(space).driveAlias.length), {
           leadingSlash: true
         })
-        item.value = path
         await loadAncestorMetaData({ space: unref(space), fileId: unref(fileId) })
+        item.value = path
         loading.value = false
         return
       }
@@ -174,7 +154,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
             !configurationManager.options.routing.fullShareOwnerPaths
           ) {
             await loadAncestorMetaData({ space: matchingSpace, fileId: unref(fileId) })
-            const mountPoint = findMountPoint(unref(fileId))
+            const { mountPoint } = findPathToMountPoint(store, unref(fileId))
             path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
             path = `${urlJoin(mountPoint.root.remoteItem.path, path.split('/').slice(3).join('/'))}`
           } else {

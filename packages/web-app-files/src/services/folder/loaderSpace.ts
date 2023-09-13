@@ -3,7 +3,12 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
 import { useCapabilityFilesSharingResharing } from 'web-pkg/src/composables'
-import { SpaceResource, isMountPointSpaceResource } from 'web-client/src/helpers'
+import {
+  MountPointSpaceResource,
+  SpaceResource,
+  isMountPointSpaceResource,
+  isPersonalSpaceResource
+} from 'web-client/src/helpers'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
@@ -11,6 +16,10 @@ import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRoute
 import { aggregateResourceShares } from '../../helpers/resources'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
 import { urlJoin } from 'web-client/src/utils'
+import { Resource } from 'tests/e2e/support/objects/app-files'
+import { dirname } from 'path'
+import { AncestorMetaData } from 'web-pkg/src/types'
+import { findPathToMountPoint } from 'web-pkg/src'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -45,6 +54,20 @@ export class FolderLoaderSpace implements FolderLoader {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
+        let mountPoint
+        let resourcePath
+
+        if (
+          isPersonalSpaceResource(space) &&
+          space.ownerId !== store.getters.user.uuid &&
+          !configurationManager.options.routing.fullShareOwnerPaths
+        ) {
+          const result = findPathToMountPoint(store, fileId)
+          mountPoint = result.mountPoint
+          resourcePath = result.resourcePath
+          path = resourcePath
+        }
+
         let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
           fileId,
           path
@@ -52,25 +75,12 @@ export class FolderLoaderSpace implements FolderLoader {
 
         currentFolder.path = path
 
-        // space
-        const mountPoint = store.getters['runtime/spaces/spaces'].find((s) => {
-          return (
-            isMountPointSpaceResource(s) &&
-            (s.root.remoteItem as any).rootId === currentFolder.storageId &&
-            path.startsWith(s.root.remoteItem.path)
-          )
-        })
-
-        // FIXME: does this still work / have effect?!
         if (mountPoint && !configurationManager.options.routing.fullShareOwnerPaths) {
-          currentFolder.path = mountPoint.root.remoteItem.path
-          const hiddenPath = currentFolder.path.split('/').slice(0, -1).join('/')
-          console.log('before', currentFolder.path)
-          currentFolder.visiblePath = currentFolder.path.replace(`/${hiddenPath}`, '')
-          console.log('after', currentFolder.visiblePath)
+          currentFolder.path = resourcePath
+          const hiddenPath = dirname(mountPoint.root.remoteItem.path)
+          currentFolder.visiblePath = currentFolder.path.slice(hiddenPath.length)
           resources.forEach((r) => {
-            r.path = urlJoin(path, r.path)
-            r.visiblePath = r.path.replace(`/${hiddenPath}`, '')
+            r.visiblePath = r.path.slice(hiddenPath.length)
           })
         }
 

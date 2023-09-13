@@ -770,7 +770,7 @@ export default defineComponent({
     },
     folderLink(file: Resource) {
       return this.createFolderLink({
-        path: file.path,
+        path: file.visiblePath,
         fileId: file.fileId,
         resource: file
       })
