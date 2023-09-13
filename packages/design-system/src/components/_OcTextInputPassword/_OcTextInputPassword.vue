@@ -12,7 +12,7 @@
     </oc-button>
     <oc-button
       v-if="generatePasswordMethod"
-      class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
+      class="oc-text-input-generate-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
       @click="showGeneratedPassword"

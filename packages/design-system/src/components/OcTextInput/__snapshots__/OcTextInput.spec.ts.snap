@@ -1,12 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OcTextInput password input field password policy displays error state if password does not match criteria 1`] = `
+exports[`OcTextInput password input field generate password button should fill input with generated password if clicked 1`] = `
 <div class="">
-  <label class="oc-label" for="oc-textinput-17"></label>
+  <label class="oc-label" for="oc-textinput-18"></label>
   <div class="oc-position-relative">
     <!--v-if-->
     <div class="oc-text-input-password-wrapper">
-      <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-17" type="password">
+      <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-18" type="text">
+      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
+        <!--v-if-->
+        <!-- @slot Content of the button -->
+        <span class="oc-icon oc-icon-s oc-icon-passive">
+          <!---->
+        </span>
+      </button>
+      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-generate-password-button oc-px-s oc-background-default" type="button">
+        <!--v-if-->
+        <!-- @slot Content of the button -->
+        <span class="oc-icon oc-icon-s oc-icon-passive">
+          <!---->
+        </span>
+      </button>
+      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
+        <!--v-if-->
+        <!-- @slot Content of the button -->
+        <span class="oc-icon oc-icon-s oc-icon-passive">
+          <!---->
+        </span>
+      </button>
+    </div>
+    <!--v-if-->
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+  <portal-target name="app.design-system.password-policy"></portal-target>
+</div>
+`;
+
+exports[`OcTextInput password input field password policy displays error state if password does not match criteria 1`] = `
+<div class="">
+  <label class="oc-label" for="oc-textinput-21"></label>
+  <div class="oc-position-relative">
+    <!--v-if-->
+    <div class="oc-text-input-password-wrapper">
+      <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-21" type="password">
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
@@ -43,11 +80,11 @@ exports[`OcTextInput password input field password policy displays error state i
 
 exports[`OcTextInput password input field password policy displays success state if password matches criteria 1`] = `
 <div class="">
-  <label class="oc-label" for="oc-textinput-18"></label>
+  <label class="oc-label" for="oc-textinput-22"></label>
   <div class="oc-position-relative">
     <!--v-if-->
     <div class="oc-text-input-password-wrapper">
-      <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-18" type="password">
+      <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-22" type="password">
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->

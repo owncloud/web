@@ -56,7 +56,8 @@ describe('OcTextInput', () => {
     inputField: '.oc-text-input',
     infoIcon: '.oc-text-input-message .oc-icon',
     showPasswordToggleBtn: '.oc-text-input-show-password-toggle',
-    copyPasswordBtn: '.oc-text-input-copy-password-button'
+    copyPasswordBtn: '.oc-text-input-copy-password-button',
+    generatePasswordBtn: '.oc-text-input-generate-password-button'
   }
 
   describe('id prop', () => {
@@ -119,6 +120,28 @@ describe('OcTextInput', () => {
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('text')
         await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('password')
+      })
+    })
+    describe('generate password button', () => {
+      it('should not exist if type is not "password" or prop "generatePasswordMethod" is not provided', () => {
+        const wrapper = getMountedWrapper()
+        expect(wrapper.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
+
+        const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
+        expect(wrapper2.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
+      })
+      it('should exist if type is "password" and prop "generatePasswordMethod" is provided', () => {
+        const wrapper = getMountedWrapper({
+          props: { generatePasswordMethod: jest.fn(), type: 'password' }
+        })
+        expect(wrapper.find(selectors.generatePasswordBtn).exists()).toBeTruthy()
+      })
+      it('should fill input with generated password if clicked', async () => {
+        const wrapper = getMountedWrapper({
+          props: { generatePasswordMethod: jest.fn(() => 'PAssword12#!'), type: 'password' }
+        })
+        await wrapper.find(selectors.generatePasswordBtn).trigger('click')
+        expect(wrapper.html()).toMatchSnapshot()
       })
     })
     describe('password policy', () => {
