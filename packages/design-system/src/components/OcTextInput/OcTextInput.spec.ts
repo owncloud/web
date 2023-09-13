@@ -141,7 +141,9 @@ describe('OcTextInput', () => {
           props: { generatePasswordMethod: jest.fn(() => 'PAssword12#!'), type: 'password' }
         })
         await wrapper.find(selectors.generatePasswordBtn).trigger('click')
-        expect(wrapper.html()).toMatchSnapshot()
+        expect((wrapper.find(selectors.inputField).element as HTMLInputElement).value).toEqual(
+          'PAssword12#!'
+        )
       })
     })
     describe('password policy', () => {
