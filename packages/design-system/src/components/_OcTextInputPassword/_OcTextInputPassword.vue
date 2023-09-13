@@ -67,13 +67,14 @@ export default defineComponent({
   release: '1.0.0',
   inheritAttrs: true,
   props: {
+    value: {
+      type: String,
+      required: false,
+      default: ''
+    },
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
       default: () => ({})
-    },
-    value: {
-      type: String,
-      required: true
     },
     generatePasswordMethod: {
       type: Function,
