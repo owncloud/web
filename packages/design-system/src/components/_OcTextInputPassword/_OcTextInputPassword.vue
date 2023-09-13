@@ -82,7 +82,7 @@ export default defineComponent({
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
@@ -93,6 +93,7 @@ export default defineComponent({
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
     })
+
     const testedPasswordPolicy = computed(() => {
       return props.passwordPolicy.missing(unref(password))
     })
