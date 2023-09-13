@@ -109,7 +109,14 @@ export class PasswordPolicyService {
   }
 
   public generatePassword(): string {
-    console.log(this.generatePasswordRules)
+    return GeneratePassword({
+      symbols: true,
+      length: 12,
+      minLengthLowercase: 2,
+      minLengthUppercase: 2,
+      minLengthNumbers: 2,
+      minLengthSymbols: 2
+    })
     return GeneratePassword({
       symbols: true,
       length: this.generatePasswordRules.length,
