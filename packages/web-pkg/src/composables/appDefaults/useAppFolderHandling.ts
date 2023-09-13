@@ -38,7 +38,9 @@ export function useAppFolderHandling({
   const authService = useAuthService()
 
   const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
-    if (store.getters.activeFile && store.getters.activeFile.path !== '') {
+    const [firstFile] = store.getters['Files/filesAll']
+    const folderChanged = dirname(unref(unref(context).item)) !== dirname(firstFile?.path)
+    if (!folderChanged) {
       return
     }
 

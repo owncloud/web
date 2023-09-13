@@ -67,7 +67,7 @@
   </main>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref, watch, getCurrentInstance } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from 'web-client/src'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
@@ -175,6 +175,11 @@ export default defineComponent({
     })
 
     const updateLocalHistory = () => {
+      // this is a rare edge case when browsing quickly through a lot of files
+      // we workaround context being null, when useDriveResolver is in loading state
+      if (!unref(currentFileContext)) {
+        return
+      }
       const { params, query } = createFileRouteOptions(
         unref(unref(currentFileContext).space),
         unref(activeFilteredFile)
@@ -207,6 +212,16 @@ export default defineComponent({
         }
       }
     ]
+
+    const instance = getCurrentInstance() as any
+
+    watch(currentFileContext, async () => {
+      if (!unref(currentFileContext)) {
+        return
+      }
+      await appDefaults.loadFolderForFileContext(unref(currentFileContext))
+      instance.proxy.setActiveFile(unref(unref(currentFileContext).driveAliasAndItem))
+    })
 
     return {
       ...appDefaults,
@@ -287,8 +302,6 @@ export default defineComponent({
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
-    await this.loadFolderForFileContext(this.currentFileContext)
-    this.setActiveFile(unref(this.currentFileContext.driveAliasAndItem))
     ;(this.$refs.preview as HTMLElement).focus()
   },
 
