@@ -103,8 +103,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       fileId,
       path
     })
-
-    loading.value = false
   }
 
   watch(
@@ -124,6 +122,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         })
         item.value = path
         await loadAncestorMetaData({ space: unref(space), fileId: unref(fileId) })
+        loading.value = false
         return
       }
 

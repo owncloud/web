@@ -89,7 +89,8 @@ const actions = {
       }
     }
 
-    ancestorList[0].path = `/`
+    ancestorList[0].path =
+      ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
     for (let i = 1; i < ancestorList.length; i++) {
       ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
     }
