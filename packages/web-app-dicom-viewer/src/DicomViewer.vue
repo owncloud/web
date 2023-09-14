@@ -1,7 +1,7 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
     <!-- check ouf if the classes of the div below are still accurate/needed/consistent with overall app design -->
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium">
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas"></div>
       <!-- div element for displaying meta data -->
@@ -224,6 +224,7 @@ export default defineComponent({
       dicomFile: null,
       dicomFileName: null,
       imageData: null,
+      dicomMetaData: null,
       metaDataElement: null,
       metaDataItems: null,
       toolInfoElement: null
@@ -425,8 +426,6 @@ export default defineComponent({
       const dicomStack = [dicomImageURL]
 
       // maybe preload meta data into memory?
-      // might only be needed if there is a stack of files
-      // await this.prefetchMetadataInformation(dicomStack)
 
       // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
       await this.viewport.setStack(dicomStack)
@@ -441,8 +440,8 @@ export default defineComponent({
       // setting metadata
       this.setMetadata(dicomImageURL)
 
-      // fetch additional meta data (for testing only, doen't put data into UI yet)
-      await this.fetchAdditionalMetadataInformation(dicomImageURL)
+      // fetch meta data (for testing only, doesn't put data into UI yet)
+      await this.fetchMetadataInformation(dicomImageURL)
     } else {
       // console.log('no valid resource url available')
     }
@@ -479,25 +478,21 @@ export default defineComponent({
         console.log('error initalizing cornerstone tools')
       }
     },
-    // from cornerstone3D example project, currently not used
-    async prefetchMetadataInformation(imageIdsToPrefetch) {
-      console.log('prefetching meta data information')
-      for (let i = 0; i < imageIdsToPrefetch.length; i++) {
-        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageIdsToPrefetch[i]).promise
-        console.log('data fetched for: ' + imageIdsToPrefetch[i])
-      }
-    },
     // currently only printing values in console
-    async fetchAdditionalMetadataInformation(imageId) {
-      console.log('fetch additional meta data information for: ' + imageId)
+    async fetchMetadataInformation(imageId) {
+      console.log('fetch meta data information for: ' + imageId)
       await cornerstoneDICOMImageLoader.wadouri
         .loadImage(imageId)
         .promise.then(async function (dicomImage) {
+          console.log('type of dicom image variable: ' + typeof dicomImage)
+          const dicomMetaData = dicomImage.data
+          console.log('patient name: ' + dicomMetaData.string('x00100010'))
           const patientName = dicomImage.data.string('x00100010')
           const patientBirthdate = dicomImage.data.string('x00100030')
           console.log('patient name: ' + patientName)
           console.log('patient birthdate: ' + patientBirthdate)
         })
+      // TODO: figure out how to pass the data from the inner function into a variable that can be accessed anywhere in the package
     },
     async createDicomFile() {
       // TODO check if already exist?
