@@ -60,7 +60,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   }) => {
     if (
       currentAncestorRequest.spaceId === space.id &&
-      (currentAncestorRequest.fileId === fileId || currentAncestorRequest.path === path)
+      ((currentAncestorRequest.fileId && currentAncestorRequest.fileId === fileId) ||
+        currentAncestorRequest.path === path)
     ) {
       return
     }
