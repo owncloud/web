@@ -101,7 +101,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         const path = urlJoin(driveAliasAndItem.slice(unref(space).driveAlias.length), {
           leadingSlash: true
         })
-        await loadAncestorMetaData({ space: unref(space), fileId: unref(fileId) })
+        await loadAncestorMetaData({ space: unref(space), fileId: unref(fileId), path })
         item.value = path
         loading.value = false
         return
