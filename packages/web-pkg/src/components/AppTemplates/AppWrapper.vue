@@ -150,7 +150,7 @@ export default defineComponent({
 
       return $gettext(`%{appName} for %{fileName}`, {
         appName: unref(applicationName) || $gettext(appName),
-        fileName: unref(unref(currentFileContext).fileName)
+        fileName: unref(unref(currentFileContext)?.fileName)
       })
     })
 
@@ -177,9 +177,10 @@ export default defineComponent({
           resource.value = { path: targetPath } as Resource
         }
 
-        if (replaceInvalidFileRoute(currentFileContext, unref(resource))) {
-          return
-        }
+        // FIXME
+        // if (replaceInvalidFileRoute(currentFileContext, unref(resource))) {
+        //   return
+        // }
 
         isReadOnly.value = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
           (p) => (unref(resource).permissions || '').indexOf(p) > -1
@@ -210,6 +211,9 @@ export default defineComponent({
     watch(
       currentFileContext,
       () => {
+        if (!unref(currentFileContext)) {
+          return
+        }
         loadFileTask.perform()
       },
       { immediate: true }
