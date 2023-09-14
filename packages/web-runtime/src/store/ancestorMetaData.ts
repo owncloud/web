@@ -51,9 +51,11 @@ const actions = {
       DavProperty.Name
     ]
 
+    let foundInCache = false
     const loadMetaDataValue = async (fileId: string): Promise<AncestorMetaDataValue> => {
       const cachedData = (state.ancestorMetaData as AncestorMetaData)[fileId]
       if (cachedData) {
+        foundInCache = true
         return { ...cachedData }
       }
 
@@ -102,7 +104,9 @@ const actions = {
       ancestorList[0].path =
         ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
     } else {
-      ancestorList[0].path = dirname(path)
+      if (!foundInCache) {
+        ancestorList[0].path = dirname(path)
+      }
     }
     for (let i = 1; i < ancestorList.length; i++) {
       ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)

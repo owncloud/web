@@ -4,7 +4,7 @@ import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { v4 as uuidv4 } from 'uuid'
 import omit from 'lodash-es/omit'
 import { AncestorMetaData } from 'web-pkg/src/types'
-import { join } from 'path'
+import { dirname, join } from 'path'
 
 export const breadcrumbsFor = ({
   currentRoute,
