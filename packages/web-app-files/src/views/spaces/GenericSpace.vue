@@ -184,7 +184,8 @@ import {
   useRouteQuery,
   useClientService,
   ViewModeConstants,
-  useCapabilityShareJailEnabled
+  useCapabilityShareJailEnabled,
+  useConfigurationManager
 } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -255,6 +256,7 @@ export default defineComponent({
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
+    const configurationManager = useConfigurationManager()
 
     let loadResourcesEventToken: string
 
@@ -315,7 +317,11 @@ export default defineComponent({
           to: createLocationSpaces('files-spaces-projects'),
           isStaticNav: true
         })
-      } else if (isPersonalSpaceResource(space) && space.ownerId !== store.getters.user.uuid) {
+      } else if (
+        isPersonalSpaceResource(space) &&
+        space.ownerId !== store.getters.user.uuid &&
+        !configurationManager.options.routing.fullShareOwnerPaths
+      ) {
         rootBreadcrumbItems.push(
           {
             id: uuidv4(),
@@ -335,7 +341,11 @@ export default defineComponent({
       let spaceBreadcrumbItem: BreadcrumbItem
       let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
       query = omit({ ...unref(route).query, ...query }, 'page')
-      if (isPersonalSpaceResource(space) && space.ownerId === store.getters.user.uuid) {
+      if (
+        isPersonalSpaceResource(space) &&
+        (space.ownerId === store.getters.user.uuid ||
+          configurationManager.options.routing.fullShareOwnerPaths)
+      ) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           text: space.name,
@@ -371,7 +381,6 @@ export default defineComponent({
       const concatted = concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
-        // FIXME: needs file ids for each parent folder path
         ...breadcrumbsFor(
           unref(route),
           props.itemId?.toString(),

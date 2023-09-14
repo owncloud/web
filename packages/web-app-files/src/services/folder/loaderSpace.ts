@@ -97,7 +97,8 @@ export class FolderLoaderSpace implements FolderLoader {
               [parentShare.shareInfo],
               true,
               unref(hasResharing),
-              true
+              true,
+              configurationManager
             )
             currentFolder = aggregatedShares[0]
           } else if (!['personal', 'public'].includes(space.driveType)) {

@@ -118,7 +118,7 @@ export function buildResource(resource): Resource {
     name,
     extension: isFolder ? '' : extension,
     path: resourcePath,
-    visiblePath: undefined,
+    visiblePath: resourcePath,
     webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,

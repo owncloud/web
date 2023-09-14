@@ -2,7 +2,14 @@ import { aggregateResourceShares } from '../resources'
 import { ShareStatus } from 'web-client/src/helpers/share/status'
 import { HttpError } from 'web-pkg/src/errors'
 
-export async function triggerShareAction(resource, status, hasReSharing, hasShareJail, $client) {
+export async function triggerShareAction(
+  resource,
+  status,
+  hasReSharing,
+  hasShareJail,
+  $client,
+  configurationManager
+) {
   const method = _getRequestMethod(status)
   if (!method) {
     throw new Error('invalid new share status')
@@ -25,7 +32,13 @@ export async function triggerShareAction(resource, status, hasReSharing, hasShar
     response = await response.json()
     if (response.ocs.data.length > 0) {
       const share = response.ocs.data[0]
-      return aggregateResourceShares([share], true, hasReSharing, hasShareJail)[0]
+      return aggregateResourceShares(
+        [share],
+        true,
+        hasReSharing,
+        hasShareJail,
+        configurationManager
+      )[0]
     }
   }
 

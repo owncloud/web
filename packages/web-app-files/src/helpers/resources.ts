@@ -54,6 +54,7 @@ export function aggregateResourceShares(
   incomingShares = false,
   allowSharePermission,
   hasShareJail,
+  configurationManager,
   spaces = []
 ): Resource[] {
   shares.sort((a, b) => a.path.localeCompare(b.path))
@@ -75,7 +76,12 @@ export function aggregateResourceShares(
           space.driveType === 'mountpoint' &&
           space.id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}`
       )?.root.remoteItem.path
-      resource.visiblePath = `/${resource.name}`
+      if (configurationManager.options.routing.fullShareOwnerPaths) {
+        resource.visiblePath = resource.path
+      } else {
+        resource.visiblePath = `/${resource.name}`
+      }
+
       return resource
     })
   }

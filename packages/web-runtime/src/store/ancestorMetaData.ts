@@ -34,8 +34,15 @@ const actions = {
       space,
       path,
       client,
-      fileId
-    }: { space: SpaceResource; path: string; client: WebDAV; fileId: string }
+      fileId,
+      fullShareOwnerPaths
+    }: {
+      space: SpaceResource
+      path: string
+      client: WebDAV
+      fileId: string
+      fullShareOwnerPaths: boolean
+    }
   ) {
     const davProperties = [
       DavProperty.FileId,
@@ -91,11 +98,17 @@ const actions = {
       }
     } while (value && value.parentFolderId !== value.spaceId && value.parentFolderId !== null)
 
-    ancestorList[0].path =
-      ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
+    if (!fullShareOwnerPaths) {
+      ancestorList[0].path =
+        ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
+    } else {
+      ancestorList[0].path = path
+    }
     for (let i = 1; i < ancestorList.length; i++) {
       ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
     }
+
+    console.log('ancestorList', path, ancestorList, fullShareOwnerPaths)
 
     commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
   }

@@ -77,7 +77,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       space: space,
       client: clientService.webdav,
       fileId,
-      path
+      path,
+      fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
     })
   }
 
