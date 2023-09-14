@@ -66,8 +66,7 @@ const createFile = async ({
     method: 'PUT',
     path: join('remote.php', 'dav', webDavEndPathToRoot, pathToFile),
     body: content,
-    user: user,
-    formatJson: false
+    user: user
   })
 
   checkResponseStatus(response, `Failed while uploading file '${pathToFile}' in personal space`)

@@ -110,7 +110,7 @@ export default defineComponent({
   },
   setup(props) {
     const language = useGettext()
-    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = language
+    const { $gettext, $ngettext } = language
     const clientService = useClientService()
     const { getFileContents, getFileInfo } = clientService.webdav
     const store = useStore()
@@ -238,9 +238,7 @@ export default defineComponent({
       return store.getters['runtime/spaces/spaceMembers'].length
     })
     const memberCountString = computed(() => {
-      const translated = $ngettext('%{count} member', '%{count} members', unref(memberCount))
-
-      return $gettextInterpolate(translated, {
+      return $ngettext('%{count} member', '%{count} members', unref(memberCount), {
         count: unref(memberCount)
       })
     })

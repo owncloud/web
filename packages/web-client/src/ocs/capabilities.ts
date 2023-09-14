@@ -9,8 +9,19 @@ export interface AppProviderCapability {
   open_url: string
   version: string
 }
+
+export interface PasswordPolicyCapability {
+  min_characters?: number
+  max_characters?: number
+  min_lowercase_characters?: number
+  min_uppercase_characters?: number
+  min_digits?: number
+  min_special_characters?: number
+}
+
 export interface Capabilities {
   capabilities: {
+    password_policy?: PasswordPolicyCapability
     notifications: {
       ocs_endpoints: string[]
     }

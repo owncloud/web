@@ -8,13 +8,20 @@ import { FileResource, SpaceResource } from 'web-client/src/helpers'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { useClientService } from '../clientService'
 import { ListFilesOptions } from 'web-client/src/webdav/listFiles'
+import { WebDAV } from 'web-client/src/webdav'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
+export type UrlForResourceOptions = Omit<Parameters<WebDAV['getFileUrl']>[2], 'isUrlSigningEnabled'>
+
 export interface AppFileHandlingResult {
-  getUrlForResource(space: SpaceResource, resource: Resource, options?: any): Promise<string>
+  getUrlForResource(
+    space: SpaceResource,
+    resource: Resource,
+    options?: UrlForResourceOptions
+  ): Promise<string>
   revokeUrl(url: string): void
   getFileInfo(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
   getFileContents(

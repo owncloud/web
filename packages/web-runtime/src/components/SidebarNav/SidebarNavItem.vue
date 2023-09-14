@@ -68,7 +68,7 @@ export default defineComponent({
     },
     toolTip() {
       const value = this.collapsed
-        ? this.$gettextInterpolate(this.$gettext('Navigate to %{ pageName } page'), {
+        ? this.$gettext('Navigate to %{ pageName } page', {
             pageName: this.name
           })
         : ''

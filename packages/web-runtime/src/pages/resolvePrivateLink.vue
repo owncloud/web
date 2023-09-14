@@ -79,13 +79,16 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const id = useRouteParam('fileId')
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
     const resource: Ref<Resource> = ref()
     const sharedParentResource: Ref<Resource> = ref()
     const isUnacceptedShareError = ref(false)
 
     const clientService = useClientService()
+
+    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const openWithDefaultApp = computed(() => queryItemAsString(unref(openWithDefaultAppQuery)))
 
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
@@ -163,9 +166,10 @@ export default defineComponent({
               ? matchingSpace.shareId
               : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
-          ...(configurationManager.options.openLinksWithDefaultApp && {
-            openWithDefaultApp: 'true'
-          })
+          ...(configurationManager.options.openLinksWithDefaultApp &&
+            unref(openWithDefaultApp) !== 'false' && {
+              openWithDefaultApp: 'true'
+            })
         }
       }
       router.push(location)
@@ -216,18 +220,20 @@ export default defineComponent({
 
         let translated
         if (unref(resource).type === 'file') {
-          translated = $gettext(
-            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          return $gettext(
+            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
+            {
+              parentShareName: unref(sharedParentResource).name
+            }
           )
         } else {
-          translated = $gettext(
-            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.'
+          return $gettext(
+            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
+            {
+              parentShareName: unref(sharedParentResource).name
+            }
           )
         }
-
-        return $gettextInterpolate(translated, {
-          parentShareName: unref(sharedParentResource).name
-        })
       }
 
       if (resolvePrivateLinkTask.isError) {

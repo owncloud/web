@@ -15,7 +15,6 @@ export class World extends CucumberWorld {
   linksEnvironment: environment.LinksEnvironment
   spacesEnvironment: environment.SpacesEnvironment
   usersEnvironment: environment.UsersEnvironment
-  tokenEnviroment: environment.TokenEnvironment
 
   constructor(options: WorldOptions) {
     super(options)
@@ -23,7 +22,6 @@ export class World extends CucumberWorld {
     this.spacesEnvironment = new environment.SpacesEnvironment()
     this.filesEnvironment = new environment.FilesEnvironment()
     this.linksEnvironment = new environment.LinksEnvironment()
-    this.tokenEnviroment = new environment.TokenEnvironment()
     this.actorsEnvironment = new environment.ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,

@@ -1,9 +1,12 @@
 Feature: link
 
-  Scenario: public link
+  Background:
     Given "Admin" creates following user using API
       | id    |
       | Alice |
+
+
+  Scenario: public link
     When "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
@@ -46,10 +49,7 @@ Feature: link
 
 
   Scenario: Quick link
-    Given "Admin" creates following user using API
-      | id    |
-      | Alice |
-    And "Alice" logs in
+    Given "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name         |
       | folderPublic |
@@ -63,3 +63,29 @@ Feature: link
       | resource  | type |
       | lorem.txt | file |
     And "Alice" logs out
+
+
+  Scenario: public link for folder (by authenticated user)
+    Given "Admin" creates following user using API
+      | id    |
+      | Brian |
+    And "Alice" logs in
+    And "Alice" creates the following resources
+      | resource     | type   |
+      | folderPublic | folder |
+    And "Alice" shares the following resources using the sidebar panel
+      | resource     | recipient | type | role     |
+      | folderPublic | Brian     | user | Can edit |
+    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "folderPublic" to "folderLink"
+    And "Alice" logs out
+    And "Brian" logs in
+    And "Brian" navigates to the shared with me page
+    And "Brian" accepts the following share
+      | name         |
+      | folderPublic |
+    When "Brian" opens the public link "folderLink"
+    And "Brian" uploads the following resources
+      | resource  |
+      | lorem.txt |
+    And "Brian" logs out

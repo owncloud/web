@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
-import { sidebar, editor } from '../utils'
+import { editor, sidebar } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
 
@@ -31,7 +31,7 @@ const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
 const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
-const saveTextFileInEditorButton = '#text-editor-controls-save:visible'
+const saveTextFileInEditorButton = '#app-save-action:visible'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
@@ -57,8 +57,8 @@ const globalSearchInput = '.oc-search-input'
 const globalSearchBarFilter = '.oc-search-bar-filter'
 const globalSearchDirFilterDropdown =
   '//div[@id="files-global-search"]//button[contains(@id, "oc-filter")]'
-const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
-const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="current-folder"]'
+const globalSearchBarFilterAllFiles = '//*[@data-test-id="everywhere"]'
+const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="in-here"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
@@ -281,18 +281,17 @@ const createDocumentFile = async (
   }
   await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
   await page.locator(resourceNameInput).fill(name)
-  const [editorPage] = await Promise.all([
-    page.waitForEvent('popup'),
+  await Promise.all([
+    page.waitForLoadState(),
+    page.waitForURL('**/external/personal/**'),
     page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
-  await editorPage.waitForLoadState()
-  await editorPage.waitForURL('**/external/personal/**')
-  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
+  const editorMainFrame = await page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
       await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
-      await editorPage.keyboard.press('Escape')
+      await page.keyboard.press('Escape')
       await editorMainFrame.locator(collaboraDocTextAreaSelector).type(content)
       const saveModified = await editorMainFrame.locator(collaboraEditorSaveSelector)
       await expect(saveModified).toBeVisible()
@@ -310,7 +309,6 @@ const createDocumentFile = async (
         "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
       )
   }
-  await editorPage.close()
 }
 
 export const openAndGetContentOfDocument = async ({
@@ -320,14 +318,13 @@ export const openAndGetContentOfDocument = async ({
   page: Page
   editorToOpen: string
 }): Promise<string> => {
-  const editorPage = await page.waitForEvent('popup')
-  await editorPage.waitForLoadState()
-  await editorPage.waitForURL('**/external/public/**')
-  const editorMainFrame = await editorPage.frameLocator(externalEditorIframe)
+  await page.waitForLoadState()
+  await page.waitForURL('**/external/public/**')
+  const editorMainFrame = await page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
       await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
-      await editorPage.keyboard.press('Escape')
+      await page.keyboard.press('Escape')
       await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
       break
     case 'OnlyOffice':
@@ -341,11 +338,9 @@ export const openAndGetContentOfDocument = async ({
       )
   }
   // copying and getting the value with keyboard requires some
-  await editorPage.keyboard.press('Control+A', { delay: 200 })
-  await editorPage.keyboard.press('Control+C', { delay: 200 })
-  const actualContentOfEditor = await editorPage.evaluate(() => navigator.clipboard.readText())
-  await editorPage.close()
-  return actualContentOfEditor
+  await page.keyboard.press('Control+A', { delay: 200 })
+  await page.keyboard.press('Control+C', { delay: 200 })
+  return await page.evaluate(() => navigator.clipboard.readText())
 }
 
 const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page, type) => {
@@ -856,18 +851,20 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         throw new Error('Single resource or objects cannot be deleted with batch action')
       }
 
-      await page.locator(deleteButtonBatchAction).click()
-      await page.waitForResponse((resp) => {
-        if (resp.status() === 204 && resp.request().method() === 'DELETE') {
-          deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
-        }
-        // waiting for GET response after all the resource are deleted with batch action
-        return (
-          resp.url().includes('graph/v1.0/drives') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'GET'
-        )
-      })
+      await Promise.all([
+        page.waitForResponse((resp) => {
+          if (resp.status() === 204 && resp.request().method() === 'DELETE') {
+            deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
+          }
+          // waiting for GET response after all the resource are deleted with batch action
+          return (
+            resp.url().includes('graph/v1.0/drives') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
+          )
+        }),
+        page.locator(deleteButtonBatchAction).click()
+      ])
       // assertion that the resources actually got deleted
       expect(deletetedResources.length).toBe(resourcesWithInfo.length)
       for (const resource of resourcesWithInfo) {
@@ -1073,7 +1070,7 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
 
   return true
 }
-export type searchFilter = 'all files' | 'current folder'
+export type searchFilter = 'everywhere' | 'in here'
 
 export interface searchResourceGlobalSearchArgs {
   keyword: string
@@ -1095,7 +1092,7 @@ export const searchResourceGlobalSearch = async (
     await page.locator(globalSearchDirFilterDropdown).click()
     await page
       .locator(
-        filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+        filter === 'everywhere' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
       )
       .click()
   }

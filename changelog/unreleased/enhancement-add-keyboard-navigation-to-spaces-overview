@@ -1,0 +1,7 @@
+Enhancement: Add keyboard navigation to spaces overview
+
+In the spaces overview it is now possible to navigate through the individual spaces
+and perform actions using the keyboard
+
+https://github.com/owncloud/web/pull/9625
+https://github.com/owncloud/web/issues/9624

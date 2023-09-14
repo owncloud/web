@@ -1,260 +1,161 @@
 <template>
-  <main>
-    <div v-if="loading" class="oc-position-center">
-      <oc-spinner size="xlarge" />
-      <p v-translate class="oc-invisible">Loading media</p>
-    </div>
-    <iframe
-      v-else
-      id="drawio-editor"
-      ref="drawIoEditor"
-      :src="iframeSource"
-      :title="$gettext('Draw.io editor')"
-    />
-  </main>
+  <iframe
+    id="drawio-editor"
+    ref="drawIoEditor"
+    :src="iframeSource"
+    :title="$gettext('Draw.io editor')"
+  />
 </template>
 <script lang="ts">
-import { DateTime } from 'luxon'
-import { basename } from 'path'
 import qs from 'qs'
-import { defineComponent, unref } from 'vue'
-import { mapActions } from 'vuex'
-import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
-import { useAppDefaults, useStore } from 'web-pkg/src/composables'
+import {
+  defineComponent,
+  unref,
+  PropType,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  VNodeRef,
+  ref,
+  watch,
+  nextTick
+} from 'vue'
+import { Resource } from 'web-client/src'
+import { AppConfigObject } from 'web-pkg/src/apps'
 
 export default defineComponent({
   name: 'DrawIoEditor',
-  setup() {
-    const store = useStore()
-    const isAutoSaveEnabled = store.getters.configuration.options.editor.autosaveEnabled
-
-    return {
-      ...useAppDefaults({
-        applicationId: 'draw-io'
-      }),
-      isAutoSaveEnabled
+  props: {
+    resource: {
+      type: Object as PropType<Resource>,
+      required: true
+    },
+    applicationConfig: {
+      type: Object as PropType<AppConfigObject>,
+      required: true
+    },
+    currentContent: {
+      type: String,
+      required: true
+    },
+    isReadOnly: {
+      type: Boolean,
+      required: true
+    },
+    isDirty: {
+      type: Boolean,
+      required: true
     }
   },
-  data: () => ({
-    loading: true,
-    filePath: '',
-    fileExtension: '',
-    isReadOnly: null,
-    currentETag: null
-  }),
-  computed: {
-    config() {
-      const { url = 'https://embed.diagrams.net', theme = 'minimal' } = this.applicationConfig
+  emits: ['update:currentContent', 'save', 'close'],
+  setup(props, { emit }) {
+    const drawIoEditor: VNodeRef = ref()
+
+    const config = computed(() => {
+      const { url = 'https://embed.diagrams.net', theme = 'minimal' } =
+        props.applicationConfig as any
       return { url, theme }
-    },
-    urlHost() {
-      const url = new URL(this.config.url)
+    })
+
+    const urlHost = computed(() => {
+      const url = new URL(unref(config).url)
       const urlHost = `${url.protocol}//${url.hostname}`
       return url.port ? `${urlHost}:${url.port}` : urlHost
-    },
-    iframeSource() {
+    })
+
+    const iframeSource = computed(() => {
       const query = qs.stringify({
         embed: 1,
-        chrome: this.isReadOnly ? 0 : 1,
+        chrome: props.isReadOnly ? 0 : 1,
         picker: 0,
         stealth: 1,
         spin: 1,
         proto: 'json',
-        ui: this.config.theme
+        ui: unref(config).theme
       })
 
-      return `${this.config.url}?${query}`
-    }
-  },
-  watch: {
-    currentFileContext: {
-      handler: function () {
-        this.checkPermissions()
-      },
-      immediate: true
-    }
-  },
-  created() {
-    this.filePath = unref(this.currentFileContext.path)
-    this.fileExtension = this.filePath.split('.').pop()
-    window.addEventListener('message', this.handleMessage)
-  },
-  beforeUnmount() {
-    window.removeEventListener('message', this.handleMessage)
-  },
-  methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
+      return `${unref(config).url}?${query}`
+    })
 
-    errorPopup(error) {
-      this.showErrorMessage({
-        title: this.$gettext('An error occurred'),
-        desc: error,
-        error
+    const loadCurrentContent = () => {
+      postMessage({
+        action: 'load',
+        xml: props.currentContent,
+        autosave: true
       })
-    },
-    successPopup(msg) {
-      this.showMessage({
-        title: this.$gettext('The diagram was successfully saved'),
-        desc: msg,
-        status: 'success'
-      })
-    },
-    errorNotification(error) {
-      ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
-        JSON.stringify({
+    }
+
+    watch(
+      () => props.isDirty,
+      () => {
+        postMessage({
           action: 'status',
-          message: error,
-          modified: false
-        }),
-        this.urlHost
-      )
-    },
-    async checkPermissions() {
-      try {
-        const resource = await this.getFileInfo(this.currentFileContext, {
-          davProperties: [DavProperty.FileId, DavProperty.Permissions]
+          modified: props.isDirty
         })
-        this.replaceInvalidFileRoute(this.currentFileContext, resource)
-        this.isReadOnly = ![DavPermission.Updateable, DavPermission.FileUpdateable].some(
-          (p) => (resource.permissions || '').indexOf(p) > -1
-        )
-        this.loading = false
-      } catch (error) {
-        this.errorPopup(error)
       }
-    },
-    async handleMessage(event) {
-      if (event.data.length > 0) {
-        if (event.origin !== this.config.url) {
+    )
+
+    watch(
+      () => props.resource,
+      () => {
+        loadCurrentContent()
+      }
+    )
+
+    const postMessage = (
+      payload:
+        | { action: string; xml: string; autosave?: boolean }
+        | { action: 'status'; modified: boolean }
+    ) => {
+      try {
+        if (!unref(drawIoEditor)) {
           return
         }
+        return (unref(drawIoEditor) as HTMLIFrameElement).contentWindow.postMessage(
+          JSON.stringify(payload),
+          unref(urlHost)
+        )
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    const handleMessage = async (event) => {
+      if (event.data.length > 0) {
+        if (event.origin !== unref(config).url) {
+          return
+        }
+        await nextTick()
         const payload = JSON.parse(event.data)
-        switch (payload.event) {
+        switch (payload?.event) {
           case 'init':
-            this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
+            loadCurrentContent()
             break
           case 'autosave':
-            if (this.isAutoSaveEnabled) {
-              this.save(payload, true)
-            }
+            emit('update:currentContent', payload.xml)
             break
           case 'save':
-            this.save(payload)
+            emit('save')
             break
           case 'exit':
-            this.exit()
+            emit('close')
             break
         }
       }
-    },
-    async loadFileContent() {
-      try {
-        const response = await this.getFileContents(this.currentFileContext)
-        this.currentETag = response.headers.ETag
-        ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
-          JSON.stringify({
-            action: 'load',
-            xml: response.body,
-            autosave: this.isAutoSaveEnabled
-          }),
-          this.urlHost
-        )
-      } catch (error) {
-        this.errorPopup(error)
-      }
-    },
-    async load() {
-      await Promise.all([this.checkPermissions(), this.loadFileContent()])
-    },
-    importVisio() {
-      const getDescription = () =>
-        this.$gettextInterpolate(
-          this.$gettext('The diagram will open as a new .drawio file: %{file}'),
-          { file: basename(this.filePath) },
-          true
-        )
-      // Change the working file after the import so the original file is not overwritten
-      this.filePath += `_${this.getTimestamp()}.drawio`
-      this.showMessage({
-        title: this.$gettext('Diagram imported'),
-        desc: getDescription()
-      })
-      this.getFileContents(this.currentFileContext, {
-        responseType: 'arrayBuffer'
-      })
-        .then((resp) => {
-          // Not setting `currentETag` on imports allows to create new files
-          // otherwise the ETag comparison fails with a 412 during the autosave/save event
-          // this.currentETag = resp.headers.get('etag')
-          return resp.body
-        })
-        .then((arrayBuffer) => {
-          const blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
-          const reader = new FileReader()
-          reader.onloadend = () => {
-            ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
-              JSON.stringify({
-                action: 'load',
-                xml: reader.result,
-                autosave: this.isAutoSaveEnabled
-              }),
-              this.urlHost
-            )
-          }
-          reader.readAsDataURL(blob)
-        })
-        .catch((error) => {
-          this.errorPopup(error)
-        })
-    },
-    save(payload, auto = false) {
-      this.putFileContents(this.currentFileContext, {
-        content: payload.xml,
-        previousEntityTag: this.currentETag
-      })
-        .then((resp) => {
-          this.currentETag = resp.etag
+    }
 
-          const message = this.$gettext('File saved!')
-          if (auto) {
-            ;(this.$refs.drawIoEditor as HTMLIFrameElement).contentWindow.postMessage(
-              JSON.stringify({
-                action: 'status',
-                message: message,
-                modified: false
-              }),
-              this.urlHost
-            )
-          } else {
-            this.successPopup(message)
-          }
-        })
-        .catch((error) => {
-          const errorFunc = auto ? this.errorNotification : this.errorPopup
-          switch (error.statusCode) {
-            case 412:
-              errorFunc(
-                this.$gettext(
-                  'This file was updated outside this window. Please refresh the page. All changes will be lost, so download a copy first.'
-                )
-              )
-              break
-            case 500:
-              errorFunc(this.$gettext("Couldn't save. Error when contacting the server"))
-              break
-            case 401:
-              errorFunc(this.$gettext("Saving error. You're not authorized to save this file"))
-              break
-            default:
-              errorFunc(error.message || error)
-          }
-        })
-    },
-    exit() {
-      window.close()
-    },
-    getTimestamp() {
-      return DateTime.local().toFormat('YYYYMMDD[T]HHmmss')
+    onMounted(() => {
+      window.addEventListener('message', handleMessage)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('message', handleMessage)
+    })
+
+    return {
+      config,
+      drawIoEditor,
+      iframeSource
     }
   }
 })

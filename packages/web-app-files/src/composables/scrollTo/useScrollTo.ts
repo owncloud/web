@@ -28,6 +28,7 @@ export const useScrollTo = (): ScrollToResult => {
     )[0] as HTMLElement
 
     if (!resourceElement) {
+      eventBus.publish('app.files.navigate.page', { resourceId, forceScroll: options.forceScroll })
       return
     }
 
@@ -43,6 +44,11 @@ export const useScrollTo = (): ScrollToResult => {
       resourceElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
+  eventBus.subscribe(
+    'app.files.navigate.scrollTo',
+    (data: { resourceId: string; forceScroll: boolean }) =>
+      scrollToResource(data.resourceId, { forceScroll: data.forceScroll })
+  )
 
   const scrollToResourceFromRoute = (resources: Resource[]) => {
     if (!unref(scrollTo) || !resources.length) {
@@ -50,13 +56,16 @@ export const useScrollTo = (): ScrollToResult => {
     }
 
     const resource = unref(resources).find((r) => r.id === unref(scrollTo))
-    if (resource && resource.processing !== true) {
-      store.commit('Files/SET_FILE_SELECTION', [resource])
-      scrollToResource(resource.id, { forceScroll: true })
 
-      if (unref(details)) {
-        eventBus.publish(SideBarEventTopics.openWithPanel, unref(details))
-      }
+    if (!resource || resource.processing === true) {
+      return
+    }
+
+    store.commit('Files/SET_FILE_SELECTION', [resource])
+    scrollToResource(resource.id, { forceScroll: true })
+
+    if (unref(details)) {
+      eventBus.publish(SideBarEventTopics.openWithPanel, unref(details))
     }
   }
 

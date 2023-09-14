@@ -1,0 +1,6 @@
+Enhancement: Moving share's "set expiration date" function
+Moving "set expiration date" function to a three dots menu to help reduce visual load on simple shares in sharing pane
+
+https://github.com/owncloud/web/pull/9584
+https://github.com/owncloud/web/pull/9612
+https://github.com/owncloud/web/issues/9493

@@ -1,0 +1,6 @@
+Enhancement: OcModal set buttons to same width
+
+We've adjusted the button widths for every modal so the options look more equal.
+
+https://github.com/owncloud/web/pull/9671
+https://github.com/owncloud/web/issues/9641

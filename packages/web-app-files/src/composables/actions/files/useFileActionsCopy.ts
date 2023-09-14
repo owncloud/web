@@ -43,21 +43,8 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
         icon: 'file-copy-2',
         handler,
         shortcut: unref(copyShortcutString),
-        label: ({ resources }) => {
-          const copyLabel = $pgettext(
-            'Action in the files list row to initiate copying resources',
-            'Copy'
-          )
-
-          if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
-            const copyableResourcesCount = resources.filter(
-              (r) => !isProjectSpaceResource(r)
-            ).length
-            return `${copyLabel} (${copyableResourcesCount.toString()})`
-          }
-
-          return copyLabel
-        },
+        label: () =>
+          $pgettext('Action in the files list row to initiate copying resources', 'Copy'),
         isEnabled: ({ resources }) => {
           if (
             !isLocationSpacesActive(router, 'files-spaces-generic') &&

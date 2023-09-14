@@ -55,20 +55,20 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
-    const useSopeQueryValue = useRouteQuery('useScope')
+    const useScopeQueryValue = useRouteQuery('useScope')
 
     const currentSelection = ref<LocationOption>()
     const userSelection = ref<LocationOption>()
     const currentSelectionTitle = computed(() => $gettext(currentSelection.value?.title))
     const locationOptions = computed<LocationOption[]>(() => [
       {
-        id: SearchLocationFilterConstants.currentFolder,
-        title: $gettext('Current Folder'),
+        id: SearchLocationFilterConstants.inHere,
+        title: $gettext('In here'),
         enabled: props.currentFolderAvailable
       },
       {
-        id: SearchLocationFilterConstants.allFiles,
-        title: $gettext('All Files'),
+        id: SearchLocationFilterConstants.everywhere,
+        title: $gettext('Everywhere'),
         enabled: true
       }
     ])
@@ -80,23 +80,23 @@ export default defineComponent({
     watch(
       () => props.currentFolderAvailable,
       () => {
-        if (unref(useSopeQueryValue)) {
-          const useScope = unref(useSopeQueryValue).toString() === 'true'
+        if (unref(useScopeQueryValue)) {
+          const useScope = unref(useScopeQueryValue).toString() === 'true'
           if (useScope) {
             currentSelection.value = unref(locationOptions).find(
-              ({ id }) => id === SearchLocationFilterConstants.currentFolder
+              ({ id }) => id === SearchLocationFilterConstants.inHere
             )
             return
           }
           currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === SearchLocationFilterConstants.allFiles
+            ({ id }) => id === SearchLocationFilterConstants.everywhere
           )
           return
         }
 
         if (!props.currentFolderAvailable) {
           currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === SearchLocationFilterConstants.allFiles
+            ({ id }) => id === SearchLocationFilterConstants.everywhere
           )
           return
         }
@@ -109,7 +109,7 @@ export default defineComponent({
         }
 
         currentSelection.value = unref(locationOptions).find(
-          ({ id }) => id === SearchLocationFilterConstants.currentFolder
+          ({ id }) => id === SearchLocationFilterConstants.everywhere
         )
       },
       { immediate: true }

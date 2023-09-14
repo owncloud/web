@@ -26,17 +26,14 @@ export default defineComponent({
   computed: {
     spaceStorageDetailsLabel() {
       if (this.spaceQuota.total) {
-        return this.$gettextInterpolate(
-          this.$gettext('%{used} of %{total} used (%{percentage}% used)'),
-          {
-            used: this.quotaUsed,
-            total: this.quotaTotal,
-            percentage: this.quotaUsagePercent
-          }
-        )
+        return this.$gettext('%{used} of %{total} used (%{percentage}% used)', {
+          used: this.quotaUsed,
+          total: this.quotaTotal,
+          percentage: this.quotaUsagePercent.toString()
+        })
       }
 
-      return this.$gettextInterpolate(this.$gettext('%{used} used (no restriction)'), {
+      return this.$gettext('%{used} used (no restriction)', {
         used: this.quotaUsed
       })
     },

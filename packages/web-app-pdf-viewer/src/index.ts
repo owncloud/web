@@ -1,5 +1,6 @@
 import translations from '../l10n/translations.json'
-import App from './App.vue'
+import { AppWrapperRoute } from 'web-pkg/src/components/AppTemplates/AppWrapperRoute'
+import PdfViewer from './App.vue'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -9,7 +10,12 @@ function $gettext(msg) {
 const routes = [
   {
     path: '/:driveAliasAndItem(.*)?',
-    component: App,
+    component: AppWrapperRoute(PdfViewer, {
+      applicationId: 'pdf-viewer',
+      urlForResourceOptions: {
+        disposition: 'inline'
+      }
+    }),
     name: 'pdf-viewer',
     meta: {
       authContext: 'hybrid',

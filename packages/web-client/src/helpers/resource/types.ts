@@ -52,6 +52,8 @@ export interface Resource {
   status?: number
   processing?: boolean
   locked?: boolean
+  lockOwnerName?: string
+  lockTime?: string
   spaceRoles?: {
     [k: string]: SpaceRole[]
   }
@@ -85,7 +87,7 @@ export interface Resource {
   canBeRestored?(): boolean
   canDeny?(): boolean
   canEditDescription?({ user }: { user?: User; ability?: Ability }): boolean
-  canRestore?({ user }: { user?: User }): boolean
+  canRestore?({ user }: { user?: User; ability?: any }): boolean
   canDisable?({ user }: { user?: User; ability?: any }): boolean
   canEditImage?({ user }: { user?: User }): boolean
   canEditReadme?({ user }: { user?: User }): boolean

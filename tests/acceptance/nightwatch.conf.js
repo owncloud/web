@@ -19,7 +19,8 @@ const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const TESTING_DATA_DIR = process.env.TESTING_DATA_DIR || './tests/testing-app/data/'
 const OPENID_LOGIN = 'true'
-const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
+const WEB_UI_CONFIG_FILE =
+  process.env.WEB_UI_CONFIG_FILE || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = process.env.SCREENSHOTS === 'true'
 
 const MIDDLEWARE_HOST = withHttp(process.env.MIDDLEWARE_HOST || 'http://host.docker.internal:3000')
@@ -49,7 +50,7 @@ const config = {
         ldap_base_dn: LDAP_BASE_DN,
         testing_data_dir: TESTING_DATA_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
-        webUIConfig: WEB_UI_CONFIG,
+        webUIConfig: WEB_UI_CONFIG_FILE,
         screenshots: SCREENSHOTS,
         middlewareUrl: MIDDLEWARE_HOST
       },

@@ -85,6 +85,14 @@ export function buildResource(resource): Resource {
   if (!resourcePath.startsWith('/')) {
     resourcePath = `/${resourcePath}`
   }
+
+  const lock = resource.fileInfo[DavProperty.LockDiscovery]
+  let activeLock, lockOwnerName, lockTime
+  if (lock) {
+    activeLock = lock[DavProperty.ActiveLock]
+    lockOwnerName = activeLock[DavProperty.LockOwnerName]
+    lockTime = activeLock[DavProperty.LockTime]
+  }
   const id = resource.fileInfo[DavProperty.FileId]
   const r = {
     id,
@@ -98,6 +106,9 @@ export function buildResource(resource): Resource {
     webDavPath: resource.name,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
+    locked: activeLock ? true : false,
+    lockOwnerName,
+    lockTime,
     processing: resource.processing || false,
     mdate: resource.fileInfo[DavProperty.LastModifiedDate],
     size: isFolder
