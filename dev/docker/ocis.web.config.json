@@ -18,7 +18,8 @@
       }
     },
     "routing": {
-      "fullShareOwnerPaths": false
+      "fullShareOwnerPaths": true,
+      "idBased": false
     },
     "previewFileMimeTypes": [
       "image/gif",

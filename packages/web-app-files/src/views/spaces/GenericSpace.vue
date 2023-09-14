@@ -381,12 +381,13 @@ export default defineComponent({
       const concatted = concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
-        ...breadcrumbsFor(
-          unref(route),
-          props.itemId?.toString(),
-          props.item,
-          unref(ancestorMetaData)
-        )
+        ...breadcrumbsFor({
+          currentRoute: unref(route),
+          resourceId: props.itemId?.toString(),
+          resourcePath: props.item,
+          ancestorMetaData: unref(ancestorMetaData),
+          fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+        })
       )
       return concatted
     })

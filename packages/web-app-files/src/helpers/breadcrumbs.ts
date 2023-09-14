@@ -6,12 +6,19 @@ import omit from 'lodash-es/omit'
 import { AncestorMetaData } from 'web-pkg/src/types'
 import { join } from 'path'
 
-export const breadcrumbsFor = (
-  currentRoute: RouteLocation,
-  resourceId: string,
-  resourcePath: string,
+export const breadcrumbsFor = ({
+  currentRoute,
+  resourceId,
+  resourcePath,
+  ancestorMetaData,
+  fullShareOwnerPaths
+}: {
+  currentRoute: RouteLocation
+  resourceId: string
+  resourcePath: string
   ancestorMetaData: AncestorMetaData
-): BreadcrumbItem[] => {
+  fullShareOwnerPaths: boolean
+}): BreadcrumbItem[] => {
   // if the resource is no file id but a storageId we have no breadcrumbs
   if (resourceId && !resourceId.includes('!')) {
     return []
@@ -20,7 +27,7 @@ export const breadcrumbsFor = (
   const pathSplit = (p = '') => p.split('/').filter(Boolean)
   const current = pathSplit(currentRoute.path)
 
-  const breadcrumbs = [] as BreadcrumbItem[]
+  let breadcrumbs = [] as BreadcrumbItem[]
   let currentAncestorMetaDataValue
   if (resourceId) {
     currentAncestorMetaDataValue = ancestorMetaData[resourceId]
@@ -35,6 +42,7 @@ export const breadcrumbsFor = (
     return []
   }
 
+  let accessiblePath = []
   const basePath =
     '/' + current.slice(0, -pathSplit(currentAncestorMetaDataValue.path).length).join('/')
   while (currentAncestorMetaDataValue && currentAncestorMetaDataValue.path !== '/') {
@@ -49,7 +57,24 @@ export const breadcrumbsFor = (
       isStaticNav: false
     } as BreadcrumbItem
     breadcrumbs.unshift(item)
+    accessiblePath.unshift(currentAncestorMetaDataValue.name)
     currentAncestorMetaDataValue = ancestorMetaData[currentAncestorMetaDataValue.parentFolderId]
+  }
+
+  if (fullShareOwnerPaths) {
+    const inaccessiblePath = resourcePath.slice(0, -accessiblePath.join('/').length)
+    const inaccessibleBreadcrumbs = inaccessiblePath
+      .split('/')
+      .filter(Boolean)
+      .map((name): BreadcrumbItem => {
+        return {
+          id: uuidv4(),
+          text: name,
+          isStaticNav: false
+        }
+      })
+
+    breadcrumbs = [...inaccessibleBreadcrumbs, ...breadcrumbs]
   }
 
   return breadcrumbs

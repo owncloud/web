@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { Resource, SpaceResource } from 'web-client/src'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
@@ -102,7 +102,7 @@ const actions = {
       ancestorList[0].path =
         ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
     } else {
-      ancestorList[0].path = path
+      ancestorList[0].path = dirname(path)
     }
     for (let i = 1; i < ancestorList.length; i++) {
       ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
