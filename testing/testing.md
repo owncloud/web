@@ -61,7 +61,7 @@ Bundle the web frontend with the following command:
 $ pnpm build:w
 ```
 
-Our compose setup automatically mounts it into an oCIS backend, respectively. Web also gets recompiled on changes.
+Our compose setup automatically mounts it into an oC10 and oCIS backend, respectively. Web also gets recompiled on changes.
 
 #### Run E2E Tests
 
@@ -77,7 +77,6 @@ To run a particular test, simply add the feature file and line number to the tes
 
 Various options are available via ENV variables, e.g.
 
-- `BASIC_AUTH=true` use basic authorization for api requests. 
 - `RETRY=n` to retry failures `n` times
 - `SLOW_MO=n` to slow the execution time by `n` milliseconds
 - `TIMEOUT=n` to set tests to timeout after `n` milliseconds
@@ -127,12 +126,12 @@ $ pnpm build:w
 The acceptance tests need additional docker containers to be running.
 
 ```shell
-$ docker compose up ocis selenium middleware-ocis
+$ docker compose up ocis vnc selenium middleware-ocis
 ```
 
 and make sure there are no conflicting ports and everything runs smoothly. You can check if everything has worked by opening [https://host.docker.internal:9200](https://host.docker.internal:9200) and logging in using the demo user (admin/admin).
 
-If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.7.0-20221206`for now. To do so, export `SELENIUM_IMAGE=seleniarm/standalone-chromium:4.7.0-20221206`.
+If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.4.0-20220814`for now. To do so, export `SELENIUM_IMAGE=seleniarm/standalone-chromium:4.4.0-20220814`.
 
 #### Run acceptance tests
 
@@ -146,7 +145,7 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.7.0-2
 
 #### Watch the Test Run
 
-To watch the tests while running, open [http://host.docker.internal:7900/](http://host.docker.internal:7900/) in the browser to access your VNC client.
+To watch the tests while running, open [http://host.docker.internal:6080/](http://host.docker.internal:6080/) in the browser to access your VNC client.
 
 ### Analyze the Test Report
 
