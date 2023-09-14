@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { SpaceResource } from 'web-client/src'
+import { Resource, SpaceResource } from 'web-client/src'
 import { WebDAV } from 'web-client/src/webdav'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { AncestorMetaData, AncestorMetaDataValue } from 'web-pkg/src/types'
@@ -29,7 +29,7 @@ const mutations = {
 
 const actions = {
   async loadAncestorMetaData(
-    { commit, state },
+    { commit, state, rootGetters },
     {
       space,
       path,
@@ -56,7 +56,13 @@ const actions = {
         ...(!fileId && path && { path })
       }
 
-      const { resource } = await client.listFiles(space, options, { depth: 0, davProperties })
+      const currentFiles: Resource[] = rootGetters['Files/filesAll']
+      let resource = currentFiles.find(({ id }) => fileId === id)
+
+      if (!resource) {
+        resource = (await client.listFiles(space, options, { depth: 0, davProperties })).resource
+      }
+
       const value = {
         id: resource.fileId,
         shareTypes: resource.shareTypes,
