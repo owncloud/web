@@ -52,7 +52,11 @@ export const breadcrumbsFor = ({
       text: currentAncestorMetaDataValue.name,
       to: {
         path: join(basePath, currentAncestorMetaDataValue.path),
-        query: { ...omit(currentRoute.query, 'page'), fileId: currentAncestorMetaDataValue.id }
+        query: {
+          ...omit(currentRoute.query, 'page'),
+          // FIXME: add only when idBased routing is on
+          ...(false && { fileId: currentAncestorMetaDataValue.id })
+        }
       },
       isStaticNav: false
     } as BreadcrumbItem

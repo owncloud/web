@@ -52,17 +52,15 @@ const actions = {
     ]
 
     let foundInCache = false
-    const loadMetaDataValue = async (fileId: string): Promise<AncestorMetaDataValue> => {
+    const loadMetaDataValue = async (
+      fileId: string,
+      path: string
+    ): Promise<AncestorMetaDataValue> => {
+      // console.log('loadMetaDataValue', fileId, path)
       const cachedData = (state.ancestorMetaData as AncestorMetaData)[fileId]
       if (cachedData) {
         foundInCache = true
         return { ...cachedData }
-      }
-
-      // if we have no fileId, we query by path - after the first request we have a fileId
-      const options = {
-        ...(fileId && { fileId }),
-        ...(!fileId && path && { path })
       }
 
       const currentFiles: Resource[] = rootGetters['Files/filesAll']
@@ -72,6 +70,12 @@ const actions = {
       )
 
       if (!resource) {
+        // if we have no fileId, we query by path - after the first request we have a fileId
+        const options = {
+          ...(fileId && { fileId }),
+          ...(!fileId && path && { path })
+        }
+
         resource = (await client.listFiles(space, options, { depth: 0, davProperties })).resource
       }
 
@@ -94,7 +98,7 @@ const actions = {
     do {
       try {
         lastValue = value
-        value = await loadMetaDataValue(value?.parentFolderId || fileId)
+        value = await loadMetaDataValue(value?.parentFolderId || fileId, value?.path || path)
         ancestorMetaData[value.id] = value
         ancestorList.unshift(value)
       } catch (e) {
@@ -106,13 +110,15 @@ const actions = {
     if (!fullShareOwnerPaths) {
       ancestorList[0].path =
         ancestorList[0].parentFolderId === null ? `/${ancestorList[0].name}` : `/`
-    } else {
-      if (!foundInCache) {
-        ancestorList[0].path = dirname(path)
+      for (let i = 1; i < ancestorList.length; i++) {
+        ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
       }
-    }
-    for (let i = 1; i < ancestorList.length; i++) {
-      ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
+    } else {
+      const pathSplit = path.split('/').filter(Boolean)
+      for (let i = 0; i < ancestorList.length; i++) {
+        const currentPath = pathSplit.slice(0, -ancestorList.length + i + 1 || undefined)
+        ancestorList[i].path = `/${currentPath.join('/')}`
+      }
     }
 
     commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
