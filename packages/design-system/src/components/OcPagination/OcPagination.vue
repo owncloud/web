@@ -115,16 +115,14 @@ export default defineComponent({
             ? pages.push('...', this.pages)
             : pages.push(this.pages)
         }
-
-        return pages.map((page, index) => {
-          return {
-            value: page,
-            key: index + uniqueId()
-          }
-        })
       }
 
-      return pages
+      return pages.map((page, index) => {
+        return {
+          value: page,
+          key: index + uniqueId()
+        }
+      })
     },
 
     isPrevPageAvailable() {
