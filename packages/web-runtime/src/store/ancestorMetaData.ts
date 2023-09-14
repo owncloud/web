@@ -66,7 +66,10 @@ const actions = {
       }
 
       const currentFiles: Resource[] = rootGetters['Files/filesAll']
-      let resource = currentFiles.find(({ id }) => fileId === id)
+      let resource = currentFiles.find(
+        ({ id, path: currentPath }) =>
+          fileId === id || (fullShareOwnerPaths && path === currentPath)
+      )
 
       if (!resource) {
         resource = (await client.listFiles(space, options, { depth: 0, davProperties })).resource
@@ -111,8 +114,6 @@ const actions = {
     for (let i = 1; i < ancestorList.length; i++) {
       ancestorList[i].path = join(ancestorList[i - 1].path, ancestorList[i].name)
     }
-
-    console.log('ancestorList', path, ancestorList, fullShareOwnerPaths)
 
     commit('SET_ANCESTOR_META_DATA', ancestorMetaData)
   }
