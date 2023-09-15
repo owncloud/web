@@ -101,7 +101,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
-  await clearPopups(page)
+  await clearCurrentPopup(page)
   return await page.locator(util.format(publicLink, 'Link')).textContent()
 }
 
@@ -109,7 +109,7 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   const { page, resource, linkName, role, space } = args
 
   // clear all popups
-  await clearPopups(page)
+  await clearAllPopups(page)
 
   let resourceName = null
   let shareType = 'space-share'
@@ -144,7 +144,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
   const { page, resource, space, newName } = args
 
   // clear all popups
-  await clearPopups(page)
+  await clearAllPopups(page)
 
   if (!space) {
     const resourcePaths = resource.split('/')
@@ -168,7 +168,7 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   const { page, resource, linkName, newPassword } = args
 
   // clear all popups
-  await clearPopups(page)
+  await clearAllPopups(page)
 
   const resourcePaths = resource.split('/')
   const resourceName = resourcePaths.pop()
@@ -214,7 +214,7 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
   const { page, resourceName, name } = args
 
   // clear all popups
-  await clearPopups(page)
+  await clearAllPopups(page)
 
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
@@ -251,7 +251,7 @@ export const getLinkEditButtonVisibility = async (
   return await page.locator(util.format(editPublicLinkButton, linkName)).isVisible()
 }
 
-export const clearPopups = async (page: Page): Promise<void> => {
+export const clearAllPopups = async (page: Page): Promise<void> => {
   const count = await page.locator(notificationContainer).evaluate((container) => {
     Object.values(container.children).forEach((child) => {
       container.removeChild(child)
@@ -262,4 +262,9 @@ export const clearPopups = async (page: Page): Promise<void> => {
     throw new Error(`Failed to clear ${count} notifications`)
   }
   await expect(page.locator(linkUpdateDialog)).not.toBeVisible()
+}
+
+export const clearCurrentPopup = async (page: Page): Promise<void> => {
+  await expect(page.locator(linkUpdateDialog)).toBeVisible()
+  await clearAllPopups(page)
 }

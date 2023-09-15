@@ -6,12 +6,12 @@
       :max-date="dateMax"
       :locale="language.current"
       :is-required="enforced"
-      class="files-recipient-expiration-datepicker"
+      class="files-recipient-expiration-datepicker oc-width-1-1"
       data-testid="recipient-datepicker"
     >
       <template #default="{ togglePopover }">
         <oc-button
-          class="files-collaborators-expiration-button"
+          class="files-collaborators-expiration-button oc-p-s action-menu-item"
           data-testid="recipient-datepicker-btn"
           appearance="raw"
           gap-size="none"
@@ -20,19 +20,17 @@
           "
           @click="togglePopover"
         >
+          <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
           <span
             v-if="!dateCurrent"
             key="no-expiration-date-label"
-            class="oc-text-truncate"
             v-text="$gettext('Set expiration date')"
           />
           <span
             v-else
             key="set-expiration-date-label"
-            class="oc-text-truncate"
-            v-text="$gettextInterpolate($gettext('Expires %{expires}'), { expires: dateExpire })"
+            v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
           />
-          <oc-icon v-if="!dateCurrent" name="arrow-down-s" />
         </oc-button>
       </template>
     </oc-datepicker>
@@ -162,8 +160,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 .recipient-edit-expiration-btn-remove {
   vertical-align: middle;
-}
-.files-collaborators-expiration-button {
-  max-width: 160px;
 }
 </style>

@@ -3,15 +3,7 @@ import { Resource } from 'web-client'
 import { ConflictDialog, ResolveConflict } from 'web-app-files/src/helpers/resource'
 
 const getConflictDialogInstance = ({ createModal = jest.fn() } = {}) => {
-  return new ConflictDialog(
-    createModal,
-    jest.fn(),
-    jest.fn(),
-    jest.fn(),
-    jest.fn(),
-    jest.fn(),
-    jest.fn()
-  )
+  return new ConflictDialog(createModal, jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn())
 }
 
 describe('conflict dialog', () => {

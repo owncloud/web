@@ -24,6 +24,7 @@ import {
   announceCustomScripts,
   announceLoadingService,
   announcePreviewService,
+  announcePasswordPolicyService,
   announceAdditionalTranslations
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
@@ -87,6 +88,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
+  announcePasswordPolicyService({ app, store })
   await announceClient(runtimeConfiguration)
 
   const applicationsPromise = initializeApplications({

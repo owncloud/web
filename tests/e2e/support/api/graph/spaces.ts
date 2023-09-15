@@ -12,8 +12,7 @@ export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<stri
   const response = await request({
     method: 'GET',
     path: join('graph', 'v1.0', 'me', 'drives', "?$filter=driveType eq 'personal'"),
-    user: user,
-    formatJson: false
+    user: user
   })
 
   checkResponseStatus(response, 'Failed while geting personal space')

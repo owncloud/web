@@ -3,7 +3,7 @@ import util from 'util'
 import Collaborator, { ICollaborator } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
-import { copyLinkArgs, clearPopups } from '../link/actions'
+import { copyLinkArgs, clearCurrentPopup } from '../link/actions'
 import { config } from '../../../../config.js'
 import { createdLinkStore } from '../../../store'
 
@@ -213,7 +213,7 @@ export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
     url = await page.locator(quickLinkUrlLocator).textContent()
   }
 
-  await clearPopups(page)
+  await clearCurrentPopup(page)
 
   if (url && !createdLinkStore.has(linkName)) {
     createdLinkStore.set(linkName, { name: linkName, url })

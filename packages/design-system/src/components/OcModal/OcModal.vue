@@ -40,12 +40,16 @@
               v-model="userInputValue"
               class="oc-modal-body-input"
               :error-message="inputError"
+              :placeholder="inputPlaceholder"
               :label="inputLabel"
               :type="inputType"
+              :password-policy="inputPasswordPolicy"
               :description-message="inputDescription"
               :disabled="inputDisabled"
               :fix-message-line="true"
               :selection-range="inputSelectionRange"
+              @password-challenge-completed="$emit('passwordChallengeCompleted')"
+              @password-challenge-failed="$emit('passwordChallengeFailed')"
               @update:model-value="inputOnInput"
               @keydown.enter.prevent="confirm"
             />
@@ -62,6 +66,7 @@
 
         <div class="oc-modal-body-actions oc-flex oc-flex-right">
           <oc-button
+            ref="cancelButton"
             class="oc-modal-body-actions-cancel"
             :variation="buttonCancelVariation"
             :appearance="buttonCancelAppearance"
@@ -70,6 +75,7 @@
           />
           <oc-button
             v-if="buttonSecondaryText"
+            ref="secondaryButton"
             class="oc-modal-body-actions-secondary oc-ml-s"
             :variation="buttonSecondaryVariation"
             :appearance="buttonSecondaryAppearance"
@@ -78,6 +84,7 @@
           />
           <oc-button
             v-if="!withoutButtonConfirm"
+            ref="primaryButton"
             class="oc-modal-body-actions-confirm oc-ml-s"
             variation="primary"
             :appearance="buttonConfirmAppearance"
@@ -92,13 +99,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, onMounted, unref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcCheckbox from '../OcCheckbox/OcCheckbox.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
+import { PasswordPolicy } from '../../helpers'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -324,6 +332,14 @@ export default defineComponent({
       default: null
     },
     /**
+     * Placeholder of the text input field
+     */
+    inputPlaceholder: {
+      type: String,
+      required: false,
+      default: null
+    },
+    /**
      * Additional description message for the input field
      */
     inputDescription: {
@@ -348,6 +364,14 @@ export default defineComponent({
       default: false
     },
     /**
+     * Password policy for the input
+     */
+    inputPasswordPolicy: {
+      type: Object as PropType<PasswordPolicy>,
+      required: false,
+      default: () => ({})
+    },
+    /**
      * Overwrite default focused element
      * Can be `#id, .class`.
      */
@@ -357,7 +381,50 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['cancel', 'confirm', 'confirm-secondary', 'input', 'checkbox-changed'],
+  emits: [
+    'cancel',
+    'confirm',
+    'confirm-secondary',
+    'input',
+    'checkbox-changed',
+    'passwordChallengeCompleted',
+    'passwordChallengeFailed'
+  ],
+  setup() {
+    const primaryButton = ref(null)
+    const secondaryButton = ref(null)
+    const cancelButton = ref(null)
+
+    const setButtonsEqualWidth = () => {
+      const _primaryButton = unref(primaryButton)
+      const _secondaryButton = unref(secondaryButton)
+      const _cancelButton = unref(cancelButton)
+
+      const primaryWidth = _primaryButton?.$el?.offsetWidth || 0
+      const secondaryWidth = _secondaryButton?.$el?.offsetWidth || 0
+      const cancelWidth = _cancelButton?.$el?.offsetWidth || 0
+      const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
+
+      if (_primaryButton?.$el) {
+        _primaryButton.$el.style.minWidth = `${maxWidth}px`
+      }
+      if (_secondaryButton?.$el) {
+        _secondaryButton.$el.style.minWidth = `${maxWidth}px`
+      }
+      if (_cancelButton?.$el) {
+        _cancelButton.$el.style.minWidth = `${maxWidth}px`
+      }
+    }
+    onMounted(() => {
+      setButtonsEqualWidth()
+    })
+
+    return {
+      primaryButton,
+      secondaryButton,
+      cancelButton
+    }
+  },
   data() {
     return {
       userInputValue: null,
@@ -558,6 +625,12 @@ export default defineComponent({
       .oc-button {
         border-radius: 4px;
       }
+    }
+  }
+
+  .oc-text-input-password-wrapper {
+    button {
+      background-color: var(--oc-color-background-highlight) !important;
     }
   }
 }

@@ -1,12 +1,12 @@
 import { onBeforeUnmount, onMounted, unref, computed, Ref, watchEffect } from 'vue'
-import { eventBus, useStore, ViewModeConstants } from 'web-pkg'
+import { eventBus, QueryValue, useStore, ViewModeConstants } from 'web-pkg'
 import { KeyboardActions } from 'web-pkg/src/composables/keyboardActions'
 import { Resource } from 'web-client'
 import { findIndex } from 'lodash-es'
 
 export const useKeyboardTableMouseActions = (
   keyActions: KeyboardActions,
-  viewMode: Ref<string>
+  viewMode: Ref<string | QueryValue>
 ) => {
   const store = useStore()
   const latestSelectedId = computed(() => store.state.Files.latestSelectedId)

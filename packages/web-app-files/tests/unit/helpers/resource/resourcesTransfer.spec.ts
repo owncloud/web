@@ -72,7 +72,6 @@ describe('resourcesTransfer', () => {
       jest.fn(),
       jest.fn(),
       jest.fn(),
-      jest.fn(),
       jest.fn()
     )
     const result = await resourcesTransfer.perform(TransferType.COPY)
@@ -97,7 +96,6 @@ describe('resourcesTransfer', () => {
           targetFolder,
           clientServiceMock,
           loadingServiceMock,
-          jest.fn(),
           jest.fn(),
           jest.fn(),
           jest.fn(),
@@ -143,7 +141,6 @@ describe('resourcesTransfer', () => {
       jest.fn(),
       jest.fn(),
       jest.fn(),
-      jest.fn(),
       jest.fn()
     )
     resourcesTransfer.resolveFileExists = jest
@@ -169,7 +166,6 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       clientServiceMock,
       loadingServiceMock,
-      jest.fn(),
       jest.fn(),
       jest.fn(),
       jest.fn(),

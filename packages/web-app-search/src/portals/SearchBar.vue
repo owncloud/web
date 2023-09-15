@@ -116,7 +116,6 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from 'web-pkg/src/composables'
 import { SearchBarFilter } from 'web-pkg/src/components'
-import { SHARE_JAIL_ID } from 'web-client/src/helpers'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -128,7 +127,7 @@ export default defineComponent({
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
     const shareId = useRouteQuery('shareId')
-    const locationFilterId = ref(SearchLocationFilterConstants.currentFolder)
+    const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
@@ -166,41 +165,36 @@ export default defineComponent({
       return unref(providerStore)?.availableProviders
     })
 
-    const buildLocationScopeId = () => {
-      const currentFolder = store.getters['Files/currentFolder']
-      const path = currentFolder.path === '/' ? '' : currentFolder.path
-      if (isShareRoute()) {
-        return `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${shareId.value}${path}`
-      }
-      const spaceId = currentFolder.fileId.split('!')[0]
-      return `${spaceId}${path}`
-    }
-
     const search = async () => {
       searchResults.value = []
       if (!unref(term)) {
         return
       }
-      let searchTerm = unref(term)
+      const terms = [`name:"*${unref(term)}*"`]
+
       if (
         unref(currentFolderAvailable) &&
-        unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+        unref(locationFilterId) === SearchLocationFilterConstants.inHere
       ) {
         const currentFolder = store.getters['Files/currentFolder']
         let scope
+
         if (currentFolder?.fileId) {
-          scope = buildLocationScopeId()
+          scope = currentFolder?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
-        searchTerm = `${unref(term)} scope:${scope}`
+
+        terms.push(`scope:${scope}`)
       }
+
       loading.value = true
+
       for (const availableProvider of unref(availableProviders)) {
         if (availableProvider.previewSearch?.available) {
           searchResults.value.push({
             providerId: availableProvider.id,
-            result: await availableProvider.previewSearch.search(unref(searchTerm))
+            result: await availableProvider.previewSearch.search(terms.join(' '))
           })
         }
       }
@@ -215,16 +209,17 @@ export default defineComponent({
       if (unref(activePreviewIndex) === null) {
         const currentQuery = unref(router.currentRoute).query
         const currentFolder = store.getters['Files/currentFolder']
+
         let scope
         if (unref(currentFolderAvailable) && currentFolder?.fileId) {
-          scope = buildLocationScopeId()
+          scope = currentFolder?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
         const useScope =
           unref(term) &&
           unref(currentFolderAvailable) &&
-          unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+          unref(locationFilterId) === SearchLocationFilterConstants.inHere
         router.push(
           createLocationCommon('files-common-search', {
             query: {
@@ -399,36 +394,27 @@ export default defineComponent({
       this.term = ''
       this.optionsDrop.hide()
     },
+    findNextPreviewIndex(previous = false) {
+      const elements = Array.from(document.querySelectorAll('li.preview'))
+      let index =
+        this.activePreviewIndex !== null ? this.activePreviewIndex : previous ? elements.length : -1
+      const increment = previous ? -1 : 1
 
+      do {
+        index += increment
+        if (index < 0 || index > elements.length - 1) {
+          return null
+        }
+      } while (elements[index].classList.contains('disabled'))
+
+      return index
+    },
     onKeyUpUp() {
-      const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
-
-      if (!previewElementsCount) {
-        return
-      }
-
-      if (this.activePreviewIndex === null) {
-        this.activePreviewIndex = previewElementsCount - 1
-      } else {
-        this.activePreviewIndex = this.activePreviewIndex === 0 ? null : this.activePreviewIndex - 1
-      }
-
+      this.activePreviewIndex = this.findNextPreviewIndex(true)
       this.scrollToActivePreviewOption()
     },
     onKeyUpDown() {
-      const previewElementsCount = this.optionsDrop.$el.querySelectorAll('.preview').length
-
-      if (!previewElementsCount) {
-        return
-      }
-
-      if (this.activePreviewIndex === null) {
-        this.activePreviewIndex = 0
-      } else {
-        this.activePreviewIndex =
-          this.activePreviewIndex === previewElementsCount - 1 ? null : this.activePreviewIndex + 1
-      }
-
+      this.activePreviewIndex = this.findNextPreviewIndex(false)
       this.scrollToActivePreviewOption()
     },
     scrollToActivePreviewOption() {
@@ -463,15 +449,14 @@ export default defineComponent({
         return this.$gettext('Show all results')
       }
 
-      const translated = this.$ngettext(
+      return this.$ngettext(
         'Show %{totalResults} result',
         'Show %{totalResults} results',
-        searchResult.totalResults
+        searchResult.totalResults,
+        {
+          totalResults: searchResult.totalResults
+        }
       )
-
-      return this.$gettextInterpolate(translated, {
-        totalResults: searchResult.totalResults
-      })
     },
     isPreviewElementActive(searchId) {
       const previewElements = this.optionsDrop.$el.querySelectorAll('.preview')
@@ -584,7 +569,7 @@ export default defineComponent({
           font-size: var(--oc-font-size-xsmall);
         }
 
-        &.preview > * {
+        &.preview {
           min-height: 44px;
           font-size: inherit;
           padding: var(--oc-space-xsmall) var(--oc-space-small);
@@ -592,6 +577,13 @@ export default defineComponent({
           &:hover,
           &.active {
             background-color: var(--oc-color-background-highlight);
+          }
+
+          &.disabled {
+            background-color: var(--oc-color-background-muted);
+            pointer-events: none;
+            opacity: 0.7;
+            filter: grayscale(0.6);
           }
         }
       }

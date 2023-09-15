@@ -50,7 +50,7 @@ describe('List component', () => {
       const searchTerm = 'term'
       const { wrapper } = getWrapper({ searchTerm })
       const appBar = wrapper.findComponent<any>('app-bar-stub')
-      expect(appBar.props('breadcrumbs')[0].text).toContain(searchTerm)
+      expect(appBar.props('breadcrumbs')[0].text).toEqual(`Search results for "${searchTerm}"`)
     })
   })
   describe('filter', () => {
@@ -75,13 +75,13 @@ describe('List component', () => {
         const searchTerm = 'term'
         const tagFilterQuery = 'tag1'
         const { wrapper } = getWrapper({
-          availableTags: ['tag1'],
+          availableTags: [tagFilterQuery],
           searchTerm,
           tagFilterQuery
         })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
-          `+Name:*${searchTerm}* +Tags:"${tagFilterQuery}"`
+          `name:"*${searchTerm}*" tag:"${tagFilterQuery}"`
         )
       })
     })
@@ -98,7 +98,7 @@ describe('List component', () => {
           fullTextSearchEnabled: true
         })
         await wrapper.vm.loadAvailableTagsTask.last
-        expect(wrapper.emitted('search')[0][0]).toEqual(`+Content:"${searchTerm}"`)
+        expect(wrapper.emitted('search')[0][0]).toEqual(`content:"${searchTerm}"`)
       })
     })
   })

@@ -2,36 +2,42 @@ import join from 'join-path'
 import fetch, { BodyInit, Response } from 'node-fetch'
 import { User } from '../types'
 import { config } from '../../config'
-import { TokenEnvironment } from '../environment'
+import { TokenEnvironmentFactory } from '../environment'
 
 export const request = async ({
   method,
   path,
   body,
   user,
-  formatJson = true,
-  header = {}
+  header = {},
+  isKeycloakRequest = false
 }: {
   method: 'POST' | 'DELETE' | 'PUT' | 'GET' | 'MKCOL' | 'PROPFIND' | 'PATCH'
   path: string
   body?: BodyInit
   user?: User
-  formatJson?: boolean
   header?: object
+  isKeycloakRequest?: boolean
 }): Promise<Response> => {
-  const tokenEnvironment = new TokenEnvironment()
+  const tokenEnvironment = TokenEnvironmentFactory(isKeycloakRequest ? 'keycloak' : null)
+
+  const authHeader = {
+    Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
+  }
+
+  if (!config.basicAuth) {
+    authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
+  }
 
   const basicHeader = {
     'OCS-APIREQUEST': true as any,
-    ...(user && {
-      Authorization: config.apiToken
-        ? 'Bearer ' + tokenEnvironment.getToken({ user }).tokenValue
-        : 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
-    }),
+    ...(user.id && authHeader),
     ...header
   }
 
-  return await fetch(join(config.backendUrl, path), {
+  const baseUrl = isKeycloakRequest ? config.keycloakUrl : config.backendUrl
+
+  return await fetch(join(baseUrl, path), {
     method,
     body,
     headers: basicHeader

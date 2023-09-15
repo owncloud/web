@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The external app error screen component displays an icon and a paragraph 1`] = `
-<div class="oc-text-center">
+<div class="oc-text-center oc-flex oc-flex-center oc-flex-middle oc-height-1-1">
   <oc-icon-stub accessiblelabel="" color="" filltype="line" name="error-warning" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
   <p class="oc-text-xlarge">Error when loading the application</p>
 </div>

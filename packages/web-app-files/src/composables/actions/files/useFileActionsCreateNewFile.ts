@@ -13,6 +13,7 @@ import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src'
 import { stringify } from 'qs'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 export const useFileActionsCreateNewFile = ({
   store,
@@ -34,7 +35,9 @@ export const useFileActionsCreateNewFile = ({
   const clientService = useClientService()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
-  const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
+  const ancestorMetaData = computed<AncestorMetaData>(
+    () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
+  )
   const areFileExtensionsShown = computed((): boolean => store.state.Files.areFileExtensionsShown)
 
   const capabilities = computed(() => store.getters['capabilities'])

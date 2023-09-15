@@ -3,7 +3,262 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.0.2...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.1.0...master
+
+Summary
+-------
+
+* Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+* Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
+* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
+* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+* Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
+* Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
+* Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
+* Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
+* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
+* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
+* Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
+* Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
+* Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
+* Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
+* Enhancement - Add keyboard navigation to spaces overview: [#9625](https://github.com/owncloud/web/pull/9625)
+* Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
+* Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
+* Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
+* Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
+
+Details
+-------
+
+* Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
+
+   In rare (legacy) cases, shares can exist without a displayName key, which caused trouble in the
+   sharing sidebar section. This has been addressed by filtering out shares without a
+   displayName.
+
+   https://github.com/owncloud/web/issues/9257
+   https://github.com/owncloud/web/pull/9504
+
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+
+   Loading PDF files with Safari has been fixed.
+
+   https://github.com/owncloud/web/issues/9483
+   https://github.com/owncloud/web/pull/9565
+
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+
+   We've fixed a bug where setting or removing an expiration on a group share wasn't possible.
+
+   https://github.com/owncloud/web/issues/8419
+   https://github.com/owncloud/web/pull/9513
+
+* Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
+
+   Adjusted offset of alignment of label for shared with action menu option in Sidebar.
+
+   https://github.com/owncloud/web/issues/9323
+   https://github.com/owncloud/web/pull/9529
+
+* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
+
+   An issue where internally resolved public links instantly triggered the default file action
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/9578
+   https://github.com/owncloud/web/pull/9587
+
+* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+
+   Loading audio and video on the Shared with me page with the preview app has been fixed.
+
+   https://github.com/owncloud/web/issues/9593
+   https://github.com/owncloud/web/pull/9595
+
+* Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
+
+   We've added the option to search for spaces in the project space overview.
+
+   https://github.com/owncloud/web/issues/9650
+   https://github.com/owncloud/web/pull/9649
+
+* Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
+
+   The `WEB_OPTION_OPEN_APPS_IN_TAB` is now being respected correctly when opening files with
+   external apps.
+
+   https://github.com/owncloud/web/issues/9630
+   https://github.com/owncloud/web/pull/9663
+
+* Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
+
+   After creating a new folder that gets sorted into the currently displayed resources but
+   outside of the current viewport, we now scroll to the new folder.
+
+   https://github.com/owncloud/web/issues/7600
+   https://github.com/owncloud/web/issues/7601
+   https://github.com/owncloud/web/pulls/8145
+
+* Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
+
+   The existing apps have been refactored and their common functionality has been extracted.
+   This enables developers to more easily create custom apps, and brings unified behavior like
+   auto-saving, shortcut handling and success/error messages across all file viewer/editor
+   apps.
+
+   https://github.com/owncloud/web/issues/9302
+   https://github.com/owncloud/web/issues/9303
+   https://github.com/owncloud/web/issues/9617
+   https://github.com/owncloud/web/pull/9485
+
+* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
+
+   We've added a loading spinner to the share button in the sharing panel to indicate that its still
+   processing if action takes longer.
+
+   https://github.com/owncloud/web/issues/9425
+   https://github.com/owncloud/web/pull/9423
+
+* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+
+   We've added a tooltip with the absolute date for file versions in file details
+
+   https://github.com/owncloud/web/pull/9441
+
+* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
+
+   We've added SSE to the notifications which allows us to be notified about new notifications
+   instantly and from the server without polling every few seconds.
+
+   https://github.com/owncloud/web/issues/9434
+   https://github.com/owncloud/web/issues/9635
+   https://github.com/owncloud/web/pull/9451
+   https://github.com/owncloud/web/pull/9654
+
+* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
+
+   We've improved the tags form in various ways, including visual appearance as well as
+   usability. Auto save, remove tags on backspace, and contextual helper (and more, see issues)
+
+   https://github.com/owncloud/web/issues/9363
+   https://github.com/owncloud/web/issues/9356
+   https://github.com/owncloud/web/issues/9360
+   https://github.com/owncloud/web/issues/9362
+   https://github.com/owncloud/web/issues/9416
+   https://github.com/owncloud/web/pull/9525
+   https://github.com/owncloud/web/pull/9563
+
+* Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
+
+   We've removed the confirmation dialog while deletion files or folder to enhance the user
+   experience. We also show success notifications after the operation.
+
+   This doesn't have impact on the trash bin, confirmation dialog will still be displayed there.
+
+   https://github.com/owncloud/web/issues/5974
+   https://github.com/owncloud/web/pull/9527
+
+* Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
+
+   If a file has been just recently uploaded, it might go trough a processing state (e.G virus
+   scan). If so, no actions on this resource is possible, therefore we show now the processing
+   state and make the temporary restrictions clear to the user.
+
+   https://github.com/owncloud/web/issues/9558
+   https://github.com/owncloud/web/pull/9561
+   https://github.com/owncloud/web/pull/9585
+   https://github.com/owncloud/web/pull/9590
+   https://github.com/owncloud/web/pull/9596
+
+* Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
+
+   We've added indicators and information in case a file is locked.
+
+   https://github.com/owncloud/web/issues/6682
+   https://github.com/owncloud/web/pull/9566
+   https://github.com/owncloud/web/pull/9658
+
+* Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
+
+   Moving "set expiration date" function to a three dots menu to help reduce visual load on simple
+   shares in sharing pane
+
+   https://github.com/owncloud/web/issues/9493
+   https://github.com/owncloud/web/pull/9584
+   https://github.com/owncloud/web/pull/9612
+
+* Enhancement - Add keyboard navigation to spaces overview: [#9625](https://github.com/owncloud/web/pull/9625)
+
+   In the spaces overview it is now possible to navigate through the individual spaces and perform
+   actions using the keyboard
+
+   https://github.com/owncloud/web/issues/9624
+   https://github.com/owncloud/web/pull/9625
+
+* Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
+
+   We've added batch actions to spaces view
+
+   https://github.com/owncloud/web/issues/9626
+   https://github.com/owncloud/web/pull/9627
+
+* Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
+
+   We've introduced
+   [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference)
+   as our default query language. Previously we used our own simple language for queries which is
+   now replaced by kql.
+
+   `sample.tx* Tags:important Tags:report Content:annual*`
+
+   Becomes
+
+   `name:"sample.tx*" AND tag:important AND tag:report AND content:"annual*"`
+
+   By default KQL uses `AND` as property restriction and the query described above can also be
+   formulated as follows
+
+   `name:"sample.tx*" tag:important tag:report content:"annual*"`
+
+   More advanced syntax like grouping combined with boolean property restriction is supported
+   too
+
+   `(name:"sample*" name:"*txt") tag:important OR tag:report content:"annual*"`
+
+   https://github.com/owncloud/web/issues/9636
+   https://github.com/owncloud/web/issues/9646
+   https://github.com/owncloud/web/pull/9653
+
+* Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
+
+   We've adjusted the button widths for every modal so the options look more equal.
+
+   https://github.com/owncloud/web/issues/9641
+   https://github.com/owncloud/web/pull/9671
+
+* Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
+
+   We consume password policy rules from the server and test public link passwords against those.
+   Additionally we added a show/hide toggle button to password input field
+
+   https://github.com/owncloud/web/issues/9638
+   https://github.com/owncloud/web/issues/9657
+   https://github.com/owncloud/web/pull/9682
+   https://github.com/owncloud/web/pull/9634
+   https://github.com/owncloud/web/pull/9686
+   https://github.com/owncloud/web/pull/9688
+
+Changelog for ownCloud Web [7.1.0] (2023-08-23)
+=======================================
+The following sections list the changes in ownCloud web 7.1.0 relevant to
+ownCloud admins and users.
+
+[7.1.0]: https://github.com/owncloud/web/compare/v7.0.2...v7.1.0
 
 Summary
 -------
@@ -11,7 +266,6 @@ Summary
 * Bugfix - Favorites list update on removal: [#9078](https://github.com/owncloud/web/pull/9078)
 * Bugfix - Space creation does not block reoccurring event: [#9213](https://github.com/owncloud/web/pull/9213)
 * Bugfix - Uploading to folders that contain special characters: [#9247](https://github.com/owncloud/web/issues/9247)
-* Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
 * Bugfix - Relative user quota display limited to two decimals: [#9259](https://github.com/owncloud/web/issues/9259)
 * Bugfix - Remember location after token invalidation: [#9261](https://github.com/owncloud/web/issues/9261)
 * Bugfix - Authenticated public links breaking uploads: [#9299](https://github.com/owncloud/web/pull/9299)
@@ -19,10 +273,6 @@ Summary
 * Bugfix - Media controls overflow on mobile screens: [#9351](https://github.com/owncloud/web/pull/9351)
 * Bugfix - Space editors see empty trashbin and delete actions in space trashbin: [#9389](https://github.com/owncloud/web/pull/9389)
 * Bugfix - Merging folders: [#9461](https://github.com/owncloud/web/issues/9461)
-* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
-* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
-* Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
-* Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 * Enhancement - Improve extension app topbar: [#8422](https://github.com/owncloud/web/issues/8422)
 * Enhancement - Open individually shared file in dedicated view: [#8445](https://github.com/owncloud/web/issues/8445)
@@ -59,13 +309,7 @@ Summary
 * Enhancement - User notification for blocked pop-ups and redirects: [#9377](https://github.com/owncloud/web/issues/9377)
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 * Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
-* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
-* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
-* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
-* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
-* Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
-* Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 
 Details
 -------
@@ -91,15 +335,6 @@ Details
 
    https://github.com/owncloud/web/issues/9247
    https://github.com/owncloud/web/pull/9290
-
-* Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
-
-   In rare (legacy) cases, shares can exist without a displayName key, which caused trouble in the
-   sharing sidebar section. This has been addressed by filtering out shares without a
-   displayName.
-
-   https://github.com/owncloud/web/issues/9257
-   https://github.com/owncloud/web/pull/9504
 
 * Bugfix - Relative user quota display limited to two decimals: [#9259](https://github.com/owncloud/web/issues/9259)
 
@@ -156,36 +391,6 @@ Details
 
    https://github.com/owncloud/web/issues/9461
    https://github.com/owncloud/web/pull/9477
-
-* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
-
-   Loading PDF files with Safari has been fixed.
-
-   https://github.com/owncloud/web/issues/9483
-   https://github.com/owncloud/web/pull/9565
-
-* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
-
-   We've fixed a bug where setting or removing an expiration on a group share wasn't possible.
-
-   https://github.com/owncloud/web/issues/8419
-   https://github.com/owncloud/web/pull/9513
-
-* Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
-
-   Adjusted offset of alignment of label for shared with action menu option in Sidebar.
-
-   https://github.com/owncloud/web/issues/9323
-   https://github.com/owncloud/web/pull/9529
-
-* Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
-
-   After creating a new folder that gets sorted into the currently displayed resources but
-   outside of the current viewport, we now scroll to the new folder.
-
-   https://github.com/owncloud/web/issues/7600
-   https://github.com/owncloud/web/issues/7601
-   https://github.com/owncloud/web/pulls/8145
 
 * Enhancement - Add hasPriority property for editors per extension: [#7967](https://github.com/owncloud/web/pull/7967)
 
@@ -497,14 +702,6 @@ Details
    https://github.com/owncloud/web/pull/9394
    https://github.com/owncloud/web/pull/9459
 
-* Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
-
-   We've added a loading spinner to the share button in the sharing panel to indicate that its still
-   processing if action takes longer.
-
-   https://github.com/owncloud/web/issues/9425
-   https://github.com/owncloud/web/pull/9423
-
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
 
    We've added a error log to the upload dialog, so if an upload fails the user can copy the log and
@@ -513,53 +710,6 @@ Details
    https://github.com/owncloud/web/issues/9430
    https://github.com/owncloud/web/pull/9436
    https://github.com/owncloud/web/pull/9426
-
-* Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
-
-   We've added a tooltip with the absolute date for file versions in file details
-
-   https://github.com/owncloud/web/pull/9441
-
-* Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
-
-   We've added SSE to the notifications which allows us to be notified about new notifications
-   instantly and from the server without polling every few seconds.
-
-   https://github.com/owncloud/web/issues/9434
-   https://github.com/owncloud/web/pull/9451
-
-* Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
-
-   We've improved the tags form in various ways, including visual appearance as well as
-   usability. Auto save, remove tags on backspace, and contextual helper (and more, see issues)
-
-   https://github.com/owncloud/web/issues/9363
-   https://github.com/owncloud/web/issues/9356
-   https://github.com/owncloud/web/issues/9360
-   https://github.com/owncloud/web/issues/9362
-   https://github.com/owncloud/web/issues/9416
-   https://github.com/owncloud/web/pull/9525
-   https://github.com/owncloud/web/pull/9563
-
-* Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
-
-   We've removed the confirmation dialog while deletion files or folder to enhance the user
-   experience. We also show success notifications after the operation.
-
-   This doesn't have impact on the trash bin, confirmation dialog will still be displayed there.
-
-   https://github.com/owncloud/web/issues/5974
-   https://github.com/owncloud/web/pull/9527
-
-* Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
-
-   If a file has been just recently uploaded, it might go trough a processing state (e.G virus
-   scan). If so, no actions on this resource is possible, therefore we show now the processing
-   state and make the temporary restrictions clear to the user.
-
-   https://github.com/owncloud/web/issues/9558
-   https://github.com/owncloud/web/pull/9561
-   https://github.com/owncloud/web/pull/9585
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
 =======================================

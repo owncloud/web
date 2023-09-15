@@ -1,0 +1,6 @@
+Bugfix: Respect the open-in-new-tab-config for external apps
+
+The `WEB_OPTION_OPEN_APPS_IN_TAB` is now being respected correctly when opening files with external apps.
+
+https://github.com/owncloud/web/pull/9663
+https://github.com/owncloud/web/issues/9630

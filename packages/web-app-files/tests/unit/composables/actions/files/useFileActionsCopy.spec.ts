@@ -14,32 +14,6 @@ import { useFileActionsCopy } from 'web-app-files/src/composables'
 describe('copy', () => {
   describe('search context', () => {
     describe('computed property "actions"', () => {
-      describe('label', () => {
-        it.each([
-          {
-            resources: [{ id: '1' }, { id: '2' }] as Resource[],
-            copyAbleCount: 2
-          },
-          {
-            resources: [
-              { id: '1' },
-              { id: '2' },
-              { id: '3' },
-              { id: '5', driveType: 'project' }
-            ] as Resource[],
-            copyAbleCount: 3
-          }
-        ])('should be set correctly', ({ resources, copyAbleCount }) => {
-          const { wrapper } = getWrapper({
-            searchLocation: true,
-            setup: ({ actions }) => {
-              expect(unref(actions)[0].label({ space: null, resources })).toContain(
-                `(${copyAbleCount.toString()})`
-              )
-            }
-          })
-        })
-      })
       describe('handler', () => {
         it.each([
           {
