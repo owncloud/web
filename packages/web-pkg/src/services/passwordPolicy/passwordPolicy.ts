@@ -9,9 +9,9 @@ import {
   MustNotBeEmptyRule
 } from './rules'
 import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
-import { PasswordPolicy } from 'password-sheriff'
 import get from 'lodash-es/get'
 import { Store } from 'vuex'
+import { PasswordPolicy } from 'password-sheriff'
 import { GeneratePassword } from 'js-generate-password'
 
 interface GeneratePasswordRules {
