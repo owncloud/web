@@ -658,6 +658,33 @@ importers:
         specifier: workspace:@ownclouders/web-pkg@*
         version: link:../web-pkg
 
+  packages/web-app-backups:
+    dependencies:
+      axios:
+        specifier: ^0.27.2
+        version: 0.27.2
+      fuse.js:
+        specifier: ^6.5.3
+        version: 6.5.3
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+      vue-concurrency:
+        specifier: 4.0.0
+        version: 4.0.0(vue@3.3.4)
+      vuex:
+        specifier: 4.1.0
+        version: 4.1.0(vue@3.3.4)
+      web-client:
+        specifier: npm:@ownclouders/web-client
+        version: link:../web-client
+      web-pkg:
+        specifier: npm:@ownclouders/web-pkg
+        version: link:../web-pkg
+
   packages/web-app-draw-io:
     dependencies:
       luxon:
@@ -943,6 +970,9 @@ importers:
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
+      p-queue:
+        specifier: ^6.6.2
+        version: 6.6.2
       password-sheriff:
         specifier: ^1.1.1
         version: 1.1.1
@@ -20515,6 +20545,15 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
     requiresBuild: true
+
+  /vue-concurrency@4.0.0(vue@3.3.4):
+    resolution: {integrity: sha512-YOLrHang8w15bMOpftw6iPsoqlZT/u5zsblnT+CrVvc2HZ0eP76hjj77sgepHxB6FRcN3dlFXDNBMQ6iZzpiNw==}
+    peerDependencies:
+      vue: ^3.2.20 || ^2.7.0
+    dependencies:
+      caf: 15.0.1
+      vue: 3.3.4
+    dev: false
 
   /vue-concurrency@4.0.1(vue@3.3.4):
     resolution: {integrity: sha512-gzZjC8o9EE1/d7OEndI0C8lO09nkLSbviT94/gQR372iLVbYKZiGto87upjV9TAHodTfzbBgjyQXH53AVI5ugA==}
