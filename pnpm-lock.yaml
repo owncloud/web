@@ -729,6 +729,9 @@ importers:
       marked:
         specifier: ^4.0.12
         version: 4.0.12
+      mobile-detect:
+        specifier: ^1.4.5
+        version: 1.4.5
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -1081,6 +1084,9 @@ importers:
       semver:
         specifier: ^7.3.8
         version: 7.3.8
+      smartbanner.js:
+        specifier: ^1.19.3
+        version: 1.19.3
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -15236,6 +15242,10 @@ packages:
     resolution: {integrity: sha512-PbNHr7Y/9Y/2P5pKFv5XOGBfNQqZ+fdiHWcuf7swLACN5ZW5LU7J5tMU8LSBjpluAxAxKYGD9nnaIbdRy9+m1w==}
     dev: true
 
+  /mobile-detect@1.4.5:
+    resolution: {integrity: sha512-yc0LhH6tItlvfLBugVUEtgawwFU2sIe+cSdmRJJCTMZ5GEJyLxNyC/NIOAOGk67Fa8GNpOttO3Xz/1bHpXFD/g==}
+    dev: false
+
   /mocha@6.2.3:
     resolution: {integrity: sha512-0R/3FvjIGH3eEuG17ccFPk117XL2rWxatr81a57D+r/x2uTYZRbdZ4oVidEUMh2W2TJDa7MdAb12Lm2/qrKajg==}
     engines: {node: '>= 6.0.0'}
@@ -18756,6 +18766,11 @@ packages:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
     dev: true
+
+  /smartbanner.js@1.19.3:
+    resolution: {integrity: sha512-30JaYaPHO0VRC8MXGeUGWm1jF3+kCwKgV2GW9uLa8J3zOuv9D9ZhZo0IKf/xIcX0HQBRisOU4RPhEj7UrNt8Sw==}
+    engines: {node: '>=10.24.1 <21.0.0'}
+    dev: false
 
   /snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
