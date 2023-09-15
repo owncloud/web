@@ -120,6 +120,7 @@ export function buildSpace(data): SpaceResource {
     description: data.description,
     extension: '',
     path,
+    visiblePath: path,
     webDavPath,
     webDavTrashPath,
     driveAlias,

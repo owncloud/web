@@ -784,7 +784,7 @@ export default defineComponent({
       }
 
       return this.createFolderLink({
-        path: dirname(file.path),
+        path: dirname(file.visiblePath),
         ...(file.parentFolderId && { fileId: file.parentFolderId }),
         resource: file
       })

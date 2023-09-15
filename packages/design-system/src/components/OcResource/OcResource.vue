@@ -52,7 +52,7 @@
           :name="resource.name"
           :extension="resource.extension"
           :type="resource.type"
-          :full-path="resource.path"
+          :full-path="resource.visiblePath"
           :is-path-displayed="isPathDisplayed"
           :is-extension-displayed="isExtensionDisplayed"
         />

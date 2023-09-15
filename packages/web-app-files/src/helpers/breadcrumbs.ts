@@ -55,7 +55,7 @@ export const breadcrumbsFor = ({
         query: {
           ...omit(currentRoute.query, 'page'),
           // FIXME: add only when idBased routing is on
-          ...(false && { fileId: currentAncestorMetaDataValue.id })
+          ...(true && { fileId: currentAncestorMetaDataValue.id })
         }
       },
       isStaticNav: false

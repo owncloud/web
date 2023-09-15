@@ -1,5 +1,5 @@
 import orderBy from 'lodash-es/orderBy'
-import path, { basename, join } from 'path'
+import path, { basename, dirname, join } from 'path'
 import { DateTime } from 'luxon'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import {

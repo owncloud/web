@@ -93,7 +93,7 @@ export default defineComponent({
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.createFolderLink(this.resource.path, this.resource.fileId)
+            to: this.createFolderLink(this.resource.visiblePath, this.resource.fileId)
           }
         : {}
     },
@@ -141,9 +141,6 @@ export default defineComponent({
         !isResourceTxtFileAlmostEmpty(this.resource)
       )
     },
-    folderLink() {
-      return this.createFolderLink(this.resource.path, this.resource.fileId)
-    },
     parentFolderLink() {
       if (isShareRoot(this.resource)) {
         return createLocationShares('files-shares-with-me')
@@ -151,7 +148,7 @@ export default defineComponent({
       if (isProjectSpaceResource(this.resource)) {
         return createLocationSpaces('files-spaces-projects')
       }
-      return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
+      return this.createFolderLink(dirname(this.resource.visiblePath), this.resource.parentFolderId)
     },
 
     parentFolderLinkIconAdditionalAttributes() {
