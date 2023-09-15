@@ -240,6 +240,7 @@ export default {
     context.commit('REMOVE_FILES', files)
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
+    context.commit('PRUNE_SHARES')
   },
   updateCurrentFileShareTypes({ state, getters, commit, rootState }) {
     const highlighted = getters.highlightedFile
