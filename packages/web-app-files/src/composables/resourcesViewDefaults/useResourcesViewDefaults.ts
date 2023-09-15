@@ -23,7 +23,7 @@ import {
   ViewModeConstants
 } from 'web-pkg/src/composables'
 
-import { ScrollToResult, useScrollTo } from '../scrollTo'
+import { ScrollToResult, useScrollTo } from 'web-pkg/src/composables/scrollTo'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>

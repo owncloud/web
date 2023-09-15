@@ -11,9 +11,9 @@ import {
   getComposableWrapper
 } from 'web-test-helpers/src'
 import { useScrollToMock } from 'web-app-files/tests/mocks/useScrollToMock'
-import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 
-jest.mock('web-app-files/src/composables/scrollTo')
+jest.mock('web-pkg/src/composables/scrollTo')
 
 describe('useFileActionsCreateNewFolder', () => {
   describe('checkFolderName', () => {
