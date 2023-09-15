@@ -1,4 +1,4 @@
-import { useScrollTo } from 'web-app-admin-settings/src/composables/scrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 import { Ref, unref } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
 import { find, findIndex } from 'lodash-es'
@@ -59,7 +59,7 @@ export const useKeyboardTableNavigation = (
     lastSelectedRowIndex.value = nextResourceIndex
     lastSelectedRowId.value = String(nextResource.id)
 
-    scrollToResource(nextResource.id)
+    scrollToResource(nextResource.id, { topbarElement: 'admin-settings-app-bar' })
   }
 
   const handleShiftUpAction = async () => {
@@ -86,7 +86,7 @@ export const useKeyboardTableNavigation = (
     lastSelectedRowIndex.value = nextResourceIndex
     lastSelectedRowId.value = String(nextResource.id)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
-    scrollToResource(nextResource.id)
+    scrollToResource(nextResource.id, { topbarElement: 'admin-settings-app-bar' })
   }
   const handleShiftDownAction = () => {
     const nextResource = getNextResource(false)
@@ -121,7 +121,7 @@ export const useKeyboardTableNavigation = (
     lastSelectedRowIndex.value = nextResourceIndex
     lastSelectedRowId.value = String(nextResource.id)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) + 1
-    scrollToResource(nextResource.id)
+    scrollToResource(nextResource.id, { topbarElement: 'admin-settings-app-bar' })
   }
 
   const handleSelectAllAction = () => {

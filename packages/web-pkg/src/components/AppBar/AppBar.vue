@@ -29,7 +29,7 @@
           </template>
         </oc-breadcrumb>
         <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
-        <shares-navigation v-if="hasSharesNavigation" />
+        <slot v-if="hasSharesNavigation" name="navigation" />
         <div
           v-if="hasViewOptions || hasSidebarToggle"
           id="files-app-bar-controls-right"
@@ -102,7 +102,6 @@ export default defineComponent({
   components: {
     BatchActions,
     ContextActions,
-    SharesNavigation,
     SidebarToggle,
     ViewOptions
   },
