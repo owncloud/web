@@ -1,8 +1,6 @@
 <template>
   <div class="oc-flex">
-    <files-view-wrapper class="oc-flex-column">
     <backups-section id="backups-section" :empty-message="emptyMessage" />
-  </files-view-wrapper>
   </div>
 </template>
 
@@ -10,12 +8,10 @@
 import { mapGetters } from 'vuex'
 import BackupsSection from '../components/BackupsSection.vue'
 import { defineComponent } from 'vue'
-import FilesViewWrapper from 'web-pkg/src/components/FilesViewWrapper.vue'
 import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 
 export default defineComponent({
   components: {
-    FilesViewWrapper,
     AppBar,
     BackupsSection
   },
