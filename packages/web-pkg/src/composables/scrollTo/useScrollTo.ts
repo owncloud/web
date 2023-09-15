@@ -7,8 +7,11 @@ import { useRouteQuery } from 'web-pkg/src/composables'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 
 export interface ScrollToResult {
-  scrollToResource(resourceId: Resource['id'], options?: { forceScroll?: boolean }): void
-  scrollToResourceFromRoute(resources: Resource[]): void
+  scrollToResource(
+    resourceId: Resource['id'],
+    options?: { forceScroll?: boolean; topbarElement: string }
+  ): void
+  scrollToResourceFromRoute(resources: Resource[], topbarElement: string): void
 }
 
 export const useScrollTo = (): ScrollToResult => {
@@ -22,7 +25,10 @@ export const useScrollTo = (): ScrollToResult => {
     return queryItemAsString(unref(detailsQuery))
   })
 
-  const scrollToResource = (resourceId: Resource['id'], options = { forceScroll: false }) => {
+  const scrollToResource = (
+    resourceId: Resource['id'],
+    options = { forceScroll: false, topbarElement: null }
+  ) => {
     const resourceElement = document.querySelectorAll(
       `[data-item-id='${resourceId}']`
     )[0] as HTMLElement
@@ -31,7 +37,8 @@ export const useScrollTo = (): ScrollToResult => {
       return
     }
 
-    const topbarElement = document.getElementById('files-app-bar')
+    // files-app-bar, admin-settings-app-bar
+    const topbarElement = document.getElementById(options.topbarElement)
     // topbar height + th height + height of one row = offset needed when scrolling top
     const topOffset = topbarElement.offsetHeight + resourceElement.offsetHeight * 2
 
@@ -44,7 +51,7 @@ export const useScrollTo = (): ScrollToResult => {
     }
   }
 
-  const scrollToResourceFromRoute = (resources: Resource[]) => {
+  const scrollToResourceFromRoute = (resources: Resource[], topbarElement: null) => {
     if (!unref(scrollTo) || !resources.length) {
       return
     }
@@ -52,7 +59,7 @@ export const useScrollTo = (): ScrollToResult => {
     const resource = unref(resources).find((r) => r.id === unref(scrollTo))
     if (resource && resource.processing !== true) {
       store.commit('Files/SET_FILE_SELECTION', [resource])
-      scrollToResource(resource.id, { forceScroll: true })
+      scrollToResource(resource.id, { forceScroll: true, topbarElement })
 
       if (unref(details)) {
         eventBus.publish(SideBarEventTopics.openWithPanel, unref(details))

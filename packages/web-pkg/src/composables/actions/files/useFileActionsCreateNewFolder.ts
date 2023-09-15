@@ -76,7 +76,7 @@ export const useFileActionsCreateNewFolder = ({
       })
 
       await nextTick()
-      scrollToResource(resource.id, { forceScroll: true })
+      scrollToResource(resource.id, { forceScroll: true, topbarElement: 'files-app-bar' })
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
