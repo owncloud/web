@@ -183,7 +183,7 @@ import ResourceTable from '../../components/FilesList/ResourceTable.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
-import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 import { useSelectedResources } from 'web-app-files/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 import { defaultFuseOptions, formatFileSize } from 'web-pkg/src'
@@ -355,7 +355,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      scrollToResourceFromRoute(unref(spaces))
+      scrollToResourceFromRoute(unref(spaces), 'files-app-bar')
       nextTick(() => {
         markInstance.value = new Mark('.spaces-table')
       })

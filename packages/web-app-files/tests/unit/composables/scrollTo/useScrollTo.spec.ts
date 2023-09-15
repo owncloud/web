@@ -1,5 +1,5 @@
 import { mock, mockDeep } from 'jest-mock-extended'
-import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 import { Resource } from 'web-client/src'
 import { eventBus } from 'web-pkg/src'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
@@ -87,7 +87,7 @@ describe('useScrollTo', () => {
           const resource = mockDeep<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
           const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
-          scrollToResourceFromRoute([resource])
+          scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
         {
@@ -109,7 +109,7 @@ describe('useScrollTo', () => {
           const resource = mockDeep<Resource>({ id: 'someOtherFileId' })
           const { scrollToResourceFromRoute } = useScrollTo()
           const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
-          scrollToResourceFromRoute([resource])
+          scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
         {
@@ -131,7 +131,7 @@ describe('useScrollTo', () => {
           const resource = mockDeep<Resource>({ id: resourceId, processing: true })
           const { scrollToResourceFromRoute } = useScrollTo()
           const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
-          scrollToResourceFromRoute([resource])
+          scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
         {
@@ -155,7 +155,7 @@ describe('useScrollTo', () => {
           const resource = mockDeep<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
           const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
-          scrollToResourceFromRoute([resource])
+          scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).toHaveBeenCalled()
         },
         {
@@ -183,7 +183,7 @@ describe('useScrollTo', () => {
           const busStub = jest.spyOn(eventBus, 'publish')
           const resource = mockDeep<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
-          scrollToResourceFromRoute([resource])
+          scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(busStub).toHaveBeenCalled()
         },
         {

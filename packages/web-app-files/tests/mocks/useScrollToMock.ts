@@ -1,4 +1,4 @@
-import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 
 export const useScrollToMock = (
   options: Partial<ReturnType<typeof useScrollTo>> = {}

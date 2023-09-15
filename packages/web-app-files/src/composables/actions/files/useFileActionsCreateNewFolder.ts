@@ -9,7 +9,7 @@ import { join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { isLocationSpacesActive } from 'web-app-files/src/router'
 import { getIndicators } from 'web-app-files/src/helpers/statusIndicators'
-import { useScrollTo } from '../../scrollTo/useScrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 import { AncestorMetaData } from 'web-pkg/src/types'
 
 export const useFileActionsCreateNewFolder = ({
@@ -79,7 +79,7 @@ export const useFileActionsCreateNewFolder = ({
       })
 
       await nextTick()
-      scrollToResource(resource.id, { forceScroll: true })
+      scrollToResource(resource.id, { forceScroll: true, topbarElement: 'files-app-bar' })
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
