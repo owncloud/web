@@ -117,7 +117,7 @@
             <li
               v-for="(option, i) in editOptions"
               :key="`public-link-edit-option-${i}`"
-              class="oc-rounded oc-menu-item-hover oc-flex"
+              class="oc-rounded oc-menu-item-hover"
             >
               <oc-datepicker
                 v-if="option.showDatepicker"
@@ -141,7 +141,6 @@
                   </oc-button>
                   <oc-button
                     v-if="option.remove && option.remove.isRemovable"
-                    :data-testid="`files-link-id-${link.id}-edit-${option.id}`"
                     :aria-label="option.remove.title"
                     appearance="raw"
                     @click="option.remove.method"
