@@ -119,7 +119,8 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicAlias,
-  useAbility
+  useAbility,
+  usePasswordPolicyService
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -156,6 +157,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { can } = useAbility()
+    const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
 
     const space = inject<Ref<SpaceResource>>('space')
@@ -224,6 +226,7 @@ export default defineComponent({
       indirectLinks,
       canCreatePublicLinks,
       configurationManager,
+      passwordPolicyService,
       canCreateLinks,
       canEditLink
     }
@@ -407,9 +410,16 @@ export default defineComponent({
       const params = this.getParamsForLink(link)
 
       if (!link.password && this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ ...this.$language, store: this.$store }, (newPassword) => {
-          this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
-        })
+        showQuickLinkPasswordModal(
+          {
+            ...this.$language,
+            store: this.$store,
+            passwordPolicyService: this.passwordPolicyService
+          },
+          (newPassword) => {
+            this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
+          }
+        )
       } else {
         this.updatePublicLink({ params, onSuccess })
       }

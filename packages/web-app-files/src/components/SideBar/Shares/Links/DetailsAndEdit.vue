@@ -230,7 +230,7 @@ export default defineComponent({
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
-      passwordPolicy: passwordPolicyService.getPolicy()
+      passwordPolicyService
     }
   },
   data() {
@@ -474,7 +474,7 @@ export default defineComponent({
         hasInput: true,
         confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
-        inputPasswordPolicy: this.passwordPolicy,
+        inputPasswordPolicy: this.passwordPolicy.getPolicy(),
         inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
         inputType: 'password',
         onCancel: this.hideModal,
