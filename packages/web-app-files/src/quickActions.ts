@@ -93,7 +93,6 @@ export default {
             await createQuicklink({
               ability,
               clientService,
-              passwordPolicyService,
               language,
               password,
               resource: item,
