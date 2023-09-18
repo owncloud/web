@@ -23,26 +23,16 @@
       padding-size="small"
       close-on-click
     >
-      <oc-list class="applications-list">
-        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
-          <oc-button
-            :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
-            :type="n.url ? 'a' : 'router-link'"
-            :target="n.target"
-            :href="n.url"
-            :to="n.path"
-            :appearance="n.active ? 'raw-inverse' : 'raw'"
-            :variation="n.active ? 'primary' : 'passive'"
-            :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
-          >
-            <span class="icon-box">
-              <oc-icon :name="n.icon" variation="inherit" />
-            </span>
-            <span v-text="$gettext(n.title)" />
-            <oc-icon v-if="n.active" name="check" class="active-check" variation="inherit" />
-          </oc-button>
-        </li>
-      </oc-list>
+      <div style="display: block; position: relative; height: 200px; width: 200px">
+        <oc-application-icon
+          icon="folder"
+          color-primary="var(--oc-color-swatch-primary-muted)"
+          color-secondary="var(--oc-color-swatch-primary-gradient)"
+        />
+        <oc-application-icon icon="slideshow" />
+        <oc-application-icon icon="home" />
+        <oc-application-icon icon="file" />
+      </div>
     </oc-drop>
   </nav>
 </template>
@@ -52,8 +42,12 @@ import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { OcDrop } from 'design-system/src/components'
+import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 
 export default defineComponent({
+  components: {
+    OcApplicationIcon
+  },
   props: {
     applicationsList: {
       type: Array as PropType<any[]>,
