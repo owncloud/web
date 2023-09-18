@@ -8,7 +8,9 @@
       appearance="raw"
       class="oc-mr-xs quick-action-button oc-p-xs"
       :class="`files-quick-action-${action.id}`"
-      @click="action.handler({ ability, clientService, item, language, store })"
+      @click="
+        action.handler({ ability, clientService, passwordPolicyService, item, language, store })
+      "
     >
       <oc-icon :name="action.icon" fill-type="line" />
     </oc-button>
@@ -18,7 +20,7 @@
 <script lang="ts">
 import pickBy from 'lodash-es/pickBy'
 import { computed, defineComponent } from 'vue'
-import { useAbility, useClientService, useStore } from 'web-pkg'
+import { useAbility, useClientService, usePasswordPolicyService, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -38,6 +40,7 @@ export default defineComponent({
     const store = useStore()
     const ability = useAbility()
     const clientService = useClientService()
+    const passwordPolicyService = usePasswordPolicyService()
     const language = useGettext()
 
     const filteredActions = computed(() =>
@@ -47,9 +50,9 @@ export default defineComponent({
     return {
       ability,
       clientService,
+      passwordPolicyService,
       store,
       language,
-
       filteredActions
     }
   }

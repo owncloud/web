@@ -88,7 +88,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
-  announcePasswordPolicyService({ app, store })
   await announceClient(runtimeConfiguration)
 
   const applicationsPromise = initializeApplications({
@@ -157,6 +156,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       if (!userContextReady) {
         return
       }
+
+      announcePasswordPolicyService({ app, store })
+
       const clientService = app.config.globalProperties.$clientService
 
       // Load spaces to make them available across the application
