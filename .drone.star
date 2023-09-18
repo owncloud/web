@@ -1259,12 +1259,12 @@ def ocisService(type, tika_enabled = False):
         "WEB_ASSET_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
+        "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
     }
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "mdns"
     else:
-        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
         environment["STORAGE_HOME_DRIVER"] = "ocis"
         environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
         environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
