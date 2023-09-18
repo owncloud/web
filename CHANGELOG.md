@@ -114,7 +114,9 @@ Details
    https://github.com/owncloud/web/issues/9302
    https://github.com/owncloud/web/issues/9303
    https://github.com/owncloud/web/issues/9617
+   https://github.com/owncloud/web/issues/9695
    https://github.com/owncloud/web/pull/9485
+   https://github.com/owncloud/web/pull/9699
 
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 
