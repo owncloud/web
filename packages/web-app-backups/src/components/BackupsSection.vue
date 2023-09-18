@@ -102,12 +102,10 @@ import { mapActions, mapMutations, mapGetters } from 'vuex'
 import { useStore } from 'web-pkg/src/composables'
 
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useResourcesViewDefaults } from 'web-pkg/src/composables'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { useTask } from 'vue-concurrency'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { basename } from 'path'
-import { Resource } from 'web-client'
 import { buildWebDavFilesPath } from 'web-pkg/src/helpers/resources'
 import { buildResource } from 'web-client/src/helpers'
 import { DavProperties } from 'web-client/src/webdav/constants'
@@ -116,6 +114,7 @@ import { breadcrumbsFromPath, concatBreadcrumbs } from 'web-pkg/src/helpers/brea
 import { createLocationSpaces } from 'web-pkg/src/router'
 import { CreateTargetRouteOptions } from 'web-pkg/src/helpers/folderLink'
 import { useClientService } from 'web-pkg/src/composables'
+import { useSelectedResources } from 'web-pkg/src/composables/selection'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -138,7 +137,7 @@ export default defineComponent({
     const accessToken = store.getters['runtime/auth/accessToken']
     const { owncloudSdk } = useClientService()
 
-    const { selectedResourcesIds } = useResourcesViewDefaults<Resource, any, any[]>()
+    const { selectedResourcesIds } = useSelectedResources({ store })
 
     const fetchResources = async (client, path, properties, signal = null) => {
       const options = signal ? { signal } : {}
