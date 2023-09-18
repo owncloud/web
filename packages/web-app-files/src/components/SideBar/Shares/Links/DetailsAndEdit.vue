@@ -440,8 +440,8 @@ export default defineComponent({
     updateLink({ link, dropRef = undefined, onSuccess = () => {} }) {
       link = link || this.link
       dropRef = dropRef || this.$refs.editPublicLinkDropdown
-      this.$emit('updateLink', { link, onSuccess })
       dropRef.hide()
+      this.$emit('updateLink', { link, onSuccess })
     },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
