@@ -1,6 +1,6 @@
 <template>
   <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
-    <h1 class="oc-invisible-sr" v-text="pageTitle" />
+    <h1 class="" v-text="pageTitle" />
     <app-top-bar
       v-if="!loading && !loadingError"
       :main-actions="fileActions"
@@ -317,7 +317,7 @@ export default defineComponent({
       autosaveIntervalId = null
     })
 
-    const { bindKeyAction } = useKeyboardActions()
+    const { bindKeyAction } = useKeyboardActions(true)
     bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.S }, () => {
       if (!unref(isDirty)) {
         return

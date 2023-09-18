@@ -65,12 +65,12 @@ const areCustomKeyBindingsDisabled = () => {
   return isTextSelected
 }
 
-export const useKeyboardActions = (): KeyboardActions => {
+export const useKeyboardActions = (skipDisabledKeyBindingsCheck?: boolean): KeyboardActions => {
   const actions = ref<Array<KeyboardAction>>([])
   const selectionCursor = ref(0)
 
   const listener = (event: KeyboardEvent): void => {
-    if (areCustomKeyBindingsDisabled()) {
+    if (!skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled()) {
       return
     }
 
@@ -81,6 +81,7 @@ export const useKeyboardActions = (): KeyboardActions => {
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
+
     unref(actions)
       .filter((action) => {
         return action.primary === key && action.modifier === modifier
