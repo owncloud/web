@@ -2,6 +2,10 @@ import { useEventListener } from '@vueuse/core'
 import { Ref, ref, unref } from 'vue'
 import * as uuid from 'uuid'
 
+interface KeyboardActionsOptions {
+  skipDisabledKeyBindingsCheck?: boolean
+}
+
 export enum Key {
   C = 'c',
   V = 'v',
@@ -65,12 +69,12 @@ const areCustomKeyBindingsDisabled = () => {
   return isTextSelected
 }
 
-export const useKeyboardActions = (): KeyboardActions => {
+export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardActions => {
   const actions = ref<Array<KeyboardAction>>([])
   const selectionCursor = ref(0)
 
   const listener = (event: KeyboardEvent): void => {
-    if (areCustomKeyBindingsDisabled()) {
+    if (!options?.skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled()) {
       return
     }
 
@@ -81,6 +85,7 @@ export const useKeyboardActions = (): KeyboardActions => {
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
+
     unref(actions)
       .filter((action) => {
         return action.primary === key && action.modifier === modifier

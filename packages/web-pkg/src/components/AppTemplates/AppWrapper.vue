@@ -317,7 +317,7 @@ export default defineComponent({
       autosaveIntervalId = null
     })
 
-    const { bindKeyAction } = useKeyboardActions()
+    const { bindKeyAction } = useKeyboardActions({ skipDisabledKeyBindingsCheck: true })
     bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.S }, () => {
       if (!unref(isDirty)) {
         return
