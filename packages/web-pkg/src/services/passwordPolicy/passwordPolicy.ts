@@ -20,8 +20,6 @@ export class PasswordPolicyService {
 
   constructor({ store, language }: { store: Store<unknown>; language: Language }) {
     this.capability = get(store, 'getters.capabilities.password_policy', {})
-    console.log(store.getters.capabilities)
-    console.log(this.capability)
     this.language = language
     this.buildPolicy()
   }
