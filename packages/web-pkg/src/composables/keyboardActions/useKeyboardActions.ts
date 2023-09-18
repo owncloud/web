@@ -74,7 +74,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
   const selectionCursor = ref(0)
 
   const listener = (event: KeyboardEvent): void => {
-    if (!options.skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled()) {
+    if (!options?.skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled()) {
       return
     }
 
