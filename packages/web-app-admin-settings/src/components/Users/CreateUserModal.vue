@@ -136,6 +136,15 @@ export default defineComponent({
         return false
       }
 
+      const pattern =
+        "^[a-zA-Z_][a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*(@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)*$"
+      if (!new RegExp(pattern).test(this.user.onPremisesSamAccountName)) {
+        this.formData.userName.errorMessage = this.$gettext(
+          'User name cannot contain special characters'
+        )
+        return false
+      }
+
       if (
         this.user.onPremisesSamAccountName.length &&
         !isNaN(parseInt(this.user.onPremisesSamAccountName[0]))
