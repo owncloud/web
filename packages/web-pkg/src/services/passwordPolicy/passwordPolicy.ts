@@ -132,14 +132,6 @@ export class PasswordPolicyService {
   public generatePassword(): string {
     return GeneratePassword({
       symbols: true,
-      length: 12,
-      minLengthLowercase: 2,
-      minLengthUppercase: 2,
-      minLengthNumbers: 2,
-      minLengthSymbols: 2
-    })
-    return GeneratePassword({
-      symbols: true,
       length: this.generatePasswordRules.length,
       minLengthLowercase: this.generatePasswordRules.minLowercaseCharacters,
       minLengthUppercase: this.generatePasswordRules.minUppercaseCharacters,
