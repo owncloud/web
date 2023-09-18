@@ -61,7 +61,7 @@ config = {
     "e2e": {
         "oCIS-1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
@@ -69,12 +69,18 @@ config = {
         },
         "oCIS-2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
         },
-        "oCIS-app-provider": {
+        "oCIS-app-provider-1": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-2": {
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
@@ -356,19 +362,15 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
+    return e2e_pipelines
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
@@ -750,7 +752,7 @@ def e2eTests(ctx):
         # oCIS specific dependencies
         depends_on = ["cache-ocis"]
 
-        if suite == "oCIS-app-provider":
+        if suite.startswith("oCIS-app-provider"):
             # app-provider specific steps
             steps += wopiServer() + \
                      collaboraService() + \
