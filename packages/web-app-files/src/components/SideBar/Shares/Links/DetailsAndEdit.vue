@@ -237,10 +237,11 @@ export default defineComponent({
   setup(props) {
     const { current } = useGettext()
     const passwordPolicyService = usePasswordPolicyService()
-
-    console.log(props.link.expiration)
     const dateExpire = computed(() => {
-      return formatRelativeDateFromDateTime(DateTime.fromISO(props.link.expiration).endOf('day'), current)
+      return formatRelativeDateFromDateTime(
+        DateTime.fromISO(props.link.expiration).endOf('day'),
+        current
+      )
     })
 
     return {
