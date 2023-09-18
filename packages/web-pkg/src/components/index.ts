@@ -1,3 +1,4 @@
+export * from './AppTemplates'
 export * from './ContextActions'
 export * from './SideBar'
 export * from './Spaces'
