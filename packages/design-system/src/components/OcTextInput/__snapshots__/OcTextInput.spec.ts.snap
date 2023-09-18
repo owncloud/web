@@ -7,6 +7,13 @@ exports[`OcTextInput password input field password policy displays error state i
     <!--v-if-->
     <div class="oc-text-input-password-wrapper">
       <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-21" type="password">
+      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
+        <!--v-if-->
+        <!-- @slot Content of the button -->
+        <span class="oc-icon oc-icon-s oc-icon-passive">
+          <!---->
+        </span>
+      </button>
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
@@ -15,13 +22,6 @@ exports[`OcTextInput password input field password policy displays error state i
         </span>
       </button>
       <!--v-if-->
-      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
-        <!--v-if-->
-        <!-- @slot Content of the button -->
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
-      </button>
     </div>
     <portal to="app.design-system.password-policy">
       <div class="oc-text-small oc-flex oc-flex-column">
@@ -48,6 +48,13 @@ exports[`OcTextInput password input field password policy displays success state
     <!--v-if-->
     <div class="oc-text-input-password-wrapper">
       <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-22" type="password">
+      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
+        <!--v-if-->
+        <!-- @slot Content of the button -->
+        <span class="oc-icon oc-icon-s oc-icon-passive">
+          <!---->
+        </span>
+      </button>
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
@@ -56,13 +63,6 @@ exports[`OcTextInput password input field password policy displays success state
         </span>
       </button>
       <!--v-if-->
-      <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
-        <!--v-if-->
-        <!-- @slot Content of the button -->
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
-      </button>
     </div>
     <portal to="app.design-system.password-policy">
       <div class="oc-text-small oc-flex oc-flex-column">
