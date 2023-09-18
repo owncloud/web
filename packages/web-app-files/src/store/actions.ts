@@ -215,6 +215,7 @@ export default {
       context.commit('REMOVE_FILES', removedFiles)
       context.commit('REMOVE_FILES_FROM_SEARCHED', removedFiles)
       context.commit('RESET_SELECTION')
+      context.commit('PRUNE_SHARES')
 
       if (removedFiles.length) {
         const title =
