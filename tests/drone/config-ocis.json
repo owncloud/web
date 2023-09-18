@@ -28,6 +28,7 @@
     "media-viewer",
     "pdf-viewer",
     "search",
-    "admin-settings"
+    "admin-settings",
+    "external"
   ]
 }
