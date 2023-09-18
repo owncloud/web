@@ -64,20 +64,20 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
       </oc-button-stub>
       <oc-drop-stub closeonclick="false" dropid="edit-public-link-dropdown" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#edit-public-link-dropdown-toggl-undefined">
         <oc-list-stub class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s" raw="false">
-          <li class="oc-rounded oc-menu-item-hover">
+          <li class="oc-rounded oc-menu-item-hover oc-flex">
             <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
               <oc-icon-stub accessiblelabel="" color="" filltype="line" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
               <span>Rename</span>
             </oc-button-stub>
           </li>
-          <li class="oc-rounded oc-menu-item-hover">
-            <date-picker-stub class="oc-datepicker link-expiry-picker link-expiry-picker" inputdebounce="1000" is24hr="false" isrange="false" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" mode="date" modelconfig="[object Object]" popover="[object Object]" updateoninput="true">
+          <li class="oc-rounded oc-menu-item-hover oc-flex">
+            <date-picker-stub class="oc-datepicker link-expiry-picker oc-flex oc-width-1-1 link-expiry-picker oc-flex oc-width-1-1" inputdebounce="1000" is24hr="false" isrange="false" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" mode="date" modelconfig="[object Object]" popover="[object Object]" updateoninput="true">
               <!-- @slot Default slot to use as the popover anchor for datepicker -->
               <!-- args is undefined during initial render, hence we check it here -->
               <!--v-if-->
             </date-picker-stub>
           </li>
-          <li class="oc-rounded oc-menu-item-hover">
+          <li class="oc-rounded oc-menu-item-hover oc-flex">
             <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
               <oc-icon-stub accessiblelabel="" color="" filltype="line" name="lock-password" size="medium" type="span" variation="passive"></oc-icon-stub>
               <span>Add password</span>
