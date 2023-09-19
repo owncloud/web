@@ -1354,9 +1354,9 @@ def ocisService(type, tika_enabled = False):
         },
         {
             "name": "wait-for-ocis-server",
-            "image": OC_CI_WAIT_FOR,
+            "image": OC_CI_ALPINE,
             "commands": [
-                "wait-for -it ocis:9200 -t 300",
+                "curl -k -u admin:admin --fail --retry-connrefused --retry 7 --retry-all-errors 'https://ocis:9200/graph/v1.0/users/admin'",
             ],
         },
     ]
