@@ -141,6 +141,7 @@
                   </oc-button>
                   <oc-button
                     v-if="option.remove && option.remove.isRemovable"
+                    :data-testid="`files-link-id-${link.id}-edit-${option.id}`"
                     :aria-label="option.remove.title"
                     appearance="raw"
                     @click="option.remove.method"
@@ -307,7 +308,7 @@ export default defineComponent({
       } else {
         result.push({
           id: 'add-expiration',
-          title: this.$gettext('Add expiration date'),
+          title: this.$gettext('Set expiration date'),
           method: this.updateLink,
           icon: 'calendar-event',
           showDatepicker: true
