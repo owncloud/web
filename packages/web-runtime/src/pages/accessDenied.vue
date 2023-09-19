@@ -62,7 +62,6 @@ export default defineComponent({
     onMounted(async () => {
       try {
         webfingerIssuer.value = await extractWebfingerIssuer()
-        console.log(webfingerIssuer.value)
       } catch (_) {}
     })
 
@@ -91,7 +90,7 @@ export default defineComponent({
 
       if (unref(webfingerIssuer)) {
         return {
-          type: 'link',
+          type: 'a',
           href: encodeURI(
             `${unref(webfingerIssuer)}${redirectUrl ? '?redirectUrl=' + redirectUrl : ''}`
           )
