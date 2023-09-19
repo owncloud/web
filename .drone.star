@@ -92,6 +92,48 @@ config = {
                 "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
             ],
         },
+        "oCIS-app-provider-4": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-5": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-6": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-7": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-8": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-9": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-10": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
     },
     "acceptance": {
         "webUI": {
