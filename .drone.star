@@ -1299,7 +1299,7 @@ def ocisService(type, tika_enabled = False):
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         # "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
         "OCIS_INSECURE": "true",
-        "OCIS_LOG_LEVEL": "error",
+        "OCIS_LOG_LEVEL": "info",
         "OCIS_URL": "https://ocis:9200",
         "PROXY_ENABLE_BASIC_AUTH": True,
         "WEB_ASSET_PATH": "%s/dist" % dir["web"],
