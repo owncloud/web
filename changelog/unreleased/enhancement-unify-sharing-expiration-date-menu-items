@@ -1,6 +1,6 @@
 Enhancement: Unify sharing expiration date menu items
 
-We've unified the sharing expiration date menu item for links,
+We've unified the sharing expiration date menu item for links and regular user/group shares,
 the delete expiration date button shows up next to the edit expiration date and therefore declutter the UI.
 
 https://github.com/owncloud/web/pull/9706
