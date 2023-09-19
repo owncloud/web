@@ -85,7 +85,7 @@ export default defineComponent({
       default: () => ({})
     },
     generatePasswordMethod: {
-      type: Function,
+      type: Function as PropType<(...args: unknown) => string>,
       required: false,
       default: null
     }
