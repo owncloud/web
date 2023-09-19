@@ -52,11 +52,10 @@ export default defineComponent({
       return store.getters.configuration.currentTheme.logo.login
     })
     const extractWebfingerIssuer = async () => {
-      const url =
-        urlJoin(configurationManager.serverUrl, '.well-known', 'webfinger') +
-        `?resource=${encodeURI(configurationManager.serverUrl)}`
-      const response = (await httpUnAuthenticated.get(url)).data
-      return response.links[0].href
+      const url = new URL(urlJoin(configurationManager.serverUrl, '.well-known', 'webfinger'))
+      url.searchParams.append('resource', encodeURI(configurationManager.serverUrl))
+      const response = await httpUnAuthenticated.get(url.toString())
+      return response.data.links[0].href
     }
 
     onMounted(async () => {
