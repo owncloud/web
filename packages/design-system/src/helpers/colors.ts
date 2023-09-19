@@ -148,3 +148,25 @@ export function cssRgbToHex(cssRgb: string): string {
     return `#${hex}`
   }
 }
+
+/**
+ * Get the hex value of a css var()
+ * @param {string} variable: The css var name e.g. var(--color-primary) or --color-primary
+ * @return {string} Returns a hex color
+ **/
+export function getHexFromCssVar(variable: string): string {
+  if (!variable) {
+    return ''
+  }
+  // if color is a hex value, return it
+  if (variable.startsWith('#')) {
+    return variable
+  }
+  const varName = variable.match(/var\(([^)]+)\)/)?.[1] || variable
+  const result = getComputedStyle(document.documentElement).getPropertyValue(varName)
+  // if css var is hex value, return it
+  if (result.startsWith('#')) {
+    return result
+  }
+  return cssRgbToHex(result)
+}
