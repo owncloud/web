@@ -1262,16 +1262,16 @@ def ocisService(type, tika_enabled = False):
         "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
     }
     if type == "app-provider":
-        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
+        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142" # expose gateway to wopi server
         environment["MICRO_REGISTRY"] = "mdns"
-    else:
-        environment["STORAGE_HOME_DRIVER"] = "ocis"
-        environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
-        environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
-        environment["STORAGE_USERS_DRIVER"] = "ocis"
-        environment["STORAGE_USERS_DRIVER_LOCAL_ROOT"] = "/srv/app/tmp/ocis/local/root"
-        environment["STORAGE_USERS_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/users"
-        environment["STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR"] = "%s" % dir["ocisRevaDataRoot"]
+    # else:
+        # environment["STORAGE_HOME_DRIVER"] = "ocis"
+        # environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
+        # environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
+        # environment["STORAGE_USERS_DRIVER"] = "ocis"
+        # environment["STORAGE_USERS_DRIVER_LOCAL_ROOT"] = "/srv/app/tmp/ocis/local/root"
+        # environment["STORAGE_USERS_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/users"
+        # environment["STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR"] = "%s" % dir["ocisRevaDataRoot"]
 
     if tika_enabled:
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
