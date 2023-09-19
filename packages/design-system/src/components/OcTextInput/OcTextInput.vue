@@ -237,7 +237,7 @@ export default defineComponent({
      * Method to generate random password
      */
     generatePasswordMethod: {
-      type: Function as PropType<(...args: unknown) => string>,
+      type: Function as PropType<(...args: unknown[]) => string>,
       required: false,
       default: null
     }
