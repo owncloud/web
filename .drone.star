@@ -86,6 +86,12 @@ config = {
                 "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
             ],
         },
+        "oCIS-app-provider-3": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
     },
     "acceptance": {
         "webUI": {
@@ -1261,7 +1267,7 @@ def ocisService(type, tika_enabled = False):
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
     }
-    if type == "app-provider":
+    if type.startswith("app-provider"):
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142" # expose gateway to wopi server
         environment["MICRO_REGISTRY"] = "mdns"
     # else:
