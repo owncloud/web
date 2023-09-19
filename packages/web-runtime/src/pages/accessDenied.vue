@@ -22,9 +22,8 @@
     </div>
     <oc-button
       id="exitAnchor"
-      type="router-link"
       class="oc-mt-m oc-width-medium"
-      :to="logoutLink"
+      v-bind:="logoutButtonsAttrs"
       size="large"
       appearance="filled"
       variation="primary"
@@ -34,19 +33,37 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
-import { useRoute, useStore } from 'web-pkg'
+import { computed, defineComponent, onMounted, ref, unref } from 'vue'
+import { useClientService, useConfigurationManager, useRoute, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { urlJoin } from 'web-client/src/utils'
 
 export default defineComponent({
   name: 'AccessDeniedPage',
   setup() {
+    const webfingerIssuer = ref(null)
     const store = useStore()
     const route = useRoute()
     const { $gettext } = useGettext()
+    const { httpAuthenticated } = useClientService()
+    const configurationManager = useConfigurationManager()
 
     const logoImg = computed(() => {
       return store.getters.configuration.currentTheme.logo.login
+    })
+    const extractWebfingerIssuer = async () => {
+      const url =
+        urlJoin(configurationManager.serverUrl, '.well-known', 'webfinger') +
+        `?resource=${encodeURI(configurationManager.serverUrl)}`
+      const response = (await httpAuthenticated.get(url)).data
+      return response.links[0].href
+    }
+
+    onMounted(async () => {
+      try {
+        webfingerIssuer.value = await extractWebfingerIssuer()
+        console.log(webfingerIssuer.value)
+      } catch (_) {}
     })
 
     const accessDeniedHelpUrl = computed(() => {
@@ -69,12 +86,34 @@ export default defineComponent({
     const navigateToLoginText = computed(() => {
       return $gettext('Log in again')
     })
-    const logoutLink = computed(() => {
+    const baselogoutLink = computed(() => {
       const redirectUrl = unref(route).query?.redirectUrl
       return {
         name: 'login',
         query: {
           ...(redirectUrl && { redirectUrl })
+        }
+      }
+    })
+
+    const logoutButtonsAttrs = computed(() => {
+      const redirectUrl = unref(route).query?.redirectUrl
+
+      if (unref(webfingerIssuer)) {
+        return {
+          type: 'link',
+          href: encodeURI(
+            `${unref(webfingerIssuer)}${redirectUrl ? '?redirectUrl=' + redirectUrl : ''}`
+          )
+        }
+      }
+      return {
+        type: 'router-link',
+        to: {
+          name: 'login',
+          query: {
+            ...(redirectUrl && { redirectUrl })
+          }
         }
       }
     })
@@ -86,7 +125,7 @@ export default defineComponent({
       footerSlogan,
       navigateToLoginText,
       accessDeniedHelpUrl,
-      logoutLink
+      logoutButtonsAttrs
     }
   }
 })
