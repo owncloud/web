@@ -1255,12 +1255,10 @@ def webService():
 def ocisService(type, tika_enabled = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
-        "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
+        # "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
         "OCIS_INSECURE": "true",
         "OCIS_LOG_LEVEL": "error",
         "OCIS_URL": "https://ocis:9200",
-        "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
-        "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
         "PROXY_ENABLE_BASIC_AUTH": True,
         "WEB_ASSET_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
@@ -1270,7 +1268,9 @@ def ocisService(type, tika_enabled = False):
     if type.startswith("app-provider"):
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142" # expose gateway to wopi server
         environment["MICRO_REGISTRY"] = "mdns"
-    # else:
+    else:
+        environment["LDAP_GROUP_SUBSTRING_FILTER_TYPE"] = "any"
+        environment["LDAP_USER_SUBSTRING_FILTER_TYPE"] = "any"
         # environment["STORAGE_HOME_DRIVER"] = "ocis"
         # environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
         # environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
