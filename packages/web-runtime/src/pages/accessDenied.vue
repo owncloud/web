@@ -92,7 +92,7 @@ export default defineComponent({
         const webfingerIssuerURL = new URL(encodeURI(unref(webfingerIssuer)))
 
         if (redirectUrl) {
-          webfingerIssuerURL.searchParams.append('redirectUrl', encodeURIComponent(redirectUrl))
+          webfingerIssuerURL.searchParams.append('redirectUrl', redirectUrl)
         }
 
         return {
