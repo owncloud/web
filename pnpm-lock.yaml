@@ -934,6 +934,9 @@ importers:
       fuse.js:
         specifier: ^6.5.3
         version: 6.5.3
+      js-generate-password:
+        specifier: ^0.1.9
+        version: 0.1.9
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -14030,6 +14033,11 @@ packages:
       glob: 8.0.3
       nopt: 6.0.0
     dev: true
+
+  /js-generate-password@0.1.9:
+    resolution: {integrity: sha512-eBHpI+Re+zGZIsKBmBNjJk1bt7jeY8cBJMPhb+AhZaZ/DYjerCKwN6cQDjXUxFCHVHd8u9Fn4zgFBMDFQLoSZg==}
+    hasBin: true
+    dev: false
 
   /js-sdsl@4.1.5:
     resolution: {integrity: sha512-08bOAKweV2NUC1wqTtf3qZlnpOX/R2DU9ikpjOHs0H+ibQv3zpncVQg6um4uYtRtrwIX8M4Nh3ytK4HGlYAq7Q==}

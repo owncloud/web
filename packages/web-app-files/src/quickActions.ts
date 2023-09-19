@@ -27,6 +27,7 @@ export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyServ
     hasInput: true,
     inputDescription: $gettext('Passwords for links are required.'),
     inputPasswordPolicy: passwordPolicyService.getPolicy(),
+    inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
     inputLabel: $gettext('Password'),
     inputType: 'password',
     onCancel: () => store.dispatch('hideModal'),

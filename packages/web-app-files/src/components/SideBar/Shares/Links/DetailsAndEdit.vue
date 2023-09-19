@@ -475,6 +475,7 @@ export default defineComponent({
         confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
         inputPasswordPolicy: this.passwordPolicyService.getPolicy(),
+        inputGeneratePasswordMethod: () => this.passwordPolicyService.generatePassword(),
         inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
         inputType: 'password',
         onCancel: this.hideModal,

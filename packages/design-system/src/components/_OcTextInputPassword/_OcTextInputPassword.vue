@@ -1,23 +1,40 @@
 <template>
-  <div ref="inputPasswordWrapper" class="oc-text-input-password-wrapper">
-    <input v-bind="$attrs" :type="showPassword ? 'text' : 'password'" @input="onInput" />
-    <oc-button
-      v-if="password"
-      class="oc-text-input-copy-password-button oc-px-s oc-background-default"
-      appearance="raw"
-      size="small"
-      @click="copyPasswordToClipboard"
-    >
-      <oc-icon size="small" :name="copyPasswordIcon" />
-    </oc-button>
+  <div class="oc-text-input-password-wrapper">
+    <input
+      v-bind="$attrs"
+      :type="showPassword ? 'text' : 'password'"
+      v-model="password"
+      @input="onPasswordEntered"
+    />
     <oc-button
       v-if="password"
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
       appearance="raw"
       size="small"
       @click="showPassword = !showPassword"
+      v-oc-tooltip="$gettext('Show password')"
     >
       <oc-icon size="small" :name="showPassword ? 'eye-off' : 'eye'" />
+    </oc-button>
+    <oc-button
+      v-if="password"
+      class="oc-text-input-copy-password-button oc-px-s oc-background-default"
+      appearance="raw"
+      size="small"
+      @click="copyPasswordToClipboard"
+      v-oc-tooltip="$gettext('Copy password')"
+    >
+      <oc-icon size="small" :name="copyPasswordIcon" />
+    </oc-button>
+    <oc-button
+      v-if="generatePasswordMethod"
+      class="oc-text-input-generate-password-button oc-px-s oc-background-default"
+      appearance="raw"
+      size="small"
+      @click="showGeneratedPassword"
+      v-oc-tooltip="$gettext('Generate password')"
+    >
+      <oc-icon size="small" name="refresh" fill-type="line" />
     </oc-button>
   </div>
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
@@ -58,30 +75,37 @@ export default defineComponent({
   release: '1.0.0',
   inheritAttrs: true,
   props: {
+    value: {
+      type: String,
+      required: false,
+      default: ''
+    },
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
       default: () => ({})
+    },
+    generatePasswordMethod: {
+      type: Function as PropType<(...args: unknown[]) => string>,
+      required: false,
+      default: null
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
+    const password = ref(props.value)
     const showPassword = ref(false)
     const passwordEntered = ref(false)
-    const password = ref('')
     const copyPasswordIconInitial = 'file-copy'
     const copyPasswordIcon = ref(copyPasswordIconInitial)
+
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
     })
+
     const testedPasswordPolicy = computed(() => {
       return props.passwordPolicy.missing(unref(password))
     })
-
-    const onInput = (event) => {
-      passwordEntered.value = true
-      password.value = event.target.value
-    }
 
     const getPasswordPolicyRuleMessage = (rule) => {
       const paramObj = {}
@@ -99,6 +123,16 @@ export default defineComponent({
       setTimeout(() => (copyPasswordIcon.value = copyPasswordIconInitial), 500)
     }
 
+    const showGeneratedPassword = () => {
+      const generatedPassword = props.generatePasswordMethod()
+      password.value = generatedPassword
+      showPassword.value = true
+    }
+
+    const onPasswordEntered = () => {
+      passwordEntered.value = true
+    }
+
     watch(password, (value) => {
       if (!Object.keys(props.passwordPolicy).length) {
         return
@@ -113,14 +147,15 @@ export default defineComponent({
 
     return {
       $gettext,
-      onInput,
       password,
       showPassword,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
       getPasswordPolicyRuleMessage,
       copyPasswordToClipboard,
-      copyPasswordIcon
+      showGeneratedPassword,
+      copyPasswordIcon,
+      onPasswordEntered
     }
   }
 })

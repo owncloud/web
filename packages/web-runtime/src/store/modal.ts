@@ -72,6 +72,7 @@ const mutations = {
     state.hasInput = modal.hasInput || false
     state.inputValue = modal.inputValue || null
     state.inputPasswordPolicy = modal.inputPasswordPolicy || {}
+    state.inputGeneratePasswordMethod = modal.inputGeneratePasswordMethod || null
     state.inputSelectionRange = modal.inputSelectionRange
     state.inputDescription = modal.inputDescription || null
     state.inputPlaceholder = modal.inputPlaceholder || null

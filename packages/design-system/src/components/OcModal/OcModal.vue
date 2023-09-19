@@ -44,6 +44,7 @@
               :label="inputLabel"
               :type="inputType"
               :password-policy="inputPasswordPolicy"
+              :generate-password-method="inputGeneratePasswordMethod"
               :description-message="inputDescription"
               :disabled="inputDisabled"
               :fix-message-line="true"
@@ -370,6 +371,14 @@ export default defineComponent({
       type: Object as PropType<PasswordPolicy>,
       required: false,
       default: () => ({})
+    },
+    /**
+     * Method to generate random password for the input
+     */
+    inputGeneratePasswordMethod: {
+      type: Function as PropType<(...args: unknown[]) => string>,
+      required: false,
+      default: null
     },
     /**
      * Overwrite default focused element

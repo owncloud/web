@@ -232,6 +232,14 @@ export default defineComponent({
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
       default: () => ({})
+    },
+    /**
+     * Method to generate random password
+     */
+    generatePasswordMethod: {
+      type: Function as PropType<(...args: unknown[]) => string>,
+      required: false,
+      default: null
     }
   },
   emits: [
@@ -264,6 +272,7 @@ export default defineComponent({
       }
       if (this.type === 'password') {
         additionalAttrs['password-policy'] = this.passwordPolicy
+        additionalAttrs['generate-password-method'] = this.generatePasswordMethod
       }
       // Exclude listeners for events which are handled via methods in this component
       // eslint-disable-next-line no-unused-vars
