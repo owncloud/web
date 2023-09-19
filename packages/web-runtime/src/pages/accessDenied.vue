@@ -86,14 +86,18 @@ export default defineComponent({
       return $gettext('Log in again')
     })
     const logoutButtonsAttrs = computed(() => {
-      const redirectUrl = unref(route).query?.redirectUrl
+      const redirectUrl = unref(route).query?.redirectUrl as string
 
       if (unref(webfingerIssuer)) {
+        const webfingerIssuerURL = new URL(encodeURI(unref(webfingerIssuer)))
+
+        if (redirectUrl) {
+          webfingerIssuerURL.searchParams.append('redirectUrl', encodeURIComponent(redirectUrl))
+        }
+
         return {
           type: 'a',
-          href: encodeURI(
-            `${unref(webfingerIssuer)}${redirectUrl ? '?redirectUrl=' + redirectUrl : ''}`
-          )
+          href: webfingerIssuerURL.toString()
         }
       }
       return {
