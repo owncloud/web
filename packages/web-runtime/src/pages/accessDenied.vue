@@ -45,7 +45,7 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const { $gettext } = useGettext()
-    const { httpAuthenticated } = useClientService()
+    const { httpUnAuthenticated } = useClientService()
     const configurationManager = useConfigurationManager()
 
     const logoImg = computed(() => {
@@ -55,7 +55,7 @@ export default defineComponent({
       const url =
         urlJoin(configurationManager.serverUrl, '.well-known', 'webfinger') +
         `?resource=${encodeURI(configurationManager.serverUrl)}`
-      const response = (await httpAuthenticated.get(url)).data
+      const response = (await httpUnAuthenticated.get(url)).data
       return response.links[0].href
     }
 
@@ -86,16 +86,6 @@ export default defineComponent({
     const navigateToLoginText = computed(() => {
       return $gettext('Log in again')
     })
-    const baselogoutLink = computed(() => {
-      const redirectUrl = unref(route).query?.redirectUrl
-      return {
-        name: 'login',
-        query: {
-          ...(redirectUrl && { redirectUrl })
-        }
-      }
-    })
-
     const logoutButtonsAttrs = computed(() => {
       const redirectUrl = unref(route).query?.redirectUrl
 
