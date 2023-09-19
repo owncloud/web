@@ -31,6 +31,7 @@ Summary
 * Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
 * Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
+* Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
 
 Details
 -------
@@ -254,6 +255,16 @@ Details
    https://github.com/owncloud/web/pull/9634
    https://github.com/owncloud/web/pull/9686
    https://github.com/owncloud/web/pull/9688
+
+* Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
+
+   We've added a new button on the password input field for public links, clicking on that button
+   will fill the input with a generated password.
+
+   If a password policy is set, those rules will also be applied.
+
+   https://github.com/owncloud/web/issues/9666
+   https://github.com/owncloud/web/pull/9691
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
