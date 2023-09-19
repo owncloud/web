@@ -17,7 +17,7 @@
             :max-date="maxExpirationDate"
             :locale="$language.current"
             :is-required="isExpirationDateEnforced"
-            class="files-recipient-expiration-datepicker"
+            class="files-recipient-expiration-datepicker oc-flex"
             data-testid="recipient-datepicker"
           >
             <template #default="{ togglePopover }">
@@ -30,10 +30,19 @@
                 <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
                 <span
                   v-if="isExpirationDateSet"
-                  class="oc-ml-s"
-                  v-text="$gettext('Edit expiration date')"
+                  v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
                 />
                 <span v-else v-text="$gettext('Set expiration date')" />
+              </oc-button>
+              <oc-button
+                v-if="isRemoveExpirationPossible"
+                class="remove-expiration-date"
+                data-testid="collaborator-remove-expiration-btn"
+                appearance="raw"
+                :aria-label="$gettext('Remove expiration date')"
+                @click="removeExpirationDate"
+              >
+                <oc-icon name="close" />
               </oc-button>
             </template>
           </oc-datepicker>
@@ -72,13 +81,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, Ref } from 'vue'
+import { computed, defineComponent, inject, Ref } from 'vue'
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from 'web-client/src'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { formatRelativeDateFromDateTime } from 'web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -111,13 +122,22 @@ export default defineComponent({
   },
   emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails', 'setDenyShare'],
   setup(props, { emit }) {
+    const language = useGettext()
     const toggleShareDenied = (value) => {
       emit('setDenyShare', value)
     }
 
+    const dateExpire = computed(() =>
+      formatRelativeDateFromDateTime(
+        DateTime.fromJSDate(props.expirationDate).endOf('day'),
+        language.current
+      )
+    )
+
     return {
       resource: inject<Ref<Resource>>('resource'),
-      toggleShareDenied
+      toggleShareDenied,
+      dateExpire
     }
   },
   data: function () {
@@ -129,21 +149,7 @@ export default defineComponent({
     ...mapGetters(['capabilities']),
 
     options() {
-      const result = []
-      if (this.isRemoveExpirationPossible) {
-        result.push({
-          title: this.$gettext('Remove expiration date'),
-          method: this.removeExpirationDate,
-          class: 'remove-expiration-date',
-          enabled: this.canEditOrDelete,
-          icon: 'calendar',
-          additionalAttributes: {
-            'data-testid': 'collaborator-remove-expiration-btn'
-          }
-        })
-      }
       return [
-        ...result,
         {
           title: isProjectSpaceResource(this.resource)
             ? this.$gettext('Remove member')
@@ -199,7 +205,10 @@ export default defineComponent({
 
     isRemoveExpirationPossible() {
       return (
-        this.isExpirationSupported && this.isExpirationDateSet && !this.isExpirationDateEnforced
+        this.canEditOrDelete &&
+        this.isExpirationSupported &&
+        this.isExpirationDateSet &&
+        !this.isExpirationDateEnforced
       )
     },
 
