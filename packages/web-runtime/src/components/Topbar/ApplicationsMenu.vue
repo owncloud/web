@@ -23,15 +23,23 @@
       padding-size="small"
       close-on-click
     >
-      <div style="display: block; position: relative; height: 200px; width: 200px">
-        <oc-application-icon
-          icon="folder"
-          color-primary="var(--oc-color-swatch-primary-muted)"
-          color-secondary="var(--oc-color-swatch-primary-gradient)"
-        />
-        <oc-application-icon icon="slideshow" />
-        <oc-application-icon icon="home" />
-        <oc-application-icon icon="file" />
+      <div style="display: block; position: relative">
+        <oc-list class="applications-list">
+          <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
+            <oc-button
+              :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
+              :type="n.url ? 'a' : 'router-link'"
+              :target="n.target"
+              :href="n.url"
+              :to="n.path"
+              :appearance="'raw'"
+              :variation="'passive'"
+            >
+              <oc-application-icon :icon="n.icon" :color-primary="n.color" />
+              <span v-text="$gettext(n.title)" />
+            </oc-button>
+          </li>
+        </oc-list>
       </div>
     </oc-drop>
   </nav>

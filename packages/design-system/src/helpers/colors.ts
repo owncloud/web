@@ -113,3 +113,38 @@ export function setDesiredContrastRatio(
     false
   )
 }
+
+/**
+ * Convert a css rgb value like rgb(255, 255, 255) to a hex value like #FFFFFF
+ * works also with rgba()
+ * @param {string} cssRgb: color to adjust
+ * @return {string} Returns a hex color
+ **/
+export function cssRgbToHex(cssRgb: string): string {
+  cssRgb = cssRgb.toLowerCase().replace(/\s/g, '')
+  const isRgba = cssRgb.includes('rgba(')
+  const values = cssRgb.match(isRgba ? /rgba?\(([^)]+)\)/ : /rgb?\(([^)]+)\)/)
+  if (!values) {
+    return '#000000'
+  }
+  const colorArray = values[1].split(',')
+  let alpha = ''
+  if (isRgba) {
+    alpha = Math.round(parseFloat(colorArray.pop()) * 255).toString(16)
+    if (alpha.length === 1) {
+      alpha = '0' + alpha
+    }
+  }
+  const hex = colorArray
+    .map((value) => {
+      const intValue = parseInt(value, 10)
+      const hexValue = intValue.toString(16)
+      return hexValue.length === 1 ? '0' + hexValue : hexValue
+    })
+    .join('')
+  if (isRgba) {
+    return `#${hex}${alpha}`
+  } else {
+    return `#${hex}`
+  }
+}
