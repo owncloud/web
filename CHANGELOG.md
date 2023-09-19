@@ -32,6 +32,7 @@ Summary
 * Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
 * Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
 * Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
+* Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 
 Details
 -------
@@ -265,6 +266,15 @@ Details
 
    https://github.com/owncloud/web/issues/9666
    https://github.com/owncloud/web/pull/9691
+
+* Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
+
+   We've unified the sharing expiration date menu item for links and regular user/group shares,
+   the delete expiration date button shows up next to the edit expiration date and therefore
+   declutter the UI.
+
+   https://github.com/owncloud/web/issues/9705
+   https://github.com/owncloud/web/pull/9706
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
