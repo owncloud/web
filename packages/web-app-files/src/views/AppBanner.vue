@@ -48,7 +48,8 @@ export default defineComponent({
     }
   },
   setup() {
-    const shouldShow = ref<boolean>(true)
+    const appBannerWasClosed = useSessionStorage('app_banner_closed', null)
+    const shouldShow = ref<boolean>(unref(appBannerWasClosed) === null)
     const store = useStore()
     const router = useRouter()
 
@@ -142,7 +143,7 @@ export default defineComponent({
 
 .app-banner-exit {
   position: absolute;
-  top: calc(50% - 6px);
+  top: 34px;
   left: 9px;
   margin: 0;
   width: 12px;
