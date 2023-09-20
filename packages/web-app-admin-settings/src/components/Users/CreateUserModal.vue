@@ -136,6 +136,19 @@ export default defineComponent({
         return false
       }
 
+      // validate username against regex
+      // shouldn't contain special characters except . and _
+      // shouldn't start with a number
+      // matching regex from server side
+      const pattern =
+        "^[a-zA-Z_][a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*(@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)*$"
+      if (!new RegExp(pattern).test(this.user.onPremisesSamAccountName)) {
+        this.formData.userName.errorMessage = this.$gettext(
+          'User name cannot contain special characters'
+        )
+        return false
+      }
+
       if (
         this.user.onPremisesSamAccountName.length &&
         !isNaN(parseInt(this.user.onPremisesSamAccountName[0]))
