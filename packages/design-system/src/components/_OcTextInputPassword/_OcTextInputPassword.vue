@@ -2,37 +2,37 @@
   <div class="oc-text-input-password-wrapper">
     <input
       v-bind="$attrs"
-      :type="showPassword ? 'text' : 'password'"
       v-model="password"
+      :type="showPassword ? 'text' : 'password'"
       @input="onPasswordEntered"
     />
     <oc-button
       v-if="password"
+      v-oc-tooltip="$gettext('Show password')"
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
       appearance="raw"
       size="small"
       @click="showPassword = !showPassword"
-      v-oc-tooltip="$gettext('Show password')"
     >
       <oc-icon size="small" :name="showPassword ? 'eye-off' : 'eye'" />
     </oc-button>
     <oc-button
       v-if="password"
+      v-oc-tooltip="$gettext('Copy password')"
       class="oc-text-input-copy-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
       @click="copyPasswordToClipboard"
-      v-oc-tooltip="$gettext('Copy password')"
     >
       <oc-icon size="small" :name="copyPasswordIcon" />
     </oc-button>
     <oc-button
       v-if="generatePasswordMethod"
+      v-oc-tooltip="$gettext('Generate password')"
       class="oc-text-input-generate-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
       @click="showGeneratedPassword"
-      v-oc-tooltip="$gettext('Generate password')"
     >
       <oc-icon size="small" name="refresh" fill-type="line" />
     </oc-button>
