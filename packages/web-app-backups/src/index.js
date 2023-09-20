@@ -1,7 +1,6 @@
 import translations from '../l10n/translations'
 import Backups from './views/Backups.vue'
 
-
 const appInfo = {
   name: 'Backups',
   id: 'backups',

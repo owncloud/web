@@ -4,7 +4,7 @@ import { configurationManager } from 'web-pkg'
 import { createLocationSpaces } from 'web-pkg/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { RouteLocationNamedRaw } from 'vue-router'
-import { AncestorMetaDataValue } from 'web-pkg/src/helpers/resource/ancestorMetaData'
+import { AncestorMetaDataValue } from 'web-pkg/src/types'
 
 export const getSharedAncestorRoute = ({
   resource,

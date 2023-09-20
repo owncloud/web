@@ -13,6 +13,9 @@
     "url": "https://github.com/owncloud/web",
     "directory": "packages/web-pkg"
   },
+  "devDependencies": {
+    "@jest/globals": "29.3.1"
+  },
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",

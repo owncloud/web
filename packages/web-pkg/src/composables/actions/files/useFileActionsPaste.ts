@@ -22,7 +22,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
-  const { $gettext, $pgettext, interpolate: $gettextInterpolate, $ngettext } = useGettext()
+  const { $gettext, $pgettext, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -66,7 +66,6 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
             showMessage: (...args) => store.dispatch('showMessage', ...args),
             showErrorMessage: (...args) => store.dispatch('showErrorMessage', ...args),
             $gettext,
-            $gettextInterpolate,
             $ngettext
           })
         })

@@ -8,11 +8,10 @@
 import { mapGetters } from 'vuex'
 import BackupsSection from '../components/BackupsSection.vue'
 import { defineComponent } from 'vue'
-import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 
 export default defineComponent({
   components: {
-    AppBar,
+    // AppBar,
     BackupsSection
   },
   // setup() {

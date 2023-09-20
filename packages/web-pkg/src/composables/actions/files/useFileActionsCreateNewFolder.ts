@@ -9,7 +9,8 @@ import { join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
 import { isLocationSpacesActive } from 'web-pkg/src/router'
 import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
-import { useScrollTo } from '../../scrollTo/useScrollTo'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 export const useFileActionsCreateNewFolder = ({
   store,
@@ -23,7 +24,9 @@ export const useFileActionsCreateNewFolder = ({
   const clientService = useClientService()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
   const files = computed((): Array<Resource> => store.getters['Files/files'])
-  const ancestorMetaData = computed(() => store.getters['Files/ancestorMetaData'])
+  const ancestorMetaData = computed<AncestorMetaData>(
+    () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
+  )
 
   const checkNewFolderName = (folderName) => {
     if (folderName.trim() === '') {
