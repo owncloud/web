@@ -1,6 +1,13 @@
 <template>
   <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
+    <quota-modal
+      v-if="quotaModalIsOpen"
+      :cancel="closeQuotaModal"
+      :spaces="selectedFiles"
+      :max-quota="maxQuota"
+    />
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
+
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
@@ -50,8 +57,10 @@
       <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
           <slot name="actions" :limited-screen-space="limitedScreenSpace" />
+          <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
           <batch-actions
             v-if="showBatchActions"
+            v-bind="{} as any"
             :actions="batchActions"
             :action-options="{ space, resources: selectedFiles }"
             :limited-screen-space="limitedScreenSpace"
@@ -65,7 +74,7 @@
 
 <script lang="ts">
 import last from 'lodash-es/last'
-import { computed, defineComponent, inject, PropType, ref, Ref, unref } from 'vue'
+import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { Resource } from 'web-client'
 import {
@@ -75,9 +84,8 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
-import { isLocationTrashActive } from '../../router'
+import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
-import SharesNavigation from './SharesNavigation.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import {
@@ -91,19 +99,33 @@ import {
   useFileActionsMove,
   useFileActionsRestore
 } from 'web-pkg/src/composables/actions'
-import { useRouteMeta, useStore, ViewModeConstants } from 'web-pkg/src/composables'
+import {
+  useCapabilitySpacesMaxQuota,
+  useRouteMeta,
+  useStore,
+  ViewModeConstants
+} from 'web-pkg/src/composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
-import { useActiveLocation } from 'web-pkg/src/composables'
+import { useActiveLocation } from 'web-pkg/src/composables/router/useActiveLocation'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
 import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
+import {
+  FileAction,
+  useSpaceActionsDelete,
+  useSpaceActionsDisable,
+  useSpaceActionsEditQuota,
+  useSpaceActionsRestore
+} from 'web-pkg/src/composables/actions'
+import { QuotaModal } from 'web-pkg'
 
 export default defineComponent({
   components: {
     BatchActions,
     ContextActions,
     SidebarToggle,
-    ViewOptions
+    ViewOptions,
+    QuotaModal
   },
   props: {
     viewModeDefault: {
@@ -124,7 +146,6 @@ export default defineComponent({
       default: () => []
     },
     hasBulkActions: { type: Boolean, default: false },
-    hasSharesNavigation: { type: Boolean, default: false },
     hasSidebarToggle: { type: Boolean, default: true },
     hasViewOptions: { type: Boolean, default: true },
     hasHiddenFiles: { type: Boolean, default: true },
@@ -151,11 +172,22 @@ export default defineComponent({
     const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
     const { actions: moveActions } = useFileActionsMove({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
+    const { actions: deleteSpaceActions } = useSpaceActionsDelete({ store })
+    const { actions: disableSpaceActions } = useSpaceActionsDisable({ store })
+    const {
+      actions: editSpaceQuotaActions,
+      modalOpen: quotaModalIsOpen,
+      closeModal: closeQuotaModal
+    } = useSpaceActionsEditQuota({ store })
+    const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
 
     const breadcrumbMaxWidth = ref<number>(0)
+    const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
+
+    const hasSharesNavigation = computed(() => useSlots().hasOwnProperty('navigation'))
 
     const batchActions = computed(() => {
-      return [
+      let actions = [
         ...unref(acceptShareActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),
@@ -165,7 +197,23 @@ export default defineComponent({
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
         ...unref(restoreActions)
-      ].filter((item) =>
+      ]
+
+      /**
+       * We show mixed results in search result page, including resources like files and folders but also spaces.
+       * Space actions shouldn't be possible in that context.
+       **/
+      if (!isSearchLocation.value) {
+        actions = [
+          ...actions,
+          ...unref(editSpaceQuotaActions),
+          ...unref(restoreSpaceActions),
+          ...unref(deleteSpaceActions),
+          ...unref(disableSpaceActions)
+        ] as FileAction[]
+      }
+
+      return actions.filter((item) =>
         item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
       )
     })
@@ -215,13 +263,17 @@ export default defineComponent({
     })
 
     return {
+      hasSharesNavigation,
       batchActions,
       showBreadcrumb,
       showMobileNav,
       breadcrumbMaxWidth,
       breadcrumbTruncationOffset,
       fileDroppedBreadcrumb,
-      pageTitle
+      pageTitle,
+      quotaModalIsOpen,
+      closeQuotaModal,
+      maxQuota: useCapabilitySpacesMaxQuota()
     }
   },
   data: function () {
@@ -248,12 +300,14 @@ export default defineComponent({
       if (this.selectedFiles.length === 0) {
         return this.$gettext('No items selected.')
       }
-      const translated = this.$ngettext(
+      return this.$ngettext(
         '%{ amount } item selected. Actions are available above the table.',
         '%{ amount } items selected. Actions are available above the table.',
-        this.selectedFiles.length
+        this.selectedFiles.length,
+        {
+          amount: this.selectedFiles.length
+        }
       )
-      return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
   },
   mounted() {

@@ -15,7 +15,7 @@ import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+  const { $gettext } = useGettext()
   const clientService = useClientService()
   const hasFavorites = useCapabilityFilesFavorites()
   const isFilesAppActive = useIsFilesAppActive()
@@ -26,10 +26,13 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
         file: resources[0]
       })
       .catch((error) => {
-        const translated = $gettext('Failed to change favorite state of "%{file}"')
-        const title = $gettextInterpolate(translated, { file: resources[0].name }, true)
+        const title = $gettext(
+          'Failed to change favorite state of "%{file}"',
+          { file: resources[0].name },
+          true
+        )
         store.dispatch('showErrorMessage', {
-          title: title,
+          title,
           error
         })
       })

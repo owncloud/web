@@ -26,7 +26,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
   const router = useRouter()
   const loadingService = useLoadingService()
   const archiverService = useArchiverService()
-  const { $ngettext, $gettext, interpolate: $gettextInterpolate, current } = useGettext()
+  const { $ngettext, $gettext, current } = useGettext()
   const publicLinkPassword = usePublicLinkPassword({ store })
   const isFilesAppActive = useIsFilesAppActive()
 
@@ -89,26 +89,12 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         handler: async (args) => {
           await loadingService.addTask(() => handler(args))
         },
-        label: ({ resources }) => {
-          const downloadLabel = $gettext('Download')
-
-          if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
-            const downloadableResourcesCount = resources.filter(
-              (r) => r.canDownload() && !isProjectSpaceResource(r)
-            ).length
-            return `${downloadLabel} (${downloadableResourcesCount.toString()})`
-          }
-
-          return downloadLabel
-        },
+        label: () => $gettext('Download'),
         disabledTooltip: ({ resources }) => {
           return areArchiverLimitsExceeded(resources)
-            ? $gettextInterpolate(
-                $gettext('The selection exceeds the allowed archive size (max. %{maxSize})'),
-                {
-                  maxSize: formatFileSize(unref(archiverService.capability).max_size, current)
-                }
-              )
+            ? $gettext('The selection exceeds the allowed archive size (max. %{maxSize})', {
+                maxSize: formatFileSize(unref(archiverService.capability).max_size, current)
+              })
             : ''
         },
         isDisabled: ({ resources }) => areArchiverLimitsExceeded(resources),
