@@ -16,6 +16,7 @@ Summary
 * Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
+* Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
@@ -96,6 +97,14 @@ Details
 
    https://github.com/owncloud/web/issues/9630
    https://github.com/owncloud/web/pull/9663
+
+* Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
+
+   Preventing special characters except for . and _ in the username. Matching server validation
+   for username
+
+   https://github.com/owncloud/web/issues/9694
+   https://github.com/owncloud/web/pull/9703
 
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 
