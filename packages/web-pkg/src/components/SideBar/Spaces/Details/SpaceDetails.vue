@@ -67,10 +67,17 @@
         </td>
       </tr>
       <tr v-if="showSpaceId">
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Space ID')" />
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Copy Space ID')" />
         <td class="oc-flex oc-flex-middle">
           <div class="oc-text-truncate" v-text="resource.id" />
-          <oc-button class="oc-ml-s" appearance="raw" size="small" @click="copySpaceIdToClipboard">
+          <oc-button
+            v-oc-tooltip="$gettext('Copy Space ID')"
+            class="oc-ml-s"
+            appearance="raw"
+            size="small"
+            :aria-label="$gettext('Copy Space ID to clipboard')"
+            @click="copySpaceIdToClipboard"
+          >
             <oc-icon :name="copySpaceIdIcon" />
           </oc-button>
         </td>
