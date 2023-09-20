@@ -63,7 +63,7 @@
       <tr v-if="!resource.disabled">
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Quota')" />
         <td>
-          <space-quota :space-quota="resource.spaceQuota" class="oc-display-inline-block" />
+          <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
       <tr v-if="showSpaceId">
