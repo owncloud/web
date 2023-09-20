@@ -32,8 +32,9 @@
               :target="n.target"
               :href="n.url"
               :to="n.path"
-              :appearance="'raw'"
-              :variation="'passive'"
+              :appearance="n.active ? 'raw-inverse' : 'raw'"
+              :variation="n.active ? 'primary' : 'passive'"
+              :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
             >
               <oc-application-icon :icon="n.icon" :color-primary="n.color" />
               <span v-text="$gettext(n.title)" />
@@ -91,6 +92,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.oc-drop {
+  width: 280px;
+}
 .applications-list li {
   margin: var(--oc-space-xsmall) 0;
 
@@ -103,6 +107,8 @@ export default defineComponent({
 
   a,
   button {
+    padding: 3px;
+    border-radius: 8px;
     gap: var(--oc-space-medium);
     justify-content: flex-start;
     width: 100%;
@@ -120,9 +126,11 @@ export default defineComponent({
       }
     }
 
-    &:focus,
+    &:focus {
+      text-decoration: none;
+    }
     &:hover {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-background-hover) !important;
       text-decoration: none;
     }
 

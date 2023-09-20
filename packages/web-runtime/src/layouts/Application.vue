@@ -180,6 +180,22 @@ export default defineComponent({
         })
       })
 
+      list.push({
+        name: 'OnlyOffice',
+        id: 'admin-settings',
+        icon: 'file-ppt-2',
+        color: '#FF3F09',
+        isFileEditor: false,
+        type: 'extension'
+      })
+      list.push({
+        name: 'Calendar',
+        id: 'admin-settings',
+        icon: 'calendar-event',
+        isFileEditor: false,
+        type: 'extension'
+      })
+
       // Get extensions manually added into config
       this.configuration.applications.forEach((application) => {
         list.push({

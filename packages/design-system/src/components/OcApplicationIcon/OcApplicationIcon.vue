@@ -83,8 +83,8 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-application-icon {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.21) 0px 1px 4px;
 }
