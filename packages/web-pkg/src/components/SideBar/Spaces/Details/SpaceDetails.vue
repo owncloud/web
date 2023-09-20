@@ -151,7 +151,7 @@ export default defineComponent({
     })
 
     const copySpaceIdToClipboard = () => {
-      navigator.clipboard.writeText(unref(resource).id as string)
+      navigator.clipboard.writeText(unref(resource).id.toString())
       copySpaceIdIcon.value = 'check'
       setTimeout(() => (copySpaceIdIcon.value = copySpaceIdIconInitial), 500)
     }
