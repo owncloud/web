@@ -22,12 +22,11 @@
     </div>
     <oc-button
       id="exitAnchor"
-      type="router-link"
       class="oc-mt-m oc-width-medium"
-      :to="logoutLink"
       size="large"
       appearance="filled"
       variation="primary"
+      v-bind="logoutButtonsAttrs"
       v-text="navigateToLoginText"
     />
   </div>
@@ -35,14 +34,16 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useRoute, useStore } from 'web-pkg'
+import { queryItemAsString, useConfigurationManager, useRouteQuery, useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AccessDeniedPage',
   setup() {
     const store = useStore()
-    const route = useRoute()
+    const configurationManager = useConfigurationManager()
+    const redirectUrlQuery = useRouteQuery('redirectUrl')
+
     const { $gettext } = useGettext()
 
     const logoImg = computed(() => {
@@ -69,12 +70,28 @@ export default defineComponent({
     const navigateToLoginText = computed(() => {
       return $gettext('Log in again')
     })
-    const logoutLink = computed(() => {
-      const redirectUrl = unref(route).query?.redirectUrl
+    const logoutButtonsAttrs = computed(() => {
+      const redirectUrl = queryItemAsString(unref(redirectUrlQuery))
+
+      if (configurationManager.options.loginUrl) {
+        const configLoginURL = new URL(encodeURI(configurationManager.options.loginUrl))
+        if (redirectUrl) {
+          configLoginURL.searchParams.append('redirectUrl', redirectUrl)
+        }
+        return {
+          type: 'a',
+          href: configLoginURL.toString()
+        }
+      }
+
       return {
         name: 'login',
-        query: {
-          ...(redirectUrl && { redirectUrl })
+        type: 'router-link',
+        to: {
+          name: 'login',
+          query: {
+            ...(redirectUrl && { redirectUrl })
+          }
         }
       }
     })
@@ -86,7 +103,7 @@ export default defineComponent({
       footerSlogan,
       navigateToLoginText,
       accessDeniedHelpUrl,
-      logoutLink
+      logoutButtonsAttrs
     }
   }
 })

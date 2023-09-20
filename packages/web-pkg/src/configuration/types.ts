@@ -18,6 +18,7 @@ export interface OptionsConfiguration {
   routing?: RoutingOptionsConfiguration
   upload?: UploadOptionsConfiguration
   logoutUrl?: string
+  loginUrl?: string
   contextHelpersReadMore?: boolean
   contextHelpers?: boolean
   openAppsInTab?: boolean
