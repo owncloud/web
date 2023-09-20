@@ -164,7 +164,6 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { formatFileSize } from 'web-pkg/src/helpers'
 import { UppyResource } from '../composables/upload'
-import { dirname } from 'path'
 import { extractParentFolderName } from 'web-client/src/helpers'
 
 export default defineComponent({
