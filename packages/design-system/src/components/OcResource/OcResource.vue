@@ -67,7 +67,7 @@
           @click.stop="$emit('parentFolderClicked')"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
-          <span class="text" v-text="parentFolder" />
+          <span class="text" v-text="parentFolderName" />
         </component>
       </div>
     </div>
@@ -82,7 +82,6 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcResourceName from '../OcResourceName/OcResourceName.vue'
 import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
 import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
-import * as path from 'path'
 import { Resource } from 'web-client/src'
 
 /**
@@ -102,12 +101,35 @@ export default defineComponent({
   },
   props: {
     /**
+     * The resource to be displayed
+     */
+    resource: {
+      type: Object as PropType<Resource>,
+      required: true
+    },
+    /**
      * The resource folder link
      */
     folderLink: {
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * Asserts whether the resource path should be displayed
+     */
+    isPathDisplayed: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
+     * The resource parent folder name to be displayed
+     */
+    parentFolderName: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The resource parent folder link path
@@ -124,29 +146,6 @@ export default defineComponent({
       type: Object,
       required: false,
       default: () => {}
-    },
-    /**
-     * The resource to be displayed
-     */
-    resource: {
-      type: Object as PropType<Resource>,
-      required: true
-    },
-    /**
-     * The resource parent folder name to be displayed
-     */
-    parentFolderNameDefault: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Asserts whether the resource path should be displayed
-     */
-    isPathDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
     },
     /**
      * Asserts whether the resource extension should be displayed
@@ -185,11 +184,6 @@ export default defineComponent({
   computed: {
     parentFolderComponentType() {
       return this.parentFolderLink !== null ? 'router-link' : 'span'
-    },
-
-    parentFolder() {
-      const folder = path.basename(path.dirname(this.resource.path)).replace('.', '')
-      return folder !== '' ? folder : this.parentFolderNameDefault
     },
 
     parentFolderStyle() {
@@ -345,7 +339,7 @@ export default defineComponent({
         <oc-resource :resource="notes" is-resource-clickable="false" class="oc-mb" />
         <oc-resource :resource="notes" :is-extension-displayed="false" class="oc-mb" />
         <oc-resource :resource="forest" is-path-displayed="true" />
-        <oc-resource :resource="something" is-path-displayed="true" parent-folder-name-default="Example parent folder"  />
+        <oc-resource :resource="something" is-path-displayed="true" parent-folder-name="Example parent folder"  />
       </div>
     </template>
     <script>

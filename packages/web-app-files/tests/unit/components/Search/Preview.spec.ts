@@ -32,12 +32,12 @@ describe('Preview component', () => {
     })
   })
 
-  describe('computed method "defaultParentFolderName"', () => {
+  describe('computed method "parentFolderName"', () => {
     it('should equal "All files and folders" if spaces capability is not present', () => {
       const { wrapper } = getWrapper({
         hasShareJail: false
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('All files and folders')
+      expect(wrapper.vm.parentFolderName).toEqual('All files and folders')
     })
     it('should equal the space name if resource storage is representing a project space', () => {
       const { wrapper } = getWrapper({
@@ -50,33 +50,33 @@ describe('Preview component', () => {
           }
         ]
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('New space')
+      expect(wrapper.vm.parentFolderName).toEqual('New space')
     })
     it('should equal the share name if resource is representing a file or folder in the root of a share', () => {
       const { wrapper } = getWrapper({
         searchResult: {
           id: '1',
           data: {
-            path: '/1/My share',
+            path: '/My share/test.txt',
             shareRoot: '/My share',
             shareId: '1'
           }
         }
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('My share')
+      expect(wrapper.vm.parentFolderName).toEqual('My share')
     })
     it('should equal the "Shared with me" if resource is representing the root share', () => {
       const { wrapper } = getWrapper({
         searchResult: {
           id: '1',
           data: {
-            path: '/',
+            path: '/My share',
             shareRoot: '/My share',
             shareId: '1'
           }
         }
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('Shared with me')
+      expect(wrapper.vm.parentFolderName).toEqual('Shared with me')
     })
     it('should equal "Personal" if resource storage is not representing the personal home', () => {
       const { wrapper } = getWrapper({
@@ -87,7 +87,7 @@ describe('Preview component', () => {
           }
         ]
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('Personal')
+      expect(wrapper.vm.parentFolderName).toEqual('Personal')
     })
   })
 })

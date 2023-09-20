@@ -13,7 +13,7 @@
       :is-resource-clickable="false"
       :parent-folder-link="parentFolderLink"
       :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
-      :parent-folder-name-default="defaultParentFolderName"
+      :parent-folder-name="parentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
       @parent-folder-clicked="parentFolderClicked"
     />
@@ -31,7 +31,13 @@ import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { basename, dirname } from 'path'
 import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
-import { buildShareSpaceResource, isProjectSpaceResource, Resource } from 'web-client/src/helpers'
+import {
+  buildShareSpaceResource,
+  extractParentFolderName,
+  isProjectSpaceResource,
+  isShareRoot,
+  Resource
+} from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
@@ -115,11 +121,14 @@ export default defineComponent({
         serverUrl: configurationManager.serverUrl
       })
     },
-    defaultParentFolderName() {
-      if (this.resource.shareId) {
-        return this.resource.path === '/'
-          ? this.$gettext('Shared with me')
-          : basename(this.resource.shareRoot)
+    parentFolderName() {
+      if (isShareRoot(this.resource)) {
+        return this.$gettext('Shared with me')
+      }
+
+      const parentFolder = extractParentFolderName(this.resource)
+      if (parentFolder) {
+        return parentFolder
       }
 
       if (!this.hasShareJail) {

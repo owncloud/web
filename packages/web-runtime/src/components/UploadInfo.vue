@@ -121,7 +121,7 @@
               :is-path-displayed="true"
               :is-thumbnail-displayed="displayThumbnails"
               :is-resource-clickable="isResourceClickable(item)"
-              :parent-folder-name-default="defaultParentFolderName(item)"
+              :parent-folder-name="parentFolderName(item)"
               :folder-link="folderLink(item)"
               :parent-folder-link="parentFolderLink(item)"
             />
@@ -164,6 +164,7 @@ import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { formatFileSize } from 'web-pkg/src/helpers'
 import { UppyResource } from '../composables/upload'
+import { extractParentFolderName } from 'web-client/src/helpers'
 
 export default defineComponent({
   setup() {
@@ -538,13 +539,18 @@ export default defineComponent({
         }
       }
     },
-    defaultParentFolderName(file) {
+    parentFolderName(file) {
       const {
         meta: { spaceName, driveType }
       } = file
 
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
+      }
+
+      const parentFolder = extractParentFolderName(file)
+      if (parentFolder) {
+        return parentFolder
       }
 
       if (driveType === 'personal') {
