@@ -43,7 +43,9 @@
         <span class="oc-text-small" v-text="$gettext('Show')" />
       </oc-button>
     </div>
-    <table class="details-table" :aria-label="detailsTableLabel">
+    <table class="details-table oc-width-1-1" :aria-label="detailsTableLabel">
+      <col class="oc-width-1-3" />
+      <col class="oc-width-2-3" />
       <tr>
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last activity')" />
         <td v-text="lastModifiedDate" />
@@ -61,18 +63,16 @@
       <tr v-if="!resource.disabled">
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Quota')" />
         <td>
-          <space-quota :space-quota="resource.spaceQuota" />
+          <space-quota :space-quota="resource.spaceQuota" class="oc-display-inline-block" />
         </td>
       </tr>
       <tr v-if="showSpaceId">
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Space ID')" />
         <td class="oc-flex oc-flex-middle">
-          <div class="oc-text-truncate oc-width-1-2" v-text="resource.id" />
-          <div class="oc-width-1-2">
-            <oc-button appearance="raw" size="small" @click="copySpaceIdToClipboard">
-              <oc-icon :name="copySpaceIdIcon" />
-            </oc-button>
-          </div>
+          <div class="oc-text-truncate" v-text="resource.id" />
+          <oc-button class="oc-ml-s" appearance="raw" size="small" @click="copySpaceIdToClipboard">
+            <oc-icon :name="copySpaceIdIcon" />
+          </oc-button>
         </td>
       </tr>
     </table>
@@ -282,6 +282,7 @@ export default defineComponent({
 
 .details-table {
   text-align: left;
+  table-layout: fixed;
 
   tr {
     height: 1.5rem;
