@@ -75,14 +75,15 @@ export const extractParentFolderName = (resource: Resource): string | null => {
 }
 
 export const isShareRoot = (resource: Resource) => {
-  return resource.shareId && resource.path === resource.shareRoot
+  // FIXME: does not work for OCS resources (re-shares), see workaround in useResourceRouteResolver
+  return typeof resource.isShareRoot === 'function' && resource.isShareRoot()
 }
 
 export function buildResource(resource): Resource {
   const name = resource.fileInfo[DavProperty.Name] || basename(resource.name)
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const extension = extractExtensionFromFile({ ...resource, name })
-  let resourcePath
+  let resourcePath: string
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
     resourcePath = resource.name.split('/').slice(3).join('/')

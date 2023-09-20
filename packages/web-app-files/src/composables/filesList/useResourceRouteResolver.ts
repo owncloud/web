@@ -1,5 +1,4 @@
 import { unref, Ref } from 'vue'
-import { basename } from 'path'
 
 import { ConfigurationManager } from 'web-pkg/src'
 import { useGetMatchingSpace } from 'web-pkg/src/composables'
@@ -27,26 +26,15 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
     }
 
     const { path, fileId, resource } = createTargetRouteOptions
-    let space
-    if (resource.shareId) {
-      space = buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: basename(resource.shareRoot),
-        serverUrl: configurationManager.serverUrl
-      })
-    } else if (
-      !resource.shareId &&
-      !unref(options.space) &&
-      !getInternalSpace(resource.storageId)
-    ) {
+    if (!resource.shareId && !unref(options.space) && !getInternalSpace(resource.storageId)) {
       if (path === '/') {
         return createLocationShares('files-shares-with-me')
       }
       // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
       return { name: 'resolvePrivateLink', params: { fileId } }
-    } else {
-      space = unref(options.space) || getMatchingSpace(resource)
     }
+
+    const space = unref(options.space) || getMatchingSpace(resource)
     if (!space) {
       return {}
     }
