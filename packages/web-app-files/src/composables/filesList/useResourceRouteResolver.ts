@@ -7,7 +7,6 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
 import { Resource, SpaceResource } from 'web-client/src'
-import { buildShareSpaceResource } from 'web-client/src/helpers'
 
 type ResourceRouteResolverOptions = {
   configurationManager?: ConfigurationManager
@@ -45,14 +44,8 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
   }
 
   const createFileAction = (resource: Resource) => {
-    let space = unref(options.space) || getMatchingSpace(resource)
-    if (!space) {
-      space = buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
-    }
+    const space = unref(options.space) || getMatchingSpace(resource)
+
     /**
      * Triggered when a default action is triggered on a file
      * @property {object} resource resource for which the event is triggered
