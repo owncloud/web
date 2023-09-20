@@ -1,6 +1,7 @@
 <template>
   <app-loading-spinner v-if="isLoading" />
   <template v-else>
+    <app-banner :file-id="fileId"></app-banner>
     <drive-redirect
       v-if="!space"
       :drive-alias-and-item="driveAliasAndItem"
@@ -8,7 +9,6 @@
     />
     <generic-trash v-else-if="isTrashRoute" :space="space" :item-id="itemId" />
     <generic-space v-else :space="space" :item="item" :item-id="itemId" />
-    <app-banner :file-id="fileId"></app-banner>
   </template>
 </template>
 

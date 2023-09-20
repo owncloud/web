@@ -1,5 +1,6 @@
-import { buildUrl } from '../router'
+import { buildUrl } from 'web-pkg/src/helpers/router/buildUrl'
 import { v4 as uuidV4 } from 'uuid'
+import { router } from 'web-runtime/src/router'
 
 async function get(url) {
   return await fetch(url, { headers: { 'X-Request-ID': uuidV4() } })
@@ -41,7 +42,7 @@ export async function registerClient(openIdConfig) {
   sessionStorage.removeItem('dynamicClientData')
   const wellKnown = await get(`${openIdConfig.authority}/.well-known/openid-configuration`)
   const resp = await post(wellKnown.registration_endpoint, {
-    redirect_uris: [buildUrl('/oidc-callback.html')],
+    redirect_uris: [buildUrl(router, '/oidc-callback.html')],
     client_name: `ownCloud Web on ${window.location.origin}`
   })
   sessionStorage.setItem('dynamicClientData', JSON.stringify(resp))

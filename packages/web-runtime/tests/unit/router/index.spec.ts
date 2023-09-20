@@ -1,4 +1,13 @@
 import { describe } from '@jest/globals'
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+  RouteLocation,
+  Router
+} from 'vue-router'
+import { mock } from 'jest-mock-extended'
+import { base } from 'web-runtime/src/router'
 
 describe('buildUrl', () => {
   it.each`
@@ -27,11 +36,22 @@ describe('buildUrl', () => {
       document.getElementsByTagName('head')[0].appendChild(baseElement)
     }
 
-    const { buildUrl } = await import('../../../src/router')
+    const { buildUrl } = await import('web-pkg/src/helpers/router/buildUrl')
     jest.resetModules()
 
     // hide warnings for non-existent routes
     jest.spyOn(console, 'warn').mockImplementation(() => undefined)
-    expect(buildUrl(path)).toBe(expected)
+
+    const router = createRouter({
+      routes: [
+        {
+          path: '/login',
+          component: {}
+        }
+      ],
+      history: (base && createWebHistory(base)) || createWebHashHistory()
+    })
+
+    expect(buildUrl(router, path)).toBe(expected)
   })
 })

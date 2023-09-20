@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { formatFileSize } from 'web-pkg'
+import { formatFileSize } from 'web-pkg/src/helpers/filesize'
 
 export default {
   name: 'QuotaSelect',

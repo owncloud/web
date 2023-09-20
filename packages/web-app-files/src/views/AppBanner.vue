@@ -1,33 +1,43 @@
 <template>
-  <div class="app-banner hide-desktop">
-    <a href="javascript:void(0);" class="app-banner-exit" aria-label="Close"></a>
-    <div
-      class="app-banner-icon"
-      style="
-        background-image: url('https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/87/4c/3c/874c3c90-d58d-837f-63fe-6a7dae6fd320/AppIcon-1x_U007emarketing-0-7-0-sRGB-85-220.png/460x0w.png');
-      "
-    ></div>
-    <div class="info-container">
-      <div>
-        <div class="app-title">ownCloud</div>
-        <div class="app-publisher">ownCloud GmbH</div>
-        <div class="app-additional-info">FREE - On the App Store</div>
+  <portal to="app.app-banner">
+    <div class="app-banner hide-desktop" :hidden="shouldShow === false">
+      <oc-button
+        variation="brand"
+        appearance="raw"
+        class="app-banner-exit"
+        aria-label="Close"
+        @click="close"
+      >
+        <oc-icon name="close" size="small" />
+      </oc-button>
+      <div
+        class="app-banner-icon"
+        :style="{ 'background-image': `url('${appBannerSettings.icon}')` }"
+      ></div>
+      <div class="info-container">
+        <div>
+          <div class="app-title">{{ appBannerSettings.title }}</div>
+          <div class="app-publisher">{{ appBannerSettings.publisher }}</div>
+          <div class="app-additional-info">{{ appBannerSettings.price }}</div>
+        </div>
       </div>
+      <a
+        :href="generateAppUrl(fileId)"
+        target="_blank"
+        class="app-banner-cta"
+        rel="noopener"
+        aria-label="{{ appBannerSettings.ctaText }}"
+        >{{ appBannerSettings.ctaText }}</a
+      >
     </div>
-    <a
-      :href="generateAppUrl(fileId)"
-      target="_blank"
-      class="app-banner-cta"
-      rel="noopener"
-      aria-label="VIEW"
-      >VIEW</a
-    >
-  </div>
+  </portal>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, unref } from 'vue'
-import { useStore } from 'web-pkg'
+import { defineComponent, ref, unref } from 'vue'
+import { useRouter, useStore } from 'web-pkg'
+import { buildUrl } from 'web-pkg/src/helpers/router'
+import { useSessionStorage } from '@vueuse/core'
 
 export default defineComponent({
   components: {},
@@ -38,14 +48,28 @@ export default defineComponent({
     }
   },
   setup() {
+    const shouldShow = ref<boolean>(true)
     const store = useStore()
-    const mobileAppScheme = store.getters.configuration.commonTheme.mobileAppScheme || 'owncloud'
+    const router = useRouter()
+
+    const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
 
     const generateAppUrl = (fileId: string) => {
-      return `${mobileAppScheme}://${window.location.host}/f/${fileId}`
+      const url = new URL(buildUrl(router, `/f/${fileId}`))
+      url.protocol = appBannerSettings.appScheme
+      return url.toString()
     }
+
+    const close = () => {
+      shouldShow.value = false
+      useSessionStorage('app_banner_closed', 1)
+    }
+
     return {
-      generateAppUrl
+      generateAppUrl,
+      close,
+      shouldShow,
+      appBannerSettings
     }
   }
 })
@@ -59,14 +83,14 @@ export default defineComponent({
 }
 
 .app-banner {
-  position: absolute;
-  top: 0;
-  left: 0;
+  //top: 0;
+  //left: 0;
   overflow-x: hidden;
   width: 100%;
   height: 84px;
   background: #f3f3f3;
   font-family: Helvetica, sans, sans-serif;
+  z-index: 5;
 }
 
 .info-container {
@@ -115,32 +139,16 @@ export default defineComponent({
 .app-additional-info {
   font-size: 12px;
 }
-.app-banner-exit::after {
-  transform: rotate(-45deg);
-}
-
-.app-banner-exit::before,
-.app-banner-exit::after {
-  position: absolute;
-  width: 1px;
-  height: 12px;
-  background: #767676;
-  content: ' ';
-}
-
-.app-banner-exit::before {
-  transform: rotate(45deg);
-}
 
 .app-banner-exit {
   position: absolute;
   top: calc(50% - 6px);
   left: 9px;
-  display: block;
   margin: 0;
   width: 12px;
   height: 12px;
   border: 0;
   text-align: center;
+  display: inline;
 }
 </style>
