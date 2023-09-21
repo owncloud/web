@@ -297,6 +297,9 @@ export default defineComponent({
   li a:focus {
     outline: auto 1px !important;
   }
+  .oc-card {
+    border-radius: 8px !important;
+  }
 }
 </style>
 
