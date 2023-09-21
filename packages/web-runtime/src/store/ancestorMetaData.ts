@@ -1,4 +1,4 @@
-import { isMountPointSpaceResource } from 'web-client/src/helpers'
+import { isMountPointSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { configurationManager } from 'web-pkg/src'
 import { getParentPaths } from 'web-pkg/src/helpers/path'
@@ -41,7 +41,12 @@ const actions = {
     const promises = []
     const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
     const parentPaths = getParentPaths(folder.path)
-    const mountPoints = rootGetters['runtime/spaces/spaces'].filter(isMountPointSpaceResource)
+    const getMountPoints = () =>
+      rootGetters['runtime/spaces/spaces'].filter(
+        (s) => isMountPointSpaceResource(s) && s.root.remoteItem.rootId === space.id
+      )
+    const fullyAccessibleSpace =
+      rootGetters.user.uuid === space.ownerId || isProjectSpaceResource(space)
 
     for (const path of parentPaths) {
       const cachedData = state.ancestorMetaData[path] ?? null
@@ -51,8 +56,9 @@ const actions = {
       }
 
       if (
+        !fullyAccessibleSpace &&
         configurationManager.options.routing.fullShareOwnerPaths &&
-        !mountPoints.find((m) => path.startsWith(m.root.remoteItem.path))
+        !getMountPoints().find((m) => path.startsWith(m.root.remoteItem.path))
       ) {
         // no access to the parent resource
         break

@@ -175,7 +175,8 @@ import {
   useRouteQuery,
   useClientService,
   ViewModeConstants,
-  useCapabilityShareJailEnabled
+  useCapabilityShareJailEnabled,
+  useConfigurationManager
 } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
@@ -246,6 +247,7 @@ export default defineComponent({
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
+    const configurationManager = useConfigurationManager()
 
     let loadResourcesEventToken
 
@@ -319,16 +321,18 @@ export default defineComponent({
         )
       }
 
-      let spaceBreadcrumbItem
+      let spaceBreadcrumbItem: BreadcrumbItem
       let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
       query = omit({ ...unref(route).query, ...query }, 'page')
       if (isPersonalSpaceResource(space)) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           text: space.name,
-          to: createLocationSpaces('files-spaces-generic', {
-            params,
-            query
+          ...(space.ownerId === store.getters.user.uuid && {
+            to: createLocationSpaces('files-spaces-generic', {
+              params,
+              query
+            })
           })
         }
       } else if (isShareSpaceResource(space)) {
@@ -367,7 +371,14 @@ export default defineComponent({
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
         // FIXME: needs file ids for each parent folder path
-        ...breadcrumbsFromPath(unref(route), props.item)
+        ...breadcrumbsFromPath(
+          unref(route),
+          space,
+          props.item,
+          store.getters['runtime/spaces/spaces'],
+          store.getters.user.uuid === space.ownerId || isProjectSpaceResource(space),
+          configurationManager.options.routing.fullShareOwnerPaths
+        )
       )
     })
 
