@@ -9,15 +9,9 @@ import {
 } from '../../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import {
-  buildShareSpaceResource,
-  isShareSpaceResource,
-  Resource,
-  SpaceResource
-} from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { useRouter, useStore } from 'web-pkg/src/composables'
+import { useGetMatchingSpace, useRouter, useStore } from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction } from 'web-pkg/src/composables/actions'
@@ -26,23 +20,10 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
   store = store || useStore()
   const router = useRouter()
   const { $pgettext } = useGettext()
+  const { getMatchingSpace } = useGetMatchingSpace()
 
   const getSpace = (space: SpaceResource, resource: Resource) => {
-    if (space) {
-      return space
-    }
-    const storageId = resource.storageId
-    // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
-    space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
-    if (space) {
-      return space
-    }
-
-    return buildShareSpaceResource({
-      shareId: resource.shareId,
-      shareName: resource.name,
-      serverUrl: configurationManager.serverUrl
-    })
+    return space ? space : getMatchingSpace(space)
   }
 
   const routeName = computed(() => {

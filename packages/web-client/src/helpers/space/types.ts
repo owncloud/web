@@ -38,14 +38,14 @@ export interface PersonalSpaceResource extends SpaceResource {
   __personalSpaceResource?: any
 }
 export const isPersonalSpaceResource = (resource: Resource): resource is PersonalSpaceResource => {
-  return resource.driveType === 'personal'
+  return resource?.driveType === 'personal'
 }
 
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
 }
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
-  return resource.driveType === 'project'
+  return resource?.driveType === 'project'
 }
 
 export interface ShareSpaceResource extends SpaceResource {
@@ -62,7 +62,7 @@ export interface MountPointSpaceResource extends SpaceResource {
 export const isMountPointSpaceResource = (
   resource: Resource
 ): resource is MountPointSpaceResource => {
-  return resource.driveType === 'mountpoint'
+  return resource?.driveType === 'mountpoint'
 }
 
 export interface PublicSpaceResource extends SpaceResource {
@@ -74,5 +74,5 @@ export interface PublicSpaceResource extends SpaceResource {
   publicLinkShareOwner?: string
 }
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
-  return resource.driveType === 'public'
+  return resource?.driveType === 'public'
 }

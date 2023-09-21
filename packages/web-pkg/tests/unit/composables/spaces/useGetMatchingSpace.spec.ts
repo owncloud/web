@@ -34,7 +34,7 @@ describe('useSpaceHelpers', () => {
     it('should return the matching share space', () => {
       getWrapper({
         setup: ({ getMatchingSpace }) => {
-          const resource = mock<Resource>()
+          const resource = mock<Resource>({ shareRoot: '/' })
           expect(getMatchingSpace(resource).driveType).toEqual('share')
         }
       })

@@ -77,7 +77,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :action-options="{ space: getSpace(resource), resources: selectedResources }"
+              :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>
@@ -126,19 +126,17 @@ import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
-import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import {
   queryItemAsString,
   useCapabilityFilesTags,
   useClientService,
   useFileListHeaderPosition,
+  useGetMatchingSpace,
   useRoute,
   useRouteQuery,
   useRouter,
   useStore
 } from 'web-pkg/src/composables'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { basename } from 'path'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { eventBus, useCapabilityFilesFullTextSearch } from 'web-pkg'
@@ -195,6 +193,7 @@ export default defineComponent({
     const clientService = useClientService()
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
     const scopeQuery = useRouteQuery('scope')
@@ -230,16 +229,6 @@ export default defineComponent({
     onBeforeRouteLeave(() => {
       eventBus.publish('app.search.term.clear')
     })
-    const getSpace = (resource: Resource): SpaceResource => {
-      if (resource.shareId) {
-        return buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: basename(resource.shareRoot),
-          serverUrl: configurationManager.serverUrl
-        })
-      }
-      return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
-    }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let query = ''
@@ -317,7 +306,7 @@ export default defineComponent({
       loadAvailableTagsTask,
       fileListHeaderY,
       fullTextSearchEnabled,
-      getSpace,
+      getMatchingSpace,
       availableTags,
       tagFilter,
       breadcrumbs,
@@ -392,7 +381,7 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           previewService: this.$previewService,
-          space: this.getSpace(resource),
+          space: this.getMatchingSpace(resource),
           resource,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail
