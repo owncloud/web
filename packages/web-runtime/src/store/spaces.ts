@@ -1,10 +1,15 @@
-import { buildSpace, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  buildSpace,
+  extractStorageId,
+  isProjectSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { Ref, unref } from 'vue'
 import { set, has } from 'lodash-es'
 import { buildSpaceShare } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space/sortMembers'
 
-import { configurationManager } from 'web-pkg/src/configuration'
+import { ConfigurationManager, configurationManager } from 'web-pkg/src/configuration'
 import { Graph } from 'web-client'
 import { AxiosResponse } from 'axios'
 
@@ -280,9 +285,38 @@ const loadSpacesByType = async ({
   if (!graphResponse.data) {
     return []
   }
-  return graphResponse.data.value.map((space) =>
-    buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
-  )
+
+  const mountpoints = graphResponse.data.value.map((space) => {
+    return buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+  })
+  if (driveType !== 'mountpoint' || !configurationManager.options.routing.fullShareOwnerPaths) {
+    return mountpoints
+  }
+
+  const rootSpaceDriveAliasMapping: Record<string, string> = {}
+  graphResponse.data.value.forEach((space) => {
+    // FIXME: update graph client for proper types
+    const { rootId, driveAlias } = space.root.remoteItem as any
+    rootSpaceDriveAliasMapping[rootId] = driveAlias
+  })
+
+  const rootSpaces = Object.entries(rootSpaceDriveAliasMapping).map(([id, driveAlias]) => {
+    // FIXME: create proper buildRootSpace (or whatever function)
+    const space = buildSpace({
+      id: extractStorageId(id),
+      // FIXME: set a proper name
+      name: `space for ${driveAlias}`,
+      // FIXME: can we retrieve this from api?
+      driveType: driveAlias.split('/')[0],
+      driveAlias,
+      path: '/',
+      serverUrl: configurationManager.serverUrl
+    })
+
+    return space
+  })
+
+  return [...mountpoints, ...rootSpaces]
 }
 
 export default {

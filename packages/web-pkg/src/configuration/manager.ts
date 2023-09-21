@@ -86,6 +86,11 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'routing.idBased', get(options, 'routing.idBased', true))
     set(
       this.optionsConfiguration,
+      'routing.fullShareOwnerPaths',
+      get(options, 'routing.fullShareOwnerPaths', false)
+    )
+    set(
+      this.optionsConfiguration,
       'contextHelpersReadMore',
       get(options, 'contextHelpersReadMore', true)
     )

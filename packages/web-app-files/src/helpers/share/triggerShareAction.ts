@@ -25,7 +25,8 @@ export async function triggerShareAction(resource, status, hasReSharing, hasShar
     response = await response.json()
     if (response.ocs.data.length > 0) {
       const share = response.ocs.data[0]
-      return aggregateResourceShares([share], true, hasReSharing, hasShareJail)[0]
+      // FIXME: pass spaces here?
+      return aggregateResourceShares([share], true, hasReSharing, hasShareJail, [])[0]
     }
   }
 

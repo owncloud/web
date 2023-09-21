@@ -4,7 +4,7 @@ import List from './list'
 import { EventBus } from 'web-pkg/src/services/eventBus'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { ClientService } from 'web-pkg'
+import { ClientService, ConfigurationManager } from 'web-pkg'
 
 function $gettext(msg) {
   return msg
@@ -17,13 +17,18 @@ export default class Provider extends EventBus implements SearchProvider {
   private readonly store: Store<any>
   private readonly router: Router
 
-  constructor(store: Store<any>, router: Router, clientService: ClientService) {
+  constructor(
+    store: Store<any>,
+    router: Router,
+    clientService: ClientService,
+    configurationManager: ConfigurationManager
+  ) {
     super()
 
     this.id = 'files.sdk'
     this.displayName = $gettext('Files')
-    this.previewSearch = new Preview(store, router, clientService)
-    this.listSearch = new List(store, clientService)
+    this.previewSearch = new Preview(store, router, clientService, configurationManager)
+    this.listSearch = new List(store, clientService, configurationManager)
     this.store = store
     this.router = router
   }

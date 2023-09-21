@@ -20,6 +20,7 @@ import { AppNavigationItem, AppReadyHookArgs } from 'web-pkg/src/apps'
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -125,7 +126,7 @@ export default {
   translations,
   ready({ router, store, globalProperties }: AppReadyHookArgs) {
     const { $clientService } = globalProperties
-    Registry.sdkSearch = new SDKSearch(store, router, $clientService)
+    Registry.sdkSearch = new SDKSearch(store, router, $clientService, configurationManager)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.

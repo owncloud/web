@@ -21,7 +21,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, clientService } = context
+    const { store, clientService, configurationManager } = context
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
     const hasShareJail = useCapabilityShareJailEnabled(store)
@@ -30,6 +30,12 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
+
+      if (configurationManager.options.routing.fullShareOwnerPaths) {
+        yield store.dispatch('runtime/spaces/loadMountPoints', {
+          graphClient: clientService.graphAuthenticated
+        })
+      }
 
       let resources = yield clientService.owncloudSdk.shares.getShares('', {
         state: 'all',
@@ -44,7 +50,8 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
           resources,
           true,
           unref(hasResharing),
-          unref(hasShareJail)
+          unref(hasShareJail),
+          store.getters['runtime/spaces/spaces']
         ).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {
