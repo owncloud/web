@@ -114,7 +114,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
         if (matchingSpace) {
           path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
-          console.log('######', path, matchingSpace.driveAlias)
         }
       }
       space.value = matchingSpace
