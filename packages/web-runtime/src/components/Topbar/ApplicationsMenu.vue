@@ -107,7 +107,7 @@ export default defineComponent({
 
   a,
   button {
-    padding: 3px;
+    padding: 5px;
     border-radius: 8px;
     gap: var(--oc-space-medium);
     justify-content: flex-start;

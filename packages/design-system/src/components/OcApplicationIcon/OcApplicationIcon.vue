@@ -83,10 +83,21 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-application-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  box-shadow: rgba(0, 0, 0, 0.21) 0px 1px 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  .oc-icon {
+    height: 18px !important;
+    max-height: 18px !important;
+    max-width: 18px !important;
+    width: 18px !important;
+    svg {
+      height: 18px !important;
+      max-height: 18px !important;
+      max-width: 18px !important;
+      width: 18px !important;
+    }
+  }
 }
 </style>
 
