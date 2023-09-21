@@ -9,7 +9,7 @@ import { set, has } from 'lodash-es'
 import { buildSpaceShare } from 'web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space/sortMembers'
 
-import { ConfigurationManager, configurationManager } from 'web-pkg/src/configuration'
+import { configurationManager } from 'web-pkg/src/configuration'
 import { Graph } from 'web-client'
 import { AxiosResponse } from 'axios'
 

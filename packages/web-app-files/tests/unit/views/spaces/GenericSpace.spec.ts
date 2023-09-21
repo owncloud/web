@@ -13,9 +13,20 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { ConfigurationManager } from 'web-pkg/src'
 
 jest.mock('web-app-files/src/composables')
 jest.mock('web-app-files/src/composables/keyboardActions')
+jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+  useConfigurationManager: () =>
+    mockDeep<ConfigurationManager>({
+      options: {
+        routing: {
+          fullShareOwnerPaths: false
+        }
+      }
+    })
+}))
 
 describe('GenericSpace view', () => {
   it('appBar always present', () => {

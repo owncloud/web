@@ -260,7 +260,6 @@ import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
-import { urlJoin } from 'web-client/src/utils'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 

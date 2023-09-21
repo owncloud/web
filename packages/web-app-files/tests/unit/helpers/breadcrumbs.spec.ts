@@ -1,3 +1,5 @@
+import { mock } from 'jest-mock-extended'
+import { SpaceResource } from 'web-client/src'
 import { RouteLocation } from 'web-test-helpers/src'
 import { breadcrumbsFromPath, concatBreadcrumbs } from '../../../src/helpers/breadcrumbs'
 
@@ -5,7 +7,11 @@ describe('builds an array of breadcrumbitems', () => {
   it('from a path', () => {
     const breadCrumbs = breadcrumbsFromPath(
       { path: '/files/spaces/personal/home/test' } as RouteLocation,
-      '/test'
+      mock<SpaceResource>(),
+      '/test',
+      [],
+      false,
+      false
     )
     expect(breadCrumbs).toEqual([
       {
@@ -22,7 +28,11 @@ describe('builds an array of breadcrumbitems', () => {
     const initialBreadCrumbs = [{ text: 'Foo' }, { text: 'Bar' }]
     const breadCrumbsFromPath = breadcrumbsFromPath(
       { path: '/app/foo/bar?all=500' } as RouteLocation,
-      '/bar'
+      mock<SpaceResource>(),
+      '/bar',
+      [],
+      false,
+      false
     )
     const result = concatBreadcrumbs(...initialBreadCrumbs, ...breadCrumbsFromPath)
     expect(result[0]).toMatchObject({ text: 'Foo' })

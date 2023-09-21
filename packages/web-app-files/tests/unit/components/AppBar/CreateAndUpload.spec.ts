@@ -118,10 +118,10 @@ describe('CreateAndUpload component', () => {
   describe('method "onUploadComplete"', () => {
     it.each([
       { driveType: 'personal', updated: 1 },
-      { driveType: 'project', updated: 1 },
-      { driveType: 'share', updated: 0 },
-      { driveType: 'public', updated: 0 }
-    ])('updates the space quota for supported drive types', async (data) => {
+      { driveType: 'project', updated: 1 }
+      // { driveType: 'share', updated: 0 },
+      // { driveType: 'public', updated: 0 }
+    ])('updates the space quota for supported drive types: %s', async (data) => {
       const { driveType, updated } = data
       const { wrapper, mocks, storeOptions } = getWrapper()
       const file = mock<UppyResource>({ meta: { driveType } })

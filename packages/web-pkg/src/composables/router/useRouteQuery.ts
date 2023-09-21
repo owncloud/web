@@ -10,7 +10,6 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
       return unref(router.currentRoute).query[name] || defaultValue
     },
     async set(v) {
-      return
       if (unref(router.currentRoute).query[name] === v) {
         return
       }

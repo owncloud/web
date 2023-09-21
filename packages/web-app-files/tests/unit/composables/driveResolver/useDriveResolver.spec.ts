@@ -9,9 +9,20 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
+import { ConfigurationManager } from 'web-pkg/src/configuration'
 
 jest.unmock('web-app-files/src/composables')
 jest.mock('web-pkg/src/composables/capability')
+jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+  useConfigurationManager: () =>
+    mockDeep<ConfigurationManager>({
+      options: {
+        routing: {
+          fullShareOwnerPaths: false
+        }
+      }
+    })
+}))
 
 describe('useDriveResolver', () => {
   it('should be valid', () => {

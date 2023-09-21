@@ -16,6 +16,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { useGetMatchingSpaceMock } from 'web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 
 jest.mock('web-pkg/src/composables/driveResolver')
 jest.mock('web-pkg/src/composables/spaces')
@@ -111,12 +112,15 @@ function getMountedWrapper({
   jest.mocked(useDriveResolver).mockImplementation(() => ({
     space,
     item: ref('/'),
-    itemId: computed(() => 'id')
+    itemId: computed(() => 'id'),
+    loading: ref(false)
   }))
-  jest.mocked(useGetMatchingSpace).mockImplementation(() => ({
-    getInternalSpace: () => internalSpace,
-    getMatchingSpace: () => null
-  }))
+  jest.mocked(useGetMatchingSpace).mockImplementation(() =>
+    useGetMatchingSpaceMock({
+      getInternalSpace: (storageId: string) => internalSpace
+    })
+  )
+
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
