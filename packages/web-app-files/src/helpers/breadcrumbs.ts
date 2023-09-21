@@ -4,7 +4,7 @@ import omit from 'lodash-es/omit'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { v4 as uuidv4 } from 'uuid'
 import { SpaceResource } from 'web-client/src'
-import { isMountPointSpaceResource } from 'web-client/src/helpers'
+import { extractStorageId, isMountPointSpaceResource } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
 
 export const breadcrumbsFromPath = (
@@ -20,7 +20,9 @@ export const breadcrumbsFromPath = (
   const resource = pathSplit(resourcePath)
 
   const getMountPoints = () =>
-    spaces.filter((s) => isMountPointSpaceResource(s) && s.root.remoteItem.rootId === space.id)
+    spaces.filter(
+      (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
+    )
 
   return resource.map((text, i) => {
     const isAccessible =
