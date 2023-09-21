@@ -5,7 +5,14 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import { buildShareSpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
+import {
+  MountPointSpaceResource,
+  buildShareSpaceResource,
+  extractStorageId,
+  isMountPointSpaceResource,
+  isPersonalSpaceResource,
+  isProjectSpaceResource
+} from 'web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
 
@@ -45,8 +52,26 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     )
   }
 
+  const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>
+    store.getters['runtime/spaces/spaces'].filter(
+      (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
+    )
+
+  const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
+    // FIXME: project space might not be accessible if files of a space have been shared but user is not a member
+    const fullyAccessibleSpace =
+      store.getters.user.uuid === space.ownerId || isProjectSpaceResource(space)
+
+    return (
+      !configurationManager.options.routing.fullShareOwnerPaths ||
+      fullyAccessibleSpace ||
+      getMatchingMountPoints(space).some((m) => path.startsWith(m.root.remoteItem.path))
+    )
+  }
+
   return {
     getInternalSpace,
-    getMatchingSpace
+    getMatchingSpace,
+    isResourceAccessible
   }
 }

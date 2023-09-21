@@ -1,4 +1,4 @@
-import { unref } from 'vue'
+import { Ref, ref, unref } from 'vue'
 import { RouteLocation, Router, RouteParams } from 'vue-router'
 
 import { MaybeRef } from '../../utils'
@@ -15,6 +15,7 @@ interface AppNavigationOptions {
 export interface AppNavigationResult {
   closeApp(): void
   replaceInvalidFileRoute(context: MaybeRef<FileContext>, resource: Resource): boolean
+  closed: Ref<boolean>
 }
 
 export const contextRouteNameKey = 'contextRouteName'
@@ -100,12 +101,15 @@ export function useAppNavigation({
     })
   }
 
+  const closed = ref(false)
   const closeApp = () => {
+    closed.value = true
     return navigateToContext(currentFileContext)
   }
 
   return {
     replaceInvalidFileRoute,
-    closeApp
+    closeApp,
+    closed
   }
 }

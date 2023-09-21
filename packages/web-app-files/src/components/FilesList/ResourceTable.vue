@@ -231,7 +231,9 @@ import {
   SortDir,
   useStore,
   useUserContext,
-  ViewModeConstants
+  ViewModeConstants,
+  useConfigurationManager,
+  useGetMatchingSpace
 } from 'web-pkg/src/composables'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from 'web-pkg/src/constants'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -258,6 +260,7 @@ import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
+import { urlJoin } from 'web-client/src/utils'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -446,6 +449,7 @@ export default defineComponent({
   ],
   setup(props, context) {
     const store = useStore()
+    const configurationManager = useConfigurationManager()
 
     const { width } = useWindowSize()
     const hasTags = computed(
@@ -470,6 +474,7 @@ export default defineComponent({
     })
 
     return {
+      configurationManager,
       getTagToolTip,
       renameActions,
       renameHandler,
@@ -480,6 +485,7 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
+      ...useGetMatchingSpace(),
       ...useResourceRouteResolver(
         {
           space: ref(props.space),
@@ -498,7 +504,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'user']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -777,7 +783,12 @@ export default defineComponent({
       })
     },
     parentFolderLink(file: Resource) {
-      if (file.shareId && file.path === '/') {
+      const space = this.getMatchingSpace(file)
+      const parentFolderAccessible = this.isResourceAccessible({
+        space,
+        path: dirname(file.path)
+      })
+      if ((file.shareId && file.path === '/') || !parentFolderAccessible) {
         return createLocationShares('files-shares-with-me')
       }
       if (isProjectSpaceResource(file)) {
@@ -975,7 +986,13 @@ export default defineComponent({
       })
     },
     getParentFolderName(resource: Resource) {
-      if (isShareRoot(resource)) {
+      const space = this.getMatchingSpace(resource)
+      const parentFolderAccessible = this.isResourceAccessible({
+        space,
+        path: dirname(resource.path)
+      })
+
+      if (isShareRoot(resource) || !parentFolderAccessible) {
         return this.$gettext('Shared with me')
       }
 
@@ -984,17 +1001,16 @@ export default defineComponent({
         return parentFolder
       }
 
-      const matchingSpace = this.getMatchingSpace(resource)
-      if (isShareSpaceResource(matchingSpace)) {
-        return matchingSpace.name
+      if (isShareSpaceResource(space)) {
+        return space.name
       }
 
       if (this.hasProjectSpaces) {
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
         }
-        if (matchingSpace?.driveType === 'project') {
-          return matchingSpace.name
+        if (space?.driveType === 'project') {
+          return space.name
         }
       }
 

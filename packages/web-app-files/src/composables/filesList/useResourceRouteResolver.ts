@@ -55,8 +55,6 @@ export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, 
 
   return {
     createFileAction,
-    createFolderLink,
-    getInternalSpace,
-    getMatchingSpace
+    createFolderLink
   }
 }

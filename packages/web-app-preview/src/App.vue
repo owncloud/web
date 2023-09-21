@@ -87,6 +87,8 @@ import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
+import { watch } from 'vue'
+import { getCurrentInstance } from 'vue'
 
 export const appId = 'preview'
 
@@ -139,7 +141,7 @@ export default defineComponent({
       return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
     })
 
-    const { activeFiles, currentFileContext } = appDefaults
+    const { activeFiles, currentFileContext, closed } = appDefaults
 
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
@@ -171,10 +173,16 @@ export default defineComponent({
       return unref(filteredFiles)[unref(activeIndex)]
     })
     const activeMediaFileCached = computed(() => {
-      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile).id)
+      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile)?.id)
     })
 
     const updateLocalHistory = () => {
+      // this is a rare edge case when browsing quickly through a lot of files
+      // we workaround context being null, when useDriveResolver is in loading state
+      if (!unref(currentFileContext)) {
+        return
+      }
+
       const { params, query } = createFileRouteOptions(
         unref(unref(currentFileContext).space),
         unref(activeFilteredFile)
@@ -207,6 +215,19 @@ export default defineComponent({
         }
       }
     ]
+
+    const instance = getCurrentInstance() as any
+    watch(
+      currentFileContext,
+      async () => {
+        if (!unref(currentFileContext) || unref(closed)) {
+          return
+        }
+        await appDefaults.loadFolderForFileContext(unref(currentFileContext))
+        instance.proxy.setActiveFile(unref(unref(currentFileContext).driveAliasAndItem))
+      },
+      { immediate: true }
+    )
 
     return {
       ...appDefaults,
@@ -283,12 +304,10 @@ export default defineComponent({
     }
   },
 
-  async mounted() {
+  mounted() {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
-    await this.loadFolderForFileContext(this.currentFileContext)
-    this.setActiveFile(unref(this.currentFileContext.driveAliasAndItem))
     ;(this.$refs.preview as HTMLElement).focus()
   },
 
