@@ -69,8 +69,12 @@ export default defineComponent({
       const secondaryHex = unref(hasSecondaryColor)
         ? unref(secondaryColor)
         : shadeColor(hexToRgb(primaryHex), 40)
+
+      const darkBorderHex = shadeColor(hexToRgb(primaryHex), -10)
+      const lightBorderHex = shadeColor(hexToRgb(primaryHex), 25)
       return {
-        background: getGradient(primaryHex, secondaryHex)
+        background: getGradient(primaryHex, secondaryHex),
+        boxShadow: `inset ${lightBorderHex} 0px 0px 1px 0px,${darkBorderHex} 0px 0px 1px 0px`
       }
     })
 
