@@ -34,6 +34,7 @@
     "@vue/compiler-dom": "3.3.4",
     "@vue/compiler-sfc": "3.3.4",
     "@vue/runtime-dom": "3.3.4",
+    "connect-history-api-fallback": "^2.0.0",
     "keycode": "^2.2.1",
     "rollup-plugin-gzip": "^3.1.0",
     "vite-plugin-static-copy": "^0.16.0",

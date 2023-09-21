@@ -53,6 +53,9 @@ importers:
       caf:
         specifier: '*'
         version: 13.1.1
+      connect-history-api-fallback:
+        specifier: ^2.0.0
+        version: 2.0.0
       keycode:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=nmisee7m676ph5sqah5fka5ueu)
@@ -61,7 +64,7 @@ importers:
         version: 2.1.7(vue@3.3.4)
       rollup-plugin-gzip:
         specifier: ^3.1.0
-        version: 3.1.0(rollup@3.21.2)
+        version: 3.1.0(rollup@3.29.2)
       uuid:
         specifier: '*'
         version: 9.0.0
@@ -125,7 +128,7 @@ importers:
         version: 1.33.0
       '@rollup/plugin-inject':
         specifier: 5.0.3
-        version: 5.0.3(rollup@3.21.2)
+        version: 5.0.3(rollup@3.29.2)
       '@types/jest':
         specifier: 29.5.1
         version: 29.5.1
@@ -251,7 +254,7 @@ importers:
         version: 0.2.1
       rollup-plugin-visualizer:
         specifier: 5.9.0
-        version: 5.9.0(rollup@3.21.2)
+        version: 5.9.0(rollup@3.29.2)
       sass:
         specifier: 1.62.1
         version: 1.62.1
@@ -330,7 +333,7 @@ importers:
         version: 2.11.5
       autoprefixer:
         specifier: ^10.0.0
-        version: 10.4.12(postcss@8.4.23)
+        version: 10.4.12(postcss@8.4.30)
       babel-core:
         specifier: ^7.0.0-bridge.0
         version: 7.0.0-bridge.0(@babel/core@7.19.6)
@@ -474,7 +477,7 @@ importers:
         version: 15.3.0
       stylelint-config-sass-guidelines:
         specifier: ^10.0.0
-        version: 10.0.0(postcss@8.4.23)(stylelint@15.3.0)
+        version: 10.0.0(postcss@8.4.30)(stylelint@15.3.0)
       stylelint-config-standard:
         specifier: ^31.0.0
         version: 31.0.0(stylelint@15.3.0)
@@ -5936,7 +5939,7 @@ packages:
     resolution: {integrity: sha512-NMrDy6EWh9TPdSRiHmHH2ye1v5U0gBD7pRYwSwJvomx7Bm4GG04vu63dYiVzebLOx2obPpJugew06xVP0Nk7hA==}
     dev: true
 
-  /@rollup/plugin-inject@5.0.3(rollup@3.21.2):
+  /@rollup/plugin-inject@5.0.3(rollup@3.29.2):
     resolution: {integrity: sha512-411QlbL+z2yXpRWFXSmw/teQRMkXcAAC8aYTemc15gwJRpvEVDQwoe+N/HTFD8RFG8+88Bme9DK2V9CVm7hJdA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -5945,10 +5948,10 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.21.2)
+      '@rollup/pluginutils': 5.0.2(rollup@3.29.2)
       estree-walker: 2.0.2
       magic-string: 0.27.0
-      rollup: 3.21.2
+      rollup: 3.29.2
     dev: true
 
   /@rollup/pluginutils@4.2.1:
@@ -5959,7 +5962,7 @@ packages:
       picomatch: 2.3.1
     dev: false
 
-  /@rollup/pluginutils@5.0.2(rollup@3.21.2):
+  /@rollup/pluginutils@5.0.2(rollup@3.29.2):
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -5971,7 +5974,7 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.21.2
+      rollup: 3.29.2
     dev: true
 
   /@sentry-internal/tracing@7.55.2:
@@ -7706,7 +7709,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dev: true
 
-  /autoprefixer@10.4.12(postcss@8.4.23):
+  /autoprefixer@10.4.12(postcss@8.4.30):
     resolution: {integrity: sha512-WrCGV9/b97Pa+jtwf5UGaRjgQIg7OK3D06GnoYoZNcG1Xb8Gt3EfuKjlhh9i/VtT16g6PYjZ69jdJ2g8FxSC4Q==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -7718,7 +7721,7 @@ packages:
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.23
+      postcss: 8.4.30
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -9176,6 +9179,11 @@ packages:
     resolution: {integrity: sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==}
     engines: {node: '>=0.8'}
     dev: true
+
+  /connect-history-api-fallback@2.0.0:
+    resolution: {integrity: sha512-U73+6lQFmfiNPrYbXqr6kZ1i1wiRqXnp2nhMsINseWXO8lDau0LGEffJ8kQi4EjLZympVgRdvqjAgiZ1tgzDDA==}
+    engines: {node: '>=0.8'}
+    dev: false
 
   /console-browserify@1.2.0:
     resolution: {integrity: sha512-ZMkYO/LkF17QvCPqM0gxw8yUzigAOZOSWSHg91FH6orS7vcEj5dVZTidN2fQ14yBSdg97RqhSNwLUXInd52OTA==}
@@ -16929,13 +16937,13 @@ packages:
       postcss: 8.4.21
     dev: true
 
-  /postcss-scss@4.0.6(postcss@8.4.23):
+  /postcss-scss@4.0.6(postcss@8.4.30):
     resolution: {integrity: sha512-rLDPhJY4z/i4nVFZ27j9GqLxj1pwxE80eAzUNRMXtcpipFYIeowerzBgG3yJhMtObGEXidtIgbUpQ3eLDsf5OQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.4.19
     dependencies:
-      postcss: 8.4.23
+      postcss: 8.4.30
     dev: true
 
   /postcss-selector-parser@6.0.10:
@@ -17023,15 +17031,6 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
-
-  /postcss@8.4.23:
-    resolution: {integrity: sha512-bQ3qMcpF6A/YjR55xtoTr0jGOlnPOKAIMdOWiv0EIT6HVPEaJiJB4NLljSbiHoC2RX7DN5Uvjtpbg1NPdwv1oA==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.6
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
-    dev: true
 
   /postcss@8.4.30:
     resolution: {integrity: sha512-7ZEao1g4kd68l97aWG/etQKPKq07us0ieSZ2TnFDk11i0ZfDW2AwKHYU8qv4MZKqN2fdBfg+7q0ES06UA73C1g==}
@@ -18274,13 +18273,13 @@ packages:
       inherits: 2.0.4
     dev: true
 
-  /rollup-plugin-gzip@3.1.0(rollup@3.21.2):
+  /rollup-plugin-gzip@3.1.0(rollup@3.29.2):
     resolution: {integrity: sha512-PFS9s6/w6dCra6/Z8PGD+ug3aaaqKLDCbr5y1Ek71Wd4rQSmMnOqCIIMgwbYxZ9A/gjP3pCN6rA4pAG47jxF0w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       rollup: '>=2.0.0'
     dependencies:
-      rollup: 3.21.2
+      rollup: 3.29.2
     dev: false
 
   /rollup-plugin-inject@3.0.2:
@@ -18303,7 +18302,7 @@ packages:
       opener: 1.5.2
     dev: false
 
-  /rollup-plugin-visualizer@5.9.0(rollup@3.21.2):
+  /rollup-plugin-visualizer@5.9.0(rollup@3.29.2):
     resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}
     engines: {node: '>=14'}
     hasBin: true
@@ -18315,7 +18314,7 @@ packages:
     dependencies:
       open: 8.4.0
       picomatch: 2.3.1
-      rollup: 3.21.2
+      rollup: 3.29.2
       source-map: 0.7.4
       yargs: 17.6.0
     dev: true
@@ -18332,13 +18331,6 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
-
-  /rollup@3.21.2:
-    resolution: {integrity: sha512-c4vC+JZ3bbF4Kqq2TtM7zSKtSyMybFOjqmomFax3xpfYaPZDZ4iz8NMIuBRMjnXOcKYozw7bC6vhJjiWD6JpzQ==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-    optionalDependencies:
-      fsevents: 2.3.2
 
   /rollup@3.29.2:
     resolution: {integrity: sha512-CJouHoZ27v6siztc21eEQGo0kIcE5D1gVPA571ez0mMYb25LGYGKnVNXpEj5MGlepmDWGXNjDB5q7uNiPHC11A==}
@@ -19355,15 +19347,15 @@ packages:
       stylelint: 15.3.0
     dev: true
 
-  /stylelint-config-sass-guidelines@10.0.0(postcss@8.4.23)(stylelint@15.3.0):
+  /stylelint-config-sass-guidelines@10.0.0(postcss@8.4.30)(stylelint@15.3.0):
     resolution: {integrity: sha512-+Rr2Dd4b72CWA4qoj1Kk+y449nP/WJsrD0nzQAWkmPPIuyVcy2GMIcfNr0Z8JJOLjRvtlkKxa49FCNXMePBikQ==}
     engines: {node: ^14.13.1 || >=16.13.0 || >=18.0.0}
     peerDependencies:
       postcss: ^8.4.21
       stylelint: ^15.2.0
     dependencies:
-      postcss: 8.4.23
-      postcss-scss: 4.0.6(postcss@8.4.23)
+      postcss: 8.4.30
+      postcss-scss: 4.0.6(postcss@8.4.30)
       stylelint: 15.3.0
       stylelint-scss: 4.5.0(stylelint@15.3.0)
     dev: true
