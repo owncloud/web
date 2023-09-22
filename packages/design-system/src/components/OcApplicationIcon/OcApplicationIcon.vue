@@ -39,7 +39,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const updateComputed = ref(0)
+    const updateComputed = ref(false)
     const iconColor = computed(() => {
       return 'rgba(255,255,255,0.7)'
     })
@@ -81,13 +81,7 @@ export default defineComponent({
     })
 
     const update = () => {
-      const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
-      const randomNum = randomInt(1, 99999)
-      if (unref(updateComputed) !== randomNum) {
-        updateComputed.value = randomNum
-        return
-      }
-      return update()
+      updateComputed.value = !unref(updateComputed)
     }
 
     return {
