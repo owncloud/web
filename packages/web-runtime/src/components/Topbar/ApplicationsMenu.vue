@@ -146,7 +146,7 @@ export default defineComponent({
       text-decoration: none;
     }
     &:hover {
-      background-color: var(--oc-color-background-hover) !important;
+      background-color: var(--oc-color-background-hover);
       text-decoration: none;
     }
 
