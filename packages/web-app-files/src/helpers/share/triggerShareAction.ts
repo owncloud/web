@@ -1,15 +1,31 @@
+import { Resource, SpaceResource } from 'web-client/src'
 import { aggregateResourceShares } from '../resources'
 import { ShareStatus } from 'web-client/src/helpers/share/status'
 import { HttpError } from 'web-pkg/src/errors'
+import { OwnCloudSdk } from 'web-client/src/types'
 
-export async function triggerShareAction(resource, status, hasReSharing, hasShareJail, $client) {
+export async function triggerShareAction({
+  resource,
+  status,
+  hasResharing,
+  hasShareJail,
+  client,
+  spaces = []
+}: {
+  resource: Resource
+  status: ShareStatus
+  hasResharing: boolean
+  hasShareJail: boolean
+  client: OwnCloudSdk
+  spaces?: SpaceResource[]
+}) {
   const method = _getRequestMethod(status)
   if (!method) {
     throw new Error('invalid new share status')
   }
 
   // exec share action
-  let response = await $client.requests.ocs({
+  let response = await client.requests.ocs({
     service: 'apps/files_sharing',
     action: `api/v1/shares/pending/${resource.share.id}`,
     method
@@ -23,10 +39,9 @@ export async function triggerShareAction(resource, status, hasReSharing, hasShar
   // get updated share from response and transform & return it
   if (parseInt(response.headers.get('content-length')) > 0) {
     response = await response.json()
-    if (response.ocs.data.length > 0) {
-      const share = response.ocs.data[0]
-      // FIXME: pass spaces here?
-      return aggregateResourceShares([share], true, hasReSharing, hasShareJail, [])[0]
+    if ((response as any).ocs.data.length > 0) {
+      const share = (response as any).ocs.data[0]
+      return aggregateResourceShares([share], true, hasResharing, hasShareJail, spaces)[0]
     }
   }
 

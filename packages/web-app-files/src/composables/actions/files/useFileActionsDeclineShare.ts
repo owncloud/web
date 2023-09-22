@@ -37,13 +37,14 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            const share = await triggerShareAction(
+            const share = await triggerShareAction({
               resource,
-              ShareStatus.declined,
-              unref(hasResharing),
-              unref(hasShareJail),
-              clientService.owncloudSdk
-            )
+              status: ShareStatus.declined,
+              hasResharing: unref(hasResharing),
+              hasShareJail: unref(hasShareJail),
+              client: clientService.owncloudSdk,
+              spaces: store.getters['runtime/spaces/spaces']
+            })
             if (share) {
               store.commit('Files/UPDATE_RESOURCE', share)
             }
