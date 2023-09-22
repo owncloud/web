@@ -45,6 +45,14 @@ const navItems = (context): AppNavigationItem[] => {
       route: {
         path: `/${appInfo.id}/spaces/personal`
       },
+      isActive: () => {
+        return (
+          !context.$store.getters['runtime/spaces/currentSpace'] ||
+          context.$store.getters['runtime/spaces/currentSpace']?.isOwner(
+            context.$store.getters.user
+          )
+        )
+      },
       enabled(capabilities) {
         if (!capabilities.spaces?.enabled) {
           return true
@@ -69,6 +77,14 @@ const navItems = (context): AppNavigationItem[] => {
       icon: 'share-forward',
       route: {
         path: `/${appInfo.id}/shares`
+      },
+      isActive: () => {
+        return (
+          context.$store.getters['runtime/spaces/currentSpace'] &&
+          !context.$store.getters['runtime/spaces/currentSpace']?.isOwner(
+            context.$store.getters.user
+          )
+        )
       },
       activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
       enabled(capabilities) {

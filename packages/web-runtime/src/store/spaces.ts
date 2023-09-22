@@ -18,7 +18,8 @@ const state = {
   spacesInitialized: false,
   mountPointsInitialized: false,
   spacesLoading: false,
-  spaceMembers: []
+  spaceMembers: [],
+  currentSpace: null
 }
 
 const getters = {
@@ -26,7 +27,8 @@ const getters = {
   spacesInitialized: (state) => state.spacesInitialized,
   mountPointsInitialized: (state) => state.mountPointsInitialized,
   spacesLoading: (state) => state.spacesLoading,
-  spaceMembers: (state) => state.spaceMembers
+  spaceMembers: (state) => state.spaceMembers,
+  currentSpace: (state) => state.currentSpace
 }
 
 const mutations = {
@@ -116,6 +118,9 @@ const mutations = {
     state.spaceMembers = state.spaceMembers.filter(
       (s) => member.id === s.id && member.collaborator[checkAttr] !== s.collaborator[checkAttr]
     )
+  },
+  SET_CURRENT_SPACE(state, currentSpace) {
+    state.currentSpace = currentSpace
   }
 }
 

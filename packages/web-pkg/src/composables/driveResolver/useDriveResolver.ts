@@ -127,6 +127,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   watch(
     space,
     (s: Resource) => {
+      store.commit('runtime/spaces/SET_CURRENT_SPACE', s)
       if (!s || ['public', 'share', 'personal', 'mountpoint'].includes(s.driveType)) {
         return
       }
