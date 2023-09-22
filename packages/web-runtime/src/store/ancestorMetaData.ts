@@ -1,5 +1,4 @@
 import {
-  MountPointSpaceResource,
   SpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
