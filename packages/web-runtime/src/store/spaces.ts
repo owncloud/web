@@ -305,7 +305,7 @@ const loadSpacesByType = async ({
     const space = buildSpace({
       id: extractStorageId(id),
       // FIXME: set a proper name
-      name: `space for ${driveAlias}`,
+      name: driveAlias,
       // FIXME: can we retrieve this from api?
       driveType: driveAlias.split('/')[0],
       driveAlias,
