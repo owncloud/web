@@ -80,7 +80,7 @@ const navItems = (context): AppNavigationItem[] => {
       },
       isActive: () => {
         return (
-          context.$store.getters['runtime/spaces/currentSpace'] &&
+          !context.$store.getters['runtime/spaces/currentSpace'] ||
           !context.$store.getters['runtime/spaces/currentSpace']?.isOwner(
             context.$store.getters.user
           )
