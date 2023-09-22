@@ -6,7 +6,7 @@ import { ConfigurationManager, displayPositionedDropdown, eventBus } from 'web-p
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { mock, mockDeep } from 'jest-mock-extended'
 
-jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => {
+jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mock<ConfigurationManager>({
       options: {
@@ -15,7 +15,7 @@ jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () =>
         }
       }
     })
-})
+}))
 
 const router = {
   push: jest.fn(),
@@ -205,8 +205,7 @@ const processingResourcesWithAllFields = [
 
 jest.mock('web-pkg/src/helpers')
 
-// FIXME: unskip tests ...
-describe.skip('ResourceTable', () => {
+describe('ResourceTable', () => {
   it('displays all known fields of the resources', () => {
     const { wrapper } = getMountedWrapper()
     for (const field of fields) {
