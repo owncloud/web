@@ -19,7 +19,11 @@ import { AppNavigationItem, AppReadyHookArgs } from 'web-pkg/src/apps'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import {
+  SpaceResource,
+  isPersonalSpaceResource,
+  isShareSpaceResource
+} from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src'
 
 // just a dummy function to trick gettext tools
@@ -57,8 +61,8 @@ const navItems = (context): AppNavigationItem[] => {
         if (!capabilities.spaces?.enabled) {
           return true
         }
-        return !!context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
-          isPersonalSpaceResource(drive)
+        return !!context?.$store?.getters['runtime/spaces/spaces'].find(
+          (drive) => isPersonalSpaceResource(drive) && drive.isOwner(context.$store.getters.user)
         )
       }
     },
@@ -79,12 +83,9 @@ const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/shares`
       },
       isActive: () => {
-        return (
-          !context.$store.getters['runtime/spaces/currentSpace'] ||
-          !context.$store.getters['runtime/spaces/currentSpace']?.isOwner(
-            context.$store.getters.user
-          )
-        )
+        const space = context.$store.getters['runtime/spaces/currentSpace'] as SpaceResource
+        // last check is when fullShareOwnerPaths is enabled
+        return !space || isShareSpaceResource(space) || !space?.isOwner(context.$store.getters.user)
       },
       activeFor: [
         { path: `/${appInfo.id}/spaces/share` },

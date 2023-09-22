@@ -81,6 +81,8 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           matchingSpace = unref(spaces).find((s) => {
             return unref(fileId).startsWith(`${s.fileId}`)
           })
+        } else {
+          matchingSpace = unref(spaces).find((s) => driveAliasAndItem.startsWith(s.driveAlias))
         }
 
         if (!matchingSpace) {
