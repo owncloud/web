@@ -59,7 +59,7 @@ const actions = {
       // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
       const projectSpace = spaces.find((s) => isProjectSpaceResource(s) && s.id === space.id)
       fullyAccessibleSpace =
-        rootGetters.user.uuid === space.ownerId || projectSpace?.isMember(rootGetters.user.uuid)
+        space.isOwner(rootGetters.user) || projectSpace?.isMember(rootGetters.user)
     }
 
     for (const path of parentPaths) {

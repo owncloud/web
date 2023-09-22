@@ -332,7 +332,7 @@ export default defineComponent({
         if (unref(hasSpaces)) {
           const spaces = store.getters['runtime/spaces/spaces']
           const user = store.getters['user']
-          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.ownerId === user.uuid
+          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(user)
           if (driveType === 'project' || isOwnSpace) {
             const client = clientService.graphAuthenticated
             const driveResponse = await client.drives.getDrive(spaceId.toString())

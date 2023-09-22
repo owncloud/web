@@ -35,6 +35,7 @@ export interface SpaceResource extends Resource {
   isEditor(uuid: User): boolean
   isManager(uuid: User): boolean
   isMember(uuid: User): boolean
+  isOwner(uuid: User): boolean
 }
 
 export interface PersonalSpaceResource extends SpaceResource {

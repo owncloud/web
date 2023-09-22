@@ -66,8 +66,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     }
 
     const projectSpace = unref(spaces).find((s) => isProjectSpaceResource(s) && s.id === space.id)
-    const fullyAccessibleSpace =
-      store.getters.user.uuid === space.ownerId || projectSpace?.isMember(unref(user))
+    const fullyAccessibleSpace = space.isOwner(unref(user)) || projectSpace?.isMember(unref(user))
 
     return (
       fullyAccessibleSpace ||

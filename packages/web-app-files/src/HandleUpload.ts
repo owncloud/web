@@ -205,7 +205,7 @@ export class HandleUpload extends BasePlugin {
         !targetUploadSpace ||
         isShareSpaceResource(targetUploadSpace) ||
         (isPersonalSpaceResource(targetUploadSpace) &&
-          targetUploadSpace.ownerId !== this.store.getters.user.uuid)
+          targetUploadSpace.isOwner(this.store.getters.user))
       ) {
         return acc
       }

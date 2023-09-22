@@ -328,7 +328,7 @@ export default defineComponent({
         spaceBreadcrumbItem = {
           id: uuidv4(),
           text: space.name,
-          ...(space.ownerId === store.getters.user.uuid && {
+          ...(space.isOwner(store.getters.user) && {
             to: createLocationSpaces('files-spaces-generic', {
               params,
               query
