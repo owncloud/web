@@ -118,13 +118,15 @@ describe('CreateAndUpload component', () => {
   describe('method "onUploadComplete"', () => {
     it.each([
       { driveType: 'personal', updated: 1 },
-      { driveType: 'project', updated: 1 }
-      // { driveType: 'share', updated: 0 },
-      // { driveType: 'public', updated: 0 }
-    ])('updates the space quota for supported drive types: %s', async (data) => {
-      const { driveType, updated } = data
-      const { wrapper, mocks, storeOptions } = getWrapper()
-      const file = mock<UppyResource>({ meta: { driveType } })
+      { driveType: 'project', updated: 1 },
+      { driveType: 'share', updated: 0 },
+      { driveType: 'public', updated: 0 }
+    ])('updates the space quota for supported drive types: %s', async ({ driveType, updated }) => {
+      const file = mock<UppyResource>({ meta: { driveType, spaceId: '1' } })
+      const spaces = [
+        mock<SpaceResource>({ id: file.meta.spaceId, isOwner: () => driveType === 'personal' })
+      ]
+      const { wrapper, mocks, storeOptions } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
       await wrapper.vm.onUploadComplete({ successful: [file] })
@@ -166,6 +168,7 @@ function getWrapper({
   currentFolder = mock<Resource>({ canUpload: () => true }),
   currentRouteName = 'files-spaces-generic',
   space = mock<SpaceResource>(),
+  spaces = [],
   item = undefined,
   itemId = undefined,
   newFileAction = false
@@ -192,6 +195,7 @@ function getWrapper({
   }))
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
+  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
   const store = createStore(storeOptions)
   const mocks = {
