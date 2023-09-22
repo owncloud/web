@@ -21,6 +21,7 @@
       toggle="#_appSwitcherButton"
       mode="click"
       padding-size="small"
+      v-on:show-drop="updateAppIcons"
       close-on-click
     >
       <div style="display: block; position: relative">
@@ -36,7 +37,7 @@
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
             >
-              <oc-application-icon :icon="n.icon" :color-primary="n.color" />
+              <oc-application-icon :icon="n.icon" :color-primary="n.color" ref="appIcons" />
               <span v-text="$gettext(n.title)" />
             </oc-button>
           </li>
@@ -47,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, unref } from 'vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { OcDrop } from 'design-system/src/components'
@@ -67,6 +68,18 @@ export default defineComponent({
   computed: {
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
+    }
+  },
+  setup() {
+    const appIcons = ref([])
+    const updateAppIcons = () => {
+      unref(appIcons).forEach((appIcon) => {
+        unref(appIcon).update()
+      })
+    }
+    return {
+      appIcons,
+      updateAppIcons
     }
   },
   mounted() {

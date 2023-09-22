@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="oc-application-icon oc-flex-inline oc-flex-middle oc-flex-center"
-    :style="iconBackgroundStyle"
-  >
+  <div class="oc-application-icon oc-flex-inline oc-flex-middle oc-flex-center" :style="iconStyle">
     <oc-icon :name="icon" color="rgba(255,255,255,0.7)" size="medium" class="" />
   </div>
 </template>
 
 <script lang="ts">
 import {
-  cssRgbToHex,
   generateHashedColorForString,
   getHexFromCssVar,
   hexToRgb,
@@ -17,7 +13,7 @@ import {
   setDesiredContrastRatio,
   shadeColor
 } from '../../helpers'
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
 export default defineComponent({
@@ -43,13 +39,16 @@ export default defineComponent({
   },
 
   setup(props) {
+    const updateComputed = ref(0)
     const getGradient = (primary: string, secondary: string): string => {
       return `linear-gradient(90deg, ${primary} 0%, ${secondary} 100%)`
     }
     const primaryColor = computed(() => {
+      unref(updateComputed)
       return getHexFromCssVar(props.colorPrimary)
     })
     const secondaryColor = computed(() => {
+      unref(updateComputed)
       return getHexFromCssVar(props.colorSecondary)
     })
     const hasPrimaryColor = computed(() => {
@@ -62,7 +61,7 @@ export default defineComponent({
       let hashedColor = generateHashedColorForString(props.icon)
       return rgbToHex(setDesiredContrastRatio(hexToRgb(hashedColor), hexToRgb('#ffffff'), 4))
     })
-    const iconBackgroundStyle = computed(() => {
+    const iconStyle = computed(() => {
       const primaryHex = unref(hasPrimaryColor)
         ? unref(primaryColor)
         : unref(generatedHashedPrimaryColor)
@@ -70,16 +69,27 @@ export default defineComponent({
         ? unref(secondaryColor)
         : shadeColor(hexToRgb(primaryHex), 40)
 
-      const darkBorderHex = shadeColor(hexToRgb(primaryHex), -10)
-      const lightBorderHex = shadeColor(hexToRgb(primaryHex), 25)
+      const darkBorderHex = shadeColor(hexToRgb(primaryHex), -25)
+      const lightBorderHex = shadeColor(hexToRgb(primaryHex), 45)
       return {
         background: getGradient(primaryHex, secondaryHex),
         boxShadow: `inset ${lightBorderHex} 0px 0px 1px 0px,${darkBorderHex} 0px 0px 1px 0px`
       }
     })
 
+    const update = () => {
+      const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+      const randomNum = randomInt(1, 99999)
+      if (unref(updateComputed) !== randomNum) {
+        updateComputed.value = randomNum
+        return
+      }
+      return update()
+    }
+
     return {
-      iconBackgroundStyle
+      iconStyle,
+      update
     }
   }
 })
