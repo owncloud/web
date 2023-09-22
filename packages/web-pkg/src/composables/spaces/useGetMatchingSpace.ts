@@ -7,6 +7,8 @@ import {
 import { Resource, SpaceResource } from 'web-client'
 import {
   MountPointSpaceResource,
+  ProjectSpaceResource,
+  User,
   buildShareSpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
@@ -23,7 +25,8 @@ type GetMatchingSpaceOptions = {
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
   const configurationManager = useConfigurationManager()
-  const spaces = computed(() => store.getters['runtime/spaces/spaces'])
+  const spaces = computed<ProjectSpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
+  const user = computed<User>(() => store.getters.user)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
@@ -53,17 +56,20 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   }
 
   const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>
-    store.getters['runtime/spaces/spaces'].filter(
+    unref(spaces).filter(
       (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
     )
 
   const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
-    // FIXME: project space might not be accessible if files of a space have been shared but user is not a member
+    if (!configurationManager.options.routing.fullShareOwnerPaths) {
+      return true
+    }
+
+    const projectSpace = unref(spaces).find((s) => isProjectSpaceResource(s) && s.id === space.id)
     const fullyAccessibleSpace =
-      store.getters.user.uuid === space.ownerId || isProjectSpaceResource(space)
+      store.getters.user.uuid === space.ownerId || projectSpace?.isMember(unref(user))
 
     return (
-      !configurationManager.options.routing.fullShareOwnerPaths ||
       fullyAccessibleSpace ||
       getMatchingMountPoints(space).some((m) => path.startsWith(m.root.remoteItem.path))
     )

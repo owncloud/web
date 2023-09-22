@@ -78,7 +78,7 @@ export default class Preview implements SearchPreview {
         resource.storageId = this.store.getters.user.id
       }
 
-      if (resource.shareRoot) {
+      if (this.configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
         resource.path = urlJoin(resource.shareRoot, resource.path)
       }
 

@@ -503,7 +503,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'user']),
+    ...mapGetters(['configuration']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',

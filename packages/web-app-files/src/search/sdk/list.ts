@@ -80,7 +80,7 @@ export default class List implements SearchList {
         if (!resource.storageId) {
           resource.storageId = this.store.getters.user.id
         }
-        if (resource.shareRoot) {
+        if (this.configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
           resource.path = urlJoin(resource.shareRoot, resource.path)
         }
         return { id: resource.id, data: resource }

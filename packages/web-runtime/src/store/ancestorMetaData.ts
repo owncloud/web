@@ -1,4 +1,6 @@
 import {
+  MountPointSpaceResource,
+  SpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
   isProjectSpaceResource
@@ -45,13 +47,21 @@ const actions = {
     const promises = []
     const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
     const parentPaths = getParentPaths(folder.path)
+    const spaces = rootGetters['runtime/spaces/spaces'] as SpaceResource[]
+
     const getMountPoints = () =>
-      rootGetters['runtime/spaces/spaces'].filter(
+      spaces.filter(
         (s) =>
           isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
       )
-    const fullyAccessibleSpace =
-      rootGetters.user.uuid === space.ownerId || isProjectSpaceResource(space)
+
+    let fullyAccessibleSpace = true
+    if (configurationManager.options.routing.fullShareOwnerPaths) {
+      // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
+      const projectSpace = spaces.find((s) => isProjectSpaceResource(s) && s.id === space.id)
+      fullyAccessibleSpace =
+        rootGetters.user.uuid === space.ownerId || projectSpace?.isMember(rootGetters.user.uuid)
+    }
 
     for (const path of parentPaths) {
       const cachedData = state.ancestorMetaData[path] ?? null
@@ -60,9 +70,9 @@ const actions = {
         continue
       }
 
+      // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
       if (
         !fullyAccessibleSpace &&
-        configurationManager.options.routing.fullShareOwnerPaths &&
         !getMountPoints().find((m) => path.startsWith(m.root.remoteItem.path))
       ) {
         // no access to the parent resource
