@@ -8,6 +8,8 @@ import { urlJoin } from 'web-client/src/utils'
 import { useGetMatchingSpace } from '../spaces'
 
 export const useBreadcrumbsFromPath = () => {
+  const { isResourceAccessible } = useGetMatchingSpace()
+
   const breadcrumbsFromPath = ({
     route,
     space,
@@ -17,8 +19,6 @@ export const useBreadcrumbsFromPath = () => {
     space: SpaceResource
     resourcePath: string
   }): BreadcrumbItem[] => {
-    const { isResourceAccessible } = useGetMatchingSpace()
-
     const pathSplit = (p = '') => p.split('/').filter(Boolean)
     const current = pathSplit(route.path)
     const resource = pathSplit(resourcePath)
@@ -59,5 +59,6 @@ export const useBreadcrumbsFromPath = () => {
       }
     ]
   }
+
   return { breadcrumbsFromPath, concatBreadcrumbs }
 }
