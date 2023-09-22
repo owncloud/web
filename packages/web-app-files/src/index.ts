@@ -86,7 +86,10 @@ const navItems = (context): AppNavigationItem[] => {
           )
         )
       },
-      activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
+      activeFor: [
+        { path: `/${appInfo.id}/spaces/share` },
+        { path: `/${appInfo.id}/spaces/personal` }
+      ],
       enabled(capabilities) {
         return capabilities.files_sharing?.api_enabled !== false
       }

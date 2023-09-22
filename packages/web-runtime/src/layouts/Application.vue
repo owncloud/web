@@ -54,6 +54,7 @@ import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 import '@uppy/core/dist/style.min.css'
+import { AppNavigationItem } from 'web-pkg/src/apps'
 
 const MOBILE_BREAKPOINT = 640
 
@@ -116,7 +117,7 @@ export default defineComponent({
         return []
       }
 
-      const items = store.getters['getNavItemsByExtension'](unref(activeApp)) as NavItem[]
+      const items = store.getters['getNavItemsByExtension'](unref(activeApp)) as AppNavigationItem[]
       if (!items) {
         return []
       }
