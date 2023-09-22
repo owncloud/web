@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 import { displayPositionedDropdown, eventBus } from 'web-pkg/src'

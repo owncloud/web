@@ -103,13 +103,13 @@ import { useStore, SortDir, SortField, ViewModeConstants } from 'web-pkg/src/com
 import { ImageDimension } from 'web-pkg/src/constants'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { displayPositionedDropdown } from 'web-pkg/src/helpers/contextMenuDropdown'
-import { createLocationSpaces } from 'web-app-files/src/router'
+import { createLocationSpaces } from 'web-pkg/src/router'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
-import { useResourceRouteResolver } from '../../composables/filesList'
+import { useResourceRouteResolver } from 'web-pkg/src/composables/filesList'
 import { eventBus } from 'web-pkg'
 
 export default defineComponent({

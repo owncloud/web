@@ -5,7 +5,7 @@
 <script lang="ts">
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 
-import { useFileActions } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 
 import { useStore } from 'web-pkg/src/composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
@@ -32,7 +32,7 @@ import {
   useFileActionsNavigate,
   useFileActionsFavorite,
   useFileActionsCreateSpaceFromResource
-} from '../../composables/actions/files'
+} from 'web-pkg'
 import { FileActionOptions } from 'web-pkg/src/composables/actions'
 
 export default defineComponent({

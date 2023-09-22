@@ -4,7 +4,7 @@ import {
   isLocationSharesActive,
   isLocationSpacesActive
 } from '../../../router'
-import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
+import { useIsFilesAppActive } from 'web-pkg'
 import { useRouter } from 'web-pkg/src/composables'
 import { FileAction, FileActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
 import { computed, unref } from 'vue'

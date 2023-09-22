@@ -1,7 +1,7 @@
 import quickActions, { canShare } from '../../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
+import { useIsFilesAppActive } from 'web-pkg'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { computed, unref } from 'vue'

@@ -3,7 +3,12 @@ import { Store } from 'vuex'
 import { Resource } from 'web-client'
 import { extractExtensionFromFile } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
-import { ConflictDialog, ResolveConflict, resolveFileNameDuplicate, ResolveStrategy } from '..'
+import {
+  ConflictDialog,
+  ResolveConflict,
+  resolveFileNameDuplicate,
+  ResolveStrategy
+} from 'web-pkg/src/helpers/resource'
 
 interface ConflictedResource {
   name: string

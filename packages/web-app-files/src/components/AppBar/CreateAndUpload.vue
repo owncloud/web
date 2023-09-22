@@ -159,14 +159,14 @@
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 
-import { useFileActions } from '../../composables/actions/files/useFileActions'
-import { isLocationPublicActive, isLocationSpacesActive } from '../../router'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
+import { isLocationPublicActive, isLocationSpacesActive } from 'web-pkg/src/router'
+import { useActiveLocation } from 'web-pkg/src/composables'
 import {
-  useActiveLocation,
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,
   useFileActionsPaste
-} from '../../composables'
+} from 'web-pkg/src/composables'
 
 import {
   useRequest,

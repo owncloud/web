@@ -1,9 +1,5 @@
 import fileSideBars from 'web-app-files/src/fileSideBars'
-import {
-  createLocationPublic,
-  createLocationSpaces,
-  createLocationTrash
-} from '../../../../src/router'
+import { createLocationPublic, createLocationSpaces, createLocationTrash } from 'web-pkg/src/router'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 import { Resource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'

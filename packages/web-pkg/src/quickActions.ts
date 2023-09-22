@@ -1,4 +1,4 @@
-import { createQuicklink } from './helpers/share'
+import { createQuicklink } from 'web-pkg/src/helpers/share'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource } from 'web-client'
@@ -28,22 +28,12 @@ export function showQuickLinkPasswordModal({ $gettext, store }, onConfirm) {
     inputDescription: $gettext('Passwords for links are required.'),
     inputLabel: $gettext('Password'),
     inputType: 'password',
+    onInput: () => store.dispatch('setModalInputErrorMessage', ''),
+    onPasswordChallengeCompleted: () => store.dispatch('setModalConfirmButtonDisabled', false),
+    onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
     onCancel: () => store.dispatch('hideModal'),
     onConfirm: async (password) => {
-      if (!password || password.trim() === '') {
-        store.dispatch('showErrorMessage', {
-          title: $gettext('Password cannot be empty')
-        })
-      } else {
-        await store.dispatch('hideModal')
-        onConfirm(password)
-      }
-    },
-    onInput: (password) => {
-      if (password.trim() === '') {
-        return store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
-      }
-      return store.dispatch('setModalInputErrorMessage', null)
+      onConfirm(password)
     }
   }
 

@@ -86,7 +86,7 @@ import {
   useCapabilityFilesSharingCanDenyAccess,
   useGetMatchingSpace
 } from 'web-pkg/src/composables'
-import { isLocationSharesActive } from '../../../router'
+import { isLocationSharesActive } from 'web-pkg/src/router'
 import { textUtils } from '../../../helpers/textUtils'
 import { peopleRoleDenyFolder, Share, ShareTypes } from 'web-client/src/helpers/share'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
@@ -97,7 +97,7 @@ import {
 } from '../../../helpers/contextualHelpers'
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { isProjectSpaceResource, Resource, SpaceResource, User } from 'web-client/src/helpers'
-import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
+import { getSharedAncestorRoute } from 'web-pkg/src/helpers/share'
 import { AncestorMetaData } from 'web-pkg/src/types'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from 'web-pkg'

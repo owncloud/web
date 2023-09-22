@@ -13,7 +13,8 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive,
   isLocationSharesActive
-} from './router'
+} from 'web-pkg/src/router'
+
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
 
 import { Panel } from '../../web-pkg/src/components/SideBar'

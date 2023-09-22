@@ -1,4 +1,4 @@
-import { cloneStateObject } from '../../../src/helpers/store'
+import { cloneStateObject } from 'web-pkg/src/helpers/store'
 
 describe('cloneStateObject', () => {
   it('clones object', () => {

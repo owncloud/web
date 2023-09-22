@@ -1,9 +1,9 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationSharesActive } from '../../router'
+import { isLocationSharesActive } from 'web-pkg/src/router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { aggregateResourceShares } from '../../helpers/resources'
+import { aggregateResourceShares } from 'web-pkg/src/helpers/resources'
 import { Store } from 'vuex'
 import {
   useCapabilityFilesSharingResharing,

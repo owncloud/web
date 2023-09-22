@@ -78,15 +78,15 @@ import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { useGetMatchingSpace, useStore, ViewModeConstants } from 'web-pkg/src/composables'
 
-import AppBar from '../components/AppBar/AppBar.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
-import ContextActions from '../components/FilesList/ContextActions.vue'
-import ResourceTable from '../components/FilesList/ResourceTable.vue'
+import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
 import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
-import { useFileActions } from '../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 
 const visibilityObserver = new VisibilityObserver()
 

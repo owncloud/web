@@ -1,5 +1,5 @@
 import SharesNavigation from '../../../../src/components/AppBar/SharesNavigation.vue'
-import { locationSharesWithMe } from 'web-app-files/src/router/shares'
+import { locationSharesWithMe } from 'web-pkg/src/router/shares'
 import { mock } from 'jest-mock-extended'
 import { RouteRecordNormalized } from 'vue-router'
 import {

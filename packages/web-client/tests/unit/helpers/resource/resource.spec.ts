@@ -4,7 +4,7 @@ import {
   extractNameWithoutExtension
 } from '../../../../src/helpers/resource'
 import { Resource } from 'web-client'
-import { isResourceTxtFileAlmostEmpty } from 'web-app-files/src/helpers/resources'
+import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resources'
 
 describe('extractDomSelector', () => {
   it.each([

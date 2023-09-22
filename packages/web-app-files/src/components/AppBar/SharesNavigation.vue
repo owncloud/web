@@ -42,15 +42,16 @@
 </template>
 
 <script lang="ts">
+import { isLocationSharesActive } from 'web-pkg/src/router'
 import {
-  isLocationSharesActive,
   locationSharesViaLink,
   locationSharesWithMe,
   locationSharesWithOthers
-} from '../../router/shares'
+} from 'web-pkg/src/router/shares'
+
 import { computed, defineComponent, unref } from 'vue'
 import { useRouter } from 'web-pkg/src/composables'
-import { useActiveLocation } from '../../composables'
+import { useActiveLocation } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
