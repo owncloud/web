@@ -108,7 +108,7 @@ import {
   createLocationCommon,
   isLocationCommonActive,
   isLocationSpacesActive
-} from 'web-app-files/src/router'
+} from 'web-pkg/src/router'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
 import { useRouteQuery, useRouter, useStore, useUserContext } from 'web-pkg/src/composables'

@@ -21,14 +21,14 @@
 </template>
 
 <script lang="ts">
-import { useFileActions } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
+import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resources'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import { createLocationShares, createLocationSpaces } from '../../router'
+import { createLocationShares, createLocationSpaces } from 'web-pkg/src/router'
 import { basename, dirname } from 'path'
 import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
 import { buildShareSpaceResource, isProjectSpaceResource, Resource } from 'web-client/src/helpers'

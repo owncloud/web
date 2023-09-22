@@ -92,24 +92,24 @@
 </template>
 
 <script lang="ts">
-import ResourceTable from '../FilesList/ResourceTable.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { mapActions } from 'vuex'
-import { useFileActions } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { useCapabilityShareJailEnabled, SortDir, useStore } from 'web-pkg/src/composables'
-import { createLocationSpaces } from '../../router'
+import { createLocationSpaces } from 'web-pkg/src/router'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import ContextActions from '../../components/FilesList/ContextActions.vue'
+import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useSelectedResources } from '../../composables/selection'
+import { useSelectedResources } from 'web-pkg/src/composables/selection'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { buildShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { configurationManager } from 'web-pkg/src/configuration'
-import { CreateTargetRouteOptions } from '../../helpers/folderLink'
+import { CreateTargetRouteOptions } from 'web-pkg/src/helpers/folderLink'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 
 const visibilityObserver = new VisibilityObserver()

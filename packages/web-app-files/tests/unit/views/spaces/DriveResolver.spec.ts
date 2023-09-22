@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import { useGetMatchingSpace } from 'web-pkg/src/composables/spaces'
-import { locationPublicUpload } from 'web-app-files/src/router/public'
+import { locationPublicUpload } from 'web-pkg/src/router/public'
 import { PublicSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissionBit } from 'web-client/src/helpers/share'
 import {

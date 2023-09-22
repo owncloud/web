@@ -1,4 +1,4 @@
-import { aggregateResourceShares } from '../resources'
+import { aggregateResourceShares } from 'web-pkg/src/helpers/resources'
 import { ShareStatus } from 'web-client/src/helpers/share/status'
 import { HttpError } from 'web-pkg/src/errors'
 

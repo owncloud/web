@@ -17,7 +17,7 @@
 import { mapActions, mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 import { useClientService, useLoadingService } from 'web-pkg/src/composables'
-import { useCreateSpace } from 'web-app-files/src/composables'
+import { useCreateSpace } from 'web-pkg/src/composables'
 import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
 
 export default defineComponent({

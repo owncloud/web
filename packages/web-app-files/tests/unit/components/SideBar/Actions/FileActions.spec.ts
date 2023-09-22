@@ -11,7 +11,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { Action } from 'web-pkg/src/composables/actions'
 
 jest.mock('web-app-files/src/composables/actions/files/useFileActions')

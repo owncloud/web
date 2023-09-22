@@ -1,6 +1,3 @@
 export * from './actions'
 export * from './resourcesViewDefaults'
-export * from './router'
-export * from './selection'
 export * from './shares'
-export * from './spaces'

@@ -50,7 +50,8 @@ import {
   createLocationSpaces,
   isLocationPublicActive,
   isLocationSpacesActive
-} from '../../router'
+} from 'web-pkg/src/router'
+
 import { useRouter } from 'web-pkg/src/composables'
 import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'

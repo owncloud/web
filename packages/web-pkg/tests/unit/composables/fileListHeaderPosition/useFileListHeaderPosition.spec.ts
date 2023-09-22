@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import { createWrapper, createAppBar } from './spec'
-import { useFileListHeaderPosition } from '../../../../src/composables/fileListHeaderPosition'
+import { useFileListHeaderPosition } from 'web-pkg'
 
 describe('useFileListHeaderPosition', () => {
   it('should be valid', () => {

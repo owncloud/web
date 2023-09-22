@@ -157,7 +157,7 @@ import Fuse from 'fuse.js'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 
-import AppBar from '../../components/AppBar/AppBar.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
@@ -179,12 +179,12 @@ import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
-import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from 'web-pkg/src/composables/sideBar'
 import { WebDAV } from 'web-client/src/webdav'
 import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
-import { useSelectedResources } from 'web-app-files/src/composables'
+import { useSelectedResources } from 'web-pkg/src/composables'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 import { defaultFuseOptions, formatFileSize } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'

@@ -5,7 +5,7 @@ import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter, useStore } from 'web-pkg/src/composables'
-import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
+import { useIsFilesAppActive } from 'web-pkg'
 import { FileAction } from 'web-pkg/src/composables/actions/types'
 
 export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}) => {

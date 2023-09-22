@@ -68,9 +68,9 @@ import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { defaultFuseOptions, useClientService, useRouter, useStore } from 'web-pkg'
-import { createLocationTrash } from 'web-app-files/src/router'
+import { createLocationTrash } from 'web-pkg/src/router'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import AppBar from 'web-app-files/src/components/AppBar/AppBar.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
 import {
   isPersonalSpaceResource,

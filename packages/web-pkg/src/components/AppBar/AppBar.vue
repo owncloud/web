@@ -85,7 +85,7 @@ import {
 } from 'web-client/src/helpers'
 import BatchActions from 'web-pkg/src/components/BatchActions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
-import ContextActions from '../FilesList/ContextActions.vue'
+import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import { ViewMode } from 'web-pkg/src/ui/types'
 import {

@@ -198,7 +198,7 @@ import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
 import { ImageDimension } from 'web-pkg/src/constants'
 import upperFirst from 'lodash-es/upperFirst'
-import { createLocationCommon } from '../../../router'
+import { createLocationCommon } from 'web-pkg/src/router'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesTags,
@@ -207,7 +207,7 @@ import {
   useStore,
   usePreviewService
 } from 'web-pkg/src/composables'
-import { getIndicators } from '../../../helpers/statusIndicators'
+import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
 import { encodePath } from 'web-pkg/src/utils'
 import {
@@ -220,7 +220,7 @@ import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource, SpaceResource } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
+import { getSharedAncestorRoute } from 'web-pkg/src/helpers/share'
 import { AncestorMetaData } from 'web-pkg/src/types'
 
 export default defineComponent({

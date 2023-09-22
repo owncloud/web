@@ -1,4 +1,4 @@
-import { createQuicklink } from './helpers/share'
+import { createQuicklink } from 'web-pkg/src/helpers/share'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource } from 'web-client'

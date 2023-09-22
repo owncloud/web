@@ -8,7 +8,7 @@ import {
 } from 'web-pkg/src/composables'
 
 import { isLocationCommonActive, isLocationSpacesActive } from '../../../router'
-import { useIsFilesAppActive } from '../helpers/useIsFilesAppActive'
+import { useIsFilesAppActive } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 

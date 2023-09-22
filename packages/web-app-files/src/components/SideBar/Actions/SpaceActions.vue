@@ -48,10 +48,8 @@ import {
   useSpaceActionsRename,
   useSpaceActionsRestore
 } from 'web-pkg/src/composables/actions/spaces'
-import {
-  useFileActionsDownloadArchive,
-  useSpaceActionsUploadImage
-} from 'web-app-files/src/composables'
+import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
+import { useFileActionsDownloadArchive } from 'web-pkg/src/composables/actions/files'
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },

@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'jest-mock-extended'
-import { useFileActions } from 'web-app-files/src/composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { SpaceResource } from 'web-client'
 import { useRouteQuery } from 'web-pkg'
 import { ref } from 'vue'

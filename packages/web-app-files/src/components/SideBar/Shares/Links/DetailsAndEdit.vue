@@ -176,7 +176,7 @@
 import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
-import { createLocationSpaces } from '../../../../router'
+import { createLocationSpaces } from 'web-pkg/src/router'
 import {
   linkRoleInternalFile,
   linkRoleInternalFolder,

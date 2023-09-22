@@ -131,7 +131,7 @@ import {
   Share,
   SharePermissions
 } from 'web-client/src/helpers/share'
-import { showQuickLinkPasswordModal } from '../../../quickActions'
+import { showQuickLinkPasswordModal } from 'web-pkg/src/quickActions'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
@@ -142,7 +142,7 @@ import {
   isProjectSpaceResource,
   isShareSpaceResource
 } from 'web-client/src/helpers'
-import { isLocationSharesActive } from '../../../router'
+import { isLocationSharesActive } from 'web-pkg/src/router'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from 'web-pkg'
 

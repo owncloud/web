@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { useActionsShowDetails } from '../../../../web-pkg/src/composables/actions'
+import { useActionsShowDetails } from 'web-pkg'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
 import { GroupActionOptions } from 'web-pkg/src/composables/actions'
