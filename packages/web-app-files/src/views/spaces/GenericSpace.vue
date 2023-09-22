@@ -176,14 +176,14 @@ import {
   useClientService,
   ViewModeConstants,
   useCapabilityShareJailEnabled,
-  useConfigurationManager
+  useConfigurationManager,
+  useBreadcrumbsFromPath
 } from 'web-pkg/src/composables'
 import { useDocumentTitle } from 'web-pkg/src/composables/appDefaults/useDocumentTitle'
 import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { breadcrumbsFromPath, concatBreadcrumbs } from '../../helpers/breadcrumbs'
 import { createLocationPublic, createLocationSpaces } from '../../router'
 import { useResourcesViewDefaults } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
@@ -248,6 +248,7 @@ export default defineComponent({
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
     const configurationManager = useConfigurationManager()
+    const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
 
     let loadResourcesEventToken
 
@@ -371,14 +372,7 @@ export default defineComponent({
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
         // FIXME: needs file ids for each parent folder path
-        ...breadcrumbsFromPath(
-          unref(route),
-          space,
-          props.item,
-          store.getters['runtime/spaces/spaces'],
-          store.getters.user.uuid === space.ownerId || isProjectSpaceResource(space),
-          configurationManager.options.routing.fullShareOwnerPaths
-        )
+        ...breadcrumbsFromPath({ route: unref(route), space, resourcePath: props.item })
       )
     })
 
