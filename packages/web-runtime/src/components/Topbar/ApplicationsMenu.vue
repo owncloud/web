@@ -48,11 +48,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, unref } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, unref, computed } from 'vue'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
+import { useClientService } from 'web-pkg/src'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -65,21 +67,34 @@ export default defineComponent({
       default: () => []
     }
   },
-  computed: {
-    applicationSwitcherLabel() {
-      return this.$gettext('Application Switcher')
-    }
-  },
   setup() {
     const appIcons = ref([])
+    const clientService = useClientService()
+    const { $gettext } = useGettext()
+
+    const applicationSwitcherLabel = computed(() => {
+      return $gettext('Application Switcher')
+    })
     const updateAppIcons = () => {
       unref(appIcons).forEach((appIcon) => {
         unref(appIcon).update()
       })
     }
+    const setClassicUIDefault = () => {
+      const url = urlJoin(configurationManager.serverUrl, '/index.php/apps/web/settings/default')
+      return clientService.httpAuthenticated.post(url, { isDefault: false })
+    }
+    const clickApp = async (appEntry) => {
+      // @TODO use id or similar
+      if (appEntry.url?.endsWith('/apps/files')) {
+        await setClassicUIDefault()
+      }
+    }
     return {
       appIcons,
-      updateAppIcons
+      updateAppIcons,
+      clickApp,
+      applicationSwitcherLabel
     }
   },
   mounted() {
@@ -88,18 +103,6 @@ export default defineComponent({
       onShown: () =>
         (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()
     })
-  },
-  methods: {
-    async clickApp(appEntry) {
-      // @TODO use id or similar
-      if (appEntry.url?.endsWith('/apps/files')) {
-        await this.setClassicUIDefault()
-      }
-    },
-    setClassicUIDefault() {
-      const url = urlJoin(configurationManager.serverUrl, '/index.php/apps/web/settings/default')
-      return this.$clientService.httpAuthenticated.post(url, { isDefault: false })
-    }
   }
 })
 </script>

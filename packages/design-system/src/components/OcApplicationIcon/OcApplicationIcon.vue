@@ -1,6 +1,6 @@
 <template>
   <div class="oc-application-icon oc-flex-inline oc-flex-middle oc-flex-center" :style="iconStyle">
-    <oc-icon :name="icon" color="rgba(255,255,255,0.7)" size="medium" class="" />
+    <oc-icon :name="icon" :color="iconColor" size="medium" />
   </div>
 </template>
 
@@ -40,6 +40,9 @@ export default defineComponent({
 
   setup(props) {
     const updateComputed = ref(0)
+    const iconColor = computed(() => {
+      return 'rgba(255,255,255,0.7)'
+    })
     const getGradient = (primary: string, secondary: string): string => {
       return `linear-gradient(90deg, ${primary} 0%, ${secondary} 100%)`
     }
@@ -88,6 +91,7 @@ export default defineComponent({
     }
 
     return {
+      iconColor,
       iconStyle,
       update
     }
