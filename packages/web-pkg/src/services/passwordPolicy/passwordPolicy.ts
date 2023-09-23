@@ -13,7 +13,6 @@ import get from 'lodash-es/get'
 import { Store } from 'vuex'
 import { PasswordPolicy } from 'password-sheriff'
 import { GeneratePassword } from 'js-generate-password'
-import { min } from 'lodash-es'
 
 interface GeneratePasswordRules {
   length: number

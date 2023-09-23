@@ -273,8 +273,6 @@ export default defineComponent({
       if (this.type === 'password') {
         additionalAttrs['password-policy'] = this.passwordPolicy
         additionalAttrs['generate-password-method'] = this.generatePasswordMethod
-        additionalAttrs['has-warning'] = !!this.warningMessage
-        additionalAttrs['has-error'] = !!this.errorMessage
       }
       // Exclude listeners for events which are handled via methods in this component
       // eslint-disable-next-line no-unused-vars

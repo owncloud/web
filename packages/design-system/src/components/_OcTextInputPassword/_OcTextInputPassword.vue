@@ -2,15 +2,15 @@
   <div
     class="oc-text-input-password-wrapper"
     :class="{
-      'oc-text-input-password-wrapper-warning': !!hasWarning,
-      'oc-text-input-password-wrapper-danger': !!hasError
+      'oc-text-input-password-wrapper-warning': !!$attrs.class.includes('oc-text-input-warning'),
+      'oc-text-input-password-wrapper-danger': !!$attrs.class.includes('oc-text-input-danger')
     }"
   >
     <input
+      ref="input"
       v-bind="$attrs"
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
-      @input="onPasswordEntered"
     />
     <oc-button
       v-if="password"
@@ -86,16 +86,6 @@ export default defineComponent({
       required: false,
       default: ''
     },
-    hasWarning: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    hasError: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
       default: () => ({})
@@ -143,17 +133,14 @@ export default defineComponent({
       const generatedPassword = props.generatePasswordMethod()
       password.value = generatedPassword
       showPassword.value = true
-      //this.$emit('input')
-    }
-
-    const onPasswordEntered = () => {
-      passwordEntered.value = true
     }
 
     watch(password, (value) => {
       if (!Object.keys(props.passwordPolicy).length) {
         return
       }
+
+      passwordEntered.value = true
 
       if (!props.passwordPolicy.check(value)) {
         return emit('passwordChallengeFailed')
@@ -171,8 +158,7 @@ export default defineComponent({
       getPasswordPolicyRuleMessage,
       copyPasswordToClipboard,
       generatePassword,
-      copyPasswordIcon,
-      onPasswordEntered
+      copyPasswordIcon
     }
   }
 })
