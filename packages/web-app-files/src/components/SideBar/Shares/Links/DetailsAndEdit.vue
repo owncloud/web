@@ -500,8 +500,6 @@ export default defineComponent({
         onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
         onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
         onConfirm: (password) => {
-          console.log("???")
-          console.log(password)
           this.updateLink({
             link: {
               ...this.link,
