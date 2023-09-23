@@ -38,7 +38,7 @@
       class="oc-text-input-generate-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
-      @click="showGeneratedPassword"
+      @click="generatePassword"
     >
       <oc-icon size="small" name="refresh" fill-type="line" />
     </oc-button>
@@ -106,7 +106,7 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
+  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed', 'input'],
   setup(props, { emit, attrs }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
@@ -139,10 +139,11 @@ export default defineComponent({
       setTimeout(() => (copyPasswordIcon.value = copyPasswordIconInitial), 500)
     }
 
-    const showGeneratedPassword = () => {
+    const generatePassword = () => {
       const generatedPassword = props.generatePasswordMethod()
       password.value = generatedPassword
       showPassword.value = true
+      //this.$emit('input')
     }
 
     const onPasswordEntered = () => {
@@ -169,7 +170,7 @@ export default defineComponent({
       testedPasswordPolicy,
       getPasswordPolicyRuleMessage,
       copyPasswordToClipboard,
-      showGeneratedPassword,
+      generatePassword,
       copyPasswordIcon,
       onPasswordEntered
     }
