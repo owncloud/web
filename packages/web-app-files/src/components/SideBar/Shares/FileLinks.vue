@@ -400,7 +400,7 @@ export default defineComponent({
       })
     },
 
-    checkLinkToCreate({ link, onError = () => {} }) {
+    checkLinkToCreate({ link }) {
       const paramsToCreate = this.getParamsForLink(link)
 
       if (this.isPasswordEnforcedFor(link)) {
@@ -411,15 +411,15 @@ export default defineComponent({
             passwordPolicyService: this.passwordPolicyService
           },
           (newPassword) => {
-            this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
+            this.createLink({ params: { ...paramsToCreate, password: newPassword } })
           }
         )
       } else {
-        this.createLink({ params: paramsToCreate, onError })
+        this.createLink({ params: paramsToCreate })
       }
     },
 
-    checkLinkToUpdate({ link, onSuccess = () => {} }) {
+    checkLinkToUpdate({ link }) {
       const params = this.getParamsForLink(link)
 
       if (!link.password && this.isPasswordEnforcedFor(link)) {
@@ -430,11 +430,11 @@ export default defineComponent({
             passwordPolicyService: this.passwordPolicyService
           },
           (newPassword) => {
-            this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
+            this.updatePublicLink({ params: { ...params, password: newPassword } })
           }
         )
       } else {
-        this.updatePublicLink({ params, onSuccess })
+        this.updatePublicLink({ params })
       }
     },
 
@@ -487,7 +487,7 @@ export default defineComponent({
       }
     },
 
-    async createLink({ params, onError = (e) => {} }) {
+    async createLink({ params }) {
       let path = this.resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
@@ -505,8 +505,6 @@ export default defineComponent({
           title: this.$gettext('Link was created successfully')
         })
       } catch (e) {
-        onError(e)
-
         if (true) {
           return this.setModalInputErrorMessage(
             this.$gettext(
@@ -523,21 +521,18 @@ export default defineComponent({
       }
     },
 
-    async updatePublicLink({ params, onSuccess = () => {}, onError = (e) => {} }) {
+    async updatePublicLink({ params }) {
       try {
         await this.updateLink({
           id: params.id,
           client: this.$client,
           params
         })
-        onSuccess()
         this.hideModal()
         this.showMessage({
           title: this.$gettext('Link was updated successfully')
         })
       } catch (e) {
-        onError(e)
-
         if (true) {
           return this.setModalInputErrorMessage(
             this.$gettext(

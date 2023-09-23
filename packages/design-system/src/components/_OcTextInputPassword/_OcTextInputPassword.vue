@@ -2,16 +2,11 @@
   <div
     class="oc-text-input-password-wrapper"
     :class="{
-      'oc-text-input-password-wrapper-warning': !!$attrs.class.includes('oc-text-input-warning'),
-      'oc-text-input-password-wrapper-danger': !!$attrs.class.includes('oc-text-input-danger')
+      'oc-text-input-password-wrapper-warning': hasWarning,
+      'oc-text-input-password-wrapper-danger': hasError
     }"
   >
-    <input
-      ref="passwordInput"
-      v-bind="$attrs"
-      v-model="password"
-      :type="showPassword ? 'text' : 'password'"
-    />
+    <input v-bind="$attrs" v-model="password" :type="showPassword ? 'text' : 'password'" />
     <oc-button
       v-if="password"
       v-oc-tooltip="$gettext('Show password')"
@@ -97,21 +92,20 @@ export default defineComponent({
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
     const passwordEntered = ref(false)
     const copyPasswordIconInitial = 'file-copy'
     const copyPasswordIcon = ref(copyPasswordIconInitial)
-    const passwordInput = ref(null)
-
-    const hasWarning = computed(() => {
-      return unref(passwordInput).classList.contains('oc-text-input-warning')
-    })
 
     const hasError = computed(() => {
-      return unref(passwordInput).classList.contains('oc-text-input-danger')
+      return (attrs?.class as string)?.includes('oc-text-input-danger')
+    })
+
+    const hasWarning = computed(() => {
+      return (attrs?.class as string)?.includes('oc-text-input-warning')
     })
 
     const showPasswordPolicyInformation = computed(() => {
@@ -161,7 +155,6 @@ export default defineComponent({
     return {
       $gettext,
       password,
-      passwordInput,
       hasError,
       hasWarning,
       showPassword,
