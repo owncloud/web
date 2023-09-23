@@ -139,11 +139,11 @@ export default defineComponent({
     }
 
     watch(password, (value) => {
-      if (!Object.keys(props.passwordPolicy).length) {
+	    passwordEntered.value = true
+
+			if (!Object.keys(props.passwordPolicy).length) {
         return
       }
-
-      passwordEntered.value = true
 
       if (!props.passwordPolicy.check(value)) {
         return emit('passwordChallengeFailed')
