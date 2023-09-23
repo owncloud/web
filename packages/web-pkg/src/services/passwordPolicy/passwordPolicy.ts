@@ -13,6 +13,7 @@ import get from 'lodash-es/get'
 import { Store } from 'vuex'
 import { PasswordPolicy } from 'password-sheriff'
 import { GeneratePassword } from 'js-generate-password'
+import { min } from 'lodash-es'
 
 interface GeneratePasswordRules {
   length: number
@@ -33,6 +34,16 @@ export class PasswordPolicyService {
     this.language = language
     this.buildGeneratePasswordRules()
     this.buildPolicy()
+  }
+
+  private useDefaultRules(): boolean {
+    return (
+      !this.capability.min_characters &&
+      !this.capability.min_lowercase_characters &&
+      !this.capability.min_uppercase_characters &&
+      !this.capability.min_digits &&
+      !this.capability.min_special_characters
+    )
   }
 
   private buildGeneratePasswordRules(): void {
@@ -79,7 +90,7 @@ export class PasswordPolicyService {
     }
     const rules = {} as any
 
-    if (!this.capability.min_characters) {
+    if (this.useDefaultRules()) {
       rules.mustNotBeEmpty = {}
     }
 

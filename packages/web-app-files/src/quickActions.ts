@@ -35,7 +35,6 @@ export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyServ
     onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
     onCancel: () => store.dispatch('hideModal'),
     onConfirm: async (password) => {
-      await store.dispatch('hideModal')
       onConfirm(password)
     }
   }

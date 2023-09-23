@@ -472,9 +472,6 @@ export default defineComponent({
             link: {
               ...this.link,
               name
-            },
-            onSuccess: () => {
-              this.hideModal()
             }
           })
       }

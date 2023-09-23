@@ -500,6 +500,7 @@ export default defineComponent({
           storageId: this.resource.fileId || this.resource.id,
           params
         })
+        this.hideModal()
         this.showMessage({
           title: this.$gettext('Link was created successfully')
         })
@@ -528,8 +529,9 @@ export default defineComponent({
           id: params.id,
           client: this.$client,
           params
-        }).then(onSuccess)
-
+        })
+        onSuccess()
+        this.hideModal()
         this.showMessage({
           title: this.$gettext('Link was updated successfully')
         })
