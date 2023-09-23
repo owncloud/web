@@ -30,9 +30,9 @@ export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyServ
     inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
     inputLabel: $gettext('Password'),
     inputType: 'password',
-    onInput: () => this.setModalInputErrorMessage(''),
-    onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
-    onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
+    onInput: () => store.dispatch('setModalInputErrorMessage', ''),
+    onPasswordChallengeCompleted: () => store.dispatch('setModalConfirmButtonDisabled', false),
+    onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
     onCancel: () => store.dispatch('hideModal'),
     onConfirm: async (password) => {
       await store.dispatch('hideModal')

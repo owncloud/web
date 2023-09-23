@@ -106,8 +106,8 @@ export default defineComponent({
       default: null
     }
   },
-  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed', 'input'],
-  setup(props, { emit, attrs }) {
+  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
