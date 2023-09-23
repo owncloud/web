@@ -21,6 +21,8 @@ services:
       FRONTEND_SEARCH_MIN_LENGTH: "2"
       FRONTEND_OCS_ENABLE_DENIALS: "true"
       FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
+      FRONTEND_PASSWORD_POLICY_MIN_CHARACTERS: "6"
+      FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
 
       # IDM
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
@@ -61,6 +63,7 @@ services:
       # make the registry available to the app provider containers
       MICRO_REGISTRY: "mdns"
     volumes:
+      - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
       - ./dist:/web/dist

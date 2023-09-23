@@ -350,7 +350,13 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
-    ...mapActions(['showMessage', 'showErrorMessage', 'createModal', 'hideModal']),
+    ...mapActions([
+      'showMessage',
+      'showErrorMessage',
+      'createModal',
+      'hideModal',
+      'setModalInputErrorMessage'
+    ]),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
@@ -494,6 +500,9 @@ export default defineComponent({
           storageId: this.resource.fileId || this.resource.id,
           params
         })
+        this.showMessage({
+          title: this.$gettext('Link was created successfully')
+        })
       } catch (e) {
         onError(e)
         console.error(e)
@@ -501,12 +510,7 @@ export default defineComponent({
           title: this.$gettext('Failed to create link'),
           error: e
         })
-        return
       }
-
-      this.showMessage({
-        title: this.$gettext('Link was created successfully')
-      })
     },
 
     async updatePublicLink({ params, onSuccess = () => {}, onError = (e) => {} }) {
@@ -516,19 +520,27 @@ export default defineComponent({
           client: this.$client,
           params
         }).then(onSuccess)
+
+        this.showMessage({
+          title: this.$gettext('Link was updated successfully')
+        })
       } catch (e) {
         onError(e)
         console.error(e)
+
+        if (true) {
+          return this.setModalInputErrorMessage(
+            this.gettext(
+              'Unfortunately, your password is commonly used. Please pick a harder-to-guess password for your safety.'
+            )
+          )
+        }
+
         this.showErrorMessage({
           title: this.$gettext('Failed to update link'),
           error: e
         })
-        return
       }
-
-      this.showMessage({
-        title: this.$gettext('Link was updated successfully')
-      })
     },
 
     deleteLinkConfirmation({ link }) {
