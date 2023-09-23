@@ -506,7 +506,6 @@ export default defineComponent({
         })
       } catch (e) {
         onError(e)
-        console.error(e)
 
         if (true) {
           return this.setModalInputErrorMessage(
@@ -516,6 +515,7 @@ export default defineComponent({
           )
         }
 
+        console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to create link'),
           error: e
@@ -537,7 +537,6 @@ export default defineComponent({
         })
       } catch (e) {
         onError(e)
-        console.error(e)
 
         if (true) {
           return this.setModalInputErrorMessage(
@@ -547,6 +546,7 @@ export default defineComponent({
           )
         }
 
+        console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to update link'),
           error: e

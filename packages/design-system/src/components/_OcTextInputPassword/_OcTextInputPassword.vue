@@ -7,7 +7,7 @@
     }"
   >
     <input
-      ref="input"
+      ref="passwordInput"
       v-bind="$attrs"
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
@@ -104,6 +104,15 @@ export default defineComponent({
     const passwordEntered = ref(false)
     const copyPasswordIconInitial = 'file-copy'
     const copyPasswordIcon = ref(copyPasswordIconInitial)
+    const passwordInput = ref(null)
+
+    const hasWarning = computed(() => {
+      return unref(passwordInput).classList.contains('oc-text-input-warning')
+    })
+
+    const hasError = computed(() => {
+      return unref(passwordInput).classList.contains('oc-text-input-danger')
+    })
 
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
@@ -152,13 +161,16 @@ export default defineComponent({
     return {
       $gettext,
       password,
+      passwordInput,
+      hasError,
+      hasWarning,
       showPassword,
+      copyPasswordIcon,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
-      getPasswordPolicyRuleMessage,
-      copyPasswordToClipboard,
       generatePassword,
-      copyPasswordIcon
+      getPasswordPolicyRuleMessage,
+      copyPasswordToClipboard
     }
   }
 })
