@@ -506,6 +506,15 @@ export default defineComponent({
       } catch (e) {
         onError(e)
         console.error(e)
+
+        if (true) {
+          return this.setModalInputErrorMessage(
+            this.$gettext(
+              'Unfortunately, your password is commonly used. Please pick a harder-to-guess password for your safety.'
+            )
+          )
+        }
+
         this.showErrorMessage({
           title: this.$gettext('Failed to create link'),
           error: e
@@ -530,7 +539,7 @@ export default defineComponent({
 
         if (true) {
           return this.setModalInputErrorMessage(
-            this.gettext(
+            this.$gettext(
               'Unfortunately, your password is commonly used. Please pick a harder-to-guess password for your safety.'
             )
           )

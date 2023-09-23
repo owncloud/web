@@ -1,5 +1,11 @@
 <template>
-  <div class="oc-text-input-password-wrapper">
+  <div
+    class="oc-text-input-password-wrapper"
+    :class="{
+      'oc-text-input-password-wrapper-warning': !!hasWarning,
+      'oc-text-input-password-wrapper-danger': !!hasError
+    }"
+  >
     <input
       v-bind="$attrs"
       v-model="password"
@@ -80,6 +86,16 @@ export default defineComponent({
       required: false,
       default: ''
     },
+    hasWarning: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    hasError: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     passwordPolicy: {
       type: Object as PropType<PasswordPolicy>,
       default: () => ({})
@@ -91,7 +107,7 @@ export default defineComponent({
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
@@ -176,6 +192,18 @@ export default defineComponent({
 
   input:focus {
     outline: none;
+  }
+
+  &-warning,
+  &-warning:focus {
+    border-color: var(--oc-color-swatch-warning-default) !important;
+    color: var(--oc-color-swatch-warning-default) !important;
+  }
+
+  &-danger,
+  &-danger:focus {
+    border-color: var(--oc-color-swatch-danger-default) !important;
+    color: var(--oc-color-swatch-danger-default) !important;
   }
 }
 .oc-text-input-password-wrapper:focus-within {

@@ -496,6 +496,7 @@ export default defineComponent({
         inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
         inputType: 'password',
         onCancel: this.hideModal,
+        onInput: () => this.setModalInputErrorMessage(''),
         onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
         onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
         onConfirm: (password) => {
