@@ -729,9 +729,6 @@ importers:
       marked:
         specifier: ^4.0.12
         version: 4.0.12
-      mobile-detect:
-        specifier: ^1.4.5
-        version: 1.4.5
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -15241,10 +15238,6 @@ packages:
   /mkpath@1.0.0:
     resolution: {integrity: sha512-PbNHr7Y/9Y/2P5pKFv5XOGBfNQqZ+fdiHWcuf7swLACN5ZW5LU7J5tMU8LSBjpluAxAxKYGD9nnaIbdRy9+m1w==}
     dev: true
-
-  /mobile-detect@1.4.5:
-    resolution: {integrity: sha512-yc0LhH6tItlvfLBugVUEtgawwFU2sIe+cSdmRJJCTMZ5GEJyLxNyC/NIOAOGk67Fa8GNpOttO3Xz/1bHpXFD/g==}
-    dev: false
 
   /mocha@6.2.3:
     resolution: {integrity: sha512-0R/3FvjIGH3eEuG17ccFPk117XL2rWxatr81a57D+r/x2uTYZRbdZ4oVidEUMh2W2TJDa7MdAb12Lm2/qrKajg==}
