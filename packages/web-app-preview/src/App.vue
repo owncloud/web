@@ -246,7 +246,7 @@ export default defineComponent({
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory,
-      fileId: unref(fileId).toString()
+      fileId: queryItemAsString(unref(fileId))
     }
   },
   data() {

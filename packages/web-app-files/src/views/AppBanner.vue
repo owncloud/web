@@ -18,28 +18,32 @@
         <div>
           <div class="app-title">{{ appBannerSettings.title }}</div>
           <div class="app-publisher">{{ appBannerSettings.publisher }}</div>
-          <div class="app-additional-info">{{ appBannerSettings.price }}</div>
+          <div class="app-additional-info">
+            {{ $gettext(appBannerSettings.additionalInformation) }}
+          </div>
         </div>
       </div>
       <a
-        :href="generateAppUrl(fileId)"
+        :href="appUrl"
         target="_blank"
         class="app-banner-cta"
         rel="noopener"
-        aria-label="{{ appBannerSettings.ctaText }}"
-        >{{ appBannerSettings.ctaText }}</a
+        aria-label="{{ $gettext(appBannerSettings.ctaText) }}"
+        >{{ $gettext(appBannerSettings.ctaText) }}</a
       >
     </div>
   </portal>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg'
 import { buildUrl } from 'web-pkg/src/helpers/router'
 import { useSessionStorage } from '@vueuse/core'
+import { $gettext } from '../router/utils'
 
 export default defineComponent({
+  methods: { $gettext },
   components: {},
   props: {
     fileId: {
@@ -47,29 +51,29 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const appBannerWasClosed = useSessionStorage('app_banner_closed', null)
-    const shouldShow = ref<boolean>(unref(appBannerWasClosed) === null)
+    const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
     const store = useStore()
     const router = useRouter()
 
     const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
 
-    const generateAppUrl = (fileId: string) => {
-      return buildUrl(router, `/f/${fileId}`)
+    const appUrl = computed(() =>
+      buildUrl(router, `/f/${props.fileId}`)
         .toString()
         .replace(/^(http)(s)?/, (_, p1, p2) => (p2 ? appBannerSettings.appScheme : p1))
-    }
+    )
 
     const close = () => {
-      shouldShow.value = false
+      isVisible.value = false
       useSessionStorage('app_banner_closed', 1)
     }
 
     return {
-      generateAppUrl,
+      appUrl,
       close,
-      shouldShow,
+      shouldShow: isVisible,
       appBannerSettings
     }
   }
@@ -84,8 +88,6 @@ export default defineComponent({
 }
 
 .app-banner {
-  //top: 0;
-  //left: 0;
   overflow-x: hidden;
   width: 100%;
   height: 84px;

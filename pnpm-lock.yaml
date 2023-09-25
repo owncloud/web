@@ -1081,9 +1081,6 @@ importers:
       semver:
         specifier: ^7.3.8
         version: 7.3.8
-      smartbanner.js:
-        specifier: ^1.19.3
-        version: 1.19.3
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -18759,11 +18756,6 @@ packages:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
     dev: true
-
-  /smartbanner.js@1.19.3:
-    resolution: {integrity: sha512-30JaYaPHO0VRC8MXGeUGWm1jF3+kCwKgV2GW9uLa8J3zOuv9D9ZhZo0IKf/xIcX0HQBRisOU4RPhEj7UrNt8Sw==}
-    engines: {node: '>=10.24.1 <21.0.0'}
-    dev: false
 
   /snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
