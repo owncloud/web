@@ -93,12 +93,12 @@ export default defineComponent({
     hasWarning: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     hasError: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
