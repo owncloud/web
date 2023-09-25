@@ -1,11 +1,7 @@
 import { Store } from 'vuex'
 import { isLocationTrashActive } from '../../../router'
-import {
-  buildWebDavSpacesTrashPath,
-  SpaceResource,
-  isProjectSpaceResource,
-  buildWebDavFilesTrashPath
-} from 'web-client/src/helpers'
+import { SpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { computed, unref } from 'vue'
 import {
   useCapabilityFilesPermanentDeletion,
@@ -28,12 +24,8 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
-    const path = unref(hasShareJail)
-      ? buildWebDavSpacesTrashPath(space.id)
-      : buildWebDavFilesTrashPath(store.getters.user.id)
-
-    return clientService.owncloudSdk.fileTrash
-      .clearTrashBin(path)
+    return clientService.webdav
+      .clearTrashBin(space, { hasShareJail: unref(hasShareJail), user: store.getters.user })
       .then(() => {
         store.dispatch('showMessage', {
           title: $gettext('All deleted files were removed')

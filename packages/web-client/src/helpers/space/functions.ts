@@ -14,6 +14,16 @@ import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
 import { urlJoin } from '../../utils'
 
+export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'image' | 'readme') {
+  const typeMap = { image: 'spaceImageData', readme: 'spaceReadmeData' }
+  const webDavPathComponents = decodeURI(space[typeMap[type]].webDavUrl).split('/')
+  const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id.toString()))
+  if (!idComponent) {
+    return ''
+  }
+  return webDavPathComponents.slice(webDavPathComponents.indexOf(idComponent) + 1).join('/')
+}
+
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
 

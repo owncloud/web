@@ -67,7 +67,7 @@ describe('DriveResolver view', () => {
     const space = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'public' }
     const internalSpace = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'personal' }
     const clientService = mockDeep<ClientService>()
-    clientService.owncloudSdk.files.getPathForFileId.mockResolvedValue('/path')
+    clientService.webdav.getPathForFileId.mockResolvedValue('/path')
     clientService.webdav.getFileInfo.mockResolvedValue(mock<Resource>())
     const { wrapper, mocks } = getMountedWrapper({
       space,
@@ -85,7 +85,7 @@ describe('DriveResolver view', () => {
   it('redirects to private link if user has access to the resource via a share', async () => {
     const space = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'public' }
     const clientService = mockDeep<ClientService>()
-    clientService.owncloudSdk.files.getPathForFileId.mockResolvedValue('/path')
+    clientService.webdav.getPathForFileId.mockResolvedValue('/path')
     const { wrapper, mocks } = getMountedWrapper({
       space,
       mocks: { $clientService: clientService },

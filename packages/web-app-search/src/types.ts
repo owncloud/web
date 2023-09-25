@@ -1,5 +1,5 @@
 export interface SearchResultValue {
-  id: string
+  id: string | number
   data: unknown
 }
 

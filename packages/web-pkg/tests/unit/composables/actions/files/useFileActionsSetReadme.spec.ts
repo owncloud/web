@@ -1,7 +1,6 @@
 import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions/files/useFileActionsSetReadme'
-import { buildSpace, SpaceResource } from 'web-client/src/helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { buildSpace, FileResource, SpaceResource } from 'web-client/src/helpers'
+import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultStoreMockOptions,
@@ -11,6 +10,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { nextTick, unref } from 'vue'
+import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
 
 describe('setReadme', () => {
   describe('isEnabled property', () => {
@@ -147,23 +147,20 @@ function getWrapper({
     options: { storeOptions: typeof defaultStoreMockOptions }
   ) => void
 }) {
-  const clientMock = mockDeep<OwnCloudSdk>()
-
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
     }),
     space
   }
-  mocks.$clientService.owncloudSdk.files.getFileContents.mockImplementation(() => {
-    if (resolveGetFileContents) {
-      return Promise.resolve('readme')
-    }
-    return Promise.reject(new Error(''))
-  })
+  if (resolveGetFileContents) {
+    mocks.$clientService.webdav.getFileContents.mockResolvedValue(mock<GetFileContentsResponse>())
+  } else {
+    mocks.$clientService.webdav.getFileContents.mockRejectedValue(new Error(''))
+  }
 
-  mocks.$clientService.owncloudSdk.files.putFileContents.mockImplementation(() =>
-    Promise.resolve({ ETag: '60c7243c2e7f1' })
+  mocks.$clientService.webdav.putFileContents.mockResolvedValue(
+    mock<FileResource>({ etag: '60c7243c2e7f1' })
   )
 
   mocks.$clientService.webdav.getFileInfo.mockImplementation(() =>

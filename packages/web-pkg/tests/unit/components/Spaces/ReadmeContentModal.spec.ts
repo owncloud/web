@@ -1,6 +1,5 @@
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
-import { mockDeep } from 'jest-mock-extended'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultPlugins,
@@ -9,35 +8,41 @@ import {
   defaultComponentMocks,
   defaultStubs
 } from 'web-test-helpers'
-
-afterEach(() => jest.clearAllMocks())
+import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
+import { Resource } from 'web-client/src'
 
 describe('ReadmeContentModal', () => {
   describe('method "editReadme"', () => {
     it('should show message on success', async () => {
-      const { wrapper } = getWrapper()
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
+      const { wrapper, storeOptions } = getWrapper()
       await wrapper.vm.editReadme()
-
-      expect(showMessageStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper(false)
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
+      const { wrapper, storeOptions } = getWrapper(false)
       await wrapper.vm.editReadme()
-
-      expect(showErrorMessageStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
     })
   })
 })
 
 function getWrapper(resolvePutFileContents = true) {
-  const clientMock = mockDeep<OwnCloudSdk>()
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
+
+  const mocks = defaultComponentMocks()
+  const { $clientService: clientService } = mocks
+  clientService.webdav.getFileContents.mockResolvedValue(mock<GetFileContentsResponse>())
+  if (resolvePutFileContents) {
+    clientService.webdav.putFileContents.mockResolvedValue(mock<Resource>())
+  } else {
+    clientService.webdav.putFileContents.mockRejectedValue(new Error(''))
+  }
+
   return {
+    storeOptions,
     wrapper: mount(ReadmeContentModal, {
       props: {
         cancel: jest.fn(),
@@ -52,24 +57,8 @@ function getWrapper(resolvePutFileContents = true) {
       global: {
         plugins: [...defaultPlugins(), store],
         stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
-        mocks: {
-          ...defaultComponentMocks(),
-          $client: {
-            ...clientMock,
-            files: {
-              ...clientMock.files,
-              putFileContents: jest.fn().mockImplementation(() => {
-                if (resolvePutFileContents) {
-                  return Promise.resolve('readme')
-                }
-                return Promise.reject(new Error(''))
-              }),
-              getFileContents: jest.fn().mockImplementation(() => {
-                return Promise.resolve('readme')
-              })
-            }
-          }
-        }
+        mocks,
+        provide: mocks
       }
     })
   }

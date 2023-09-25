@@ -1,6 +1,6 @@
 import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
-import { SpaceResource } from 'web-client/src'
+import { Resource, SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
 import {
   useClientService,
@@ -57,22 +57,24 @@ export const useSpaceActionsUploadImage = ({
     }
 
     return loadingService.addTask(() => {
-      return clientService.owncloudSdk.files
-        .putFileContents(`/spaces/${selectedSpace.id}/.space/${file.name}`, file, {
+      return clientService.webdav
+        .putFileContents(selectedSpace, {
+          path: `/.space/${file.name}`,
+          content: file,
           headers: extraHeaders,
           overwrite: true
         })
-        .then((image) => {
+        .then(({ fileId }: Resource) => {
           return graphClient.drives
             .updateDrive(
-              selectedSpace.id as string,
+              selectedSpace.id.toString(),
               {
                 special: [
                   {
                     specialFolder: {
                       name: 'image'
                     },
-                    id: image['OC-FileId']
+                    id: fileId
                   }
                 ]
               } as Drive,
@@ -80,7 +82,7 @@ export const useSpaceActionsUploadImage = ({
             )
             .then(({ data }) => {
               store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-                id: selectedSpace.id as string,
+                id: selectedSpace.id.toString(),
                 field: 'spaceImageData',
                 value: data.special.find((special) => special.specialFolder.name === 'image')
               })

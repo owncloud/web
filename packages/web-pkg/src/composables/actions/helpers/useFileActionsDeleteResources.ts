@@ -1,12 +1,7 @@
 import { Store } from 'vuex'
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
-import {
-  buildWebDavFilesTrashPath,
-  buildWebDavSpacesTrashPath,
-  Resource,
-  SpaceResource
-} from 'web-client/src/helpers'
+import { Resource, SpaceResource } from 'web-client/src/helpers'
 import PQueue from 'p-queue'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
@@ -111,13 +106,13 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
     )
   })
 
-  const trashbin_deleteOp = (space, resource) => {
-    const path = unref(hasShareJail)
-      ? buildWebDavSpacesTrashPath(space.id)
-      : buildWebDavFilesTrashPath(store.getters.user.id)
-
-    return owncloudSdk.fileTrash
-      .clearTrashBin(path, resource.id)
+  const trashbin_deleteOp = (space: SpaceResource, resource: Resource) => {
+    return clientService.webdav
+      .clearTrashBin(space, {
+        hasShareJail: unref(hasShareJail),
+        id: resource.id,
+        user: store.getters.user
+      })
       .then(() => {
         store.dispatch('Files/removeFilesFromTrashbin', [resource])
         const translated = $gettext(

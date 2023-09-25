@@ -110,12 +110,11 @@ function getWrapper({
     space: mock<ProjectSpaceResource>({ driveType, isEditor: () => false, isManager: () => false })
   }
 
-  mocks.$clientService.owncloudSdk.fileTrash.clearTrashBin.mockImplementation(() => {
-    if (resolveClearTrashBin) {
-      return Promise.resolve({})
-    }
-    return Promise.reject(new Error(''))
-  })
+  if (resolveClearTrashBin) {
+    mocks.$clientService.webdav.clearTrashBin.mockResolvedValue()
+  } else {
+    mocks.$clientService.webdav.clearTrashBin.mockRejectedValue(new Error(''))
+  }
 
   const storeOptions = {
     ...defaultStoreMockOptions,

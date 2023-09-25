@@ -1,23 +1,14 @@
 import { SearchList, SearchResult } from 'web-app-search/src/types'
 import ListComponent from '../../components/Search/List.vue'
 import { ClientService } from 'web-pkg/src/services'
-import {
-  ProjectSpaceResource,
-  buildResource,
-  isProjectSpaceResource,
-  Resource
-} from 'web-client/src/helpers'
+import { ProjectSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { Component, computed, Ref, unref } from 'vue'
-import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
+import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
 import { ConfigurationManager } from 'web-pkg/src'
 import { urlJoin } from 'web-client/src/utils'
 
 export const searchLimit = 200
-
-export interface SearchResource extends Resource {
-  highlights: string
-}
 
 export default class List implements SearchList {
   public readonly component: Component
@@ -60,30 +51,27 @@ export default class List implements SearchList {
       }
     }
 
-    const { range, results } = await this.clientService.owncloudSdk.files.search(
-      term,
+    const { resources, totalResults } = await this.clientService.webdav.search(term, {
       searchLimit,
-      DavProperties.Default,
+      davProperties: DavProperties.Default,
       useSpacesEndpoint
-    )
+    })
 
     return {
-      totalResults: range ? parseInt(range?.split('/')[1]) : null,
-      values: results.map((result) => {
-        const projectSpace = this.getProjectSpace(result.fileInfo[DavProperty.FileParent])
-        const resource = {
-          ...(projectSpace ? projectSpace : buildResource(result)),
-          highlights: result.fileInfo[DavProperty.Highlights] || ''
-        } as SearchResource
+      totalResults,
+      values: resources.map((resource) => {
+        const matchingSpace = this.getProjectSpace(resource.parentFolderId)
+        const data = matchingSpace ? matchingSpace : resource
 
         // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
-        if (!resource.storageId) {
-          resource.storageId = this.store.getters.user.id
+        if (!data.storageId) {
+          data.storageId = this.store.getters.user.id
         }
-        if (this.configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
-          resource.path = urlJoin(resource.shareRoot, resource.path)
+        if (this.configurationManager.options.routing.fullShareOwnerPaths && data.shareRoot) {
+          data.path = urlJoin(data.shareRoot, data.path)
         }
-        return { id: resource.id, data: resource }
+
+        return { id: data.id, data }
       })
     }
   }

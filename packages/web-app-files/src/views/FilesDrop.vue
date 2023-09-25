@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { createLocationPublic, createLocationSpaces } from 'web-pkg/src/router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
@@ -54,7 +53,6 @@ import { useUpload } from 'web-runtime/src/composables/upload'
 import { useGettext } from 'vue3-gettext'
 import {
   useClientService,
-  usePublicLinkPassword,
   usePublicLinkToken,
   useStore,
   useRouter,
@@ -72,6 +70,8 @@ import { UppyService } from 'web-runtime/src/services/uppyService'
 import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { SpaceResource } from 'web-client/src'
+import { PublicSpaceResource } from 'web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -87,7 +87,6 @@ export default defineComponent({
     const authService = useAuthService()
     const clientService = useClientService()
     const publicToken = usePublicLinkToken({ store })
-    const publicLinkPassword = usePublicLinkPassword({ store })
     const isUserContext = useUserContext({ store })
     const { getInternalSpace } = useGetMatchingSpace()
     useUpload({ uppyService })
@@ -111,7 +110,7 @@ export default defineComponent({
       })
     }
 
-    const share = ref()
+    const share = ref<PublicSpaceResource>()
     const dragareaEnabled = ref(false)
     const loading = ref(true)
     const errorMessage = ref(null)
@@ -142,7 +141,7 @@ export default defineComponent({
 
       if (unref(isUserContext) && unref(fileId)) {
         try {
-          const path = await clientService.owncloudSdk.files.getPathForFileId(unref(fileId))
+          const path = await clientService.webdav.getPathForFileId(unref(fileId))
           await resolveToInternalLocation(path)
           loading.value = false
           return
@@ -151,11 +150,14 @@ export default defineComponent({
         }
       }
 
-      clientService.owncloudSdk.publicFiles
-        .list(unref(publicToken), unref(publicLinkPassword), DavProperties.PublicLink, '0')
-        .then((files) => {
+      const spaces: SpaceResource[] = store.getters['runtime/spaces/spaces']
+      const space = spaces.find((s) => s.driveAlias === `public/${unref(publicToken)}`)
+
+      clientService.webdav
+        .listFiles(space, {}, { depth: 0 })
+        .then(({ resource }) => {
           // Redirect to files list if the link doesn't have role "uploader"
-          const sharePermissions = parseInt(files[0].getProperty(DavProperty.PublicLinkPermission))
+          const sharePermissions = (resource as PublicSpaceResource).publicLinkPermission
           if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
             router.replace(
               createLocationPublic('files-public-link', {
@@ -164,7 +166,7 @@ export default defineComponent({
             )
             return
           }
-          share.value = files[0]
+          share.value = resource as PublicSpaceResource
         })
         .catch((error) => {
           // likely missing password, redirect to public link password prompt
@@ -220,7 +222,7 @@ export default defineComponent({
       if (this.share) {
         return this.$gettext(
           '%{owner} shared this folder with you for uploading',
-          { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) },
+          { owner: this.share.publicLinkShareOwner },
           true
         )
       }

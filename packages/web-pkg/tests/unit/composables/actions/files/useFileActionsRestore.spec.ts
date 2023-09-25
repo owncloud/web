@@ -197,12 +197,6 @@ function getWrapper({
     return Promise.reject(new Error(''))
   })
   mocks.$clientService.owncloudSdk.users.getUser.mockImplementation(() => ({ quota: {} }))
-  mocks.$clientService.owncloudSdk.fileTrash.restore.mockImplementation(() => {
-    if (resolveRestore) {
-      return Promise.resolve({})
-    }
-    return Promise.reject(new Error(''))
-  })
 
   const storeOptions = {
     ...defaultStoreMockOptions,

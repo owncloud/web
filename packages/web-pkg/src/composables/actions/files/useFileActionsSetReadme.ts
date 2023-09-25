@@ -14,8 +14,8 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
-      const { owncloudSdk, graphAuthenticated, webdav } = clientService
-      const fileContent = await owncloudSdk.files.getFileContents(resources[0].webDavPath)
+      const { graphAuthenticated, webdav } = clientService
+      const fileContent = (await webdav.getFileContents(space, { path: resources[0].path })).body
 
       try {
         await webdav.getFileInfo(space, { path: '.space' })
@@ -23,7 +23,10 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
         await webdav.createFolder(space, { path: '.space' })
       }
 
-      await owncloudSdk.files.putFileContents(`/spaces/${space.id}/.space/readme.md`, fileContent)
+      await webdav.putFileContents(space, {
+        path: `/.space/readme.md`,
+        content: fileContent
+      })
       const file = await webdav.getFileInfo(space, { path: '.space/readme.md' })
 
       const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
