@@ -60,8 +60,6 @@ import { additionalTranslations } from './helpers/additionalTranslations' // esl
 import { eventBus } from 'web-pkg/src/services'
 import { useHead } from './composables/head'
 import { useStore } from 'web-pkg/src/composables'
-//import 'smartbanner.js/dist/smartbanner.css'
-//import * as SmartBanner from 'smartbanner.js/dist/smartbanner.js'
 
 export default defineComponent({
   components: {

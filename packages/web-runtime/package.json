@@ -37,6 +37,7 @@
     "qs": "^6.10.3",
     "sanitize-html": "^2.7.0",
     "semver": "^7.3.8",
+    "smartbanner.js": "^1.19.3",
     "tippy.js": "^6.3.7",
     "utf8": "^3.0.0",
     "uuid": "^9.0.0",

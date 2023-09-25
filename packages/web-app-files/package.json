@@ -5,8 +5,7 @@
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
   "dependencies": {
-    "mark.js": "^8.11.1",
-    "mobile-detect": "^1.4.5"
+    "mark.js": "^8.11.1"
   },
   "devDependencies": {
     "@jest/globals": "29.3.1",

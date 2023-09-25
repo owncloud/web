@@ -56,7 +56,6 @@ export default defineComponent({
     const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
 
     const generateAppUrl = (fileId: string) => {
-      console.error(appBannerSettings.appScheme)
       return buildUrl(router, `/f/${fileId}`)
         .toString()
         .replace(/^(http)(s)?/, (_, p1, p2) => (p2 ? appBannerSettings.appScheme : p1))
