@@ -39,6 +39,26 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const item: Ref<string> = ref(null)
   const loading = ref(false)
 
+  const getSpaceByDriveAliasAndItem = (driveAliasAndItem: string) => {
+    const driveAliasAndItemSegments = driveAliasAndItem.split('/')
+
+    return unref(spaces).find((s) => {
+      if (!driveAliasAndItem.startsWith(s.driveAlias)) {
+        return false
+      }
+
+      const driveAliasSegments = s.driveAlias.split('/')
+      if (
+        driveAliasAndItemSegments.length < driveAliasSegments.length ||
+        driveAliasAndItemSegments.slice(0, driveAliasSegments.length).join('/') !== s.driveAlias
+      ) {
+        return false
+      }
+
+      return s
+    })
+  }
+
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
     async ([driveAliasAndItem, areSpacesLoading], [driveAliasAndItemOld, areSpacesLoadingOld]) => {
@@ -63,7 +83,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
       let matchingSpace = null
       let path = null
-      const driveAliasAndItemSegments = driveAliasAndItem.split('/')
       if (driveAliasAndItem.startsWith('public/')) {
         const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
@@ -82,7 +101,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
             return unref(fileId).startsWith(`${s.fileId}`)
           })
         } else {
-          matchingSpace = unref(spaces).find((s) => driveAliasAndItem.startsWith(s.driveAlias))
+          matchingSpace = getSpaceByDriveAliasAndItem(driveAliasAndItem)
         }
 
         if (!matchingSpace) {
@@ -96,22 +115,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
             })
           }
 
-          matchingSpace = unref(spaces).find((s) => {
-            if (!driveAliasAndItem.startsWith(s.driveAlias)) {
-              return false
-            }
-
-            const driveAliasSegments = s.driveAlias.split('/')
-            if (
-              driveAliasAndItemSegments.length < driveAliasSegments.length ||
-              driveAliasAndItemSegments.slice(0, driveAliasSegments.length).join('/') !==
-                s.driveAlias
-            ) {
-              return false
-            }
-
-            return s
-          })
+          matchingSpace = getSpaceByDriveAliasAndItem(driveAliasAndItem)
         }
 
         if (matchingSpace) {
