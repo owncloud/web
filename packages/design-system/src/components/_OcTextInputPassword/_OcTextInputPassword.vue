@@ -89,6 +89,16 @@ export default defineComponent({
       type: Function as PropType<(...args: unknown[]) => string>,
       required: false,
       default: null
+    },
+    hasWarning: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hasError: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
@@ -99,14 +109,6 @@ export default defineComponent({
     const passwordEntered = ref(false)
     const copyPasswordIconInitial = 'file-copy'
     const copyPasswordIcon = ref(copyPasswordIconInitial)
-
-    const hasError = computed(() => {
-      return (attrs?.class as string)?.includes('oc-text-input-danger')
-    })
-
-    const hasWarning = computed(() => {
-      return (attrs?.class as string)?.includes('oc-text-input-warning')
-    })
 
     const showPasswordPolicyInformation = computed(() => {
       return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
@@ -139,9 +141,9 @@ export default defineComponent({
     }
 
     watch(password, (value) => {
-	    passwordEntered.value = true
+      passwordEntered.value = true
 
-			if (!Object.keys(props.passwordPolicy).length) {
+      if (!Object.keys(props.passwordPolicy).length) {
         return
       }
 
@@ -155,8 +157,6 @@ export default defineComponent({
     return {
       $gettext,
       password,
-      hasError,
-      hasWarning,
       showPassword,
       copyPasswordIcon,
       showPasswordPolicyInformation,
