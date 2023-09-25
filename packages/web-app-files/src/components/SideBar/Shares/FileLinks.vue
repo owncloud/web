@@ -505,15 +505,13 @@ export default defineComponent({
           title: this.$gettext('Link was created successfully')
         })
       } catch (e) {
-        if (true) {
-          return this.setModalInputErrorMessage(
-            this.$gettext(
-              'Unfortunately, your password is commonly used. Please pick a harder-to-guess password for your safety.'
-            )
-          )
+        console.error(e)
+
+        // Human-readable error message is provided, for example when password is on banned list
+        if (e.status === 400) {
+          return this.setModalInputErrorMessage(this.$gettext(e.message))
         }
 
-        console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to create link'),
           error: e
@@ -533,15 +531,11 @@ export default defineComponent({
           title: this.$gettext('Link was updated successfully')
         })
       } catch (e) {
-        if (true) {
-          return this.setModalInputErrorMessage(
-            this.$gettext(
-              'Unfortunately, your password is commonly used. Please pick a harder-to-guess password for your safety.'
-            )
-          )
+        // Human-readable error message is provided, for example when password is on banned list
+        if (e.statusCode === 400) {
+          return this.setModalInputErrorMessage(this.$gettext(e.message))
         }
 
-        console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to update link'),
           error: e
