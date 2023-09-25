@@ -61,7 +61,7 @@
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :is-path-displayed="arePathsDisplayed"
-          :parent-folder-name-default="getDefaultParentFolderName(item)"
+          :parent-folder-name-default="getParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
@@ -211,10 +211,17 @@
 <script lang="ts">
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { basename, dirname } from 'path'
+import { dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from 'web-client'
-import { extractDomSelector, isProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  extractDomSelector,
+  extractParentFolderName,
+  isProjectSpaceResource,
+  isShareRoot,
+  isShareSpaceResource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
 import {
@@ -967,12 +974,24 @@ export default defineComponent({
         ownerName: resource.owner[0].displayName
       })
     },
-    getDefaultParentFolderName(resource: Resource) {
+    getParentFolderName(resource: Resource) {
+      if (isShareRoot(resource)) {
+        return this.$gettext('Shared with me')
+      }
+      const parentFolder = extractParentFolderName(resource)
+      if (parentFolder) {
+        return parentFolder
+      }
+
+      const matchingSpace = this.getMatchingSpace(resource)
+      if (isShareSpaceResource(matchingSpace)) {
+        return matchingSpace.name
+      }
+
       if (this.hasProjectSpaces) {
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
         }
-        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }
@@ -980,16 +999,6 @@ export default defineComponent({
 
       if (!this.hasShareJail) {
         return this.$gettext('All files and folders')
-      }
-
-      if (resource.shareId) {
-        return resource.path === '/'
-          ? this.$gettext('Shared with me')
-          : basename(resource.shareRoot)
-      }
-
-      if (!this.getInternalSpace(resource.storageId)) {
-        return this.$gettext('Shared with me')
       }
 
       return this.$gettext('Personal')
