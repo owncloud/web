@@ -1,4 +1,3 @@
-import { base, router } from './index'
 import { RouteLocation, RouteParams, Router, RouteRecordNormalized } from 'vue-router'
 import {
   AuthContext,

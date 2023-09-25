@@ -1,13 +1,5 @@
 import { describe } from '@jest/globals'
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-  RouteLocation,
-  Router
-} from 'vue-router'
-import { mock } from 'jest-mock-extended'
-import { base } from 'web-runtime/src/router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 describe('buildUrl', () => {
   it.each`
