@@ -17,6 +17,7 @@ Summary
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
+* Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
@@ -106,6 +107,14 @@ Details
 
    https://github.com/owncloud/web/issues/9694
    https://github.com/owncloud/web/pull/9703
+
+* Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
+
+   We've added a new configuration option loginUrl to web, this is helpful if you use an external
+   IdP and the login is out of web/OCIS context.
+
+   https://github.com/owncloud/web/issues/9707
+   https://github.com/owncloud/ocis/pull/7317
 
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 
