@@ -298,7 +298,7 @@ export default defineComponent({
     outline: auto 1px !important;
   }
   .oc-card {
-    border-radius: 8px !important;
+    border-radius: var(--oc-space-small) !important;
   }
 }
 </style>
