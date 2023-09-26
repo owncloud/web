@@ -26,7 +26,7 @@
     >
       <div style="display: block; position: relative">
         <oc-list class="applications-list">
-          <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
+          <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
             <oc-button
               :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
               :type="n.url ? 'a' : 'router-link'"
@@ -69,7 +69,6 @@ export default defineComponent({
   },
   setup() {
     const appIcons = ref([])
-    const clientService = useClientService()
     const { $gettext } = useGettext()
 
     const applicationSwitcherLabel = computed(() => {
@@ -80,20 +79,9 @@ export default defineComponent({
         unref(appIcon).update()
       })
     }
-    const setClassicUIDefault = () => {
-      const url = urlJoin(configurationManager.serverUrl, '/index.php/apps/web/settings/default')
-      return clientService.httpAuthenticated.post(url, { isDefault: false })
-    }
-    const clickApp = async (appEntry) => {
-      // @TODO use id or similar
-      if (appEntry.url?.endsWith('/apps/files')) {
-        await setClassicUIDefault()
-      }
-    }
     return {
       appIcons,
       updateAppIcons,
-      clickApp,
       applicationSwitcherLabel
     }
   },
