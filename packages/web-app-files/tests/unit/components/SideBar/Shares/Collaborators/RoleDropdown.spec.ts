@@ -106,7 +106,10 @@ describe('RoleDropdown', () => {
       const { wrapper } = getWrapper({
         mountType: shallowMount,
         canShare: true,
-        incomingParentShare: { permissions: permissions.reduce((a, b) => a + b.bit, 0) }
+        incomingParentShare: {
+          fileOwner: { name: 'name' },
+          permissions: permissions.reduce((a, b) => a + b.bit, 0)
+        }
       })
 
       for (const permission of permissions) {
@@ -125,7 +128,9 @@ function getWrapper({
   canShare = false,
   incomingParentShare = null
 } = {}) {
-  const store = createStore(defaultStoreMockOptions)
+  const storeOptions = defaultStoreMockOptions
+  storeOptions.getters.user.mockReturnValue({ id: 'name' })
+  const store = createStore(storeOptions)
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
