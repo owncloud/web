@@ -61,7 +61,7 @@
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :is-path-displayed="arePathsDisplayed"
-          :parent-folder-name-default="getParentFolderName(item)"
+          :parent-folder-name="getParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
