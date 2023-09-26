@@ -37,9 +37,11 @@ export class PasswordPolicyService {
 
   private useDefaultRules(): boolean {
     return (
-      Object.keys(this.capability).length === 0 ||
-      (Object.keys(this.capability).length === 1 &&
-        Object.keys(this.capability)[0] === 'max_characters')
+      !this.capability.min_characters &&
+      !this.capability.min_lowercase_characters &&
+      !this.capability.min_uppercase_characters &&
+      !this.capability.min_digits &&
+      !this.capability.min_special_characters
     )
   }
 
