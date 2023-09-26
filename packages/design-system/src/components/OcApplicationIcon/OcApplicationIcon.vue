@@ -39,7 +39,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const updateComputed = ref(false)
     const iconColor = computed(() => {
       return 'rgba(255,255,255,0.7)'
     })
@@ -47,11 +46,9 @@ export default defineComponent({
       return `linear-gradient(90deg, ${primary} 0%, ${secondary} 100%)`
     }
     const primaryColor = computed(() => {
-      unref(updateComputed)
       return getHexFromCssVar(props.colorPrimary)
     })
     const secondaryColor = computed(() => {
-      unref(updateComputed)
       return getHexFromCssVar(props.colorSecondary)
     })
     const hasPrimaryColor = computed(() => {
@@ -80,14 +77,9 @@ export default defineComponent({
       }
     })
 
-    const update = () => {
-      updateComputed.value = !unref(updateComputed)
-    }
-
     return {
       iconColor,
-      iconStyle,
-      update
+      iconStyle
     }
   }
 })

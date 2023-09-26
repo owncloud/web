@@ -37,7 +37,12 @@
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
             >
-              <oc-application-icon ref="appIcons" :icon="n.icon" :color-primary="n.color" />
+              <oc-application-icon
+                ref="appIcons"
+                :key="appIconKey"
+                :icon="n.icon"
+                :color-primary="n.color"
+              />
               <span v-text="$gettext(n.title)" />
             </oc-button>
           </li>
@@ -67,17 +72,20 @@ export default defineComponent({
   setup() {
     const appIcons = ref([])
     const { $gettext } = useGettext()
+    const appIconKey = ref(false)
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
     })
     const updateAppIcons = () => {
+      appIconKey.value = !appIconKey.value
       unref(appIcons).forEach((appIcon) => {
         unref(appIcon).update()
       })
     }
     return {
       appIcons,
+      appIconKey,
       updateAppIcons,
       applicationSwitcherLabel
     }
