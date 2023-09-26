@@ -205,7 +205,7 @@ export default defineComponent({
 
       if (
         this.incomingParentShare &&
-        this.incomingParentShare.fileOwner.name !== this.user.id &&
+        this.incomingParentShare?.fileOwner?.name !== this.user.id &&
         this.resourceIsSharable
       ) {
         return PeopleShareRoles.filterByBitmask(
