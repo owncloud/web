@@ -8,7 +8,7 @@ import {
   setDesiredContrastRatio,
   cssRgbToHex,
   getHexFromCssVar
-} from './colors' // Import the actual path to your utility functions
+} from './colors'
 
 describe('hexToRgb', () => {
   it('converts hex to rgb', () => {
