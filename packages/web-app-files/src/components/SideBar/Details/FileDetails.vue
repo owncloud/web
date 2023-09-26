@@ -300,6 +300,7 @@ export default defineComponent({
     })
     const loadPreviewTask = useTask(function* (signal, resource) {
       if (unref(isFolder)) {
+        preview.value = undefined
         return
       }
       preview.value = yield previewService.loadPreview({
