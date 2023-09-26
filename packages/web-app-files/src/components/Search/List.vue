@@ -363,7 +363,7 @@ export default defineComponent({
             : []
         })
         await nextTick()
-        this.scrollToResourceFromRoute(this.paginatedResources)
+        this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
       }
     }
   },

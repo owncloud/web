@@ -155,7 +155,7 @@ export default defineComponent({
 
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.paginatedResources)
+    this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
   },
 
   methods: {

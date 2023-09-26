@@ -459,10 +459,10 @@ export default defineComponent({
         options
       )
 
-      resourcesViewDefaults.scrollToResourceFromRoute([
-        store.getters['Files/currentFolder'],
-        ...unref(resourcesViewDefaults.paginatedResources)
-      ])
+      resourcesViewDefaults.scrollToResourceFromRoute(
+        [store.getters['Files/currentFolder'], ...unref(resourcesViewDefaults.paginatedResources)],
+        'files-app-bar'
+      )
       resourcesViewDefaults.refreshFileListHeaderPosition()
       focusAndAnnounceBreadcrumb(sameRoute)
 

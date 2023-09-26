@@ -135,7 +135,8 @@ export default defineComponent({
       await resourcesViewDefaults.loadResourcesTask.perform(props.space)
       resourcesViewDefaults.refreshFileListHeaderPosition()
       resourcesViewDefaults.scrollToResourceFromRoute(
-        unref(resourcesViewDefaults.paginatedResources)
+        unref(resourcesViewDefaults.paginatedResources),
+        'files-app-bar'
       )
     }
 

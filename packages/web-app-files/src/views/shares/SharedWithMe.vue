@@ -223,11 +223,10 @@ export default defineComponent({
 
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute([
-      ...this.acceptedItems,
-      ...this.pendingItems,
-      ...this.declinedItems
-    ])
+    this.scrollToResourceFromRoute(
+      [...this.acceptedItems, ...this.pendingItems, ...this.declinedItems],
+      'files-app-bar'
+    )
   }
 })
 </script>
