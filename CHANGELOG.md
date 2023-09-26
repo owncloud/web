@@ -34,6 +34,7 @@ Summary
 * Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
 * Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
+* Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 
 Details
 -------
@@ -284,6 +285,14 @@ Details
 
    https://github.com/owncloud/web/issues/9705
    https://github.com/owncloud/web/pull/9706
+
+* Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
+
+   We now show a meaningful error if the user tries to set a public link password, that's on a server
+   side banned password list.
+
+   https://github.com/owncloud/web/issues/9726
+   https://github.com/owncloud/web/pull/9727
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
