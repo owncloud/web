@@ -1,5 +1,4 @@
-import { useEventListener } from '@vueuse/core'
-import { Ref, ref, unref } from 'vue'
+import { onBeforeUnmount, onMounted, Ref, ref } from 'vue'
 import * as uuid from 'uuid'
 
 interface KeyboardActionsOptions {
@@ -74,10 +73,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
   const selectionCursor = ref(0)
 
   const listener = (event: KeyboardEvent): void => {
-    if (!options?.skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled()) {
-      return
-    }
-
+    event.preventDefault()
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
     if (metaKey || ctrlKey) {
@@ -85,15 +81,12 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
     }
-
-    unref(actions)
-      .filter((action) => {
-        return action.primary === key && action.modifier === modifier
-      })
-      .forEach((action) => {
-        event.preventDefault()
-        action.callback(event)
-      })
+    const action = actions.value.find((action) => {
+      return action.primary === key && action.modifier === modifier
+    })
+    if (action) {
+      action.callback(event)
+    }
   }
   const bindKeyAction = (
     keys: { primary: Key; modifier?: ModifierKey },

@@ -1,0 +1,37 @@
+{
+  "ar": {},
+  "bg": {
+    "Loading DICOM document": "Зареждане на DICOM документ",
+    "DICOM Viewer": "Преглед на DICOM"
+  },
+  "cs": { "Loading DICOM document": "Načítání DICOM dokumentu", "DICOM Viewer": "DICOM prohlížeč" },
+  "de": {
+    "Loading DICOM document": "Das DICOM-Dokument wird geladen",
+    "DICOM Viewer": "DICOM-Vorschau"
+  },
+  "es": { "Loading DICOM document": "Cargando documento DICOM", "DICOM Viewer": "Visor DICOM" },
+  "fr": {
+    "Loading DICOM document": "Chargement du document DICOM",
+    "DICOM Viewer": "Visionneuse DICOM"
+  },
+  "gl": {},
+  "he": { "Loading DICOM document": "מסמך DICOM נטען", "DICOM Viewer": "מציג DICOM" },
+  "it": {
+    "Loading DICOM document": "Caricamento documento DICOM",
+    "DICOM Viewer": "Visualizzatore DICOM"
+  },
+  "pl": { "Loading DICOM document": "Ładowanie dokumentu DICOM", "DICOM Viewer": "Podgląd DICOM" },
+  "ru": {
+    "Loading DICOM document": "Загрузка DICOM документа",
+    "DICOM Viewer": "DICOM Просмотрщик"
+  },
+  "sk": {},
+  "sq": {
+    "Loading DICOM document": "Po ngarkohet dokument DICOM",
+    "DICOM Viewer": "Parës DICOM-sh"
+  },
+  "tr": {
+    "Loading DICOM document": "DICOM dokümanı yükleniyor",
+    "DICOM Viewer": "DICOM Görüntüleyici"
+  }
+}

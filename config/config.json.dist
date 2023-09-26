@@ -10,6 +10,7 @@
     "draw-io",
     "files",
     "pdf-viewer",
+    "dicom-viewer",
     "preview",
     "search",
     "text-editor"

@@ -149,7 +149,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      window.removeEventListener('message', handleMessage)
+      window.addEventListener('message', handleMessage)
     })
 
     return {

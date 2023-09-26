@@ -32,6 +32,7 @@
     "files",
     "text-editor",
     "pdf-viewer",
+    "dicom-viewer",
     "search",
     "external",
     "admin-settings",
