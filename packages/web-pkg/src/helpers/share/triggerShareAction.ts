@@ -1,5 +1,4 @@
-import { aggregateResourceShares } from 'web-pkg/src/helpers/resources'
-import { ShareStatus } from 'web-client/src/helpers/share/status'
+import { aggregateResourceShares, ShareStatus } from 'web-client/src/helpers/share'
 import { HttpError } from 'web-pkg/src/errors'
 
 export async function triggerShareAction(resource, status, hasReSharing, hasShareJail, $client) {

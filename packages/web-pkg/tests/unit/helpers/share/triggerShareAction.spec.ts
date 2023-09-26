@@ -7,7 +7,7 @@ import { mockDeep } from 'jest-mock-extended'
 jest.unmock('axios')
 const $client = mockDeep<OwnCloudSdk>()
 
-jest.mock('../../../../src/helpers/resources', () => ({
+jest.mock('web-client/src/helpers/share', () => ({
   aggregateResourceShares: ([shares]) => [shares]
 }))
 

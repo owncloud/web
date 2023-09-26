@@ -10,7 +10,7 @@ import {
   extractNameWithoutExtension
 } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { renameResource as _renameResource } from '../../../helpers/resources'
+import { renameResource as _renameResource } from 'web-client/src/helpers'
 import { computed, unref } from 'vue'
 import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'

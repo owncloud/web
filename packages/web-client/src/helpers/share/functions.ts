@@ -1,45 +1,21 @@
-import orderBy from 'lodash-es/orderBy'
-import path, { basename, join } from 'path'
+import { orderBy } from 'lodash-es'
 import { DateTime } from 'luxon'
-import { DavProperty } from 'web-client/src/webdav/constants'
 import {
-  LinkShareRoles,
-  PeopleShareRoles,
-  SharePermissions,
-  Share,
-  ShareStatus,
-  ShareTypes,
-  buildSpaceShare
-} from 'web-client/src/helpers/share'
-import {
+  Resource,
+  buildWebDavFilesPath,
   buildWebDavSpacesPath,
   extractDomSelector,
   extractExtensionFromFile,
   extractStorageId
-} from 'web-client/src/helpers/resource'
-import { Resource, SpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
-import { urlJoin } from 'web-client/src/utils'
-
-export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
-  resource.name = basename(newPath)
-  resource.path = newPath
-  resource.webDavPath = join(space.webDavPath, newPath)
-  resource.extension = extractExtensionFromFile(resource)
-  return resource
-}
-
-export function buildWebDavFilesPath(userId, path) {
-  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function buildWebDavFilesTrashPath(userId, path = '') {
-  return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function isResourceTxtFileAlmostEmpty(resource: Resource): boolean {
-  const mimeType = resource.mimeType || ''
-  return mimeType.startsWith('text/') && (resource.size as number) < 30
-}
+} from '../resource'
+import { ShareTypes } from './type'
+import path from 'path'
+import { SHARE_JAIL_ID } from '../space'
+import { ShareStatus } from './status'
+import { SharePermissions } from './permission'
+import { Share } from './share'
+import { buildSpaceShare } from './space'
+import { LinkShareRoles, PeopleShareRoles } from './role'
 
 /**
  * Transforms given shares into a resource format and returns only their unique occurences
@@ -352,47 +328,4 @@ export function buildCollaboratorShare(s, file, allowSharePermission): Share {
   share.path = s.path
 
   return share
-}
-
-export function buildDeletedResource(resource): Resource {
-  const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
-  const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
-  const id = path.basename(resource.name)
-  return {
-    type: isFolder ? 'folder' : resource.type,
-    isFolder,
-    ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
-    name: path.basename(fullName),
-    extension,
-    path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
-    id,
-    parentFolderId: resource.fileInfo[DavProperty.FileParent],
-    indicators: [],
-    webDavPath: '',
-    canUpload: () => false,
-    canDownload: () => false,
-    canBeDeleted: () => {
-      /** FIXME: once https://github.com/owncloud/ocis/issues/3339 gets implemented,
-       * we want to add a check if the permission is set.
-       * We might to be careful and do an early return true if DavProperty.Permissions is not set
-       * as oc10 does not support it.
-       **/
-      return true
-    },
-    canBeRestored: function () {
-      /** FIXME: once https://github.com/owncloud/ocis/issues/3339 gets implemented,
-       * we want to add a check if the permission is set.
-       * We might to be careful and do an early return true if DavProperty.Permissions is not set
-       * as oc10 does not support it.
-       **/
-      return true
-    },
-    canRename: () => false,
-    canShare: () => false,
-    canCreate: () => false,
-    isMounted: () => false,
-    isReceivedShare: () => false,
-    getDomSelector: () => extractDomSelector(id)
-  }
 }

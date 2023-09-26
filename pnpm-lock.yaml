@@ -910,6 +910,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      luxon:
+        specifier: ^3.0.1
+        version: 3.1.1
 
   packages/web-pkg:
     dependencies:
@@ -14729,7 +14732,6 @@ packages:
   /luxon@3.1.1:
     resolution: {integrity: sha512-Ah6DloGmvseB/pX1cAmjbFvyU/pKuwQMQqz7d0yvuDlVYLTs2WeDHQMpC8tGjm1da+BriHROW/OEIT/KfYg6xw==}
     engines: {node: '>=12'}
-    dev: true
 
   /magic-string@0.25.7:
     resolution: {integrity: sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==}

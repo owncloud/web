@@ -3,7 +3,7 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from 'web-pkg/src/router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { aggregateResourceShares } from 'web-pkg/src/helpers/resources'
+import { aggregateResourceShares } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import {
   useCapabilityFilesSharingResharing,

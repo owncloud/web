@@ -220,7 +220,8 @@ import {
   isProjectSpaceResource,
   isShareRoot,
   isShareSpaceResource,
-  SpaceResource
+  SpaceResource,
+  isResourceTxtFileAlmostEmpty
 } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
@@ -246,7 +247,6 @@ import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/Contex
 
 import { useResourceRouteResolver } from 'web-pkg/src/composables/filesList/useResourceRouteResolver'
 import { ClipboardActions } from 'web-pkg/src/helpers/clipboardActions'
-import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resources'
 import { determineSortFields } from 'web-pkg/src/helpers/ui/resourceTable'
 import { useFileActionsRename } from 'web-pkg/src/composables/actions/files/useFileActionsRename'
 import {

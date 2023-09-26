@@ -1,11 +1,10 @@
 import PQueue from 'p-queue'
 
 import { getParentPaths } from 'web-pkg/src/helpers/path'
-import { buildShare, buildCollaboratorShare } from 'web-pkg/src/helpers/resources'
+import { buildShare, buildCollaboratorShare, ShareTypes } from 'web-client/src/helpers/share'
 import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
-import { ShareTypes } from 'web-client/src/helpers/share'
 import get from 'lodash-es/get'
 import { ClipboardActions } from 'web-pkg/src/helpers/clipboardActions'
 import {

@@ -1,7 +1,8 @@
-import { basename, dirname } from 'path'
+import path, { basename, dirname, join } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource } from './types'
+import { SpaceResource } from '../space'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', '.tar.xz']
@@ -17,6 +18,27 @@ export function buildWebDavSpacesTrashPath(storageId, path = '') {
   return urlJoin('spaces', 'trash-bin', storageId, path, {
     leadingSlash: true
   })
+}
+
+export function buildWebDavFilesPath(userId, path) {
+  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
+}
+
+export function buildWebDavFilesTrashPath(userId, path = '') {
+  return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
+}
+
+export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
+  resource.name = basename(newPath)
+  resource.path = newPath
+  resource.webDavPath = join(space.webDavPath, newPath)
+  resource.extension = extractExtensionFromFile(resource)
+  return resource
+}
+
+export function isResourceTxtFileAlmostEmpty(resource: Resource): boolean {
+  const mimeType = resource.mimeType || ''
+  return mimeType.startsWith('text/') && (resource.size as number) < 30
 }
 
 export const extractDomSelector = (str: string): string => {
@@ -187,4 +209,47 @@ export function buildResource(resource): Resource {
     }
   })
   return r
+}
+
+export function buildDeletedResource(resource): Resource {
+  const isFolder = resource.type === 'dir' || resource.type === 'folder'
+  const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
+  const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
+  const id = path.basename(resource.name)
+  return {
+    type: isFolder ? 'folder' : resource.type,
+    isFolder,
+    ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
+    name: path.basename(fullName),
+    extension,
+    path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
+    id,
+    parentFolderId: resource.fileInfo[DavProperty.FileParent],
+    indicators: [],
+    webDavPath: '',
+    canUpload: () => false,
+    canDownload: () => false,
+    canBeDeleted: () => {
+      /** FIXME: once https://github.com/owncloud/ocis/issues/3339 gets implemented,
+       * we want to add a check if the permission is set.
+       * We might to be careful and do an early return true if DavProperty.Permissions is not set
+       * as oc10 does not support it.
+       **/
+      return true
+    },
+    canBeRestored: function () {
+      /** FIXME: once https://github.com/owncloud/ocis/issues/3339 gets implemented,
+       * we want to add a check if the permission is set.
+       * We might to be careful and do an early return true if DavProperty.Permissions is not set
+       * as oc10 does not support it.
+       **/
+      return true
+    },
+    canRename: () => false,
+    canShare: () => false,
+    canCreate: () => false,
+    isMounted: () => false,
+    isReceivedShare: () => false,
+    getDomSelector: () => extractDomSelector(id)
+  }
 }

@@ -8,7 +8,7 @@ import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from 'web-pkg/src/composables/router/useFileRouteReplace'
-import { aggregateResourceShares } from 'web-pkg/src/helpers/resources'
+import { aggregateResourceShares } from 'web-client/src/helpers/share'
 import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
 
 export class FolderLoaderSpace implements FolderLoader {

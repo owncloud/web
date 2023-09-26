@@ -1,8 +1,12 @@
 import { Store } from 'vuex'
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
-import { buildWebDavFilesTrashPath } from '../../../helpers/resources'
-import { buildWebDavSpacesTrashPath, Resource, SpaceResource } from 'web-client/src/helpers'
+import {
+  buildWebDavFilesTrashPath,
+  buildWebDavSpacesTrashPath,
+  Resource,
+  SpaceResource
+} from 'web-client/src/helpers'
 import PQueue from 'p-queue'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
