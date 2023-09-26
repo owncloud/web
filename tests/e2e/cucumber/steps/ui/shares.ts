@@ -161,6 +161,15 @@ When(
 )
 
 When(
+  '{string} accepts all pending shares using the batch actions',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    await shareObject.acceptAll()
+  }
+)
+
+When(
   '{string} declines the following share from the context menu',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
