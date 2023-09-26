@@ -72,6 +72,7 @@ export default {
     const language = useGettext()
     const router = useRouter()
 
+    const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
       return unref(isUserContext) && unref(notificationsSupport).includes('list')
     })
@@ -165,7 +166,8 @@ export default {
       updateLeftPortal,
       isNotificationBellEnabled,
       userMenuItems,
-      appMenuItems
+      appMenuItems,
+      logoWidth
     }
   },
   computed: {
@@ -199,6 +201,21 @@ export default {
         ...(feedback.description && { description: feedback.description })
       }
     }
+  },
+  async created() {
+    const image = new Image()
+    const imageDimensions = (await new Promise((resolve) => {
+      image.onload = () => {
+        resolve({
+          height: image.height,
+          width: image.width
+        })
+      }
+      image.src = this.configuration.currentTheme.logo.topbar
+    })) as { height: number; width: number }
+    // max-height of logo is 38px, so we calculate the width based on the ratio of the image
+    // and add 70px to account for the width of the left side of the topbar
+    this.logoWidth = `${imageDimensions.width / (imageDimensions.height / 38) + 70}px`
   }
 }
 </script>
@@ -216,7 +233,7 @@ export default {
 
   @media (min-width: $oc-breakpoint-small-default) {
     column-gap: 10px;
-    grid-template-columns: 150px 9fr 1fr;
+    grid-template-columns: v-bind(logoWidth) 9fr 1fr;
     grid-template-rows: 1;
     height: 52px;
     justify-content: center;
@@ -227,7 +244,7 @@ export default {
     grid-template-columns: 30% 30% 40%;
 
     @media (min-width: $oc-breakpoint-small-default) {
-      grid-template-columns: 150px 1fr 1fr;
+      grid-template-columns: v-bind(logoWidth) 1fr 1fr;
     }
   }
 

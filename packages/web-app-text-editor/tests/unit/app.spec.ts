@@ -1,34 +1,19 @@
 import { mock } from 'jest-mock-extended'
-import { ref } from 'vue'
-import { Resource } from 'web-client'
-import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  defaultStubs
-} from 'web-test-helpers'
-import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
+import { Resource } from 'web-client/src'
+import { AppConfigObject } from 'web-pkg/src/apps'
+import { mount } from 'web-test-helpers'
 import App from '../../src/App.vue'
 
 jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('Text editor app', () => {
-  describe('different view states', () => {
-    it('shows the loading spinner during loading', () => {
-      const { wrapper } = getWrapper()
-      expect(wrapper.find('oc-spinner-stub').exists()).toBeTruthy()
+  it('shows the editor', async () => {
+    const { wrapper } = getWrapper({
+      applicationConfig: {}
     })
-    it('shows the editor and appTopBar after loading', async () => {
-      const { wrapper } = getWrapper()
-      await wrapper.vm.loadFileTask.last
-      expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
-      expect(wrapper.find('app-top-bar-stub').exists()).toBeTruthy()
-      expect(wrapper.find('oc-textarea-stub').exists()).toBeTruthy()
-    })
+    expect(wrapper.html()).toMatchSnapshot()
   })
+
   describe('preview', () => {
     it.each([
       { fileExtension: 'txt', showPreview: false },
@@ -37,33 +22,22 @@ describe('Text editor app', () => {
       { fileExtension: 'json', showPreview: false },
       { fileExtension: 'xml', showPreview: false },
       { fileExtension: 'md', showPreview: true }
-    ])('shows only for supported file types', async (data) => {
-      const { wrapper } = getWrapper({ fileName: `file.${data.fileExtension}` })
-      await wrapper.vm.loadFileTask.last
+    ])('shows only for supported file types: %s', async (data) => {
+      const { wrapper } = getWrapper({
+        applicationConfig: {},
+        resource: mock<Resource>({
+          extension: data.fileExtension
+        })
+      })
       expect(wrapper.find('#text-editor-preview').exists()).toBe(data.showPreview)
     })
   })
 })
 
-function getWrapper({ fileName = 'someFile.txt' }: { fileName?: string } = {}) {
-  jest.mocked(useAppDefaults).mockImplementation(() =>
-    useAppDefaultsMock({
-      currentFileContext: ref(mock<FileContext>({ path: fileName })),
-      getFileInfo: jest.fn().mockImplementation(() => mock<Resource>({ permissions: '' }))
-    })
-  )
-  const defaultMocks = { ...defaultComponentMocks() }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+function getWrapper(props: { applicationConfig: AppConfigObject; resource?: Resource }) {
   return {
-    mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(App, {
-      global: {
-        plugins: [...defaultPlugins(), store],
-        mocks: defaultMocks,
-        stubs: defaultStubs
-      }
+      props
     })
   }
 }

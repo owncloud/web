@@ -56,5 +56,3 @@ Feature: Locks
     Then file "lorem.txt" should not be listed on the webUI
     Examples:
       | lockscope |
-      | exclusive |
-      | shared    |

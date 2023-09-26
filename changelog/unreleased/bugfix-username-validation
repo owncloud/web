@@ -1,0 +1,7 @@
+Bugfix: Special characters in username
+
+Preventing special characters except for . and _ in the username.
+Matching server validation for username
+
+https://github.com/owncloud/web/issues/9694
+https://github.com/owncloud/web/pull/9703

@@ -3,7 +3,7 @@ import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource } from 'web-client'
 import { Language } from 'vue3-gettext'
-import { ClientService } from 'web-pkg'
+import { ClientService, PasswordPolicyService } from 'web-pkg'
 import { Ability } from 'web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
 
@@ -18,7 +18,7 @@ export function canShare(item, store) {
   return item.canShare()
 }
 
-export function showQuickLinkPasswordModal({ $gettext, store }, onConfirm) {
+export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyService }, onConfirm) {
   const modal = {
     variation: 'passive',
     title: $gettext('Set password'),
@@ -26,6 +26,8 @@ export function showQuickLinkPasswordModal({ $gettext, store }, onConfirm) {
     confirmText: $gettext('Set'),
     hasInput: true,
     inputDescription: $gettext('Passwords for links are required.'),
+    inputPasswordPolicy: passwordPolicyService.getPolicy(),
+    inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
     inputLabel: $gettext('Password'),
     inputType: 'password',
     onCancel: () => store.dispatch('hideModal'),
@@ -56,6 +58,7 @@ interface QuickLinkContext {
   item: Resource
   language: Language
   store: Store<any>
+  passwordPolicyService: PasswordPolicyService
 }
 
 export default {
@@ -72,14 +75,21 @@ export default {
     label: ($gettext) => $gettext('Copy link'),
     icon: 'link',
     iconFillType: undefined,
-    handler: async ({ ability, clientService, item, language, store }: QuickLinkContext) => {
+    handler: async ({
+      ability,
+      clientService,
+      item,
+      language,
+      store,
+      passwordPolicyService
+    }: QuickLinkContext) => {
       const passwordEnforced =
         store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
         true
 
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(
-          { store, $gettext: language.$gettext },
+          { store, $gettext: language.$gettext, passwordPolicyService },
           async (password) => {
             await createQuicklink({
               ability,

@@ -119,7 +119,8 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicAlias,
-  useAbility
+  useAbility,
+  usePasswordPolicyService
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -156,6 +157,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { can } = useAbility()
+    const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
 
     const space = inject<Ref<SpaceResource>>('space')
@@ -224,6 +226,7 @@ export default defineComponent({
       indirectLinks,
       canCreatePublicLinks,
       configurationManager,
+      passwordPolicyService,
       canCreateLinks,
       canEditLink
     }
@@ -310,8 +313,9 @@ export default defineComponent({
     },
 
     indirectLinksHeading() {
-      const translated = this.$gettext('Indirect links (%{ count })')
-      return this.$gettextInterpolate(translated, { count: this.indirectLinks.length })
+      return this.$gettext('Indirect links (%{ count })', {
+        count: this.indirectLinks.length.toString()
+      })
     },
 
     displayLinks() {
@@ -394,9 +398,16 @@ export default defineComponent({
       const paramsToCreate = this.getParamsForLink(link)
 
       if (this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ ...this.$language, store: this.$store }, (newPassword) => {
-          this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
-        })
+        showQuickLinkPasswordModal(
+          {
+            ...this.$language,
+            store: this.$store,
+            passwordPolicyService: this.passwordPolicyService
+          },
+          (newPassword) => {
+            this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
+          }
+        )
       } else {
         this.createLink({ params: paramsToCreate, onError })
       }
@@ -406,9 +417,16 @@ export default defineComponent({
       const params = this.getParamsForLink(link)
 
       if (!link.password && this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ ...this.$language, store: this.$store }, (newPassword) => {
-          this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
-        })
+        showQuickLinkPasswordModal(
+          {
+            ...this.$language,
+            store: this.$store,
+            passwordPolicyService: this.passwordPolicyService
+          },
+          (newPassword) => {
+            this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
+          }
+        )
       } else {
         this.updatePublicLink({ params, onSuccess })
       }

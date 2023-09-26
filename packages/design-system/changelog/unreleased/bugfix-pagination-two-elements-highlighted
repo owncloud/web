@@ -1,0 +1,6 @@
+Bugfix: OcPagination two items highlighted
+
+We've fixed a bug that caused two pagination items to be highlighted.
+
+https://github.com/owncloud/web/issues/9665
+https://github.com/owncloud/web/pull/9684

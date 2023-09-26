@@ -3,6 +3,7 @@ import {
   ClientService,
   LoadingService,
   LoadingTaskCallbackArguments,
+  PasswordPolicyService,
   PreviewService
 } from 'web-pkg/src/services'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
@@ -33,6 +34,7 @@ export const defaultComponentMocks = ({ currentRoute = undefined }: ComponentMoc
       addTask: (callback) => {
         return callback(mock<LoadingTaskCallbackArguments>())
       }
-    })
+    }),
+    $passwordPolicyService: mockDeep<PasswordPolicyService>()
   }
 }

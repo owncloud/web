@@ -90,6 +90,7 @@ export class ConfigurationManager {
       get(options, 'contextHelpersReadMore', true)
     )
     set(this.optionsConfiguration, 'contextHelpers', get(options, 'contextHelpers', true))
+    set(this.optionsConfiguration, 'openAppsInTab', get(options, 'openAppsInTab', false))
     set(
       this.optionsConfiguration,
       'openLinksWithDefaultApp',

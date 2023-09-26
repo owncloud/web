@@ -584,8 +584,7 @@ export default defineComponent({
       return [...prefix, item[field.name]].join('-')
     },
     getSortLabel(name) {
-      const label = this.$gettext('Sort by %{ name }')
-      return this.$gettextInterpolate(label, { name })
+      return this.$gettext('Sort by %{ name }', { name })
     },
     handleTrClick(field) {
       if (this.isSortable) {

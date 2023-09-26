@@ -12,7 +12,7 @@
     :loading="loading"
     :is-header-compact="!!loadedResource"
     v-bind="$attrs"
-    data-custom-key-bindings="true"
+    data-custom-key-bindings-disabled="true"
     @before-unmount="destroySideBar"
     @mounted="focusSideBar"
     @file-changed="focusSideBar"

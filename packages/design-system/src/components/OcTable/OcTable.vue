@@ -1,5 +1,5 @@
 <template>
-  <table v-bind="extractTableProps()">
+  <table v-bind="extractTableProps()" class="has-item-context-menu">
     <oc-thead v-if="hasHeader">
       <oc-tr class="oc-table-header-row">
         <oc-th
@@ -220,11 +220,11 @@ export default defineComponent({
       default: null
     },
     /**
-     * The ids of disabled data items. Null or an empty string/array for no disabled items.
+     * The ids of disabled data items. Empty array for no disabled items.
      */
     disabled: {
-      type: [String, Array],
-      default: null
+      type: Array as PropType<Array<string | number>>,
+      default: () => []
     },
     /**
      * Top position of header used when the header is sticky in pixels
@@ -482,15 +482,11 @@ export default defineComponent({
       return this.highlighted === item[this.idKey]
     },
     isDisabled(item) {
-      if (!this.disabled) {
+      if (!this.disabled.length) {
         return false
       }
 
-      if (Array.isArray(this.disabled)) {
-        return this.disabled.indexOf(item[this.idKey]) > -1
-      }
-
-      return this.disabled === item[this.idKey]
+      return this.disabled.indexOf(item[this.idKey]) > -1
     },
 
     cellKey(field, index, item) {
@@ -508,9 +504,7 @@ export default defineComponent({
     },
 
     getSortLabel(name) {
-      const label = this.$gettext('Sort by %{ name }')
-
-      return this.$gettextInterpolate(label, { name })
+      return this.$gettext('Sort by %{ name }', { name })
     },
 
     handleTrClick(field) {
@@ -596,7 +590,8 @@ export default defineComponent({
 
   &-disabled {
     background-color: var(--oc-color-background-muted);
-    opacity: 0.8;
+    opacity: 0.7;
+    filter: grayscale(0.6);
     pointer-events: none;
   }
 
@@ -654,7 +649,7 @@ export default defineComponent({
       A simple table with plain field types
     </h3>
     <oc-table :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
+      :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
       <template #footer>
         3 resources
       </template>
@@ -701,7 +696,7 @@ export default defineComponent({
       A sortable table with plain field types
     </h3>
     <oc-table @sort="handleSort" :sort-by="sortBy" :sort-dir="sortDir" :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      disabled="8468c9f0-5057-11eb-924b-934c6fd827a2" :sticky="true">
+      :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
       <template #footer>
         3 resources
       </template>

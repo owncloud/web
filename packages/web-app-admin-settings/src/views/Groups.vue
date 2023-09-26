@@ -214,17 +214,21 @@ export default defineComponent({
     ...mapActions(['showMessage', 'showErrorMessage']),
 
     selectGroups(groups) {
-      this.selectedGroups = [...groups]
+      this.selectedGroups.splice(0, this.selectedGroups.length, ...groups)
     },
-    toggleSelectGroup(toggledGroup) {
+    toggleSelectGroup(toggledGroup, deselect = false) {
+      if (deselect) {
+        this.selectedGroups.splice(0, this.selectedGroups.length)
+      }
       const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)
       if (!isGroupSelected) {
         return this.selectedGroups.push(toggledGroup)
       }
-      this.selectedGroups = this.selectedGroups.filter((group) => group.id !== toggledGroup.id)
+      const index = this.selectedGroups.findIndex((group) => group.id === toggledGroup.id)
+      this.selectedGroups.splice(index, 1)
     },
     unselectAllGroups() {
-      this.selectedGroups = []
+      this.selectedGroups.splice(0, this.selectedGroups.length)
     },
     toggleCreateGroupModal() {
       this.createGroupModalOpen = !this.createGroupModalOpen

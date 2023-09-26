@@ -49,21 +49,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
     {
       name: 'delete',
       icon: 'delete-bin-5',
-      label: ({ resources }) => {
-        const deleteLabel = $gettext('Delete')
-
-        if (isLocationCommonActive(router, 'files-common-search') && resources.length > 1) {
-          const deletableResourcesCount = resources.filter(
-            (r) =>
-              r.canBeDeleted() &&
-              (!unref(hasSpaces) || !r.isShareRoot()) &&
-              !isProjectSpaceResource(r)
-          ).length
-          return `${deleteLabel} (${deletableResourcesCount.toString()})`
-        }
-
-        return deleteLabel
-      },
+      label: () => $gettext('Delete'),
       handler: ({ space, resources }) => handler({ space, resources, deletePermanent: false }),
       isEnabled: ({ space, resources }) => {
         if (
@@ -83,6 +69,10 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
           space?.driveType === 'share' &&
           resources[0].path === '/'
         ) {
+          return false
+        }
+
+        if (resources.length === 1 && resources[0].locked) {
           return false
         }
 

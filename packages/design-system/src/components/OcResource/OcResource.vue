@@ -5,17 +5,32 @@
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
+      class="oc-resource-link"
       @click="emitClick"
     >
       <oc-img
         v-if="hasThumbnail"
         :key="thumbnail"
+        v-oc-tooltip="tooltipLabelIcon"
         :src="thumbnail"
         class="oc-resource-thumbnail"
         width="40"
         height="40"
+        :aria-label="tooltipLabelIcon"
       />
-      <oc-resource-icon v-else :resource="resource" />
+      <oc-resource-icon
+        v-else
+        v-oc-tooltip="tooltipLabelIcon"
+        :aria-label="tooltipLabelIcon"
+        :resource="resource"
+      >
+        <template v-if="showStatusIcon" #status>
+          <oc-icon v-bind="statusIconAttrs" size="xsmall" />
+        </template>
+      </oc-resource-icon>
+      <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
+        <oc-icon v-bind="statusIconAttrs" size="xsmall" />
+      </span>
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <oc-resource-link
@@ -52,7 +67,7 @@
           @click.stop="$emit('parentFolderClicked')"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
-          <span class="text" v-text="parentFolder" />
+          <span class="text" v-text="parentFolderName" />
         </component>
       </div>
     </div>
@@ -67,7 +82,6 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcResourceName from '../OcResourceName/OcResourceName.vue'
 import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
 import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
-import * as path from 'path'
 import { Resource } from 'web-client/src'
 
 /**
@@ -87,12 +101,35 @@ export default defineComponent({
   },
   props: {
     /**
+     * The resource to be displayed
+     */
+    resource: {
+      type: Object as PropType<Resource>,
+      required: true
+    },
+    /**
      * The resource folder link
      */
     folderLink: {
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * Asserts whether the resource path should be displayed
+     */
+    isPathDisplayed: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
+     * The resource parent folder name to be displayed
+     */
+    parentFolderName: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The resource parent folder link path
@@ -109,29 +146,6 @@ export default defineComponent({
       type: Object,
       required: false,
       default: () => {}
-    },
-    /**
-     * The resource to be displayed
-     */
-    resource: {
-      type: Object as PropType<Resource>,
-      required: true
-    },
-    /**
-     * The resource parent folder name to be displayed
-     */
-    parentFolderNameDefault: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Asserts whether the resource path should be displayed
-     */
-    isPathDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
     },
     /**
      * Asserts whether the resource extension should be displayed
@@ -172,11 +186,6 @@ export default defineComponent({
       return this.parentFolderLink !== null ? 'router-link' : 'span'
     },
 
-    parentFolder() {
-      const folder = path.basename(path.dirname(this.resource.path)).replace('.', '')
-      return folder !== '' ? folder : this.parentFolderNameDefault
-    },
-
     parentFolderStyle() {
       const hasLinkTarget = this.parentFolderLink !== null
       return {
@@ -202,6 +211,34 @@ export default defineComponent({
 
     thumbnail() {
       return this.resource.thumbnail
+    },
+
+    showStatusIcon() {
+      return this.resource.locked || this.resource.processing
+    },
+
+    tooltipLabelIcon() {
+      if (this.resource.locked) {
+        return this.$gettext('This item is locked')
+      }
+      return null
+    },
+
+    statusIconAttrs() {
+      if (this.resource.locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill'
+        }
+      }
+      if (this.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
+
+      return {}
     }
   },
 
@@ -221,6 +258,11 @@ export default defineComponent({
   align-items: center;
   display: inline-flex;
   justify-content: flex-start;
+  overflow: visible !important;
+
+  &-link {
+    position: relative;
+  }
 
   &-thumbnail {
     border-radius: 2px;
@@ -229,6 +271,19 @@ export default defineComponent({
     max-height: $oc-size-icon-default * 1.5;
     width: $oc-size-icon-default * 1.5;
     max-width: $oc-size-icon-default * 1.5;
+
+    &-status-badge {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: var(--oc-space-small);
+      height: var(--oc-space-small);
+      padding: var(--oc-space-xsmall);
+      line-height: var(--oc-space-small);
+      border-radius: 30px;
+      background: rgba(155, 155, 155, 0.8);
+      color: white;
+    }
   }
 
   &-details {
@@ -284,7 +339,7 @@ export default defineComponent({
         <oc-resource :resource="notes" is-resource-clickable="false" class="oc-mb" />
         <oc-resource :resource="notes" :is-extension-displayed="false" class="oc-mb" />
         <oc-resource :resource="forest" is-path-displayed="true" />
-        <oc-resource :resource="something" is-path-displayed="true" parent-folder-name-default="Example parent folder"  />
+        <oc-resource :resource="something" is-path-displayed="true" parent-folder-name="Example parent folder"  />
       </div>
     </template>
     <script>

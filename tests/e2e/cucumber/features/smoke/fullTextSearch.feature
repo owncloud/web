@@ -51,7 +51,7 @@ Feature: Search
       | fileWithTag.txt | tag 1 |
       | withTag.txt     | tag 1 |
 
-    When "Brian" searches "" using the global search and the "all files" filter and presses enter
+    When "Brian" searches "" using the global search and the "everywhere" filter and presses enter
     Then "Brian" should see the message "Search for files" on the webUI
 
     When "Brian" selects tag "alice tag" from the search result filter chip
@@ -66,7 +66,7 @@ Feature: Search
       | fileWithTag.txt |
       | withTag.txt     |
 
-    When "Brian" searches "file" using the global search and the "all files" filter and presses enter
+    When "Brian" searches "file" using the global search and the "everywhere" filter and presses enter
     Then following resources should be displayed in the files list for user "Brian"
       | resource        |
       | fileWithTag.txt |
@@ -81,7 +81,7 @@ Feature: Search
       | spaceFolder/spaceTextfile.txt |
 
     When "Brian" enables the option to search in file content
-    And "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
+    And "Brian" searches "Cheers" using the global search and the "everywhere" filter and presses enter
     Then following resources should be displayed in the files list for user "Brian"
       | resource                      |
       | textfile.txt                  |
@@ -94,14 +94,12 @@ Feature: Search
       | resource     |
       | textfile.txt |
     And "Brian" closes the file viewer
-    # TODO: uncomment the following step after the bug is fixed
-    # issue: https://github.com/owncloud/web/issues/9428
-    # Then following resources should be displayed in the files list for user "Brian"
-    #   | resource                      |
-    #   | textfile.txt                  |
-    #   | testFolder/innerTextfile.txt  |
-    #   | fileToShare.txt               |
-    #   | fileWithTag.txt               |
-    #   | withTag.txt                   |
-    #   | spaceFolder/spaceTextfile.txt |
+    Then following resources should be displayed in the files list for user "Brian"
+      | resource                      |
+      | textfile.txt                  |
+      | testFolder/innerTextfile.txt  |
+      | fileToShare.txt               |
+      | fileWithTag.txt               |
+      | withTag.txt                   |
+      | spaceFolder/spaceTextfile.txt |
     And "Brian" logs out

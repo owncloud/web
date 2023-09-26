@@ -1,0 +1,22 @@
+Enhancement: Keyword Query Language (KQL) search syntax
+
+We've introduced [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference) as our default query language.
+Previously we used our own simple language for queries which is now replaced by kql.
+
+`sample.tx* Tags:important Tags:report Content:annual*`
+
+becomes
+
+`name:"sample.tx*" AND tag:important AND tag:report AND content:"annual*"`
+
+by default KQL uses `AND` as property restriction and the query described above can also be formulated as follows
+
+`name:"sample.tx*" tag:important tag:report content:"annual*"`
+
+More advanced syntax like grouping combined with boolean property restriction is supported too
+
+`(name:"sample*" name:"*txt") tag:important OR tag:report content:"annual*"`
+
+https://github.com/owncloud/web/pull/9653
+https://github.com/owncloud/web/issues/9636
+https://github.com/owncloud/web/issues/9646
