@@ -4,8 +4,7 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
-  RouteLocation
+  defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 
@@ -13,7 +12,7 @@ const selectors = {
   logInAgainButton: '#exitAnchor'
 }
 
-import { ConfigurationManager, useConfigurationManager, useRequest } from 'web-pkg/src'
+import { ConfigurationManager, useConfigurationManager } from 'web-pkg/src'
 
 jest.mock('web-pkg/src/composables/configuration/useConfigurationManager')
 
