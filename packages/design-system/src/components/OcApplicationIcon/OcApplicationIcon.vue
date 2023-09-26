@@ -17,8 +17,8 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
 export default defineComponent({
-  components: { OcIcon },
   name: 'OcApplicationIcon',
+  components: { OcIcon },
   status: 'ready',
   release: '15.0.0',
   props: {

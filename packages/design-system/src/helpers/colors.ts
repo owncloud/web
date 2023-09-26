@@ -5,7 +5,7 @@
  **/
 export function hexToRgb(hex: string): Array<number> | null {
   hex = hex.startsWith('#') ? hex : `#${hex}`
-  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
   return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null
 }
 
@@ -35,9 +35,9 @@ function shadeValue(value: number, percent: number): string {
  * @return {string} The brightened or dimmed hex color
  **/
 export function shadeColor(rgb: Array<number>, percent: number): string {
-  let r = rgb[0]
-  let g = rgb[1]
-  let b = rgb[2]
+  const r = rgb[0]
+  const g = rgb[1]
+  const b = rgb[2]
 
   return `#${shadeValue(r, percent)}${shadeValue(g, percent)}${shadeValue(b, percent)}`
 }

@@ -21,8 +21,8 @@
       toggle="#_appSwitcherButton"
       mode="click"
       padding-size="small"
-      @show-drop="updateAppIcons"
       close-on-click
+      @show-drop="updateAppIcons"
     >
       <div class="oc-display-block oc-position-relative">
         <oc-list class="applications-list">
@@ -37,7 +37,7 @@
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
             >
-              <oc-application-icon :icon="n.icon" :color-primary="n.color" ref="appIcons" />
+              <oc-application-icon ref="appIcons" :icon="n.icon" :color-primary="n.color" />
               <span v-text="$gettext(n.title)" />
             </oc-button>
           </li>
@@ -49,11 +49,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ComponentPublicInstance, ref, unref, computed } from 'vue'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { urlJoin } from 'web-client/src/utils'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
-import { useClientService } from 'web-pkg/src'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
