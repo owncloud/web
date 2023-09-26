@@ -21,10 +21,10 @@
       toggle="#_appSwitcherButton"
       mode="click"
       padding-size="small"
-      v-on:show-drop="updateAppIcons"
+      @show-drop="updateAppIcons"
       close-on-click
     >
-      <div style="display: block; position: relative">
+      <div class="oc-display-block oc-position-relative">
         <oc-list class="applications-list">
           <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
             <oc-button
