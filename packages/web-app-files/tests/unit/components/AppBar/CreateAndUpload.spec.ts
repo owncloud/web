@@ -3,7 +3,8 @@ import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Drive } from 'web-client/src/generated'
-import { eventBus, useRequest } from 'web-pkg'
+import { useRequest } from 'web-pkg/src/composables'
+import { eventBus } from 'web-pkg/src'
 import {
   createStore,
   defaultPlugins,

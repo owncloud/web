@@ -1,5 +1,6 @@
 import { onBeforeUnmount, onMounted, unref, computed, Ref, watchEffect } from 'vue'
-import { eventBus, QueryValue, useStore, ViewModeConstants } from 'web-pkg'
+import { QueryValue, useStore, ViewModeConstants } from 'web-pkg/src/composables'
+import { eventBus } from 'web-pkg/src/services'
 import { KeyboardActions } from 'web-pkg/src/composables/keyboardActions'
 import { Resource } from 'web-client'
 import { findIndex } from 'lodash-es'

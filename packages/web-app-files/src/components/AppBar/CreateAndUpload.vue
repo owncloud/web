@@ -161,7 +161,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { isLocationPublicActive, isLocationSpacesActive } from 'web-pkg/src/router'
-import { useActiveLocation } from 'web-pkg/src/composables'
+import { useActiveLocation } from 'web-pkg/src/composables/router'
 import {
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,

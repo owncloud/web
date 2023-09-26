@@ -13,8 +13,8 @@ import {
 } from 'web-test-helpers'
 
 jest.mock('web-pkg/src/observer')
-jest.mock('web-app-files/src/helpers/resources', () => {
-  const original = jest.requireActual('web-app-files/src/helpers/resources')
+jest.mock('web-client/src/helpers/resource', () => {
+  const original = jest.requireActual('web-client/src/helpers/resource')
   return {
     ...original,
     buildResource: jest.fn()

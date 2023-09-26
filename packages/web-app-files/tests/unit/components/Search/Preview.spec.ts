@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
 import { SpaceResource } from 'web-client/src'
-import { useGetMatchingSpace } from 'web-pkg/src'
+import { useGetMatchingSpace } from 'web-pkg/src/composables'
 import { useGetMatchingSpaceMock } from 'web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 import {
   createStore,

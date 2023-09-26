@@ -25,7 +25,7 @@ import {
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { LoadingTaskCallbackArguments } from 'web-pkg'
+import { LoadingTaskCallbackArguments } from 'web-pkg/src/services'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

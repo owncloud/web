@@ -132,6 +132,7 @@ import {
   useClientService,
   useFileListHeaderPosition,
   useGetMatchingSpace,
+  useCapabilityFilesFullTextSearch,
   useRoute,
   useRouteQuery,
   useRouter,
@@ -139,7 +140,7 @@ import {
 } from 'web-pkg/src/composables'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { eventBus, useCapabilityFilesFullTextSearch } from 'web-pkg'
+import { eventBus } from 'web-pkg'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
 import { isLocationCommonActive } from 'web-pkg/src/router'
 import ItemFilterToggle from 'web-pkg/src/components/ItemFilterToggle.vue'

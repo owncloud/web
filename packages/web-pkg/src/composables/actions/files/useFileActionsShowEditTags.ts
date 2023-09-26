@@ -1,8 +1,12 @@
 import { Store } from 'vuex'
 import { eventBus } from 'web-pkg'
-import { useCapabilityFilesTags, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useCapabilityFilesTags,
+  useRouter,
+  useStore,
+  useIsFilesAppActive
+} from 'web-pkg/src/composables'
 import { isLocationTrashActive, isLocationPublicActive } from '../../../router'
-import { useIsFilesAppActive } from 'web-pkg'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { computed, unref } from 'vue'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'

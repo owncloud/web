@@ -988,10 +988,6 @@ importers:
       web-pkg:
         specifier: workspace:@ownclouders/web-pkg@*
         version: 'link:'
-    devDependencies:
-      '@jest/globals':
-        specifier: 29.3.1
-        version: 29.3.1
 
   packages/web-runtime:
     dependencies:
@@ -5623,6 +5619,16 @@ packages:
     dependencies:
       jest-get-type: 29.4.3
 
+  /@jest/expect@29.3.1:
+    resolution: {integrity: sha512-QivM7GlSHSsIAWzgfyP8dgeExPRZ9BIe2LsdPyEhCGkZkoyA+kGsoIzbKAfZCvvRzfZioKwPtCZIt5SaoxYCvg==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      expect: 29.5.0
+      jest-snapshot: 29.5.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@jest/expect@29.5.0:
     resolution: {integrity: sha512-PueDR2HGihN3ciUNGr4uelropW7rqUfTiOn+8u0leg/42UhblPxHkfoh0Ruu3I9Y1962P3u2DY4+h7GVTSVU6g==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5659,10 +5665,10 @@ packages:
     resolution: {integrity: sha512-cTicd134vOcwO59OPaB6AmdHQMCtWOe+/DitpTZVxWgMJ+YvXL1HNAmPyiGbSHmF/mXVBkvlm8YYtQhyHPnV6Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/environment': 29.5.0
-      '@jest/expect': 29.5.0
-      '@jest/types': 29.5.0
-      jest-mock: 29.5.0
+      '@jest/environment': 29.3.1
+      '@jest/expect': 29.3.1
+      '@jest/types': 29.3.1
+      jest-mock: 29.3.1
     transitivePeerDependencies:
       - supports-color
     dev: true

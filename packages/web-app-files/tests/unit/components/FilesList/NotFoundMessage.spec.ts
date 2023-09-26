@@ -1,5 +1,5 @@
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
-import { createLocationPublic, createLocationSpaces } from '../../../../src/router'
+import { createLocationPublic, createLocationSpaces } from 'web-pkg/src/router'
 import { PublicSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
 import { MockProxy, mock } from 'jest-mock-extended'
 import { join } from 'path'

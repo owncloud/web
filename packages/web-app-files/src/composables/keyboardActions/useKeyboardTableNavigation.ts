@@ -1,4 +1,4 @@
-import { QueryValue, useStore, ViewModeConstants } from 'web-pkg'
+import { QueryValue, useStore, ViewModeConstants } from 'web-pkg/src/composables'
 import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 import { computed, Ref, ref, unref, nextTick, watchEffect } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'

@@ -1,11 +1,15 @@
 import actions from '../../../src/store/actions'
-import { spaceRoleManager, ShareTypes, Share } from 'web-client/src/helpers/share'
+import {
+  spaceRoleManager,
+  ShareTypes,
+  Share,
+  SpaceResource,
+  Resource
+} from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from 'web-client/src/types'
-import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
 
-jest.mock('../../../src/helpers/resources', () => {
+jest.mock('web-client/src/helpers/share/functions', () => {
   return {
     buildShare: (share) => share,
     buildCollaboratorShare: (share) => share

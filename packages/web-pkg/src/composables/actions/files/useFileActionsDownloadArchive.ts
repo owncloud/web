@@ -4,7 +4,7 @@ import {
   isLocationSharesActive,
   isLocationSpacesActive
 } from '../../../router'
-import { useIsFilesAppActive } from 'web-pkg'
+import { useIsFilesAppActive } from 'web-pkg/src/composables'
 import path from 'path'
 import first from 'lodash-es/first'
 import { isProjectSpaceResource, isPublicSpaceResource, Resource } from 'web-client/src/helpers'

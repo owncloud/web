@@ -8,9 +8,8 @@ import {
 } from 'web-pkg/src/composables'
 
 import { isLocationCommonActive, isLocationSpacesActive } from '../../../router'
-import { useIsFilesAppActive } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions, useIsFilesAppActive } from 'web-pkg/src/composables/actions'
 
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
