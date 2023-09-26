@@ -69,6 +69,7 @@ const state = {
     contextHelpersReadMore: true,
     openLinksWithDefaultApp: true,
     tokenStorageLocal: true,
+    loginUrl: '',
     privacyUrl: '',
     imprintUrl: '',
     accessDeniedHelpUrl: ''

@@ -47,13 +47,13 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const logoImg = computed(() => {
-      return store.getters.configuration.currentTheme.logo.login
+      return store.getters.configuration?.currentTheme?.logo?.login
     })
 
     const accessDeniedHelpUrl = computed(() => {
       return (
-        store.getters.configuration.commonTheme.accessDeniedHelpUrl ||
-        store.getters.configuration.options.accessDeniedHelpUrl
+        store.getters.configuration?.commonTheme?.accessDeniedHelpUrl ||
+        store.getters.configuration?.options?.accessDeniedHelpUrl
       )
     })
     const cardTitle = computed(() => {
@@ -65,14 +65,13 @@ export default defineComponent({
       )
     })
     const footerSlogan = computed(() => {
-      return store.getters.configuration.currentTheme.general.slogan
+      return store.getters.configuration?.currentTheme?.general?.slogan
     })
     const navigateToLoginText = computed(() => {
       return $gettext('Log in again')
     })
     const logoutButtonsAttrs = computed(() => {
       const redirectUrl = queryItemAsString(unref(redirectUrlQuery))
-
       if (configurationManager.options.loginUrl) {
         const configLoginURL = new URL(encodeURI(configurationManager.options.loginUrl))
         if (redirectUrl) {
@@ -83,7 +82,6 @@ export default defineComponent({
           href: configLoginURL.toString()
         }
       }
-
       return {
         name: 'login',
         type: 'router-link',
