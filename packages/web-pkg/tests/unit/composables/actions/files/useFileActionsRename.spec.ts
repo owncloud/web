@@ -9,6 +9,18 @@ import {
 } from 'web-test-helpers'
 import { useStore } from 'web-pkg/src/composables'
 import { nextTick, unref } from 'vue'
+import { ConfigurationManager } from 'web-pkg/src'
+
+jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+  useConfigurationManager: () =>
+    mockDeep<ConfigurationManager>({
+      options: {
+        routing: {
+          fullShareOwnerPaths: false
+        }
+      }
+    })
+}))
 
 const currentFolder = {
   id: 1,

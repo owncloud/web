@@ -56,13 +56,13 @@ export class FolderLoaderSpace implements FolderLoader {
         if (path === '/') {
           if (space.driveType === 'share') {
             const parentShare = yield client.shares.getShare(space.shareId)
-            const aggregatedShares = aggregateResourceShares(
-              [parentShare.shareInfo],
-              true,
-              unref(hasResharing),
-              true,
-              store.getters['runtime/spaces/spaces']
-            )
+            const aggregatedShares = aggregateResourceShares({
+              shares: [parentShare.shareInfo],
+              spaces: store.getters['runtime/spaces/spaces'],
+              allowSharePermission: unref(hasResharing),
+              hasShareJail: true,
+              incomingShares: true
+            })
             currentFolder = aggregatedShares[0]
           } else if (!['personal', 'public'].includes(space.driveType)) {
             // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.

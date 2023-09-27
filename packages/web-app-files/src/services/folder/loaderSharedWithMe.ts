@@ -46,13 +46,13 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       resources = resources.map((r) => r.shareInfo)
 
       if (resources.length) {
-        resources = aggregateResourceShares(
-          resources,
-          true,
-          unref(hasResharing),
-          unref(hasShareJail),
-          store.getters['runtime/spaces/spaces']
-        ).map((resource) => {
+        resources = aggregateResourceShares({
+          shares: resources,
+          spaces: store.getters['runtime/spaces/spaces'],
+          incomingShares: true,
+          allowSharePermission: unref(hasResharing),
+          hasShareJail: unref(hasShareJail)
+        }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {
             resource.storageId = store.getters.user.id

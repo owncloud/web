@@ -10,7 +10,7 @@ import {
 } from '../resource'
 import { ShareTypes } from './type'
 import path from 'path'
-import { SHARE_JAIL_ID } from '../space'
+import { SHARE_JAIL_ID, SpaceResource } from '../space'
 import { ShareStatus } from './status'
 import { SharePermissions } from './permission'
 import { Share } from './share'
@@ -19,19 +19,22 @@ import { LinkShareRoles, PeopleShareRoles } from './role'
 
 /**
  * Transforms given shares into a resource format and returns only their unique occurences
- * @param {Array} shares Shares to be transformed into unique resources
- * @param {Boolean} incomingShares Asserts whether the shares are incoming
- * @param {Boolean} allowSharePermission Asserts whether the reshare permission is available
- * @param {Boolean} hasShareJail Asserts whether the share jail is available backend side
- * @param {Array} spaces A list of spaces the current user has access to
  */
-export function aggregateResourceShares(
+export function aggregateResourceShares({
   shares,
+  spaces,
+  allowSharePermission = true,
+  hasShareJail = true,
   incomingShares = false,
-  allowSharePermission,
-  hasShareJail,
-  spaces = []
-): Resource[] {
+  fullShareOwnerPaths = false
+}: {
+  shares: Share[]
+  spaces: SpaceResource[]
+  allowSharePermission?: boolean
+  hasShareJail?: boolean
+  incomingShares?: boolean
+  fullShareOwnerPaths?: boolean
+}): Resource[] {
   shares.sort((a, b) => a.path.localeCompare(b.path))
   if (spaces.length) {
     shares = addMatchingSpaceToShares(shares, spaces)
@@ -46,6 +49,15 @@ export function aggregateResourceShares(
         hasShareJail
       )
       resource.shareId = share.id
+
+      if (fullShareOwnerPaths) {
+        resource.path = spaces.find(
+          (space) =>
+            space.driveType === 'mountpoint' &&
+            space.id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}`
+        )?.root.remoteItem.path
+        resource.shareRoot = resource.path
+      }
       return resource
     })
   }

@@ -8,9 +8,9 @@
   >
     <input
       v-bind="$attrs"
+      ref="passwordInput"
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
-      ref="passwordInput"
       @input="onPasswordEntered"
     />
     <oc-button

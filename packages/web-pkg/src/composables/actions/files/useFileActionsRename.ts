@@ -12,7 +12,13 @@ import {
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { renameResource as _renameResource } from 'web-client/src/helpers'
 import { computed, unref } from 'vue'
-import { useClientService, useLoadingService, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useClientService,
+  useConfigurationManager,
+  useLoadingService,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
 import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capability'
@@ -24,6 +30,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const canRename = useCapabilityFilesSharingCanRename()
+  const configurationManager = useConfigurationManager()
 
   const checkNewName = (resource, newName, parentResources = undefined) => {
     const newPath =
@@ -235,7 +242,9 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
 
         // FIXME: Remove this check as soon as renaming shares works as expected
         // see https://github.com/owncloud/ocis/issues/4866
-        const rootShareIncluded = resources.some((r) => r.shareId && r.path === '/')
+        const rootShareIncluded = configurationManager.options.routing.fullShareOwnerPaths
+          ? resources.some((r) => r.shareRoot && r.path)
+          : resources.some((r) => r.shareId && r.path === '/')
         if (rootShareIncluded) {
           return false
         }
