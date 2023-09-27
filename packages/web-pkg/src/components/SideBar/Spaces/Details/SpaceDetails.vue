@@ -43,7 +43,9 @@
         <span class="oc-text-small" v-text="$gettext('Show')" />
       </oc-button>
     </div>
-    <table class="details-table" :aria-label="detailsTableLabel">
+    <table class="details-table oc-width-1-1" :aria-label="detailsTableLabel">
+      <col class="oc-width-1-3" />
+      <col class="oc-width-2-3" />
       <tr>
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last activity')" />
         <td v-text="lastModifiedDate" />
@@ -64,11 +66,27 @@
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
+      <tr v-if="showSpaceId">
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Copy Space ID')" />
+        <td class="oc-flex oc-flex-middle">
+          <div class="oc-text-truncate" v-text="resource.id" />
+          <oc-button
+            v-oc-tooltip="$gettext('Copy Space ID')"
+            class="oc-ml-s"
+            appearance="raw"
+            size="small"
+            :aria-label="$gettext('Copy Space ID to clipboard')"
+            @click="copySpaceIdToClipboard"
+          >
+            <oc-icon :name="copySpaceIdIcon" />
+          </oc-button>
+        </td>
+      </tr>
     </table>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, inject, ref, computed } from 'vue'
+import { defineComponent, inject, ref, computed, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import { buildResource, buildWebDavSpacesPath, SpaceResource } from 'web-client/src/helpers'
@@ -89,6 +107,11 @@ export default defineComponent({
       required: false,
       default: true
     },
+    showSpaceId: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     showShareIndicators: {
       type: Boolean,
       required: false,
@@ -100,6 +123,8 @@ export default defineComponent({
     const previewService = usePreviewService()
     const resource = inject<SpaceResource>('resource')
     const spaceImage = ref('')
+    const copySpaceIdIconInitial = 'file-copy'
+    const copySpaceIdIcon = ref(copySpaceIdIconInitial)
 
     const loadImageTask = useTask(function* (signal, ref) {
       if (!ref.resource?.spaceImageData || !props.showSpaceImage) {
@@ -132,7 +157,20 @@ export default defineComponent({
       return store.getters['Files/outgoingLinks'].length
     })
 
-    return { loadImageTask, spaceImage, resource, linkShareCount }
+    const copySpaceIdToClipboard = () => {
+      navigator.clipboard.writeText(unref(resource).id.toString())
+      copySpaceIdIcon.value = 'check'
+      setTimeout(() => (copySpaceIdIcon.value = copySpaceIdIconInitial), 500)
+    }
+
+    return {
+      loadImageTask,
+      spaceImage,
+      resource,
+      linkShareCount,
+      copySpaceIdIcon,
+      copySpaceIdToClipboard
+    }
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaceMembers']),
@@ -251,6 +289,7 @@ export default defineComponent({
 
 .details-table {
   text-align: left;
+  table-layout: fixed;
 
   tr {
     height: 1.5rem;

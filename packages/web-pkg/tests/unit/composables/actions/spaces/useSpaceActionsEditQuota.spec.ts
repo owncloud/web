@@ -23,7 +23,8 @@ describe('editQuota', () => {
         quota: {},
         root: {
           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         canEditSpaceQuota: true,
@@ -38,7 +39,8 @@ describe('editQuota', () => {
         quota: {},
         root: {
           permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
-        }
+        },
+        driveType: 'project'
       }
       const { wrapper } = getWrapper({
         canEditSpaceQuota: false,

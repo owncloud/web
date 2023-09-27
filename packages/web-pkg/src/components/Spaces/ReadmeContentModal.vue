@@ -14,7 +14,6 @@
           id="description-input-area"
           v-model="readmeContent"
           class="oc-width-1-1 oc-height-1-1 oc-input oc-text-input"
-          rows="30"
         ></textarea>
       </template>
     </oc-modal>
@@ -44,7 +43,7 @@ export default defineComponent({
   },
   computed: {
     modalTitle() {
-      return this.$gettextInterpolate(this.$gettext('Edit description for space %{name}'), {
+      return this.$gettext('Edit description for space %{name}', {
         name: this.space.name
       })
     }
@@ -86,3 +85,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+#description-input-area {
+  height: 40vh;
+}
+</style>

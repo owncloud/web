@@ -33,7 +33,7 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      store.commit('Files/SET_ANCESTOR_META_DATA', {})
+      store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
 
       const shareTypes = ShareTypes.authenticated
         .filter(

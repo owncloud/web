@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import _defineConfig from './vite.config'
+import _defineConfig, { historyModePlugins } from './vite.config'
 
 /**
  * NOTE: This is a special config file for CERN. It overwrites some of the code paths to implement custom logic
@@ -23,22 +23,7 @@ export default defineConfig(async (args) => {
   config.resolve.alias['web-runtime/src/composables/tokenInfo'] =
     'web-pkg/src/cern/composables/useLoadTokenInfo'
 
-  config.plugins.push({
-    name: 'base-href',
-    transformIndexHtml: {
-      transform() {
-        return [
-          {
-            injectTo: 'head-prepend',
-            tag: 'base',
-            attrs: {
-              href: '/'
-            }
-          }
-        ]
-      }
-    }
-  })
+  config.plugins.push(historyModePlugins()[0])
 
   return config
 })

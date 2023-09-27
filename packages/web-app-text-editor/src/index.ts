@@ -1,5 +1,5 @@
 import translations from '../l10n/translations.json'
-import TextEditor from './TextEditor.vue'
+import TextEditor from './App.vue'
 import { AppWrapperRoute } from 'web-pkg/src/components/AppTemplates/AppWrapperRoute'
 
 // just a dummy function to trick gettext tools

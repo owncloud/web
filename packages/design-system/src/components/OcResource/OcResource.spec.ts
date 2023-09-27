@@ -119,7 +119,7 @@ describe('OcResource', () => {
       props: {
         resource: fileResourceWithoutParentFoldername,
         isPathDisplayed: true,
-        parentFolderNameDefault: 'Example parent folder name'
+        parentFolderName: 'Example parent folder name'
       },
       global: {
         stubs
@@ -134,7 +134,7 @@ describe('OcResource', () => {
       props: {
         resource: fileResourceWithoutParentFoldername,
         isIconDisplayed: false,
-        parentFolderNameDefault: 'Example parent folder name'
+        parentFolderName: 'Example parent folder name'
       },
       global: {
         stubs

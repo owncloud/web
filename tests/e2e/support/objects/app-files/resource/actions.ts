@@ -3,10 +3,9 @@ import { expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
-import { sidebar, editor } from '../utils'
+import { editor, sidebar } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
-import { config } from '../../../../config'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -31,7 +30,8 @@ const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
-const saveTextFileInEditorButton = '#text-editor-controls-save'
+const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
+const saveTextFileInEditorButton = '#app-save-action:visible'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
@@ -57,8 +57,8 @@ const globalSearchInput = '.oc-search-input'
 const globalSearchBarFilter = '.oc-search-bar-filter'
 const globalSearchDirFilterDropdown =
   '//div[@id="files-global-search"]//button[contains(@id, "oc-filter")]'
-const globalSearchBarFilterAllFiles = '//*[@data-test-id="all-files"]'
-const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="current-folder"]'
+const globalSearchBarFilterAllFiles = '//*[@data-test-id="everywhere"]'
+const globalSearchBarFilterCurrentFolder = '//*[@data-test-id="in-here"]'
 const searchList =
   '//div[@id="files-global-search-options"]//li[contains(@class,"preview")]//span[@class="oc-resource-name"]'
 const globalSearchOptions = '#files-global-search-options'
@@ -68,6 +68,7 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"preview-player")]//img'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
+const externalEditorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
@@ -92,6 +93,15 @@ const pauseResumeUploadButton = '#pause-upload-info-btn'
 const cancelUploadButton = '#cancel-upload-info-btn'
 const uploadPauseTooltip = '//div[text()="Pause upload"]'
 const uploadResumeTooltip = '//div[text()="Resume upload"]'
+const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar .savemodified'
+const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
+const onlyOfficeSaveButtonSelector = '#asc-gen578'
+const collaboraDocTextAreaSelector = '#clipboard-area'
+const onlyofficeDocTextAreaSelector = '#area_id'
+const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
+const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
+const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
+const collaboraCanvasEditorSelector = '.leaflet-layer'
 
 export const clickResource = async ({
   page,
@@ -118,7 +128,7 @@ export const clickResource = async ({
 export interface createResourceArgs {
   page: Page
   name: string
-  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile'
+  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile' | 'OpenDocument' | 'Microsoft Word'
   content?: string
 }
 
@@ -239,7 +249,116 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
       await page.goto(page.url())
       break
     }
+    case 'OpenDocument': {
+      // By Default when OpenDocument is created, it is opened with collabora if both app-provider services are running together
+      await createDocumentFile(args, 'Collabora')
+      break
+    }
+    case 'Microsoft Word': {
+      // By Default when Microsoft Word document is created, it is opened with OnlyOffice if both app-provider services are running together
+      await createDocumentFile(args, 'OnlyOffice')
+      break
+    }
   }
+}
+
+const createDocumentFile = async (
+  args: createResourceArgs,
+  editorToOpen: string
+): Promise<void> => {
+  const { page, name, type, content } = args
+  // for creating office suites documents we need the external app provider services to be ready
+  // though the service is ready it takes some time for the list of office suites documents to be visible in the dropdown in the webUI
+  // which requires a retry to check if the service is ready and the office suites documents is visible in the dropdown
+  const isAppProviderServiceReadyInWebUI = await isAppProviderServiceForOfficeSuitesReadyInWebUI(
+    page,
+    type
+  )
+  if (isAppProviderServiceReadyInWebUI === false) {
+    throw new Error(
+      `The document of type ${type} did not appear in the webUI for ${editorToOpen}. Possible reason could be the app provider service for ${editorToOpen} was not ready yet.`
+    )
+  }
+  await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
+  await page.locator(resourceNameInput).fill(name)
+  await Promise.all([
+    page.waitForLoadState(),
+    page.waitForURL('**/external/personal/**'),
+    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
+  const editorMainFrame = await page.frameLocator(externalEditorIframe)
+  switch (editorToOpen) {
+    case 'Collabora':
+      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
+      await page.keyboard.press('Escape')
+      await editorMainFrame.locator(collaboraDocTextAreaSelector).type(content)
+      const saveModified = await editorMainFrame.locator(collaboraEditorSaveSelector)
+      await expect(saveModified).toBeVisible()
+      await editorMainFrame.locator('#Save').click()
+      await expect(saveModified).not.toBeVisible()
+      break
+    case 'OnlyOffice':
+      const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerIframe.locator(onlyofficeDocTextAreaSelector).type(content)
+      const saveButtonDisabledLocator = innerIframe.locator(onlyOfficeSaveButtonSelector)
+      await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
+      break
+    default:
+      throw new Error(
+        "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
+      )
+  }
+}
+
+export const openAndGetContentOfDocument = async ({
+  page,
+  editorToOpen
+}: {
+  page: Page
+  editorToOpen: string
+}): Promise<string> => {
+  await page.waitForLoadState()
+  await page.waitForURL('**/external/public/**')
+  const editorMainFrame = await page.frameLocator(externalEditorIframe)
+  switch (editorToOpen) {
+    case 'Collabora':
+      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
+      await page.keyboard.press('Escape')
+      await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
+      break
+    case 'OnlyOffice':
+      const innerFrame = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
+      await innerFrame.locator(onlyOfficeCanvasCursorSelector).waitFor()
+      break
+    default:
+      throw new Error(
+        "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
+      )
+  }
+  // copying and getting the value with keyboard requires some
+  await page.keyboard.press('Control+A', { delay: 200 })
+  await page.keyboard.press('Control+C', { delay: 200 })
+  return await page.evaluate(() => navigator.clipboard.readText())
+}
+
+const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page, type) => {
+  let retry = 1
+  let isCreateNewOfficeDocumentFileButtonVisible
+  while (retry <= 5) {
+    isCreateNewOfficeDocumentFileButtonVisible = await page
+      .locator(util.format(createNewOfficeDocumentFileBUtton, type))
+      .isVisible()
+    if (isCreateNewOfficeDocumentFileButtonVisible === true) {
+      break
+    }
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    await page.reload()
+    await page.locator(addNewResourceButton).click()
+    retry++
+  }
+  return isCreateNewOfficeDocumentFileButtonVisible
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
@@ -732,18 +851,20 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         throw new Error('Single resource or objects cannot be deleted with batch action')
       }
 
-      await page.locator(deleteButtonBatchAction).click()
-      await page.waitForResponse((resp) => {
-        if (resp.status() === 204 && resp.request().method() === 'DELETE') {
-          deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
-        }
-        // waiting for GET response after all the resource are deleted with batch action
-        return (
-          resp.url().includes(config.ocis ? 'graph/v1.0/drives' : 'ocs/v1.php/cloud/users') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'GET'
-        )
-      })
+      await Promise.all([
+        page.waitForResponse((resp) => {
+          if (resp.status() === 204 && resp.request().method() === 'DELETE') {
+            deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
+          }
+          // waiting for GET response after all the resource are deleted with batch action
+          return (
+            resp.url().includes('graph/v1.0/drives') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
+          )
+        }),
+        page.locator(deleteButtonBatchAction).click()
+      ])
       // assertion that the resources actually got deleted
       expect(deletetedResources.length).toBe(resourcesWithInfo.length)
       for (const resource of resourcesWithInfo) {
@@ -949,7 +1070,7 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
 
   return true
 }
-export type searchFilter = 'all files' | 'current folder'
+export type searchFilter = 'everywhere' | 'in here'
 
 export interface searchResourceGlobalSearchArgs {
   keyword: string
@@ -971,7 +1092,7 @@ export const searchResourceGlobalSearch = async (
     await page.locator(globalSearchDirFilterDropdown).click()
     await page
       .locator(
-        filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+        filter === 'everywhere' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
       )
       .click()
   }

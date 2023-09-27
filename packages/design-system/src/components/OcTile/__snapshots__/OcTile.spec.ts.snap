@@ -13,7 +13,7 @@ exports[`OcTile component renders default space correctly 1`] = `
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-        <oc-resource-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldernamedefault="" resource="[object Object]"></oc-resource-stub>
+        <oc-resource-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldername="" resource="[object Object]"></oc-resource-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
         <!-- Slot for individual actions -->
@@ -40,7 +40,7 @@ exports[`OcTile component renders disabled space correctly 1`] = `
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-        <oc-resource-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldernamedefault="" resource="[object Object]"></oc-resource-stub>
+        <oc-resource-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldername="" resource="[object Object]"></oc-resource-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
         <!-- Slot for individual actions -->

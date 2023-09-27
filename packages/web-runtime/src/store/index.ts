@@ -1,3 +1,4 @@
+import ancestorMetaData from './ancestorMetaData'
 import app from './app'
 import apps from './apps'
 import auth from './auth'
@@ -12,6 +13,7 @@ const strict = process.env.NODE_ENV === 'development'
 const runtime = {
   namespaced: true,
   modules: {
+    ancestorMetaData,
     auth,
     spaces
   }

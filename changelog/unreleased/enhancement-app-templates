@@ -1,6 +1,11 @@
-Enhancement: Custom app templates
+Enhancement: Application unification
 
-The existing apps have been refactored and their common functionality has been extracted into a viewer and an editor app template, which can be easily reused to create custom apps.
+The existing apps have been refactored and their common functionality has been extracted.
+This enables developers to more easily create custom apps, and brings unified behavior like auto-saving, shortcut handling and success/error messages across all file viewer/editor apps.
 
 https://github.com/owncloud/web/issues/9302
 https://github.com/owncloud/web/issues/9303
+https://github.com/owncloud/web/issues/9617
+https://github.com/owncloud/web/issues/9695
+https://github.com/owncloud/web/pull/9485
+https://github.com/owncloud/web/pull/9699

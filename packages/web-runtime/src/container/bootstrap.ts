@@ -11,7 +11,12 @@ import { getBackendVersion, getWebVersion } from './versions'
 import { useLocalStorage } from 'web-pkg/src/composables'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
-import { ClientService, LoadingService, PreviewService } from 'web-pkg/src/services'
+import {
+  ClientService,
+  LoadingService,
+  PasswordPolicyService,
+  PreviewService
+} from 'web-pkg/src/services'
 import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
@@ -411,6 +416,22 @@ export const announceAuthService = ({
   authService.initialize(configurationManager, clientService, store, router, ability, language)
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)
+}
+
+/**
+ * @param vue
+ */
+export const announcePasswordPolicyService = ({
+  app,
+  store
+}: {
+  app: App
+  store: Store<any>
+}): void => {
+  const language = app.config.globalProperties.$language
+  const passwordPolicyService = new PasswordPolicyService({ store, language })
+  app.config.globalProperties.passwordPolicyService = passwordPolicyService
+  app.provide('$passwordPolicyService', passwordPolicyService)
 }
 
 /**

@@ -1,5 +1,7 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { mock } from 'jest-mock-extended'
+import { nextTick } from 'vue'
+import { queryItemAsString } from 'web-pkg'
 
 import {
   createStore,
@@ -10,6 +12,12 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+
+jest.mock('web-pkg/src/helpers', () => ({
+  ...jest.requireActual('web-pkg/src/helpers'),
+  displayPositionedDropdown: jest.fn()
+}))
+jest.mock('web-pkg/src/composables/appDefaults')
 
 const spacesResources = [
   {
@@ -64,6 +72,12 @@ describe('Projects view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
     })
+    it('shows only filtered spaces if filter applied', async () => {
+      const { wrapper } = getMountedWrapper({ spaces: spacesResources })
+      wrapper.vm.filterTerm = 'Some other space'
+      await nextTick()
+      expect(wrapper.vm.items).toEqual([spacesResources[1]])
+    })
   })
   it('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
@@ -75,6 +89,8 @@ describe('Projects view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })

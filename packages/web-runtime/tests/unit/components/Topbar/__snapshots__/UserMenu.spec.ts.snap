@@ -100,7 +100,7 @@ exports[`User Menu component when quota and no email is set renders a navigation
       </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
+        <div class="storage-wrapper-text oc-width-1-1">
           <p class="oc-my-rm">
             <span class="oc-display-block">Personal storage (30% used)</span>
             <span class="oc-text-small">300 B of 1 kB used</span>
@@ -144,7 +144,7 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
       </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
+        <div class="storage-wrapper-text oc-width-1-1">
           <p class="oc-my-rm">
             <span class="oc-display-block">Personal storage (81% used)</span>
             <span class="oc-text-small">810 B of 1 kB used</span>
@@ -188,7 +188,7 @@ exports[`User Menu component when quota is above 90% renders a danger quota prog
       </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
+        <div class="storage-wrapper-text oc-width-1-1">
           <p class="oc-my-rm">
             <span class="oc-display-block">Personal storage (91% used)</span>
             <span class="oc-text-small">910 B of 1 kB used</span>
@@ -232,7 +232,7 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
       </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
+        <div class="storage-wrapper-text oc-width-1-1">
           <p class="oc-my-rm">
             <span class="oc-display-block">Personal storage (30% used)</span>
             <span class="oc-text-small">300 B of 1 kB used</span>
@@ -276,7 +276,7 @@ exports[`User Menu component when quota is not defined renders no percentag of t
       </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
+        <div class="storage-wrapper-text oc-width-1-1">
           <p class="oc-my-rm">
             <span class="oc-display-block">Personal storage</span>
             <span class="oc-text-small">910 B used</span>
@@ -320,7 +320,7 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
       </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
-        <div class="storage-wrapper-text">
+        <div class="storage-wrapper-text oc-width-1-1">
           <p class="oc-my-rm">
             <span class="oc-display-block">Personal storage</span>
             <span class="oc-text-small">300 B used</span>

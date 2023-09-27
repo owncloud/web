@@ -12,7 +12,8 @@ import { mock } from 'jest-mock-extended'
 
 const spaceMock = {
   id: '1',
-  root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] }
+  root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
+  driveType: 'project'
 }
 
 describe('SpaceContextActions', () => {

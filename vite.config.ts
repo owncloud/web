@@ -6,6 +6,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
 import compression from 'rollup-plugin-gzip'
+import history from 'connect-history-api-fallback'
 
 import ejs from 'ejs'
 import { basename, join } from 'path'
@@ -91,6 +92,55 @@ const getConfigJson = async (url: string, config: UserConfig) => {
 
   return configJson
 }
+
+export const historyModePlugins = () =>
+  [
+    {
+      name: 'base-href',
+      transformIndexHtml: {
+        transform() {
+          return [
+            {
+              injectTo: 'head-prepend',
+              tag: 'base',
+              attrs: {
+                href: '/'
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      name: 'fallback-to-index-html',
+      configureServer(server: ViteDevServer) {
+        return () => {
+          const handler = history({
+            disableDotRule: true,
+            rewrites: [
+              {
+                from: /$/,
+                to({ parsedUrl, request }) {
+                  const root = projectRootDir
+                  const decodedPath = decodeURIComponent(parsedUrl.pathname)
+                  const rewritten = decodedPath + 'index.html'
+                  if (decodedPath !== '/' && existsSync(join(root, decodedPath))) {
+                    return decodedPath
+                  }
+                  if (existsSync(join(root, rewritten))) {
+                    return rewritten
+                  }
+                  return `/index.html`
+                }
+              }
+            ]
+          })
+
+          server.middlewares.use(handler)
+        }
+      }
+    }
+  ] as const
 
 export default defineConfig(async ({ mode, command }) => {
   const production = mode === 'production'
@@ -330,6 +380,7 @@ export default defineConfig(async ({ mode, command }) => {
             }
           }
         },
+        ...(command === 'serve' ? historyModePlugins() : []),
         compression(),
         process.env.REPORT !== 'true'
           ? null

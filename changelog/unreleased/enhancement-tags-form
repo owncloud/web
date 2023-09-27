@@ -3,8 +3,10 @@ Enhancement: Tags form improved
 We've improved the tags form in various ways, including visual appearance as well as usability. Auto save, remove tags on backspace, and contextual helper (and more, see issues)
 
 https://github.com/owncloud/web/pull/9525
+https://github.com/owncloud/web/pull/9563
 https://github.com/owncloud/web/issues/9363
 https://github.com/owncloud/web/issues/9356
 https://github.com/owncloud/web/issues/9360
 https://github.com/owncloud/web/issues/9362
 https://github.com/owncloud/web/issues/9416
+

@@ -22,13 +22,13 @@ import {
   createdUserStore
 } from '../../support/store'
 import { User } from '../../support/types'
-import { Session } from '../../support/objects/runtime/session'
+import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
+import { refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
 
 export { World }
 
-const usersEnvironment = new environment.UsersEnvironment()
 const logger = pino({
   level: config.logLevel,
   transport: {
@@ -39,17 +39,6 @@ const logger = pino({
   }
 })
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
-
-BeforeAll(async function (this: World) {
-  if (config.ocis) {
-    return
-  }
-
-  await api.config.setLocking({
-    value: false,
-    user: usersEnvironment.getUser({ key: 'Admin' })
-  })
-})
 
 Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
@@ -77,8 +66,12 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
-  if (config.apiToken) {
-    await getAdminToken(state.browser)
+  if (!config.basicAuth) {
+    await setAdminToken(state.browser)
+  }
+
+  if (config.keycloak) {
+    await setKeycloakAdminToken(state.browser)
   }
 })
 
@@ -100,6 +93,12 @@ BeforeAll(async (): Promise<void> => {
       await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
     chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
   }[config.browser]()
+
+  // setup keycloak admin user
+  if (config.keycloak) {
+    const usersEnvironment = new environment.UsersEnvironment()
+    setupKeycloakAdminUser(usersEnvironment.getUser({ key: 'admin' }))
+  }
 })
 
 const defaults = {
@@ -119,6 +118,11 @@ After(async function (this: World, { result }: ITestCaseHookParameter) {
     await this.actorsEnvironment.close()
   }
 
+  // refresh keycloak admin access token
+  if (config.keycloak) {
+    await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
+  }
+
   await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
@@ -135,11 +139,7 @@ setWorldConstructor(World)
 const cleanUpUser = async (adminUser: User) => {
   const requests = []
   createdUserStore.forEach((user) => {
-    if (config.ocis) {
-      requests.push(api.graph.deleteUser({ user, admin: adminUser }))
-    } else {
-      requests.push(api.user.deleteUser({ user, admin: adminUser }))
-    }
+    requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
   createdUserStore.clear()
@@ -171,24 +171,21 @@ const cleanUpSpaces = async (adminUser: User) => {
 const cleanUpGroup = async (adminUser: User) => {
   const requests = []
   createdGroupStore.forEach((group) => {
-    if (config.ocis) {
-      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
-    } else {
-      requests.push(api.user.deleteGroup({ group, admin: adminUser }))
-    }
+    requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
   })
 
   await Promise.all(requests)
   createdGroupStore.clear()
 }
 
-const getAdminToken = async (browser: Browser) => {
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true })
-  const page = await ctx.newPage()
-  const admin = usersEnvironment.getUser({ key: 'admin' })
-  await page.goto(config.frontendUrl)
-  await new Session({ page }).login({ user: admin })
+const setAdminToken = async (browser: Browser) => {
+  return getTokenFromLogin({ browser })
+}
 
-  await page.close()
-  await ctx.close()
+const setKeycloakAdminToken = async (browser: Browser) => {
+  return getTokenFromLogin({
+    browser,
+    url: config.keycloakLoginUrl,
+    tokenType: 'keycloak'
+  })
 }

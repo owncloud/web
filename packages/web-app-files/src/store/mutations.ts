@@ -129,7 +129,10 @@ export default {
   LOAD_INDICATORS(state, path) {
     const files = state.files.filter((f) => f.path.startsWith(path))
     for (const resource of files) {
-      const indicators = getIndicators({ resource, ancestorMetaData: state.ancestorMetaData })
+      const indicators = getIndicators({
+        resource,
+        ancestorMetaData: (this as any).getters['runtime/ancestorMetaData/ancestorMetaData']
+      })
       if (!indicators.length && !resource.indicators.length) {
         continue
       }
@@ -155,7 +158,7 @@ export default {
   },
 
   UPSERT_RESOURCES(state, resources) {
-    const otherFiles = state.files.filter((f) => !resources.some((r) => r.id === f.id))
+    const otherFiles = state.files.filter((f) => !resources.some((r) => r.path === f.path))
     state.files = [...otherFiles, ...resources]
   },
 
@@ -211,17 +214,6 @@ export default {
     state.areFileExtensionsShown = value
 
     window.localStorage.setItem('oc_fileExtensionsShown', value)
-  },
-
-  SET_ANCESTOR_META_DATA(state, value) {
-    state.ancestorMetaData = value
-  },
-
-  UPDATE_ANCESTOR_FIELD(state, params) {
-    const resource = state.ancestorMetaData[params.path] ?? null
-    if (resource) {
-      resource[params.field] = params.value
-    }
   }
 }
 

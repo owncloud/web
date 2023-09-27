@@ -24,6 +24,7 @@ import {
   announceCustomScripts,
   announceLoadingService,
   announcePreviewService,
+  announcePasswordPolicyService,
   announceAdditionalTranslations
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
@@ -155,6 +156,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       if (!userContextReady) {
         return
       }
+
+      announcePasswordPolicyService({ app, store })
+
       const clientService = app.config.globalProperties.$clientService
 
       // Load spaces to make them available across the application

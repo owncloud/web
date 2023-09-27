@@ -56,9 +56,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Listing shares via ocs API does not show path for parent folders](https://github.com/owncloud/ocis/issues/1231)
 -   [webUISharingPublicManagement/shareByPublicLink.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L111)
 
-### [Propfind response to trashbin endpoint is different in ocis](https://github.com/owncloud/product/issues/186)
--   [webUIFilesSearch/search.feature:131](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesSearch/search.feature#L131)
-
 ### [Conflict / overwrite issues with TUS](https://github.com/owncloud/ocis/issues/1294)
 -   [webUIUpload/uploadFileGreaterThanQuotaSize.feature:11](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadFileGreaterThanQuotaSize.feature#L11)
 
@@ -101,9 +98,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Federated shares not showing in shared with me page](https://github.com/owncloud/web/issues/2510)
 -   [webUISharingExternal/federationSharing.feature:38](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L38)
 -   [webUISharingExternal/federationSharing.feature:166](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExternal/federationSharing.feature#L166)
-
-### [web config update is not properly reflected after the ocis start](https://github.com/owncloud/ocis/issues/2944)
--   [webUIFiles/breadcrumb.feature:50](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/breadcrumb.feature#L50)
 
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 -   [webUIUpload/upload.feature:43](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L43)

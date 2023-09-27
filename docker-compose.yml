@@ -2,23 +2,18 @@ services:
   ocis:
     image: ${OCIS_IMAGE:-owncloud/ocis:latest}
     container_name: web_ocis
+    entrypoint: /bin/sh
+    command: ['-c', 'ocis init || true && ocis server']
     environment:
       # OCIS
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
       OCIS_INSECURE: "${OCIS_INSECURE:-true}"
-      OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error}
+      OCIS_LOG_LEVEL: "${OCIS_LOG_LEVEL:-error}"
       OCIS_LOG_PRETTY: "${OCIS_LOG_PRETTY:-true}"
       OCIS_LOG_COLOR: "${OCIS_LOG_COLOR:-true}"
-      OCIS_SYSTEM_USER_ID: "${OCIS_SYSTEM_USER_ID:-some-system-user-id-000-000000000000}"
-      OCIS_ADMIN_USER_ID: "${OCIS_ADMIN_USER_ID:-some-admin-user-id-0000-000000000000}"
-      OCIS_SYSTEM_USER_API_KEY: "${OCIS_SYSTEM_USER_API_KEY:-some-system-user-machine-auth-api-key}"
-      OCIS_JWT_SECRET: "${OCIS_JWT_SECRET:-some-ocis-jwt-secret}"
-      OCIS_MACHINE_AUTH_API_KEY: "${OCIS_MACHINE_AUTH_API_KEY:-some-ocis-machine-auth-api-key}"
-      STORAGE_USERS_MOUNT_ID: "1284d238-aa92-42ce-bdc4-0b0000009157"
-      GATEWAY_STORAGE_USERS_MOUNT_ID: "1284d238-aa92-42ce-bdc4-0b0000009157"
 
       # WEB
-      WEB_UI_CONFIG: ${WEB_UI_CONFIG:-/web/config.json}
+      WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
       WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
       WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
 
@@ -26,6 +21,7 @@ services:
       FRONTEND_SEARCH_MIN_LENGTH: "2"
       FRONTEND_OCS_ENABLE_DENIALS: "true"
       FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
+      FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
 
       # IDM
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
@@ -38,8 +34,8 @@ services:
       IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
 
       # STORAGE
-      STORAGE_HOME_DRIVER: ${STORAGE_HOME_DRIVER:-ocis}
-      STORAGE_USERS_DRIVER: ${STORAGE_USERS_DRIVER:-ocis}
+      STORAGE_HOME_DRIVER: "${STORAGE_HOME_DRIVER:-ocis}"
+      STORAGE_USERS_DRIVER: "${STORAGE_USERS_DRIVER:-ocis}"
       STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
 
       # LDAP
@@ -62,19 +58,25 @@ services:
       SEARCH_EXTRACTOR_TYPE: "tika"
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: "http://host.docker.internal:9998"
       SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: "true"
+      GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
+      # make the registry available to the app provider containers
+      MICRO_REGISTRY: "mdns"
     volumes:
-      - ./dev/docker/ocis.entrypoint.sh:/usr/bin/entrypoint
+      - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
       - ./dist:/web/dist
       - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
+      - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
+      - ocis-config:/etc/ocis
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    entrypoint: /usr/bin/entrypoint
     labels:
       traefik.enable: true
+      traefik.http.routers.ocis.tls: true
       traefik.http.routers.ocis.rule: PathPrefix(`/`)
-      traefik.http.routers.ocis.entrypoints: websecure
+      traefik.http.routers.ocis.entrypoints: ocis
+      traefik.http.services.ocis.loadbalancer.server.port: 9200
       # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.routers.ocis.middlewares: cors
     restart: unless-stopped
@@ -92,6 +94,8 @@ services:
     ports:
       - 4444:4444
       - 5900:5900
+      - 7900:7900
+      - 6080:7900
     volumes:
       - /dev/shm:/dev/shm
       - uploads:/uploads:ro
@@ -118,16 +122,6 @@ services:
       REMOTE_UPLOAD_DIR: "/uploads"
       TEST_WITH_GRAPH_API: "true"
 
-  vnc:
-    build:
-      dockerfile: vnc.Dockerfile
-      context: ./dev/docker
-    container_name: web_vnc
-    ports:
-      - 6080:6080
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
-
   companion:
     image: owncloud/uppy-companion:3.12.13-owncloud
     extra_hosts:
@@ -149,6 +143,132 @@ services:
       traefik.http.routers.companion.entrypoints: websecure
       traefik.http.services.companion.loadbalancer.server.port: 3020
 
+  ocis-appprovider-collabora:
+    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
+    command: app-provider server
+    environment:
+      APP_PROVIDER_LOG_LEVEL: error
+      # use the internal service name of the gateway
+      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
+      # STORAGE_GATEWAY_ENDPOINT: host.docker.internal:9142
+      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
+      # configure the service name to avoid collision with onlyoffice
+      APP_PROVIDER_SERVICE_NAME: app-provider-collabora
+      # use the internal service name
+      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-collabora
+      APP_PROVIDER_DRIVER: wopi
+      APP_PROVIDER_WOPI_APP_NAME: Collabora
+      APP_PROVIDER_WOPI_APP_ICON_URI: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}/favicon.ico
+      APP_PROVIDER_WOPI_APP_URL: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}
+      APP_PROVIDER_WOPI_INSECURE: true
+      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
+      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
+      # share the registry with the ocis container
+      MICRO_REGISTRY: 'mdns'
+    volumes:
+      - ocis-config:/etc/ocis
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    restart: always
+
+  ocis-appprovider-onlyoffice:
+    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
+    user: '0' # needed for apk add in entrypoint script
+    entrypoint:
+      - /bin/sh
+      - /entrypoint-override.sh
+    environment:
+      APP_PROVIDER_LOG_LEVEL: error
+      # use the internal service name of the gateway
+      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
+      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
+      # configure the service name to avoid collision with collabora
+      APP_PROVIDER_SERVICE_NAME: app-provider-onlyoffice
+      # use the internal service name
+      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-onlyoffice
+      APP_PROVIDER_DRIVER: wopi
+      APP_PROVIDER_WOPI_APP_NAME: OnlyOffice
+      APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
+      APP_PROVIDER_WOPI_APP_URL: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}
+      APP_PROVIDER_WOPI_INSECURE: true
+      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
+      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
+      # share the registry with the ocis container
+      MICRO_REGISTRY: 'mdns'
+    volumes:
+      - ./dev/docker/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
+      - ocis-config:/etc/ocis
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    restart: always
+
+  collabora:
+    image: collabora/code:22.05.14.3.1
+    environment:
+      DONT_GEN_SSL_CERT: 'YES'
+      extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://host.docker.internal:9200
+    cap_add:
+      - MKNOD
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.collabora.tls: true
+      traefik.http.routers.collabora.rule: PathPrefix(`/`)
+      traefik.http.routers.collabora.entrypoints: collabora
+      traefik.http.services.collabora.loadbalancer.server.port: 9980
+    restart: always
+    depends_on:
+      - traefik
+
+  onlyoffice:
+    image: onlyoffice/documentserver:7.3.3
+    entrypoint:
+      - /bin/sh
+      - /entrypoint-override.sh
+    environment:
+      WOPI_ENABLED: true
+      USE_UNAUTHORIZED_STORAGE: true # self signed certificates
+    volumes:
+      - ./dev/docker/onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
+      - ./dev/docker/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.dist.json
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.onlyoffice.tls: true
+      traefik.http.routers.onlyoffice.rule: PathPrefix(`/`)
+      traefik.http.routers.onlyoffice.entrypoints: websecure
+      # websockets can't be opened when this is ommitted
+      traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto: https
+      traefik.http.routers.onlyoffice.middlewares: onlyoffice
+    restart: always
+    depends_on:
+      - traefik
+
+  wopiserver:
+    image: cs3org/wopiserver:v9.4.0
+    environment:
+      WOPISERVER_INSECURE: true
+      WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
+      WOPISERVER_DOMAIN: ${WOPISERVER_DOMAIN:-host.docker.internal:8880}
+    volumes:
+      - ./dev/docker/wopiserver/entrypoint-override.sh:/entrypoint-override.sh
+      - ./dev/docker/wopiserver/wopiserver.conf.dist:/etc/wopi/wopiserver.conf.dist
+    entrypoint:
+      - /bin/sh
+      - /entrypoint-override.sh
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.wopiserver.tls: true
+      traefik.http.routers.wopiserver.rule: PathPrefix(`/`)
+      traefik.http.routers.wopiserver.entrypoints: wopi
+      traefik.http.services.wopiserver.loadbalancer.server.port: 8880
+    depends_on:
+      - traefik
+
   traefik:
     image: traefik:v2.10.1
     restart: unless-stopped
@@ -162,6 +282,9 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.ocis.address=:9200"
+      - "--entrypoints.collabora.address=:9980"
+      - "--entrypoints.wopi.address=:8880"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.middlewares=https_config@docker"
       - "--entrypoints.websecure.http.tls.options=default"
@@ -182,7 +305,10 @@ services:
     ports:
       - "80:80"
       - "8090:8080"
-      - "9200:443"
+      - "9200:9200"
+      - "9980:9980"
+      - "8880:8880"
+      - "9981:443"
     volumes:
       - "./dev/docker/traefik/certificates:/certificates"
       - "./dev/docker/traefik/configs:/configs"
@@ -205,4 +331,4 @@ services:
 volumes:
   uploads:
   uppy_companion_datadir:
-  traefik_letsencrypt:
+  ocis-config:

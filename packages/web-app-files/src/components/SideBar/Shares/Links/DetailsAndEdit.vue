@@ -122,7 +122,7 @@
               <oc-datepicker
                 v-if="option.showDatepicker"
                 v-model="newExpiration"
-                class="link-expiry-picker"
+                class="link-expiry-picker oc-flex oc-width-1-1"
                 :min-date="expirationDate.min"
                 :max-date="expirationDate.max"
                 :locale="$language.current"
@@ -138,6 +138,15 @@
                   >
                     <oc-icon :name="option.icon" fill-type="line" size="medium" />
                     <span v-text="option.title" />
+                  </oc-button>
+                  <oc-button
+                    v-if="option.remove && option.remove.isRemovable"
+                    :data-testid="`files-link-id-${link.id}-edit-${option.id}`"
+                    :aria-label="option.remove.title"
+                    appearance="raw"
+                    @click="option.remove.method"
+                  >
+                    <oc-icon :name="option.remove.icon" />
                   </oc-button>
                 </template>
               </oc-datepicker>
@@ -183,11 +192,13 @@ import {
   LinkShareRoles,
   ShareRole
 } from 'web-client/src/helpers/share'
-import { defineComponent, inject, PropType, Ref } from 'vue'
+import { computed, defineComponent, inject, PropType, Ref } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { OcDrop } from 'design-system/src/components'
+import { usePasswordPolicyService } from 'web-pkg/src/composables/passwordPolicyService'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -223,10 +234,21 @@ export default defineComponent({
     }
   },
   emits: ['removePublicLink', 'updateLink'],
-  setup() {
+  setup(props) {
+    const { current } = useGettext()
+    const passwordPolicyService = usePasswordPolicyService()
+    const dateExpire = computed(() => {
+      return formatRelativeDateFromDateTime(
+        DateTime.fromISO(props.link.expiration).endOf('day'),
+        current
+      )
+    })
+
     return {
       space: inject<Ref<SpaceResource>>('space'),
-      resource: inject<Ref<Resource>>('resource')
+      resource: inject<Ref<Resource>>('resource'),
+      passwordPolicyService,
+      dateExpire
     }
   },
   data() {
@@ -265,16 +287,15 @@ export default defineComponent({
       if (this.link.expiration) {
         result.push({
           id: 'edit-expiration',
-          title: this.$gettext('Edit expiration date'),
+          title: this.$gettext('Expires %{expires}', { expires: this.dateExpire }),
           method: this.updateLink,
           icon: 'calendar-event',
-          showDatepicker: true
-        })
-        if (!this.expirationDate.enforced) {
-          result.push({
+          showDatepicker: true,
+          remove: {
             id: 'remove-expiration',
             title: this.$gettext('Remove expiration date'),
-            icon: 'calendar',
+            icon: 'close',
+            isRemovable: !this.expirationDate.enforced,
             method: () =>
               this.updateLink({
                 link: {
@@ -282,12 +303,12 @@ export default defineComponent({
                   expiration: ''
                 }
               })
-          })
-        }
+          }
+        })
       } else {
         result.push({
           id: 'add-expiration',
-          title: this.$gettext('Add expiration date'),
+          title: this.$gettext('Set expiration date'),
           method: this.updateLink,
           icon: 'calendar-event',
           showDatepicker: true
@@ -381,7 +402,7 @@ export default defineComponent({
       if (!this.link.indirect) {
         return null
       }
-      return this.$gettextInterpolate(
+      return (
         this.$gettext('Navigate to the parent (%{folderName})'),
         { folderName: basename(this.link.path) },
         true
@@ -420,8 +441,8 @@ export default defineComponent({
     updateLink({ link, dropRef = undefined, onSuccess = () => {} }) {
       link = link || this.link
       dropRef = dropRef || this.$refs.editPublicLinkDropdown
-      this.$emit('updateLink', { link, onSuccess })
       dropRef.hide()
+      this.$emit('updateLink', { link, onSuccess })
     },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
@@ -451,27 +472,11 @@ export default defineComponent({
             link: {
               ...this.link,
               name
-            },
-            onSuccess: () => {
-              this.hideModal()
             }
           })
       }
 
       this.createModal(modal)
-    },
-
-    checkPassword(password) {
-      if (password === '') {
-        this.setModalConfirmButtonDisabled(true)
-        return this.setModalInputErrorMessage(this.$gettext("Password can't be empty"))
-      }
-      if (password.length > 72) {
-        this.setModalConfirmButtonDisabled(true)
-        return this.setModalInputErrorMessage(this.$gettext("Password can't exceed 72 characters"))
-      }
-      this.setModalConfirmButtonDisabled(false)
-      return this.setModalInputErrorMessage(null)
     },
 
     showPasswordModal() {
@@ -483,9 +488,14 @@ export default defineComponent({
         hasInput: true,
         confirmDisabled: true,
         inputLabel: this.$gettext('Password'),
+        inputPasswordPolicy: this.passwordPolicyService.getPolicy(),
+        inputGeneratePasswordMethod: () => this.passwordPolicyService.generatePassword(),
+        inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
         inputType: 'password',
         onCancel: this.hideModal,
-        onInput: (password) => this.checkPassword(password),
+        onInput: () => this.setModalInputErrorMessage(''),
+        onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
+        onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
         onConfirm: (password) => {
           this.updateLink({
             link: {
@@ -511,8 +521,15 @@ export default defineComponent({
   justify-content: flex-end;
 }
 
-.edit-public-link-role-dropdown {
-  width: 400px;
+@media (max-width: $oc-breakpoint-medium-default) {
+  .edit-public-link-role-dropdown {
+    width: 100%;
+  }
+}
+@media (min-width: $oc-breakpoint-medium-default) {
+  .edit-public-link-role-dropdown {
+    width: 400px;
+  }
 }
 
 .role-dropdown-list span {

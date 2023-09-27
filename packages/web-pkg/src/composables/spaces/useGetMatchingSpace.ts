@@ -7,6 +7,7 @@ import {
 import { Resource, SpaceResource } from 'web-client'
 import { buildShareSpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
+import { basename } from 'path'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
@@ -38,7 +39,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       getInternalSpace(storageId) ||
       buildShareSpaceResource({
         shareId: resource.shareId,
-        shareName: resource.name,
+        shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
         serverUrl: configurationManager.serverUrl
       })
     )

@@ -2,7 +2,6 @@ import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import join from 'join-path'
 import { getPersonalSpaceId, getSpaceIdBySpaceName } from '../graph'
-import { config } from '../../../config'
 import { Response } from 'node-fetch'
 import convert from 'xml-js'
 import _ from 'lodash/object'
@@ -67,8 +66,7 @@ const createFile = async ({
     method: 'PUT',
     path: join('remote.php', 'dav', webDavEndPathToRoot, pathToFile),
     body: content,
-    user: user,
-    formatJson: false
+    user: user
   })
 
   checkResponseStatus(response, `Failed while uploading file '${pathToFile}' in personal space`)
@@ -83,11 +81,7 @@ export const uploadFileInPersonalSpace = async ({
   pathToFile: string
   content: string
 }): Promise<void> => {
-  // upload a file step is same for oc10 and ocis
-  // so first need to determine the end path to make request
-  const webDavEndPathToRoot = config.ocis
-    ? 'spaces/' + (await getPersonalSpaceId({ user }))
-    : 'files/' + user.id
+  const webDavEndPathToRoot = 'spaces/' + (await getPersonalSpaceId({ user }))
   await createFile({ user, pathToFile, content, webDavEndPathToRoot })
 }
 
@@ -112,11 +106,7 @@ export const createFolderInsidePersonalSpace = async ({
   user: User
   folder: string
 }): Promise<void> => {
-  // creation of folder step is same for oc10 and ocis
-  // so first need to determine the end point to make request
-  const webDavEndPathToRoot = config.ocis
-    ? 'spaces/' + (await getPersonalSpaceId({ user }))
-    : 'files/' + user.id
+  const webDavEndPathToRoot = 'spaces/' + (await getPersonalSpaceId({ user }))
   await createFolder({ user, folder, webDavEndPathToRoot })
 }
 

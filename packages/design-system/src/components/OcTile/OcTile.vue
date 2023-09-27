@@ -4,6 +4,7 @@
     :data-item-id="resource.id"
     :class="{
       'oc-tile-card-selected': isResourceSelected,
+      'oc-tile-card-disabled': resource.processing,
       'state-trashed': resource.disabled
     }"
     @contextmenu="$emit('contextmenu', $event)"
@@ -24,7 +25,11 @@
       >
         <span v-text="$gettext('Disabled')" />
       </oc-tag>
-      <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
+      <div
+        v-oc-tooltip="tooltipLabelIcon"
+        class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center"
+        :aria-label="tooltipLabelIcon"
+      >
         <div class="oc-tile-card-hover"></div>
         <slot name="imageField" :item="resource">
           <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
@@ -33,7 +38,11 @@
             :resource="resource"
             :size="resourceIconSize"
             class="tile-default-image oc-pt-xs"
-          />
+          >
+            <template v-if="showStatusIcon" #status>
+              <oc-icon v-bind="statusIconAttrs" size="xsmall" />
+            </template>
+          </oc-resource-icon>
         </slot>
       </div>
     </oc-resource-link>
@@ -63,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { Resource } from 'web-client'
 
 import OcImg from '../OcImage/OcImage.vue'
@@ -71,6 +80,7 @@ import OcResource from '../OcResource/OcResource.vue'
 import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
 import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
 import OcTag from '../OcTag/OcTag.vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'OcTile',
@@ -112,7 +122,44 @@ export default defineComponent({
       }
     }
   },
-  emits: ['click', 'contextmenu']
+  emits: ['click', 'contextmenu'],
+  setup(props) {
+    const { $gettext } = useGettext()
+    const showStatusIcon = computed(() => {
+      return props.resource.locked || props.resource.processing
+    })
+
+    const statusIconAttrs = computed(() => {
+      if (props.resource.locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill'
+        }
+      }
+
+      if (props.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
+
+      return {}
+    })
+
+    const tooltipLabelIcon = computed(() => {
+      if (props.resource.locked) {
+        return $gettext('This item is locked')
+      }
+      return null
+    })
+
+    return {
+      statusIconAttrs,
+      showStatusIcon,
+      tooltipLabelIcon
+    }
+  }
 })
 </script>
 
@@ -125,6 +172,13 @@ export default defineComponent({
   flex-flow: column;
   outline: 1px solid var(--oc-color-border);
 
+  &-disabled {
+    pointer-events: none;
+    background-color: var(--oc-color-background-muted) !important;
+    opacity: 0.7;
+    filter: grayscale(0.6);
+  }
+
   &.state-trashed {
     cursor: pointer;
 
@@ -133,6 +187,10 @@ export default defineComponent({
       filter: grayscale(100%);
       opacity: 80%;
     }
+  }
+
+  .tile-default-image {
+    position: relative;
   }
 
   .oc-card-media-top {
@@ -201,6 +259,18 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     text-align: center;
+
+    .oc-resource-icon-status-badge {
+      background: var(--oc-color-background-highlight) !important;
+      .oc-icon {
+        svg {
+          fill: var(--oc-color-background-highlight) !important;
+        }
+      }
+      .oc-spinner {
+        color: var(--oc-color-background-highlight) !important;
+      }
+    }
   }
 
   &-hover {
