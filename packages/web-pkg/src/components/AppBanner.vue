@@ -55,7 +55,6 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
-    console.log(appBannerSettings)
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()
