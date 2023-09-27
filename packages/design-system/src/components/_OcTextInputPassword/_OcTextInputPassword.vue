@@ -11,6 +11,7 @@
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
       ref="passwordInput"
+      @input="onPasswordEntered"
     />
     <oc-button
       v-if="password"
@@ -147,13 +148,15 @@ export default defineComponent({
       emit('passwordGenerated', password.value)
     }
 
+    const onPasswordEntered = () => {
+      passwordEntered.value = true
+    }
+
     const focus = () => {
       unref(passwordInput).focus()
     }
 
     watch(password, (value) => {
-      passwordEntered.value = true
-
       if (!Object.keys(props.passwordPolicy).length) {
         return
       }
@@ -174,6 +177,7 @@ export default defineComponent({
       copyPasswordIcon,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
+      onPasswordEntered,
       generatePassword,
       getPasswordPolicyRuleMessage,
       copyPasswordToClipboard
