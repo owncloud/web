@@ -6,7 +6,12 @@
       'oc-text-input-password-wrapper-danger': hasError
     }"
   >
-    <input v-bind="$attrs" v-model="password" :type="showPassword ? 'text' : 'password'" />
+    <input
+      v-bind="$attrs"
+      v-model="password"
+      :type="showPassword ? 'text' : 'password'"
+      ref="passwordInput"
+    />
     <oc-button
       v-if="password"
       v-oc-tooltip="$gettext('Show password')"
@@ -101,8 +106,9 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
-  setup(props, { emit, attrs }) {
+  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed', 'passwordGenerated'],
+  setup(props, { emit }) {
+    const passwordInput = ref(null)
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
@@ -138,6 +144,11 @@ export default defineComponent({
       const generatedPassword = props.generatePasswordMethod()
       password.value = generatedPassword
       showPassword.value = true
+      emit('passwordGenerated', password.value)
+    }
+
+    const focus = () => {
+      unref(passwordInput).focus()
     }
 
     watch(password, (value) => {
@@ -155,9 +166,11 @@ export default defineComponent({
     })
 
     return {
+      focus,
       $gettext,
       password,
       showPassword,
+      passwordInput,
       copyPasswordIcon,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
