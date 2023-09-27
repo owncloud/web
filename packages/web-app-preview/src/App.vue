@@ -232,7 +232,7 @@ export default defineComponent({
       { immediate: true }
     )
 
-    const fileId = computed(() => unref(currentFileContext).itemId)
+    const fileId = computed(() => unref(unref(currentFileContext).itemId))
 
     return {
       ...appDefaults,
