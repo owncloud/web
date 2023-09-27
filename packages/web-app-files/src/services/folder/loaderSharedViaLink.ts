@@ -52,7 +52,8 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
           spaces,
           incomingShares: false,
           allowSharePermission: unref(hasResharing),
-          hasShareJail: unref(hasShareJail)
+          hasShareJail: unref(hasShareJail),
+          fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
         }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {

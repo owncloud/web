@@ -9,7 +9,8 @@ export async function triggerShareAction({
   hasResharing,
   hasShareJail,
   client,
-  spaces = []
+  spaces = [],
+  fullShareOwnerPaths = false
 }: {
   resource: Resource
   status: ShareStatus
@@ -17,6 +18,7 @@ export async function triggerShareAction({
   hasShareJail: boolean
   client: OwnCloudSdk
   spaces?: SpaceResource[]
+  fullShareOwnerPaths?: boolean
 }) {
   const method = _getRequestMethod(status)
   if (!method) {
@@ -45,7 +47,8 @@ export async function triggerShareAction({
         spaces,
         incomingShares: true,
         allowSharePermission: hasResharing,
-        hasShareJail
+        hasShareJail,
+        fullShareOwnerPaths
       })[0]
     }
   }

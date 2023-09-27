@@ -51,7 +51,8 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
           spaces: store.getters['runtime/spaces/spaces'],
           incomingShares: true,
           allowSharePermission: unref(hasResharing),
-          hasShareJail: unref(hasShareJail)
+          hasShareJail: unref(hasShareJail),
+          fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
         }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {

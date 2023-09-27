@@ -28,7 +28,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, router, clientService } = context
+    const { store, router, clientService, configurationManager } = context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
     const hasResharing = useCapabilityFilesSharingResharing(store)
@@ -61,7 +61,8 @@ export class FolderLoaderSpace implements FolderLoader {
               spaces: store.getters['runtime/spaces/spaces'],
               allowSharePermission: unref(hasResharing),
               hasShareJail: true,
-              incomingShares: true
+              incomingShares: true,
+              fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
             })
             currentFolder = aggregatedShares[0]
           } else if (!['personal', 'public'].includes(space.driveType)) {

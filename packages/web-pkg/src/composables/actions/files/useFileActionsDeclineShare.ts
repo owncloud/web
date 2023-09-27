@@ -11,6 +11,7 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled,
   useClientService,
+  useConfigurationManager,
   useLoadingService,
   useRouter,
   useStore
@@ -28,6 +29,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
   const hasShareJail = useCapabilityShareJailEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const configurationManager = useConfigurationManager()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
@@ -43,7 +45,8 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,
-              spaces: store.getters['runtime/spaces/spaces']
+              spaces: store.getters['runtime/spaces/spaces'],
+              fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
             })
             if (share) {
               store.commit('Files/UPDATE_RESOURCE', share)
