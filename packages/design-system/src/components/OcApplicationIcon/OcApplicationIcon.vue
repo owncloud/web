@@ -22,6 +22,10 @@ export default defineComponent({
   status: 'ready',
   release: '15.0.0',
   props: {
+    key: {
+      type: String,
+      required: false
+    },
     icon: {
       type: String,
       required: true

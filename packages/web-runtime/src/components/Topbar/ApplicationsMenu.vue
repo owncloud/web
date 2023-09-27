@@ -52,6 +52,7 @@ import { defineComponent, PropType, ComponentPublicInstance, ref, unref, compute
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
+import * as uuid from 'uuid'
 
 export default defineComponent({
   components: {
@@ -66,13 +67,13 @@ export default defineComponent({
   },
   setup() {
     const { $gettext } = useGettext()
-    const appIconKey = ref(false)
+    const appIconKey = ref('')
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
     })
     const updateAppIcons = () => {
-      appIconKey.value = !appIconKey.value
+      appIconKey.value = uuid.v4().replaceAll('-', '')
     }
     return {
       appIconKey,
