@@ -83,7 +83,8 @@ import {
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingCanDenyAccess
+  useCapabilityFilesSharingCanDenyAccess,
+  useGetMatchingSpace
 } from 'web-pkg/src/composables'
 import { isLocationSharesActive } from '../../../router'
 import { textUtils } from '../../../helpers/textUtils'
@@ -109,6 +110,10 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { getMatchingSpace } = useGetMatchingSpace()
+
+    const resource = inject<Ref<Resource>>('resource')
+
     const sharesListCollapsed = ref(
       !store.getters.configuration.options.sidebar.shares.showAllOnLoad
     )
@@ -138,10 +143,15 @@ export default defineComponent({
       return Object.values(unref(ancestorMetaData)).find((a) => a.id === fileId)
     }
 
+    const matchingSpace = computed(() => {
+      return getMatchingSpace(unref(resource))
+    })
+
     return {
       ...useShares(),
-      resource: inject<Ref<Resource>>('resource'),
+      resource,
       space: inject<Ref<SpaceResource>>('space'),
+      matchingSpace,
       sharesListCollapsed,
       toggleShareListCollapsed,
       memberListCollapsed,
@@ -260,10 +270,6 @@ export default defineComponent({
         this.resource.type !== 'space' &&
         this.currentUserIsMemberOfSpace
       )
-    },
-
-    matchingSpace() {
-      return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
     },
 
     resourceIsSpace() {
@@ -464,10 +470,10 @@ export default defineComponent({
       if (!sharedAncestor) {
         return null
       }
+
       return getSharedAncestorRoute({
-        resource: this.resource,
         sharedAncestor,
-        matchingSpace: this.matchingSpace
+        matchingSpace: this.space || this.matchingSpace
       })
     },
 

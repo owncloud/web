@@ -219,6 +219,7 @@ import {
   extractParentFolderName,
   isProjectSpaceResource,
   isShareRoot,
+  isShareSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
@@ -983,11 +984,15 @@ export default defineComponent({
         return parentFolder
       }
 
+      const matchingSpace = this.getMatchingSpace(resource)
+      if (isShareSpaceResource(matchingSpace)) {
+        return matchingSpace.name
+      }
+
       if (this.hasProjectSpaces) {
         if (isProjectSpaceResource(resource)) {
           return this.$gettext('Spaces')
         }
-        const matchingSpace = this.getMatchingSpace(resource)
         if (matchingSpace?.driveType === 'project') {
           return matchingSpace.name
         }

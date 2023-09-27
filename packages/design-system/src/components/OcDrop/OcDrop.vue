@@ -170,7 +170,7 @@ export default defineComponent({
       interactive: true,
       plugins: [hideOnEsc],
       theme: 'none',
-      maxWidth: 400,
+      maxWidth: 416,
       offset: this.offset ?? 0,
       aria: {
         content: 'describedby'

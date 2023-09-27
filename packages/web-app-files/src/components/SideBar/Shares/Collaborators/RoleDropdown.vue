@@ -126,6 +126,7 @@ import {
 } from 'web-pkg/src/composables'
 import { Resource } from 'web-client'
 import { OcDrop } from 'design-system/src/components'
+import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -202,7 +203,11 @@ export default defineComponent({
         return SpacePeopleShareRoles.list()
       }
 
-      if (this.incomingParentShare && this.resourceIsSharable) {
+      if (
+        this.incomingParentShare &&
+        this.incomingParentShare?.fileOwner?.name !== this.user.id &&
+        this.resourceIsSharable
+      ) {
         return PeopleShareRoles.filterByBitmask(
           this.incomingParentShare.permissions,
           this.resource.isFolder,
@@ -224,7 +229,8 @@ export default defineComponent({
     },
     defaultCustomPermissions() {
       return [...this.selectedRole.permissions(this.allowSharePermission && this.resharingDefault)]
-    }
+    },
+    ...mapGetters(['user'])
   },
 
   created() {

@@ -208,6 +208,7 @@ export default defineComponent({
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
             showSpaceImage: false,
+            showSpaceId: true,
             showShareIndicators: false
           }
         },

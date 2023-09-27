@@ -1,11 +1,12 @@
 <template>
-  <div class="oc-text-input-password-wrapper">
-    <input
-      v-bind="$attrs"
-      v-model="password"
-      :type="showPassword ? 'text' : 'password'"
-      @input="onPasswordEntered"
-    />
+  <div
+    class="oc-text-input-password-wrapper"
+    :class="{
+      'oc-text-input-password-wrapper-warning': hasWarning,
+      'oc-text-input-password-wrapper-danger': hasError
+    }"
+  >
+    <input v-bind="$attrs" v-model="password" :type="showPassword ? 'text' : 'password'" />
     <oc-button
       v-if="password"
       v-oc-tooltip="$gettext('Show password')"
@@ -32,7 +33,7 @@
       class="oc-text-input-generate-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
-      @click="showGeneratedPassword"
+      @click="generatePassword"
     >
       <oc-icon size="small" name="refresh" fill-type="line" />
     </oc-button>
@@ -88,10 +89,20 @@ export default defineComponent({
       type: Function as PropType<(...args: unknown[]) => string>,
       required: false,
       default: null
+    },
+    hasWarning: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    hasError: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
@@ -123,17 +134,15 @@ export default defineComponent({
       setTimeout(() => (copyPasswordIcon.value = copyPasswordIconInitial), 500)
     }
 
-    const showGeneratedPassword = () => {
+    const generatePassword = () => {
       const generatedPassword = props.generatePasswordMethod()
       password.value = generatedPassword
       showPassword.value = true
     }
 
-    const onPasswordEntered = () => {
-      passwordEntered.value = true
-    }
-
     watch(password, (value) => {
+      passwordEntered.value = true
+
       if (!Object.keys(props.passwordPolicy).length) {
         return
       }
@@ -149,13 +158,12 @@ export default defineComponent({
       $gettext,
       password,
       showPassword,
+      copyPasswordIcon,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
+      generatePassword,
       getPasswordPolicyRuleMessage,
-      copyPasswordToClipboard,
-      showGeneratedPassword,
-      copyPasswordIcon,
-      onPasswordEntered
+      copyPasswordToClipboard
     }
   }
 })
@@ -176,6 +184,18 @@ export default defineComponent({
 
   input:focus {
     outline: none;
+  }
+
+  &-warning,
+  &-warning:focus {
+    border-color: var(--oc-color-swatch-warning-default) !important;
+    color: var(--oc-color-swatch-warning-default) !important;
+  }
+
+  &-danger,
+  &-danger:focus {
+    border-color: var(--oc-color-swatch-danger-default) !important;
+    color: var(--oc-color-swatch-danger-default) !important;
   }
 }
 .oc-text-input-password-wrapper:focus-within {
