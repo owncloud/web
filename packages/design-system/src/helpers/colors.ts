@@ -34,7 +34,7 @@ function shadeValue(value: number, percent: number): string {
  * @param {string} rgb: The rgb color value
  * @return {string} The brightened or dimmed hex color
  **/
-export function shadeColor(rgb: Array<number>, percent: number): string {
+export function calculateShadeColor(rgb: Array<number>, percent: number): string {
   const r = rgb[0]
   const g = rgb[1]
   const b = rgb[2]

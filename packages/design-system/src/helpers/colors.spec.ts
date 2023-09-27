@@ -1,7 +1,7 @@
 import {
   hexToRgb,
   rgbToHex,
-  shadeColor,
+  calculateShadeColor,
   getLuminanace,
   getContrastRatio,
   generateHashedColorForString,
@@ -35,8 +35,8 @@ describe('rgbToHex', () => {
 describe('shadeColor', () => {
   it('shades a color', () => {
     const initialColor = [100, 50, 50]
-    expect(shadeColor(initialColor, 50)).toBe('#964b4b')
-    expect(shadeColor(initialColor, -10)).toBe('#5a2d2d')
+    expect(calculateShadeColor(initialColor, 50)).toBe('#964b4b')
+    expect(calculateShadeColor(initialColor, -10)).toBe('#5a2d2d')
   })
 })
 
