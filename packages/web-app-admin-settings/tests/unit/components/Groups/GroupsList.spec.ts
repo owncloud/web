@@ -9,7 +9,7 @@ const getGroupMocks = () => [
 ]
 
 jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg/src/helpers'),
+  ...jest.requireActual('@ownclouders/web-pkg,
   displayPositionedDropdown: jest.fn()
 }))
 

@@ -1,8 +1,4 @@
-import {
-  Key,
-  KeyboardActions,
-  ModifierKey
-} from '@ownclouders/web-pkg/src/composables/keyboardActions'
+import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
 import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 

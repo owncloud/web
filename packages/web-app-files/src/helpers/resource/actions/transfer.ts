@@ -8,7 +8,7 @@ import {
   isResourceBeeingMovedToSameLocation,
   resolveFileNameDuplicate,
   FileConflict
-} from '@ownclouders/web-pkg/src/helpers/resource'
+} from '@ownclouders/web-pkg'
 
 import { TransferType } from '.'
 

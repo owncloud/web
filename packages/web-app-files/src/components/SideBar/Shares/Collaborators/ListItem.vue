@@ -141,10 +141,7 @@ import {
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
 import * as uuid from 'uuid'
-import {
-  formatDateFromDateTime,
-  formatRelativeDateFromDateTime
-} from '@ownclouders/web-pkg/src/helpers'
+import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'

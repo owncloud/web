@@ -30,7 +30,7 @@ import { useFileActionsPaste, useFileActionsShowDetails } from '@ownclouders/web
 import { useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
 import { SpaceResource } from 'web-client/src'
 import { useStore } from '@ownclouders/web-pkg'
-import ActionMenuItem from '@ownclouders/web-pkg/src/components/ContextActions/ActionMenuItem.vue'
+import ActionMenuItem from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'WhitespaceContextMenu',

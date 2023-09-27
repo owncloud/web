@@ -191,13 +191,13 @@ import {
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { eventBus } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
-import { useService } from '@ownclouders/web-pkg/src/composables/service'
+import { useService } from '@ownclouders/web-pkg'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
-import { Action } from '@ownclouders/web-pkg/src/composables/actions'
+import { Action } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({

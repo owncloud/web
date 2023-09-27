@@ -12,11 +12,10 @@ import { urlJoin } from 'web-client/src/utils'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { ResourceConflict } from './helpers/resource'
-import { locationPublicLink } from '@ownclouders/web-pkg/src/router/public'
-import { locationSpacesGeneric } from '@ownclouders/web-pkg/src/router/spaces'
+import { locationPublicLink } from '@ownclouders/web-pkg'
+import { locationSpacesGeneric } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
-import { ClientService } from 'web-pkg/types'
-import { queryItemAsString } from 'web-pkg/src/composables'
+import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 
 export interface HandleUploadOptions {
   clientService: ClientService

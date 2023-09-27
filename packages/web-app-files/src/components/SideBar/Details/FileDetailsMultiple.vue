@@ -31,7 +31,7 @@
 <script lang="ts">
 import { mapGetters } from 'vuex'
 import { defineComponent } from 'vue'
-import { formatFileSize } from '@ownclouders/web-pkg/src/helpers'
+import { formatFileSize } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileDetailsMultiple',

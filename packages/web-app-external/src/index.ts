@@ -1,4 +1,4 @@
-import { AppWrapperRoute } from '@ownclouders/web-pkg/src/components/AppTemplates/AppWrapperRoute'
+import { AppWrapperRoute } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
 import store from './store'

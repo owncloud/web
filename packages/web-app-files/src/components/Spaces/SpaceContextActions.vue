@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts">
-import ContextActionMenu from '@ownclouders/web-pkg/src/components/ContextActions/ContextActionMenu.vue'
-import QuotaModal from '@ownclouders/web-pkg/src/components/Spaces/QuotaModal.vue'
-import ReadmeContentModal from '@ownclouders/web-pkg/src/components/Spaces/ReadmeContentModal.vue'
+import ContextActionMenu from '@ownclouders/web-pkg'
+import QuotaModal from '@ownclouders/web-pkg'
+import ReadmeContentModal from '@ownclouders/web-pkg'
 
 import { useFileActionsShowDetails } from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
@@ -42,7 +42,7 @@ import {
   useSpaceActionsRestore,
   useSpaceActionsShowMembers
 } from '@ownclouders/web-pkg'
-import { isLocationSpacesActive } from '@ownclouders/web-pkg/src/router'
+import { isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
 import {
   useCapabilitySpacesMaxQuota,

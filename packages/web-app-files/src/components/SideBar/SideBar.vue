@@ -40,9 +40,9 @@ import { useActiveLocation } from '@ownclouders/web-pkg'
 import FileInfo from './FileInfo.vue'
 import { isProjectSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
-import { default as InnerSideBar } from '@ownclouders/web-pkg/src/components/SideBar/SideBar.vue'
-import SpaceInfo from '@ownclouders/web-pkg/src/components/SideBar/Spaces/SpaceInfo.vue'
-import { Panel } from '@ownclouders/web-pkg/src/components/SideBar'
+import { default as InnerSideBar } from '@ownclouders/web-pkg'
+import SpaceInfo from '@ownclouders/web-pkg'
+import { Panel } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import {
   isLocationCommonActive,
@@ -50,7 +50,7 @@ import {
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
-} from '@ownclouders/web-pkg/src/router'
+} from '@ownclouders/web-pkg'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
