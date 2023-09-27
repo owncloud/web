@@ -12,6 +12,7 @@
         :is="inputComponent"
         :id="id"
         v-bind="additionalAttributes"
+        v-on="additionalListeners"
         ref="input"
         :aria-invalid="ariaInvalid"
         class="oc-text-input oc-input oc-rounded"
@@ -260,6 +261,13 @@ export default defineComponent({
     },
     messageId() {
       return `${this.id}-message`
+    },
+    additionalListeners() {
+      if (this.type === 'password') {
+        return { passwordGenerated: this.onInput }
+      }
+
+      return {}
     },
     additionalAttributes() {
       const additionalAttrs = {}

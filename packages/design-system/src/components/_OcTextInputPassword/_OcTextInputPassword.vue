@@ -101,8 +101,8 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed'],
-  setup(props, { emit, attrs }) {
+  emits: ['passwordChallengeCompleted', 'passwordChallengeFailed', 'passwordGenerated'],
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
@@ -138,6 +138,7 @@ export default defineComponent({
       const generatedPassword = props.generatePasswordMethod()
       password.value = generatedPassword
       showPassword.value = true
+      emit('passwordGenerated', password.value)
     }
 
     watch(password, (value) => {
