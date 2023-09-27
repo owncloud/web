@@ -37,7 +37,11 @@
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
             >
-              <oc-application-icon :key="appIconKey" :icon="n.icon" :color-primary="n.color" />
+              <oc-application-icon
+                :key="`apps-menu-icon-${nid}-${appIconKey}`"
+                :icon="n.icon"
+                :color-primary="n.color"
+              />
               <span v-text="$gettext(n.title)" />
             </oc-button>
           </li>
