@@ -1,4 +1,4 @@
-import { useSpaceActionsRename } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsRename } from '../../../../../src/composables/actions'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,

@@ -1,6 +1,6 @@
 import { avatarUrl } from '../../../../src/helpers/user'
-import { ImageDimension } from 'web-pkg/src/constants'
-import { ClientService } from 'web-pkg/src/services'
+import { ImageDimension } from '@ownclouders/web-pkg/src/constants'
+import { ClientService } from '@ownclouders/web-pkg'
 import { mockDeep } from 'jest-mock-extended'
 
 const getDefaultOptions = () => ({

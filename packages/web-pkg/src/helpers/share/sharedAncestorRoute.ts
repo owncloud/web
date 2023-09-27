@@ -1,8 +1,8 @@
 import { SpaceResource } from 'web-client/src/helpers'
-import { createLocationSpaces } from 'web-pkg/src/router'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createLocationSpaces } from '@ownclouders/web-pkg/src/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
 import { RouteLocationNamedRaw } from 'vue-router'
-import { AncestorMetaDataValue } from 'web-pkg/src/types'
+import { AncestorMetaDataValue } from '@ownclouders/web-pkg/src/types'
 
 export const getSharedAncestorRoute = ({
   sharedAncestor,

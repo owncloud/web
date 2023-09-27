@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { formatFileSize } from 'web-pkg/src/helpers'
+import { formatFileSize } from '@ownclouders/web-pkg/src/helpers'
 
 export default defineComponent({
   props: {

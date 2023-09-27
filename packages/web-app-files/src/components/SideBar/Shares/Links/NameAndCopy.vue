@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 

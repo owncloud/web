@@ -4,10 +4,15 @@ import { ShareStatus } from 'web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../../router'
 import { computed } from 'vue'
-import { useAbility, useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import {
+  useAbility,
+  useClientService,
+  useRouter,
+  useStore
+} from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 
 export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

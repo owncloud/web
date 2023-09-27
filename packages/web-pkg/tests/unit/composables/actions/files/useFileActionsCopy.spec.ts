@@ -9,7 +9,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useFileActionsCopy } from 'web-pkg/src/composables'
+import { useFileActionsCopy } from '../../../../../src/composables/actions/files'
 
 describe('copy', () => {
   describe('search context', () => {

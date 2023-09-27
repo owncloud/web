@@ -33,14 +33,14 @@
 
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
 import MobileNav from '../components/MobileNav.vue'
 import { NavItem } from '../helpers/navItems'
-import LoadingIndicator from 'web-pkg/src/components/LoadingIndicator.vue'
+import LoadingIndicator from '@ownclouders/web-pkg/src/components/LoadingIndicator.vue'
 import {
   useActiveApp,
   useRoute,
@@ -48,13 +48,13 @@ import {
   useSpacesLoading,
   useStore,
   useUserContext
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { computed, defineComponent, provide, ref, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 import '@uppy/core/dist/style.min.css'
-import { AppNavigationItem } from 'web-pkg/src/apps'
+import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 const MOBILE_BREAKPOINT = 640
 

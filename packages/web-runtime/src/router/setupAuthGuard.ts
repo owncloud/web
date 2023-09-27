@@ -1,6 +1,6 @@
 import { extractPublicLinkToken, isIdpContext, isPublicLinkContext, isUserContext } from './index'
 import { Router, RouteLocation } from 'vue-router'
-import { contextRouteNameKey, queryItemAsString } from 'web-pkg/src/composables'
+import { contextRouteNameKey, queryItemAsString } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth/authService'
 
 export const setupAuthGuard = (router: Router) => {

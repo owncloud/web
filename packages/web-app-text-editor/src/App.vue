@@ -23,7 +23,7 @@ import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { computed, defineComponent, unref, PropType } from 'vue'
 import { Resource } from 'web-client/src/helpers/resource/types'
-import { AppConfigObject } from 'web-pkg/src/apps/types'
+import { AppConfigObject } from '@ownclouders/web-pkg/types'
 
 export default defineComponent({
   name: 'TextEditor',

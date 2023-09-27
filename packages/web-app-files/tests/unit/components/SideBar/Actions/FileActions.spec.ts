@@ -11,10 +11,10 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { Action } from 'web-pkg/src/composables/actions'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { Action } from '@ownclouders/web-pkg'
 
-jest.mock('web-pkg/src/composables/actions/files/useFileActions')
+jest.mock('@ownclouders/web-pkg/files/useFileActions')
 
 describe('FileActions', () => {
   describe('when user is on personal route', () => {

@@ -1,4 +1,4 @@
-import { AppNavigationItem } from 'web-pkg/src/apps'
+import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 export interface NavItem extends Omit<AppNavigationItem, 'name'> {
   name: string

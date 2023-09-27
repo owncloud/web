@@ -1,4 +1,4 @@
-import { useSpaceActionsEditDescription } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsEditDescription } from '../../../../../src/composables/actions'
 import {
   createStore,
   defaultComponentMocks,

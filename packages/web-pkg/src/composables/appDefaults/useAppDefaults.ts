@@ -96,7 +96,8 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       clientService
     }),
     ...useAppFolderHandling({
-      clientService,
+      // FIXME: what's wrong here? mismatch in packages somehow...
+      clientService: clientService as any,
       store,
       currentRoute
     }),

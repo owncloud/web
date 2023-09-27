@@ -123,7 +123,7 @@ import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharingDefault,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { Resource } from 'web-client'
 import { OcDrop } from 'design-system/src/components'
 import { mapGetters } from 'vuex'

@@ -1,7 +1,7 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService, eventBus } from 'web-pkg/src'
+import { ClientService, eventBus } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
@@ -19,7 +19,7 @@ const getClientServiceMock = () => {
   )
   return clientService
 }
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 describe('Groups view', () => {
   describe('method "createGroup"', () => {

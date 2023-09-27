@@ -1,8 +1,8 @@
 import Preview from './preview'
 import { SearchPreview, SearchProvider } from 'web-app-search/src/types'
-import { EventBus } from 'web-pkg/src/services/eventBus'
+import { EventBus } from '@ownclouders/web-pkg'
 import { GitHubClient } from './client'
-import { HttpClient } from 'web-pkg'
+import { HttpClient } from '@ownclouders/web-pkg'
 
 export class GitHubSearch extends EventBus implements SearchProvider {
   public readonly id: string

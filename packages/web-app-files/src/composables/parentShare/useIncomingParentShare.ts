@@ -1,5 +1,5 @@
 import { buildShare } from 'web-client/src/helpers/share'
-import { useCapabilitySpacesEnabled, useClientService, useStore } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useClientService, useStore } from '@ownclouders/web-pkg'
 import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import {

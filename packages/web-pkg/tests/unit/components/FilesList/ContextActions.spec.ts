@@ -8,16 +8,16 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
+import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'
 
 import {
   useFileActionsAcceptShare,
   useFileActionsCreateQuickLink,
   useFileActionsRename,
   useFileActionsCopy
-} from 'web-pkg/src/composables/actions/files'
+} from '../../../../src/composables'
 import { computed, ref } from 'vue'
-import { Action } from 'web-pkg/src/composables/actions'
+import { Action } from '@ownclouders/web-pkg'
 
 function createMockActionComposables(module) {
   const mockModule: Record<string, any> = {}
@@ -27,13 +27,13 @@ function createMockActionComposables(module) {
   return mockModule
 }
 
-jest.mock('web-pkg/src/composables/actions/files', () =>
-  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/files'))
+jest.mock('@ownclouders/web-pkg/files', () =>
+  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg/files'))
 )
 
-jest.mock('web-pkg/src/composables/actions/files/useFileActionsSetReadme', () =>
+jest.mock('@ownclouders/web-pkg/files/useFileActionsSetReadme', () =>
   createMockActionComposables(
-    jest.requireActual('web-pkg/src/composables/actions/files/useFileActionsSetReadme')
+    jest.requireActual('@ownclouders/web-pkg/files/useFileActionsSetReadme')
   )
 )
 

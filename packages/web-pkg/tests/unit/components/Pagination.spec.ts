@@ -8,7 +8,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import Pagination from 'web-pkg/src/components/Pagination.vue'
+import Pagination from '@ownclouders/web-pkg/src/components/Pagination.vue'
 
 const filesPersonalRoute = { name: 'files-personal', path: '/files/home' }
 

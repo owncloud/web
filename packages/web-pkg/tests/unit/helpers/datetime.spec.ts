@@ -9,7 +9,7 @@ import {
   formatRelativeDateFromJSDate,
   formatRelativeDateFromISO,
   formatRelativeDateFromRFC
-} from 'web-pkg'
+} from '@ownclouders/web-pkg'
 
 describe('datetime helper', () => {
   const language = 'en'

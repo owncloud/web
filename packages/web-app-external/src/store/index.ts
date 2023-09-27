@@ -1,6 +1,6 @@
 import { Commit } from 'vuex'
 import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { configurationManager } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
 
 interface AppProvider {

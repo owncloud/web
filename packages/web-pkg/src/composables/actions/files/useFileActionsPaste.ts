@@ -12,8 +12,8 @@ import {
   useLoadingService,
   useRouter,
   useStore
-} from 'web-pkg/src/composables'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+} from '@ownclouders/web-pkg/src/composables'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from 'web-client'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {

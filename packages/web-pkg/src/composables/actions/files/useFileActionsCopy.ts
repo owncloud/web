@@ -5,9 +5,9 @@ import {
 } from '../../../router'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import { useRouter, useStore } from 'web-pkg/src/composables'
+import { useRouter, useStore } from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {

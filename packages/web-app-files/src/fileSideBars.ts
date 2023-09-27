@@ -6,14 +6,14 @@ import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import TagsPanel from './components/SideBar/TagsPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
-import SpaceDetails from 'web-pkg/src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import SpaceNoSelection from 'web-pkg/src/components/SideBar/Spaces/SpaceNoSelection.vue'
+import SpaceDetails from '@ownclouders/web-pkg/src/components/SideBar/Spaces/Details/SpaceDetails.vue'
+import SpaceNoSelection from '@ownclouders/web-pkg/src/components/SideBar/Spaces/SpaceNoSelection.vue'
 import {
   isLocationTrashActive,
   isLocationPublicActive,
   isLocationSpacesActive,
   isLocationSharesActive
-} from 'web-pkg/src/router'
+} from '@ownclouders/web-pkg/src/router'
 
 import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
 
@@ -21,7 +21,7 @@ import { Panel } from '../../web-pkg/src/components/SideBar'
 
 import { Resource, User } from 'web-client'
 import { Router } from 'vue-router'
-import SpaceDetailsMultiple from 'web-pkg/src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
+import SpaceDetailsMultiple from '@ownclouders/web-pkg/src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
 
 function $gettext(msg: string): string {
   return msg

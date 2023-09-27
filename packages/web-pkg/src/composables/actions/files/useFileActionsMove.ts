@@ -6,9 +6,9 @@ import {
 } from '../../../router'
 import { Store } from 'vuex'
 import { useGettext } from 'vue3-gettext'
-import { ActionOptions, FileAction } from 'web-pkg/src/composables/actions'
+import { ActionOptions, FileAction } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
-import { useRouter, useStore } from 'web-pkg/src/composables'
+import { useRouter, useStore } from '@ownclouders/web-pkg/src/composables'
 
 export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

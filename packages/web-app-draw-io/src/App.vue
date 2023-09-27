@@ -21,7 +21,7 @@ import {
   nextTick
 } from 'vue'
 import { Resource } from 'web-client/src'
-import { AppConfigObject } from 'web-pkg/src/apps'
+import { AppConfigObject } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'DrawIoEditor',

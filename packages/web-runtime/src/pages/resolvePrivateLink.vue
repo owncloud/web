@@ -54,11 +54,11 @@ import {
   useCapabilitySpacesEnabled,
   useClientService,
   useRouteQuery
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
 import { dirname } from 'path'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
 import { useTask } from 'vue-concurrency'
 import {
   buildShareSpaceResource,
@@ -68,7 +68,7 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { configurationManager } from '@ownclouders/web-pkg'
 import { RouteLocationRaw } from 'vue-router'
 import { useLoadFileInfoById } from '../composables/fileInfo'
 import { useGettext } from 'vue3-gettext'

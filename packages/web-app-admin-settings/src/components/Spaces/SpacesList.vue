@@ -124,25 +124,20 @@ import {
   displayPositionedDropdown,
   formatFileSize,
   defaultFuseOptions
-} from 'web-pkg/src/helpers'
+} from '@ownclouders/web-pkg'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
 import { SpaceResource } from 'web-client/src/helpers'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
-import { eventBus, SortDir } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import {
-  useFileListHeaderPosition,
-  useRoute,
-  useRouter,
-  usePagination
-} from 'web-pkg/src/composables'
-import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { eventBus, SortDir } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
+import { useFileListHeaderPosition, useRoute, useRouter, usePagination } from '@ownclouders/web-pkg'
+import { Pagination } from '@ownclouders/web-pkg'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
-import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useKeyboardActions } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation

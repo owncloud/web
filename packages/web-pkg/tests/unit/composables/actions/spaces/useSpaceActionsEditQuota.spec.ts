@@ -1,4 +1,4 @@
-import { useSpaceActionsEditQuota } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsEditQuota } from '../../../../../src/composables/actions'
 import { buildSpace } from 'web-client/src/helpers'
 import {
   createStore,

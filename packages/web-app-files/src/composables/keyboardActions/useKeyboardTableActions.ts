@@ -1,5 +1,9 @@
-import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
-import { useStore } from 'web-pkg/src/composables'
+import {
+  Key,
+  KeyboardActions,
+  ModifierKey
+} from '@ownclouders/web-pkg/src/composables/keyboardActions'
+import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export const useKeyboardTableActions = (keyActions: KeyboardActions) => {

@@ -1,4 +1,4 @@
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 import { Store } from 'vuex'
 import { createStore, getComposableWrapper, defaultStoreMockOptions } from 'web-test-helpers'
 

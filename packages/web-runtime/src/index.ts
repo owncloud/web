@@ -1,6 +1,6 @@
 import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { configurationManager } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -43,7 +43,7 @@ import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import { ArchiverService } from 'web-pkg/src/services/archiver'
+import { ArchiverService } from '@ownclouders/web-pkg/archiver'
 import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {

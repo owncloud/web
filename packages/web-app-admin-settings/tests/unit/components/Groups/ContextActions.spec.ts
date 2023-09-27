@@ -7,7 +7,7 @@ import {
   useGroupActionsEdit
 } from 'web-app-admin-settings/src/composables/actions'
 import { computed, ref } from 'vue'
-import { Action } from 'web-pkg/src/composables/actions'
+import { Action } from '@ownclouders/web-pkg'
 
 function createMockActionComposables(module) {
   const mockModule: Record<string, any> = {}
@@ -17,10 +17,8 @@ function createMockActionComposables(module) {
   return mockModule
 }
 
-jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
-  createMockActionComposables(
-    jest.requireActual('web-pkg/src/composables/actions/useActionsShowDetails')
-  )
+jest.mock('@ownclouders/web-pkg', () =>
+  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
 )
 
 jest.mock('web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete', () =>

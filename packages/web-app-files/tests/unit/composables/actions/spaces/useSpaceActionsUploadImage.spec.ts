@@ -9,7 +9,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
 

@@ -35,10 +35,10 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
 import { SpaceResource } from 'web-client'
-import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
-import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from 'web-pkg/src/composables'
+import ActionMenuItem from '@ownclouders/web-pkg/src/components/ContextActions/ActionMenuItem.vue'
+import QuotaModal from '@ownclouders/web-pkg/src/components/Spaces/QuotaModal.vue'
+import ReadmeContentModal from '@ownclouders/web-pkg/src/components/Spaces/ReadmeContentModal.vue'
+import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
@@ -47,9 +47,9 @@ import {
   useSpaceActionsEditReadmeContent,
   useSpaceActionsRename,
   useSpaceActionsRestore
-} from 'web-pkg/src/composables/actions/spaces'
+} from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
-import { useFileActionsDownloadArchive } from 'web-pkg/src/composables/actions/files'
+import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },

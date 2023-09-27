@@ -1,4 +1,4 @@
-import { triggerShareAction } from 'web-pkg/src/helpers/share/triggerShareAction'
+import { triggerShareAction } from '@ownclouders/web-pkg/src/helpers/share/triggerShareAction'
 
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { OwnCloudSdk } from 'web-client/src/types'

@@ -1,4 +1,4 @@
-import { useSpaceActionsEditReadmeContent } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsEditReadmeContent } from '../../../../../src/composables/actions'
 import { buildSpace } from 'web-client/src/helpers'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'

@@ -1,7 +1,7 @@
 import { unref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { useClientService, useSpaceHelpers } from 'web-pkg/src/composables'
+import { useClientService, useSpaceHelpers } from '@ownclouders/web-pkg/src/composables'
 import { useAbility } from '../../ability'
 import { useRoute } from '../../router'
 import { useStore } from '../../store'

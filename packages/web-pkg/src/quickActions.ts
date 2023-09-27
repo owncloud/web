@@ -1,9 +1,9 @@
-import { createQuicklink } from 'web-pkg/src/helpers/share'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { createQuicklink } from '@ownclouders/web-pkg/src/helpers/share'
+import { eventBus } from '@ownclouders/web-pkg/src/services/eventBus'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { Resource } from 'web-client'
 import { Language } from 'vue3-gettext'
-import { ClientService, PasswordPolicyService } from 'web-pkg'
+import { ClientService, PasswordPolicyService } from '@ownclouders/web-pkg'
 import { Ability } from 'web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
 

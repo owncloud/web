@@ -1,11 +1,11 @@
 import { Store } from 'vuex'
 import { isLocationTrashActive } from '../../../router'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '@ownclouders/web-pkg/src/services/eventBus'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useRouter, useStore, useIsFilesAppActive } from 'web-pkg/src/composables'
-import { FileAction } from 'web-pkg/src/composables/actions/types'
+import { useRouter, useStore, useIsFilesAppActive } from '@ownclouders/web-pkg/src/composables'
+import { FileAction } from '@ownclouders/web-pkg/types'
 
 export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

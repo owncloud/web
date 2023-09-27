@@ -20,7 +20,12 @@
 <script lang="ts">
 import pickBy from 'lodash-es/pickBy'
 import { computed, defineComponent } from 'vue'
-import { useAbility, useClientService, usePasswordPolicyService, useStore } from 'web-pkg'
+import {
+  useAbility,
+  useClientService,
+  usePasswordPolicyService,
+  useStore
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

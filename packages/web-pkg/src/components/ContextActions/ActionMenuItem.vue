@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ActionMenuItem',

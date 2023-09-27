@@ -9,9 +9,9 @@ import {
   useLoadingService,
   useRouter,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

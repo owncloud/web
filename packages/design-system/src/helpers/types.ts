@@ -1,5 +1,3 @@
-import { ConfigurationManager } from 'web-pkg'
-
 export type IconFillType = 'fill' | 'line' | 'none'
 export type IconType = {
   name: string
@@ -19,7 +17,7 @@ export interface ContextualHelperData {
 }
 
 export interface ContextualHelperOptions {
-  configurationManager: ConfigurationManager
+  configurationManager: unknown
 }
 
 export interface ContextualHelper {

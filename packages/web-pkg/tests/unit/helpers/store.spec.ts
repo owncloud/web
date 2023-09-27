@@ -1,4 +1,4 @@
-import { cloneStateObject } from 'web-pkg/src/helpers/store'
+import { cloneStateObject } from '@ownclouders/web-pkg/src/helpers/store'
 
 describe('cloneStateObject', () => {
   it('clones object', () => {

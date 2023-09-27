@@ -1,7 +1,7 @@
 import { mock, mockDeep } from 'jest-mock-extended'
 import { createApp, defineComponent, App } from 'vue'
 import { createStore } from 'vuex'
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import {
   initializeApplications,
   announceApplicationsReady,

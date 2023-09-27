@@ -1,6 +1,6 @@
 import { onBeforeUnmount, onMounted, unref, Ref } from 'vue'
-import { eventBus } from 'web-pkg'
-import { KeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { eventBus } from '@ownclouders/web-pkg'
+import { KeyboardActions } from '@ownclouders/web-pkg'
 import { findIndex, find } from 'lodash-es'
 import { Resource } from 'web-client'
 

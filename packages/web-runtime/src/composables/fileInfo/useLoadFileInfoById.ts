@@ -1,5 +1,5 @@
-import { ClientService } from 'web-pkg/src/services'
-import { useClientService } from 'web-pkg/src/composables'
+import { ClientService } from '@ownclouders/web-pkg'
+import { useClientService } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
 import { DavProperty, DavPropertyValue } from 'web-client/src/webdav/constants'

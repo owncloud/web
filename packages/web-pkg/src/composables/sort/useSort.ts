@@ -1,11 +1,11 @@
 import { ref, Ref, computed, unref, isRef } from 'vue'
-import { MaybeRef, ReadOnlyRef } from 'web-pkg/src/utils'
+import { MaybeRef, ReadOnlyRef } from '@ownclouders/web-pkg/src/utils'
 import {
   useRouteName,
   useRouter,
   useRouteQueryPersisted,
   QueryValue
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { SortConstants } from './constants'
 import get from 'lodash-es/get'
 

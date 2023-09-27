@@ -10,11 +10,11 @@ import {
 import { ShareStatus } from 'web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { useGetMatchingSpace, useRouter, useStore } from 'web-pkg/src/composables'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import { useGetMatchingSpace, useRouter, useStore } from '@ownclouders/web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction } from 'web-pkg/src/composables/actions'
+import { FileAction } from '@ownclouders/web-pkg'
 
 export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

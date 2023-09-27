@@ -1,4 +1,4 @@
-import { useFileActionsDeleteResources } from 'web-pkg/src/composables'
+import { useFileActionsDeleteResources } from '@ownclouders/web-pkg/src/composables'
 import { Store } from 'vuex'
 import {
   isLocationPublicActive,
@@ -12,9 +12,9 @@ import {
   useCapabilitySpacesEnabled,
   useRouter,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {

@@ -32,32 +32,26 @@ import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteLeave } from 'vue-router'
 
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
-import LoadingScreen from 'web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
+import AppTopBar from '@ownclouders/web-pkg/src/components/AppTopBar.vue'
+import ErrorScreen from '@ownclouders/web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
+import LoadingScreen from '@ownclouders/web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
 import {
   UrlForResourceOptions,
   useAppDefaults,
   useClientService,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { Resource } from 'web-client'
 import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
-import { AppConfigObject } from 'web-pkg/src/apps/types'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
+import { Action, ActionOptions } from '@ownclouders/web-pkg'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { HttpError } from 'web-pkg/src/errors'
-import { ModifierKey, Key, useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
-import { useAppMeta } from 'web-pkg/src/composables/appDefaults/useAppMeta'
-
-export interface AppWrapperSlotArgs {
-  applicationConfig: AppConfigObject
-  resource: Resource
-  currentContent: Ref<string>
-  isDirty: boolean
-  isReadOnly: boolean
-  url: string
-}
+import { HttpError } from '@ownclouders/web-pkg/src/errors'
+import {
+  ModifierKey,
+  Key,
+  useKeyboardActions
+} from '@ownclouders/web-pkg/src/composables/keyboardActions'
+import { useAppMeta } from '@ownclouders/web-pkg/src/composables/appDefaults/useAppMeta'
 
 export default defineComponent({
   name: 'AppWrapper',

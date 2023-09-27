@@ -34,7 +34,7 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingQuickLinkDefaultRole,
   useCapabilityFilesSharingResharing
-} from 'web-pkg'
+} from '@ownclouders/web-pkg'
 import { Resource } from 'web-client/src'
 import { useGettext } from 'vue3-gettext'
 import {

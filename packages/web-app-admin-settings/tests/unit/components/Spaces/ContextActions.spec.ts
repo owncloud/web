@@ -15,7 +15,7 @@ import {
   useSpaceActionsEditDescription,
   useSpaceActionsEditQuota,
   useSpaceActionsRename
-} from 'web-pkg/src/composables/actions'
+} from '@ownclouders/web-pkg'
 import { computed, ref } from 'vue'
 
 function createMockActionComposables(module) {
@@ -26,13 +26,8 @@ function createMockActionComposables(module) {
   return mockModule
 }
 
-jest.mock('web-pkg/src/composables/actions/spaces', () =>
-  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
-)
-jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
-  createMockActionComposables(
-    jest.requireActual('web-pkg/src/composables/actions/useActionsShowDetails')
-  )
+jest.mock('@ownclouders/web-pkg', () =>
+  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
 )
 
 describe('ContextActions', () => {

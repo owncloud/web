@@ -2,7 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties } from 'web-client/src/webdav/constants'
-import { isLocationTrashActive } from 'web-pkg/src/router'
+import { isLocationTrashActive } from '@ownclouders/web-pkg/src/router'
 import {
   buildResource,
   buildWebDavSpacesTrashPath,
@@ -11,7 +11,7 @@ import {
 } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { Resource } from 'web-client'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 
 export class FolderLoaderTrashbin implements FolderLoader {

@@ -122,19 +122,24 @@ import {
 } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { defaultFuseOptions, displayPositionedDropdown, eventBus, SortDir } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import {
+  defaultFuseOptions,
+  displayPositionedDropdown,
+  eventBus,
+  SortDir
+} from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { AppRole, User } from 'web-client/src/generated'
-import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useFileListHeaderPosition, usePagination } from 'web-pkg/src/composables'
-import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
+import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
+import { Pagination } from '@ownclouders/web-pkg'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
 import {
   useKeyboardTableNavigation,
   useKeyboardTableMouseActions
 } from 'web-app-admin-settings/src/composables/keyboardActions'
-import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useKeyboardActions } from '@ownclouders/web-pkg'
 import { findIndex } from 'lodash-es'
 
 export default defineComponent({

@@ -1,4 +1,5 @@
 export const displayPositionedDropdown = (dropdown, event, contextMenuButton) => {
+  console.log("HENLO I'M NOT MOCKED")
   const contextMenuButtonPos = contextMenuButton.$el.getBoundingClientRect()
   const isKeyboardEvent = event.clientY === 0
   const yValue = isKeyboardEvent

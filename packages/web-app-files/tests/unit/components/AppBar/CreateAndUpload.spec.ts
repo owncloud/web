@@ -3,8 +3,8 @@ import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Drive } from 'web-client/src/generated'
-import { useRequest } from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src'
+import { useRequest } from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultPlugins,
@@ -13,11 +13,11 @@ import {
   defaultComponentMocks
 } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { useExtensionRegistry } from 'web-pkg/src/composables/piniaStores/extensionRegistry'
+import { useExtensionRegistry } from '@ownclouders/web-pkg/src/composables/piniaStores/extensionRegistry'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
-jest.mock('web-pkg/src/composables/authContext')
-jest.mock('web-pkg/src/composables/piniaStores/extensionRegistry')
+jest.mock('@ownclouders/web-pkg/src/composables/authContext')
+jest.mock('@ownclouders/web-pkg/src/composables/piniaStores/extensionRegistry')
 
 const elSelector = {
   component: '#create-and-upload-actions',

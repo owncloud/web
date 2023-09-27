@@ -1,6 +1,6 @@
 import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useSort } from 'web-pkg/src/composables/sort'
+import { useSort } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { ref } from 'vue'
@@ -17,7 +17,7 @@ import {
 } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
-jest.mock('web-pkg/src/composables/sort')
+jest.mock('@ownclouders/web-pkg')
 
 describe('SharedWithMe view', () => {
   it('appBar always present', () => {

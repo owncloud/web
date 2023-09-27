@@ -43,7 +43,7 @@ import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
-import { defaultFuseOptions } from 'web-pkg/src/helpers'
+import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'MembersPanel',

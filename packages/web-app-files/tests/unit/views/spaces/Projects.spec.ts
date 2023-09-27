@@ -1,7 +1,7 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { mock } from 'jest-mock-extended'
 import { nextTick } from 'vue'
-import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
+import { queryItemAsString } from '@ownclouders/web-pkg'
 
 import {
   createStore,
@@ -13,11 +13,11 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 
-jest.mock('web-pkg/src/helpers/contextMenuDropdown', () => ({
-  ...jest.requireActual('web-pkg/src/helpers/contextMenuDropdown'),
+jest.mock('@ownclouders/web-pkg/src/helpers/contextMenuDropdown', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg/src/helpers/contextMenuDropdown'),
   displayPositionedDropdown: jest.fn()
 }))
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 const spacesResources = [
   {

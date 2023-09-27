@@ -1,13 +1,12 @@
 import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService, Cache } from '@ownclouders/web-pkg'
 import { ProjectSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
-import { Cache } from 'web-pkg/src/helpers/cache'
 import { Component, computed, Ref, unref } from 'vue'
 import { Router } from 'vue-router'
 import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { urlJoin } from 'web-client/src/utils'
 
 export const previewSearchLimit = 8

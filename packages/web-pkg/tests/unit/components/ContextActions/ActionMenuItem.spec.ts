@@ -1,4 +1,4 @@
-import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
+import ActionMenuItem from '@ownclouders/web-pkg/src/components/ContextActions/ActionMenuItem.vue'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 
 const selectors = {

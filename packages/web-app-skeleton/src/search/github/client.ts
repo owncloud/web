@@ -1,4 +1,4 @@
-import { HttpClient } from 'web-pkg'
+import { HttpClient } from '@ownclouders/web-pkg'
 
 export interface Repository {
   id: number

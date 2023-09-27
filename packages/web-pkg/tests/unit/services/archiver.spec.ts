@@ -1,7 +1,7 @@
 import { ArchiverCapability, ArchiverService } from '../../../src/services'
-import { RuntimeError } from 'web-pkg/src/errors'
+import { RuntimeError } from '@ownclouders/web-pkg/src/errors'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg'
+import { ClientService } from '@ownclouders/web-pkg'
 import { unref, ref, Ref } from 'vue'
 
 const serverUrl = 'https://demo.owncloud.com'

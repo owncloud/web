@@ -1,4 +1,4 @@
-import { useFileActionsSetImage } from 'web-pkg/src/composables/actions/files/useFileActionsSetImage'
+import { useFileActionsSetImage } from '../../../../../src/composables/actions'
 import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {

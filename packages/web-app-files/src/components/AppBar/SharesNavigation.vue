@@ -42,16 +42,16 @@
 </template>
 
 <script lang="ts">
-import { isLocationSharesActive } from 'web-pkg/src/router'
+import { isLocationSharesActive } from '@ownclouders/web-pkg/src/router'
 import {
   locationSharesViaLink,
   locationSharesWithMe,
   locationSharesWithOthers
-} from 'web-pkg/src/router/shares'
+} from '@ownclouders/web-pkg/src/router/shares'
 
 import { computed, defineComponent, unref } from 'vue'
-import { useRouter } from 'web-pkg/src/composables'
-import { useActiveLocation } from 'web-pkg/src/composables'
+import { useRouter } from '@ownclouders/web-pkg'
+import { useActiveLocation } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

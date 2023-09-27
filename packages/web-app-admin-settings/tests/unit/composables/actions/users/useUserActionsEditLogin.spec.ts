@@ -2,7 +2,7 @@ import { useUserActionsEditLogin } from '../../../../../src/composables/actions/
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from 'web-client/src/generated'
-import { eventBus } from 'web-pkg/src'
+import { eventBus } from '@ownclouders/web-pkg'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 
 describe('useUserActionsEditLogin', () => {

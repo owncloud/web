@@ -20,12 +20,12 @@ import {
   useUserActionsEditQuota
 } from '../../composables/actions/users'
 import { computed, defineComponent, PropType, unref, watch, toRaw, ref } from 'vue'
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import { ContextActionMenu } from '@ownclouders/web-pkg'
 import { User } from 'web-client/src/generated'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
+import { QuotaModal } from '@ownclouders/web-pkg'
 import { SpaceResource } from 'web-client/src'
-import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
-import { useActionsShowDetails } from 'web-pkg/src/composables/actions'
+import { useCapabilitySpacesMaxQuota, useStore } from '@ownclouders/web-pkg'
+import { useActionsShowDetails } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 

@@ -1,5 +1,5 @@
-import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
-import { mock } from 'jest-mock-extended'
+import ReadmeContentModal from '../../../../src/components/Spaces/ReadmeContentModal.vue'
+
 import {
   createStore,
   defaultPlugins,

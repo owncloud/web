@@ -64,21 +64,16 @@
 import GroupsList from '../components/Groups/GroupsList.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import { NoContentMessage } from '@ownclouders/web-pkg'
 import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import { mapActions } from 'vuex'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
-import {
-  queryItemAsString,
-  useClientService,
-  useRouteQuery,
-  useStore
-} from 'web-pkg/src/composables'
+import { queryItemAsString, useClientService, useRouteQuery, useStore } from '@ownclouders/web-pkg'
 import AppTemplate from '../components/AppTemplate.vue'
-import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import { useSideBar } from '@ownclouders/web-pkg'
 import { useGroupActionsDelete } from '../composables/actions/groups'
 import MembersPanel from '../components/Groups/SideBar/MembersPanel.vue'
 

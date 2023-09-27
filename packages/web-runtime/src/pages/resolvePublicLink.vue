@@ -72,7 +72,7 @@ import {
   useRouter,
   useStore,
   useUserContext
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {

@@ -10,6 +10,8 @@
     "mark.js": "^8.11.1"
   },
   "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
     "axios": "^0.27.2 || ^1.0.0",
     "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "^6.5.3",
@@ -17,8 +19,6 @@
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.1",
     "vuex": "4.1.0",
-    "web-app-admin-settings": "workspace:*",
-    "web-client": "workspace:@ownclouders/web-client@*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "web-app-admin-settings": "workspace:*"
   }
 }

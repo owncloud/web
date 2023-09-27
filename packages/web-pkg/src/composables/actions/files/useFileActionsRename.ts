@@ -9,8 +9,8 @@ import {
   isShareSpaceResource,
   extractNameWithoutExtension
 } from 'web-client/src/helpers'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { renameResource as _renameResource } from 'web-pkg/src/helpers/resource'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { renameResource as _renameResource } from '../../../helpers/resource'
 import { computed, unref } from 'vue'
 import {
   useClientService,
@@ -18,10 +18,10 @@ import {
   useLoadingService,
   useRouter,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { useCapabilityFilesSharingCanRename } from 'web-pkg/src/composables/capability'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { useCapabilityFilesSharingCanRename } from '@ownclouders/web-pkg/src/composables/capability'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

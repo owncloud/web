@@ -1,5 +1,5 @@
 import { Resource } from 'web-client/src'
-import { AppWrapperRoute } from 'web-pkg/src/components/AppTemplates/AppWrapperRoute'
+import { AppWrapperRoute } from '@ownclouders/web-pkg/src/components/AppTemplates/AppWrapperRoute'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
 

@@ -18,7 +18,7 @@ import { ComponentPublicInstance, computed, defineComponent, inject, provide } f
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 import { useIncomingParentShare } from '../../../composables/parentShare'
 import { Resource } from 'web-client'
 

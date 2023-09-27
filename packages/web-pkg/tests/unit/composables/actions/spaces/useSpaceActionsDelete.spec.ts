@@ -1,4 +1,4 @@
-import { useSpaceActionsDelete } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,

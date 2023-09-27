@@ -1,4 +1,4 @@
-import { Cache } from 'web-pkg'
+import { Cache } from '@ownclouders/web-pkg'
 describe('cache', () => {
   describe('CacheElement', () => {
     let cache

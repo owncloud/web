@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
+import AppBar from '@ownclouders/web-pkg/src/components/AppBar/AppBar.vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client'
 import {
@@ -10,8 +10,8 @@ import {
   defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
-import { ArchiverService } from 'web-pkg/src/services'
-import { ViewModeConstants } from 'web-pkg/src/composables'
+import { ArchiverService } from '@ownclouders/web-pkg/src/services'
+import { ViewModeConstants } from '@ownclouders/web-pkg/src/composables'
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',

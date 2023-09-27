@@ -57,9 +57,9 @@ import LayoutPlain from './layouts/Plain.vue'
 import { defineComponent } from 'vue'
 import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
-import { eventBus } from 'web-pkg/src/services'
+import { eventBus } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {

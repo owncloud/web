@@ -123,7 +123,7 @@ import {
   useCapabilityShareJailEnabled,
   useClientService,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 
 import { defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from 'web-client'
@@ -132,7 +132,7 @@ import {
   displayPositionedDropdown,
   formatDateFromDateTime,
   formatRelativeDateFromDateTime
-} from 'web-pkg'
+} from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
 

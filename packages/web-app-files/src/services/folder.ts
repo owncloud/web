@@ -5,10 +5,10 @@ import {
   useClientService,
   useStore,
   useConfigurationManager
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { Store } from 'vuex'
-import { ClientService } from 'web-pkg/src/services/client'
+import { ClientService } from '@ownclouders/web-pkg/client'
 
 import {
   FolderLoaderSpace,
@@ -18,7 +18,7 @@ import {
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
 } from './folder/index'
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 export * from './folder/types'
 

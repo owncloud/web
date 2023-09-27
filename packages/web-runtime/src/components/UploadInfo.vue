@@ -160,9 +160,9 @@ import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
 import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
-import { formatFileSize } from 'web-pkg/src/helpers'
+import { configurationManager } from '@ownclouders/web-pkg'
+import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
+import { formatFileSize } from '@ownclouders/web-pkg'
 import { UppyResource } from '../composables/upload'
 import { extractParentFolderName } from 'web-client/src/helpers'
 

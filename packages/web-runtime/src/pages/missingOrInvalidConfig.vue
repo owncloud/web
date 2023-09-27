@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useStore } from 'web-pkg'
+import { useStore } from '@ownclouders/web-pkg'
 import { useHead } from '../composables/head'
 
 export default defineComponent({

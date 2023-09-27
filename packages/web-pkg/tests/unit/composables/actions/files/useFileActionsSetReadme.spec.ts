@@ -1,6 +1,7 @@
-import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions/files/useFileActionsSetReadme'
+import { useFileActionsSetReadme } from '../../../../../src/composables/actions'
 import { buildSpace, FileResource, SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
+
 import {
   createStore,
   defaultStoreMockOptions,

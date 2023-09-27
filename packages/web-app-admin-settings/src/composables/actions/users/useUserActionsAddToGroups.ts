@@ -1,7 +1,7 @@
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction } from 'web-pkg/src/composables/actions'
+import { UserAction } from '@ownclouders/web-pkg'
 
 export const useUserActionsAddToGroups = () => {
   const { $gettext } = useGettext()

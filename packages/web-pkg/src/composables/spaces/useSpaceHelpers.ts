@@ -1,4 +1,4 @@
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 
 export const useSpaceHelpers = () => {

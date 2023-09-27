@@ -8,11 +8,11 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
-import { FileContext, useAppDefaults } from 'web-pkg/src/composables/appDefaults'
+import { FileContext, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 
-jest.mock('web-pkg/src/composables/appDefaults', () => {
-  const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg', () => {
+  const { queryItemAsString } = jest.requireActual('@ownclouders/web-pkg')
   return {
     useAppDefaults: jest.fn(),
     useAppFileHandling: jest.fn(),

@@ -9,7 +9,7 @@ import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { extensions } from '../../src/extensions'
-import { ApplicationSetupOptions } from 'web-pkg/src/apps'
+import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 
 const getAction = (opts: ApplicationSetupOptions) => {

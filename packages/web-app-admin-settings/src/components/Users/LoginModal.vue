@@ -26,7 +26,7 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { User } from 'web-client/src/generated'
-import { useStore } from 'web-pkg/src'
+import { useStore } from '@ownclouders/web-pkg'
 
 type LoginOption = {
   label: string

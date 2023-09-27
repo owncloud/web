@@ -1,9 +1,9 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { useFileActionsDelete } from 'web-pkg/src/composables/actions/files/useFileActionsDelete'
-import { useFileActionsDeleteResources } from 'web-pkg/src/composables/actions/helpers/useFileActionsDeleteResources'
+import { useFileActionsDelete } from '@ownclouders/web-pkg'
+import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { Resource, SpaceResource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 
 import {
   createStore,
@@ -13,7 +13,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 
-jest.mock('web-pkg/src/composables/actions/helpers/useFileActionsDeleteResources')
+jest.mock('@ownclouders/web-pkg')
 
 describe('delete', () => {
   describe('computed property "actions"', () => {

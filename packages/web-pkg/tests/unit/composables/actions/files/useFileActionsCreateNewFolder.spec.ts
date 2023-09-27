@@ -1,6 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, unref } from 'vue'
-import { useFileActionsCreateNewFolder } from 'web-pkg/src/composables'
+import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
 import { SpaceResource } from 'web-client/src'
 import { FolderResource } from 'web-client/src/helpers'
 import {
@@ -10,10 +10,10 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers/src'
-import { useScrollToMock } from 'web-pkg/tests/mocks/useScrollToMock'
-import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
+import { useScrollToMock } from '@ownclouders/web-pkg/tests/mocks/useScrollToMock'
+import { useScrollTo } from '@ownclouders/web-pkg/src/composables/scrollTo'
 
-jest.mock('web-pkg/src/composables/scrollTo')
+jest.mock('@ownclouders/web-pkg/src/composables/scrollTo')
 
 describe('useFileActionsCreateNewFolder', () => {
   describe('checkFolderName', () => {

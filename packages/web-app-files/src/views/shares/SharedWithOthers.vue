@@ -65,26 +65,26 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { VisibilityObserver } from '@ownclouders/web-pkg/src/observer'
+import { ImageDimension, ImageType } from '@ownclouders/web-pkg/src/constants'
 import { debounce, find } from 'lodash-es'
 
-import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
+import ResourceTable from '@ownclouders/web-pkg/src/components/FilesList/ResourceTable.vue'
+import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
+import NoContentMessage from '@ownclouders/web-pkg/src/components/NoContentMessage.vue'
+import AppBar from '@ownclouders/web-pkg/src/components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import Pagination from 'web-pkg/src/components/Pagination.vue'
-import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
+import Pagination from '@ownclouders/web-pkg/src/components/Pagination.vue'
+import ContextActions from '@ownclouders/web-pkg/src/components/FilesList/ContextActions.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
-import { useGroupingSettings } from 'web-pkg/src/cern/composables'
-import { useGetMatchingSpace, useMutationSubscription } from 'web-pkg/src/composables'
+import { useGroupingSettings } from '@ownclouders/web-pkg/src/cern/composables'
+import { useGetMatchingSpace, useMutationSubscription } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 
 const visibilityObserver = new VisibilityObserver()

@@ -5,7 +5,7 @@ import {
   AppNavigationItem,
   ApplicationQuickActions,
   ApplicationTranslations
-} from 'web-pkg/src/apps'
+} from '@ownclouders/web-pkg'
 
 /** shim configuration for now, should be typed in a later step */
 export type RuntimeConfiguration = any

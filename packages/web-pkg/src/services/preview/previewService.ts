@@ -2,7 +2,7 @@ import get from 'lodash-es/get'
 import isEqual from 'lodash-es/isEqual'
 import { stringify } from 'qs'
 import { Store } from 'vuex'
-import { cacheService, ClientService, ConfigurationManager, encodePath } from 'web-pkg'
+import { cacheService, ClientService, ConfigurationManager, encodePath } from '@ownclouders/web-pkg'
 import { isPublicSpaceResource } from 'web-client/src/helpers'
 import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
 

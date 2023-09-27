@@ -1,14 +1,14 @@
 import { Resource } from 'web-client'
 import { basename, join } from 'path'
 import { SpaceResource } from 'web-client/src/helpers'
-import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
+import { ClientService, LoadingService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
 import {
   ConflictDialog,
   ResolveStrategy,
   isResourceBeeingMovedToSameLocation,
   resolveFileNameDuplicate,
   FileConflict
-} from 'web-pkg/src/helpers/resource'
+} from '@ownclouders/web-pkg/src/helpers/resource'
 
 import { TransferType } from '.'
 

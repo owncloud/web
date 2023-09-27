@@ -1,9 +1,13 @@
-import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
+import {
+  Key,
+  KeyboardActions,
+  ModifierKey
+} from '@ownclouders/web-pkg/src/composables/keyboardActions'
 import { SpaceResource } from 'web-client'
-import { useStore } from 'web-pkg'
+import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
-import { useFileActionsPaste } from 'web-pkg/src/composables'
+import { useFileActionsPaste } from '@ownclouders/web-pkg'
 
 export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space: SpaceResource) => {
   const store = useStore()

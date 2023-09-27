@@ -1,5 +1,5 @@
 import { computed, unref } from 'vue'
-import { activeApp, useRoute } from 'web-pkg/src/composables'
+import { activeApp, useRoute } from '@ownclouders/web-pkg/src/composables'
 
 const isFilesAppActive = (activeApp: string): boolean => {
   // FIXME: we should use this constant but it somehow breaks the unit tests

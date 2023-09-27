@@ -1,5 +1,5 @@
-import { useFileActionsRestore } from 'web-pkg/src/composables/actions/files/useFileActionsRestore'
-import { createLocationTrash, createLocationSpaces } from 'web-pkg/src/router'
+import { useFileActionsRestore } from '../../../../../src/composables/actions'
+import { createLocationTrash, createLocationSpaces } from '@ownclouders/web-pkg/src/router'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -8,11 +8,11 @@ import {
   getComposableWrapper,
   RouteLocation
 } from 'web-test-helpers'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 import { unref } from 'vue'
 import { Resource } from 'web-client'
 import { FileResource, ProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { LoadingTaskCallbackArguments } from 'web-pkg'
+import { LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
 
 describe('restore', () => {
   afterEach(() => jest.clearAllMocks())

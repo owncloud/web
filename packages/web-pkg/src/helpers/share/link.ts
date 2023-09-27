@@ -6,7 +6,7 @@ import {
   linkRoleViewerFolder
 } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService } from '@ownclouders/web-pkg/src/services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from 'web-client/src/helpers/resource/types'
 import { Resource } from 'web-client'

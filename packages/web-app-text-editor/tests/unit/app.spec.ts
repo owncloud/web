@@ -1,10 +1,10 @@
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src'
-import { AppConfigObject } from 'web-pkg/src/apps'
+import { AppConfigObject } from '@ownclouders/web-pkg'
 import { mount } from 'web-test-helpers'
 import App from '../../src/App.vue'
 
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 describe('Text editor app', () => {
   it('shows the editor', async () => {

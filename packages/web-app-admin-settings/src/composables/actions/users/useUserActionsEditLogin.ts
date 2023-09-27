@@ -1,8 +1,8 @@
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction } from 'web-pkg/src/composables/actions'
-import { useCapabilityReadOnlyUserAttributes } from 'web-pkg'
+import { UserAction } from '@ownclouders/web-pkg'
+import { useCapabilityReadOnlyUserAttributes } from '@ownclouders/web-pkg'
 
 export const useUserActionsEditLogin = () => {
   const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()

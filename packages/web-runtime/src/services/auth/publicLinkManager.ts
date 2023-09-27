@@ -1,5 +1,5 @@
-import { ClientService } from 'web-pkg/src/services'
-import { ConfigurationManager } from 'web-pkg/src/configuration'
+import { ClientService } from '@ownclouders/web-pkg'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
 

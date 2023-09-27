@@ -1,16 +1,16 @@
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, nextTick, unref } from 'vue'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
-import { FileAction } from 'web-pkg/src/composables/actions'
+import { useClientService, useRouter, useStore } from '@ownclouders/web-pkg/src/composables'
+import { FileAction } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { resolveFileNameDuplicate } from 'web-pkg/src/helpers/resource'
+import { resolveFileNameDuplicate } from '@ownclouders/web-pkg/src/helpers/resource'
 import { join } from 'path'
 import { WebDAV } from 'web-client/src/webdav'
-import { isLocationSpacesActive } from 'web-pkg/src/router'
-import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
-import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
-import { AncestorMetaData } from 'web-pkg/src/types'
+import { isLocationSpacesActive } from '@ownclouders/web-pkg/src/router'
+import { getIndicators } from '@ownclouders/web-pkg/src/helpers/statusIndicators'
+import { useScrollTo } from '@ownclouders/web-pkg/src/composables/scrollTo'
+import { AncestorMetaData } from '@ownclouders/web-pkg/src/types'
 
 export const useFileActionsCreateNewFolder = ({
   store,

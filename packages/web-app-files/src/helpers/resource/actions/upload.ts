@@ -8,7 +8,7 @@ import {
   ResolveConflict,
   resolveFileNameDuplicate,
   ResolveStrategy
-} from 'web-pkg/src/helpers/resource'
+} from '@ownclouders/web-pkg/src/helpers/resource'
 
 interface ConflictedResource {
   name: string

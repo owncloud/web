@@ -36,8 +36,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import { createLocationPublic, createLocationSpaces } from 'web-pkg/src/router'
-
+import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
   computed,
@@ -62,14 +61,14 @@ import {
   useUserContext,
   useRouteQuery,
   queryItemAsString
-} from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+} from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import { useService } from 'web-pkg/src/composables/service'
+import { useService } from '@ownclouders/web-pkg/src/composables/service'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
+import { useAuthService } from '@ownclouders/web-pkg/src/composables/authContext/useAuthService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { SpaceResource } from 'web-client/src'
 import { PublicSpaceResource } from 'web-client/src/helpers'
 

@@ -1,4 +1,8 @@
-import { Key, ModifierKey, useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import {
+  Key,
+  ModifierKey,
+  useKeyboardActions
+} from '@ownclouders/web-pkg/src/composables/keyboardActions'
 import { getComposableWrapper } from 'web-test-helpers'
 import { ref } from 'vue'
 

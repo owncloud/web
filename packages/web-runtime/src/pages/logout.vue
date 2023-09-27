@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useRouter, useStore } from 'web-pkg'
+import { useRouter, useStore } from '@ownclouders/web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
 import { useGettext } from 'vue3-gettext'
 

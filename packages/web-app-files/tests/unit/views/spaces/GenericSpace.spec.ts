@@ -13,11 +13,11 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 jest.mock('web-app-files/src/composables')
 jest.mock('web-app-files/src/composables/keyboardActions')
-jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {

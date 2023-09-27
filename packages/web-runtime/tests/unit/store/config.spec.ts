@@ -1,6 +1,6 @@
 import { loadTheme } from 'web-runtime/src/helpers/theme'
 import Store from 'web-runtime/src/store'
-import { objectKeys } from 'web-pkg/src/utils'
+import { objectKeys } from '@ownclouders/web-pkg'
 import get from 'lodash-es/get'
 import difference from 'lodash-es/difference'
 import { getStoreInstance } from 'web-test-helpers'

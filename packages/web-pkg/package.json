@@ -14,6 +14,8 @@
     "directory": "packages/web-pkg"
   },
   "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",
     "@microsoft/fetch-event-source": "^2.0.1",
@@ -35,8 +37,6 @@
     "vue-concurrency": "4.0.1",
     "vue-router": "4.2.0",
     "vue3-gettext": "2.5.0-alpha.1",
-    "vuex": "4.1.0",
-    "web-client": "workspace:@ownclouders/web-client@*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "vuex": "4.1.0"
   }
 }

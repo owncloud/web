@@ -1,5 +1,5 @@
-import { cacheService, ClientService } from 'web-pkg/src/services'
-import { ImageDimension } from 'web-pkg/src/constants'
+import { cacheService, ClientService } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg/src/constants'
 
 interface AvatarUrlOptions {
   clientService: ClientService

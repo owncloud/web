@@ -46,7 +46,7 @@ import {
   useRouter,
   useStore,
   useUserContext
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { computed, unref, PropType, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 

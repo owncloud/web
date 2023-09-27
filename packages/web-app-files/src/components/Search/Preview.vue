@@ -21,16 +21,18 @@
 </template>
 
 <script lang="ts">
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension } from 'web-pkg/src/constants'
-import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resource'
+import {
+  useFileActions,
+  isResourceTxtFileAlmostEmpty,
+  VisibilityObserver,
+  ImageDimension
+} from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import { createLocationShares, createLocationSpaces } from 'web-pkg/src/router'
+import { createLocationShares, createLocationSpaces } from '@ownclouders/web-pkg/src/router'
 import { dirname } from 'path'
-import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
+import { useCapabilityShareJailEnabled, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import {
   extractParentFolderName,
   isProjectSpaceResource,
@@ -38,8 +40,8 @@ import {
   isShareSpaceResource,
   Resource
 } from 'web-client/src/helpers'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { eventBus } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
 import { SearchResultValue } from 'web-app-search/src/types'
 
 const visibilityObserver = new VisibilityObserver()

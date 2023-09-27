@@ -297,12 +297,12 @@ importers:
 
   packages/design-system:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
       portal-vue:
         specifier: '*'
         version: 3.0.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
     devDependencies:
       '@adobe/leonardo-contrast-colors':
         specifier: 1.0.0-alpha.16
@@ -621,6 +621,12 @@ importers:
 
   packages/web-app-admin-settings:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       axios:
         specifier: ^0.27.2 || ^1.0.0
         version: 1.4.0
@@ -654,30 +660,30 @@ importers:
       web-app-admin-settings:
         specifier: workspace:*
         version: 'link:'
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-draw-io:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       luxon:
         specifier: ^2.4.0
         version: 2.4.0
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-external:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -690,15 +696,15 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-files:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       '@uppy/core':
         specifier: ^3.3.0
         version: 3.3.0
@@ -759,12 +765,6 @@ importers:
       web-app-search:
         specifier: workspace:*
         version: link:../web-app-search
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
       web-runtime:
         specifier: workspace:*
         version: link:../web-runtime
@@ -802,18 +802,24 @@ importers:
 
   packages/web-app-pdf-viewer:
     dependencies:
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       vue3-gettext:
         specifier: ^2.3.3
         version: 2.3.4(@vue/compiler-sfc@3.3.4)(vue@3.3.4)
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-preview:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       '@vueuse/core':
         specifier: ^10.3.0
         version: 10.3.0(vue@3.3.4)
@@ -823,15 +829,15 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-search:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -844,24 +850,24 @@ importers:
       web-app-files:
         specifier: workspace:*
         version: link:../web-app-files
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-skeleton:
     dependencies:
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       web-app-search:
         specifier: workspace:*
         version: link:../web-app-search
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-text-editor:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       marked:
         specifier: ^4.0.12
         version: 4.0.12
@@ -877,27 +883,21 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-app-webfinger:
     dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
       web-app-webfinger:
         specifier: workspace:*
         version: 'link:'
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
 
   packages/web-client:
     dependencies:
@@ -925,6 +925,12 @@ importers:
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: 'link:'
       '@vueuse/core':
         specifier: ^10.0.0
         version: 10.3.0(vue@3.3.4)
@@ -982,12 +988,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: 'link:'
 
   packages/web-runtime:
     dependencies:
@@ -1000,6 +1000,12 @@ importers:
       '@fortawesome/fontawesome-free':
         specifier: 6.4.0
         version: 6.4.0
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       '@popperjs/core':
         specifier: ^2.11.5
         version: 2.11.5
@@ -1117,12 +1123,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-client:
-        specifier: workspace:@ownclouders/web-client@*
-        version: link:../web-client
-      web-pkg:
-        specifier: workspace:@ownclouders/web-pkg@*
-        version: link:../web-pkg
       web-runtime:
         specifier: workspace:*
         version: 'link:'

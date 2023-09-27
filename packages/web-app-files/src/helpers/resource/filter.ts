@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { defaultFuseOptions } from 'web-pkg/src/helpers'
+import { defaultFuseOptions } from '@ownclouders/web-pkg/src/helpers'
 
 export const filterResources = (resources: unknown[], term: string, limit?: number): unknown[] => {
   const engine = new Fuse(resources, {

@@ -1,8 +1,8 @@
 import { computed } from 'vue'
 import { Store } from 'vuex'
-import { eventBus, useLoadingService } from 'web-pkg'
-import { useClientService, useStore } from 'web-pkg/src/composables'
-import { GroupAction, GroupActionOptions } from 'web-pkg/src/composables/actions'
+import { eventBus, useLoadingService } from '@ownclouders/web-pkg'
+import { useClientService, useStore } from '@ownclouders/web-pkg'
+import { GroupAction, GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {

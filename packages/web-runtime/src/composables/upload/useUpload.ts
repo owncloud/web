@@ -6,7 +6,7 @@ import {
   usePublicLinkContext,
   usePublicLinkPassword,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppyService'
 import { v4 as uuidV4 } from 'uuid'

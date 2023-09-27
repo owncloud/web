@@ -20,7 +20,7 @@ const selectors = {
   }
 }
 
-jest.mock('web-pkg/src/configuration', () => ({
+jest.mock('@ownclouders/web-pkg', () => ({
   configurationManager: {
     options: { routing: { idBased: true } }
   }

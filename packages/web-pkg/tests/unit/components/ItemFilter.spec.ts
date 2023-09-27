@@ -1,8 +1,8 @@
-import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
+import ItemFilter from '@ownclouders/web-pkg/src/components/ItemFilter.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
-import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
+import { queryItemAsString } from '@ownclouders/web-pkg'
 
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 const filterItems = [
   { id: '1', name: 'Albert Einstein' },

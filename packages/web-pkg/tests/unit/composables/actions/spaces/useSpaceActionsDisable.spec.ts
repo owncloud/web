@@ -1,4 +1,4 @@
-import { useSpaceActionsDisable } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsDisable } from '../../../../../src/composables/actions'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import {
   createStore,

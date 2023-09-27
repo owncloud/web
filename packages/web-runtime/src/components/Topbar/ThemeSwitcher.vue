@@ -14,7 +14,7 @@
 <script lang="ts">
 import { computed, unref, watch, defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
-import { useStore, useLocalStorage } from 'web-pkg/src/composables'
+import { useStore, useLocalStorage } from '@ownclouders/web-pkg'
 import { themeNameDark, themeNameLight, useDefaultThemeName } from '../../composables'
 
 export default defineComponent({

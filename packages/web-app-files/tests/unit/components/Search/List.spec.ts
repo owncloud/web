@@ -10,13 +10,13 @@ import {
   defaultStoreMockOptions,
   mockAxiosResolve
 } from 'web-test-helpers/src'
-import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
+import { queryItemAsString } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 import { Resource } from 'web-client/src'
 import { mock } from 'jest-mock-extended'
 
 jest.mock('web-app-files/src/composables')
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 const selectors = {
   noContentMessageStub: 'no-content-message-stub',

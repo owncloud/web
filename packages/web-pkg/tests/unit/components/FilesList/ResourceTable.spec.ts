@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon'
-import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
+import ResourceTable from '@ownclouders/web-pkg/src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
-import { ConfigurationManager, displayPositionedDropdown, eventBus } from 'web-pkg/src'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { ConfigurationManager, displayPositionedDropdown, eventBus } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'jest-mock-extended'
 
-jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mock<ConfigurationManager>({
       options: {
@@ -203,7 +203,7 @@ const processingResourcesWithAllFields = [
   }
 ]
 
-jest.mock('web-pkg/src/helpers')
+jest.mock('@ownclouders/web-pkg/src/helpers')
 
 describe('ResourceTable', () => {
   it('displays all known fields of the resources', () => {

@@ -2,7 +2,7 @@ import { useGroupActionsDelete } from '../../../../../src/composables/actions/gr
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { Group } from 'web-client/src/generated'
-import { eventBus } from 'web-pkg/src'
+import { eventBus } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,

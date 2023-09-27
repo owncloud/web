@@ -1,7 +1,7 @@
 import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
 import { Graph } from 'web-client'
 import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
+import { ClientService } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
@@ -20,11 +20,11 @@ function createMockActionComposables(module) {
   return mockModule
 }
 
-jest.mock('web-pkg/src/composables/actions/spaces', () =>
-  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
+jest.mock('@ownclouders/web-pkg', () =>
+  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
 )
 
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 const selectors = {
   loadingSpinnerStub: 'app-loading-spinner-stub',

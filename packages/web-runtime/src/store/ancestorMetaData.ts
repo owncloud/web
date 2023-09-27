@@ -5,9 +5,9 @@ import {
   isProjectSpaceResource
 } from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
-import { configurationManager } from 'web-pkg/src'
-import { getParentPaths } from 'web-pkg/src/helpers/path'
-import { AncestorMetaData } from 'web-pkg/src/types'
+import { configurationManager } from '@ownclouders/web-pkg'
+import { getParentPaths } from '@ownclouders/web-pkg/src/helpers/path'
+import { AncestorMetaData } from '@ownclouders/web-pkg/src/types'
 
 const state = {
   ancestorMetaData: {}

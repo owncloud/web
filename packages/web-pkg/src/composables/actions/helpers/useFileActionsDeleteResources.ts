@@ -5,7 +5,7 @@ import { Resource, SpaceResource } from 'web-client/src/helpers'
 import PQueue from 'p-queue'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
 import { computed, unref } from 'vue'
 import {
   useCapabilitySpacesEnabled,
@@ -16,7 +16,7 @@ import {
   useRouteQuery,
   queryItemAsString,
   useGetMatchingSpace
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
 

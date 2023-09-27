@@ -1,4 +1,4 @@
-import { useRouteQuery } from 'web-pkg/src/composables'
+import { useRouteQuery } from '@ownclouders/web-pkg/src/composables'
 import { Ref, nextTick, computed, ComputedRef, unref } from 'vue'
 import { getComposableWrapper, createRouter } from 'web-test-helpers'
 

@@ -1,4 +1,4 @@
-import { SortDir, SortField } from 'web-pkg/src/composables'
+import { SortDir, SortField } from '@ownclouders/web-pkg/src/composables'
 
 export const determineSortFields = (firstResource): SortField[] => {
   if (!firstResource) {

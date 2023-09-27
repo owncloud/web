@@ -137,12 +137,15 @@ import {
   queryItemAsString,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { extractDomSelector } from 'web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
 import * as uuid from 'uuid'
-import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
-import { useClientService } from 'web-pkg/src/composables'
+import {
+  formatDateFromDateTime,
+  formatRelativeDateFromDateTime
+} from '@ownclouders/web-pkg/src/helpers'
+import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 

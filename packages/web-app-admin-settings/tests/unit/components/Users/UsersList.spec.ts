@@ -1,14 +1,14 @@
 import UsersList from '../../../../src/components/Users/UsersList.vue'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { displayPositionedDropdown, eventBus, queryItemAsString } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 
 const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
-jest.mock('web-pkg/src/helpers', () => ({
-  ...jest.requireActual('web-pkg/src/helpers'),
-  displayPositionedDropdown: jest.fn()
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  displayPositionedDropdown: jest.fn(),
+  queryItemAsString: jest.fn()
 }))
-jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('UsersList', () => {
   describe('computed method "allUsersSelected"', () => {

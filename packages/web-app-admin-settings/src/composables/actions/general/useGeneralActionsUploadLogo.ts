@@ -1,8 +1,8 @@
 import { Store } from 'vuex'
 import { supportedLogoMimeTypes } from '../../../defaults'
 import { computed, VNodeRef, unref } from 'vue'
-import { Action } from 'web-pkg/src/composables/actions'
-import { useAbility, useClientService, useRouter, useStore } from 'web-pkg/src/composables'
+import { Action } from '@ownclouders/web-pkg'
+import { useAbility, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export const useGeneralActionsUploadLogo = ({

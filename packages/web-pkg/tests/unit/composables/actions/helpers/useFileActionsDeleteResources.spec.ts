@@ -1,4 +1,4 @@
-import { useFileActionsDeleteResources } from 'web-pkg/src/composables/actions/helpers/useFileActionsDeleteResources'
+import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { mockDeep } from 'jest-mock-extended'
 import { FolderResource, SpaceResource } from 'web-client/src/helpers'
 import {
@@ -7,7 +7,7 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 import { nextTick } from 'vue'
 
 const currentFolder = {

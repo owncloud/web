@@ -1,4 +1,4 @@
-import { useSpaceActionsRestore } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsRestore } from '../../../../../src/composables/actions'
 import { buildSpace, SpaceResource } from 'web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {

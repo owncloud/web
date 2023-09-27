@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
-import { eventBus, useLoadingService } from 'web-pkg'
-import { LoadingEventTopics } from 'web-pkg/src/services'
+import { eventBus, useLoadingService } from '@ownclouders/web-pkg'
+import { LoadingEventTopics } from '@ownclouders/web-pkg/src/services'
 
 export default defineComponent({
   name: 'LoadingIndicator',

@@ -13,9 +13,8 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { SpaceResource } from 'web-client'
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
+import { ContextActionMenu, QuotaModal } from '@ownclouders/web-pkg'
+import { useCapabilitySpacesMaxQuota, useStore } from '@ownclouders/web-pkg'
 
 import {
   useSpaceActionsDelete,
@@ -25,7 +24,7 @@ import {
   useSpaceActionsRename,
   useSpaceActionsRestore,
   useActionsShowDetails
-} from 'web-pkg/src/composables/actions'
+} from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ContextActions',

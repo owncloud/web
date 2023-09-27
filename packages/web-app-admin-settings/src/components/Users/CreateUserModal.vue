@@ -58,7 +58,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import * as EmailValidator from 'email-validator'
-import { useClientService } from 'web-pkg'
+import { useClientService } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateUserModal',

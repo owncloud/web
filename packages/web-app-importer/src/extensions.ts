@@ -1,4 +1,4 @@
-import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg/src/composables'
+import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg/src/composables/service'
 import type { UppyService } from 'web-runtime/src/services/uppyService'
@@ -11,7 +11,7 @@ import OneDrive from '@uppy/onedrive'
 import { WebdavPublicLink } from '@uppy/webdav'
 import GoogleDrive from '@uppy/google-drive'
 import { Extension } from '@ownclouders/web-pkg/src/composables/piniaStores'
-import { ApplicationSetupOptions } from 'web-pkg/src/apps'
+import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const store = useStore()

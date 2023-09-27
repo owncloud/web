@@ -8,7 +8,7 @@ import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
-import { useClientService, useConfigurationManager } from 'web-pkg/src/composables'
+import { useClientService, useConfigurationManager } from '@ownclouders/web-pkg/src/composables'
 
 interface DriveResolverOptions {
   store?: Store<any>

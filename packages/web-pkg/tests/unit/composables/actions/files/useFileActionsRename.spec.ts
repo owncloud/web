@@ -1,4 +1,4 @@
-import { useFileActionsRename } from 'web-pkg/src/composables/actions/files/useFileActionsRename'
+import { useFileActionsRename } from '../../../../../src/composables/actions'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import {
@@ -7,11 +7,11 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 import { nextTick, unref } from 'vue'
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 
-jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {

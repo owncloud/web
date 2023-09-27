@@ -196,9 +196,9 @@
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
-import { ImageDimension } from 'web-pkg/src/constants'
+import { ImageDimension } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { createLocationCommon } from 'web-pkg/src/router'
+import { createLocationCommon } from '@ownclouders/web-pkg'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import {
   useCapabilityFilesTags,
@@ -207,22 +207,22 @@ import {
   useStore,
   usePreviewService,
   useGetMatchingSpace
-} from 'web-pkg/src/composables'
-import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
+} from '@ownclouders/web-pkg'
+import { getIndicators } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
-import { encodePath } from 'web-pkg/src/utils'
+import { encodePath } from '@ownclouders/web-pkg'
 import {
   formatDateFromHTTP,
   formatFileSize,
   formatRelativeDateFromJSDate
-} from 'web-pkg/src/helpers'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+} from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { getSharedAncestorRoute } from 'web-pkg/src/helpers/share'
-import { AncestorMetaData } from 'web-pkg/src/types'
+import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
+import { AncestorMetaData } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileDetails',

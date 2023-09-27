@@ -1,4 +1,4 @@
-import { useService } from 'web-pkg/src/composables/service'
+import { useService } from '@ownclouders/web-pkg/src/composables/service'
 import { ArchiverService } from '../../services'
 
 export const useArchiverService = (): ArchiverService => {

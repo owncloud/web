@@ -5,7 +5,7 @@ import {
   LoadingTaskCallbackArguments,
   PasswordPolicyService,
   PreviewService
-} from 'web-pkg/src/services'
+} from '@ownclouders/web-pkg'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { OwnCloudSdk } from 'web-client/src/types'

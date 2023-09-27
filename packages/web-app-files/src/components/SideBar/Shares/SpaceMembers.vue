@@ -66,14 +66,14 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
-import { createLocationSpaces, isLocationSpacesActive } from 'web-pkg/src/router'
+import { createLocationSpaces, isLocationSpacesActive } from '@ownclouders/web-pkg/src/router'
 import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource } from 'web-client/src/helpers'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { configurationManager, defaultFuseOptions } from 'web-pkg'
+import { configurationManager, defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceMembers',

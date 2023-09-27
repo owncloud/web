@@ -21,11 +21,11 @@ import {
   useLoadingService,
   useRouter,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { LoadingTaskCallbackArguments } from 'web-pkg/src/services'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { LoadingTaskCallbackArguments } from '@ownclouders/web-pkg/src/services'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

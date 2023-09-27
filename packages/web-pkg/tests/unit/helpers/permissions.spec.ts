@@ -1,4 +1,4 @@
-import { canBeMoved } from 'web-pkg/src/helpers/permissions'
+import { canBeMoved } from '@ownclouders/web-pkg/src/helpers/permissions'
 
 describe('permissions helper', () => {
   describe('canBeMoved function', () => {

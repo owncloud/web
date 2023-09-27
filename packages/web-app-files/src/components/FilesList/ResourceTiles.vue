@@ -99,18 +99,18 @@
 import { onBeforeUpdate, defineComponent, nextTick, PropType, computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from 'web-client'
-import { useStore, SortDir, SortField, ViewModeConstants } from 'web-pkg/src/composables'
-import { ImageDimension } from 'web-pkg/src/constants'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { displayPositionedDropdown } from 'web-pkg/src/helpers/contextMenuDropdown'
-import { createLocationSpaces } from 'web-pkg/src/router'
-import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import { useStore, SortDir, SortField, ViewModeConstants } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg/src/constants'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import { displayPositionedDropdown } from '@ownclouders/web-pkg/src/helpers/contextMenuDropdown'
+import { createLocationSpaces } from '@ownclouders/web-pkg/src/router'
+import ContextMenuQuickAction from '@ownclouders/web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
-import { useResourceRouteResolver } from 'web-pkg/src/composables/filesList'
-import { eventBus } from 'web-pkg'
+import { useResourceRouteResolver } from '@ownclouders/web-pkg/src/composables/filesList'
+import { eventBus } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',

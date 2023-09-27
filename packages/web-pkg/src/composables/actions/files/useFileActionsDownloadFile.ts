@@ -4,12 +4,12 @@ import {
   isLocationSharesActive,
   isLocationSpacesActive
 } from '../../../router'
-import { useIsFilesAppActive } from 'web-pkg/src/composables'
-import { useRouter } from 'web-pkg/src/composables'
-import { FileAction, FileActionOptions, useIsSearchActive } from 'web-pkg/src/composables/actions'
+import { useIsFilesAppActive } from '@ownclouders/web-pkg'
+import { useRouter } from '@ownclouders/web-pkg'
+import { FileAction, FileActionOptions, useIsSearchActive } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import { useDownloadFile } from '@ownclouders/web-pkg'
 
 export const useFileActionsDownloadFile = () => {
   const router = useRouter()

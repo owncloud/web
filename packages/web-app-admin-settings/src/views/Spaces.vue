@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+import { NoContentMessage } from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   useAccessToken,
@@ -65,31 +65,31 @@ import {
   useClientService,
   useRouteQuery,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import AppTemplate from '../components/AppTemplate.vue'
 import { buildSpace } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg'
+import { configurationManager } from '@ownclouders/web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
-import SpaceDetails from 'web-pkg/src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import SpaceDetailsMultiple from 'web-pkg/src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
-import SpaceNoSelection from 'web-pkg/src/components/SideBar/Spaces/SpaceNoSelection.vue'
+import SpaceDetails from '@ownclouders/web-pkg/src/components/SideBar/Spaces/Details/SpaceDetails.vue'
+import SpaceDetailsMultiple from '@ownclouders/web-pkg/src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
+import SpaceNoSelection from '@ownclouders/web-pkg/src/components/SideBar/Spaces/SpaceNoSelection.vue'
 import ContextActions from '../components/Spaces/ContextActions.vue'
 import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
-import SpaceInfo from 'web-pkg/src/components/SideBar/Spaces/SpaceInfo.vue'
+import SpaceInfo from '@ownclouders/web-pkg/src/components/SideBar/Spaces/SpaceInfo.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import QuotaModal from '@ownclouders/web-pkg/src/components/Spaces/QuotaModal.vue'
+import { useSideBar } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota
-} from 'web-pkg/src/composables/actions/spaces'
-import { SpaceAction } from 'web-pkg/src/composables/actions'
+} from '@ownclouders/web-pkg'
+import { SpaceAction } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpacesView',

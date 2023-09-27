@@ -1,4 +1,4 @@
-import { isSameResource } from 'web-pkg/src/helpers/resource'
+import { isSameResource } from '@ownclouders/web-pkg/src/helpers/resource'
 
 describe('isSameResource', () => {
   test('evaluates to false if one of the resources is nullish', () => {

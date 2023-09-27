@@ -29,7 +29,11 @@
 import { computed, defineComponent, inject, unref } from 'vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
 import { Resource } from 'web-client'
-import { useCapabilityFilesSharingPublicAlias, useCapabilityPrivateLinks, useStore } from 'web-pkg'
+import {
+  useCapabilityFilesSharingPublicAlias,
+  useCapabilityPrivateLinks,
+  useStore
+} from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileInfo',

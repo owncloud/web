@@ -3,7 +3,7 @@ import {
   useConfigurationManager,
   useRouteParam,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
 import {
   MountPointSpaceResource,

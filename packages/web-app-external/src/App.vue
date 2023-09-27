@@ -30,8 +30,8 @@ import { useGettext } from 'vue3-gettext'
 
 import { Resource } from 'web-client/src'
 import { urlJoin } from 'web-client/src/utils'
-import { queryItemAsString, useRequest, useRouteQuery, useStore } from 'web-pkg/src/composables'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { queryItemAsString, useRequest, useRouteQuery, useStore } from '@ownclouders/web-pkg'
+import { configurationManager } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ExternalApp',

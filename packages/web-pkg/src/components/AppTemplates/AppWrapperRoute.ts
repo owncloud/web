@@ -1,6 +1,7 @@
 import { defineComponent, h } from 'vue'
-import AppWrapper, { AppWrapperSlotArgs } from './AppWrapper.vue'
-import { UrlForResourceOptions } from 'web-pkg/src/composables'
+import AppWrapper from './AppWrapper.vue'
+import { AppWrapperSlotArgs } from './types'
+import { UrlForResourceOptions } from '@ownclouders/web-pkg/src/composables'
 import { Resource } from 'web-client/src'
 
 export function AppWrapperRoute(

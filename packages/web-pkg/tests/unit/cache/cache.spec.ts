@@ -1,4 +1,4 @@
-import Cache from 'web-pkg/src/helpers/cache/cache'
+import Cache from '@ownclouders/web-pkg/src/helpers/cache/cache'
 
 const newCache = <T>(vs: T[], ttl?: number, capacity?: number): Cache<number, T> => {
   const cache = new Cache<number, T>({ ttl, capacity })

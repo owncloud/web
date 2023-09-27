@@ -1,29 +1,32 @@
 import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
-import { usePagination, useSort, SortDir, SortField, useRouteName } from 'web-pkg/src/composables'
-import { useSideBar } from 'web-pkg/src/composables/sideBar'
+import { usePagination, useSort, SortDir, SortField, useRouteName } from '@ownclouders/web-pkg'
+import { useSideBar } from '@ownclouders/web-pkg'
 
 import {
   queryItemAsString,
   useMutationSubscription,
   useRouteQuery,
   useStore
-} from 'web-pkg/src/composables'
-import { determineSortFields as determineResourceTableSortFields } from 'web-pkg/src/helpers/ui/resourceTable'
+} from '@ownclouders/web-pkg'
+import { determineSortFields as determineResourceTableSortFields } from '@ownclouders/web-pkg/src/helpers/ui/resourceTable'
 import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
-import { useSelectedResources, SelectedResourcesResult } from 'web-pkg/src/composables/selection'
-import { ReadOnlyRef } from 'web-pkg'
+import {
+  useSelectedResources,
+  SelectedResourcesResult
+} from '@ownclouders/web-pkg/src/composables/selection'
+import { ReadOnlyRef } from '@ownclouders/web-pkg'
 import {
   useFileListHeaderPosition,
   useViewMode,
   useViewSize,
   ViewModeConstants
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 
-import { ScrollToResult, useScrollTo } from 'web-pkg/src/composables/scrollTo'
+import { ScrollToResult, useScrollTo } from '@ownclouders/web-pkg/src/composables/scrollTo'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>

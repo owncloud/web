@@ -28,18 +28,18 @@ import {
   useRouter,
   useStore,
   useUserContext
-} from 'web-pkg/src/composables'
-import { useActiveLocation } from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
+import { useActiveLocation } from '@ownclouders/web-pkg'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
   isLocationTrashActive
-} from 'web-pkg/src/router'
+} from '@ownclouders/web-pkg/src/router'
 import { isPublicSpaceResource, PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { locationPublicUpload } from 'web-pkg/src/router/public'
+import { locationPublicUpload } from '@ownclouders/web-pkg/src/router/public'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
 import { dirname } from 'path'
 import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 

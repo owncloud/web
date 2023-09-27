@@ -5,7 +5,7 @@ import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { WebDAV } from 'web-client/src/webdav'
 import { OwnCloudSdk } from 'web-client/src/types'
-import { ConfigurationManager } from 'web-pkg'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import { Language } from 'vue3-gettext'
 

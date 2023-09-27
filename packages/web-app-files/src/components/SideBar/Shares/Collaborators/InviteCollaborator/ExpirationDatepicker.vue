@@ -49,9 +49,12 @@
 <script lang="ts">
 import { DateTime } from 'luxon'
 import { computed, watch, defineComponent, customRef } from 'vue'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import {
+  formatRelativeDateFromDateTime,
+  getLocaleFromLanguage
+} from '@ownclouders/web-pkg/src/helpers'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

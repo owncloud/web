@@ -1,15 +1,15 @@
 import { Store } from 'vuex'
-import { eventBus } from 'web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 import {
   useCapabilityFilesTags,
   useRouter,
   useStore,
   useIsFilesAppActive
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { isLocationTrashActive, isLocationPublicActive } from '../../../router'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export const useFileActionsShowEditTags = ({ store }: { store?: Store<any> } = {}) => {

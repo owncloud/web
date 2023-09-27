@@ -1,6 +1,6 @@
-import { useFileActionsShowDetails } from 'web-pkg/src/composables/actions/files/useFileActionsShowDetails'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { useFileActionsShowDetails } from '../../../../../src/composables/actions'
+import { eventBus } from '@ownclouders/web-pkg/src/services/eventBus'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultStoreMockOptions,
@@ -9,7 +9,7 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg/src/composables'
 
 describe('showDetails', () => {
   describe('handler', () => {

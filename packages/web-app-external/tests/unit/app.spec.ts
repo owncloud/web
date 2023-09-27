@@ -5,14 +5,14 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
-import { useRequest, useRouteQuery } from 'web-pkg/src/composables'
+import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
 import { Resource } from 'web-client'
 import App from '../../src/App.vue'
 
-jest.mock('web-pkg/src/composables/authContext/useRequest')
-jest.mock('web-pkg/src/composables/router/useRouteQuery')
+jest.mock('@ownclouders/web-pkg/src/composables/authContext/useRequest')
+jest.mock('@ownclouders/web-pkg/useRouteQuery')
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
 

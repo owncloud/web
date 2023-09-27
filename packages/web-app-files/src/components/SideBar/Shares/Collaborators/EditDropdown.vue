@@ -88,7 +88,7 @@ import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from 'web-client/src'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { formatRelativeDateFromDateTime } from 'web-pkg'
+import { formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

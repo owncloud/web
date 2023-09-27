@@ -1,12 +1,12 @@
 import { SDKSearch } from '../../../src/search'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import { RouteLocation, Router } from 'vue-router'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ref } from 'vue'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
 import { ProjectSpaceResource } from 'web-client/src/helpers'
-import { ConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 const getClientServiceMock = (result = { resources: [], totalResults: 0 }) => {
   const clientService = mockDeep<ClientService>()

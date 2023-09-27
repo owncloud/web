@@ -101,8 +101,8 @@ import {
   PaginationConstants,
   ViewModeConstants,
   useRouteName
-} from 'web-pkg/src/composables'
-import { ViewMode } from 'web-pkg/src/ui/types'
+} from '@ownclouders/web-pkg/src/composables'
+import { ViewMode } from '@ownclouders/web-pkg/src/ui/types'
 
 export default defineComponent({
   props: {

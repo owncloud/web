@@ -83,11 +83,11 @@ import {
   isShareSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
+import BatchActions from '@ownclouders/web-pkg/src/components/BatchActions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
-import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
+import ContextActions from '@ownclouders/web-pkg/src/components/FilesList/ContextActions.vue'
 import SidebarToggle from './SidebarToggle.vue'
-import { ViewMode } from 'web-pkg/src/ui/types'
+import { ViewMode } from '@ownclouders/web-pkg/src/ui/types'
 import {
   useFileActionsAcceptShare,
   useFileActionsCopy,
@@ -98,17 +98,17 @@ import {
   useFileActionsEmptyTrashBin,
   useFileActionsMove,
   useFileActionsRestore
-} from 'web-pkg/src/composables/actions'
+} from '@ownclouders/web-pkg'
 import {
   useCapabilitySpacesMaxQuota,
   useRouteMeta,
   useStore,
   ViewModeConstants
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg/src/composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
-import { useActiveLocation } from 'web-pkg/src/composables/router/useActiveLocation'
+import { useActiveLocation } from '../../composables'
 import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
-import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
+import ViewOptions from '@ownclouders/web-pkg/src/components/ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
 import {
   FileAction,
@@ -116,8 +116,8 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsEditQuota,
   useSpaceActionsRestore
-} from 'web-pkg/src/composables/actions'
-import { QuotaModal } from 'web-pkg'
+} from '@ownclouders/web-pkg'
+import { QuotaModal } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {

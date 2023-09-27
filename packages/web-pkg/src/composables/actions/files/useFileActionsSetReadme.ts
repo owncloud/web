@@ -1,8 +1,8 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { useClientService, useRouter, useStore } from 'web-pkg/src/composables'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { useClientService, useRouter, useStore } from '@ownclouders/web-pkg/src/composables'
+import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
 import { Drive } from 'web-client/src/generated'
 import { buildSpace } from 'web-client/src/helpers'
 

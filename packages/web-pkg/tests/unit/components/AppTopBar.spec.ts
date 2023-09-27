@@ -1,8 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { Resource } from 'web-client/src/helpers'
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { Action } from 'web-pkg/src/composables/actions/types'
+import AppTopBar from '@ownclouders/web-pkg/src/components/AppTopBar.vue'
+import { Action } from '@ownclouders/web-pkg/types'
 
 describe('AppTopBar', () => {
   describe('if no resource is present', () => {

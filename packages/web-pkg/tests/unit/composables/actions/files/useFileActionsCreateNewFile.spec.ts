@@ -1,9 +1,9 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, ref, unref } from 'vue'
-import { useFileActionsCreateNewFile } from 'web-pkg/src/composables'
+import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
 import { SpaceResource } from 'web-client/src'
 import { Resource } from 'web-client/src/helpers'
-import { FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileActionOptions } from '@ownclouders/web-pkg'
 import {
   RouteLocation,
   createStore,

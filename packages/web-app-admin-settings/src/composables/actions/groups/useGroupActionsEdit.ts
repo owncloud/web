@@ -1,8 +1,8 @@
-import { eventBus } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
-import { GroupAction } from 'web-pkg/src/composables/actions'
+import { GroupAction } from '@ownclouders/web-pkg'
 
 export const useGroupActionsEdit = () => {
   const { $gettext } = useGettext()

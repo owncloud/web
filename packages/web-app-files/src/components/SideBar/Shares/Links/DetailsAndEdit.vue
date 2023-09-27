@@ -185,7 +185,7 @@
 import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
-import { createLocationSpaces } from 'web-pkg/src/router'
+import { createLocationSpaces } from '@ownclouders/web-pkg'
 import {
   linkRoleInternalFile,
   linkRoleInternalFolder,
@@ -193,11 +193,11 @@ import {
   ShareRole
 } from 'web-client/src/helpers/share'
 import { computed, defineComponent, inject, PropType, Ref } from 'vue'
-import { formatDateFromDateTime, formatRelativeDateFromDateTime } from 'web-pkg/src/helpers'
+import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
-import { usePasswordPolicyService } from 'web-pkg/src/composables/passwordPolicyService'
+import { usePasswordPolicyService } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
