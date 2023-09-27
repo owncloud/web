@@ -275,6 +275,7 @@ Details
    https://github.com/owncloud/web/pull/9634
    https://github.com/owncloud/web/pull/9686
    https://github.com/owncloud/web/pull/9688
+   https://github.com/owncloud/web/pull/9735
 
 * Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
 
