@@ -1,9 +1,4 @@
-import {
-  createMockActionComposables,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount
-} from 'web-test-helpers'
+import { defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from 'web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
@@ -11,8 +6,16 @@ import {
   useGroupActionsDelete,
   useGroupActionsEdit
 } from 'web-app-admin-settings/src/composables/actions'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Action } from 'web-pkg/src/composables/actions'
+
+function createMockActionComposables(module) {
+  const mockModule: Record<string, any> = {}
+  for (const m of Object.keys(module)) {
+    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+  }
+  return mockModule
+}
 
 jest.mock('web-pkg/src/composables/actions/useActionsShowDetails', () =>
   createMockActionComposables(

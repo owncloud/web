@@ -28,10 +28,14 @@ import {
   useStore,
   useUserContext
 } from 'web-pkg/src/composables'
-import { useActiveLocation } from '../../composables'
-import { createLocationSpaces, isLocationSpacesActive, isLocationTrashActive } from '../../router'
+import { useActiveLocation } from 'web-pkg/src/composables'
+import {
+  createLocationSpaces,
+  isLocationSpacesActive,
+  isLocationTrashActive
+} from 'web-pkg/src/router'
 import { isPublicSpaceResource, PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { locationPublicUpload } from 'web-app-files/src/router/public'
+import { locationPublicUpload } from 'web-pkg/src/router/public'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'

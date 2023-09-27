@@ -1,7 +1,11 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :has-shares-navigation="true" :side-bar-open="sideBarOpen" />
+      <app-bar :side-bar-open="sideBarOpen">
+        <template #navigation>
+          <SharesNavigation />
+        </template>
+      </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -62,19 +66,19 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { useFileActions } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension, ImageType } from 'web-pkg/src/constants'
 import { debounce, find } from 'lodash-es'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import AppBar from '../../components/AppBar/AppBar.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import ContextActions from '../../components/FilesList/ContextActions.vue'
+import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
@@ -85,11 +89,13 @@ import {
   useGetMatchingSpace,
   useMutationSubscription
 } from 'web-pkg/src/composables'
+import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
+    SharesNavigation,
     FilesViewWrapper,
     AppBar,
     ResourceTable,
@@ -152,7 +158,7 @@ export default defineComponent({
 
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.paginatedResources)
+    this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
   },
 
   beforeUnmount() {

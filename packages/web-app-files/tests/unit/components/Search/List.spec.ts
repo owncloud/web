@@ -10,7 +10,7 @@ import {
   defaultStoreMockOptions,
   mockAxiosResolve
 } from 'web-test-helpers/src'
-import { queryItemAsString } from 'web-pkg'
+import { queryItemAsString } from 'web-pkg/src/composables/appDefaults'
 import { ref } from 'vue'
 import { Resource } from 'web-client/src'
 import { mock } from 'jest-mock-extended'

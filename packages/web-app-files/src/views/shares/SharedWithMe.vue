@@ -1,11 +1,11 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper class="oc-flex-column">
-      <app-bar
-        :has-shares-navigation="true"
-        :has-bulk-actions="true"
-        :side-bar-open="sideBarOpen"
-      />
+      <app-bar :has-bulk-actions="true" :side-bar-open="sideBarOpen">
+        <template #navigation>
+          <SharesNavigation />
+        </template>
+      </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <shared-with-me-section
@@ -67,7 +67,7 @@ import { mapGetters } from 'vuex'
 import { useResourcesViewDefaults } from '../../composables'
 
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import AppBar from '../../components/AppBar/AppBar.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from 'vue'
@@ -76,9 +76,11 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useGetMatchingSpace, useSort } from 'web-pkg/src/composables'
 import { useGroupingSettings } from 'web-pkg/src/cern/composables'
+import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 
 export default defineComponent({
   components: {
+    SharesNavigation,
     FilesViewWrapper,
     AppBar,
     AppLoadingSpinner,
@@ -221,11 +223,10 @@ export default defineComponent({
 
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute([
-      ...this.acceptedItems,
-      ...this.pendingItems,
-      ...this.declinedItems
-    ])
+    this.scrollToResourceFromRoute(
+      [...this.acceptedItems, ...this.pendingItems, ...this.declinedItems],
+      'files-app-bar'
+    )
   }
 })
 </script>

@@ -18,6 +18,7 @@
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
     "axios": "^0.27.2 || ^1.0.0",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "luxon": "^3.0.1"
   }
 }

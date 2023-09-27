@@ -1,5 +1,5 @@
-import { QueryValue, useStore, ViewModeConstants } from 'web-pkg'
-import { useScrollTo } from 'web-app-files/src/composables/scrollTo'
+import { QueryValue, useStore, ViewModeConstants } from 'web-pkg/src/composables'
+import { useScrollTo } from 'web-pkg/src/composables/scrollTo'
 import { computed, Ref, ref, unref, nextTick, watchEffect } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from 'web-pkg/src/composables/keyboardActions'
 import { Resource } from 'web-client'
@@ -121,7 +121,7 @@ export const useKeyboardTableNavigation = (
     await nextTick()
     store.commit('Files/ADD_FILE_SELECTION', { id: nextId })
     await nextTick()
-    scrollToResource(nextId)
+    scrollToResource(nextId, { topbarElement: 'files-app-bar' })
   }
 
   const getNextResourceId = (previous = false, movedBy = 1) => {
@@ -291,7 +291,7 @@ export const useKeyboardTableNavigation = (
     } else {
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
     }
-    scrollToResource(nextResourceId)
+    scrollToResource(nextResourceId, { topbarElement: 'files-app-bar' })
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
   }
   const handleShiftDownAction = async (movedBy = 1) => {
@@ -305,7 +305,7 @@ export const useKeyboardTableNavigation = (
     } else {
       store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
     }
-    scrollToResource(nextResourceId)
+    scrollToResource(nextResourceId, { topbarElement: 'files-app-bar' })
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) + 1
   }
 

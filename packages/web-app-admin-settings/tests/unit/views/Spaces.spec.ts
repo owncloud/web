@@ -3,7 +3,6 @@ import { Graph } from 'web-client'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from 'web-pkg/src'
 import {
-  createMockActionComposables,
   createStore,
   defaultComponentMocks,
   defaultPlugins,
@@ -11,6 +10,15 @@ import {
   mount
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
+import { ref } from 'vue'
+
+function createMockActionComposables(module) {
+  const mockModule: Record<string, any> = {}
+  for (const m of Object.keys(module)) {
+    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+  }
+  return mockModule
+}
 
 jest.mock('web-pkg/src/composables/actions/spaces', () =>
   createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))

@@ -3,7 +3,7 @@ import { SpaceResource } from 'web-client'
 import { useStore } from 'web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
-import { useFileActionsPaste } from 'web-app-files/src/composables'
+import { useFileActionsPaste } from 'web-pkg/src/composables'
 
 export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space: SpaceResource) => {
   const store = useStore()

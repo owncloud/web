@@ -36,7 +36,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useActiveLocation } from '../../composables'
+import { useActiveLocation } from 'web-pkg/src/composables'
 import FileInfo from './FileInfo.vue'
 import { isProjectSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
@@ -50,7 +50,7 @@ import {
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
-} from '../../router'
+} from 'web-pkg/src/router'
 import {
   useCapabilityShareJailEnabled,
   useClientService,

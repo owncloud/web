@@ -30,8 +30,8 @@ import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActi
 import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
 import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
 
-import { useFileActionsShowDetails } from '../../composables/actions/files/useFileActionsShowDetails'
-import { useSpaceActionsUploadImage } from '../../composables/actions/spaces/useSpaceActionsUploadImage'
+import { useFileActionsShowDetails } from 'web-pkg/src/composables/actions/files/useFileActionsShowDetails'
+import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
@@ -42,7 +42,7 @@ import {
   useSpaceActionsRestore,
   useSpaceActionsShowMembers
 } from 'web-pkg/src/composables/actions'
-import { isLocationSpacesActive } from '../../router'
+import { isLocationSpacesActive } from 'web-pkg/src/router'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
 import {
   useCapabilitySpacesMaxQuota,
@@ -51,7 +51,7 @@ import {
   usePreviewService
 } from 'web-pkg/src/composables'
 import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/actions'
-import { useFileActionsDownloadArchive } from 'web-app-files/src/composables'
+import { useFileActionsDownloadArchive } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'SpaceContextActions',

@@ -1,9 +1,9 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationSharesActive } from '../../router'
+import { isLocationSharesActive } from 'web-pkg/src/router'
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { aggregateResourceShares } from '../../helpers/resources'
+import { aggregateResourceShares } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import {
   useCapabilityFilesSharingResharing,
@@ -47,13 +47,14 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       resources = resources.map((r) => r.shareInfo)
       const spaces = store.getters['runtime/spaces/spaces']
       if (resources.length) {
-        resources = aggregateResourceShares(
-          resources,
-          false,
-          unref(hasResharing),
-          unref(hasShareJail),
-          spaces
-        ).map((resource) => {
+        resources = aggregateResourceShares({
+          shares: resources,
+          spaces,
+          incomingShares: false,
+          allowSharePermission: unref(hasResharing),
+          hasShareJail: unref(hasShareJail),
+          fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+        }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {
             resource.storageId = store.getters.user.id

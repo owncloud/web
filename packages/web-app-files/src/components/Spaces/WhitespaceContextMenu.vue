@@ -26,8 +26,8 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useFileActionsPaste, useFileActionsShowDetails } from 'web-app-files/src/composables'
-import { useFileActionsCreateNewFolder } from 'web-app-files/src/composables/actions/files/useFileActionsCreateNewFolder'
+import { useFileActionsPaste, useFileActionsShowDetails } from 'web-pkg/src/composables'
+import { useFileActionsCreateNewFolder } from 'web-pkg/src/composables/actions/files/useFileActionsCreateNewFolder'
 import { SpaceResource } from 'web-client/src'
 import { useStore } from 'web-pkg/src'
 import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'

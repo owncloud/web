@@ -1,10 +1,6 @@
 import { ClientService, LoadingService, LoadingTaskCallbackArguments } from 'web-pkg/src/services'
-import {
-  ResolveConflict,
-  ResourceTransfer,
-  TransferType,
-  resolveFileNameDuplicate
-} from '../../../../src/helpers/resource'
+import { ResourceTransfer, TransferType } from '../../../../src/helpers/resource'
+import { ResolveConflict, resolveFileNameDuplicate } from 'web-pkg/src/helpers/resource'
 import { mock, mockDeep, mockReset } from 'jest-mock-extended'
 import { buildSpace, Resource } from 'web-client/src/helpers'
 import { ListFilesResult } from 'web-client/src/webdav/listFiles'

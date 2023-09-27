@@ -10,11 +10,11 @@ import {
   useRouteQuery,
   useStore
 } from 'web-pkg/src/composables'
-import { determineSortFields as determineResourceTableSortFields } from '../../helpers/ui/resourceTable'
+import { determineSortFields as determineResourceTableSortFields } from 'web-pkg/src/helpers/ui/resourceTable'
 import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
 import { Resource } from 'web-client'
-import { useSelectedResources, SelectedResourcesResult } from '../selection'
+import { useSelectedResources, SelectedResourcesResult } from 'web-pkg/src/composables/selection'
 import { ReadOnlyRef } from 'web-pkg'
 import {
   useFileListHeaderPosition,
@@ -23,7 +23,7 @@ import {
   ViewModeConstants
 } from 'web-pkg/src/composables'
 
-import { ScrollToResult, useScrollTo } from '../scrollTo'
+import { ScrollToResult, useScrollTo } from 'web-pkg/src/composables/scrollTo'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>

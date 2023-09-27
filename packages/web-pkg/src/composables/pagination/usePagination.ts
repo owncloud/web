@@ -47,12 +47,24 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
 
   eventBus.subscribe(
     'app.files.navigate.page',
-    ({ resourceId, forceScroll }: { resourceId: string; forceScroll: boolean }) => {
+    ({
+      resourceId,
+      forceScroll,
+      topbarElement
+    }: {
+      resourceId: string
+      forceScroll: boolean
+      topbarElement: string
+    }) => {
       const index = findIndex(unref(options.items), (item: any) => item.id === resourceId)
       if (index >= 0) {
         const page = Math.ceil((index + 1) / Number(unref(perPage)))
         router.push({ ...unref(route), query: { ...unref(route).query, page } }).then(() => {
-          eventBus.publish('app.files.navigate.scrollTo', { resourceId, forceScroll })
+          eventBus.publish('app.files.navigate.scrollTo', {
+            resourceId,
+            forceScroll,
+            topbarElement
+          })
         })
       }
     }

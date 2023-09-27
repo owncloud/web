@@ -152,17 +152,17 @@ import {
   SpaceResource
 } from 'web-client/src/helpers'
 
-import { useFileActions } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 
-import AppBar from '../../components/AppBar/AppBar.vue'
-import ContextActions from '../../components/FilesList/ContextActions.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
+import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceDetails from '../../components/FilesList/ResourceDetails.vue'
-import ResourceTable from '../../components/FilesList/ResourceTable.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
@@ -184,11 +184,11 @@ import { ImageType } from 'web-pkg/src/constants'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { eventBus } from 'web-pkg/src/services/eventBus'
-import { createLocationPublic, createLocationSpaces } from '../../router'
+import { createLocationPublic, createLocationSpaces } from 'web-pkg/src/router'
 import { useResourcesViewDefaults } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
-import { CreateTargetRouteOptions } from 'web-app-files/src/helpers/folderLink/types'
+import { CreateTargetRouteOptions } from 'web-pkg/src/helpers/folderLink/types'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { displayPositionedDropdown } from 'web-pkg/src'
 import { v4 as uuidv4 } from 'uuid'
@@ -458,10 +458,10 @@ export default defineComponent({
         options
       )
 
-      resourcesViewDefaults.scrollToResourceFromRoute([
-        store.getters['Files/currentFolder'],
-        ...unref(resourcesViewDefaults.paginatedResources)
-      ])
+      resourcesViewDefaults.scrollToResourceFromRoute(
+        [store.getters['Files/currentFolder'], ...unref(resourcesViewDefaults.paginatedResources)],
+        'files-app-bar'
+      )
       resourcesViewDefaults.refreshFileListHeaderPosition()
       focusAndAnnounceBreadcrumb(sameRoute)
 

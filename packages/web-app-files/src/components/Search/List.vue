@@ -112,16 +112,16 @@ import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageType, ImageDimension } from 'web-pkg/src/constants'
 import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import ResourceTable from '../FilesList/ResourceTable.vue'
-import ContextActions from '../FilesList/ContextActions.vue'
+import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
+import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
 import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
-import AppBar from '../AppBar/AppBar.vue'
+import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
 import { computed, defineComponent, nextTick, onMounted, ref, unref, VNodeRef, watch } from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
-import { useFileActions } from '../../composables/actions/files/useFileActions'
+import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
@@ -132,6 +132,7 @@ import {
   useClientService,
   useFileListHeaderPosition,
   useGetMatchingSpace,
+  useCapabilityFilesFullTextSearch,
   useRoute,
   useRouteQuery,
   useRouter,
@@ -139,9 +140,9 @@ import {
 } from 'web-pkg/src/composables'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { eventBus, useCapabilityFilesFullTextSearch } from 'web-pkg'
+import { eventBus } from 'web-pkg'
 import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
-import { isLocationCommonActive } from 'web-app-files/src/router'
+import { isLocationCommonActive } from 'web-pkg/src/router'
 import ItemFilterToggle from 'web-pkg/src/components/ItemFilterToggle.vue'
 import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
 import {
@@ -362,7 +363,7 @@ export default defineComponent({
             : []
         })
         await nextTick()
-        this.scrollToResourceFromRoute(this.paginatedResources)
+        this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
       }
     }
   },

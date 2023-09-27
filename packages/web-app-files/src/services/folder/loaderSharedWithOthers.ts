@@ -1,8 +1,8 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationSharesActive } from '../../router'
-import { aggregateResourceShares } from '../../helpers/resources'
+import { isLocationSharesActive } from 'web-pkg/src/router'
+import { aggregateResourceShares } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { peopleRoleDenyFolder, ShareTypes } from 'web-client/src/helpers/share'
 import {
@@ -54,13 +54,14 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
         .filter((r) => parseInt(r.shareInfo.permissions) !== peopleRoleDenyFolder.bitmask(false))
         .map((r) => r.shareInfo)
       if (resources.length) {
-        resources = aggregateResourceShares(
-          resources,
-          false,
-          unref(hasResharing),
-          unref(hasShareJail),
-          store.getters['runtime/spaces/spaces']
-        ).map((resource) => {
+        resources = aggregateResourceShares({
+          shares: resources,
+          spaces: store.getters['runtime/spaces/spaces'],
+          incomingShares: false,
+          allowSharePermission: unref(hasResharing),
+          hasShareJail: unref(hasShareJail),
+          fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+        }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {
             resource.storageId = store.getters.user.id

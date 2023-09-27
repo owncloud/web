@@ -8,7 +8,8 @@ import {
   isResourceBeeingMovedToSameLocation,
   resolveFileNameDuplicate,
   FileConflict
-} from '../conflictHandling'
+} from 'web-pkg/src/helpers/resource'
+
 import { TransferType } from '.'
 
 export class ResourceTransfer extends ConflictDialog {

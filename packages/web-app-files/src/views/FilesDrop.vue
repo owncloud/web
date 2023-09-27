@@ -37,7 +37,7 @@
 <script lang="ts">
 import { mapGetters } from 'vuex'
 import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
-import { createLocationPublic, createLocationSpaces } from '../router'
+import { createLocationPublic, createLocationSpaces } from 'web-pkg/src/router'
 
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
