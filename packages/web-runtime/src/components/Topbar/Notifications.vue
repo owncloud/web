@@ -104,7 +104,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 
 const POLLING_INTERVAL = 30000
 

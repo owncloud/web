@@ -154,22 +154,22 @@ import {
 
 import { useFileActions } from '@ownclouders/web-pkg'
 
-import AppBar from '@ownclouders/web-pkg/src/components/AppBar/AppBar.vue'
-import ContextActions from '@ownclouders/web-pkg/src/components/FilesList/ContextActions.vue'
+import AppBar from '@ownclouders/web-pkg'
+import ContextActions from '@ownclouders/web-pkg'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceDetails from '../../components/FilesList/ResourceDetails.vue'
-import ResourceTable from '@ownclouders/web-pkg/src/components/FilesList/ResourceTable.vue'
+import ResourceTable from '@ownclouders/web-pkg'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
-import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from '@ownclouders/web-pkg/src/components/NoContentMessage.vue'
+import AppLoadingSpinner from '@ownclouders/web-pkg'
+import NoContentMessage from '@ownclouders/web-pkg'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
-import Pagination from '@ownclouders/web-pkg/src/components/Pagination.vue'
+import Pagination from '@ownclouders/web-pkg'
 import {
   useRoute,
   useRouteQuery,
@@ -179,20 +179,20 @@ import {
   useConfigurationManager,
   useBreadcrumbsFromPath
 } from '@ownclouders/web-pkg'
-import { useDocumentTitle } from '@ownclouders/web-pkg/src/composables/appDefaults/useDocumentTitle'
-import { ImageType } from '@ownclouders/web-pkg/src/constants'
-import { VisibilityObserver } from '@ownclouders/web-pkg/src/observer'
-import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import { useDocumentTitle } from '@ownclouders/web-pkg'
+import { ImageType } from '@ownclouders/web-pkg'
+import { VisibilityObserver } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg/src/router'
+import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
-import { CreateTargetRouteOptions } from '@ownclouders/web-pkg/src/helpers/folderLink/types'
+import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
-import { useKeyboardActions } from '@ownclouders/web-pkg/src/composables/keyboardActions'
+import { useKeyboardActions } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation,

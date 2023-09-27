@@ -13,8 +13,8 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg/src/helpers/contextMenuDropdown', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg/src/helpers/contextMenuDropdown'),
+jest.mock('@ownclouders/web-pkg{
+  ...jest.requireActual('@ownclouders/web-pkg,
   displayPositionedDropdown: jest.fn()
 }))
 jest.mock('@ownclouders/web-pkg')

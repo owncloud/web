@@ -2,7 +2,7 @@ import { mock } from 'jest-mock-extended'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
 import { SpaceResource } from 'web-client/src'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
-import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
+import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
@@ -11,7 +11,7 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg/src/composables/spaces/useGetMatchingSpace')
+jest.mock('@ownclouders/web-pkg)
 
 describe('Preview component', () => {
   jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())

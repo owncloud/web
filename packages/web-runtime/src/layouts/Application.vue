@@ -33,14 +33,14 @@
 
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
-import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
+import AppLoadingSpinner from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
 import MobileNav from '../components/MobileNav.vue'
 import { NavItem } from '../helpers/navItems'
-import LoadingIndicator from '@ownclouders/web-pkg/src/components/LoadingIndicator.vue'
+import LoadingIndicator from '@ownclouders/web-pkg'
 import {
   useActiveApp,
   useRoute,

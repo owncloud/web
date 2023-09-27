@@ -108,14 +108,14 @@ import {
   createLocationCommon,
   isLocationCommonActive,
   isLocationSpacesActive
-} from '@ownclouders/web-pkg/src/router'
+} from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
 import { useRouteQuery, useRouter, useStore, useUserContext } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from '@ownclouders/web-pkg'
-import { SearchBarFilter } from '@ownclouders/web-pkg/src/components'
+import { SearchBarFilter } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SearchBar',

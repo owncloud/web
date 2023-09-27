@@ -1,5 +1,5 @@
 import { avatarUrl } from '../../../../src/helpers/user'
-import { ImageDimension } from '@ownclouders/web-pkg/src/constants'
+import { ImageDimension } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { mockDeep } from 'jest-mock-extended'
 

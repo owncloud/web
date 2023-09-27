@@ -6,8 +6,8 @@ import {
 } from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { configurationManager } from '@ownclouders/web-pkg'
-import { getParentPaths } from '@ownclouders/web-pkg/src/helpers/path'
-import { AncestorMetaData } from '@ownclouders/web-pkg/src/types'
+import { getParentPaths } from '@ownclouders/web-pkg'
+import { AncestorMetaData } from '@ownclouders/web-pkg'
 
 const state = {
   ancestorMetaData: {}

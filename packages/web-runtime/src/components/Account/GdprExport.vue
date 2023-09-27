@@ -36,7 +36,7 @@ import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from 'web-client'
 import { useClientService, useStore } from '@ownclouders/web-pkg'
-import { useDownloadFile } from '@ownclouders/web-pkg/src/composables/download'
+import { useDownloadFile } from '@ownclouders/web-pkg'
 import { formatDateFromJSDate } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource } from 'web-client/src/helpers'
 

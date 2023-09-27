@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationSharesActive } from '@ownclouders/web-pkg/src/router'
+import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { ShareTypes } from 'web-client/src/helpers/share'
 import { aggregateResourceShares } from 'web-client/src/helpers/share'
 import { Store } from 'vuex'

@@ -68,17 +68,17 @@ import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { defaultFuseOptions, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
-import { createLocationTrash } from '@ownclouders/web-pkg/src/router'
-import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
-import AppBar from '@ownclouders/web-pkg/src/components/AppBar/AppBar.vue'
+import { createLocationTrash } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import AppBar from '@ownclouders/web-pkg'
 import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
-import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from '@ownclouders/web-pkg/src/components/NoContentMessage.vue'
+import AppLoadingSpinner from '@ownclouders/web-pkg'
+import NoContentMessage from '@ownclouders/web-pkg'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
 import { useFileListHeaderPosition } from '@ownclouders/web-pkg'
 

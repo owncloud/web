@@ -34,12 +34,12 @@ import {
   createLocationSpaces,
   isLocationSpacesActive,
   isLocationTrashActive
-} from '@ownclouders/web-pkg/src/router'
+} from '@ownclouders/web-pkg'
 import { isPublicSpaceResource, PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { locationPublicUpload } from '@ownclouders/web-pkg/src/router/public'
+import { locationPublicUpload } from '@ownclouders/web-pkg'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
-import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import AppLoadingSpinner from '@ownclouders/web-pkg'
 import { dirname } from 'path'
 import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 

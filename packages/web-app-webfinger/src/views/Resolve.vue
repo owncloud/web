@@ -32,7 +32,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { OwnCloudServer, WebfingerDiscovery } from 'web-app-webfinger/src/discovery'
 import { useGettext } from 'vue3-gettext'
-import { useAuthService } from '@ownclouders/web-pkg/src/composables/authContext/useAuthService'
+import { useAuthService } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'WebfingerResolve',

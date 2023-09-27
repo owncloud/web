@@ -1,6 +1,6 @@
 import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { useService } from '@ownclouders/web-pkg/src/composables/service'
+import { useService } from '@ownclouders/web-pkg'
 import type { UppyService } from 'web-runtime/src/services/uppyService'
 import { computed, unref } from 'vue'
 import { Resource } from 'web-client/src'
@@ -10,7 +10,7 @@ import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'
 import { WebdavPublicLink } from '@uppy/webdav'
 import GoogleDrive from '@uppy/google-drive'
-import { Extension } from '@ownclouders/web-pkg/src/composables/piniaStores'
+import { Extension } from '@ownclouders/web-pkg'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {

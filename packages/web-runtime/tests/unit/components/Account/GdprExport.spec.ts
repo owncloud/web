@@ -18,7 +18,7 @@ const selectors = {
 }
 
 const downloadFile = jest.fn()
-jest.mock('@ownclouders/web-pkg/src/composables/download', () => ({
+jest.mock('@ownclouders/web-pkg{
   useDownloadFile: jest.fn(() => ({ downloadFile }))
 }))
 

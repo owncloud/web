@@ -13,11 +13,11 @@ import {
   defaultComponentMocks
 } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { useExtensionRegistry } from '@ownclouders/web-pkg/src/composables/piniaStores/extensionRegistry'
+import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
-jest.mock('@ownclouders/web-pkg/src/composables/authContext')
-jest.mock('@ownclouders/web-pkg/src/composables/piniaStores/extensionRegistry')
+jest.mock('@ownclouders/web-pkg)
+jest.mock('@ownclouders/web-pkg)
 
 const elSelector = {
   component: '#create-and-upload-actions',

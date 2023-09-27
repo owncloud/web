@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg/src/router'
+import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { useCapabilityFilesSharingResharing } from '@ownclouders/web-pkg'
 import { SpaceResource } from 'web-client/src/helpers'
 import { unref } from 'vue'
@@ -9,7 +9,7 @@ import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from '@ownclouders/web-pkg'
 import { aggregateResourceShares } from 'web-client/src/helpers/share'
-import { getIndicators } from '@ownclouders/web-pkg/src/helpers/statusIndicators'
+import { getIndicators } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {

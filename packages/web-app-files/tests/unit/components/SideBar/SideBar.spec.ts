@@ -3,7 +3,7 @@ import {
   createLocationPublic,
   createLocationSpaces,
   createLocationTrash
-} from '@ownclouders/web-pkg/src/router'
+} from '@ownclouders/web-pkg'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 import { Resource } from 'web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
@@ -16,7 +16,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg/src/observer')
+jest.mock('@ownclouders/web-pkg)
 jest.mock('web-client/src/helpers/resource', () => {
   const original = jest.requireActual('web-client/src/helpers/resource')
   return {

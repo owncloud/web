@@ -4,7 +4,7 @@
  */
 import CoreTranslations from '../../l10n/translations.json'
 import ClientTranslations from 'web-client/l10n/translations.json'
-import PkgTranslations from '@ownclouders/web-pkg/l10n/translations.json'
+import PkgTranslations from '@ownclouders/web-pkg'
 import OdsTranslations from 'design-system/l10n/translations.json'
 
 export const coreTranslations = CoreTranslations

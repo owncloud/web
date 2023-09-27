@@ -1,5 +1,5 @@
 import { set, has } from 'lodash-es'
-import { getIndicators } from '@ownclouders/web-pkg/src/helpers/statusIndicators'
+import { getIndicators } from '@ownclouders/web-pkg'
 import { Resource } from 'web-client/src/helpers'
 
 export default {

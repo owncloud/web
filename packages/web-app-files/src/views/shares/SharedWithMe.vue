@@ -66,8 +66,8 @@
 import { mapGetters } from 'vuex'
 import { useResourcesViewDefaults } from '../../composables'
 
-import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
-import AppBar from '@ownclouders/web-pkg/src/components/AppBar/AppBar.vue'
+import AppLoadingSpinner from '@ownclouders/web-pkg'
+import AppBar from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from 'vue'
@@ -75,7 +75,7 @@ import { Resource } from 'web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
-import { useGroupingSettings } from '@ownclouders/web-pkg/src/cern/composables'
+import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 
 export default defineComponent({

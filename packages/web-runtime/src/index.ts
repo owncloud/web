@@ -43,7 +43,7 @@ import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import { ArchiverService } from '@ownclouders/web-pkg/archiver'
+import { ArchiverService } from '@ownclouders/web-pkg'
 import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {

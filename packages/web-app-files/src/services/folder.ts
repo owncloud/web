@@ -8,7 +8,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { Store } from 'vuex'
-import { ClientService } from '@ownclouders/web-pkg/client'
+import { ClientService } from '@ownclouders/web-pkg'
 
 import {
   FolderLoaderSpace,

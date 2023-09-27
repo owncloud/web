@@ -58,7 +58,7 @@ import {
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
 import { dirname } from 'path'
-import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import {
   buildShareSpaceResource,

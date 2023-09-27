@@ -1,12 +1,12 @@
 import PQueue from 'p-queue'
 
-import { getParentPaths } from '@ownclouders/web-pkg/src/helpers/path'
+import { getParentPaths } from '@ownclouders/web-pkg'
 import { buildShare, buildCollaboratorShare, ShareTypes } from 'web-client/src/helpers/share'
 import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import get from 'lodash-es/get'
-import { ClipboardActions } from '@ownclouders/web-pkg/src/helpers/clipboardActions'
+import { ClipboardActions } from '@ownclouders/web-pkg'
 import {
   buildResource,
   isProjectSpaceResource,
@@ -17,7 +17,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { ClientService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { eventBus } from '@ownclouders/web-pkg'
-import { AncestorMetaData } from '@ownclouders/web-pkg/src/types'
+import { AncestorMetaData } from '@ownclouders/web-pkg'
 
 const allowSharePermissions = (getters) => {
   return (

@@ -24,7 +24,7 @@ const selectors = {
   notificationActions: '.oc-notifications-actions'
 }
 
-jest.mock('@ownclouders/web-pkg/src/composables/sse/useServerSentEvents')
+jest.mock('@ownclouders/web-pkg)
 
 describe('Notification component', () => {
   it('renders the notification bell and no notifications if there are none', () => {

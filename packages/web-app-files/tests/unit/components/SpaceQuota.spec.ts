@@ -1,4 +1,4 @@
-import SpaceQuota from '@ownclouders/web-pkg/src/components/SpaceQuota.vue'
+import SpaceQuota from '@ownclouders/web-pkg'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('SpaceQuota component', () => {

@@ -13,7 +13,7 @@ import { SpaceResource } from 'web-client'
 import { useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
-jest.mock('@ownclouders/web-pkg/files/useFileActions')
+jest.mock('@ownclouders/web-pkg)
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useRouteQuery: jest.fn()

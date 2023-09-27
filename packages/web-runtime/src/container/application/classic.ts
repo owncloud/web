@@ -7,7 +7,7 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { RuntimeError } from '@ownclouders/web-pkg'
 import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from '@ownclouders/web-pkg'
-import { useExtensionRegistry } from '@ownclouders/web-pkg/src/composables/piniaStores'
+import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
 
 /**
