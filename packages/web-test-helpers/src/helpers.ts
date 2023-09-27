@@ -1,6 +1,6 @@
 import { createStore as _createStore, StoreOptions } from 'vuex'
 import { mount } from '@vue/test-utils'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from 'web-test-helpers'
 import { createRouter as _createRouter } from 'web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
@@ -57,11 +57,3 @@ export const createRouter = (options?: Partial<RouterOptions>) =>
     strict: false,
     ...options
   })
-
-export const createMockActionComposables = (module) => {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
