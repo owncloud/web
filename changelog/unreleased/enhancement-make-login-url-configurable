@@ -1,0 +1,7 @@
+Enhancement: Make login url configurable
+
+We've added a new configuration option loginUrl to web, this is helpful if you use an external IdP and the login
+is out of web/OCIS context.
+
+https://github.com/owncloud/ocis/pull/7317
+https://github.com/owncloud/web/issues/9707

@@ -1,4 +1,7 @@
+import { mock } from 'jest-mock-extended'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
+import { Resource, SpaceResource } from 'web-client/src'
+import { useGetMatchingSpace } from 'web-pkg/src'
 import {
   createStore,
   defaultComponentMocks,
@@ -7,7 +10,24 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 
+const useGetMatchingSpaceMock = (
+  options: Partial<ReturnType<typeof useGetMatchingSpace>> = {}
+): ReturnType<typeof useGetMatchingSpace> => {
+  return {
+    getInternalSpace(storageId: string) {
+      return mock<SpaceResource>()
+    },
+    getMatchingSpace(resource: Resource) {
+      return mock<SpaceResource>()
+    },
+    ...options
+  }
+}
+
+jest.mock('web-pkg/src/composables/spaces/useGetMatchingSpace')
+
 describe('Preview component', () => {
+  jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
   it('should set correct props on oc-resource component', () => {
     const { wrapper } = getWrapper()
     const ocResource = wrapper.findComponent<any>('oc-resource-stub')
@@ -19,14 +39,12 @@ describe('Preview component', () => {
     it('should use the items storageId for the resource target location if present', () => {
       const driveAliasAndItem = '1'
       const { wrapper } = getWrapper({
-        spaces: [
-          {
-            id: '1',
-            driveType: 'project',
-            name: 'New space',
-            getDriveAliasAndItem: () => driveAliasAndItem
-          }
-        ]
+        space: mock<SpaceResource>({
+          id: '1',
+          driveType: 'project',
+          name: 'New space',
+          getDriveAliasAndItem: () => driveAliasAndItem
+        })
       })
       expect(wrapper.vm.parentFolderLink.params.driveAliasAndItem).toEqual(driveAliasAndItem)
     })
@@ -41,14 +59,12 @@ describe('Preview component', () => {
     })
     it('should equal the space name if resource storage is representing a project space', () => {
       const { wrapper } = getWrapper({
-        spaces: [
-          {
-            id: '1',
-            driveType: 'project',
-            name: 'New space',
-            getDriveAliasAndItem: jest.fn()
-          }
-        ]
+        space: mock<SpaceResource>({
+          id: '1',
+          driveType: 'project',
+          name: 'New space',
+          getDriveAliasAndItem: jest.fn()
+        })
       })
       expect(wrapper.vm.parentFolderName).toEqual('New space')
     })
@@ -72,7 +88,8 @@ describe('Preview component', () => {
           data: {
             path: '/My share',
             shareRoot: '/My share',
-            shareId: '1'
+            shareId: '1',
+            isShareRoot: () => true
           }
         }
       })
@@ -80,12 +97,10 @@ describe('Preview component', () => {
     })
     it('should equal "Personal" if resource storage is not representing the personal home', () => {
       const { wrapper } = getWrapper({
-        spaces: [
-          {
-            id: 1,
-            driveType: 'personal'
-          }
-        ]
+        space: mock<SpaceResource>({
+          id: 1,
+          driveType: 'personal'
+        })
       })
       expect(wrapper.vm.parentFolderName).toEqual('Personal')
     })
@@ -97,8 +112,8 @@ function getWrapper({
     query: {},
     params: {}
   },
-  spaces = [],
   hasShareJail = true,
+  space = null,
   searchResult = {
     id: '1',
     data: {
@@ -109,7 +124,21 @@ function getWrapper({
     }
   },
   user = { id: 'test' }
-}: any = {}) {
+}: {
+  route?: any
+  hasShareJail?: boolean
+  space?: SpaceResource
+  searchResult?: any
+  user?: any
+} = {}) {
+  jest.mocked(useGetMatchingSpace).mockImplementation(() =>
+    useGetMatchingSpaceMock({
+      getMatchingSpace() {
+        return space
+      }
+    })
+  )
+
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
@@ -127,7 +156,6 @@ function getWrapper({
       user: () => user
     }
   }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockImplementation(() => spaces)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({ currentRoute: route })
   return {

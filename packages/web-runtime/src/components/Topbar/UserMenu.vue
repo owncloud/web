@@ -88,7 +88,7 @@
           </li>
           <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">
             <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
-            <div class="storage-wrapper-text">
+            <div class="storage-wrapper-text oc-width-1-1">
               <p class="oc-my-rm">
                 <span class="oc-display-block" v-text="personalStorageLabel" />
                 <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
@@ -282,7 +282,6 @@ export default defineComponent({
 
     .storage-wrapper-text {
       align-self: flex-end;
-      display: inline-block;
     }
   }
 }

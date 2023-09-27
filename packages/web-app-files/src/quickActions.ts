@@ -30,22 +30,12 @@ export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyServ
     inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
     inputLabel: $gettext('Password'),
     inputType: 'password',
+    onInput: () => store.dispatch('setModalInputErrorMessage', ''),
+    onPasswordChallengeCompleted: () => store.dispatch('setModalConfirmButtonDisabled', false),
+    onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
     onCancel: () => store.dispatch('hideModal'),
     onConfirm: async (password) => {
-      if (!password || password.trim() === '') {
-        store.dispatch('showErrorMessage', {
-          title: $gettext('Password cannot be empty')
-        })
-      } else {
-        await store.dispatch('hideModal')
-        onConfirm(password)
-      }
-    },
-    onInput: (password) => {
-      if (password.trim() === '') {
-        return store.dispatch('setModalInputErrorMessage', $gettext('Password cannot be empty'))
-      }
-      return store.dispatch('setModalInputErrorMessage', null)
+      onConfirm(password)
     }
   }
 

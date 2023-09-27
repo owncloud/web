@@ -28,15 +28,8 @@
           :aria-current="getAriaCurrent(index)"
           :to="item.isTruncationPlaceholder ? lastHiddenItem.to : item.to"
         >
-          <span class="oc-breadcrumb-item-text">{{ item.text }}</span>
+          <span class="oc-breadcrumb-item-text oc-breadcrumb-item-navigable">{{ item.text }}</span>
         </router-link>
-        <oc-icon
-          v-if="item.to"
-          color="var(--oc-color-text-default)"
-          name="arrow-right-s"
-          class="oc-mx-xs"
-          fill-type="line"
-        />
         <oc-button
           v-else-if="item.onClick"
           :aria-current="getAriaCurrent(index)"
@@ -47,6 +40,7 @@
           <span
             :class="[
               'oc-breadcrumb-item-text',
+              'oc-breadcrumb-item-navigable',
               {
                 'oc-breadcrumb-item-text-last': index === displayItems.length - 1
               }
@@ -60,6 +54,13 @@
           :aria-current="getAriaCurrent(index)"
           tabindex="-1"
           v-text="item.text"
+        />
+        <oc-icon
+          v-if="index !== displayItems.length - 1"
+          color="var(--oc-color-text-default)"
+          name="arrow-right-s"
+          class="oc-mx-xs"
+          fill-type="line"
         />
         <template v-if="showContextActions && index === displayItems.length - 1">
           <oc-button
@@ -84,7 +85,7 @@
       </li>
     </ol>
     <oc-button
-      v-if="displayItems.length > 1"
+      v-if="parentFolderTo && displayItems.length > 1"
       appearance="raw"
       type="router-link"
       :aria-label="$gettext('Navigate one level up')"
@@ -280,7 +281,7 @@ export default defineComponent({
       return [...props.items].reverse()[0]
     })
     const parentFolderTo = computed(() => {
-      return [...props.items].reverse()[1].to
+      return [...props.items].reverse()[1]?.to
     })
 
     const contextMenuLabel = computed(() => {
@@ -343,6 +344,10 @@ export default defineComponent({
     }
   }
 
+  &-item-navigable:hover {
+    text-decoration: underline;
+  }
+
   &-mobile-current,
   &-mobile-navigation {
     @media (min-width: $oc-breakpoint-small-default) {
@@ -379,12 +384,6 @@ export default defineComponent({
 
     > :last-child > span {
       color: var(--oc-color-text-default);
-    }
-
-    > li a:hover,
-    > li span:not([aria-current='page']):not(.oc-icon):hover,
-    > li button:hover {
-      text-decoration: underline;
     }
   }
 

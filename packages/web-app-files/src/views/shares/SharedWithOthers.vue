@@ -35,7 +35,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :action-options="{ space: getSpace(resource), resources: selectedResources }"
+              :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>
@@ -79,10 +79,8 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
 import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
 import { useGroupingSettings } from 'web-pkg/src/cern/composables'
-import { useMutationSubscription, useStore } from 'web-pkg/src/composables'
-import { getSpaceFromResource } from 'web-app-files/src/helpers/resource/getSpace'
+import { useGetMatchingSpace, useMutationSubscription } from 'web-pkg/src/composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -100,10 +98,7 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
-    const getSpace = (resource: Resource): SpaceResource => {
-      return getSpaceFromResource({ spaces: store.getters['runtime/spaces/spaces'], resource })
-    }
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
@@ -129,7 +124,7 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
-      getSpace,
+      getMatchingSpace,
 
       // CERN
       ...useGroupingSettings({ sortBy, sortDir })
@@ -174,7 +169,7 @@ export default defineComponent({
 
         this.loadPreview({
           previewService: this.$previewService,
-          space: this.getSpace(resource),
+          space: this.getMatchingSpace(resource),
           resource,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail

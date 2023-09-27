@@ -52,6 +52,9 @@ importers:
       caf:
         specifier: '*'
         version: 13.1.1
+      connect-history-api-fallback:
+        specifier: ^2.0.0
+        version: 2.0.0
       keycode:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=nmisee7m676ph5sqah5fka5ueu)
@@ -60,16 +63,16 @@ importers:
         version: 2.1.7(vue@3.3.4)
       rollup-plugin-gzip:
         specifier: ^3.1.0
-        version: 3.1.0(rollup@3.21.2)
+        version: 3.1.0(rollup@3.29.2)
       uuid:
         specifier: '*'
         version: 9.0.0
       vite-plugin-static-copy:
         specifier: ^0.16.0
-        version: 0.16.0(vite@4.3.5)
+        version: 0.16.0(vite@4.4.9)
       vite-plugin-treat-umd-as-commonjs:
         specifier: 0.1.3
-        version: 0.1.3(vite@4.3.5)
+        version: 0.1.3(vite@4.4.9)
       vue:
         specifier: 3.3.4
         version: 3.3.4
@@ -124,7 +127,7 @@ importers:
         version: 1.33.0
       '@rollup/plugin-inject':
         specifier: 5.0.3
-        version: 5.0.3(rollup@3.21.2)
+        version: 5.0.3(rollup@3.29.2)
       '@types/jest':
         specifier: 29.5.1
         version: 29.5.1
@@ -142,7 +145,7 @@ importers:
         version: 2.6.3
       '@vitejs/plugin-vue':
         specifier: 4.2.3
-        version: 4.2.3(vite@4.3.5)(vue@3.3.4)
+        version: 4.2.3(vite@4.4.9)(vue@3.3.4)
       '@vue/test-utils':
         specifier: v2.4.0-alpha.0
         version: 2.4.0-alpha.0(vue@3.3.4)
@@ -250,7 +253,7 @@ importers:
         version: 0.2.1
       rollup-plugin-visualizer:
         specifier: 5.9.0
-        version: 5.9.0(rollup@3.21.2)
+        version: 5.9.0(rollup@3.29.2)
       sass:
         specifier: 1.62.1
         version: 1.62.1
@@ -270,11 +273,11 @@ importers:
         specifier: 8.1.1
         version: 8.1.1
       vite:
-        specifier: 4.3.5
-        version: 4.3.5(@types/node@16.18.30)(sass@1.62.1)
+        specifier: 4.4.9
+        version: 4.4.9(@types/node@16.18.30)(sass@1.62.1)
       vite-plugin-environment:
         specifier: ^1.1.3
-        version: 1.1.3(vite@4.3.5)
+        version: 1.1.3(vite@4.4.9)
       vue-tsc:
         specifier: 1.6.5
         version: 1.6.5(typescript@5.0.3)
@@ -329,7 +332,7 @@ importers:
         version: 2.11.5
       autoprefixer:
         specifier: ^10.0.0
-        version: 10.4.12(postcss@8.4.23)
+        version: 10.4.12(postcss@8.4.30)
       babel-core:
         specifier: ^7.0.0-bridge.0
         version: 7.0.0-bridge.0(@babel/core@7.19.6)
@@ -473,7 +476,7 @@ importers:
         version: 15.3.0
       stylelint-config-sass-guidelines:
         specifier: ^10.0.0
-        version: 10.0.0(postcss@8.4.23)(stylelint@15.3.0)
+        version: 10.0.0(postcss@8.4.30)(stylelint@15.3.0)
       stylelint-config-standard:
         specifier: ^31.0.0
         version: 31.0.0(stylelint@15.3.0)
@@ -1078,8 +1081,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       owncloud-sdk:
-        specifier: 3.1.0-alpha.8
-        version: 3.1.0-alpha.8(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11)
+        specifier: 3.1.0-alpha.9
+        version: 3.1.0-alpha.9(axios@1.4.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.10.3)(utf8@3.0.0)(uuid@9.0.0)(webdav@4.10.0)(xml-js@1.6.11)
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -7381,10 +7384,10 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.21.2)
+      '@rollup/pluginutils': 5.0.2(rollup@3.29.2)
       estree-walker: 2.0.2
       magic-string: 0.27.0
-      rollup: 3.21.2
+      rollup: 3.29.2
     dev: true
 
   /@rollup/pluginutils@4.2.1:
@@ -7413,7 +7416,7 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.21.2
+      rollup: 3.29.2
     dev: true
 
   /@sentry-internal/tracing@7.55.2:
@@ -8409,7 +8412,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.3.5(@types/node@16.18.30)(sass@1.62.1)
+      vite: 4.4.9(@types/node@16.18.30)(sass@1.62.1)
       vue: 3.3.4
     dev: true
 
@@ -9821,7 +9824,7 @@ packages:
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.23
+      postcss: 8.4.30
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -11822,6 +11825,14 @@ packages:
       }
     engines: { node: '>=0.8' }
     dev: true
+
+  /connect-history-api-fallback@2.0.0:
+    resolution:
+      {
+        integrity: sha512-U73+6lQFmfiNPrYbXqr6kZ1i1wiRqXnp2nhMsINseWXO8lDau0LGEffJ8kQi4EjLZympVgRdvqjAgiZ1tgzDDA==
+      }
+    engines: { node: '>=0.8' }
+    dev: false
 
   /console-browserify@1.2.0:
     resolution:
@@ -14165,28 +14176,28 @@ packages:
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@esbuild/android-arm': 0.17.18
-      '@esbuild/android-arm64': 0.17.18
-      '@esbuild/android-x64': 0.17.18
-      '@esbuild/darwin-arm64': 0.17.18
-      '@esbuild/darwin-x64': 0.17.18
-      '@esbuild/freebsd-arm64': 0.17.18
-      '@esbuild/freebsd-x64': 0.17.18
-      '@esbuild/linux-arm': 0.17.18
-      '@esbuild/linux-arm64': 0.17.18
-      '@esbuild/linux-ia32': 0.17.18
-      '@esbuild/linux-loong64': 0.17.18
-      '@esbuild/linux-mips64el': 0.17.18
-      '@esbuild/linux-ppc64': 0.17.18
-      '@esbuild/linux-riscv64': 0.17.18
-      '@esbuild/linux-s390x': 0.17.18
-      '@esbuild/linux-x64': 0.17.18
-      '@esbuild/netbsd-x64': 0.17.18
-      '@esbuild/openbsd-x64': 0.17.18
-      '@esbuild/sunos-x64': 0.17.18
-      '@esbuild/win32-arm64': 0.17.18
-      '@esbuild/win32-ia32': 0.17.18
-      '@esbuild/win32-x64': 0.17.18
+      '@esbuild/android-arm': 0.18.20
+      '@esbuild/android-arm64': 0.18.20
+      '@esbuild/android-x64': 0.18.20
+      '@esbuild/darwin-arm64': 0.18.20
+      '@esbuild/darwin-x64': 0.18.20
+      '@esbuild/freebsd-arm64': 0.18.20
+      '@esbuild/freebsd-x64': 0.18.20
+      '@esbuild/linux-arm': 0.18.20
+      '@esbuild/linux-arm64': 0.18.20
+      '@esbuild/linux-ia32': 0.18.20
+      '@esbuild/linux-loong64': 0.18.20
+      '@esbuild/linux-mips64el': 0.18.20
+      '@esbuild/linux-ppc64': 0.18.20
+      '@esbuild/linux-riscv64': 0.18.20
+      '@esbuild/linux-s390x': 0.18.20
+      '@esbuild/linux-x64': 0.18.20
+      '@esbuild/netbsd-x64': 0.18.20
+      '@esbuild/openbsd-x64': 0.18.20
+      '@esbuild/sunos-x64': 0.18.20
+      '@esbuild/win32-arm64': 0.18.20
+      '@esbuild/win32-ia32': 0.18.20
+      '@esbuild/win32-x64': 0.18.20
 
   /escalade@3.1.1:
     resolution:
@@ -22606,7 +22617,7 @@ packages:
     peerDependencies:
       postcss: ^8.4.19
     dependencies:
-      postcss: 8.4.23
+      postcss: 8.4.30
     dev: true
 
   /postcss-selector-parser@6.0.10:
@@ -24439,7 +24450,7 @@ packages:
     peerDependencies:
       rollup: '>=2.0.0'
     dependencies:
-      rollup: 3.21.2
+      rollup: 3.29.2
     dev: false
 
   /rollup-plugin-inject@3.0.2:
@@ -24486,7 +24497,7 @@ packages:
     dependencies:
       open: 8.4.0
       picomatch: 2.3.1
-      rollup: 3.21.2
+      rollup: 3.29.2
       source-map: 0.7.4
       yargs: 17.6.0
     dev: true
@@ -25983,8 +25994,8 @@ packages:
       postcss: ^8.4.21
       stylelint: ^15.2.0
     dependencies:
-      postcss: 8.4.23
-      postcss-scss: 4.0.6(postcss@8.4.23)
+      postcss: 8.4.30
+      postcss-scss: 4.0.6(postcss@8.4.30)
       stylelint: 15.3.0
       stylelint-scss: 4.5.0(stylelint@15.3.0)
     dev: true
@@ -27470,7 +27481,7 @@ packages:
     peerDependencies:
       vite: '>= 2.7'
     dependencies:
-      vite: 4.3.5(@types/node@16.18.30)(sass@1.62.1)
+      vite: 4.4.9(@types/node@16.18.30)(sass@1.62.1)
     dev: true
 
   /vite-plugin-static-copy@0.16.0(vite@4.3.5):
@@ -27486,7 +27497,7 @@ packages:
       fast-glob: 3.2.12
       fs-extra: 11.1.0
       picocolors: 1.0.0
-      vite: 4.3.5(@types/node@16.18.30)(sass@1.62.1)
+      vite: 4.4.9(@types/node@16.18.30)(sass@1.62.1)
     dev: false
 
   /vite-plugin-treat-umd-as-commonjs@0.1.3(vite@4.3.5):
@@ -27498,7 +27509,7 @@ packages:
       vite: ^2.0.4
     dependencies:
       '@rollup/pluginutils': 4.2.1
-      vite: 4.3.5(@types/node@16.18.30)(sass@1.62.1)
+      vite: 4.4.9(@types/node@16.18.30)(sass@1.62.1)
     dev: false
 
   /vite@4.1.1(@types/node@16.18.30)(sass@1.62.1):
@@ -27549,6 +27560,7 @@ packages:
     peerDependencies:
       '@types/node': '>= 14'
       less: '*'
+      lightningcss: ^1.21.0
       sass: '*'
       stylus: '*'
       sugarss: '*'
@@ -27557,6 +27569,8 @@ packages:
       '@types/node':
         optional: true
       less:
+        optional: true
+      lightningcss:
         optional: true
       sass:
         optional: true
@@ -27568,9 +27582,9 @@ packages:
         optional: true
     dependencies:
       '@types/node': 16.18.30
-      esbuild: 0.17.18
-      postcss: 8.4.23
-      rollup: 3.21.2
+      esbuild: 0.18.20
+      postcss: 8.4.30
+      rollup: 3.29.2
       sass: 1.62.1
     optionalDependencies:
       fsevents: 2.3.2
