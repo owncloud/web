@@ -19,6 +19,7 @@ import {
 } from 'web-client/src/helpers/resource'
 import { Resource, SpaceResource, SHARE_JAIL_ID } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
+import { configurationManager } from 'web-pkg/src'
 
 export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
   resource.name = basename(newPath)
@@ -54,7 +55,7 @@ export function aggregateResourceShares(
   incomingShares = false,
   allowSharePermission,
   hasShareJail,
-  spaces = []
+  spaces
 ): Resource[] {
   shares.sort((a, b) => a.path.localeCompare(b.path))
   if (spaces.length) {
@@ -70,6 +71,15 @@ export function aggregateResourceShares(
         hasShareJail
       )
       resource.shareId = share.id
+
+      if (configurationManager.options.routing.fullShareOwnerPaths) {
+        resource.path = spaces.find(
+          (space) =>
+            space.driveType === 'mountpoint' &&
+            space.id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${resource.shareId}`
+        )?.root.remoteItem.path
+        resource.shareRoot = resource.path
+      }
       return resource
     })
   }

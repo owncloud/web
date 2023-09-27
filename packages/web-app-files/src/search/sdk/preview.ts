@@ -7,6 +7,8 @@ import { Component, computed, Ref, unref } from 'vue'
 import { Router } from 'vue-router'
 import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
+import { ConfigurationManager } from 'web-pkg/src'
+import { urlJoin } from 'web-client/src/utils'
 
 export const previewSearchLimit = 8
 
@@ -16,21 +18,28 @@ export default class Preview implements SearchPreview {
   private readonly router: Router
   private readonly store: Store<any>
   private readonly clientService: ClientService
+  private readonly configurationManager: ConfigurationManager
   private readonly projectSpaces: Ref<ProjectSpaceResource[]>
 
-  constructor(store: Store<any>, router: Router, clientService: ClientService) {
+  constructor(
+    store: Store<any>,
+    router: Router,
+    clientService: ClientService,
+    configurationManager: ConfigurationManager
+  ) {
     this.component = PreviewComponent
     this.router = router
     this.store = store
     // define how long the cache should be valid, maybe conf option?
     this.cache = new Cache({ ttl: 10000, capacity: 100 })
     this.clientService = clientService
+    this.configurationManager = configurationManager
     this.projectSpaces = computed(() =>
       this.store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s))
     )
   }
 
-  getMatchingSpace(id): ProjectSpaceResource {
+  getProjectSpace(id): ProjectSpaceResource {
     return unref(this.projectSpaces).find((s) => s.id === id)
   }
 
@@ -40,6 +49,12 @@ export default class Preview implements SearchPreview {
         totalResults: null,
         values: []
       }
+    }
+
+    if (this.configurationManager.options.routing.fullShareOwnerPaths) {
+      await this.store.dispatch('runtime/spaces/loadMountPoints', {
+        graphClient: this.clientService.graphAuthenticated
+      })
     }
 
     if (this.cache.has(term)) {
@@ -56,11 +71,15 @@ export default class Preview implements SearchPreview {
       useSpacesEndpoint
     )
     const resources = results.reduce((acc, result) => {
-      const matchingSpace = this.getMatchingSpace(result.fileInfo[DavProperty.FileParent])
-      const resource = matchingSpace ? matchingSpace : buildResource(result)
+      const projectSpace = this.getProjectSpace(result.fileInfo[DavProperty.FileParent])
+      const resource = projectSpace ? projectSpace : buildResource(result)
       // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
       if (!resource.storageId) {
         resource.storageId = this.store.getters.user.id
+      }
+
+      if (this.configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
+        resource.path = urlJoin(resource.shareRoot, resource.path)
       }
 
       // filter results if hidden files shouldn't be shown due to settings

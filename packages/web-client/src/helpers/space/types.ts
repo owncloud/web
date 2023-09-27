@@ -14,6 +14,8 @@ export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 export interface SpaceResourceRemoteItem {
   id: string
   name: string
+  path: string
+  rootId: string
 }
 
 export interface SpaceResourceRoot {
@@ -32,6 +34,8 @@ export interface SpaceResource extends Resource {
   isViewer(uuid: User): boolean
   isEditor(uuid: User): boolean
   isManager(uuid: User): boolean
+  isMember(uuid: User): boolean
+  isOwner(uuid: User): boolean
 }
 
 export interface PersonalSpaceResource extends SpaceResource {

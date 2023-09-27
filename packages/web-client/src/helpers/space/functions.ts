@@ -238,6 +238,9 @@ export function buildSpace(data): SpaceResource {
     },
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)
+    },
+    isOwner({ uuid }: User): boolean {
+      return uuid === this.ownerId
     }
   }
   Object.defineProperty(s, 'nodeId', {

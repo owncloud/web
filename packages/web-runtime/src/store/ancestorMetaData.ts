@@ -1,4 +1,11 @@
+import {
+  SpaceResource,
+  extractStorageId,
+  isMountPointSpaceResource,
+  isProjectSpaceResource
+} from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { configurationManager } from 'web-pkg/src'
 import { getParentPaths } from 'web-pkg/src/helpers/path'
 import { AncestorMetaData } from 'web-pkg/src/types'
 
@@ -26,7 +33,7 @@ const mutations = {
 }
 
 const actions = {
-  loadAncestorMetaData({ commit, state }, { folder, space, client }) {
+  loadAncestorMetaData({ commit, state, rootGetters }, { folder, space, client }) {
     const ancestorMetaData: AncestorMetaData = {
       [folder.path]: {
         id: folder.fileId,
@@ -39,12 +46,36 @@ const actions = {
     const promises = []
     const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
     const parentPaths = getParentPaths(folder.path)
+    const spaces = rootGetters['runtime/spaces/spaces'] as SpaceResource[]
+
+    const getMountPoints = () =>
+      spaces.filter(
+        (s) =>
+          isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
+      )
+
+    let fullyAccessibleSpace = true
+    if (configurationManager.options.routing.fullShareOwnerPaths) {
+      // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
+      const projectSpace = spaces.find((s) => isProjectSpaceResource(s) && s.id === space.id)
+      fullyAccessibleSpace =
+        space.isOwner(rootGetters.user) || projectSpace?.isMember(rootGetters.user)
+    }
 
     for (const path of parentPaths) {
       const cachedData = state.ancestorMetaData[path] ?? null
       if (cachedData?.spaceId === space.id) {
         ancestorMetaData[path] = cachedData
         continue
+      }
+
+      // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
+      if (
+        !fullyAccessibleSpace &&
+        !getMountPoints().find((m) => path.startsWith(m.root.remoteItem.path))
+      ) {
+        // no access to the parent resource
+        break
       }
 
       promises.push(

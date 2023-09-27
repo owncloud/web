@@ -13,9 +13,20 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { ConfigurationManager } from 'web-pkg/src'
 
 jest.mock('web-app-files/src/composables')
 jest.mock('web-app-files/src/composables/keyboardActions')
+jest.mock('web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+  useConfigurationManager: () =>
+    mockDeep<ConfigurationManager>({
+      options: {
+        routing: {
+          fullShareOwnerPaths: false
+        }
+      }
+    })
+}))
 
 describe('GenericSpace view', () => {
   it('appBar always present', () => {
@@ -70,12 +81,16 @@ describe('GenericSpace view', () => {
       { driveType: 'personal', expectedItems: 1 },
       { driveType: 'project', expectedItems: 2 },
       { driveType: 'share', expectedItems: 3 }
-    ])('include root item(s)', (data) => {
-      const { driveType } = data
-      const space = { id: 1, getDriveAliasAndItem: jest.fn(), driveType }
+    ])('include root item(s)', ({ driveType, expectedItems }) => {
+      const space = {
+        id: 1,
+        getDriveAliasAndItem: jest.fn(),
+        driveType,
+        isOwner: () => driveType === 'personal'
+      }
       const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()], props: { space } })
       expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs.length).toBe(
-        data.expectedItems
+        expectedItems
       )
     })
     it('include the root item and the current folder', () => {

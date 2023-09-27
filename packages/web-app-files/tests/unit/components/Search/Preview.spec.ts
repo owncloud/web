@@ -1,7 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
-import { Resource, SpaceResource } from 'web-client/src'
+import { SpaceResource } from 'web-client/src'
 import { useGetMatchingSpace } from 'web-pkg/src'
+import { useGetMatchingSpaceMock } from 'web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 import {
   createStore,
   defaultComponentMocks,
@@ -9,20 +10,6 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-
-const useGetMatchingSpaceMock = (
-  options: Partial<ReturnType<typeof useGetMatchingSpace>> = {}
-): ReturnType<typeof useGetMatchingSpace> => {
-  return {
-    getInternalSpace(storageId: string) {
-      return mock<SpaceResource>()
-    },
-    getMatchingSpace(resource: Resource) {
-      return mock<SpaceResource>()
-    },
-    ...options
-  }
-}
 
 jest.mock('web-pkg/src/composables/spaces/useGetMatchingSpace')
 

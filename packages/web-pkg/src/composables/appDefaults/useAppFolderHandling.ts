@@ -9,6 +9,7 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 import { DavProperty } from 'web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
+import { isMountPointSpaceResource } from 'web-client/src/helpers'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
@@ -57,6 +58,20 @@ export function useAppFolderHandling({
         path: unref(context.item),
         fileId: unref(context.itemId)
       })
+
+      const isSpaceRoot = store.getters['runtime/spaces/spaces'].some(
+        (s) => isMountPointSpaceResource(s) && s.root.remoteItem.id === pathResource.id
+      )
+
+      if (isSpaceRoot) {
+        const resource = await getFileInfo(context)
+        store.commit('Files/LOAD_FILES', {
+          currentFolder: resource,
+          files: [resource]
+        })
+        isFolderLoading.value = false
+        return
+      }
 
       const path = dirname(pathResource.path)
       const { resource, children } = await webdav.listFiles(space, {

@@ -13,6 +13,7 @@ export interface AppReadyHookArgs {
 }
 
 export interface AppNavigationItem {
+  isActive?: () => boolean
   activeFor?: { name?: string; path?: string }[]
   enabled?: (capabilities?: Record<string, any>) => boolean
   fillType?: string

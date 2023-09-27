@@ -5,7 +5,16 @@ import {
   useStore
 } from 'web-pkg/src/composables'
 import { Resource, SpaceResource } from 'web-client'
-import { buildShareSpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
+import {
+  MountPointSpaceResource,
+  ProjectSpaceResource,
+  User,
+  buildShareSpaceResource,
+  extractStorageId,
+  isMountPointSpaceResource,
+  isPersonalSpaceResource,
+  isProjectSpaceResource
+} from 'web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
 
@@ -16,7 +25,8 @@ type GetMatchingSpaceOptions = {
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
   const configurationManager = useConfigurationManager()
-  const spaces = computed(() => store.getters['runtime/spaces/spaces'])
+  const spaces = computed<ProjectSpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
+  const user = computed<User>(() => store.getters.user)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
@@ -45,8 +55,28 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     )
   }
 
+  const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>
+    unref(spaces).filter(
+      (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
+    )
+
+  const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
+    if (!configurationManager.options.routing.fullShareOwnerPaths) {
+      return true
+    }
+
+    const projectSpace = unref(spaces).find((s) => isProjectSpaceResource(s) && s.id === space.id)
+    const fullyAccessibleSpace = space.isOwner(unref(user)) || projectSpace?.isMember(unref(user))
+
+    return (
+      fullyAccessibleSpace ||
+      getMatchingMountPoints(space).some((m) => path.startsWith(m.root.remoteItem.path))
+    )
+  }
+
   return {
     getInternalSpace,
-    getMatchingSpace
+    getMatchingSpace,
+    isResourceAccessible
   }
 }

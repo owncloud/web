@@ -6,10 +6,9 @@ import { useRouteQuery } from '../router'
 import { Resource } from 'web-client'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
-import { configurationManager } from '../../configuration'
 import { urlJoin } from 'web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../capability'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService, useConfigurationManager } from 'web-pkg/src/composables'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -20,6 +19,7 @@ interface DriveResolverResult {
   space: Ref<SpaceResource>
   item: Ref<string>
   itemId: Ref<string>
+  loading: Ref<boolean>
 }
 
 export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResolverResult => {
@@ -31,15 +31,41 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
     return queryItemAsString(unref(fileIdQueryItem))
   })
   const hasSpaces = useCapabilitySpacesEnabled(store)
+  const configurationManager = useConfigurationManager()
 
   const clientService = useClientService()
   const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
   const space = ref<SpaceResource>(null)
   const item: Ref<string> = ref(null)
+  const loading = ref(false)
+
+  const getSpaceByDriveAliasAndItem = (driveAliasAndItem: string) => {
+    const driveAliasAndItemSegments = driveAliasAndItem.split('/')
+
+    return unref(spaces).find((s) => {
+      if (!driveAliasAndItem.startsWith(s.driveAlias)) {
+        return false
+      }
+
+      const driveAliasSegments = s.driveAlias.split('/')
+      if (
+        driveAliasAndItemSegments.length < driveAliasSegments.length ||
+        driveAliasAndItemSegments.slice(0, driveAliasSegments.length).join('/') !== s.driveAlias
+      ) {
+        return false
+      }
+
+      return s
+    })
+  }
 
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
-    ([driveAliasAndItem]) => {
+    async ([driveAliasAndItem, areSpacesLoading], [driveAliasAndItemOld, areSpacesLoadingOld]) => {
+      if (driveAliasAndItem === driveAliasAndItemOld && areSpacesLoading === areSpacesLoadingOld) {
+        return
+      }
+
       if (!driveAliasAndItem || driveAliasAndItem.startsWith('virtual/')) {
         space.value = null
         item.value = null
@@ -57,7 +83,6 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
       let matchingSpace = null
       let path = null
-      const driveAliasAndItemSegments = driveAliasAndItem.split('/')
       if (driveAliasAndItem.startsWith('public/')) {
         const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
@@ -76,23 +101,23 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
             return unref(fileId).startsWith(`${s.fileId}`)
           })
         } else {
-          matchingSpace = unref(spaces).find((s) => {
-            if (!driveAliasAndItem.startsWith(s.driveAlias)) {
-              return false
-            }
-
-            const driveAliasSegments = s.driveAlias.split('/')
-            if (
-              driveAliasAndItemSegments.length < driveAliasSegments.length ||
-              driveAliasAndItemSegments.slice(0, driveAliasSegments.length).join('/') !==
-                s.driveAlias
-            ) {
-              return false
-            }
-
-            return s
-          })
+          matchingSpace = getSpaceByDriveAliasAndItem(driveAliasAndItem)
         }
+
+        if (!matchingSpace) {
+          if (
+            !store.state.runtime.spaces.mountPointsInitialized &&
+            configurationManager.options.routing.fullShareOwnerPaths
+          ) {
+            loading.value = true
+            await store.dispatch('runtime/spaces/loadMountPoints', {
+              graphClient: clientService.graphAuthenticated
+            })
+          }
+
+          matchingSpace = getSpaceByDriveAliasAndItem(driveAliasAndItem)
+        }
+
         if (matchingSpace) {
           path = driveAliasAndItem.slice(matchingSpace.driveAlias.length)
         }
@@ -101,13 +126,15 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       item.value = urlJoin(path, {
         leadingSlash: true
       })
+      loading.value = false
     },
     { immediate: true, deep: true }
   )
   watch(
     space,
     (s: Resource) => {
-      if (!s || ['public', 'share', 'personal'].includes(s.driveType)) {
+      store.commit('runtime/spaces/SET_CURRENT_SPACE', s)
+      if (!s || ['public', 'share', 'personal', 'mountpoint'].includes(s.driveType)) {
         return
       }
       return store.dispatch('runtime/spaces/loadSpaceMembers', {
@@ -120,6 +147,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   return {
     space,
     item,
-    itemId: fileId
+    itemId: fileId,
+    loading
   }
 }

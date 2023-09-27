@@ -7,11 +7,18 @@ import { ref } from 'vue'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
 import { ProjectSpaceResource } from 'web-client/src/helpers'
 import { DavProperty } from 'web-client/src/webdav/constants'
+import { ConfigurationManager } from 'web-pkg/src'
 
 const searchMock = jest.fn()
 const clientService = mockDeep<ClientService>()
 clientService.owncloudSdk.files.search.mockImplementation(searchMock)
-
+const configurationManager = mockDeep<ConfigurationManager>({
+  options: {
+    routing: {
+      fullShareOwnerPaths: false
+    }
+  }
+})
 jest.mock('web-client/src/helpers/resource', () => ({
   buildResource: (v) => v
 }))
@@ -29,7 +36,12 @@ const storeWithoutFileSearch = mockDeep<Store<any>>({
 
 describe('SDKProvider', () => {
   it('is only available if announced via capabilities', () => {
-    const search = new SDKSearch(storeWithoutFileSearch, mock<Router>(), clientService)
+    const search = new SDKSearch(
+      storeWithoutFileSearch,
+      mock<Router>(),
+      clientService,
+      configurationManager
+    )
     expect(search.available).toBe(false)
   })
 
@@ -45,7 +57,8 @@ describe('SDKProvider', () => {
           mock<Router>({
             currentRoute: ref(mock<RouteLocation>({ name: v.route }))
           }),
-          clientService
+          clientService,
+          configurationManager
         )
 
         expect(!!search.previewSearch.available).toBe(!!v.available)
@@ -53,7 +66,7 @@ describe('SDKProvider', () => {
     })
 
     it('can search', async () => {
-      const search = new SDKSearch(getStore(), mock<Router>(), clientService)
+      const search = new SDKSearch(getStore(), mock<Router>(), clientService, configurationManager)
       const files = [
         { id: 'foo', name: 'foo', fileInfo: {} },
         { id: 'bar', name: 'bar', fileInfo: {} },
@@ -73,7 +86,12 @@ describe('SDKProvider', () => {
     it('properly returns space resources', async () => {
       const spaceId = '1'
       const space = mock<ProjectSpaceResource>({ id: spaceId, name: 'foo', driveType: 'project' })
-      const search = new SDKSearch(getStore([space]), mock<Router>(), clientService)
+      const search = new SDKSearch(
+        getStore([space]),
+        mock<Router>(),
+        clientService,
+        configurationManager
+      )
       const files = [{ id: 'foo', name: 'foo', fileInfo: { [DavProperty.FileParent]: space.id } }]
 
       searchMock.mockReturnValueOnce({ results: files })
@@ -83,7 +101,7 @@ describe('SDKProvider', () => {
   })
   describe('SDKProvider listSearch', () => {
     it('can search', async () => {
-      const search = new SDKSearch(getStore(), mock<Router>(), clientService)
+      const search = new SDKSearch(getStore(), mock<Router>(), clientService, configurationManager)
       const files = [
         { id: 'foo', name: 'foo', fileInfo: {} },
         { id: 'bar', name: 'bar', fileInfo: {} },
@@ -97,7 +115,12 @@ describe('SDKProvider', () => {
     it('properly returns space resources', async () => {
       const spaceId = '1'
       const space = mock<ProjectSpaceResource>({ id: spaceId, driveType: 'project' })
-      const search = new SDKSearch(getStore([space]), mock<Router>(), clientService)
+      const search = new SDKSearch(
+        getStore([space]),
+        mock<Router>(),
+        clientService,
+        configurationManager
+      )
       const files = [{ id: 'foo', name: 'foo', fileInfo: { [DavProperty.FileParent]: space.id } }]
 
       searchMock.mockReturnValueOnce({ results: files })

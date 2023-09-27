@@ -28,7 +28,8 @@ export const runtimeModuleMockOptions = {
         mutations: {
           UPDATE_SPACE_FIELD: jest.fn(),
           REMOVE_SPACE: jest.fn(),
-          UPSERT_SPACE: jest.fn()
+          UPSERT_SPACE: jest.fn(),
+          SET_CURRENT_SPACE: jest.fn()
         },
         actions: {
           loadSpaceMembers: jest.fn(),

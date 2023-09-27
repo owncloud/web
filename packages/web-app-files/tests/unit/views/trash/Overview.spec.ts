@@ -17,21 +17,24 @@ const spaceMocks = [
     name: 'admin',
     disabled: false,
     driveType: 'personal',
-    getDriveAliasAndItem: () => '1'
+    getDriveAliasAndItem: () => '1',
+    isOwner: () => true
   },
   {
     id: '2',
     name: 'Project space 1',
     disabled: false,
     driveType: 'project',
-    getDriveAliasAndItem: () => '2'
+    getDriveAliasAndItem: () => '2',
+    isOwner: () => false
   },
   {
     id: '3',
     name: 'Project space 2',
     disabled: false,
     driveType: 'project',
-    getDriveAliasAndItem: () => '3'
+    getDriveAliasAndItem: () => '3',
+    isOwner: () => false
   }
 ]
 

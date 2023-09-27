@@ -19,7 +19,12 @@ import { AppNavigationItem, AppReadyHookArgs } from 'web-pkg/src/apps'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import {
+  SpaceResource,
+  isPersonalSpaceResource,
+  isShareSpaceResource
+} from 'web-client/src/helpers'
+import { configurationManager } from 'web-pkg/src'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -45,12 +50,20 @@ const navItems = (context): AppNavigationItem[] => {
       route: {
         path: `/${appInfo.id}/spaces/personal`
       },
+      isActive: () => {
+        return (
+          !context.$store.getters['runtime/spaces/currentSpace'] ||
+          context.$store.getters['runtime/spaces/currentSpace']?.isOwner(
+            context.$store.getters.user
+          )
+        )
+      },
       enabled(capabilities) {
         if (!capabilities.spaces?.enabled) {
           return true
         }
-        return !!context?.$store?.getters['runtime/spaces/spaces'].find((drive) =>
-          isPersonalSpaceResource(drive)
+        return !!context?.$store?.getters['runtime/spaces/spaces'].find(
+          (drive) => isPersonalSpaceResource(drive) && drive.isOwner(context.$store.getters.user)
         )
       }
     },
@@ -70,7 +83,15 @@ const navItems = (context): AppNavigationItem[] => {
       route: {
         path: `/${appInfo.id}/shares`
       },
-      activeFor: [{ path: `/${appInfo.id}/spaces/share` }],
+      isActive: () => {
+        const space = context.$store.getters['runtime/spaces/currentSpace'] as SpaceResource
+        // last check is when fullShareOwnerPaths is enabled
+        return !space || isShareSpaceResource(space) || !space?.isOwner(context.$store.getters.user)
+      },
+      activeFor: [
+        { path: `/${appInfo.id}/spaces/share` },
+        { path: `/${appInfo.id}/spaces/personal` }
+      ],
       enabled(capabilities) {
         return capabilities.files_sharing?.api_enabled !== false
       }
@@ -126,7 +147,7 @@ export default {
   translations,
   ready({ router, store, globalProperties }: AppReadyHookArgs) {
     const { $clientService } = globalProperties
-    Registry.sdkSearch = new SDKSearch(store, router, $clientService)
+    Registry.sdkSearch = new SDKSearch(store, router, $clientService, configurationManager)
 
     // when discussing the boot process of applications we need to implement a
     // registry that does not rely on call order, aka first register "on" and only after emit.

@@ -188,7 +188,7 @@ import {
   watch,
   ref
 } from 'vue'
-import { useUpload } from 'web-runtime/src/composables/upload'
+import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { useService } from 'web-pkg/src/composables/service'
@@ -321,32 +321,35 @@ export default defineComponent({
 
     const onUploadComplete = async (result) => {
       if (result.successful) {
-        const file = result.successful[0]
+        const file = result.successful[0] as UppyResource
 
         if (!file) {
           return
         }
 
         store.dispatch('hideModal')
-        const { spaceId, currentFolder, currentFolderId } = file.meta
-        if (!['public', 'share'].includes(file.meta.driveType)) {
-          if (unref(hasSpaces)) {
+        const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
+        if (unref(hasSpaces)) {
+          const spaces = store.getters['runtime/spaces/spaces']
+          const user = store.getters['user']
+          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(user)
+          if (driveType === 'project' || isOwnSpace) {
             const client = clientService.graphAuthenticated
-            const driveResponse = await client.drives.getDrive(spaceId)
+            const driveResponse = await client.drives.getDrive(spaceId.toString())
             store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
               id: driveResponse.data.id,
               field: 'spaceQuota',
               value: driveResponse.data.quota
             })
-          } else {
-            const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
-            store.commit('SET_QUOTA', user.quota)
           }
+        } else {
+          const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
+          store.commit('SET_QUOTA', user.quota)
         }
 
         const sameFolder =
           props.itemId && !isShareSpaceResource(props.space)
-            ? props.itemId.toString().startsWith(currentFolderId)
+            ? props.itemId.toString().startsWith(currentFolderId.toString())
             : currentFolder === props.item
         const fileIsInCurrentPath = spaceId === props.space.id && sameFolder
         if (fileIsInCurrentPath) {

@@ -51,7 +51,7 @@ export function useIncomingParentShare() {
     incomingParentShare.value = null
   })
 
-  const getParentShare = async (resource) => {
+  const getParentShare = async (resource: Resource) => {
     await store.dispatch('runtime/spaces/loadMountPoints', {
       graphClient: clientService.graphAuthenticated
     })

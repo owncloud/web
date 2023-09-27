@@ -54,6 +54,7 @@ import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 import '@uppy/core/dist/style.min.css'
+import { AppNavigationItem } from 'web-pkg/src/apps'
 
 const MOBILE_BREAKPOINT = 640
 
@@ -116,16 +117,17 @@ export default defineComponent({
         return []
       }
 
-      const items = store.getters['getNavItemsByExtension'](unref(activeApp))
+      const items = store.getters['getNavItemsByExtension'](unref(activeApp)) as AppNavigationItem[]
       if (!items) {
         return []
       }
 
       const { href: currentHref } = router.resolve(unref(route))
       return items.map((item) => {
-        const active = [item.route, ...(item.activeFor || [])]
-          .filter(Boolean)
-          .some((currentItem) => {
+        let active = typeof item.isActive !== 'function' || item.isActive()
+
+        if (active) {
+          active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {
             try {
               const comparativeHref = router.resolve(currentItem).href
               return currentHref.startsWith(comparativeHref)
@@ -134,6 +136,7 @@ export default defineComponent({
               return false
             }
           })
+        }
 
         const name =
           typeof item.name === 'function' ? item.name(store.getters['capabilities']) : item.name
