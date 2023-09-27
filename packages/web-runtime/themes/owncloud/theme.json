@@ -16,8 +16,8 @@
       "appBanner": {
         "title": "ownCloud",
         "publisher": "ownCloud GmbH",
-        "additionalInformation": "FREE",
-        "ctaText": "VIEW",
+        "additionalInformation": "",
+        "ctaText": "OPEN",
         "icon": "themes/owncloud/assets/owncloud-app-icon.png",
         "appScheme": "owncloud"
       },
@@ -100,8 +100,8 @@
       "appBanner": {
         "title": "ownCloud",
         "publisher": "ownCloud GmbH",
-        "additionalInformation": "FREE",
-        "ctaText": "VIEW",
+        "additionalInformation": "",
+        "ctaText": "OPEN",
         "icon": "themes/owncloud/assets/owncloud-app-icon.png",
         "appScheme": "owncloud"
       },

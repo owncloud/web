@@ -18,7 +18,7 @@
         <div>
           <div class="app-title">{{ appBannerSettings.title }}</div>
           <div class="app-publisher">{{ appBannerSettings.publisher }}</div>
-          <div class="app-additional-info">
+          <div v-if="appBannerSettings.additionalInformation !== ''" class="app-additional-info">
             {{ $gettext(appBannerSettings.additionalInformation) }}
           </div>
         </div>
@@ -40,7 +40,6 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg'
 import { buildUrl } from 'web-pkg/src/helpers/router'
 import { useSessionStorage } from '@vueuse/core'
-import { $gettext } from '../../../web-app-files/src/router/utils'
 
 export default defineComponent({
   components: {},
@@ -56,6 +55,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
+    console.log(appBannerSettings)
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()
