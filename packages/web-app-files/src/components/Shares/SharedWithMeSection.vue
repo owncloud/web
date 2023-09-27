@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="oc-px-m oc-py-s">
+    <h2 class="oc-px-m oc-py-s oc-invisible-sr">
       {{ title }}
       <span class="oc-text-medium">({{ items.length }})</span>
     </h2>
@@ -39,25 +39,7 @@
           :key="resource.getDomSelector() + resource.status"
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
-          <oc-button
-            v-if="getShowAcceptButton(resource)"
-            size="small"
-            variation="success"
-            class="file-row-share-status-accept"
-            @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
-          >
-            <oc-icon size="small" name="check" />
-            <span v-translate>Accept</span>
-          </oc-button>
-          <oc-button
-            v-if="getShowDeclineButton(resource)"
-            size="small"
-            class="file-row-share-decline oc-ml-s"
-            @click.stop="triggerAction('decline-share', { space: null, resources: [resource] })"
-          >
-            <oc-icon size="small" name="spam-3" fill-type="line" />
-            <span v-translate>Decline</span>
-          </oc-button>
+          <oc-icon v-if="getShowSynchedIcon(resource)" name="cloudy-2" v-oc-tooltip="syncHint" />
         </div>
       </template>
       <template #contextMenu="{ resource }">
@@ -65,6 +47,29 @@
           v-if="isResourceInSelection(resource)"
           :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
         />
+      </template>
+      <template #quickActions="{ resource }">
+        <!-- Provide different button depending on share being hidden/visible -->
+        <!-- 'decline-share' should be turned into "hide", and should show a modal if the share-to-be-hidden is already accepted -->
+        <oc-button
+          v-if="getShowAcceptButton(resource)"
+          size="small"
+          variation="success"
+          class="file-row-share-status-accept"
+          @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
+        >
+          <oc-icon size="small" name="check" />
+          <span v-translate>Accept</span>
+        </oc-button>
+        <oc-button
+          v-if="getShowDeclineButton(resource)"
+          size="small"
+          class="file-row-share-decline oc-ml-s"
+          @click.stop="triggerAction('hide-share', { space: null, resources: [resource] })"
+        >
+          <oc-icon size="small" name="spam-3" fill-type="line" />
+          <span v-translate>Hide</span>
+        </oc-button>
       </template>
       <template #footer>
         <div v-if="showMoreToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
@@ -137,7 +142,7 @@ export default defineComponent({
     },
     shareStatus: {
       type: Number,
-      required: true
+      default: ShareStatus.accepted
     },
     sortBy: {
       type: String,
@@ -206,10 +211,14 @@ export default defineComponent({
       )
     }
 
+    // TODO: Pipe through gettext
+    const syncHint = 'Synced with your devices'
+
     return {
       ...useFileActions(),
       resourceTargetRouteCallback,
       ...useSelectedResources({ store }),
+      syncHint,
       getMatchingSpace
     }
   },
@@ -270,6 +279,9 @@ export default defineComponent({
         onEnter: debounced,
         onExit: debounced.cancel
       })
+    },
+    getShowSynchedIcon(resource) {
+      return resource.status === ShareStatus.accepted
     },
     getShowAcceptButton(resource) {
       return resource.status === ShareStatus.declined || resource.status === ShareStatus.pending

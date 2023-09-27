@@ -36,6 +36,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
             const share = await triggerShareAction({
               resource,
               status: ShareStatus.accepted,
+              // Set hidden false here?
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,

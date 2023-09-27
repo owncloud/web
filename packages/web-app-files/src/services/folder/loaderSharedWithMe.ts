@@ -40,7 +40,8 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       let resources = yield clientService.owncloudSdk.shares.getShares('', {
         state: 'all',
         include_tags: false,
-        shared_with_me: true
+        shared_with_me: true,
+        show_hidden: true
       })
 
       resources = resources.map((r) => r.shareInfo)

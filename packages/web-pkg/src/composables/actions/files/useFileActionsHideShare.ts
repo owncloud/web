@@ -1,23 +1,24 @@
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
-import {
-  isLocationSharesActive,
-  isLocationSpacesActive,
-  createLocationShares
-} from '../../../router'
+
 import { Store } from 'vuex'
 import PQueue from 'p-queue'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
-import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
-import { useClientService } from '../../clientService'
-import { useConfigurationManager } from '../../configuration'
-import { useLoadingService } from '../../loadingService'
-import { useRouter } from '../../router'
-import { useStore } from '../../store'
+import { ShareStatus } from 'web-client/src/helpers/share'
+import { isLocationSharesActive, isLocationSpacesActive } from '../../../router'
+import {
+  useCapabilityFilesSharingResharing,
+  useCapabilityShareJailEnabled,
+  useClientService,
+  useConfigurationManager,
+  useLoadingService,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '../types'
+import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions/types'
 
-export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
+// TODO: Replace all "accept" copy leftovers
+export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $ngettext } = useGettext()
@@ -38,8 +39,8 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
           try {
             const share = await triggerShareAction({
               resource,
-              status: ShareStatus.declined,
-              // TODO: Hidden implications here?
+              status: ShareStatus.pending,
+              // visibility: 'public',
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,
@@ -57,19 +58,18 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
       )
     })
     await Promise.all(triggerPromises)
-
+    console.log(errors)
     if (errors.length === 0) {
       store.dispatch('Files/resetFileSelection')
 
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
         store.dispatch('showMessage', {
           title: $ngettext(
-            'The selected share was declined successfully',
-            'The selected shares were declined successfully',
+            'The selected share was accepted successfully',
+            'The selected shares were accepted successfully',
             resources.length
           )
         })
-        router.push(createLocationShares('files-shares-with-me'))
       }
 
       return
@@ -77,8 +77,8 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
 
     store.dispatch('showErrorMessage', {
       title: $ngettext(
-        'Failed to decline the selected share',
-        'Failed to decline selected shares',
+        'Failed to accept the selected share.',
+        'Failed to accept selected shares.',
         resources.length
       ),
       errors
@@ -87,10 +87,10 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
 
   const actions = computed((): FileAction[] => [
     {
-      name: 'decline-share',
-      icon: 'spam-3',
+      name: 'hide-share',
+      icon: 'check',
       handler: (args) => loadingService.addTask(() => handler(args)),
-      label: ({ resources }) => $ngettext('Decline share', 'Decline shares', resources.length),
+      label: ({ resources }) => $ngettext('Accept share', 'Accept shares', resources.length),
       isEnabled: ({ space, resources }) => {
         if (
           !isLocationSharesActive(router, 'files-shares-with-me') &&
@@ -104,18 +104,19 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
 
         if (
           isLocationSpacesActive(router, 'files-spaces-generic') &&
-          (space?.driveType !== 'share' || resources.length > 1 || resources[0].path !== '/')
+          (unref(space)?.driveType !== 'share' || resources.length > 1 || resources[0].path !== '/')
         ) {
           return false
         }
 
-        const declineDisabled = resources.some((resource) => {
-          return resource.status === ShareStatus.declined
-        })
-        return !declineDisabled
+        return true
+        // const acceptDisabled = resources.some((resource) => {
+        //   return resource.status === ShareStatus.accepted
+        // })
+        // return !acceptDisabled
       },
       componentType: 'button',
-      class: 'oc-files-actions-decline-share-trigger'
+      class: 'oc-files-actions-hide-share-trigger'
     }
   ])
 

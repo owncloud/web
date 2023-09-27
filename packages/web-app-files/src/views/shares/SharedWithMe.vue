@@ -8,53 +8,50 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
+        <!-- TODO: Make styling final -->
+        <div class="button-group oc-button-group oc-m-m">
+          <oc-button
+            :appearance="areHiddenFilesShown ? 'raw' : 'filled'"
+            class="oc-px-m"
+            @click="setAreHiddenFilesShown(false)"
+          >
+            Shares
+          </oc-button>
+          <oc-button
+            :appearance="areHiddenFilesShown ? 'filled' : 'raw'"
+            class="oc-px-m"
+            @click="setAreHiddenFilesShown(true)"
+          >
+            Hidden Shares
+          </oc-button>
+        </div>
         <shared-with-me-section
-          v-if="pendingItems.length > 0"
-          id="files-shared-with-me-pending-section"
-          :display-thumbnails="false"
-          :file-list-header-y="fileListHeaderY"
-          :items="pendingItems"
-          :resource-clickable="false"
-          :share-status="ShareStatus.pending"
-          :show-more-toggle="true"
-          :side-bar-open="sideBarOpen"
-          :sort-by="pendingSortBy"
-          :sort-dir="pendingSortDir"
-          :sort-handler="pendingHandleSort"
-          :title="pendingTitle"
-        />
-
-        <shared-with-me-section
-          id="files-shared-with-me-accepted-section"
+          v-if="!areHiddenFilesShown"
+          id="files-shared-with-me-visible-view"
           :display-thumbnails="displayThumbnails"
-          :empty-message="acceptedEmptyMessage"
           :file-list-header-y="fileListHeaderY"
-          :items="acceptedItems"
+          :items="visibleShares"
           :resource-clickable="true"
-          :share-status="ShareStatus.accepted"
+          :show-more-toggle="true"
           :side-bar-open="sideBarOpen"
           :sort-by="acceptedSortBy"
           :sort-dir="acceptedSortDir"
           :sort-handler="acceptedHandleSort"
-          :title="acceptedTitle"
-          :grouping-settings="groupingSettings"
+          :title="shareSectionTitle"
         />
-
         <shared-with-me-section
-          id="files-shared-with-me-declined-section"
-          :display-thumbnails="false"
-          :empty-message="declinedEmptyMessage"
+          v-if="areHiddenFilesShown"
+          id="files-shared-with-me-hidden-view"
+          :display-thumbnails="displayThumbnails"
           :file-list-header-y="fileListHeaderY"
-          :items="declinedItems"
+          :items="hiddenShares"
           :resource-clickable="false"
-          :share-status="ShareStatus.declined"
           :show-more-toggle="true"
           :side-bar-open="sideBarOpen"
-          :sort-by="declinedSortBy"
-          :sort-dir="declinedSortDir"
-          :sort-handler="declinedHandleSort"
-          :title="declinedTitle"
-          :grouping-settings="groupingSettings"
+          :sort-by="acceptedSortBy"
+          :sort-dir="acceptedSortDir"
+          :sort-handler="acceptedHandleSort"
+          :title="shareSectionTitle"
         />
       </template>
     </files-view-wrapper>
@@ -63,7 +60,6 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { useResourcesViewDefaults } from '../../composables'
 
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
@@ -75,8 +71,10 @@ import { Resource } from '@ownclouders/web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
-import { useGroupingSettings } from '@ownclouders/web-pkg'
+// import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from 'web-pkg/src/composables'
 
 export default defineComponent({
   components: {
@@ -102,23 +100,22 @@ export default defineComponent({
       scrollToResourceFromRoute
     } = useResourcesViewDefaults<Resource, any, any[]>()
 
-    // pending shares
-    const pending = computed(() =>
-      unref(storeItems).filter((item) => item.status === ShareStatus.pending)
-    )
-    const {
-      sortBy: pendingSortBy,
-      sortDir: pendingSortDir,
-      items: pendingItems,
-      handleSort: pendingHandleSort
-    } = useSort({
-      items: pending,
-      fields: sortFields,
-      sortByQueryName: 'pending-sort-by',
-      sortDirQueryName: 'pending-sort-dir'
+    const { $gettext } = useGettext()
+
+    const areHiddenFilesShown = ref(false)
+
+    const shareSectionTitle = computed(() => {
+      return areHiddenFilesShown.value ? $gettext('Hidden Shares') : $gettext('Shares')
     })
 
-    // accepted shares
+    const setAreHiddenFilesShown = (value: boolean) => {
+      areHiddenFilesShown.value = value
+    }
+
+    const visibleShares = computed(() => unref(storeItems).filter((r) => r.hide !== 'true'))
+    const hiddenShares = computed(() => unref(storeItems).filter((r) => r.hide === 'true'))
+
+    // TODO: Adapt for show/hidden state
     const accepted = computed(() =>
       unref(storeItems).filter((item) => item.status === ShareStatus.accepted)
     )
@@ -151,6 +148,10 @@ export default defineComponent({
     })
 
     const { getMatchingSpace } = useGetMatchingSpace()
+    const store = useStore()
+
+    const displayThumbnails = computed(() => store.getters.configuration?.options?.disablePreviews)
+
     const selectedShareSpace = computed(() => {
       if (unref(selectedResources).length !== 1) {
         return null
@@ -171,24 +172,22 @@ export default defineComponent({
       selectedShareSpace,
       scrollToResourceFromRoute,
 
-      // view specific
-      pendingHandleSort,
-      pendingSortBy,
-      pendingSortDir,
-      pendingItems,
+      areHiddenFilesShown,
+      displayThumbnails,
+      hiddenShares,
+      setAreHiddenFilesShown,
+      shareSectionTitle,
+      visibleShares,
 
+      // TODO: Add sorting via useSort
       acceptedHandleSort,
       acceptedSortBy,
       acceptedSortDir,
-      acceptedItems,
+      acceptedItems
 
-      declinedHandleSort,
-      declinedSortBy,
-      declinedSortDir,
-      declinedItems,
-
+      // TODO: Renable for hidden/shown shares
       // CERN
-      ...useGroupingSettings({ sortBy: acceptedSortBy, sortDir: acceptedSortDir })
+      // ...useGroupingSettings({ sortBy: acceptedSortBy, sortDir: acceptedSortDir })
     }
   },
 
@@ -196,37 +195,13 @@ export default defineComponent({
     ShareStatus
   }),
 
-  computed: {
-    ...mapGetters(['configuration']),
-
-    pendingTitle() {
-      return this.$gettext('Pending shares')
-    },
-
-    acceptedTitle() {
-      return this.$gettext('Accepted shares')
-    },
-    acceptedEmptyMessage() {
-      return this.$gettext('You have no accepted shares.')
-    },
-
-    declinedTitle() {
-      return this.$gettext('Declined shares')
-    },
-    declinedEmptyMessage() {
-      return this.$gettext('You have no declined shares.')
-    },
-    displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
-    }
-  },
-
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(
-      [...this.acceptedItems, ...this.pendingItems, ...this.declinedItems],
-      'files-app-bar'
-    )
+    // TODO: Fix
+    // this.scrollToResourceFromRoute(
+    //   [...this.acceptedItems, ...this.pendingItems, ...this.declinedItems],
+    //   'files-app-bar'
+    // )
   }
 })
 </script>
