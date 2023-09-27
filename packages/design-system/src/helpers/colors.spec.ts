@@ -32,7 +32,7 @@ describe('rgbToHex', () => {
   })
 })
 
-describe('shadeColor', () => {
+describe('calculateShadeColor', () => {
   it('shades a color', () => {
     const initialColor = [100, 50, 50]
     expect(calculateShadeColor(initialColor, 50)).toBe('#964b4b')

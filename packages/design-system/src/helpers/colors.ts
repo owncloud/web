@@ -100,14 +100,14 @@ export function setDesiredContrastRatio(
   }
   if (ratio < desiredRatio) {
     return setDesiredContrastRatio(
-      hexToRgb(shadeColor(targetColorRgb, -1)),
+      hexToRgb(calculateShadeColor(targetColorRgb, -1)),
       associatedColorRgb,
       desiredRatio,
       true
     )
   }
   return setDesiredContrastRatio(
-    hexToRgb(shadeColor(targetColorRgb, 1)),
+    hexToRgb(calculateShadeColor(targetColorRgb, 1)),
     associatedColorRgb,
     desiredRatio,
     false
