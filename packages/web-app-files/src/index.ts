@@ -30,6 +30,7 @@ const appInfo = {
   name: $gettext('Files'),
   id: 'files',
   icon: 'resource-type-folder',
+  color: 'var(--oc-color-swatch-primary-muted)',
   isFileEditor: false,
   extensions: [],
   fileSideBars

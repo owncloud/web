@@ -6,26 +6,22 @@ exports[`ApplicationsMenu component should render navigation with button and men
     <oc-icon-stub accessiblelabel="" class="oc-flex" color="" filltype="fill" name="grid" size="large" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
   <oc-drop-stub closeonclick="true" dropid="app-switcher-dropdown" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#_appSwitcherButton">
-    <oc-list-stub class="applications-list" raw="false">
-      <li>
-        <oc-button-stub appearance="raw" class="" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="/files" type="router-link" variation="passive">
-          <span class="icon-box">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="folder" size="medium" type="span" variation="inherit"></oc-icon-stub>
-          </span>
-          <span>Files</span>
-          <!--v-if-->
-        </oc-button-stub>
-      </li>
-      <li>
-        <oc-button-stub appearance="raw" class="" disabled="false" gapsize="medium" href="http://some.org" justifycontent="center" showspinner="false" size="medium" submit="button" target="_blank" type="a" variation="passive">
-          <span class="icon-box">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="some-icon" size="medium" type="span" variation="inherit"></oc-icon-stub>
-          </span>
-          <span>External</span>
-          <!--v-if-->
-        </oc-button-stub>
-      </li>
-    </oc-list-stub>
+    <div class="oc-display-block oc-position-relative">
+      <oc-list-stub class="applications-list" raw="false">
+        <li>
+          <oc-button-stub appearance="raw" class="" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="/files" type="router-link" variation="passive">
+            <oc-application-icon-stub colorprimary="" colorsecondary="" icon="folder"></oc-application-icon-stub>
+            <span>Files</span>
+          </oc-button-stub>
+        </li>
+        <li>
+          <oc-button-stub appearance="raw" class="" disabled="false" gapsize="medium" href="http://some.org" justifycontent="center" showspinner="false" size="medium" submit="button" target="_blank" type="a" variation="passive">
+            <oc-application-icon-stub colorprimary="" colorsecondary="" icon="some-icon"></oc-application-icon-stub>
+            <span>External</span>
+          </oc-button-stub>
+        </li>
+      </oc-list-stub>
+    </div>
   </oc-drop-stub>
 </nav>
 `;

@@ -23,6 +23,7 @@ const mutations = {
       app,
       icon: extension.icon,
       img: extension.img,
+      color: extension.color,
       routeName: extension.routeName,
       routes: extension.routes || [],
       extension: extension.extension,
@@ -84,7 +85,8 @@ const mutations = {
       ...(appInfo.iconFillType && { iconFillType: appInfo.iconFillType }),
       ...(appInfo.iconColor && { iconColor: appInfo.iconColor }),
       img: appInfo.img || null,
-      config: (state.fileEditorConfigs || {})[appInfo.id]
+      config: (state.fileEditorConfigs || {})[appInfo.id],
+      color: appInfo.color || ''
     }
     state.meta[app.id] = app
   },

@@ -12,9 +12,10 @@ function $gettext(msg) {
 }
 
 const appInfo = {
-  name: $gettext('Administration Settings'),
+  name: $gettext('Admin Settings'),
   id: 'admin-settings',
   icon: 'settings-4',
+  color: '#2b2b2b',
   isFileEditor: false
 }
 

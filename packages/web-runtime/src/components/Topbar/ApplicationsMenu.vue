@@ -22,38 +22,46 @@
       mode="click"
       padding-size="small"
       close-on-click
+      @show-drop="updateAppIcons"
     >
-      <oc-list class="applications-list">
-        <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`" @click="clickApp(n)">
-          <oc-button
-            :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
-            :type="n.url ? 'a' : 'router-link'"
-            :target="n.target"
-            :href="n.url"
-            :to="n.path"
-            :appearance="n.active ? 'raw-inverse' : 'raw'"
-            :variation="n.active ? 'primary' : 'passive'"
-            :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
-          >
-            <span class="icon-box">
-              <oc-icon :name="n.icon" variation="inherit" />
-            </span>
-            <span v-text="$gettext(n.title)" />
-            <oc-icon v-if="n.active" name="check" class="active-check" variation="inherit" />
-          </oc-button>
-        </li>
-      </oc-list>
+      <div class="oc-display-block oc-position-relative">
+        <oc-list class="applications-list">
+          <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
+            <oc-button
+              :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
+              :type="n.url ? 'a' : 'router-link'"
+              :target="n.target"
+              :href="n.url"
+              :to="n.path"
+              :appearance="n.active ? 'raw-inverse' : 'raw'"
+              :variation="n.active ? 'primary' : 'passive'"
+              :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
+            >
+              <oc-application-icon
+                :key="`apps-menu-icon-${nid}-${appIconKey}`"
+                :icon="n.icon"
+                :color-primary="n.color"
+              />
+              <span v-text="$gettext(n.title)" />
+            </oc-button>
+          </li>
+        </oc-list>
+      </div>
     </oc-drop>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { urlJoin } from 'web-client/src/utils'
+import { defineComponent, PropType, ComponentPublicInstance, ref, computed } from 'vue'
 import { OcDrop } from 'design-system/src/components'
+import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
+import { useGettext } from 'vue3-gettext'
+import * as uuid from 'uuid'
 
 export default defineComponent({
+  components: {
+    OcApplicationIcon
+  },
   props: {
     applicationsList: {
       type: Array as PropType<any[]>,
@@ -61,9 +69,20 @@ export default defineComponent({
       default: () => []
     }
   },
-  computed: {
-    applicationSwitcherLabel() {
-      return this.$gettext('Application Switcher')
+  setup() {
+    const { $gettext } = useGettext()
+    const appIconKey = ref('')
+
+    const applicationSwitcherLabel = computed(() => {
+      return $gettext('Application Switcher')
+    })
+    const updateAppIcons = () => {
+      appIconKey.value = uuid.v4().replaceAll('-', '')
+    }
+    return {
+      appIconKey,
+      updateAppIcons,
+      applicationSwitcherLabel
     }
   },
   mounted() {
@@ -72,23 +91,14 @@ export default defineComponent({
       onShown: () =>
         (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()
     })
-  },
-  methods: {
-    async clickApp(appEntry) {
-      // @TODO use id or similar
-      if (appEntry.url?.endsWith('/apps/files')) {
-        await this.setClassicUIDefault()
-      }
-    },
-    setClassicUIDefault() {
-      const url = urlJoin(configurationManager.serverUrl, '/index.php/apps/web/settings/default')
-      return this.$clientService.httpAuthenticated.post(url, { isDefault: false })
-    }
   }
 })
 </script>
 
 <style lang="scss" scoped>
+.oc-drop {
+  width: 280px;
+}
 .applications-list li {
   margin: var(--oc-space-xsmall) 0;
 
@@ -101,6 +111,8 @@ export default defineComponent({
 
   a,
   button {
+    padding: 5px;
+    border-radius: 8px;
     gap: var(--oc-space-medium);
     justify-content: flex-start;
     width: 100%;
@@ -118,7 +130,9 @@ export default defineComponent({
       }
     }
 
-    &:focus,
+    &:focus {
+      text-decoration: none;
+    }
     &:hover {
       background-color: var(--oc-color-background-hover);
       text-decoration: none;

@@ -112,6 +112,7 @@ export default {
           // TODO: move language resolution to a common function
           // FIXME: need to handle logic for variants like en_US vs en_GB
           let title = item.title ? item.title.en : item.name
+          let color = item.color
           let icon
           let iconUrl
           if (item.title && item.title[lang]) {
@@ -130,7 +131,8 @@ export default {
           const app: any = {
             icon: icon,
             iconUrl: iconUrl,
-            title: title
+            title: title,
+            color: color
           }
 
           if (item.url) {
