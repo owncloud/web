@@ -166,8 +166,8 @@ export default defineComponent({
 }
 #web-nav-sidebar {
   background-color: var(--oc-color-background-default);
-  border-radius: 15px;
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  border-radius: 15px 0 0 15px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
