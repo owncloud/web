@@ -17,5 +17,6 @@ export const additionalTranslations = {
   requestErrorDeniedByPolicy: $gettext('Operation denied due to security policies'),
   ocsErrorPasswordOnBannedList: $gettext(
     'Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety'
-  )
+  ),
+  openAppFromSmartBanner: $gettext('OPEN')
 }
