@@ -19,7 +19,10 @@ const getClientServiceMock = () => {
   )
   return clientService
 }
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useAppDefaults: jest.fn()
+}))
 
 describe('Groups view', () => {
   describe('method "createGroup"', () => {

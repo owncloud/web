@@ -106,7 +106,6 @@ describe('SpacesList', () => {
   })
   it('should show the context menu on context menu button click', async () => {
     const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
-    // .mockImplementation(() => undefined)
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find('.spaces-table-btn-action-dropdown').trigger('click')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)

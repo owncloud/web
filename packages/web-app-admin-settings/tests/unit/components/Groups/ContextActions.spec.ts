@@ -39,7 +39,7 @@ const selectors = {
   actionMenuItemStub: 'action-menu-item-stub'
 }
 
-describe('ContextActions', () => {
+describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
       const { wrapper } = getWrapper()

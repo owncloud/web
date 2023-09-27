@@ -66,8 +66,8 @@
 import { mapGetters } from 'vuex'
 import { useResourcesViewDefaults } from '../../composables'
 
-import AppLoadingSpinner from '@ownclouders/web-pkg'
-import AppBar from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { computed, defineComponent, unref } from 'vue'

@@ -9,56 +9,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
           <oc-breadcrumb-stub class="oc-flex oc-flex-middle" contextmenupadding="medium" id="admin-settings-breadcrumb" items="[object Object],[object Object]" maxwidth="-1" showcontextactions="false" truncationoffset="2" variation="default"></oc-breadcrumb-stub>
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div class="oc-flex">
-            <div class="oc-flex oc-flex-middle">
-              <!--v-if-->
-              <button aria-label="Display customization options of the files list" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-view-options-btn" type="button">
-                <!--v-if-->
-                <!-- @slot Content of the button -->
-                <span class="oc-icon oc-icon-m oc-icon-passive">
-                  <!---->
-                </span>
-              </button>
-              <div class="oc-drop oc-box-shadow-medium oc-rounded oc-width-auto" id="files-view-options-drop">
-                <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
-                  <ul class="oc-list oc-my-rm oc-mx-rm">
-                    <!--v-if-->
-                    <!--v-if-->
-                    <li class="files-view-options-list-item">
-                      <div class="oc-page-size files-pagination-size">
-                        <label class="oc-page-size-label" for="oc-page-size-3">Items per page</label>
-                        <div class="oc-page-size-select" input-id="oc-page-size-3" options="20,50,100,250">
-                          <label class="oc-label" for="oc-select-4"></label>
-                          <!--v-if-->
-                          <div class="v-select vs--single vs--unsearchable oc-select oc-page-size-select" dir="auto" style="background: transparent;">
-                            <div aria-expanded="false" aria-label="Search for option" aria-owns="vs2__listbox" class="vs__dropdown-toggle" id="vs2__combobox" role="combobox">
-                              <div class="vs__selected-options">
-                                <input aria-autocomplete="list" aria-controls="vs2__listbox" aria-labelledby="vs2__combobox" autocomplete="off" class="vs__search" id="oc-select-4" readonly="" type="search">
-                              </div>
-                              <div class="vs__actions">
-                                <button aria-label="Clear Selected" class="vs__clear" style="display: none;" title="Clear Selected" type="button">
-                                  <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.895455 5l2.842897-2.842898c.348864-.348863.348864-.914488 0-1.263636L9.106534.261648c-.348864-.348864-.914489-.348864-1.263636 0L5 3.104545 2.157102.261648c-.348863-.348864-.914488-.348864-1.263636 0L.261648.893466c-.348864.348864-.348864.914489 0 1.263636L3.104545 5 .261648 7.842898c-.348864.348863-.348864.914488 0 1.263636l.631818.631818c.348864.348864.914773.348864 1.263636 0L5 6.895455l2.842898 2.842897c.348863.348864.914772.348864 1.263636 0l.631818-.631818c.348864-.348864.348864-.914489 0-1.263636L6.895455 5z"></path>
-                                  </svg>
-                                </button>
-                                <svg class="vs__open-indicator" height="10" role="presentation" width="14" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path>
-                                </svg>
-                                <div class="vs__spinner" style="display: none;">Loading...</div>
-                              </div>
-                            </div>
-                            <transition-stub appear="false" css="true" name="vs__fade" persisted="false">
-                              <ul id="vs2__listbox" role="listbox" style="display: none; visibility: hidden;"></ul>
-                            </transition-stub>
-                          </div>
-                          <!--v-if-->
-                        </div>
-                      </div>
-                    </li>
-                    <!--v-if-->
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <view-options-stub hasfileextensions="false" hashiddenfiles="false" haspagination="true" paginationoptions="20,50,100,250" perpagedefault="50" perpagequeryname="items-per-page" perpagestorageprefix="admin-settings" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
             <button aria-label="Open sidebar to view details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-toggle-sidebar" type="button">
               <!--v-if-->
               <!-- @slot Content of the button -->

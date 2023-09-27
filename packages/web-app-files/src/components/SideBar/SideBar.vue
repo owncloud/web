@@ -41,7 +41,7 @@ import FileInfo from './FileInfo.vue'
 import { isProjectSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
 import { WebDAV } from 'web-client/src/webdav'
 import { default as InnerSideBar } from '@ownclouders/web-pkg'
-import SpaceInfo from '@ownclouders/web-pkg'
+import { SpaceInfo } from '@ownclouders/web-pkg'
 import { Panel } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import {

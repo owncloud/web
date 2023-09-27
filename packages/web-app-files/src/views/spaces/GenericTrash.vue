@@ -63,15 +63,15 @@
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
 
-import AppBar from '@ownclouders/web-pkg'
-import ContextActions from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
+import { ContextActions } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import ResourceTable from '@ownclouders/web-pkg'
+import { ResourceTable } from '@ownclouders/web-pkg'
 import SideBar from '../../components/SideBar/SideBar.vue'
-import AppLoadingSpinner from '@ownclouders/web-pkg'
-import NoContentMessage from '@ownclouders/web-pkg'
-import Pagination from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
+import { Pagination } from '@ownclouders/web-pkg'
 
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'

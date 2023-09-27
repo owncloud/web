@@ -6,7 +6,7 @@ import { HttpError, RuntimeError } from '@ownclouders/web-pkg/src/errors'
 import { ClientService } from '@ownclouders/web-pkg'
 import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from '@ownclouders/web-pkg'
-import { triggerDownloadWithFilename } from '@ownclouders/web-pkg/src/helpers'
+import { triggerDownloadWithFilename } from '../../'
 
 import { Ref, ref, computed, unref } from 'vue'
 

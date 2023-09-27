@@ -70,15 +70,15 @@ import { useTask } from 'vue-concurrency'
 import { defaultFuseOptions, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
 import { createLocationTrash } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import AppBar from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
 import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   SpaceResource
 } from 'web-client/src/helpers'
-import AppLoadingSpinner from '@ownclouders/web-pkg'
-import NoContentMessage from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
 import { useFileListHeaderPosition } from '@ownclouders/web-pkg'
 

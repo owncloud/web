@@ -39,7 +39,7 @@ import { isPublicSpaceResource, PublicSpaceResource, SpaceResource } from 'web-c
 import { locationPublicUpload } from '@ownclouders/web-pkg'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import AppLoadingSpinner from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { dirname } from 'path'
 import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 

@@ -154,10 +154,10 @@ import { mapMutations, mapGetters } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import NoContentMessage from '@ownclouders/web-pkg'
-import AppLoadingSpinner from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 
-import AppBar from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
@@ -173,13 +173,13 @@ import {
   useRoute
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
-import Pagination from '@ownclouders/web-pkg'
+import { Pagination } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
-import ResourceTable from '@ownclouders/web-pkg'
+import { ResourceTable } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
 import { WebDAV } from 'web-client/src/webdav'

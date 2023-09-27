@@ -15,7 +15,6 @@
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
-    "@ownclouders/web-pkg": "workspace:*",
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",
     "@microsoft/fetch-event-source": "^2.0.1",

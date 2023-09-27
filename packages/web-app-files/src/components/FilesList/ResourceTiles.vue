@@ -104,7 +104,7 @@ import { ImageDimension } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
-import ContextMenuQuickAction from '@ownclouders/web-pkg'
+import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can

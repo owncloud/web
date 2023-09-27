@@ -101,7 +101,7 @@ import {
   PaginationConstants,
   ViewModeConstants,
   useRouteName
-} from '@ownclouders/web-pkg/src/composables'
+} from '../composables'
 import { ViewMode } from '@ownclouders/web-pkg/src/ui/types'
 
 export default defineComponent({
@@ -213,6 +213,7 @@ export default defineComponent({
       viewSizeCurrent: viewSizeQuery,
       itemsPerPageCurrent: itemsPerPageQuery,
       queryParamsLoading,
+      queryItemAsString,
       setTilesViewSize,
       setItemsPerPage,
       setViewMode,
@@ -242,7 +243,6 @@ export default defineComponent({
     }
   },
   methods: {
-    queryItemAsString,
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     updateHiddenFilesShownModel(event) {

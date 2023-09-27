@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import ResourceTable from '@ownclouders/web-pkg'
+import { ResourceTable } from '@ownclouders/web-pkg'
 import { defineComponent, PropType } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
@@ -103,8 +103,8 @@ import { SortDir, useStore, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import ContextActions from '@ownclouders/web-pkg'
-import NoContentMessage from '@ownclouders/web-pkg'
+import { ContextActions } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { Resource } from 'web-client/src/helpers'

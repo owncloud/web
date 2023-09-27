@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import ActionMenuItem from '@ownclouders/web-pkg'
+import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { Resource, SpaceResource } from 'web-client'

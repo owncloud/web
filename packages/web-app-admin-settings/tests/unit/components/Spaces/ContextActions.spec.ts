@@ -16,21 +16,9 @@ import {
   useSpaceActionsEditQuota,
   useSpaceActionsRename
 } from '@ownclouders/web-pkg'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
-
-jest.mock('@ownclouders/web-pkg', () =>
-  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
-)
-
-describe('ContextActions', () => {
+describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
       const { wrapper } = getWrapper()

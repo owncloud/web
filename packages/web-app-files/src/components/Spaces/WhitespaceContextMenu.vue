@@ -30,7 +30,7 @@ import { useFileActionsPaste, useFileActionsShowDetails } from '@ownclouders/web
 import { useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
 import { SpaceResource } from 'web-client/src'
 import { useStore } from '@ownclouders/web-pkg'
-import ActionMenuItem from '@ownclouders/web-pkg'
+import { ActionMenuItem } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'WhitespaceContextMenu',

@@ -154,22 +154,22 @@ import {
 
 import { useFileActions } from '@ownclouders/web-pkg'
 
-import AppBar from '@ownclouders/web-pkg'
-import ContextActions from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
+import { ContextActions } from '@ownclouders/web-pkg'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceDetails from '../../components/FilesList/ResourceDetails.vue'
-import ResourceTable from '@ownclouders/web-pkg'
+import { ResourceTable } from '@ownclouders/web-pkg'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
-import AppLoadingSpinner from '@ownclouders/web-pkg'
-import NoContentMessage from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
-import Pagination from '@ownclouders/web-pkg'
+import { Pagination } from '@ownclouders/web-pkg'
 import {
   useRoute,
   useRouteQuery,

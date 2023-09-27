@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts">
-import ContextActionMenu from '@ownclouders/web-pkg'
-import QuotaModal from '@ownclouders/web-pkg'
-import ReadmeContentModal from '@ownclouders/web-pkg'
+import { ContextActionMenu } from '@ownclouders/web-pkg'
+import { QuotaModal } from '@ownclouders/web-pkg'
+import { ReadmeContentModal } from '@ownclouders/web-pkg'
 
 import { useFileActionsShowDetails } from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
