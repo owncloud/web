@@ -37,7 +37,7 @@ import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { dirname } from 'path'
-import AppBanner from 'web-app-files/src/views/AppBanner.vue'
+import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 
 export default defineComponent({
   components: {

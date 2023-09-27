@@ -88,9 +88,9 @@ import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
-import AppBanner from '../../web-app-files/src/views/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
+import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 
 export const appId = 'preview'
 
@@ -233,6 +233,7 @@ export default defineComponent({
     )
 
     const fileId = useRouteQuery('fileId')
+    const fileId = unref(currentFileContext).itemId
 
     return {
       ...appDefaults,
@@ -246,7 +247,7 @@ export default defineComponent({
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory,
-      fileId: queryItemAsString(unref(fileId))
+      fileId: fileId
     }
   },
   data() {

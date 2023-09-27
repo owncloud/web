@@ -1,6 +1,6 @@
 <template>
   <portal to="app.app-banner">
-    <div class="app-banner hide-desktop" :hidden="shouldShow === false">
+    <div class="app-banner hide-desktop" :hidden="isVisible === false">
       <oc-button
         variation="brand"
         appearance="raw"
@@ -40,10 +40,9 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import { useRouter, useStore } from 'web-pkg'
 import { buildUrl } from 'web-pkg/src/helpers/router'
 import { useSessionStorage } from '@vueuse/core'
-import { $gettext } from '../router/utils'
+import { $gettext } from '../../../web-app-files/src/router/utils'
 
 export default defineComponent({
-  methods: { $gettext },
   components: {},
   props: {
     fileId: {
@@ -56,14 +55,12 @@ export default defineComponent({
     const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
     const store = useStore()
     const router = useRouter()
-
     const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
-
-    const appUrl = computed(() =>
-      buildUrl(router, `/f/${props.fileId}`)
+    const appUrl = computed(() => {
+      return buildUrl(router, `/f/${props.fileId}`)
         .toString()
-        .replace(/^(http)(s)?/, (_, p1, p2) => (p2 ? appBannerSettings.appScheme : p1))
-    )
+        .replace('https', appBannerSettings.appScheme)
+    })
 
     const close = () => {
       isVisible.value = false
@@ -73,10 +70,11 @@ export default defineComponent({
     return {
       appUrl,
       close,
-      shouldShow: isVisible,
+      isVisible,
       appBannerSettings
     }
-  }
+  },
+  methods: { $gettext }
 })
 </script>
 
