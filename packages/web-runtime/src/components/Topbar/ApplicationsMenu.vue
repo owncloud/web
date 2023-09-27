@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, unref, computed } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, computed } from 'vue'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'

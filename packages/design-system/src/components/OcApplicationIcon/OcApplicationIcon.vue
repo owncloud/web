@@ -13,7 +13,7 @@ import {
   setDesiredContrastRatio,
   calculateShadeColor
 } from '../../helpers'
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
 export default defineComponent({
@@ -22,10 +22,6 @@ export default defineComponent({
   status: 'ready',
   release: '15.0.0',
   props: {
-    key: {
-      type: String,
-      required: false
-    },
     icon: {
       type: String,
       required: true
