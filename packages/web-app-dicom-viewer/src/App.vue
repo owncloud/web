@@ -1,9 +1,7 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
     <!-- check ouf if the classes of the div below are still accurate/needed/consistent with overall app design -->
-    <div
-      class="oc-height-1-1 oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium"
-    >
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas"></div>
       <!-- div element for displaying meta data -->
@@ -79,6 +77,35 @@
         </div>
       </div>
     </div>
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium">
+      <!-- viewport manipulations -->
+      <div id="tools"></div>
+      <div id="tool-info">
+        <!--
+        <h2>viewport manipulations</h2>
+        <div>
+          <span>Rotation:</span>
+          <span id="rotation"></span>
+        </div>
+        <div>
+          <span>Flip Horizontal:</span>
+          <span id="flip-horizontal"></span>
+        </div>
+        <div>
+          <span>Flip Vertical:</span>
+          <span id="flip-vertical"></span>
+        </div>
+        <div>
+          <span>Zoom:</span>
+          <span id="zoom"></span>
+        </div>
+        <div>
+          <span>Inverted:</span>
+          <span id="inverted"></span>
+        </div>
+        -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -90,6 +117,8 @@ import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
 import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
+
+import { init as csToolsInit } from '@cornerstonejs/tools'
 
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
@@ -103,7 +132,7 @@ import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFil
 import uids from './helper/uids'
 
 // declaring some const & references
-const { ViewportType } = Enums
+const { ViewportType, Events } = Enums
 
 // specify external dependencies
 cornerstoneTools.external.Hammer = Hammer
@@ -193,8 +222,10 @@ export default defineComponent({
       dicomFile: null,
       dicomFileName: null,
       imageData: null,
+      dicomMetaData: null,
       metaDataElement: null,
-      metaDataItems: null
+      metaDataItems: null,
+      toolInfoElement: null
     }
   },
   watch: {},
@@ -256,6 +287,116 @@ export default defineComponent({
       'dicom-metadata-item'
     ) as HTMLCollectionOf<HTMLDivElement>
 
+    // root element for tool info, maybe not needed
+    this.toolInfoElement = document.getElementById('tool-info') as HTMLDivElement
+    //this.setToolInfo()
+
+    // adding some buttons for image manipulation
+
+    // zoom in
+    this.addButton({
+      id: 'zoom-in-tool',
+      title: 'Zoom+',
+      onClick: () => {
+        const camera = this.viewport.getCamera()
+
+        const newCamera = {
+          parallelScale: camera.parallelScale * 0.8,
+          position: camera.position,
+          focalPoint: camera.focalPoint
+        }
+
+        this.viewport.setCamera(newCamera)
+        this.viewport.render()
+      }
+    })
+
+    // zoom out
+    this.addButton({
+      id: 'zoom-out-tool',
+      title: 'Zoom-',
+      onClick: () => {
+        const camera = this.viewport.getCamera()
+
+        const newCamera = {
+          parallelScale: camera.parallelScale * 1.25,
+          position: camera.position,
+          focalPoint: camera.focalPoint
+        }
+
+        this.viewport.setCamera(newCamera)
+        this.viewport.render()
+      }
+    })
+
+    // rotate image anti clockwise
+    this.addButton({
+      id: 'backrotate-tool',
+      title: 'Rotate -90',
+      onClick: () => {
+        const { rotation } = this.viewport.getProperties()
+        this.viewport.setProperties({ rotation: rotation - 90 })
+        this.viewport.render()
+      }
+    })
+
+    // rotate image clockwise
+    this.addButton({
+      id: 'rotate-tool',
+      title: 'Rotate +90',
+      onClick: () => {
+        const { rotation } = this.viewport.getProperties()
+        this.viewport.setProperties({ rotation: rotation + 90 })
+        this.viewport.render()
+      }
+    })
+
+    // flip image horizontal
+    this.addButton({
+      id: 'flip-horizontal-tool',
+      title: 'Flip H',
+      onClick: () => {
+        const { flipHorizontal } = this.viewport.getCamera()
+        this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
+        this.viewport.render()
+      }
+    })
+
+    // flip image vertical
+    this.addButton({
+      id: 'flip-vertical-tool',
+      title: 'Flip V',
+      onClick: () => {
+        const { flipVertical } = this.viewport.getCamera()
+        this.viewport.setCamera({ flipVertical: !flipVertical })
+        this.viewport.render()
+      }
+    })
+
+    // invert image
+    this.addButton({
+      id: 'invert-tool',
+      title: 'Invert',
+      onClick: () => {
+        const { invert } = this.viewport.getProperties()
+        this.viewport.setProperties({ invert: !invert })
+        this.viewport.render()
+      }
+    })
+
+    // reset image
+    this.addButton({
+      id: 'reset-tool',
+      title: 'Reset',
+      onClick: () => {
+        // Resets the viewport's camera
+        this.viewport.resetCamera()
+        // Resets the viewport's properties
+        this.viewport.resetProperties()
+        this.viewport.render()
+      }
+    })
+
     // get resource
     // ensure resource url is not empty!
     if (this.url != null && this.url != undefined && this.url != '') {
@@ -294,7 +435,7 @@ export default defineComponent({
     }
   },
   // "beforeUpdate" is implementing any change in the component
-  async beforeUpdate() {
+  beforeUpdate() {
     console.log('lifecycle @ beforeUpdate')
   },
   // updated gets called anytime some change is made in the component
@@ -322,12 +463,31 @@ export default defineComponent({
         console.error('Error initalizing cornerstone core', e)
       }
     },
-    async prefetchMetadataInformation(imageIdsToPrefetch) {
-      console.log('prefetching meta data information')
-      for (let i = 0; i < imageIdsToPrefetch.length; i++) {
-        await cornerstoneDICOMImageLoader.wadouri.loadImage(imageIdsToPrefetch[i]).promise
-        console.log('data fetched for: ' + imageIdsToPrefetch[i])
+    async initCornerstoneTools() {
+      console.log('initializing cornerstone tools')
+      try {
+        await cornerstoneTools.init()
+        console.log('cornerstone tools initalized')
+      } catch (e) {
+        console.error('Error initalizing cornerstone tools', e)
+        console.log('error initalizing cornerstone tools')
       }
+    },
+    // currently only printing values in console
+    async fetchMetadataInformation(imageId) {
+      console.log('fetch meta data information for: ' + imageId)
+      await cornerstoneDICOMImageLoader.wadouri
+        .loadImage(imageId)
+        .promise.then(async function (dicomImage) {
+          console.log('type of dicom image variable: ' + typeof dicomImage)
+          const dicomMetaData = dicomImage.data
+          console.log('patient name: ' + dicomMetaData.string('x00100010'))
+          const patientName = dicomImage.data.string('x00100010')
+          const patientBirthdate = dicomImage.data.string('x00100030')
+          console.log('patient name: ' + patientName)
+          console.log('patient birthdate: ' + patientBirthdate)
+        })
+      // TODO: figure out how to pass the data from the inner function into a variable that can be accessed anywhere in the package
     },
     async createDicomFile() {
       // TODO check if already exist?
@@ -371,6 +531,7 @@ export default defineComponent({
         const sopCommonModule = metaData.get('sopCommonModule', imageId)
         const transferSyntax = metaData.get('transferSyntax', imageId)
 
+        // setting the data to UI elements
         //transfer syntax
         document.getElementById('transfer-syntax').innerHTML = transferSyntax.transferSyntaxUID
 
@@ -460,6 +621,23 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
+    setToolInfo() {
+      // adding event listener
+      this.element.addEventListener(Events.CAMERA_MODIFIED, (_) => {
+        if (!this.viewport) {
+          return
+        }
+
+        const { flipHorizontal, flipVertical } = this.viewport.getCamera()
+        const { rotation, invert } = this.viewport.getProperties()
+
+        document.getElementById('rotation').innerHTML = `${Math.round(rotation)}`
+        document.getElementById('flip-horizontal').innerHTML = `${flipHorizontal}`
+        document.getElementById('flip-vertical').innerHTML = `${flipVertical}`
+        document.getElementById('zoom').innerHTML = `TODO`
+        document.getElementById('inverted').innerHTML = `${invert}`
+      })
+    },
     separateCredentialsFromUrl(url: String) {
       const [urlWithoutCredentials, ...rest] = url.split('?')
       const credentials = rest.join('?')
@@ -505,6 +683,31 @@ export default defineComponent({
         let result = reader.result as String
         console.log('reading file lenght: ' + result.length)
       }
+    },
+    addButton({
+      id,
+      title,
+      container,
+      onClick
+    }: {
+      id?: string
+      title: string
+      container?: HTMLElement
+      onClick: () => void
+    }) {
+      const button = document.createElement('button')
+
+      button.id = id
+      //button.className = 'dicom-manipulation-btn'
+
+      button.style.padding = '12px'
+      button.style.margin = '12px'
+
+      button.innerHTML = title
+      button.onclick = onClick
+
+      container = container ?? document.getElementById('tools')
+      container.append(button)
     }
   }
 })
