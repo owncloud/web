@@ -16,6 +16,7 @@ Summary
 * Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
+* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -100,6 +101,13 @@ Details
 
    https://github.com/owncloud/web/issues/9630
    https://github.com/owncloud/web/pull/9663
+
+* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
+
+   Navigating via tab and enter in the tiles view has been fixed.
+
+   https://github.com/owncloud/web/issues/9633
+   https://github.com/owncloud/web/pull/9670
 
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 
