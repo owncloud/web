@@ -4,7 +4,7 @@ import {
   UserManager as OidcUserManager,
   UserManagerSettings
 } from 'oidc-client-ts'
-import { buildUrl } from '../../router'
+import { buildUrl } from 'web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
 import { ConfigurationManager } from 'web-pkg/src/configuration'
 import { ClientService } from 'web-pkg/src/services'
@@ -13,6 +13,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import { Ability } from 'web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
+import { router } from 'web-runtime/src/router'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -48,13 +49,13 @@ export class UserManager extends OidcUserManager {
     })
     const openIdConfig: UserManagerSettings = {
       userStore,
-      redirect_uri: buildUrl('/oidc-callback.html'),
-      silent_redirect_uri: buildUrl('/oidc-silent-redirect.html'),
+      redirect_uri: buildUrl(router, '/oidc-callback.html'),
+      silent_redirect_uri: buildUrl(router, '/oidc-silent-redirect.html'),
 
       response_mode: 'query',
       response_type: 'code', // "code" triggers auth code grant flow
 
-      post_logout_redirect_uri: buildUrl('/'),
+      post_logout_redirect_uri: buildUrl(router, '/'),
       accessTokenExpiringNotificationTimeInSeconds: 10,
       authority: '',
       client_id: ''

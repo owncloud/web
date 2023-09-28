@@ -1,4 +1,5 @@
 <template>
+  <app-banner :file-id="fileId"></app-banner>
   <main
     id="preview"
     ref="preview"
@@ -87,6 +88,7 @@ import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
+import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
 
@@ -112,6 +114,7 @@ export const mimeTypes = () => {
 export default defineComponent({
   name: 'Preview',
   components: {
+    AppBanner,
     AppTopBar,
     MediaControls,
     MediaAudio,
@@ -229,6 +232,8 @@ export default defineComponent({
       { immediate: true }
     )
 
+    const fileId = computed(() => unref(unref(currentFileContext).itemId))
+
     return {
       ...appDefaults,
       activeFilteredFile,
@@ -240,7 +245,8 @@ export default defineComponent({
       isFileContentLoading,
       isFullScreenModeActivated,
       toggleFullscreenMode,
-      updateLocalHistory
+      updateLocalHistory,
+      fileId: fileId
     }
   },
   data() {

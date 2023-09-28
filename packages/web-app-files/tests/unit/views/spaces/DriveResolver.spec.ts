@@ -143,7 +143,7 @@ function getMountedWrapper({
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         provide: defaultMocks,
-        stubs: defaultStubs
+        stubs: { ...defaultStubs, 'app-banner': true }
       }
     })
   }

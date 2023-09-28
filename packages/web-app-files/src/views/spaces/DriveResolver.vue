@@ -1,6 +1,7 @@
 <template>
   <app-loading-spinner v-if="isLoading" />
   <template v-else>
+    <app-banner :file-id="fileId"></app-banner>
     <drive-redirect
       v-if="!space"
       :drive-alias-and-item="driveAliasAndItem"
@@ -40,9 +41,11 @@ import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { dirname } from 'path'
+import AppBanner from 'web-pkg/src/components/AppBanner.vue'
 
 export default defineComponent({
   components: {
+    AppBanner,
     DriveRedirect,
     GenericSpace,
     GenericTrash,
@@ -142,7 +145,8 @@ export default defineComponent({
       driveAliasAndItem,
       isSpaceRoute,
       isTrashRoute,
-      isLoading
+      isLoading,
+      fileId
     }
   }
 })
