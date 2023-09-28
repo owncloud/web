@@ -4,33 +4,38 @@
     :class="{ lightbox: isFullScreenModeActivated }"
   >
     <div
-      class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
+      class="oc-background-brand oc-p-s oc-width-xlarge oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
     >
-      <oc-button
-        v-oc-tooltip="previousDescription"
-        class="preview-controls-previous"
-        appearance="raw-inverse"
-        variation="brand"
-        :aria-label="previousDescription"
-        @click="$emit('togglePrevious')"
-      >
-        <oc-icon size="large" name="arrow-drop-left" variation="inherit" />
-      </oc-button>
-      <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
-        <span aria-hidden="true" v-text="ariaHiddenFileCount" />
-        <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
-      </p>
-      <oc-button
-        v-oc-tooltip="nextDescription"
-        class="preview-controls-next"
-        appearance="raw-inverse"
-        variation="brand"
-        :aria-label="nextDescription"
-        @click="$emit('toggleNext')"
-      >
-        <oc-icon size="large" name="arrow-drop-right" variation="inherit" />
-      </oc-button>
+      <!-- prev / next -->
       <div class="oc-flex oc-flex-middle">
+        <oc-button
+          v-oc-tooltip="previousDescription"
+          class="preview-controls-previous"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="previousDescription"
+          @click="$emit('togglePrevious')"
+        >
+          <oc-icon size="large" name="arrow-drop-left" variation="inherit" />
+        </oc-button>
+        <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
+          <span aria-hidden="true" v-text="ariaHiddenFileCount" />
+          <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
+        </p>
+        <oc-button
+          v-oc-tooltip="nextDescription"
+          class="preview-controls-next"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="nextDescription"
+          @click="$emit('toggleNext')"
+        >
+          <oc-icon size="large" name="arrow-drop-right" variation="inherit" />
+        </oc-button>
+      </div>
+
+      <!-- zoom -->
+      <div class="oc-flex-middle">
         <div class="oc-flex">
           <oc-button
             v-oc-tooltip="imageShrinkDescription"
@@ -63,28 +68,101 @@
             <oc-icon fill-type="line" name="add-box" variation="inherit" />
           </oc-button>
         </div>
-        <div class="oc-ml-m">
-          <oc-button
-            v-oc-tooltip="imageRotateLeftDescription"
-            class="preview-controls-rotate-left"
-            appearance="raw-inverse"
-            variation="brand"
-            :aria-label="imageRotateLeftDescription"
-            @click="imageRotateLeft"
-          >
-            <oc-icon fill-type="line" name="anticlockwise" variation="inherit" />
-          </oc-button>
-          <oc-button
-            v-oc-tooltip="imageRotateRightDescription"
-            class="preview-controls-rotate-right"
-            appearance="raw-inverse"
-            variation="brand"
-            :aria-label="imageRotateRightDescription"
-            @click="imageRotateRight"
-          >
-            <oc-icon fill-type="line" name="clockwise" variation="inherit" />
-          </oc-button>
-        </div>
+      </div>
+
+      <!-- rotation -->
+      <div class="oc-flex oc-flex-middle">
+        <oc-button
+          v-oc-tooltip="imageRotateLeftDescription"
+          class="preview-controls-rotate-left"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageRotateLeftDescription"
+          @click="imageRotateLeft"
+        >
+          <oc-icon fill-type="line" name="anticlockwise" variation="inherit" />
+        </oc-button>
+        <oc-button
+          v-oc-tooltip="imageRotateRightDescription"
+          class="preview-controls-rotate-right"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageRotateRightDescription"
+          @click="imageRotateRight"
+        >
+          <oc-icon fill-type="line" name="clockwise" variation="inherit" />
+        </oc-button>
+      </div>
+
+      <!-- flip -->
+      <div class="oc-flex oc-flex-middle">
+        <oc-button
+          v-oc-tooltip="imageFlipVerticalDescription"
+          class="preview-controls-flip-vertical"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageFlipVerticalDescription"
+          @click="imageFlipVertical"
+        >
+          <!-- TODO: insert correct icon -->
+          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+        </oc-button>
+        <oc-button
+          v-oc-tooltip="imageFlipHorizontalDescription"
+          class="preview-controls-flip-horizontal"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageFlipHorizontalDescription"
+          @click="imageFlipHorizontal"
+        >
+          <!-- TODO: insert correct icon -->
+          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+        </oc-button>
+      </div>
+
+      <!-- invert -->
+      <div class="oc-flex oc-flex-middle">
+        <oc-button
+          v-oc-tooltip="imageInvertDescription"
+          class="preview-controls-invert"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageInvertDescription"
+          @click="imageInvert"
+        >
+          <!-- TODO: insert correct icon -->
+          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+        </oc-button>
+      </div>
+
+      <!-- reset -->
+      <div class="oc-flex oc-flex-middle">
+        <oc-button
+          v-oc-tooltip="imageResetDescription"
+          class="preview-controls-reset"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageResetDescription"
+          @click="imageReset"
+        >
+          <!-- TODO: insert correct icon -->
+          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+        </oc-button>
+      </div>
+
+      <!-- metadata -->
+      <div class="oc-flex-middle oc-flex oc-mr-m">
+        <oc-button
+          v-oc-tooltip="imageShowMetadataDescription"
+          class="preview-controls-show-metadata"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageShowMetadataDescription"
+          @click="imageShowMetadata"
+        >
+          <!-- TODO: insert correct icon -->
+          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+        </oc-button>
       </div>
     </div>
   </div>
