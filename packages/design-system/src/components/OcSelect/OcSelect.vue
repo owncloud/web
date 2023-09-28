@@ -97,7 +97,7 @@ import {
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
-import { ContextualHelper } from 'design-system/src/helpers'
+import { ContextualHelper } from '../../helpers'
 
 /**
  * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)

@@ -1,5 +1,5 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Drive } from 'web-client/src/generated'
@@ -66,13 +66,13 @@ describe('CreateAndUpload component', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('should be disabled if file creation is not possible', () => {
-      const currentFolder = mockDeep<Resource>({ canUpload: () => false })
+      const currentFolder = mock<Resource>({ canUpload: () => false })
       const { wrapper } = getWrapper({ currentFolder })
       expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeTruthy()
       expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeTruthy()
     })
     it('should not be visible if file creation is not possible on a public page', () => {
-      const currentFolder = mockDeep<Resource>({ canUpload: () => false })
+      const currentFolder = mock<Resource>({ canUpload: () => false })
       const { wrapper } = getWrapper({ currentFolder, currentRouteName: 'files-public-link' })
       expect(wrapper.find(elSelector.component).exists()).toBeFalsy()
     })
@@ -95,16 +95,22 @@ describe('CreateAndUpload component', () => {
       ).toBeFalsy()
     })
     it('should show if clipboard is not empty', () => {
-      const { wrapper } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
+      const { wrapper } = getWrapper({ clipboardResources: [mock<Resource>()] })
       expect(wrapper.findAll(`${elSelector.clipboardBtns} .oc-button`).length).toBe(2)
     })
     it('call the "paste files"-action', async () => {
-      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
+      const { wrapper, storeOptions } = getWrapper({
+        clipboardResources: [
+          mock<Resource>({
+            shareRoot: undefined
+          })
+        ]
+      })
       await wrapper.find(elSelector.pasteFilesBtn).trigger('click')
       expect(storeOptions.modules.Files.actions.pasteSelectedFiles).toHaveBeenCalled()
     })
     it('call "clear clipboard"-action', async () => {
-      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mockDeep<Resource>()] })
+      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mock<Resource>()] })
       await wrapper.find(elSelector.clearClipboardBtn).trigger('click')
       expect(storeOptions.modules.Files.actions.clearClipboardFiles).toHaveBeenCalled()
     })
@@ -118,9 +124,9 @@ describe('CreateAndUpload component', () => {
     ])('updates the space quota for supported drive types', async (data) => {
       const { driveType, updated } = data
       const { wrapper, mocks, storeOptions } = getWrapper()
-      const file = mockDeep<UppyResource>({ meta: { driveType } })
+      const file = mock<UppyResource>({ meta: { driveType } })
       const graphMock = mocks.$clientService.graphAuthenticated
-      graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
+      graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
       await wrapper.vm.onUploadComplete({ successful: [file] })
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
@@ -131,11 +137,11 @@ describe('CreateAndUpload component', () => {
       const itemId = 'itemId'
       const space = mock<SpaceResource>({ id: '1' })
       const { wrapper, mocks } = getWrapper({ itemId, space })
-      const file = mockDeep<UppyResource>({
+      const file = mock<UppyResource>({
         meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
       })
       const graphMock = mocks.$clientService.graphAuthenticated
-      graphMock.drives.getDrive.mockResolvedValue(mockDeep<Drive>() as any)
+      graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
       await wrapper.vm.onUploadComplete({ successful: [file] })
       expect(eventSpy).toHaveBeenCalled()
     })
@@ -146,7 +152,7 @@ describe('CreateAndUpload component', () => {
       expect(mocks.$uppyService.useDropTarget).toHaveBeenCalled()
     })
     it('is not being initialized when user can not upload', () => {
-      const currentFolder = mockDeep<Resource>({ canUpload: () => false })
+      const currentFolder = mock<Resource>({ canUpload: () => false })
       const { mocks } = getWrapper({ currentFolder })
       expect(mocks.$uppyService.useDropTarget).not.toHaveBeenCalled()
     })
@@ -157,7 +163,7 @@ function getWrapper({
   newFileHandlers = [],
   clipboardResources = [],
   files = [],
-  currentFolder = mockDeep<Resource>({ canUpload: () => true }),
+  currentFolder = mock<Resource>({ canUpload: () => true }),
   currentRouteName = 'files-spaces-generic',
   space = mock<SpaceResource>(),
   item = undefined,

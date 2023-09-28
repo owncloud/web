@@ -2,6 +2,7 @@
 
 exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
+  <!--v-if-->
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
@@ -16,6 +17,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
+        <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
@@ -25,6 +27,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
 
 exports[`AppBar component renders if given, with content in the actions slot 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
+  <!--v-if-->
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
@@ -39,7 +42,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
-        <button class="action-slot">Click</button>
+        <button class="action-slot">Click</button> <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
@@ -49,6 +52,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
 
 exports[`AppBar component renders if given, with content in the content slot 1`] = `
 <div class="" displayviewmodeswitch="false" id="files-app-bar">
+  <!--v-if-->
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
@@ -63,6 +67,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
       <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
+        <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>

@@ -1,0 +1,11 @@
+Enhancement: Indicate processing state
+
+If a file has been just recently uploaded, it might go trough a processing state (e.G virus scan).
+If so, no actions on this resource is possible, therefore we show now the processing state and make
+the temporary restrictions clear to the user.
+
+https://github.com/owncloud/web/pull/9561
+https://github.com/owncloud/web/pull/9585
+https://github.com/owncloud/web/pull/9590
+https://github.com/owncloud/web/pull/9596
+https://github.com/owncloud/web/issues/9558

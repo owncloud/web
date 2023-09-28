@@ -1,4 +1,7 @@
+import { mock } from 'jest-mock-extended'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
+import { Resource, SpaceResource } from 'web-client/src'
+import { useGetMatchingSpace } from 'web-pkg/src'
 import {
   createStore,
   defaultComponentMocks,
@@ -7,7 +10,24 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 
+const useGetMatchingSpaceMock = (
+  options: Partial<ReturnType<typeof useGetMatchingSpace>> = {}
+): ReturnType<typeof useGetMatchingSpace> => {
+  return {
+    getInternalSpace(storageId: string) {
+      return mock<SpaceResource>()
+    },
+    getMatchingSpace(resource: Resource) {
+      return mock<SpaceResource>()
+    },
+    ...options
+  }
+}
+
+jest.mock('web-pkg/src/composables/spaces/useGetMatchingSpace')
+
 describe('Preview component', () => {
+  jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
   it('should set correct props on oc-resource component', () => {
     const { wrapper } = getWrapper()
     const ocResource = wrapper.findComponent<any>('oc-resource-stub')
@@ -19,75 +39,70 @@ describe('Preview component', () => {
     it('should use the items storageId for the resource target location if present', () => {
       const driveAliasAndItem = '1'
       const { wrapper } = getWrapper({
-        spaces: [
-          {
-            id: '1',
-            driveType: 'project',
-            name: 'New space',
-            getDriveAliasAndItem: () => driveAliasAndItem
-          }
-        ]
+        space: mock<SpaceResource>({
+          id: '1',
+          driveType: 'project',
+          name: 'New space',
+          getDriveAliasAndItem: () => driveAliasAndItem
+        })
       })
       expect(wrapper.vm.parentFolderLink.params.driveAliasAndItem).toEqual(driveAliasAndItem)
     })
   })
 
-  describe('computed method "defaultParentFolderName"', () => {
+  describe('computed method "parentFolderName"', () => {
     it('should equal "All files and folders" if spaces capability is not present', () => {
       const { wrapper } = getWrapper({
         hasShareJail: false
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('All files and folders')
+      expect(wrapper.vm.parentFolderName).toEqual('All files and folders')
     })
     it('should equal the space name if resource storage is representing a project space', () => {
       const { wrapper } = getWrapper({
-        spaces: [
-          {
-            id: '1',
-            driveType: 'project',
-            name: 'New space',
-            getDriveAliasAndItem: jest.fn()
-          }
-        ]
+        space: mock<SpaceResource>({
+          id: '1',
+          driveType: 'project',
+          name: 'New space',
+          getDriveAliasAndItem: jest.fn()
+        })
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('New space')
+      expect(wrapper.vm.parentFolderName).toEqual('New space')
     })
     it('should equal the share name if resource is representing a file or folder in the root of a share', () => {
       const { wrapper } = getWrapper({
         searchResult: {
           id: '1',
           data: {
-            path: '/1/My share',
+            path: '/My share/test.txt',
             shareRoot: '/My share',
             shareId: '1'
           }
         }
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('My share')
+      expect(wrapper.vm.parentFolderName).toEqual('My share')
     })
     it('should equal the "Shared with me" if resource is representing the root share', () => {
       const { wrapper } = getWrapper({
         searchResult: {
           id: '1',
           data: {
-            path: '/',
+            path: '/My share',
             shareRoot: '/My share',
-            shareId: '1'
+            shareId: '1',
+            isShareRoot: () => true
           }
         }
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('Shared with me')
+      expect(wrapper.vm.parentFolderName).toEqual('Shared with me')
     })
     it('should equal "Personal" if resource storage is not representing the personal home', () => {
       const { wrapper } = getWrapper({
-        spaces: [
-          {
-            id: 1,
-            driveType: 'personal'
-          }
-        ]
+        space: mock<SpaceResource>({
+          id: 1,
+          driveType: 'personal'
+        })
       })
-      expect(wrapper.vm.defaultParentFolderName).toEqual('Personal')
+      expect(wrapper.vm.parentFolderName).toEqual('Personal')
     })
   })
 })
@@ -97,8 +112,8 @@ function getWrapper({
     query: {},
     params: {}
   },
-  spaces = [],
   hasShareJail = true,
+  space = null,
   searchResult = {
     id: '1',
     data: {
@@ -109,7 +124,21 @@ function getWrapper({
     }
   },
   user = { id: 'test' }
-}: any = {}) {
+}: {
+  route?: any
+  hasShareJail?: boolean
+  space?: SpaceResource
+  searchResult?: any
+  user?: any
+} = {}) {
+  jest.mocked(useGetMatchingSpace).mockImplementation(() =>
+    useGetMatchingSpaceMock({
+      getMatchingSpace() {
+        return space
+      }
+    })
+  )
+
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
@@ -127,7 +156,6 @@ function getWrapper({
       user: () => user
     }
   }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockImplementation(() => spaces)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({ currentRoute: route })
   return {

@@ -13,7 +13,7 @@
       :is-resource-clickable="false"
       :parent-folder-link="parentFolderLink"
       :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
-      :parent-folder-name-default="defaultParentFolderName"
+      :parent-folder-name="parentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
       @parent-folder-clicked="parentFolderClicked"
     />
@@ -26,22 +26,28 @@ import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers/resources'
 import { debounce } from 'lodash-es'
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
-import { basename, dirname } from 'path'
+import { dirname } from 'path'
 import { useCapabilityShareJailEnabled, useGetMatchingSpace } from 'web-pkg/src/composables'
-import { buildShareSpaceResource, isProjectSpaceResource, Resource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
+import {
+  extractParentFolderName,
+  isProjectSpaceResource,
+  isShareRoot,
+  isShareSpaceResource,
+  Resource
+} from 'web-client/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { SearchResultValue } from 'web-app-search/src/types'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   props: {
     searchResult: {
-      type: Object,
+      type: Object as PropType<SearchResultValue>,
       default: function () {
         return {}
       }
@@ -54,8 +60,9 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { getInternalSpace } = useGetMatchingSpace()
+    const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
     const previewData = ref()
+
     const resource = computed((): Resource => {
       return {
         ...(props.searchResult.data as Resource),
@@ -65,12 +72,19 @@ export default defineComponent({
           } as Resource))
       }
     })
+
+    const resourceDisabled = computed(() => {
+      return unref(resource).disabled === true
+    })
+
     return {
       ...useFileActions(),
       getInternalSpace,
+      getMatchingSpace,
       hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
-      resource
+      resource,
+      resourceDisabled
     }
   },
   computed: {
@@ -96,22 +110,16 @@ export default defineComponent({
           }
     },
     matchingSpace() {
-      const space = this.spaces.find((space) => space.id === this.resource.storageId)
-      if (space) {
-        return space
+      return this.getMatchingSpace(this.resource)
+    },
+    parentFolderName() {
+      if (isShareRoot(this.resource)) {
+        return this.$gettext('Shared with me')
       }
 
-      return buildShareSpaceResource({
-        shareId: this.resource.shareId,
-        shareName: basename(this.resource.shareRoot),
-        serverUrl: configurationManager.serverUrl
-      })
-    },
-    defaultParentFolderName() {
-      if (this.resource.shareId) {
-        return this.resource.path === '/'
-          ? this.$gettext('Shared with me')
-          : basename(this.resource.shareRoot)
+      const parentFolder = extractParentFolderName(this.resource)
+      if (parentFolder) {
+        return parentFolder
       }
 
       if (!this.hasShareJail) {
@@ -122,7 +130,7 @@ export default defineComponent({
         return this.$gettext('Spaces')
       }
 
-      if (this.matchingSpace?.driveType === 'project') {
+      if (isProjectSpaceResource(this.matchingSpace) || isShareSpaceResource(this.matchingSpace)) {
         return this.matchingSpace.name
       }
 
@@ -166,6 +174,10 @@ export default defineComponent({
     }
   },
   mounted() {
+    if (this.resourceDisabled) {
+      this.$el.parentElement.classList.add('disabled')
+    }
+
     if (!this.displayThumbnails) {
       return
     }
@@ -205,8 +217,3 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-.files-search-preview {
-  font-size: inherit;
-}
-</style>

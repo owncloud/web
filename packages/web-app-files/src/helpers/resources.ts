@@ -168,7 +168,8 @@ export function buildSharedResource(
     indicators: [],
     tags: [],
     path: undefined,
-    webDavPath: undefined
+    webDavPath: undefined,
+    processing: share.processing || false
   }
 
   if (incomingShares) {

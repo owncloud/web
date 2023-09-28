@@ -88,7 +88,7 @@
           </li>
           <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">
             <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
-            <div class="storage-wrapper-text">
+            <div class="storage-wrapper-text oc-width-1-1">
               <p class="oc-my-rm">
                 <span class="oc-display-block" v-text="personalStorageLabel" />
                 <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
@@ -183,20 +183,22 @@ export default defineComponent({
       if (!this.limitedPersonalStorage) {
         return this.$gettext('Personal storage')
       }
-      return this.$gettextInterpolate(this.$gettext('Personal storage (%{percentage}% used)'), {
-        percentage: this.quotaUsagePercent || 0
+      return this.$gettext('Personal storage (%{percentage}% used)', {
+        percentage: (this.quotaUsagePercent || 0).toString()
       })
     },
     personalStorageDetailsLabel() {
       const total = this.quota.definition === 'none' ? 0 : this.quota.total || 0
       const used = this.quota.used || 0
-      return this.$gettextInterpolate(
-        total ? this.$gettext('%{used} of %{total} used') : this.$gettext('%{used} used'),
-        {
-          used: filesize(used),
-          total: filesize(total)
-        }
-      )
+      return total
+        ? this.$gettext('%{used} of %{total} used', {
+            used: filesize(used),
+            total: filesize(total)
+          })
+        : this.$gettext('%{used} used', {
+            used: filesize(used),
+            total: filesize(total)
+          })
     },
     limitedPersonalStorage() {
       if (!this.useLegacyQuota) {
@@ -280,7 +282,6 @@ export default defineComponent({
 
     .storage-wrapper-text {
       align-self: flex-end;
-      display: inline-block;
     }
   }
 }

@@ -7,6 +7,7 @@ import { useStore } from '../../store'
 import { useAbility } from '../../ability'
 import { useClientService, useLoadingService } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -18,7 +19,9 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
   const loadingService = useLoadingService()
 
   const filterResourcesToDisable = (resources): SpaceResource[] => {
-    return resources.filter((r) => r.canDisable({ user: store.getters.user, ability }))
+    return resources.filter(
+      (r) => isProjectSpaceResource(r) && r.canDisable({ user: store.getters.user, ability })
+    )
   }
 
   const disableSpaces = async (spaces: SpaceResource[]) => {
@@ -121,13 +124,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
     {
       name: 'disable',
       icon: 'stop-circle',
-      label: ({ resources }) => {
-        if (resources.length === 1) {
-          return $gettext('Disable')
-        }
-        const allowedCount = filterResourcesToDisable(resources).length
-        return $gettext('Disable (%{count})', { count: allowedCount.toString() })
-      },
+      label: () => $gettext('Disable'),
       handler,
       isEnabled: ({ resources }) => {
         return !!filterResourcesToDisable(resources).length

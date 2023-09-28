@@ -151,20 +151,24 @@ export default defineComponent({
     ])
 
     const selectSpaces = (paginatedSpaces) => {
-      selectedSpaces.value = [...paginatedSpaces]
+      selectedSpaces.value.splice(0, selectedSpaces.value.length, ...paginatedSpaces)
     }
 
-    const toggleSelectSpace = (toggledSpace) => {
+    const toggleSelectSpace = (toggledSpace, deselect = false) => {
+      if (deselect) {
+        selectedSpaces.value.splice(0, selectedSpaces.value.length)
+      }
       const isSpaceSelected = unref(selectedSpaces).find((s) => s.id === toggledSpace.id)
       if (!isSpaceSelected) {
         return selectedSpaces.value.push(toggledSpace)
       }
 
-      selectedSpaces.value = unref(selectedSpaces).filter((s) => s.id !== toggledSpace.id)
+      const index = selectedSpaces.value.findIndex((s) => s.id === toggledSpace.id)
+      selectedSpaces.value.splice(index, 1)
     }
 
     const unselectAllSpaces = () => {
-      selectedSpaces.value = []
+      selectedSpaces.value.splice(0, selectedSpaces.value.length)
     }
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
@@ -204,6 +208,7 @@ export default defineComponent({
           enabled: unref(selectedSpaces).length === 1,
           componentAttrs: {
             showSpaceImage: false,
+            showSpaceId: true,
             showShareIndicators: false
           }
         },

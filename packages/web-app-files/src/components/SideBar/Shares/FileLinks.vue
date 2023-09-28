@@ -119,7 +119,8 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicAlias,
-  useAbility
+  useAbility,
+  usePasswordPolicyService
 } from 'web-pkg/src/composables'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -156,6 +157,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { can } = useAbility()
+    const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
 
     const space = inject<Ref<SpaceResource>>('space')
@@ -224,6 +226,7 @@ export default defineComponent({
       indirectLinks,
       canCreatePublicLinks,
       configurationManager,
+      passwordPolicyService,
       canCreateLinks,
       canEditLink
     }
@@ -310,8 +313,9 @@ export default defineComponent({
     },
 
     indirectLinksHeading() {
-      const translated = this.$gettext('Indirect links (%{ count })')
-      return this.$gettextInterpolate(translated, { count: this.indirectLinks.length })
+      return this.$gettext('Indirect links (%{ count })', {
+        count: this.indirectLinks.length.toString()
+      })
     },
 
     displayLinks() {
@@ -346,7 +350,13 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
-    ...mapActions(['showMessage', 'showErrorMessage', 'createModal', 'hideModal']),
+    ...mapActions([
+      'showMessage',
+      'showErrorMessage',
+      'createModal',
+      'hideModal',
+      'setModalInputErrorMessage'
+    ]),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
@@ -390,27 +400,41 @@ export default defineComponent({
       })
     },
 
-    checkLinkToCreate({ link, onError = () => {} }) {
+    checkLinkToCreate({ link }) {
       const paramsToCreate = this.getParamsForLink(link)
 
       if (this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ ...this.$language, store: this.$store }, (newPassword) => {
-          this.createLink({ params: { ...paramsToCreate, password: newPassword }, onError })
-        })
+        showQuickLinkPasswordModal(
+          {
+            ...this.$language,
+            store: this.$store,
+            passwordPolicyService: this.passwordPolicyService
+          },
+          (newPassword) => {
+            this.createLink({ params: { ...paramsToCreate, password: newPassword } })
+          }
+        )
       } else {
-        this.createLink({ params: paramsToCreate, onError })
+        this.createLink({ params: paramsToCreate })
       }
     },
 
-    checkLinkToUpdate({ link, onSuccess = () => {} }) {
+    checkLinkToUpdate({ link }) {
       const params = this.getParamsForLink(link)
 
       if (!link.password && this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal({ ...this.$language, store: this.$store }, (newPassword) => {
-          this.updatePublicLink({ params: { ...params, password: newPassword }, onSuccess })
-        })
+        showQuickLinkPasswordModal(
+          {
+            ...this.$language,
+            store: this.$store,
+            passwordPolicyService: this.passwordPolicyService
+          },
+          (newPassword) => {
+            this.updatePublicLink({ params: { ...params, password: newPassword } })
+          }
+        )
       } else {
-        this.updatePublicLink({ params, onSuccess })
+        this.updatePublicLink({ params })
       }
     },
 
@@ -463,7 +487,7 @@ export default defineComponent({
       }
     },
 
-    async createLink({ params, onError = (e) => {} }) {
+    async createLink({ params }) {
       let path = this.resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
@@ -476,41 +500,47 @@ export default defineComponent({
           storageId: this.resource.fileId || this.resource.id,
           params
         })
+        this.hideModal()
+        this.showMessage({
+          title: this.$gettext('Link was created successfully')
+        })
       } catch (e) {
-        onError(e)
         console.error(e)
+
+        // Human-readable error message is provided, for example when password is on banned list
+        if (e.status === 400) {
+          return this.setModalInputErrorMessage(this.$gettext(e.message))
+        }
+
         this.showErrorMessage({
           title: this.$gettext('Failed to create link'),
           error: e
         })
-        return
       }
-
-      this.showMessage({
-        title: this.$gettext('Link was created successfully')
-      })
     },
 
-    async updatePublicLink({ params, onSuccess = () => {}, onError = (e) => {} }) {
+    async updatePublicLink({ params }) {
       try {
         await this.updateLink({
           id: params.id,
           client: this.$client,
           params
-        }).then(onSuccess)
+        })
+        this.hideModal()
+        this.showMessage({
+          title: this.$gettext('Link was updated successfully')
+        })
       } catch (e) {
-        onError(e)
-        console.error(e)
+        // Human-readable error message is provided, for example when password is on banned list
+        if (e.statusCode === 400) {
+          return this.setModalInputErrorMessage(this.$gettext(e.message))
+        }
+
         this.showErrorMessage({
           title: this.$gettext('Failed to update link'),
           error: e
         })
-        return
       }
-
-      this.showMessage({
-        title: this.$gettext('Link was updated successfully')
-      })
     },
 
     deleteLinkConfirmation({ link }) {

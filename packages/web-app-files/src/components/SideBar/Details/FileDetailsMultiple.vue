@@ -44,12 +44,10 @@ export default defineComponent({
       return this.selectedFiles.length
     },
     selectedFilesString() {
-      return this.$gettextInterpolate(
-        this.$ngettext(
-          '%{ itemCount } item selected',
-          '%{ itemCount } items selected',
-          this.selectedFilesCount
-        ),
+      return this.$ngettext(
+        '%{ itemCount } item selected',
+        '%{ itemCount } items selected',
+        this.selectedFilesCount,
         {
           itemCount: this.selectedFilesCount
         }

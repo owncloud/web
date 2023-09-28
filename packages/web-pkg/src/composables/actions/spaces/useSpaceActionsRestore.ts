@@ -5,6 +5,7 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
 import { useAbility, useClientService, useLoadingService, useStore } from 'web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
+import { isProjectSpaceResource } from 'web-client/src/helpers'
 
 export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -15,7 +16,9 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
   const route = useRoute()
 
   const filterResourcesToRestore = (resources): SpaceResource[] => {
-    return resources.filter((r) => r.canRestore({ user: store.getters.user, ability }))
+    return resources.filter(
+      (r) => isProjectSpaceResource(r) && r.canRestore({ user: store.getters.user, ability })
+    )
   }
 
   const restoreSpaces = async (spaces: SpaceResource[]) => {
@@ -125,13 +128,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
     {
       name: 'restore',
       icon: 'play-circle',
-      label: ({ resources }) => {
-        if (resources.length === 1) {
-          return $gettext('Enable')
-        }
-        const allowedCount = filterResourcesToRestore(resources).length
-        return $gettext('Enable (%{count})', { count: allowedCount.toString() })
-      },
+      label: () => $gettext('Enable'),
       handler,
       isEnabled: ({ resources }) => {
         return !!filterResourcesToRestore(resources).length

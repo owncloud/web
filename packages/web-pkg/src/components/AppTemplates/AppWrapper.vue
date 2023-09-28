@@ -1,7 +1,6 @@
 <template>
   <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
-    <!-- TODO: Figure out what to write into hidden pageTitle for screenreader compatibility -->
-    <!-- <h1 class="oc-invisible-sr" v-text="pageTitle" /> -->
+    <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar
       v-if="!loading && !loadingError"
       :main-actions="fileActions"
@@ -49,6 +48,7 @@ import { Action, ActionOptions } from 'web-pkg/src/composables/actions'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { HttpError } from 'web-pkg/src/errors'
 import { ModifierKey, Key, useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import { useAppMeta } from 'web-pkg/src/composables/appDefaults/useAppMeta'
 
 export interface AppWrapperSlotArgs {
   applicationConfig: AppConfigObject
@@ -87,9 +87,10 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore()
 
+    const applicationName = ref('')
     const resource: Ref<Resource> = ref()
     const currentETag = ref('')
     const url = ref('')
@@ -128,17 +129,29 @@ export default defineComponent({
     const clientService = useClientService()
 
     const {
+      applicationConfig,
+      closeApp,
       currentFileContext,
       getFileContents,
       getFileInfo,
       getUrlForResource,
-      closeApp,
+      loadFolderForFileContext,
       putFileContents,
-      revokeUrl,
       replaceInvalidFileRoute,
-      applicationConfig
+      revokeUrl
     } = useAppDefaults({
       applicationId: props.applicationId
+    })
+
+    const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, store })
+
+    const pageTitle = computed(() => {
+      const { name: appName } = unref(applicationMeta)
+
+      return $gettext(`%{appName} for %{fileName}`, {
+        appName: unref(applicationName) || $gettext(appName),
+        fileName: unref(unref(currentFileContext).fileName)
+      })
     })
 
     const loadFileTask = useTask(function* () {
@@ -186,10 +199,10 @@ export default defineComponent({
           )
           url.value = tmpUrl
         }
+        loading.value = false
       } catch (e) {
         console.error(e)
         loadingError.value = e
-      } finally {
         loading.value = false
       }
     }).restartable()
@@ -304,7 +317,7 @@ export default defineComponent({
       autosaveIntervalId = null
     })
 
-    const { bindKeyAction } = useKeyboardActions()
+    const { bindKeyAction } = useKeyboardActions({ skipDisabledKeyBindingsCheck: true })
     bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.S }, () => {
       if (!unref(isDirty)) {
         return
@@ -320,7 +333,7 @@ export default defineComponent({
         isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',
-        id: 'text-editor-controls-save',
+        id: 'app-save-action',
         label: () => 'Save',
         handler: () => {
           save()
@@ -359,10 +372,14 @@ export default defineComponent({
       isDirty: unref(isDirty),
       isReadOnly: unref(isReadOnly),
       applicationConfig: unref(applicationConfig),
-
+      currentFileContext: unref(currentFileContext),
       currentContent: unref(currentContent),
+
       'onUpdate:currentContent': (value) => {
         currentContent.value = value
+      },
+      'onUpdate:applicationName': (value) => {
+        applicationName.value = value
       },
 
       onSave: save,
@@ -375,6 +392,7 @@ export default defineComponent({
       fileActions,
       loading,
       loadingError,
+      pageTitle,
       resource,
       slotAttrs
     }

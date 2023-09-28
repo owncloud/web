@@ -10,7 +10,12 @@
       appearance="raw"
       @click="isToggle ? $emit('toggleFilter') : false"
     >
-      <oc-icon v-if="filterActive" name="check" size="small" color="var(--oc-color-text-inverse)" />
+      <oc-icon
+        :class="filterActive ? 'oc-filter-check-icon-active' : 'oc-filter-check-icon-inactive'"
+        name="check"
+        size="small"
+        color="var(--oc-color-text-inverse)"
+      />
       <span
         class="oc-text-truncate oc-filter-chip-label"
         v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterLabel"
@@ -115,7 +120,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-filter-chip {
-  &-button {
+  &-button.oc-pill {
     align-items: center;
     background-color: var(--oc-color-background-default) !important;
     color: var(--oc-color-text-muted) !important;
@@ -129,17 +134,16 @@ export default defineComponent({
     max-width: 150px;
     height: 24px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
-
-    &-selected,
-    &-selected:hover {
-      background-color: var(--oc-color-swatch-primary-default) !important;
-      color: var(--oc-color-text-inverse) !important;
-      border-top-left-radius: 99px !important;
-      border-bottom-left-radius: 99px !important;
-      border-top-right-radius: 0px !important;
-      border-bottom-right-radius: 0px !important;
-      border: 0;
-    }
+  }
+  &-button-selected.oc-pill,
+  &-button-selected.oc-pill:hover {
+    background-color: var(--oc-color-swatch-primary-default) !important;
+    color: var(--oc-color-text-inverse) !important;
+    border-top-left-radius: 99px !important;
+    border-bottom-left-radius: 99px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border: 0;
   }
   &-clear,
   &-clear:hover {
@@ -160,5 +164,14 @@ export default defineComponent({
     background-color: transparent !important;
     border: none !important;
   }
+}
+.oc-filter-check-icon-active {
+  transition: all 0.25s ease-in;
+  transform: scale(1) !important;
+}
+.oc-filter-check-icon-inactive {
+  transition: all 0.25 ease-in;
+  transform: scale(0) !important;
+  width: 0px !important;
 }
 </style>

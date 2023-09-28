@@ -48,6 +48,7 @@
           </no-content-message>
           <resource-tiles
             v-else-if="viewMode === ViewModeConstants.tilesView.name"
+            id="tiles-view"
             v-model:selectedIds="selectedResourcesIds"
             :data="paginatedResources"
             class="oc-px-m oc-pt-l"
@@ -240,7 +241,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore()
-    const { $gettext, $ngettext, interpolate: $gettextInterpolate } = useGettext()
+    const { $gettext, $ngettext } = useGettext()
     const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
@@ -384,12 +385,10 @@ export default defineComponent({
       const totalFilesCount = store.getters['Files/totalFilesCount']
       const itemCount = totalFilesCount.files + totalFilesCount.folders
 
-      const announcement = $gettextInterpolate(
-        $ngettext(
-          'This folder contains %{ amount } item.',
-          'This folder contains %{ amount } items.',
-          itemCount
-        ),
+      const announcement = $ngettext(
+        'This folder contains %{ amount } item.',
+        'This folder contains %{ amount } items.',
+        itemCount,
         { amount: itemCount }
       )
 
@@ -428,9 +427,13 @@ export default defineComponent({
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
 
-    const keyActions = useKeyboardActions('files-view')
-    useKeyboardTableNavigation(keyActions, resourcesViewDefaults.paginatedResources)
-    useKeyboardTableMouseActions(keyActions)
+    const keyActions = useKeyboardActions()
+    useKeyboardTableNavigation(
+      keyActions,
+      resourcesViewDefaults.paginatedResources,
+      resourcesViewDefaults.viewMode
+    )
+    useKeyboardTableMouseActions(keyActions, resourcesViewDefaults.viewMode)
     useKeyboardTableSpaceActions(keyActions, props.space)
 
     const performLoaderTask = async (
@@ -635,8 +638,7 @@ export default defineComponent({
         this.showMessage,
         this.showErrorMessage,
         this.$gettext,
-        this.$ngettext,
-        this.$gettextInterpolate
+        this.$ngettext
       )
       const movedResources = await copyMove.perform(TransferType.MOVE)
       this.REMOVE_FILES(movedResources)

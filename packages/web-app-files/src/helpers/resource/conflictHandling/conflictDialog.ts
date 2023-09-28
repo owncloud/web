@@ -14,11 +14,20 @@ export class ConflictDialog {
     protected hideModal: () => void,
     protected showMessage: (data: object) => void,
     protected showErrorMessage: (data: object) => void,
-    protected $gettext: (msg: string) => string,
-    protected $ngettext: (msgid: string, plural: string, n: number) => string,
-    protected $gettextInterpolate: (
-      msg: string,
-      context: object,
+    protected $gettext: (
+      msgid: string,
+      parameters?: {
+        [key: string]: string
+      },
+      disableHtmlEscaping?: boolean
+    ) => string,
+    protected $ngettext: (
+      msgid: string,
+      plural: string,
+      n: number,
+      parameters?: {
+        [key: string]: string
+      },
       disableHtmlEscaping?: boolean
     ) => string
   ) {}
@@ -80,11 +89,23 @@ export class ConflictDialog {
     let translatedSkipLabel
 
     if (!separateSkipHandling) {
-      translatedSkipLabel = this.$gettext('Apply to all %{count} conflicts')
+      translatedSkipLabel = this.$gettext(
+        'Apply to all %{count} conflicts',
+        { count: conflictCount.toString() },
+        true
+      )
     } else if (resource.isFolder) {
-      translatedSkipLabel = this.$gettext('Apply to all %{count} folders')
+      translatedSkipLabel = this.$gettext(
+        'Apply to all %{count} folders',
+        { count: conflictCount.toString() },
+        true
+      )
     } else {
-      translatedSkipLabel = this.$gettext('Apply to all %{count} files')
+      translatedSkipLabel = this.$gettext(
+        'Apply to all %{count} files',
+        { count: conflictCount.toString() },
+        true
+      )
     }
 
     return new Promise<ResolveConflict>((resolve) => {
@@ -94,19 +115,21 @@ export class ConflictDialog {
         title: resource.isFolder
           ? this.$gettext('Folder already exists')
           : this.$gettext('File already exists'),
-        message: this.$gettextInterpolate(
-          resource.isFolder
-            ? this.$gettext('Folder with name "%{name}" already exists.')
-            : this.$gettext('File with name "%{name}" already exists.'),
-          { name: resource.name },
-          true
-        ),
+        message: resource.isFolder
+          ? this.$gettext(
+              'Folder with name "%{name}" already exists.',
+              { name: resource.name },
+              true
+            )
+          : this.$gettext(
+              'File with name "%{name}" already exists.',
+              { name: resource.name },
+              true
+            ),
         cancelText: this.$gettext('Skip'),
         confirmText: this.$gettext('Keep both'),
         buttonSecondaryText: suggestMerge ? this.$gettext('Merge') : this.$gettext('Replace'),
-        checkboxLabel: isSingleConflict
-          ? ''
-          : this.$gettextInterpolate(translatedSkipLabel, { count: conflictCount }, true),
+        checkboxLabel: isSingleConflict ? '' : translatedSkipLabel,
         onCheckboxValueChanged: (value) => {
           doForAllConflicts = value
         },

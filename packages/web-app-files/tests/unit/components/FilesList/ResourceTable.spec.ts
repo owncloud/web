@@ -150,6 +150,48 @@ const resourcesWithAllFields = [
   }
 ]
 
+const processingResourcesWithAllFields = [
+  {
+    id: 'rainforest',
+    name: 'rainforest.jpg',
+    path: 'images/nature/rainforest.jpg',
+    extension: 'jpg',
+    thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
+    indicators,
+    isFolder: false,
+    type: 'file',
+    tags: ['space', 'tag', 'moon'],
+    size: '111000234',
+    mdate: getCurrentDate(),
+    sdate: getCurrentDate(),
+    ddate: getCurrentDate(),
+    owner,
+    sharedWith,
+    canRename: jest.fn,
+    getDomSelector: () => extractDomSelector('forest'),
+    processing: true
+  },
+  {
+    id: 'personalnotes',
+    name: 'personalnotes.txt',
+    path: '/Documents/personalnotes.txt',
+    extension: 'txt',
+    indicators,
+    isFolder: false,
+    type: 'file',
+    size: 'big',
+    tags: ['space', 'tag'],
+    mdate: getCurrentDate(),
+    sdate: getCurrentDate(),
+    ddate: getCurrentDate(),
+    sharedWith,
+    owner,
+    canRename: jest.fn,
+    getDomSelector: () => extractDomSelector('notes'),
+    processing: true
+  }
+]
+
 jest.mock('web-pkg/src/helpers')
 
 describe('ResourceTable', () => {
@@ -192,6 +234,16 @@ describe('ResourceTable', () => {
       wrapper.find('.oc-tbody-tr-documents .oc-checkbox').setValue(true)
       expect(wrapper.emitted('update:selectedIds').length).toBe(2)
     })
+    it('does not add resources that are disabled to selection model via checkboxes', () => {
+      const { wrapper } = getMountedWrapper({ addProcessingResources: true })
+      wrapper.find('.resource-table-select-all .oc-checkbox').setValue(true)
+      expect(wrapper.emitted('update:selectedIds')[0][0]).not.toContain(
+        processingResourcesWithAllFields[0].id
+      )
+      expect(wrapper.emitted('update:selectedIds')[0][0]).not.toContain(
+        processingResourcesWithAllFields[1].id
+      )
+    })
 
     describe('all rows already selected', () => {
       it('de-selects all resources via the select-all checkbox', async () => {
@@ -208,20 +260,37 @@ describe('ResourceTable', () => {
   })
 
   describe('resource activation', () => {
-    it('emits fileClick upon clicking on a resource name', () => {
+    it('emits fileClick upon clicking on a resource name', async () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.find('.oc-tbody-tr-forest .oc-resource-name').trigger('click')
+      const tr = await wrapper.find('.oc-tbody-tr-forest .oc-resource-name')
+      await tr.trigger('click')
 
       expect(wrapper.emitted().fileClick[0][0].resources[0].name).toMatch('forest.jpg')
+    })
+
+    it('does not emit fileClick upon clicking on a disabled resource name', async () => {
+      const { wrapper } = getMountedWrapper({ addProcessingResources: true })
+      const tr = await wrapper.find('.oc-tbody-tr-rainforest .oc-resource-name')
+      await tr.trigger('click')
+
+      expect(wrapper.emitted().fileClick).toBeUndefined()
     })
   })
 
   describe('resource details', () => {
     it('emits select event when clicking on the row', async () => {
       const { wrapper } = getMountedWrapper()
-      const tableRow = await wrapper.find('.oc-tbody-tr .oc-table-data-cell-size')
+      const tableRow = await wrapper.find('.oc-tbody-tr-forest .oc-table-data-cell-size')
       await tableRow.trigger('click')
       expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
+    })
+
+    it('does not emit select event when clicking on the row of a disabled resource', async () => {
+      const { wrapper } = getMountedWrapper({ addProcessingResources: true })
+      const tableRow = await wrapper.find('.oc-tbody-tr-rainforest .oc-table-data-cell-size')
+      await tableRow.trigger('click')
+
+      expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
     })
   })
 
@@ -234,6 +303,14 @@ describe('ResourceTable', () => {
       expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
     })
 
+    it('does not emit select event on contextmenu click of disabled resource', async () => {
+      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+      const { wrapper } = getMountedWrapper({ addProcessingResources: true })
+      await wrapper.find('.oc-tbody-tr-rainforest').trigger('contextmenu')
+      expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
+      expect(spyDisplayPositionedDropdown).not.toHaveBeenCalled()
+    })
+
     it('emits select event on clicking the three-dot icon in table row', async () => {
       const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper()
@@ -242,6 +319,18 @@ describe('ResourceTable', () => {
         .trigger('click')
       expect(wrapper.emitted('update:selectedIds').length).toBe(1)
       expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not emit select event on clicking the three-dot icon in table row of a disabled resource', async () => {
+      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+      const { wrapper } = getMountedWrapper({ addProcessingResources: true })
+      await wrapper
+        .find(
+          '.oc-tbody-tr-rainforest .oc-table-data-cell-actions .resource-table-btn-action-dropdown'
+        )
+        .trigger('click')
+      expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
+      expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(0)
     })
 
     it('removes invalid chars from item ids for usage in html template', async () => {
@@ -326,7 +415,11 @@ describe('ResourceTable', () => {
   })
 })
 
-function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
+function getMountedWrapper({
+  props = {},
+  isUserContextReady = true,
+  addProcessingResources = false
+} = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
     isUserContextReady
@@ -342,7 +435,10 @@ function getMountedWrapper({ props = {}, isUserContextReady = true } = {}) {
   return {
     wrapper: mount(ResourceTable, {
       props: {
-        resources: resourcesWithAllFields,
+        resources: [
+          ...resourcesWithAllFields,
+          ...(addProcessingResources ? processingResourcesWithAllFields : [])
+        ],
         selection: [],
         hover: false,
         space: {

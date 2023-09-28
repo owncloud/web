@@ -17,39 +17,6 @@ jest.mock('web-pkg/src/composables/archiverService/useArchiverService')
 describe('downloadArchive', () => {
   describe('search context', () => {
     describe('computed property "actions"', () => {
-      describe('label', () => {
-        it.each([
-          {
-            resources: [
-              { id: '1', canDownload: () => true },
-              { id: '2', canDownload: () => true }
-            ] as Resource[],
-            downloadableCount: 2
-          },
-          {
-            resources: [
-              { id: '1', canDownload: () => true },
-              { id: '2', canDownload: () => true },
-              { id: '3', canDownload: () => true },
-              { id: '4', canDownload: () => false },
-              { id: '5', canDownload: () => true, driveType: 'project' }
-            ] as Resource[],
-            downloadableCount: 3
-          }
-        ])('should be set correctly', ({ resources, downloadableCount }) => {
-          const { wrapper } = getWrapper({
-            searchLocation: true,
-            setup: () => {
-              const store = useStore()
-              const { actions } = useFileActionsDownloadArchive({ store })
-
-              expect(unref(actions)[0].label({ space: null, resources })).toContain(
-                `(${downloadableCount.toString()})`
-              )
-            }
-          })
-        })
-      })
       describe('handler', () => {
         it.each([
           {

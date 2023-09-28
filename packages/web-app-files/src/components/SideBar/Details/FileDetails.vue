@@ -45,6 +45,12 @@
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
+        <tr v-if="resource.locked" data-testid="locked-by">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
+          <td>
+            <span>{{ resource.lockOwnerName }} ({{ formatDateRelative(resource.lockTime) }})</span>
+          </td>
+        </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
           <td>
@@ -199,25 +205,32 @@ import {
   useClientService,
   usePublicLinkContext,
   useStore,
-  usePreviewService
+  usePreviewService,
+  useGetMatchingSpace
 } from 'web-pkg/src/composables'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useClipboard } from '@vueuse/core'
 import { encodePath } from 'web-pkg/src/utils'
-import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
+import {
+  formatDateFromHTTP,
+  formatFileSize,
+  formatRelativeDateFromJSDate
+} from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource, SpaceResource } from 'web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
-import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
+import { AncestorMetaData } from 'web-pkg/src/types'
 
 export default defineComponent({
   name: 'FileDetails',
   setup() {
     const store = useStore()
     const { $gettext } = useGettext()
+    const { getMatchingSpace } = useGetMatchingSpace()
+    const language = useGettext()
 
     const copiedDirect = ref(false)
     const copiedEos = ref(false)
@@ -239,6 +252,10 @@ export default defineComponent({
       return !unref(isPublicLinkContext)
         ? `${store.getters.configuration.server}files/spaces${encodePath(unref(resource).path)}`
         : `${store.getters.configuration.server.replace(/\/+$/, '')}${unref(resource).downloadURL}`
+    })
+
+    const matchingSpace = computed(() => {
+      return getMatchingSpace(unref(resource))
     })
 
     const copyEosPathToClipboard = () => {
@@ -316,7 +333,7 @@ export default defineComponent({
     })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['Files/ancestorMetaData']
+      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
     )
     const sharedAncestor = computed(() => {
       return Object.values(unref(ancestorMetaData)).find(
@@ -325,6 +342,9 @@ export default defineComponent({
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
     })
+    const formatDateRelative = (date) => {
+      return formatRelativeDateFromJSDate(new Date(date), language.current)
+    }
 
     watch(
       resource,
@@ -354,17 +374,15 @@ export default defineComponent({
       hasTags: useCapabilityFilesTags(),
       isPreviewLoading,
       ancestorMetaData,
-      sharedAncestor
+      sharedAncestor,
+      formatDateRelative,
+      matchingSpace
     }
   },
   computed: {
-    ...mapGetters('runtime/spaces', ['spaces']),
     ...mapGetters('Files', ['versions']),
     ...mapGetters(['user', 'configuration']),
 
-    matchingSpace() {
-      return this.space || this.spaces.find((space) => space.id === this.resource.storageId)
-    },
     runningOnEos() {
       return !!this.configuration?.options?.runningOnEos
     },
@@ -395,9 +413,8 @@ export default defineComponent({
     },
     sharedAncestorRoute() {
       return getSharedAncestorRoute({
-        resource: this.resource,
         sharedAncestor: this.sharedAncestor,
-        matchingSpace: this.matchingSpace
+        matchingSpace: this.space || this.matchingSpace
       })
     },
     showShares() {

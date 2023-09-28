@@ -15,6 +15,7 @@
           :items="availableTags"
           :option-filter-label="$gettext('Filter tags')"
           :show-option-filter="true"
+          :close-on-click="true"
           class="files-search-filter-tags oc-mr-s"
           display-name-attribute="label"
           filter-name="tags"
@@ -76,7 +77,7 @@
           <template #contextMenu="{ resource }">
             <context-actions
               v-if="isResourceInSelection(resource)"
-              :action-options="{ space: getSpace(resource), resources: selectedResources }"
+              :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
             />
           </template>
           <template #footer>
@@ -125,19 +126,17 @@ import { searchLimit } from '../../search/sdk/list'
 import { Resource } from 'web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
-import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
 import {
   queryItemAsString,
   useCapabilityFilesTags,
   useClientService,
   useFileListHeaderPosition,
+  useGetMatchingSpace,
   useRoute,
   useRouteQuery,
   useRouter,
   useStore
 } from 'web-pkg/src/composables'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { basename } from 'path'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { eventBus, useCapabilityFilesFullTextSearch } from 'web-pkg'
@@ -194,6 +193,7 @@ export default defineComponent({
     const clientService = useClientService()
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
     const scopeQuery = useRouteQuery('scope')
@@ -201,9 +201,9 @@ export default defineComponent({
 
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
 
-    const keyActions = useKeyboardActions('files-view')
-    useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources)
-    useKeyboardTableMouseActions(keyActions)
+    const keyActions = useKeyboardActions()
+    useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources, resourcesView.viewMode)
+    useKeyboardTableMouseActions(keyActions, resourcesView.viewMode)
     useKeyboardTableActions(keyActions)
 
     const searchTerm = computed(() => {
@@ -229,36 +229,31 @@ export default defineComponent({
     onBeforeRouteLeave(() => {
       eventBus.publish('app.search.term.clear')
     })
-    const getSpace = (resource: Resource): SpaceResource => {
-      if (resource.shareId) {
-        return buildShareSpaceResource({
-          shareId: resource.shareId,
-          shareName: basename(resource.shareRoot),
-          serverUrl: configurationManager.serverUrl
-        })
-      }
-      return store.getters['runtime/spaces/spaces'].find((space) => space.id === resource.storageId)
-    }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      let term = ''
-      if (unref(searchTerm)) {
-        term = `+Name:*${unref(searchTerm)}*`
+      let query = ''
+      const add = (k: string, v: string) => {
+        query = (query + ` ${k}:${v}`).trimStart()
       }
 
-      const fullTextQuery = queryItemAsString(unref(fullTextParam))
-      if (fullTextQuery) {
-        term = `+Content:"${unref(searchTerm)}"`
-      }
-      if (unref(scopeQuery) && unref(doUseScope) === 'true') {
-        term += ` scope:${unref(scopeQuery)}`
+      const humanSearchTerm = unref(searchTerm)
+      const isContentOnlySearch = queryItemAsString(unref(fullTextParam)) == 'true'
+
+      if (isContentOnlySearch && !!humanSearchTerm) {
+        add('content', `"${humanSearchTerm}"`)
+      } else if (!!humanSearchTerm) {
+        add('name', `"*${humanSearchTerm}*"`)
       }
 
-      const tagsQuery = queryItemAsString(unref(tagParam))
-      if (tagsQuery) {
-        tagsQuery.split('+')?.forEach((tag) => {
-          term += ` +Tags:"${unref(tag)}"`
-        })
+      const humanScopeQuery = unref(scopeQuery)
+      const isScopedSearch = unref(doUseScope) === 'true'
+      if (isScopedSearch && humanScopeQuery) {
+        add('scope', `${humanScopeQuery}`)
+      }
+
+      const humanTagsParams = queryItemAsString(unref(tagParam))
+      if (humanTagsParams) {
+        add('tag', `"${humanTagsParams}"`)
 
         if (manuallyUpdateFilterChip && unref(tagFilter)) {
           /**
@@ -271,7 +266,7 @@ export default defineComponent({
         }
       }
 
-      return term.trimStart()
+      return query
     }
 
     const breadcrumbs = computed(() => {
@@ -311,7 +306,7 @@ export default defineComponent({
       loadAvailableTagsTask,
       fileListHeaderY,
       fullTextSearchEnabled,
-      getSpace,
+      getMatchingSpace,
       availableTags,
       tagFilter,
       breadcrumbs,
@@ -338,19 +333,18 @@ export default defineComponent({
     },
     searchResultExceedsLimitText() {
       if (!this.rangeSupported) {
-        const translated = this.$gettext('Showing up to %{searchLimit} results')
-        return this.$gettextInterpolate(translated, {
-          searchLimit
+        return this.$gettext('Showing up to %{searchLimit} results', {
+          searchLimit: searchLimit.toString()
         })
       }
 
-      const translated = this.$gettext(
-        'Found %{totalResults}, showing the %{itemCount} best matching results'
+      return this.$gettext(
+        'Found %{totalResults}, showing the %{itemCount} best matching results',
+        {
+          itemCount: this.itemCount,
+          totalResults: this.searchResult.totalResults
+        }
       )
-      return this.$gettextInterpolate(translated, {
-        itemCount: this.itemCount,
-        totalResults: this.searchResult.totalResults
-      })
     }
   },
   watch: {
@@ -387,7 +381,7 @@ export default defineComponent({
         unobserve()
         this.loadPreview({
           previewService: this.$previewService,
-          space: this.getSpace(resource),
+          space: this.getMatchingSpace(resource),
           resource,
           dimensions: ImageDimension.Thumbnail,
           type: ImageType.Thumbnail

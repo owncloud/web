@@ -1,5 +1,11 @@
 import { Ability } from 'web-client/src/helpers/resource/types'
-import { ArchiverService, ClientService, LoadingService, PreviewService } from './src/services'
+import {
+  ArchiverService,
+  ClientService,
+  LoadingService,
+  PreviewService,
+  PasswordPolicyService
+} from './src/services'
 
 export * from './src'
 
@@ -10,5 +16,6 @@ declare module 'vue' {
     $clientService: ClientService
     $loadingService: LoadingService
     $previewService: PreviewService
+    $passwordPolicyService: PasswordPolicyService
   }
 }

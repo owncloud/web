@@ -1,0 +1,6 @@
+Bugfix: Set or remove expiration date on group share not possible
+
+We've fixed a bug where setting or removing an expiration on a group share wasn't possible.
+
+https://github.com/owncloud/web/pull/9513
+https://github.com/owncloud/web/issues/8419

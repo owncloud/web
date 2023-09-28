@@ -822,19 +822,23 @@ export default defineComponent({
     ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
 
     selectUsers(users) {
-      this.selectedUsers = users
+      this.selectedUsers.splice(0, this.selectedUsers.length, ...users)
     },
-    toggleSelectUser(toggledUser) {
+    toggleSelectUser(toggledUser, deselect = false) {
+      if (deselect) {
+        this.selectedUsers.splice(0, this.selectedUsers.length)
+      }
       const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
 
       if (!isUserSelected) {
         return this.selectedUsers.push(this.users.find((u) => u.id === toggledUser.id))
       }
 
-      this.selectedUsers = this.selectedUsers.filter((user) => user.id !== toggledUser.id)
+      const index = this.selectedUsers.findIndex((user) => user.id === toggledUser.id)
+      this.selectedUsers.splice(index, 1)
     },
     unselectAllUsers() {
-      this.selectedUsers = []
+      this.selectedUsers.splice(0, this.selectedUsers.length)
     },
     toggleCreateUserModal() {
       this.createUserModalOpen = !this.createUserModalOpen

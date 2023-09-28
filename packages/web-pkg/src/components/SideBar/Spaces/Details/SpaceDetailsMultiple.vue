@@ -47,12 +47,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const {
-      $gettext,
-      $ngettext,
-      interpolate: $gettextInterpolate,
-      current: currentLanguage
-    } = useGettext()
+    const { $gettext, $ngettext, current: currentLanguage } = useGettext()
     const totalSelectedSpaceQuotaTotal = computed(() => {
       let total = 0
       props.selectedSpaces.forEach((space) => {
@@ -90,14 +85,12 @@ export default defineComponent({
       return $gettext('Overview of the information about the selected spaces')
     })
     const selectedSpacesString = computed(() => {
-      return $gettextInterpolate(
-        $ngettext(
-          '%{ itemCount } space selected',
-          '%{ itemCount } spaces selected',
-          props.selectedSpaces.length
-        ),
+      return $ngettext(
+        '%{ itemCount } space selected',
+        '%{ itemCount } spaces selected',
+        props.selectedSpaces.length,
         {
-          itemCount: props.selectedSpaces.length
+          itemCount: props.selectedSpaces.length.toString()
         }
       )
     })

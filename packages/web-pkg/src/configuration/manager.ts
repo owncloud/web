@@ -90,6 +90,7 @@ export class ConfigurationManager {
       get(options, 'contextHelpersReadMore', true)
     )
     set(this.optionsConfiguration, 'contextHelpers', get(options, 'contextHelpers', true))
+    set(this.optionsConfiguration, 'openAppsInTab', get(options, 'openAppsInTab', false))
     set(
       this.optionsConfiguration,
       'openLinksWithDefaultApp',
@@ -97,6 +98,7 @@ export class ConfigurationManager {
     )
     set(this.optionsConfiguration, 'upload.companionUrl', get(options, 'upload.companionUrl', ''))
     set(this.optionsConfiguration, 'tokenStorageLocal', get(options, 'tokenStorageLocal', true))
+    set(this.optionsConfiguration, 'loginUrl', get(options, 'loginUrl', ''))
   }
 
   get options(): OptionsConfiguration {

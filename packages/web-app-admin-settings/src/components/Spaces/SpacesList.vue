@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="space-list">
     <oc-text-input
       id="spaces-filter"
       v-model="filterTerm"
@@ -42,8 +42,8 @@
           :option="item"
           :label="getSelectSpaceLabel(item)"
           hide-label
-          @update:model-value="$emit('toggleSelectSpace', item)"
-          @click.stop
+          @update:model-value="toggleSpace(item)"
+          @click.stop="fileClicked([item, $event])"
         />
       </template>
       <template #icon>
@@ -142,6 +142,12 @@ import {
 } from 'web-pkg/src/composables'
 import Pagination from 'web-pkg/src/components/Pagination.vue'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { useKeyboardActions } from 'web-pkg/src/composables/keyboardActions'
+import {
+  useKeyboardTableMouseActions,
+  useKeyboardTableNavigation
+} from 'web-app-admin-settings/src/composables/keyboardActions'
+import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -169,6 +175,9 @@ export default defineComponent({
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
+
+    const lastSelectedSpaceIndex = ref(0)
+    const lastSelectedSpaceId = ref(null)
 
     const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
     const footerTextTotal = computed(() => {
@@ -340,6 +349,10 @@ export default defineComponent({
       return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
     }
     const getTotalQuota = (space: SpaceResource) => {
+      if (space.spaceQuota.total === 0) {
+        return $gettext('Unrestricted')
+      }
+
       return formatFileSize(space.spaceQuota.total, currentLanguage)
     }
     const getUsedQuota = (space: SpaceResource) => {
@@ -392,10 +405,28 @@ export default defineComponent({
     })
 
     const fileClicked = (data) => {
-      const space = data[0]
-      if (!isSpaceSelected(space)) {
-        selectSpace(space)
+      const resource = data[0]
+      const eventData = data[1]
+      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
+
+      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      if (contextActionClicked) {
+        return
       }
+
+      if (eventData?.metaKey) {
+        return eventBus.publish('app.resources.list.clicked.meta', resource)
+      }
+      if (eventData?.shiftKey) {
+        return eventBus.publish('app.resources.list.clicked.shift', {
+          resource,
+          skipTargetSelection: isCheckboxClicked
+        })
+      }
+      if (isCheckboxClicked) {
+        return
+      }
+      toggleSpace(resource, true)
     }
 
     const showContextMenuOnBtnClick = (data, space) => {
@@ -428,6 +459,29 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.open)
     }
 
+    const keyActions = useKeyboardActions()
+    useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      props.selectedSpaces,
+      lastSelectedSpaceIndex,
+      lastSelectedSpaceId
+    )
+    useKeyboardTableMouseActions(
+      keyActions,
+      paginatedItems,
+      props.selectedSpaces,
+      lastSelectedSpaceIndex,
+      lastSelectedSpaceId
+    )
+
+    const toggleSpace = (space, deselect = false) => {
+      lastSelectedSpaceIndex.value = findIndex(props.spaces, (u) => u.id === space.id)
+      lastSelectedSpaceId.value = space.id
+      keyActions.resetSelectionCursor()
+      emit('toggleSelectSpace', space, deselect)
+    }
+
     return {
       allSpacesSelected,
       sortBy,
@@ -448,6 +502,7 @@ export default defineComponent({
       getMemberCount,
       getSelectSpaceLabel,
       handleSort,
+      toggleSpace,
       fileClicked,
       isSpaceSelected,
       contextMenuButtonRef,

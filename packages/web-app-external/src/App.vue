@@ -38,31 +38,33 @@ export default defineComponent({
   props: {
     resource: { type: Object as PropType<Resource>, required: true }
   },
-  setup(props) {
+  emits: ['update:applicationName'],
+  setup(props, { emit }) {
     const language = useGettext()
     const store = useStore()
 
-    const { $gettext, interpolate: $gettextInterpolate } = language
+    const { $gettext } = language
     const { makeRequest } = useRequest()
 
-    const appName = useRouteQuery('app')
+    const appNameQuery = useRouteQuery('app')
     const appUrl = ref()
     const formParameters = ref({})
     const method = ref()
     const subm: VNodeRef = ref()
 
     const capabilities = computed(() => store.getters['capabilities'])
-    // FIXME: Make available to appDefaults composable for pageTitle
-    const applicationName = computed(() => queryItemAsString(unref(appName)))
+    const applicationName = computed(() => {
+      const appName = queryItemAsString(unref(appNameQuery))
+      emit('update:applicationName', appName)
+      return appName
+    })
 
     const iFrameTitle = computed(() => {
-      const translated = $gettext('"%{appName}" app content area')
-      return $gettextInterpolate(translated, {
+      return $gettext('"%{appName}" app content area', {
         appName: unref(applicationName)
       })
     })
 
-    // TODO: Extract within web-pkg with default title?
     const errorPopup = (error) => {
       store.dispatch('showErrorMessage', {
         title: $gettext('An error occurred'),
@@ -73,9 +75,7 @@ export default defineComponent({
 
     const loadAppUrl = useTask(function* () {
       try {
-        // FIXME: make all updates atomic/happen at once so the ui can never mix data from different resources
         const fileId = props.resource.fileId
-
         const baseUrl = urlJoin(
           configurationManager.serverUrl,
           unref(capabilities).files.app_providers[0].open_url
@@ -105,17 +105,18 @@ export default defineComponent({
               errorPopup(response.data?.message)
           }
 
-          console.error('Error fetching app information', response.status, response.data.message)
-          return
+          const error = new Error('Error fetching app information')
+          throw error
         }
 
         if (!response.data.app_url || !response.data.method) {
-          console.error('Error in app server response')
-          return
+          const error = new Error('Error in app server response')
+          throw error
         }
 
         appUrl.value = response.data.app_url
         method.value = response.data.method
+
         if (response.data.form_parameters) {
           formParameters.value = response.data.form_parameters
         }
@@ -126,7 +127,8 @@ export default defineComponent({
           unref(subm).click()
         }
       } catch (e) {
-        console.error(e)
+        console.error('web-app-external error', e)
+        throw e
       }
     }).restartable()
 
@@ -139,10 +141,9 @@ export default defineComponent({
     )
 
     return {
-      iFrameTitle,
-      applicationName,
       appUrl,
       formParameters,
+      iFrameTitle,
       method,
       subm
     }

@@ -5,8 +5,11 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
   <div class="oc-width-1-3@l oc-width-1-2@m oc-width-3-4">
     <div class="file_info oc-flex oc-flex-between oc-p-s">
       <div class="oc-flex oc-flex-middle">
-        <span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-folder file_info__icon oc-mr-s">
-          <!---->
+        <span class="file_info__icon oc-mr-s">
+          <span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-folder">
+            <!---->
+          </span>
+          <!--v-if-->
         </span>
         <div class="file_info__body oc-text-overflow">
           <h3 class="oc-font-semibold">
@@ -22,8 +25,11 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
     <div class="oc-mb" id="oc-file-details-sidebar">
       <div>
         <div class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb">
-          <span class="oc-icon oc-icon-xxxl oc-icon-passive oc-resource-icon oc-resource-icon-folder details-icon">
-            <!---->
+          <span class="details-icon">
+            <span class="oc-icon oc-icon-xxxl oc-icon-passive oc-resource-icon oc-resource-icon-folder">
+              <!---->
+            </span>
+            <!--v-if-->
           </span>
         </div>
         <!--v-if-->
@@ -35,6 +41,7 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
                 <span>Oct 21, 2015, 7:28 AM</span>
               </td>
             </tr>
+            <!--v-if-->
             <!--v-if-->
             <!--v-if-->
             <!--v-if-->

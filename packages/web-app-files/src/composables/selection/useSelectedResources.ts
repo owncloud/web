@@ -1,9 +1,8 @@
 import { computed, unref, WritableComputedRef, Ref } from 'vue'
 import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src/composables'
+import { useGetMatchingSpace, useStore } from 'web-pkg/src/composables'
 import { Store } from 'vuex'
-import { buildShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { SpaceResource } from 'web-client/src/helpers'
 
 export interface SelectedResourcesResult {
   selectedResources: Ref<Resource[]>
@@ -20,6 +19,7 @@ export const useSelectedResources = (
   options?: SelectedResourcesOptions
 ): SelectedResourcesResult => {
   const store = options.store || useStore()
+  const { getMatchingSpace } = useGetMatchingSpace()
 
   const selectedResources: WritableComputedRef<Resource[]> = computed({
     get(): Resource[] {
@@ -47,18 +47,7 @@ export const useSelectedResources = (
       return null
     }
     const resource = unref(selectedResources)[0]
-    const storageId = resource.storageId
-    // FIXME: Once we have the shareId in the OCS response, we can check for that and early return the share
-    const space = store.getters['runtime/spaces/spaces'].find((space) => space.id === storageId)
-    if (space) {
-      return space
-    }
-
-    return buildShareSpaceResource({
-      shareId: resource.shareId,
-      shareName: resource.name,
-      serverUrl: configurationManager.serverUrl
-    })
+    return getMatchingSpace(resource)
   })
 
   return {
