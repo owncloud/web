@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium">
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- viewport manipulations -->
       <div id="tools"></div>
       <div id="tool-info">
