@@ -107,6 +107,35 @@
       </div>
     </div>
   </div>
+  <!--
+    <media-controls
+      :files="filteredFiles"
+      :active-index="activeIndex"
+      :is-full-screen-mode-activated="isFullScreenModeActivated"
+      :is-folder-loading="isFolderLoading"
+      :is-image="activeMediaFileCached?.isImage"
+      :current-image-rotation="currentImageRotation"
+      :current-image-zoom="currentImageZoom"
+      @set-rotation="currentImageRotation = $event"
+      @set-zoom="currentImageZoom = $event"
+      @toggle-full-screen="toggleFullscreenMode"
+      @toggle-previous="prev"
+      @toggle-next="next"
+    />
+  -->
+  <dicom-controls
+    :files="dicomFiles"
+    :active-index="0"
+    :is-full-screen-mode-activated="false"
+    :is-folder-loading="false"
+    :is-image="true"
+    :current-image-rotation="currentImageRotation"
+    :current-image-zoom="currentImageZoom"
+    @set-rotation="currentImageRotation = $event"
+    @set-zoom="currentImageZoom = $event"
+    @toggle-previous="prev"
+    @toggle-next="next"
+  />
 </template>
 
 <script lang="ts">
@@ -123,12 +152,13 @@ import { init as csToolsInit } from '@cornerstonejs/tools'
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
 // vue imports
-import { defineComponent } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import type { PropType } from 'vue'
 
 // other imports
 import { Resource } from 'web-client/src'
-import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+//import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import DicomControls from './components/DicomControls.vue'
 import uids from './helper/uids'
 
 // declaring some const & references
@@ -192,7 +222,9 @@ cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 
 export default defineComponent({
   //name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps
-  components: {}, // only needed if are child components
+  components: {
+    DicomControls
+  },
   props: {
     url: {
       type: String,
@@ -206,11 +238,17 @@ export default defineComponent({
       type: Object as PropType<Resource>,
       default: null
     }
-  }, // only needed if there are child components
+  },
   setup() {
+    //const dicomFiles = <Resource[]>[this.resource]
+
+    const activeIndex = ref()
+
+    /*
     return {
       ...useDownloadFile()
     }
+    */
   },
   data() {
     return {
@@ -225,7 +263,10 @@ export default defineComponent({
       dicomMetaData: null,
       metaDataElement: null,
       metaDataItems: null,
-      toolInfoElement: null
+      toolInfoElement: null,
+      currentImageZoom: 1,
+      currentImageRotation: 0,
+      dicomFiles: [this.resource]
     }
   },
   watch: {},
@@ -683,6 +724,12 @@ export default defineComponent({
         let result = reader.result as String
         console.log('reading file lenght: ' + result.length)
       }
+    },
+    next() {
+      return
+    },
+    prev() {
+      return
     },
     addButton({
       id,
