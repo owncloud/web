@@ -85,7 +85,7 @@
 <script lang="ts">
 // import cornerstone packages
 import Hammer from 'hammerjs'
-//import dicomParser from 'dicom-parser'
+import dicomParser from 'dicom-parser'
 import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
@@ -110,7 +110,7 @@ cornerstoneTools.external.Hammer = Hammer
 cornerstoneTools.external.cornerstone = cornerstone
 cornerstoneTools.external.cornerstoneMath = cornerstoneMath
 cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
-//cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
+cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
 
 // configure cornerstone dicom image loader
 const { preferSizeOverAccuracy, useNorm16Texture } = cornerstone.getConfiguration().rendering
@@ -195,7 +195,8 @@ export default defineComponent({
       dicomFileName: null,
       imageData: null,
       metaDataElement: null,
-      metaDataItems: null
+      metaDataItems: null,
+      dicomUrl: null
     }
   },
   watch: {},
@@ -205,10 +206,15 @@ export default defineComponent({
   // --------------------------
 
   // "created" runs before DOM is rendered, data and events are already accessible
-  created() {},
+  created() {
+    console.log('lifecycle @ created')
+  },
   // "mounted" is called when component has been added to DOM
-  beforeMount() {},
+  beforeMount() {
+    console.log('lifecycle @ beforeMount')
+  },
   async mounted() {
+    console.log('lifecycle @ mounted')
     // check if cornerstone core (TODO and tools) are initalized
     if (!this.isCornerstoneInitialized) {
       // initalize cornerstone core
@@ -251,72 +257,82 @@ export default defineComponent({
     this.metaDataItems = document.getElementsByClassName(
       'dicom-metadata-item'
     ) as HTMLCollectionOf<HTMLDivElement>
+
+    // get resource
+    // ensure resource url is not empty!
+    if (this.url != null && this.url != undefined && this.url != '') {
+      this.dicomUrl = this.url
+    } else {
+      console.log('no valid dicom resource url, using default dicom image (for testing only)')
+      this.dicomUrl =
+        'https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
+    }
+    console.log('resource url: ' + this.dicomUrl)
+    if (this.resource != (null || undefined)) {
+      this.dicomFileName = this.resource.name
+    }
+
+    //let dicomImageURL = await this.addWadouriPrefix(this.url)
+    let dicomImageURL = await this.addWadouriPrefix(this.dicomUrl)
+
+    /*
+    // file manager is only needed if resource is passed along as file
+    const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
+    */
+
+    // define a stack containing a single image
+    const dicomStack = [dicomImageURL]
+
+    // maybe preload meta data into memory?
+    // might only be needed if there is a stack of files
+    // await this.prefetchMetadataInformation(dicomStack)
+
+    // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
+    await this.viewport.setStack(dicomStack)
+
+    // render the image (updates every viewport in the rendering engine)
+    this.viewport.render()
+    this.isDicomFileRendered = true
+
+    // get metadata
+    this.imageData = this.viewport.getImageData()
+
+    // setting metadata
+    this.setMetadata(dicomImageURL)
   },
   // "beforeUpdate" is implementing any change in the component
   async beforeUpdate() {
-    // check if cornerstone core (TODO and tools) are initalized
-    if (!this.isCornerstoneInitialized) {
-      // initalize cornerstone core
-      await this.initCornerstoneCore()
-    }
-
-    // get resource
-    // ensure resource url is not empty
-    if (this.url != null && this.url != undefined && this.url != '') {
-      if (this.resource != (null || undefined)) {
-        this.dicomFileName = this.resource.name
-      }
-
-      let dicomImageURL = await this.addWadouriPrefix(this.url)
-
-      /*
-      // file manager is only needed if resource is passed along as file
-      const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
-      */
-
-      // define a stack containing a single image
-      const dicomStack = [dicomImageURL]
-
-      // maybe preload meta data into memory?
-      // might only be needed if there is a stack of files
-      // await this.prefetchMetadataInformation(dicomStack)
-
-      // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
-      await this.viewport.setStack(dicomStack)
-
-      // render the image (updates every viewport in the rendering engine)
-      this.viewport.render()
-      this.isDicomFileRendered = true
-
-      // get metadata
-      this.imageData = this.viewport.getImageData()
-
-      // setting metadata
-      this.setMetadata(dicomImageURL)
-    } else {
-      // console.log('no valid resource url available')
-    }
+    console.log('lifecycle @ beforeUpdate')
   },
   // updated gets called anytime some change is made in the component
   updated() {
+    console.log('lifecycle @ updated')
     // this.viewport.resize()
   },
   // cleaning up component, leaving no variables or events that could cause memory leaks to app
   beforeUnmount() {
+    console.log('lifecycle @ beforeUnmount')
     this.renderingEngine.destroy()
     this.isDicomFileRendered = false
     this.isMetaDataSet = false
     this.updateDisplayOfMetaData()
     this.clearMetadata()
   },
-  unmounted() {},
+  unmounted() {
+    console.log('lifecycle @ unmounted')
+  },
   methods: {
     async initCornerstoneCore() {
+      console.log('cornerstone init status: ' + cornerstone.isCornerstoneInitialized())
+      console.log('cornerstone init variable: ' + this.isCornerstoneInitialized)
       try {
         await cornerstone.init()
         this.isCornerstoneInitialized = true
       } catch (e) {
         console.error('Error initalizing cornerstone core', e)
+      } finally {
+        console.log('cornerstone init status: ' + cornerstone.isCornerstoneInitialized())
+        console.log('cornerstone init variable: ' + this.isCornerstoneInitialized)
       }
     },
     async prefetchMetadataInformation(imageIdsToPrefetch) {
