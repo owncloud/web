@@ -3,7 +3,7 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { App, unref } from 'vue'
+import { App, computed, unref } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
@@ -344,7 +344,8 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService.owncloudSdk = sdk
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk,
-    store
+    capabilities: computed(() => store.getters.capabilities),
+    user: computed(() => store.getters.user)
   })
 
   app.provide('$client', sdk)

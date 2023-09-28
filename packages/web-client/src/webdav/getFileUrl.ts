@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { Resource, SpaceResource } from '../helpers'
 import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
@@ -5,7 +6,7 @@ import { WebDavOptions } from './types'
 
 export const GetFileUrlFactory = (
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { sdk, store }: WebDavOptions
+  { sdk, capabilities }: WebDavOptions
 ) => {
   return {
     async getFileUrl(
@@ -20,7 +21,7 @@ export const GetFileUrlFactory = (
       }
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
-      const isUrlSigningEnabled = store.getters.capabilities?.core['support-url-signing'] === true
+      const isUrlSigningEnabled = unref(capabilities)?.core['support-url-signing'] === true
       const { path } = resource
       let { downloadURL } = resource
 
