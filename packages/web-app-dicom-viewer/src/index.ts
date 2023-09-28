@@ -27,24 +27,8 @@ const routes = [
   }
 ]
 
-/*
-const routes = [
-  {
-    path: '/:driveAliasAndItem(.*)?',
-    component: App,
-    name: 'dicom-viewer',
-    meta: {
-      authContext: 'hybrid',
-      title: $gettext('DICOM Viewer'),
-      patchCleanPath: true
-    }
-  }
-]
-*/
-
 const appInfo = {
-  name: $gettext('Preview'),
-  //name: $gettext('DICOM Viewer'),
+  name: $gettext('DICOM Viewer'),
   id: 'dicom-viewer',
   icon: 'resource-type-medical',
   iconFillType: 'fill',
@@ -52,7 +36,8 @@ const appInfo = {
   extensions: [
     {
       extension: 'dcm',
-      routeName: 'dicom-viewer'
+      routeName: 'dicom-viewer',
+      label: $gettext('Preview')
     }
   ]
 }
