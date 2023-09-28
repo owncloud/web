@@ -8,6 +8,7 @@
       :class="classes"
       :value="option"
       :disabled="disabled"
+      @keydown.enter="$emit('click', $event)"
     />
     <label :for="id" :class="labelClasses" v-text="label" />
   </span>
@@ -174,6 +175,10 @@ export default defineComponent({
 
   &:hover {
     cursor: pointer;
+  }
+
+  &:focus-visible {
+    outline: var(--oc-color-swatch-primary-default) auto 1px;
   }
 
   &-checked,

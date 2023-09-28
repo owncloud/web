@@ -45,6 +45,9 @@ export interface UppyResource {
     routeDriveAliasAndItem?: string
     routeShareId?: string
   }
+  tus?: {
+    endpoint: string
+  }
   xhrUpload?: {
     endpoint: string
   }
