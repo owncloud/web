@@ -5,7 +5,6 @@ import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { FileContext } from './types'
 import { FileResource, SpaceResource } from 'web-client/src/helpers'
-import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { useClientService } from '../clientService'
 import { ListFilesOptions } from 'web-client/src/webdav/listFiles'
 import { WebDAV } from 'web-client/src/webdav'
@@ -37,12 +36,10 @@ export interface AppFileHandlingResult {
 export function useAppFileHandling({
   clientService: { webdav }
 }: AppFileHandlingOptions): AppFileHandlingResult {
-  const isUrlSigningSupported = useCapabilityCoreSupportUrlSigning()
   const clientService = useClientService()
 
   const getUrlForResource = (space: SpaceResource, resource: Resource, options?: any) => {
     return clientService.webdav.getFileUrl(space, resource, {
-      isUrlSigningEnabled: unref(isUrlSigningSupported),
       ...options
     })
   }

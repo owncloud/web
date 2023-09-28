@@ -9,7 +9,6 @@ import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import { computed, unref } from 'vue'
 import {
   useCapabilitySpacesEnabled,
-  useCapabilityShareJailEnabled,
   useClientService,
   useRouter,
   useStore,
@@ -27,7 +26,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = language
-  const hasShareJail = useCapabilityShareJailEnabled()
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
@@ -109,9 +107,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const trashbin_deleteOp = (space: SpaceResource, resource: Resource) => {
     return clientService.webdav
       .clearTrashBin(space, {
-        hasShareJail: unref(hasShareJail),
-        id: resource.id,
-        user: store.getters.user
+        id: resource.id
       })
       .then(() => {
         store.dispatch('Files/removeFilesFromTrashbin', [resource])

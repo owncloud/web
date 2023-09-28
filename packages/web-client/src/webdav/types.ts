@@ -1,3 +1,4 @@
+import { Store } from 'vuex'
 import { OwnCloudSdk } from '../types'
 import { CreateFolderFactory } from './createFolder'
 import { GetFileContentsFactory } from './getFileContents'
@@ -17,6 +18,7 @@ import { GetPathForFileIdFactory } from './getPathForFileId'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
+  store: Store<unknown>
 }
 
 export interface WebDAV {

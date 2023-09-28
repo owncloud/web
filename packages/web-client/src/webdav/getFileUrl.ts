@@ -5,7 +5,7 @@ import { WebDavOptions } from './types'
 
 export const GetFileUrlFactory = (
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { sdk }: WebDavOptions
+  { sdk, store }: WebDavOptions
 ) => {
   return {
     async getFileUrl(
@@ -13,16 +13,14 @@ export const GetFileUrlFactory = (
       resource: Resource,
       {
         disposition = 'attachment',
-        signUrlTimeout = 86400,
-        isUrlSigningEnabled
+        signUrlTimeout = 86400
       }: {
         disposition?: 'inline' | 'attachment'
         signUrlTimeout?: number
-        // FIXME: add this to WebDavOptions
-        isUrlSigningEnabled: boolean
       }
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
+      const isUrlSigningEnabled = store.getters.capabilities?.core['support-url-signing'] === true
       const { path } = resource
       let { downloadURL } = resource
 
