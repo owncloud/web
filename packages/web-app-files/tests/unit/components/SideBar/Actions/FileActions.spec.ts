@@ -1,6 +1,6 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 import { fileActions, editors, meta } from 'web-app-files/tests/__fixtures__/fileActions'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,

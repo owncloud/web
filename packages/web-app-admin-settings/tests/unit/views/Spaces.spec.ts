@@ -1,5 +1,5 @@
 import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
-import { Graph } from 'web-client'
+import { Graph } from '@ownclouders/web-client'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
 import {

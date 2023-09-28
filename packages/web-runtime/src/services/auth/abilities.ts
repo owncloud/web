@@ -1,5 +1,5 @@
 import { SubjectRawRule } from '@casl/ability'
-import { AbilityActions, AbilitySubjects } from 'web-client/src/helpers/resource/types'
+import { AbilityActions, AbilitySubjects } from '@ownclouders/web-client/src/helpers/resource/types'
 
 export const getAbilities = (
   permissions: string[]

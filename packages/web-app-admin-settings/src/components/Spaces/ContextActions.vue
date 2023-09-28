@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
-import { SpaceResource } from 'web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { ContextActionMenu, QuotaModal } from '@ownclouders/web-pkg'
 import { useCapabilitySpacesMaxQuota, useStore } from '@ownclouders/web-pkg'
 

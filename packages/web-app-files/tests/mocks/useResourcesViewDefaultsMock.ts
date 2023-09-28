@@ -2,7 +2,7 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { readonly, ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Task } from 'vue-concurrency'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export const useResourcesViewDefaultsMock = (
   options: Partial<ReturnType<typeof useResourcesViewDefaults>> = {}

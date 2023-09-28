@@ -8,7 +8,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 const selectors = {
   name: '[data-testid="files-info-name"]'

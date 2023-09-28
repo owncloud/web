@@ -191,10 +191,10 @@ import {
   linkRoleInternalFolder,
   LinkShareRoles,
   ShareRole
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import { computed, defineComponent, inject, PropType, Ref } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 import { usePasswordPolicyService } from '@ownclouders/web-pkg'

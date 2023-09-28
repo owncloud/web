@@ -213,7 +213,7 @@ import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vu
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   extractDomSelector,
   extractParentFolderName,
@@ -221,8 +221,8 @@ import {
   isShareRoot,
   isShareSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
-import { ShareTypes } from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 import {
   useCapabilityFilesTags,

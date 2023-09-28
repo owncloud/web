@@ -82,7 +82,7 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace, useMutationSubscription } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'

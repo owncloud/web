@@ -12,7 +12,7 @@ import {
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
-import { User } from 'web-client/src/generated'
+import { User } from '@ownclouders/web-client/src/generated'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 
 jest.mock('@ownclouders/web-pkg', () => ({

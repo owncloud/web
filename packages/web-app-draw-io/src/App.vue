@@ -20,7 +20,7 @@ import {
   watch,
   nextTick
 } from 'vue'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 import { AppConfigObject } from '@ownclouders/web-pkg'
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
-import { Resource, SpaceResource } from 'web-client/src'
-import { Drive } from 'web-client/src/generated'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
+import { Drive } from '@ownclouders/web-client/src/generated'
 import {
   useClientService,
   useLoadingService,

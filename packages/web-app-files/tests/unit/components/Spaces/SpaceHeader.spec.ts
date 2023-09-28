@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
-import { Drive } from 'web-client/src/generated'
-import { buildSpace } from 'web-client/src/helpers'
+import { Drive } from '@ownclouders/web-client/src/generated'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultPlugins,

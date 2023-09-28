@@ -7,7 +7,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import DropTarget from '@uppy/drop-target'
 import getFileType from '@uppy/utils/lib/getFileType'
 import generateFileID from '@uppy/utils/lib/generateFileID'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'

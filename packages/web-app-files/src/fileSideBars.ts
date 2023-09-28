@@ -15,11 +15,11 @@ import {
   isLocationSharesActive
 } from '@ownclouders/web-pkg'
 
-import { spaceRoleEditor, spaceRoleManager } from 'web-client/src/helpers/share'
+import { spaceRoleEditor, spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 
 import { Panel } from '../../web-pkg/src/components/SideBar'
 
-import { Resource, User } from 'web-client'
+import { Resource, User } from '@ownclouders/web-client'
 import { Router } from 'vue-router'
 import { SpaceDetailsMultiple } from '@ownclouders/web-pkg'
 

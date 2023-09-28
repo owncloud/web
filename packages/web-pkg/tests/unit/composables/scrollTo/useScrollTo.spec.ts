@@ -1,6 +1,6 @@
 import { mock, mockDeep } from 'jest-mock-extended'
 import { useScrollTo } from '../../../../src/composables/scrollTo'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 import { eventBus } from '../../../../src/services'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
 import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'

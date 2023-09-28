@@ -3,14 +3,14 @@ import {
   extractStorageId,
   isProjectSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { Ref, unref } from 'vue'
 import { set, has } from 'lodash-es'
-import { buildSpaceShare } from 'web-client/src/helpers/share'
+import { buildSpaceShare } from '@ownclouders/web-client/src/helpers/share'
 import { sortSpaceMembers } from '../helpers/space/sortMembers'
 
 import { configurationManager } from '@ownclouders/web-pkg'
-import { Graph } from 'web-client'
+import { Graph } from '@ownclouders/web-client'
 import { AxiosResponse } from 'axios'
 
 const state = {

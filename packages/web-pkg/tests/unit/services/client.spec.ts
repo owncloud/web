@@ -3,7 +3,7 @@ import { ClientService, ConfigurationManager } from '../../../src/'
 import { Language } from 'vue3-gettext'
 import { Store } from 'vuex'
 import mockAxios from 'jest-mock-axios'
-import { client as _client } from 'web-client'
+import { client as _client } from '@ownclouders/web-client'
 
 const getters = { 'runtime/auth/accessToken': 'token' }
 const language = { current: 'en' }
@@ -18,7 +18,7 @@ const getClientServiceMock = () => {
 }
 const v4uuid = '00000000-0000-0000-0000-000000000000'
 jest.mock('uuid', () => ({ v4: () => v4uuid }))
-jest.mock('web-client', () => ({ client: jest.fn(() => ({ graph: {}, ocs: {} })) }))
+jest.mock('@ownclouders/web-client', () => ({ client: jest.fn(() => ({ graph: {}, ocs: {} })) }))
 
 describe('ClientService', () => {
   beforeEach(() => {

@@ -9,7 +9,7 @@ import {
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'jest-mock-extended'
 import { useFileActions } from '@ownclouders/web-pkg'
-import { SpaceResource } from 'web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 

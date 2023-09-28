@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { ShareRole } from 'web-client/src/helpers/share'
+import { ShareRole } from '@ownclouders/web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'RoleItem',

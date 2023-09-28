@@ -9,7 +9,7 @@ import {
   mockAxiosReject
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'

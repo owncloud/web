@@ -1,5 +1,5 @@
 import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
-import { SpaceResource } from 'web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'

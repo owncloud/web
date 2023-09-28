@@ -1,4 +1,4 @@
-import { Drive } from 'web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/src/generated'
 import { computed, unref } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
@@ -7,7 +7,7 @@ import { useClientService } from '../../clientService'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 
 export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

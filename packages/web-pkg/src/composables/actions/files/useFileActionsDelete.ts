@@ -6,7 +6,7 @@ import {
   isLocationTrashActive,
   isLocationCommonActive
 } from '../../../router'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useCapabilityFilesPermanentDeletion, useCapabilitySpacesEnabled } from '../../capability'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'

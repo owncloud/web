@@ -5,11 +5,11 @@ import {
   Share,
   SpaceResource,
   Resource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 
-jest.mock('web-client/src/helpers/share/functions', () => {
+jest.mock('@ownclouders/web-client/src/helpers/share/functions', () => {
   return {
     buildShare: (share) => share,
     buildCollaboratorShare: (share) => share

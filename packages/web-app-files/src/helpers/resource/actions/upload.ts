@@ -1,7 +1,7 @@
 import { Language } from 'vue3-gettext'
 import { Store } from 'vuex'
-import { Resource } from 'web-client'
-import { extractExtensionFromFile } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
+import { extractExtensionFromFile } from '@ownclouders/web-client/src/helpers'
 import { UppyResource } from 'web-runtime/src/composables/upload'
 import {
   ConflictDialog,

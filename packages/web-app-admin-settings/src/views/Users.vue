@@ -165,7 +165,7 @@ import { useSideBar } from '@ownclouders/web-pkg'
 import { ItemFilter } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { toRaw } from 'vue'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
 import { format } from 'util'
@@ -179,8 +179,8 @@ import {
   useUserActionsEditQuota
 } from '../composables/actions/users'
 import { configurationManager } from '@ownclouders/web-pkg'
-import { Drive, Group, User } from 'web-client/src/generated'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { Drive, Group, User } from '@ownclouders/web-client/src/generated'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'UsersView',

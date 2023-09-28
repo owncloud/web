@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 
 const selectors = {
   ocSpinnerStub: 'oc-spinner-stub',

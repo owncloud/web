@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { useStore } from '../../../../../src/composables/store'
 import { unref } from 'vue'
-import { ProjectSpaceResource, Resource } from 'web-client/src/helpers'
+import { ProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
 
 describe('emptyTrashBin', () => {

@@ -1,7 +1,7 @@
 import { createStore as _createStore, StoreOptions } from 'vuex'
 import { mount } from '@vue/test-utils'
 import { defineComponent } from 'vue'
-import { defaultPlugins, DefaultPluginsOptions } from 'web-test-helpers'
+import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 import { createRouter as _createRouter } from 'web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
 

@@ -1,6 +1,6 @@
 import quickActions, { canShare } from '../../../quickActions'
 import { createQuicklink } from '../../../helpers/share'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../../router'
 import { computed } from 'vue'

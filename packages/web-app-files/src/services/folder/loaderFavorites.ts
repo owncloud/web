@@ -1,8 +1,8 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { DavProperties } from 'web-client/src/webdav/constants'
-import { buildResource } from 'web-client/src/helpers'
+import { DavProperties } from '@ownclouders/web-client/src/webdav/constants'
+import { buildResource } from '@ownclouders/web-client/src/helpers'
 import { isLocationCommonActive } from '@ownclouders/web-pkg'
 
 export class FolderLoaderFavorites implements FolderLoader {

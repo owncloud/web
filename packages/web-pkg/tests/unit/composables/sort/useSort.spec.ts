@@ -1,6 +1,6 @@
 import { ref, unref } from 'vue'
 import { SortDir, SortOptions, useSort } from '../../../../src/composables/sort'
-import { Resource } from 'web-client/src/helpers/resource'
+import { Resource } from '@ownclouders/web-client/src/helpers/resource'
 import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useSort', () => {

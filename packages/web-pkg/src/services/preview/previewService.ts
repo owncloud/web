@@ -6,7 +6,7 @@ import { cacheService } from '../cache'
 import { ClientService } from '../client'
 import { ConfigurationManager } from '../../configuration'
 import { encodePath } from '../../utils'
-import { isPublicSpaceResource } from 'web-client/src/helpers'
+import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
 
 export class PreviewService {

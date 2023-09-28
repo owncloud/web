@@ -25,7 +25,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { User } from 'web-client/src/generated'
+import { User } from '@ownclouders/web-client/src/generated'
 import { useStore } from '@ownclouders/web-pkg'
 
 type LoginOption = {

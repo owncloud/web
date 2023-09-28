@@ -10,8 +10,12 @@ import {
 } from 'web-test-helpers'
 import { useStore } from '../../../../../src/composables'
 import { unref } from 'vue'
-import { Resource } from 'web-client'
-import { FileResource, ProjectSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
+import {
+  FileResource,
+  ProjectSpaceResource,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
 
 describe('restore', () => {

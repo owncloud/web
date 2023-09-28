@@ -1,9 +1,9 @@
 import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
 import { mock } from 'jest-mock-extended'
-import { User } from 'web-client/src'
-import { Ability } from 'web-client/src/helpers/resource/types'
-import { Drive } from 'web-client/src/generated'
+import { User } from '@ownclouders/web-client/src'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('buildSpace', () => {
   const uuid = '1'

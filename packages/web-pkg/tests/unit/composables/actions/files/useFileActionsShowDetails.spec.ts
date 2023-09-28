@@ -8,7 +8,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useStore } from '../../../../../src/composables/store'
 
 describe('showDetails', () => {

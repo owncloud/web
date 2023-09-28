@@ -8,7 +8,7 @@ import {
 } from '../../../web-pkg/src'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
 import { UppyService } from 'web-runtime/src/services/uppyService'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { ref } from 'vue'
 
 export interface ComponentMocksOptions {

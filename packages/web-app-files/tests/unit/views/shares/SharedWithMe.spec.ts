@@ -2,12 +2,12 @@ import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useSort } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   createStore,
   defaultPlugins,

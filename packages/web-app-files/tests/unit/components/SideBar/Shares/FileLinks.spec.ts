@@ -6,9 +6,9 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
-import { SharePermissions } from 'web-client/src/helpers/share'
-import { AbilityRule } from 'web-client/src/helpers/resource/types'
+import { Resource } from '@ownclouders/web-client'
+import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
+import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
 
 const defaultLinksList = [
   {

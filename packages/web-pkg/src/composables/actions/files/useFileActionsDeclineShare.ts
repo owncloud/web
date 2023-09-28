@@ -6,7 +6,7 @@ import {
 } from '../../../router'
 import { Store } from 'vuex'
 import PQueue from 'p-queue'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
 import { useConfigurationManager } from '../../configuration'

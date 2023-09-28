@@ -2,9 +2,9 @@ import { DateTime } from 'luxon'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
 import { defaultStubs } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
-import { ShareSpaceResource } from 'web-client/src/helpers'
-import { DavPermission } from 'web-client/src/webdav/constants'
+import { Resource } from '@ownclouders/web-client'
+import { ShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
 import {
   createStore,
   defaultPlugins,

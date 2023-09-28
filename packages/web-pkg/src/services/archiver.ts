@@ -4,7 +4,7 @@ import rcompare from 'semver/functions/rcompare'
 
 import { HttpError, RuntimeError } from '../errors'
 import { ClientService } from '../services'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../configuration'
 import { triggerDownloadWithFilename } from '../../'
 

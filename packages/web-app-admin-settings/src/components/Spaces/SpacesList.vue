@@ -126,8 +126,12 @@ import {
   defaultFuseOptions
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
-import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
+} from '@ownclouders/web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'

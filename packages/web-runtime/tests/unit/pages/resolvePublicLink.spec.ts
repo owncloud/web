@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
 
 jest.mock('web-runtime/src/services/auth')

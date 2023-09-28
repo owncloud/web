@@ -1,5 +1,5 @@
 import { useSpaceActionsEditQuota } from '../../../../../src/composables/actions'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultComponentMocks,
@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock } from 'jest-mock-extended'
-import { Drive } from 'web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('editQuota', () => {
   describe('isEnabled property', () => {

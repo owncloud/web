@@ -21,7 +21,7 @@ import { computed, defineComponent, inject, ref, watch, unref, Ref } from 'vue'
 import MembersRoleSection from '../../Groups/SideBar/MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { Group } from 'web-client/src/generated'
+import { Group } from '@ownclouders/web-client/src/generated'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({

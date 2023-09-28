@@ -5,7 +5,7 @@ import { RouteLocation, Router } from 'vue-router'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ref } from 'vue'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
-import { ProjectSpaceResource } from 'web-client/src/helpers'
+import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 const getClientServiceMock = (result = { resources: [], totalResults: 0 }) => {
@@ -23,7 +23,7 @@ const configurationManager = mockDeep<ConfigurationManager>({
     }
   }
 })
-jest.mock('web-client/src/helpers/resource', () => ({
+jest.mock('@ownclouders/web-client/src/helpers/resource', () => ({
   buildResource: (v) => v
 }))
 

@@ -70,7 +70,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } fro
 import { useTask } from 'vue-concurrency'
 import { eventBus } from '@ownclouders/web-pkg'
 import AppTemplate from '../components/AppTemplate.vue'
-import { buildSpace } from 'web-client/src/helpers'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 import { configurationManager } from '@ownclouders/web-pkg'
 import SpacesList from '../components/Spaces/SpacesList.vue'
 import { SpaceDetails } from '@ownclouders/web-pkg'

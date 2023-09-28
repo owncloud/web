@@ -1,5 +1,5 @@
 import { useFileActionsSetImage } from '../../../../../src/composables/actions'
-import { buildSpace, Resource, SpaceResource } from 'web-client/src/helpers'
+import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {
   createStore,
@@ -10,7 +10,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from 'web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('setImage', () => {
   describe('isEnabled property', () => {

@@ -76,13 +76,13 @@
 import last from 'lodash-es/last'
 import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   isShareSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import BatchActions from '../BatchActions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
@@ -107,8 +107,8 @@ import {
 } from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from '../../composables'
-import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
-import ViewOptions from '-/ViewOptions.vue'
+import { helpers } from 'design-system'
+import ViewOptions from '../ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
 import {
   FileAction,
@@ -118,6 +118,8 @@ import {
   useSpaceActionsRestore
 } from '../../composables'
 import QuotaModal from '../Spaces/QuotaModal.vue'
+
+const { EVENT_ITEM_DROPPED } = helpers
 
 export default defineComponent({
   components: {

@@ -190,7 +190,7 @@ import {
 } from 'vue'
 import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { eventBus } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useService } from '@ownclouders/web-pkg'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'

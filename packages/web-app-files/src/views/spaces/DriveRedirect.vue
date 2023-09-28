@@ -8,7 +8,7 @@
 import { computed, defineComponent, unref } from 'vue'
 import { useRoute, useRouter, useStore } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 

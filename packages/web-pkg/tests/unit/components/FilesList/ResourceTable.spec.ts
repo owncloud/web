@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
-import { extractDomSelector, Resource } from 'web-client/src/helpers'
+import { extractDomSelector, Resource } from '@ownclouders/web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 import { ConfigurationManager, displayPositionedDropdown, eventBus } from '../../../../src'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'

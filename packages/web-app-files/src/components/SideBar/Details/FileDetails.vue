@@ -199,7 +199,7 @@ import { mapGetters } from 'vuex'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { createLocationCommon } from '@ownclouders/web-pkg'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityFilesTags,
   useClientService,
@@ -218,7 +218,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'

@@ -8,8 +8,8 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-import { OwnCloudSdk } from 'web-client/src/types'
-import { SpaceResource } from 'web-client'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
+import { SpaceResource } from '@ownclouders/web-client'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',

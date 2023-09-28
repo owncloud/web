@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsDownloadArchive } from '../../../../../src/composables/actions'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 import {
   createStore,

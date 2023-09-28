@@ -7,7 +7,7 @@ import {
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'
 import {
   useSpaceActionsDisable,

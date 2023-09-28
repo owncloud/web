@@ -114,7 +114,7 @@ import UserInfoBox from './UserInfoBox.vue'
 import { CompareSaveDialog, QuotaSelect } from '@ownclouders/web-pkg'
 import GroupSelect from '../GroupSelect.vue'
 import { cloneDeep } from 'lodash-es'
-import { AppRole, AppRoleAssignment, Group, User } from 'web-client/src/generated'
+import { AppRole, AppRoleAssignment, Group, User } from '@ownclouders/web-client/src/generated'
 import {
   MaybeRef,
   useCapabilityReadOnlyUserAttributes,

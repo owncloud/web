@@ -1,11 +1,3 @@
 {
-  "extends": "@ownclouders/tsconfig",
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "*": [
-        "packages/*"
-      ]
-    }
-  }
+  "extends": "@ownclouders/tsconfig"
 }

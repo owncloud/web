@@ -66,8 +66,8 @@ import {
   isPersonalSpaceResource,
   Resource,
   SpaceResource
-} from 'web-client/src/helpers'
-import { urlJoin } from 'web-client/src/utils'
+} from '@ownclouders/web-client/src/helpers'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '@ownclouders/web-pkg'
 import { RouteLocationRaw } from 'vue-router'
 import { useLoadFileInfoById } from '../composables/fileInfo'

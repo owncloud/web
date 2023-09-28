@@ -1,6 +1,6 @@
 import { defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
 import {
   useGroupActionsDelete,

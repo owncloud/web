@@ -1,6 +1,6 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRoute } from '../../router'
@@ -9,7 +9,7 @@ import { useAbility } from '../../ability'
 import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { Store } from 'vuex'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

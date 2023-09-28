@@ -7,7 +7,7 @@ import {
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'
 
 import {

@@ -90,7 +90,7 @@
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
 import { eventBus } from '@ownclouders/web-pkg'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import {

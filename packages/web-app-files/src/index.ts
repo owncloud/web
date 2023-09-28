@@ -23,7 +23,7 @@ import {
   SpaceResource,
   isPersonalSpaceResource,
   isShareSpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { configurationManager } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools

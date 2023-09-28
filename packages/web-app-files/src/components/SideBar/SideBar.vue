@@ -38,8 +38,12 @@ import { computed, defineComponent, PropType, provide, ref, unref, watch } from 
 import { useGettext } from 'vue3-gettext'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import FileInfo from './FileInfo.vue'
-import { isProjectSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
+import {
+  isProjectSpaceResource,
+  SpaceResource,
+  Resource
+} from '@ownclouders/web-client/src/helpers'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { SideBar as InnerSideBar } from '@ownclouders/web-pkg'
 import { SpaceInfo } from '@ownclouders/web-pkg'
 import { Panel } from '@ownclouders/web-pkg'

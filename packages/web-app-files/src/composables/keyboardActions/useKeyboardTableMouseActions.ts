@@ -2,7 +2,7 @@ import { onBeforeUnmount, onMounted, unref, computed, Ref, watchEffect } from 'v
 import { QueryValue, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { KeyboardActions } from '@ownclouders/web-pkg'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
 
 export const useKeyboardTableMouseActions = (

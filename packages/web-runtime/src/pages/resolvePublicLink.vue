@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { SharePermissionBit } from 'web-client/src/helpers/share'
+import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
 import { authService } from '../services/auth'
 
 import {
@@ -80,7 +80,7 @@ import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
 // full import is needed here so it can be overwritten via CERN config

@@ -35,9 +35,13 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '@ownclouders/web-pkg'
-import { isPublicSpaceResource, PublicSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import {
+  isPublicSpaceResource,
+  PublicSpaceResource,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { locationPublicUpload } from '@ownclouders/web-pkg'
-import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
+import { linkRoleUploaderFolder } from '@ownclouders/web-client/src/helpers/share'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { dirname } from 'path'

@@ -13,9 +13,9 @@ import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
 import * as webPkg from '@ownclouders/web-pkg'
-import * as webClient from 'web-client'
+import * as webClient from '@ownclouders/web-client'
 
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { App } from 'vue'
 import { AppConfigObject, ClassicApplicationScript } from '@ownclouders/web-pkg'

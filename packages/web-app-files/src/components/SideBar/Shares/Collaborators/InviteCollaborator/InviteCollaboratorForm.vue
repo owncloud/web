@@ -115,7 +115,7 @@ import {
   SharePermissions,
   ShareTypes,
   SpacePeopleShareRoles
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharing,
@@ -126,7 +126,7 @@ import {
 } from '@ownclouders/web-pkg'
 
 import { defineComponent, inject, ref, unref, watch } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
   displayPositionedDropdown,

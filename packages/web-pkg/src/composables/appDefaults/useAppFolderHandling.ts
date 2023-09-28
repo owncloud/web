@@ -3,13 +3,13 @@ import { computed, Ref, ref, unref, MaybeRef } from 'vue'
 import { dirname } from 'path'
 import { ClientService } from '../../services'
 import { useAppFileHandling } from './useAppFileHandling'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { FileContext } from './types'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
-import { isMountPointSpaceResource } from 'web-client/src/helpers'
+import { isMountPointSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 interface AppFolderHandlingOptions {
   store: Store<any>

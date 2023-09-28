@@ -28,7 +28,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, unref } from 'vue'
 import PrivateLinkItem from './PrivateLinkItem.vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   useCapabilityFilesSharingPublicAlias,
   useCapabilityPrivateLinks,

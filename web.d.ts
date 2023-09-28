@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import { OwnCloudSdk } from 'web-client/src/types'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 
 // This file must have at least one export or import on top-level

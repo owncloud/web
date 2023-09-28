@@ -1,8 +1,8 @@
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { eventBus } from '../services'
 import { SideBarEventTopics } from '../composables/sideBar'
 import { createLocationShares } from '../router'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { AncestorMetaData } from '../types'
 
 // dummy to trick gettext string extraction into recognizing strings

@@ -4,7 +4,7 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   createStore,
   defaultPlugins,

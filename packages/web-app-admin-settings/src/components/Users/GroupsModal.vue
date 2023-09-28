@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
-import { Group, User } from 'web-client/src/generated'
+import { Group, User } from '@ownclouders/web-client/src/generated'
 import GroupSelect from './GroupSelect.vue'
 
 export default defineComponent({

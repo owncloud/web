@@ -1,7 +1,11 @@
 import PQueue from 'p-queue'
 
 import { getParentPaths } from '@ownclouders/web-pkg'
-import { buildShare, buildCollaboratorShare, ShareTypes } from 'web-client/src/helpers/share'
+import {
+  buildShare,
+  buildCollaboratorShare,
+  ShareTypes
+} from '@ownclouders/web-client/src/helpers/share'
 import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
@@ -12,8 +16,8 @@ import {
   isProjectSpaceResource,
   Resource,
   SpaceResource
-} from 'web-client/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
+} from '@ownclouders/web-client/src/helpers'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { ClientService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { eventBus } from '@ownclouders/web-pkg'

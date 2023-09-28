@@ -2,7 +2,7 @@ import { shallowMount } from 'web-test-helpers'
 import { AVAILABLE_SIZES } from '../../helpers/constants'
 import { OcResourceIcon } from '..'
 import { OcResourceIconMapping, ocResourceIconMappingInjectionKey } from './types'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 const resourceIconMapping: OcResourceIconMapping = {
   extension: {

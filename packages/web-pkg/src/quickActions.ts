@@ -1,10 +1,10 @@
 import { createQuicklink } from './helpers/share'
 import { eventBus } from './services/eventBus'
 import { SideBarEventTopics } from './composables/sideBar/eventTopics'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
 import { ClientService, PasswordPolicyService } from './services'
-import { Ability } from 'web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
 
 export function canShare(item, store) {

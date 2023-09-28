@@ -1,8 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
-import { SpaceResource } from 'web-client/src'
-import { FolderResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { FolderResource } from '@ownclouders/web-client/src/helpers'
 import {
   RouteLocation,
   createStore,

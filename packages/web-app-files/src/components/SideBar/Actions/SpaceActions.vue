@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
-import { SpaceResource } from 'web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { QuotaModal } from '@ownclouders/web-pkg'
 import { ReadmeContentModal } from '@ownclouders/web-pkg'

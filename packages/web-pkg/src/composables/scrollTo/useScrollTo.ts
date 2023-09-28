@@ -1,5 +1,5 @@
 import { computed, unref } from 'vue'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 import { queryItemAsString } from '../appDefaults/useAppNavigation'
 import { useStore } from '../store/useStore'
 import { eventBus } from '../../services'

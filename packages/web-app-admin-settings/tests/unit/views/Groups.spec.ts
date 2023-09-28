@@ -9,7 +9,7 @@ import {
   defaultStoreMockOptions,
   mount
 } from 'web-test-helpers'
-import { Group } from 'web-client/src/generated'
+import { Group } from '@ownclouders/web-client/src/generated'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {

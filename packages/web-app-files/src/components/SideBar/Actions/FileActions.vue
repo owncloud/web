@@ -14,7 +14,7 @@
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, Ref, unref } from 'vue'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'FileActions',

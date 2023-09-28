@@ -4,7 +4,7 @@ import {
   useFileActionsDeleteResources,
   useFileActionsDelete
 } from '../../../../../src/composables/actions'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useStore } from '../../../../../src/composables/store'
 
 import {

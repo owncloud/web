@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import AppBar from '../../../../src/components/AppBar/AppBar.vue'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   createStore,
   defaultComponentMocks,

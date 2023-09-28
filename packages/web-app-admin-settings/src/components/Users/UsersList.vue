@@ -129,7 +129,7 @@ import {
   SortDir
 } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { AppRole, User } from 'web-client/src/generated'
+import { AppRole, User } from '@ownclouders/web-client/src/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'

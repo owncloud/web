@@ -34,10 +34,10 @@ import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
   Resource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
-import { WebDAV } from 'web-client/src/webdav'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { computed, createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'

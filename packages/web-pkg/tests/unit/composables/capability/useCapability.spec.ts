@@ -1,6 +1,7 @@
 import { unref } from 'vue'
 import { useCapability } from '../../../../src/composables/capability/useCapability'
-import user from 'web-runtime/src/store/user'
+// FIXME:
+import user from '../../../../../web-runtime/src/store/user'
 import set from 'lodash-es/set'
 import { getStoreInstance } from 'web-test-helpers'
 

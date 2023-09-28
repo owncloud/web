@@ -8,7 +8,7 @@ import { computed, unref } from 'vue'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 

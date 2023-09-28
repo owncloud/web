@@ -1,6 +1,6 @@
 import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { mockDeep } from 'jest-mock-extended'
-import { FolderResource, SpaceResource } from 'web-client/src/helpers'
+import { FolderResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultStoreMockOptions,

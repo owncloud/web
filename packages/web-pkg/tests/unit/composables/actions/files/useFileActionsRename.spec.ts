@@ -1,6 +1,6 @@
 import { useFileActionsRename } from '../../../../../src/composables/actions'
 import { mockDeep } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultStoreMockOptions,

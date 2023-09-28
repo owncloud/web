@@ -7,14 +7,14 @@ import {
   isProjectSpaceResource,
   extractExtensionFromFile,
   SpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import {
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
   ConflictDialog
 } from '../../../helpers/resource'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useCapabilitySpacesEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'

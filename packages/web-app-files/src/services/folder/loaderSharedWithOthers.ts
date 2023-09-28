@@ -2,9 +2,9 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
-import { aggregateResourceShares } from 'web-client/src/helpers/share'
+import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
 import { Store } from 'vuex'
-import { peopleRoleDenyFolder, ShareTypes } from 'web-client/src/helpers/share'
+import { peopleRoleDenyFolder, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled

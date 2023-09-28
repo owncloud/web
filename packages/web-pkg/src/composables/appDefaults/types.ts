@@ -1,6 +1,6 @@
 import { MaybeRef } from '../../utils'
 import { LocationQuery } from '../router'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { RouteParams } from 'vue-router'
 
 export interface FileContext {

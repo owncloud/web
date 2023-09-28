@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 import PrivateLinkItem from 'web-app-files/src/components/SideBar/PrivateLinkItem.vue'
 

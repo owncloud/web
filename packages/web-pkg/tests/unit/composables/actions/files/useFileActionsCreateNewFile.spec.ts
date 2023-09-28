@@ -1,8 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
-import { SpaceResource } from 'web-client/src'
-import { Resource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
 import {
   RouteLocation,

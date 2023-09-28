@@ -60,7 +60,7 @@ import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, wat
 import { eventBus } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useClientService, useConfigurationManager, useStore } from '@ownclouders/web-pkg'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
 import keycode from 'keycode'

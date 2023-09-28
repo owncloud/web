@@ -1,6 +1,6 @@
 import getters from 'web-app-files/src/store/getters'
 import { mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 let state
 const mockedFiles = [mockDeep<Resource>(), mockDeep<Resource>(), mockDeep<Resource>()]

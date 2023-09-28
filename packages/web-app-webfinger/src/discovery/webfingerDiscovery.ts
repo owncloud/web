@@ -1,6 +1,6 @@
 import { OwnCloudServer } from 'web-app-webfinger/src/discovery/types'
 import { ClientService } from '@ownclouders/web-pkg'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 interface OwnCloudInstancesResponse {
   subject: string

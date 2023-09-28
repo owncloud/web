@@ -1,4 +1,4 @@
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject } from '../../apps/types'
 import { Ref } from 'vue'
 

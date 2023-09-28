@@ -7,9 +7,9 @@ import {
   isLocationSharesActive,
   isLocationTrashActive
 } from '../../../router'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '../../../helpers/router'
 import { useGetMatchingSpace } from '../../spaces'
 import { useRouter } from '../../router'

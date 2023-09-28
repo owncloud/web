@@ -20,7 +20,7 @@
 <script lang="ts">
 import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defineComponent } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
 

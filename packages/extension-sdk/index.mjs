@@ -62,7 +62,7 @@ export const defineConfig = (overrides = {}) => {
 
               '@ownclouders/web-client',
               '@ownclouders/web-pkg',
-              'web-client',
+              '@ownclouders/web-client',
               '@ownclouders/web-pkg'
             ],
             preserveEntrySignatures: 'strict',

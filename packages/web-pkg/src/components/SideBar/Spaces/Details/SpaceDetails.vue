@@ -89,8 +89,11 @@
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { getRelativeSpecialFolderSpacePath, SpaceResource } from 'web-client/src/helpers'
-import { spaceRoleManager } from 'web-client/src/helpers/share'
+import {
+  getRelativeSpecialFolderSpacePath,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
+import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import { useStore, usePreviewService, useClientService } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import { formatDateFromISO } from '../../../../helpers'

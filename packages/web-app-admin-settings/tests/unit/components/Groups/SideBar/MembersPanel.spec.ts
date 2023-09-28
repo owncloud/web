@@ -1,7 +1,7 @@
 import MembersPanel from '../../../../../src/components/Groups/SideBar/MembersPanel.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Group } from 'web-client/src/generated'
+import { Group } from '@ownclouders/web-client/src/generated'
 
 const groupMock = mock<Group>({
   id: '1',

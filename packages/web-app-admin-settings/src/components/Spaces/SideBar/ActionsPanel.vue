@@ -30,7 +30,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { QuotaModal } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, unref } from 'vue'
-import { SpaceResource } from 'web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useCapabilitySpacesMaxQuota, useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({

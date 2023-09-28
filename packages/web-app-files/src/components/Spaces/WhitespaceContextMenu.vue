@@ -28,7 +28,7 @@ import { computed, defineComponent, PropType, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useFileActionsPaste, useFileActionsShowDetails } from '@ownclouders/web-pkg'
 import { useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 import { useStore } from '@ownclouders/web-pkg'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 

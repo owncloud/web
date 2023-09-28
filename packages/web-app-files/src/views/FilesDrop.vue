@@ -63,14 +63,14 @@ import {
   queryItemAsString
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
+import { linkRoleUploaderFolder } from '@ownclouders/web-client/src/helpers/share'
 import { useService } from '@ownclouders/web-pkg'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { SpaceResource } from 'web-client/src'
-import { PublicSpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { PublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   components: {

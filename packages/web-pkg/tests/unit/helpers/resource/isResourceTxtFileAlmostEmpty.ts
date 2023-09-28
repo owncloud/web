@@ -1,4 +1,4 @@
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 import { isResourceTxtFileAlmostEmpty } from '../../../../src/helpers/resource'
 
 describe('isResourceTxtFileAlmostEmpty', () => {

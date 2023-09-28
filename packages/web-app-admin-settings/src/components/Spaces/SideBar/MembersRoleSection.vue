@@ -25,8 +25,8 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { ShareTypes } from 'web-client/src/helpers/share'
-import { SpaceRole } from 'web-client/src/helpers'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { SpaceRole } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'MembersRoleSection',

@@ -13,7 +13,7 @@ import {
 import { resourceTable } from '@ownclouders/web-pkg'
 import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useSelectedResources, SelectedResourcesResult } from '@ownclouders/web-pkg'
 import { ReadOnlyRef } from '@ownclouders/web-pkg'
 import {

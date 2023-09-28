@@ -83,7 +83,7 @@ import { Pagination } from '@ownclouders/web-pkg'
 
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   useCapabilityProjectSpacesEnabled,
   useGetMatchingSpace,

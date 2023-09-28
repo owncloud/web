@@ -1,5 +1,5 @@
-import { isProjectSpaceResource } from 'web-client/src/helpers'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 export default {
   selectedFiles: (state, getters) => {

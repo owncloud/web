@@ -1,7 +1,7 @@
 import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from './PreviewComponent.vue'
 import { Component } from 'vue'
-import { GitHubClient } from 'web-app-skeleton/src/search/github/client'
+import { GitHubClient } from './client'
 
 export const previewSearchLimit = 3
 

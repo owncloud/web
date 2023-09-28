@@ -1,7 +1,7 @@
 import { mock, mockDeep } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsMove } from '../../../../../src/composables/actions'
-import { Resource, SpaceResource } from 'web-client/src'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { useStore } from '../../../../../src/composables/store'
 import {
   RouteLocation,

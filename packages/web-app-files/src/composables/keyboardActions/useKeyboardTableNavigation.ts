@@ -2,7 +2,7 @@ import { QueryValue, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { computed, Ref, ref, unref, nextTick, watchEffect } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
 
 const enum Direction {

@@ -1,7 +1,7 @@
 import { useUserActionsDelete } from '../../../../../src/composables/actions/users/useUserActionsDelete'
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { User } from 'web-client/src/generated'
+import { User } from '@ownclouders/web-client/src/generated'
 import { eventBus } from '@ownclouders/web-pkg'
 import {
   createStore,

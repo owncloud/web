@@ -1,7 +1,7 @@
 import { useCapabilitySpacesEnabled, useDriveResolver } from '@ownclouders/web-pkg'
 import { computed, ref, unref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { isShareSpaceResource, SpaceResource } from 'web-client/src/helpers'
+import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   getComposableWrapper,

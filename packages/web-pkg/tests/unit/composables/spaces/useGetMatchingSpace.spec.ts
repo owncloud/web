@@ -7,7 +7,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('useSpaceHelpers', () => {
   it('should be valid', () => {

@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { SpaceAction } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
   const { $gettext } = useGettext()

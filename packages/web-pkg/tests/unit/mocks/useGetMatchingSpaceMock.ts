@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client/src'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { useGetMatchingSpace } from '../../../src'
 
 export const useGetMatchingSpaceMock = (

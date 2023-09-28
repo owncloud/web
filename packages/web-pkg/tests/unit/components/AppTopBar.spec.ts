@@ -1,6 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { Resource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import AppTopBar from '../../../src/components/AppTopBar.vue'
 import { Action } from '../../../src/composables/actions'
 

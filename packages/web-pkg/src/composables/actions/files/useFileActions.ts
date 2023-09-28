@@ -1,6 +1,6 @@
 import kebabCase from 'lodash-es/kebabCase'
 import { Store } from 'vuex'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { routeToContextQuery } from '../../appDefaults'
 import { configurationManager } from '../../../configuration'
 

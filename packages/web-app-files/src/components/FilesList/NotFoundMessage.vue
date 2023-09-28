@@ -54,7 +54,7 @@ import {
 
 import { useRouter } from '@ownclouders/web-pkg'
 import { defineComponent, PropType } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({

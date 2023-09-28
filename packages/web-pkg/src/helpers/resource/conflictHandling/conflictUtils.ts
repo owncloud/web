@@ -1,5 +1,9 @@
 import { dirname } from 'path'
-import { extractNameWithoutExtension, Resource, SpaceResource } from 'web-client/src/helpers'
+import {
+  extractNameWithoutExtension,
+  Resource,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 
 export const resolveFileNameDuplicate = (name, extension, existingFiles, iteration = 1) => {
   let potentialName

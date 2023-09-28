@@ -3,10 +3,10 @@ import { DateTime } from 'luxon'
 import { Store } from 'vuex'
 import { ClientService } from '../../../../src/services'
 import { useClipboard } from '@vueuse/core'
-import { Ability } from 'web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Language } from 'vue3-gettext'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 jest.mock('@vueuse/core', () => ({
   useClipboard: jest.fn().mockReturnValue({ copy: jest.fn() })
@@ -41,7 +41,7 @@ const mockResource = mock<Resource>({
 const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })
 
 let returnBitmask = 1
-jest.mock('web-client/src/helpers/share', () => ({
+jest.mock('@ownclouders/web-client/src/helpers/share', () => ({
   LinkShareRoles: {
     getByName: jest.fn().mockReturnValue({ bitmask: jest.fn(() => returnBitmask) })
   },

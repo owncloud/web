@@ -132,13 +132,13 @@ import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
-import { Share, SharePermissions, ShareTypes } from 'web-client/src/helpers/share'
+import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   queryItemAsString,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault
 } from '@ownclouders/web-pkg'
-import { extractDomSelector } from 'web-client/src/helpers/resource'
+import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'

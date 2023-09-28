@@ -1,5 +1,5 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultComponentMocks,
@@ -8,7 +8,7 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 const getResourceMock = ({
   type = 'file',

@@ -12,7 +12,7 @@ import {
   isUserContext
 } from '../../router'
 import { unref } from 'vue'
-import { Ability } from 'web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 
 export class AuthService {

@@ -1,5 +1,5 @@
 import index from '../../src/index'
-import { Ability } from 'web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { mock } from 'jest-mock-extended'
 
 const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })

@@ -8,8 +8,8 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
-import { Drive } from 'web-client/src/generated'
-import { buildSpace } from 'web-client/src/helpers'
+import { Drive } from '@ownclouders/web-client/src/generated'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 
 export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

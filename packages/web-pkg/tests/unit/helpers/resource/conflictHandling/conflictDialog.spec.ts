@@ -1,5 +1,5 @@
 import { mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { ConflictDialog, ResolveConflict } from '../../../../../src/helpers/resource'
 
 const getConflictDialogInstance = ({ createModal = jest.fn() } = {}) => {

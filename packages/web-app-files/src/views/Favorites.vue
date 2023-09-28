@@ -69,7 +69,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { debounce } from 'lodash-es'
 
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'

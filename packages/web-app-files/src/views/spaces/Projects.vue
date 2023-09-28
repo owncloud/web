@@ -175,20 +175,28 @@ import {
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
-import { isProjectSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import {
+  isProjectSpaceResource,
+  Resource,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
-import { WebDAV } from 'web-client/src/webdav'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
 import { defaultFuseOptions, formatFileSize } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
+import {
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
+} from '@ownclouders/web-client/src/helpers/share'
 import { useKeyboardActions } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableNavigation,

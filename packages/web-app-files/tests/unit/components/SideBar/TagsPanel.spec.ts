@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import TagsPanel from 'web-app-files/src/components/SideBar/TagsPanel.vue'
 import { mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { ClientService, eventBus } from '@ownclouders/web-pkg'
 
 jest.mock('@ownclouders/web-pkg')

@@ -1,7 +1,7 @@
 import { PasswordPolicyService } from '../../../src/services'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers'
 import { Language } from 'vue3-gettext'
-import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
+import { PasswordPolicyCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 
 describe('PasswordPolicyService', () => {
   describe('policy', () => {

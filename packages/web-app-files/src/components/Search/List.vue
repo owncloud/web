@@ -123,7 +123,7 @@ import ListInfo from '../FilesList/ListInfo.vue'
 import { Pagination } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { searchLimit } from '../../search/sdk/list'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import {

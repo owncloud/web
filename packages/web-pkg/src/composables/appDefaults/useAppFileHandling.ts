@@ -1,13 +1,13 @@
 import { unref } from 'vue'
 
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { MaybeRef } from '../../utils'
 import { ClientService } from '../../services'
 import { FileContext } from './types'
-import { FileResource, SpaceResource } from 'web-client/src/helpers'
+import { FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '../clientService'
-import { ListFilesOptions } from 'web-client/src/webdav/listFiles'
-import { WebDAV } from 'web-client/src/webdav'
+import { ListFilesOptions } from '@ownclouders/web-client/src/webdav/listFiles'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 
 interface AppFileHandlingOptions {
   clientService: ClientService

@@ -1,4 +1,8 @@
-import { Resource, SpaceResource, extractNameWithoutExtension } from 'web-client/src/helpers'
+import {
+  Resource,
+  SpaceResource,
+  extractNameWithoutExtension
+} from '@ownclouders/web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, Ref, unref } from 'vue'
 import { useClientService } from '../../clientService'
@@ -9,11 +13,11 @@ import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
 import { join } from 'path'
-import { WebDAV } from 'web-client/src/webdav'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'

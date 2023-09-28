@@ -131,7 +131,7 @@ import {
   LinkShareRoles,
   Share,
   SharePermissions
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import { showQuickLinkPasswordModal } from '@ownclouders/web-pkg'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
@@ -142,7 +142,7 @@ import {
   SpaceResource,
   isProjectSpaceResource,
   isShareSpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from '@ownclouders/web-pkg'

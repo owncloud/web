@@ -8,7 +8,7 @@ import {
 import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import App from '../../src/App.vue'
 
 jest.mock('@ownclouders/web-pkg')

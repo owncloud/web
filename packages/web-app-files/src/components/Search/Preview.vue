@@ -39,7 +39,7 @@ import {
   isShareRoot,
   isShareSpaceResource,
   Resource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { SearchResultValue } from 'web-app-search/src/types'

@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 import OcImg from '../OcImage/OcImage.vue'
 import OcResource from '../OcResource/OcResource.vue'

@@ -1,12 +1,12 @@
 import { SearchList, SearchResult } from 'web-app-search/src/types'
 import ListComponent from '../../components/Search/List.vue'
 import { ClientService } from '@ownclouders/web-pkg'
-import { ProjectSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
+import { ProjectSpaceResource, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Component, computed, Ref, unref } from 'vue'
-import { DavProperties } from 'web-client/src/webdav/constants'
+import { DavProperties } from '@ownclouders/web-client/src/webdav/constants'
 import { Store } from 'vuex'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export const searchLimit = 200
 

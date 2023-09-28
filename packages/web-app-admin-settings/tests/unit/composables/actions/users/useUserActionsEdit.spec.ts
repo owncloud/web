@@ -1,7 +1,7 @@
 import { useUserActionsEdit } from '../../../../../src/composables/actions/users/useUserActionsEdit'
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { User } from 'web-client/src/generated'
+import { User } from '@ownclouders/web-client/src/generated'
 import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useUserActionsEdit', () => {

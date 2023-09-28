@@ -5,8 +5,8 @@ import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
-import { Drive } from 'web-client/src/generated'
-import { buildSpace } from 'web-client/src/helpers'
+import { Drive } from '@ownclouders/web-client/src/generated'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 
 export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

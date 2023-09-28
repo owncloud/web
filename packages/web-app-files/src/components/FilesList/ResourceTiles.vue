@@ -98,7 +98,7 @@
 <script lang="ts">
 import { onBeforeUpdate, defineComponent, nextTick, PropType, computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useStore, SortDir, SortField, ViewModeConstants } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'

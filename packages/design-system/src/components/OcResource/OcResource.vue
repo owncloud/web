@@ -82,7 +82,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcResourceName from '../OcResourceName/OcResourceName.vue'
 import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
 import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 
 /**
  * Displays a resource together with the resource type icon or thumbnail

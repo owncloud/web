@@ -1,5 +1,5 @@
 import { useFileActionsSetReadme } from '../../../../../src/composables/actions'
-import { buildSpace, FileResource, SpaceResource } from 'web-client/src/helpers'
+import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 
 import {
@@ -11,8 +11,8 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { nextTick, unref } from 'vue'
-import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
-import { Drive } from 'web-client/src/generated'
+import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('setReadme', () => {
   describe('isEnabled property', () => {

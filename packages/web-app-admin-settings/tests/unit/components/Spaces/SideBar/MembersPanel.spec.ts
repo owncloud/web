@@ -1,7 +1,7 @@
 import MembersPanel from '../../../../../src/components/Spaces/SideBar/MembersPanel.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 const spaceMock = mock<SpaceResource>({
   spaceRoles: {

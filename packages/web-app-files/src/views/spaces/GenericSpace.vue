@@ -143,14 +143,14 @@ import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref,
 import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 
 import { useFileActions } from '@ownclouders/web-pkg'
 

@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, PropType, unref } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
 import { AVAILABLE_SIZES, IconType } from '../../helpers'

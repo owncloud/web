@@ -8,7 +8,7 @@ import {
   MustContainRule,
   MustNotBeEmptyRule
 } from './rules'
-import { PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
+import { PasswordPolicyCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 import get from 'lodash-es/get'
 import { Store } from 'vuex'
 import { PasswordPolicy } from 'password-sheriff'

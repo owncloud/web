@@ -1,4 +1,4 @@
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createLocationSpaces } from '../../router'
 import { createFileRouteOptions } from '../../helpers/router'
 import { RouteLocationNamedRaw } from 'vue-router'

@@ -12,7 +12,7 @@ import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
