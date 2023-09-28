@@ -214,6 +214,7 @@ export default defineComponent({
   },
   data() {
     return {
+      isDicomFileRendered: false,
       isMetaDataSet: false,
       element: null,
       renderingEngine: null,
