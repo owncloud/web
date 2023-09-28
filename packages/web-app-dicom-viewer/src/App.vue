@@ -194,8 +194,7 @@ export default defineComponent({
       dicomFileName: null,
       imageData: null,
       metaDataElement: null,
-      metaDataItems: null,
-      dicomUrl: null
+      metaDataItems: null
     }
   },
   watch: {},
@@ -260,44 +259,39 @@ export default defineComponent({
     // get resource
     // ensure resource url is not empty!
     if (this.url != null && this.url != undefined && this.url != '') {
-      this.dicomUrl = this.url
+      if (this.resource != (null || undefined)) {
+        this.dicomFileName = this.resource.name
+      }
+
+      let dicomImageURL = await this.addWadouriPrefix(this.url)
+
+      /*
+      // file manager is only needed if resource is passed along as file
+      const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
+      */
+
+      // define a stack containing a single image
+      const dicomStack = [dicomImageURL]
+
+      // maybe preload meta data into memory?
+      // might only be needed if there is a stack of files
+      // await this.prefetchMetadataInformation(dicomStack)
+
+      // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
+      await this.viewport.setStack(dicomStack)
+
+      // render the image (updates every viewport in the rendering engine)
+      this.viewport.render()
+      this.isDicomFileRendered = true
+
+      // get metadata
+      this.imageData = this.viewport.getImageData()
+
+      // setting metadata
+      this.setMetadata(dicomImageURL)
     } else {
-      console.log('no valid dicom resource url, using default dicom image (for testing only)')
-      this.dicomUrl =
-        'https://raw.githubusercontent.com/cornerstonejs/cornerstone3D/main/packages/dicomImageLoader/testImages/CTImage.dcm_JPEGLSLosslessTransferSyntax_1.2.840.10008.1.2.4.80.dcm'
+      console.log('no valid dicom resource url')
     }
-    console.log('resource url: ' + this.dicomUrl)
-    if (this.resource != (null || undefined)) {
-      this.dicomFileName = this.resource.name
-    }
-
-    //let dicomImageURL = await this.addWadouriPrefix(this.url)
-    let dicomImageURL = await this.addWadouriPrefix(this.dicomUrl)
-
-    /*
-    // file manager is only needed if resource is passed along as file
-    const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
-    */
-
-    // define a stack containing a single image
-    const dicomStack = [dicomImageURL]
-
-    // maybe preload meta data into memory?
-    // might only be needed if there is a stack of files
-    // await this.prefetchMetadataInformation(dicomStack)
-
-    // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
-    await this.viewport.setStack(dicomStack)
-
-    // render the image (updates every viewport in the rendering engine)
-    this.viewport.render()
-    this.isDicomFileRendered = true
-
-    // get metadata
-    this.imageData = this.viewport.getImageData()
-
-    // setting metadata
-    this.setMetadata(dicomImageURL)
   },
   // "beforeUpdate" is implementing any change in the component
   async beforeUpdate() {
