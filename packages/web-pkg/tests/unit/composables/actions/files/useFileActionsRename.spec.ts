@@ -7,9 +7,9 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from '@ownclouders/web-pkg/src/composables'
+import { useStore } from '../../../../../src/composables'
 import { nextTick, unref } from 'vue'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager } from '../../../../../src/configuration'
 
 jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>

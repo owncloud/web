@@ -1,4 +1,4 @@
-import { getParentPaths } from '@ownclouders/web-pkg/src/helpers/path'
+import { getParentPaths } from '../../../src/helpers/path'
 
 describe('build an array of parent paths from a provided path', () => {
   it('should return an empty array on an empty path', () => {

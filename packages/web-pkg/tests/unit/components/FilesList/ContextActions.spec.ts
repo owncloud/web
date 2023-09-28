@@ -17,7 +17,7 @@ import {
   useFileActionsCopy
 } from '../../../../src/composables'
 import { computed, ref } from 'vue'
-import { Action } from '@ownclouders/web-pkg'
+import { Action } from '../../../../src/composables/actions'
 
 function createMockActionComposables(module) {
   const mockModule: Record<string, any> = {}

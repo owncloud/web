@@ -61,7 +61,7 @@ import { WebDAV } from 'web-client/src/webdav'
 import { defineComponent, inject, ref, Ref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
 import { SharePermissions } from 'web-client/src/helpers/share'
-import { useClientService } from 'web-pkg/src/composables'
+import { useClientService } from '@ownclouders/web-pkg/src/composables'
 import { formatDateFromJSDate } from '@ownclouders/web-pkg'
 import { useDownloadFile } from '@ownclouders/web-pkg'
 

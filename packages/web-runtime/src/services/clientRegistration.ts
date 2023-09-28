@@ -1,4 +1,4 @@
-import { buildUrl } from 'web-pkg/src/helpers/router/buildUrl'
+import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { v4 as uuidV4 } from 'uuid'
 import { router } from 'web-runtime/src/router'
 

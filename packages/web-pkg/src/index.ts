@@ -7,9 +7,13 @@ export * from './errors'
 export * from './helpers'
 export * from './http'
 export * from './observer'
+export { default as quickActions } from './quickActions'
 export * from './quickActions'
 export * from './router'
 export * from './services'
 export * from './types'
 export * from './ui'
 export * from './utils'
+
+// FIXME: do we really want this?
+export * from './cern'

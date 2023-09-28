@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../src/http'
-import { ClientService, ConfigurationManager } from '@ownclouders/web-pkg'
+import { ClientService, ConfigurationManager } from '../../../src/'
 import { Language } from 'vue3-gettext'
 import { Store } from 'vuex'
 import mockAxios from 'jest-mock-axios'

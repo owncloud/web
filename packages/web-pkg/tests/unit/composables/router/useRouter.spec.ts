@@ -1,4 +1,4 @@
-import { useRouter } from '@ownclouders/web-pkg/src/composables'
+import { useRouter } from '../../../../src/composables/router'
 import { createRouter, getComposableWrapper } from 'web-test-helpers'
 
 describe.skip('useRouter', () => {

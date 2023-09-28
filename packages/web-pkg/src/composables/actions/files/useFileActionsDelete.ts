@@ -1,4 +1,4 @@
-import { useFileActionsDeleteResources } from '@ownclouders/web-pkg/src/composables'
+import { useFileActionsDeleteResources } from '../helpers'
 import { Store } from 'vuex'
 import {
   isLocationPublicActive,
@@ -7,14 +7,11 @@ import {
   isLocationCommonActive
 } from '../../../router'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
-import {
-  useCapabilityFilesPermanentDeletion,
-  useCapabilitySpacesEnabled,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useCapabilityFilesPermanentDeletion, useCapabilitySpacesEnabled } from '../../capability'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { FileAction, FileActionOptions } from '../types'
 import { computed, unref } from 'vue'
 
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {

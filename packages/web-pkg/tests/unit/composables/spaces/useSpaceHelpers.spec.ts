@@ -1,4 +1,4 @@
-import { useSpaceHelpers } from '@ownclouders/web-pkg/src/composables'
+import { useSpaceHelpers } from '../../../../src/composables/spaces'
 import {
   createStore,
   defaultComponentMocks,

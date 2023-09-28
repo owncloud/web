@@ -1,4 +1,4 @@
-import ContextMenuQuickAction from '@ownclouders/web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import ContextMenuQuickAction from '../../../../src/components/ContextActions/ContextMenuQuickAction.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('ContextMenuQuickAction component', () => {

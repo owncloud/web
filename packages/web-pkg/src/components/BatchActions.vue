@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import ActionMenuItem from '@ownclouders/web-pkg/src/components/ContextActions/ActionMenuItem.vue'
+import ActionMenuItem from './ContextActions/ActionMenuItem.vue'
 import { defineComponent, PropType } from 'vue'
 import { Action, ActionOptions } from '../composables/actions'
 

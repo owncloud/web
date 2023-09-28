@@ -1,13 +1,15 @@
 import quickActions, { canShare } from '../../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { eventBus } from '@ownclouders/web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { eventBus } from '../../../services'
+import { SideBarEventTopics } from '../../sideBar'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useIsFilesAppActive, useRouter, useStore } from '@ownclouders/web-pkg/src/composables'
+import { useIsFilesAppActive } from '../helpers'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { Store } from 'vuex'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { FileAction, FileActionOptions } from '../types'
 
 export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

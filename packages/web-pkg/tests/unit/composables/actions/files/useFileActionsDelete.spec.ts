@@ -1,9 +1,11 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { useFileActionsDelete } from '@ownclouders/web-pkg'
-import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
+import {
+  useFileActionsDeleteResources,
+  useFileActionsDelete
+} from '../../../../../src/composables/actions'
 import { Resource, SpaceResource } from 'web-client'
-import { useStore } from '@ownclouders/web-pkg/src/composables'
+import { useStore } from '../../../../../src/composables/store'
 
 import {
   createStore,

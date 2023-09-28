@@ -2,7 +2,8 @@ import { mock } from 'jest-mock-extended'
 import Preview from 'web-app-files/src/components/Search/Preview.vue'
 import { SpaceResource } from 'web-client/src'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
-import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg'
+// FIXME:
+import { useGetMatchingSpaceMock } from '../../../../../web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 import {
   createStore,
   defaultComponentMocks,

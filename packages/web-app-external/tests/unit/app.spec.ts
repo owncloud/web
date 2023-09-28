@@ -11,8 +11,7 @@ import { ref } from 'vue'
 import { Resource } from 'web-client'
 import App from '../../src/App.vue'
 
-jest.mock('@ownclouders/web-pkg)
-jest.mock('@ownclouders/web-pkg)
+jest.mock('@ownclouders/web-pkg')
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
 

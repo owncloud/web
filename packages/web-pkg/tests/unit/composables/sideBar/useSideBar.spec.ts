@@ -1,4 +1,4 @@
-import { EventBus } from '@ownclouders/web-pkg/src/services/eventBus'
+import { EventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from '../../../../src/composables/sideBar'
 import { unref } from 'vue'
 import { getComposableWrapper } from 'web-test-helpers'

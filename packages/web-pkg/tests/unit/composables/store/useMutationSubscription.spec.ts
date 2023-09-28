@@ -1,5 +1,5 @@
 import { MutationPayload } from 'vuex'
-import { useMutationSubscription, useStore } from '@ownclouders/web-pkg/src/composables'
+import { useMutationSubscription, useStore } from '../../../../src/composables'
 import { createStore, getComposableWrapper } from 'web-test-helpers'
 
 describe('subscribeMutation', () => {

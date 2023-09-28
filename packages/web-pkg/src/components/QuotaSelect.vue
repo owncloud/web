@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { formatFileSize } from '@ownclouders/web-pkg'
+import { formatFileSize } from '../helpers'
 
 export default {
   name: 'QuotaSelect',

@@ -1,10 +1,10 @@
 import { computed, unref } from 'vue'
 import { Resource } from 'web-client/src'
-import { queryItemAsString } from '@ownclouders/web-pkg/src/composables/appDefaults/useAppNavigation'
-import { useStore } from '@ownclouders/web-pkg/src/composables/store/useStore'
-import { eventBus } from '@ownclouders/web-pkg/src/services'
-import { useRouteQuery } from '@ownclouders/web-pkg/src/composables'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { queryItemAsString } from '../appDefaults/useAppNavigation'
+import { useStore } from '../store/useStore'
+import { eventBus } from '../../services'
+import { useRouteQuery } from '../router'
+import { SideBarEventTopics } from '../sideBar'
 
 export interface ScrollToResult {
   scrollToResource(

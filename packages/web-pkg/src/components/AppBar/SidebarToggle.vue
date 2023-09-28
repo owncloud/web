@@ -13,8 +13,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { eventBus } from '@ownclouders/web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { eventBus } from '../../services/eventBus'
+import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default defineComponent({
   props: {

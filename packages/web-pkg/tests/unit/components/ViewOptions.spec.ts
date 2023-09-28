@@ -8,18 +8,14 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import ViewOptions from '@ownclouders/web-pkg/src/components/ViewOptions.vue'
-import {
-  ViewModeConstants,
-  useRouteQuery,
-  useRouteQueryPersisted
-} from '@ownclouders/web-pkg/src/composables'
+import ViewOptions from '../../../src/components/ViewOptions.vue'
+import { ViewModeConstants, useRouteQuery, useRouteQueryPersisted } from '../../../src/composables'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useRouteQueryPersisted: jest.fn(),
-  useRouteQuery: jest.fn()
-}))
+// jest.mock('@ownclouders/web-pkg', () => ({
+//   ...jest.requireActual('@ownclouders/web-pkg'),
+//   useRouteQueryPersisted: jest.fn(),
+//   useRouteQuery: jest.fn()
+// }))
 
 const selectors = {
   pageSizeSelect: '.oc-page-size',

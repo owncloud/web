@@ -10,6 +10,7 @@ import {
 } from 'web-test-helpers'
 import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
 import { Resource } from 'web-client/src'
+import { mock } from 'jest-mock-extended'
 
 describe('ReadmeContentModal', () => {
   describe('method "editReadme"', () => {

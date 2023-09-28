@@ -2,7 +2,7 @@ import {
   isLocationActive,
   isLocationActiveDirector,
   createLocation
-} from '@ownclouders/web-pkg/src/router/utils'
+} from '../../../src/router/utils'
 import { RouteLocation, Router } from 'vue-router'
 import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'

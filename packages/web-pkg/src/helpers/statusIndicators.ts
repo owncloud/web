@@ -1,9 +1,9 @@
 import { ShareTypes } from 'web-client/src/helpers/share'
-import { eventBus } from '@ownclouders/web-pkg'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { createLocationShares } from '@ownclouders/web-pkg/src/router'
+import { eventBus } from '../services'
+import { SideBarEventTopics } from '../composables/sideBar'
+import { createLocationShares } from '../router'
 import { Resource } from 'web-client'
-import { AncestorMetaData } from '@ownclouders/web-pkg/src/types'
+import { AncestorMetaData } from '../types'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str) => {

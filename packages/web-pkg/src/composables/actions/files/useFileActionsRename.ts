@@ -9,19 +9,17 @@ import {
   isShareSpaceResource,
   extractNameWithoutExtension
 } from 'web-client/src/helpers'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '../../../helpers/router'
 import { renameResource as _renameResource } from '../../../helpers/resource'
 import { computed, unref } from 'vue'
-import {
-  useClientService,
-  useConfigurationManager,
-  useLoadingService,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useClientService } from '../../clientService'
+import { useConfigurationManager } from '../../configuration'
+import { useLoadingService } from '../../loadingService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
-import { useCapabilityFilesSharingCanRename } from '@ownclouders/web-pkg/src/composables/capability'
+import { FileAction, FileActionOptions } from '../types'
+import { useCapabilityFilesSharingCanRename } from '../../capability'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

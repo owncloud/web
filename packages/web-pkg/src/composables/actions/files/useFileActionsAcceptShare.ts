@@ -4,18 +4,15 @@ import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from 'web-client/src/helpers/share'
 import { isLocationSharesActive, isLocationSpacesActive } from '../../../router'
-import {
-  useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled,
-  useClientService,
-  useConfigurationManager,
-  useLoadingService,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
+import { useClientService } from '../../clientService'
+import { useConfigurationManager } from '../../configuration'
+import { useLoadingService } from '../../loadingService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg/types'
+import { FileAction, FileActionOptions } from '../../actions'
 
 export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

@@ -1,4 +1,4 @@
-import SpaceDetailsMultiple from '@ownclouders/web-pkg/src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
+import SpaceDetailsMultiple from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const spaceMock = {

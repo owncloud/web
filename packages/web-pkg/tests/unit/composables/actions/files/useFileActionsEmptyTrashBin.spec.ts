@@ -1,5 +1,5 @@
 import { useFileActionsEmptyTrashBin } from '../../../../../src/composables/actions'
-import { createLocationTrash, createLocationSpaces } from '@ownclouders/web-pkg/src/router'
+import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -8,10 +8,10 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import { useStore } from '@ownclouders/web-pkg/src/composables'
+import { useStore } from '../../../../../src/composables/store'
 import { unref } from 'vue'
 import { ProjectSpaceResource, Resource } from 'web-client/src/helpers'
-import { FileActionOptions } from '@ownclouders/web-pkg'
+import { FileActionOptions } from '../../../../../src/composables/actions'
 
 describe('emptyTrashBin', () => {
   afterEach(() => jest.clearAllMocks())

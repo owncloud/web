@@ -66,8 +66,9 @@ import { defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import omit from 'lodash-es/omit'
-import { defaultFuseOptions, useRoute, useRouteQuery, useRouter } from '@ownclouders/web-pkg'
-import { queryItemAsString } from '@ownclouders/web-pkg'
+import { useRoute, useRouteQuery, useRouter } from '../composables'
+import { defaultFuseOptions } from '../helpers'
+import { queryItemAsString } from '../composables/appDefaults'
 
 export default defineComponent({
   name: 'ItemFilter',

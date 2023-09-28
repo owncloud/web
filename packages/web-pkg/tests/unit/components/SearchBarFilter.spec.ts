@@ -1,8 +1,8 @@
-import { useRouteQuery } from '@ownclouders/web-pkg'
-import SearchBarFilter from '@ownclouders/web-pkg/src/components/SearchBarFilter.vue'
+import { useRouteQuery } from '../../../src/composables/router'
+import SearchBarFilter from '../../../src/components/SearchBarFilter.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg')
+//jest.mock('@ownclouders/web-pkg')
 
 const selectors = {
   filterChipStub: 'oc-filter-chip-stub'

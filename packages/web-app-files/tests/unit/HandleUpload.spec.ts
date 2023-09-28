@@ -6,7 +6,7 @@ import { Resource, SpaceResource } from 'web-client/src'
 import { UppyService } from 'web-runtime/src/services/uppyService'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { ref, unref } from 'vue'
-import { ClientService } from 'web-pkg/src'
+import { ClientService } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
 

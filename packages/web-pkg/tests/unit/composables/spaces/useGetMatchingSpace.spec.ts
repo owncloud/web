@@ -1,4 +1,4 @@
-import { useGetMatchingSpace } from '@ownclouders/web-pkg/src/composables'
+import { useGetMatchingSpace } from '../../../../src/composables/spaces'
 import {
   createStore,
   defaultComponentMocks,

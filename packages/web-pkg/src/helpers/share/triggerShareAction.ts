@@ -1,6 +1,6 @@
 import { Resource, SpaceResource } from 'web-client/src'
 import { aggregateResourceShares, ShareStatus } from 'web-client/src/helpers/share'
-import { HttpError } from '@ownclouders/web-pkg/src/errors'
+import { HttpError } from '../../errors'
 import { OwnCloudSdk } from 'web-client/src/types'
 
 export async function triggerShareAction({

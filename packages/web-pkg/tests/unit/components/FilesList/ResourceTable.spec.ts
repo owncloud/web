@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
-import ResourceTable from '@ownclouders/web-pkg/src/components/FilesList/ResourceTable.vue'
+import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from 'web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
-import { ConfigurationManager, displayPositionedDropdown, eventBus } from '@ownclouders/web-pkg'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { ConfigurationManager, displayPositionedDropdown, eventBus } from '../../../../src'
+import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock, mockDeep } from 'jest-mock-extended'
 
 jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({

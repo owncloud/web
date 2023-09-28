@@ -1,6 +1,7 @@
 import { computed, unref, WritableComputedRef, Ref } from 'vue'
 import { Resource } from 'web-client'
-import { useGetMatchingSpace, useStore } from '@ownclouders/web-pkg/src/composables'
+import { useGetMatchingSpace } from '../spaces'
+import { useStore } from '../store'
 import { Store } from 'vuex'
 import { SpaceResource } from 'web-client/src/helpers'
 

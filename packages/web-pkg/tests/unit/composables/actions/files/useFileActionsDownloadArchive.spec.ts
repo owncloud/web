@@ -10,7 +10,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useArchiverService, useStore } from '@ownclouders/web-pkg/src/composables'
+import { useArchiverService, useStore } from '../../../../../src/composables'
 
 jest.mock('@ownclouders/web-pkg/src/composables/archiverService/useArchiverService')
 

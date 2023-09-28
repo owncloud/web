@@ -1,4 +1,4 @@
-import LoadingScreen from '@ownclouders/web-pkg/src/components/AppTemplates/PartialViews/LoadingScreen.vue'
+import LoadingScreen from '../../../../src/components/AppTemplates/PartialViews/LoadingScreen.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('The external app loading screen component', () => {

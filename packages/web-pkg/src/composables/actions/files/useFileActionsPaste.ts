@@ -6,14 +6,12 @@ import {
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import {
-  useClientService,
-  useGetMatchingSpace,
-  useLoadingService,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { useGetMatchingSpace } from '../../spaces'
+import { useClientService } from '../../clientService'
+import { useLoadingService } from '../../loadingService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
+import { FileAction, FileActionOptions } from '../types'
 import { Resource, SpaceResource } from 'web-client'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {

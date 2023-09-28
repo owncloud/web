@@ -32,10 +32,11 @@
 <script lang="ts">
 import { computed, defineComponent, unref, PropType, ref, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import QuotaSelect from '@ownclouders/web-pkg/src/components/QuotaSelect.vue'
+import QuotaSelect from '../QuotaSelect.vue'
 import { SpaceResource } from 'web-client/src'
-import { eventBus, useClientService, useRouter } from '@ownclouders/web-pkg'
-import { useStore, useLoadingService } from '@ownclouders/web-pkg/src/composables'
+import { useClientService, useRouter } from '../../composables'
+import { eventBus } from '../../services'
+import { useStore, useLoadingService } from '../../composables'
 import { Drive } from 'web-client/src/generated'
 
 export default defineComponent({

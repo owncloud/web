@@ -1,15 +1,13 @@
 import { isLocationSpacesActive } from '../../../router'
 import { Store } from 'vuex'
-import {
-  useClientService,
-  useLoadingService,
-  useRouter,
-  useStore,
-  usePreviewService
-} from '@ownclouders/web-pkg/src/composables'
+import { usePreviewService } from '../../previewService'
+import { useClientService } from '../../clientService'
+import { useLoadingService } from '../../loadingService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { FileAction, FileActionOptions } from '../types'
 import { Drive } from 'web-client/src/generated'
 import { buildSpace } from 'web-client/src/helpers'
 

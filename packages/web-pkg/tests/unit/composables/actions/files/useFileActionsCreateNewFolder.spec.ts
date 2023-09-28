@@ -10,8 +10,8 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers/src'
-import { useScrollToMock } from '@ownclouders/web-pkg/tests/mocks/useScrollToMock'
-import { useScrollTo } from '@ownclouders/web-pkg/src/composables/scrollTo'
+import { useScrollToMock } from '../../../../mocks/useScrollToMock'
+import { useScrollTo } from '../../../../../src/composables/scrollTo'
 
 jest.mock('@ownclouders/web-pkg/src/composables/scrollTo')
 

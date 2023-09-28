@@ -928,9 +928,6 @@ importers:
       '@ownclouders/web-client':
         specifier: workspace:*
         version: link:../web-client
-      '@ownclouders/web-pkg':
-        specifier: workspace:*
-        version: 'link:'
       '@vueuse/core':
         specifier: ^10.0.0
         version: 10.3.0(vue@3.3.4)

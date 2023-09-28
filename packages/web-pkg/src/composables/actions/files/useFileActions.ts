@@ -1,16 +1,14 @@
 import kebabCase from 'lodash-es/kebabCase'
 import { Store } from 'vuex'
 import { ShareStatus } from 'web-client/src/helpers/share'
-import { routeToContextQuery } from '@ownclouders/web-pkg'
-import { configurationManager } from '@ownclouders/web-pkg'
+import { routeToContextQuery } from '../../appDefaults'
+import { configurationManager } from '../../../configuration'
 
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
-import {
-  useCapabilityFilesAppProviders,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useStore } from '../../store'
+import { useRouter } from '../../router'
+import { useCapabilityFilesAppProviders } from '../../capability'
 import { useGettext } from 'vue3-gettext'
 import {
   Action,
@@ -18,7 +16,7 @@ import {
   FileActionOptions,
   useIsSearchActive,
   useWindowOpen
-} from '@ownclouders/web-pkg'
+} from '../../actions'
 
 import {
   useFileActionsAcceptShare,

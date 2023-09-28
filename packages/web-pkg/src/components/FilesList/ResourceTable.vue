@@ -234,26 +234,23 @@ import {
   ViewModeConstants,
   useConfigurationManager,
   useGetMatchingSpace
-} from '@ownclouders/web-pkg/src/composables'
+} from '../../composables'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
-  formatRelativeDateFromJSDate
+  formatRelativeDateFromJSDate,
+  isResourceTxtFileAlmostEmpty
 } from '../../helpers'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import ContextMenuQuickAction from '@ownclouders/web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
+import { SideBarEventTopics } from '../../composables/sideBar'
+import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue'
 
-import { useResourceRouteResolver } from '@ownclouders/web-pkg/src/composables/filesList/useResourceRouteResolver'
-import { ClipboardActions } from '@ownclouders/web-pkg/src/helpers/clipboardActions'
-import { determineSortFields } from '@ownclouders/web-pkg/src/helpers/ui/resourceTable'
+import { useResourceRouteResolver } from '../../composables/filesList/useResourceRouteResolver'
+import { ClipboardActions } from '../../helpers/clipboardActions'
+import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { useFileActionsRename } from '../../composables/actions'
-import {
-  createLocationShares,
-  createLocationCommon,
-  createLocationSpaces
-} from '@ownclouders/web-pkg/src/router'
+import { createLocationShares, createLocationCommon, createLocationSpaces } from '../../router'
 import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable

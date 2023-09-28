@@ -1,5 +1,5 @@
 import { ref, unref } from 'vue'
-import { usePagination } from '@ownclouders/web-pkg/src/composables'
+import { usePagination } from '../../../../src/composables'
 import { getComposableWrapper } from 'web-test-helpers'
 
 describe('usePagination', () => {

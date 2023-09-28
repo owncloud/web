@@ -102,7 +102,7 @@ import {
   ViewModeConstants,
   useRouteName
 } from '../composables'
-import { ViewMode } from '@ownclouders/web-pkg/src/ui/types'
+import { ViewMode } from '../ui/types'
 
 export default defineComponent({
   props: {

@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { useExtensionRegistry } from '@ownclouders/web-pkg'
+import { useExtensionRegistry } from '../../../web-pkg/src'
 
 export const useExtensionRegistryMock = (
   options: Partial<ReturnType<typeof useExtensionRegistry>> = {}

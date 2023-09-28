@@ -5,7 +5,7 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
-import AppBanner from 'web-pkg/src/components/AppBanner.vue'
+import AppBanner from '../../../src/components/AppBanner.vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { useSessionStorage } from '@vueuse/core'
 import { ref } from 'vue'

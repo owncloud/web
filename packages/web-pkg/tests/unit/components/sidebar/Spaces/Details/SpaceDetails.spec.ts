@@ -1,4 +1,4 @@
-import SpaceDetails from '@ownclouders/web-pkg/src/components/SideBar/Spaces/Details/SpaceDetails.vue'
+import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
 import { spaceRoleManager, ShareTypes } from 'web-client/src/helpers/share'
 import {
   createStore,

@@ -7,7 +7,7 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from '@ownclouders/web-pkg/src/composables'
+import { useStore } from '../../../../../src/composables'
 import { nextTick } from 'vue'
 
 const currentFolder = {

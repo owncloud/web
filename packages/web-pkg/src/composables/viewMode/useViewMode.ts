@@ -1,6 +1,6 @@
 import { computed, ComputedRef, unref } from 'vue'
-import { queryItemAsString } from '@ownclouders/web-pkg'
-import { useRouteQueryPersisted } from '@ownclouders/web-pkg'
+import { queryItemAsString } from '../appDefaults'
+import { useRouteQueryPersisted } from '../router'
 import { ViewModeConstants } from './constants'
 
 export function useViewMode(options: ComputedRef<string>): ComputedRef<string> {

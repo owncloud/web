@@ -4,7 +4,7 @@ import {
   UserManager as OidcUserManager,
   UserManagerSettings
 } from 'oidc-client-ts'
-import { buildUrl } from 'web-pkg/src/helpers/router/buildUrl'
+import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'

@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import ContextActionMenu from '@ownclouders/web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
 
 import { useStore } from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
@@ -29,9 +29,9 @@ import {
   useFileActionsShowEditTags,
   useFileActionsNavigate,
   useFileActionsFavorite,
-  useFileActionsCreateSpaceFromResource
-} from '@ownclouders/web-pkg'
-import { FileActionOptions } from '@ownclouders/web-pkg'
+  useFileActionsCreateSpaceFromResource,
+  FileActionOptions
+} from '../../composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',

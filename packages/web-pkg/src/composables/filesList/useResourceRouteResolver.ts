@@ -1,9 +1,9 @@
 import { unref, Ref } from 'vue'
 
-import { ConfigurationManager } from '@ownclouders/web-pkg'
-import { useGetMatchingSpace } from '@ownclouders/web-pkg/src/composables'
-import { useConfigurationManager } from '@ownclouders/web-pkg/src/composables/configuration'
-import { createFileRouteOptions } from '@ownclouders/web-pkg/src/helpers/router'
+import { ConfigurationManager } from '../../configuration'
+import { useGetMatchingSpace } from '../spaces'
+import { createFileRouteOptions } from '../../helpers/router'
+import { useConfigurationManager } from '../configuration'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
 import { Resource, SpaceResource } from 'web-client/src'

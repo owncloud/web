@@ -2,7 +2,7 @@ import { mock } from 'jest-mock-extended'
 import { SpaceResource } from 'web-client/src'
 import { RouteLocation, getComposableWrapper } from 'web-test-helpers/src'
 import { useBreadcrumbsFromPath } from '../../../../src/composables/breadcrumbs'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager } from '../../../../src/configuration'
 
 jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>

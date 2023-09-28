@@ -93,9 +93,10 @@ import { getRelativeSpecialFolderSpacePath, SpaceResource } from 'web-client/src
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { useStore, usePreviewService, useClientService } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
-import { formatDateFromISO } from '@ownclouders/web-pkg/src/helpers'
-import { eventBus } from '@ownclouders/web-pkg/src/services/eventBus'
-import { ImageDimension, SideBarEventTopics } from '@ownclouders/web-pkg'
+import { formatDateFromISO } from '../../../../helpers'
+import { eventBus } from '../../../../services/eventBus'
+import { SideBarEventTopics } from '../../../../composables'
+import { ImageDimension } from '../../../../constants'
 
 export default defineComponent({
   name: 'SpaceDetails',

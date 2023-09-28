@@ -1,9 +1,7 @@
-import {
-  useCapabilitySpacesEnabled,
-  useConfigurationManager,
-  useRouteParam,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useCapabilitySpacesEnabled } from '../capability'
+import { useStore } from '../store'
+import { useConfigurationManager } from '../configuration'
+import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from 'web-client'
 import {
   MountPointSpaceResource,

@@ -3,15 +3,14 @@ import { isLocationTrashActive } from '../../../router'
 import { SpaceResource } from 'web-client/src/helpers'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { computed, unref } from 'vue'
-import {
-  useCapabilityFilesPermanentDeletion,
-  useClientService,
-  useLoadingService,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useCapabilityFilesPermanentDeletion } from '../../capability'
+import { useClientService } from '../../clientService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
+
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '@ownclouders/web-pkg'
+import { FileAction, FileActionOptions } from '../types'
+import { useLoadingService } from '../../loadingService'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

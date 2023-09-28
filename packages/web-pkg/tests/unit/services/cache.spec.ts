@@ -1,5 +1,5 @@
-import { cacheService } from '@ownclouders/web-pkg/src/services'
-import { Cache } from '@ownclouders/web-pkg/src/helpers/cache'
+import { cacheService } from '../../../src/services'
+import { Cache } from '../../../src/helpers/cache'
 
 describe('cache', () => {
   describe('cacheService', () => {

@@ -5,7 +5,7 @@ import { useAppMeta } from './useAppMeta'
 import { useDocumentTitle } from './useDocumentTitle'
 import { Store } from 'vuex'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { MaybeRef } from '@ownclouders/web-pkg'
+import { MaybeRef } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 interface AppDocumentTitleOptions {

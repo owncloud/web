@@ -2,10 +2,10 @@
 import major from 'semver/functions/major'
 import rcompare from 'semver/functions/rcompare'
 
-import { HttpError, RuntimeError } from '@ownclouders/web-pkg/src/errors'
-import { ClientService } from '@ownclouders/web-pkg'
+import { HttpError, RuntimeError } from '../errors'
+import { ClientService } from '../services'
 import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from '@ownclouders/web-pkg'
+import { configurationManager } from '../configuration'
 import { triggerDownloadWithFilename } from '../../'
 
 import { Ref, ref, computed, unref } from 'vue'

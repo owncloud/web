@@ -3,12 +3,10 @@ import { computed, unref } from 'vue'
 import { Store } from 'vuex'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
-import {
-  useAbility,
-  useClientService,
-  useLoadingService,
-  useStore
-} from '@ownclouders/web-pkg/src/composables'
+import { useAbility } from '../../ability'
+import { useClientService } from '../../clientService'
+import { useLoadingService } from '../../loadingService'
+import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from 'web-client/src/helpers'
 

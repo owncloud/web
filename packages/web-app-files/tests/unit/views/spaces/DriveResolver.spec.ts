@@ -16,7 +16,9 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg'
+
+// FIXME:
+import { useGetMatchingSpaceMock } from '../../../../../web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 
 jest.mock('@ownclouders/web-pkg')
 

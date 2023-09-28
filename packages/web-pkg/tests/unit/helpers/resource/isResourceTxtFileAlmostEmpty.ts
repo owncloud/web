@@ -1,5 +1,5 @@
 import { Resource } from 'web-client/src'
-import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resource'
+import { isResourceTxtFileAlmostEmpty } from '../../../../src/helpers/resource'
 
 describe('isResourceTxtFileAlmostEmpty', () => {
   it('return true for resources smaller 30 bytes', () => {

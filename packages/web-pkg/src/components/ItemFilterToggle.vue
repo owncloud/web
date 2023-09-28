@@ -13,8 +13,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, unref } from 'vue'
 import omit from 'lodash-es/omit'
-import { useRoute, useRouteQuery, useRouter } from '@ownclouders/web-pkg'
-import { queryItemAsString } from '@ownclouders/web-pkg'
+import { useRoute, useRouteQuery, useRouter, queryItemAsString } from '../composables'
 
 export default defineComponent({
   name: 'ItemFilterToggle',
