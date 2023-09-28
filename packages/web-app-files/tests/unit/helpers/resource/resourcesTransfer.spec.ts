@@ -4,6 +4,7 @@ import { ResolveConflict, resolveFileNameDuplicate } from 'web-pkg/src/helpers/r
 import { mock, mockDeep, mockReset } from 'jest-mock-extended'
 import { buildSpace, Resource } from 'web-client/src/helpers'
 import { ListFilesResult } from 'web-client/src/webdav/listFiles'
+import { Drive } from 'web-client/src/generated'
 
 const clientServiceMock = mockDeep<ClientService>()
 const loadingServiceMock = mock<LoadingService>({
@@ -34,7 +35,7 @@ describe('resourcesTransfer', () => {
     ]
     const spaceOptions = {
       id: 'c42c9504-2c19-44fd-87cc-b4fc20ecbb54'
-    }
+    } as unknown as Drive
     sourceSpace = buildSpace(spaceOptions)
     targetSpace = buildSpace(spaceOptions)
     targetFolder = {

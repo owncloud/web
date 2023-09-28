@@ -10,56 +10,60 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
+import { Drive } from 'web-client/src/generated'
 
 describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
     })
     it('should be false when the space is not disabled', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
     })
     it('should be true when the space is disabled', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }],
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }],
           deleted: { state: 'trashed' }
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
     })
     it('should be false when the current user is a viewer', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         root: {
-          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }],
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }],
           deleted: { state: 'trashed' }
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })

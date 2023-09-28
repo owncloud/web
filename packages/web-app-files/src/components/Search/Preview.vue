@@ -24,7 +24,7 @@
 import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
 import { VisibilityObserver } from 'web-pkg/src/observer'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { isResourceTxtFileAlmostEmpty } from 'web-client/src/helpers'
+import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resource'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'

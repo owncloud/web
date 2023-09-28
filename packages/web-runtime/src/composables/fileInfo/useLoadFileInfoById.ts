@@ -2,11 +2,11 @@ import { ClientService } from 'web-pkg/src/services'
 import { useClientService } from 'web-pkg/src/composables'
 import { useTask } from 'vue-concurrency'
 import { buildSpace, buildWebDavSpacesPath } from 'web-client/src/helpers'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { DavProperty, DavPropertyValue } from 'web-client/src/webdav/constants'
 
 export interface LoadFileInfoByIdOptions {
   clientService?: ClientService
-  davProperties?: DavProperty[]
+  davProperties?: DavPropertyValue[]
 }
 
 export const useLoadFileInfoById = (options: LoadFileInfoByIdOptions) => {
@@ -20,7 +20,8 @@ export const useLoadFileInfoById = (options: LoadFileInfoByIdOptions) => {
 
   const loadFileInfoByIdTask = useTask(function* (signal, fileId: string | number) {
     const space = buildSpace({
-      id: fileId,
+      id: fileId.toString(),
+      name: '',
       webDavPath: buildWebDavSpacesPath(fileId)
     })
     return yield webdav.getFileInfo(

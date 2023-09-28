@@ -16,7 +16,7 @@ export const ClearTrashBinFactory = ({ sdk, capabilities, user }: WebDavOptions)
     clearTrashBin(space: SpaceResource, { id }: ClearTrashBinOptions = {}): Promise<void> {
       const hasShareJail = unref(capabilities)?.spaces?.share_jail === true
       const path = hasShareJail
-        ? buildWebDavSpacesTrashPath(space.id)
+        ? buildWebDavSpacesTrashPath(space.id.toString())
         : buildWebDavFilesTrashPath(unref(user).id)
       return sdk.fileTrash.clearTrashBin(path, id)
     }

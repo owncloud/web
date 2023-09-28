@@ -1,18 +1,24 @@
 import { User } from '../user'
-import {
-  buildWebDavSpacesPath,
-  buildWebDavSpacesTrashPath,
-  extractDomSelector,
-  extractNodeId,
-  Resource,
-  SpaceRole
-} from '../resource'
+import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
 
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
 import { urlJoin } from '../../utils'
+import { Drive, DriveItem } from 'web-client/src/generated'
+
+export function buildWebDavSpacesPath(storageId: string | number, path?: string) {
+  return urlJoin('spaces', storageId, path, {
+    leadingSlash: true
+  })
+}
+
+export function buildWebDavSpacesTrashPath(storageId: string, path = '') {
+  return urlJoin('spaces', 'trash-bin', storageId, path, {
+    leadingSlash: true
+  })
+}
 
 export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'image' | 'readme') {
   const typeMap = { image: 'spaceImageData', readme: 'spaceReadmeData' }
@@ -77,8 +83,16 @@ export function buildShareSpaceResource({
   return space
 }
 
-export function buildSpace(data): SpaceResource {
-  let spaceImageData, spaceReadmeData
+export function buildSpace(
+  data: Drive & {
+    path?: string
+    serverUrl?: string
+    shareId?: string | number
+    webDavPath?: string
+    webDavTrashPath?: string
+  }
+): SpaceResource {
+  let spaceImageData: DriveItem, spaceReadmeData: DriveItem
   let disabled = false
   const spaceRoles = Object.fromEntries(SpacePeopleShareRoles.list().map((role) => [role.name, []]))
 
@@ -161,7 +175,7 @@ export function buildSpace(data): SpaceResource {
     permissions: '',
     starred: false,
     etag: '',
-    shareId: data.shareId,
+    shareId: data.shareId?.toString(),
     sharePermissions: '',
     shareTypes: (function () {
       return []

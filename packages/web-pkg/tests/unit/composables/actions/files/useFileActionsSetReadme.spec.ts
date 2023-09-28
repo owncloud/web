@@ -11,6 +11,7 @@ import {
 } from 'web-test-helpers'
 import { nextTick, unref } from 'vue'
 import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
+import { Drive } from 'web-client/src/generated'
 
 describe('setReadme', () => {
   describe('isEnabled property', () => {
@@ -22,11 +23,15 @@ describe('setReadme', () => {
       })
     })
     it('should be false when mimeType is not text', () => {
-      const space = buildSpace({
-        id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
-        special: [{ specialFolder: { name: 'readme' } }]
-      })
+      const space = buildSpace(
+        mock<Drive>({
+          id: '1',
+          root: {
+            permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
+          },
+          special: [{ specialFolder: { name: 'readme' } }]
+        })
+      )
       const { wrapper } = getWrapper({
         resolveGetFileContents: true,
         space,
@@ -41,11 +46,15 @@ describe('setReadme', () => {
       })
     })
     it('should be true when the mimeType is "text/plain"', () => {
-      const space = buildSpace({
-        id: '1',
-        root: { permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }] },
-        special: [{ specialFolder: { name: 'readme' } }]
-      })
+      const space = buildSpace(
+        mock<Drive>({
+          id: '1',
+          root: {
+            permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }]
+          },
+          special: [{ specialFolder: { name: 'readme' } }]
+        })
+      )
       const { wrapper } = getWrapper({
         resolveGetFileContents: true,
         space,
@@ -60,11 +69,15 @@ describe('setReadme', () => {
       })
     })
     it('should be true when the mimeType is text', () => {
-      const space = buildSpace({
-        id: '1',
-        root: { permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }] },
-        special: [{ specialFolder: { name: 'readme' } }]
-      })
+      const space = buildSpace(
+        mock<Drive>({
+          id: '1',
+          root: {
+            permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }]
+          },
+          special: [{ specialFolder: { name: 'readme' } }]
+        })
+      )
       const { wrapper } = getWrapper({
         resolveGetFileContents: true,
         space,

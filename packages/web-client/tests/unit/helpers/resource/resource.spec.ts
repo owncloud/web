@@ -1,10 +1,9 @@
 import {
+  Resource,
   extractDomSelector,
   extractExtensionFromFile,
-  extractNameWithoutExtension,
-  isResourceTxtFileAlmostEmpty
-} from '../../../../src/helpers/resource'
-import { Resource } from 'web-client'
+  extractNameWithoutExtension
+} from 'web-client/src/helpers'
 
 describe('extractDomSelector', () => {
   it.each([
@@ -73,28 +72,6 @@ describe('filterResources', () => {
       { name: 'afolder', type: 'folder' }
     ])('should return empty string if folder', (resource) => {
       expect(extractExtensionFromFile(resource as Resource)).toEqual('')
-    })
-  })
-  describe('isResourceTxtFileAlmostEmpty', () => {
-    it('return true for resources smaller 30 bytes', () => {
-      expect(isResourceTxtFileAlmostEmpty({ mimeType: 'text/plain', size: 20 } as Resource)).toBe(
-        true
-      )
-    })
-    it('return false for resources larger 30 bytes', () => {
-      expect(isResourceTxtFileAlmostEmpty({ mimeType: 'text/plain', size: 35 } as Resource)).toBe(
-        false
-      )
-    })
-    it('return false for resources that are not text', () => {
-      expect(
-        isResourceTxtFileAlmostEmpty({ mimeType: 'application/json', size: 35 } as Resource)
-      ).toBe(false)
-    })
-    it('return false for resources that have undefined mimeType', () => {
-      expect(isResourceTxtFileAlmostEmpty({ mimeType: undefined, size: 35 } as Resource)).toBe(
-        false
-      )
     })
   })
 })

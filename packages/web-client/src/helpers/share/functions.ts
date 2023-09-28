@@ -7,7 +7,7 @@ import {
   extractDomSelector,
   extractExtensionFromFile,
   extractStorageId
-} from '../resource'
+} from '../'
 import { ShareTypes } from './type'
 import path from 'path'
 import { SHARE_JAIL_ID, SpaceResource } from '../space'

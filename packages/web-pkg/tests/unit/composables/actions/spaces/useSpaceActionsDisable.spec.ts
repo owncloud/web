@@ -10,6 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
+import { Drive } from 'web-client/src/generated'
 
 describe('disable', () => {
   describe('isEnabled property', () => {
@@ -21,13 +22,14 @@ describe('disable', () => {
       })
     })
     it('should be true when the space is not disabled', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
@@ -35,13 +37,14 @@ describe('disable', () => {
       })
     })
     it('should be false when the space is disabled', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }],
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }],
           deleted: { state: 'trashed' }
-        }
-      }
+        },
+        special: null
+      })
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
@@ -49,13 +52,14 @@ describe('disable', () => {
       })
     })
     it('should be false when current user is a viewer', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         root: {
-          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }]
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)

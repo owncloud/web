@@ -9,12 +9,14 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
+import { Drive } from 'web-client/src/generated'
 
-const spaceMock = {
+const spaceMock = mock<Drive>({
   id: '1',
-  root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
-  driveType: 'project'
-}
+  root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }] },
+  driveType: 'project',
+  special: null
+})
 
 describe('SpaceContextActions', () => {
   describe('action handlers', () => {

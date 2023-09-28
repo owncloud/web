@@ -6,28 +6,16 @@
 // ```
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
+import { DriveItem } from 'web-client/src/generated'
 import { Resource } from '../resource'
 import { User } from '../user'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
-export interface SpaceResourceRemoteItem {
-  id: string
-  name: string
-  path: string
-  rootId: string
-}
-
-export interface SpaceResourceRoot {
-  id: string
-  remoteItem: SpaceResourceRemoteItem
-  webDavUrl: string
-}
-
 export interface SpaceResource extends Resource {
   disabled?: boolean
   webDavTrashPath: string
-  root: SpaceResourceRoot
+  root: DriveItem
   getWebDavUrl({ path }: { path: string }): string
   getWebDavTrashUrl({ path }: { path: string }): string
   getDriveAliasAndItem(resource: Resource): string

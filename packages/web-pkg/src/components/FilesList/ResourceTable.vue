@@ -220,8 +220,7 @@ import {
   isProjectSpaceResource,
   isShareRoot,
   isShareSpaceResource,
-  SpaceResource,
-  isResourceTxtFileAlmostEmpty
+  SpaceResource
 } from 'web-client/src/helpers'
 import { ShareTypes } from 'web-client/src/helpers/share'
 
@@ -243,6 +242,7 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from 'web-pkg/src/helpers'
+import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resource'
 
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'

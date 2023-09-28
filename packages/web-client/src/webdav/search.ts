@@ -1,14 +1,14 @@
 import { unref } from 'vue'
 import { Resource, buildResource } from '../helpers'
 import { WebDavOptions } from './types'
-import { DavProperties, DavProperty } from './constants'
+import { DavProperties, DavProperty, DavPropertyValue } from './constants'
 
 export interface SearchResource extends Resource {
   highlights: string
 }
 
 export type SearchOptions = {
-  davProperties?: DavProperty[]
+  davProperties?: DavPropertyValue[]
   searchLimit?: number
 }
 

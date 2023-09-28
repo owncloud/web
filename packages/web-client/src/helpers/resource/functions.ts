@@ -1,44 +1,18 @@
-import path, { basename, dirname, join } from 'path'
+import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
-import { Resource } from './types'
-import { SpaceResource } from '../space'
+import { Resource, WebDavResponseResource } from './types'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', '.tar.xz']
 }
 
-export function buildWebDavSpacesPath(storageId: string | number, path?: string) {
-  return urlJoin('spaces', storageId, path, {
-    leadingSlash: true
-  })
-}
-
-export function buildWebDavSpacesTrashPath(storageId, path = '') {
-  return urlJoin('spaces', 'trash-bin', storageId, path, {
-    leadingSlash: true
-  })
-}
-
-export function buildWebDavFilesPath(userId, path) {
+export function buildWebDavFilesPath(userId: string, path: string) {
   return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
 }
 
-export function buildWebDavFilesTrashPath(userId, path = '') {
+export function buildWebDavFilesTrashPath(userId: string, path = '') {
   return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
-  resource.name = basename(newPath)
-  resource.path = newPath
-  resource.webDavPath = join(space.webDavPath, newPath)
-  resource.extension = extractExtensionFromFile(resource)
-  return resource
-}
-
-export function isResourceTxtFileAlmostEmpty(resource: Resource): boolean {
-  const mimeType = resource.mimeType || ''
-  return mimeType.startsWith('text/') && (resource.size as number) < 30
 }
 
 export const extractDomSelector = (str: string): string => {
@@ -101,10 +75,11 @@ export const isShareRoot = (resource: Resource) => {
   return typeof resource.isShareRoot === 'function' && resource.isShareRoot()
 }
 
-export function buildResource(resource): Resource {
+export function buildResource(resource: WebDavResponseResource): Resource {
   const name = resource.fileInfo[DavProperty.Name] || basename(resource.name)
+  const id = resource.fileInfo[DavProperty.FileId]
+
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const extension = extractExtensionFromFile({ ...resource, name })
   let resourcePath: string
 
   if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
@@ -117,14 +92,16 @@ export function buildResource(resource): Resource {
     resourcePath = `/${resourcePath}`
   }
 
+  const extension = extractExtensionFromFile({ ...resource, id, name, path: resourcePath })
+
   const lock = resource.fileInfo[DavProperty.LockDiscovery]
-  let activeLock, lockOwnerName, lockTime
+  let activeLock: string, lockOwnerName: string, lockTime: string
   if (lock) {
     activeLock = lock[DavProperty.ActiveLock]
     lockOwnerName = activeLock[DavProperty.LockOwnerName]
     lockTime = activeLock[DavProperty.LockTime]
   }
-  const id = resource.fileInfo[DavProperty.FileId]
+
   const r = {
     id,
     fileId: id,
@@ -146,7 +123,7 @@ export function buildResource(resource): Resource {
       ? resource.fileInfo[DavProperty.ContentSize]
       : resource.fileInfo[DavProperty.ContentLength],
     indicators: [],
-    permissions: (resource.fileInfo[DavProperty.Permissions] as string) || '',
+    permissions: resource.fileInfo[DavProperty.Permissions] || '',
     starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
     etag: resource.fileInfo[DavProperty.ETag],
     sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
@@ -211,7 +188,7 @@ export function buildResource(resource): Resource {
   return r
 }
 
-export function buildDeletedResource(resource): Resource {
+export function buildDeletedResource(resource: WebDavResponseResource): Resource {
   const isFolder = resource.type === 'dir' || resource.type === 'folder'
   const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
   const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
