@@ -34,6 +34,7 @@ Summary
 * Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
 * Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
 * Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
+* Enhancement - Added app banner for mobile devices: [#9696](https://github.com/owncloud/web/pull/9696)
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 
@@ -287,6 +288,14 @@ Details
 
    https://github.com/owncloud/web/issues/9666
    https://github.com/owncloud/web/pull/9691
+
+* Enhancement - Added app banner for mobile devices: [#9696](https://github.com/owncloud/web/pull/9696)
+
+   We've added an app banner at the top of the web view for mobile devices asking the user whether
+   they want to continue working in the app. By dismissing it, it will not show again until a new
+   session is started, e.g. by opening a new tab.
+
+   https://github.com/owncloud/web/pull/9696
 
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 
