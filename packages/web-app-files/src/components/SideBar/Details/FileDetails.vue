@@ -208,6 +208,7 @@ import { formatDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
 import { Resource, SpaceResource } from 'web-client'
+import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from 'web-app-files/src/helpers/share'
 import { AncestorMetaData } from 'web-app-files/src/helpers/resource/ancestorMetaData'
@@ -233,7 +234,6 @@ export default defineComponent({
     const clientService = useClientService()
     const previewService = usePreviewService()
     const preview = ref(undefined)
-    const isPreviewLoading = ref(true)
 
     const directLink = computed(() => {
       return !unref(isPublicLinkContext)
@@ -295,28 +295,26 @@ export default defineComponent({
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
-    watch(
-      resource,
-      async (newResource: Resource) => {
-        if (newResource) {
-          await loadData()
-          isPreviewLoading.value = true
-
-          if (newResource.isFolder) {
-            preview.value = undefined
-            isPreviewLoading.value = false
-            return
-          }
-          preview.value = await previewService.loadPreview({
-            space: unref(space),
-            resource: newResource,
-            dimensions: ImageDimension.Preview
-          })
-          isPreviewLoading.value = false
-        }
-      },
-      { immediate: true }
-    )
+    const isFolder = computed(() => {
+      return unref(resource).isFolder
+    })
+    const loadPreviewTask = useTask(function* (signal, resource) {
+      if (unref(isFolder)) {
+        preview.value = undefined
+        return
+      }
+      preview.value = yield previewService.loadPreview({
+        space: unref(space),
+        resource,
+        dimensions: ImageDimension.Preview
+      })
+    }).restartable()
+    const isPreviewLoading = computed(() => {
+      if (unref(isFolder)) {
+        return false
+      }
+      return loadPreviewTask.isRunning || !loadPreviewTask.last
+    })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
       () => store.getters['Files/ancestorMetaData']
@@ -328,6 +326,17 @@ export default defineComponent({
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
     })
+
+    watch(
+      resource,
+      () => {
+        if (unref(resource)) {
+          loadData()
+          loadPreviewTask.perform(unref(resource))
+        }
+      },
+      { immediate: true }
+    )
 
     return {
       copiedEos,
