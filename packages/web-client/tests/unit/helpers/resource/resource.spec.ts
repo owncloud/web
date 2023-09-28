@@ -3,7 +3,7 @@ import {
   extractDomSelector,
   extractExtensionFromFile,
   extractNameWithoutExtension
-} from 'web-client/src/helpers'
+} from '../../../../src/helpers'
 
 describe('extractDomSelector', () => {
   it.each([
