@@ -174,6 +174,12 @@ export class ResourceConflict extends ConflictDialog {
             `/${encodeURIComponent(newFolderName)}`
           )
         }
+        if (file.tus?.endpoint) {
+          file.tus.endpoint = file.tus.endpoint.replace(
+            new RegExp(`/${encodeURIComponent(folder)}`),
+            `/${encodeURIComponent(newFolderName)}`
+          )
+        }
       }
     }
     return files

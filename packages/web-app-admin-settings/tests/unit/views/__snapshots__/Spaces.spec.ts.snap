@@ -2,7 +2,7 @@
 
 exports[`Spaces view loading states should render spaces list after loading has been finished 1`] = `
 <div>
-  <main class="oc-flex oc-flex-wrap oc-height-1-1 app-content oc-width-1-1">
+  <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
     <div class="oc-width-expand oc-height-1-1 oc-position-relative" id="admin-settings-wrapper">
       <div class="oc-app-bar oc-py-s" id="admin-settings-app-bar">
         <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">

@@ -1,5 +1,5 @@
 <template>
-  <main class="oc-flex oc-flex-wrap oc-height-1-1 app-content oc-width-1-1">
+  <main class="oc-flex oc-height-1-1 app-content oc-width-1-1">
     <app-loading-spinner v-if="loading" />
     <template v-else>
       <div id="admin-settings-wrapper" class="oc-width-expand oc-height-1-1 oc-position-relative">
