@@ -9,7 +9,6 @@ export interface SearchResource extends Resource {
 export type SearchOptions = {
   davProperties?: DavProperty[]
   searchLimit?: number
-  useSpacesEndpoint?: boolean
 }
 
 export type SearchResult = {
@@ -17,12 +16,13 @@ export type SearchResult = {
   totalResults: number
 }
 
-export const SearchFactory = ({ sdk }: WebDavOptions) => {
+export const SearchFactory = ({ sdk, store }: WebDavOptions) => {
   return {
     async search(
       term: string,
-      { davProperties = DavProperties.Default, searchLimit, useSpacesEndpoint }: any
+      { davProperties = DavProperties.Default, searchLimit }: SearchOptions
     ): Promise<SearchResult> {
+      const useSpacesEndpoint = store.getters.capabilities?.spaces?.enabled === true
       const { range, results } = await sdk.files.search(
         term,
         searchLimit,

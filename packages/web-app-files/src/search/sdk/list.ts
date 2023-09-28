@@ -36,8 +36,6 @@ export default class List implements SearchList {
   }
 
   async search(term: string): Promise<SearchResult> {
-    const useSpacesEndpoint = this.store.getters.capabilities?.spaces?.enabled === true
-
     if (this.configurationManager.options.routing.fullShareOwnerPaths) {
       await this.store.dispatch('runtime/spaces/loadMountPoints', {
         graphClient: this.clientService.graphAuthenticated
@@ -53,8 +51,7 @@ export default class List implements SearchList {
 
     const { resources, totalResults } = await this.clientService.webdav.search(term, {
       searchLimit,
-      davProperties: DavProperties.Default,
-      useSpacesEndpoint
+      davProperties: DavProperties.Default
     })
 
     return {

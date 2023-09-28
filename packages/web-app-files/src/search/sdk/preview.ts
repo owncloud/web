@@ -62,12 +62,10 @@ export default class Preview implements SearchPreview {
     }
 
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
-    const useSpacesEndpoint = this.store.getters.capabilities?.spaces?.enabled === true
 
     const { resources, totalResults } = await this.clientService.webdav.search(term, {
       searchLimit: previewSearchLimit,
-      davProperties: DavProperties.Default,
-      useSpacesEndpoint
+      davProperties: DavProperties.Default
     })
 
     return {

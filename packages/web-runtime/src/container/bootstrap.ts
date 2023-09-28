@@ -343,7 +343,8 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService = clientService
   app.config.globalProperties.$clientService.owncloudSdk = sdk
   app.config.globalProperties.$clientService.webdav = webdav({
-    sdk
+    sdk,
+    store
   })
 
   app.provide('$client', sdk)

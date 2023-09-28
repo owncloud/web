@@ -5,7 +5,6 @@ import { isProjectSpaceResource } from 'web-client/src/helpers'
 import { computed, unref } from 'vue'
 import {
   useCapabilityFilesPermanentDeletion,
-  useCapabilityShareJailEnabled,
   useClientService,
   useLoadingService,
   useRouter,
@@ -20,12 +19,11 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   const { $gettext, $pgettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const hasShareJail = useCapabilityShareJailEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
     return clientService.webdav
-      .clearTrashBin(space, { hasShareJail: unref(hasShareJail), user: store.getters.user })
+      .clearTrashBin(space)
       .then(() => {
         store.dispatch('showMessage', {
           title: $gettext('All deleted files were removed')
