@@ -160,7 +160,7 @@ services:
       APP_PROVIDER_WOPI_APP_NAME: Collabora
       APP_PROVIDER_WOPI_APP_ICON_URI: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}/favicon.ico
       APP_PROVIDER_WOPI_APP_URL: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}
-      APP_PROVIDER_WOPI_INSECURE: true
+      APP_PROVIDER_WOPI_INSECURE: 1 #true
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
       # share the registry with the ocis container
@@ -190,7 +190,7 @@ services:
       APP_PROVIDER_WOPI_APP_NAME: OnlyOffice
       APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
       APP_PROVIDER_WOPI_APP_URL: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}
-      APP_PROVIDER_WOPI_INSECURE: true
+      APP_PROVIDER_WOPI_INSECURE: 1 #true
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
       # share the registry with the ocis container
@@ -227,8 +227,8 @@ services:
       - /bin/sh
       - /entrypoint-override.sh
     environment:
-      WOPI_ENABLED: true
-      USE_UNAUTHORIZED_STORAGE: true # self signed certificates
+      WOPI_ENABLED: 1 #true
+      USE_UNAUTHORIZED_STORAGE: 1 #true # self signed certificates
     volumes:
       - ./dev/docker/onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
       - ./dev/docker/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.dist.json
@@ -249,7 +249,7 @@ services:
   wopiserver:
     image: cs3org/wopiserver:v9.4.0
     environment:
-      WOPISERVER_INSECURE: true
+      WOPISERVER_INSECURE: 1 #true
       WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
       WOPISERVER_DOMAIN: ${WOPISERVER_DOMAIN:-host.docker.internal:8880}
     volumes:
