@@ -30,27 +30,7 @@
       >
         <oc-icon size="large" name="arrow-drop-right" variation="inherit" />
       </oc-button>
-      <div class="oc-flex">
-        <oc-button
-          v-oc-tooltip="
-            isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
-          "
-          class="preview-controls-fullscreen"
-          appearance="raw-inverse"
-          variation="brand"
-          :aria-label="
-            isFullScreenModeActivated ? exitFullScreenDescription : enterFullScreenDescription
-          "
-          @click="$emit('toggleFullScreen')"
-        >
-          <oc-icon
-            fill-type="line"
-            :name="isFullScreenModeActivated ? 'fullscreen-exit' : 'fullscreen'"
-            variation="inherit"
-          />
-        </oc-button>
-      </div>
-      <div v-if="isImage" class="oc-flex oc-flex-middle">
+      <div class="oc-flex oc-flex-middle">
         <div class="oc-flex">
           <oc-button
             v-oc-tooltip="imageShrinkDescription"
@@ -146,7 +126,7 @@ export default defineComponent({
       default: 0
     }
   },
-  emits: ['setRotation', 'setZoom', 'toggleFullScreen', 'toggleNext', 'togglePrevious'],
+  emits: ['setRotation', 'setZoom', 'toggleNext', 'togglePrevious'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
 
