@@ -722,15 +722,17 @@ export default defineComponent({
 }
 
 .dicom-canvas {
-  border: 10px solid yellow; //none
-  width: 500px; // 100%;
-  height: 500px; // 100%;
+  border: none;
+  width: 600px; // 100%;
+  height: 600px; // 100%;
 }
 
 .dicom-metadata {
   border: 10px solid green; //none
   width: 500px;
-  height: 500px; // 100%;
+  height: auto; //100%;
+  padding: 20px;
+  margin-left: 20px;
   //display: block;
 }
 .dicom-metadata-item {
