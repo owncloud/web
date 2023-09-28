@@ -85,7 +85,7 @@
 <script lang="ts">
 // import cornerstone packages
 import Hammer from 'hammerjs'
-import dicomParser from 'dicom-parser'
+//import dicomParser from 'dicom-parser'
 import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
@@ -110,7 +110,7 @@ cornerstoneTools.external.Hammer = Hammer
 cornerstoneTools.external.cornerstone = cornerstone
 cornerstoneTools.external.cornerstoneMath = cornerstoneMath
 cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
-cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
+//cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
 
 // configure cornerstone dicom image loader
 const { preferSizeOverAccuracy, useNorm16Texture } = cornerstone.getConfiguration().rendering
@@ -131,16 +131,23 @@ if (navigator.hardwareConcurrency) {
 
 var config = {
   maxWebWorkers,
-  startWebWorkersOnDemand: false, // true,
+  startWebWorkersOnDemand: true,
   // TODO: further look into the specifics of the configuration
   // webWorkerTaskPaths: [],
   taskConfiguration: {
     decodeTask: {
-      initializeCodecsOnStartup: false, // true,
+      initializeCodecsOnStartup: true,
       strict: false // true
     }
   }
 }
+
+/*
+var config = {
+  maxWebWorkers: navigator.hardwareConcurrency || 1,
+  startWebWorkersOnDemand: true
+}
+*/
 
 try {
   cornerstoneDICOMImageLoader.webWorkerManager.initialize(config)

@@ -1,6 +1,8 @@
 import translations from '../l10n/translations.json'
 import { AppWrapperRoute } from 'web-pkg/src/components/AppTemplates/AppWrapperRoute'
-import DicomViewer from './DicomViewer.vue'
+import DicomViewer from './App.vue'
+//import * as app from './App.vue'
+//const { default: App, mimeTypes, appId } = app as any
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -25,8 +27,24 @@ const routes = [
   }
 ]
 
+/*
+const routes = [
+  {
+    path: '/:driveAliasAndItem(.*)?',
+    component: App,
+    name: 'dicom-viewer',
+    meta: {
+      authContext: 'hybrid',
+      title: $gettext('DICOM Viewer'),
+      patchCleanPath: true
+    }
+  }
+]
+*/
+
 const appInfo = {
-  name: $gettext('DICOM Viewer'),
+  name: $gettext('Preview'),
+  //name: $gettext('DICOM Viewer'),
   id: 'dicom-viewer',
   icon: 'resource-type-medical',
   iconFillType: 'fill',
