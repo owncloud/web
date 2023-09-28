@@ -80,7 +80,8 @@ export function useIncomingParentShare() {
 
   const fetchFileInfoById = async (id: string | number): Promise<Resource> => {
     const space = buildSpace({
-      id,
+      id: id.toString(),
+      name: '',
       webDavPath: buildWebDavSpacesPath(id)
     })
     return await clientService.webdav.getFileInfo(

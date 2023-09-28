@@ -2,15 +2,19 @@ import { useSpaceActionsEditReadmeContent } from 'web-pkg/src/composables/action
 import { buildSpace } from 'web-client/src/helpers'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
+import { mock } from 'jest-mock-extended'
+import { Drive } from 'web-client/src/generated'
 
 describe('editReadmeContent', () => {
   describe('isEnabled property', () => {
     it('should be true for space managers', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] },
+        root: {
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
+        },
         special: [{ specialFolder: { name: 'readme' } }]
-      }
+      })
 
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
@@ -30,10 +34,13 @@ describe('editReadmeContent', () => {
       })
     })
     it('should be false when spaceReadmeData does not exist', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
-        root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }] }
-      }
+        root: {
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
+        },
+        special: null
+      })
 
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {
@@ -46,10 +53,13 @@ describe('editReadmeContent', () => {
       })
     })
     it('should be false when the current user is a viewer', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
-        root: { permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: 1 } }] }] }
-      }
+        root: {
+          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }]
+        },
+        special: null
+      })
 
       const { wrapper } = getWrapper({
         setup: ({ actions }) => {

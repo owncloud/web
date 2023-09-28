@@ -36,8 +36,8 @@ export class FolderLoaderTrashbin implements FolderLoader {
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
 
       const path = unref(hasShareJail)
-        ? buildWebDavSpacesTrashPath(space.id)
-        : buildWebDavFilesTrashPath(space.id)
+        ? buildWebDavSpacesTrashPath(space.id.toString())
+        : buildWebDavFilesTrashPath(space.id.toString())
       const resources = yield client.fileTrash.list(path, '1', DavProperties.Trashbin)
 
       store.commit('Files/LOAD_FILES', {

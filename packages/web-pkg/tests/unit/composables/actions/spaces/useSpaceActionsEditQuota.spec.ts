@@ -7,6 +7,8 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
+import { mock } from 'jest-mock-extended'
+import { Drive } from 'web-client/src/generated'
 
 describe('editQuota', () => {
   describe('isEnabled property', () => {
@@ -18,14 +20,15 @@ describe('editQuota', () => {
       })
     })
     it('should be true when the current user has the "set-space-quota"-permission', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
         canEditSpaceQuota: true,
         setup: ({ actions }) => {
@@ -34,14 +37,15 @@ describe('editQuota', () => {
       })
     })
     it('should be false when the current user does not have the "set-space-quota"-permission', () => {
-      const spaceMock = {
+      const spaceMock = mock<Drive>({
         id: '1',
         quota: {},
         root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: 1 } }] }]
+          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
         },
-        driveType: 'project'
-      }
+        driveType: 'project',
+        special: null
+      })
       const { wrapper } = getWrapper({
         canEditSpaceQuota: false,
         setup: ({ actions }) => {

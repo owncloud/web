@@ -3,14 +3,13 @@ import { DateTime } from 'luxon'
 import {
   Resource,
   buildWebDavFilesPath,
-  buildWebDavSpacesPath,
   extractDomSelector,
   extractExtensionFromFile,
   extractStorageId
 } from '../resource'
 import { ShareTypes } from './type'
 import path from 'path'
-import { SHARE_JAIL_ID, SpaceResource } from '../space'
+import { SHARE_JAIL_ID, SpaceResource, buildWebDavSpacesPath } from '../space'
 import { ShareStatus } from './status'
 import { SharePermissions } from './permission'
 import { Share } from './share'

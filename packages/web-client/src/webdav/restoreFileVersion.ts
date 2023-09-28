@@ -1,7 +1,7 @@
 import { FileResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
-import { Resource } from '..'
+import { Resource } from '../helpers'
 
 export const RestoreFileVersionFactory = ({ sdk }: WebDavOptions) => {
   return {
