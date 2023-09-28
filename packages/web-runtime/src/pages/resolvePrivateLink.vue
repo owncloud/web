@@ -105,7 +105,7 @@ export default defineComponent({
       let matchingSpace = getMatchingSpace(id)
       let resourceIsNestedInShare = false
       if (matchingSpace) {
-        path = yield clientService.owncloudSdk.files.getPathForFileId(id)
+        path = yield clientService.webdav.getPathForFileId(id)
         resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
       } else {
         // no matching space found => the file doesn't lie in own spaces => it's a share.

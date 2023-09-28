@@ -14,7 +14,13 @@ export const PutFileContentsFactory = (
         path,
         content = '',
         ...options
-      }: { path?: string; content?: string; previousEntityTag?: string }
+      }: {
+        path?: string
+        content?: string
+        previousEntityTag?: string
+        headers?: Record<string, string>
+        overwrite?: boolean
+      }
     ): Promise<FileResource> {
       if (isPublicSpaceResource(space)) {
         await sdk.publicFiles.putFileContents(

@@ -6,9 +6,13 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { ref } from 'vue'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
 import { ProjectSpaceResource } from 'web-client/src/helpers'
-import { DavProperty } from 'web-client/src/webdav/constants'
 import { ConfigurationManager } from 'web-pkg/src'
 
+const getClientServiceMock = (result = { resources: [], totalResults: 0 }) => {
+  const clientService = mockDeep<ClientService>()
+  clientService.webdav.search.mockResolvedValue(result)
+  return clientService
+}
 const searchMock = jest.fn()
 const clientService = mockDeep<ClientService>()
 clientService.owncloudSdk.files.search.mockImplementation(searchMock)
@@ -36,6 +40,7 @@ const storeWithoutFileSearch = mockDeep<Store<any>>({
 
 describe('SDKProvider', () => {
   it('is only available if announced via capabilities', () => {
+    const clientService = getClientServiceMock()
     const search = new SDKSearch(
       storeWithoutFileSearch,
       mock<Router>(),
@@ -47,6 +52,7 @@ describe('SDKProvider', () => {
 
   describe('SDKProvider previewSearch', () => {
     it('is not available on certain routes', () => {
+      const clientService = getClientServiceMock()
       ;[
         { route: 'foo', available: true },
         { route: 'search-provider-list' },
@@ -66,17 +72,17 @@ describe('SDKProvider', () => {
     })
 
     it('can search', async () => {
-      const search = new SDKSearch(getStore(), mock<Router>(), clientService, configurationManager)
       const files = [
         { id: 'foo', name: 'foo', fileInfo: {} },
         { id: 'bar', name: 'bar', fileInfo: {} },
         { id: 'baz', name: 'baz', fileInfo: {} }
       ]
+      const clientService = getClientServiceMock({ resources: files, totalResults: 3 })
+      const search = new SDKSearch(getStore(), mock<Router>(), clientService, configurationManager)
 
       const noTerm = await search.previewSearch.search('')
       expect(noTerm).toEqual({ totalResults: null, values: [] })
 
-      searchMock.mockReturnValueOnce({ results: files })
       const withTerm = await search.previewSearch.search('foo')
       expect(withTerm.values.map((r) => r.data)).toMatchObject(files)
 
@@ -86,44 +92,41 @@ describe('SDKProvider', () => {
     it('properly returns space resources', async () => {
       const spaceId = '1'
       const space = mock<ProjectSpaceResource>({ id: spaceId, name: 'foo', driveType: 'project' })
+      const files = [{ id: 'foo', name: 'foo', parentFolderId: space.id }]
+      const clientService = getClientServiceMock({ resources: files, totalResults: 1 })
       const search = new SDKSearch(
         getStore([space]),
         mock<Router>(),
         clientService,
         configurationManager
       )
-      const files = [{ id: 'foo', name: 'foo', fileInfo: { [DavProperty.FileParent]: space.id } }]
-
-      searchMock.mockReturnValueOnce({ results: files })
       const withTerm = (await search.previewSearch.search('foo')) as any
       expect(withTerm.values.map((r) => r.data)[0].id).toEqual(spaceId)
     })
   })
   describe('SDKProvider listSearch', () => {
     it('can search', async () => {
-      const search = new SDKSearch(getStore(), mock<Router>(), clientService, configurationManager)
       const files = [
         { id: 'foo', name: 'foo', fileInfo: {} },
         { id: 'bar', name: 'bar', fileInfo: {} },
         { id: 'baz', name: 'baz', fileInfo: {} }
       ]
-
-      searchMock.mockReturnValueOnce({ results: files })
+      const clientService = getClientServiceMock({ resources: files, totalResults: 3 })
+      const search = new SDKSearch(getStore(), mock<Router>(), clientService, configurationManager)
       const withTerm = (await search.listSearch.search('foo')) as any
       expect(withTerm.values.map((r) => r.data)).toMatchObject(files)
     })
     it('properly returns space resources', async () => {
       const spaceId = '1'
       const space = mock<ProjectSpaceResource>({ id: spaceId, driveType: 'project' })
+      const files = [{ id: 'foo', name: 'foo', parentFolderId: space.id }]
+      const clientService = getClientServiceMock({ resources: files, totalResults: 1 })
       const search = new SDKSearch(
         getStore([space]),
         mock<Router>(),
         clientService,
         configurationManager
       )
-      const files = [{ id: 'foo', name: 'foo', fileInfo: { [DavProperty.FileParent]: space.id } }]
-
-      searchMock.mockReturnValueOnce({ results: files })
       const withTerm = (await search.listSearch.search('foo')) as any
       expect(withTerm.values.map((r) => r.data)[0].id).toEqual(spaceId)
     })

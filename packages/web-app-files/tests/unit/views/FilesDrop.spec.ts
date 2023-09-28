@@ -29,9 +29,7 @@ describe('FilesDrop view', () => {
 
 function getMountedWrapper() {
   const $clientService = mockDeep<ClientService>()
-  $clientService.owncloudSdk.publicFiles.list.mockImplementation(() =>
-    Promise.resolve([{ getProperty: jest.fn() }])
-  )
+  $clientService.webdav.listFiles.mockReturnValue(undefined)
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-common-favorites' })

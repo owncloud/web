@@ -134,23 +134,6 @@ describe('setImage', () => {
         }
       })
     })
-
-    /* FIXME: Reintroduce with latest copyMove bugfix
-      it('should not copy the image if source and destination path are the same', async () => {
-        mockAxios.request.mockImplementationOnce(() => {
-          return Promise.resolve({ data: { special: [{ specialFolder: { name: 'image' } }] } })
-        })
-        getWrapper()
-        await wrapper.vm.$_setSpaceImage_trigger({
-          resources: [
-            {
-              webDavPath: '/spaces/1fe58d8b-aa69-4c22-baf7-97dd57479f22/.space/image.png',
-              name: 'image.png'
-            }
-          ]
-        })
-        expect(wrapper.vm.$client.files.copy).toBeCalledTimes(0)
-      }) */
   })
 })
 

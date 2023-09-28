@@ -63,16 +63,19 @@ import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/he
 import { SharePermissions } from 'web-client/src/helpers/share'
 import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import { formatDateFromJSDate } from 'web-pkg/src/helpers'
+import { useClientService } from 'web-pkg/src/composables'
 
 export default defineComponent({
   name: 'FileVersions',
   setup() {
+    const clientService = useClientService()
     const loading = ref(false)
 
     return {
       ...useDownloadFile(),
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
+      clientService,
       loading
     }
   },
@@ -118,8 +121,12 @@ export default defineComponent({
       this.loading = false
     },
     async revertVersion(file) {
-      const { fileId, id, path } = this.resource
-      await this.$client.fileVersions.restoreFileVersion(fileId, this.currentVersionId(file), path)
+      const { id } = this.resource
+      await this.clientService.webdav.restoreFileVersion(
+        this.space,
+        this.resource,
+        this.currentVersionId(file)
+      )
       const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
         this.space,
         this.resource

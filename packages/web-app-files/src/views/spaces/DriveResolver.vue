@@ -118,7 +118,7 @@ export default defineComponent({
         const isRunningOnEos = store.getters.configuration?.options?.runningOnEos
         if (unref(isUserContext) && unref(fileId) && !isRunningOnEos) {
           try {
-            const path = await clientService.owncloudSdk.files.getPathForFileId(unref(fileId))
+            const path = await clientService.webdav.getPathForFileId(unref(fileId))
             await resolveToInternalLocation(path)
             loading.value = false
             return

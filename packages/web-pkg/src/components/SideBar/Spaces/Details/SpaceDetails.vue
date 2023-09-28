@@ -86,13 +86,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, inject, ref, computed, unref } from 'vue'
+import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { buildResource, buildWebDavSpacesPath, SpaceResource } from 'web-client/src/helpers'
+import { getRelativeSpecialFolderSpacePath, SpaceResource } from 'web-client/src/helpers'
 import { spaceRoleManager } from 'web-client/src/helpers/share'
 import { ImageDimension } from 'web-pkg/src/constants'
-import { useStore, usePreviewService } from 'web-pkg/src/composables'
+import { useStore, usePreviewService, useClientService } from 'web-pkg/src/composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { eventBus } from 'web-pkg/src/services/eventBus'
@@ -121,7 +121,8 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const previewService = usePreviewService()
-    const resource = inject<SpaceResource>('resource')
+    const clientService = useClientService()
+    const resource = inject<Ref<SpaceResource>>('resource')
     const spaceImage = ref('')
     const copySpaceIdIconInitial = 'file-copy'
     const copySpaceIdIcon = ref(copySpaceIdIconInitial)
@@ -132,22 +133,12 @@ export default defineComponent({
         return
       }
 
-      const webDavPathComponents = decodeURI(ref.resource.spaceImageData.webDavUrl).split('/')
-      const idComponent = webDavPathComponents.find((c) => c.startsWith(ref.resource.id))
-      if (!idComponent) {
-        return
-      }
-      const path = webDavPathComponents
-        .slice(webDavPathComponents.indexOf(idComponent) + 1)
-        .join('/')
-
-      const fileInfo = yield ref.$client.files.fileInfo(
-        buildWebDavSpacesPath(idComponent, decodeURIComponent(path))
-      )
-      const imageResource = buildResource(fileInfo)
+      const imageResource = yield clientService.webdav.getFileInfo(unref(resource), {
+        path: getRelativeSpecialFolderSpacePath(unref(resource), 'image')
+      })
 
       spaceImage.value = yield previewService.loadPreview({
-        space: resource,
+        space: unref(resource),
         resource: imageResource,
         dimensions: ImageDimension.Preview
       })

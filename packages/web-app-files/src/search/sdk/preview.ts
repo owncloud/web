@@ -1,11 +1,11 @@
 import { SearchPreview, SearchResult } from 'web-app-search/src/types'
 import PreviewComponent from '../../components/Search/Preview.vue'
 import { ClientService } from 'web-pkg/src/services'
-import { ProjectSpaceResource, buildResource, isProjectSpaceResource } from 'web-client/src/helpers'
+import { ProjectSpaceResource, isProjectSpaceResource } from 'web-client/src/helpers'
 import { Cache } from 'web-pkg/src/helpers/cache'
 import { Component, computed, Ref, unref } from 'vue'
 import { Router } from 'vue-router'
-import { DavProperties, DavProperty } from 'web-client/src/webdav/constants'
+import { DavProperties } from 'web-client/src/webdav/constants'
 import { Store } from 'vuex'
 import { ConfigurationManager } from 'web-pkg/src'
 import { urlJoin } from 'web-client/src/utils'
@@ -64,35 +64,34 @@ export default class Preview implements SearchPreview {
     const areHiddenFilesShown = this.store.state.Files?.areHiddenFilesShown
     const useSpacesEndpoint = this.store.getters.capabilities?.spaces?.enabled === true
 
-    const { range, results } = await this.clientService.owncloudSdk.files.search(
-      term,
-      previewSearchLimit, // todo: add configuration option, other places need that too... needs consolidation
-      DavProperties.Default,
+    const { resources, totalResults } = await this.clientService.webdav.search(term, {
+      searchLimit: previewSearchLimit,
+      davProperties: DavProperties.Default,
       useSpacesEndpoint
-    )
-    const resources = results.reduce((acc, result) => {
-      const projectSpace = this.getProjectSpace(result.fileInfo[DavProperty.FileParent])
-      const resource = projectSpace ? projectSpace : buildResource(result)
-      // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
-      if (!resource.storageId) {
-        resource.storageId = this.store.getters.user.id
-      }
-
-      if (this.configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
-        resource.path = urlJoin(resource.shareRoot, resource.path)
-      }
-
-      // filter results if hidden files shouldn't be shown due to settings
-      if (!resource.name.startsWith('.') || areHiddenFilesShown) {
-        acc.push({ id: resource.id, data: { ...resource } })
-      }
-
-      return acc
-    }, [])
-    return this.cache.set(term, {
-      totalResults: range ? parseInt(range?.split('/')[1]) : null,
-      values: resources
     })
+
+    return {
+      totalResults,
+      values: resources
+        .map((resource) => {
+          const matchingSpace = this.getProjectSpace(resource.parentFolderId)
+          const data = matchingSpace ? matchingSpace : resource
+
+          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
+          if (!data.storageId) {
+            data.storageId = this.store.getters.user.id
+          }
+          if (this.configurationManager.options.routing.fullShareOwnerPaths && data.shareRoot) {
+            data.path = urlJoin(data.shareRoot, data.path)
+          }
+
+          return { id: data.id, data }
+        })
+        .filter(({ data }) => {
+          // filter results if hidden files shouldn't be shown due to settings
+          return !data.name.startsWith('.') || areHiddenFilesShown
+        })
+    }
   }
 
   public get available(): boolean {

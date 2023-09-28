@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
 import { useStore } from 'web-pkg/src/composables'
-import { SpaceResource } from 'web-client/src'
+import { Resource, SpaceResource } from 'web-client/src'
 import { Drive } from 'web-client/src/generated'
 
 describe('uploadImage', () => {
@@ -22,9 +22,9 @@ describe('uploadImage', () => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
             mockAxiosResolve(driveMock)
           )
-          clientService.owncloudSdk.files.putFileContents.mockImplementation(() =>
-            Promise.resolve({
-              'OC-FileId':
+          clientService.webdav.putFileContents.mockResolvedValue(
+            mock<Resource>({
+              fileId:
                 'YTE0ODkwNGItNTZhNy00NTQ4LTk2N2MtZjcwZjhhYTY0Y2FjOmQ4YzMzMmRiLWUxNWUtNDRjMy05NGM2LTViYjQ2MGMwMWJhMw=='
             })
           )
@@ -43,9 +43,7 @@ describe('uploadImage', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
-          clientService.owncloudSdk.files.putFileContents.mockImplementation(() =>
-            Promise.reject(new Error(''))
-          )
+          clientService.webdav.putFileContents.mockRejectedValue(new Error(''))
 
           await uploadImageSpace({
             currentTarget: {

@@ -16,6 +16,7 @@ import { locationPublicLink } from 'web-pkg/src/router/public'
 import { locationSpacesGeneric } from 'web-pkg/src/router/spaces'
 import { isPersonalSpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
 import { ClientService } from 'web-pkg/types'
+import { queryItemAsString } from 'web-pkg/src/composables'
 
 export interface HandleUploadOptions {
   clientService: ClientService
@@ -112,8 +113,12 @@ export class HandleUpload extends BasePlugin {
 
     if (!this.currentFolder && unref(this.route)?.params?.token) {
       // public file drop
-      const publicLinkToken = unref(this.route).params.token
-      let endpoint = this.clientService.owncloudSdk.publicFiles.getFileUrl(publicLinkToken) + '/'
+      const publicLinkToken = queryItemAsString(unref(this.route).params.token)
+      let endpoint = urlJoin(
+        this.clientService.webdav.getPublicFileUrl(this.space, publicLinkToken),
+        { trailingSlash: true }
+      )
+
       for (const file of files) {
         if (!this._uppy.getPlugin('Tus')) {
           endpoint = urlJoin(endpoint, encodeURIComponent(file.name))
