@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import {
   Resource,
   SpaceResource,
@@ -5,21 +6,18 @@ import {
   buildWebDavSpacesTrashPath
 } from '../helpers'
 import { WebDavOptions } from './types'
-import { User } from '../helpers'
 
 interface ClearTrashBinOptions {
   id?: Resource['id']
 }
 
-export const ClearTrashBinFactory = ({ sdk, store }: WebDavOptions) => {
+export const ClearTrashBinFactory = ({ sdk, capabilities, user }: WebDavOptions) => {
   return {
     clearTrashBin(space: SpaceResource, { id }: ClearTrashBinOptions = {}): Promise<void> {
-      const hasShareJail = store.getters.capabilities?.spaces?.share_jail === true
-      const user = store.getters.user as User
-
+      const hasShareJail = unref(capabilities)?.spaces?.share_jail === true
       const path = hasShareJail
         ? buildWebDavSpacesTrashPath(space.id)
-        : buildWebDavFilesTrashPath(user.id)
+        : buildWebDavFilesTrashPath(unref(user).id)
       return sdk.fileTrash.clearTrashBin(path, id)
     }
   }

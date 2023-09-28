@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { Resource, buildResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DavProperties, DavProperty } from './constants'
@@ -16,13 +17,13 @@ export type SearchResult = {
   totalResults: number
 }
 
-export const SearchFactory = ({ sdk, store }: WebDavOptions) => {
+export const SearchFactory = ({ sdk, capabilities }: WebDavOptions) => {
   return {
     async search(
       term: string,
       { davProperties = DavProperties.Default, searchLimit }: SearchOptions
     ): Promise<SearchResult> {
-      const useSpacesEndpoint = store.getters.capabilities?.spaces?.enabled === true
+      const useSpacesEndpoint = unref(capabilities)?.spaces?.enabled === true
       const { range, results } = await sdk.files.search(
         term,
         searchLimit,

@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { OwnCloudSdk } from '../types'
 import { CreateFolderFactory } from './createFolder'
 import { GetFileContentsFactory } from './getFileContents'
@@ -15,10 +14,14 @@ import { RestoreFileVersionFactory } from './restoreFileVersion'
 import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
 import { GetPathForFileIdFactory } from './getPathForFileId'
+import { Capabilities } from '../ocs'
+import { User } from '../helpers'
+import { Ref } from 'vue'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
-  store: Store<unknown>
+  capabilities: Ref<Capabilities['capabilities']>
+  user: Ref<User>
 }
 
 export interface WebDAV {
