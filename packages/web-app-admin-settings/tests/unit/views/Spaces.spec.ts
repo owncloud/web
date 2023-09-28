@@ -1,12 +1,7 @@
 import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
 import { Graph } from 'web-client'
 import { mockDeep } from 'jest-mock-extended'
-import {
-  ClientService,
-  queryItemAsString,
-  useAppDefaults,
-  useRouteQueryPersisted
-} from '@ownclouders/web-pkg'
+import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,

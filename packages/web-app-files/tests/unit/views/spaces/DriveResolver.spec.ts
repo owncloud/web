@@ -18,8 +18,7 @@ import {
 } from 'web-test-helpers'
 import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg'
 
-jest.mock('@ownclouders/web-pkg)
-jest.mock('@ownclouders/web-pkg)
+jest.mock('@ownclouders/web-pkg')
 
 describe('DriveResolver view', () => {
   it('renders the "drive-redirect"-component when no space is given', async () => {

@@ -17,7 +17,7 @@ import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 jest.mock('web-app-files/src/composables')
 jest.mock('web-app-files/src/composables/keyboardActions')
-jest.mock('@ownclouders/web-pkg{
+jest.mock('@ownclouders/web-pkgg', () => ({
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {

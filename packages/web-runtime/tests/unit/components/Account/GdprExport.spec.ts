@@ -18,9 +18,9 @@ const selectors = {
 }
 
 const downloadFile = jest.fn()
-jest.mock('@ownclouders/web-pkg{
+jest.mock('@ownclouders/web-pkg', () => {
   useDownloadFile: jest.fn(() => ({ downloadFile }))
-}))
+})
 
 describe('GdprExport component', () => {
   it('shows the loading spinner initially', () => {

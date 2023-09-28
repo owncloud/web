@@ -16,8 +16,7 @@ import { RouteLocation } from 'vue-router'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
-jest.mock('@ownclouders/web-pkg)
-jest.mock('@ownclouders/web-pkg)
+jest.mock('@ownclouders/web-pkg')
 
 const elSelector = {
   component: '#create-and-upload-actions',

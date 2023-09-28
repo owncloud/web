@@ -16,7 +16,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg)
+jest.mock('@ownclouders/web-pkg')
 jest.mock('web-client/src/helpers/resource', () => {
   const original = jest.requireActual('web-client/src/helpers/resource')
   return {

@@ -11,7 +11,7 @@ import { mockDeep } from 'jest-mock-extended'
 import { Resource } from 'web-client'
 import { ClientService, eventBus } from '@ownclouders/web-pkg'
 
-jest.mock('@ownclouders/web-pkg)
+jest.mock('@ownclouders/web-pkg')
 
 describe('Tags Panel', () => {
   it('show tags input form if loaded successfully', () => {

@@ -12,8 +12,8 @@ import {
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 jest.unmock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg)
-jest.mock('@ownclouders/web-pkg{
+jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {
