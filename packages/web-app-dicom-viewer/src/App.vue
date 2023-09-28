@@ -185,7 +185,6 @@ export default defineComponent({
   },
   data() {
     return {
-      isCornerstoneInitialized: false,
       isDicomFileRendered: false,
       isMetaDataSet: false,
       element: null,
@@ -216,7 +215,7 @@ export default defineComponent({
   async mounted() {
     console.log('lifecycle @ mounted')
     // check if cornerstone core (TODO and tools) are initalized
-    if (!this.isCornerstoneInitialized) {
+    if (!cornerstone.isCornerstoneInitialized()) {
       // initalize cornerstone core
       await this.initCornerstoneCore()
     }
@@ -323,16 +322,10 @@ export default defineComponent({
   },
   methods: {
     async initCornerstoneCore() {
-      console.log('cornerstone init status: ' + cornerstone.isCornerstoneInitialized())
-      console.log('cornerstone init variable: ' + this.isCornerstoneInitialized)
       try {
         await cornerstone.init()
-        this.isCornerstoneInitialized = true
       } catch (e) {
         console.error('Error initalizing cornerstone core', e)
-      } finally {
-        console.log('cornerstone init status: ' + cornerstone.isCornerstoneInitialized())
-        console.log('cornerstone init variable: ' + this.isCornerstoneInitialized)
       }
     },
     async prefetchMetadataInformation(imageIdsToPrefetch) {
