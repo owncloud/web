@@ -299,10 +299,6 @@ export default defineComponent({
       return unref(resource).isFolder
     })
     const loadPreviewTask = useTask(function* (signal, resource) {
-      if (unref(isFolder)) {
-        preview.value = undefined
-        return
-      }
       preview.value = yield previewService.loadPreview({
         space: unref(space),
         resource,
@@ -332,6 +328,10 @@ export default defineComponent({
       () => {
         if (unref(resource)) {
           loadData()
+          if (unref(isFolder)) {
+            preview.value = undefined
+            return
+          }
           loadPreviewTask.perform(unref(resource))
         }
       },
