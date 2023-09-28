@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium">
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- viewport manipulations -->
       <div id="tools"></div>
       <div id="tool-info">
@@ -723,17 +723,20 @@ export default defineComponent({
 }
 
 .dicom-canvas {
-  border: 10px solid yellow; //none
-  width: 500px; // 100%;
-  height: 500px; // 100%;
+  border: none;
+  width: 600px; // 100%;
+  height: 600px; // 100%;
 }
 
 .dicom-metadata {
   border: 10px solid green; //none
   width: 500px;
-  height: 500px; // 100%;
+  height: auto; //100%;
+  padding: 20px;
+  margin-left: 20px;
   //display: block;
 }
+
 .dicom-metadata-item {
   display: none;
 }
