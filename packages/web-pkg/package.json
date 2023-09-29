@@ -13,12 +13,12 @@
   },
   "type": "module",
   "main": "src/index.ts",
+  "files": [
+    "dist/"
+  ],
   "publishConfig": {
     "main": "",
-    "types": "dist/web-pkg/src/index.d.ts",
-    "files": [
-      "dist/"
-    ]
+    "types": "dist/web-pkg/src/index.d.ts"
   },
   "scripts": {
     "vite": "vite"
