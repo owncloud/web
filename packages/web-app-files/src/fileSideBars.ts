@@ -12,12 +12,11 @@ import {
   isLocationTrashActive,
   isLocationPublicActive,
   isLocationSpacesActive,
-  isLocationSharesActive
+  isLocationSharesActive,
+  Panel
 } from '@ownclouders/web-pkg'
 
 import { spaceRoleEditor, spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
-
-import { Panel } from '../../web-pkg/src/components/SideBar'
 
 import { Resource, User } from '@ownclouders/web-client'
 import { Router } from 'vue-router'
