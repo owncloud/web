@@ -24,7 +24,6 @@ export default {
   },
   moduleNameMapper: {
     '\\.(css|less|scss)$': '<rootDir>/tests/unit/stubs/empty.js',
-    '^@/(.*)$': '<rootDir>/$1',
     '^core-js$': '<rootDir>/node_modules/core-js',
     '^mark.js$': '<rootDir>/node_modules/mark.js/src/vanilla.js',
     '^fuse.js$': '<rootDir>/node_modules/fuse.js/dist/fuse.esm.js',
