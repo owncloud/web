@@ -584,7 +584,6 @@ def buildCacheWeb(ctx):
                      "image": OC_CI_NODEJS,
                      "commands": [
                          "pnpm --version",
-                         "pnpm add -g pnpm@8.6",
                          "pnpm config set store-dir ./.pnpm-store",
                          "make dist",
                      ],
