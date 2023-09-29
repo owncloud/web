@@ -14,6 +14,7 @@ import { mock } from 'jest-mock-extended'
 jest.mock('@ownclouders/web-pkg', () => {
   const { queryItemAsString } = jest.requireActual('@ownclouders/web-pkg')
   return {
+    ...jest.requireActual('@ownclouders/web-pkg'),
     useAppDefaults: jest.fn(),
     useAppFileHandling: jest.fn(),
     queryItemAsString

@@ -8,8 +8,6 @@ import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
 import { useStore } from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
-import { useFileActionsSetReadme, useFileActions } from '../../composables'
-
 import {
   useFileActionsCreateQuickLink,
   useFileActionsPaste,
@@ -30,8 +28,11 @@ import {
   useFileActionsNavigate,
   useFileActionsFavorite,
   useFileActionsCreateSpaceFromResource,
-  FileActionOptions
-} from '../../composables/actions'
+  useFileActionsSetReadme,
+  useFileActions
+} from '../../composables/actions/files'
+
+import { FileActionOptions } from '../../composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',

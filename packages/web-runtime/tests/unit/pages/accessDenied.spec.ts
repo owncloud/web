@@ -14,7 +14,10 @@ const selectors = {
 
 import { ConfigurationManager, useConfigurationManager } from '@ownclouders/web-pkg'
 
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useConfigurationManager: jest.fn()
+}))
 
 describe('access denied page', () => {
   it('renders component', () => {

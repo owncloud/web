@@ -374,7 +374,7 @@ export default defineComponent({
      */
     viewMode: {
       type: String,
-      default: ViewModeConstants.defaultModeName,
+      default: () => ViewModeConstants.defaultModeName,
       validator: (value: string) =>
         [ViewModeConstants.condensedTable.name, ViewModeConstants.default.name].includes(value)
     },

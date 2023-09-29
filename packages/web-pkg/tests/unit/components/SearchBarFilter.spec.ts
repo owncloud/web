@@ -2,7 +2,7 @@ import { useRouteQuery } from '../../../src/composables/router'
 import SearchBarFilter from '../../../src/components/SearchBarFilter.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
-//jest.mock('@ownclouders/web-pkg')
+jest.mock('../../../src/composables/router')
 
 const selectors = {
   filterChipStub: 'oc-filter-chip-stub'

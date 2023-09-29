@@ -133,7 +133,7 @@ export default defineComponent({
     viewModeDefault: {
       type: String,
       required: false,
-      default: ViewModeConstants.default.name
+      default: () => ViewModeConstants.default.name
     },
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,

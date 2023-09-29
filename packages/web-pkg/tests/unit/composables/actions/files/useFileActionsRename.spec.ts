@@ -11,7 +11,7 @@ import { useStore } from '../../../../../src/composables'
 import { nextTick, unref } from 'vue'
 import { ConfigurationManager } from '../../../../../src/configuration'
 
-jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('../../../../../src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {

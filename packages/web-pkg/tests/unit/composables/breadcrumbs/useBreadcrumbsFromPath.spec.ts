@@ -4,7 +4,7 @@ import { RouteLocation, getComposableWrapper } from 'web-test-helpers/src'
 import { useBreadcrumbsFromPath } from '../../../../src/composables/breadcrumbs'
 import { ConfigurationManager } from '../../../../src/configuration'
 
-jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('../../../../src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mock<ConfigurationManager>({
       options: {

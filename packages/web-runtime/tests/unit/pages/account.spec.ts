@@ -11,7 +11,7 @@ import {
 import { mock, mockDeep } from 'jest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
-import { ClientService } from '@ownclouders/web-pkg'
+import { ClientService, ConfigurationManager } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 
 const $route = {
@@ -33,9 +33,14 @@ const selectors = {
 }
 
 jest.mock('@ownclouders/web-pkg', () => ({
-  configurationManager: {
-    logoutUrl: 'https://account-manager/logout'
-  }
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useConfigurationManager: () =>
+    mock<ConfigurationManager>({
+      logoutUrl: 'https://account-manager/logout',
+      options: {
+        logoutUrl: 'https://account-manager/logout'
+      }
+    })
 }))
 
 describe('account page', () => {

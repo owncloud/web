@@ -15,7 +15,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg')
+jest.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')
 
 describe('delete', () => {
   describe('computed property "actions"', () => {

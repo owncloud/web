@@ -13,7 +13,7 @@ import {
 import { useScrollToMock } from '../../../../mocks/useScrollToMock'
 import { useScrollTo } from '../../../../../src/composables/scrollTo'
 
-jest.mock('@ownclouders/web-pkg/src/composables/scrollTo')
+jest.mock('../../../../../src/composables/scrollTo')
 
 describe('useFileActionsCreateNewFolder', () => {
   describe('checkFolderName', () => {

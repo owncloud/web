@@ -12,7 +12,7 @@ import {
 } from 'web-test-helpers'
 import { useArchiverService, useStore } from '../../../../../src/composables'
 
-jest.mock('@ownclouders/web-pkg/src/composables/archiverService/useArchiverService')
+jest.mock('../../../../../src/composables/archiverService/useArchiverService')
 
 describe('downloadArchive', () => {
   describe('search context', () => {
@@ -66,9 +66,7 @@ function getWrapper({
   jest.mocked(useArchiverService).mockImplementation(
     () =>
       ({
-        ...jest.requireActual(
-          '@ownclouders/web-pkg/src/composables/archiverService/useArchiverService'
-        ),
+        ...jest.requireActual('../../../../..//src/composables/archiverService/useArchiverService'),
         triggerDownload: triggerDownloadMock,
         fileIdsSupported: true
       } as any as any)

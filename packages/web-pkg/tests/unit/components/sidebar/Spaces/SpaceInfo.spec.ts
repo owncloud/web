@@ -1,4 +1,4 @@
-import SpaceInfo from '../../../../src/components/SideBar/Spaces/SpaceInfo.vue'
+import SpaceInfo from '../../../../../src/components/SideBar/Spaces/SpaceInfo.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const spaceMock = {

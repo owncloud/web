@@ -2,7 +2,10 @@ import ItemFilterToggle from '../../../src/components/ItemFilterToggle.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
 
-jest.mock('@ownclouders/web-pkg')
+jest.mock('../../../src/composables/appDefaults', () => ({
+  appDefaults: jest.fn(),
+  queryItemAsString: jest.fn()
+}))
 
 const selectors = {
   labelSpan: '.oc-filter-chip-label',

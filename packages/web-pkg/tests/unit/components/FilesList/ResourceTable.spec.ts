@@ -2,11 +2,13 @@ import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from '@ownclouders/web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
-import { ConfigurationManager, displayPositionedDropdown, eventBus } from '../../../../src'
+import { ConfigurationManager, displayPositionedDropdown } from '../../../../src'
+import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock, mockDeep } from 'jest-mock-extended'
 
-jest.mock('@ownclouders/web-pkg/src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('../../../../src/helpers')
+jest.mock('../../../../src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
     mock<ConfigurationManager>({
       options: {
@@ -202,8 +204,6 @@ const processingResourcesWithAllFields = [
     processing: true
   }
 ]
-
-jest.mock('@ownclouders/web-pkg/src/helpers')
 
 describe('ResourceTable', () => {
   it('displays all known fields of the resources', () => {

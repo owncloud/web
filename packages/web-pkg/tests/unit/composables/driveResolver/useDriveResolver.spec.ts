@@ -1,4 +1,5 @@
-import { useCapabilitySpacesEnabled, useDriveResolver } from '../../../../src/composables'
+import { useCapabilitySpacesEnabled } from '../../../../src/composables/capability'
+import { useDriveResolver } from '../../../../src/composables/driveResolver'
 import { computed, ref, unref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -11,9 +12,12 @@ import {
 } from 'web-test-helpers'
 import { ConfigurationManager } from '../../../../src/configuration'
 
+jest.mock('../../../../src/composables/capability', () => ({
+  useCapabilitySpacesEnabled: jest.fn()
+}))
+
 jest.mock('../../../../src/composables', () => ({
   ...jest.requireActual('../../../../src/composables'),
-  useCapabilitySpacesEnabled: jest.fn(),
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {

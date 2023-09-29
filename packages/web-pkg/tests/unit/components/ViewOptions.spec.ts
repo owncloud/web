@@ -11,11 +11,11 @@ import { mock } from 'jest-mock-extended'
 import ViewOptions from '../../../src/components/ViewOptions.vue'
 import { ViewModeConstants, useRouteQuery, useRouteQueryPersisted } from '../../../src/composables'
 
-// jest.mock('@ownclouders/web-pkg', () => ({
-//   ...jest.requireActual('@ownclouders/web-pkg'),
-//   useRouteQueryPersisted: jest.fn(),
-//   useRouteQuery: jest.fn()
-// }))
+jest.mock('../../../src/composables/router', () => ({
+  ...jest.requireActual('../../../src/composables/router'),
+  useRouteQueryPersisted: jest.fn(),
+  useRouteQuery: jest.fn()
+}))
 
 const selectors = {
   pageSizeSelect: '.oc-page-size',
