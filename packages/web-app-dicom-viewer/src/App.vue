@@ -1,10 +1,35 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
-    <!-- check ouf if the classes of the div below are still accurate/needed/consistent with overall app design -->
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
+      <!-- vip meta data -->
+      <div id="dicom-viewer-vip-metadata">
+        [insert name] (*[insert birthdate]) <br />
+        [insert institution], [insert date when image was captured]
+      </div>
+      <!-- toggle for displaying all meta data -->
+      <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
+        <!-- TODO: implement click event of toggle properly -->
+        <oc-button
+          id="metadata-toggle-sidebar"
+          oc-tooltip="show/hide DICOM metadata"
+          class="preview-controls-show-metadata"
+          appearance="raw"
+          variation="brand"
+          @click="$emit('toggleShowMetadata')"
+        >
+          <!-- TODO: implement proper toggle, check if fill or line version is needed -->
+          <oc-icon
+            :fill-type="isShowMetadataActivated ? 'fill' : 'line'"
+            name="side-bar-right"
+            variation="inherit"
+          />
+        </oc-button>
+      </div>
+    </div>
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas"></div>
-      <!-- div element for displaying meta data -->
+      <!-- div element for displaying full meta data -->
       <div id="dicom-metadata" class="dicom-metadata">
         <h2>metadata for current dicom image</h2>
         <div class="dicom-metadata-item">
@@ -77,8 +102,8 @@
         </div>
       </div>
     </div>
+    <!-- temporary buttons for viewport manipulations -->
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
-      <!-- viewport manipulations -->
       <div id="tools"></div>
       <div id="tool-info">
         <!--
@@ -801,5 +826,18 @@ export default defineComponent({
 
 .dicom-metadata-item {
   display: none;
+}
+
+#dicom-viewer-show-metadata {
+  justify-content: right;
+}
+
+#metadata-toggle-sidebar {
+  vertical-align: middle;
+  border: 3px solid transparent;
+  &:hover {
+    background-color: var(--oc-color-background-hover);
+    border-radius: 3px;
+  }
 }
 </style>
