@@ -1053,6 +1053,10 @@ importers:
       vite-plugin-dts:
         specifier: 3.6.0
         version: 3.6.0(@types/node@16.18.30)(rollup@3.29.2)(typescript@5.0.3)(vite@4.4.9)
+      web-test-helpers:
+        specifier: workspace:*
+        version: link:../web-test-helpers
+    publishDirectory: package
 
   packages/web-runtime:
     dependencies:
