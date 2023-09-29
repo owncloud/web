@@ -6,7 +6,7 @@ import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID }
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
 import { urlJoin } from '../../utils'
-import { Drive, DriveItem } from 'web-client/src/generated'
+import { Drive, DriveItem } from '@ownclouders/web-client/src/generated'
 
 export function buildWebDavSpacesPath(storageId: string | number, path?: string) {
   return urlJoin('spaces', storageId, path, {

@@ -1,4 +1,4 @@
-import { ViewMode } from 'web-pkg/src/ui/types'
+import { ViewMode } from '../../ui/types'
 
 function $gettext(msg: string): string {
   return msg

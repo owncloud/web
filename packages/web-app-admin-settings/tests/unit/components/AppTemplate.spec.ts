@@ -8,8 +8,8 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
-import { eventBus } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 
 const stubSelectors = {
@@ -23,7 +23,7 @@ const elSelectors = {
   adminSettingsWrapper: '#admin-settings-wrapper'
 }
 
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg')
 
 afterEach(() => jest.clearAllMocks())
 

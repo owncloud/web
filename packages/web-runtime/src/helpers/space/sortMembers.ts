@@ -1,4 +1,4 @@
-import { spaceRoleManager } from 'web-client/src/helpers/share'
+import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 
 export const sortSpaceMembers = (shares: Array<any>): Array<any> => {
   const sortedManagers = shares

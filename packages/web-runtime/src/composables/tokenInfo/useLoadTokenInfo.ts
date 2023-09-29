@@ -1,7 +1,7 @@
 import { Ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useStore, useUserContext } from 'web-pkg/src/composables'
-import { ClientService } from 'web-pkg/src/services'
+import { useClientService, useStore, useUserContext } from '@ownclouders/web-pkg'
+import { ClientService } from '@ownclouders/web-pkg'
 
 export interface LoadTokenInfoOptions {
   clientService?: ClientService

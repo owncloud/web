@@ -101,8 +101,8 @@ import {
   PaginationConstants,
   ViewModeConstants,
   useRouteName
-} from 'web-pkg/src/composables'
-import { ViewMode } from 'web-pkg/src/ui/types'
+} from '../composables'
+import { ViewMode } from '../ui/types'
 
 export default defineComponent({
   props: {
@@ -115,11 +115,11 @@ export default defineComponent({
     },
     perPageQueryName: {
       type: String,
-      default: PaginationConstants.perPageQueryName
+      default: () => PaginationConstants.perPageQueryName
     },
     perPageDefault: {
       type: String,
-      default: PaginationConstants.perPageDefault
+      default: () => PaginationConstants.perPageDefault
     },
     perPageStoragePrefix: {
       type: String,
@@ -128,7 +128,7 @@ export default defineComponent({
     viewModeDefault: {
       type: String,
       required: false,
-      default: ViewModeConstants.defaultModeName
+      default: () => ViewModeConstants.defaultModeName
     },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
@@ -213,6 +213,7 @@ export default defineComponent({
       viewSizeCurrent: viewSizeQuery,
       itemsPerPageCurrent: itemsPerPageQuery,
       queryParamsLoading,
+      queryItemAsString,
       setTilesViewSize,
       setItemsPerPage,
       setViewMode,
@@ -242,7 +243,6 @@ export default defineComponent({
     }
   },
   methods: {
-    queryItemAsString,
     ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
 
     updateHiddenFilesShownModel(event) {

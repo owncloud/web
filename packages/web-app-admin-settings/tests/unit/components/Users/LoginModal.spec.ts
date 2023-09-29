@@ -6,7 +6,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { User } from 'web-client/src/generated'
+import { User } from '@ownclouders/web-client/src/generated'
 
 describe('LoginModal', () => {
   it('renders the input including two options', () => {

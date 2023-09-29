@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { ResolveConflict, ResolveStrategy } from '.'
 
 export interface FileConflict {

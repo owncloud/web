@@ -1,3 +1,4 @@
+export * from './useFileActions'
 export * from './useFileActionsSetReadme'
 export * from './useFileActionsAcceptShare'
 export * from './useFileActionsCopy'

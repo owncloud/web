@@ -1,12 +1,8 @@
-import { computed, ComputedRef, unref } from 'vue'
-import { MaybeRef } from 'web-pkg/src/utils'
-import {
-  queryItemAsString,
-  useRouteQuery,
-  useRouteQueryPersisted,
-  PaginationConstants
-} from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { computed, ComputedRef, unref, MaybeRef } from 'vue'
+import { queryItemAsString } from '../appDefaults'
+import { useRouteQuery, useRouteQueryPersisted } from '../router'
+import { PaginationConstants } from './constants'
+import { eventBus } from '../../services'
 import { findIndex } from 'lodash-es'
 import { useRoute, useRouter } from 'vue-router'
 

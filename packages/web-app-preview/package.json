@@ -4,11 +4,14 @@
   "private": true,
   "description": "ownCloud Web Preview",
   "license": "AGPL-3.0",
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
   "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
     "@vueuse/core": "^10.3.0",
     "vue3-gettext": "^2.3.3",
-    "vuex": "4.1.0",
-    "web-client": "workspace:@ownclouders/web-client@*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "vuex": "4.1.0"
   }
 }

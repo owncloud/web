@@ -8,14 +8,14 @@ import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
-import quickActions from 'web-pkg/src/quickActions'
+import { quickActions } from '@ownclouders/web-pkg'
 import store from './store'
 import { SDKSearch } from './search'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import { Registry } from './services'
 import fileSideBars from './fileSideBars'
-import { buildRoutes } from 'web-pkg/src/router'
-import { AppNavigationItem, AppReadyHookArgs } from 'web-pkg/src/apps'
+import { buildRoutes } from '@ownclouders/web-pkg'
+import { AppNavigationItem, AppReadyHookArgs } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
@@ -23,8 +23,8 @@ import {
   SpaceResource,
   isPersonalSpaceResource,
   isShareSpaceResource
-} from 'web-client/src/helpers'
-import { configurationManager } from 'web-pkg/src'
+} from '@ownclouders/web-client/src/helpers'
+import { configurationManager } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {

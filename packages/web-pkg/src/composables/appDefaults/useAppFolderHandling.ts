@@ -1,15 +1,15 @@
 import { Store } from 'vuex'
-import { computed, Ref, ref, unref } from 'vue'
+import { computed, Ref, ref, unref, MaybeRef } from 'vue'
 import { dirname } from 'path'
-import { ClientService, MaybeRef } from 'web-pkg'
-import { useAppFileHandling } from 'web-pkg/src/composables'
-import { Resource } from 'web-client'
+import { ClientService } from '../../services'
+import { useAppFileHandling } from './useAppFileHandling'
+import { Resource } from '@ownclouders/web-client'
 import { FileContext } from './types'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
-import { isMountPointSpaceResource } from 'web-client/src/helpers'
+import { isMountPointSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 interface AppFolderHandlingOptions {
   store: Store<any>

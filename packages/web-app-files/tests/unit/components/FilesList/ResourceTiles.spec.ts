@@ -1,7 +1,7 @@
 import { createStore, defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
 import ResourceTiles from 'web-app-files/src/components/FilesList/ResourceTiles.vue'
 import { sortFields } from 'web-app-files/src/helpers/ui/resourceTiles'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { mock } from 'jest-mock-extended'
 
 const spacesResources = [

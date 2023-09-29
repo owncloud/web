@@ -7,25 +7,23 @@ import {
   isProjectSpaceResource,
   extractExtensionFromFile,
   SpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import {
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
   ConflictDialog
 } from '../../../helpers/resource'
-import { urlJoin } from 'web-client/src/utils'
-import {
-  useCapabilitySpacesEnabled,
-  useClientService,
-  useLoadingService,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useCapabilitySpacesEnabled } from '../../capability'
+import { useClientService } from '../../clientService'
+import { useLoadingService } from '../../loadingService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { LoadingTaskCallbackArguments } from 'web-pkg/src/services'
+import { FileAction, FileActionOptions } from '../types'
+import { LoadingTaskCallbackArguments } from '../../../services'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

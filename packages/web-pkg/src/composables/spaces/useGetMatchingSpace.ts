@@ -1,10 +1,8 @@
-import {
-  useCapabilitySpacesEnabled,
-  useConfigurationManager,
-  useRouteParam,
-  useStore
-} from 'web-pkg/src/composables'
-import { Resource, SpaceResource } from 'web-client'
+import { useCapabilitySpacesEnabled } from '../capability'
+import { useStore } from '../store'
+import { useConfigurationManager } from '../configuration'
+import { useRouteParam } from '../router'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   MountPointSpaceResource,
   ProjectSpaceResource,
@@ -14,7 +12,7 @@ import {
   isMountPointSpaceResource,
   isPersonalSpaceResource,
   isProjectSpaceResource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
 

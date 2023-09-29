@@ -1,7 +1,7 @@
 import translations from '../l10n/translations.json'
 import { extensions } from './extensions'
 import { useGettext } from 'vue3-gettext'
-import { defineWebApplication } from '@ownclouders/web-pkg/src/apps'
+import { defineWebApplication } from '@ownclouders/web-pkg'
 
 export default defineWebApplication({
   setup(args) {

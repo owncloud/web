@@ -116,15 +116,15 @@ import {
   SharePermissions,
   ShareRole,
   SpacePeopleShareRoles
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import * as uuid from 'uuid'
 import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharingDefault,
   useStore
-} from 'web-pkg/src/composables'
-import { Resource } from 'web-client'
+} from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client'
 import { OcDrop } from 'design-system/src/components'
 import { mapGetters } from 'vuex'
 

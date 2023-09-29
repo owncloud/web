@@ -1,6 +1,6 @@
 import { set, has } from 'lodash-es'
-import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
-import { Resource } from 'web-client/src/helpers'
+import { getIndicators } from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {

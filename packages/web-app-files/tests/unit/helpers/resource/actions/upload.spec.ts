@@ -1,9 +1,8 @@
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource'
-import { ResolveStrategy } from 'web-pkg/src/helpers/resource'
-import { Resource } from 'web-client/src/helpers'
-import { UppyResource } from 'web-pkg/src/services/uppy'
+import { ResolveStrategy, UppyResource } from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
 
 const getResourceConflictInstance = ({

@@ -1,6 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultComponentMocks,

@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { useFileActionsDownloadArchive } from 'web-pkg/src/composables/actions/files/useFileActionsDownloadArchive'
-import { Resource } from 'web-client'
+import { useFileActionsDownloadArchive } from '../../../../../src/composables/actions'
+import { Resource } from '@ownclouders/web-client'
 
 import {
   createStore,
@@ -10,9 +10,9 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useArchiverService, useStore } from 'web-pkg/src/composables'
+import { useArchiverService, useStore } from '../../../../../src/composables'
 
-jest.mock('web-pkg/src/composables/archiverService/useArchiverService')
+jest.mock('../../../../../src/composables/archiverService/useArchiverService')
 
 describe('downloadArchive', () => {
   describe('search context', () => {
@@ -66,7 +66,7 @@ function getWrapper({
   jest.mocked(useArchiverService).mockImplementation(
     () =>
       ({
-        ...jest.requireActual('web-pkg/src/composables/archiverService/useArchiverService'),
+        ...jest.requireActual('../../../../..//src/composables/archiverService/useArchiverService'),
         triggerDownload: triggerDownloadMock,
         fileIdsSupported: true
       } as any as any)

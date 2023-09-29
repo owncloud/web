@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import ActionMenuItem from 'web-pkg/src/components/ContextActions/ActionMenuItem.vue'
+import { ActionMenuItem } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
@@ -27,11 +27,11 @@ import {
   useSpaceActionsEditQuota,
   useSpaceActionsRename,
   useSpaceActionsRestore
-} from 'web-pkg/src/composables/actions/spaces'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
+} from '@ownclouders/web-pkg'
+import { QuotaModal } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, unref } from 'vue'
-import { SpaceResource } from 'web-client'
-import { useCapabilitySpacesMaxQuota, useStore } from 'web-pkg/src/composables'
+import { SpaceResource } from '@ownclouders/web-client'
+import { useCapabilitySpacesMaxQuota, useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ActionsPanel',

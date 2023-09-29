@@ -8,15 +8,15 @@ import {
 } from 'web-test-helpers'
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'jest-mock-extended'
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { SpaceResource } from 'web-client'
-import { useRouteQuery } from 'web-pkg'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { SpaceResource } from '@ownclouders/web-client'
+import { useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
-jest.mock('web-pkg/src/composables/actions/files/useFileActions')
-jest.mock('web-pkg/src/composables/router', () => ({
-  ...jest.requireActual('web-pkg/src/composables/router'),
-  useRouteQuery: jest.fn()
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useRouteQuery: jest.fn(),
+  useFileActions: jest.fn()
 }))
 
 describe('ResourceDetails component', () => {

@@ -1,7 +1,7 @@
 import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import { RuntimeApi } from './types'
-import { ApiError } from 'web-pkg/src/errors'
+import { ApiError } from '@ownclouders/web-pkg'
 import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
 import { Store } from 'vuex'
 import { App, Component, h } from 'vue'
@@ -9,7 +9,7 @@ import {
   ApplicationQuickActions,
   ApplicationTranslations,
   AppNavigationItem
-} from 'web-pkg/src/apps'
+} from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
 
 /**

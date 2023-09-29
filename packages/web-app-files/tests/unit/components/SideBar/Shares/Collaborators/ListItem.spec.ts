@@ -4,7 +4,7 @@ import {
   peopleRoleViewerFolder,
   SharePermissions,
   ShareTypes
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,

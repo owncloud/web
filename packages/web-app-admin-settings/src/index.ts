@@ -3,8 +3,8 @@ import General from './views/General.vue'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
-import { Ability } from 'web-client/src/helpers/resource/types'
-import { AppNavigationItem } from 'web-pkg/src/apps'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
+import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {

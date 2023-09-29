@@ -1,18 +1,18 @@
 import GroupsList from '../../../../src/components/Groups/GroupsList.vue'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { displayPositionedDropdown, eventBus, queryItemAsString } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 
 const getGroupMocks = () => [
   { id: '1', members: [] },
   { id: '2', members: [] }
 ]
 
-jest.mock('web-pkg/src/helpers', () => ({
-  ...jest.requireActual('web-pkg/src/helpers'),
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  queryItemAsString: jest.fn(),
   displayPositionedDropdown: jest.fn()
 }))
-jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('GroupsList', () => {
   describe('method "orderBy"', () => {

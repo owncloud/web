@@ -70,8 +70,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import { Resource } from 'web-client/src'
-import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
+import { Resource } from '@ownclouders/web-client/src'
+import { AppTopBar } from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   sortHelper,
@@ -79,16 +79,16 @@ import {
   useRoute,
   useRouteQuery,
   useRouter
-} from 'web-pkg/src/composables'
-import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
-import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+} from '@ownclouders/web-pkg'
+import { Action, ActionOptions } from '@ownclouders/web-pkg'
+import { useDownloadFile } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
-import AppBanner from 'web-pkg/src/components/AppBanner.vue'
+import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
 

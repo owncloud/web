@@ -1,5 +1,5 @@
 import { useGettext } from 'vue3-gettext'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '../store'
 
 export const useWindowOpen = () => {
   const { $gettext } = useGettext()

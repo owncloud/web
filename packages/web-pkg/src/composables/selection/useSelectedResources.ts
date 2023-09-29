@@ -1,8 +1,9 @@
 import { computed, unref, WritableComputedRef, Ref } from 'vue'
-import { Resource } from 'web-client'
-import { useGetMatchingSpace, useStore } from 'web-pkg/src/composables'
+import { Resource } from '@ownclouders/web-client'
+import { useGetMatchingSpace } from '../spaces'
+import { useStore } from '../store'
 import { Store } from 'vuex'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export interface SelectedResourcesResult {
   selectedResources: Ref<Resource[]>

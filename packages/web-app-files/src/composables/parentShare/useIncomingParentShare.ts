@@ -1,5 +1,5 @@
-import { buildShare } from 'web-client/src/helpers/share'
-import { useCapabilitySpacesEnabled, useClientService, useStore } from 'web-pkg/src/composables'
+import { buildShare } from '@ownclouders/web-client/src/helpers/share'
+import { useCapabilitySpacesEnabled, useClientService, useStore } from '@ownclouders/web-pkg'
 import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import {
@@ -9,8 +9,8 @@ import {
   isPersonalSpaceResource,
   Resource,
   SpaceResource
-} from 'web-client/src/helpers'
-import { DavProperty } from 'web-client/src/webdav/constants'
+} from '@ownclouders/web-client/src/helpers'
+import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 
 export function useIncomingParentShare() {
   const store = useStore()

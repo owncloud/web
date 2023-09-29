@@ -1,6 +1,6 @@
 import { useRouter } from './useRouter'
 import { useConfigurationManager } from '../configuration'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '../../helpers/router'
 import { Router } from 'vue-router'
 import { ConfigurationManager } from '../../configuration'

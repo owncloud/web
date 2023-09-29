@@ -1,4 +1,4 @@
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 export interface CreateTargetRouteOptions {
   path: string

@@ -1,7 +1,7 @@
 import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import { mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
-import { Drive } from 'web-client/src/generated'
+import { Resource } from '@ownclouders/web-client'
+import { Drive } from '@ownclouders/web-client/src/generated'
 import {
   createStore,
   defaultPlugins,

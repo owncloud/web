@@ -1,4 +1,4 @@
-import { useSpaceActionsRename } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsRename } from '../../../../../src/composables/actions'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -9,7 +9,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 
 describe('rename', () => {
   describe('handler', () => {

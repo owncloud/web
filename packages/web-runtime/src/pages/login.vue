@@ -32,9 +32,9 @@
 
 <script lang="ts">
 import { authService } from '../services/auth'
-import { queryItemAsString, useRouteQuery, useStore } from 'web-pkg/src/composables'
+import { queryItemAsString, useRouteQuery, useStore } from '@ownclouders/web-pkg'
 import { computed, defineComponent, unref } from 'vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'LoginPage',

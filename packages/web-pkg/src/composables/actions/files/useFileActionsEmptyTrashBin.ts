@@ -1,17 +1,16 @@
 import { Store } from 'vuex'
 import { isLocationTrashActive } from '../../../router'
-import { SpaceResource } from 'web-client/src/helpers'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { computed, unref } from 'vue'
-import {
-  useCapabilityFilesPermanentDeletion,
-  useClientService,
-  useLoadingService,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
+import { useCapabilityFilesPermanentDeletion } from '../../capability'
+import { useClientService } from '../../clientService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
+
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions } from '../types'
+import { useLoadingService } from '../../loadingService'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

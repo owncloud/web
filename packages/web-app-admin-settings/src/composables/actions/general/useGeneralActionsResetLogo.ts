@@ -1,8 +1,8 @@
 import { Store } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
-import { useAbility, useClientService, useRouter, useStore } from 'web-pkg/src/composables'
-import { Action } from 'web-pkg/src/composables/actions'
+import { useAbility, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
+import { Action } from '@ownclouders/web-pkg'
 
 export const useGeneralActionsResetLogo = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()

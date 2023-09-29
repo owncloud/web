@@ -89,8 +89,8 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { eventBus } from '@ownclouders/web-pkg'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import {
@@ -101,10 +101,10 @@ import {
   useStore,
   useServerSentEvents,
   useCapabilityCoreSSE
-} from 'web-pkg'
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 
 const POLLING_INTERVAL = 30000
 

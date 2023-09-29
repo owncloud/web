@@ -55,15 +55,15 @@
 </template>
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { DavPermission, DavProperty } from 'web-client/src/webdav/constants'
-import { formatRelativeDateFromHTTP, formatFileSize } from 'web-pkg/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
+import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
+import { formatRelativeDateFromHTTP, formatFileSize } from '@ownclouders/web-pkg'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { defineComponent, inject, ref, Ref } from 'vue'
-import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
-import { SharePermissions } from 'web-client/src/helpers/share'
-import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
-import { formatDateFromJSDate } from 'web-pkg/src/helpers'
-import { useClientService } from 'web-pkg/src/composables'
+import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
+import { useClientService } from '@ownclouders/web-pkg/src/composables'
+import { formatDateFromJSDate } from '@ownclouders/web-pkg'
+import { useDownloadFile } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileVersions',

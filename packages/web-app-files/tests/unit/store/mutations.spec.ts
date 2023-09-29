@@ -1,6 +1,6 @@
 import mutations from '../../../src/store/mutations'
 import { cloneDeep } from 'lodash-es'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 const stateFixture = {
   files: [

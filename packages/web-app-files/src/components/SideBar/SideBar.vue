@@ -36,28 +36,32 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useActiveLocation } from 'web-pkg/src/composables'
+import { useActiveLocation } from '@ownclouders/web-pkg'
 import FileInfo from './FileInfo.vue'
-import { isProjectSpaceResource, SpaceResource, Resource } from 'web-client/src/helpers'
-import { WebDAV } from 'web-client/src/webdav'
-import { default as InnerSideBar } from 'web-pkg/src/components/SideBar/SideBar.vue'
-import SpaceInfo from 'web-pkg/src/components/SideBar/Spaces/SpaceInfo.vue'
-import { Panel } from 'web-pkg/src/components/SideBar'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import {
+  isProjectSpaceResource,
+  SpaceResource,
+  Resource
+} from '@ownclouders/web-client/src/helpers'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { SideBar as InnerSideBar } from '@ownclouders/web-pkg'
+import { SpaceInfo } from '@ownclouders/web-pkg'
+import { Panel } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import {
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
-} from 'web-pkg/src/router'
+} from '@ownclouders/web-pkg'
 import {
   useCapabilityShareJailEnabled,
   useClientService,
   useStore,
   useRouter
-} from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+} from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: { FileInfo, SpaceInfo, InnerSideBar },

@@ -4,12 +4,12 @@ import {
   Share,
   linkRoleInternalFolder,
   linkRoleViewerFolder
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import { Store } from 'vuex'
-import { ClientService } from 'web-pkg/src/services'
+import { ClientService } from '../../services'
 import { useClipboard } from '@vueuse/core'
-import { Ability } from 'web-client/src/helpers/resource/types'
-import { Resource } from 'web-client'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Resource } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
 
 export interface CreateQuicklink {

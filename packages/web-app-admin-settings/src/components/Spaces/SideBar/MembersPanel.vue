@@ -38,12 +38,16 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, inject, ref, watch, unref } from 'vue'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from 'web-client/src/helpers/share'
-import { defaultFuseOptions } from 'web-pkg/src/helpers'
+import {
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
+} from '@ownclouders/web-client/src/helpers/share'
+import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'MembersPanel',

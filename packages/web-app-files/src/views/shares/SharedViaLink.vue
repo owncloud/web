@@ -66,29 +66,29 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { VisibilityObserver } from 'web-pkg/src/observer'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { VisibilityObserver } from '@ownclouders/web-pkg'
+import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { debounce, find } from 'lodash-es'
 
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
+import { ContextActions } from '@ownclouders/web-pkg'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
-import Pagination from 'web-pkg/src/components/Pagination.vue'
+import { ResourceTable } from '@ownclouders/web-pkg'
+import { Pagination } from '@ownclouders/web-pkg'
 
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   useCapabilityProjectSpacesEnabled,
   useGetMatchingSpace,
   useMutationSubscription
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 
 const visibilityObserver = new VisibilityObserver()

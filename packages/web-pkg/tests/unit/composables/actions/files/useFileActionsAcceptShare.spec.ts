@@ -1,9 +1,9 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { useFileActionsAcceptShare } from 'web-pkg/src/composables/actions/files/useFileActionsAcceptShare'
-import { Resource } from 'web-client'
-import { ShareStatus } from 'web-client/src/helpers/share'
-import { useStore } from 'web-pkg/src/composables'
+import { useFileActionsAcceptShare } from '../../../../../src/composables/actions/files/useFileActionsAcceptShare'
+import { Resource } from '@ownclouders/web-client'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { useStore } from '../../../../../src/composables'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const sharesWithMeLocation = 'files-shares-with-me'

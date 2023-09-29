@@ -115,7 +115,7 @@ import {
   SharePermissions,
   ShareTypes,
   SpacePeopleShareRoles
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharing,
@@ -123,16 +123,16 @@ import {
   useCapabilityShareJailEnabled,
   useClientService,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 
 import { defineComponent, inject, ref, unref, watch } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
   displayPositionedDropdown,
   formatDateFromDateTime,
   formatRelativeDateFromDateTime
-} from 'web-pkg'
+} from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
 

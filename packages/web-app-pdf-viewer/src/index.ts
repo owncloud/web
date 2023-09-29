@@ -1,5 +1,5 @@
 import translations from '../l10n/translations.json'
-import { AppWrapperRoute } from 'web-pkg/src/components/AppTemplates/AppWrapperRoute'
+import { AppWrapperRoute } from '@ownclouders/web-pkg'
 import PdfViewer from './App.vue'
 
 // just a dummy function to trick gettext tools

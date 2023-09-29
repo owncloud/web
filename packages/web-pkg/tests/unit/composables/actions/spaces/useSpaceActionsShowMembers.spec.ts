@@ -1,6 +1,6 @@
 import { unref } from 'vue'
-import { SpaceResource } from 'web-client/src'
-import { useSpaceActionsShowMembers } from 'web-pkg/src/composables/actions/spaces'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { useSpaceActionsShowMembers } from '../../../../../src/composables/actions'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 
 describe('showMembers', () => {

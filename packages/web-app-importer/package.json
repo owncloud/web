@@ -4,6 +4,9 @@
   "private": true,
   "description": "ownCloud Web Importer",
   "license": "AGPL-3.0",
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
   "dependencies": {
     "@uppy/dashboard": "^3.1.1",
     "@uppy/google-drive": "^3.1.1",

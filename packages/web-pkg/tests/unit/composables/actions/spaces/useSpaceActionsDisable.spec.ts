@@ -1,5 +1,5 @@
-import { useSpaceActionsDisable } from 'web-pkg/src/composables/actions/spaces'
-import { buildSpace, SpaceResource } from 'web-client/src/helpers'
+import { useSpaceActionsDisable } from '../../../../../src/composables/actions'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultComponentMocks,
@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { Drive } from 'web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('disable', () => {
   describe('isEnabled property', () => {

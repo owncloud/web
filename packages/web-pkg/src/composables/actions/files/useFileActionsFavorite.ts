@@ -1,15 +1,13 @@
 import { computed, unref } from 'vue'
 import { Store } from 'vuex'
-import {
-  useCapabilityFilesFavorites,
-  useClientService,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
+import { useCapabilityFilesFavorites } from '../../capability'
 
 import { isLocationCommonActive, isLocationSpacesActive } from '../../../router'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions, useIsFilesAppActive } from 'web-pkg/src/composables/actions'
+import { FileAction, FileActionOptions, useIsFilesAppActive } from '../../actions'
+import { useStore } from '../../store'
+import { useRouter } from '../../router'
+import { useClientService } from '../../clientService'
 
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

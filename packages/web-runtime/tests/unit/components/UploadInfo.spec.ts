@@ -20,17 +20,14 @@ const selectors = {
   }
 }
 
-jest.mock('web-pkg/src/configuration', () => ({
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
   configurationManager: {
     options: { routing: { idBased: true } }
   }
 }))
 
 describe('UploadInfo component', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('should render the component in a hidden state per default', () => {
     const { wrapper } = getShallowWrapper()
     const overlay = wrapper.find(selectors.overlay)

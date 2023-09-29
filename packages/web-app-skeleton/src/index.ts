@@ -1,6 +1,6 @@
 import App from './App.vue'
 import { GitHubSearch } from './search/github'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 
 const appInfo = {
   name: 'web-app-skeleton',

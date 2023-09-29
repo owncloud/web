@@ -123,7 +123,7 @@ import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled, useRoute, useStore } from 'web-pkg/src/composables'
+import { useCapabilitySpacesEnabled, useRoute, useStore } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({

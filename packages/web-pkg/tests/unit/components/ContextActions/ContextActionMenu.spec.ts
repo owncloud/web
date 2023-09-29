@@ -1,4 +1,4 @@
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import ContextActionMenu from '../../../../src/components/ContextActions/ContextActionMenu.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('ContextActionMenu component', () => {

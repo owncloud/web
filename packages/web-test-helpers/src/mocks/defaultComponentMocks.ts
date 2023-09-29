@@ -4,11 +4,11 @@ import {
   LoadingService,
   LoadingTaskCallbackArguments,
   PasswordPolicyService,
-  PreviewService
-} from 'web-pkg/src/services'
+  PreviewService,
+  UppyService
+} from '@ownclouders/web-pkg'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
-import { UppyService } from 'web-pkg/src/services/uppy'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { ref } from 'vue'
 
 export interface ComponentMocksOptions {

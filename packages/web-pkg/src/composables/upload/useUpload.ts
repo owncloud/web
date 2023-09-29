@@ -1,12 +1,10 @@
+import { useStore } from '../store'
+import { useAccessToken, usePublicLinkContext, usePublicLinkPassword } from '../authContext'
 import {
-  useAccessToken,
   useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
-  useCapabilityFilesTusSupportMaxChunkSize,
-  usePublicLinkContext,
-  usePublicLinkPassword,
-  useStore
-} from 'web-pkg/src/composables'
+  useCapabilityFilesTusSupportMaxChunkSize
+} from '../capability'
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'

@@ -143,7 +143,7 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
+import { QuotaModal } from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   useAccessToken,
@@ -155,17 +155,17 @@ import {
   useRouteQuery,
   useRouter,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { computed, defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import { mapActions, mapMutations, mapState } from 'vuex'
 import AppTemplate from '../components/AppTemplate.vue'
-import { useSideBar } from 'web-pkg/src/composables/sideBar'
-import ItemFilter from 'web-pkg/src/components/ItemFilter.vue'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import { useSideBar } from '@ownclouders/web-pkg'
+import { ItemFilter } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { toRaw } from 'vue'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
 import { format } from 'util'
@@ -178,9 +178,9 @@ import {
   useUserActionsEditLogin,
   useUserActionsEditQuota
 } from '../composables/actions/users'
-import { configurationManager } from 'web-pkg'
-import { Drive, Group, User } from 'web-client/src/generated'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { configurationManager } from '@ownclouders/web-pkg'
+import { Drive, Group, User } from '@ownclouders/web-client/src/generated'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'UsersView',

@@ -1,5 +1,5 @@
 import * as uuid from 'uuid'
-import { eventBus } from 'web-pkg'
+import { eventBus } from './eventBus'
 import { debounce } from 'lodash-es'
 
 export enum LoadingEventTopics {

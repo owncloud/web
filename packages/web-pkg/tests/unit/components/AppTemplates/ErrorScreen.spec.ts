@@ -1,4 +1,4 @@
-import ErrorScreen from 'web-pkg/src/components/AppTemplates/PartialViews/ErrorScreen.vue'
+import ErrorScreen from '../../../../src/components/AppTemplates/PartialViews/ErrorScreen.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('The external app error screen component', () => {

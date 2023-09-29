@@ -2,8 +2,11 @@ import get from 'lodash-es/get'
 import isEqual from 'lodash-es/isEqual'
 import { stringify } from 'qs'
 import { Store } from 'vuex'
-import { cacheService, ClientService, ConfigurationManager, encodePath } from 'web-pkg'
-import { isPublicSpaceResource } from 'web-client/src/helpers'
+import { cacheService } from '../cache'
+import { ClientService } from '../client'
+import { ConfigurationManager } from '../../configuration'
+import { encodePath } from '../../utils'
+import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
 
 export class PreviewService {

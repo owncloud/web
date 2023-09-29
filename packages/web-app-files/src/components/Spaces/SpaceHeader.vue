@@ -82,15 +82,15 @@ import {
   unref,
   watch
 } from 'vue'
-import { SpaceResource } from 'web-client/src/helpers'
-import { useClientService, useStore, usePreviewService } from 'web-pkg/src/composables'
-import { ImageDimension } from 'web-pkg/src/constants'
-import { VisibilityObserver } from 'web-pkg/src/observer'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useClientService, useStore, usePreviewService } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg'
+import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import SpaceContextActions from './SpaceContextActions.vue'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 const visibilityObserver = new VisibilityObserver()

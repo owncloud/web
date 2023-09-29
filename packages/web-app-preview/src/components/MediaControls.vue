@@ -112,7 +112,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 
 export default defineComponent({
   name: 'MediaControls',
@@ -205,7 +205,7 @@ export default defineComponent({
   }
 })
 </script>
-  
+
 <style lang="scss" scoped>
 .preview-details.lightbox {
   z-index: 1000;
@@ -220,4 +220,3 @@ export default defineComponent({
   width: 42px;
 }
 </style>
-  

@@ -7,7 +7,7 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg'
+import { ClientService } from '@ownclouders/web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from 'vue'
 

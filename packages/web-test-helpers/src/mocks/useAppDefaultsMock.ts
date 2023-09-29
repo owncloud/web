@@ -1,10 +1,9 @@
 import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
-import { Resource } from 'web-client/src'
-import { FileResource } from 'web-client/src/helpers'
-import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
-import { AppConfigObject } from 'web-pkg/src/apps'
-import { FileContext, useAppDefaults } from 'web-pkg/src/composables'
+import { Resource } from '@ownclouders/web-client/src'
+import { FileResource } from '@ownclouders/web-client/src/helpers'
+import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
+import { FileContext, useAppDefaults, AppConfigObject } from '@ownclouders/web-pkg'
 
 export const useAppDefaultsMock = (
   options: Partial<ReturnType<typeof useAppDefaults>> = {}

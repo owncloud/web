@@ -1,5 +1,5 @@
 import { RouteLocation } from 'web-test-helpers/src'
-import { breadcrumbsFromPath, concatBreadcrumbs } from 'web-pkg/src/helpers/breadcrumbs'
+import { breadcrumbsFromPath, concatBreadcrumbs } from '../../../src/helpers/breadcrumbs'
 
 describe('builds an array of breadcrumbitems', () => {
   it('from a path', () => {

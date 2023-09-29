@@ -1,4 +1,4 @@
-import { SortDir, SortField } from 'web-pkg/src/composables'
+import { SortDir, SortField } from '../../composables/sort'
 
 export const determineSortFields = (firstResource): SortField[] => {
   if (!firstResource) {

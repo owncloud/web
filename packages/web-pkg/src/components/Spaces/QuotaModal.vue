@@ -32,11 +32,13 @@
 <script lang="ts">
 import { computed, defineComponent, unref, PropType, ref, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
-import { SpaceResource } from 'web-client/src'
-import { eventBus, useClientService, useRouter } from 'web-pkg/src'
-import { useStore, useLoadingService } from 'web-pkg/src/composables'
-import { Drive } from 'web-client/src/generated'
+import QuotaSelect from '../QuotaSelect.vue'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { useClientService } from '../../composables'
+import { useRouter } from '../../composables/router'
+import { eventBus } from '../../services'
+import { useStore, useLoadingService } from '../../composables'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',

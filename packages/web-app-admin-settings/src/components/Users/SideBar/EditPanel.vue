@@ -111,13 +111,17 @@
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
-import CompareSaveDialog from 'web-pkg/src/components/SideBar/CompareSaveDialog.vue'
+import { CompareSaveDialog, QuotaSelect } from '@ownclouders/web-pkg'
 import GroupSelect from '../GroupSelect.vue'
-import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
 import { cloneDeep } from 'lodash-es'
-import { AppRole, AppRoleAssignment, Group, User } from 'web-client/src/generated'
-import { MaybeRef, useCapabilityReadOnlyUserAttributes, useClientService, useStore } from 'web-pkg'
-import { useCapabilitySpacesMaxQuota } from 'web-pkg/src/composables'
+import { AppRole, AppRoleAssignment, Group, User } from '@ownclouders/web-client/src/generated'
+import {
+  MaybeRef,
+  useCapabilityReadOnlyUserAttributes,
+  useClientService,
+  useStore
+} from '@ownclouders/web-pkg'
+import { useCapabilitySpacesMaxQuota } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'EditPanel',

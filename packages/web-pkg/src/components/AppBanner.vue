@@ -37,8 +37,8 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
-import { useRouter, useStore } from 'web-pkg'
-import { buildUrl } from 'web-pkg/src/helpers/router'
+import { useRouter, useStore } from '../composables'
+import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
 
 export default defineComponent({

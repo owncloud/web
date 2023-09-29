@@ -1,12 +1,12 @@
 import DriveResolver from '../../../../src/views/spaces/DriveResolver.vue'
-import { useDriveResolver } from 'web-pkg/src/composables'
+import { useDriveResolver } from '@ownclouders/web-pkg'
 import { computed, ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
-import { useGetMatchingSpace } from 'web-pkg/src/composables/spaces'
-import { locationPublicUpload } from 'web-pkg/src/router/public'
-import { PublicSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
-import { SharePermissionBit } from 'web-client/src/helpers/share'
+import { ClientService } from '@ownclouders/web-pkg'
+import { useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { locationPublicUpload } from '@ownclouders/web-pkg'
+import { PublicSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,
@@ -14,12 +14,15 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
-  RouteLocation
+  RouteLocation,
+  useGetMatchingSpaceMock
 } from 'web-test-helpers'
-import { useGetMatchingSpaceMock } from 'web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 
-jest.mock('web-pkg/src/composables/driveResolver')
-jest.mock('web-pkg/src/composables/spaces')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useGetMatchingSpace: jest.fn(),
+  useDriveResolver: jest.fn()
+}))
 
 describe('DriveResolver view', () => {
   it('renders the "drive-redirect"-component when no space is given', async () => {

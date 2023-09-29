@@ -1,8 +1,8 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
-import { ClientService } from 'web-pkg/src/services'
-import { ConfigurationManager } from 'web-pkg/src/configuration'
+import { ClientService } from '@ownclouders/web-pkg'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
   extractPublicLinkToken,
@@ -12,7 +12,7 @@ import {
   isUserContext
 } from '../../router'
 import { unref } from 'vue'
-import { Ability } from 'web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 
 export class AuthService {

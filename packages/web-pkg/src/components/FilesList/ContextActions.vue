@@ -3,14 +3,10 @@
 </template>
 
 <script lang="ts">
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
 
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
-
-import { useFileActionsSetReadme } from 'web-pkg/src/composables/actions/files/useFileActionsSetReadme'
 
 import {
   useFileActionsCreateQuickLink,
@@ -31,9 +27,12 @@ import {
   useFileActionsShowEditTags,
   useFileActionsNavigate,
   useFileActionsFavorite,
-  useFileActionsCreateSpaceFromResource
-} from 'web-pkg'
-import { FileActionOptions } from 'web-pkg/src/composables/actions'
+  useFileActionsCreateSpaceFromResource,
+  useFileActionsSetReadme,
+  useFileActions
+} from '../../composables/actions/files'
+
+import { FileActionOptions } from '../../composables/actions'
 
 export default defineComponent({
   name: 'ContextActions',

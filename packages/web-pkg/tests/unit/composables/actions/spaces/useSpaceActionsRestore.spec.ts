@@ -1,5 +1,5 @@
-import { useSpaceActionsRestore } from 'web-pkg/src/composables/actions/spaces'
-import { buildSpace, SpaceResource } from 'web-client/src/helpers'
+import { useSpaceActionsRestore } from '../../../../../src/composables/actions'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -10,7 +10,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from 'web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('restore', () => {
   describe('isEnabled property', () => {

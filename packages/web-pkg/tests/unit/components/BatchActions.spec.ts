@@ -1,6 +1,6 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import BatchActions from '../../../src/components/BatchActions.vue'
 
 const selectors = {

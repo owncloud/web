@@ -1,5 +1,6 @@
 import { ref, Ref, watch } from 'vue'
-import { useRoute, useRouter } from 'web-pkg/src/composables'
+import { useRoute } from './useRoute'
+import { useRouter } from './useRouter'
 import { ActiveRouteDirectorFunc } from '../../router'
 
 /**

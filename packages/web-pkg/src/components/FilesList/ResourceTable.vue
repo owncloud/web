@@ -213,7 +213,7 @@ import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vu
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   extractDomSelector,
   extractParentFolderName,
@@ -221,8 +221,8 @@ import {
   isShareRoot,
   isShareSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
-import { ShareTypes } from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 import {
   useCapabilityFilesTags,
@@ -234,28 +234,23 @@ import {
   ViewModeConstants,
   useConfigurationManager,
   useGetMatchingSpace
-} from 'web-pkg/src/composables'
-import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from 'web-pkg/src/constants'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+} from '../../composables'
+import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
+import { eventBus } from '../../services'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
-  formatRelativeDateFromJSDate
-} from 'web-pkg/src/helpers'
-import { isResourceTxtFileAlmostEmpty } from 'web-pkg/src/helpers/resource'
+  formatRelativeDateFromJSDate,
+  isResourceTxtFileAlmostEmpty
+} from '../../helpers'
+import { SideBarEventTopics } from '../../composables/sideBar'
+import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue'
 
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import ContextMenuQuickAction from 'web-pkg/src/components/ContextActions/ContextMenuQuickAction.vue'
-
-import { useResourceRouteResolver } from 'web-pkg/src/composables/filesList/useResourceRouteResolver'
-import { ClipboardActions } from 'web-pkg/src/helpers/clipboardActions'
-import { determineSortFields } from 'web-pkg/src/helpers/ui/resourceTable'
-import { useFileActionsRename } from 'web-pkg/src/composables/actions/files/useFileActionsRename'
-import {
-  createLocationShares,
-  createLocationCommon,
-  createLocationSpaces
-} from 'web-pkg/src/router'
+import { useResourceRouteResolver } from '../../composables/filesList/useResourceRouteResolver'
+import { ClipboardActions } from '../../helpers/clipboardActions'
+import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { useFileActionsRename } from '../../composables/actions'
+import { createLocationShares, createLocationCommon, createLocationSpaces } from '../../router'
 import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
@@ -379,7 +374,7 @@ export default defineComponent({
      */
     viewMode: {
       type: String,
-      default: ViewModeConstants.defaultModeName,
+      default: () => ViewModeConstants.defaultModeName,
       validator: (value: string) =>
         [ViewModeConstants.condensedTable.name, ViewModeConstants.default.name].includes(value)
     },

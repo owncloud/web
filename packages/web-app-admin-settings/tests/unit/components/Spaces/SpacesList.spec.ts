@@ -1,8 +1,8 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { eventBus, queryItemAsString } from 'web-pkg'
-import { displayPositionedDropdown } from 'web-pkg/src/helpers'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus, queryItemAsString } from '@ownclouders/web-pkg'
+import { displayPositionedDropdown } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
 
 const spaceMocks = [
@@ -50,11 +50,12 @@ const selectors = {
   ocTableStub: 'oc-table-stub'
 }
 
-jest.mock('web-pkg/src/helpers', () => ({
-  ...jest.requireActual('web-pkg/src/helpers'),
-  displayPositionedDropdown: jest.fn()
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  displayPositionedDropdown: jest.fn(),
+  queryItemAsString: jest.fn()
+  // useAppDefaults: jest.fn()
 }))
-jest.mock('web-pkg/src/composables/appDefaults')
 
 describe('SpacesList', () => {
   it('should render all spaces in a table', () => {
@@ -98,6 +99,7 @@ describe('SpacesList', () => {
   })
   it('should show the context menu on right click', async () => {
     const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    // .mockImplementation(() => undefined)
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find(`[data-item-id="${spaceMocks[0].id}"]`).trigger('contextmenu')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)

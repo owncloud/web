@@ -1,8 +1,8 @@
 import { computed, unref } from 'vue'
 import { Store } from 'vuex'
-import { eventBus, useCapabilityDeleteUsersDisabled, useLoadingService } from 'web-pkg'
-import { useClientService, useStore } from 'web-pkg/src/composables'
-import { UserAction, UserActionOptions } from 'web-pkg/src/composables/actions'
+import { eventBus, useCapabilityDeleteUsersDisabled, useLoadingService } from '@ownclouders/web-pkg'
+import { useClientService, useStore } from '@ownclouders/web-pkg'
+import { UserAction, UserActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {

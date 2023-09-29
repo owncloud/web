@@ -26,11 +26,11 @@
 </template>
 
 <script lang="ts">
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
-import QuotaModal from 'web-pkg/src/components/Spaces/QuotaModal.vue'
-import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
+import { ContextActionMenu } from '@ownclouders/web-pkg'
+import { QuotaModal } from '@ownclouders/web-pkg'
+import { ReadmeContentModal } from '@ownclouders/web-pkg'
 
-import { useFileActionsShowDetails } from 'web-pkg/src/composables/actions/files/useFileActionsShowDetails'
+import { useFileActionsShowDetails } from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
 import {
   useSpaceActionsDelete,
@@ -41,17 +41,17 @@ import {
   useSpaceActionsRename,
   useSpaceActionsRestore,
   useSpaceActionsShowMembers
-} from 'web-pkg/src/composables/actions'
-import { isLocationSpacesActive } from 'web-pkg/src/router'
+} from '@ownclouders/web-pkg'
+import { isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
 import {
   useCapabilitySpacesMaxQuota,
   useRouter,
   useStore,
   usePreviewService
-} from 'web-pkg/src/composables'
-import { FileActionOptions, SpaceActionOptions } from 'web-pkg/src/composables/actions'
-import { useFileActionsDownloadArchive } from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
+import { FileActionOptions, SpaceActionOptions } from '@ownclouders/web-pkg'
+import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceContextActions',

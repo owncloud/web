@@ -2,7 +2,10 @@ import { Store } from 'vuex'
 import get from 'lodash-es/get'
 import { computed, ComputedRef } from 'vue'
 import { useStore } from '../store'
-import { AppProviderCapability, PasswordPolicyCapability } from 'web-client/src/ocs/capabilities'
+import {
+  AppProviderCapability,
+  PasswordPolicyCapability
+} from '@ownclouders/web-client/src/ocs/capabilities'
 
 export const useCapability = <T>(
   store: Store<any>,

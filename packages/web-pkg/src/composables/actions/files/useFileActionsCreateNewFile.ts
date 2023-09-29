@@ -1,19 +1,26 @@
-import { Resource, SpaceResource, extractNameWithoutExtension } from 'web-client/src/helpers'
+import {
+  Resource,
+  SpaceResource,
+  extractNameWithoutExtension
+} from '@ownclouders/web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, Ref, unref } from 'vue'
-import { useClientService, useRequest, useRouter, useStore } from 'web-pkg/src/composables'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { useClientService } from '../../clientService'
+import { useRequest } from '../../authContext'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
+import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
-import { resolveFileNameDuplicate } from 'web-pkg/src/helpers/resource'
+import { resolveFileNameDuplicate } from '../../../helpers/resource'
 import { join } from 'path'
-import { WebDAV } from 'web-client/src/webdav'
-import { isLocationSpacesActive } from 'web-pkg/src/router'
-import { getIndicators } from 'web-pkg/src/helpers/statusIndicators'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { isLocationSpacesActive } from '../../../router'
+import { getIndicators } from '../../../helpers'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
-import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
-import { AncestorMetaData } from 'web-pkg/src/types'
+import { AncestorMetaData } from '../../../types'
 
 export const useFileActionsCreateNewFile = ({
   store,

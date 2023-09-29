@@ -1,7 +1,7 @@
 import { computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useAbility, useCapabilityReadOnlyUserAttributes } from 'web-pkg'
-import { UserAction } from 'web-pkg/src/composables/actions'
+import { useAbility, useCapabilityReadOnlyUserAttributes } from '@ownclouders/web-pkg'
+import { UserAction } from '@ownclouders/web-pkg'
 
 export const useUserActionsEditQuota = () => {
   const { $gettext } = useGettext()

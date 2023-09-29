@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import GroupInfoBox from './GroupInfoBox.vue'
-import { Group } from 'web-client/src/generated'
+import { Group } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'DetailsPanel',

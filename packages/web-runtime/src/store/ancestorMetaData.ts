@@ -3,11 +3,11 @@ import {
   extractStorageId,
   isMountPointSpaceResource,
   isProjectSpaceResource
-} from 'web-client/src/helpers'
-import { DavProperty } from 'web-client/src/webdav/constants'
-import { configurationManager } from 'web-pkg/src'
-import { getParentPaths } from 'web-pkg/src/helpers/path'
-import { AncestorMetaData } from 'web-pkg/src/types'
+} from '@ownclouders/web-client/src/helpers'
+import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
+import { configurationManager } from '@ownclouders/web-pkg'
+import { getParentPaths } from '@ownclouders/web-pkg'
+import { AncestorMetaData } from '@ownclouders/web-pkg'
 
 const state = {
   ancestorMetaData: {}

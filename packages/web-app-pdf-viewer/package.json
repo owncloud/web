@@ -4,9 +4,12 @@
   "private": true,
   "description": "ownCloud web PDF viewer",
   "license": "AGPL-3.0",
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
   "peerDependencies": {
+    "@ownclouders/web-pkg": "workspace:*",
     "vue3-gettext": "^2.3.3",
-    "vuex": "4.1.0",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "vuex": "4.1.0"
   }
 }

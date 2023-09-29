@@ -1,4 +1,4 @@
-import { formatFileSize } from 'web-pkg/src/helpers'
+import { formatFileSize } from '../../../src/helpers'
 
 describe('formatFileSize', () => {
   describe('converts numeric input to a human readable format', () => {

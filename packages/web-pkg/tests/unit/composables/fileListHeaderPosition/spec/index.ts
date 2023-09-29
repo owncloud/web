@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
-import { useFileListHeaderPosition } from 'web-pkg/src/composables'
-import { useStore } from 'web-pkg/src/composables'
+import { useFileListHeaderPosition } from '../../../../../src/composables/fileListHeaderPosition'
+import { useStore } from '../../../../../src/composables/store'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 export const createWrapper = () =>

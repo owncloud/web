@@ -1,7 +1,11 @@
 import fileSideBars from 'web-app-files/src/fileSideBars'
-import { createLocationPublic, createLocationSpaces, createLocationTrash } from 'web-pkg/src/router'
+import {
+  createLocationPublic,
+  createLocationSpaces,
+  createLocationTrash
+} from '@ownclouders/web-pkg'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
-import { Resource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {
   createStore,
@@ -11,10 +15,15 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
+import { defineComponent } from 'vue'
 
-jest.mock('web-pkg/src/observer')
-jest.mock('web-client/src/helpers/resource', () => {
-  const original = jest.requireActual('web-client/src/helpers/resource')
+const InnerSideBarComponent = defineComponent({
+  props: { availablePanels: { type: Array, required: true } },
+  template: '<div id="foo"><slot name="header"></slot></div>'
+})
+
+jest.mock('@ownclouders/web-client/src/helpers/resource', () => {
+  const original = jest.requireActual('@ownclouders/web-client/src/helpers/resource')
   return {
     ...original,
     buildResource: jest.fn()
@@ -24,8 +33,7 @@ jest.mock('web-client/src/helpers/resource', () => {
 const selectors = {
   noSelectionInfoPanel: 'no-selection-stub',
   fileInfoStub: 'file-info-stub',
-  spaceInfoStub: 'space-info-stub',
-  tagsPanel: '#sidebar-panel-tags'
+  spaceInfoStub: 'space-info-stub'
 }
 
 describe('SideBar', () => {
@@ -94,7 +102,8 @@ describe('SideBar', () => {
         const { wrapper } = createWrapper({ item })
         wrapper.vm.loadedResource = item
         await wrapper.vm.$nextTick()
-        expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
+        const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+        expect(panels[0].app === 'no-selection').toBe(noSelectionExpected)
       })
     })
     describe('for all files', () => {
@@ -118,7 +127,8 @@ describe('SideBar', () => {
         const { wrapper } = createWrapper({ item })
         wrapper.vm.loadedResource = item
         await wrapper.vm.$nextTick()
-        expect(wrapper.find(selectors.noSelectionInfoPanel).exists()).toBe(noSelectionExpected)
+        const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+        expect(panels[0].app === 'no-selection').toBe(noSelectionExpected)
       })
     })
   })
@@ -128,28 +138,32 @@ describe('SideBar', () => {
       const { wrapper } = createWrapper({ item })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(true)
+      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+      expect(panels.some(({ app }) => app === 'tags')).toBeTruthy()
     })
     it('does not show when disabled via capabilities', async () => {
       const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
       const { wrapper } = createWrapper({ item, tagsEnabled: false })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
     })
     it('does not show for root folders', async () => {
       const item = mockDeep<Resource>({ path: '/', canEditTags: () => true })
       const { wrapper } = createWrapper({ item })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
     })
     it('does not show when not possible on the resource', async () => {
       const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => false })
       const { wrapper } = createWrapper({ item })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
     })
     it.each([
       createLocationTrash('files-trash-generic'),
@@ -159,7 +173,8 @@ describe('SideBar', () => {
       const { wrapper } = createWrapper({ item, currentRoute })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.tagsPanel).exists()).toBe(false)
+      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
+      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
     })
   })
 })
@@ -201,7 +216,7 @@ function createWrapper({
         plugins: [...defaultPlugins(), store],
         renderStubDefaultSlot: true,
         stubs: {
-          InnerSideBar: false
+          InnerSideBar: InnerSideBarComponent
         },
         mocks,
         provide: mocks

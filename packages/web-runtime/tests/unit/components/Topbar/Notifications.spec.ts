@@ -8,8 +8,8 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
-import { OwnCloudSdk } from 'web-client/src/types'
-import { SpaceResource } from 'web-client'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
+import { SpaceResource } from '@ownclouders/web-client'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',
@@ -24,7 +24,10 @@ const selectors = {
   notificationActions: '.oc-notifications-actions'
 }
 
-jest.mock('web-pkg/src/composables/sse/useServerSentEvents')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useServerSentEvents: jest.fn()
+}))
 
 describe('Notification component', () => {
   it('renders the notification bell and no notifications if there are none', () => {

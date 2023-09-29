@@ -1,5 +1,5 @@
 import Users from '../../../src/views/Users.vue'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import {
@@ -11,10 +11,16 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
-import { ClientService, queryItemAsString } from 'web-pkg'
-import { User } from 'web-client/src/generated'
+import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
+import { User } from '@ownclouders/web-client/src/generated'
+import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  queryItemAsString: jest.fn(),
+  useAppDefaults: jest.fn()
+}))
+jest.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
 
 const getDefaultUser = () => {
   return {

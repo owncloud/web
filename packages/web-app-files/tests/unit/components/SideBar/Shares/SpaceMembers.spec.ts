@@ -5,9 +5,9 @@ import {
   ShareTypes,
   spaceRoleEditor,
   Share
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 import { mock } from 'jest-mock-extended'
-import { ProjectSpaceResource, SpaceResource, User } from 'web-client/src/helpers'
+import { ProjectSpaceResource, SpaceResource, User } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultPlugins,

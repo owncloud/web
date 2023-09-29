@@ -1,10 +1,11 @@
 import { isLocationTrashActive } from '../../../router'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '../../../services/eventBus'
+import { SideBarEventTopics } from '../../sideBar'
 import { computed, unref } from 'vue'
-import { useRouter, useIsFilesAppActive } from 'web-pkg/src/composables'
+import { useIsFilesAppActive } from '../helpers'
+import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
-import { FileAction } from 'web-pkg/src/composables/actions'
+import { FileAction } from '../types'
 
 export const useFileActionsShowActions = () => {
   const router = useRouter()

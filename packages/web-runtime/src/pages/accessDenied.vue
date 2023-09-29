@@ -34,7 +34,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { queryItemAsString, useConfigurationManager, useRouteQuery, useStore } from 'web-pkg'
+import {
+  queryItemAsString,
+  useConfigurationManager,
+  useRouteQuery,
+  useStore
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

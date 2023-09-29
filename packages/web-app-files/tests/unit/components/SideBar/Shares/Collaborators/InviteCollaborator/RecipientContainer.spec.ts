@@ -1,5 +1,5 @@
 import RecipientContainer from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/helpers/user/avatarUrl', () => ({

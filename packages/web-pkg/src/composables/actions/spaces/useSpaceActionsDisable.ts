@@ -1,13 +1,14 @@
-import { SpaceResource } from 'web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
-import { useRoute, useRouter } from 'web-pkg/src/composables'
+import { useRoute, useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useAbility } from '../../ability'
-import { useClientService, useLoadingService } from 'web-pkg/src/composables'
+import { useClientService } from '../../clientService'
+import { useLoadingService } from '../../loadingService'
 import { Store } from 'vuex'
-import { isProjectSpaceResource } from 'web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

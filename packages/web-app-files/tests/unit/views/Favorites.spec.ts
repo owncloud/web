@@ -3,7 +3,7 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { mockDeep, mock } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   createStore,
   defaultPlugins,

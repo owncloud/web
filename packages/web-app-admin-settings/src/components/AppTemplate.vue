@@ -70,9 +70,7 @@
 
 <script lang="ts">
 import { perPageDefault, paginationOptions } from 'web-app-admin-settings/src/defaults'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import SideBar from 'web-pkg/src/components/SideBar/SideBar.vue'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
+import { AppLoadingSpinner, SideBar, BatchActions } from '@ownclouders/web-pkg'
 import {
   defineComponent,
   inject,
@@ -84,11 +82,11 @@ import {
   VNodeRef,
   watch
 } from 'vue'
-import { eventBus, useAppDefaults } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
-import { Panel } from 'web-pkg/src/components/SideBar'
+import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
+import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { Panel } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
-import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
+import { ViewOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {

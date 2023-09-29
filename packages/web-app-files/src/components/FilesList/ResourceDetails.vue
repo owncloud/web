@@ -10,13 +10,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 import FileActions from '../SideBar/Actions/FileActions.vue'
 import FileDetails from '../SideBar/Details/FileDetails.vue'
 import FileInfo from '../SideBar/FileInfo.vue'
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { useRouteQuery } from 'web-pkg'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { useRouteQuery } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {

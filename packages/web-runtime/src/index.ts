@@ -1,6 +1,6 @@
 import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { configurationManager } from 'web-pkg/src/configuration'
+import { configurationManager } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -34,16 +34,16 @@ import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
   Resource
-} from 'web-client/src/helpers'
+} from '@ownclouders/web-client/src/helpers'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
-import { WebDAV } from 'web-client/src/webdav'
-import { DavProperty } from 'web-client/src/webdav/constants'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { computed, createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import { ArchiverService } from 'web-pkg/src/services/archiver'
+import { ArchiverService } from '@ownclouders/web-pkg'
 import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {

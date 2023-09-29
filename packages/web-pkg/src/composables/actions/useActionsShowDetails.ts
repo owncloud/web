@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { eventBus } from 'web-pkg'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '../../services'
+import { SideBarEventTopics } from '../sideBar'
 import { Action } from './types'
 
 export const useActionsShowDetails = () => {

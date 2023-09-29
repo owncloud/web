@@ -1,6 +1,6 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
 import { fileActions, editors, meta } from 'web-app-files/tests/__fixtures__/fileActions'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -11,10 +11,13 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { Action } from 'web-pkg/src/composables/actions'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { Action } from '@ownclouders/web-pkg'
 
-jest.mock('web-pkg/src/composables/actions/files/useFileActions')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useFileActions: jest.fn()
+}))
 
 describe('FileActions', () => {
   describe('when user is on personal route', () => {

@@ -5,9 +5,9 @@ import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { RuntimeError } from 'web-pkg/src/errors'
-import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from 'web-pkg/src/apps'
-import { useExtensionRegistry } from 'web-pkg/src/composables/piniaStores'
+import { RuntimeError } from '@ownclouders/web-pkg'
+import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from '@ownclouders/web-pkg'
+import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
 
 /**

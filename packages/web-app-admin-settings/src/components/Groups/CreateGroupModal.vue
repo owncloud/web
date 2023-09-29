@@ -27,8 +27,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { Group } from 'web-client/src/generated'
-import { MaybeRef, useClientService } from 'web-pkg'
+import { Group } from '@ownclouders/web-client/src/generated'
+import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateGroupModal',

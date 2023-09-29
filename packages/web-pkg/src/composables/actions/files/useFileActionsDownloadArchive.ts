@@ -4,22 +4,25 @@ import {
   isLocationSharesActive,
   isLocationSpacesActive
 } from '../../../router'
-import { useIsFilesAppActive } from 'web-pkg/src/composables'
+import { useIsFilesAppActive } from '../helpers'
 import path from 'path'
 import first from 'lodash-es/first'
-import { isProjectSpaceResource, isPublicSpaceResource, Resource } from 'web-client/src/helpers'
+import {
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  Resource
+} from '@ownclouders/web-client/src/helpers'
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import {
-  useLoadingService,
-  usePublicLinkPassword,
-  useRouter,
-  useStore
-} from 'web-pkg/src/composables'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
+import { usePublicLinkPassword } from '../../authContext'
+import { useLoadingService } from '../../loadingService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
+
+import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
-import { useArchiverService } from 'web-pkg/src/composables/archiverService'
-import { formatFileSize } from 'web-pkg/src/helpers/filesize'
+import { useArchiverService } from '../../archiverService'
+import { formatFileSize } from '../../../helpers/filesize'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

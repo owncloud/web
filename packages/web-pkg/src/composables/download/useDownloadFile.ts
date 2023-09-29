@@ -2,7 +2,7 @@ import { unref } from 'vue'
 import { usePublicLinkContext } from '../authContext'
 import { useClientService } from '../clientService'
 import { useStore } from '../store'
-import { triggerDownloadWithFilename } from 'web-pkg/src/helpers'
+import { triggerDownloadWithFilename } from '../../../src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
 

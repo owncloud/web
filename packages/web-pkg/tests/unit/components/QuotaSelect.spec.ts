@@ -1,4 +1,4 @@
-import QuotaSelect from 'web-pkg/src/components/QuotaSelect.vue'
+import QuotaSelect from '../../../src/components/QuotaSelect.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 afterEach(() => jest.clearAllMocks())

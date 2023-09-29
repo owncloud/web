@@ -1,4 +1,4 @@
-import { DavFileInfoResponse } from 'web-client/src/webdav/constants'
+import { DavFileInfoResponse } from '@ownclouders/web-client/src/webdav/constants'
 import { User } from '../user'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
 

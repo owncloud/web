@@ -12,9 +12,12 @@ const selectors = {
   logInAgainButton: '#exitAnchor'
 }
 
-import { ConfigurationManager, useConfigurationManager } from 'web-pkg/src'
+import { ConfigurationManager, useConfigurationManager } from '@ownclouders/web-pkg'
 
-jest.mock('web-pkg/src/composables/configuration/useConfigurationManager')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useConfigurationManager: jest.fn()
+}))
 
 describe('access denied page', () => {
   it('renders component', () => {

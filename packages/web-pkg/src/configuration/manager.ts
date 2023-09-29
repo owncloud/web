@@ -8,7 +8,7 @@ import {
 import isNil from 'lodash-es/isNil'
 import get from 'lodash-es/get'
 import set from 'lodash-es/set'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export interface RawConfig {
   server: string

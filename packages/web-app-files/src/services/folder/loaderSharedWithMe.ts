@@ -1,13 +1,13 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { aggregateResourceShares } from 'web-client/src/helpers/share'
-import { isLocationSharesActive } from 'web-pkg/src/router'
+import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
+import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import {
   useCapabilityFilesSharingResharing,
   useCapabilityShareJailEnabled
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {

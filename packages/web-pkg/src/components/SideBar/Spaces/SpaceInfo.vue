@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'SpaceInfo',

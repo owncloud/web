@@ -1,4 +1,4 @@
-import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
+import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { configurationManager, ConfigurationManager } from '../../configuration'
 import { LocationQuery } from '../../composables'
 import { RouteParams } from 'vue-router'

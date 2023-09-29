@@ -1,8 +1,8 @@
 import { onBeforeUnmount, onMounted, unref, computed, Ref, watchEffect } from 'vue'
-import { QueryValue, useStore, ViewModeConstants } from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services'
-import { KeyboardActions } from 'web-pkg/src/composables/keyboardActions'
-import { Resource } from 'web-client'
+import { QueryValue, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
+import { KeyboardActions } from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
 
 export const useKeyboardTableMouseActions = (

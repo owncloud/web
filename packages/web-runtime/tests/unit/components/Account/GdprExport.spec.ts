@@ -7,8 +7,8 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg'
-import { Resource } from 'web-client/src'
+import { ClientService } from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client/src'
 
 const selectors = {
   ocSpinnerStub: 'oc-spinner-stub',
@@ -18,7 +18,8 @@ const selectors = {
 }
 
 const downloadFile = jest.fn()
-jest.mock('web-pkg/src/composables/download', () => ({
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
   useDownloadFile: jest.fn(() => ({ downloadFile }))
 }))
 

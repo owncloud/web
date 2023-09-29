@@ -1,14 +1,14 @@
-import { triggerShareAction } from 'web-pkg/src/helpers/share/triggerShareAction'
+import { triggerShareAction } from '../../../../src/helpers/share/triggerShareAction'
 
-import { ShareStatus } from 'web-client/src/helpers/share'
-import { OwnCloudSdk } from 'web-client/src/types'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 
 jest.unmock('axios')
 const client = mockDeep<OwnCloudSdk>()
 
-jest.mock('web-client/src/helpers/share/functions', () => ({
+jest.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
   aggregateResourceShares: ({ shares }) => shares
 }))
 

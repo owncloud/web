@@ -4,13 +4,13 @@ import {
   UserManager as OidcUserManager,
   UserManagerSettings
 } from 'oidc-client-ts'
-import { buildUrl } from 'web-pkg/src/helpers/router/buildUrl'
+import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
-import { ConfigurationManager } from 'web-pkg/src/configuration'
-import { ClientService } from 'web-pkg/src/services'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ClientService } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
-import { Ability } from 'web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import { router } from 'web-runtime/src/router'

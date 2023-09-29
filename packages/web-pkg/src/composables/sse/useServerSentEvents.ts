@@ -2,7 +2,9 @@ import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-sou
 import { ref, unref, watch } from 'vue'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { configurationManager, useAccessToken, useStore } from 'web-pkg/src'
+import { configurationManager } from '../../configuration'
+import { useAccessToken } from '../authContext'
+import { useStore } from '../store'
 
 class FatalError extends Error {}
 

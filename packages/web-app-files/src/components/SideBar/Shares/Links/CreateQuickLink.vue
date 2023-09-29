@@ -34,14 +34,14 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingQuickLinkDefaultRole,
   useCapabilityFilesSharingResharing
-} from 'web-pkg'
-import { Resource } from 'web-client/src'
+} from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client/src'
 import { useGettext } from 'vue3-gettext'
 import {
   LinkShareRoles,
   linkRoleInternalFolder,
   linkRoleViewerFolder
-} from 'web-client/src/helpers/share'
+} from '@ownclouders/web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'CreateQuickLink',

@@ -1,8 +1,8 @@
 import { ClientService, PreviewService } from '../../../src/services'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ConfigurationManager } from 'web-pkg'
+import { ConfigurationManager } from '../../../src/configuration'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers'
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('PreviewService', () => {
   describe('method "isMimetypeSupported"', () => {

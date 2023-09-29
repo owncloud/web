@@ -1,6 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 import {
   createStore,
@@ -9,7 +9,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useFileActionsCopy } from 'web-pkg/src/composables'
+import { useFileActionsCopy } from '../../../../../src/composables/actions/files'
 
 describe('copy', () => {
   describe('search context', () => {

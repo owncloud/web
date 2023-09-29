@@ -1,9 +1,9 @@
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client'
-import { SpaceResource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
-import { Share } from 'web-client/src/helpers/share'
+import { Share } from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,

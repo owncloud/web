@@ -1,5 +1,5 @@
-import { Resource, SpaceResource } from 'web-client/src'
-import { Group, User } from 'web-client/src/generated'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
+import { Group, User } from '@ownclouders/web-client/src/generated'
 import { RouteLocationRaw } from 'vue-router'
 
 export type ActionOptions = Record<string, unknown | unknown[]>

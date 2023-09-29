@@ -22,8 +22,8 @@
 <script lang="ts">
 import { computed, defineComponent, inject, unref } from 'vue'
 import { useClipboard } from '@vueuse/core'
-import { Resource } from 'web-client'
-import { useStore } from 'web-pkg/src'
+import { Resource } from '@ownclouders/web-client'
+import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

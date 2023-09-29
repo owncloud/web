@@ -8,7 +8,7 @@ import {
   defaultStubs,
   mount
 } from 'web-test-helpers'
-import { UppyService } from 'web-pkg/src/services/uppy'
+import { UppyService } from '@ownclouders/web-pkg'
 
 describe('Resource Upload Component', () => {
   describe('file upload', () => {

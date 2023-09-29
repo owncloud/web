@@ -27,9 +27,9 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, onMounted, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { SpaceResource } from 'web-client/src'
-import { getRelativeSpecialFolderSpacePath } from 'web-client/src/helpers'
-import { useClientService, useStore } from 'web-pkg/src/composables'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
+import { useClientService, useStore } from '../../composables'
 
 export default defineComponent({
   name: 'SpaceReadmeContentModal',

@@ -34,11 +34,11 @@
 import { computed, defineComponent, onMounted, onUnmounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from 'web-client'
-import { useClientService, useStore } from 'web-pkg/src/composables'
-import { useDownloadFile } from 'web-pkg/src/composables/download'
-import { formatDateFromJSDate } from 'web-pkg'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
+import { useClientService, useStore } from '@ownclouders/web-pkg'
+import { useDownloadFile } from '@ownclouders/web-pkg'
+import { formatDateFromJSDate } from '@ownclouders/web-pkg'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 const GDPR_EXPORT_FILE_NAME = '.personal_data_export.json'
 const POLLING_INTERVAL = 30000

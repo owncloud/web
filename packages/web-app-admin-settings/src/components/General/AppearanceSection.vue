@@ -44,13 +44,13 @@
 
 <script lang="ts">
 import { defineComponent, computed, unref, VNodeRef, ref } from 'vue'
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import { ContextActionMenu } from '@ownclouders/web-pkg'
 import {
   useGeneralActionsResetLogo,
   useGeneralActionsUploadLogo
 } from '../../composables/actions/general'
 import { supportedLogoMimeTypes } from '../../defaults'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'AppearanceSection',

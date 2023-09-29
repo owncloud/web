@@ -4,8 +4,11 @@
   "private": true,
   "description": "ownCloud web app skeleton",
   "license": "AGPL-3.0",
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
   "peerDependencies": {
-    "web-app-search": "workspace:*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "@ownclouders/web-pkg": "workspace:*",
+    "web-app-search": "workspace:*"
   }
 }

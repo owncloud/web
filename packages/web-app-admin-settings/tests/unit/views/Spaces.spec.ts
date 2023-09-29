@@ -1,7 +1,7 @@
 import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
-import { Graph } from 'web-client'
+import { Graph } from '@ownclouders/web-client'
 import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg/src'
+import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
@@ -10,21 +10,15 @@ import {
   mount
 } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
-import { ref } from 'vue'
+import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
-
-jest.mock('web-pkg/src/composables/actions/spaces', () =>
-  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
-)
-
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  queryItemAsString: jest.fn(),
+  useAppDefaults: jest.fn(),
+  useRouteQueryPersisted: jest.fn()
+}))
+jest.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock({}))
 
 const selectors = {
   loadingSpinnerStub: 'app-loading-spinner-stub',
@@ -142,7 +136,8 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
           NoContentMessage: true,
           SpacesList: true,
           OcBreadcrumb: true,
-          BatchActions: true
+          BatchActions: true,
+          ViewOptions: true
         }
       }
     })

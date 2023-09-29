@@ -1,5 +1,5 @@
 import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
-import { PeopleShareRoles, SharePermissions } from 'web-client/src/helpers/share'
+import { PeopleShareRoles, SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,
@@ -8,7 +8,7 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 
 const selectors = {
   recipientRoleBtn: '.files-recipient-role-select-btn',

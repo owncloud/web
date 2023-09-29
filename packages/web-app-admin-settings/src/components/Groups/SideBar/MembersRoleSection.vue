@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { User } from 'web-client/src/helpers'
+import { User } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'MembersRoleSection',

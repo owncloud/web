@@ -1,11 +1,6 @@
-import { ref, Ref, computed, unref, isRef } from 'vue'
-import { MaybeRef, ReadOnlyRef } from 'web-pkg/src/utils'
-import {
-  useRouteName,
-  useRouter,
-  useRouteQueryPersisted,
-  QueryValue
-} from 'web-pkg/src/composables'
+import { ref, Ref, computed, unref, isRef, MaybeRef } from 'vue'
+import { ReadOnlyRef } from '../../utils'
+import { useRouteName, useRouter, useRouteQueryPersisted, QueryValue } from '../router'
 import { SortConstants } from './constants'
 import get from 'lodash-es/get'
 

@@ -39,7 +39,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
-import { Group } from 'web-client/src/generated'
+import { Group } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'GroupSelect',

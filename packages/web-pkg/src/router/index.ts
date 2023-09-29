@@ -9,18 +9,24 @@ import { buildRoutes as buildDeprecatedRoutes, isLocationActive } from './deprec
 import {
   buildRoutes as buildPublicRoutes,
   createLocationPublic,
-  isLocationPublicActive
+  isLocationPublicActive,
+  locationPublicLink,
+  locationPublicUpload
 } from './public'
 import { RouteComponents } from './router'
 import {
   buildRoutes as buildSharesRoutes,
   isLocationSharesActive,
-  createLocationShares
+  createLocationShares,
+  locationSharesViaLink,
+  locationSharesWithMe,
+  locationSharesWithOthers
 } from './shares'
 import {
   buildRoutes as buildSpacesRoutes,
   isLocationSpacesActive,
-  createLocationSpaces
+  createLocationSpaces,
+  locationSpacesGeneric
 } from './spaces'
 import {
   buildRoutes as buildTrashRoutes,
@@ -57,6 +63,12 @@ export {
   isLocationActive,
   isLocationTrashActive,
   createLocationTrash,
+  locationPublicLink,
+  locationPublicUpload,
+  locationSpacesGeneric,
+  locationSharesViaLink,
+  locationSharesWithMe,
+  locationSharesWithOthers,
   buildRoutes,
   ActiveRouteDirectorFunc
 }

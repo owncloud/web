@@ -9,9 +9,12 @@
   },
   "devDependencies": {
     "@jest/globals": "29.3.1",
-    "@vueuse/core": "^10.3.0"
+    "@vueuse/core": "^10.3.0",
+    "web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
     "@uppy/core": "^3.3.0",
     "@uppy/dashboard": "3.4.1",
     "@uppy/onedrive": "3.1.1",
@@ -32,8 +35,6 @@
     "vuex": "4.1.0",
     "web-app-files": "workspace:*",
     "web-app-search": "workspace:*",
-    "web-client": "workspace:@ownclouders/web-client@*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*",
     "web-runtime": "workspace:*"
   }
 }

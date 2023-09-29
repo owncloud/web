@@ -67,20 +67,20 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { defaultFuseOptions, useClientService, useRouter, useStore } from 'web-pkg'
-import { createLocationTrash } from 'web-pkg/src/router'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import AppBar from 'web-pkg/src/components/AppBar/AppBar.vue'
+import { defaultFuseOptions, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
+import { createLocationTrash } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { AppBar } from '@ownclouders/web-pkg'
 import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
+} from '@ownclouders/web-client/src/helpers'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
-import { useFileListHeaderPosition } from 'web-pkg/src/composables'
+import { useFileListHeaderPosition } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'TrashOverview',

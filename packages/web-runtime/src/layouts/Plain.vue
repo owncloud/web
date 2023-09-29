@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useRouteMeta, useStore } from 'web-pkg'
+import { useRouteMeta, useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

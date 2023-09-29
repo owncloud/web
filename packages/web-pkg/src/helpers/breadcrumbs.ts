@@ -1,4 +1,4 @@
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '../services'
 import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'

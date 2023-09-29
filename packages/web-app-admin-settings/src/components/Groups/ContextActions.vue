@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-import { useActionsShowDetails } from 'web-pkg'
+import { useActionsShowDetails } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, unref } from 'vue'
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
-import { GroupActionOptions } from 'web-pkg/src/composables/actions'
+import { ContextActionMenu } from '@ownclouders/web-pkg'
+import { GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGroupActionsEdit, useGroupActionsDelete } from '../../composables/actions/groups'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ContextActions',

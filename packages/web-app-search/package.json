@@ -4,14 +4,17 @@
   "private": true,
   "description": "ownCloud web search",
   "license": "AGPL-3.0",
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
   "dependencies": {
     "mark.js": "^8.11.1"
   },
   "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
     "lodash-es": "^4.17.21",
     "vue3-gettext": "^2.3.3",
-    "web-app-files": "workspace:*",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*",
-    "web-client": "workspace:@ownclouders/web-client@*"
+    "web-app-files": "workspace:*"
   }
 }

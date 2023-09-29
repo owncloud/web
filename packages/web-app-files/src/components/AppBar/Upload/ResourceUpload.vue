@@ -29,9 +29,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, onBeforeUnmount, ref } from 'vue'
-import { Resource } from 'web-client/src'
-import { useService } from 'web-pkg/src/composables/service'
-import type { UppyService } from 'web-pkg/src/services/uppy'
+import { Resource } from '@ownclouders/web-client/src'
+import { useService } from '@ownclouders/web-pkg'
+import type { UppyService } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   props: {

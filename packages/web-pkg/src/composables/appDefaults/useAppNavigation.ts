@@ -4,7 +4,7 @@ import { RouteLocation, Router, RouteParams } from 'vue-router'
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
 import { LocationQuery } from '../router'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
 interface AppNavigationOptions {

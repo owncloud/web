@@ -16,7 +16,7 @@ exports[`Projects view different files view states lists all available project s
           <!--v-if-->
           <!--v-if-->
         </div>
-        <resource-table-stub arepathsdisplayed="false" areresourcesclickable="true" arethumbnailsdisplayed="true" class="spaces-table" dragdrop="false" fieldsdisplayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" hasactions="true" headerposition="0" hover="true" isselectable="true" paddingx="small" resourcedomselector="[Function]" resources="" selectedids="" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sortby="[Function]" sortdir="desc" sticky="false" viewmode="resource-table"></resource-table-stub>
+        <resource-table-stub arepathsdisplayed="false" areresourcesclickable="true" arethumbnailsdisplayed="true" class="spaces-table" dragdrop="false" fieldsdisplayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" hasactions="true" headerposition="0" hover="true" isselectable="true" paddingx="small" resourcedomselector="[Function]" resources="[object Object],[object Object]" selectedids="" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sortby="[Function]" sortdir="desc" sticky="false" viewmode="resource-table"></resource-table-stub>
       </div>
     </div>
   </div>

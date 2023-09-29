@@ -6,8 +6,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, watch, ref } from 'vue'
-import { useRoute, useStore } from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { useRoute, useStore } from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   setup() {

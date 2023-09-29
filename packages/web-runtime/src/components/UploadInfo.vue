@@ -159,12 +159,11 @@ import { mapGetters } from 'vuex'
 import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
-import { urlJoin } from 'web-client/src/utils'
-import { configurationManager } from 'web-pkg/src/configuration'
-import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
-import { formatFileSize } from 'web-pkg/src/helpers'
-import { UppyResource } from 'web-pkg/src/services/uppy'
-import { extractParentFolderName } from 'web-client/src/helpers'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { configurationManager } from '@ownclouders/web-pkg'
+import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
+import { formatFileSize, UppyResource } from '@ownclouders/web-pkg'
+import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   setup() {

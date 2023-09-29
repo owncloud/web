@@ -89,14 +89,17 @@
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
-import { getRelativeSpecialFolderSpacePath, SpaceResource } from 'web-client/src/helpers'
-import { spaceRoleManager } from 'web-client/src/helpers/share'
-import { ImageDimension } from 'web-pkg/src/constants'
-import { useStore, usePreviewService, useClientService } from 'web-pkg/src/composables'
+import {
+  getRelativeSpecialFolderSpacePath,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
+import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
+import { useStore, usePreviewService, useClientService } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
-import { formatDateFromISO } from 'web-pkg/src/helpers'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { formatDateFromISO } from '../../../../helpers'
+import { eventBus } from '../../../../services/eventBus'
+import { SideBarEventTopics } from '../../../../composables'
+import { ImageDimension } from '../../../../constants'
 
 export default defineComponent({
   name: 'SpaceDetails',

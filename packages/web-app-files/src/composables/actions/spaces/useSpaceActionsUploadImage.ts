@@ -1,16 +1,16 @@
 import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
-import { Resource, SpaceResource } from 'web-client/src'
-import { Drive } from 'web-client/src/generated'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
+import { Drive } from '@ownclouders/web-client/src/generated'
 import {
   useClientService,
   useLoadingService,
   useStore,
   usePreviewService
-} from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+} from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { SpaceAction, SpaceActionOptions } from 'web-pkg/src/composables/actions'
+import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
 
 export const useSpaceActionsUploadImage = ({
   store,

@@ -57,10 +57,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useConfigurationManager, useStore } from 'web-pkg/src/composables'
-import { Resource } from 'web-client'
+import { useClientService, useConfigurationManager, useStore } from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client'
 import diff from 'lodash-es/difference'
 import { useGettext } from 'vue3-gettext'
 import keycode from 'keycode'

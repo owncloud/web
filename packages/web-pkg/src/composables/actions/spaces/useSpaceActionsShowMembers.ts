@@ -1,6 +1,6 @@
 import { useStore } from 'vuex'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { SideBarEventTopics } from 'web-pkg/src/composables/sideBar'
+import { eventBus } from '../../../services/eventBus'
+import { SideBarEventTopics } from '../../sideBar'
 import { Store } from 'vuex'
 import { computed } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'

@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { ShareTypes } from 'web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 export default {
   name: 'AutocompleteItem',

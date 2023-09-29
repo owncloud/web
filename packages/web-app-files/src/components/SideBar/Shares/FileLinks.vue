@@ -121,7 +121,7 @@ import {
   useCapabilityFilesSharingPublicAlias,
   useAbility,
   usePasswordPolicyService
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
   linkRoleContributorFolder,
@@ -131,21 +131,21 @@ import {
   LinkShareRoles,
   Share,
   SharePermissions
-} from 'web-client/src/helpers/share'
-import { showQuickLinkPasswordModal } from 'web-pkg/src/quickActions'
+} from '@ownclouders/web-client/src/helpers/share'
+import { showQuickLinkPasswordModal } from '@ownclouders/web-pkg'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
-import { getLocaleFromLanguage } from 'web-pkg/src/helpers'
+import { getLocaleFromLanguage } from '@ownclouders/web-pkg'
 import {
   Resource,
   SpaceResource,
   isProjectSpaceResource,
   isShareSpaceResource
-} from 'web-client/src/helpers'
-import { isLocationSharesActive } from 'web-pkg/src/router'
+} from '@ownclouders/web-client/src/helpers'
+import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { useShares } from 'web-app-files/src/composables'
-import { configurationManager } from 'web-pkg'
+import { configurationManager } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileLinks',

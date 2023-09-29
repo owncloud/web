@@ -9,7 +9,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService } from 'web-pkg'
+import { ClientService } from '@ownclouders/web-pkg'
 
 describe('FilesDrop view', () => {
   describe('different files view states', () => {

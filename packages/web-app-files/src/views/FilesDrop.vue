@@ -36,8 +36,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import { createLocationPublic, createLocationSpaces } from 'web-pkg/src/router'
-
+import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
   computed,
@@ -49,7 +48,6 @@ import {
   nextTick,
   watch
 } from 'vue'
-import { useUpload } from 'web-pkg/src/composables/upload'
 import { useGettext } from 'vue3-gettext'
 import {
   useClientService,
@@ -61,17 +59,17 @@ import {
   useGetMatchingSpace,
   useUserContext,
   useRouteQuery,
-  queryItemAsString
-} from 'web-pkg/src/composables'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
-import { useService } from 'web-pkg/src/composables/service'
-import { UppyService } from 'web-pkg/src/services/uppy'
-import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
+  queryItemAsString,
+  useUpload
+} from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
+import { linkRoleUploaderFolder } from '@ownclouders/web-client/src/helpers/share'
+import { useService, UppyService } from '@ownclouders/web-pkg'
+import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { SpaceResource } from 'web-client/src'
-import { PublicSpaceResource } from 'web-client/src/helpers'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { PublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   components: {

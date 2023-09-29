@@ -1,6 +1,6 @@
 import { computed, Ref } from 'vue'
-import { Share } from 'web-client/src/helpers/share'
-import { useStore } from 'web-pkg/src/composables'
+import { Share } from '@ownclouders/web-client/src/helpers/share'
+import { useStore } from '@ownclouders/web-pkg'
 
 export function useShares() {
   const store = useStore()

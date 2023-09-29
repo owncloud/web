@@ -134,7 +134,7 @@ const filterContextHelper = (
   data: ContextualHelperData,
   options?: ContextualHelperOptions
 ): ContextualHelperData => {
-  if (options.configurationManager.options.contextHelpersReadMore === false) {
+  if ((options.configurationManager as any).options.contextHelpersReadMore === false) {
     return omit(data, 'readMoreLink')
   }
   return data

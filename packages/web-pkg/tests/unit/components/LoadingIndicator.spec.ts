@@ -1,7 +1,7 @@
-import LoadingIndicator from 'web-pkg/src/components/LoadingIndicator.vue'
+import LoadingIndicator from '../../../src/components/LoadingIndicator.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { LoadingService } from 'web-pkg'
+import { LoadingService } from '../../../src/services'
 
 const selectors = {
   loadingIndicator: '#oc-loading-indicator',

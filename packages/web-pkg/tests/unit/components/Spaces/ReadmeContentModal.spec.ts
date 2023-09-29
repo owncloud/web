@@ -1,5 +1,5 @@
-import ReadmeContentModal from 'web-pkg/src/components/Spaces/ReadmeContentModal.vue'
-import { mock } from 'jest-mock-extended'
+import ReadmeContentModal from '../../../../src/components/Spaces/ReadmeContentModal.vue'
+
 import {
   createStore,
   defaultPlugins,
@@ -8,8 +8,9 @@ import {
   defaultComponentMocks,
   defaultStubs
 } from 'web-test-helpers'
-import { GetFileContentsResponse } from 'web-client/src/webdav/getFileContents'
-import { Resource } from 'web-client/src'
+import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
+import { Resource } from '@ownclouders/web-client/src'
+import { mock } from 'jest-mock-extended'
 
 describe('ReadmeContentModal', () => {
   describe('method "editReadme"', () => {

@@ -8,10 +8,13 @@ import {
 } from 'web-test-helpers'
 import TagsPanel from 'web-app-files/src/components/SideBar/TagsPanel.vue'
 import { mockDeep } from 'jest-mock-extended'
-import { Resource } from 'web-client'
-import { ClientService, eventBus } from 'web-pkg'
+import { Resource } from '@ownclouders/web-client'
+import { ClientService, eventBus } from '@ownclouders/web-pkg'
 
-jest.mock('web-pkg/src/composables/authContext')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useAccessToken: jest.fn()
+}))
 
 describe('Tags Panel', () => {
   it('show tags input form if loaded successfully', () => {

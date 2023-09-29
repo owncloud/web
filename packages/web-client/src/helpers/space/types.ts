@@ -6,7 +6,7 @@
 // ```
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
-import { DriveItem } from 'web-client/src/generated'
+import { DriveItem } from '@ownclouders/web-client/src/generated'
 import { Resource } from '../resource'
 import { User } from '../user'
 

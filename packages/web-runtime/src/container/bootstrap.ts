@@ -8,27 +8,27 @@ import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { useLocalStorage } from 'web-pkg/src/composables'
+import { useLocalStorage } from '@ownclouders/web-pkg'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
 import {
   ClientService,
   LoadingService,
   PasswordPolicyService,
-  PreviewService
-} from 'web-pkg/src/services'
-import { UppyService } from 'web-pkg/src/services/uppy'
+  PreviewService,
+  UppyService
+} from '@ownclouders/web-pkg'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
-import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'
-import { webdav } from 'web-client/src/webdav'
+import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
+import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
 import {
   ocResourceIconMappingInjectionKey,
   OcResourceIconMapping
 } from 'design-system/src/components/OcResourceIcon/types'
 import { merge } from 'lodash-es'
-import { AppConfigObject } from 'web-pkg/src/apps'
+import { AppConfigObject } from '@ownclouders/web-pkg'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static

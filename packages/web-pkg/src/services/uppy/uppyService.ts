@@ -3,11 +3,11 @@ import Tus from '@uppy/tus'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { Language } from 'vue3-gettext'
-import { eventBus } from 'web-pkg/src/services/eventBus'
+import { eventBus } from '../eventBus'
 import DropTarget from '@uppy/drop-target'
 import getFileType from '@uppy/utils/lib/getFileType'
 import generateFileID from '@uppy/utils/lib/generateFileID'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'

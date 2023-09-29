@@ -33,9 +33,9 @@
   </div>
 </template>
 <script lang="ts">
-import { formatFileSize } from 'web-pkg/src/helpers'
+import { formatFileSize } from '../../../../helpers'
 import { computed, defineComponent, PropType } from 'vue'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

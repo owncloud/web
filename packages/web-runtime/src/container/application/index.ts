@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
-import { RuntimeError } from 'web-pkg/src/errors'
+import { RuntimeError } from '@ownclouders/web-pkg'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 import type { Language } from 'vue3-gettext'
@@ -12,13 +12,13 @@ import * as vue from 'vue' // eslint-disable-line
 import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
-import * as webPkg from 'web-pkg'
-import * as webClient from 'web-client'
+import * as webPkg from '@ownclouders/web-pkg'
+import * as webClient from '@ownclouders/web-client'
 
-import { urlJoin } from 'web-client/src/utils'
-import { ConfigurationManager } from 'web-pkg'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { App } from 'vue'
-import { AppConfigObject, ClassicApplicationScript } from 'web-pkg/src/apps'
+import { AppConfigObject, ClassicApplicationScript } from '@ownclouders/web-pkg'
 
 export { NextApplication } from './next'
 

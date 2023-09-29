@@ -7,14 +7,16 @@ import {
   isLocationSharesActive,
   isLocationTrashActive
 } from '../../../router'
-import { ShareStatus } from 'web-client/src/helpers/share'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import { isShareSpaceResource, Resource, SpaceResource } from 'web-client/src/helpers'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
-import { useGetMatchingSpace, useRouter, useStore } from 'web-pkg/src/composables'
+import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { createFileRouteOptions } from '../../../helpers/router'
+import { useGetMatchingSpace } from '../../spaces'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction } from 'web-pkg/src/composables/actions'
+import { FileAction } from '../types'
 
 export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()

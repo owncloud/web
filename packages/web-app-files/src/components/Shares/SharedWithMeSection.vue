@@ -92,24 +92,24 @@
 </template>
 
 <script lang="ts">
-import ResourceTable from 'web-pkg/src/components/FilesList/ResourceTable.vue'
+import { ResourceTable } from '@ownclouders/web-pkg'
 import { defineComponent, PropType } from 'vue'
 import { debounce } from 'lodash-es'
-import { ImageDimension, ImageType } from 'web-pkg/src/constants'
-import { VisibilityObserver } from 'web-pkg/src/observer'
+import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
+import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { mapActions } from 'vuex'
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { SortDir, useStore, useGetMatchingSpace } from 'web-pkg/src/composables'
-import { createLocationSpaces } from 'web-pkg/src/router'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { SortDir, useStore, useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import { ShareStatus } from 'web-client/src/helpers/share'
-import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
-import NoContentMessage from 'web-pkg/src/components/NoContentMessage.vue'
-import { useSelectedResources } from 'web-pkg/src/composables/selection'
+import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ContextActions } from '@ownclouders/web-pkg'
+import { NoContentMessage } from '@ownclouders/web-pkg'
+import { useSelectedResources } from '@ownclouders/web-pkg'
 import { RouteLocationNamedRaw } from 'vue-router'
-import { Resource } from 'web-client/src/helpers'
-import { CreateTargetRouteOptions } from 'web-pkg/src/helpers/folderLink'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { Resource } from '@ownclouders/web-client/src/helpers'
+import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
+import { createFileRouteOptions } from '@ownclouders/web-pkg'
 
 const visibilityObserver = new VisibilityObserver()
 

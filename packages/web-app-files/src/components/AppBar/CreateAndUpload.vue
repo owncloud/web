@@ -159,14 +159,14 @@
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 
-import { useFileActions } from 'web-pkg/src/composables/actions/files/useFileActions'
-import { isLocationPublicActive, isLocationSpacesActive } from 'web-pkg/src/router'
-import { useActiveLocation } from 'web-pkg/src/composables/router'
+import { useFileActions } from '@ownclouders/web-pkg'
+import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
+import { useActiveLocation } from '@ownclouders/web-pkg'
 import {
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,
   useFileActionsPaste
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 
 import {
   useRequest,
@@ -175,7 +175,7 @@ import {
   useStore,
   useUserContext,
   useClientService
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
 import {
@@ -188,16 +188,14 @@ import {
   watch,
   ref
 } from 'vue'
-import { useUpload } from 'web-pkg/src/composables/upload'
-import { eventBus } from 'web-pkg/src/services/eventBus'
-import { Resource, SpaceResource, isShareSpaceResource } from 'web-client/src/helpers'
-import { useService } from 'web-pkg/src/composables/service'
-import { UppyService, UppyResource } from 'web-pkg/src/services/uppy'
+import { eventBus } from '@ownclouders/web-pkg'
+import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useService, useUpload, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
-import { ActionExtension, useExtensionRegistry } from 'web-pkg/src/composables/piniaStores'
-import { Action } from 'web-pkg/src/composables/actions'
+import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { Action } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({

@@ -1,5 +1,5 @@
 import { onBeforeUnmount, ref, Ref, unref } from 'vue'
-import { EventBus, eventBus as defaultEventBus } from 'web-pkg/src/services/eventBus'
+import { EventBus, eventBus as defaultEventBus } from '../../services/eventBus'
 import { SideBarEventTopics } from './eventTopics'
 
 interface SideBarResult {

@@ -1,11 +1,10 @@
 import Uppy, { UppyFile, State, UIPlugin } from '@uppy/core'
 import { HandleUpload } from '../../src/HandleUpload'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource, SpaceResource } from 'web-client/src'
-import { UppyService, UppyResource } from 'web-pkg/src/services/uppy'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { ref, unref } from 'vue'
-import { ClientService } from 'web-pkg/src'
+import { ClientService, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
 

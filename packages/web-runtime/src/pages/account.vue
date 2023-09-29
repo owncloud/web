@@ -132,14 +132,14 @@ import {
   useCapabilitySpacesEnabled,
   useClientService,
   useStore
-} from 'web-pkg/src/composables'
+} from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
-import { useConfigurationManager } from 'web-pkg/src/composables/configuration'
-import { SpaceResource, isPersonalSpaceResource } from 'web-client/src/helpers'
-import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
+import { useConfigurationManager } from '@ownclouders/web-pkg'
+import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'AccountPage',

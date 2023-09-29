@@ -1,4 +1,4 @@
-import { Resource, SpaceResource } from 'web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export interface BuildQueryStringOptions {
   preview?: number

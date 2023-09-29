@@ -18,10 +18,10 @@ export default defineConfig(async (args) => {
 
   // collapsible table
   config.resolve.alias['design-system/src/components/OcTable/OcTable.vue'] =
-    'web-pkg/src/cern/components/CollapsibleOcTable.vue'
+    '@ownclouders/web-pkg/src/cern/components/CollapsibleOcTable.vue'
   // token info request
   config.resolve.alias['web-runtime/src/composables/tokenInfo'] =
-    'web-pkg/src/cern/composables/useLoadTokenInfo'
+    '@ownclouders/web-pkg/src/cern/composables/useLoadTokenInfo'
 
   config.plugins.push(historyModePlugins()[0])
 

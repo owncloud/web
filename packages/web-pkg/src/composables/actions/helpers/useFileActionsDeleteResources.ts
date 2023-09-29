@@ -1,22 +1,20 @@
 import { Store } from 'vuex'
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
-import { Resource, SpaceResource } from 'web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import PQueue from 'p-queue'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
-import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
+import { createFileRouteOptions } from '../../../helpers'
 import { computed, unref } from 'vue'
-import {
-  useCapabilitySpacesEnabled,
-  useClientService,
-  useRouter,
-  useStore,
-  useLoadingService,
-  useRouteQuery,
-  queryItemAsString,
-  useGetMatchingSpace
-} from 'web-pkg/src/composables'
+import { queryItemAsString } from '../../appDefaults'
+import { useGetMatchingSpace } from '../../spaces'
+import { useRouteQuery } from '../../router'
+import { useCapabilitySpacesEnabled } from '../../capability'
+import { useLoadingService } from '../../loadingService'
+import { useClientService } from '../../clientService'
+import { useRouter } from '../../router'
+import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
 

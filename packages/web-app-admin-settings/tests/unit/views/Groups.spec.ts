@@ -1,7 +1,7 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService, eventBus } from 'web-pkg/src'
+import { ClientService, eventBus } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
@@ -9,7 +9,7 @@ import {
   defaultStoreMockOptions,
   mount
 } from 'web-test-helpers'
-import { Group } from 'web-client/src/generated'
+import { Group } from '@ownclouders/web-client/src/generated'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
@@ -19,7 +19,10 @@ const getClientServiceMock = () => {
   )
   return clientService
 }
-jest.mock('web-pkg/src/composables/appDefaults')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useAppDefaults: jest.fn()
+}))
 
 describe('Groups view', () => {
   describe('method "createGroup"', () => {

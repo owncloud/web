@@ -1,12 +1,16 @@
 import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from 'web-pkg/src/composables/actions'
-import { useAbility, useClientService, useLoadingService, useRouter } from 'web-pkg/src/composables'
-import { isPersonalSpaceResource } from 'web-client/src/helpers'
-import { isLocationSpacesActive } from 'web-pkg/src/router'
-import { useCreateSpace } from 'web-pkg/src/composables/spaces'
-import { useSpaceHelpers } from 'web-pkg/src/composables/spaces'
+import { FileAction, FileActionOptions } from '../../actions'
+
+import { useAbility } from '../../ability'
+import { useClientService } from '../../clientService'
+import { useRouter } from '../../router'
+import { useLoadingService } from '../../loadingService'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isLocationSpacesActive } from '../../../router'
+import { useCreateSpace } from '../../spaces'
+import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {

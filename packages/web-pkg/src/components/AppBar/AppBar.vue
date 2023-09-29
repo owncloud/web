@@ -76,18 +76,18 @@
 import last from 'lodash-es/last'
 import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
 import { mapGetters, mapState, mapMutations } from 'vuex'
-import { Resource } from 'web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   isShareSpaceResource,
   SpaceResource
-} from 'web-client/src/helpers'
-import BatchActions from 'web-pkg/src/components/BatchActions.vue'
+} from '@ownclouders/web-client/src/helpers'
+import BatchActions from '../BatchActions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
-import ContextActions from 'web-pkg/src/components/FilesList/ContextActions.vue'
+import ContextActions from '../FilesList/ContextActions.vue'
 import SidebarToggle from './SidebarToggle.vue'
-import { ViewMode } from 'web-pkg/src/ui/types'
+import { ViewMode } from '../../ui/types'
 import {
   useFileActionsAcceptShare,
   useFileActionsCopy,
@@ -98,17 +98,17 @@ import {
   useFileActionsEmptyTrashBin,
   useFileActionsMove,
   useFileActionsRestore
-} from 'web-pkg/src/composables/actions'
+} from '../../composables/actions'
 import {
   useCapabilitySpacesMaxQuota,
   useRouteMeta,
   useStore,
   ViewModeConstants
-} from 'web-pkg/src/composables'
+} from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
-import { useActiveLocation } from 'web-pkg/src/composables/router/useActiveLocation'
-import { EVENT_ITEM_DROPPED } from 'design-system/src/helpers'
-import ViewOptions from 'web-pkg/src/components/ViewOptions.vue'
+import { useActiveLocation } from '../../composables'
+import { helpers } from 'design-system'
+import ViewOptions from '../ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
 import {
   FileAction,
@@ -116,8 +116,10 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsEditQuota,
   useSpaceActionsRestore
-} from 'web-pkg/src/composables/actions'
-import { QuotaModal } from 'web-pkg'
+} from '../../composables'
+import QuotaModal from '../Spaces/QuotaModal.vue'
+
+const { EVENT_ITEM_DROPPED } = helpers
 
 export default defineComponent({
   components: {
@@ -131,7 +133,7 @@ export default defineComponent({
     viewModeDefault: {
       type: String,
       required: false,
-      default: ViewModeConstants.default.name
+      default: () => ViewModeConstants.default.name
     },
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,

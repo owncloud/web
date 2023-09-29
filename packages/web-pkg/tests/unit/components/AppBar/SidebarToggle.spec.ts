@@ -1,5 +1,5 @@
 import SidebarToggle from '../../../../src/components/AppBar/SidebarToggle.vue'
-import { eventBus } from 'web-pkg'
+import { eventBus } from '../../../../src/services'
 import {
   createStore,
   defaultPlugins,

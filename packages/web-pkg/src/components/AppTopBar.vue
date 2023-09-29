@@ -73,9 +73,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 import { Action } from '../composables/actions/types'
-import ContextActionMenu from 'web-pkg/src/components/ContextActions/ContextActionMenu.vue'
+import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

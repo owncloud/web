@@ -9,9 +9,9 @@ import {
   mockAxiosReject
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { SpaceResource } from 'web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
-import { ClientService } from 'web-pkg'
+import { ClientService, ConfigurationManager } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 
 const $route = {
@@ -32,10 +32,15 @@ const selectors = {
   gdprExport: '[data-testid="gdpr-export"]'
 }
 
-jest.mock('web-pkg/src/configuration', () => ({
-  configurationManager: {
-    logoutUrl: 'https://account-manager/logout'
-  }
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useConfigurationManager: () =>
+    mock<ConfigurationManager>({
+      logoutUrl: 'https://account-manager/logout',
+      options: {
+        logoutUrl: 'https://account-manager/logout'
+      }
+    })
 }))
 
 describe('account page', () => {

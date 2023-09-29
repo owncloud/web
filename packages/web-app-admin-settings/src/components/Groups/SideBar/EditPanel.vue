@@ -24,9 +24,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
-import { Group } from 'web-client/src/generated'
-import CompareSaveDialog from 'web-pkg/src/components/SideBar/CompareSaveDialog.vue'
-import { MaybeRef, useClientService } from 'web-pkg'
+import { Group } from '@ownclouders/web-client/src/generated'
+import { CompareSaveDialog } from '@ownclouders/web-pkg'
+import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
 import GroupInfoBox from './GroupInfoBox.vue'
 
 export default defineComponent({

@@ -1,4 +1,4 @@
-import { useSpaceActionsEditDescription } from 'web-pkg/src/composables/actions/spaces'
+import { useSpaceActionsEditDescription } from '../../../../../src/composables/actions'
 import {
   createStore,
   defaultComponentMocks,
@@ -9,7 +9,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { SpaceResource } from 'web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 
 describe('editDescription', () => {
   describe('handler', () => {

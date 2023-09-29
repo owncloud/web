@@ -1,4 +1,4 @@
-import { ConfigurationManager } from 'web-pkg'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
 import merge from 'lodash-es/merge'
 

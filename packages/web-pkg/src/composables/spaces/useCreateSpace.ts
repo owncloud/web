@@ -1,7 +1,8 @@
-import { buildSpace } from 'web-client/src/helpers'
-import { Drive } from 'web-client/src/generated'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { Drive } from '@ownclouders/web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
-import { useConfigurationManager, useClientService } from 'web-pkg/src/composables'
+import { useClientService } from '../clientService'
+import { useConfigurationManager } from '../configuration'
 
 export const useCreateSpace = () => {
   const clientService = useClientService()

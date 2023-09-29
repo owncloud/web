@@ -20,7 +20,7 @@ import { RequestResult, usePublicLinkContext, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
-import { urlJoin } from 'web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -96,7 +96,8 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       clientService
     }),
     ...useAppFolderHandling({
-      clientService,
+      // FIXME: what's wrong here? mismatch in packages somehow...
+      clientService: clientService as any,
       store,
       currentRoute
     }),

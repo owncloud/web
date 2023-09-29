@@ -7,16 +7,16 @@ import {
   mount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { Resource } from 'web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'
 import {
   useSpaceActionsDisable,
   useSpaceActionsEditDescription,
   useSpaceActionsEditQuota,
   useSpaceActionsRename
-} from 'web-pkg/src/composables/actions/spaces'
+} from '@ownclouders/web-pkg'
 import { computed, ref } from 'vue'
-import { Action } from 'web-pkg/src/composables/actions'
+import { Action } from '@ownclouders/web-pkg'
 
 function createMockActionComposables(module) {
   const mockModule: Record<string, any> = {}
@@ -26,8 +26,8 @@ function createMockActionComposables(module) {
   return mockModule
 }
 
-jest.mock('web-pkg/src/composables/actions/spaces', () =>
-  createMockActionComposables(jest.requireActual('web-pkg/src/composables/actions/spaces'))
+jest.mock('@ownclouders/web-pkg', () =>
+  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
 )
 
 describe('ActionsPanel', () => {
