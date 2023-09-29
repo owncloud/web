@@ -14,9 +14,9 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
-  RouteLocation
+  RouteLocation,
+  useGetMatchingSpaceMock
 } from 'web-test-helpers'
-import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),

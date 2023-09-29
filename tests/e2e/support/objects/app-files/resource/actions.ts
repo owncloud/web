@@ -1346,3 +1346,12 @@ export const countNumberOfResourcesInThePage = ({ page }): Promise<number> => {
 export const expectPageNumberNotToBeVisible = async ({ page }): Promise<void> => {
   await expect(page.locator(filesPaginationNavSelector)).not.toBeVisible()
 }
+
+export interface expectFileToBeSelectedArgs {
+  page: Page
+  fileName: string
+}
+
+export const expectFileToBeSelected = async ({ page, fileName }): Promise<void> => {
+  await expect(page.locator(util.format(checkBox, fileName))).toBeChecked()
+}

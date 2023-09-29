@@ -15,9 +15,9 @@ import {
   ClientService,
   LoadingService,
   PasswordPolicyService,
-  PreviewService
+  PreviewService,
+  UppyService
 } from '@ownclouders/web-pkg'
-import { UppyService } from '../services/uppyService'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'

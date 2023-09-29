@@ -48,7 +48,6 @@ import {
   nextTick,
   watch
 } from 'vue'
-import { useUpload } from 'web-runtime/src/composables/upload'
 import { useGettext } from 'vue3-gettext'
 import {
   useClientService,
@@ -60,12 +59,12 @@ import {
   useGetMatchingSpace,
   useUserContext,
   useRouteQuery,
-  queryItemAsString
+  queryItemAsString,
+  useUpload
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { linkRoleUploaderFolder } from '@ownclouders/web-client/src/helpers/share'
-import { useService } from '@ownclouders/web-pkg'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { useService, UppyService } from '@ownclouders/web-pkg'
 import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'

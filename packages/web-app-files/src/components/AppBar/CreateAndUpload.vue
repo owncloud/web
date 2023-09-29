@@ -188,11 +188,9 @@ import {
   watch,
   ref
 } from 'vue'
-import { UppyResource, useUpload } from 'web-runtime/src/composables/upload'
 import { eventBus } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useService } from '@ownclouders/web-pkg'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { useService, useUpload, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'

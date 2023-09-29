@@ -3,10 +3,7 @@ import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
-
-// FIXME:
-import { UppyService } from '../../web-runtime/src/services/uppyService'
-
+import type { UppyService } from '@ownclouders/web-pkg'
 import '@uppy/dashboard/dist/style.min.css'
 import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'

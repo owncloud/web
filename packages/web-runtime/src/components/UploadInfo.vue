@@ -162,8 +162,7 @@ import getSpeed from '@uppy/utils/lib/getSpeed'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '@ownclouders/web-pkg'
 import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
-import { formatFileSize } from '@ownclouders/web-pkg'
-import { UppyResource } from '../composables/upload'
+import { formatFileSize, UppyResource } from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({

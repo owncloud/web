@@ -1,10 +1,9 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { useRequest } from '@ownclouders/web-pkg'
-import { eventBus } from '@ownclouders/web-pkg'
+import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultPlugins,

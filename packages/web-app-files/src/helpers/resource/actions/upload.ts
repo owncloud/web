@@ -2,12 +2,12 @@ import { Language } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { Resource } from '@ownclouders/web-client'
 import { extractExtensionFromFile } from '@ownclouders/web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
 import {
   ConflictDialog,
   ResolveConflict,
   resolveFileNameDuplicate,
-  ResolveStrategy
+  ResolveStrategy,
+  UppyResource
 } from '@ownclouders/web-pkg'
 
 interface ConflictedResource {

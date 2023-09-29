@@ -1,57 +1,14 @@
+import { useStore } from '../store'
+import { useAccessToken, usePublicLinkContext, usePublicLinkPassword } from '../authContext'
 import {
-  useAccessToken,
   useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
-  useCapabilityFilesTusSupportMaxChunkSize,
-  usePublicLinkContext,
-  usePublicLinkPassword,
-  useStore
-} from '@ownclouders/web-pkg'
+  useCapabilityFilesTusSupportMaxChunkSize
+} from '../capability'
 import { computed, unref, watch } from 'vue'
-import { UppyService } from '../../services/uppyService'
+import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-
-export interface UppyResource {
-  id?: string
-  source: string
-  name: string
-  isFolder: boolean
-  type: string
-  size: number
-  data: Blob
-  isRemote: boolean
-  meta: {
-    // IMPORTANT: must only contain primitive types, complex types won't be serialized properly!
-    name?: string
-    mtime?: number
-    // current space & folder
-    spaceId: string | number
-    spaceName: string
-    driveAlias: string
-    driveType: string
-    currentFolder: string // current folder path during upload initiation
-    currentFolderId?: string | number
-    fileId?: string | number
-    // upload data
-    uppyId?: string
-    relativeFolder: string
-    relativePath: string
-    tusEndpoint: string
-    uploadId: string
-    topLevelFolderId?: string
-    // route data
-    routeName?: string
-    routeDriveAliasAndItem?: string
-    routeShareId?: string
-  }
-  tus?: {
-    endpoint: string
-  }
-  xhrUpload?: {
-    endpoint: string
-  }
-}
 
 interface UploadOptions {
   uppyService: UppyService

@@ -31,7 +31,7 @@
 import { computed, defineComponent, onMounted, onBeforeUnmount, ref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { useService } from '@ownclouders/web-pkg'
-import type { UppyService } from 'web-runtime/src/services/uppyService'
+import type { UppyService } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   props: {
