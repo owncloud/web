@@ -88,16 +88,8 @@ then
 	done
 elif [[ -n  "${RUN_PART}" ]]
 then
-  	ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
-	if [ "${RUN_ON_OCIS}" == "true" ]
-	then
-		NOT_OCIS_SUITES=$(cat "${SCRIPT_PATH}"/suites-not-to-run-on-ocis.txt)
+	ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
 
-		for SUITE in "${NOT_OCIS_SUITES[@]}"
-		do
-			ALL_SUITES=$(echo "${ALL_SUITES}" | grep -v "${SUITE}")
-		done
-	fi
 	ALL_SUITES_COUNT=$(echo "${ALL_SUITES}" | wc -l)
 	#divide the suites letting it round down (could be zero)
 	MIN_SUITES_PER_RUN=$((ALL_SUITES_COUNT / DIVIDE_INTO_NUM_PARTS))

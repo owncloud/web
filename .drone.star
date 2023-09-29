@@ -177,7 +177,6 @@ config = {
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "SERVER_HOST": "https://ocis:9200",
                 "BACKEND_HOST": "https://ocis:9200",
-                "RUN_ON_OCIS": "true",
                 "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
                 "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
                 "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
