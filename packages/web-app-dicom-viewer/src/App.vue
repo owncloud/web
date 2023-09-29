@@ -135,6 +135,10 @@
     :is-show-metadata-activated="false"
     @set-rotation="currentImageRotation = $event"
     @set-zoom="currentImageZoom = $event"
+    @set-vertical-flip="currentVerticalFlip = $event"
+    @set-horizontal-flip="currentHorizontalFlip = $event"
+    @set-inversion="currentInversion = $event"
+    @toggle-show-metadata="showMetadata"
     @toggle-previous="prev"
     @toggle-next="next"
   />
@@ -268,6 +272,10 @@ export default defineComponent({
       toolInfoElement: null,
       currentImageZoom: 1,
       currentImageRotation: 0,
+      currentVerticalFlip: false,
+      currentHorizontalFlip: false,
+      currentInversion: false,
+      isShowMetadataActivated: false,
       dicomFiles: [this.resource]
     }
   },
@@ -727,10 +735,15 @@ export default defineComponent({
         console.log('reading file lenght: ' + result.length)
       }
     },
+    // TODO: properly implement these functions
     next() {
       return
     },
     prev() {
+      return
+    },
+    showMetadata() {
+      // similar to "ToggleFullScreenMode" of preview app
       return
     },
     addButton({

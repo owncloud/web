@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="oc-position-medium oc-position-bottom-center preview-details"
-    :class="{ lightbox: isFullScreenModeActivated }"
-  >
+  <div class="oc-position-medium oc-position-bottom-center preview-details">
     <div
       class="oc-background-brand oc-p-s oc-width-xlarge oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
     >
@@ -153,15 +150,23 @@
       <!-- metadata -->
       <div class="oc-flex-middle oc-flex oc-mr-m">
         <oc-button
-          v-oc-tooltip="imageShowMetadataDescription"
+          v-oc-tooltip="
+            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
+          "
           class="preview-controls-show-metadata"
           appearance="raw-inverse"
           variation="brand"
-          :aria-label="imageShowMetadataDescription"
-          @click="imageShowMetadata"
+          :aria-label="
+            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
+          "
+          @click="$emit('toggleShowMetadata')"
         >
           <!-- TODO: insert correct icon -->
-          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+          <oc-icon
+            fill-type="line"
+            :name="isShowMetadataActivated ? 'fullscreen-exit' : 'fullscreen'"
+            variation="inherit"
+          />
         </oc-button>
       </div>
     </div>
@@ -212,7 +217,16 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['setRotation', 'setZoom', 'toggleNext', 'togglePrevious'],
+  emits: [
+    'setRotation',
+    'setZoom',
+    'setVerticalFlip',
+    'setHorizontalFlip',
+    'setInversion',
+    'toggleShowMetadata',
+    'toggleNext',
+    'togglePrevious'
+  ],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
 
@@ -240,7 +254,7 @@ export default defineComponent({
       emit('setZoom', Math.max(0.1, calculateZoom(props.currentImageZoom, 0.8)))
     }
     const imageZoom = () => {
-      const maxZoomValue = calculateZoom(9, 1.25)
+      const maxZoomValue = calculateZoom(9, 1.25) // why is there a value 9?!?
       emit('setZoom', Math.min(calculateZoom(props.currentImageZoom, 1.25), maxZoomValue))
     }
     const imageRotateLeft = () => {
@@ -248,6 +262,27 @@ export default defineComponent({
     }
     const imageRotateRight = () => {
       emit('setRotation', props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90)
+    }
+
+    // TODO: draft only, properly implement the following new functionalities
+    const imageFlipVertical = () => {
+      emit('setVerticalFlip', props.currentVerticalFlip === true ? true : false)
+    }
+
+    const imageFlipHorizontal = () => {
+      emit('setHorizontalFlip', props.currentHorizontalFlip === true ? true : false)
+    }
+
+    const imageInvert = () => {
+      emit('setInversion', props.currentInversion === true ? true : false)
+    }
+
+    const imageReset = () => {
+      // TODO: reset zoom, flip & inversion to default value
+    }
+
+    const imageShowMetadata = () => {
+      emit('toggleShowMetadata', props.isShowMetadataActivated === true ? true : false)
     }
 
     return {
@@ -268,10 +303,16 @@ export default defineComponent({
       imageInvertDescription: $gettext('Invert the colours of the image'),
       imageResetDescription: $gettext('Reset all image manipulations'),
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
+      imageHideMetadataDescription: $gettext('Hide DICOM metadata'),
       imageShrink,
       imageZoom,
       imageRotateLeft,
-      imageRotateRight
+      imageRotateRight,
+      imageFlipVertical,
+      imageFlipHorizontal,
+      imageInvert,
+      imageReset,
+      imageShowMetadata
     }
   }
 })
