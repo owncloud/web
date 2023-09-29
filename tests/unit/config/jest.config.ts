@@ -1,3 +1,4 @@
+import type { Config } from 'jest'
 import path from 'path'
 import { compilerOptions } from '../../../vite.config'
 const rootDir = path.resolve(__dirname, '../../../')
@@ -5,7 +6,7 @@ const rootDir = path.resolve(__dirname, '../../../')
 // We need to transpile these modules as they are using esm syntax
 const esmModules = ['lodash-es', 'mark.js', 'fuse.js', 'filesize'].map((m) => `.pnpm/${m}@.*`)
 process.env.TZ = 'GMT'
-module.exports = {
+export default {
   globals: {
     'vue-jest': {
       compilerOptions
@@ -14,6 +15,8 @@ module.exports = {
   rootDir,
   modulePaths: ['<rootDir>'],
   moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
+  maxWorkers: '50%',
+  maxConcurrency: 5,
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
     '^.+\\.js$': 'babel-jest',
@@ -21,7 +24,6 @@ module.exports = {
   },
   moduleNameMapper: {
     '\\.(css|less|scss)$': '<rootDir>/tests/unit/stubs/empty.js',
-    '^@/(.*)$': '<rootDir>/$1',
     '^core-js$': '<rootDir>/node_modules/core-js',
     '^mark.js$': '<rootDir>/node_modules/mark.js/src/vanilla.js',
     '^fuse.js$': '<rootDir>/node_modules/fuse.js/dist/fuse.esm.js',
@@ -63,4 +65,4 @@ module.exports = {
   testMatch: ['**/*.spec.{js,ts}'],
   testPathIgnorePatterns: ['<rootDir>/.pnpm-store/*'],
   clearMocks: true
-}
+} satisfies Config
