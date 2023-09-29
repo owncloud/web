@@ -1,10 +1,8 @@
 {
   "name": "@ownclouders/web-pkg",
-  "version": "0.0.3",
+  "version": "0.0.5-alpha.5",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
-  "main": "src/index.ts",
-  "types": "types.d.ts",
   "private": false,
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "homepage": "https://github.com/owncloud/web/tree/master/packages/web-pkg",
@@ -13,9 +11,27 @@
     "url": "https://github.com/owncloud/web",
     "directory": "packages/web-pkg"
   },
+  "type": "module",
+  "main": "src/index.ts",
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "main": "",
+    "types": "dist/web-pkg/src/index.d.ts"
+  },
+  "clean-publish": {
+    "directory": "package"
+  },
+  "scripts": {
+    "vite": "vite",
+    "prepublishOnly": "rm -rf ./package && clean-publish && cat package.json",
+    "postpublish": "rm -rf ./package"
+  },
   "devDependencies": {
     "web-test-helpers": "workspace:*",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "vite-plugin-dts": "3.6.0"
   },
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
@@ -29,6 +45,7 @@
     "@uppy/xhr-upload": "^3.0.1",
     "@vueuse/core": "^10.0.0",
     "axios": "1.6.2",
+    "clean-publish": "4.2.0",
     "design-system": "workspace:@ownclouders/design-system@*",
     "filesize": "^9.0.11",
     "fuse.js": "6.6.2",
