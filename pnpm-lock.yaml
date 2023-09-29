@@ -520,9 +520,6 @@ importers:
       vue3-gettext:
         specifier: ^2.3.3
         version: 2.3.4(@vue/compiler-sfc@3.3.4)(vue@3.3.4)
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
       webfontloader:
         specifier: ^1.6.28
         version: 1.6.28
@@ -660,10 +657,6 @@ importers:
       web-app-admin-settings:
         specifier: workspace:*
         version: 'link:'
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-draw-io:
     dependencies:
@@ -679,10 +672,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-external:
     dependencies:
@@ -704,10 +693,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-files:
     dependencies:
@@ -787,9 +772,6 @@ importers:
       '@vueuse/core':
         specifier: ^10.3.0
         version: 10.3.0(vue@3.3.4)
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-importer:
     dependencies:
@@ -814,10 +796,6 @@ importers:
       '@uppy/webdav':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@3.3.0)'
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-pdf-viewer:
     dependencies:
@@ -830,10 +808,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-preview:
     dependencies:
@@ -852,10 +826,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-search:
     dependencies:
@@ -877,10 +847,6 @@ importers:
       web-app-files:
         specifier: workspace:*
         version: link:../web-app-files
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-skeleton:
     dependencies:
@@ -890,10 +856,6 @@ importers:
       web-app-search:
         specifier: workspace:*
         version: link:../web-app-search
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-text-editor:
     dependencies:
@@ -918,10 +880,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-webfinger:
     dependencies:
@@ -937,10 +895,6 @@ importers:
       web-app-webfinger:
         specifier: workspace:*
         version: 'link:'
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-client:
     dependencies:
@@ -1050,9 +1004,6 @@ importers:
       vite-plugin-dts:
         specifier: 3.6.0
         version: 3.6.0(@types/node@16.18.30)(rollup@3.29.2)(typescript@5.0.3)(vite@4.4.9)
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-runtime:
     dependencies:
@@ -1201,9 +1152,6 @@ importers:
       '@types/semver':
         specifier: 7.5.0
         version: 7.5.0
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-test-helpers:
     dependencies:

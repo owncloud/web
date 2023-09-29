@@ -4,9 +4,6 @@
   "private": true,
   "description": "ownCloud web integration of the reva app provider",
   "license": "AGPL-3.0",
-  "devDependencies": {
-    "web-test-helpers": "workspace:*"
-  },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",

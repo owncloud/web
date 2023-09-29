@@ -18,15 +18,13 @@
     "types": "dist/web-pkg/src/index.d.ts",
     "files": [
       "dist/"
-    ],
-    "devDependencies": {}
+    ]
   },
   "scripts": {
     "vite": "vite"
   },
   "devDependencies": {
-    "vite-plugin-dts": "3.6.0",
-    "web-test-helpers": "workspace:*"
+    "vite-plugin-dts": "3.6.0"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
