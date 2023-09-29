@@ -13,16 +13,14 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
+import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 
 jest.mock('web-app-files/src/composables/resourcesViewDefaults')
 jest.mock('web-app-files/src/composables/keyboardActions')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  useBreadcrumbsFromPath: jest.fn(() => ({
-    breadcrumbsFromPath: jest.fn(),
-    concatBreadcrumbs: jest.fn()
-  })),
+  useBreadcrumbsFromPath: jest.fn(),
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {
@@ -102,7 +100,8 @@ describe('GenericSpace view', () => {
       const folderName = 'someFolder'
       const { wrapper } = getMountedWrapper({
         files: [mockDeep<Resource>()],
-        props: { item: `/${folderName}` }
+        props: { item: `/${folderName}` },
+        breadcrumbsFromPath: [{ text: folderName }]
       })
       expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs.length).toBe(2)
       expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
@@ -212,13 +211,19 @@ function getMountedWrapper({
   currentRoute = { name: 'files-spaces-generic', path: '/' },
   currentFolder = mock<Resource>() || {},
   runningOnEos = false,
-  space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' }
+  space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' },
+  breadcrumbsFromPath = []
 } = {}) {
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(files),
     areResourcesLoading: ref(loading)
   })
   jest.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
+  jest
+    .mocked(useBreadcrumbsFromPath)
+    .mockImplementation(() =>
+      useBreadcrumbsFromPathMock({ breadcrumbsFromPath: jest.fn(() => breadcrumbsFromPath) })
+    )
   const defaultMocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute) }),
     ...(mocks && mocks)
