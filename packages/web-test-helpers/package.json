@@ -3,16 +3,12 @@
   "private": true,
   "main": "src/index.ts",
   "peerDependencies": {
-    "@ownclouders/web-client": "workspace:*",
-    "@ownclouders/web-pkg": "workspace:*",
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.1",
     "axios": "1.4.0",
-    "design-system": "workspace:@ownclouders/design-system@*",
     "pinia": "2.1.4",
     "vue3-gettext": "^2.3.3",
     "vue-router": "4.2.0",
-    "vuex": "4.1.0",
-    "web-runtime": "workspace:*"
+    "vuex": "4.1.0"
   }
 }

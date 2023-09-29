@@ -1,9 +1,9 @@
-import DesignSystem from 'design-system'
+import DesignSystem from '../../design-system'
 import { createGettext } from 'vue3-gettext'
 import { h } from 'vue'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
-import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
+import { AbilityRule } from '../../web-client/src/helpers/resource/types'
 import { createPinia } from 'pinia'
 
 export interface DefaultPluginsOptions {

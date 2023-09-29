@@ -6,9 +6,9 @@ import {
   PasswordPolicyService,
   PreviewService,
   UppyService
-} from '@ownclouders/web-pkg'
+} from '../../../web-pkg/src/'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
-import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
+import { OwnCloudSdk } from '../../../web-client/src/types'
 import { ref } from 'vue'
 
 export interface ComponentMocksOptions {
