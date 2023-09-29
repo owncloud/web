@@ -925,6 +925,21 @@ importers:
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
+      '@uppy/core':
+        specifier: ^3.2.0
+        version: 3.3.0
+      '@uppy/drop-target':
+        specifier: ^2.0.0
+        version: 2.0.1(@uppy/core@3.3.0)
+      '@uppy/tus':
+        specifier: ^3.1.0
+        version: 3.1.0(@uppy/core@3.3.0)
+      '@uppy/utils':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@uppy/xhr-upload':
+        specifier: ^3.0.1
+        version: 3.3.1(@uppy/core@3.3.0)
       '@vueuse/core':
         specifier: ^10.0.0
         version: 10.3.0(vue@3.3.4)
@@ -1009,18 +1024,9 @@ importers:
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz'
-      '@uppy/drop-target':
-        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-drop-target.tgz
-        version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-drop-target.tgz(@uppy/core@3.3.0)'
-      '@uppy/tus':
-        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-tus.tgz
-        version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-tus.tgz(@uppy/core@3.3.0)'
       '@uppy/utils':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
-      '@uppy/xhr-upload':
-        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz
-        version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz(@uppy/core@3.3.0)'
       '@vueuse/head':
         specifier: 1.1.26
         version: 1.1.26(vue@3.3.4)
@@ -6649,6 +6655,15 @@ packages:
       preact: 10.7.1
     dev: false
 
+  /@uppy/drop-target@2.0.1(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-FMO8wj+0dx4mlwXKxFWSTUF+irgr0BVXadyc4qaoBBtZ3vEcwc3jP7SQfwk3JizV/D5MYG8MRICRbPAIrY9M8w==}
+    peerDependencies:
+      '@uppy/core': ^3.0.2
+    dependencies:
+      '@uppy/core': 3.3.0
+      '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
+    dev: false
+
   /@uppy/onedrive@3.1.1(@uppy/core@3.3.0):
     resolution: {integrity: sha512-TxrmZbOATL/ItEbdCZi4gVooQK+CUa4A5aAVGPgJqYlYTUdzKqhmS2YsgIgxBhDrn6TJrA78rVehZl/R8PPXlg==}
     peerDependencies:
@@ -6659,6 +6674,34 @@ packages:
       '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
       '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
       preact: 10.7.1
+    dev: false
+
+  /@uppy/tus@3.1.0(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-oFSa6WtDv2yXO/U02wZ8pQEIxEdtBs5N80fi1anipiJASvNJ+pCrl812QDQLdd/roXJkg0jIEP4/8Eod2d6yGg==}
+    peerDependencies:
+      '@uppy/core': ^3.2.0
+    dependencies:
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz'
+      '@uppy/core': 3.3.0
+      '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
+      tus-js-client: 3.0.0
+    dev: false
+
+  /@uppy/utils@5.3.0:
+    resolution: {integrity: sha512-tPW+HtRkjanFQAa/XD2e6kjJ7ZeMHtVxEVeBeRtKTnltsCA9kNF2gDwxtUVPEWyLrKzW+CvRm60NDiOKaWUuww==}
+    dependencies:
+      lodash.throttle: 4.1.1
+    dev: false
+
+  /@uppy/xhr-upload@3.3.1(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-LcZvyKVQ0gWNgv3yK7CUAM9AiAQDvqBNxLhWlJxzPjAR9FIBCL9+XpyAgsjg+APAZgk55S6sVSiVV3sXRk44HA==}
+    peerDependencies:
+      '@uppy/core': ^3.3.0
+    dependencies:
+      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz'
+      '@uppy/core': 3.3.0
+      '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
+      nanoid: 4.0.0
     dev: false
 
   /@vitejs/plugin-vue@4.2.3(vite@4.1.1)(vue@3.3.4):
@@ -21658,18 +21701,6 @@ packages:
       preact: 10.7.1
     dev: false
 
-  '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-drop-target.tgz(@uppy/core@3.3.0)':
-    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-drop-target.tgz}
-    id: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-drop-target.tgz'
-    name: '@uppy/drop-target'
-    version: 2.0.1
-    peerDependencies:
-      '@uppy/core': ^3.3.0
-    dependencies:
-      '@uppy/core': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz'
-      '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
-    dev: false
-
   '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz(@uppy/core@3.3.0)':
     resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz}
     id: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz'
@@ -21763,20 +21794,6 @@ packages:
       exifr: 7.1.3
     dev: false
 
-  '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-tus.tgz(@uppy/core@3.3.0)':
-    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-tus.tgz}
-    id: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-tus.tgz'
-    name: '@uppy/tus'
-    version: 3.1.2
-    peerDependencies:
-      '@uppy/core': ^3.3.0
-    dependencies:
-      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz'
-      '@uppy/core': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz'
-      '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
-      tus-js-client: 3.0.0
-    dev: false
-
   '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz':
     resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz}
     name: '@uppy/utils'
@@ -21798,20 +21815,6 @@ packages:
       '@uppy/provider-views': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz(@uppy/core@3.3.0)'
       '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
       preact: 10.7.1
-    dev: false
-
-  '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz(@uppy/core@3.3.0)':
-    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz}
-    id: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz'
-    name: '@uppy/xhr-upload'
-    version: 3.3.1
-    peerDependencies:
-      '@uppy/core': ^3.3.0
-    dependencies:
-      '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz'
-      '@uppy/core': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz'
-      '@uppy/utils': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
-      nanoid: 4.0.0
     dev: false
 
   github.com/dschmidt/v-calendar/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d(vue@3.3.4):

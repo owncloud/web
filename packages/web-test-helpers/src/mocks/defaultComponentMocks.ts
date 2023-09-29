@@ -7,7 +7,7 @@ import {
   PreviewService
 } from 'web-pkg/src/services'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { UppyService } from 'web-pkg/src/services/uppy'
 import { OwnCloudSdk } from 'web-client/src/types'
 import { ref } from 'vue'
 

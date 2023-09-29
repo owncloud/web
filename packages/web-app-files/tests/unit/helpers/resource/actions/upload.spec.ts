@@ -3,7 +3,7 @@ import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource'
 import { ResolveStrategy } from 'web-pkg/src/helpers/resource'
 import { Resource } from 'web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
+import { UppyResource } from 'web-pkg/src/services/uppy'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
 
 const getResourceConflictInstance = ({
