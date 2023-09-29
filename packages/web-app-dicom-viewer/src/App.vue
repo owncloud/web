@@ -3,8 +3,13 @@
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- vip meta data -->
       <div id="dicom-viewer-vip-metadata">
-        [insert name] (*[insert birthdate]) <br />
-        [insert institution], [insert date when image was captured]
+        <div class="oc-pr-s oc-font-semibold">
+          <span>[insert name]</span><span>(*[insert birthdate])</span>
+          <!-- TODO: make sure that date is displayed in the format matching language settings -->
+        </div>
+        <div class="oc-pr-s oc-font-semibold">
+          <span>[insert institution]</span><span>, [insert date when image was captured]</span>
+        </div>
       </div>
       <!-- toggle for displaying all meta data -->
       <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
@@ -839,5 +844,9 @@ export default defineComponent({
     background-color: var(--oc-color-background-hover);
     border-radius: 3px;
   }
+}
+
+#dicom-viewer-vip-metadata {
+  color: var(--oc-color-icon-image);
 }
 </style>
