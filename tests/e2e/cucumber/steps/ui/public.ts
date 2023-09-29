@@ -169,3 +169,12 @@ When(
     await processDelete(stepTable, pageObject, actionType)
   }
 )
+
+Then(
+  'for {string} file {string} should be selected',
+  async function (this: World, stepUser: string, fileName: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.expectFileToBeSelected({ fileName: fileName })
+  }
+)
