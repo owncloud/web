@@ -1,4 +1,4 @@
-import { useUpload } from 'web-runtime/src/composables/upload'
+import { useUpload } from 'web-pkg/src/composables/upload'
 
 describe('useUpload', () => {
   it('should be valid', () => {

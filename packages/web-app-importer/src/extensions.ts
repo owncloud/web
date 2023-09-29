@@ -1,7 +1,7 @@
 import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg/src/composables'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg/src/composables/service'
-import type { UppyService } from 'web-runtime/src/services/uppyService'
+import type { UppyService } from 'web-pkg/src/services/uppy'
 import { computed, unref } from 'vue'
 import { Resource } from 'web-client/src'
 

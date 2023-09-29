@@ -10,7 +10,7 @@ import { Resource } from '@ownclouders/web-client'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { extensions } from '../../src/extensions'
 import { ApplicationSetupOptions } from 'web-pkg/src/apps'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { UppyService } from 'web-pkg/src/services/uppy'
 
 const getAction = (opts: ApplicationSetupOptions) => {
   const { action } = unref(extensions(opts))[0]

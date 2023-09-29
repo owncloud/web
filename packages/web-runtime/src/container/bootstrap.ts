@@ -17,7 +17,7 @@ import {
   PasswordPolicyService,
   PreviewService
 } from 'web-pkg/src/services'
-import { UppyService } from '../services/uppyService'
+import { UppyService } from 'web-pkg/src/services/uppy'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from 'web-pkg/src/configuration'

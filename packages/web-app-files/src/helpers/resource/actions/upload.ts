@@ -2,7 +2,7 @@ import { Language } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { Resource } from 'web-client'
 import { extractExtensionFromFile } from 'web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
+import { UppyResource } from 'web-pkg/src/services/uppy'
 import {
   ConflictDialog,
   ResolveConflict,

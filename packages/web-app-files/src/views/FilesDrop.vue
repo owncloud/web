@@ -49,7 +49,7 @@ import {
   nextTick,
   watch
 } from 'vue'
-import { useUpload } from 'web-runtime/src/composables/upload'
+import { useUpload } from 'web-pkg/src/composables/upload'
 import { useGettext } from 'vue3-gettext'
 import {
   useClientService,
@@ -66,7 +66,7 @@ import {
 import { eventBus } from 'web-pkg/src/services/eventBus'
 import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { useService } from 'web-pkg/src/composables/service'
-import { UppyService } from 'web-runtime/src/services/uppyService'
+import { UppyService } from 'web-pkg/src/services/uppy'
 import { useAuthService } from 'web-pkg/src/composables/authContext/useAuthService'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'

@@ -163,7 +163,7 @@ import { urlJoin } from 'web-client/src/utils'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { useCapabilityShareJailEnabled } from 'web-pkg/src/composables'
 import { formatFileSize } from 'web-pkg/src/helpers'
-import { UppyResource } from '../composables/upload'
+import { UppyResource } from 'web-pkg/src/services/uppy'
 import { extractParentFolderName } from 'web-client/src/helpers'
 
 export default defineComponent({

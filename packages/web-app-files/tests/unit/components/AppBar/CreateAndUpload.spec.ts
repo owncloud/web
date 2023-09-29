@@ -1,7 +1,7 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from 'web-client/src/helpers'
-import { UppyResource } from 'web-runtime/src/composables/upload'
+import { UppyResource } from 'web-pkg/src/services/uppy'
 import { Drive } from 'web-client/src/generated'
 import { useRequest } from 'web-pkg/src/composables'
 import { eventBus } from 'web-pkg/src'
