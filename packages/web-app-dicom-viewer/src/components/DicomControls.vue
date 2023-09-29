@@ -161,10 +161,10 @@
           "
           @click="$emit('toggleShowMetadata')"
         >
-          <!-- TODO: insert correct icon -->
+          <!-- TODO: insert correct icon, check if fill or line version is needed -->
           <oc-icon
-            fill-type="line"
-            :name="isShowMetadataActivated ? 'fullscreen-exit' : 'fullscreen'"
+            v-fill-type="isShowMetadataActivated ? 'fill' : 'line'"
+            :name="isShowMetadataActivated ? 'side-bar-right' : 'side-bar-right'"
             variation="inherit"
           />
         </oc-button>
