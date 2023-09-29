@@ -16,7 +16,11 @@ import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
 
 jest.mock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  queryItemAsString: jest.fn(),
+  useAppDefaults: jest.fn()
+}))
 
 const selectors = {
   noContentMessageStub: 'no-content-message-stub',

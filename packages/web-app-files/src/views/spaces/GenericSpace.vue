@@ -176,7 +176,6 @@ import {
   useClientService,
   ViewModeConstants,
   useCapabilityShareJailEnabled,
-  useConfigurationManager,
   useBreadcrumbsFromPath
 } from '@ownclouders/web-pkg'
 import { useDocumentTitle } from '@ownclouders/web-pkg'
@@ -247,7 +246,6 @@ export default defineComponent({
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
-    const configurationManager = useConfigurationManager()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
 
     let loadResourcesEventToken

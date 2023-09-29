@@ -17,7 +17,10 @@ import {
 } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useSort: jest.fn().mockImplementation(() => useSortMock())
+}))
 
 describe('SharedWithMe view', () => {
   it('appBar always present', () => {

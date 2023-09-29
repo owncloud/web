@@ -12,7 +12,10 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useGetMatchingSpace: jest.fn()
+}))
 
 describe('Preview component', () => {
   jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())

@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import GenericSpace from 'web-app-files/src/views/spaces/GenericSpace.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
+import { useResourcesViewDefaults } from 'web-app-files/src/composables/resourcesViewDefaults'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import {
   createStore,
@@ -15,9 +15,14 @@ import {
 } from 'web-test-helpers'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 
-jest.mock('web-app-files/src/composables')
+jest.mock('web-app-files/src/composables/resourcesViewDefaults')
 jest.mock('web-app-files/src/composables/keyboardActions')
-jest.mock('@ownclouders/web-pkgg', () => ({
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useBreadcrumbsFromPath: jest.fn(() => ({
+    breadcrumbsFromPath: jest.fn(),
+    concatBreadcrumbs: jest.fn()
+  })),
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {

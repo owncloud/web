@@ -14,7 +14,10 @@ import {
 import { useFileActions } from '@ownclouders/web-pkg'
 import { Action } from '@ownclouders/web-pkg'
 
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useFileActions: jest.fn()
+}))
 
 describe('FileActions', () => {
   describe('when user is on personal route', () => {

@@ -15,9 +15,10 @@ import {
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  displayPositionedDropdown: jest.fn()
+  displayPositionedDropdown: jest.fn(),
+  queryItemAsString: jest.fn(),
+  appDefaults: jest.fn()
 }))
-jest.mock('@ownclouders/web-pkg')
 
 const spacesResources = [
   {

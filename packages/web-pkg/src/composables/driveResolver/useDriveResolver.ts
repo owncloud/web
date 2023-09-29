@@ -63,6 +63,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
     async ([driveAliasAndItem, areSpacesLoading], [driveAliasAndItemOld, areSpacesLoadingOld]) => {
+      console.log(1, unref(hasSpaces), useCapabilitySpacesEnabled)
       if (driveAliasAndItem === driveAliasAndItemOld && areSpacesLoading === areSpacesLoadingOld) {
         return
       }

@@ -115,11 +115,11 @@ export default defineComponent({
     },
     perPageQueryName: {
       type: String,
-      default: PaginationConstants.perPageQueryName
+      default: () => PaginationConstants.perPageQueryName
     },
     perPageDefault: {
       type: String,
-      default: PaginationConstants.perPageDefault
+      default: () => PaginationConstants.perPageDefault
     },
     perPageStoragePrefix: {
       type: String,
@@ -128,7 +128,7 @@ export default defineComponent({
     viewModeDefault: {
       type: String,
       required: false,
-      default: ViewModeConstants.defaultModeName
+      default: () => ViewModeConstants.defaultModeName
     },
     viewModes: {
       type: Array as PropType<ViewMode[]>,
