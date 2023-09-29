@@ -139,7 +139,12 @@ export default {
             console.error(`SSE notifications error: ${msg.data}`)
             return
           }
-          const data = JSON.parse(msg.data)
+          const parsedData = JSON.parse(msg.data) as { type: string; data?: Notification }
+          if (!parsedData?.data) {
+            return
+          }
+
+          const { data } = parsedData
           if (data.notification_id) {
             notifications.value = [data, ...unref(notifications)]
           }
