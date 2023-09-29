@@ -4,9 +4,6 @@
   "private": true,
   "description": "ownCloud admin settings",
   "license": "AGPL-3.0",
-  "devDependencies": {
-    "web-test-helpers": "workspace:*"
-  },
   "dependencies": {
     "deep-object-diff": "^1.1.9",
     "email-validator": "^2.0.4",

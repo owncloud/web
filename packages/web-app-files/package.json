@@ -9,8 +9,7 @@
   },
   "devDependencies": {
     "@jest/globals": "29.7.0",
-    "@vueuse/core": "^10.3.0",
-    "web-test-helpers": "workspace:*"
+    "@vueuse/core": "^10.3.0"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",

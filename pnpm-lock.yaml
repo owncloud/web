@@ -660,10 +660,6 @@ importers:
       web-app-admin-settings:
         specifier: workspace:*
         version: 'link:'
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-draw-io:
     dependencies:
@@ -679,10 +675,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-external:
     dependencies:
@@ -704,10 +696,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-files:
     dependencies:
@@ -787,9 +775,6 @@ importers:
       '@vueuse/core':
         specifier: ^10.3.0
         version: 10.3.0(vue@3.3.4)
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-importer:
     dependencies:
@@ -814,10 +799,6 @@ importers:
       '@uppy/webdav':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@3.3.0)'
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-pdf-viewer:
     dependencies:
@@ -830,10 +811,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-preview:
     dependencies:
@@ -852,10 +829,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-search:
     dependencies:
@@ -877,10 +850,6 @@ importers:
       web-app-files:
         specifier: workspace:*
         version: link:../web-app-files
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-skeleton:
     dependencies:
@@ -890,10 +859,6 @@ importers:
       web-app-search:
         specifier: workspace:*
         version: link:../web-app-search
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-text-editor:
     dependencies:
@@ -918,10 +883,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-app-webfinger:
     dependencies:
@@ -937,10 +898,6 @@ importers:
       web-app-webfinger:
         specifier: workspace:*
         version: 'link:'
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-client:
     dependencies:
@@ -1046,10 +1003,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-runtime:
     dependencies:
@@ -1198,9 +1151,6 @@ importers:
       '@types/semver':
         specifier: 7.5.0
         version: 7.5.0
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
 
   packages/web-test-helpers:
     dependencies:
@@ -1210,12 +1160,6 @@ importers:
       '@casl/vue':
         specifier: ^2.2.1
         version: 2.2.1(@casl/ability@6.3.3)(vue@3.3.4)
-      '@ownclouders/web-client':
-        specifier: workspace:*
-        version: link:../web-client
-      '@ownclouders/web-pkg':
-        specifier: workspace:*
-        version: link:../web-pkg
       axios:
         specifier: 1.4.0
         version: 1.4.0
@@ -1234,9 +1178,6 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
-      web-runtime:
-        specifier: workspace:*
-        version: link:../web-runtime
 
   tests/acceptance:
     devDependencies:
@@ -3571,7 +3512,7 @@ packages:
     dependencies:
       '@babel/core': 7.21.8
       '@babel/helper-builder-binary-assignment-operator-visitor': 7.18.9
-      '@babel/helper-plugin-utils': 7.21.5
+      '@babel/helper-plugin-utils': 7.20.2
     dev: true
 
   /@babel/plugin-transform-for-of@7.16.7(@babel/core@7.17.5):
@@ -3977,7 +3918,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.21.8
-      '@babel/helper-plugin-utils': 7.21.5
+      '@babel/helper-plugin-utils': 7.20.2
       '@babel/helper-replace-supers': 7.19.1
     transitivePeerDependencies:
       - supports-color
@@ -8763,7 +8704,7 @@ packages:
   /builtins@5.0.1:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
     dependencies:
-      semver: 7.3.8
+      semver: 7.5.4
     dev: false
 
   /byte-length@1.0.2:
@@ -11483,7 +11424,7 @@ packages:
       is-core-module: 2.11.0
       minimatch: 3.1.2
       resolve: 1.22.1
-      semver: 7.3.8
+      semver: 7.5.4
     dev: false
 
   /eslint-plugin-node@11.1.0(eslint@8.25.0):
