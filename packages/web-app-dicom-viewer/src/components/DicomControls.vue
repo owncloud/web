@@ -183,15 +183,7 @@ export default defineComponent({
       type: Number,
       required: true
     },
-    isFullScreenModeActivated: {
-      type: Boolean,
-      default: false
-    },
     isFolderLoading: {
-      type: Boolean,
-      default: false
-    },
-    isImage: {
       type: Boolean,
       default: false
     },
@@ -202,6 +194,22 @@ export default defineComponent({
     currentImageRotation: {
       type: Number,
       default: 0
+    },
+    currentVerticalFlip: {
+      type: Boolean,
+      default: false
+    },
+    currentHorizontalFlip: {
+      type: Boolean,
+      default: false
+    },
+    currentInversion: {
+      type: Boolean,
+      default: false
+    },
+    isShowMetadataActivated: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['setRotation', 'setZoom', 'toggleNext', 'togglePrevious'],
@@ -253,13 +261,13 @@ export default defineComponent({
       imageOriginalSizeDescription: $gettext('Show the image at its normal size'),
       imageRotateLeftDescription: $gettext('Rotate the image 90 degrees to the left'),
       imageRotateRightDescription: $gettext('Rotate the image 90 degrees to the right'),
-      previousDescription: $gettext('Show previous media file in folder'),
-      nextDescription: $gettext('Show next media file in folder'),
+      previousDescription: $gettext('Show previous DICOM file in folder'),
+      nextDescription: $gettext('Show next DICOM file in folder'),
       imageFlipVerticalDescription: $gettext('Flip the image vertically'),
-      imageFlipHorizonalDescription: $gettext('Flip the image horizontally'),
+      imageFlipHorizontalDescription: $gettext('Flip the image horizontally'),
       imageInvertDescription: $gettext('Invert the colours of the image'),
       imageResetDescription: $gettext('Reset all image manipulations'),
-      imageMetadataDescription: $gettext('Show image metadata'),
+      imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageShrink,
       imageZoom,
       imageRotateLeft,
