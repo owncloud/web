@@ -89,7 +89,7 @@ export default defineComponent({
       } finally {
         loading.value = false
       }
-    }).restartable()
+    }).restartable() as any
 
     const requestExport = async () => {
       try {
