@@ -16,11 +16,13 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { useGetMatchingSpaceMock } from '@ownclouders/web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
 
-// FIXME:
-import { useGetMatchingSpaceMock } from '../../../../../web-pkg/tests/unit/mocks/useGetMatchingSpaceMock'
-
-jest.mock('@ownclouders/web-pkg')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useGetMatchingSpace: jest.fn(),
+  useDriveResolver: jest.fn()
+}))
 
 describe('DriveResolver view', () => {
   it('renders the "drive-redirect"-component when no space is given', async () => {
