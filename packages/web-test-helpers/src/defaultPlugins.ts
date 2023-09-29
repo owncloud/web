@@ -1,4 +1,4 @@
-import DesignSystem from 'design-system'
+import DesignSystem from '../../design-system'
 import { createGettext } from 'vue3-gettext'
 import { h } from 'vue'
 import { abilitiesPlugin } from '@casl/vue'
