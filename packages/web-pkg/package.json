@@ -13,6 +13,9 @@
     "url": "https://github.com/owncloud/web",
     "directory": "packages/web-pkg"
   },
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@casl/ability": "^6.3.3",

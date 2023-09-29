@@ -8,8 +8,9 @@
     "mark.js": "^8.11.1"
   },
   "devDependencies": {
-    "@jest/globals": "29.7.0",
-    "@vueuse/core": "^10.3.0"
+    "@jest/globals": "29.3.1",
+    "@vueuse/core": "^10.3.0",
+    "web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
