@@ -59,6 +59,9 @@ importers:
       keycode:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=nmisee7m676ph5sqah5fka5ueu)
+      pnpm:
+        specifier: '8.6'
+        version: 8.6.12
       portal-vue:
         specifier: '*'
         version: 2.1.7(vue@3.3.4)
@@ -2747,7 +2750,7 @@ packages:
     dependencies:
       '@babel/core': 7.19.6
       '@babel/helper-create-regexp-features-plugin': 7.19.0(@babel/core@7.19.6)
-      '@babel/helper-plugin-utils': 7.20.2
+      '@babel/helper-plugin-utils': 7.21.5
     dev: true
 
   /@babel/plugin-proposal-unicode-property-regex@7.18.6(@babel/core@7.21.8):
@@ -17458,6 +17461,12 @@ packages:
     dependencies:
       semver-compare: 1.0.0
     dev: true
+
+  /pnpm@8.6.12:
+    resolution: {integrity: sha512-Eza4C5SO/Xl5IYozupbZ5NOA5leBRPYxmXmXfe7G4/4uCkRLhks84rB33aitxNZU/uMrnDGGjwrLktoKvPjqHA==}
+    engines: {node: '>=16.14'}
+    hasBin: true
+    dev: false
 
   /pofile@1.0.11:
     resolution: {integrity: sha512-Vy9eH1dRD9wHjYt/QqXcTz+RnX/zg53xK+KljFSX30PvdDMb2z+c6uDUeblUGqqJgz3QFsdlA0IJvHziPmWtQg==}
