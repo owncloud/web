@@ -237,9 +237,6 @@ importers:
       pino-pretty:
         specifier: 7.6.1
         version: 7.6.1
-      playwright:
-        specifier: 1.33.0
-        version: 1.33.0
       postcss:
         specifier: 8.4.20
         version: 8.4.20
@@ -17445,15 +17442,6 @@ packages:
     resolution: {integrity: sha512-aizyPE1Cj62vAECdph1iaMILpT0WUDCq3E6rW6I+dleSbBoGbktvJtzS6VHkZ4DKNEOG9qJpiom/ZxO+S15LAw==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: true
-
-  /playwright@1.33.0:
-    resolution: {integrity: sha512-+zzU3V2TslRX2ETBRgQKsKytYBkJeLZ2xzUj4JohnZnxQnivoUvOvNbRBYWSYykQTO0Y4zb8NwZTYFUO+EpPBQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      playwright-core: 1.33.0
     dev: true
 
   /please-upgrade-node@3.2.0:
