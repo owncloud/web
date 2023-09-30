@@ -103,6 +103,7 @@
     "node-fetch": "2.6.11",
     "pino": "7.11.0",
     "pino-pretty": "7.6.1",
+    "playwright": "1.33.0",
     "postcss": "8.4.20",
     "qs": "6.11.2",
     "react": "17.0.2",
