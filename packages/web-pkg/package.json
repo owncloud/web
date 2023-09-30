@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/web-pkg",
-  "version": "0.0.5-alpha.6",
+  "version": "0.0.5-alpha.7",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "private": false,
@@ -19,12 +19,12 @@
   "publishConfig": {
     "directory": "package",
     "linkDirectory": false,
-    "main": "",
+    "main": "dist/web-pkg/src/index.d.ts",
     "types": "dist/web-pkg/src/index.d.ts"
   },
   "scripts": {
     "vite": "vite",
-    "prepublishOnly": "rm -rf ./package && clean-publish && cat package.json",
+    "prepublishOnly": "rm -rf ./package && clean-publish && rm -rf package/dist/web-pkg/tests package/dist/*.css && find package && cat package/package.json",
     "postpublish": "rm -rf ./package"
   },
   "devDependencies": {
