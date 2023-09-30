@@ -1165,7 +1165,7 @@ def buildRelease(ctx):
                     "bash -c '[ \"%s\" == \"web-pkg\" ] && pnpm --filter \"%s\" vite build'" % (package, full_package_name),
                     # until https://github.com/pnpm/pnpm/issues/5775 is resolved, we print pnpm whoami because that fails when the npm_token is invalid
                     "env \"npm_config_//registry.npmjs.org/:_authToken=$${NPM_TOKEN}\" pnpm whoami",
-                    "env \"npm_config_//registry.npmjs.org/:_authToken=$${NPM_TOKEN}\" pnpm publish --no-git-checks --filter %s --access public --tag latest --dry-run" % full_package_name,
+                    "env \"npm_config_//registry.npmjs.org/:_authToken=$${NPM_TOKEN}\" pnpm publish --no-git-checks --filter %s --access public --tag latest" % full_package_name,
                 ],
                 "when": {
                     "ref": [
