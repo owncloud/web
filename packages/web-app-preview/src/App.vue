@@ -3,6 +3,7 @@
   <main
     id="preview"
     ref="preview"
+    class="oc-width-1-1"
     tabindex="-1"
     @keydown.left="prev"
     @keydown.right="next"
