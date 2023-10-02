@@ -2,13 +2,16 @@
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- vip meta data -->
-      <div id="dicom-viewer-vip-metadata">
+      <!-- TODO: make sure that date and time is displayed in the format matching language settings -->
+      <div v-if="imageData" id="dicom-viewer-vip-metadata">
         <div class="oc-pr-s oc-font-semibold">
-          <span>[insert name]</span><span>(*[insert birthdate])</span>
-          <!-- TODO: make sure that date is displayed in the format matching language settings -->
+          <span>{{ imageData.patientName }}</span>
+          <span> (*{{ imageData.patientBirthdate }})</span>
         </div>
         <div class="oc-pr-s oc-font-semibold">
-          <span>[insert institution]</span><span>, [insert date when image was captured]</span>
+          <span>{{ imageData.institutionName }}</span
+          >,
+          <span>{{ imageData.instanceCreationDate }} {{ imageData.instanceCreationTime }}</span>
         </div>
       </div>
       <!-- toggle for displaying all meta data -->
@@ -276,9 +279,30 @@ export default defineComponent({
     }
   },
   setup() {
+    return {
+      imageData: {
+        patientName: 'Max Muster',
+        patientBirthdate: '19800101',
+        institutionName: 'LMU Klinikum',
+        instanceCreationDate: '20230901',
+        instanceCreationTime: '093801'
+      }
+      // TODO implement proper interface
+      /*
+      patientInformation: {},
+      studyInformation: {},
+      seriesInformation: {},
+      instanceInformation: {},
+      imageInformation: {},
+      equipmentInformation: {},
+      scanningInformation: {},
+      uidsInformation: {},
+      otherInformation: {}
+      */
+    }
     //const dicomFiles = <Resource[]>[this.resource]
 
-    const activeIndex = ref()
+    //const activeIndex = ref()
 
     /*
     return {
@@ -508,7 +532,8 @@ export default defineComponent({
 
       // get metadata
       this.imageData = this.viewport.getImageData()
-      this.fetchMetadataInformation(dicomImageURL)
+      this.dicomMetaData = await this.fetchMetadataInformation(dicomImageURL)
+      //console.log('dicom meta data: ' + this.dicomMetaData[0])
 
       // setting metadata
       this.setMetadata(dicomImageURL)
@@ -569,6 +594,8 @@ export default defineComponent({
           console.log('patient birthdate: ' + patientBirthdate)
           console.log('institution name: ' + institutionName)
           console.log('image capture date: ' + imageCaptureDate)
+
+          return [patientName, patientBirthdate, institutionName, imageCaptureDate]
         })
       // TODO: figure out how to pass the data from the inner function into a variable that can be accessed anywhere in the package
     },
@@ -626,6 +653,7 @@ export default defineComponent({
         document.getElementById('sop-instance-uid').innerHTML = sopCommonModule.sopInstanceUID
 
         //rows
+
         document.getElementById('rows').innerHTML = this.imageData.dimensions[0]
 
         //columns
