@@ -5,13 +5,16 @@
       <!-- TODO: make sure that date and time is displayed in the format matching language settings -->
       <div v-if="imageData" id="dicom-viewer-vip-metadata">
         <div class="oc-pr-s oc-font-semibold">
-          <span>{{ imageData.patientName }}</span>
-          <span> (*{{ imageData.patientBirthdate }})</span>
+          <span>{{ imageData.patientName || 'patient name' }}</span>
+          <span> (*{{ imageData.patientBirthdate || 'birthdate' }})</span>
         </div>
         <div class="oc-pr-s oc-font-semibold">
-          <span>{{ imageData.institutionName }}</span
+          <span>{{ imageData.institutionName || 'institution name' }}</span
           >,
-          <span>{{ imageData.instanceCreationDate }} {{ imageData.instanceCreationTime }}</span>
+          <span
+            >{{ imageData.instanceCreationDate || 'instance creation date' }}
+            {{ imageData.instanceCreationTime || ' and time' }}</span
+          >
         </div>
       </div>
       <!-- toggle for displaying all meta data -->
@@ -256,11 +259,13 @@ export default defineComponent({
   setup() {
     return {
       imageData: {
+        /*
         patientName: 'Max Muster',
         patientBirthdate: '19800101',
         institutionName: 'LMU Klinikum',
         instanceCreationDate: '20230901',
         instanceCreationTime: '093801'
+        */
       }
       // TODO implement proper interface
       /*
