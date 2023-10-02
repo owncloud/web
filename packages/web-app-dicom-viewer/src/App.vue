@@ -113,31 +113,6 @@
     <!-- temporary buttons for viewport manipulations -->
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <div id="tools"></div>
-      <div id="tool-info">
-        <!--
-        <h2>viewport manipulations</h2>
-        <div>
-          <span>Rotation:</span>
-          <span id="rotation"></span>
-        </div>
-        <div>
-          <span>Flip Horizontal:</span>
-          <span id="flip-horizontal"></span>
-        </div>
-        <div>
-          <span>Flip Vertical:</span>
-          <span id="flip-vertical"></span>
-        </div>
-        <div>
-          <span>Zoom:</span>
-          <span id="zoom"></span>
-        </div>
-        <div>
-          <span>Inverted:</span>
-          <span id="inverted"></span>
-        </div>
-        -->
-      </div>
     </div>
   </div>
   <!--
@@ -391,10 +366,6 @@ export default defineComponent({
     this.metaDataItems = document.getElementsByClassName(
       'dicom-metadata-item'
     ) as HTMLCollectionOf<HTMLDivElement>
-
-    // root element for tool info, maybe not needed
-    this.toolInfoElement = document.getElementById('tool-info') as HTMLDivElement
-    //this.setToolInfo()
 
     // adding some buttons for image manipulation
 
@@ -732,6 +703,7 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
+    // currently not used, maybe delete function
     setToolInfo() {
       // adding event listener
       this.element.addEventListener(Events.CAMERA_MODIFIED, (_) => {
