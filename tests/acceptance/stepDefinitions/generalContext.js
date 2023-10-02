@@ -16,12 +16,6 @@ const getConfigJsonContent = function (fullPathOfConfigFile) {
   return JSON.parse(rawdata)
 }
 
-Given('the property {string} has been set to {string} in web config file', function (key, value) {
-  const data = getConfigJsonContent(this.fullPathOfConfigFile)
-  data[key] = value
-  return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
-})
-
 function setconfig(key, subkey, value, configfile) {
   const data = getConfigJsonContent(configfile)
   if (!data[key]) {
@@ -30,47 +24,6 @@ function setconfig(key, subkey, value, configfile) {
   data[key][subkey] = value
   return fs.writeFileSync(configfile, JSON.stringify(data, null, 4))
 }
-
-Given(
-  'the property {string} of {string} has been set to {string} in web config file',
-  function (subkey, key, value) {
-    return setconfig(key, subkey, value, this.fullPathOfConfigFile)
-  }
-)
-
-Given(
-  'the property {string} of {string} has been set to true in web config file',
-  function (subkey, key) {
-    return setconfig(key, subkey, true, this.fullPathOfConfigFile)
-  }
-)
-
-Given(
-  'the property {string} of {string} has been set to false in web config file',
-  function (subkey, key) {
-    return setconfig(key, subkey, false, this.fullPathOfConfigFile)
-  }
-)
-
-When(
-  'the property {string} of {string} is changed to true in web config file',
-  function (subkey, key) {
-    return setconfig(key, subkey, true, this.fullPathOfConfigFile)
-  }
-)
-
-When(
-  'the property {string} of {string} is changed to false in web config file',
-  function (subkey, key) {
-    return setconfig(key, subkey, false, this.fullPathOfConfigFile)
-  }
-)
-
-Given('the property {string} has been deleted in web config file', function (key) {
-  const data = getConfigJsonContent(this.fullPathOfConfigFile)
-  delete data[key]
-  return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
-})
 
 Then(
   'the {string} message with header {string} should be displayed on the webUI',

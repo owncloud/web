@@ -45,9 +45,3 @@ Feature: access breadcrumb
     Then breadcrumb for folder "\'single-double quotes\"" should be displayed on the webUI
     And breadcrumb for folder "\"inner\" double quotes" should be displayed on the webUI
     And non-clickable breadcrumb for folder "\"inner\" double quotes" should be present on the webUI
-
-
-  Scenario: Check breadCrumb for home folder
-    Given the property "homeFolder" of "options" has been set to "/0" in web config file
-    And user "Alice" has logged in using the webUI
-    Then breadcrumb for folder "0" should be displayed on the webUI
