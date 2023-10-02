@@ -1246,7 +1246,6 @@ def webService():
 def ocisService(type, tika_enabled = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
-        "IDP_IDENTIFIER_REGISTRATION_CONF": "%s" % dir["ocisIdentifierRegistrationConfig"],
         "OCIS_INSECURE": "true",
         "OCIS_LOG_LEVEL": "error",
         "OCIS_URL": "https://ocis:9200",
@@ -1263,12 +1262,7 @@ def ocisService(type, tika_enabled = False):
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
         environment["STORAGE_HOME_DRIVER"] = "ocis"
-        environment["STORAGE_METADATA_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/metadata"
-        environment["STORAGE_SHARING_USER_JSON_FILE"] = "/srv/app/tmp/ocis/shares.json"
         environment["STORAGE_USERS_DRIVER"] = "ocis"
-        environment["STORAGE_USERS_DRIVER_LOCAL_ROOT"] = "/srv/app/tmp/ocis/local/root"
-        environment["STORAGE_USERS_DRIVER_OCIS_ROOT"] = "/srv/app/tmp/ocis/storage/users"
-        environment["STORAGE_USERS_DRIVER_OWNCLOUD_DATADIR"] = "%s" % dir["ocisRevaDataRoot"]
 
     if tika_enabled:
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
