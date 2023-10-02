@@ -235,4 +235,8 @@ export class Resource {
   async expectPageNumberNotToBeVisible(): Promise<void> {
     await po.expectPageNumberNotToBeVisible({ page: this.#page })
   }
+
+  async expectFileToBeSelected(args: Omit<po.expectFileToBeSelectedArgs, 'page'>): Promise<void> {
+    await po.expectFileToBeSelected({ ...args, page: this.#page })
+  }
 }
