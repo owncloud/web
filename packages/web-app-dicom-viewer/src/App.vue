@@ -508,6 +508,7 @@ export default defineComponent({
 
       // get metadata
       this.imageData = this.viewport.getImageData()
+      this.fetchMetadataInformation(dicomImageURL)
 
       // setting metadata
       this.setMetadata(dicomImageURL)
@@ -560,13 +561,14 @@ export default defineComponent({
       await cornerstoneDICOMImageLoader.wadouri
         .loadImage(imageId)
         .promise.then(async function (dicomImage) {
-          console.log('type of dicom image variable: ' + typeof dicomImage)
-          const dicomMetaData = dicomImage.data
-          console.log('patient name: ' + dicomMetaData.string('x00100010'))
           const patientName = dicomImage.data.string('x00100010')
           const patientBirthdate = dicomImage.data.string('x00100030')
+          const institutionName = dicomImage.data.string('x00080080')
+          const imageCaptureDate = dicomImage.data.string('x00080012')
           console.log('patient name: ' + patientName)
           console.log('patient birthdate: ' + patientBirthdate)
+          console.log('institution name: ' + institutionName)
+          console.log('image capture date: ' + imageCaptureDate)
         })
       // TODO: figure out how to pass the data from the inner function into a variable that can be accessed anywhere in the package
     },
