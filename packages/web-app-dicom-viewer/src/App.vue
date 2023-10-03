@@ -17,11 +17,6 @@
           >
         </div>
       </div>
-      <div v-if="dicomMetaData">
-        <div class="oc-pr-s oc-font-semibold">
-          <span>{{ dicomMetaData.code }}</span>
-        </div>
-      </div>
       <!-- toggle for displaying all meta data -->
       <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
         <!-- TODO: implement click event of toggle properly -->
@@ -243,9 +238,6 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       default: null
-    },
-    patientName: {
-      type: String
     }
   },
   setup(props) {
@@ -290,6 +282,7 @@ export default defineComponent({
       viewport: null,
       dicomFile: null,
       dicomFileName: null,
+      dicomUrl: null,
       imageData: null,
       dicomMetaData: null,
       metaDataElement: null,
@@ -301,8 +294,8 @@ export default defineComponent({
       currentHorizontalFlip: false,
       currentInversion: false,
       isShowMetadataActivated: false,
-      dicomFiles: [this.resource],
-      vipMetadata: this.vipMetadata
+      isVipMetadataFetched: false,
+      dicomFiles: [this.resource]
     }
   },
   watch: {},
@@ -312,13 +305,40 @@ export default defineComponent({
   // --------------------------
 
   // "created" runs before DOM is rendered, data and events are already accessible
-  created() {
+  async created() {
     console.log('lifecycle @ created')
+    //console.log('url: ' + this.url)
+    //console.log('file name: ' + this.resource.name)
+
+    // get resource, ensure resource url is not empty!
+    if (this.url != null && this.url != undefined && this.url != '') {
+      if (this.resource != (null || undefined)) {
+        this.dicomFileName = this.resource.name
+      }
+
+      this.dicomUrl = await this.addWadouriPrefix(this.url)
+    }
+
+    // get vip metadata
+    this.dicomMetaData = await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
+    console.log('dicom meta data: ' + this.dicomMetaData)
+    console.log('patient name: ' + this.dicomMetaData[0])
+    this.imageData.patientName = this.dicomMetaData[0]
+    console.log('patient birthdata: ' + this.dicomMetaData[1])
+    this.imageData.patientBirthdate = this.dicomMetaData[1]
+    console.log('institution name: ' + this.dicomMetaData[2])
+    this.imageData.institutionName = this.dicomMetaData[2]
+    console.log('instance creation date: ' + this.dicomMetaData[3])
+    this.imageData.instanceCreationDate = this.dicomMetaData[3]
+    console.log('instance creation time: ' + this.dicomMetaData[4])
+    this.imageData.instanceCreationTime = this.dicomMetaData[4]
+    this.isVipMetadataFetched = true
   },
-  // "mounted" is called when component has been added to DOM
+  // "beforeMount" is called right before the component is to be mounted
   beforeMount() {
     console.log('lifecycle @ beforeMount')
   },
+  // "mounted" is called when component has been added to DOM
   async mounted() {
     console.log('lifecycle @ mounted')
     // check if cornerstone core (TODO and tools) are initalized
@@ -470,22 +490,21 @@ export default defineComponent({
       }
     })
 
-    // get resource
+    // add resource to stack
     // ensure resource url is not empty!
     if (this.url != null && this.url != undefined && this.url != '') {
       if (this.resource != (null || undefined)) {
         this.dicomFileName = this.resource.name
       }
 
-      let dicomImageURL = await this.addWadouriPrefix(this.url)
-
+      let dicomResourceUrl = await this.addWadouriPrefix(this.url)
       /*
       // file manager is only needed if resource is passed along as file
       const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
       */
 
       // define a stack containing a single image
-      const dicomStack = [dicomImageURL]
+      const dicomStack = [dicomResourceUrl]
 
       // maybe preload meta data into memory?
       // might only be needed if there is a stack of files
@@ -500,23 +519,11 @@ export default defineComponent({
 
       // get metadata
       this.imageData = this.viewport.getImageData()
-      this.dicomMetaData = await this.fetchMetadataInformation(dicomImageURL)
-      console.log('dicom meta data: ' + this.dicomMetaData)
-      console.log('patient name: ' + this.dicomMetaData[0])
-      this.imageData.patientName = this.dicomMetaData[0]
-      console.log('patient birthdata: ' + this.dicomMetaData[1])
-      this.imageData.patientBirthdate = this.dicomMetaData[1]
-      console.log('institution name: ' + this.dicomMetaData[2])
-      this.imageData.institutionName = this.dicomMetaData[2]
-      console.log('instance creation date: ' + this.dicomMetaData[3])
-      this.imageData.instanceCreationDate = this.dicomMetaData[3]
-      console.log('instance creation time: ' + this.dicomMetaData[4])
-      this.imageData.instanceCreationTime = this.dicomMetaData[4]
 
       // setting metadata
-      this.setMetadata(dicomImageURL)
+      this.setMetadata(dicomResourceUrl)
     } else {
-      console.log('no valid dicom resource url')
+      console.log('no valid dicom resource url: ' + this.url)
     }
   },
   // "beforeUpdate" is implementing any change in the component
@@ -534,6 +541,7 @@ export default defineComponent({
     this.renderingEngine.destroy()
     this.isDicomFileRendered = false
     this.isMetaDataSet = false
+    this.isVipMetadataFetched = false
     this.updateDisplayOfMetaData()
     this.clearMetadata()
   },
