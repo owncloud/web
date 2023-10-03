@@ -1,23 +1,6 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
-      <!-- vip meta data -->
-      <!-- TODO: make sure that date and time is displayed in the format matching language settings -->
-      <!-- TODO: define what should be displayed if attributes have empty values  -->
-      <div v-if="isVipMetadataFetched" id="dicom-viewer-vip-metadata">
-        <div class="oc-pr-s oc-font-semibold">
-          <span>{{ imageData.patientName || 'patient name not defined' }}</span>
-          <span> (*{{ imageData.patientBirthdate || 'birthdate not defined' }})</span>
-        </div>
-        <div class="oc-pr-s oc-font-semibold">
-          <span>{{ imageData.institutionName || 'institution name not defined' }}</span
-          >,
-          <span
-            >{{ imageData.instanceCreationDate || 'instance creation date' }}
-            {{ imageData.instanceCreationTime || ' and time not defined' }}</span
-          >
-        </div>
-      </div>
       <!-- toggle for displaying all meta data -->
       <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
         <!-- TODO: implement click event of toggle properly -->
@@ -40,7 +23,29 @@
     </div>
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- div element for dicom viewport -->
-      <div id="dicom-canvas" class="dicom-canvas"></div>
+      <div id="dicom-canvas" class="dicom-canvas oc-position-relative">
+        <!-- vip meta data -->
+        <!-- TODO: make sure that date and time is displayed in the format matching language settings -->
+        <div
+          v-if="isVipMetadataFetched"
+          id="dicom-viewer-vip-metadata"
+          class="oc-position-absolute"
+        >
+          <div class="oc-pr-s oc-font-semibold">
+            <span>{{ imageData.patientName || 'patient name not defined' }}</span>
+            <span> (*{{ imageData.patientBirthdate || 'birthdate not defined' }})</span>
+          </div>
+          <div class="oc-pr-s oc-font-semibold">
+            <span>{{ imageData.institutionName || 'institution name not defined' }}</span
+            >,
+            <span
+              >{{ imageData.instanceCreationDate || 'instance creation date' }}
+              {{ imageData.instanceCreationTime || ' and time not defined' }}</span
+            >
+          </div>
+        </div>
+      </div>
+
       <!-- div element for displaying full meta data -->
       <div id="dicom-metadata" class="dicom-metadata">
         <h2>metadata for current dicom image</h2>
@@ -892,5 +897,7 @@ export default defineComponent({
 
 #dicom-viewer-vip-metadata {
   color: var(--oc-color-icon-image);
+  z-index: 2;
+  margin: 10px;
 }
 </style>
