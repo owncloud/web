@@ -244,7 +244,7 @@ export default defineComponent({
   setup(props) {
     return {
       imageData: {
-        // maybe remove dummy data
+        // dummy data for testing only
         patientName: 'Max Muster',
         patientBirthdate: '19800101',
         institutionName: 'LMU Klinikum',
@@ -317,22 +317,21 @@ export default defineComponent({
       if (this.resource != (null || undefined)) {
         this.dicomFileName = this.resource.name
       }
-
       this.dicomUrl = await this.addWadouriPrefix(this.url)
     }
 
     // get vip metadata
     this.dicomMetaData = await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
-    console.log('dicom meta data: ' + this.dicomMetaData)
-    console.log('patient name: ' + this.dicomMetaData[0])
+    // console.log('dicom meta data: ' + this.dicomMetaData)
+    // console.log('patient name: ' + this.dicomMetaData[0])
     this.imageData.patientName = this.dicomMetaData[0]
-    console.log('patient birthdata: ' + this.dicomMetaData[1])
+    // console.log('patient birthdata: ' + this.dicomMetaData[1])
     this.imageData.patientBirthdate = this.dicomMetaData[1]
-    console.log('institution name: ' + this.dicomMetaData[2])
+    // console.log('institution name: ' + this.dicomMetaData[2])
     this.imageData.institutionName = this.dicomMetaData[2]
-    console.log('instance creation date: ' + this.dicomMetaData[3])
+    // console.log('instance creation date: ' + this.dicomMetaData[3])
     this.imageData.instanceCreationDate = this.dicomMetaData[3]
-    console.log('instance creation time: ' + this.dicomMetaData[4])
+    // console.log('instance creation time: ' + this.dicomMetaData[4])
     this.imageData.instanceCreationTime = this.dicomMetaData[4]
     this.isVipMetadataFetched = true
   },
