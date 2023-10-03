@@ -118,22 +118,6 @@
       <div id="tools"></div>
     </div>
   </div>
-  <!--
-    <media-controls
-      :files="filteredFiles"
-      :active-index="activeIndex"
-      :is-full-screen-mode-activated="isFullScreenModeActivated"
-      :is-folder-loading="isFolderLoading"
-      :is-image="activeMediaFileCached?.isImage"
-      :current-image-rotation="currentImageRotation"
-      :current-image-zoom="currentImageZoom"
-      @set-rotation="currentImageRotation = $event"
-      @set-zoom="currentImageZoom = $event"
-      @toggle-full-screen="toggleFullscreenMode"
-      @toggle-previous="prev"
-      @toggle-next="next"
-    />
-  -->
   <dicom-controls
     :files="dicomFiles"
     :active-index="0"
@@ -254,19 +238,21 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       default: null
+    },
+    patientName: {
+      type: String
     }
   },
-  setup() {
+  setup(props) {
     return {
       imageData: {
-        /*
         patientName: 'Max Muster',
         patientBirthdate: '19800101',
         institutionName: 'LMU Klinikum',
         instanceCreationDate: '20230901',
         instanceCreationTime: '093801'
-        */
       }
+      //props.patientName
       // TODO implement proper interface
       /*
       patientInformation: {},
@@ -310,7 +296,8 @@ export default defineComponent({
       currentHorizontalFlip: false,
       currentInversion: false,
       isShowMetadataActivated: false,
-      dicomFiles: [this.resource]
+      dicomFiles: [this.resource],
+      vipMetadata: this.vipMetadata
     }
   },
   watch: {},
@@ -509,7 +496,7 @@ export default defineComponent({
       // get metadata
       this.imageData = this.viewport.getImageData()
       this.dicomMetaData = await this.fetchMetadataInformation(dicomImageURL)
-      //console.log('dicom meta data: ' + this.dicomMetaData[0])
+      console.log('dicom meta data: ' + this.dicomMetaData)
 
       // setting metadata
       this.setMetadata(dicomImageURL)
@@ -520,6 +507,8 @@ export default defineComponent({
   // "beforeUpdate" is implementing any change in the component
   beforeUpdate() {
     console.log('lifecycle @ beforeUpdate')
+    console.log('dicom meta data: ' + this.dicomMetaData)
+    console.log('dicom meta data length: ' + this.dicomMetaData.length)
   },
   // updated gets called anytime some change is made in the component
   updated() {
@@ -556,24 +545,29 @@ export default defineComponent({
         console.log('error initalizing cornerstone tools')
       }
     },
-    // currently only printing values in console
     async fetchMetadataInformation(imageId) {
       console.log('fetch meta data information for: ' + imageId)
+
+      let patientName = ''
+      let patientBirthdate = ''
+      let institutionName = ''
+      let imageCaptureDate = ''
+
       await cornerstoneDICOMImageLoader.wadouri
         .loadImage(imageId)
         .promise.then(async function (dicomImage) {
-          const patientName = dicomImage.data.string('x00100010')
-          const patientBirthdate = dicomImage.data.string('x00100030')
-          const institutionName = dicomImage.data.string('x00080080')
-          const imageCaptureDate = dicomImage.data.string('x00080012')
-          console.log('patient name: ' + patientName)
-          console.log('patient birthdate: ' + patientBirthdate)
-          console.log('institution name: ' + institutionName)
-          console.log('image capture date: ' + imageCaptureDate)
-
-          return [patientName, patientBirthdate, institutionName, imageCaptureDate]
+          patientName = dicomImage.data.string('x00100010')
+          patientBirthdate = dicomImage.data.string('x00100030')
+          institutionName = dicomImage.data.string('x00080080')
+          imageCaptureDate = dicomImage.data.string('x00080012')
         })
-      // TODO: figure out how to pass the data from the inner function into a variable that can be accessed anywhere in the package
+
+      console.log('patient name: ' + patientName)
+      console.log('patient birthdate: ' + patientBirthdate)
+      console.log('institution name: ' + institutionName)
+      console.log('image capture date: ' + imageCaptureDate)
+      console.log('vip meta data fetched')
+      return [patientName, patientBirthdate, institutionName, imageCaptureDate]
     },
     async createDicomFile() {
       // TODO check if already exist?
