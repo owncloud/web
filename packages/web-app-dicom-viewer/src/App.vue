@@ -3,17 +3,18 @@
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
       <!-- vip meta data -->
       <!-- TODO: make sure that date and time is displayed in the format matching language settings -->
-      <div v-if="imageData" id="dicom-viewer-vip-metadata">
+      <!-- TODO: define what should be displayed if attributes have empty values  -->
+      <div v-if="isVipMetadataFetched" id="dicom-viewer-vip-metadata">
         <div class="oc-pr-s oc-font-semibold">
-          <span>{{ imageData.patientName || 'patient name' }}</span>
-          <span> (*{{ imageData.patientBirthdate || 'birthdate' }})</span>
+          <span>{{ imageData.patientName || 'patient name not defined' }}</span>
+          <span> (*{{ imageData.patientBirthdate || 'birthdate not defined' }})</span>
         </div>
         <div class="oc-pr-s oc-font-semibold">
-          <span>{{ imageData.institutionName || 'institution name' }}</span
+          <span>{{ imageData.institutionName || 'institution name not defined' }}</span
           >,
           <span
             >{{ imageData.instanceCreationDate || 'instance creation date' }}
-            {{ imageData.instanceCreationTime || ' and time' }}</span
+            {{ imageData.instanceCreationTime || ' and time not defined' }}</span
           >
         </div>
       </div>
@@ -243,6 +244,7 @@ export default defineComponent({
   setup(props) {
     return {
       imageData: {
+        // maybe remove dummy data
         patientName: 'Max Muster',
         patientBirthdate: '19800101',
         institutionName: 'LMU Klinikum',
