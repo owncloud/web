@@ -17,6 +17,11 @@
           >
         </div>
       </div>
+      <div v-if="dicomMetaData">
+        <div class="oc-pr-s oc-font-semibold">
+          <span>{{ dicomMetaData.code }}</span>
+        </div>
+      </div>
       <!-- toggle for displaying all meta data -->
       <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
         <!-- TODO: implement click event of toggle properly -->
@@ -497,6 +502,16 @@ export default defineComponent({
       this.imageData = this.viewport.getImageData()
       this.dicomMetaData = await this.fetchMetadataInformation(dicomImageURL)
       console.log('dicom meta data: ' + this.dicomMetaData)
+      console.log('patient name: ' + this.dicomMetaData[0])
+      this.imageData.patientName = this.dicomMetaData[0]
+      console.log('patient birthdata: ' + this.dicomMetaData[1])
+      this.imageData.patientBirthdate = this.dicomMetaData[1]
+      console.log('institution name: ' + this.dicomMetaData[2])
+      this.imageData.institutionName = this.dicomMetaData[2]
+      console.log('instance creation date: ' + this.dicomMetaData[3])
+      this.imageData.instanceCreationDate = this.dicomMetaData[3]
+      console.log('instance creation time: ' + this.dicomMetaData[4])
+      this.imageData.instanceCreationTime = this.dicomMetaData[4]
 
       // setting metadata
       this.setMetadata(dicomImageURL)
@@ -507,8 +522,6 @@ export default defineComponent({
   // "beforeUpdate" is implementing any change in the component
   beforeUpdate() {
     console.log('lifecycle @ beforeUpdate')
-    console.log('dicom meta data: ' + this.dicomMetaData)
-    console.log('dicom meta data length: ' + this.dicomMetaData.length)
   },
   // updated gets called anytime some change is made in the component
   updated() {
@@ -551,7 +564,8 @@ export default defineComponent({
       let patientName = ''
       let patientBirthdate = ''
       let institutionName = ''
-      let imageCaptureDate = ''
+      let instanceCreationDate = ''
+      let instanceCreationTime = ''
 
       await cornerstoneDICOMImageLoader.wadouri
         .loadImage(imageId)
@@ -559,15 +573,35 @@ export default defineComponent({
           patientName = dicomImage.data.string('x00100010')
           patientBirthdate = dicomImage.data.string('x00100030')
           institutionName = dicomImage.data.string('x00080080')
-          imageCaptureDate = dicomImage.data.string('x00080012')
+          instanceCreationDate = dicomImage.data.string('x00080012')
+          instanceCreationTime = dicomImage.data.string('x00080013')
         })
 
+      /*
       console.log('patient name: ' + patientName)
       console.log('patient birthdate: ' + patientBirthdate)
       console.log('institution name: ' + institutionName)
-      console.log('image capture date: ' + imageCaptureDate)
-      console.log('vip meta data fetched')
-      return [patientName, patientBirthdate, institutionName, imageCaptureDate]
+      console.log('instance creation date: ' + instanceCreationDate)
+      console.log('instance creation time: ' + instanceCreationTime)
+
+      const vipMetadata = {
+        'Patient Name': patientName,
+        'Patient Birthdate': patientBirthdate,
+        'Institution Name': institutionName,
+        'Instance Creation Date': instanceCreationDate,
+        'Instance Creation Time': instanceCreationTime
+      }
+      console.log(vipMetadata)
+      return vipMetadata
+      */
+
+      return [
+        patientName,
+        patientBirthdate,
+        institutionName,
+        instanceCreationDate,
+        instanceCreationTime
+      ]
     },
     async createDicomFile() {
       // TODO check if already exist?
