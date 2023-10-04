@@ -125,7 +125,7 @@
           appearance="raw-inverse"
           variation="brand"
           :aria-label="imageInvertDescription"
-          @click="imageInvert"
+          @click="$emit('toggleInversion')"
         >
           <!-- TODO: insert correct icon -->
           <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
@@ -208,10 +208,6 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    currentInversion: {
-      type: Boolean,
-      default: false
-    },
     isShowMetadataActivated: {
       type: Boolean,
       default: false
@@ -222,7 +218,7 @@ export default defineComponent({
     'setZoom',
     'setVerticalFlip',
     'setHorizontalFlip',
-    'setInversion',
+    'toggleInversion',
     'toggleShowMetadata',
     'toggleNext',
     'togglePrevious'
@@ -248,45 +244,49 @@ export default defineComponent({
     })
 
     const calculateZoom = (zoom, factor) => {
+      console.log('calculating zoom')
       return Math.round(zoom * factor * 20) / 20
     }
     const imageShrink = () => {
+      console.log('current zoom: ' + props.currentImageZoom)
       emit('setZoom', Math.max(0.1, calculateZoom(props.currentImageZoom, 0.8)))
     }
     const imageZoom = () => {
+      console.log('current zoom: ' + props.currentImageZoom)
       const maxZoomValue = calculateZoom(9, 1.25) // why is there a value 9?!?
       emit('setZoom', Math.min(calculateZoom(props.currentImageZoom, 1.25), maxZoomValue))
     }
     const imageRotateLeft = () => {
+      console.log('current rotation: ' + props.currentImageRotation)
       emit('setRotation', props.currentImageRotation === -270 ? 0 : props.currentImageRotation - 90)
     }
     const imageRotateRight = () => {
+      console.log('current rotation: ' + props.currentImageRotation)
       emit('setRotation', props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90)
     }
 
     // TODO: draft only, properly implement the following new functionalities
     const imageFlipVertical = () => {
-      emit('setVerticalFlip', props.currentVerticalFlip === true ? true : false)
+      console.log('current flip vertical: ' + props.currentVerticalFlip)
+      emit('setVerticalFlip', props.currentVerticalFlip === true ? false : true)
     }
 
     const imageFlipHorizontal = () => {
-      emit('setHorizontalFlip', props.currentHorizontalFlip === true ? true : false)
-    }
-
-    const imageInvert = () => {
-      emit('setInversion', props.currentInversion === true ? true : false)
+      console.log('current flip horizontal: ' + props.currentHorizontalFlip)
+      emit('setHorizontalFlip', props.currentHorizontalFlip === true ? false : true)
     }
 
     const imageReset = () => {
-      // TODO: reset zoom, flip & inversion to default value
+      // TODO: reset zoom, flip & inversion to default value or new emit for image reset?
       emit('setZoom', 1)
       emit('setRotation', 0)
       emit('setVerticalFlip', false)
       emit('setHorizontalFlip', false)
-      emit('setInversion', false)
+      //emit('toggleInversion')
     }
 
     const imageShowMetadata = () => {
+      console.log('current show metadata: ' + props.isShowMetadataActivated)
       emit('toggleShowMetadata', props.isShowMetadataActivated === true ? true : false)
     }
 
@@ -315,7 +315,7 @@ export default defineComponent({
       imageRotateRight,
       imageFlipVertical,
       imageFlipHorizontal,
-      imageInvert,
+      //imageInvert,
       imageReset,
       imageShowMetadata
     }

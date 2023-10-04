@@ -138,7 +138,7 @@
     @set-zoom="setZoom"
     @set-vertical-flip="setVerticalFlip"
     @set-horizontal-flip="setHorizontalFlip"
-    @set-inversion="setInversion"
+    @toggle-inversion="toggleInversion"
     @toggle-show-metadata="toggleShowMetadata"
     @toggle-previous="prev"
     @toggle-next="next"
@@ -299,7 +299,7 @@ export default defineComponent({
       toolInfoElement: null,
       currentImageZoom: 1,
       currentImageRotation: 0,
-      currentVerticalFlip: false,
+      currentVerticalFlip: true,
       currentHorizontalFlip: false,
       currentInversion: false,
       isShowMetadataActivated: false,
@@ -825,31 +825,49 @@ export default defineComponent({
     },
     setZoom() {
       console.log('zoom clicked')
-      console.log('current zoom: ' + this.currentImageZoom)
+      console.log('new zoom: ' + this.currentImageZoom)
+      const camera = this.viewport.getCamera()
+
+      const newCamera = {
+        parallelScale: camera.parallelScale * this.currentImageZoom,
+        position: camera.position,
+        focalPoint: camera.focalPoint
+      }
+
+      this.viewport.setCamera(newCamera)
+      this.viewport.render()
     },
     setRotation() {
       console.log('rotate image clicked')
-      console.log('current rotation: ' + this.currentImageRotation)
+      console.log('new rotation: ' + this.currentImageRotation)
       const { rotation } = this.viewport.getProperties()
       this.viewport.setProperties({ rotation: this.currentImageRotation })
       this.viewport.render()
     },
     setVerticalFlip() {
       console.log('flip vertical clicked')
-      console.log('current zoom: ' + this.currentVerticalFlip)
+      console.log('new vertical flip: ' + this.currentVerticalFlip)
+      const { flipVertical } = this.viewport.getCamera()
+      this.viewport.setCamera({ flipVertical: !flipVertical })
+      this.viewport.render()
     },
     setHorizontalFlip() {
       console.log('flip horizontal clicked')
-      console.log('current zoom: ' + this.currentHorizontalFlip)
+      console.log('new horizontal flip: ' + this.currentHorizontalFlip)
+      const { flipHorizontal } = this.viewport.getCamera()
+      this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
+      this.viewport.render()
     },
-    setInversion() {
+    toggleInversion() {
       console.log('invert clicked')
-      console.log('current zoom: ' + this.currentInversion)
+      const { invert } = this.viewport.getProperties()
+      this.viewport.setProperties({ invert: !invert })
+      this.viewport.render()
     },
     toggleShowMetadata() {
       // similar to "ToggleFullScreenMode" of preview app
       console.log('show metadata clicked')
-      console.log('current zoom: ' + this.isShowMetadataActivated)
+      console.log('current show metadata: ' + this.isShowMetadataActivated)
     },
     addButton({
       id,
