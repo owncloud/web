@@ -255,13 +255,8 @@ export default defineComponent({
     }
     const imageRotateRight = () => {
       console.log('rotate right')
-      console.log('current rotation: ' + props.currentImageRotation)
-      let newImageRotation =
-        props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90
-      console.log('new rotation: ' + newImageRotation)
-      emit('setRotation', newImageRotation)
+      emit('setRotation', props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90)
     }
-
     // TODO: draft only, properly implement the following new functionalities
     const imageShowMetadata = () => {
       console.log('current show metadata: ' + props.isShowMetadataActivated)

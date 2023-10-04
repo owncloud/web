@@ -425,28 +425,6 @@ export default defineComponent({
       }
     })
 
-    // rotate image anti clockwise
-    this.addButton({
-      id: 'backrotate-tool',
-      title: 'Rotate -90',
-      onClick: () => {
-        const { rotation } = this.viewport.getProperties()
-        this.viewport.setProperties({ rotation: rotation - 90 })
-        this.viewport.render()
-      }
-    })
-
-    // rotate image clockwise
-    this.addButton({
-      id: 'rotate-tool',
-      title: 'Rotate +90',
-      onClick: () => {
-        const { rotation } = this.viewport.getProperties()
-        this.viewport.setProperties({ rotation: rotation + 90 })
-        this.viewport.render()
-      }
-    })
-
     // add resource to stack
     // ensure resource url is not empty!
     if (this.url != null && this.url != undefined && this.url != '') {
@@ -756,9 +734,9 @@ export default defineComponent({
       console.log('next clicked')
       // TODO: still needs to be implemented, similar to prev & next in preview app
     },
-    setZoom() {
+    setZoom(newZoomFactor) {
       console.log('zoom clicked')
-      console.log('new zoom: ' + this.currentImageZoom)
+      this.currentImageZoom = newZoomFactor
       const camera = this.viewport.getCamera()
 
       const newCamera = {
@@ -770,9 +748,9 @@ export default defineComponent({
       this.viewport.setCamera(newCamera)
       this.viewport.render()
     },
-    setRotation() {
+    setRotation(newRotation) {
       console.log('rotate image clicked')
-      console.log('new rotation: ' + this.currentImageRotation)
+      this.currentImageRotation = newRotation
       const { rotation } = this.viewport.getProperties()
       this.viewport.setProperties({ rotation: this.currentImageRotation })
       this.viewport.render()
