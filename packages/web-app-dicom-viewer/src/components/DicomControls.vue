@@ -254,8 +254,12 @@ export default defineComponent({
       emit('setRotation', props.currentImageRotation === -270 ? 0 : props.currentImageRotation - 90)
     }
     const imageRotateRight = () => {
+      console.log('rotate right')
       console.log('current rotation: ' + props.currentImageRotation)
-      emit('setRotation', props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90)
+      let newImageRotation =
+        props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90
+      console.log('new rotation: ' + newImageRotation)
+      emit('setRotation', newImageRotation)
     }
 
     // TODO: draft only, properly implement the following new functionalities

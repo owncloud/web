@@ -701,24 +701,6 @@ export default defineComponent({
       document.getElementById('window-width').innerHTML = ''
       document.getElementById('window-center').innerHTML = ''
     },
-    // currently not used, maybe delete function
-    setToolInfo() {
-      // adding event listener
-      this.element.addEventListener(Events.CAMERA_MODIFIED, (_) => {
-        if (!this.viewport) {
-          return
-        }
-
-        const { flipHorizontal, flipVertical } = this.viewport.getCamera()
-        const { rotation, invert } = this.viewport.getProperties()
-
-        document.getElementById('rotation').innerHTML = `${Math.round(rotation)}`
-        document.getElementById('flip-horizontal').innerHTML = `${flipHorizontal}`
-        document.getElementById('flip-vertical').innerHTML = `${flipVertical}`
-        document.getElementById('zoom').innerHTML = `TODO`
-        document.getElementById('inverted').innerHTML = `${invert}`
-      })
-    },
     separateCredentialsFromUrl(url: String) {
       const [urlWithoutCredentials, ...rest] = url.split('?')
       const credentials = rest.join('?')
@@ -768,9 +750,11 @@ export default defineComponent({
     // functions relating to dicom controls
     prev() {
       console.log('prev clicked')
+      // TODO: still needs to be implemented, similar to prev & next in preview app
     },
     next() {
       console.log('next clicked')
+      // TODO: still needs to be implemented, similar to prev & next in preview app
     },
     setZoom() {
       console.log('zoom clicked')
@@ -813,14 +797,12 @@ export default defineComponent({
     },
     resetViewport() {
       console.log('reset clicked')
-      // Resets the viewport's camera
       this.viewport.resetCamera()
-      // Resets the viewport's properties
       this.viewport.resetProperties()
       this.viewport.render()
     },
     toggleShowMetadata() {
-      // similar to "ToggleFullScreenMode" of preview app
+      // similar to "ToggleFullScreenMode" of preview app, still needs to be implemented
       console.log('show metadata clicked')
       console.log('current show metadata: ' + this.isShowMetadataActivated)
     },
