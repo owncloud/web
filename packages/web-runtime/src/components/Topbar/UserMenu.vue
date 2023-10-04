@@ -3,10 +3,10 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
-      v-oc-tooltip="$gettext('User Menu')"
+      v-oc-tooltip="$gettext('My Account')"
       class="oc-topbar-personal"
       appearance="raw"
-      :aria-label="$gettext('User Menu')"
+      :aria-label="$gettext('My Account')"
     >
       <avatar-image
         v-if="userId"
