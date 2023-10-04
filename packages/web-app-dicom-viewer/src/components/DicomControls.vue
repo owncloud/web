@@ -94,23 +94,23 @@
       <!-- flip -->
       <div class="oc-flex oc-flex-middle">
         <oc-button
-          v-oc-tooltip="imageFlipVerticalDescription"
-          class="preview-controls-flip-vertical"
-          appearance="raw-inverse"
-          variation="brand"
-          :aria-label="imageFlipVerticalDescription"
-          @click="imageFlipVertical"
-        >
-          <!-- TODO: insert correct icon -->
-          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
-        </oc-button>
-        <oc-button
           v-oc-tooltip="imageFlipHorizontalDescription"
           class="preview-controls-flip-horizontal"
           appearance="raw-inverse"
           variation="brand"
           :aria-label="imageFlipHorizontalDescription"
-          @click="imageFlipHorizontal"
+          @click="$emit('setHorizontalFlip')"
+        >
+          <!-- TODO: insert correct icon -->
+          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+        </oc-button>
+        <oc-button
+          v-oc-tooltip="imageFlipVerticalDescription"
+          class="preview-controls-flip-vertical"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="imageFlipVerticalDescription"
+          @click="$emit('setVerticalFlip')"
         >
           <!-- TODO: insert correct icon -->
           <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
@@ -142,7 +142,6 @@
           :aria-label="imageResetDescription"
           @click="$emit('resetViewport')"
         >
-          <!-- @click="imageReset" -->
           <!-- TODO: insert correct icon -->
           <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
         </oc-button>
@@ -201,24 +200,16 @@ export default defineComponent({
       type: Number,
       default: 0
     },
-    currentVerticalFlip: {
-      type: Boolean,
-      default: false
-    },
-    currentHorizontalFlip: {
-      type: Boolean,
-      default: false
-    },
     isShowMetadataActivated: {
       type: Boolean,
       default: false
     }
   },
   emits: [
-    'setRotation',
     'setZoom',
-    'setVerticalFlip',
+    'setRotation',
     'setHorizontalFlip',
+    'setVerticalFlip',
     'toggleInversion',
     'resetViewport',
     'toggleShowMetadata',
@@ -268,16 +259,6 @@ export default defineComponent({
     }
 
     // TODO: draft only, properly implement the following new functionalities
-    const imageFlipVertical = () => {
-      console.log('current flip vertical: ' + props.currentVerticalFlip)
-      emit('setVerticalFlip', props.currentVerticalFlip === true ? false : true)
-    }
-
-    const imageFlipHorizontal = () => {
-      console.log('current flip horizontal: ' + props.currentHorizontalFlip)
-      emit('setHorizontalFlip', props.currentHorizontalFlip === true ? false : true)
-    }
-
     const imageShowMetadata = () => {
       console.log('current show metadata: ' + props.isShowMetadataActivated)
       emit('toggleShowMetadata', props.isShowMetadataActivated === true ? true : false)
@@ -296,8 +277,8 @@ export default defineComponent({
       imageRotateRightDescription: $gettext('Rotate the image 90 degrees to the right'),
       previousDescription: $gettext('Show previous DICOM file in folder'),
       nextDescription: $gettext('Show next DICOM file in folder'),
-      imageFlipVerticalDescription: $gettext('Flip the image vertically'),
       imageFlipHorizontalDescription: $gettext('Flip the image horizontally'),
+      imageFlipVerticalDescription: $gettext('Flip the image vertically'),
       imageInvertDescription: $gettext('Invert the colours of the image'),
       imageResetDescription: $gettext('Reset all image manipulations'),
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
@@ -306,8 +287,6 @@ export default defineComponent({
       imageZoom,
       imageRotateLeft,
       imageRotateRight,
-      imageFlipVertical,
-      imageFlipHorizontal,
       imageShowMetadata
     }
   }

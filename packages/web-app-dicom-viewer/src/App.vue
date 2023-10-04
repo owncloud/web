@@ -130,14 +130,11 @@
     :is-folder-loading="false"
     :current-image-rotation="currentImageRotation"
     :current-image-zoom="currentImageZoom"
-    :current-vertical-flip="false"
-    :current-horizontal-flip="false"
-    :current-inversion="false"
     :is-show-metadata-activated="false"
-    @set-rotation="setRotation"
     @set-zoom="setZoom"
-    @set-vertical-flip="setVerticalFlip"
+    @set-rotation="setRotation"
     @set-horizontal-flip="setHorizontalFlip"
+    @set-vertical-flip="setVerticalFlip"
     @toggle-inversion="toggleInversion"
     @reset-viewport="resetViewport"
     @toggle-show-metadata="toggleShowMetadata"
@@ -300,8 +297,6 @@ export default defineComponent({
       toolInfoElement: null,
       currentImageZoom: 1,
       currentImageRotation: 0,
-      currentVerticalFlip: true,
-      currentHorizontalFlip: false,
       isShowMetadataActivated: false,
       isVipMetadataFetched: false,
       dicomFiles: [this.resource]
@@ -448,28 +443,6 @@ export default defineComponent({
       onClick: () => {
         const { rotation } = this.viewport.getProperties()
         this.viewport.setProperties({ rotation: rotation + 90 })
-        this.viewport.render()
-      }
-    })
-
-    // flip image horizontal
-    this.addButton({
-      id: 'flip-horizontal-tool',
-      title: 'Flip H',
-      onClick: () => {
-        const { flipHorizontal } = this.viewport.getCamera()
-        this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
-        this.viewport.render()
-      }
-    })
-
-    // flip image vertical
-    this.addButton({
-      id: 'flip-vertical-tool',
-      title: 'Flip V',
-      onClick: () => {
-        const { flipVertical } = this.viewport.getCamera()
-        this.viewport.setCamera({ flipVertical: !flipVertical })
         this.viewport.render()
       }
     })
@@ -820,18 +793,16 @@ export default defineComponent({
       this.viewport.setProperties({ rotation: this.currentImageRotation })
       this.viewport.render()
     },
-    setVerticalFlip() {
-      console.log('flip vertical clicked')
-      console.log('new vertical flip: ' + this.currentVerticalFlip)
-      const { flipVertical } = this.viewport.getCamera()
-      this.viewport.setCamera({ flipVertical: !flipVertical })
-      this.viewport.render()
-    },
     setHorizontalFlip() {
       console.log('flip horizontal clicked')
-      console.log('new horizontal flip: ' + this.currentHorizontalFlip)
       const { flipHorizontal } = this.viewport.getCamera()
       this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
+      this.viewport.render()
+    },
+    setVerticalFlip() {
+      console.log('flip vertical clicked')
+      const { flipVertical } = this.viewport.getCamera()
+      this.viewport.setCamera({ flipVertical: !flipVertical })
       this.viewport.render()
     },
     toggleInversion() {
