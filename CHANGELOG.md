@@ -171,6 +171,7 @@ Details
    https://github.com/owncloud/web/issues/9635
    https://github.com/owncloud/web/pull/9451
    https://github.com/owncloud/web/pull/9654
+   https://github.com/owncloud/web/pull/9753
 
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 
