@@ -220,6 +220,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const currentZoomDisplayValue = computed(() => {
+      console.log('current zoom display: ' + props.currentImageZoom)
       return `${(props.currentImageZoom * 100).toFixed(0)}%`
     })
 
@@ -246,7 +247,7 @@ export default defineComponent({
     }
     const imageZoom = () => {
       console.log('current zoom: ' + props.currentImageZoom)
-      const maxZoomValue = calculateZoom(9, 1.25) // why is there a value 9?!?
+      const maxZoomValue = calculateZoom(9, 1.25)
       emit('setZoom', Math.min(calculateZoom(props.currentImageZoom, 1.25), maxZoomValue))
     }
     const imageRotateLeft = () => {
@@ -259,7 +260,7 @@ export default defineComponent({
     }
     // TODO: draft only, properly implement the following new functionalities
     const imageShowMetadata = () => {
-      console.log('current show metadata: ' + props.isShowMetadataActivated)
+      console.log('toggle show metadata')
       emit('toggleShowMetadata', props.isShowMetadataActivated === true ? true : false)
     }
 

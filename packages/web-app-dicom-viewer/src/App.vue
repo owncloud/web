@@ -47,6 +47,7 @@
       </div>
 
       <!-- div element for displaying full meta data -->
+      <!--
       <div id="dicom-metadata" class="dicom-metadata">
         <h2>metadata for current dicom image</h2>
         <div class="dicom-metadata-item">
@@ -118,6 +119,7 @@
           <span id="window-center"></span>
         </div>
       </div>
+      -->
     </div>
     <!-- temporary buttons for viewport manipulations -->
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
@@ -287,6 +289,7 @@ export default defineComponent({
       element: null,
       renderingEngine: null,
       viewport: null,
+      viewportCameraParallelScale: 137.3853139193763, // TODO: initialize this automatically to the correct value
       dicomFile: null,
       dicomFileName: null,
       dicomUrl: null,
@@ -378,6 +381,10 @@ export default defineComponent({
 
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
+    // initialize value for viewport camera parallel scale
+    // this.viewportCameraParallelScale = this.viewport.getCamera().parallelScale
+    // this could also be calculated by getting ratio between width of the resource and viewport
+    // needs to get updated if viewport size changes
 
     // set reference to HTML element for metadata
     // metadata root element
@@ -386,44 +393,6 @@ export default defineComponent({
     this.metaDataItems = document.getElementsByClassName(
       'dicom-metadata-item'
     ) as HTMLCollectionOf<HTMLDivElement>
-
-    // adding some buttons for image manipulation
-
-    // zoom in
-    this.addButton({
-      id: 'zoom-in-tool',
-      title: 'Zoom+',
-      onClick: () => {
-        const camera = this.viewport.getCamera()
-
-        const newCamera = {
-          parallelScale: camera.parallelScale * 0.8,
-          position: camera.position,
-          focalPoint: camera.focalPoint
-        }
-
-        this.viewport.setCamera(newCamera)
-        this.viewport.render()
-      }
-    })
-
-    // zoom out
-    this.addButton({
-      id: 'zoom-out-tool',
-      title: 'Zoom-',
-      onClick: () => {
-        const camera = this.viewport.getCamera()
-
-        const newCamera = {
-          parallelScale: camera.parallelScale * 1.25,
-          position: camera.position,
-          focalPoint: camera.focalPoint
-        }
-
-        this.viewport.setCamera(newCamera)
-        this.viewport.render()
-      }
-    })
 
     // add resource to stack
     // ensure resource url is not empty!
@@ -456,7 +425,7 @@ export default defineComponent({
       this.imageData = this.viewport.getImageData()
 
       // setting metadata
-      this.setMetadata(dicomResourceUrl)
+      //this.setMetadata(dicomResourceUrl)
     } else {
       console.log('no valid dicom resource url: ' + this.url)
     }
@@ -737,10 +706,11 @@ export default defineComponent({
     setZoom(newZoomFactor) {
       console.log('zoom clicked')
       this.currentImageZoom = newZoomFactor
+      console.log('new zoom factor: ' + this.currentImageZoom)
       const camera = this.viewport.getCamera()
 
       const newCamera = {
-        parallelScale: camera.parallelScale * this.currentImageZoom,
+        parallelScale: this.viewportCameraParallelScale / this.currentImageZoom,
         position: camera.position,
         focalPoint: camera.focalPoint
       }
@@ -775,39 +745,20 @@ export default defineComponent({
     },
     resetViewport() {
       console.log('reset clicked')
+      this.currentImageZoom = 1
+      this.currentImageRotation = 0
       this.viewport.resetCamera()
       this.viewport.resetProperties()
       this.viewport.render()
+
+      // for testing only
+      const camera = this.viewport.getCamera()
+      console.log('camera scale after reset: ' + camera.parallelScale)
     },
     toggleShowMetadata() {
       // similar to "ToggleFullScreenMode" of preview app, still needs to be implemented
       console.log('show metadata clicked')
       console.log('current show metadata: ' + this.isShowMetadataActivated)
-    },
-    addButton({
-      id,
-      title,
-      container,
-      onClick
-    }: {
-      id?: string
-      title: string
-      container?: HTMLElement
-      onClick: () => void
-    }) {
-      const button = document.createElement('button')
-
-      button.id = id
-      //button.className = 'dicom-manipulation-btn'
-
-      button.style.padding = '12px'
-      button.style.margin = '12px'
-
-      button.innerHTML = title
-      button.onclick = onClick
-
-      container = container ?? document.getElementById('tools')
-      container.append(button)
     }
   }
 })
