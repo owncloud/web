@@ -139,6 +139,7 @@
     @set-vertical-flip="setVerticalFlip"
     @set-horizontal-flip="setHorizontalFlip"
     @toggle-inversion="toggleInversion"
+    @reset-viewport="resetViewport"
     @toggle-show-metadata="toggleShowMetadata"
     @toggle-previous="prev"
     @toggle-next="next"
@@ -301,7 +302,6 @@ export default defineComponent({
       currentImageRotation: 0,
       currentVerticalFlip: true,
       currentHorizontalFlip: false,
-      currentInversion: false,
       isShowMetadataActivated: false,
       isVipMetadataFetched: false,
       dicomFiles: [this.resource]
@@ -470,30 +470,6 @@ export default defineComponent({
       onClick: () => {
         const { flipVertical } = this.viewport.getCamera()
         this.viewport.setCamera({ flipVertical: !flipVertical })
-        this.viewport.render()
-      }
-    })
-
-    // invert image
-    this.addButton({
-      id: 'invert-tool',
-      title: 'Invert',
-      onClick: () => {
-        const { invert } = this.viewport.getProperties()
-        this.viewport.setProperties({ invert: !invert })
-        this.viewport.render()
-      }
-    })
-
-    // reset image
-    this.addButton({
-      id: 'reset-tool',
-      title: 'Reset',
-      onClick: () => {
-        // Resets the viewport's camera
-        this.viewport.resetCamera()
-        // Resets the viewport's properties
-        this.viewport.resetProperties()
         this.viewport.render()
       }
     })
@@ -862,6 +838,14 @@ export default defineComponent({
       console.log('invert clicked')
       const { invert } = this.viewport.getProperties()
       this.viewport.setProperties({ invert: !invert })
+      this.viewport.render()
+    },
+    resetViewport() {
+      console.log('reset clicked')
+      // Resets the viewport's camera
+      this.viewport.resetCamera()
+      // Resets the viewport's properties
+      this.viewport.resetProperties()
       this.viewport.render()
     },
     toggleShowMetadata() {

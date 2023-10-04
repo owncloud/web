@@ -140,8 +140,9 @@
           appearance="raw-inverse"
           variation="brand"
           :aria-label="imageResetDescription"
-          @click="imageReset"
+          @click="$emit('resetViewport')"
         >
+          <!-- @click="imageReset" -->
           <!-- TODO: insert correct icon -->
           <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
         </oc-button>
@@ -219,6 +220,7 @@ export default defineComponent({
     'setVerticalFlip',
     'setHorizontalFlip',
     'toggleInversion',
+    'resetViewport',
     'toggleShowMetadata',
     'toggleNext',
     'togglePrevious'
@@ -276,15 +278,6 @@ export default defineComponent({
       emit('setHorizontalFlip', props.currentHorizontalFlip === true ? false : true)
     }
 
-    const imageReset = () => {
-      // TODO: reset zoom, flip & inversion to default value or new emit for image reset?
-      emit('setZoom', 1)
-      emit('setRotation', 0)
-      emit('setVerticalFlip', false)
-      emit('setHorizontalFlip', false)
-      //emit('toggleInversion')
-    }
-
     const imageShowMetadata = () => {
       console.log('current show metadata: ' + props.isShowMetadataActivated)
       emit('toggleShowMetadata', props.isShowMetadataActivated === true ? true : false)
@@ -315,8 +308,6 @@ export default defineComponent({
       imageRotateRight,
       imageFlipVertical,
       imageFlipHorizontal,
-      //imageInvert,
-      imageReset,
       imageShowMetadata
     }
   }
