@@ -304,7 +304,7 @@ export default defineComponent({
       if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
         calls.push(
           store.dispatch('Files/loadVersions', {
-            client: clientService.owncloudSdk,
+            client: clientService.webdav,
             fileId: unref(resource).id
           })
         )

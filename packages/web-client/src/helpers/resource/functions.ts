@@ -46,7 +46,7 @@ export const extractNameWithoutExtension = (resource?: Resource): string => {
 
 export const extractExtensionFromFile = (resource: Resource): string => {
   const name = resource.name
-  if (resource.type === 'dir' || resource.type === 'folder' || resource.isFolder) {
+  if (resource.type === 'directory' || resource.isFolder) {
     return ''
   }
 
@@ -76,16 +76,16 @@ export const isShareRoot = (resource: Resource) => {
 }
 
 export function buildResource(resource: WebDavResponseResource): Resource {
-  const name = resource.fileInfo[DavProperty.Name] || basename(resource.name)
-  const id = resource.fileInfo[DavProperty.FileId]
+  const name = resource.props[DavProperty.Name]?.toString() || basename(resource.filename)
+  const id = resource.props[DavProperty.FileId]
 
-  const isFolder = resource.type === 'dir' || resource.type === 'folder'
+  const isFolder = resource.type === 'directory'
   let resourcePath: string
 
-  if (resource.name.startsWith('/files') || resource.name.startsWith('/space')) {
-    resourcePath = resource.name.split('/').slice(3).join('/')
+  if (resource.filename.startsWith('/files') || resource.filename.startsWith('/space')) {
+    resourcePath = resource.filename.split('/').slice(3).join('/')
   } else {
-    resourcePath = resource.name
+    resourcePath = resource.filename
   }
 
   if (!resourcePath.startsWith('/')) {
@@ -94,7 +94,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
 
   const extension = extractExtensionFromFile({ ...resource, id, name, path: resourcePath })
 
-  const lock = resource.fileInfo[DavProperty.LockDiscovery]
+  const lock = resource.props[DavProperty.LockDiscovery]
   let activeLock: string, lockOwnerName: string, lockTime: string
   if (lock) {
     activeLock = lock[DavProperty.ActiveLock]
@@ -102,44 +102,47 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     lockTime = activeLock[DavProperty.LockTime]
   }
 
+  let shareTypes: number[] = []
+  if (resource.props[DavProperty.ShareTypes]) {
+    shareTypes = resource.props[DavProperty.ShareTypes]['share-type']
+    if (!Array.isArray(shareTypes)) {
+      shareTypes = [shareTypes]
+    }
+  }
+
   const r = {
     id,
     fileId: id,
     storageId: extractStorageId(id),
-    parentFolderId: resource.fileInfo[DavProperty.FileParent],
-    mimeType: resource.fileInfo[DavProperty.MimeType],
+    parentFolderId: resource.props[DavProperty.FileParent],
+    mimeType: resource.props[DavProperty.MimeType],
     name,
     extension: isFolder ? '' : extension,
     path: resourcePath,
-    webDavPath: resource.name,
+    webDavPath: resource.filename,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
     locked: activeLock ? true : false,
     lockOwnerName,
     lockTime,
     processing: resource.processing || false,
-    mdate: resource.fileInfo[DavProperty.LastModifiedDate],
+    mdate: resource.props[DavProperty.LastModifiedDate],
     size: isFolder
-      ? resource.fileInfo[DavProperty.ContentSize]
-      : resource.fileInfo[DavProperty.ContentLength],
+      ? resource.props[DavProperty.ContentSize]?.toString() || '0'
+      : (resource.props[DavProperty.ContentLength] as number)?.toString() || '0',
     indicators: [],
-    permissions: resource.fileInfo[DavProperty.Permissions] || '',
-    starred: resource.fileInfo[DavProperty.IsFavorite] !== '0',
-    etag: resource.fileInfo[DavProperty.ETag],
-    sharePermissions: resource.fileInfo[DavProperty.SharePermissions],
-    shareTypes: (function () {
-      if (resource.fileInfo[DavProperty.ShareTypes]) {
-        return resource.fileInfo[DavProperty.ShareTypes].map((v) => parseInt(v))
-      }
-      return []
-    })(),
-    privateLink: resource.fileInfo[DavProperty.PrivateLink],
-    downloadURL: resource.fileInfo[DavProperty.DownloadURL],
-    shareId: resource.fileInfo[DavProperty.ShareId],
-    shareRoot: resource.fileInfo[DavProperty.ShareRoot],
-    ownerId: resource.fileInfo[DavProperty.OwnerId],
-    ownerDisplayName: resource.fileInfo[DavProperty.OwnerDisplayName],
-    tags: (resource.fileInfo[DavProperty.Tags] || '').split(',').filter(Boolean),
+    permissions: resource.props[DavProperty.Permissions] || '',
+    starred: resource.props[DavProperty.IsFavorite] !== 0,
+    etag: resource.props[DavProperty.ETag],
+    sharePermissions: resource.props[DavProperty.SharePermissions],
+    shareTypes,
+    privateLink: resource.props[DavProperty.PrivateLink],
+    downloadURL: resource.props[DavProperty.DownloadURL],
+    shareId: resource.props[DavProperty.ShareId],
+    shareRoot: resource.props[DavProperty.ShareRoot],
+    ownerId: resource.props[DavProperty.OwnerId],
+    ownerDisplayName: resource.props[DavProperty.OwnerDisplayName],
+    tags: (resource.props[DavProperty.Tags] || '').split(',').filter(Boolean),
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
@@ -171,8 +174,8 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
     isShareRoot(): boolean {
-      return resource.fileInfo[DavProperty.ShareRoot]
-        ? resource.name.split('/').length === 3
+      return resource.props[DavProperty.ShareRoot]
+        ? resource.filename.split('/').length === 3
         : false
     },
     canDeny: function () {
@@ -189,19 +192,19 @@ export function buildResource(resource: WebDavResponseResource): Resource {
 }
 
 export function buildDeletedResource(resource: WebDavResponseResource): Resource {
-  const isFolder = resource.type === 'dir' || resource.type === 'folder'
-  const fullName = resource.fileInfo[DavProperty.TrashbinOriginalFilename]
+  const isFolder = resource.type === 'directory'
+  const fullName = resource.props[DavProperty.TrashbinOriginalFilename]
   const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
-  const id = path.basename(resource.name)
+  const id = path.basename(resource.filename)
   return {
     type: isFolder ? 'folder' : resource.type,
     isFolder,
-    ddate: resource.fileInfo[DavProperty.TrashbinDeletedDate],
+    ddate: resource.props[DavProperty.TrashbinDeletedDate],
     name: path.basename(fullName),
     extension,
-    path: urlJoin(resource.fileInfo[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
+    path: urlJoin(resource.props[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
     id,
-    parentFolderId: resource.fileInfo[DavProperty.FileParent],
+    parentFolderId: resource.props[DavProperty.FileParent],
     indicators: [],
     webDavPath: '',
     canUpload: () => false,

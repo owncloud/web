@@ -47,7 +47,7 @@
     "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",
     "web-runtime": "workspace:*",
-    "webdav": "^4.10.0",
+    "webdav": "5.3.0",
     "webfontloader": "^1.6.28",
     "xml-js": "^1.6.11"
   },

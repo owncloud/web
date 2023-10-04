@@ -1,33 +1,49 @@
-import { buildResource, Resource } from '../helpers/resource'
+import { buildDeletedResource, buildResource, Resource } from '../helpers/resource'
 import { DavProperties, DavPropertyValue } from './constants'
 import { buildPublicSpaceResource, isPublicSpaceResource, SpaceResource } from '../helpers'
-import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
+import { DAV, buildPublicLinkAuthHeader } from './client'
+import { GetPathForFileIdFactory } from './getPathForFileId'
+import { WebDavOptions } from './types'
 
 export type ListFilesOptions = {
   depth?: number
   davProperties?: DavPropertyValue[]
+  isTrash?: boolean
 }
 
-export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
+export const ListFilesFactory = (
+  dav: DAV,
+  pathForFileIdFactory: ReturnType<typeof GetPathForFileIdFactory>,
+  options: WebDavOptions
+) => {
   return {
     async listFiles(
       space: SpaceResource,
       { path, fileId }: { path?: string; fileId?: string | number } = {},
-      { depth = 1, davProperties }: ListFilesOptions = {}
+      { depth = 1, davProperties, isTrash = false }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
-      let webDavResources: any[]
+      let webDavResources: any[] // FIXME: type
       if (isPublicSpaceResource(space)) {
-        webDavResources = await sdk.publicFiles.list(
-          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
-          space.publicLinkPassword,
-          davProperties || DavProperties.PublicLink,
-          `${depth}`
-        )
+        const headers = { Authorization: null }
+        if (space.publicLinkPassword) {
+          headers.Authorization = buildPublicLinkAuthHeader(space.publicLinkPassword)
+        }
+
+        webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
+          depth,
+          headers,
+          properties: davProperties || DavProperties.PublicLink
+        })
+
+        // FIXME: strip out token, ooof
+        webDavResources.forEach((r) => {
+          r.filename = r.filename.split('/').slice(1).join('/')
+        })
 
         // FIXME: This is a workaround for https://github.com/owncloud/ocis/issues/4758
         if (webDavResources.length === 1) {
-          webDavResources[0].name = urlJoin(space.id, path, {
+          webDavResources[0].filename = urlJoin(space.id, path, {
             leadingSlashes: true
           })
         }
@@ -35,8 +51,9 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
         // We remove the /${publicLinkToken} prefix so the name is relative to the public link root
         // At first we tried to do this in buildResource but only the public link root resource knows it's a public link
         webDavResources.forEach((resource) => {
-          resource.name = resource.name.split('/').slice(2).join('/')
+          resource.filename = resource.filename.split('/').slice(2).join('/')
         })
+
         if (!path) {
           const [rootFolder, ...children] = webDavResources
           return {
@@ -49,16 +66,21 @@ export const ListFilesFactory = ({ sdk }: WebDavOptions) => {
       }
 
       const listFilesCorrectedPath = async () => {
-        const correctPath = await sdk.files.getPathForFileId(fileId)
+        const correctPath = await pathForFileIdFactory.getPathForFileId(fileId.toString())
         return this.listFiles(space, { path: correctPath }, { depth, davProperties })
       }
 
       try {
-        webDavResources = await sdk.files.list(
-          urlJoin(space.webDavPath, path),
-          `${depth}`,
-          davProperties || DavProperties.Default
-        )
+        webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
+          depth,
+          properties: davProperties || DavProperties.Default
+        })
+        if (isTrash) {
+          return {
+            resource: buildResource(webDavResources[0]),
+            children: webDavResources.slice(1).map(buildDeletedResource)
+          } as ListFilesResult
+        }
         const resources = webDavResources.map(buildResource)
         if (fileId && fileId !== resources[0].fileId) {
           return listFilesCorrectedPath()

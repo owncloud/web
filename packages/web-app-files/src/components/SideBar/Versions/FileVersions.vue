@@ -55,9 +55,8 @@
 </template>
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
+import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
 import { formatRelativeDateFromHTTP, formatFileSize } from '@ownclouders/web-pkg'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { defineComponent, inject, ref, Ref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
@@ -111,26 +110,16 @@ export default defineComponent({
   methods: {
     ...mapActions('Files', ['loadVersions']),
     ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
-    currentVersionId(file) {
-      const etag = file.name.split('/')
-      return etag[etag.length - 1]
-    },
+
     async fetchFileVersions() {
       this.loading = true
-      await this.loadVersions({ client: this.$client, fileId: this.resource.fileId })
+      await this.loadVersions({ client: this.clientService.webdav, fileId: this.resource.fileId })
       this.loading = false
     },
-    async revertVersion(file) {
+    async revertVersion(file: Resource) {
       const { id } = this.resource
-      await this.clientService.webdav.restoreFileVersion(
-        this.space,
-        this.resource,
-        this.currentVersionId(file)
-      )
-      const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(
-        this.space,
-        this.resource
-      )
+      await this.clientService.webdav.restoreFileVersion(this.space, this.resource, file.name)
+      const resource = await this.clientService.webdav.getFileInfo(this.space, this.resource)
 
       const fieldsToUpdate = ['size', 'mdate']
       for (const field of fieldsToUpdate) {
@@ -141,24 +130,17 @@ export default defineComponent({
 
       this.fetchFileVersions()
     },
-    downloadVersion(file) {
-      const version = this.currentVersionId(file)
-      return this.downloadFile(this.resource, version)
+    downloadVersion(file: Resource) {
+      return this.downloadFile(this.resource, file.name)
     },
-    formatVersionDateRelative(file) {
-      return formatRelativeDateFromHTTP(
-        file.fileInfo[DavProperty.LastModifiedDate],
-        this.$language.current
-      )
+    formatVersionDateRelative(file: Resource) {
+      return formatRelativeDateFromHTTP(file.mdate, this.$language.current)
     },
-    formatVersionDate(file) {
-      return formatDateFromJSDate(
-        new Date(file.fileInfo[DavProperty.LastModifiedDate]),
-        this.$language.current
-      )
+    formatVersionDate(file: Resource) {
+      return formatDateFromJSDate(new Date(file.mdate), this.$language.current)
     },
-    formatVersionFileSize(file) {
-      return formatFileSize(file.fileInfo[DavProperty.ContentLength], this.$language.current)
+    formatVersionFileSize(file: Resource) {
+      return formatFileSize(file.size, this.$language.current)
     }
   }
 })

@@ -1,20 +1,22 @@
-import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
+import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
+import { DAV } from './client'
 
-export const RestoreFileFactory = ({ sdk }: WebDavOptions) => {
+export const RestoreFileFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     restoreFile(
       space: SpaceResource,
       { id }: { id: string | number },
       { path: restorePath }: { path: string },
       { overwrite }: { overwrite?: boolean }
-    ): Promise<FileResource> {
+    ) {
       if (isPublicSpaceResource(space)) {
         return
       }
+
       const restoreWebDavPath = urlJoin(space.webDavPath, restorePath)
-      return sdk.fileTrash.restore(space.webDavTrashPath, id, restoreWebDavPath, overwrite)
+      return dav.move(urlJoin(space.webDavTrashPath, id), restoreWebDavPath, { overwrite })
     }
   }
 }

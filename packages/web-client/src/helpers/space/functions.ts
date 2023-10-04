@@ -33,12 +33,12 @@ export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'i
 export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
 
-  const fileId = data.fileInfo?.[DavProperty.FileId]
-  const publicLinkItemType = data.fileInfo?.[DavProperty.PublicLinkItemType]
-  const publicLinkPermission = data.fileInfo?.[DavProperty.PublicLinkPermission]
-  const publicLinkExpiration = data.fileInfo?.[DavProperty.PublicLinkExpiration]
-  const publicLinkShareDate = data.fileInfo?.[DavProperty.PublicLinkShareDate]
-  const publicLinkShareOwner = data.fileInfo?.[DavProperty.PublicLinkShareOwner]
+  const fileId = data.props?.[DavProperty.FileId]
+  const publicLinkItemType = data.props?.[DavProperty.PublicLinkItemType]
+  const publicLinkPermission = data.props?.[DavProperty.PublicLinkPermission]
+  const publicLinkExpiration = data.props?.[DavProperty.PublicLinkExpiration]
+  const publicLinkShareDate = data.props?.[DavProperty.PublicLinkShareDate]
+  const publicLinkShareOwner = data.props?.[DavProperty.PublicLinkShareOwner]
 
   return Object.assign(
     buildSpace({

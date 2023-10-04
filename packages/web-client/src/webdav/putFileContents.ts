@@ -1,11 +1,14 @@
 import { urlJoin } from '../utils'
-import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
+import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
+import { DAV, buildPublicLinkAuthHeader } from './client'
+import { ProgressEventCallback } from 'webdav'
 
 export const PutFileContentsFactory = (
+  dav: DAV,
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,
-  { sdk }: WebDavOptions
+  options: WebDavOptions
 ) => {
   return {
     async putFileContents(
@@ -13,28 +16,34 @@ export const PutFileContentsFactory = (
       {
         path,
         content = '',
-        ...options
+        previousEntityTag = '',
+        headers = {},
+        overwrite,
+        onUploadProgress = null
       }: {
         path?: string
         content?: string
         previousEntityTag?: string
         headers?: Record<string, string>
         overwrite?: boolean
+        onUploadProgress?: ProgressEventCallback
       }
-    ): Promise<FileResource> {
+    ) {
       if (isPublicSpaceResource(space)) {
-        await sdk.publicFiles.putFileContents(
-          '',
-          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
-          space.publicLinkPassword,
-          content,
-          options
-        )
-      } else {
-        await sdk.files.putFileContents(urlJoin(space.webDavPath, path), content, options)
+        headers.Authorization = null
+        if (space.publicLinkPassword) {
+          headers.Authorization = buildPublicLinkAuthHeader(space.publicLinkPassword)
+        }
       }
 
-      return getFileInfoFactory.getFileInfo(space, { path }) as Promise<FileResource>
+      await dav.put(urlJoin(space.webDavPath, path), content, {
+        previousEntityTag,
+        overwrite,
+        onUploadProgress,
+        headers
+      })
+
+      return getFileInfoFactory.getFileInfo(space, { path })
     }
   }
 }

@@ -6,19 +6,26 @@ import {
   buildWebDavSpacesTrashPath
 } from '../helpers'
 import { WebDavOptions } from './types'
+import { DAV } from './client'
+import { urlJoin } from '../utils'
 
 interface ClearTrashBinOptions {
   id?: Resource['id']
 }
 
-export const ClearTrashBinFactory = ({ sdk, capabilities, user }: WebDavOptions) => {
+export const ClearTrashBinFactory = (dav: DAV, { capabilities, user }: WebDavOptions) => {
   return {
-    clearTrashBin(space: SpaceResource, { id }: ClearTrashBinOptions = {}): Promise<void> {
+    clearTrashBin(space: SpaceResource, { id }: ClearTrashBinOptions = {}) {
       const hasShareJail = unref(capabilities)?.spaces?.share_jail === true
-      const path = hasShareJail
+      let path = hasShareJail
         ? buildWebDavSpacesTrashPath(space.id.toString())
         : buildWebDavFilesTrashPath(unref(user).id)
-      return sdk.fileTrash.clearTrashBin(path, id)
+
+      if (id) {
+        path = urlJoin(path, id)
+      }
+
+      return dav.delete(path)
     }
   }
 }

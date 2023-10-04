@@ -6,8 +6,9 @@ import {
   SHARE_JAIL_ID
 } from '../helpers'
 import { WebDavOptions } from './types'
+import { DAV, buildPublicLinkAuthHeader } from './client'
 
-export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
+export const MoveFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     moveFiles(
       sourceSpace: SpaceResource,
@@ -15,28 +16,32 @@ export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
       targetSpace: SpaceResource,
       { path: targetPath },
       options?: { overwrite?: boolean }
-    ): Promise<void> {
+    ) {
       if (isShareSpaceResource(sourceSpace) && sourcePath === '/') {
-        return sdk.files.move(
+        return dav.move(
           `${sourceSpace.webDavPath}/${sourcePath || ''}`,
           `/spaces/${SHARE_JAIL_ID}!${SHARE_JAIL_ID}/${targetPath || ''}`,
-          options?.overwrite || false
+          { overwrite: options?.overwrite || false }
         )
       }
       if (isPublicSpaceResource(sourceSpace)) {
-        return sdk.publicFiles.move(
-          urlJoin(sourceSpace.webDavPath.replace(/^\/public-files/, ''), sourcePath),
-          urlJoin(targetSpace.webDavPath.replace(/^\/public-files/, ''), targetPath),
-          sourceSpace.publicLinkPassword,
-          options?.overwrite || false
-        )
-      } else {
-        return sdk.files.move(
-          `${sourceSpace.webDavPath}/${sourcePath || ''}`,
-          `${targetSpace.webDavPath}/${targetPath || ''}`,
-          options?.overwrite || false
+        const headers = { Authorization: null }
+        if (sourceSpace.publicLinkPassword) {
+          headers.Authorization = buildPublicLinkAuthHeader(sourceSpace.publicLinkPassword)
+        }
+
+        return dav.move(
+          urlJoin(sourceSpace.webDavPath, sourcePath),
+          urlJoin(targetSpace.webDavPath, targetPath),
+          { overwrite: options?.overwrite || false, headers }
         )
       }
+
+      return dav.move(
+        `${sourceSpace.webDavPath}/${sourcePath || ''}`,
+        `${targetSpace.webDavPath}/${targetPath || ''}`,
+        { overwrite: options?.overwrite || false }
+      )
     }
   }
 }

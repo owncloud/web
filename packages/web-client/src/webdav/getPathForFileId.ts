@@ -1,9 +1,16 @@
+import { urlJoin } from '../utils'
+import { DAV } from './client'
+import { DavProperty } from './constants'
 import { WebDavOptions } from './types'
 
-export const GetPathForFileIdFactory = ({ sdk }: WebDavOptions) => {
+export const GetPathForFileIdFactory = (dav: DAV, options: WebDavOptions) => {
   return {
-    getPathForFileId(id: string): Promise<string> {
-      return sdk.files.getPathForFileId(id)
+    async getPathForFileId(id: string): Promise<string> {
+      const result = await dav.propfind(urlJoin('meta', id, { leadingSlash: true }), {
+        properties: [DavProperty.MetaPathForUser]
+      })
+
+      return result[0].props[DavProperty.MetaPathForUser]
     }
   }
 }
