@@ -279,6 +279,11 @@ export default defineComponent({
 
     const imageReset = () => {
       // TODO: reset zoom, flip & inversion to default value
+      emit('setZoom', 1)
+      emit('setRotation', 0)
+      emit('setVerticalFlip', false)
+      emit('setHorizontalFlip', false)
+      emit('setInversion', false)
     }
 
     const imageShowMetadata = () => {

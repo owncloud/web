@@ -134,12 +134,12 @@
     :current-horizontal-flip="false"
     :current-inversion="false"
     :is-show-metadata-activated="false"
-    @set-rotation="currentImageRotation = $event"
-    @set-zoom="currentImageZoom = $event"
-    @set-vertical-flip="currentVerticalFlip = $event"
-    @set-horizontal-flip="currentHorizontalFlip = $event"
-    @set-inversion="currentInversion = $event"
-    @toggle-show-metadata="showMetadata"
+    @set-rotation="setRotation"
+    @set-zoom="setZoom"
+    @set-vertical-flip="setVerticalFlip"
+    @set-horizontal-flip="setHorizontalFlip"
+    @set-inversion="setInversion"
+    @toggle-show-metadata="toggleShowMetadata"
     @toggle-previous="prev"
     @toggle-next="next"
   />
@@ -247,6 +247,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+    //const isShowMetadataActivated = ref(false)
+
     return {
       imageData: {
         // dummy data for testing only
@@ -814,16 +816,40 @@ export default defineComponent({
         console.log('reading file lenght: ' + result.length)
       }
     },
-    // TODO: properly implement these functions
-    next() {
-      return
-    },
+    // functions relating to dicom controls
     prev() {
-      return
+      console.log('prev clicked')
     },
-    showMetadata() {
+    next() {
+      console.log('next clicked')
+    },
+    setZoom() {
+      console.log('zoom clicked')
+      console.log('current zoom: ' + this.currentImageZoom)
+    },
+    setRotation() {
+      console.log('rotate image clicked')
+      console.log('current rotation: ' + this.currentImageRotation)
+      const { rotation } = this.viewport.getProperties()
+      this.viewport.setProperties({ rotation: this.currentImageRotation })
+      this.viewport.render()
+    },
+    setVerticalFlip() {
+      console.log('flip vertical clicked')
+      console.log('current zoom: ' + this.currentVerticalFlip)
+    },
+    setHorizontalFlip() {
+      console.log('flip horizontal clicked')
+      console.log('current zoom: ' + this.currentHorizontalFlip)
+    },
+    setInversion() {
+      console.log('invert clicked')
+      console.log('current zoom: ' + this.currentInversion)
+    },
+    toggleShowMetadata() {
       // similar to "ToggleFullScreenMode" of preview app
-      return
+      console.log('show metadata clicked')
+      console.log('current zoom: ' + this.isShowMetadataActivated)
     },
     addButton({
       id,
