@@ -23,6 +23,10 @@ export class Share {
     await po.declineShare({ ...args, page: this.#page })
   }
 
+  async acceptAll(): Promise<void> {
+    await po.acceptAllShare({ page: this.#page })
+  }
+
   async changeShareeRole(args: Omit<po.ShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.changeShareeRole({ ...args, page: this.#page })

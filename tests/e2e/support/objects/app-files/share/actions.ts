@@ -25,6 +25,11 @@ const filesSharedWithMeDeclined =
 const publicLinkInputField =
   '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
   '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
+const showAllButton = '#files-shared-with-me-pending-section #files-shared-with-me-show-all'
+const selecAllCheckbox = '#files-shared-with-me-pending-section #resource-table-select-all'
+const acceptButton = '.oc-files-actions-accept-share-trigger'
+const pendingShareItem =
+  '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
 
 export interface ShareArgs {
   page: Page
@@ -93,6 +98,27 @@ export const acceptShare = async (args: ShareStatusArgs): Promise<void> => {
     ])
   }
   await page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
+}
+
+export const acceptAllShare = async ({ page }: { page: Page }): Promise<void> => {
+  if (await page.locator(showAllButton).isVisible()) {
+    await page.locator(showAllButton).click()
+  }
+  await page.locator(selecAllCheckbox).click()
+  const numberOfPendingShares = await page.locator(pendingShareItem).count()
+  const checkResponses = []
+  for (let i = 0; i < numberOfPendingShares; i++) {
+    const id = await page.locator(pendingShareItem + `[${i + 1}]`).getAttribute('data-item-id')
+    checkResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes(`shares/pending/${id}`) &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST'
+      )
+    )
+  }
+  await Promise.all([...checkResponses, page.locator(acceptButton).click()])
 }
 
 export const declineShare = async (args: ShareStatusArgs): Promise<void> => {
