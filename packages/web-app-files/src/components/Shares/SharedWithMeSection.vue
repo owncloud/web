@@ -59,7 +59,7 @@
           @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
         >
           <oc-icon size="small" name="check" />
-          <span v-translate>Accept</span>
+          <span v-translate>Enable sync</span>
         </oc-button>
         <oc-button
           v-if="getShowDeclineButton(resource)"

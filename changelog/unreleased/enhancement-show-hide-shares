@@ -1,0 +1,9 @@
+Enhancement: Personal shares can be shown and hidden
+
+On the shared-with-me page, there is no distinction between pending, accepted and rejected shares anymore.
+Instead, the user can toggle to display either shown or hidden shares.
+
+Furthermore, accepting and rejecting shares has been renamed to "enable sync"/"disable sync" to better reflect what's happening on the server and on other devices.
+
+https://github.com/owncloud/web/issues/9531
+https://github.com/owncloud/web/pull/9718

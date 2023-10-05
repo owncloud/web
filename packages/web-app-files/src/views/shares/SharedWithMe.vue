@@ -66,7 +66,7 @@ import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { AppBar } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -74,7 +74,7 @@ import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
 // import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
-import { useStore } from 'web-pkg/src/composables'
+import { useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {
