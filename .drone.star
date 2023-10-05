@@ -1196,6 +1196,7 @@ def documentation(ctx):
                         "pages_directory": "docs/",
                         "copy_contents": "true",
                         "target_branch": "docs",
+                        "delete": "true",
                     },
                     "when": {
                         "ref": {
