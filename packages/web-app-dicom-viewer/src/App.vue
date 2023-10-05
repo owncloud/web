@@ -52,9 +52,8 @@
       </div>
 
       <!-- div element for displaying full meta data -->
-      <!--
       <div id="dicom-metadata" class="dicom-metadata">
-        <h2>metadata for current dicom image</h2>
+        <h2>metadata <br />for current dicom</h2>
         <div class="dicom-metadata-item">
           <span>Filename:</span>
           <span id="filename"></span>
@@ -124,11 +123,6 @@
           <span id="window-center"></span>
         </div>
       </div>
-      -->
-    </div>
-    <!-- temporary buttons for viewport manipulations -->
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
-      <div id="tools"></div>
     </div>
   </div>
   <dicom-controls
@@ -323,8 +317,6 @@ export default defineComponent({
   // "created" runs before DOM is rendered, data and events are already accessible
   async created() {
     console.log('lifecycle @ created')
-    //console.log('url: ' + this.url)
-    //console.log('file name: ' + this.resource.name)
 
     // get resource, ensure resource url is not empty!
     if (this.url != null && this.url != undefined && this.url != '') {
@@ -335,6 +327,7 @@ export default defineComponent({
     }
 
     // get vip metadata
+    // maybe also prefetch other metadata?
     this.dicomMetaData = await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
     // console.log('dicom meta data: ' + this.dicomMetaData)
     // console.log('patient name: ' + this.dicomMetaData[0])
@@ -419,10 +412,6 @@ export default defineComponent({
       // define a stack containing a single image
       const dicomStack = [dicomResourceUrl]
 
-      // maybe preload meta data into memory?
-      // might only be needed if there is a stack of files
-      // await this.prefetchMetadataInformation(dicomStack)
-
       // set stack on the viewport (currently only one image in the stack, therefore no frame # required)
       await this.viewport.setStack(dicomStack)
 
@@ -434,7 +423,7 @@ export default defineComponent({
       this.imageData = this.viewport.getImageData()
 
       // setting metadata
-      //this.setMetadata(dicomResourceUrl)
+      this.setMetadata(dicomResourceUrl)
     } else {
       console.log('no valid dicom resource url: ' + this.url)
     }
