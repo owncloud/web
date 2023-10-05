@@ -772,9 +772,20 @@ def e2eTests(ctx):
 
         if suite.startswith("oCIS-app-provider"):
             # app-provider specific steps
-            steps += wopiServer() + \
+
+            #  [{
+            #      "name": "wait-for-services",
+            #      "image": OC_UBUNTU,
+            #      "commands": [
+            #          waitForService("http://wopiserver:8880/welcome/"),
+            #          waitForService("https://collabora:9980"),
+            #          waitForService("https://onlyoffice/hosting/discovery"),
+            #      ],
+            #  }] + \
+            steps += onlyofficeService() + \
                      collaboraService() + \
-                     onlyofficeService() + \
+                     wopiServer() + \
+                     waitForServices() + \
                      ocisService("app-provider") + \
                      appProviderService("collabora") + \
                      appProviderService("onlyoffice")
@@ -2102,13 +2113,6 @@ def wopiServer():
                 "/app/wopiserver.py",
             ],
         },
-        {
-            "name": "wait-for-wopi-server",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it wopiserver:8880 -t 300",
-            ],
-        },
     ]
 
 def collaboraService():
@@ -2122,13 +2126,6 @@ def collaboraService():
                 "DONT_GEN_SSL_CERT": "set",
                 "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
             },
-        },
-        {
-            "name": "wait-for-collabora-service",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it collabora:9980 -t 300",
-            ],
         },
     ]
 
@@ -2151,13 +2148,6 @@ def onlyofficeService():
                 "cp onlyoffice.crt /var/www/onlyoffice/Data/certs/",
                 "chmod 400 /var/www/onlyoffice/Data/certs/onlyoffice.key",
                 "/app/ds/run-document-server.sh",
-            ],
-        },
-        {
-            "name": "wait-for-onlyoffice-service",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it onlyoffice:443/hosting/discovery -t 300",
             ],
         },
     ]
@@ -2209,3 +2199,23 @@ def appProviderService(name):
             ],
         },
     ]
+
+# def waitForService(url, timeout = 300):
+#     command = '''timeout %ss
+#      bash -c "
+#     while [ $(curl -sk -o /dev/null -w '%%{http_code}' %s) != 200 ]; do
+#      sleep 0.5;
+#     done"
+#     ''' % (timeout, url)
+#     return command.replace("\n", "")
+
+def waitForServices(timeout = 300):
+    return [{
+        "name": "wait-for-services",
+        "image": OC_UBUNTU,
+        "commands": [
+            "timeout %ss bash %s/tests/drone/wait-service.sh http://wopiserver:8880/wopi" % (timeout, dir["web"]),
+            "timeout %ss bash %s/tests/drone/wait-service.sh https://collabora:9980" % (timeout, dir["web"]),
+            "timeout %ss bash %s/tests/drone/wait-service.sh https://onlyoffice/hosting/discovery" % (timeout, dir["web"]),
+        ],
+    }]
