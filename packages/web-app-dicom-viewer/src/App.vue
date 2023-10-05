@@ -806,7 +806,8 @@ export default defineComponent({
 }
 
 #dicom-viewer-vip-metadata {
-  color: var(--oc-color-icon-image);
+  color: #ff7566; //var(--oc-color-swatch-danger-default); // it seems like the other colour changes if dark mode is activated and becomes less readible
+  text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
   z-index: 2;
   margin: 10px;
 }
