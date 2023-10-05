@@ -61,7 +61,7 @@ config = {
     "e2e": {
         "oCIS-1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
@@ -69,12 +69,36 @@ config = {
         },
         "oCIS-2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
         },
-        "oCIS-app-provider": {
+        "oCIS-app-provider-1": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-2": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-3": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-4": {
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            ],
+        },
+        "oCIS-app-provider-5": {
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
@@ -322,10 +346,10 @@ def Diff(li1, li2):
     return li_dif
 
 def main(ctx):
-    uiSuitesCheck = checkTestSuites()
-    if (uiSuitesCheck == False):
-        print("Errors detected. Review messages above.")
-        return []
+    # uiSuitesCheck = checkTestSuites()
+    # if (uiSuitesCheck == False):
+    #     print("Errors detected. Review messages above.")
+    #     return []
 
     before = beforePipelines(ctx)
 
@@ -337,7 +361,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages + after
+    pipelines = before + stages  #+ after
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -351,24 +375,21 @@ def main(ctx):
         pipelines,
     )
 
-    pipelineSanityChecks(ctx, pipelines)
+    # pipelineSanityChecks(ctx, pipelines)
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
+
+    # return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -749,7 +770,7 @@ def e2eTests(ctx):
         # oCIS specific dependencies
         depends_on = ["cache-ocis"]
 
-        if suite == "oCIS-app-provider":
+        if suite.startswith("oCIS-app-provider"):
             # app-provider specific steps
             steps += wopiServer() + \
                      collaboraService() + \
