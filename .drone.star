@@ -2157,7 +2157,7 @@ def onlyofficeService():
             "name": "wait-for-onlyoffice-service",
             "image": OC_CI_WAIT_FOR,
             "commands": [
-                "wait-for -it onlyoffice:443 -t 300",
+                "wait-for -it onlyoffice:443/hosting/discovery -t 300",
             ],
         },
     ]
