@@ -1,15 +1,20 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
+    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-py-s">
       <!-- toggle for displaying all meta data -->
       <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
         <!-- TODO: implement click event of toggle properly -->
         <oc-button
           id="metadata-toggle-sidebar"
-          oc-tooltip="show/hide DICOM metadata"
-          class="preview-controls-show-metadata"
+          v-oc-tooltip="
+            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
+          "
+          class="preview-controls-show-metadata oc-my-s oc-p-xs"
           appearance="raw"
           variation="brand"
+          :aria-label="
+            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
+          "
           @click="$emit('toggleShowMetadata')"
         >
           <!-- TODO: implement proper toggle, check if fill or line version is needed -->
@@ -161,6 +166,7 @@ import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 // vue imports
 import { defineComponent, computed, ref } from 'vue'
 import type { PropType } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 // other imports
 import { Resource } from 'web-client/src'
@@ -247,6 +253,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { $gettext } = useGettext()
     //const isShowMetadataActivated = ref(false)
 
     return {
@@ -257,7 +264,9 @@ export default defineComponent({
         institutionName: 'LMU Klinikum',
         instanceCreationDate: '20230901',
         instanceCreationTime: '093801'
-      }
+      },
+      imageShowMetadataDescription: $gettext('Show DICOM metadata'),
+      imageHideMetadataDescription: $gettext('Hide DICOM metadata')
       //props.patientName
       // TODO implement proper interface
       /*
@@ -806,7 +815,11 @@ export default defineComponent({
 }
 
 #dicom-viewer-vip-metadata {
-  color: #ff7566; //var(--oc-color-swatch-danger-default); // it seems like the other colour changes if dark mode is activated and becomes less readible
+  color: rgb(
+    255,
+    117,
+    102
+  ); //var(--oc-color-swatch-danger-default); // it seems like the other colour changes if dark mode is activated and becomes less readible
   text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
   z-index: 2;
   margin: 10px;
