@@ -7,7 +7,9 @@
   "peerDependencies": {
     "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",
-    "web-pkg": "workspace:@ownclouders/web-pkg@*"
+    "web-pkg": "workspace:@ownclouders/web-pkg@*",
+    "lodash-es": "^4.17.21",
+    "luxon": "^2.4.0"
   },
   "dependencies": {
     "@cornerstonejs/core": "^1.13.0",

@@ -43,10 +43,9 @@
           <div class="oc-pr-s oc-font-semibold">
             <span>{{ imageData.institutionName || 'institution name not defined' }}</span
             >,
-            <span
-              >{{ imageData.instanceCreationDate || 'instance creation date' }}
-              {{ imageData.instanceCreationTime || ' and time not defined' }}</span
-            >
+            <span>{{
+              instanceCreationDateTimeFormatedDate || 'instance creation date and time not defined'
+            }}</span>
           </div>
         </div>
       </div>
@@ -167,6 +166,9 @@ import { Resource } from 'web-client/src'
 //import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import DicomControls from './components/DicomControls.vue'
 import uids from './helper/uids'
+import { formatDateFromISO } from 'web-pkg/src/helpers'
+import { DateTime } from 'luxon'
+import upperFirst from 'lodash-es/upperFirst'
 
 // declaring some const & references
 const { ViewportType, Events } = Enums
@@ -259,6 +261,8 @@ export default defineComponent({
         instanceCreationDate: '20230901',
         instanceCreationTime: '093801'
       },
+      //const user = reactive({ firstName: 'John', lastName: 'Doe', age: 25 })
+
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageHideMetadataDescription: $gettext('Hide DICOM metadata')
       //props.patientName
@@ -306,6 +310,34 @@ export default defineComponent({
       isShowMetadataActivated: false,
       isVipMetadataFetched: false,
       dicomFiles: [this.resource]
+    }
+  },
+  computed: {
+    instanceCreationDateTimeFormatedDate() {
+      // transforming date and time into a string that is valid for formatDateFromHTTP ('YYYY-MM-DDTHH:MM:SS')
+      let dateString =
+        this.imageData.instanceCreationDate.substr(0, 4) +
+        '-' +
+        this.imageData.instanceCreationDate.substr(4, 2) +
+        '-' +
+        this.imageData.instanceCreationDate.substr(6, 2) +
+        'T' +
+        this.imageData.instanceCreationTime.substr(0, 2) +
+        ':' +
+        this.imageData.instanceCreationTime.substr(2, 2) +
+        ':' +
+        this.imageData.instanceCreationTime.substr(4, 2)
+      console.log('temp date string: ' + dateString)
+      let date = new Date(dateString)
+      console.log('temp date: ' + date.toString())
+      let formatedDate = formatDateFromISO(
+        DateTime.fromISO('2010-10-22T21:38:00'),
+        this.$language.current,
+        DateTime.DATETIME_MED //DateTime.DATETIME_MED includes time, DateTime.DATE_MED and DateTime.DATE_SHORT return date only
+      )
+
+      console.log('formated date: ' + formatedDate)
+      return upperFirst(formatedDate)
     }
   },
   watch: {},
@@ -512,6 +544,13 @@ export default defineComponent({
         instanceCreationDate,
         instanceCreationTime
       ]
+      /*
+      var data = [
+                {
+                  'Patient Name': patientName,
+                  'Patient Birthdate': patientBirthdate
+                }
+                */
     },
     async createDicomFile() {
       // TODO check if already exist?
