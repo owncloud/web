@@ -765,10 +765,9 @@ def e2eTests(ctx):
                          collaboraService() + \
                          wopiServer() + \
                          waitForServices() + \
-                         ocisService("app-provider")
-                #  appProviderService("collabora") + \
-                #  appProviderService("onlyoffice")
-
+                         ocisService("app-provider") + \
+                         appProviderService("collabora") + \
+                         appProviderService("onlyoffice")
             else:
                 # oCIS specific steps
                 steps += copyFilesForUpload() + \
@@ -1269,8 +1268,10 @@ def ocisService(type, tika_enabled = False):
         "FRONTEND_OCS_ENABLE_DENIALS": True,
     }
     if type == "app-provider":
-        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
-        environment["MICRO_REGISTRY"] = "mdns"
+        test = "nothing"
+        # environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
+        # environment["MICRO_REGISTRY"] = "mdns"
+
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
         environment["STORAGE_HOME_DRIVER"] = "ocis"
