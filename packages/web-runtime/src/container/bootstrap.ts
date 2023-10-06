@@ -29,6 +29,7 @@ import {
 } from 'design-system/src/components/OcResourceIcon/types'
 import { merge } from 'lodash-es'
 import { AppConfigObject } from '@ownclouders/web-pkg'
+import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -560,4 +561,35 @@ export const announceCustomStyles = ({
     link.rel = 'stylesheet'
     document.head.appendChild(link)
   })
+}
+
+const onSSEProcessingFinishedEvent = ({
+  store,
+  msg
+}: {
+  store: Store<unknown>
+  msg: MessageEvent
+}): void => {
+  try {
+    const postProcessingData = JSON.parse(msg.data)
+    store.commit('Files/UPDATE_RESOURCE_FIELD', {
+      id: postProcessingData.itemid,
+      field: 'processing',
+      value: false
+    })
+  } catch (_) {
+    console.error('Unable to parse sse postprocessing data')
+  }
+}
+
+export const registerSSEEventListeners = ({
+  store,
+  clientService
+}: {
+  store: Store<unknown>
+  clientService: ClientService
+}): void => {
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
+    onSSEProcessingFinishedEvent({ store, msg })
+  )
 }

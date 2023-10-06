@@ -25,7 +25,8 @@ import {
   announceLoadingService,
   announcePreviewService,
   announcePasswordPolicyService,
-  announceAdditionalTranslations
+  announceAdditionalTranslations,
+  registerSSEEventListeners
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -160,6 +161,11 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       announcePasswordPolicyService({ app, store })
 
       const clientService = app.config.globalProperties.$clientService
+
+      // Register SSE event listeners
+      if (store.getters.capabilities?.core?.['support-sse']) {
+        registerSSEEventListeners({ store, clientService })
+      }
 
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
