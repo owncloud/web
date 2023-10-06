@@ -716,8 +716,8 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
-        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-            continue
+        # if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        #     continue
 
         if params["skip"]:
             continue
@@ -748,7 +748,7 @@ def e2eTests(ctx):
             # oCIS specific dependencies
             depends_on = ["cache-ocis"]
 
-            if suite.startswith("oCIS-app-provider"):
+            if suite == "oCIS-app-provider":
                 # app-provider specific steps
 
                 #  [{
