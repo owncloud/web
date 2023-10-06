@@ -48,6 +48,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
           async onopen(response) {
             if (response.status === 401) {
               unref(ctrl).abort()
+              throw TokenExp
               return
             } else if (response.status >= 500 || response.status === 404) {
               retryCounter.value = maxRetries
@@ -59,7 +60,7 @@ export const useServerSentEvents = (options: ServerSentEventsOptions) => {
           },
           onerror(err) {
             if (err instanceof FatalError) {
-              throw err
+              setTimeout(connect, 1m)
             }
           },
           onmessage(msg) {

@@ -1,5 +1,5 @@
 import { HttpClient as _HttpClient } from '../../http'
-import { client, Graph, OCS } from '@ownclouders/web-client'
+import { client, Graph, OCS, SSE } from '@ownclouders/web-client'
 import { Auth, AuthParameters } from './auth'
 import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
@@ -14,12 +14,28 @@ interface OcClient {
   language: string
   graph: Graph
   ocs: OCS
+  sse: SSE
 }
 
 interface HttpClient {
   client: _HttpClient
   language: string
   token?: string
+}
+
+interface FetchOptions {
+  headers: Record<string, string>
+}
+
+const createFetchOptions = (authParams: AuthParameters, language: string): FetchOptions => {
+  return {
+    headers: {
+      Authorization: `Bearer ${authParams.accessToken}`,
+      'Accept-Language': language,
+      'X-Request-ID': uuidV4(),
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }
 }
 
 const createAxiosInstance = (authParams: AuthParameters, language: string): AxiosInstance => {
@@ -84,6 +100,13 @@ export class ClientService {
     return this.ocUserContextClient.graph
   }
 
+  public get sseAuthenticated(): SSE {
+    if (this.clientNeedsInit(this.ocUserContextClient)) {
+      this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
+    }
+    return this.ocUserContextClient.sse
+  }
+
   public get ocsUserContext(): OCS {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
       this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
@@ -118,15 +141,17 @@ export class ClientService {
   }
 
   private getOcsClient(authParams: AuthParameters): OcClient {
-    const { graph, ocs } = client(
+    const { graph, ocs, sse } = client(
       this.configurationManager.serverUrl,
-      createAxiosInstance(authParams, this.currentLanguage)
+      createAxiosInstance(authParams, this.currentLanguage),
+      createFetchOptions(authParams, this.currentLanguage)
     )
     return {
       token: this.token,
       language: this.currentLanguage,
       graph,
-      ocs
+      ocs,
+      sse
     }
   }
 
