@@ -1256,6 +1256,7 @@ def ocisService(type, tika_enabled = False):
         "WEB_ASSET_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
+        "FRONTEND_AUTO_ACCEPT_SHARES": True,
     }
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"

@@ -90,15 +90,10 @@ Given(
 )
 
 Given(
-  '{string} accepts the following share(s) using API',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+  '{string} disables auto-accepting using API',
+  async function (this: World, stepUser: string): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    for (const info of stepTable.hashes()) {
-      await api.share.acceptShare({
-        user,
-        path: info.name
-      })
-    }
+    await api.settings.disableAutoAccepting({ user })
   }
 )
 

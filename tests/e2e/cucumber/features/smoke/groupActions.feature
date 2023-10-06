@@ -22,6 +22,10 @@ Feature: Group actions
       | Brian | sales    |
       | Brian | finance  |
       | Brian | security |
+    And "Brian" logs in
+    # disabling auto accepting to check accepting share
+    And "Brian" disables auto-accepting using API
+    
     And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
@@ -53,11 +57,9 @@ Feature: Group actions
       | sharedFolder | finance   | group | Can edit |
       | sharedFolder | security  | group | Can edit |
 
-    When "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
 
-    # multiple share accept
     And "Brian" accepts all pending shares using the batch actions
     And "Alice" logs out
     And "Brian" logs out

@@ -1,0 +1,1 @@
+export { disableAutoAccepting } from './settings'

@@ -24,11 +24,6 @@ Feature: Search
     And "Brian" logs out
 
     When "Alice" logs in
-    And "Alice" navigates to the shared with me page
-    And "Alice" accepts the following share
-      | name                 |
-      | new_share_from_brian |
-      | new-lorem-big.txt    |
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
       | resource                   | type   |
@@ -130,11 +125,6 @@ Feature: Search
 
     # search re-shared resources
     When "Carol" logs in
-    And "Carol" navigates to the shared with me page
-    And "Carol" accepts the following share
-      | name                 |
-      | new_share_from_brian |
-      | new-lorem-big.txt    |
     And "Carol" opens the "files" app
     And "Carol" creates the following resources
       | resource | type   |

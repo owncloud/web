@@ -5,6 +5,9 @@ Feature: share
       | id    |
       | Alice |
       | Brian |
+    And "Brian" logs in
+    # disabling auto accepting to check accepting share
+    And "Brian" disables auto-accepting using API
 
   Scenario: folder
     Given "Alice" logs in
@@ -23,7 +26,7 @@ Feature: share
       | folder_to_shared       | Brian     | user | Can edit                              | folder       |
       | shared_folder          | Brian     | user | Can edit                              | folder       |
       | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
-    And "Brian" logs in
+
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
@@ -93,7 +96,7 @@ Feature: share
       | testavatar.jpeg  | Brian     | user | Can view                             | file         |
       | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
       | sharedFile.txt   | Brian     | user | Can edit                             | file         |
-    And "Brian" logs in
+    
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     Then "Brian" should not be able to open the file "shareToBrian.txt"

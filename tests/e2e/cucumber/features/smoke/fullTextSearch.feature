@@ -24,9 +24,6 @@ Feature: Search
       | fileToShare.txt | Brian     | user | Can edit |
     And "Alice" logs out
     And "Brian" logs in
-    And "Brian" accepts the following share using API
-      | name            |
-      | fileToShare.txt |
     And "Brian" creates the following folder in personal space using API
       | name       |
       | testFolder |
