@@ -74,31 +74,7 @@ config = {
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
         },
-        "oCIS-app-provider-1": {
-            "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
-            ],
-        },
-        "oCIS-app-provider-2": {
-            "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
-            ],
-        },
-        "oCIS-app-provider-3": {
-            "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
-            ],
-        },
-        "oCIS-app-provider-4": {
-            "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
-            ],
-        },
-        "oCIS-app-provider-5": {
+        "oCIS-app-provider": {
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
@@ -720,6 +696,7 @@ def e2eTests(ctx):
         "db": "mysql:5.5",
         "featurePaths": "",
         "tikaNeeded": False,
+        "run": 5,
     }
 
     e2e_trigger = {
@@ -748,76 +725,77 @@ def e2eTests(ctx):
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
 
-        environment = {
-            "HEADLESS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": params["reportTracing"],
-        }
+        for count in range(1, params["run"] + 1):
+            environment = {
+                "HEADLESS": "true",
+                "RETRY": "1",
+                "REPORT_TRACING": params["reportTracing"],
+            }
 
-        services = []
-        depends_on = []
-        steps = skipIfUnchanged(ctx, "e2e-tests") + \
-                restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-                restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
-                installPnpm() + \
-                restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                setupServerConfigureWeb(params["logLevel"]) + \
-                restoreOcisCache()
+            services = []
+            depends_on = []
+            steps = skipIfUnchanged(ctx, "e2e-tests") + \
+                    restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+                    restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+                    installPnpm() + \
+                    restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+                    setupServerConfigureWeb(params["logLevel"]) + \
+                    restoreOcisCache()
 
-        # oCIS specific environment variables
-        environment["BASE_URL_OCIS"] = "ocis:9200"
+            # oCIS specific environment variables
+            environment["BASE_URL_OCIS"] = "ocis:9200"
 
-        # oCIS specific dependencies
-        depends_on = ["cache-ocis"]
+            # oCIS specific dependencies
+            depends_on = ["cache-ocis"]
 
-        if suite.startswith("oCIS-app-provider"):
-            # app-provider specific steps
+            if suite.startswith("oCIS-app-provider"):
+                # app-provider specific steps
 
-            #  [{
-            #      "name": "wait-for-services",
-            #      "image": OC_UBUNTU,
-            #      "commands": [
-            #          waitForService("http://wopiserver:8880/welcome/"),
-            #          waitForService("https://collabora:9980"),
-            #          waitForService("https://onlyoffice/hosting/discovery"),
-            #      ],
-            #  }] + \
-            steps += onlyofficeService() + \
-                     collaboraService() + \
-                     wopiServer() + \
-                     waitForServices() + \
-                     ocisService("app-provider") + \
-                     appProviderService("collabora") + \
-                     appProviderService("onlyoffice")
-        else:
-            # oCIS specific steps
-            steps += copyFilesForUpload() + \
-                     (tikaService() if params["tikaNeeded"] else []) + \
-                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
+                #  [{
+                #      "name": "wait-for-services",
+                #      "image": OC_UBUNTU,
+                #      "commands": [
+                #          waitForService("http://wopiserver:8880/welcome/"),
+                #          waitForService("https://collabora:9980"),
+                #          waitForService("https://onlyoffice/hosting/discovery"),
+                #      ],
+                #  }] + \
+                steps += onlyofficeService() + \
+                         collaboraService() + \
+                         wopiServer() + \
+                         waitForServices() + \
+                         ocisService("app-provider") + \
+                         appProviderService("collabora") + \
+                         appProviderService("onlyoffice")
+            else:
+                # oCIS specific steps
+                steps += copyFilesForUpload() + \
+                         (tikaService() if params["tikaNeeded"] else []) + \
+                         ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
 
-        steps += getSkeletonFiles() + \
-                 [{
-                     "name": "e2e-tests",
-                     "image": OC_CI_NODEJS,
-                     "environment": environment,
-                     "commands": [
-                         "pnpm test:e2e:cucumber %s" % " ".join(params["featurePaths"]),
-                     ],
-                 }] + \
-                 uploadTracingResult(ctx) + \
-                 logTracingResult(ctx, "e2e-tests %s" % suite)
+            steps += getSkeletonFiles() + \
+                     [{
+                         "name": "e2e-tests",
+                         "image": OC_CI_NODEJS,
+                         "environment": environment,
+                         "commands": [
+                             "pnpm test:e2e:cucumber %s" % " ".join(params["featurePaths"]),
+                         ],
+                     }] + \
+                     uploadTracingResult(ctx) + \
+                     logTracingResult(ctx, "e2e-tests %s" % suite)
 
-        pipelines.append({
-            "kind": "pipeline",
-            "type": "docker",
-            "name": "e2e-tests-%s" % suite,
-            "workspace": e2e_workspace,
-            "steps": steps,
-            "services": services,
-            "depends_on": depends_on,
-            "trigger": e2e_trigger,
-            "volumes": e2e_volumes,
-        })
+            pipelines.append({
+                "kind": "pipeline",
+                "type": "docker",
+                "name": "e2e-tests-%s-%s" % (suite, count),
+                "workspace": e2e_workspace,
+                "steps": steps,
+                "services": services,
+                "depends_on": depends_on,
+                "trigger": e2e_trigger,
+                "volumes": e2e_volumes,
+            })
     return pipelines
 
 def acceptance(ctx):
