@@ -151,11 +151,9 @@ Feature: display image in preview app on the webUI
 
 
   Scenario: Open jpeg file with preview app in shared-with-me page
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And user "Brian" has been created with default attributes and without skeleton files in the server
+    Given user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has uploaded file "testavatar.jpeg" to "testavatar.jpeg" in the server
     And user "Brian" has shared file "testavatar.jpeg" with user "Alice" with "all" permissions in the server
-    And user "Alice" has accepted the share "testavatar.jpeg" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user browses to the shared-with-me page
     When the user views the file "testavatar.jpeg" in the preview app by clicking on the file name using the webUI

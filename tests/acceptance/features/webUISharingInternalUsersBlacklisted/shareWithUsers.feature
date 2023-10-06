@@ -5,8 +5,7 @@ Feature: Sharing files and folders with internal users
   So that those users can access the files and folders
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -20,9 +19,7 @@ Feature: Sharing files and folders with internal users
     And group "grp1" has been created in the server
     And user "Alice" has been added to group "grp1" in the server
     And user "Carol" has shared file "testimage.jpg" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/testimage.jpg" offered by user "Carol" in the server
     And user "Carol" has shared folder "simple-folder" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Carol" in the server
     And the administrator has enabled exclude groups from sharing in the server
     And the administrator has excluded group "grp1" from sharing in the server
     When user "Alice" logs in using the webUI
@@ -40,7 +37,6 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has created folder "common" in the server
     And user "Carol" has moved file "testimage.jpg" to "common/testimage.jpg" in the server
     And user "Carol" has shared folder "common" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/common" offered by user "Carol" in the server
     And the administrator has enabled exclude groups from sharing in the server
     And the administrator has excluded group "grp1" from sharing in the server
     And user "Alice" has logged in using the webUI
@@ -58,7 +54,6 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has created folder "common" in the server
     And user "Carol" has created folder "common/inside-common" in the server
     And user "Carol" has shared folder "common" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/common" offered by user "Carol" in the server
     And the administrator has enabled exclude groups from sharing in the server
     And the administrator has excluded group "grp1" from sharing in the server
     And user "Alice" has logged in using the webUI
@@ -85,7 +80,6 @@ Feature: Sharing files and folders with internal users
     And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Brian" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
     And user "Brian" has shared file "/testimage.jpg" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/testimage.jpg" offered by user "Brian" in the server
     And the administrator has enabled exclude groups from sharing in the server
     And the administrator has excluded group "grp1" from sharing in the server
     And user "Alice" has logged in using the webUI
