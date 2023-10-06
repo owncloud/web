@@ -1269,8 +1269,9 @@ def ocisService(type, tika_enabled = False):
     }
     if type == "app-provider":
         test = "nothing"
-        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
-        # environment["MICRO_REGISTRY"] = "mdns"
+
+        # environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
+        environment["MICRO_REGISTRY"] = "mdns"
 
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
