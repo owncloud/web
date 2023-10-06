@@ -761,13 +761,14 @@ def e2eTests(ctx):
                 #      ],
                 #  }] + \
 
-                # onlyofficeService() + \
-                # collaboraService() + \
-                # wopiServer() + \
-                # waitForServices() + \
-                steps += ocisService("app-provider") + \
-                         appProviderService("collabora") + \
-                         appProviderService("onlyoffice")
+                steps += onlyofficeService() + \
+                         collaboraService() + \
+                         wopiServer() + \
+                         waitForServices() + \
+                         ocisService("app-provider")
+                #  appProviderService("collabora") + \
+                #  appProviderService("onlyoffice")
+
             else:
                 # oCIS specific steps
                 steps += copyFilesForUpload() + \
