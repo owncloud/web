@@ -44,16 +44,15 @@
           </div>
           <div class="oc-pr-s oc-font-semibold">
             <span>{{ imageData.institutionName || 'institution name not defined' }}</span
-            >,
+            >,<!--
             <span>{{
               instanceCreationDateTimeFormatedDate || 'instance creation date and time not defined'
             }}</span>
-            <!--
+            -->
             <span>{{
               formatDateAndTime(imageData.instanceCreationDate, imageData.instanceCreationTime) ||
               'instance creation date and time not defined'
             }}</span>
-            -->
           </div>
         </div>
       </div>
@@ -766,10 +765,12 @@ export default defineComponent({
         )
 
         return upperFirst(formatedDate)
-      } else {
+      }
+      /*else {
         console.log('invalid date and/or time input')
         return date + ', ' + time
       }
+      */
     },
     formatDate(date: string, isShort: boolean) {
       // transforming date into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
@@ -791,10 +792,13 @@ export default defineComponent({
         )
 
         return upperFirst(formatedDate)
-      } else {
+      }
+      /*
+      else {
         console.log('invalid date input')
         return date
       }
+      */
     },
     // functions relating to dicom controls
     prev() {
