@@ -1270,8 +1270,8 @@ def ocisService(type, tika_enabled = False):
     if type == "app-provider":
         test = "nothing"
 
-        # environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
-        environment["MICRO_REGISTRY"] = "mdns"
+        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
+        # environment["MICRO_REGISTRY"] = "mdns"
 
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
@@ -2143,7 +2143,7 @@ def appProviderService(name):
         "APP_PROVIDER_WOPI_INSECURE": True,
         "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
         "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
-        "MICRO_REGISTRY": "mdns",
+        # "MICRO_REGISTRY": "mdns",
     }
 
     if name == "collabora":
