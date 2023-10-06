@@ -38,7 +38,9 @@
         >
           <div class="oc-pr-s oc-font-semibold">
             <span>{{ imageData.patientName || 'patient name not defined' }}</span>
-            <span> (*{{ imageData.patientBirthdate || 'birthdate not defined' }})</span>
+            <span>
+              (*{{ formatDate(imageData.patientBirthdate, true) || 'birthdate not defined' }})</span
+            >
           </div>
           <div class="oc-pr-s oc-font-semibold">
             <span>{{ imageData.institutionName || 'institution name not defined' }}</span
@@ -46,6 +48,12 @@
             <span>{{
               instanceCreationDateTimeFormatedDate || 'instance creation date and time not defined'
             }}</span>
+            <!--
+            <span>{{
+              formatDateAndTime(imageData.instanceCreationDate, imageData.instanceCreationTime) ||
+              'instance creation date and time not defined'
+            }}</span>
+            -->
           </div>
         </div>
       </div>
@@ -315,29 +323,36 @@ export default defineComponent({
   computed: {
     instanceCreationDateTimeFormatedDate() {
       // transforming date and time into a string that is valid for formatDateFromHTTP ('YYYY-MM-DDTHH:MM:SS')
-      let dateString =
-        this.imageData.instanceCreationDate.substr(0, 4) +
-        '-' +
-        this.imageData.instanceCreationDate.substr(4, 2) +
-        '-' +
-        this.imageData.instanceCreationDate.substr(6, 2) +
-        'T' +
-        this.imageData.instanceCreationTime.substr(0, 2) +
-        ':' +
-        this.imageData.instanceCreationTime.substr(2, 2) +
-        ':' +
-        this.imageData.instanceCreationTime.substr(4, 2)
-      console.log('temp date string: ' + dateString)
-      let date = new Date(dateString)
-      console.log('temp date: ' + date.toString())
-      let formatedDate = formatDateFromISO(
-        DateTime.fromISO('2010-10-22T21:38:00'),
-        this.$language.current,
-        DateTime.DATETIME_MED //DateTime.DATETIME_MED includes time, DateTime.DATE_MED and DateTime.DATE_SHORT return date only
-      )
+      if (
+        this.imageData.instanceCreationDate != undefined &&
+        this.imageData.instanceCreationTime != undefined &&
+        this.imageData.instanceCreationDate.length >= 8 &&
+        this.imageData.instanceCreationTime.length >= 6
+      ) {
+        let dateString =
+          this.imageData.instanceCreationDate.substring(0, 4) +
+          '-' +
+          this.imageData.instanceCreationDate.substring(4, 6) +
+          '-' +
+          this.imageData.instanceCreationDate.substring(6, 8) +
+          'T' +
+          this.imageData.instanceCreationTime.substring(0, 2) +
+          ':' +
+          this.imageData.instanceCreationTime.substring(2, 4) +
+          ':' +
+          this.imageData.instanceCreationTime.substring(4, 8)
 
-      console.log('formated date: ' + formatedDate)
-      return upperFirst(formatedDate)
+        let formatedDate = formatDateFromISO(
+          DateTime.fromISO(dateString),
+          this.$language.current,
+          DateTime.DATETIME_MED
+        )
+
+        return upperFirst(formatedDate)
+      } else {
+        console.log('invalid date and/or time input')
+        return 'instance creation date and time undefined'
+      }
     }
   },
   watch: {},
@@ -361,16 +376,10 @@ export default defineComponent({
     // get vip metadata
     // maybe also prefetch other metadata?
     this.dicomMetaData = await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
-    // console.log('dicom meta data: ' + this.dicomMetaData)
-    // console.log('patient name: ' + this.dicomMetaData[0])
     this.imageData.patientName = this.dicomMetaData[0]
-    // console.log('patient birthdata: ' + this.dicomMetaData[1])
     this.imageData.patientBirthdate = this.dicomMetaData[1]
-    // console.log('institution name: ' + this.dicomMetaData[2])
     this.imageData.institutionName = this.dicomMetaData[2]
-    // console.log('instance creation date: ' + this.dicomMetaData[3])
     this.imageData.instanceCreationDate = this.dicomMetaData[3]
-    // console.log('instance creation time: ' + this.dicomMetaData[4])
     this.imageData.instanceCreationTime = this.dicomMetaData[4]
     this.isVipMetadataFetched = true
   },
@@ -519,13 +528,13 @@ export default defineComponent({
           instanceCreationTime = dicomImage.data.string('x00080013')
         })
 
-      /*
       console.log('patient name: ' + patientName)
       console.log('patient birthdate: ' + patientBirthdate)
       console.log('institution name: ' + institutionName)
       console.log('instance creation date: ' + instanceCreationDate)
       console.log('instance creation time: ' + instanceCreationTime)
 
+      /*
       const vipMetadata = {
         'Patient Name': patientName,
         'Patient Birthdate': patientBirthdate,
@@ -729,6 +738,62 @@ export default defineComponent({
       reader.onloadend = function () {
         let result = reader.result as String
         console.log('reading file lenght: ' + result.length)
+      }
+    },
+    // functions for styling data
+    formatDateAndTime(date: string, time: string) {
+      // transforming date and time into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
+      console.log('incoming date: ' + date)
+      console.log('incoming time: ' + time)
+      if (date != undefined && time != undefined && date.length >= 8 && time.length >= 6) {
+        let tempDateTimeString =
+          date.substring(0, 4) +
+          '-' +
+          date.substring(4, 6) +
+          '-' +
+          date.substring(6, 8) +
+          'T' +
+          time.substring(0, 2) +
+          ':' +
+          time.substring(2, 4) +
+          ':' +
+          time.substring(4, 6)
+
+        let formatedDate = formatDateFromISO(
+          DateTime.fromISO(tempDateTimeString),
+          this.$language.current,
+          DateTime.DATETIME_MED
+        )
+
+        return upperFirst(formatedDate)
+      } else {
+        console.log('invalid date and/or time input')
+        return date + ', ' + time
+      }
+    },
+    formatDate(date: string, isShort: boolean) {
+      // transforming date into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
+      // isShort determins output format (DateTime.DATE_MED or DateTime.DATE_SHORT), see https://moment.github.io/luxon/api-docs/index.html
+      console.log('incoming date: ' + date)
+      if (date != undefined && date.length >= 8) {
+        let tempDateTimeString =
+          date.substring(0, 4) +
+          '-' +
+          date.substring(4, 6) +
+          '-' +
+          date.substring(6, 8) +
+          'T00:00:00'
+
+        let formatedDate = formatDateFromISO(
+          DateTime.fromISO(tempDateTimeString),
+          this.$language.current,
+          isShort ? DateTime.DATE_SHORT : DateTime.DATE_MED
+        )
+
+        return upperFirst(formatedDate)
+      } else {
+        console.log('invalid date input')
+        return date
       }
     },
     // functions relating to dicom controls
