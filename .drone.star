@@ -696,7 +696,7 @@ def e2eTests(ctx):
         "db": "mysql:5.5",
         "featurePaths": "",
         "tikaNeeded": False,
-        "run": 5,
+        "run": 10,
     }
 
     e2e_trigger = {
