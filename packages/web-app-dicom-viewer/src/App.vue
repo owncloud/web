@@ -1,9 +1,8 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
     <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-py-s">
-      <!-- toggle for displaying all meta data -->
+      <!-- toggle for displaying all meta data, TODO: implement click event of toggle properly -->
       <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
-        <!-- TODO: implement click event of toggle properly -->
         <oc-button
           id="metadata-toggle-sidebar"
           v-oc-tooltip="
@@ -17,7 +16,7 @@
           "
           @click="$emit('toggleShowMetadata')"
         >
-          <!-- TODO: implement proper toggle, check if fill or line version is needed -->
+          <!-- TODO: check if fill or line version is needed -->
           <oc-icon
             :fill-type="isShowMetadataActivated ? 'fill' : 'line'"
             name="side-bar-right"
@@ -30,7 +29,6 @@
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas oc-position-relative">
         <!-- vip meta data -->
-        <!-- TODO: make sure that date and time is displayed in the format matching language settings -->
         <div
           v-if="isVipMetadataFetched"
           id="dicom-viewer-vip-metadata"
@@ -375,6 +373,7 @@ export default defineComponent({
     // get vip metadata
     // maybe also prefetch other metadata?
     this.dicomMetaData = await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
+    console.log(this.dicomMetaData)
     this.imageData.patientName = this.dicomMetaData[0]
     this.imageData.patientBirthdate = this.dicomMetaData[1]
     this.imageData.institutionName = this.dicomMetaData[2]
@@ -526,23 +525,12 @@ export default defineComponent({
           instanceCreationDate = dicomImage.data.string('x00080012')
           instanceCreationTime = dicomImage.data.string('x00080013')
         })
-
+      /*
       console.log('patient name: ' + patientName)
       console.log('patient birthdate: ' + patientBirthdate)
       console.log('institution name: ' + institutionName)
       console.log('instance creation date: ' + instanceCreationDate)
       console.log('instance creation time: ' + instanceCreationTime)
-
-      /*
-      const vipMetadata = {
-        'Patient Name': patientName,
-        'Patient Birthdate': patientBirthdate,
-        'Institution Name': institutionName,
-        'Instance Creation Date': instanceCreationDate,
-        'Instance Creation Time': instanceCreationTime
-      }
-      console.log(vipMetadata)
-      return vipMetadata
       */
 
       return [
@@ -552,13 +540,6 @@ export default defineComponent({
         instanceCreationDate,
         instanceCreationTime
       ]
-      /*
-      var data = [
-                {
-                  'Patient Name': patientName,
-                  'Patient Birthdate': patientBirthdate
-                }
-                */
     },
     async createDicomFile() {
       // TODO check if already exist?
@@ -742,8 +723,6 @@ export default defineComponent({
     // functions for styling data
     formatDateAndTime(date: string, time: string) {
       // transforming date and time into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
-      console.log('incoming date: ' + date)
-      console.log('incoming time: ' + time)
       if (date != undefined && time != undefined && date.length >= 8 && time.length >= 6) {
         let tempDateTimeString =
           date.substring(0, 4) +
@@ -775,7 +754,6 @@ export default defineComponent({
     formatDate(date: string, isShort: boolean) {
       // transforming date into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
       // isShort determins output format (DateTime.DATE_MED or DateTime.DATE_SHORT), see https://moment.github.io/luxon/api-docs/index.html
-      console.log('incoming date: ' + date)
       if (date != undefined && date.length >= 8) {
         let tempDateTimeString =
           date.substring(0, 4) +
