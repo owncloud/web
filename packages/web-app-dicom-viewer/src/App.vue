@@ -49,11 +49,7 @@
             <span>{{
               dicomMetadata.vipInformation.institutionName || 'institution name not defined'
             }}</span
-            >,<!--
-            <span>{{
-              instanceCreationDateTimeFormatedDate || 'instance creation date and time not defined'
-            }}</span>
-            -->
+            >,
             <span>{{
               formatDateAndTime(
                 dicomMetadata.vipInformation.instanceCreationDate,
@@ -95,6 +91,7 @@
               <td>{{ value || '–' }}</td>
             </tr>
             <!-- study information section -->
+            <!--
             <tr>
               <th colspan="2">
                 <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
@@ -106,7 +103,9 @@
               <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
               <td>{{ value || '–' }}</td>
             </tr>
+            -->
             <!-- series information section -->
+            <!--
             <tr>
               <th colspan="2">
                 <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
@@ -118,27 +117,9 @@
               <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
               <td>{{ value || '–' }}</td>
             </tr>
+            -->
           </table>
-
-          <!--
-          <oc-table-simple :hover="true" class="details-table">
-            <oc-tbody class="details-table">
-              <oc-tr v-for="(value, key) in dicomMetadata.exampleInformation" :key="key">
-                <oc-td class="oc-pr-s oc-font-semibold"> {{ formatLabel(key) }}</oc-td>
-                <oc-td> {{ value }} </oc-td>
-              </oc-tr>
-            </oc-tbody>
-          </oc-table-simple>
-          -->
-          <!--
-        <div
-          class="dicom-metadata-item"
-          v-for="(value, key) in dicomMetadata.exampleInformation"
-          :key="key"
-        >
-          <span> {{ formatLabel(key) }} </span>: <span> {{ value }} </span>
         </div>
-        --></div>
       </div>
     </div>
   </div>
@@ -280,7 +261,6 @@ export default defineComponent({
           instanceCreationTime: ''
         },
         exampleInformation: {
-          fileName: '',
           transferSyntax: '',
           SOP_ClassUID: '',
           SOP_InstanceUID: '',
@@ -349,7 +329,7 @@ export default defineComponent({
       element: null,
       renderingEngine: null,
       viewport: null,
-      viewportCameraParallelScale: 137.3853139193763, // TODO: initialize this automatically to the correct value
+      viewportCameraParallelScale: 137.3853139193763, // TODO: initialize this automatically to the correct value and adjust it when size of the viewport changes
       dicomFile: null,
       dicomFileName: null,
       dicomUrl: null,
@@ -531,8 +511,6 @@ export default defineComponent({
     this.isDicomFileRendered = false
     this.isMetadataExtracted = false
     this.isVipMetadataFetched = false
-    this.updateDisplayOfMetaData()
-    //this.clearMetadata()
   },
   unmounted() {
     console.log('lifecycle @ unmounted')
@@ -615,9 +593,6 @@ export default defineComponent({
       // get metadata from viewport
       this.imageData = this.viewport.getImageData() // returns IImageData object, see https://www.cornerstonejs.org/api/core/namespace/Types#IImageData
 
-      // filename (for testing only) - not needed since filename is displayed in the header of the app
-      this.dicomMetadata.exampleInformation.fileName = this.dicomFileName //this.resource.name
-
       if (imageId != (null || undefined) && typeof imageId == 'string') {
         console.log('extracting metadata from viewport for image id: ' + imageId)
         const {
@@ -634,14 +609,9 @@ export default defineComponent({
 
         // adding values to corresponding variable
         this.dicomMetadata.exampleInformation.transferSyntax = transferSyntax.transferSyntaxUID
-        console.log('transfer syntax: ' + this.dicomMetadata.exampleInformation.transferSyntax)
         this.dicomMetadata.exampleInformation.SOP_ClassUID =
           sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']' // adding description of the SOP module
-        console.log('sop class uid: ' + this.dicomMetadata.exampleInformation.SOP_ClassUID)
         this.dicomMetadata.exampleInformation.SOP_InstanceUID = sopCommonModule.sopInstanceUID
-        console.log(
-          'sop class instance uid: ' + this.dicomMetadata.exampleInformation.SOP_InstanceUID
-        )
         this.dicomMetadata.exampleInformation.rows = this.imageData.dimensions[0]
         this.dicomMetadata.exampleInformation.columns = this.imageData.dimensions[1]
         this.dicomMetadata.exampleInformation.spacing = this.imageData.spacing.join('\\')
@@ -657,27 +627,19 @@ export default defineComponent({
         this.dicomMetadata.exampleInformation.bitsStored = bitsStored
         this.dicomMetadata.exampleInformation.highBit = highBit
         this.dicomMetadata.exampleInformation.photometricInterpretation = photometricInterpretation
-        this.dicomMetadata.exampleInformation.windowWidth = voiLutModuleLocal.windowWidth.toString()
-        this.dicomMetadata.exampleInformation.windowCenter =
-          voiLutModuleLocal.windowCenter.toString()
-
-        console.log('metadata extracted')
+        if (voiLutModuleLocal.windowWidth != (null || undefined)) {
+          this.dicomMetadata.exampleInformation.windowWidth =
+            voiLutModuleLocal.windowWidth.toString()
+        }
+        if (voiLutModuleLocal.windowCenter != (null || undefined)) {
+          this.dicomMetadata.exampleInformation.windowCenter =
+            voiLutModuleLocal.windowCenter.toString()
+        }
 
         this.isMetadataExtracted = true
-        this.updateDisplayOfMetaData()
+        console.log('metadata from viewport extracted')
       } else {
-        console.log('no image meta data available')
-      }
-    },
-    updateDisplayOfMetaData() {
-      if (this.isMetadataExtracted) {
-        for (let i = 0; i < this.metaDataItems.length; i++) {
-          this.metaDataItems[i].style.display = 'block'
-        }
-      } else {
-        for (let i = 0; i < this.metaDataItems.length; i++) {
-          this.metaDataItems[i].style.display = 'none'
-        }
+        console.log('no image meta data available available for extraction from viewport')
       }
     },
     separateCredentialsFromUrl(url: String) {
@@ -751,11 +713,6 @@ export default defineComponent({
 
         return upperFirst(formatedDate)
       }
-      /*else {
-        console.log('invalid date and/or time input')
-        return date + ', ' + time
-      }
-      */
     },
     formatDate(date: string, isShort: boolean) {
       // transforming date into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
@@ -777,12 +734,6 @@ export default defineComponent({
 
         return upperFirst(formatedDate)
       }
-      /*
-      else {
-        console.log('invalid date input')
-        return date
-      }
-      */
     },
     formatLabel(label: string) {
       // formatting camelcase labels into easily readible labels by adding a gap befor each upper case letter
@@ -790,10 +741,10 @@ export default defineComponent({
       // in cases where such an abbreviation is followed by another word and underline should be added in the variable name, e.g. "SOP_InstanceUID" becomes "SOP Instance UID"
 
       const result = label.replace(/([A-Z]+)/g, ' $1').replace('_', '')
-      // dealing with cases where multiple uppercase letters in a row are desired, e.g. SOP Instance
 
       // optionally make first letter of each word lower?
       // return upperFirst(result.toLowerCase())
+
       return upperFirst(result)
     },
     // functions relating to dicom controls
@@ -868,7 +819,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .dicom-viewer {
-  border: none; //10px solid blue;
+  border: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
