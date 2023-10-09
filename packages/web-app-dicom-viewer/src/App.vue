@@ -275,7 +275,6 @@ export default defineComponent({
     return {
       dicomMetadata: {
         vipInformation: {
-          // dummy data for testing only
           patientName: '',
           patientBirthdate: '',
           institutionName: '',
@@ -283,10 +282,10 @@ export default defineComponent({
           instanceCreationTime: ''
         },
         exampleInformation: {
-          filename: '',
+          fileName: '',
           transferSyntax: '',
-          sopClassUid: '',
-          sopInstanceUid: '',
+          SOP_ClassUID: '',
+          SOP_InstanceUID: '',
           rows: '',
           columns: '',
           spacing: '',
@@ -300,12 +299,8 @@ export default defineComponent({
           photometricInterpretation: '',
           windowWidth: '',
           windowCenter: ''
-        },
-        patientInformation: {
-          test: 'x'
         }
       },
-      //const user = reactive({ firstName: 'John', lastName: 'Doe', age: 25 })
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageHideMetadataDescription: $gettext('Hide DICOM metadata')
@@ -819,7 +814,12 @@ export default defineComponent({
     },
     formatLabel(label: string) {
       // formatting camelcase labels into easily readible labels by adding a gap befor each upper case letter
-      const result = label.replace(/([A-Z])/g, ' $1')
+      // there is no space added if there are multiple upper case letters in a row (e.g. ID)
+      // in cases where such an abbreviation is followed by another word and underline should be added in the variable name, e.g. "SOP_InstanceUID" becomes "SOP Instance UID"
+
+      const result = label.replace(/([A-Z]+)/g, ' $1').replace('_', '')
+      // dealing with cases where multiple uppercase letters in a row are desired, e.g. SOP Instance
+
       // optionally make first letter of each word lower?
       // return upperFirst(result.toLowerCase())
       return upperFirst(result)
