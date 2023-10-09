@@ -65,13 +65,58 @@
       </div>
 
       <!-- div element for displaying full meta data -->
-      <div id="dicom-metadata" class="dicom-metadata">
-        <h2 class="oc-py-s oc-my-rm">DICOM metadata</h2>
+      <div id="dicom-metadata" class="dicom-metadata sidebar-panel__header">
+        <h2 class="oc-py-s oc-my-rm header__title">DICOM metadata</h2>
+
         <div v-if="isMetadataExtracted">
-          <table class="details-table">
+          <table class="details-table oc-py-s">
+            <!-- example information section -->
+            <tr>
+              <th colspan="2">
+                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+                  Example Information (Section Title)
+                </p>
+              </th>
+            </tr>
             <tr v-for="(value, key) in dicomMetadata.exampleInformation" :key="key">
               <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
-              <td>{{ value }}</td>
+              <td>{{ value || '–' }}</td>
+            </tr>
+            <!-- patient information section -->
+            <tr>
+              <th colspan="2">
+                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+                  Patient Information
+                </p>
+              </th>
+            </tr>
+            <tr v-for="(value, key) in dicomMetadata.patientInformation" :key="key">
+              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
+              <td>{{ value || '–' }}</td>
+            </tr>
+            <!-- study information section -->
+            <tr>
+              <th colspan="2">
+                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+                  Study Information
+                </p>
+              </th>
+            </tr>
+            <tr v-for="(value, key) in dicomMetadata.studyInformation" :key="key">
+              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
+              <td>{{ value || '–' }}</td>
+            </tr>
+            <!-- series information section -->
+            <tr>
+              <th colspan="2">
+                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+                  Series Information
+                </p>
+              </th>
+            </tr>
+            <tr v-for="(value, key) in dicomMetadata.seriesInformation" :key="key">
+              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
+              <td>{{ value || '–' }}</td>
             </tr>
           </table>
 
@@ -252,23 +297,40 @@ export default defineComponent({
           photometricInterpretation: '',
           windowWidth: '',
           windowCenter: ''
-        }
+        },
+        patientInformation: {
+          patientName: '',
+          patientID: '',
+          patientBirthday: '',
+          patientSex: '',
+          patientWeight: ''
+        },
+        studyInformation: {
+          studyDescription: '',
+          protocolName: '',
+          accessionNumber: '',
+          studyID: '',
+          studyDate: '',
+          studyTime: ''
+        },
+        seriesInformation: {
+          seriesDescription: '',
+          seriesNumber: '',
+          modality: '',
+          bodyPart: '',
+          seriesDate: '',
+          seriesTime: ''
+        },
+        instanceInformation: {},
+        imageInformation: {},
+        equipmentInformation: {},
+        scanningInformation: {},
+        uidsInformation: {},
+        otherInformation: {}
       },
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageHideMetadataDescription: $gettext('Hide DICOM metadata')
-      // TODO implement proper interface
-      /*
-      patientInformation: {},
-      studyInformation: {},
-      seriesInformation: {},
-      instanceInformation: {},
-      imageInformation: {},
-      equipmentInformation: {},
-      scanningInformation: {},
-      uidsInformation: {},
-      otherInformation: {}
-      */
     }
     //const dicomFiles = <Resource[]>[this.resource]
 
@@ -854,5 +916,26 @@ export default defineComponent({
   text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
   z-index: 2;
   margin: 10px;
+}
+
+/*
+.header__title {
+  border-bottom: 1px solid var(--oc-color-border);
+}
+*/
+
+.dicom-metadata-section-title {
+  //margin: 4px 0px 8px 0px;
+  margin-bottom: 0px;
+  padding-top: 16px !important;
+  border-top: 1px solid var(--oc-color-border);
+}
+
+.details-table {
+  tr {
+    height: 1rem; // reducing hight, originally 1.5rem
+  }
+
+  border-bottom: 1px solid var(--oc-color-border);
 }
 </style>
