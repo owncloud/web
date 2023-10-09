@@ -66,13 +66,17 @@
 
       <!-- div element for displaying full meta data -->
       <div id="dicom-metadata" class="dicom-metadata">
-        <!-- test for displaying metadata
-        <h2>Looping through an Object</h2>
-        <div v-for="(value, key) in dicomMetadata.vipInformation" :key="key">
-          <span> {{ formatLabel(key) }} </span>, <span> {{ value }} </span>
+        <!-- test for displaying metadata -->
+        <h2>dynamic metadata <br />for current dicom</h2>
+        <div
+          class="dicom-metadata-item"
+          v-for="(value, key) in dicomMetadata.exampleInformation"
+          :key="key"
+        >
+          <span> {{ formatLabel(key) }} </span>: <span> {{ value }} </span>
         </div>
-        -->
-        <h2>metadata <br />for current dicom</h2>
+        <h2>static metadata <br />for current dicom</h2>
+
         <div class="dicom-metadata-item">
           <span>Filename:</span>
           <span id="filename"></span>
@@ -339,7 +343,6 @@ export default defineComponent({
       dicomFileName: null,
       dicomUrl: null,
       imageData: null,
-      //dicomMetadata: null,
       metaDataElement: null,
       metaDataItems: null,
       toolInfoElement: null,
@@ -496,7 +499,7 @@ export default defineComponent({
       this.imageData = this.viewport.getImageData()
 
       // setting metadata
-      this.setMetadata(dicomResourceUrl)
+      this.extractMetadataFromViewport(dicomResourceUrl)
     } else {
       console.log('no valid dicom resource url: ' + this.url)
     }
@@ -518,7 +521,7 @@ export default defineComponent({
     this.isMetaDataSet = false
     this.isVipMetadataFetched = false
     this.updateDisplayOfMetaData()
-    this.clearMetadata()
+    //this.clearMetadata()
   },
   unmounted() {
     console.log('lifecycle @ unmounted')
@@ -597,14 +600,15 @@ export default defineComponent({
     async addWadouriPrefix(url: String) {
       return 'wadouri:' + url
     },
-    setMetadata(imageId: String) {
+    extractMetadataFromViewport(imageId: String) {
       // get metadata from viewport
       this.imageData = this.viewport.getImageData() // returns IImageData object, see https://www.cornerstonejs.org/api/core/namespace/Types#IImageData
 
       // filename (for testing only) - not needed since filename is displayed in the header of the app
-      document.getElementById('filename').innerHTML = this.dicomFileName //this.resource.name
+      this.dicomMetadata.exampleInformation.fileName = this.dicomFileName //this.resource.name
 
       if (imageId != (null || undefined) && typeof imageId == 'string') {
+        console.log('extracting metadata from viewport for image id: ' + imageId)
         const {
           pixelRepresentation,
           bitsAllocated,
@@ -617,60 +621,36 @@ export default defineComponent({
         const sopCommonModule = metaData.get('sopCommonModule', imageId)
         const transferSyntax = metaData.get('transferSyntax', imageId)
 
-        // setting the data to UI elements
-        //transfer syntax
-        document.getElementById('transfer-syntax').innerHTML = transferSyntax.transferSyntaxUID
-
-        //sop class uid
-        document.getElementById('sop-class-uid').innerHTML =
-          sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']'
-
-        //sop instance uid
-        document.getElementById('sop-instance-uid').innerHTML = sopCommonModule.sopInstanceUID
-
-        //rows
-
-        document.getElementById('rows').innerHTML = this.imageData.dimensions[0]
-
-        //columns
-        document.getElementById('columns').innerHTML = this.imageData.dimensions[1]
-
-        //spacing
-        document.getElementById('spacing').innerHTML = this.imageData.spacing.join('\\')
-
-        //direction
-        document.getElementById('direction').innerHTML = this.imageData.direction
+        // adding values to corresponding variable
+        this.dicomMetadata.exampleInformation.transferSyntax = transferSyntax.transferSyntaxUID
+        console.log('transfer syntax: ' + this.dicomMetadata.exampleInformation.transferSyntax)
+        this.dicomMetadata.exampleInformation.SOP_ClassUID =
+          sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']' // adding description of the SOP module
+        console.log('sop class uid: ' + this.dicomMetadata.exampleInformation.SOP_ClassUID)
+        this.dicomMetadata.exampleInformation.SOP_InstanceUID = sopCommonModule.sopInstanceUID
+        console.log(
+          'sop class instance uid: ' + this.dicomMetadata.exampleInformation.SOP_InstanceUID
+        )
+        this.dicomMetadata.exampleInformation.rows = this.imageData.dimensions[0]
+        this.dicomMetadata.exampleInformation.columns = this.imageData.dimensions[1]
+        this.dicomMetadata.exampleInformation.spacing = this.imageData.spacing.join('\\')
+        this.dicomMetadata.exampleInformation.direction = this.imageData.direction
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
-
-        //origin
-        document.getElementById('origin').innerHTML = this.imageData.origin
+        this.dicomMetadata.exampleInformation.origin = this.imageData.origin
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
+        this.dicomMetadata.exampleInformation.modality = this.imageData.metadata.Modality
+        this.dicomMetadata.exampleInformation.pixelRepresentation = pixelRepresentation
+        this.dicomMetadata.exampleInformation.bitsAllocated = bitsAllocated
+        this.dicomMetadata.exampleInformation.bitsStored = bitsStored
+        this.dicomMetadata.exampleInformation.highBit = highBit
+        this.dicomMetadata.exampleInformation.photometricInterpretation = photometricInterpretation
+        this.dicomMetadata.exampleInformation.windowWidth = voiLutModuleLocal.windowWidth.toString()
+        this.dicomMetadata.exampleInformation.windowCenter =
+          voiLutModuleLocal.windowCenter.toString()
 
-        //modality
-        document.getElementById('modality').innerHTML = this.imageData.metadata.Modality
-
-        //pixel representation
-        document.getElementById('pixel-representation').innerHTML = pixelRepresentation
-
-        //bits allocated
-        document.getElementById('bits-allocated').innerHTML = bitsAllocated
-
-        //bits stored
-        document.getElementById('bits-stored').innerHTML = bitsStored
-
-        //high bit
-        document.getElementById('high-bit').innerHTML = highBit
-
-        //photometric interpretation
-        document.getElementById('photometric-interpretation').innerHTML = photometricInterpretation
-
-        //window width
-        document.getElementById('window-width').innerHTML = voiLutModuleLocal.windowWidth
-
-        //window center
-        document.getElementById('window-center').innerHTML = voiLutModuleLocal.windowCenter
+        console.log('metadata extracted')
 
         this.isMetaDataSet = true
         this.updateDisplayOfMetaData()
@@ -688,25 +668,6 @@ export default defineComponent({
           this.metaDataItems[i].style.display = 'none'
         }
       }
-    },
-    clearMetadata() {
-      document.getElementById('filename').innerHTML = ''
-      document.getElementById('transfer-syntax').innerHTML = ''
-      document.getElementById('sop-class-uid').innerHTML = ''
-      document.getElementById('sop-instance-uid').innerHTML = ''
-      document.getElementById('rows').innerHTML = ''
-      document.getElementById('columns').innerHTML = ''
-      document.getElementById('spacing').innerHTML = ''
-      document.getElementById('direction').innerHTML = ''
-      document.getElementById('origin').innerHTML = ''
-      document.getElementById('modality').innerHTML = ''
-      document.getElementById('pixel-representation').innerHTML = ''
-      document.getElementById('bits-allocated').innerHTML = ''
-      document.getElementById('bits-stored').innerHTML = ''
-      document.getElementById('high-bit').innerHTML = ''
-      document.getElementById('photometric-interpretation').innerHTML = ''
-      document.getElementById('window-width').innerHTML = ''
-      document.getElementById('window-center').innerHTML = ''
     },
     separateCredentialsFromUrl(url: String) {
       const [urlWithoutCredentials, ...rest] = url.split('?')
@@ -744,7 +705,7 @@ export default defineComponent({
       this.viewport.render()
 
       // setting metadata
-      this.setMetadata(imageId)
+      this.extractMetadataFromViewport(imageId)
     },
     readMyFile(f: File) {
       let reader = new FileReader()
