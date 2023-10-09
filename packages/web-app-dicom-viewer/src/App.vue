@@ -66,8 +66,26 @@
 
       <!-- div element for displaying full meta data -->
       <div id="dicom-metadata" class="dicom-metadata">
-        <!-- test for displaying metadata -->
-        <h2>dynamic metadata <br />for current dicom</h2>
+        <h2 class="oc-py-s oc-my-rm">DICOM metadata</h2>
+        <div v-if="isMetadataExtracted">
+          <table class="details-table">
+            <tr v-for="(value, key) in dicomMetadata.exampleInformation" :key="key">
+              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+
+          <!--
+          <oc-table-simple :hover="true" class="details-table">
+            <oc-tbody class="details-table">
+              <oc-tr v-for="(value, key) in dicomMetadata.exampleInformation" :key="key">
+                <oc-td class="oc-pr-s oc-font-semibold"> {{ formatLabel(key) }}</oc-td>
+                <oc-td> {{ value }} </oc-td>
+              </oc-tr>
+            </oc-tbody>
+          </oc-table-simple>
+          -->
+          <!--
         <div
           class="dicom-metadata-item"
           v-for="(value, key) in dicomMetadata.exampleInformation"
@@ -75,76 +93,7 @@
         >
           <span> {{ formatLabel(key) }} </span>: <span> {{ value }} </span>
         </div>
-        <h2>static metadata <br />for current dicom</h2>
-
-        <div class="dicom-metadata-item">
-          <span>Filename:</span>
-          <span id="filename"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Transfer Syntax:</span>
-          <span id="transfer-syntax"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>SOPClassUID:</span>
-          <span id="sop-class-uid"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>SOPInstanceUID:</span>
-          <span id="sop-instance-uid"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Rows:</span>
-          <span id="rows"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Columns:</span>
-          <span id="columns"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Spacing:</span>
-          <span id="spacing"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Direction:</span>
-          <span id="direction"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Origin:</span>
-          <span id="origin"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Modality:</span>
-          <span id="modality"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Pixel Representation:</span>
-          <span id="pixel-representation"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Bits Allocated:</span>
-          <span id="bits-allocated"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Bits Stored:</span>
-          <span id="bits-stored"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>High Bit:</span>
-          <span id="high-bit"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Photometric Interpretation:</span>
-          <span id="photometric-interpretation"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Window Width:</span>
-          <span id="window-width"></span>
-        </div>
-        <div class="dicom-metadata-item">
-          <span>Window Center:</span>
-          <span id="window-center"></span>
-        </div>
+        --></div>
       </div>
     </div>
   </div>
@@ -334,7 +283,7 @@ export default defineComponent({
   data() {
     return {
       isDicomFileRendered: false,
-      isMetaDataSet: false,
+      isMetadataExtracted: false,
       element: null,
       renderingEngine: null,
       viewport: null,
@@ -518,7 +467,7 @@ export default defineComponent({
     console.log('lifecycle @ beforeUnmount')
     this.renderingEngine.destroy()
     this.isDicomFileRendered = false
-    this.isMetaDataSet = false
+    this.isMetadataExtracted = false
     this.isVipMetadataFetched = false
     this.updateDisplayOfMetaData()
     //this.clearMetadata()
@@ -652,14 +601,14 @@ export default defineComponent({
 
         console.log('metadata extracted')
 
-        this.isMetaDataSet = true
+        this.isMetadataExtracted = true
         this.updateDisplayOfMetaData()
       } else {
         console.log('no image meta data available')
       }
     },
     updateDisplayOfMetaData() {
-      if (this.isMetaDataSet) {
+      if (this.isMetadataExtracted) {
         for (let i = 0; i < this.metaDataItems.length; i++) {
           this.metaDataItems[i].style.display = 'block'
         }
@@ -871,7 +820,7 @@ export default defineComponent({
 }
 
 .dicom-metadata {
-  border: 10px solid green; //none
+  border: none;
   width: 500px;
   height: auto; //100%;
   padding: 20px;
