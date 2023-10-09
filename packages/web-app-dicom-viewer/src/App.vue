@@ -35,21 +35,30 @@
           class="oc-position-absolute"
         >
           <div class="oc-pr-s oc-font-semibold">
-            <span>{{ imageData.patientName || 'patient name not defined' }}</span>
+            <span>{{
+              dicomMetadata.vipInformation.patientName || 'patient name not defined'
+            }}</span>
             <span>
-              (*{{ formatDate(imageData.patientBirthdate, true) || 'birthdate not defined' }})</span
+              (*{{
+                formatDate(dicomMetadata.vipInformation.patientBirthdate, true) ||
+                'birthdate not defined'
+              }})</span
             >
           </div>
           <div class="oc-pr-s oc-font-semibold">
-            <span>{{ imageData.institutionName || 'institution name not defined' }}</span
+            <span>{{
+              dicomMetadata.vipInformation.institutionName || 'institution name not defined'
+            }}</span
             >,<!--
             <span>{{
               instanceCreationDateTimeFormatedDate || 'instance creation date and time not defined'
             }}</span>
             -->
             <span>{{
-              formatDateAndTime(imageData.instanceCreationDate, imageData.instanceCreationTime) ||
-              'instance creation date and time not defined'
+              formatDateAndTime(
+                dicomMetadata.vipInformation.instanceCreationDate,
+                dicomMetadata.vipInformation.instanceCreationTime
+              ) || 'instance creation date and time not defined'
             }}</span>
           </div>
         </div>
@@ -57,6 +66,12 @@
 
       <!-- div element for displaying full meta data -->
       <div id="dicom-metadata" class="dicom-metadata">
+        <!-- test for displaying metadata
+        <h2>Looping through an Object</h2>
+        <div v-for="(value, key) in dicomMetadata.vipInformation" :key="key">
+          <span> {{ formatLabel(key) }} </span>, <span> {{ value }} </span>
+        </div>
+        -->
         <h2>metadata <br />for current dicom</h2>
         <div class="dicom-metadata-item">
           <span>Filename:</span>
@@ -258,19 +273,42 @@ export default defineComponent({
     //const isShowMetadataActivated = ref(false)
 
     return {
-      imageData: {
-        // dummy data for testing only
-        patientName: 'Max Muster',
-        patientBirthdate: '19800101',
-        institutionName: 'LMU Klinikum',
-        instanceCreationDate: '20230901',
-        instanceCreationTime: '093801'
+      dicomMetadata: {
+        vipInformation: {
+          // dummy data for testing only
+          patientName: '',
+          patientBirthdate: '',
+          institutionName: '',
+          instanceCreationDate: '',
+          instanceCreationTime: ''
+        },
+        exampleInformation: {
+          filename: '',
+          transferSyntax: '',
+          sopClassUid: '',
+          sopInstanceUid: '',
+          rows: '',
+          columns: '',
+          spacing: '',
+          direction: '',
+          origin: '',
+          modality: '',
+          pixelRepresentation: '',
+          bitsAllocated: '',
+          bitsStored: '',
+          highBit: '',
+          photometricInterpretation: '',
+          windowWidth: '',
+          windowCenter: ''
+        },
+        patientInformation: {
+          test: 'x'
+        }
       },
       //const user = reactive({ firstName: 'John', lastName: 'Doe', age: 25 })
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageHideMetadataDescription: $gettext('Hide DICOM metadata')
-      //props.patientName
       // TODO implement proper interface
       /*
       patientInformation: {},
@@ -306,7 +344,7 @@ export default defineComponent({
       dicomFileName: null,
       dicomUrl: null,
       imageData: null,
-      dicomMetaData: null,
+      //dicomMetadata: null,
       metaDataElement: null,
       metaDataItems: null,
       toolInfoElement: null,
@@ -321,23 +359,23 @@ export default defineComponent({
     instanceCreationDateTimeFormatedDate() {
       // transforming date and time into a string that is valid for formatDateFromHTTP ('YYYY-MM-DDTHH:MM:SS')
       if (
-        this.imageData.instanceCreationDate != undefined &&
-        this.imageData.instanceCreationTime != undefined &&
-        this.imageData.instanceCreationDate.length >= 8 &&
-        this.imageData.instanceCreationTime.length >= 6
+        this.dicomMetadata.vipInformation.instanceCreationDate != undefined &&
+        this.dicomMetadata.vipInformation.instanceCreationTime != undefined &&
+        this.dicomMetadata.vipInformation.instanceCreationDate.length >= 8 &&
+        this.dicomMetadata.vipInformation.instanceCreationTime.length >= 6
       ) {
         let dateString =
-          this.imageData.instanceCreationDate.substring(0, 4) +
+          this.dicomMetadata.vipInformation.instanceCreationDate.substring(0, 4) +
           '-' +
-          this.imageData.instanceCreationDate.substring(4, 6) +
+          this.dicomMetadata.vipInformation.instanceCreationDate.substring(4, 6) +
           '-' +
-          this.imageData.instanceCreationDate.substring(6, 8) +
+          this.dicomMetadata.vipInformation.instanceCreationDate.substring(6, 8) +
           'T' +
-          this.imageData.instanceCreationTime.substring(0, 2) +
+          this.dicomMetadata.vipInformation.instanceCreationTime.substring(0, 2) +
           ':' +
-          this.imageData.instanceCreationTime.substring(2, 4) +
+          this.dicomMetadata.vipInformation.instanceCreationTime.substring(2, 4) +
           ':' +
-          this.imageData.instanceCreationTime.substring(4, 8)
+          this.dicomMetadata.vipInformation.instanceCreationTime.substring(4, 8)
 
         let formatedDate = formatDateFromISO(
           DateTime.fromISO(dateString),
@@ -372,13 +410,14 @@ export default defineComponent({
 
     // get vip metadata
     // maybe also prefetch other metadata?
-    this.dicomMetaData = await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
-    console.log(this.dicomMetaData)
-    this.imageData.patientName = this.dicomMetaData[0]
-    this.imageData.patientBirthdate = this.dicomMetaData[1]
-    this.imageData.institutionName = this.dicomMetaData[2]
-    this.imageData.instanceCreationDate = this.dicomMetaData[3]
-    this.imageData.instanceCreationTime = this.dicomMetaData[4]
+    const dicomMetadataInformation = await this.fetchMetadataInformation(
+      await this.addWadouriPrefix(this.url)
+    )
+    this.dicomMetadata.vipInformation.patientName = dicomMetadataInformation[0]
+    this.dicomMetadata.vipInformation.patientBirthdate = dicomMetadataInformation[1]
+    this.dicomMetadata.vipInformation.institutionName = dicomMetadataInformation[2]
+    this.dicomMetadata.vipInformation.instanceCreationDate = dicomMetadataInformation[3]
+    this.dicomMetadata.vipInformation.instanceCreationTime = dicomMetadataInformation[4]
     this.isVipMetadataFetched = true
   },
   // "beforeMount" is called right before the component is to be mounted
@@ -777,6 +816,13 @@ export default defineComponent({
         return date
       }
       */
+    },
+    formatLabel(label: string) {
+      // formatting camelcase labels into easily readible labels by adding a gap befor each upper case letter
+      const result = label.replace(/([A-Z])/g, ' $1')
+      // optionally make first letter of each word lower?
+      // return upperFirst(result.toLowerCase())
+      return upperFirst(result)
     },
     // functions relating to dicom controls
     prev() {
