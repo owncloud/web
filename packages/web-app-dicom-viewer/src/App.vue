@@ -14,9 +14,8 @@
           :aria-label="
             isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
           "
-          @click="$emit('toggleShowMetadata')"
+          @click="toggleShowMetadata"
         >
-          <!-- TODO: check if fill or line version is needed -->
           <oc-icon
             :fill-type="isShowMetadataActivated ? 'fill' : 'line'"
             name="side-bar-right"
@@ -75,14 +74,14 @@
     :is-folder-loading="false"
     :current-image-rotation="currentImageRotation"
     :current-image-zoom="currentImageZoom"
-    :is-show-metadata-activated="false"
+    :is-show-metadata-activated="isShowMetadataActivated"
     @set-zoom="setZoom"
     @set-rotation="setRotation"
     @set-horizontal-flip="setHorizontalFlip"
     @set-vertical-flip="setVerticalFlip"
     @toggle-inversion="toggleInversion"
     @reset-viewport="resetViewport"
-    @toggle-show-metadata="toggleShowMetadataMethod"
+    @toggle-show-metadata="toggleShowMetadata"
     @toggle-previous="prev"
     @toggle-next="next"
   />
@@ -760,7 +759,7 @@ export default defineComponent({
       const camera = this.viewport.getCamera()
       console.log('camera scale after reset: ' + camera.parallelScale)
     },
-    toggleShowMetadataMethod() {
+    toggleShowMetadata() {
       console.log('show metadata clicked')
       this.isShowMetadataActivated = !this.isShowMetadataActivated
     }

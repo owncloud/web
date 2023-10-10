@@ -161,10 +161,9 @@
           "
           @click="$emit('toggleShowMetadata')"
         >
-          <!-- TODO: insert correct icon, check why icon is not changing on click -->
           <oc-icon
-            fill-type="line"
-            :name="isShowMetadataActivated ? 'side-bar-right' : 'side-bar-right'"
+            name="side-bar-right"
+            :fill-type="isShowMetadataActivated ? 'fill' : 'line'"
             variation="inherit"
           />
         </oc-button>
@@ -201,8 +200,7 @@ export default defineComponent({
       default: 0
     },
     isShowMetadataActivated: {
-      type: Boolean,
-      default: false
+      type: Boolean
     }
   },
   emits: [
@@ -252,9 +250,8 @@ export default defineComponent({
     const imageRotateRight = () => {
       emit('setRotation', props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90)
     }
-    // TODO: draft only, properly implement the following new functionalities
     const imageShowMetadata = () => {
-      emit('toggleShowMetadata') //, props.isShowMetadataActivated === true ? false : true)
+      emit('toggleShowMetadata')
     }
 
     return {
