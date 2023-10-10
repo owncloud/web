@@ -947,6 +947,9 @@ importers:
       '@casl/ability':
         specifier: ^6.3.3
         version: 6.3.3
+      '@microsoft/fetch-event-source':
+        specifier: ^2.0.1
+        version: 2.0.1
       '@ownclouders/web-client':
         specifier: workspace:*
         version: 'link:'
@@ -6740,7 +6743,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.56.0(typescript@5.0.3)
       eslint: 8.25.0
       eslint-scope: 5.1.1
-      semver: 7.3.8
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -6760,7 +6763,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.60.0(typescript@5.0.3)
       eslint: 8.25.0
       eslint-scope: 5.1.1
-      semver: 7.3.8
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -18488,7 +18491,7 @@ packages:
       debug: 4.3.4(supports-color@6.1.0)
       read-package-json: 4.1.2
       readdir-scoped-modules: 1.1.0
-      semver: 7.3.8
+      semver: 7.5.4
       slide: 1.1.6
     optionalDependencies:
       graceful-fs: 4.2.10
@@ -21369,7 +21372,7 @@ packages:
       espree: 9.5.2
       esquery: 1.5.0
       lodash: 4.17.21
-      semver: 7.3.8
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
     dev: false
