@@ -101,8 +101,7 @@
           :aria-label="imageFlipHorizontalDescription"
           @click="$emit('setHorizontalFlip')"
         >
-          <!-- TODO: insert correct icon -->
-          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+          <oc-icon fill-type="line" name="flip-horizontal" variation="inherit" />
         </oc-button>
         <oc-button
           v-oc-tooltip="imageFlipVerticalDescription"
@@ -112,8 +111,7 @@
           :aria-label="imageFlipVerticalDescription"
           @click="$emit('setVerticalFlip')"
         >
-          <!-- TODO: insert correct icon -->
-          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+          <oc-icon fill-type="line" name="flip-vertical" variation="inherit" />
         </oc-button>
       </div>
 
