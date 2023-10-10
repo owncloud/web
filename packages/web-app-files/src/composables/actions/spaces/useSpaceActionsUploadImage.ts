@@ -35,7 +35,7 @@ export const useSpaceActionsUploadImage = ({
     unref(spaceImageInput)?.click()
   }
 
-  const uploadImageSpace = (ev) => {
+  const uploadImageSpace = async (ev) => {
     const graphClient = clientService.graphAuthenticated
     const file = ev.currentTarget.files[0]
 
@@ -54,6 +54,14 @@ export const useSpaceActionsUploadImage = ({
       extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
     } else if (file.lastModified) {
       extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
+    }
+
+    if (!store.getters['Files/files'].find((file) => file.name === '.space')) {
+      await clientService.webdav.createFolder(selectedSpace, { path: '.space' })
+      await clientService.webdav.putFileContents(selectedSpace, {
+        path: '.space/readme.md',
+        content: $gettext('Here you can add a description for this Space.')
+      })
     }
 
     return loadingService.addTask(() => {
