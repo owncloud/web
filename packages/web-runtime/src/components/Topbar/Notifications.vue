@@ -285,6 +285,16 @@ export default {
       }
     }
 
+    const onSSENotificationEvent = (event) => {
+      const notification = JSON.parse(event.data) as Notification
+      if (!notification) {
+        return
+      }
+      if (notification.notification_id) {
+        notifications.value = [notification, ...unref(notifications)]
+      }
+    }
+
     const hideDrop = () => {
       dropdownOpened.value = false
     }
@@ -296,15 +306,10 @@ export default {
     onMounted(async () => {
       fetchNotificationsTask.perform()
       if (unref(sseEnabled)) {
-        clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.NOTIFICATION, (event) => {
-          const notification = JSON.parse(event.data) as Notification
-          if (!notification) {
-            return
-          }
-          if (notification.notification_id) {
-            notifications.value = [notification, ...unref(notifications)]
-          }
-        })
+        clientService.sseAuthenticated.addEventListener(
+          MESSAGE_TYPE.NOTIFICATION,
+          onSSENotificationEvent
+        )
       } else {
         notificationsInterval.value = setInterval(() => {
           fetchNotificationsTask.perform()
@@ -313,8 +318,15 @@ export default {
     })
 
     onUnmounted(() => {
-      if (unref(notificationsInterval)) {
-        clearInterval(unref(notificationsInterval))
+      if (unref(sseEnabled)) {
+        clientService.sseAuthenticated.removeEventListener(
+          MESSAGE_TYPE.NOTIFICATION,
+          onSSENotificationEvent
+        )
+      } else {
+        if (unref(notificationsInterval)) {
+          clearInterval(unref(notificationsInterval))
+        }
       }
     })
 

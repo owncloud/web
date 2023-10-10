@@ -5,7 +5,7 @@ export enum MESSAGE_TYPE {
   POSTPROCESSING = 'postprocessing'
 }
 
-export class SseAdapter implements EventSource {
+export class SSEAdapter implements EventSource {
   private abortController: AbortController
   private eventListenerMap: Record<string, ((event: MessageEvent) => any)[]>
 
@@ -71,11 +71,10 @@ export class SseAdapter implements EventSource {
   }
 
   close() {
-    this.abortController.abort('closed 123')
+    this.abortController.abort('closed')
   }
 
   addEventListener(type: string, listener: (this: EventSource, event: MessageEvent) => any): void {
-    console.log('add event listener')
     this.eventListenerMap[type] = this.eventListenerMap[type] || []
     this.eventListenerMap[type].push(listener)
   }
@@ -92,14 +91,14 @@ export class SseAdapter implements EventSource {
   }
 }
 
-let eventSource: SseAdapter = null
+let eventSource: SSEAdapter = null
 
 export const sse = (baseURI: string, fetchOptions: FetchEventSourceInit): EventSource => {
-  // TODO:
+  // TODO: shouldn't be using capabilities but should also not be used if sse is disabled
   //const sseEnabled = useCapabilityCoreSSE()
   //if (unref(sseEnabled)) {
   if (!eventSource) {
-    eventSource = new SseAdapter(
+    eventSource = new SSEAdapter(
       new URL('ocs/v2.php/apps/notifications/api/v1/notifications/sse', baseURI).href,
       fetchOptions
     )
