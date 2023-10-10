@@ -1,4 +1,4 @@
-import { SearchProvider } from '../types'
+import { SearchProvider } from '@ownclouders/web-pkg'
 
 export class ProviderStore {
   public providers: SearchProvider[]

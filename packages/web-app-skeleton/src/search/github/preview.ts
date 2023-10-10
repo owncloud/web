@@ -1,4 +1,4 @@
-import { SearchPreview, SearchResult } from 'web-app-search/src/types'
+import { SearchPreview, SearchResult } from '@ownclouders/web-pkg'
 import PreviewComponent from './PreviewComponent.vue'
 import { Component } from 'vue'
 import { GitHubClient } from './client'

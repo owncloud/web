@@ -1,6 +1,5 @@
-import { SearchList, SearchResult } from 'web-app-search/src/types'
 import ListComponent from '../../components/Search/List.vue'
-import { ClientService } from '@ownclouders/web-pkg'
+import { ClientService, SearchList, SearchResult } from '@ownclouders/web-pkg'
 import { ProjectSpaceResource, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Component, computed, Ref, unref } from 'vue'
 import { DavProperties } from '@ownclouders/web-client/src/webdav/constants'
