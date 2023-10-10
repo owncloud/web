@@ -23,11 +23,11 @@ interface HttpClient {
   token?: string
 }
 
-interface FetchOptions {
+interface SSEOptions {
   headers: Record<string, string>
 }
 
-const createFetchOptions = (authParams: AuthParameters, language: string): FetchOptions => {
+const createSSEOptions = (authParams: AuthParameters, language: string): SSEOptions => {
   return {
     headers: {
       Authorization: `Bearer ${authParams.accessToken}`,
@@ -144,7 +144,7 @@ export class ClientService {
     const { graph, ocs, sse } = client(
       this.configurationManager.serverUrl,
       createAxiosInstance(authParams, this.currentLanguage),
-      createFetchOptions(authParams, this.currentLanguage)
+      createSSEOptions(authParams, this.currentLanguage)
     )
     return {
       token: this.token,

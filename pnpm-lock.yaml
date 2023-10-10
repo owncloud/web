@@ -947,15 +947,15 @@ importers:
       '@casl/ability':
         specifier: ^6.3.3
         version: 6.3.3
-      '@microsoft/fetch-event-source':
-        specifier: ^2.0.1
-        version: 2.0.1
       '@ownclouders/web-client':
         specifier: workspace:*
         version: 'link:'
       axios:
         specifier: ^0.27.2 || ^1.0.0
         version: 1.4.0
+      event-source-polyfill:
+        specifier: ^1.0.31
+        version: 1.0.31
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -2743,7 +2743,7 @@ packages:
     dependencies:
       '@babel/core': 7.19.6
       '@babel/helper-create-regexp-features-plugin': 7.19.0(@babel/core@7.19.6)
-      '@babel/helper-plugin-utils': 7.20.2
+      '@babel/helper-plugin-utils': 7.21.5
     dev: true
 
   /@babel/plugin-proposal-unicode-property-regex@7.18.6(@babel/core@7.21.8):
@@ -11774,6 +11774,10 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
     dev: true
+
+  /event-source-polyfill@1.0.31:
+    resolution: {integrity: sha512-4IJSItgS/41IxN5UVAVuAyczwZF7ZIEsM1XAoUzIHA6A+xzusEZUutdXz2Nr+MQPLxfTiCvqE79/C8HT8fKFvA==}
+    dev: false
 
   /eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}

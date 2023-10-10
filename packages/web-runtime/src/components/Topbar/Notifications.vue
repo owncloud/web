@@ -118,12 +118,14 @@ export default {
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
 
+    //console.log(clientService.sseAuthenticated)
+
     const notifications = ref<Notification[]>([])
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
 
-    const sseEnabled = useCapabilityCoreSSE()
+    const sseEnabled = ref(false)
     let setupServerSentEvents
     if (unref(sseEnabled)) {
       setupServerSentEvents = useServerSentEvents({
