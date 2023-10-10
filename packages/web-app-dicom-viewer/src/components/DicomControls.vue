@@ -161,9 +161,9 @@
           "
           @click="$emit('toggleShowMetadata')"
         >
-          <!-- TODO: insert correct icon, check if fill or line version is needed -->
+          <!-- TODO: insert correct icon, check why icon is not changing on click -->
           <oc-icon
-            v-fill-type="isShowMetadataActivated ? 'fill' : 'line'"
+            fill-type="line"
             :name="isShowMetadataActivated ? 'side-bar-right' : 'side-bar-right'"
             variation="inherit"
           />
@@ -254,7 +254,7 @@ export default defineComponent({
     }
     // TODO: draft only, properly implement the following new functionalities
     const imageShowMetadata = () => {
-      emit('toggleShowMetadata', props.isShowMetadataActivated === true ? true : false)
+      emit('toggleShowMetadata') //, props.isShowMetadataActivated === true ? false : true)
     }
 
     return {

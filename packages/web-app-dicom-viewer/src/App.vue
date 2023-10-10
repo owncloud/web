@@ -60,69 +60,15 @@
         </div>
       </div>
 
-      <!-- div element for displaying full meta data -->
-      <div id="dicom-metadata" class="dicom-metadata sidebar-panel__header">
-        <h2 class="oc-py-s oc-my-rm header__title">DICOM metadata</h2>
-
-        <div v-if="isMetadataExtracted">
-          <table class="details-table oc-py-s">
-            <!-- example information section -->
-            <tr>
-              <th colspan="2">
-                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
-                  Example Information (Section Title)
-                </p>
-              </th>
-            </tr>
-            <tr v-for="(value, key) in dicomMetadata.exampleInformation" :key="key">
-              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
-              <td>{{ value || '–' }}</td>
-            </tr>
-            <!-- patient information section -->
-            <tr>
-              <th colspan="2">
-                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
-                  Patient Information
-                </p>
-              </th>
-            </tr>
-            <tr v-for="(value, key) in dicomMetadata.patientInformation" :key="key">
-              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
-              <td>{{ value || '–' }}</td>
-            </tr>
-            <!-- study information section -->
-            <!--
-            <tr>
-              <th colspan="2">
-                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
-                  Study Information
-                </p>
-              </th>
-            </tr>
-            <tr v-for="(value, key) in dicomMetadata.studyInformation" :key="key">
-              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
-              <td>{{ value || '–' }}</td>
-            </tr>
-            -->
-            <!-- series information section -->
-            <!--
-            <tr>
-              <th colspan="2">
-                <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
-                  Series Information
-                </p>
-              </th>
-            </tr>
-            <tr v-for="(value, key) in dicomMetadata.seriesInformation" :key="key">
-              <th scope="col" class="oc-pr-s">{{ formatLabel(key) }}</th>
-              <td>{{ value || '–' }}</td>
-            </tr>
-            -->
-          </table>
-        </div>
-      </div>
+      <metadata-sidebar
+        v-show="isShowMetadataActivated"
+        :dicom-metadata="dicomMetadata"
+        :is-show-metadata-activated="isShowMetadataActivated"
+        :is-metadata-extracted="isMetadataExtracted"
+      />
     </div>
   </div>
+
   <dicom-controls
     :files="dicomFiles"
     :active-index="0"
@@ -136,10 +82,15 @@
     @set-vertical-flip="setVerticalFlip"
     @toggle-inversion="toggleInversion"
     @reset-viewport="resetViewport"
-    @toggle-show-metadata="toggleShowMetadata"
+    @toggle-show-metadata="toggleShowMetadataMethod"
     @toggle-previous="prev"
     @toggle-next="next"
   />
+  <!--
+    add
+    @toggle-show-metadata="toggleShowMetadata"
+    back to dicom controls
+    -->
 </template>
 
 <script lang="ts">
@@ -156,7 +107,7 @@ import { init as csToolsInit } from '@cornerstonejs/tools'
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
 // vue imports
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, unref } from 'vue'
 import type { PropType } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
@@ -164,6 +115,7 @@ import { useGettext } from 'vue3-gettext'
 import { Resource } from 'web-client/src'
 //import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
 import DicomControls from './components/DicomControls.vue'
+import MetadataSidebar from './components/MetadataSidebar.vue'
 import uids from './helper/uids'
 import { formatDateFromISO } from 'web-pkg/src/helpers'
 import { DateTime } from 'luxon'
@@ -231,7 +183,8 @@ cornerstone.registerImageLoader('https', cornerstoneDICOMImageLoader.loadImage)
 export default defineComponent({
   //name: 'DicomViewer', // seems like this is not needed anymore for streamlined apps
   components: {
-    DicomControls
+    DicomControls,
+    MetadataSidebar
   },
   props: {
     url: {
@@ -249,7 +202,6 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
-    //const isShowMetadataActivated = ref(false)
 
     return {
       dicomMetadata: {
@@ -339,8 +291,8 @@ export default defineComponent({
       toolInfoElement: null,
       currentImageZoom: 1,
       currentImageRotation: 0,
-      isShowMetadataActivated: false,
       isVipMetadataFetched: false,
+      isShowMetadataActivated: false,
       dicomFiles: [this.resource]
     }
   },
@@ -808,10 +760,9 @@ export default defineComponent({
       const camera = this.viewport.getCamera()
       console.log('camera scale after reset: ' + camera.parallelScale)
     },
-    toggleShowMetadata() {
-      // similar to "ToggleFullScreenMode" of preview app, still needs to be implemented
+    toggleShowMetadataMethod() {
       console.log('show metadata clicked')
-      console.log('current show metadata: ' + this.isShowMetadataActivated)
+      this.isShowMetadataActivated = !this.isShowMetadataActivated
     }
   }
 })
