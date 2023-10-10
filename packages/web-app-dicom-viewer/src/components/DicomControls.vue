@@ -95,7 +95,7 @@
       <div class="oc-flex oc-flex-middle">
         <oc-button
           v-oc-tooltip="imageFlipHorizontalDescription"
-          class="preview-controls-flip-horizontal"
+          class="preview-controls-flip-horizontal oc-mr-xs"
           appearance="raw-inverse"
           variation="brand"
           :aria-label="imageFlipHorizontalDescription"
@@ -125,8 +125,8 @@
           :aria-label="imageInvertDescription"
           @click="$emit('toggleInversion')"
         >
-          <!-- TODO: insert correct icon -->
-          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+          <oc-icon fill-type="fill" name="contrast" variation="inherit" />
+          <!-- alternative icon: "speaker-2" -->
         </oc-button>
       </div>
 
@@ -140,8 +140,8 @@
           :aria-label="imageResetDescription"
           @click="$emit('resetViewport')"
         >
-          <!-- TODO: insert correct icon -->
-          <oc-icon fill-type="line" name="fullscreen" variation="inherit" />
+          <oc-icon fill-type="line" name="arrow-go-back" variation="inherit" />
+          <!-- alternative icon: "loop-left" -->
         </oc-button>
       </div>
 
