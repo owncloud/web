@@ -20,11 +20,11 @@ interface Client {
 export const client = (
   baseURI: string,
   axiosClient: AxiosInstance,
-  sseOptions: FetchEventSourceInit
+  fetchOptions: FetchEventSourceInit
 ): Client => {
   return {
     graph: graph(baseURI, axiosClient),
     ocs: ocs(baseURI, axiosClient),
-    sse: sse(baseURI, sseOptions)
+    sse: sse(baseURI, fetchOptions)
   }
 }
