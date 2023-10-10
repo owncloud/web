@@ -10,7 +10,7 @@ export * as helpers from './helpers'
 
 export type { Resource, SpaceResource, User } from './helpers'
 
-export interface FetchOptions {
+export interface SSEOptions {
   headers: Record<string, string>
 }
 
@@ -23,11 +23,11 @@ interface Client {
 export const client = (
   baseURI: string,
   axiosClient: AxiosInstance,
-  fetchOptions: FetchOptions
+  sseOptions: SSEOptions
 ): Client => {
   return {
     graph: graph(baseURI, axiosClient),
     ocs: ocs(baseURI, axiosClient),
-    sse: sse(baseURI, fetchOptions)
+    sse: sse(baseURI, sseOptions)
   }
 }

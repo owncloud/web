@@ -16,11 +16,11 @@
     "generate-openapi": "rm -rf src/generated && docker run --rm -v \"${PWD}/src:/local\" openapitools/openapi-generator-cli generate -i https://raw.githubusercontent.com/owncloud/libre-graph-api/main/api/openapi-spec/v1.0.yaml  -g typescript-axios -o /local/generated"
   },
   "peerDependencies": {
-    "@ownclouders/web-client": "workspace:*",
     "@casl/ability": "^6.3.3",
+    "@ownclouders/web-client": "workspace:*",
     "axios": "^0.27.2 || ^1.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.0.1",
-    "@microsoft/fetch-event-source": "^2.0.1"
+    "event-source-polyfill": "^1.0.31"
   }
 }
