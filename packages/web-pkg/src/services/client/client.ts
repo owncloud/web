@@ -1,5 +1,5 @@
 import { HttpClient as _HttpClient } from '../../http'
-import { client, Graph, OCS, SSE } from '@ownclouders/web-client'
+import { client, Graph, OCS } from '@ownclouders/web-client'
 import { Auth, AuthParameters } from './auth'
 import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
@@ -8,13 +8,14 @@ import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { ConfigurationManager } from '../../configuration'
 import { Store } from 'vuex'
 import { Language } from 'vue3-gettext'
+import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 
 interface OcClient {
   token: string
   language: string
   graph: Graph
   ocs: OCS
-  sse: SSE
+  sse: EventSource
 }
 
 interface HttpClient {
@@ -23,11 +24,7 @@ interface HttpClient {
   token?: string
 }
 
-interface SSEOptions {
-  headers: Record<string, string>
-}
-
-const createSSEOptions = (authParams: AuthParameters, language: string): SSEOptions => {
+const createFetchOptions = (authParams: AuthParameters, language: string): FetchEventSourceInit => {
   return {
     headers: {
       Authorization: `Bearer ${authParams.accessToken}`,
@@ -100,7 +97,7 @@ export class ClientService {
     return this.ocUserContextClient.graph
   }
 
-  public get sseAuthenticated(): SSE {
+  public get sseAuthenticated(): EventSource {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
       this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
     }
@@ -144,7 +141,7 @@ export class ClientService {
     const { graph, ocs, sse } = client(
       this.configurationManager.serverUrl,
       createAxiosInstance(authParams, this.currentLanguage),
-      createSSEOptions(authParams, this.currentLanguage)
+      createFetchOptions(authParams, this.currentLanguage)
     )
     return {
       token: this.token,

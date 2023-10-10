@@ -988,10 +988,10 @@ importers:
         version: 2.0.1(@uppy/core@3.3.0)
       '@uppy/tus':
         specifier: ^3.1.0
-        version: 3.1.0(@uppy/core@3.3.0)
+        version: 3.1.2(@uppy/core@3.3.0)
       '@uppy/utils':
         specifier: ^5.3.0
-        version: 5.3.0
+        version: 5.4.0
       '@uppy/xhr-upload':
         specifier: ^3.0.1
         version: 3.3.1(@uppy/core@3.3.0)
@@ -6902,10 +6902,10 @@ packages:
       preact: 10.7.1
     dev: false
 
-  /@uppy/tus@3.1.0(@uppy/core@3.3.0):
-    resolution: {integrity: sha512-oFSa6WtDv2yXO/U02wZ8pQEIxEdtBs5N80fi1anipiJASvNJ+pCrl812QDQLdd/roXJkg0jIEP4/8Eod2d6yGg==}
+  /@uppy/tus@3.1.2(@uppy/core@3.3.0):
+    resolution: {integrity: sha512-LTn1S90gMczlDzVh+bG+FQmbTUAn+ZgbsBbmZ3GRnuSWzKhtoc9TDfr71TG7bCD8wlCPujJ8Mr72DMySbT5+NA==}
     peerDependencies:
-      '@uppy/core': ^3.2.0
+      '@uppy/core': ^3.3.0
     dependencies:
       '@uppy/companion-client': '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz'
       '@uppy/core': 3.3.0
@@ -6913,10 +6913,10 @@ packages:
       tus-js-client: 3.0.0
     dev: false
 
-  /@uppy/utils@5.3.0:
-    resolution: {integrity: sha512-tPW+HtRkjanFQAa/XD2e6kjJ7ZeMHtVxEVeBeRtKTnltsCA9kNF2gDwxtUVPEWyLrKzW+CvRm60NDiOKaWUuww==}
+  /@uppy/utils@5.4.0:
+    resolution: {integrity: sha512-X9f43OvTcymhoiDEzA2CqH7W5pADTVv2bhQ/9NUaVwYRLUadDjZc27ZgnNraKSYgnOhKFJlC63nyCwcd0yaQIQ==}
     dependencies:
-      lodash.throttle: 4.1.1
+      lodash: 4.17.21
     dev: false
 
   /@uppy/xhr-upload@3.3.1(@uppy/core@3.3.0):

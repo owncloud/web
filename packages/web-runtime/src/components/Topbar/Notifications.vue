@@ -105,6 +105,7 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import {MESSAGE_TYPE} from "@ownclouders/web-client/src/sse";
 
 const POLLING_INTERVAL = 30000
 
@@ -118,12 +119,15 @@ export default {
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
 
-    //console.log(clientService.sseAuthenticated)
-
     const notifications = ref<Notification[]>([])
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
+
+    clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.NOTIFICATION, (ev) => {
+      console.log(ev)
+      console.log('got notifications event')
+    })
 
     const sseEnabled = ref(false)
     let setupServerSentEvents
