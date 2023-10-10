@@ -95,6 +95,9 @@ export class SseAdapter implements EventSource {
 let eventSource: SseAdapter = null
 
 export const sse = (baseURI: string, fetchOptions: FetchEventSourceInit): EventSource => {
+  // TODO:
+  //const sseEnabled = useCapabilityCoreSSE()
+  //if (unref(sseEnabled)) {
   if (!eventSource) {
     eventSource = new SseAdapter(
       new URL('ocs/v2.php/apps/notifications/api/v1/notifications/sse', baseURI).href,
