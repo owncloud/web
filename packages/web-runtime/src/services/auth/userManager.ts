@@ -140,7 +140,7 @@ export class UserManager extends OidcUserManager {
     if (!accessTokenChanged) {
       return this.updateAccessTokenPromise
     }
-    this.clientService.sseAuthenticated.updateAccessToken(accessToken)
+
     this.store.commit('runtime/auth/SET_ACCESS_TOKEN', accessToken)
 
     this.updateAccessTokenPromise = (async () => {
@@ -156,6 +156,7 @@ export class UserManager extends OidcUserManager {
         user: this.store.getters.user
       })
       this.initializeOwnCloudSdk(accessToken)
+      this.clientService.sseAuthenticated.updateAccessToken(accessToken)
 
       if (!userKnown) {
         await this.fetchUserInfo()

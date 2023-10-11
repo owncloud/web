@@ -27,6 +27,7 @@ export class SSEAdapter implements EventSource {
   onopen: ((this: EventSource, ev: Event) => any) | null
 
   constructor(url: string, fetchOptions: FetchEventSourceInit) {
+    console.log(fetchOptions)
     this.url = url
     this.fetchOptions = fetchOptions
     this.abortController = new AbortController()
@@ -36,6 +37,7 @@ export class SSEAdapter implements EventSource {
 
   private customFetch(...args) {
     let [resource, config] = args
+    console.log(this.fetchOptions)
     config = { ...config, ...this.fetchOptions }
     return window.fetch(resource, config)
   }
