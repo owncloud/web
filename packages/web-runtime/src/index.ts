@@ -25,7 +25,8 @@ import {
   announceLoadingService,
   announcePreviewService,
   announcePasswordPolicyService,
-  announceAdditionalTranslations
+  announceAdditionalTranslations,
+  registerSSEEventListeners
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -162,21 +163,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       const clientService = app.config.globalProperties.$clientService
 
-      clientService.sseAuthenticated.addEventListener(
-        MESSAGE_TYPE.POSTPROCESSING_FINISHED,
-        ({ data }) => {
-          try {
-            const postProcessingData = JSON.parse(data)
-            store.commit('Files/UPDATE_RESOURCE_FIELD', {
-              id: postProcessingData.itemid,
-              field: 'processing',
-              value: false
-            })
-          } catch (_) {
-            console.error('Unable to parse sse postprocessing data ')
-          }
-        }
-      )
+      // Register SSE event listeners
+      if (store.getters.capabilities?.core?.['support-sse']) {
+        registerSSEEventListeners({ store, clientService })
+      }
 
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {
