@@ -14,6 +14,7 @@ import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import { router } from 'web-runtime/src/router'
+import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -156,7 +157,10 @@ export class UserManager extends OidcUserManager {
         user: this.store.getters.user
       })
       this.initializeOwnCloudSdk(accessToken)
-      this.clientService.sseAuthenticated.updateAccessToken(accessToken)
+
+      if (this.store.getters.capabilities?.core?.['support-sse']) {
+        ;(this.clientService.sseAuthenticated as SSEAdapter).updateAccessToken(accessToken)
+      }
 
       if (!userKnown) {
         await this.fetchUserInfo()

@@ -9,14 +9,14 @@ import { ConfigurationManager } from '../../configuration'
 import { Store } from 'vuex'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
-import { SSEAdapter } from '@ownclouders/web-client/src/sse'
+import { sse } from '@ownclouders/web-client/src/sse'
 
 interface OcClient {
   token: string
   language: string
   graph: Graph
   ocs: OCS
-  sse: SSEAdapter
+  sse: EventSource
 }
 
 interface HttpClient {
@@ -98,11 +98,11 @@ export class ClientService {
     return this.ocUserContextClient.graph
   }
 
-  public get sseAuthenticated(): SSEAdapter {
-    if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
-    }
-    return this.ocUserContextClient.sse
+  public get sseAuthenticated(): EventSource {
+    return sse(
+      this.configurationManager.serverUrl,
+      createFetchOptions({ accessToken: this.token }, this.currentLanguage)
+    )
   }
 
   public get ocsUserContext(): OCS {
@@ -139,7 +139,7 @@ export class ClientService {
   }
 
   private getOcsClient(authParams: AuthParameters): OcClient {
-    const { graph, ocs, sse } = client(
+    const { graph, ocs } = client(
       this.configurationManager.serverUrl,
       createAxiosInstance(authParams, this.currentLanguage),
       createFetchOptions(authParams, this.currentLanguage)
@@ -148,8 +148,7 @@ export class ClientService {
       token: this.token,
       language: this.currentLanguage,
       graph,
-      ocs,
-      sse
+      ocs
     }
   }
 
