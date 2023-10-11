@@ -6,6 +6,7 @@ import { Language } from 'vue3-gettext'
 import { ClientService, PasswordPolicyService } from './services'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
+import { ApplicationQuickActions } from './apps'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user
@@ -103,4 +104,4 @@ export default {
     },
     displayed: canShare
   }
-} // FIXME: fix type, then add: satisfies ApplicationQuickActions
+} satisfies ApplicationQuickActions

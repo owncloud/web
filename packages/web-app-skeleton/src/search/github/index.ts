@@ -1,16 +1,14 @@
 import Preview from './preview'
-import { EventBus, SearchPreview, SearchProvider } from '@ownclouders/web-pkg'
+import { SearchPreview, SearchProvider } from '@ownclouders/web-pkg'
 import { GitHubClient } from './client'
 import { HttpClient } from '@ownclouders/web-pkg'
 
-export class GitHubSearch extends EventBus implements SearchProvider {
+export class GitHubSearch implements SearchProvider {
   public readonly id: string
   public readonly displayName: string
   public readonly previewSearch: SearchPreview
 
   constructor() {
-    super()
-
     const httpClient = new HttpClient()
     const gitHubClient = new GitHubClient(httpClient)
 

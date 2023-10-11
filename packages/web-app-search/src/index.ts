@@ -1,8 +1,6 @@
 import SearchBar from './portals/SearchBar.vue'
 import App from './App.vue'
 import List from './views/List.vue'
-import { providerStore } from './service'
-import { eventBus, SearchProvider } from '@ownclouders/web-pkg'
 import { Component } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -12,10 +10,6 @@ import translations from '../l10n/translations.json'
 const $gettext = (msg) => {
   return msg
 }
-
-eventBus.subscribe('app.search.register.provider', (provider: SearchProvider) => {
-  providerStore.addProvider(provider)
-})
 
 export default {
   appInfo: {
