@@ -1,30 +1,9 @@
 <template>
-  <div class="dicom-viewer oc-width-1-1 oc-height-1-1">
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-py-s">
-      <!-- toggle for displaying all meta data, TODO: implement click event of toggle properly -->
-      <div id="dicom-viewer-show-metadata" class="oc-flex-middle oc-flex oc-width-xlarge">
-        <oc-button
-          id="metadata-toggle-sidebar"
-          v-oc-tooltip="
-            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
-          "
-          class="preview-controls-show-metadata oc-my-s oc-p-xs"
-          appearance="raw"
-          variation="brand"
-          :aria-label="
-            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
-          "
-          @click="toggleShowMetadata"
-        >
-          <oc-icon
-            :fill-type="isShowMetadataActivated ? 'fill' : 'line'"
-            name="side-bar-right"
-            variation="inherit"
-          />
-        </oc-button>
-      </div>
-    </div>
-    <div class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s">
+  <div class="dicom-viewer oc-width-1-1 oc-height-1-1 oc-flex">
+    <!-- TODO: the class of the following item should be oc-width-1-1 if sidebar is not displayed, also vertical align of dicom viewport should be adjusted -->
+    <div
+      class="oc-position-relative oc-width-2-3 oc-flex oc-flex-center oc-flex-middle oc-flex-around oc-p-s"
+    >
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas oc-position-relative">
         <!-- vip meta data -->
@@ -58,14 +37,36 @@
           </div>
         </div>
       </div>
-
-      <metadata-sidebar
-        v-show="isShowMetadataActivated"
-        :dicom-metadata="dicomMetadata"
-        :is-metadata-extracted="isMetadataExtracted"
-        @close-metadata-sidebar="toggleShowMetadata"
-      />
+      <!-- toggle for metadata sidebar -->
+      <div id="dicom-viewer-toggle-metadata-sidebar" class="oc-flex oc-position-absolute">
+        <oc-button
+          id="toggle-metadata-sidebar"
+          v-oc-tooltip="
+            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
+          "
+          class="preview-controls-show-metadata oc-my-s oc-p-xs"
+          appearance="raw"
+          variation="brand"
+          :aria-label="
+            isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
+          "
+          @click="toggleShowMetadata"
+        >
+          <oc-icon
+            :fill-type="isShowMetadataActivated ? 'fill' : 'line'"
+            name="side-bar-right"
+            variation="inherit"
+          />
+        </oc-button>
+      </div>
     </div>
+
+    <metadata-sidebar
+      v-show="isShowMetadataActivated"
+      :dicom-metadata="dicomMetadata"
+      :is-metadata-extracted="isMetadataExtracted"
+      @close-metadata-sidebar="toggleShowMetadata"
+    />
   </div>
 
   <dicom-controls
@@ -790,11 +791,13 @@ export default defineComponent({
   display: none;
 }
 
-#dicom-viewer-show-metadata {
-  justify-content: right;
+#dicom-viewer-toggle-metadata-sidebar {
+  //justify-content: right;
+  top: 0;
+  right: 0;
 }
 
-#metadata-toggle-sidebar {
+#toggle-metadata-sidebar {
   vertical-align: middle;
   border: 3px solid transparent;
   &:hover {
