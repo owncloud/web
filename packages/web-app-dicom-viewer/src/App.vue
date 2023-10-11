@@ -60,6 +60,23 @@
           />
         </oc-button>
       </div>
+      <dicom-controls
+        :files="dicomFiles"
+        :active-index="0"
+        :is-folder-loading="false"
+        :current-image-rotation="currentImageRotation"
+        :current-image-zoom="currentImageZoom"
+        :is-show-metadata-activated="isShowMetadataActivated"
+        @set-zoom="setZoom"
+        @set-rotation="setRotation"
+        @set-horizontal-flip="setHorizontalFlip"
+        @set-vertical-flip="setVerticalFlip"
+        @toggle-inversion="toggleInversion"
+        @reset-viewport="resetViewport"
+        @toggle-show-metadata="toggleShowMetadata"
+        @toggle-previous="prev"
+        @toggle-next="next"
+      />
     </div>
 
     <metadata-sidebar
@@ -69,24 +86,6 @@
       @close-metadata-sidebar="toggleShowMetadata"
     />
   </div>
-
-  <dicom-controls
-    :files="dicomFiles"
-    :active-index="0"
-    :is-folder-loading="false"
-    :current-image-rotation="currentImageRotation"
-    :current-image-zoom="currentImageZoom"
-    :is-show-metadata-activated="isShowMetadataActivated"
-    @set-zoom="setZoom"
-    @set-rotation="setRotation"
-    @set-horizontal-flip="setHorizontalFlip"
-    @set-vertical-flip="setVerticalFlip"
-    @toggle-inversion="toggleInversion"
-    @reset-viewport="resetViewport"
-    @toggle-show-metadata="toggleShowMetadata"
-    @toggle-previous="prev"
-    @toggle-next="next"
-  />
 </template>
 
 <script lang="ts">
