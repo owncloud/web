@@ -62,8 +62,8 @@
       <metadata-sidebar
         v-show="isShowMetadataActivated"
         :dicom-metadata="dicomMetadata"
-        :is-show-metadata-activated="isShowMetadataActivated"
         :is-metadata-extracted="isMetadataExtracted"
+        @close-metadata-sidebar="toggleShowMetadata"
       />
     </div>
   </div>
@@ -85,11 +85,6 @@
     @toggle-previous="prev"
     @toggle-next="next"
   />
-  <!--
-    add
-    @toggle-show-metadata="toggleShowMetadata"
-    back to dicom controls
-    -->
 </template>
 
 <script lang="ts">
@@ -760,7 +755,7 @@ export default defineComponent({
       console.log('camera scale after reset: ' + camera.parallelScale)
     },
     toggleShowMetadata() {
-      console.log('show metadata clicked')
+      console.log('toggle show metadata clicked')
       this.isShowMetadataActivated = !this.isShowMetadataActivated
     }
   }

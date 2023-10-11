@@ -1,11 +1,40 @@
 <template>
-  <div
-    v-if="isShowMetadataActivated"
-    id="dicom-metadata"
-    class="dicom-metadata sidebar-panel__header"
-  >
+  <div id="dicom-metadata" class="dicom-metadata sidebar-panel__header">
     <!-- insert cross icon to close sidebar -->
+    <div class="sidebar-panel__header header">
+      <!--
+    <div
+      v-if="[activePanelName, oldPanelName].includes(panel.app)"
+      class="sidebar-panel__header header"
+    >
+    -->
+      <!-- accessible label back
+            <oc-button
+              v-if="!panel.default"
+              v-oc-tooltip="accessibleLabelBack"
+              class="header__back"
+              appearance="raw"
+              :aria-label="accessibleLabelBack"
+              @click="closePanel"
+            >
+              <oc-icon name="arrow-left-s" fill-type="line" />
+            </oc-button>
+            -->
+
+      <h2 class="header__title oc-my-rm">DICOM metadata</h2>
+
+      <oc-button
+        appearance="raw"
+        class="header__close"
+        :aria-label="$gettext('Close metadata sidebar')"
+        @click="$emit('closeMetadataSidebar')"
+      >
+        <oc-icon name="close" />
+      </oc-button>
+    </div>
+    <!--
     <h2 class="oc-py-s oc-my-rm header__title">DICOM metadata</h2>
+    -->
 
     <div v-if="isMetadataExtracted">
       <table class="details-table oc-py-s">
@@ -79,15 +108,12 @@ export default defineComponent({
       type: [Array, Object],
       required: true
     },
-    isShowMetadataActivated: {
-      type: Boolean
-    },
     isMetadataExtracted: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['toggleShowMetadata'],
+  emits: ['closeMetadataSidebar'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
 
