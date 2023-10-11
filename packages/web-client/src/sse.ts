@@ -58,6 +58,11 @@ export class SSEAdapter implements EventSource {
         console.error(err)
         const event = new CustomEvent('error', { detail: err })
         this.onerror?.bind(this)(event)
+
+        /*
+         * Try to reconnect after 30 seconds plus random time in seconds.
+         * This prevents all clients try to reconnect concurrent on server error, to reduce load.
+         */
         return 30000 + Math.floor(Math.random() * RECONNECT_RANDOM_OFFSET)
       }
     })
