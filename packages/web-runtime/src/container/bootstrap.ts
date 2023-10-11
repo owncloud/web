@@ -574,7 +574,7 @@ const onSSEProcessingFinishedEvent = ({
       value: false
     })
   } catch (_) {
-    console.error('Unable to parse sse postprocessing data ')
+    console.error('Unable to parse sse postprocessing data')
   }
 }
 
