@@ -5,6 +5,8 @@ export enum MESSAGE_TYPE {
   POSTPROCESSING_FINISHED = 'postprocessing-finished'
 }
 
+class RetriableError extends Error {}
+const RECONNECT_RANDOM_OFFSET = 15000
 export class SSEAdapter implements EventSource {
   private abortController: AbortController
   private eventListenerMap: Record<string, ((event: MessageEvent) => any)[]>
@@ -53,19 +55,14 @@ export class SSEAdapter implements EventSource {
         const eventListeners = this.eventListenerMap[type]
         eventListeners?.forEach((l) => l(event))
       },
-      onclose() {
-        // if the server closes the connection unexpectedly, retry:
-        // throw new RetriableError()
+      onclose: () => {
+        throw new RetriableError()
       },
-      onerror(err) {
-        // if (err instanceof FatalError) {
-        //   throw err // rethrow to stop the operation
-        // } else {
-        //   // do nothing to automatically retry. You can also
-        //   // return a specific retry interval here.
-        // }
+      onerror: (err) => {
+        console.error(err)
         const event = new CustomEvent('error', { detail: err })
         this.onerror?.bind(this)(event)
+        return 30000 + Math.floor(Math.random() * RECONNECT_RANDOM_OFFSET)
       }
     })
   }
