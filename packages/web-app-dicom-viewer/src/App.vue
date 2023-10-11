@@ -2,7 +2,8 @@
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1 oc-flex">
     <!-- TODO: the class of the following item should be oc-width-1-1 if sidebar is not displayed, also vertical align of dicom viewport should be adjusted -->
     <div
-      class="oc-position-relative oc-width-2-3 oc-flex oc-flex-center oc-flex-middle oc-flex-around oc-p-s"
+      class="oc-position-relative oc-flex oc-flex-center oc-flex-middle oc-flex-around oc-p-s"
+      :class="isShowMetadataActivated ? 'oc-width-2-3' : 'oc-width-1-1'"
     >
       <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas oc-position-relative">
@@ -44,7 +45,7 @@
           v-oc-tooltip="
             isShowMetadataActivated ? imageHideMetadataDescription : imageShowMetadataDescription
           "
-          class="preview-controls-show-metadata oc-my-s oc-p-xs"
+          class="preview-controls-show-metadata oc-m-s oc-p-xs"
           appearance="raw"
           variation="brand"
           :aria-label="
