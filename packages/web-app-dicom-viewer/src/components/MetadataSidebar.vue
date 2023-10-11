@@ -1,5 +1,8 @@
 <template>
-  <div id="dicom-metadata" class="dicom-metadata sidebar-panel__header">
+  <div
+    id="dicom-metadata-sidebar"
+    class="dicom-metadata-sidebar sidebar-panel__header oc-ml-xl oc-p-s oc-width-1-3 oc-height-1-1"
+  >
     <!-- insert cross icon to close sidebar -->
     <div class="sidebar-panel__header header">
       <!--
@@ -140,6 +143,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.dicom-metadata-sidebar {
+  border-left: 1px solid var(--oc-color-border);
+}
 .dicom-metadata-section-title {
   //margin: 4px 0px 8px 0px;
   margin-bottom: 0px;
