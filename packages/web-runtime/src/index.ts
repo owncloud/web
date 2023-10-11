@@ -46,7 +46,6 @@ import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
 import { get } from 'lodash-es'
-import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()

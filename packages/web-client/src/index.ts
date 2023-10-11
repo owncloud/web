@@ -1,8 +1,6 @@
 import { AxiosInstance } from 'axios'
 import { graph, Graph } from './graph'
 import { ocs, OCS } from './ocs'
-import { sse } from './sse'
-import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 
 export type { Graph } from './graph'
 export type { OCS } from './ocs'

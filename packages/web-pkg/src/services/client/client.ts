@@ -16,7 +16,6 @@ interface OcClient {
   language: string
   graph: Graph
   ocs: OCS
-  sse: EventSource
 }
 
 interface HttpClient {
@@ -141,8 +140,7 @@ export class ClientService {
   private getOcsClient(authParams: AuthParameters): OcClient {
     const { graph, ocs } = client(
       this.configurationManager.serverUrl,
-      createAxiosInstance(authParams, this.currentLanguage),
-      createFetchOptions(authParams, this.currentLanguage)
+      createAxiosInstance(authParams, this.currentLanguage)
     )
     return {
       token: this.token,

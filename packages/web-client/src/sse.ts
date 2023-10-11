@@ -34,17 +34,11 @@ export class SSEAdapter implements EventSource {
     this.connect()
   }
 
-  private customFetch(...args) {
-    let [resource, config] = args
-    config = { ...config, ...this.fetchOptions }
-    return window.fetch(resource, config)
-  }
-
   private connect() {
     return fetchEventSource(this.url, {
       openWhenHidden: true,
       signal: this.abortController.signal,
-      fetch: this.customFetch.bind(this),
+      fetch: this.fetchProvider.bind(this),
       onopen: async () => {
         const event = new Event('open')
         this.onopen?.bind(this)(event)
@@ -67,6 +61,12 @@ export class SSEAdapter implements EventSource {
         return 30000 + Math.floor(Math.random() * RECONNECT_RANDOM_OFFSET)
       }
     })
+  }
+
+  private fetchProvider(...args) {
+    let [resource, config] = args
+    config = { ...config, ...this.fetchOptions }
+    return window.fetch(resource, config)
   }
 
   close() {
