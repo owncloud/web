@@ -46,7 +46,6 @@ export class SSEAdapter implements EventSource {
         // if (msg.event === 'FatalError') {
         //   throw new FatalError(msg.data)
         // }
-        console.log(msg)
         const event = new MessageEvent('message', { data: msg.data })
         this.onmessage?.bind(this)(event)
 
