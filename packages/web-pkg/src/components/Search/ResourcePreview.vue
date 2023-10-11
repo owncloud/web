@@ -21,18 +21,18 @@
 </template>
 
 <script lang="ts">
-import {
-  useFileActions,
-  isResourceTxtFileAlmostEmpty,
-  VisibilityObserver,
-  ImageDimension
-} from '@ownclouders/web-pkg'
+import { ImageDimension } from '../../constants'
+import { VisibilityObserver } from '../../observer'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import { createLocationShares, createLocationSpaces } from '@ownclouders/web-pkg/src/router'
+import { createLocationShares, createLocationSpaces } from '../../router'
 import { dirname } from 'path'
-import { useCapabilityShareJailEnabled, useGetMatchingSpace } from '@ownclouders/web-pkg'
+import {
+  useCapabilityShareJailEnabled,
+  useGetMatchingSpace,
+  useFileActions
+} from '../../composables'
 import {
   extractParentFolderName,
   isProjectSpaceResource,
@@ -40,9 +40,9 @@ import {
   isShareSpaceResource,
   Resource
 } from '@ownclouders/web-client/src/helpers'
-import { eventBus } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { SearchResultValue } from 'web-app-search/src/types'
+import { eventBus } from '../../services'
+import { createFileRouteOptions, isResourceTxtFileAlmostEmpty } from '../../helpers'
+import { SearchResultValue } from './types'
 
 const visibilityObserver = new VisibilityObserver()
 

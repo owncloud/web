@@ -2,8 +2,7 @@ import SearchBar from './portals/SearchBar.vue'
 import App from './App.vue'
 import List from './views/List.vue'
 import { providerStore } from './service'
-import { eventBus } from '@ownclouders/web-pkg'
-import { SearchProvider } from './types'
+import { eventBus, SearchProvider } from '@ownclouders/web-pkg'
 import { Component } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

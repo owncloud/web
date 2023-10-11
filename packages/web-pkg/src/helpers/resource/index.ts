@@ -1,4 +1,5 @@
 export * from './sameResource'
 export * from './conflictHandling'
+export * from './filter'
 export * from './isResourceTxtFileAlmostEmpty'
 export * from './renameResource'

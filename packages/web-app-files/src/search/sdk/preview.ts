@@ -1,12 +1,10 @@
-import { SearchPreview, SearchResult } from 'web-app-search/src/types'
-import PreviewComponent from '../../components/Search/Preview.vue'
-import { ClientService, Cache } from '@ownclouders/web-pkg'
+import { ClientService, Cache, SearchPreview, SearchResult } from '@ownclouders/web-pkg'
 import { ProjectSpaceResource, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Component, computed, Ref, unref } from 'vue'
 import { Router } from 'vue-router'
 import { DavProperties } from '@ownclouders/web-client/src/webdav/constants'
 import { Store } from 'vuex'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, ResourcePreview } from '@ownclouders/web-pkg'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export const previewSearchLimit = 8
@@ -26,7 +24,7 @@ export default class Preview implements SearchPreview {
     clientService: ClientService,
     configurationManager: ConfigurationManager
   ) {
-    this.component = PreviewComponent
+    this.component = ResourcePreview
     this.router = router
     this.store = store
     // define how long the cache should be valid, maybe conf option?

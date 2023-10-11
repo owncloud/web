@@ -1,10 +1,15 @@
-import { SearchList, SearchPreview, SearchProvider } from 'web-app-search/src/types'
 import Preview from './preview'
 import List from './list'
 import { EventBus } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { ClientService, ConfigurationManager } from '@ownclouders/web-pkg'
+import {
+  ClientService,
+  ConfigurationManager,
+  SearchList,
+  SearchPreview,
+  SearchProvider
+} from '@ownclouders/web-pkg'
 
 function $gettext(msg) {
   return msg
