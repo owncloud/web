@@ -5,18 +5,15 @@ export enum MESSAGE_TYPE {
   POSTPROCESSING_FINISHED = 'postprocessing-finished'
 }
 
-const myFetch = async (...args) => {
-  let [resource, config] = args
-  config.headers['Authorization'] = 'Bearer Pimmel'
-
-  return window.fetch(resource, config)
-}
-
 class RetriableError extends Error {}
+
+let lol: FetchEventSourceInit = {}
 
 const RECONNECT_RANDOM_OFFSET = 15000
 
 export class SSEAdapter implements EventSource {
+  private url: string
+  private fetchOptions: FetchEventSourceInit
   private abortController: AbortController
   private eventListenerMap: Record<string, ((event: MessageEvent) => any)[]>
 
@@ -33,31 +30,30 @@ export class SSEAdapter implements EventSource {
   onopen: ((this: EventSource, ev: Event) => any) | null
 
   constructor(url: string, fetchOptions: FetchEventSourceInit) {
+    this.url = url
+    this.fetchOptions = fetchOptions
+    lol = this.fetchOptions
     this.abortController = new AbortController()
     this.eventListenerMap = {}
+    this.connect()
+  }
 
-    fetchEventSource(url, {
-      ...fetchOptions,
+  private customFetch(...args) {
+    console.log(this)
+    let [resource, config] = args
+    config = { ...config, ...lol }
+    return window.fetch(resource, config)
+  }
+
+  private connect() {
+    return fetchEventSource(this.url, {
       signal: this.abortController.signal,
-      fetch: myFetch,
+      fetch: this.customFetch,
       onopen: async (response) => {
-        // if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-        //   return // everything's good
-        // } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
-        //   // client-side errors are usually non-retriable:
-        //   throw new FatalError()
-        // } else {
-        //   throw new RetriableError()
-        // }
         const event = new Event('open')
         this.onopen?.bind(this)(event)
       },
       onmessage: (msg) => {
-        // // if the server emits an error message, throw an exception
-        // // so it gets handled by the onerror callback below:
-        // if (msg.event === 'FatalError') {
-        //   throw new FatalError(msg.data)
-        // }
         const event = new MessageEvent('message', { data: msg.data })
         this.onmessage?.bind(this)(event)
 
