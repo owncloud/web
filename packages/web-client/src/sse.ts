@@ -5,7 +5,9 @@ export enum MESSAGE_TYPE {
   POSTPROCESSING_FINISHED = 'postprocessing-finished'
 }
 
-class RetriableError extends Error {}
+class RetriableError extends Error {
+  name = 'RetriableError'
+}
 
 const RECONNECT_RANDOM_OFFSET = 15000
 
