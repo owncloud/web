@@ -42,6 +42,7 @@ export class SSEAdapter implements EventSource {
 
   private connect() {
     return fetchEventSource(this.url, {
+      openWhenHidden: true,
       signal: this.abortController.signal,
       fetch: this.customFetch.bind(this),
       onopen: async () => {
