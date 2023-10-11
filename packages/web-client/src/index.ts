@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios'
 import { graph, Graph } from './graph'
 import { ocs, OCS } from './ocs'
-import { sse } from './sse'
+import { sse, SSEAdapter } from './sse'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 
 export type { Graph } from './graph'
@@ -14,7 +14,7 @@ export type { Resource, SpaceResource, User } from './helpers'
 interface Client {
   graph: Graph
   ocs: OCS
-  sse: EventSource
+  sse: SSEAdapter
 }
 
 export const client = (

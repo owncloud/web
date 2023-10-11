@@ -7,18 +7,15 @@ export enum MESSAGE_TYPE {
 
 class RetriableError extends Error {}
 
-let lol: FetchEventSourceInit = {}
-
 const RECONNECT_RANDOM_OFFSET = 15000
 
 export class SSEAdapter implements EventSource {
-  private url: string
+  url: string
   private fetchOptions: FetchEventSourceInit
   private abortController: AbortController
   private eventListenerMap: Record<string, ((event: MessageEvent) => any)[]>
 
   readonly readyState: number
-  readonly url: string
   readonly withCredentials: boolean
 
   readonly CONNECTING: 0
@@ -32,24 +29,22 @@ export class SSEAdapter implements EventSource {
   constructor(url: string, fetchOptions: FetchEventSourceInit) {
     this.url = url
     this.fetchOptions = fetchOptions
-    lol = this.fetchOptions
     this.abortController = new AbortController()
     this.eventListenerMap = {}
     this.connect()
   }
 
   private customFetch(...args) {
-    console.log(this)
     let [resource, config] = args
-    config = { ...config, ...lol }
+    config = { ...config, ...this.fetchOptions }
     return window.fetch(resource, config)
   }
 
   private connect() {
     return fetchEventSource(this.url, {
       signal: this.abortController.signal,
-      fetch: this.customFetch,
-      onopen: async (response) => {
+      fetch: this.customFetch.bind(this),
+      onopen: async () => {
         const event = new Event('open')
         this.onopen?.bind(this)(event)
       },
@@ -90,13 +85,17 @@ export class SSEAdapter implements EventSource {
   }
 
   dispatchEvent(event: Event): boolean {
-    throw new Error('not implemented')
+    throw new Error('Method not implemented.')
+  }
+
+  updateAccessToken(token: string) {
+    this.fetchOptions.headers['Authorization'] = `Bearer ${token}`
   }
 }
 
 let eventSource: SSEAdapter = null
 
-export const sse = (baseURI: string, fetchOptions: FetchEventSourceInit): EventSource => {
+export const sse = (baseURI: string, fetchOptions: FetchEventSourceInit): SSEAdapter => {
   // TODO: shouldn't be using capabilities but should also not be used if sse is disabled
   //const sseEnabled = useCapabilityCoreSSE()
   //if (unref(sseEnabled)) {

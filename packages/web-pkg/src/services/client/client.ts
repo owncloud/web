@@ -9,13 +9,14 @@ import { ConfigurationManager } from '../../configuration'
 import { Store } from 'vuex'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
+import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 
 interface OcClient {
   token: string
   language: string
   graph: Graph
   ocs: OCS
-  sse: EventSource
+  sse: SSEAdapter
 }
 
 interface HttpClient {
@@ -97,7 +98,7 @@ export class ClientService {
     return this.ocUserContextClient.graph
   }
 
-  public get sseAuthenticated(): EventSource {
+  public get sseAuthenticated(): SSEAdapter {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
       this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
     }

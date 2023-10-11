@@ -140,6 +140,7 @@ export class UserManager extends OidcUserManager {
     if (!accessTokenChanged) {
       return this.updateAccessTokenPromise
     }
+    this.clientService.sseAuthenticated.updateAccessToken(accessToken)
     this.store.commit('runtime/auth/SET_ACCESS_TOKEN', accessToken)
 
     this.updateAccessTokenPromise = (async () => {
