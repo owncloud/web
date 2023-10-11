@@ -82,12 +82,6 @@ function getWrapper({
 
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
-
-  store.getters['Files/files'].push({
-    id: '1fe58d8b-aa69-4c22-baf7-97dd57479f23',
-    name: '.space'
-  })
-
   return {
     wrapper: getComposableWrapper(
       () => {

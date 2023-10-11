@@ -11,6 +11,7 @@ import {
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -56,11 +57,35 @@ export const useSpaceActionsUploadImage = ({
       extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
     }
 
-    if (!store.getters['Files/files'].find((file) => file.name === '.space')) {
+    try {
+      await clientService.webdav.getFileInfo(selectedSpace, { path: '.space' })
+    } catch (_) {
       await clientService.webdav.createFolder(selectedSpace, { path: '.space' })
       await clientService.webdav.putFileContents(selectedSpace, {
         path: '.space/readme.md',
         content: $gettext('Here you can add a description for this Space.')
+      })
+      const file = await clientService.webdav.getFileInfo(selectedSpace, {
+        path: '.space/readme.md'
+      })
+      const { data: updatedDriveData } = await clientService.graphAuthenticated.drives.updateDrive(
+        selectedSpace.id as string,
+        {
+          special: [
+            {
+              specialFolder: {
+                name: 'readme'
+              },
+              id: file.id
+            }
+          ]
+        } as Drive,
+        {}
+      )
+      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+        id: selectedSpace.id,
+        field: 'spaceReadmeData',
+        value: buildSpace(updatedDriveData).spaceReadmeData
       })
     }
 
