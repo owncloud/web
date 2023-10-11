@@ -45,6 +45,7 @@ import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
 import { get } from 'lodash-es'
+import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()
@@ -160,6 +161,22 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       announcePasswordPolicyService({ app, store })
 
       const clientService = app.config.globalProperties.$clientService
+
+      clientService.sseAuthenticated.addEventListener(
+        MESSAGE_TYPE.POSTPROCESSING_FINISHED,
+        ({ data }) => {
+          try {
+            const postProcessingData = JSON.parse(data)
+            store.commit('Files/UPDATE_RESOURCE_FIELD', {
+              id: postProcessingData.itemid,
+              field: 'processing',
+              value: false
+            })
+          } catch (_) {
+            console.error('Unable to parse sse postprocessing data ')
+          }
+        }
+      )
 
       // Load spaces to make them available across the application
       if (store.getters.capabilities?.spaces?.enabled) {

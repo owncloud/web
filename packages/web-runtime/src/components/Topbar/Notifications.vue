@@ -293,7 +293,7 @@ export default {
         }
         notifications.value = [notification, ...unref(notifications)]
       } catch (_) {
-        console.error('Unable to parse notification')
+        console.error('Unable to parse sse notification data')
       }
     }
 
