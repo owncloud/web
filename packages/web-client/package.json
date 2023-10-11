@@ -19,11 +19,8 @@
     "@casl/ability": "^6.3.3",
     "@ownclouders/web-client": "workspace:*",
     "axios": "^0.27.2 || ^1.0.0",
-    "event-source-polyfill": "^1.0.31",
     "lodash-es": "^4.17.21",
-    "luxon": "^3.0.1"
-  },
-  "dependencies": {
+    "luxon": "^3.0.1",
     "@microsoft/fetch-event-source": "^2.0.1"
   }
 }

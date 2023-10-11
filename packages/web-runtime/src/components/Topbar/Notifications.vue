@@ -67,8 +67,8 @@
                     @click.prevent="
                       executeAction(el.app, action.link, action.type, el.notification_id)
                     "
-                    >{{ action.label }}</oc-button
-                  >
+                    >{{ action.label }}
+                  </oc-button>
                 </div>
                 <div v-if="el.datetime" class="oc-text-small oc-text-muted oc-mt-xs">
                   <span
@@ -286,12 +286,14 @@ export default {
     }
 
     const onSSENotificationEvent = (event) => {
-      const notification = JSON.parse(event.data) as Notification
-      if (!notification) {
-        return
-      }
-      if (notification.notification_id) {
+      try {
+        const notification = JSON.parse(event.data) as Notification
+        if (!notification || !notification.notification_id) {
+          return
+        }
         notifications.value = [notification, ...unref(notifications)]
+      } catch (_) {
+        console.error('Unable to parse notification')
       }
     }
 
@@ -324,9 +326,7 @@ export default {
           onSSENotificationEvent
         )
       } else {
-        if (unref(notificationsInterval)) {
-          clearInterval(unref(notificationsInterval))
-        }
+        clearInterval(unref(notificationsInterval))
       }
     })
 
@@ -354,20 +354,24 @@ export default {
   max-width: 100%;
   max-height: 400px;
 }
+
 .oc-notifications {
   &-item {
     > a {
       color: var(--oc-color-text-default);
     }
   }
+
   &-loading {
     * {
       position: absolute;
     }
+
     &-background {
       background-color: var(--oc-color-background-secondary);
       opacity: 0.6;
     }
+
     &-spinner {
       top: 50%;
       left: 50%;
@@ -375,11 +379,13 @@ export default {
       opacity: 1;
     }
   }
+
   &-actions {
     button:not(:last-child) {
       margin-right: var(--oc-space-small);
     }
   }
+
   &-link {
     white-space: nowrap;
     text-overflow: ellipsis;
