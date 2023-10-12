@@ -79,7 +79,7 @@ describe('ClientService', () => {
     })
     const clientService = getClientServiceMock()
     const client = clientService.graphAuthenticated
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
+    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
     expect(graphClient).toEqual(client)
     // test re-instantiation on token and language change
@@ -99,7 +99,7 @@ describe('ClientService', () => {
     })
     const clientService = getClientServiceMock()
     const client = clientService.ocsUserContext
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
+    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
     expect(ocsClient).toEqual(client)
     // test re-instantiation on token and language change
@@ -119,7 +119,7 @@ describe('ClientService', () => {
     })
     const clientService = getClientServiceMock()
     const client = clientService.ocsPublicLinkContext()
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
+    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
     expect(ocsClient).toEqual(client)
     // test re-instantiation on token and language change
