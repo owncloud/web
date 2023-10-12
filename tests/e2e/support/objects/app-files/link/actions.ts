@@ -91,6 +91,8 @@ const deleteLinkButton =
   `//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]`
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 const notificationContainer = 'div.oc-notification'
+const publicLinkPasswordErrorMessage = `//div[contains(@class, "oc-text-input-message oc-text-input-danger")]/span`
+const cancelButton = '.oc-modal-body-actions-cancel'
 
 const getRecentLinkUrl = async (page: Page): Promise<string> => {
   return page.locator(publicLinkUrlList).first().textContent()
@@ -175,7 +177,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
   return await getRecentLinkName(page)
 }
 
-export const addPassword = async (args: addPasswordArgs): Promise<void> => {
+export const fillPassword = async (args: addPasswordArgs): Promise<void> => {
   const { page, resource, linkName, newPassword } = args
 
   // clear all popups
@@ -192,6 +194,12 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   await page.locator(editPublicLinkAddPasswordButton).click()
   await page.locator(editPublicLinkInput).fill(newPassword)
   await page.locator(editPublicLinkRenameConfirm).click()
+}
+
+export const addPassword = async (args: addPasswordArgs): Promise<void> => {
+  const { page } = args
+
+  await fillPassword(args)
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
 }
@@ -278,4 +286,12 @@ export const clearAllPopups = async (page: Page): Promise<void> => {
 export const clearCurrentPopup = async (page: Page): Promise<void> => {
   await expect(page.locator(linkUpdateDialog)).toBeVisible()
   await clearAllPopups(page)
+}
+
+export const getPublicLinkPasswordErrorMessage = async (page: Page): Promise<string> => {
+  return await page.locator(publicLinkPasswordErrorMessage).innerText()
+}
+
+export const clickOnCancelButton = async (page: Page): Promise<void> => {
+  await page.locator(cancelButton).click()
 }

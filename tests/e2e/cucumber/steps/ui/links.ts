@@ -75,6 +75,21 @@ When(
 )
 
 When(
+  '{string} tries to sets the password of the public link named {string} of resource {string} to {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    linkName: string,
+    resource: string,
+    newPassword: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.fillPassword({ resource, linkName, newPassword })
+  }
+)
+
+When(
   '{string} edits the public link named {string} of resource {string} changing role to {string}',
   async function (
     this: World,
@@ -133,6 +148,17 @@ Then(
     const linkObject = new objects.applicationFiles.Link({ page })
     const isVisible = await linkObject.islinkEditButtonVisibile(linkName)
     expect(isVisible).toBe(shouldOrShouldNot !== 'should not')
+  }
+)
+
+Then(
+  '{string} should see an error message',
+  async function (this: World, stepUser: any, errorMessage: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const actualErrorMessage = await linkObject.checkErrorMessage()
+    expect(actualErrorMessage).toBe(errorMessage)
+    await linkObject.clickOnCancelButton()
   }
 )
 
