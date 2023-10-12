@@ -1,45 +1,34 @@
 <template>
   <div
     id="dicom-metadata-sidebar"
-    class="dicom-metadata-sidebar .sidebar-panel oc-position-relative oc-width-1-3 oc-height-1-1 oc-ml-xs oc-p-s"
+    class="dicom-metadata-sidebar .sidebar-panel oc-position-relative oc-width-1-3 oc-height-1-1 oc-ml-xs oc-py-s"
   >
-    <!-- insert cross icon to close sidebar -->
     <div class="sidebar-panel__header header">
-      <!--
-    <div
-      v-if="[activePanelName, oldPanelName].includes(panel.app)"
-      class="sidebar-panel__header header"
-    >
-    -->
-      <!-- accessible label back
-            <oc-button
-              v-if="!panel.default"
-              v-oc-tooltip="accessibleLabelBack"
-              class="header__back"
-              appearance="raw"
-              :aria-label="accessibleLabelBack"
-              @click="closePanel"
-            >
-              <oc-icon name="arrow-left-s" fill-type="line" />
-            </oc-button>
-            -->
+      <oc-button
+        v-if="isSmallScreen"
+        v-oc-tooltip="backToMainDescription"
+        class="header__back"
+        appearance="raw"
+        :aria-label="backToMainDescription"
+        @click="$emit('closeMetadataSidebar')"
+      >
+        <oc-icon name="arrow-left-s" fill-type="line" />
+      </oc-button>
 
       <h2 class="header__title oc-my-rm">DICOM metadata</h2>
 
       <oc-button
-        appearance="raw"
+        v-oc-tooltip="hideMetadataDescription"
         class="header__close"
-        :aria-label="$gettext('Close metadata sidebar')"
+        appearance="raw"
+        :aria-label="hideMetadataDescription"
         @click="$emit('closeMetadataSidebar')"
       >
         <oc-icon name="close" />
       </oc-button>
     </div>
-    <!--
-    <h2 class="oc-py-s oc-my-rm header__title">DICOM metadata</h2>
-    -->
 
-    <div v-if="isMetadataExtracted">
+    <div v-if="isMetadataExtracted" id="dicom-metadata-sidebar-content" class="oc-p-s">
       <table class="details-table oc-py-s">
         <!-- example information section -->
         <tr>
@@ -114,6 +103,10 @@ export default defineComponent({
     isMetadataExtracted: {
       type: Boolean,
       default: false
+    },
+    isSmallScreen: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['closeMetadataSidebar'],
@@ -121,8 +114,8 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     return {
-      imageShowMetadataDescription: $gettext('Show DICOM metadata'),
-      imageHideMetadataDescription: $gettext('Hide DICOM metadata')
+      hideMetadataDescription: $gettext('Hide DICOM metadata'),
+      backToMainDescription: $gettext('Back to DICOM viewer')
     }
   },
   methods: {
@@ -143,12 +136,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#metadata-sidebar {
-  border: 1px solid red;
-}
 .dicom-metadata-sidebar {
-  border-left: 1px solid var(--oc-color-border);
-  border-left: 1px solid var(--oc-color-border);
+  border-left: 1px solid var(--oc-color-border); // TODO: hide line on small screen
   position: relative;
   overflow: hidden;
   width: 600px;

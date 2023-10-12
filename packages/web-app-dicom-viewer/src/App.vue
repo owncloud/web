@@ -1,6 +1,5 @@
 <template>
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1 oc-flex">
-    <!-- TODO: the class of the following item should be oc-width-1-1 if sidebar is not displayed, also vertical align of dicom viewport should be adjusted -->
     <div
       v-show="displayDicomViewerMain"
       id="dicom-viewer-main"
@@ -85,6 +84,7 @@
       v-show="isShowMetadataActivated"
       :dicom-metadata="dicomMetadata"
       :is-metadata-extracted="isMetadataExtracted"
+      :is-small-screen="isSmallScreen"
       @close-metadata-sidebar="toggleShowMetadata"
     />
   </div>
@@ -818,11 +818,7 @@ export default defineComponent({
 }
 
 #dicom-viewer-vip-metadata {
-  color: rgb(
-    255,
-    117,
-    102
-  ); //var(--oc-color-swatch-danger-default); // it seems like the other colour changes if dark mode is activated and becomes less readible
+  color: rgb(255, 117, 102);
   text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
   z-index: 2;
   margin: 10px;
