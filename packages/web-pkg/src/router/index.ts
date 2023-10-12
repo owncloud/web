@@ -1,4 +1,4 @@
-import { RouteLocationNamedRaw } from 'vue-router'
+import { RouteRecordRaw } from 'vue-router'
 
 import {
   buildRoutes as buildCommonRoutes,
@@ -41,7 +41,7 @@ const ROOT_ROUTE = {
   redirect: (to) => createLocationSpaces('files-spaces-generic', to)
 }
 
-const buildRoutes = (components: RouteComponents): RouteLocationNamedRaw[] => [
+const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
   ROOT_ROUTE,
   ...buildCommonRoutes(components),
   ...buildSharesRoutes(components),

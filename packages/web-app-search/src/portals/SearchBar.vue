@@ -15,6 +15,7 @@
       :placeholder="searchLabel"
       :button-hidden="true"
       :show-cancel-button="showCancelButton"
+      :show-advanced-search-button="listProviderAvailable"
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
@@ -29,6 +30,7 @@
     >
       <template #locationFilter>
         <search-bar-filter
+          v-if="locationFilterAvailable"
           :current-folder-available="currentFolderAvailable"
           @update:model-value="onLocationFilterChange"
         />
@@ -103,7 +105,6 @@
 </template>
 
 <script lang="ts">
-import { providerStore } from '../service'
 import {
   createLocationCommon,
   isLocationCommonActive,
@@ -116,6 +117,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from '@ownclouders/web-pkg'
 import { SearchBarFilter } from '@ownclouders/web-pkg'
+import { useAvailableProviders } from '../composables'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -126,7 +128,7 @@ export default defineComponent({
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
-    const shareId = useRouteQuery('shareId')
+    const availableProviders = useAvailableProviders()
     const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
@@ -134,6 +136,15 @@ export default defineComponent({
     const searchResults = ref([])
     const loading = ref(false)
     const currentFolderAvailable = ref(false)
+
+    const listProviderAvailable = computed(() =>
+      unref(availableProviders).some((p) => !!p.listSearch)
+    )
+
+    const locationFilterAvailable = computed(() =>
+      // FIXME: use capability as soon as we have one
+      unref(availableProviders).some((p) => !!p.listSearch)
+    )
 
     watch(isMobileWidth, () => {
       const searchBarEl = document.getElementById('files-global-search-bar')
@@ -153,16 +164,8 @@ export default defineComponent({
       }
     })
 
-    const isShareRoute = () => {
-      return !!shareId.value
-    }
-
     const optionsDrop = computed(() => {
       return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
-    })
-
-    const availableProviders = computed(() => {
-      return unref(providerStore)?.availableProviders
     })
 
     const search = async () => {
@@ -202,6 +205,10 @@ export default defineComponent({
     }
 
     const onKeyUpEnter = () => {
+      if (!unref(listProviderAvailable)) {
+        return
+      }
+
       if (unref(optionsDrop)) {
         unref(optionsDrop).hide()
       }
@@ -273,6 +280,8 @@ export default defineComponent({
       showCancelButton,
       onLocationFilterChange,
       currentFolderAvailable,
+      listProviderAvailable,
+      locationFilterAvailable,
       store,
       scopeQueryValue,
       optionsDrop,
@@ -282,7 +291,6 @@ export default defineComponent({
       onKeyUpEnter,
       searchResults,
       loading,
-      providerStore,
       availableProviders,
       search,
       showPreview,

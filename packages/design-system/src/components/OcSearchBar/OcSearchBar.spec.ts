@@ -4,6 +4,7 @@ import OcSearchBar from './OcSearchBar.vue'
 describe('OcSearchBar', () => {
   const selectors = {
     searchButton: '.oc-search-button',
+    advancedSearchButton: '.oc-advanced-search',
     searchInput: '.oc-search-input',
     searchButtonWrapper: '.oc-search-button-wrapper',
     searchClearButton: '.oc-search-clear'
@@ -187,11 +188,15 @@ describe('OcSearchBar', () => {
   describe('advanced search button', () => {
     it('should be visible', () => {
       const wrapper = getWrapper()
-      expect(wrapper.find('.oc-advanced-search').exists()).toBeTruthy()
+      expect(wrapper.find(selectors.advancedSearchButton).exists()).toBeTruthy()
+    })
+    it('should not be visible if disabled', () => {
+      const wrapper = getWrapper({ showAdvancedSearchButton: false })
+      expect(wrapper.find(selectors.advancedSearchButton).exists()).toBeFalsy()
     })
     it('should trigger the "advancedSearch"-event on click', async () => {
       const wrapper = getWrapper()
-      await wrapper.find('.oc-advanced-search').trigger('click')
+      await wrapper.find(selectors.advancedSearchButton).trigger('click')
       expect(wrapper.emitted('advancedSearch').length).toBeGreaterThan(0)
     })
   })

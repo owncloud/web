@@ -1,6 +1,7 @@
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import flushPromises from 'flush-promises'
 import { mock } from 'jest-mock-extended'
+import { ref } from 'vue'
 import { defineComponent } from 'vue'
 import {
   createStore,
@@ -10,6 +11,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
+import { useAvailableProviders } from '../../../src/composables'
 
 const component = defineComponent({
   emits: ['click', 'keyup'],
@@ -46,6 +48,7 @@ const providerContacts = {
 }
 
 const selectors = {
+  search: '#files-global-search',
   noResults: '#no-results',
   searchInput: 'input',
   searchInputClear: '.oc-search-clear',
@@ -57,13 +60,8 @@ const selectors = {
 }
 
 jest.mock('lodash-es/debounce', () => (fn) => fn)
-jest.mock('web-app-search/src/service/providerStore', () => ({
-  get providerStore() {
-    return {
-      availableProviders: [providerFiles, providerContacts]
-    }
-  }
-}))
+jest.mock('../../../src/composables/useAvailableProviders')
+
 beforeEach(() => {
   providerFiles.previewSearch.search.mockImplementation(() => {
     return {
@@ -92,12 +90,12 @@ afterEach(() => {
 describe('Search Bar portal component', () => {
   jest.spyOn(console, 'warn').mockImplementation(undefined)
   test('does not render a search field if no availableProviders given', () => {
-    wrapper = getMountedWrapper({ data: { providerStore: { availableProviders: [] } } }).wrapper
-    expect(wrapper.element.innerText).toBeFalsy()
+    wrapper = getMountedWrapper({ providers: [] }).wrapper
+    expect(wrapper.find(selectors.search).exists()).toBeFalsy()
   })
   test('does not render a search field if no user given', () => {
     wrapper = getMountedWrapper({ isUserContextReady: false }).wrapper
-    expect(wrapper.element.innerText).toBeFalsy()
+    expect(wrapper.find(selectors.search).exists()).toBeFalsy()
   })
   test('updates the search term on input', () => {
     wrapper = getMountedWrapper().wrapper
@@ -217,9 +215,23 @@ describe('Search Bar portal component', () => {
       query: expect.objectContaining({ term: 'albert', provider: 'files.sdk' })
     })
   })
+  test('does not navigate to the list view if no list provider given', async () => {
+    wrapper = getMountedWrapper({ providers: [providerContacts] }).wrapper
+    wrapper.find(selectors.searchInput).setValue('albert')
+    const spyRouterPushStub = wrapper.vm.$router.push
+    await flushPromises()
+    wrapper.find(selectors.searchInput).trigger('keyup.enter')
+    expect(spyRouterPushStub).not.toHaveBeenCalled()
+  })
 })
 
-function getMountedWrapper({ data = {}, mocks = {}, isUserContextReady = true } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  isUserContextReady = true,
+  providers = [providerFiles, providerContacts]
+} = {}) {
+  jest.mocked(useAvailableProviders).mockReturnValue(ref(providers))
+
   const currentRoute = mock<RouteLocation>({
     name: 'files-spaces-generic',
     query: {

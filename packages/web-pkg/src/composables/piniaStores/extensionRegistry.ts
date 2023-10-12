@@ -1,4 +1,5 @@
 import { Action } from '../actions'
+import { SearchProvider } from '../../components/Search'
 import { defineStore } from 'pinia'
 import { Ref, unref } from 'vue'
 
@@ -12,7 +13,12 @@ export interface ActionExtension extends BaseExtension {
   action: Action
 }
 
-export type Extension = ActionExtension // | FooExtension | BarExtension
+export interface SearchExtension extends BaseExtension {
+  type: 'search'
+  searchProvider: SearchProvider
+}
+
+export type Extension = ActionExtension | SearchExtension
 
 export const useExtensionRegistry = defineStore('extensionRegistry', {
   state: () => ({ extensions: [] as Ref<Extension[]>[] }),
@@ -25,7 +31,9 @@ export const useExtensionRegistry = defineStore('extensionRegistry', {
     requestExtensions:
       (state) =>
       <ExtensionType extends Extension>(type: string) => {
-        return state.extensions.map((e) => unref(e).filter((e) => e.type === type)).flat()
+        return state.extensions
+          .map((e) => unref(e).filter((e) => e.type === type))
+          .flat() as ExtensionType[]
       }
   }
 })
