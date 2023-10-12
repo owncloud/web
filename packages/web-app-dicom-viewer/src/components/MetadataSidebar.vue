@@ -71,18 +71,72 @@
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
+        <!-- instance information section -->
+        <tr>
+          <th colspan="2">
+            <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+              Instance Information
+            </p>
+          </th>
+        </tr>
+        <tr v-for="(value, key) in instanceInformation" :key="key">
+          <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
+          <td>{{ value || '–' }}</td>
+        </tr>
         <!-- image information section -->
         <tr>
           <th colspan="2">
             <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Image Information</p>
           </th>
         </tr>
-        <!--
-        <tr v-for="(value, key) in dicomMetadata[4]" :key="key">
+        <tr v-for="(value, key) in imageInformation" :key="key">
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
-        -->
+        <!-- equipment information section -->
+        <tr>
+          <th colspan="2">
+            <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+              Equipment Information
+            </p>
+          </th>
+        </tr>
+        <tr v-for="(value, key) in equipmentInformation" :key="key">
+          <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
+          <td>{{ value || '–' }}</td>
+        </tr>
+        <!-- scanning information section -->
+        <tr>
+          <th colspan="2">
+            <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">
+              Scanning Information
+            </p>
+          </th>
+        </tr>
+        <tr v-for="(value, key) in scanningInformation" :key="key">
+          <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
+          <td>{{ value || '–' }}</td>
+        </tr>
+        <!-- uids information section -->
+        <tr>
+          <th colspan="2">
+            <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">UIDS Information</p>
+          </th>
+        </tr>
+        <tr v-for="(value, key) in uidsInformation" :key="key">
+          <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
+          <td>{{ value || '–' }}</td>
+        </tr>
+        <!-- other information section -->
+        <tr>
+          <th colspan="2">
+            <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Other Information</p>
+          </th>
+        </tr>
+        <tr v-for="(value, key) in otherInformation" :key="key">
+          <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
+          <td>{{ value || '–' }}</td>
+        </tr>
       </table>
     </div>
   </div>
@@ -95,12 +149,9 @@ import upperFirst from 'lodash-es/upperFirst'
 export default defineComponent({
   name: 'MetadataSidebar',
   props: {
-    dicomMetadata: {
-      type: [Array, Object],
-      required: true
-    },
     isMetadataExtracted: {
       type: Boolean,
+      required: true,
       default: false
     },
     isSmallScreen: {
@@ -111,13 +162,40 @@ export default defineComponent({
       type: Array
     },
     patientInformation: {
-      type: Array
+      type: Array,
+      required: true
     },
     studyInformation: {
-      type: Array
+      type: Array,
+      required: true
     },
     seriesInformation: {
-      type: Array
+      type: Array,
+      required: true
+    },
+    instanceInformation: {
+      type: Array,
+      required: true
+    },
+    imageInformation: {
+      type: Array,
+      required: true
+    },
+    equipmentInformation: {
+      type: Array,
+      required: true
+    },
+    scanningInformation: {
+      type: Array,
+      required: true
+    },
+    uidsInformation: {
+      type: Array,
+      required: true
+    },
+    otherInformation: {
+      type: Array,
+      required: true
     }
   },
   emits: ['closeMetadataSidebar'],

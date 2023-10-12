@@ -86,7 +86,12 @@
       :patientInformation="patientInformation"
       :studyInformation="studyInformation"
       :seriesInformation="seriesInformation"
-      :dicom-metadata="dicomMetadata"
+      :instanceInformation="instanceInformation"
+      :imageInformation="imageInformation"
+      :equipmentInformation="equipmentInformation"
+      :scanningInformation="scanningInformation"
+      :uidsInformation="uidsInformation"
+      :otherInformation="otherInformation"
       :is-metadata-extracted="isMetadataExtracted"
       :is-small-screen="isSmallScreen"
       @close-metadata-sidebar="toggleShowMetadata"
@@ -211,6 +216,24 @@ export default defineComponent({
     },
     seriesInformation: {
       type: Array
+    },
+    instanceInformation: {
+      type: Array
+    },
+    imageInformation: {
+      type: Array
+    },
+    equipmentInformation: {
+      type: Array
+    },
+    scanningInformation: {
+      type: Array
+    },
+    uidsInformation: {
+      type: Array
+    },
+    otherInformation: {
+      type: Array
     }
   },
   setup(props) {
@@ -274,13 +297,6 @@ export default defineComponent({
       scanningInformation: {},
       uidsInformation: {},
       otherInformation: {},
-      patientInfo: {
-        patientName: '',
-        patientBirthdate: '',
-        institutionName: '',
-        instanceCreationDate: '',
-        instanceCreationTime: ''
-      },
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageHideMetadataDescription: $gettext('Hide DICOM metadata')
