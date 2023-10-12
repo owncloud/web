@@ -82,6 +82,10 @@
 
     <metadata-sidebar
       v-show="isShowMetadataActivated"
+      :exampleInformation="exampleInformation"
+      :patientInformation="patientInformation"
+      :studyInformation="studyInformation"
+      :seriesInformation="seriesInformation"
       :dicom-metadata="dicomMetadata"
       :is-metadata-extracted="isMetadataExtracted"
       :is-small-screen="isSmallScreen"
@@ -195,12 +199,25 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       default: null
+    },
+    exampleInformation: {
+      type: Array
+    },
+    patientInformation: {
+      type: Array
+    },
+    studyInformation: {
+      type: Array
+    },
+    seriesInformation: {
+      type: Array
     }
   },
   setup(props) {
     const { $gettext } = useGettext()
 
     return {
+      // dicom metadata
       dicomMetadata: {
         vipInformation: {
           patientName: '',
@@ -208,54 +225,61 @@ export default defineComponent({
           institutionName: '',
           instanceCreationDate: '',
           instanceCreationTime: ''
-        },
-        exampleInformation: {
-          transferSyntax: '',
-          SOP_ClassUID: '',
-          SOP_InstanceUID: '',
-          rows: '',
-          columns: '',
-          spacing: '',
-          direction: '',
-          origin: '',
-          modality: '',
-          pixelRepresentation: '',
-          bitsAllocated: '',
-          bitsStored: '',
-          highBit: '',
-          photometricInterpretation: '',
-          windowWidth: '',
-          windowCenter: ''
-        },
-        patientInformation: {
-          patientName: '',
-          patientID: '',
-          patientBirthday: '',
-          patientSex: '',
-          patientWeight: ''
-        },
-        studyInformation: {
-          studyDescription: '',
-          protocolName: '',
-          accessionNumber: '',
-          studyID: '',
-          studyDate: '',
-          studyTime: ''
-        },
-        seriesInformation: {
-          seriesDescription: '',
-          seriesNumber: '',
-          modality: '',
-          bodyPart: '',
-          seriesDate: '',
-          seriesTime: ''
-        },
-        instanceInformation: {},
-        imageInformation: {},
-        equipmentInformation: {},
-        scanningInformation: {},
-        uidsInformation: {},
-        otherInformation: {}
+        }
+      },
+      exampleInformation: {
+        transferSyntax: '',
+        SOP_ClassUID: '',
+        SOP_InstanceUID: '',
+        rows: '',
+        columns: '',
+        spacing: '',
+        direction: '',
+        origin: '',
+        modality: '',
+        pixelRepresentation: '',
+        bitsAllocated: '',
+        bitsStored: '',
+        highBit: '',
+        photometricInterpretation: '',
+        windowWidth: '',
+        windowCenter: ''
+      },
+      patientInformation: {
+        patientName: '',
+        patientID: '',
+        patientBirthday: '',
+        patientSex: '',
+        patientWeight: ''
+      },
+      studyInformation: {
+        studyDescription: '',
+        protocolName: '',
+        accessionNumber: '',
+        studyID: '',
+        studyDate: '',
+        studyTime: ''
+      },
+      seriesInformation: {
+        seriesDescription: '',
+        seriesNumber: '',
+        modality: '',
+        bodyPart: '',
+        seriesDate: '',
+        seriesTime: ''
+      },
+      instanceInformation: {},
+      imageInformation: {},
+      equipmentInformation: {},
+      scanningInformation: {},
+      uidsInformation: {},
+      otherInformation: {},
+      patientInfo: {
+        patientName: '',
+        patientBirthdate: '',
+        institutionName: '',
+        instanceCreationDate: '',
+        instanceCreationTime: ''
       },
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
@@ -564,34 +588,31 @@ export default defineComponent({
         const transferSyntax = metaData.get('transferSyntax', imageId)
 
         // adding values to corresponding variable
-        this.dicomMetadata.exampleInformation.transferSyntax = transferSyntax.transferSyntaxUID
-        this.dicomMetadata.exampleInformation.SOP_ClassUID =
+        this.exampleInformation.transferSyntax = transferSyntax.transferSyntaxUID
+        this.exampleInformation.SOP_ClassUID =
           sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']' // adding description of the SOP module
-        this.dicomMetadata.exampleInformation.SOP_InstanceUID = sopCommonModule.sopInstanceUID
-        this.dicomMetadata.exampleInformation.rows = this.imageData.dimensions[0]
-        this.dicomMetadata.exampleInformation.columns = this.imageData.dimensions[1]
-        this.dicomMetadata.exampleInformation.spacing = this.imageData.spacing.join('\\')
-        this.dicomMetadata.exampleInformation.direction = this.imageData.direction
+        this.exampleInformation.SOP_InstanceUID = sopCommonModule.sopInstanceUID
+        this.exampleInformation.rows = this.imageData.dimensions[0]
+        this.exampleInformation.columns = this.imageData.dimensions[1]
+        this.exampleInformation.spacing = this.imageData.spacing.join('\\')
+        this.exampleInformation.direction = this.imageData.direction
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
-        this.dicomMetadata.exampleInformation.origin = this.imageData.origin
+        this.exampleInformation.origin = this.imageData.origin
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
-        this.dicomMetadata.exampleInformation.modality = this.imageData.metadata.Modality
-        this.dicomMetadata.exampleInformation.pixelRepresentation = pixelRepresentation
-        this.dicomMetadata.exampleInformation.bitsAllocated = bitsAllocated
-        this.dicomMetadata.exampleInformation.bitsStored = bitsStored
-        this.dicomMetadata.exampleInformation.highBit = highBit
-        this.dicomMetadata.exampleInformation.photometricInterpretation = photometricInterpretation
+        this.exampleInformation.modality = this.imageData.metadata.Modality
+        this.exampleInformation.pixelRepresentation = pixelRepresentation
+        this.exampleInformation.bitsAllocated = bitsAllocated
+        this.exampleInformation.bitsStored = bitsStored
+        this.exampleInformation.highBit = highBit
+        this.exampleInformation.photometricInterpretation = photometricInterpretation
         if (voiLutModuleLocal.windowWidth != (null || undefined)) {
-          this.dicomMetadata.exampleInformation.windowWidth =
-            voiLutModuleLocal.windowWidth.toString()
+          this.exampleInformation.windowWidth = voiLutModuleLocal.windowWidth.toString()
         }
         if (voiLutModuleLocal.windowCenter != (null || undefined)) {
-          this.dicomMetadata.exampleInformation.windowCenter =
-            voiLutModuleLocal.windowCenter.toString()
+          this.exampleInformation.windowCenter = voiLutModuleLocal.windowCenter.toString()
         }
-
         this.isMetadataExtracted = true
         console.log('metadata from viewport extracted')
       } else {
@@ -767,8 +788,6 @@ export default defineComponent({
     toggleShowMetadata() {
       console.log('toggle show metadata clicked')
       this.isShowMetadataActivated = !this.isShowMetadataActivated
-      console.log('is small screen: ' + this.isSmallScreen)
-      console.log('is is show metadata activated: ' + this.isShowMetadataActivated)
     }
   }
 })

@@ -27,9 +27,8 @@
         <oc-icon name="close" />
       </oc-button>
     </div>
-
-    <div v-if="isMetadataExtracted" id="dicom-metadata-sidebar-content" class="oc-p-s">
-      <table class="details-table oc-py-s">
+    <div v-if="isMetadataExtracted" id="dicom-metadata-sidebar-content" class="oc-px-s">
+      <table class="details-table">
         <!-- example information section -->
         <tr>
           <th colspan="2">
@@ -38,7 +37,7 @@
             </p>
           </th>
         </tr>
-        <tr v-for="(value, key) in dicomMetadata[0]" :key="key">
+        <tr v-for="(value, key) in exampleInformation" :key="key">
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
@@ -48,18 +47,17 @@
             <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Patient Information</p>
           </th>
         </tr>
-        <tr v-for="(value, key) in dicomMetadata[1]" :key="key">
+        <tr v-for="(value, key) in patientInformation" :key="key">
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
         <!-- study information section -->
-
         <tr>
           <th colspan="2">
             <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Study Information</p>
           </th>
         </tr>
-        <tr v-for="(value, key) in dicomMetadata[2]" :key="key">
+        <tr v-for="(value, key) in studyInformation" :key="key">
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
@@ -69,7 +67,7 @@
             <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Series Information</p>
           </th>
         </tr>
-        <tr v-for="(value, key) in dicomMetadata[3]" :key="key">
+        <tr v-for="(value, key) in seriesInformation" :key="key">
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
@@ -79,18 +77,19 @@
             <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Image Information</p>
           </th>
         </tr>
+        <!--
         <tr v-for="(value, key) in dicomMetadata[4]" :key="key">
           <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
           <td>{{ value || '–' }}</td>
         </tr>
+        -->
       </table>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from 'web-client/src'
 import upperFirst from 'lodash-es/upperFirst'
 
 export default defineComponent({
@@ -107,6 +106,18 @@ export default defineComponent({
     isSmallScreen: {
       type: Boolean,
       default: false
+    },
+    exampleInformation: {
+      type: Array
+    },
+    patientInformation: {
+      type: Array
+    },
+    studyInformation: {
+      type: Array
+    },
+    seriesInformation: {
+      type: Array
     }
   },
   emits: ['closeMetadataSidebar'],
@@ -141,6 +152,10 @@ export default defineComponent({
   position: relative;
   overflow: hidden;
   width: 600px;
+}
+
+#dicom-metadata-sidebar-content table {
+  width: 100%;
 }
 .dicom-metadata-section-title {
   //margin: 4px 0px 8px 0px;
