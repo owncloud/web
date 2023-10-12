@@ -1,5 +1,7 @@
 import { XMLBuilder } from 'fast-xml-parser'
 import { DavProperties, DavPropertyValue } from '../constants'
+import { SpaceResource, isPublicSpaceResource } from '../../helpers'
+import { Headers } from 'webdav'
 
 export const buildPropFindBody = (
   properties: DavPropertyValue[] = [],
@@ -35,4 +37,15 @@ export const buildPropFindBody = (
 
 export const buildPublicLinkAuthHeader = (password: string) => {
   return 'Basic ' + Buffer.from('public:' + password).toString('base64')
+}
+
+export const buildAuthHeader = (token: string, space: SpaceResource = null): Headers => {
+  if (isPublicSpaceResource(space)) {
+    if (space.publicLinkPassword) {
+      return { Authorization: buildPublicLinkAuthHeader(space.publicLinkPassword) }
+    }
+    return {}
+  }
+
+  return { Authorization: `Bearer ${token}` }
 }

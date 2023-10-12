@@ -1,14 +1,15 @@
 import { urlJoin } from '../utils'
-import { isPublicSpaceResource, SpaceResource } from '../helpers'
+import { SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
-import { DAV, buildPublicLinkAuthHeader } from './client'
+import { DAV, buildAuthHeader } from './client'
 import { ProgressEventCallback } from 'webdav'
+import { unref } from 'vue'
 
 export const PutFileContentsFactory = (
   dav: DAV,
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,
-  options: WebDavOptions
+  { accessToken }: WebDavOptions
 ) => {
   return {
     async putFileContents(
@@ -29,18 +30,14 @@ export const PutFileContentsFactory = (
         onUploadProgress?: ProgressEventCallback
       }
     ) {
-      if (isPublicSpaceResource(space)) {
-        headers.Authorization = null
-        if (space.publicLinkPassword) {
-          headers.Authorization = buildPublicLinkAuthHeader(space.publicLinkPassword)
-        }
-      }
-
       await dav.put(urlJoin(space.webDavPath, path), content, {
         previousEntityTag,
         overwrite,
         onUploadProgress,
-        headers
+        headers: {
+          ...headers,
+          ...buildAuthHeader(unref(accessToken), space)
+        }
       })
 
       return getFileInfoFactory.getFileInfo(space, { path })

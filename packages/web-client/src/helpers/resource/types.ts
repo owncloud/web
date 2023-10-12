@@ -144,8 +144,8 @@ export interface WebDavResponseTusSupport {
   version?: string[]
 }
 
-export interface WebDavResponseResource extends FileStat {
-  props?: DAVResultResponseProps & DavFileInfoResponse
+export interface WebDavResponseResource extends Omit<FileStat, 'props'> {
+  props?: Omit<DAVResultResponseProps, 'getcontentlength'> & DavFileInfoResponse
   processing?: boolean
   tusSupport?: WebDavResponseTusSupport
 }

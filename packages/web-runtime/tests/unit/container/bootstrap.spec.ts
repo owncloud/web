@@ -1,104 +1,116 @@
-it.todo('fix tests')
-// jest.mock('../../../src/container/application')
+import { mock, mockDeep } from 'jest-mock-extended'
+import { createApp, defineComponent, App } from 'vue'
+import { createStore } from 'vuex'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
+import {
+  initializeApplications,
+  announceApplicationsReady,
+  announceCustomScripts,
+  announceCustomStyles
+} from '../../../src/container/bootstrap'
+import { buildApplication } from '../../../src/container/application'
+import { defaultStoreMockOptions } from 'web-test-helpers/src'
 
-// describe.skip('initialize applications', () => {
-//   it('continues even if one or more applications are falsy', async () => {
-//     const fishyError = new Error('fishy')
-//     const initialize = jest.fn()
-//     const ready = jest.fn()
-//     const errorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn)
-//     const buildApplicationMock = jest
-//       .fn()
-//       .mockImplementation(({ applicationPath }: { applicationPath: string }) => {
-//         if (applicationPath.includes('Valid')) {
-//           return Promise.resolve({ initialize, ready })
-//         }
+jest.mock('../../../src/container/application')
 
-//         return Promise.reject(fishyError)
-//       })
+describe('initialize applications', () => {
+  it('continues even if one or more applications are falsy', async () => {
+    const fishyError = new Error('fishy')
+    const initialize = jest.fn()
+    const ready = jest.fn()
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn)
+    const buildApplicationMock = jest
+      .fn()
+      .mockImplementation(({ applicationPath }: { applicationPath: string }) => {
+        if (applicationPath.includes('Valid')) {
+          return Promise.resolve({ initialize, ready })
+        }
 
-//     jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
+        return Promise.reject(fishyError)
+      })
 
-//     const applications = await initializeApplications({
-//       app: createApp(defineComponent({})),
-//       configurationManager: mockDeep<ConfigurationManager>(),
-//       runtimeConfiguration: {
-//         apps: ['internalFishy', 'internalValid'],
-//         external_apps: [{ path: 'externalFishy' }, { path: 'externalValid' }]
-//       },
-//       store: undefined,
-//       router: undefined,
-//       gettext: undefined,
-//       supportedLanguages: {}
-//     })
+    jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
-//     expect(buildApplicationMock).toHaveBeenCalledTimes(4)
-//     expect(initialize).toHaveBeenCalledTimes(2)
-//     expect(errorSpy).toHaveBeenCalledTimes(2)
-//     expect(errorSpy.mock.calls[0][0]).toMatchObject(fishyError)
-//     expect(errorSpy.mock.calls[1][0]).toMatchObject(fishyError)
+    const applications = await initializeApplications({
+      app: createApp(defineComponent({})),
+      configurationManager: mockDeep<ConfigurationManager>(),
+      runtimeConfiguration: {
+        apps: ['internalFishy', 'internalValid'],
+        external_apps: [{ path: 'externalFishy' }, { path: 'externalValid' }]
+      },
+      store: undefined,
+      router: undefined,
+      gettext: undefined,
+      supportedLanguages: {}
+    })
 
-//     await announceApplicationsReady({
-//       app: mock<App>(),
-//       store: createStore(defaultStoreMockOptions),
-//       applications
-//     })
-//     expect(ready).toHaveBeenCalledTimes(2)
-//   })
-// })
+    expect(buildApplicationMock).toHaveBeenCalledTimes(4)
+    expect(initialize).toHaveBeenCalledTimes(2)
+    expect(errorSpy).toHaveBeenCalledTimes(2)
+    expect(errorSpy.mock.calls[0][0]).toMatchObject(fishyError)
+    expect(errorSpy.mock.calls[1][0]).toMatchObject(fishyError)
 
-// describe.skip('announceCustomScripts', () => {
-//   afterEach(() => {
-//     document.getElementsByTagName('html')[0].innerHTML = ''
-//   })
+    await announceApplicationsReady({
+      app: mock<App>(),
+      store: createStore(defaultStoreMockOptions),
+      applications
+    })
+    expect(ready).toHaveBeenCalledTimes(2)
+  })
+})
 
-//   it('injects basic scripts', () => {
-//     announceCustomScripts({
-//       runtimeConfiguration: { scripts: [{ src: 'foo.js' }, { src: 'bar.js' }] }
-//     })
-//     const elements = document.getElementsByTagName('script')
-//     expect(elements.length).toBe(2)
-//   })
+describe('announceCustomScripts', () => {
+  afterEach(() => {
+    document.getElementsByTagName('html')[0].innerHTML = ''
+  })
 
-//   it('skips the injection if no src option is provided', () => {
-//     announceCustomScripts({ runtimeConfiguration: { scripts: [{}, {}, {}, {}, {}] } })
-//     const elements = document.getElementsByTagName('script')
-//     expect(elements.length).toBeFalsy()
-//   })
+  it('injects basic scripts', () => {
+    announceCustomScripts({
+      runtimeConfiguration: { scripts: [{ src: 'foo.js' }, { src: 'bar.js' }] }
+    })
+    const elements = document.getElementsByTagName('script')
+    expect(elements.length).toBe(2)
+  })
 
-//   it('loads scripts synchronous by default', () => {
-//     announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js' }] } })
-//     const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
-//     expect(element.async).toBeFalsy()
-//   })
+  it('skips the injection if no src option is provided', () => {
+    announceCustomScripts({ runtimeConfiguration: { scripts: [{}, {}, {}, {}, {}] } })
+    const elements = document.getElementsByTagName('script')
+    expect(elements.length).toBeFalsy()
+  })
 
-//   it('injects scripts async if the corresponding configurations option is set', () => {
-//     announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js', async: true }] } })
-//     const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
-//     expect(element.async).toBeTruthy()
-//   })
-// })
+  it('loads scripts synchronous by default', () => {
+    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js' }] } })
+    const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
+    expect(element.async).toBeFalsy()
+  })
 
-// describe.skip('announceCustomStyles', () => {
-//   afterEach(() => {
-//     document.getElementsByTagName('html')[0].innerHTML = ''
-//   })
+  it('injects scripts async if the corresponding configurations option is set', () => {
+    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js', async: true }] } })
+    const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
+    expect(element.async).toBeTruthy()
+  })
+})
 
-//   it('injects basic styles', () => {
-//     const styles = [{ href: 'foo.css' }, { href: 'bar.css' }]
-//     announceCustomStyles({ runtimeConfiguration: { styles } })
+describe('announceCustomStyles', () => {
+  afterEach(() => {
+    document.getElementsByTagName('html')[0].innerHTML = ''
+  })
 
-//     styles.forEach(({ href }) => {
-//       const element = document.querySelector<HTMLLinkElement>(`[href="${href}"]`)
-//       expect(element).toBeTruthy()
-//       expect(element.type).toBe('text/css')
-//       expect(element.rel).toBe('stylesheet')
-//     })
-//   })
+  it('injects basic styles', () => {
+    const styles = [{ href: 'foo.css' }, { href: 'bar.css' }]
+    announceCustomStyles({ runtimeConfiguration: { styles } })
 
-//   it('skips the injection if no href option is provided', () => {
-//     announceCustomStyles({ runtimeConfiguration: { styles: [{}, {}] } })
-//     const elements = document.getElementsByTagName('link')
-//     expect(elements.length).toBeFalsy()
-//   })
-// })
+    styles.forEach(({ href }) => {
+      const element = document.querySelector<HTMLLinkElement>(`[href="${href}"]`)
+      expect(element).toBeTruthy()
+      expect(element.type).toBe('text/css')
+      expect(element.rel).toBe('stylesheet')
+    })
+  })
+
+  it('skips the injection if no href option is provided', () => {
+    announceCustomStyles({ runtimeConfiguration: { styles: [{}, {}] } })
+    const elements = document.getElementsByTagName('link')
+    expect(elements.length).toBeFalsy()
+  })
+})

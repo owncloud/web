@@ -129,7 +129,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     mdate: resource.props[DavProperty.LastModifiedDate],
     size: isFolder
       ? resource.props[DavProperty.ContentSize]?.toString() || '0'
-      : (resource.props[DavProperty.ContentLength] as number)?.toString() || '0',
+      : resource.props[DavProperty.ContentLength]?.toString() || '0',
     indicators: [],
     permissions: resource.props[DavProperty.Permissions] || '',
     starred: resource.props[DavProperty.IsFavorite] !== 0,

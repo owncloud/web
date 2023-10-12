@@ -70,14 +70,17 @@ export class DAV {
     path: string,
     {
       limit = 30,
-      properties
+      properties,
+      headers = {}
     }: {
       limit?: number
       properties?: DavPropertyValue[]
+      headers?: Headers
     } = {}
   ) {
     const { body, result } = await this.request(DavMethod.report, path, {
-      body: buildPropFindBody(properties, { pattern, limit })
+      body: buildPropFindBody(properties, { pattern, limit }),
+      headers
     })
 
     return {
@@ -150,7 +153,6 @@ export class DAV {
   private buildHeaders(headers: Headers = {}): Headers {
     return {
       'Accept-Language': unref(this.language),
-      Authorization: 'Bearer ' + unref(this.accessToken),
       'Content-Type': 'application/xml; charset=utf-8',
       'X-Requested-With': 'XMLHttpRequest',
       'X-Request-ID': uuidV4(),

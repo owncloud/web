@@ -6,14 +6,17 @@ import {
   buildWebDavSpacesTrashPath
 } from '../helpers'
 import { WebDavOptions } from './types'
-import { DAV } from './client'
+import { DAV, buildAuthHeader } from './client'
 import { urlJoin } from '../utils'
 
 interface ClearTrashBinOptions {
   id?: Resource['id']
 }
 
-export const ClearTrashBinFactory = (dav: DAV, { capabilities, user }: WebDavOptions) => {
+export const ClearTrashBinFactory = (
+  dav: DAV,
+  { accessToken, capabilities, user }: WebDavOptions
+) => {
   return {
     clearTrashBin(space: SpaceResource, { id }: ClearTrashBinOptions = {}) {
       const hasShareJail = unref(capabilities)?.spaces?.share_jail === true
@@ -25,7 +28,8 @@ export const ClearTrashBinFactory = (dav: DAV, { capabilities, user }: WebDavOpt
         path = urlJoin(path, id)
       }
 
-      return dav.delete(path)
+      const headers = buildAuthHeader(unref(accessToken), space)
+      return dav.delete(path, { headers })
     }
   }
 }

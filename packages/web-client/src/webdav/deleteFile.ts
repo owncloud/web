@@ -1,21 +1,14 @@
 import { urlJoin } from '../utils'
-import { isPublicSpaceResource, SpaceResource } from '../helpers'
+import { SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
-import { DAV, buildPublicLinkAuthHeader } from './client'
+import { DAV, buildAuthHeader } from './client'
+import { unref } from 'vue'
 
-export const DeleteFileFactory = (dav: DAV, options: WebDavOptions) => {
+export const DeleteFileFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
     deleteFile(space: SpaceResource, { path }: { path: string }) {
-      if (isPublicSpaceResource(space)) {
-        const headers = { Authorization: null }
-        if (space.publicLinkPassword) {
-          headers.Authorization = buildPublicLinkAuthHeader(space.publicLinkPassword)
-        }
-
-        return dav.delete(urlJoin(space.webDavPath, path), { headers })
-      }
-
-      return dav.delete(urlJoin(space.webDavPath, path))
+      const headers = buildAuthHeader(unref(accessToken), space)
+      return dav.delete(urlJoin(space.webDavPath, path), { headers })
     }
   }
 }
