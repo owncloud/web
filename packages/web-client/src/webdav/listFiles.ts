@@ -1,10 +1,22 @@
-import { buildDeletedResource, buildResource, Resource } from '../helpers/resource'
+import {
+  buildDeletedResource,
+  buildResource,
+  buildWebDavFilesTrashPath,
+  Resource,
+  WebDavResponseResource
+} from '../helpers/resource'
 import { DavProperties, DavPropertyValue } from './constants'
-import { buildPublicSpaceResource, isPublicSpaceResource, SpaceResource } from '../helpers'
+import {
+  buildPublicSpaceResource,
+  buildWebDavSpacesTrashPath,
+  isPublicSpaceResource,
+  SpaceResource
+} from '../helpers'
 import { urlJoin } from '../utils'
 import { DAV, buildPublicLinkAuthHeader } from './client'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { WebDavOptions } from './types'
+import { unref } from 'vue'
 
 export type ListFilesOptions = {
   depth?: number
@@ -15,7 +27,7 @@ export type ListFilesOptions = {
 export const ListFilesFactory = (
   dav: DAV,
   pathForFileIdFactory: ReturnType<typeof GetPathForFileIdFactory>,
-  options: WebDavOptions
+  { capabilities }: WebDavOptions
 ) => {
   return {
     async listFiles(
@@ -23,7 +35,7 @@ export const ListFilesFactory = (
       { path, fileId }: { path?: string; fileId?: string | number } = {},
       { depth = 1, davProperties, isTrash = false }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
-      let webDavResources: any[] // FIXME: type
+      let webDavResources: WebDavResponseResource[]
       if (isPublicSpaceResource(space)) {
         const headers = { Authorization: null }
         if (space.publicLinkPassword) {
@@ -71,7 +83,14 @@ export const ListFilesFactory = (
       }
 
       try {
-        webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
+        let webDavPath = urlJoin(space.webDavPath, path)
+        if (isTrash) {
+          webDavPath = unref(capabilities).spaces?.share_jail
+            ? buildWebDavSpacesTrashPath(space.id.toString())
+            : buildWebDavFilesTrashPath(space.id.toString())
+        }
+
+        webDavResources = await dav.propfind(webDavPath, {
           depth,
           properties: davProperties || DavProperties.Default
         })

@@ -3,14 +3,8 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { DavProperties } from '@ownclouders/web-client/src/webdav/constants'
 import { isLocationTrashActive } from '@ownclouders/web-pkg'
-import {
-  buildWebDavSpacesTrashPath,
-  buildWebDavFilesTrashPath,
-  SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Store } from 'vuex'
-import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
-import { unref } from 'vue'
 
 export class FolderLoaderTrashbin implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,19 +21,13 @@ export class FolderLoaderTrashbin implements FolderLoader {
       store,
       clientService: { webdav }
     } = context
-    const hasShareJail = useCapabilityShareJailEnabled(store)
-
     return useTask(function* (signal1, signal2, space: SpaceResource) {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
 
-      const path = unref(hasShareJail)
-        ? buildWebDavSpacesTrashPath(space.id.toString())
-        : buildWebDavFilesTrashPath(space.id.toString())
-
       const { resource, children } = yield webdav.listFiles(
-        { ...space, webDavPath: '' },
-        { path },
+        space,
+        {},
         { depth: 1, davProperties: DavProperties.Trashbin, isTrash: true }
       )
 
