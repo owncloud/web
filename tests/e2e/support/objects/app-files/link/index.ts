@@ -55,6 +55,10 @@ export class Link {
     await this.#page.goto(startUrl)
   }
 
+  async fillPassword(args: Omit<po.addPasswordArgs, 'page'>): Promise<void> {
+    await po.fillPassword({ page: this.#page, ...args })
+  }
+
   async changeRole(args: Omit<po.changeRoleArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const role = await po.changeRole({ page: this.#page, ...args })
@@ -79,5 +83,13 @@ export class Link {
 
   async islinkEditButtonVisibile(linkName): Promise<boolean> {
     return await po.getLinkEditButtonVisibility({ page: this.#page, linkName })
+  }
+
+  async checkErrorMessage(): Promise<string> {
+    return await po.getPublicLinkPasswordErrorMessage(this.#page)
+  }
+
+  async clickOnCancelButton(): Promise<void> {
+    await po.clickOnCancelButton(this.#page)
   }
 }
