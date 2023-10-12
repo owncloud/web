@@ -15,25 +15,20 @@
           class="oc-position-absolute"
         >
           <div class="oc-pr-s oc-font-semibold">
-            <span>{{
-              dicomMetadata.vipInformation.patientName || 'patient name not defined'
-            }}</span>
+            <span>{{ vipInformation.patientName || 'patient name not defined' }}</span>
             <span>
               (*{{
-                formatDate(dicomMetadata.vipInformation.patientBirthdate, true) ||
-                'birthdate not defined'
+                formatDate(vipInformation.patientBirthdate, true) || 'birthdate not defined'
               }})</span
             >
           </div>
           <div class="oc-pr-s oc-font-semibold">
-            <span>{{
-              dicomMetadata.vipInformation.institutionName || 'institution name not defined'
-            }}</span
+            <span>{{ vipInformation.institutionName || 'institution name not defined' }}</span
             >,
             <span>{{
               formatDateAndTime(
-                dicomMetadata.vipInformation.instanceCreationDate,
-                dicomMetadata.vipInformation.instanceCreationTime
+                vipInformation.instanceCreationDate,
+                vipInformation.instanceCreationTime
               ) || 'instance creation date and time not defined'
             }}</span>
           </div>
@@ -241,14 +236,12 @@ export default defineComponent({
 
     return {
       // dicom metadata
-      dicomMetadata: {
-        vipInformation: {
-          patientName: '',
-          patientBirthdate: '',
-          institutionName: '',
-          instanceCreationDate: '',
-          instanceCreationTime: ''
-        }
+      vipInformation: {
+        patientName: '',
+        patientBirthdate: '',
+        institutionName: '',
+        instanceCreationDate: '',
+        instanceCreationTime: ''
       },
       exampleInformation: {
         transferSyntax: '',
@@ -344,23 +337,23 @@ export default defineComponent({
     instanceCreationDateTimeFormatedDate() {
       // transforming date and time into a string that is valid for formatDateFromHTTP ('YYYY-MM-DDTHH:MM:SS')
       if (
-        this.dicomMetadata.vipInformation.instanceCreationDate != undefined &&
-        this.dicomMetadata.vipInformation.instanceCreationTime != undefined &&
-        this.dicomMetadata.vipInformation.instanceCreationDate.length >= 8 &&
-        this.dicomMetadata.vipInformation.instanceCreationTime.length >= 6
+        this.vipInformation.instanceCreationDate != undefined &&
+        this.vipInformation.instanceCreationTime != undefined &&
+        this.vipInformation.instanceCreationDate.length >= 8 &&
+        this.vipInformation.instanceCreationTime.length >= 6
       ) {
         let dateString =
-          this.dicomMetadata.vipInformation.instanceCreationDate.substring(0, 4) +
+          this.vipInformation.instanceCreationDate.substring(0, 4) +
           '-' +
-          this.dicomMetadata.vipInformation.instanceCreationDate.substring(4, 6) +
+          this.vipInformation.instanceCreationDate.substring(4, 6) +
           '-' +
-          this.dicomMetadata.vipInformation.instanceCreationDate.substring(6, 8) +
+          this.vipInformation.instanceCreationDate.substring(6, 8) +
           'T' +
-          this.dicomMetadata.vipInformation.instanceCreationTime.substring(0, 2) +
+          this.vipInformation.instanceCreationTime.substring(0, 2) +
           ':' +
-          this.dicomMetadata.vipInformation.instanceCreationTime.substring(2, 4) +
+          this.vipInformation.instanceCreationTime.substring(2, 4) +
           ':' +
-          this.dicomMetadata.vipInformation.instanceCreationTime.substring(4, 8)
+          this.vipInformation.instanceCreationTime.substring(4, 8)
 
         let formatedDate = formatDateFromISO(
           DateTime.fromISO(dateString),
@@ -398,11 +391,11 @@ export default defineComponent({
     const dicomMetadataInformation = await this.fetchMetadataInformation(
       await this.addWadouriPrefix(this.url)
     )
-    this.dicomMetadata.vipInformation.patientName = dicomMetadataInformation[0]
-    this.dicomMetadata.vipInformation.patientBirthdate = dicomMetadataInformation[1]
-    this.dicomMetadata.vipInformation.institutionName = dicomMetadataInformation[2]
-    this.dicomMetadata.vipInformation.instanceCreationDate = dicomMetadataInformation[3]
-    this.dicomMetadata.vipInformation.instanceCreationTime = dicomMetadataInformation[4]
+    this.vipInformation.patientName = dicomMetadataInformation[0]
+    this.vipInformation.patientBirthdate = dicomMetadataInformation[1]
+    this.vipInformation.institutionName = dicomMetadataInformation[2]
+    this.vipInformation.instanceCreationDate = dicomMetadataInformation[3]
+    this.vipInformation.instanceCreationTime = dicomMetadataInformation[4]
     this.isVipMetadataFetched = true
   },
   // "beforeMount" is called right before the component is to be mounted
