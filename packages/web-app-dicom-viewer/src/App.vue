@@ -2,6 +2,8 @@
   <div class="dicom-viewer oc-width-1-1 oc-height-1-1 oc-flex">
     <!-- TODO: the class of the following item should be oc-width-1-1 if sidebar is not displayed, also vertical align of dicom viewport should be adjusted -->
     <div
+      v-show="displayDicomViewerMain"
+      id="dicom-viewer-main"
       class="oc-position-relative oc-flex oc-flex-center oc-flex-middle oc-flex-around oc-p-s"
       :class="isShowMetadataActivated ? 'oc-width-2-3' : 'oc-width-1-1'"
     >
@@ -288,10 +290,17 @@ export default defineComponent({
       currentImageRotation: 0,
       isVipMetadataFetched: false,
       isShowMetadataActivated: false,
+      isSmallScreen: false, //TODO: implement a method that sets this to true if screensize / browser size is too small to display the main part of dicom viewer together with metadata sidebar
       dicomFiles: [this.resource]
     }
   },
   computed: {
+    displayDicomViewerMain() {
+      if (this.isSmallScreen && this.isShowMetadataActivated) {
+        return false
+      }
+      return true
+    },
     instanceCreationDateTimeFormatedDate() {
       // transforming date and time into a string that is valid for formatDateFromHTTP ('YYYY-MM-DDTHH:MM:SS')
       if (
@@ -758,6 +767,8 @@ export default defineComponent({
     toggleShowMetadata() {
       console.log('toggle show metadata clicked')
       this.isShowMetadataActivated = !this.isShowMetadataActivated
+      console.log('is small screen: ' + this.isSmallScreen)
+      console.log('is is show metadata activated: ' + this.isShowMetadataActivated)
     }
   }
 })
