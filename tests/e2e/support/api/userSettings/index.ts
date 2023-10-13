@@ -1,0 +1,1 @@
+export { disableAutoAcceptShare } from './settings'

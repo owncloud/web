@@ -22,9 +22,6 @@ Feature: deny share access
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
-      | name             |
-      | folder_to_shared |
     And "Brian" opens folder "folder_to_shared"
     Then following resources should not be displayed in the files list for user "Brian"
       | resource       |

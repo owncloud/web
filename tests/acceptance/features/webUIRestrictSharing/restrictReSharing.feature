@@ -6,8 +6,7 @@ Feature: restrict resharing
   I want to be able to forbid a user that received a share from me to share it further
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -25,7 +24,6 @@ Feature: restrict resharing
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     When user "Alice" logs in using the webUI
     And the user browses to the files page
     And the user opens folder "Shares" using the webUI
@@ -40,8 +38,6 @@ Feature: restrict resharing
     Given the setting "shareapi_allow_resharing" of app "core" has been set to "no" in the server
     And user "Carol" has uploaded file "lorem.txt" to "lorem.txt" in the server
     And user "Carol" has shared file "lorem.txt" with group "grp1" in the server
-    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Carol" in the server
-    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Carol" in the server
     When user "Alice" logs in using the webUI
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share file "lorem.txt" using the webUI

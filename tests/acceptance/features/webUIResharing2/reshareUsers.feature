@@ -5,8 +5,7 @@ Feature: Resharing shared files with different permissions
   So that I can control the access on those files/folders by other collaborators
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -17,9 +16,7 @@ Feature: Resharing shared files with different permissions
   @issue-ocis-1922
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has shared folder "Shares/simple-folder" with user "Carol" with "read" permissions in the server
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
@@ -30,37 +27,20 @@ Feature: Resharing shared files with different permissions
   @skipOnOCIS
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
-    And user "Alice" has shared folder "Shares/simple-folder" with user "Carol" with "read" permissions in the server
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Carol King" should be listed as "Custom permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS
-  Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
-    And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "read" permissions in the server
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
-    When user "Carol" logs in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then the user should not be able to share folder "simple-folder" using the webUI
-
    # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
   # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
   @skipOnOCIS
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And user "Carol" should have received a share with these details in the server:
@@ -83,11 +63,9 @@ Feature: Resharing shared files with different permissions
   @skipOnOCIS
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     And the user re-logs in as "Brian" using the webUI
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI

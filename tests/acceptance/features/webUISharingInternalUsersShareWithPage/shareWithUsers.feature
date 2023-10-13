@@ -4,8 +4,7 @@ Feature: Shares in share-with pages
   So that I can know what is shared with me and by me
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -18,9 +17,7 @@ Feature: Shares in share-with pages
     And user "Brian" has renamed folder "simple-folder" to "new-simple-folder" in the server
     And user "Brian" has renamed file "lorem.txt" to "ipsum.txt" in the server
     And user "Brian" has shared file "ipsum.txt" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/ipsum.txt" offered by user "Brian" in the server
     And user "Brian" has shared folder "new-simple-folder" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/new-simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-me page
     Then file "ipsum.txt" should be listed on the webUI
@@ -32,11 +29,8 @@ Feature: Shares in share-with pages
     And user "Brian" has created file "lorem.txt" in the server
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/lorem.txt" offered by user "Brian" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     And user "Brian" has shared folder "simple-folder" with user "Carol" in the server
-    And user "Carol" has accepted the share "Shares/simple-folder" offered by user "Brian" in the server
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
       | fileName      | expectedCollaborators    |
@@ -68,7 +62,6 @@ Feature: Shares in share-with pages
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "data.zip" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     Then folder "simple-folder" should be listed on the webUI
@@ -78,7 +71,6 @@ Feature: Shares in share-with pages
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Alice" has created file "simple-folder/collaborate-on-this.txt" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
@@ -89,7 +81,6 @@ Feature: Shares in share-with pages
   Scenario: unsharing an entry on the shared-with-me page unshares from self
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user unshares folder "simple-folder" using the webUI
@@ -100,7 +91,6 @@ Feature: Shares in share-with pages
   Scenario: unsharing an entry on the shared-with-me page unshares from self
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user unshares folder "simple-folder" using the webUI
@@ -113,9 +103,7 @@ Feature: Shares in share-with pages
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/lorem.txt" offered by user "Alice" in the server
     And user "Brian" has logged in using the webUI
     And the user browses to the shared-with-me page in accepted shares view
     When the user batch unshares these files using the webUI
@@ -152,7 +140,6 @@ Feature: Shares in share-with pages
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action on the webUI
-    And user "Brian" accepts the share "Shares/simple-folder" offered by user "Alice" using the sharing API in the server
     Then user "Brian Murphy" should be listed as "Can view" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details in the server:
       | field       | value                 |

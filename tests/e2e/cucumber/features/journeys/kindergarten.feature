@@ -41,9 +41,6 @@ Feature: Kindergarten can use web to organize a day
     When "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
-      | name      |
-      | meal plan |
     And "Brian" downloads the following resources using the sidebar panel
       | resource | from      | type |
       | data.zip | meal plan | file |
@@ -52,9 +49,6 @@ Feature: Kindergarten can use web to organize a day
     When "Carol" logs in
     And "Carol" opens the "files" app
     And "Carol" navigates to the shared with me page
-    And "Carol" accepts the following shares
-      | name      |
-      | meal plan |
     And "Carol" downloads the following resources using the sidebar panel
       | resource      | from      | type   |
       | data.zip      | meal plan | file   |

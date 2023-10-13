@@ -98,12 +98,6 @@ Feature: link
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
     And "Brian" logs in
-    And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
-      | name           |
-      | folderPublic   |
-      | simple.pdf     |
-      | testavatar.jpg |
     When "Brian" opens the public link "folderLink"
     And "Brian" uploads the following resources
       | resource  |

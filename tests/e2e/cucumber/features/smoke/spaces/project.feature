@@ -92,9 +92,6 @@ Feature: spaces.personal
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
-      | name             |
-      | folder_to_shared |
     And "Brian" renames the following resource
       | resource                   | as            |
       | folder_to_shared/lorem.txt | lorem_new.txt |

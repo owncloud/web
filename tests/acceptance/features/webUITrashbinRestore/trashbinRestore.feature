@@ -174,13 +174,11 @@ Feature: Restore deleted files/folders
 
   @issue-ocis-1124
   Scenario: delete and restore a file inside a received shared folder
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "folder-to-share" in the server
     And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt" in the server
     And user "Carol" has shared folder "folder-to-share" with user "Alice" in the server
-    And user "Alice" has accepted the share "Shares/folder-to-share" offered by user "Carol" in the server
     And the user has reloaded the current page of the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens folder "folder-to-share" using the webUI
