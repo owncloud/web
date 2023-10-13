@@ -6,9 +6,7 @@
       class="oc-position-relative oc-flex oc-flex-center oc-flex-middle oc-flex-around oc-p-s"
       :class="isShowMetadataActivated ? 'oc-width-2-3' : 'oc-width-1-1'"
     >
-      <!-- div element for dicom viewport -->
       <div id="dicom-canvas" class="dicom-canvas oc-position-relative">
-        <!-- vip meta data -->
         <div
           v-if="isVipMetadataFetched"
           id="dicom-viewer-vip-metadata"
@@ -34,7 +32,6 @@
           </div>
         </div>
       </div>
-      <!-- toggle for metadata sidebar -->
       <div id="dicom-viewer-toggle-metadata-sidebar" class="oc-flex oc-position-absolute">
         <oc-button
           id="toggle-metadata-sidebar"
@@ -102,8 +99,6 @@ import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstone from '@cornerstonejs/core'
 import * as cornerstoneTools from '@cornerstonejs/tools'
 import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
-
-import { init as csToolsInit } from '@cornerstonejs/tools'
 
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
 
@@ -316,8 +311,6 @@ export default defineComponent({
       dicomFileName: null,
       dicomUrl: null,
       imageData: null,
-      metaDataElement: null,
-      metaDataItems: null,
       toolInfoElement: null,
       currentImageZoom: 1,
       currentImageRotation: 0,
@@ -334,39 +327,6 @@ export default defineComponent({
         return false
       }
       return true
-    },
-    instanceCreationDateTimeFormatedDate() {
-      // transforming date and time into a string that is valid for formatDateFromHTTP ('YYYY-MM-DDTHH:MM:SS')
-      if (
-        this.vipInformation.instanceCreationDate != undefined &&
-        this.vipInformation.instanceCreationTime != undefined &&
-        this.vipInformation.instanceCreationDate.length >= 8 &&
-        this.vipInformation.instanceCreationTime.length >= 6
-      ) {
-        let dateString =
-          this.vipInformation.instanceCreationDate.substring(0, 4) +
-          '-' +
-          this.vipInformation.instanceCreationDate.substring(4, 6) +
-          '-' +
-          this.vipInformation.instanceCreationDate.substring(6, 8) +
-          'T' +
-          this.vipInformation.instanceCreationTime.substring(0, 2) +
-          ':' +
-          this.vipInformation.instanceCreationTime.substring(2, 4) +
-          ':' +
-          this.vipInformation.instanceCreationTime.substring(4, 8)
-
-        let formatedDate = formatDateFromISO(
-          DateTime.fromISO(dateString),
-          this.$language.current,
-          DateTime.DATETIME_MED
-        )
-
-        return upperFirst(formatedDate)
-      } else {
-        console.log('invalid date and/or time input')
-        return 'instance creation date and time undefined'
-      }
     }
   },
   watch: {},
@@ -439,14 +399,6 @@ export default defineComponent({
     // this could also be calculated by getting ratio between width of the resource and viewport
     // needs to get updated if viewport size changes
 
-    // set reference to HTML element for metadata
-    // metadata root element
-    this.metaDataElement = document.getElementById('dicom-metadata') as HTMLDivElement
-    // child elements
-    this.metaDataItems = document.getElementsByClassName(
-      'dicom-metadata-item'
-    ) as HTMLCollectionOf<HTMLDivElement>
-
     // add resource to stack
     // ensure resource url is not empty!
     if (this.url != null && this.url != undefined && this.url != '') {
@@ -455,10 +407,6 @@ export default defineComponent({
       }
 
       let dicomResourceUrl = await this.addWadouriPrefix(this.url)
-      /*
-      // file manager is only needed if resource is passed along as file
-      const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(this.dicomFile)
-      */
 
       // define a stack containing a single image
       const dicomStack = [dicomResourceUrl]
@@ -506,16 +454,6 @@ export default defineComponent({
         await cornerstone.init()
       } catch (e) {
         console.error('Error initalizing cornerstone core', e)
-      }
-    },
-    async initCornerstoneTools() {
-      console.log('initializing cornerstone tools')
-      try {
-        await cornerstoneTools.init()
-        console.log('cornerstone tools initalized')
-      } catch (e) {
-        console.error('Error initalizing cornerstone tools', e)
-        console.log('error initalizing cornerstone tools')
       }
     },
     async fetchVipMetadataInformation(imageId) {
@@ -601,25 +539,6 @@ export default defineComponent({
       this.isMetadataFetched = true
       // TODO: check that data only gets displayed after all metadata has been fetched
     },
-    async createDicomFile() {
-      // TODO check if already exist?
-      // TODO delete content after unloading the package?
-
-      console.log('creating dicom file')
-      if (this.dicomFile != (null || undefined)) {
-        console.log('file size before creation: ' + this.dicomFile.size)
-        this.dicomFile = null
-      }
-
-      this.dicomFile = await new File([this.currentContent], this.resource.name, {
-        type:
-          this.resource.mimeType != (null || undefined)
-            ? this.resource.mimeType
-            : 'application/dicom' // set default mime type, maybe application/octet-stream ?
-      })
-
-      console.log('file size after creation: ' + this.dicomFile.size)
-    },
     async addWadouriPrefix(url: String) {
       return 'wadouri:' + url
     },
@@ -672,52 +591,6 @@ export default defineComponent({
         console.log('metadata from viewport extracted')
       } else {
         console.log('no image meta data available available for extraction from viewport')
-      }
-    },
-    separateCredentialsFromUrl(url: String) {
-      const [urlWithoutCredentials, ...rest] = url.split('?')
-      const credentials = rest.join('?')
-      return [urlWithoutCredentials, credentials] as const
-    },
-    uploadDicomFile(event) {
-      // get first file (upload should support only single file anyway)
-      const dicomFile = event.target.files[0] as File
-
-      // for testing only
-      console.log('file uploaded: ' + dicomFile + ' / ' + typeof (dicomFile as File))
-      console.log('file name: ' + dicomFile.name)
-      console.log('file size: ' + dicomFile.size + ' bytes')
-      console.log('file mime type: ' + dicomFile.type)
-
-      this.displayDicomFile(dicomFile)
-    },
-    async displayDicomFile(f: File) {
-      console.log('display dicom file function called for file: ' + f.name)
-      this.dicomFileName = f.name
-
-      // for testing only
-      // this.readMyFile(f)
-
-      const imageId = await cornerstoneDICOMImageLoader.wadouri.fileManager.add(f)
-
-      // define a stack containing a single image
-      const dicomStack = [imageId]
-
-      // set stack on the viewport (only one image in the stack, therefore no frame # required)
-      await this.viewport.setStack(dicomStack)
-
-      // render the image
-      this.viewport.render()
-
-      // setting metadata
-      this.extractMetadataFromViewport(imageId)
-    },
-    readMyFile(f: File) {
-      let reader = new FileReader()
-      reader.readAsText(f, 'UTF-8')
-      reader.onloadend = function () {
-        let result = reader.result as String
-        console.log('reading file lenght: ' + result.length)
       }
     },
     // functions for styling data
@@ -789,7 +662,6 @@ export default defineComponent({
       // TODO: still needs to be implemented, similar to prev & next in preview app
     },
     setZoom(newZoomFactor) {
-      console.log('zoom clicked')
       this.currentImageZoom = newZoomFactor
       console.log('new zoom factor: ' + this.currentImageZoom)
       const camera = this.viewport.getCamera()
@@ -804,32 +676,27 @@ export default defineComponent({
       this.viewport.render()
     },
     setRotation(newRotation) {
-      console.log('rotate image clicked')
       this.currentImageRotation = newRotation
       const { rotation } = this.viewport.getProperties()
       this.viewport.setProperties({ rotation: this.currentImageRotation })
       this.viewport.render()
     },
     setHorizontalFlip() {
-      console.log('flip horizontal clicked')
       const { flipHorizontal } = this.viewport.getCamera()
       this.viewport.setCamera({ flipHorizontal: !flipHorizontal })
       this.viewport.render()
     },
     setVerticalFlip() {
-      console.log('flip vertical clicked')
       const { flipVertical } = this.viewport.getCamera()
       this.viewport.setCamera({ flipVertical: !flipVertical })
       this.viewport.render()
     },
     toggleInversion() {
-      console.log('invert clicked')
       const { invert } = this.viewport.getProperties()
       this.viewport.setProperties({ invert: !invert })
       this.viewport.render()
     },
     resetViewport() {
-      console.log('reset clicked')
       this.currentImageZoom = 1
       this.currentImageRotation = 0
       this.viewport.resetCamera()
@@ -841,7 +708,6 @@ export default defineComponent({
       console.log('camera scale after reset: ' + camera.parallelScale)
     },
     toggleShowMetadata() {
-      console.log('toggle show metadata clicked')
       this.isShowMetadataActivated = !this.isShowMetadataActivated
     }
   }
@@ -869,7 +735,6 @@ export default defineComponent({
   height: auto; //100%;
   padding: 20px;
   margin-left: 20px;
-  //display: block;
 }
 
 .dicom-metadata-item {
@@ -877,7 +742,6 @@ export default defineComponent({
 }
 
 #dicom-viewer-toggle-metadata-sidebar {
-  //justify-content: right;
   top: 0;
   right: 0;
 }
@@ -898,14 +762,7 @@ export default defineComponent({
   margin: 10px;
 }
 
-/*
-.header__title {
-  border-bottom: 1px solid var(--oc-color-border);
-}
-*/
-
 .dicom-metadata-section-title {
-  //margin: 4px 0px 8px 0px;
   margin-bottom: 0px;
   padding-top: 16px !important;
   border-top: 1px solid var(--oc-color-border);
