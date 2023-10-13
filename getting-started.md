@@ -76,10 +76,6 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
 - `options.openLinksWithDefaultApp` Specifies whether single file link shares should be opened with default app or not.
 - `options.tokenStorageLocal` Specifies whether the access token will be stored in the local storage when set to `true` or in the session storage when set to `false`. If stored in the local storage, login state will be persisted across multiple browser tabs, means no additional logins are required. Defaults to `true`.
-- `options.loginUrl` Specifies the target URL to the login page. This is helpful when an external IdP is used. This option is disabled by default. Example URL like: 'https://www.myidp.com/login'.
-- `options.logoutUrl` Adds a link to the user's profile page to point him to an external page, where he can manage his session and devices. This is helpful when an external IdP is used. This option is disabled by default.
-- `options.imprintUrl` Specifies the target URL for the imprint link valid for the ocis instance in the account menu.
-- `options.privacyUrl` Specifies the target URL for the privacy link valid for the ocis instance in the account menu.
 
 #### Scripts and Styles
 
