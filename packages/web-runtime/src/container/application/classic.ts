@@ -5,7 +5,7 @@ import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { RuntimeError } from '@ownclouders/web-pkg'
+import { ConfigurationManager, RuntimeError } from '@ownclouders/web-pkg'
 import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from '@ownclouders/web-pkg'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
@@ -84,7 +84,8 @@ export const convertClassicApplication = async ({
   store,
   router,
   gettext,
-  supportedLanguages
+  supportedLanguages,
+  configurationManager
 }: {
   app: App
   applicationScript: ClassicApplicationScript
@@ -93,6 +94,7 @@ export const convertClassicApplication = async ({
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
+  configurationManager: ConfigurationManager
 }): Promise<NextApplication> => {
   if (applicationScript.setup) {
     applicationScript = app.runWithContext(() => {
@@ -130,7 +132,7 @@ export const convertClassicApplication = async ({
   await store.dispatch('registerApp', applicationScript.appInfo)
 
   if (applicationScript.extensions) {
-    useExtensionRegistry().registerExtensions(applicationScript.extensions)
+    useExtensionRegistry({ configurationManager }).registerExtensions(applicationScript.extensions)
   }
 
   return new ClassicApplication(runtimeApi, applicationScript, app)

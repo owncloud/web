@@ -72,7 +72,8 @@ const state = {
     loginUrl: '',
     privacyUrl: '',
     imprintUrl: '',
-    accessDeniedHelpUrl: ''
+    accessDeniedHelpUrl: '',
+    disabledExtensions: []
   }
 }
 

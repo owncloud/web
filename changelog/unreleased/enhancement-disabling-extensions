@@ -1,0 +1,6 @@
+Enhancement: Disabling extensions
+
+A new configuration `disabledExtensions` has been added which enables disabling specific extensions via their id.
+
+https://github.com/owncloud/web/pull/9441
+https://github.com/owncloud/web/issues/8524
