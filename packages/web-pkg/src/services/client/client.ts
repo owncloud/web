@@ -8,6 +8,8 @@ import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { ConfigurationManager } from '../../configuration'
 import { Store } from 'vuex'
 import { Language } from 'vue3-gettext'
+import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
+import { sse } from '@ownclouders/web-client/src/sse'
 
 interface OcClient {
   token: string
@@ -20,6 +22,17 @@ interface HttpClient {
   client: _HttpClient
   language: string
   token?: string
+}
+
+const createFetchOptions = (authParams: AuthParameters, language: string): FetchEventSourceInit => {
+  return {
+    headers: {
+      Authorization: `Bearer ${authParams.accessToken}`,
+      'Accept-Language': language,
+      'X-Request-ID': uuidV4(),
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }
 }
 
 const createAxiosInstance = (authParams: AuthParameters, language: string): AxiosInstance => {
@@ -82,6 +95,13 @@ export class ClientService {
       this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
     }
     return this.ocUserContextClient.graph
+  }
+
+  public get sseAuthenticated(): EventSource {
+    return sse(
+      this.configurationManager.serverUrl,
+      createFetchOptions({ accessToken: this.token }, this.currentLanguage)
+    )
   }
 
   public get ocsUserContext(): OCS {

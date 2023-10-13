@@ -128,6 +128,7 @@ import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settin
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
   useCapabilityChangeSelfPasswordDisabled,
+  useCapabilityCoreSSE,
   useCapabilityGraphPersonalDataExport,
   useCapabilitySpacesEnabled,
   useClientService,
@@ -140,6 +141,7 @@ import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from '@ownclouders/web-pkg'
 import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 
 export default defineComponent({
   name: 'AccountPage',
@@ -158,6 +160,7 @@ export default defineComponent({
     const accountBundle = ref<SettingsBundle>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
+    const sseEnabled = useCapabilityCoreSSE()
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = useCapabilitySpacesEnabled()
@@ -301,6 +304,9 @@ export default defineComponent({
             value
           }
         })
+        if (unref(sseEnabled)) {
+          ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
+        }
         if (unref(personalSpace)) {
           // update personal space name with new translation
           store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
