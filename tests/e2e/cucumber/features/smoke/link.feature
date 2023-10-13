@@ -102,12 +102,12 @@ Feature: link
     And "Brian" uploads the following resources
       | resource  |
       | lorem.txt |
-    # When "Brian" opens the public link "textLink"
-    # Then for "Brian" file "shareToBrian.txt" should be selected
-    # When "Brian" opens the public link "markdownLink"
-    # Then for "Brian" file "shareToBrian.md" should be selected
-    # When "Brian" opens the public link "pdfLink"
-    # Then for "Brian" file "simple.pdf" should be selected
-    # When "Brian" opens the public link "imageLink"
-    # Then for "Brian" file "testavatar.jpg" should be selected
+    When "Brian" opens the public link "textLink"
+    Then for "Brian" file "shareToBrian.txt" should be selected
+    When "Brian" opens the public link "markdownLink"
+    Then for "Brian" file "shareToBrian.md" should be selected
+    When "Brian" opens the public link "pdfLink"
+    Then for "Brian" file "simple.pdf" should be selected
+    When "Brian" opens the public link "imageLink"
+    Then for "Brian" file "testavatar.jpg" should be selected
     And "Brian" logs out

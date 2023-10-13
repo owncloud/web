@@ -3,7 +3,7 @@ import join from 'join-path'
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 
-export const disableAutoAccepting = async ({ user }: { user: User }): Promise<void> => {
+export const disableAutoAcceptShare = async ({ user }: { user: User }): Promise<void> => {
   const body = JSON.stringify({
     value: {
       accountUuid: 'me',
@@ -21,5 +21,5 @@ export const disableAutoAccepting = async ({ user }: { user: User }): Promise<vo
     body: body,
     user: user
   })
-  checkResponseStatus(response, 'Failed while disabling auto accept')
+  checkResponseStatus(response, 'Failed while disabling auto-accept share')
 }

@@ -93,7 +93,7 @@ Given(
   '{string} disables auto-accepting using API',
   async function (this: World, stepUser: string): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    await api.settings.disableAutoAccepting({ user })
+    await api.settings.disableAutoAcceptShare({ user })
   }
 )
 
