@@ -33,6 +33,7 @@ export class SSEAdapter implements EventSource {
     this.fetchOptions = fetchOptions
     this.abortController = new AbortController()
     this.eventListenerMap = {}
+    this.readyState = this.CONNECTING
     this.connect()
   }
 
@@ -44,7 +45,7 @@ export class SSEAdapter implements EventSource {
       onopen: async () => {
         const event = new Event('open')
         this.onopen?.bind(this)(event)
-        this.readyState = this.CONNECTING
+        this.readyState = this.OPEN
       },
       onmessage: (msg) => {
         const event = new MessageEvent('message', { data: msg.data })
