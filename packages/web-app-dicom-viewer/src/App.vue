@@ -322,6 +322,7 @@ export default defineComponent({
       currentImageZoom: 1,
       currentImageRotation: 0,
       isVipMetadataFetched: false,
+      isMetadataFetched: false,
       isShowMetadataActivated: false,
       isSmallScreen: false, //TODO: implement a method that sets this to true if screensize / browser size is too small to display the main part of dicom viewer together with metadata sidebar
       dicomFiles: [this.resource]
@@ -387,16 +388,10 @@ export default defineComponent({
     }
 
     // get vip metadata
-    // maybe also prefetch other metadata?
-    const dicomMetadataInformation = await this.fetchMetadataInformation(
-      await this.addWadouriPrefix(this.url)
-    )
-    this.vipInformation.patientName = dicomMetadataInformation[0]
-    this.vipInformation.patientBirthdate = dicomMetadataInformation[1]
-    this.vipInformation.institutionName = dicomMetadataInformation[2]
-    this.vipInformation.instanceCreationDate = dicomMetadataInformation[3]
-    this.vipInformation.instanceCreationTime = dicomMetadataInformation[4]
-    this.isVipMetadataFetched = true
+    await this.fetchVipMetadataInformation(await this.addWadouriPrefix(this.url))
+
+    // prefetch all other metadata (in separate function for performance purpose)
+    await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
   },
   // "beforeMount" is called right before the component is to be mounted
   beforeMount() {
@@ -500,6 +495,7 @@ export default defineComponent({
     this.isDicomFileRendered = false
     this.isMetadataExtracted = false
     this.isVipMetadataFetched = false
+    this.isMetadataFetched = false
   },
   unmounted() {
     console.log('lifecycle @ unmounted')
@@ -522,14 +518,10 @@ export default defineComponent({
         console.log('error initalizing cornerstone tools')
       }
     },
-    async fetchMetadataInformation(imageId) {
-      console.log('fetch meta data information for: ' + imageId)
+    async fetchVipMetadataInformation(imageId) {
+      console.log('fetch vip meta data information for: ' + imageId)
 
-      let patientName = ''
-      let patientBirthdate = ''
-      let institutionName = ''
-      let instanceCreationDate = ''
-      let instanceCreationTime = ''
+      let patientName, patientBirthdate, institutionName, instanceCreationDate, instanceCreationTime
 
       await cornerstoneDICOMImageLoader.wadouri
         .loadImage(imageId)
@@ -540,21 +532,74 @@ export default defineComponent({
           instanceCreationDate = dicomImage.data.string('x00080012')
           instanceCreationTime = dicomImage.data.string('x00080013')
         })
-      /*
-      console.log('patient name: ' + patientName)
-      console.log('patient birthdate: ' + patientBirthdate)
-      console.log('institution name: ' + institutionName)
-      console.log('instance creation date: ' + instanceCreationDate)
-      console.log('instance creation time: ' + instanceCreationTime)
-      */
 
-      return [
-        patientName,
-        patientBirthdate,
-        institutionName,
-        instanceCreationDate,
-        instanceCreationTime
-      ]
+      this.vipInformation.patientName = patientName
+      this.vipInformation.patientBirthdate = patientBirthdate
+      this.vipInformation.institutionName = institutionName
+      this.vipInformation.instanceCreationDate = instanceCreationDate
+      this.vipInformation.instanceCreationTime = instanceCreationTime
+
+      this.isVipMetadataFetched = true
+    },
+    async fetchMetadataInformation(imageId) {
+      console.log('fetch meta data information for: ' + imageId)
+
+      //patientInformation
+      let patientName, patientID, patientBirthday, patientSex, patientWeight
+
+      //studyInformation
+      let studyDescription, protocolName, accessionNumber, studyID, studyDate, studyTime
+
+      // seriesInformation
+      let seriesDescription, seriesNumber, modality, bodyPart, seriesDate, seriesTime
+
+      // instanceInformation
+
+      // imageInformation
+
+      // equipmentInformation
+
+      // scanningInformation
+
+      // uidsInformation
+
+      // otherInformation
+
+      await cornerstoneDICOMImageLoader.wadouri
+        .loadImage(imageId)
+        .promise.then(async function (dicomImage) {
+          patientID = dicomImage.data.string('x00100020')
+          patientSex = dicomImage.data.string('x00100040')
+          patientWeight = dicomImage.data.string('x00101030')
+        })
+
+      //patientInformation
+      this.patientInformation.patientName = this.vipInformation.patientName
+      this.patientInformation.patientID = patientID
+      this.patientInformation.patientBirthday = this.vipInformation.patientBirthdate
+      this.patientInformation.patientSex = patientSex
+      this.patientInformation.patientWeight = patientWeight
+
+      // TODO binding of all other variables
+
+      //studyInformation
+
+      // seriesInformation
+
+      // instanceInformation
+
+      // imageInformation
+
+      // equipmentInformation
+
+      // scanningInformation
+
+      // uidsInformation
+
+      // otherInformation
+
+      this.isMetadataFetched = true
+      // TODO: check that data only gets displayed after all metadata has been fetched
     },
     async createDicomFile() {
       // TODO check if already exist?
@@ -622,6 +667,7 @@ export default defineComponent({
         if (voiLutModuleLocal.windowCenter != (null || undefined)) {
           this.exampleInformation.windowCenter = voiLutModuleLocal.windowCenter.toString()
         }
+
         this.isMetadataExtracted = true
         console.log('metadata from viewport extracted')
       } else {
