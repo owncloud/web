@@ -23,6 +23,7 @@ Summary
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+* Enhancement - Disabling extensions: [#9441](https://github.com/owncloud/web/pull/9441)
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
@@ -161,6 +162,14 @@ Details
 
    We've added a tooltip with the absolute date for file versions in file details
 
+   https://github.com/owncloud/web/pull/9441
+
+* Enhancement - Disabling extensions: [#9441](https://github.com/owncloud/web/pull/9441)
+
+   A new configuration `disabledExtensions` has been added which enables disabling specific
+   extensions via their id.
+
+   https://github.com/owncloud/web/issues/8524
    https://github.com/owncloud/web/pull/9441
 
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
