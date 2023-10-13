@@ -38,6 +38,7 @@ Summary
 * Enhancement - Added app banner for mobile devices: [#9696](https://github.com/owncloud/web/pull/9696)
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
+* Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
 
 Details
 -------
@@ -322,6 +323,15 @@ Details
 
    https://github.com/owncloud/web/issues/9726
    https://github.com/owncloud/web/pull/9727
+
+* Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
+
+   We've added the functionality to listen for events from the server that update the
+   postprocessing state, this allows the user to see if the postprocessing on a file is finished,
+   without reloading the UI.
+
+   https://github.com/owncloud/web/issues/9769
+   https://github.com/owncloud/web/pull/9771
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
