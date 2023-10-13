@@ -5,7 +5,7 @@ export enum MESSAGE_TYPE {
   POSTPROCESSING_FINISHED = 'postprocessing-finished'
 }
 
-class RetriableError extends Error {
+export class RetriableError extends Error {
   name = 'RetriableError'
 }
 
@@ -13,11 +13,11 @@ const RECONNECT_RANDOM_OFFSET = 15000
 
 export class SSEAdapter implements EventSource {
   url: string
-  private fetchOptions: FetchEventSourceInit
+  fetchOptions: FetchEventSourceInit
   private abortController: AbortController
   private eventListenerMap: Record<string, ((event: MessageEvent) => any)[]>
 
-  private readyState: number
+  readyState: number
   readonly withCredentials: boolean
 
   readonly CONNECTING: 0
@@ -72,7 +72,7 @@ export class SSEAdapter implements EventSource {
     })
   }
 
-  private fetchProvider(...args) {
+  fetchProvider(...args) {
     let [resource, config] = args
     config = { ...config, ...this.fetchOptions }
     return window.fetch(resource, config)
