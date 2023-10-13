@@ -1,11 +1,15 @@
 import { urlJoin } from '../utils'
-import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
+import { SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
+import { DAV, buildAuthHeader } from './client'
+import { ProgressEventCallback } from 'webdav'
+import { unref } from 'vue'
 
 export const PutFileContentsFactory = (
+  dav: DAV,
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,
-  { sdk }: WebDavOptions
+  { accessToken }: WebDavOptions
 ) => {
   return {
     async putFileContents(
@@ -13,28 +17,30 @@ export const PutFileContentsFactory = (
       {
         path,
         content = '',
-        ...options
+        previousEntityTag = '',
+        headers = {},
+        overwrite,
+        onUploadProgress = null
       }: {
         path?: string
         content?: string
         previousEntityTag?: string
         headers?: Record<string, string>
         overwrite?: boolean
+        onUploadProgress?: ProgressEventCallback
       }
-    ): Promise<FileResource> {
-      if (isPublicSpaceResource(space)) {
-        await sdk.publicFiles.putFileContents(
-          '',
-          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
-          space.publicLinkPassword,
-          content,
-          options
-        )
-      } else {
-        await sdk.files.putFileContents(urlJoin(space.webDavPath, path), content, options)
-      }
+    ) {
+      await dav.put(urlJoin(space.webDavPath, path), content, {
+        previousEntityTag,
+        overwrite,
+        onUploadProgress,
+        headers: {
+          ...headers,
+          ...buildAuthHeader(unref(accessToken), space)
+        }
+      })
 
-      return getFileInfoFactory.getFileInfo(space, { path }) as Promise<FileResource>
+      return getFileInfoFactory.getFileInfo(space, { path })
     }
   }
 }

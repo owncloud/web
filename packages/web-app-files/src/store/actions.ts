@@ -424,10 +424,10 @@ export default {
       resolvePromise()
     })
   },
-  async loadVersions(context, { client, fileId }) {
+  async loadVersions(context, { client, fileId }: { client: WebDAV; fileId: Resource['fileId'] }) {
     let response
     try {
-      response = await client.fileVersions.listVersions(fileId)
+      response = await client.listFileVersions(fileId)
     } catch (e) {
       console.error(e)
       response = []

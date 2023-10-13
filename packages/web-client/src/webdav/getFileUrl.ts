@@ -3,8 +3,10 @@ import { Resource, SpaceResource } from '../helpers'
 import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
 import { WebDavOptions } from './types'
+import { DAV } from './client'
 
 export const GetFileUrlFactory = (
+  dav: DAV,
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
   { sdk, capabilities }: WebDavOptions
 ) => {
@@ -29,7 +31,7 @@ export const GetFileUrlFactory = (
       if (!downloadURL && !inlineDisposition) {
         // compute unsigned url
         const webDavPath = urlJoin(space.webDavPath, path)
-        downloadURL = sdk.files.getFileUrl(webDavPath)
+        downloadURL = dav.getFileUrl(webDavPath)
 
         // sign url
         if (isUrlSigningEnabled) {

@@ -2,7 +2,8 @@
 import major from 'semver/functions/major'
 import rcompare from 'semver/functions/rcompare'
 
-import { HttpError, RuntimeError } from '../errors'
+import { RuntimeError } from '../errors'
+import { HttpError } from '@ownclouders/web-client/src/errors'
 import { ClientService } from '../services'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../configuration'

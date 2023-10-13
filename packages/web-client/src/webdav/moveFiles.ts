@@ -1,13 +1,9 @@
-import { urlJoin } from '../utils'
-import {
-  isPublicSpaceResource,
-  SpaceResource,
-  isShareSpaceResource,
-  SHARE_JAIL_ID
-} from '../helpers'
+import { SpaceResource, isShareSpaceResource, SHARE_JAIL_ID } from '../helpers'
 import { WebDavOptions } from './types'
+import { DAV, buildAuthHeader } from './client'
+import { unref } from 'vue'
 
-export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
+export const MoveFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
     moveFiles(
       sourceSpace: SpaceResource,
@@ -15,28 +11,21 @@ export const MoveFilesFactory = ({ sdk }: WebDavOptions) => {
       targetSpace: SpaceResource,
       { path: targetPath },
       options?: { overwrite?: boolean }
-    ): Promise<void> {
+    ) {
+      const headers = buildAuthHeader(unref(accessToken), sourceSpace)
       if (isShareSpaceResource(sourceSpace) && sourcePath === '/') {
-        return sdk.files.move(
+        return dav.move(
           `${sourceSpace.webDavPath}/${sourcePath || ''}`,
           `/spaces/${SHARE_JAIL_ID}!${SHARE_JAIL_ID}/${targetPath || ''}`,
-          options?.overwrite || false
+          { overwrite: options?.overwrite || false, headers }
         )
       }
-      if (isPublicSpaceResource(sourceSpace)) {
-        return sdk.publicFiles.move(
-          urlJoin(sourceSpace.webDavPath.replace(/^\/public-files/, ''), sourcePath),
-          urlJoin(targetSpace.webDavPath.replace(/^\/public-files/, ''), targetPath),
-          sourceSpace.publicLinkPassword,
-          options?.overwrite || false
-        )
-      } else {
-        return sdk.files.move(
-          `${sourceSpace.webDavPath}/${sourcePath || ''}`,
-          `${targetSpace.webDavPath}/${targetPath || ''}`,
-          options?.overwrite || false
-        )
-      }
+
+      return dav.move(
+        `${sourceSpace.webDavPath}/${sourcePath || ''}`,
+        `${targetSpace.webDavPath}/${targetPath || ''}`,
+        { overwrite: options?.overwrite || false, headers }
+      )
     }
   }
 }
