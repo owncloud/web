@@ -141,6 +141,7 @@ import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from '@ownclouders/web-pkg'
 import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 
 export default defineComponent({
   name: 'AccountPage',

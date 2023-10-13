@@ -17,7 +17,7 @@ export class SSEAdapter implements EventSource {
   private abortController: AbortController
   private eventListenerMap: Record<string, ((event: MessageEvent) => any)[]>
 
-  readonly readyState: number
+  private readyState: number
   readonly withCredentials: boolean
 
   readonly CONNECTING: 0
@@ -44,6 +44,7 @@ export class SSEAdapter implements EventSource {
       onopen: async () => {
         const event = new Event('open')
         this.onopen?.bind(this)(event)
+        this.readyState = this.CONNECTING
       },
       onmessage: (msg) => {
         const event = new MessageEvent('message', { data: msg.data })
@@ -54,6 +55,7 @@ export class SSEAdapter implements EventSource {
         eventListeners?.forEach((l) => l(event))
       },
       onclose: () => {
+        this.readyState = this.CLOSED
         throw new RetriableError()
       },
       onerror: (err) => {
