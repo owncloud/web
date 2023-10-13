@@ -306,7 +306,7 @@ export default defineComponent({
       element: null,
       renderingEngine: null,
       viewport: null,
-      viewportCameraParallelScale: 137.3853139193763, // TODO: initialize this automatically to the correct value and adjust it when size of the viewport changes
+      viewportCameraParallelScale: 1,
       dicomFile: null,
       dicomFileName: null,
       dicomUrl: null,
@@ -350,7 +350,7 @@ export default defineComponent({
     // get vip metadata
     await this.fetchVipMetadataInformation(await this.addWadouriPrefix(this.url))
 
-    // prefetch all other metadata (in separate function for performance purpose)
+    // prefetch all other metadata (in separate function for performance reasons)
     await this.fetchMetadataInformation(await this.addWadouriPrefix(this.url))
   },
   // "beforeMount" is called right before the component is to be mounted
@@ -360,9 +360,8 @@ export default defineComponent({
   // "mounted" is called when component has been added to DOM
   async mounted() {
     console.log('lifecycle @ mounted')
-    // check if cornerstone core (TODO and tools) are initalized
+    // check if cornerstone core is initalized
     if (!cornerstone.isCornerstoneInitialized()) {
-      // initalize cornerstone core
       await this.initCornerstoneCore()
     }
 
@@ -394,10 +393,6 @@ export default defineComponent({
 
     // get stack viewport that was created
     this.viewport = <Types.IStackViewport>this.renderingEngine.getViewport(viewportId)
-    // initialize value for viewport camera parallel scale
-    // this.viewportCameraParallelScale = this.viewport.getCamera().parallelScale
-    // this could also be calculated by getting ratio between width of the resource and viewport
-    // needs to get updated if viewport size changes
 
     // add resource to stack
     // ensure resource url is not empty!
@@ -417,6 +412,7 @@ export default defineComponent({
       // render the image (updates every viewport in the rendering engine)
       this.viewport.render()
       this.isDicomFileRendered = true
+      this.setViewportCameraParallelScaleFactor()
 
       // get metadata
       this.imageData = this.viewport.getImageData()
@@ -435,6 +431,8 @@ export default defineComponent({
   updated() {
     console.log('lifecycle @ updated')
     // this.viewport.resize()
+    // also check if it is needed to recalculate scalefactor
+    // this.setViewportCameraParallelScaleFactor()
   },
   // cleaning up component, leaving no variables or events that could cause memory leaks to app
   beforeUnmount() {
@@ -455,6 +453,9 @@ export default defineComponent({
       } catch (e) {
         console.error('Error initalizing cornerstone core', e)
       }
+    },
+    async addWadouriPrefix(url: String) {
+      return 'wadouri:' + url
     },
     async fetchVipMetadataInformation(imageId) {
       console.log('fetch vip meta data information for: ' + imageId)
@@ -539,9 +540,6 @@ export default defineComponent({
       this.isMetadataFetched = true
       // TODO: check that data only gets displayed after all metadata has been fetched
     },
-    async addWadouriPrefix(url: String) {
-      return 'wadouri:' + url
-    },
     extractMetadataFromViewport(imageId: String) {
       // get metadata from viewport
       this.imageData = this.viewport.getImageData() // returns IImageData object, see https://www.cornerstonejs.org/api/core/namespace/Types#IImageData
@@ -592,6 +590,10 @@ export default defineComponent({
       } else {
         console.log('no image meta data available available for extraction from viewport')
       }
+    },
+    setViewportCameraParallelScaleFactor() {
+      const camera = this.viewport.getCamera()
+      this.viewportCameraParallelScale = camera.parallelScale
     },
     // functions for styling data
     formatDateAndTime(date: string, time: string) {
@@ -663,7 +665,6 @@ export default defineComponent({
     },
     setZoom(newZoomFactor) {
       this.currentImageZoom = newZoomFactor
-      console.log('new zoom factor: ' + this.currentImageZoom)
       const camera = this.viewport.getCamera()
 
       const newCamera = {
@@ -702,10 +703,6 @@ export default defineComponent({
       this.viewport.resetCamera()
       this.viewport.resetProperties()
       this.viewport.render()
-
-      // for testing only
-      const camera = this.viewport.getCamera()
-      console.log('camera scale after reset: ' + camera.parallelScale)
     },
     toggleShowMetadata() {
       this.isShowMetadataActivated = !this.isShowMetadataActivated
