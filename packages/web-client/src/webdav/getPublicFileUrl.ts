@@ -1,10 +1,12 @@
 import { SpaceResource } from '../helpers'
+import { urlJoin } from '../utils'
+import { DAV } from './client'
 import { WebDavOptions } from './types'
 
-export const GetPublicFileUrlFactory = ({ sdk }: WebDavOptions) => {
+export const GetPublicFileUrlFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     getPublicFileUrl(space: SpaceResource, publicLinkToken: string): string {
-      return sdk.publicFiles.getFileUrl(publicLinkToken)
+      return dav.getFileUrl(urlJoin('public-files', publicLinkToken))
     }
   }
 }

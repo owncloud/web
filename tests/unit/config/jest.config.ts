@@ -4,7 +4,9 @@ import { compilerOptions } from '../../../vite.config'
 const rootDir = path.resolve(__dirname, '../../../')
 
 // We need to transpile these modules as they are using esm syntax
-const esmModules = ['lodash-es', 'mark.js', 'fuse.js', 'filesize'].map((m) => `.pnpm/${m}@.*`)
+const esmModules = ['lodash-es', 'mark.js', 'fuse.js', 'filesize', 'layerr', 'webdav'].map(
+  (m) => `.pnpm/${m}@.*`
+)
 process.env.TZ = 'GMT'
 export default {
   globals: {
@@ -28,6 +30,7 @@ export default {
     '^mark.js$': '<rootDir>/node_modules/mark.js/src/vanilla.js',
     '^fuse.js$': '<rootDir>/node_modules/fuse.js/dist/fuse.esm.js',
     '^filesize$': '<rootDir>/node_modules/filesize/lib/filesize.esm.js',
+    '^webdav$': '<rootDir>/node_modules/webdav/dist/web/index.js',
 
     // dedupe ...
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.cjs.js',
@@ -42,7 +45,8 @@ export default {
     '@uppy/utils': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/onedrive': '<rootDir>tests/unit/stubs/uppy',
     '@uppy/google-drive': '<rootDir>tests/unit/stubs/uppy',
-    '@uppy/webdav': '<rootDir>tests/unit/stubs/uppy'
+    '@uppy/webdav': '<rootDir>tests/unit/stubs/uppy',
+    'owncloud-sdk': '<rootDir>tests/unit/stubs/uppy'
   },
   modulePathIgnorePatterns: ['packages/design-system/docs/'],
   testEnvironment: 'jsdom',

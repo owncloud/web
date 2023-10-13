@@ -13,9 +13,7 @@ const getClientServiceMock = (result = { resources: [], totalResults: 0 }) => {
   clientService.webdav.search.mockResolvedValue(result)
   return clientService
 }
-const searchMock = jest.fn()
-const clientService = mockDeep<ClientService>()
-clientService.owncloudSdk.files.search.mockImplementation(searchMock)
+
 const configurationManager = mockDeep<ConfigurationManager>({
   options: {
     routing: {

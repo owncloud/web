@@ -10,6 +10,7 @@ import { CopyFilesFactory } from './copyFiles'
 import { MoveFilesFactory } from './moveFiles'
 import { DeleteFileFactory } from './deleteFile'
 import { RestoreFileFactory } from './restoreFile'
+import { ListFileVersionsFactory } from './listFileVersions'
 import { RestoreFileVersionFactory } from './restoreFileVersion'
 import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
@@ -20,7 +21,11 @@ import { Ref } from 'vue'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
+  accessToken: Ref<string>
+  baseUrl: string
   capabilities: Ref<Capabilities['capabilities']>
+  clientService: any
+  language: Ref<string>
   user: Ref<User>
 }
 
@@ -38,6 +43,7 @@ export interface WebDAV {
   moveFiles: ReturnType<typeof MoveFilesFactory>['moveFiles']
   deleteFile: ReturnType<typeof DeleteFileFactory>['deleteFile']
   restoreFile: ReturnType<typeof RestoreFileFactory>['restoreFile']
+  listFileVersions: ReturnType<typeof ListFileVersionsFactory>['listFileVersions']
   restoreFileVersion: ReturnType<typeof RestoreFileVersionFactory>['restoreFileVersion']
   clearTrashBin: ReturnType<typeof ClearTrashBinFactory>['clearTrashBin']
   search: ReturnType<typeof SearchFactory>['search']

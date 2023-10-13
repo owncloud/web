@@ -2,6 +2,7 @@ export type OwnCloudSdk = {
   helpers: {
     _davPath: string
   }
+  /** @deprecated */
   files: {
     createFolder(...args): any
     fileInfo(...args): any
@@ -16,15 +17,18 @@ export type OwnCloudSdk = {
     move(...args): any
     delete(...args): any
   }
+  /** @deprecated */
   fileTrash: {
     list(...args): any
     restore(...args): any
     clearTrashBin(...args): any
   }
+  /** @deprecated */
   fileVersions: {
     getFileVersionUrl(...args): any
     restoreFileVersion(...args): any
   }
+  /** @deprecated */
   publicFiles: {
     PUBLIC_LINK_SHARE_OWNER: string
 
@@ -56,6 +60,7 @@ export type OwnCloudSdk = {
     deleteShare(...args): any
     updateShare(...args): any
   }
+  /** @deprecated */
   tags: {
     addResourceTag(...args): any
     removeResourceTag(...args): any

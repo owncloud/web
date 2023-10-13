@@ -29,6 +29,7 @@ module.exports = {
         .initAjaxCounters()
         .click('@restoreSelectedButton')
         .waitForOutstandingAjaxCalls()
+        .waitForElementNotPresent('@restoreSelectedButton')
     },
     deleteSelectedPermanently: function () {
       return this.waitForElementVisible('@deleteSelectedPermanentlyButton')

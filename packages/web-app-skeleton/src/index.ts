@@ -1,6 +1,6 @@
+import { defineWebApplication } from '@ownclouders/web-pkg'
 import App from './App.vue'
-import { GitHubSearch } from './search/github'
-import { eventBus } from '@ownclouders/web-pkg'
+import { extensions } from './extensions'
 
 const appInfo = {
   name: 'web-app-skeleton',
@@ -8,10 +8,6 @@ const appInfo = {
   icon: 'folder',
   isFileEditor: true,
   extensions: []
-}
-
-const injectSearch = (): void => {
-  eventBus.publish('app.search.register.provider', new GitHubSearch())
 }
 
 const injectExtensions = async (api): Promise<void> => {
@@ -29,26 +25,30 @@ const injectExtensions = async (api): Promise<void> => {
   })
 }
 
-export default {
-  appInfo,
-  navItems: [
-    {
-      name: 'skeleton',
-      icon: appInfo.icon,
-      route: {
-        path: `/${appInfo.id}/`
+export default defineWebApplication({
+  setup: (args) => {
+    return {
+      appInfo,
+      navItems: [
+        {
+          name: 'skeleton',
+          icon: appInfo.icon,
+          route: {
+            path: `/${appInfo.id}/`
+          }
+        }
+      ],
+      routes: [
+        {
+          name: 'skeleton',
+          path: '/',
+          component: App
+        }
+      ],
+      extensions: extensions(args),
+      async mounted(api) {
+        await injectExtensions(api)
       }
     }
-  ],
-  routes: [
-    {
-      name: 'skeleton',
-      path: '/',
-      component: App
-    }
-  ],
-  async mounted(api) {
-    await injectSearch()
-    await injectExtensions(api)
   }
-}
+})

@@ -3,7 +3,7 @@ import clone from 'lodash-es/clone'
 import { RuntimeApi } from './types'
 import { ApiError } from '@ownclouders/web-pkg'
 import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
-import { Store } from 'vuex'
+import { Module, Store } from 'vuex'
 import { App, Component, h } from 'vue'
 import {
   ApplicationQuickActions,
@@ -148,9 +148,9 @@ const announceQuickActions = (
 const announceStore = (
   applicationName: string,
   store: Store<unknown>,
-  applicationStore: unknown
+  applicationStore: Module<unknown, unknown>
 ): void => {
-  const obtainedStore: Store<unknown> = get(applicationStore, 'default', applicationStore)
+  const obtainedStore: Module<unknown, unknown> = get(applicationStore, 'default', applicationStore)
 
   if (!isObject(obtainedStore)) {
     throw new ApiError("store can't be blank")
@@ -260,7 +260,7 @@ export const buildRuntimeApi = ({
       announceTranslations(supportedLanguages, gettext, appTranslations),
     announceQuickActions: (quickActions: ApplicationQuickActions): void =>
       announceQuickActions(store, quickActions),
-    announceStore: (applicationStore: Store<unknown>): void =>
+    announceStore: (applicationStore: Module<unknown, unknown>): void =>
       announceStore(applicationName, store, applicationStore),
     announceExtension: (extension: { [key: string]: unknown }): void =>
       announceExtension(applicationId, store, extension),

@@ -27,6 +27,7 @@
       />
       <slot name="locationFilter" />
       <oc-button
+        v-if="showAdvancedSearchButton"
         v-oc-tooltip="$gettext('Open advanced search')"
         :aria-label="$gettext('Open advanced search')"
         class="oc-advanced-search oc-position-small oc-position-center-right oc-mt-rm"
@@ -195,6 +196,13 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    /**
+     * Show a "Advanced search button.
+     */
+    showAdvancedSearchButton: {
+      type: Boolean,
+      default: true
     },
     /**
      * Variation of the cancel button

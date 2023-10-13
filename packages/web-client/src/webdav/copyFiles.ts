@@ -1,8 +1,10 @@
 import { urlJoin } from '../utils'
-import { isPublicSpaceResource, SpaceResource } from '../helpers'
+import { SpaceResource } from '../helpers'
+import { DAV, buildAuthHeader } from './client'
 import { WebDavOptions } from './types'
+import { unref } from 'vue'
 
-export const CopyFilesFactory = ({ sdk }: WebDavOptions) => {
+export const CopyFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
     copyFiles(
       sourceSpace: SpaceResource,
@@ -10,21 +12,13 @@ export const CopyFilesFactory = ({ sdk }: WebDavOptions) => {
       targetSpace: SpaceResource,
       { path: targetPath },
       options?: { overwrite?: boolean }
-    ): Promise<void> {
-      if (isPublicSpaceResource(sourceSpace)) {
-        return sdk.publicFiles.copy(
-          urlJoin(sourceSpace.webDavPath.replace(/^\/public-files/, ''), sourcePath),
-          urlJoin(targetSpace.webDavPath.replace(/^\/public-files/, ''), targetPath),
-          sourceSpace.publicLinkPassword,
-          options?.overwrite || false
-        )
-      } else {
-        return sdk.files.copy(
-          urlJoin(sourceSpace.webDavPath, sourcePath),
-          urlJoin(targetSpace.webDavPath, targetPath),
-          options?.overwrite || false
-        )
-      }
+    ) {
+      const headers = buildAuthHeader(unref(accessToken), sourceSpace)
+      return dav.copy(
+        urlJoin(sourceSpace.webDavPath, sourcePath),
+        urlJoin(targetSpace.webDavPath, targetPath),
+        { overwrite: options?.overwrite || false, headers }
+      )
     }
   }
 }

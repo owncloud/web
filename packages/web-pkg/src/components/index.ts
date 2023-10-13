@@ -3,6 +3,7 @@ export * from './AppTemplates'
 export * from './ContextActions'
 export * from './FilesList'
 export * from './SideBar'
+export * from './Search'
 export * from './Spaces'
 
 export { default as AppLoadingSpinner } from './AppLoadingSpinner.vue'

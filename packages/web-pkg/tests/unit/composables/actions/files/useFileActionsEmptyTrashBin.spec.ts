@@ -111,7 +111,7 @@ function getWrapper({
   }
 
   if (resolveClearTrashBin) {
-    mocks.$clientService.webdav.clearTrashBin.mockResolvedValue()
+    mocks.$clientService.webdav.clearTrashBin.mockResolvedValue(undefined)
   } else {
     mocks.$clientService.webdav.clearTrashBin.mockRejectedValue(new Error(''))
   }

@@ -8,42 +8,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-import { providerStore } from '../service'
+import { computed, defineComponent, ref, unref } from 'vue'
+import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
+import { useAvailableProviders } from '../composables'
 
 export default defineComponent({
-  data() {
-    const { provider: providerId } = this.$route.query
-    const { listSearch } = providerStore.availableProviders.find(
-      (provider) => provider.id === providerId
-    )
-    // abort and return if no provider is found
-    return {
-      loading: false,
-      debouncedSearch: undefined,
-      searchResult: {
-        values: [],
-        totalResults: null
-      },
-      listSearch
-    }
-  },
-  methods: {
-    async search(term: string) {
-      this.loading = true
+  setup() {
+    const availableProviders = useAvailableProviders()
+    const providerId = useRouteQuery('provider')
+
+    const listSearch = computed(() => {
+      const { listSearch } = unref(availableProviders).find(
+        (provider) => provider.id === queryItemAsString(unref(providerId))
+      )
+      return listSearch
+    })
+
+    const loading = ref(false)
+    const searchResult = ref({
+      values: [],
+      totalResults: null
+    })
+
+    const search = async (term: string) => {
+      loading.value = true
       try {
-        this.searchResult = await this.listSearch.search(term || '')
+        searchResult.value = await unref(listSearch).search(term || '')
       } catch (e) {
-        this.searchResult = {
+        searchResult.value = {
           values: [],
           totalResults: null
         }
         console.error(e)
       }
 
-      this.loading = false
+      loading.value = false
     }
+
+    return { listSearch, loading, searchResult, search }
   }
 })
 </script>

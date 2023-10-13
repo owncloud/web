@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
-import Preview from 'web-app-files/src/components/Search/Preview.vue'
+import { ResourcePreview } from '../../../../src/components'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { useGetMatchingSpace } from '../../../../src/composables/spaces/useGetMatchingSpace'
 import {
   createStore,
   defaultComponentMocks,
@@ -11,8 +11,7 @@ import {
   useGetMatchingSpaceMock
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
+jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
   useGetMatchingSpace: jest.fn()
 }))
 
@@ -149,7 +148,7 @@ function getWrapper({
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({ currentRoute: route })
   return {
-    wrapper: shallowMount(Preview, {
+    wrapper: shallowMount(ResourcePreview, {
       props: {
         searchResult
       },

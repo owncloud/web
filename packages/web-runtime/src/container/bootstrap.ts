@@ -344,7 +344,11 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService.owncloudSdk = sdk
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk,
+    accessToken: computed(() => store.getters['runtime/auth/accessToken']),
+    baseUrl: runtimeConfiguration.server,
     capabilities: computed(() => store.getters.capabilities),
+    clientService: app.config.globalProperties.$clientService,
+    language: computed(() => app.config.globalProperties.$language.current),
     user: computed(() => store.getters.user)
   })
 

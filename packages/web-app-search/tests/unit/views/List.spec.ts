@@ -1,26 +1,29 @@
 import List from '../../../src/views/List.vue'
-import { providerStore } from '../../../src/service'
 import { defaultComponentMocks, mount } from 'web-test-helpers'
+import { useAvailableProviders } from '../../../src/composables'
+import { ref } from 'vue'
+import { SearchProvider, queryItemAsString } from '@ownclouders/web-pkg'
+import { mock } from 'jest-mock-extended'
 
-const mockProvider = {
+const mockProvider = mock<SearchProvider>({
   id: 'p1',
   available: true,
-  reset: jest.fn(),
-  updateTerm: jest.fn(),
-  activate: jest.fn(),
   listSearch: {
     search: jest.fn()
-  } as any
-}
-
-beforeEach(() => {
-  providerStore.providers = [mockProvider]
+  }
 })
+
+jest.mock('../../../src/composables/useAvailableProviders')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useRouteQuery: jest.fn(),
+  queryItemAsString: jest.fn()
+}))
 
 describe('search result List view', () => {
   it('requests the listSearch from the current active provider', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.vm.$data.listSearch).toMatchObject(mockProvider.listSearch)
+    expect(wrapper.vm.listSearch).toMatchObject(mockProvider.listSearch)
   })
   it('triggers the search', async () => {
     const { wrapper } = getWrapper()
@@ -30,8 +33,9 @@ describe('search result List view', () => {
 })
 
 const getWrapper = () => {
+  jest.mocked(useAvailableProviders).mockReturnValue(ref([mockProvider]))
+  jest.mocked(queryItemAsString).mockReturnValue('p1')
   const mocks = { ...defaultComponentMocks() }
-  mocks.$route.query = { provider: 'p1' }
   return {
     wrapper: mount(List, {
       global: { mocks }
