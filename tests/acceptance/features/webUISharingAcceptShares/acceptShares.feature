@@ -95,7 +95,7 @@ Feature: accept/decline shares coming from internal users
     And user "Carol" has shared file "lorem.txt" with user "Brian" in the server
     And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
     When the user browses to the shared-with-me page
-    Then file "lorem.txt" shared by "Alice Hansen" should be in "Accepted" state on the webUI
+    Then file "lorem (1).txt" shared by "Alice Hansen" should be in "Accepted" state on the webUI
     And file "lorem.txt" shared by "Carol King" should be in "Accepted" state on the webUI
 
   @ocisSmokeTest
