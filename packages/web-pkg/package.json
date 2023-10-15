@@ -14,7 +14,8 @@
     "directory": "packages/web-pkg"
   },
   "devDependencies": {
-    "web-test-helpers": "workspace:*"
+    "web-test-helpers": "workspace:*",
+    "zod": "^3.22.4"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",

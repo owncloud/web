@@ -29,50 +29,49 @@
       :accessible-label="$gettext('Failed to load media file')"
     />
     <template v-else>
-      <div
-        v-show="activeMediaFileCached"
-        class="oc-width-1-1 oc-flex oc-flex-center oc-flex-middle oc-p-s oc-box-shadow-medium preview-player"
-        :class="{ lightbox: isFullScreenModeActivated }"
-      >
-        <media-image
-          v-if="activeMediaFileCached.isImage"
-          :file="activeMediaFileCached"
+      <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
+        <div v-show="activeMediaFileCached" class="stage_media">
+          <media-image
+            v-if="activeMediaFileCached.isImage"
+            :file="activeMediaFileCached"
+            :current-image-rotation="currentImageRotation"
+            :current-image-zoom="currentImageZoom"
+          />
+          <media-video
+            v-else-if="activeMediaFileCached.isVideo"
+            :file="activeMediaFileCached"
+            :is-auto-play-enabled="isAutoPlayEnabled"
+          />
+          <media-audio
+            v-else-if="activeMediaFileCached.isAudio"
+            :file="activeMediaFileCached"
+            :is-auto-play-enabled="isAutoPlayEnabled"
+          />
+        </div>
+        <media-controls
+          class="stage_controls"
+          :files="filteredFiles"
+          :active-index="activeIndex"
+          :is-full-screen-mode-activated="isFullScreenModeActivated"
+          :is-folder-loading="isFolderLoading"
+          :is-image="activeMediaFileCached?.isImage"
           :current-image-rotation="currentImageRotation"
           :current-image-zoom="currentImageZoom"
-        />
-        <media-video
-          v-else-if="activeMediaFileCached.isVideo"
-          :file="activeMediaFileCached"
-          :is-auto-play-enabled="isAutoPlayEnabled"
-        />
-        <media-audio
-          v-else-if="activeMediaFileCached.isAudio"
-          :file="activeMediaFileCached"
-          :is-auto-play-enabled="isAutoPlayEnabled"
+          @set-rotation="currentImageRotation = $event"
+          @set-zoom="currentImageZoom = $event"
+          @toggle-full-screen="toggleFullscreenMode"
+          @toggle-previous="prev"
+          @toggle-next="next"
         />
       </div>
     </template>
-    <media-controls
-      :files="filteredFiles"
-      :active-index="activeIndex"
-      :is-full-screen-mode-activated="isFullScreenModeActivated"
-      :is-folder-loading="isFolderLoading"
-      :is-image="activeMediaFileCached?.isImage"
-      :current-image-rotation="currentImageRotation"
-      :current-image-zoom="currentImageZoom"
-      @set-rotation="currentImageRotation = $event"
-      @set-zoom="currentImageZoom = $event"
-      @toggle-full-screen="toggleFullscreenMode"
-      @toggle-previous="prev"
-      @toggle-next="next"
-    />
   </main>
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from '@ownclouders/web-client/src'
-import { AppTopBar } from '@ownclouders/web-pkg'
+import { AppTopBar, ProcessorType } from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   sortHelper,
@@ -443,7 +442,8 @@ export default defineComponent({
       return this.$previewService.loadPreview({
         space: unref(this.currentFileContext.space),
         resource: file,
-        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
+        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number],
+        processor: ProcessorType.enum.fit
       })
     },
     preloadImages() {
@@ -496,44 +496,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.preview-player {
-  overflow: auto;
-  max-width: 90vw;
-  height: 70vh;
-  margin: 10px auto;
-  object-fit: contain;
-
-  img,
-  video {
-    max-width: 85vw;
-    max-height: 65vh;
-  }
-}
-.preview-player.lightbox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  margin: 0;
-  background: rgba(38, 38, 38, 0.8);
-  width: 100%;
+.stage {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  max-width: 100%;
-}
+  text-align: center;
 
-.preview-player.lightbox > * {
-  max-width: 100vw;
-  max-height: 100vh;
-}
+  &_media {
+    flex-grow: 1;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.preview-details.lightbox {
-  z-index: 1000;
-  opacity: 0.9;
-}
-
-@media (max-width: 959px) {
-  .preview-player {
-    max-width: 100vw;
+  &_controls {
+    height: auto;
+    margin: 10px auto;
   }
 }
 </style>
