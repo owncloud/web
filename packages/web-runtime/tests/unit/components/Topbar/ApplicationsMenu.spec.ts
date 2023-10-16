@@ -1,5 +1,14 @@
 import ApplicationsMenu from 'web-runtime/src/components/Topbar/ApplicationsMenu.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  RouteLocation,
+  createStore,
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStoreMockOptions,
+  mount,
+  shallowMount
+} from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
 
 const menuLinks = [
   {
@@ -25,6 +34,18 @@ describe('ApplicationsMenu component', () => {
 })
 
 function getWrapper(applicationsList = []) {
+  const storeOptions = {
+    ...defaultStoreMockOptions,
+    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
+  }
+  const store = createStore(storeOptions)
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ query: { app: 'admin-settings' } })
+    }),
+    space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
+  }
+
   return {
     wrapper: shallowMount(ApplicationsMenu, {
       props: {
@@ -32,8 +53,9 @@ function getWrapper(applicationsList = []) {
       },
       global: {
         renderStubDefaultSlot: true,
-        mocks: defaultComponentMocks(),
-        plugins: [...defaultPlugins()]
+        mocks,
+        provide: mocks,
+        plugins: [...defaultPlugins(), store]
       }
     })
   }

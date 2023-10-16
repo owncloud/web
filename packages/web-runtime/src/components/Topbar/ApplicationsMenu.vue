@@ -78,7 +78,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    const { openEditor, getDefaultEditorAction } = useFileActions()
+    const { openEditor } = useFileActions()
     const clientService = useClientService()
     const { webdav } = clientService
     const { $gettext } = useGettext()
@@ -133,6 +133,7 @@ export default defineComponent({
         to: item.path
       }
     }
+
     return {
       appIconKey,
       updateAppIcons,
@@ -209,6 +210,3 @@ export default defineComponent({
   }
 }
 </style>
-
-function openEditor(editor: any, arg1: any, webDavPath: any, fileId: any, EDITOR_MODE_EDIT: any,
-shareId: any) { throw new Error('Function not implemented.') }
