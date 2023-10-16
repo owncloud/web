@@ -204,6 +204,7 @@ export default defineComponent({
           type: 'link'
         })
       })
+      console.log(this.configuration.applications)
 
       return list
     }

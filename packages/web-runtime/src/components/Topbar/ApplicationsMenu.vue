@@ -29,13 +29,11 @@
           <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
             <oc-button
               :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
-              :type="n.url ? 'a' : 'router-link'"
-              :target="n.target"
-              :href="n.url"
-              :to="n.path"
               :appearance="n.active ? 'raw-inverse' : 'raw'"
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
+              v-bind="getAdditionalAttributes(n)"
+              v-on="getAdditionalEventBindings(n)"
             >
               <oc-application-icon
                 :key="`apps-menu-icon-${nid}-${appIconKey}`"
@@ -52,11 +50,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, computed } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, computed, unref } from 'vue'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
+import { useClientService, useStore } from '@ownclouders/web-pkg'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
   components: {
@@ -70,6 +70,9 @@ export default defineComponent({
     }
   },
   setup() {
+    const store = useStore()
+    const clientService = useClientService()
+    const { webdav } = clientService
     const { $gettext } = useGettext()
     const appIconKey = ref('')
 
@@ -79,10 +82,40 @@ export default defineComponent({
     const updateAppIcons = () => {
       appIconKey.value = uuid.v4().replaceAll('-', '')
     }
+    const currentFolder = computed((): SpaceResource => {
+      return store.getters['Files/currentFolder']
+    })
+    const getAdditionalEventBindings = (item: any) => {
+      if (item.path == '/text-editor') {
+        return {
+          click: async () => {
+            const test = await webdav.putFileContents(unref(currentFolder), {
+              path: new Date().getTime() + '.txt',
+              content: $gettext('If this works very nice.')
+            })
+          }
+        }
+      }
+      return {}
+    }
+    const getAdditionalAttributes = (item: any) => {
+      console.log(item)
+      if (item.path == '/text-editor') {
+        return {}
+      }
+      return {
+        type: item.url ? 'a' : 'router-link',
+        target: item.target,
+        href: item.url,
+        to: item.path
+      }
+    }
     return {
       appIconKey,
       updateAppIcons,
-      applicationSwitcherLabel
+      applicationSwitcherLabel,
+      getAdditionalAttributes,
+      getAdditionalEventBindings
     }
   },
   mounted() {

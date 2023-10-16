@@ -1,6 +1,6 @@
 import translations from '../l10n/translations.json'
 import TextEditor from './App.vue'
-import { AppWrapperRoute } from '@ownclouders/web-pkg'
+import { AppNavigationItem, AppWrapperRoute } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -92,7 +92,9 @@ const appInfo = {
   name: $gettext('Text Editor'),
   id: appId,
   icon: 'file-text',
+  color: '#2b2b2b',
   isFileEditor: true,
+  showInApplicationMenu: true,
   extensions: fileExtensions().map((extensionItem) => {
     return {
       extension: extensionItem.extension,
@@ -103,8 +105,17 @@ const appInfo = {
   })
 }
 
+const navItems = (): AppNavigationItem[] => [
+  {
+    enabled: () => {
+      return true
+    }
+  }
+]
+
 export default {
   appInfo,
   routes,
   translations
+  //navItems
 }
