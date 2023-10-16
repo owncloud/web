@@ -93,6 +93,10 @@ const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-con
 const notificationContainer = 'div.oc-notification'
 const publicLinkPasswordErrorMessage = `//div[contains(@class, "oc-text-input-message oc-text-input-danger")]/span`
 const cancelButton = '.oc-modal-body-actions-cancel'
+const showOrHidePasswordButton = '.oc-text-input-show-password-toggle'
+const copyPasswordButton = '.oc-text-input-copy-password-button'
+const generatePasswordButton = '.oc-text-input-generate-password-button'
+const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
 
 const getRecentLinkUrl = async (page: Page): Promise<string> => {
   return page.locator(publicLinkUrlList).first().textContent()
@@ -202,6 +206,39 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   await fillPassword(args)
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
+}
+
+export const showOrHidePassword = async (args): Promise<void> => {
+  const { page, showOrHide } = args
+  await page.locator(showOrHidePasswordButton).click()
+  showOrHide === 'reveals'
+    ? expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'text')
+    : expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'password')
+}
+
+export const copyEnteredPassword = async (page: Page): Promise<void> => {
+  const enteredPassword = await page.locator(editPublicLinkInput).inputValue()
+  await page.locator(copyPasswordButton).click()
+  const copiedPassword = await page.evaluate('navigator.clipboard.readText()')
+  expect(enteredPassword).toBe(copiedPassword)
+}
+
+export const generatePassword = async (page: Page): Promise<void> => {
+  await page.locator(generatePasswordButton).click()
+  const generatedPassword = await page.locator(editPublicLinkInput).inputValue()
+  expect(generatedPassword).toMatch(expectedRegexForGeneratedPassword)
+}
+
+export const setPassword = async (page: Page): Promise<void> => {
+  await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('api/v1/shares/') &&
+        res.request().method() === 'PUT' &&
+        res.status() === 200
+    ),
+    page.locator(editPublicLinkRenameConfirm).click()
+  ])
 }
 
 export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
