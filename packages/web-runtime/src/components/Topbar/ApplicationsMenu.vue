@@ -32,6 +32,7 @@
               :appearance="n.active ? 'raw-inverse' : 'raw'"
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
+              :data-test-id="n.id"
               v-bind="getAdditionalAttributes(n)"
               v-on="getAdditionalEventBindings(n)"
             >

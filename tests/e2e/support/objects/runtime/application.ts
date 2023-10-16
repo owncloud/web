@@ -2,7 +2,7 @@ import { Page } from 'playwright'
 import util from 'util'
 
 const appSwitcherButton = '#_appSwitcherButton'
-const appSelector = `//ul[contains(@class, "applications-list")]//a[@href="#/%s" or @href="/%s"]`
+const appSelector = `//ul[contains(@class, "applications-list")]//*[@data-test-id="%s"]`
 const notificationsBell = `#oc-notifications-bell`
 const notificationsDrop = `#oc-notifications-drop`
 const notificationsLoading = `#oc-notifications-drop .oc-notifications-loading`
@@ -22,7 +22,7 @@ export class Application {
 
   async open({ name }: { name: string }): Promise<void> {
     await this.#page.locator(appSwitcherButton).click()
-    await this.#page.locator(util.format(appSelector, name, name)).click()
+    await this.#page.locator(util.format(appSelector, name)).click()
   }
 
   async getNotificationMessages(): Promise<string[]> {
