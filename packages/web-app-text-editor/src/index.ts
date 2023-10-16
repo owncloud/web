@@ -92,7 +92,7 @@ const appInfo = {
   name: $gettext('Text Editor'),
   id: appId,
   icon: 'file-text',
-  color: '#2b2b2b',
+  color: '#EF6C00',
   isFileEditor: true,
   showInApplicationMenu: true,
   extensions: fileExtensions().map((extensionItem) => {

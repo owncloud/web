@@ -86,7 +86,8 @@ const mutations = {
       ...(appInfo.iconColor && { iconColor: appInfo.iconColor }),
       img: appInfo.img || null,
       config: (state.fileEditorConfigs || {})[appInfo.id],
-      color: appInfo.color || ''
+      color: appInfo.color || '',
+      showInApplicationMenu: appInfo.showInApplicationMenu || false
     }
     state.meta[app.id] = app
   },

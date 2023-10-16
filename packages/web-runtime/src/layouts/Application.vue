@@ -197,6 +197,16 @@ export default defineComponent({
         })
       })
 
+      // Add extensions with showInApplicationMenu
+      Object.values(this.apps).forEach((app: any) => {
+        if (app.showInApplicationMenu) {
+          list.push({
+            ...app,
+            type: 'extension'
+          })
+        }
+      })
+
       // Get extensions manually added into config
       this.configuration.applications.forEach((application) => {
         list.push({
@@ -204,7 +214,7 @@ export default defineComponent({
           type: 'link'
         })
       })
-      console.log(this.configuration.applications)
+      console.log('apps', list)
 
       return list
     }

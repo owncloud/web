@@ -55,7 +55,12 @@ import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
-import { useClientService, useStore } from '@ownclouders/web-pkg'
+import {
+  useClientService,
+  useFileActions,
+  useGetMatchingSpace,
+  useStore
+} from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
@@ -69,12 +74,16 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
+    const { openEditor, getDefaultEditorAction } = useFileActions()
     const clientService = useClientService()
     const { webdav } = clientService
     const { $gettext } = useGettext()
     const appIconKey = ref('')
+    const { getMatchingSpace } = useGetMatchingSpace()
+
+    console.log('registered', props.applicationsList)
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -89,10 +98,20 @@ export default defineComponent({
       if (item.path == '/text-editor') {
         return {
           click: async () => {
-            const test = await webdav.putFileContents(unref(currentFolder), {
-              path: new Date().getTime() + '.txt',
-              content: $gettext('If this works very nice.')
+            const emptyResource = await webdav.putFileContents(unref(currentFolder), {
+              path: new Date().getTime() + 'empty.txt'
             })
+            const space = getMatchingSpace(emptyResource)
+            const fileActionsOptions = {
+              resources: [emptyResource],
+              space
+            }
+
+            const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
+
+            if (defaultEditorAction) {
+              defaultEditorAction.handler({ ...fileActionsOptions })
+            }
           }
         }
       }
@@ -186,3 +205,6 @@ export default defineComponent({
   }
 }
 </style>
+
+function openEditor(editor: any, arg1: any, webDavPath: any, fileId: any, EDITOR_MODE_EDIT: any,
+shareId: any) { throw new Error('Function not implemented.') }

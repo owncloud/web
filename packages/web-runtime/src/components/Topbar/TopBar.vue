@@ -109,7 +109,8 @@ export default {
             return (
               store.getters
                 .getNavItemsByExtension(app.id)
-                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0
+                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0 ||
+              app.showInApplicationMenu
             )
           }
           return isNavItemPermitted(permittedMenus, app)
