@@ -56,7 +56,7 @@ export const useFileActionsCreateQuickLink = ({
             return false
           }
         }
-        return canShare(resources[0], store)
+        return canShare(resources[0], store, ability)
       },
       componentType: 'button',
       class: 'oc-files-actions-create-quicklink-trigger'
