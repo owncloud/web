@@ -4,10 +4,12 @@ import { defineStore } from 'pinia'
 import { Ref, hasInjectionContext, unref } from 'vue'
 import { useConfigurationManager } from '../configuration'
 import { ConfigurationManager } from '../../configuration'
+import { AppNavigationItem } from '../../apps'
 
 export type BaseExtension = {
   id: string
   type: string
+  scopes?: string[]
 }
 
 export interface ActionExtension extends BaseExtension {
@@ -20,7 +22,12 @@ export interface SearchExtension extends BaseExtension {
   searchProvider: SearchProvider
 }
 
-export type Extension = ActionExtension | SearchExtension
+export interface SidebarNavExtension extends BaseExtension {
+  type: 'sidebarNav'
+  navItem: AppNavigationItem
+}
+
+export type Extension = ActionExtension | SearchExtension | SidebarNavExtension
 
 export const useExtensionRegistry = ({
   configurationManager
@@ -41,13 +48,20 @@ export const useExtensionRegistry = ({
     getters: {
       requestExtensions:
         (state) =>
-        <ExtensionType extends Extension>(type: string) => {
+        <ExtensionType extends Extension>(type: string, scope?: string) => {
           return state.extensions
             .map((e) =>
-              unref(e).filter((e) => e.type === type && !options.disabledExtensions.includes(e.id))
+              unref(e).filter(
+                (e) =>
+                  e.type === type &&
+                  !options.disabledExtensions.includes(e.id) &&
+                  (!scope || e.scopes?.includes(scope))
+              )
             )
             .flat() as ExtensionType[]
         }
     }
   })()
 }
+
+export type ExtensionRegistry = ReturnType<typeof useExtensionRegistry>

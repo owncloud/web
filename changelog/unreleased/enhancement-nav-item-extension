@@ -1,0 +1,11 @@
+Enhancement: Registering nav items as extension
+
+Nav items can now be registered with the new extension type `SidebarNavExtension`, which consists of a `AppNavigationItem` and optionally `scopes` (a list of app IDs where the nav item should show).
+
+Also, 2 new optional properties have been added to the `AppNavigationItem` interface:
+
+`handler` - a click handler that get executes on click. It takes priority over a given route.
+`priority` - a number that determines the nav item's position.
+
+https://github.com/owncloud/web/pull/9814
+https://github.com/owncloud/web/issues/9239

@@ -39,6 +39,7 @@
           :name="link.name"
           :collapsed="navigation.closed"
           :tag="link.tag"
+          :handler="link.handler"
         />
       </oc-list>
     </nav>
@@ -189,7 +190,8 @@ export default defineComponent({
     justify-content: flex-end !important;
   }
 
-  .oc-sidebar-nav li a:not(.active) {
+  .oc-sidebar-nav li a:not(.active),
+  .oc-sidebar-nav li button:not(.active) {
     &:hover,
     &:focus {
       text-decoration: none !important;
@@ -198,7 +200,8 @@ export default defineComponent({
     }
   }
 
-  .oc-sidebar-nav li a.active {
+  .oc-sidebar-nav li a.active,
+  .oc-sidebar-nav li button.active {
     &:focus,
     &:hover {
       color: var(--oc-color-swatch-primary-contrast);

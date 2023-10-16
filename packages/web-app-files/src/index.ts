@@ -62,7 +62,8 @@ export const navItems = (context): AppNavigationItem[] => {
         return !!context?.$store?.getters['runtime/spaces/spaces'].find(
           (drive) => isPersonalSpaceResource(drive) && drive.isOwner(context.$store.getters.user)
         )
-      }
+      },
+      priority: 10
     },
     {
       name: $gettext('Favorites'),
@@ -72,7 +73,8 @@ export const navItems = (context): AppNavigationItem[] => {
       },
       enabled(capabilities) {
         return capabilities.files?.favorites
-      }
+      },
+      priority: 20
     },
     {
       name: $gettext('Shares'),
@@ -91,7 +93,8 @@ export const navItems = (context): AppNavigationItem[] => {
       ],
       enabled(capabilities) {
         return capabilities.files_sharing?.api_enabled !== false
-      }
+      },
+      priority: 30
     },
     {
       name: $gettext('Spaces'),
@@ -102,7 +105,8 @@ export const navItems = (context): AppNavigationItem[] => {
       activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
       enabled(capabilities) {
         return capabilities.spaces?.projects
-      }
+      },
+      priority: 40
     },
     {
       name: $gettext('Deleted files'),
@@ -113,7 +117,8 @@ export const navItems = (context): AppNavigationItem[] => {
       activeFor: [{ path: `/${appInfo.id}/trash` }],
       enabled(capabilities) {
         return capabilities.dav?.trashbin === '1.0' && capabilities.files?.undelete
-      }
+      },
+      priority: 50
     }
   ]
 }
