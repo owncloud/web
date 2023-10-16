@@ -273,7 +273,16 @@ export default defineComponent({
         seriesDate: '',
         seriesTime: ''
       },
-      instanceInformation: {},
+      instanceInformation: {
+        instanceNumber: '',
+        acquisitionNumber: '',
+        acquisitionDate: '',
+        acquisitionTime: '',
+        instanceCreationDate: '',
+        instanceCreationTime: '',
+        contentDate: '',
+        contentTime: ''
+      },
       imageInformation: {},
       equipmentInformation: {},
       scanningInformation: {},
@@ -487,6 +496,14 @@ export default defineComponent({
       let seriesDescription, seriesNumber, modality, bodyPart, seriesDate, seriesTime
 
       // instanceInformation
+      let instanceNumber,
+        acquisitionNumber,
+        acquisitionDate,
+        acquisitionTime,
+        instanceCreationDate,
+        instanceCreationTime,
+        contentDate,
+        contentTime
 
       // imageInformation
 
@@ -504,6 +521,8 @@ export default defineComponent({
           patientID = dicomImage.data.string('x00100020')
           patientSex = dicomImage.data.string('x00100040')
           patientWeight = dicomImage.data.string('x00101030')
+
+          studyDescription = dicomImage.data.string('x00081030')
         })
 
       //patientInformation
@@ -516,6 +535,7 @@ export default defineComponent({
       // TODO binding of all other variables
 
       //studyInformation
+      this.studyInformation.studyDescription = studyDescription
 
       // seriesInformation
 
