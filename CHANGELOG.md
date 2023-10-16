@@ -40,6 +40,7 @@ Summary
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
+* Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 
 Details
 -------
@@ -341,6 +342,15 @@ Details
 
    https://github.com/owncloud/web/issues/9769
    https://github.com/owncloud/web/pull/9771
+
+* Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
+
+   We've updated the preview app to have a more user friendly image browsing experience, image
+   zooming, rotation and movement is smoother, images are no longer cropped.
+
+   https://github.com/owncloud/web/issues/7728
+   https://github.com/owncloud/web/pull/9806
+   https://github.com/owncloud/ocis/pull/7409
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
