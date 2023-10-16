@@ -95,6 +95,7 @@ const appInfo = {
   color: '#EF6C00',
   isFileEditor: true,
   showInApplicationMenu: true,
+  defaultExtension: 'txt',
   extensions: fileExtensions().map((extensionItem) => {
     return {
       extension: extensionItem.extension,
@@ -105,17 +106,8 @@ const appInfo = {
   })
 }
 
-const navItems = (): AppNavigationItem[] => [
-  {
-    enabled: () => {
-      return true
-    }
-  }
-]
-
 export default {
   appInfo,
   routes,
   translations
-  //navItems
 }

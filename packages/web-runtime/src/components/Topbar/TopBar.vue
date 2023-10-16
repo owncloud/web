@@ -110,7 +110,7 @@ export default {
               store.getters
                 .getNavItemsByExtension(app.id)
                 .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0 ||
-              app.showInApplicationMenu
+              (app.showInApplicationMenu && !permittedMenus.includes('user'))
             )
           }
           return isNavItemPermitted(permittedMenus, app)
@@ -137,10 +137,13 @@ export default {
           }
 
           const app: any = {
+            id: item.id,
             icon: icon,
             iconUrl: iconUrl,
             title: title,
-            color: color
+            color: color,
+            showInApplicationMenu: item.showInApplicationMenu,
+            defaultExtension: item.defaultExtension
           }
 
           if (item.url) {

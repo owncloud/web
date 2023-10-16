@@ -26,6 +26,8 @@ const appInfo = {
   name: 'Draw.io',
   id: applicationId,
   icon: 'grid',
+  showInApplicationMenu: true,
+  defaultExtension: 'drawio',
   extensions: [
     {
       extension: 'drawio',

@@ -56,6 +56,8 @@ import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/Oc
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
 import {
+  EDITOR_MODE_EDIT,
+  resolveFileNameDuplicate,
   useClientService,
   useFileActions,
   useGetMatchingSpace,
@@ -83,8 +85,6 @@ export default defineComponent({
     const appIconKey = ref('')
     const { getMatchingSpace } = useGetMatchingSpace()
 
-    console.log('registered', props.applicationsList)
-
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
     })
@@ -94,32 +94,36 @@ export default defineComponent({
     const currentFolder = computed((): SpaceResource => {
       return store.getters['Files/currentFolder']
     })
+    const files = computed((): Array<Resource> => store.getters['Files/files'])
+    const onEditorApplicationClick = async (item: any) => {
+      let fileName = $gettext('New file') + `.${item.defaultExtension}`
+
+      if (unref(files).some((f) => f.name === fileName)) {
+        fileName = resolveFileNameDuplicate(fileName, item.defaultExtension, unref(files))
+      }
+
+      const emptyResource = await webdav.putFileContents(unref(currentFolder), {
+        path: fileName
+      })
+      const space = getMatchingSpace(emptyResource)
+      openEditor(
+        item,
+        space.getDriveAliasAndItem(emptyResource),
+        emptyResource.webDavPath,
+        emptyResource.id,
+        EDITOR_MODE_EDIT
+      )
+    }
     const getAdditionalEventBindings = (item: any) => {
-      if (item.path == '/text-editor') {
+      if (item.showInApplicationMenu && item.defaultExtension) {
         return {
-          click: async () => {
-            const emptyResource = await webdav.putFileContents(unref(currentFolder), {
-              path: new Date().getTime() + 'empty.txt'
-            })
-            const space = getMatchingSpace(emptyResource)
-            const fileActionsOptions = {
-              resources: [emptyResource],
-              space
-            }
-
-            const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
-
-            if (defaultEditorAction) {
-              defaultEditorAction.handler({ ...fileActionsOptions })
-            }
-          }
+          click: () => onEditorApplicationClick(item)
         }
       }
       return {}
     }
     const getAdditionalAttributes = (item: any) => {
-      console.log(item)
-      if (item.path == '/text-editor') {
+      if (item.showInApplicationMenu) {
         return {}
       }
       return {

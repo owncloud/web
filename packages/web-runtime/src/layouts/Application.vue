@@ -214,8 +214,6 @@ export default defineComponent({
           type: 'link'
         })
       })
-      console.log('apps', list)
-
       return list
     }
   },
