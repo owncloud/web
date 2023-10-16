@@ -93,11 +93,8 @@
 
 <script lang="ts">
 // import cornerstone packages
-import Hammer from 'hammerjs'
 import dicomParser from 'dicom-parser'
-import * as cornerstoneMath from 'cornerstone-math'
 import * as cornerstone from '@cornerstonejs/core'
-import * as cornerstoneTools from '@cornerstonejs/tools'
 import * as cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader'
 
 import { RenderingEngine, Types, Enums, metaData } from '@cornerstonejs/core'
@@ -121,9 +118,6 @@ import upperFirst from 'lodash-es/upperFirst'
 const { ViewportType, Events } = Enums
 
 // specify external dependencies
-cornerstoneTools.external.Hammer = Hammer
-cornerstoneTools.external.cornerstone = cornerstone
-cornerstoneTools.external.cornerstoneMath = cornerstoneMath
 cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
 cornerstoneDICOMImageLoader.external.dicomParser = dicomParser
 
