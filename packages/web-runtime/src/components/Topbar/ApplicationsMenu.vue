@@ -51,7 +51,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, computed, unref } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ComponentPublicInstance,
+  ref,
+  computed,
+  unref,
+  watch
+} from 'vue'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
@@ -62,6 +70,9 @@ import {
   useClientService,
   useFileActions,
   useGetMatchingSpace,
+  useLocalStorage,
+  useRouteQuery,
+  useRouter,
   useStore
 } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -85,6 +96,70 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const appIconKey = ref('')
     const { getMatchingSpace } = useGetMatchingSpace()
+    const filesAppOpen = ref(false)
+
+    const tempCreatedFiles = useLocalStorage('oc_tempFiles')
+
+    if (!unref(tempCreatedFiles)) {
+      tempCreatedFiles.value = { files: [] }
+    }
+
+    const addTempFile = (spaceWebDavPath: string, path: string, id: string) => {
+      const temp = { ...tempCreatedFiles.value }
+      temp['files'].push({ spaceWebDavPath, path, id })
+      tempCreatedFiles.value = temp
+    }
+
+    const removeTempFile = (spaceWebDavPath: string, path: string, id: string) => {
+      const temp = { ...tempCreatedFiles.value }
+      const result = temp['files'].filter(
+        (file) =>
+          !(file.spaceWebDavPath === spaceWebDavPath && file.path === path && file.id === id)
+      )
+      temp['files'] = result
+      tempCreatedFiles.value = temp
+    }
+
+    const getTempFileIds = (): Array<{ spaceWebDavPath: string; path: string; id: string }> => {
+      return [...tempCreatedFiles.value['files']]
+    }
+
+    watch(
+      () => props.applicationsList,
+      () => {
+        const filesApp = props.applicationsList.find((app) => app.id === 'files')
+        if (!filesApp.active) {
+          filesAppOpen.value = false
+          return
+        }
+        filesAppOpen.value = true
+      },
+      { deep: true }
+    )
+
+    watch(
+      () => unref(filesAppOpen),
+      () => {
+        if (!unref(filesAppOpen)) {
+          return
+        }
+        const idsToRemove = getTempFileIds()
+        idsToRemove.forEach(async (file) => {
+          console.log(`Removing temp file ${file.path}`)
+          const space = { webDavPath: file.spaceWebDavPath } as SpaceResource
+
+          webdav.getFileInfo(space, { path: file.path }).then((resource) => {
+            if (resource.size > 0) {
+              return
+            }
+            webdav.deleteFile(space, { path: file.path }).then(() => {
+              removeTempFile(file.spaceWebDavPath, file.path, file.id)
+              store.commit('Files/REMOVE_FILES', [{ id: file.id }])
+            })
+          })
+        })
+      }
+    )
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -106,7 +181,10 @@ export default defineComponent({
       const emptyResource = await webdav.putFileContents(unref(currentFolder), {
         path: fileName
       })
+
       const space = getMatchingSpace(emptyResource)
+      addTempFile(space.webDavPath, emptyResource.path, emptyResource.id as string)
+
       openEditor(
         item,
         space.getDriveAliasAndItem(emptyResource),
