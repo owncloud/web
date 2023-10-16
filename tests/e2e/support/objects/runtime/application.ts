@@ -21,6 +21,7 @@ export class Application {
   }
 
   async open({ name }: { name: string }): Promise<void> {
+    await this.#page.waitForTimeout(1000)
     await this.#page.locator(appSwitcherButton).click()
     await this.#page.locator(util.format(appSelector, name)).click()
   }
