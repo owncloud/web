@@ -5,6 +5,7 @@
   "description": "ownCloud Web Preview",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@panzoom/panzoom": "^4.5.1",
     "web-test-helpers": "workspace:*"
   },
   "peerDependencies": {

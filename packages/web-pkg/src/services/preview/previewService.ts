@@ -112,6 +112,7 @@ export class PreviewService {
       scalingup: options.scalingup || 0,
       preview: Object.hasOwnProperty.call(options, 'preview') ? options.preview : 1,
       a: Object.hasOwnProperty.call(options, 'a') ? options.a : 1,
+      ...(options.processor && { processor: options.processor }),
       ...(options.etag && { c: options.etag.replaceAll('"', '') }),
       ...(options.dimensions && options.dimensions[0] && { x: options.dimensions[0] }),
       ...(options.dimensions && options.dimensions[1] && { y: options.dimensions[1] })
@@ -119,7 +120,7 @@ export class PreviewService {
   }
 
   private async privatePreviewBlob(options: LoadPreviewOptions, cached = false): Promise<string> {
-    const { resource, dimensions } = options
+    const { resource, dimensions, processor } = options
     if (cached) {
       return this.cacheFactory(options)
     }
@@ -129,7 +130,7 @@ export class PreviewService {
       'remote.php/dav',
       encodePath(resource.webDavPath),
       '?',
-      this.buildQueryString({ etag: resource.etag, dimensions })
+      this.buildQueryString({ etag: resource.etag, dimensions, processor })
     ].join('')
     try {
       const { data } = await this.clientService.httpAuthenticated.get(url, {
@@ -140,14 +141,17 @@ export class PreviewService {
   }
 
   private async publicPreviewUrl(options: LoadPreviewOptions): Promise<string> {
-    const { resource, dimensions } = options
+    const { resource, dimensions, processor } = options
     // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
     // download the file.
     const [url, signedQuery] = resource.downloadURL.split('?')
 
     // Since the pre-signed url contains query parameters and the caller of this method
     // can also provide query parameters we have to combine them.
-    const combinedQuery = [this.buildQueryString({ etag: resource.etag, dimensions }), signedQuery]
+    const combinedQuery = [
+      this.buildQueryString({ etag: resource.etag, dimensions, processor }),
+      signedQuery
+    ]
       .filter(Boolean)
       .join('&')
 

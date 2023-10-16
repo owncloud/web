@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="oc-position-medium oc-position-bottom-center preview-details"
-    :class="{ lightbox: isFullScreenModeActivated }"
-  >
+  <div class="preview-details" :class="{ lightbox: isFullScreenModeActivated }">
     <div
       class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
     >
