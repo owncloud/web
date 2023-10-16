@@ -1,0 +1,5 @@
+Enhancement: Add new portal into runtime to include footer
+
+We've added a new portal into the application layout of runtime package. This portals allows developers to add new content below the app container. The name of the portal is `app.runtime.footer`.
+
+https://github.com/owncloud/web/pull/9815

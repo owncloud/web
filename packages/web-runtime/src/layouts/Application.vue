@@ -23,6 +23,8 @@
           />
         </template>
       </div>
+
+      <portal-target name="app.runtime.footer" />
     </div>
     <div class="snackbars">
       <message-bar :active-messages="activeMessages" @delete-message="deleteMessage" />
@@ -226,7 +228,11 @@ export default defineComponent({
   }
 
   #web-content-main {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    justify-content: flex-start;
     overflow-y: hidden;
 
     .app-container {
@@ -234,6 +240,7 @@ export default defineComponent({
       background-color: var(--oc-color-background-default);
       border-radius: 15px;
       overflow: hidden;
+      width: 100%;
 
       .app-content {
         transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);
