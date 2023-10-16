@@ -41,6 +41,7 @@ Summary
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
+* Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
 
 Details
 -------
@@ -351,6 +352,14 @@ Details
    https://github.com/owncloud/web/issues/7728
    https://github.com/owncloud/web/pull/9806
    https://github.com/owncloud/ocis/pull/7409
+
+* Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
+
+   We've added a new portal into the application layout of runtime package. This portals allows
+   developers to add new content below the app container. The name of the portal is
+   `app.runtime.footer`.
+
+   https://github.com/owncloud/web/pull/9815
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
