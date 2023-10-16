@@ -23,6 +23,8 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
     return window.navigator.platform.match('Mac')
   })
 
+  const runningOnEos = computed<boolean>(() => store.getters.configuration?.options?.runningOnEos)
+
   const copyShortcutString = computed(() => {
     if (unref(isMacOs)) {
       return $pgettext('Keyboard shortcut for macOS for copying files', '⌘ + C')
@@ -72,6 +74,14 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
             resources.every((r) => isProjectSpaceResource(r))
           ) {
             return false
+          }
+
+          if (unref(runningOnEos)) {
+            // CERNBox does not allow actions above home/project root
+            const elems = resources[0].path?.split('/').filter(Boolean) || [] //"/eos/project/c/cernbox"
+            if (isLocationSpacesActive(router, 'files-spaces-generic') && elems.length < 5) {
+              return false
+            }
           }
 
           // copy can't be restricted in authenticated context, because
