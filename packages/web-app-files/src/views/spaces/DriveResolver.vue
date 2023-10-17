@@ -21,6 +21,7 @@ import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import {
   queryItemAsString,
   useClientService,
+  useConfigurationManager,
   useDriveResolver,
   useGetMatchingSpace,
   useRouteParam,
@@ -65,6 +66,7 @@ export default defineComponent({
     const isTrashRoute = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
     const resolvedDrive = useDriveResolver({ store, driveAliasAndItem })
     const { getInternalSpace } = useGetMatchingSpace()
+    const configurationManager = useConfigurationManager()
 
     const loading = ref(true)
     const isLoading = computed(() => {
@@ -103,7 +105,13 @@ export default defineComponent({
         return router.push(
           createLocationSpaces('files-spaces-generic', {
             params,
-            query: { ...query, scrollTo: unref(resource).fileId }
+            query: {
+              ...query,
+              scrollTo: unref(resource).fileId,
+              ...(configurationManager.options.openLinksWithDefaultApp && {
+                openWithDefaultApp: 'true'
+              })
+            }
           })
         )
       }
@@ -112,7 +120,11 @@ export default defineComponent({
       return router.push({
         name: 'resolvePrivateLink',
         params: { fileId: unref(fileId) },
-        query: { openWithDefaultApp: 'false' }
+        query: {
+          ...(configurationManager.options.openLinksWithDefaultApp && {
+            openWithDefaultApp: 'true'
+          })
+        }
       })
     }
 
