@@ -150,6 +150,7 @@ export default defineComponent({
 
           webdav.getFileInfo(space, { path: file.path }).then((resource) => {
             if (resource.size > 0) {
+              removeTempFile(file.spaceWebDavPath, file.path, file.id)
               return
             }
             webdav.deleteFile(space, { path: file.path }).then(() => {
