@@ -116,8 +116,8 @@ import upperFirst from 'lodash-es/upperFirst'
 
 // declaring some const & references
 const { ViewportType, Events } = Enums
-const shortDateFormat = true
-const longDateFormat = false
+const shortDateTimeFormat = true
+const longDateTimeFormat = false
 
 // specify external dependencies
 cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
@@ -684,7 +684,7 @@ export default defineComponent({
       this.patientInformation.patientID = patientID
       this.patientInformation.patientBirthday = this.formatDate(
         this.vipInformation.patientBirthdate,
-        longDateFormat
+        longDateTimeFormat
       )
       this.patientInformation.patientSex = patientSex
       this.patientInformation.patientWeight = patientWeight
@@ -694,29 +694,38 @@ export default defineComponent({
       this.studyInformation.protocolName = protocolName
       this.studyInformation.accessionNumber = accessionNumber
       this.studyInformation.studyID = studyID
-      this.studyInformation.studyDate = this.formatDate(studyDate, longDateFormat)
-      this.studyInformation.studyTime = this.formatTime(studyTime)
+      this.studyInformation.studyDate = this.formatDate(studyDate, longDateTimeFormat)
+      this.studyInformation.studyTime = this.formatTime(studyTime, longDateTimeFormat)
 
       // seriesInformation
       this.seriesInformation.seriesDescription = seriesDescription
       this.seriesInformation.seriesNumber = seriesNumber
       this.seriesInformation.modality = modality
       this.seriesInformation.bodyPart = bodyPart //: Body Part Examined? or Body Part Thickness?
-      this.seriesInformation.seriesDate = this.formatDate(seriesDate, longDateFormat)
-      this.seriesInformation.seriesTime = this.formatTime(seriesTime)
+      this.seriesInformation.seriesDate = this.formatDate(seriesDate, longDateTimeFormat)
+      this.seriesInformation.seriesTime = this.formatTime(seriesTime, longDateTimeFormat)
 
       // instanceInformation
       this.instanceInformation.instanceNumber = instanceNumber
       this.instanceInformation.acquisitionNumber = acquisitionNumber
-      this.instanceInformation.acquisitionDate = this.formatDate(acquisitionDate, longDateFormat)
-      this.instanceInformation.acquisitionTime = this.formatTime(acquisitionTime)
+      this.instanceInformation.acquisitionDate = this.formatDate(
+        acquisitionDate,
+        longDateTimeFormat
+      )
+      this.instanceInformation.acquisitionTime = this.formatTime(
+        acquisitionTime,
+        longDateTimeFormat
+      )
       this.instanceInformation.instanceCreationDate = this.formatDate(
         instanceCreationDate,
-        longDateFormat
+        longDateTimeFormat
       )
-      this.instanceInformation.instanceCreationTime = this.formatTime(instanceCreationTime)
-      this.instanceInformation.contentDate = this.formatDate(contentDate, longDateFormat)
-      this.instanceInformation.contentTime = this.formatTime(contentTime)
+      this.instanceInformation.instanceCreationTime = this.formatTime(
+        instanceCreationTime,
+        longDateTimeFormat
+      )
+      this.instanceInformation.contentDate = this.formatDate(contentDate, longDateTimeFormat)
+      this.instanceInformation.contentTime = this.formatTime(contentTime, longDateTimeFormat)
 
       // imageInformation
       this.imageInformation.rowsX_Columns = rows + 'x' + columns
@@ -875,9 +884,10 @@ export default defineComponent({
         return upperFirst(formattedDate)
       }
     },
-    formatTime(time: string) {
+    formatTime(time: string, isSimple: boolean) {
       // transform time string retrieved from dicom metadata into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
       // description of input format see https://dicom.nema.org/dicom/2013/output/chtml/part05/sect_6.2.html, VR Name 'TM'
+      // isSimple determins output format (DateTime.DATE_MED or DateTime.DATE_SHORT), see https://moment.github.io/luxon/api-docs/index.html
       if (time != undefined && time.length >= 4) {
         let tempDateTimeString =
           '1970-01-01T' +
@@ -890,7 +900,7 @@ export default defineComponent({
         let formattedTime = formatDateFromISO(
           DateTime.fromISO(tempDateTimeString),
           this.$language.current,
-          DateTime.TIME_24_WITH_SECONDS
+          isSimple ? DateTime.TIME_SIMPLE : DateTime.TIME_24_WITH_SECONDS
         )
 
         return upperFirst(formattedTime)
