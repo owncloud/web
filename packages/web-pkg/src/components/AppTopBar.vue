@@ -151,6 +151,12 @@ export default defineComponent({
     flex-basis: 250px;
     margin: 0;
   }
+
+  .oc-resource-indicators {
+    .text {
+      color: var(--oc-color-swatch-brand-contrast);
+    }
+  }
 }
 
 .open-file-bar {

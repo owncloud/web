@@ -26,6 +26,7 @@ const appInfo = {
   name: 'Draw.io',
   id: applicationId,
   icon: 'grid',
+  color: '#EF6C00',
   applicationMenu: {
     enabled: () => true,
     priority: 30,
