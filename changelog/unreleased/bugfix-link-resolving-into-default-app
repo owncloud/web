@@ -1,0 +1,7 @@
+Bugfix: Link resolving into default app
+
+Internal and public file links now reliably resolve into the default app when `openLinksWithDefaultApp` is enabled.
+
+https://github.com/owncloud/web/issues/9799
+https://github.com/owncloud/web/issues/9776
+https://github.com/owncloud/web/pull/9821
