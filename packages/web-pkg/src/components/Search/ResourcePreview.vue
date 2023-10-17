@@ -34,13 +34,7 @@ import {
   useFileActions,
   useFolderLink
 } from '../../composables'
-import {
-  extractParentFolderName,
-  isProjectSpaceResource,
-  isShareRoot,
-  isShareSpaceResource,
-  Resource
-} from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../services'
 import { createFileRouteOptions, isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'

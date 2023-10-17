@@ -7,7 +7,6 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
-import { computed } from 'vue/dist/vue'
 import { useCapabilityShareJailEnabled } from '../capability'
 import { useGetMatchingSpace } from '../spaces'
 

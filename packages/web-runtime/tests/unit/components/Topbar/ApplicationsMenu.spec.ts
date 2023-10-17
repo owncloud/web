@@ -5,7 +5,6 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   defaultStoreMockOptions,
-  mount,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'

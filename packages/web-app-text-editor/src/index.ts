@@ -1,6 +1,6 @@
 import translations from '../l10n/translations.json'
 import TextEditor from './App.vue'
-import { AppNavigationItem, AppWrapperRoute } from '@ownclouders/web-pkg'
+import { AppWrapperRoute } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
