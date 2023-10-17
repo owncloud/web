@@ -85,6 +85,7 @@ export default defineComponent({
       extensionRegistry
         .requestExtensions<SidebarNavExtension>('sidebarNav', unref(activeApp))
         .map(({ navItem }) => navItem)
+        .filter((n) => n.enabled(store.getters.capabilities))
     )
 
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
