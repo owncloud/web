@@ -94,7 +94,11 @@ const appInfo = {
   icon: 'file-text',
   color: '#EF6C00',
   isFileEditor: true,
-  showInApplicationMenu: true,
+  applicationMenu: {
+    enabled: () => true,
+    priority: 20,
+    openAsEditor: true
+  },
   defaultExtension: 'txt',
   extensions: fileExtensions().map((extensionItem) => {
     return {

@@ -189,17 +189,8 @@ export default defineComponent({
     applicationsList() {
       const list = []
 
-      // Get extensions which have at least one nav item
-      this.getExtensionsWithNavItems.forEach((extensionId) => {
-        list.push({
-          ...this.apps[extensionId],
-          type: 'extension'
-        })
-      })
-
-      // Add extensions with showInApplicationMenu
       Object.values(this.apps).forEach((app: any) => {
-        if (app.showInApplicationMenu) {
+        if (app.applicationMenu.enabled instanceof Function && app.applicationMenu.enabled()) {
           list.push({
             ...app,
             type: 'extension'
@@ -214,7 +205,12 @@ export default defineComponent({
           type: 'link'
         })
       })
-      return list
+
+      return list.sort(
+        (a, b) =>
+          (a.applicationMenu?.priority || Number.MAX_SAFE_INTEGER) -
+          (b.applicationMenu?.priority || Number.MAX_SAFE_INTEGER)
+      )
     }
   },
   mounted() {

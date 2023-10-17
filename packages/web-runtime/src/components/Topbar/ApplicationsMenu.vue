@@ -77,7 +77,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup(props) {
+  setup() {
     const store = useStore()
     const { openEditor } = useFileActions()
     const clientService = useClientService()
@@ -118,7 +118,7 @@ export default defineComponent({
       )
     }
     const getAdditionalEventBindings = (item: any) => {
-      if (item.showInApplicationMenu && item.defaultExtension) {
+      if (item.applicationMenu?.openAsEditor) {
         return {
           click: () => onEditorApplicationClick(item)
         }
@@ -126,7 +126,7 @@ export default defineComponent({
       return {}
     }
     const getAdditionalAttributes = (item: any) => {
-      if (item.showInApplicationMenu) {
+      if (item.applicationMenu?.openAsEditor) {
         return {}
       }
       return {
@@ -159,12 +159,14 @@ export default defineComponent({
 .oc-drop {
   width: 280px;
 }
+
 .applications-list li {
   margin: var(--oc-space-xsmall) 0;
 
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -183,6 +185,7 @@ export default defineComponent({
         color: var(--oc-color-swatch-primary-contrast) !important;
       }
     }
+
     &.oc-button-passive-raw {
       &:focus,
       &:hover {
@@ -193,6 +196,7 @@ export default defineComponent({
     &:focus {
       text-decoration: none;
     }
+
     &:hover {
       background-color: var(--oc-color-background-hover);
       text-decoration: none;

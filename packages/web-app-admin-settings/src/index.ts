@@ -16,7 +16,11 @@ const appInfo = {
   id: 'admin-settings',
   icon: 'settings-4',
   color: '#2b2b2b',
-  isFileEditor: false
+  isFileEditor: false,
+  applicationMenu: {
+    enabled: () => true,
+    priority: 40
+  }
 }
 
 const routes = ({ $ability }: { $ability: Ability }) => [

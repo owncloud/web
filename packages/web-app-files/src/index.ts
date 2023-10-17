@@ -35,7 +35,11 @@ const appInfo = {
   color: 'var(--oc-color-swatch-primary-muted)',
   isFileEditor: false,
   extensions: [],
-  fileSideBars
+  fileSideBars,
+  applicationMenu: {
+    enabled: () => true,
+    priority: 10
+  }
 }
 export const navItems = (context): AppNavigationItem[] => {
   return [
