@@ -283,10 +283,56 @@ export default defineComponent({
         contentDate: '',
         contentTime: ''
       },
-      imageInformation: {},
-      equipmentInformation: {},
-      scanningInformation: {},
-      uidsInformation: {},
+      imageInformation: {
+        rowsX_Columns: '',
+        photometricInterpretation: '',
+        imageType: '',
+        bitsAllocated: '',
+        bitsStored: '',
+        highBit: '',
+        pixelRepresentation: '',
+        rescaleSlope: '',
+        rescaleIntercept: '',
+        imagePositionPatient: '',
+        imageOrientationPatient: '',
+        patientPosition: '',
+        pixelSpacing: '',
+        samplesPerPixel: '',
+        imageComments: ''
+      },
+      equipmentInformation: {
+        manufacturer: '',
+        model: '',
+        stationName: '',
+        AE_Title: '',
+        institutionName: '',
+        softwareVersion: '',
+        implementationVersionName: ''
+      },
+      scanningInformation: {
+        scanningSequence: '',
+        sequenceVariant: '',
+        scanOptions: '',
+        sliceThickness: '',
+        repetitiontime: '',
+        echotime: '',
+        inversionTime: '',
+        imagingFrequency: '',
+        imagedNucleus: '',
+        echoNumbers: '',
+        magneticFieldStrength: '',
+        spacingBetweenSlices: '',
+        numberOfPhaseEncodingSteps: '',
+        echoTrainLength: ''
+      },
+      uidsInformation: {
+        studyUID: '',
+        seriesUID: '',
+        instanceUID: '',
+        SOP_ClassUID: '',
+        transferSyntaxUID: '',
+        frameOfReferenceUID: ''
+      },
       otherInformation: {},
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
@@ -506,12 +552,50 @@ export default defineComponent({
         contentTime
 
       // imageInformation
+      let rows,
+        columns,
+        photometricInterpretation,
+        imageType,
+        bitsAllocated,
+        bitsStored,
+        highBit,
+        pixelRepresentation,
+        rescaleSlope,
+        rescaleIntercept,
+        imagePositionPatient,
+        imageOrientationPatient,
+        patientPosition,
+        pixelSpacing,
+        samplesPerPixel,
+        imageComments
 
       // equipmentInformation
+      let manufacturer,
+        model,
+        stationName,
+        AE_Title,
+        institutionName,
+        softwareVersion,
+        implementationVersionName
 
       // scanningInformation
+      let scanningSequence,
+        sequenceVariant,
+        scanOptions,
+        sliceThickness,
+        repetitiontime,
+        echotime,
+        inversionTime,
+        imagingFrequency,
+        imagedNucleus,
+        echoNumbers,
+        magneticFieldStrength,
+        spacingBetweenSlices,
+        numberOfPhaseEncodingSteps,
+        echoTrainLength
 
       // uidsInformation
+      let studyUID, seriesUID, instanceUID, SOP_ClassUID, transferSyntaxUID, frameOfReferenceUID
 
       // otherInformation
 
@@ -523,6 +607,74 @@ export default defineComponent({
           patientWeight = dicomImage.data.string('x00101030')
 
           studyDescription = dicomImage.data.string('x00081030')
+          protocolName = dicomImage.data.string('x00181030')
+          accessionNumber = dicomImage.data.string('x00080050')
+          studyID = dicomImage.data.string('x00200010')
+          studyDate = dicomImage.data.string('x00080020')
+          studyTime = dicomImage.data.string('x00080030')
+
+          seriesDescription = dicomImage.data.string('x0008103E')
+          seriesNumber = dicomImage.data.string('x00200011')
+          modality = dicomImage.data.string('x00080060')
+          bodyPart = dicomImage.data.string('x00180015') //   Body Part Examined? or Body Part Thickness?
+          seriesDate = dicomImage.data.string('x00080021')
+          seriesTime = dicomImage.data.string('x00080031')
+
+          instanceNumber = dicomImage.data.string('x00200013')
+          acquisitionNumber = dicomImage.data.string('x00200012')
+          acquisitionDate = dicomImage.data.string('x00080022')
+          acquisitionTime = dicomImage.data.string('x0008002A')
+          instanceCreationDate = dicomImage.data.string('x00080012')
+          instanceCreationTime = dicomImage.data.string('x00080013')
+          contentDate = dicomImage.data.string('x00080023')
+          contentTime = dicomImage.data.string('x00080033')
+
+          rows = dicomImage.data.string('x00280010')
+          columns = dicomImage.data.string('x00280011')
+          photometricInterpretation = dicomImage.data.string('x00280004')
+          imageType = dicomImage.data.string('x00080008')
+          bitsAllocated = dicomImage.data.string('x00280100')
+          bitsStored = dicomImage.data.string('x00280101')
+          highBit = dicomImage.data.string('x00280102')
+          pixelRepresentation = dicomImage.data.string('x00280103')
+          rescaleSlope = dicomImage.data.string('x00281053')
+          rescaleIntercept = dicomImage.data.string('x00281052')
+          imagePositionPatient = dicomImage.data.string('x00200032')
+          pixelSpacing = dicomImage.data.string('x00280030')
+          samplesPerPixel = dicomImage.data.string('x00280002')
+          imageComments = dicomImage.data.string('x00204000')
+          imageOrientationPatient = dicomImage.data.string('x00200037')
+          patientPosition = dicomImage.data.string('x00185100')
+
+          manufacturer = dicomImage.data.string('x00080070')
+          model = dicomImage.data.string('x00081090') // Manufacturer's Model Name
+          stationName = dicomImage.data.string('x00081010')
+          AE_Title = dicomImage.data.string('x') //Retrieve AE Title? or Station AE Title?
+          institutionName = dicomImage.data.string('x00080080')
+          softwareVersion = dicomImage.data.string('x00181020')
+          implementationVersionName = dicomImage.data.string('x00020013')
+
+          scanningSequence = dicomImage.data.string('x00180020')
+          sequenceVariant = dicomImage.data.string('x00180021')
+          scanOptions = dicomImage.data.string('x00180022')
+          sliceThickness = dicomImage.data.string('x00180050')
+          repetitiontime = dicomImage.data.string('x00180080')
+          echotime = dicomImage.data.string('x00180081')
+          inversionTime = dicomImage.data.string('x00180082')
+          imagingFrequency = dicomImage.data.string('x00180084')
+          imagedNucleus = dicomImage.data.string('x00180085')
+          echoNumbers = dicomImage.data.string('x00180086')
+          magneticFieldStrength = dicomImage.data.string('x00180087')
+          spacingBetweenSlices = dicomImage.data.string('x00180088')
+          numberOfPhaseEncodingSteps = dicomImage.data.string('x00180089')
+          echoTrainLength = dicomImage.data.string('x00180091')
+
+          studyUID = dicomImage.data.string('x00200010') // Study Instance UID	?
+          seriesUID = dicomImage.data.string('x0020000E') //Series Instance UID	?
+          instanceUID = dicomImage.data.string('x00080018') // SOP Instance UID	?
+          SOP_ClassUID = dicomImage.data.string('x00080016')
+          transferSyntaxUID = dicomImage.data.string('x00020010')
+          frameOfReferenceUID = dicomImage.data.string('x00200052')
         })
 
       //patientInformation
@@ -536,18 +688,79 @@ export default defineComponent({
 
       //studyInformation
       this.studyInformation.studyDescription = studyDescription
+      this.studyInformation.protocolName = protocolName
+      this.studyInformation.accessionNumber = accessionNumber
+      this.studyInformation.studyID = studyID
+      this.studyInformation.studyDate = studyDate
+      this.studyInformation.studyTime = studyTime
 
       // seriesInformation
+      this.seriesInformation.seriesDescription = seriesDescription
+      this.seriesInformation.seriesNumber = seriesNumber
+      this.seriesInformation.modality = modality
+      this.seriesInformation.bodyPart = bodyPart //: Body Part Examined? or Body Part Thickness?
+      this.seriesInformation.seriesDate = seriesDate
+      this.seriesInformation.seriesTime = seriesTime
 
       // instanceInformation
+      this.instanceInformation.instanceNumber = instanceNumber
+      this.instanceInformation.acquisitionNumber = acquisitionNumber
+      this.instanceInformation.acquisitionDate = acquisitionDate
+      this.instanceInformation.acquisitionTime = acquisitionTime
+      this.instanceInformation.instanceCreationDate = instanceCreationDate
+      this.instanceInformation.instanceCreationTime = instanceCreationTime
+      this.instanceInformation.contentDate = contentDate
+      this.instanceInformation.contentTime = contentTime
 
       // imageInformation
+      this.imageInformation.rowsX_Columns = rows + 'x' + columns
+      this.imageInformation.photometricInterpretation = photometricInterpretation
+      this.imageInformation.imageType = imageType
+      this.imageInformation.bitsAllocated = bitsAllocated
+      this.imageInformation.bitsStored = bitsStored
+      this.imageInformation.highBit = highBit
+      this.imageInformation.pixelRepresentation = pixelRepresentation
+      this.imageInformation.rescaleSlope = rescaleSlope
+      this.imageInformation.rescaleIntercept = rescaleIntercept
+      this.imageInformation.imagePositionPatient = imagePositionPatient
+      this.imageInformation.imageOrientationPatient = imageOrientationPatient
+      this.imageInformation.patientPosition = patientPosition
+      this.imageInformation.pixelSpacing = pixelSpacing
+      this.imageInformation.samplesPerPixel = samplesPerPixel
+      this.imageInformation.imageComments = imageComments
 
       // equipmentInformation
+      this.equipmentInformation.manufacturer = manufacturer
+      this.equipmentInformation.model = model
+      this.equipmentInformation.stationName = stationName
+      this.equipmentInformation.AE_Title = AE_Title
+      this.equipmentInformation.institutionName = institutionName
+      this.equipmentInformation.softwareVersion = softwareVersion
+      this.equipmentInformation.implementationVersionName = implementationVersionName
 
       // scanningInformation
+      this.scanningInformation.scanningSequence = scanningSequence
+      this.scanningInformation.sequenceVariant = sequenceVariant
+      this.scanningInformation.scanOptions = scanOptions
+      this.scanningInformation.sliceThickness = sliceThickness
+      this.scanningInformation.repetitiontime = repetitiontime
+      this.scanningInformation.echotime = echotime
+      this.scanningInformation.inversionTime = inversionTime
+      this.scanningInformation.imagingFrequency = imagingFrequency
+      this.scanningInformation.imagedNucleus = imagedNucleus
+      this.scanningInformation.echoNumbers = echoNumbers
+      this.scanningInformation.magneticFieldStrength = magneticFieldStrength
+      this.scanningInformation.spacingBetweenSlices = spacingBetweenSlices
+      this.scanningInformation.numberOfPhaseEncodingSteps = numberOfPhaseEncodingSteps
+      this.scanningInformation.echoTrainLength = echoTrainLength
 
       // uidsInformation
+      this.uidsInformation.studyUID = studyUID
+      this.uidsInformation.seriesUID = seriesUID
+      this.uidsInformation.instanceUID = instanceUID
+      this.uidsInformation.SOP_ClassUID = SOP_ClassUID
+      this.uidsInformation.transferSyntaxUID = transferSyntaxUID
+      this.uidsInformation.frameOfReferenceUID = frameOfReferenceUID
 
       // otherInformation
 
