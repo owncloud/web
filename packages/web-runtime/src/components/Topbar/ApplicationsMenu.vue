@@ -96,70 +96,6 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const appIconKey = ref('')
     const { getMatchingSpace } = useGetMatchingSpace()
-    const filesAppOpen = ref(false)
-
-    const tempCreatedFiles = useLocalStorage('oc_tempFiles')
-
-    if (!unref(tempCreatedFiles)) {
-      tempCreatedFiles.value = { files: [] }
-    }
-
-    const addTempFileToLocalStorage = (spaceWebDavPath: string, path: string, id: string) => {
-      const temp = { ...tempCreatedFiles.value }
-      temp['files'].push({ spaceWebDavPath, path, id })
-      tempCreatedFiles.value = temp
-    }
-
-    const removeTempFileFromLocalStorage = (spaceWebDavPath: string, path: string, id: string) => {
-      const temp = { ...tempCreatedFiles.value }
-      const result = temp['files'].filter(
-        (file) =>
-          !(file.spaceWebDavPath === spaceWebDavPath && file.path === path && file.id === id)
-      )
-      temp['files'] = result
-      tempCreatedFiles.value = temp
-    }
-
-    const getTempFileIds = (): Array<{ spaceWebDavPath: string; path: string; id: string }> => {
-      return [...tempCreatedFiles.value['files']]
-    }
-
-    watch(
-      () => props.applicationsList,
-      () => {
-        const filesApp = props.applicationsList.find((app) => app.id === 'files')
-        if (!filesApp.active) {
-          filesAppOpen.value = false
-          return
-        }
-        filesAppOpen.value = true
-      },
-      { deep: true }
-    )
-
-    watch(
-      () => unref(filesAppOpen),
-      () => {
-        if (!unref(filesAppOpen)) {
-          return
-        }
-        const idsToRemove = getTempFileIds()
-        idsToRemove.forEach(async (file) => {
-          console.log(`Removing temp file ${file.path}`)
-          const space = { webDavPath: file.spaceWebDavPath } as SpaceResource
-
-          webdav.getFileInfo(space, { path: file.path }).then((resource) => {
-            removeTempFileFromLocalStorage(file.spaceWebDavPath, file.path, file.id)
-            if (resource.size > 0) {
-              return
-            }
-            webdav.deleteFile(space, { path: file.path }).then(() => {
-              store.commit('Files/REMOVE_FILES', [{ id: file.id }])
-            })
-          })
-        })
-      }
-    )
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -183,7 +119,6 @@ export default defineComponent({
       })
 
       const space = getMatchingSpace(emptyResource)
-      addTempFileToLocalStorage(space.webDavPath, emptyResource.path, emptyResource.id as string)
 
       openEditor(
         item,
