@@ -1,0 +1,6 @@
+Bugfix: Create .space folder if it does not exist
+
+Creating .space folder and README.md in space if folder has been removed by user.
+
+https://github.com/owncloud/web/issues/9788
+https://github.com/owncloud/web/pull/9793
