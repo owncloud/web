@@ -8,6 +8,11 @@
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
             :resource="resource"
+            :parent-folder-name="parentFolderName"
+            :parent-folder-link-icon-additional-attributes="
+              parentFolderLinkIconAdditionalAttributes
+            "
+            :is-path-displayed="true"
           />
         </div>
         <div class="oc-flex main-actions">
@@ -77,6 +82,7 @@ import { Resource } from '@ownclouders/web-client/src'
 import { Action } from '../composables/actions/types'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
+import { useFolderLink } from '../composables'
 
 export default defineComponent({
   name: 'AppTopBar',
@@ -98,15 +104,21 @@ export default defineComponent({
     }
   },
   emits: ['close'],
-  setup() {
+  setup(props) {
     const { $gettext } = useGettext()
 
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
 
+    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes } = useFolderLink()
+
     return {
       contextMenuLabel,
-      closeButtonLabel
+      closeButtonLabel,
+      parentFolderName: getParentFolderName(props.resource),
+      parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
+        props.resource
+      )
     }
   }
 })

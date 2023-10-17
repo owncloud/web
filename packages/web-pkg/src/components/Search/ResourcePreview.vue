@@ -31,7 +31,8 @@ import { dirname } from 'path'
 import {
   useCapabilityShareJailEnabled,
   useGetMatchingSpace,
-  useFileActions
+  useFileActions,
+  useFolderLink
 } from '../../composables'
 import {
   extractParentFolderName,
@@ -63,6 +64,7 @@ export default defineComponent({
   },
   setup(props) {
     const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
+    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes } = useFolderLink()
     const previewData = ref()
 
     const resource = computed((): Resource => {
@@ -86,7 +88,11 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
       resource,
-      resourceDisabled
+      resourceDisabled,
+      parentFolderName: getParentFolderName(unref(resource)),
+      parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
+        unref(resource)
+      )
     }
   },
   computed: {
@@ -114,30 +120,6 @@ export default defineComponent({
     matchingSpace() {
       return this.getMatchingSpace(this.resource)
     },
-    parentFolderName() {
-      if (isShareRoot(this.resource)) {
-        return this.$gettext('Shared with me')
-      }
-
-      const parentFolder = extractParentFolderName(this.resource)
-      if (parentFolder) {
-        return parentFolder
-      }
-
-      if (!this.hasShareJail) {
-        return this.$gettext('All files and folders')
-      }
-
-      if (isProjectSpaceResource(this.resource)) {
-        return this.$gettext('Spaces')
-      }
-
-      if (isProjectSpaceResource(this.matchingSpace) || isShareSpaceResource(this.matchingSpace)) {
-        return this.matchingSpace.name
-      }
-
-      return this.$gettext('Personal')
-    },
     displayThumbnails() {
       return (
         !this.configuration?.options?.disablePreviews &&
@@ -155,24 +137,6 @@ export default defineComponent({
         return createLocationSpaces('files-spaces-projects')
       }
       return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
-    },
-
-    parentFolderLinkIconAdditionalAttributes() {
-      // Identify if resource is project space or is part of a project space and the resource is located in its root
-      if (
-        isProjectSpaceResource(this.resource) ||
-        (isProjectSpaceResource(
-          this.getInternalSpace(this.resource.storageId) || ({} as Resource)
-        ) &&
-          this.resource.path.split('/').length === 2)
-      ) {
-        return {
-          name: 'layout-grid',
-          'fill-type': 'fill'
-        }
-      }
-
-      return {}
     }
   },
   mounted() {
