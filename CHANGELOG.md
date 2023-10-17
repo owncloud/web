@@ -41,6 +41,7 @@ Summary
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
+* Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
 
 Details
@@ -352,6 +353,20 @@ Details
    https://github.com/owncloud/web/issues/7728
    https://github.com/owncloud/web/pull/9806
    https://github.com/owncloud/ocis/pull/7409
+
+* Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
+
+   Nav items can now be registered with the new extension type `SidebarNavExtension`, which
+   consists of a `AppNavigationItem` and optionally `scopes` (a list of app IDs where the nav item
+   should show).
+
+   Also, 2 new optional properties have been added to the `AppNavigationItem` interface:
+
+   `handler` - a click handler that get executes on click. It takes priority over a given route.
+   `priority` - a number that determines the nav item's position.
+
+   https://github.com/owncloud/web/issues/9239
+   https://github.com/owncloud/web/pull/9814
 
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
 
