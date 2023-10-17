@@ -21,6 +21,8 @@ export interface AppNavigationItem {
   name?: string | ((capabilities?: Record<string, any>) => string)
   route?: RouteLocationRaw
   tag?: string
+  handler?: () => void
+  priority?: number
 }
 
 /**
