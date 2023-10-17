@@ -104,13 +104,13 @@ export default defineComponent({
       tempCreatedFiles.value = { files: [] }
     }
 
-    const addTempFile = (spaceWebDavPath: string, path: string, id: string) => {
+    const addTempFileToLocalStorage = (spaceWebDavPath: string, path: string, id: string) => {
       const temp = { ...tempCreatedFiles.value }
       temp['files'].push({ spaceWebDavPath, path, id })
       tempCreatedFiles.value = temp
     }
 
-    const removeTempFile = (spaceWebDavPath: string, path: string, id: string) => {
+    const removeTempFileFromLocalStorage = (spaceWebDavPath: string, path: string, id: string) => {
       const temp = { ...tempCreatedFiles.value }
       const result = temp['files'].filter(
         (file) =>
@@ -149,12 +149,11 @@ export default defineComponent({
           const space = { webDavPath: file.spaceWebDavPath } as SpaceResource
 
           webdav.getFileInfo(space, { path: file.path }).then((resource) => {
+            removeTempFileFromLocalStorage(file.spaceWebDavPath, file.path, file.id)
             if (resource.size > 0) {
-              removeTempFile(file.spaceWebDavPath, file.path, file.id)
               return
             }
             webdav.deleteFile(space, { path: file.path }).then(() => {
-              removeTempFile(file.spaceWebDavPath, file.path, file.id)
               store.commit('Files/REMOVE_FILES', [{ id: file.id }])
             })
           })
@@ -184,7 +183,7 @@ export default defineComponent({
       })
 
       const space = getMatchingSpace(emptyResource)
-      addTempFile(space.webDavPath, emptyResource.path, emptyResource.id as string)
+      addTempFileToLocalStorage(space.webDavPath, emptyResource.path, emptyResource.id as string)
 
       openEditor(
         item,
