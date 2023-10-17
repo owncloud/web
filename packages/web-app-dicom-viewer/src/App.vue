@@ -876,10 +876,16 @@ export default defineComponent({
       }
     },
     formatTime(time: string) {
-      // TODO: transform time string retrieved from dicom metadata into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
-      // some examples of data that has been extracted: 150829.0000, 155614.6300
-      if (time != undefined) {
-        let tempDateTimeString = '' // TODO transform the given timestring into a valid input for formatDateFromISO
+      // transform time string retrieved from dicom metadata into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
+      // description of input format see https://dicom.nema.org/dicom/2013/output/chtml/part05/sect_6.2.html, VR Name 'TM'
+      if (time != undefined && time.length >= 4) {
+        let tempDateTimeString =
+          '1970-01-01T' +
+          time.substring(0, 2) +
+          ':' +
+          time.substring(2, 4) +
+          ':' +
+          (time.length >= 6 ? time.substring(4, 6) : '00')
 
         let formattedTime = formatDateFromISO(
           DateTime.fromISO(tempDateTimeString),
@@ -887,10 +893,7 @@ export default defineComponent({
           DateTime.TIME_24_WITH_SECONDS
         )
 
-        console.log('formatted time string: ' + formattedTime)
-
-        //return upperFirst(formattedTime)
-        return upperFirst(time)
+        return upperFirst(formattedTime)
       }
     },
     formatLabel(label: string) {
