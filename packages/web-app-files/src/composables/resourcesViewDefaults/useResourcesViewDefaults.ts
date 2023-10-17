@@ -10,7 +10,7 @@ import {
   useRouteQuery,
   useStore
 } from '@ownclouders/web-pkg'
-import { resourceTable } from '@ownclouders/web-pkg'
+import { determineSortFields as determineResourceTableSortFields } from '@ownclouders/web-pkg'
 import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
 import { Resource } from '@ownclouders/web-client'
@@ -24,8 +24,6 @@ import {
 } from '@ownclouders/web-pkg'
 
 import { ScrollToResult, useScrollTo } from '@ownclouders/web-pkg'
-
-const { determineSortFields: determineResourceTableSortFields } = resourceTable
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>

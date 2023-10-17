@@ -1,1 +1,1 @@
-export * as resourceTable from './resourceTable'
+export * from './resourceTable'

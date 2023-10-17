@@ -163,7 +163,7 @@ export default defineComponent({
     viewSize: {
       type: Number,
       required: false,
-      default: ViewModeConstants.tilesSizeDefault
+      default: () => ViewModeConstants.tilesSizeDefault
     },
     dragDrop: {
       type: Boolean,
