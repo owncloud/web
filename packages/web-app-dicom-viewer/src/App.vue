@@ -116,6 +116,8 @@ import upperFirst from 'lodash-es/upperFirst'
 
 // declaring some const & references
 const { ViewportType, Events } = Enums
+const shortDateFormat = true
+const longDateFormat = false
 
 // specify external dependencies
 cornerstoneDICOMImageLoader.external.cornerstone = cornerstone
@@ -314,8 +316,8 @@ export default defineComponent({
         sequenceVariant: '',
         scanOptions: '',
         sliceThickness: '',
-        repetitiontime: '',
-        echotime: '',
+        repetitionTime: '',
+        echoTime: '',
         inversionTime: '',
         imagingFrequency: '',
         imagedNucleus: '',
@@ -583,8 +585,8 @@ export default defineComponent({
         sequenceVariant,
         scanOptions,
         sliceThickness,
-        repetitiontime,
-        echotime,
+        repetitionTime,
+        echoTime,
         inversionTime,
         imagingFrequency,
         imagedNucleus,
@@ -613,7 +615,7 @@ export default defineComponent({
           studyDate = dicomImage.data.string('x00080020')
           studyTime = dicomImage.data.string('x00080030')
 
-          seriesDescription = dicomImage.data.string('x0008103E')
+          seriesDescription = dicomImage.data.string('x0008103e')
           seriesNumber = dicomImage.data.string('x00200011')
           modality = dicomImage.data.string('x00080060')
           bodyPart = dicomImage.data.string('x00180015') //   Body Part Examined? or Body Part Thickness?
@@ -658,8 +660,8 @@ export default defineComponent({
           sequenceVariant = dicomImage.data.string('x00180021')
           scanOptions = dicomImage.data.string('x00180022')
           sliceThickness = dicomImage.data.string('x00180050')
-          repetitiontime = dicomImage.data.string('x00180080')
-          echotime = dicomImage.data.string('x00180081')
+          repetitionTime = dicomImage.data.string('x00180080')
+          echoTime = dicomImage.data.string('x00180081')
           inversionTime = dicomImage.data.string('x00180082')
           imagingFrequency = dicomImage.data.string('x00180084')
           imagedNucleus = dicomImage.data.string('x00180085')
@@ -680,37 +682,41 @@ export default defineComponent({
       //patientInformation
       this.patientInformation.patientName = this.vipInformation.patientName
       this.patientInformation.patientID = patientID
-      this.patientInformation.patientBirthday = this.vipInformation.patientBirthdate
+      this.patientInformation.patientBirthday = this.formatDate(
+        this.vipInformation.patientBirthdate,
+        longDateFormat
+      )
       this.patientInformation.patientSex = patientSex
       this.patientInformation.patientWeight = patientWeight
-
-      // TODO binding of all other variables
 
       //studyInformation
       this.studyInformation.studyDescription = studyDescription
       this.studyInformation.protocolName = protocolName
       this.studyInformation.accessionNumber = accessionNumber
       this.studyInformation.studyID = studyID
-      this.studyInformation.studyDate = studyDate
-      this.studyInformation.studyTime = studyTime
+      this.studyInformation.studyDate = this.formatDate(studyDate, longDateFormat)
+      this.studyInformation.studyTime = this.formatTime(studyTime)
 
       // seriesInformation
       this.seriesInformation.seriesDescription = seriesDescription
       this.seriesInformation.seriesNumber = seriesNumber
       this.seriesInformation.modality = modality
       this.seriesInformation.bodyPart = bodyPart //: Body Part Examined? or Body Part Thickness?
-      this.seriesInformation.seriesDate = seriesDate
-      this.seriesInformation.seriesTime = seriesTime
+      this.seriesInformation.seriesDate = this.formatDate(seriesDate, longDateFormat)
+      this.seriesInformation.seriesTime = this.formatTime(seriesTime)
 
       // instanceInformation
       this.instanceInformation.instanceNumber = instanceNumber
       this.instanceInformation.acquisitionNumber = acquisitionNumber
-      this.instanceInformation.acquisitionDate = acquisitionDate
-      this.instanceInformation.acquisitionTime = acquisitionTime
-      this.instanceInformation.instanceCreationDate = instanceCreationDate
-      this.instanceInformation.instanceCreationTime = instanceCreationTime
-      this.instanceInformation.contentDate = contentDate
-      this.instanceInformation.contentTime = contentTime
+      this.instanceInformation.acquisitionDate = this.formatDate(acquisitionDate, longDateFormat)
+      this.instanceInformation.acquisitionTime = this.formatTime(acquisitionTime)
+      this.instanceInformation.instanceCreationDate = this.formatDate(
+        instanceCreationDate,
+        longDateFormat
+      )
+      this.instanceInformation.instanceCreationTime = this.formatTime(instanceCreationTime)
+      this.instanceInformation.contentDate = this.formatDate(contentDate, longDateFormat)
+      this.instanceInformation.contentTime = this.formatTime(contentTime)
 
       // imageInformation
       this.imageInformation.rowsX_Columns = rows + 'x' + columns
@@ -743,8 +749,8 @@ export default defineComponent({
       this.scanningInformation.sequenceVariant = sequenceVariant
       this.scanningInformation.scanOptions = scanOptions
       this.scanningInformation.sliceThickness = sliceThickness
-      this.scanningInformation.repetitiontime = repetitiontime
-      this.scanningInformation.echotime = echotime
+      this.scanningInformation.repetitionTime = repetitionTime
+      this.scanningInformation.echoTime = echoTime
       this.scanningInformation.inversionTime = inversionTime
       this.scanningInformation.imagingFrequency = imagingFrequency
       this.scanningInformation.imagedNucleus = imagedNucleus
@@ -860,13 +866,31 @@ export default defineComponent({
           date.substring(6, 8) +
           'T00:00:00'
 
-        let formatedDate = formatDateFromISO(
+        let formattedDate = formatDateFromISO(
           DateTime.fromISO(tempDateTimeString),
           this.$language.current,
           isShort ? DateTime.DATE_SHORT : DateTime.DATE_MED
         )
 
-        return upperFirst(formatedDate)
+        return upperFirst(formattedDate)
+      }
+    },
+    formatTime(time: string) {
+      // TODO: transform time string retrieved from dicom metadata into a string that is valid for formatDateFromISO ('YYYY-MM-DDTHH:MM:SS')
+      // some examples of data that has been extracted: 150829.0000, 155614.6300
+      if (time != undefined) {
+        let tempDateTimeString = '' // TODO transform the given timestring into a valid input for formatDateFromISO
+
+        let formattedTime = formatDateFromISO(
+          DateTime.fromISO(tempDateTimeString),
+          this.$language.current,
+          DateTime.TIME_24_WITH_SECONDS
+        )
+
+        console.log('formatted time string: ' + formattedTime)
+
+        //return upperFirst(formattedTime)
+        return upperFirst(time)
       }
     },
     formatLabel(label: string) {
