@@ -89,9 +89,9 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import { ViewMode } from '../../ui/types'
 import {
-  useFileActionsAcceptShare,
+  useFileActionsSyncShare,
   useFileActionsCopy,
-  useFileActionsDeclineShare,
+  useFileActionsUnsyncShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsDownloadFile,
@@ -101,6 +101,7 @@ import {
 } from '../../composables/actions'
 import {
   useCapabilitySpacesMaxQuota,
+  useFileActionsToggleHideShare,
   useRouteMeta,
   useStore,
   ViewModeConstants
@@ -165,9 +166,10 @@ export default defineComponent({
     const store = useStore()
     const { $gettext } = useGettext()
 
-    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+    const { actions: acceptShareActions } = useFileActionsSyncShare({ store })
+    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
-    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
+    const { actions: declineShareActions } = useFileActionsUnsyncShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
@@ -190,6 +192,7 @@ export default defineComponent({
 
     const batchActions = computed(() => {
       let actions = [
+        ...unref(hideShareActions),
         ...unref(acceptShareActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),

@@ -221,7 +221,6 @@ export default defineComponent({
   &-raw-inverse {
     background-color: transparent;
     border-style: none;
-    font-size: var(--oc-font-size-medium);
     font-weight: normal;
     min-height: 0;
     padding: 0;

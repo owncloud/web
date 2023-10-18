@@ -11,7 +11,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'
 
 import {
-  useFileActionsAcceptShare,
+  useFileActionsSyncShare,
   useFileActionsCreateQuickLink,
   useFileActionsRename,
   useFileActionsCopy
@@ -46,7 +46,7 @@ describe.skip('ContextActions', () => {
 
     it('render enabled actions', () => {
       const enabledComposables = [
-        useFileActionsAcceptShare,
+        useFileActionsSyncShare,
         useFileActionsCreateQuickLink,
         useFileActionsRename,
         useFileActionsCopy

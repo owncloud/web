@@ -1,12 +1,8 @@
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
-import {
-  isLocationSharesActive,
-  isLocationSpacesActive,
-  createLocationShares
-} from '../../../router'
+
 import { Store } from 'vuex'
 import PQueue from 'p-queue'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { isLocationSharesActive } from '../../../router'
 import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
 import { useConfigurationManager } from '../../configuration'
@@ -15,12 +11,13 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '../types'
+import { FileAction, FileActionOptions } from '../../actions'
+import { Resource } from '@ownclouders/web-client'
 
-export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $ngettext } = useGettext()
+  const { $gettext } = useGettext()
 
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
@@ -28,18 +25,22 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
   const loadingService = useLoadingService()
   const configurationManager = useConfigurationManager()
 
+  const highlightedFile = computed<Resource>(() => store.getters['Files/highlightedFile'])
+
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({ concurrency: 4 })
+    const hide = !resources[0].hidden
+
     resources.forEach((resource) => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
             const share = await triggerShareAction({
               resource,
-              status: ShareStatus.declined,
-              // TODO: Hidden implications here?
+              status: resource.status,
+              hide,
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,
@@ -56,66 +57,41 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
         })
       )
     })
+
     await Promise.all(triggerPromises)
 
     if (errors.length === 0) {
       store.dispatch('Files/resetFileSelection')
-
-      if (isLocationSpacesActive(router, 'files-spaces-generic')) {
-        store.dispatch('showMessage', {
-          title: $ngettext(
-            'The selected share was declined successfully',
-            'The selected shares were declined successfully',
-            resources.length
-          )
-        })
-        router.push(createLocationShares('files-shares-with-me'))
-      }
+      store.dispatch('showMessage', {
+        title: hide
+          ? $gettext('The share was hidden successfully')
+          : $gettext('The share was unhidden successfully')
+      })
 
       return
     }
 
     store.dispatch('showErrorMessage', {
-      title: $ngettext(
-        'Failed to decline the selected share',
-        'Failed to decline selected shares',
-        resources.length
-      ),
+      title: hide ? $gettext('Failed to hide the share') : $gettext('Failed to unhide share share'),
       errors
     })
   }
 
   const actions = computed((): FileAction[] => [
     {
-      name: 'decline-share',
-      icon: 'spam-3',
+      name: 'toggle-hide-share',
+      icon: 'eye-off', // FIXME: change icon based on hidden status
       handler: (args) => loadingService.addTask(() => handler(args)),
-      label: ({ resources }) => $ngettext('Decline share', 'Decline shares', resources.length),
-      isEnabled: ({ space, resources }) => {
-        if (
-          !isLocationSharesActive(router, 'files-shares-with-me') &&
-          !isLocationSpacesActive(router, 'files-spaces-generic')
-        ) {
-          return false
-        }
+      label: ({ resources }) => (resources[0].hidden ? $gettext('Unhide') : $gettext('Hide')),
+      isEnabled: ({ resources }) => {
         if (resources.length === 0) {
           return false
         }
 
-        if (
-          isLocationSpacesActive(router, 'files-spaces-generic') &&
-          (space?.driveType !== 'share' || resources.length > 1 || resources[0].path !== '/')
-        ) {
-          return false
-        }
-
-        const declineDisabled = resources.some((resource) => {
-          return resource.status === ShareStatus.declined
-        })
-        return !declineDisabled
+        return isLocationSharesActive(router, 'files-shares-with-me')
       },
       componentType: 'button',
-      class: 'oc-files-actions-decline-share-trigger'
+      class: 'oc-files-actions-hide-share-trigger'
     }
   ])
 

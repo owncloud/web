@@ -39,7 +39,11 @@
           :key="resource.getDomSelector() + resource.status"
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
-          <oc-icon v-if="getShowSynchedIcon(resource)" name="cloudy-2" v-oc-tooltip="syncHint" />
+          <oc-icon
+            v-if="getShowSynchedIcon(resource)"
+            v-oc-tooltip="$gettext('Synced with your devices')"
+            name="cloudy-2"
+          />
         </div>
       </template>
       <template #contextMenu="{ resource }">
@@ -49,26 +53,14 @@
         />
       </template>
       <template #quickActions="{ resource }">
-        <!-- Provide different button depending on share being hidden/visible -->
-        <!-- 'decline-share' should be turned into "hide", and should show a modal if the share-to-be-hidden is already accepted -->
         <oc-button
-          v-if="getShowAcceptButton(resource)"
           size="small"
-          variation="success"
-          class="file-row-share-status-accept"
-          @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
+          appearance="raw"
+          :class="['oc-ml-s', 'oc-p-s', hideShareAction.class]"
+          @click.stop="hideShareAction.handler({ space: null, resources: [resource] })"
         >
-          <oc-icon size="small" name="check" />
-          <span v-translate>Enable sync</span>
-        </oc-button>
-        <oc-button
-          v-if="getShowDeclineButton(resource)"
-          size="small"
-          class="file-row-share-decline oc-ml-s"
-          @click.stop="triggerAction('hide-share', { space: null, resources: [resource] })"
-        >
-          <oc-icon size="small" name="spam-3" fill-type="line" />
-          <span v-translate>Hide</span>
+          <oc-icon size="small" :name="resource.hidden ? 'eye' : 'eye-off'" fill-type="line" />
+          <span>{{ hideShareAction.label({ space: null, resources: [resource] }) }}</span>
         </oc-button>
       </template>
       <template #footer>
@@ -97,13 +89,12 @@
 </template>
 
 <script lang="ts">
-import { ResourceTable } from '@ownclouders/web-pkg'
-import { defineComponent, PropType } from 'vue'
+import { ResourceTable, useFileActions, useFileActionsToggleHideShare } from '@ownclouders/web-pkg'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { mapActions } from 'vuex'
-import { useFileActions } from '@ownclouders/web-pkg'
 import { SortDir, useStore, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -200,6 +191,10 @@ export default defineComponent({
     const store = useStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
+    const { triggerDefaultAction } = useFileActions()
+    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
+    const hideShareAction = computed(() => unref(hideShareActions)[0])
+
     const resourceTargetRouteCallback = ({
       path,
       fileId,
@@ -211,14 +206,11 @@ export default defineComponent({
       )
     }
 
-    // TODO: Pipe through gettext
-    const syncHint = 'Synced with your devices'
-
     return {
-      ...useFileActions(),
+      triggerDefaultAction,
+      hideShareAction,
       resourceTargetRouteCallback,
       ...useSelectedResources({ store }),
-      syncHint,
       getMatchingSpace
     }
   },
@@ -280,13 +272,13 @@ export default defineComponent({
         onExit: debounced.cancel
       })
     },
-    getShowSynchedIcon(resource) {
+    getShowSynchedIcon(resource: Resource) {
       return resource.status === ShareStatus.accepted
     },
-    getShowAcceptButton(resource) {
+    getShowAcceptButton(resource: Resource) {
       return resource.status === ShareStatus.declined || resource.status === ShareStatus.pending
     },
-    getShowDeclineButton(resource) {
+    getShowDeclineButton(resource: Resource) {
       return resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
     },
     toggleShowMore() {
@@ -299,5 +291,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .files-empty {
   height: auto;
+}
+.oc-files-actions-hide-share-trigger:hover {
+  background-color: var(--oc-color-background-secondary);
 }
 </style>

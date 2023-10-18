@@ -115,7 +115,7 @@ export interface Resource {
   sharedWith?: string
   shareOwner?: string
   shareOwnerDisplayname?: string
-  hide?: string
+  hidden?: boolean
 
   extension?: string
   share?: any

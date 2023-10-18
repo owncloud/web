@@ -19,10 +19,10 @@ import {
 } from '../../actions'
 
 import {
-  useFileActionsAcceptShare,
-  useFileActionsHideShare,
+  useFileActionsSyncShare,
+  useFileActionsToggleHideShare,
   useFileActionsCopy,
-  useFileActionsDeclineShare,
+  useFileActionsUnsyncShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsDownloadFile,
@@ -54,11 +54,11 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const { openUrl } = useWindowOpen()
 
-  const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
-  const { actions: hideShareActions } = useFileActionsHideShare({ store })
+  const { actions: acceptShareActions } = useFileActionsSyncShare({ store })
+  const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
   const { actions: deleteActions } = useFileActionsDelete({ store })
-  const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
+  const { actions: declineShareActions } = useFileActionsUnsyncShare({ store })
   const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
   const { actions: downloadFileActions } = useFileActionsDownloadFile()
   const { actions: favoriteActions } = useFileActionsFavorite({ store })
@@ -214,8 +214,6 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   }
 
   const triggerAction = (name: string, options: FileActionOptions) => {
-    console.log(getAllAvailableActions(options))
-
     const action = getAllAvailableActions(options).filter((action) => action.name === name)[0]
     if (!action) {
       throw new Error(`Action not found: '${name}'`)

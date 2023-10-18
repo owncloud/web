@@ -1,6 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import { useFileActionsAcceptShare } from '../../../../../src/composables/actions/files/useFileActionsAcceptShare'
+import { useFileActionsSyncShare } from '../../../../../src/composables/actions/files/useFileActionsSyncShare'
 import { Resource } from '@ownclouders/web-client'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { useStore } from '../../../../../src/composables'
@@ -22,7 +22,7 @@ describe('acceptShare', () => {
           const { wrapper } = getWrapper({
             setup: () => {
               const store = useStore()
-              const { actions } = useFileActionsAcceptShare({ store })
+              const { actions } = useFileActionsSyncShare({ store })
 
               const resources = inputData.resources
               expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
@@ -43,7 +43,7 @@ describe('acceptShare', () => {
             routeName: sharesWithOthersLocation,
             setup: () => {
               const store = useStore()
-              const { actions } = useFileActionsAcceptShare({ store })
+              const { actions } = useFileActionsSyncShare({ store })
 
               expect(
                 unref(actions)[0].isEnabled({ space: null, resources: [resource] })

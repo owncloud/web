@@ -159,7 +159,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     batchDeclineSharesButton: {
-      selector: '.oc-files-actions-decline-share-trigger'
+      selector: '.oc-files-actions-unsync-share-trigger'
     }
   }
 }

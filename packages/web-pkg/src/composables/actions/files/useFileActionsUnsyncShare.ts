@@ -1,9 +1,12 @@
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
-
+import {
+  isLocationSharesActive,
+  isLocationSpacesActive,
+  createLocationShares
+} from '../../../router'
 import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
-import { isLocationSharesActive, isLocationSpacesActive } from '../../../router'
 import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
 import { useConfigurationManager } from '../../configuration'
@@ -12,13 +15,12 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '../../actions'
+import { FileAction, FileActionOptions } from '../types'
 
-// TODO: Replace all "accept" copy leftovers
-export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsUnsyncShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $ngettext } = useGettext()
+  const { $gettext, $ngettext } = useGettext()
 
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
@@ -36,8 +38,8 @@ export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) 
           try {
             const share = await triggerShareAction({
               resource,
-              status: ShareStatus.pending,
-              // visibility: 'public',
+              status: ShareStatus.declined,
+              // TODO: Hidden implications here?
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,
@@ -55,18 +57,17 @@ export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) 
       )
     })
     await Promise.all(triggerPromises)
-    console.log(errors)
-    if (errors.length === 0) {
-      store.dispatch('Files/resetFileSelection')
 
+    if (errors.length === 0) {
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
         store.dispatch('showMessage', {
           title: $ngettext(
-            'The selected share was accepted successfully',
-            'The selected shares were accepted successfully',
+            'Sync for the selected share was disabled successfully',
+            'Sync for the selected shares was disabled successfully',
             resources.length
           )
         })
+        router.push(createLocationShares('files-shares-with-me'))
       }
 
       return
@@ -74,8 +75,8 @@ export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) 
 
     store.dispatch('showErrorMessage', {
       title: $ngettext(
-        'Failed to accept the selected share.',
-        'Failed to accept selected shares.',
+        'Failed to disable sync for the the selected share',
+        'Failed to disable sync for the selected shares',
         resources.length
       ),
       errors
@@ -84,10 +85,10 @@ export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) 
 
   const actions = computed((): FileAction[] => [
     {
-      name: 'hide-share',
-      icon: 'check',
+      name: 'unsync-share',
+      icon: 'spam-3',
       handler: (args) => loadingService.addTask(() => handler(args)),
-      label: ({ resources }) => $ngettext('Accept share', 'Accept shares', resources.length),
+      label: () => $gettext('Disable sync'),
       isEnabled: ({ space, resources }) => {
         if (
           !isLocationSharesActive(router, 'files-shares-with-me') &&
@@ -101,19 +102,18 @@ export const useFileActionsHideShare = ({ store }: { store?: Store<any> } = {}) 
 
         if (
           isLocationSpacesActive(router, 'files-spaces-generic') &&
-          (unref(space)?.driveType !== 'share' || resources.length > 1 || resources[0].path !== '/')
+          (space?.driveType !== 'share' || resources.length > 1 || resources[0].path !== '/')
         ) {
           return false
         }
 
-        return true
-        // const acceptDisabled = resources.some((resource) => {
-        //   return resource.status === ShareStatus.accepted
-        // })
-        // return !acceptDisabled
+        const declineDisabled = resources.some((resource) => {
+          return resource.status === ShareStatus.declined
+        })
+        return !declineDisabled
       },
       componentType: 'button',
-      class: 'oc-files-actions-hide-share-trigger'
+      class: 'oc-files-actions-unsync-share-trigger'
     }
   ])
 

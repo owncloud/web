@@ -6,7 +6,7 @@ import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 export async function triggerShareAction({
   resource,
   status,
-  hide = 'false',
+  hide = false,
   hasResharing,
   hasShareJail,
   client,
@@ -15,7 +15,7 @@ export async function triggerShareAction({
 }: {
   resource: Resource
   status: ShareStatus
-  hide?: 'false' | 'true'
+  hide?: boolean
   hasResharing: boolean
   hasShareJail: boolean
   client: OwnCloudSdk
@@ -30,7 +30,7 @@ export async function triggerShareAction({
   // exec share action
   let response = await client.requests.ocs({
     service: 'apps/files_sharing',
-    action: `api/v1/shares/pending/${resource.share.id}?hide=${hide}`,
+    action: `api/v1/shares/pending/${resource.share.id}?hide=${hide ? 'true' : 'false'}`,
     method
   })
 

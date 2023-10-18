@@ -226,11 +226,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     acceptShareButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-accept-share-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-sync-share-trigger")]',
       locateStrategy: 'xpath'
     },
     declineShareButtonInAccordion: {
-      selector: '//button[contains(@class, "oc-files-actions-decline-share-trigger")]',
+      selector: '//button[contains(@class, "oc-files-actions-unsync-share-trigger")]',
       locateStrategy: 'xpath'
     },
     previewButtonInAccordion: {

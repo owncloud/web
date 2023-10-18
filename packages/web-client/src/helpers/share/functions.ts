@@ -174,7 +174,7 @@ export function buildSharedResource(
     ]
     resource.sharedWith = share.sharedWith || []
     resource.status = parseInt(share.state)
-    resource.hide = share.hide || 'false'
+    resource.hidden = share.hide === 'true' || share.hide === true
     resource.name = path.basename(share.file_target)
     if (hasShareJail) {
       // FIXME, HACK 1: path needs to be '/' because the share has it's own webdav endpoint (we access it's root). should ideally be removed backend side.
