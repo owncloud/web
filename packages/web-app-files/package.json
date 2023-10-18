@@ -31,7 +31,7 @@
     "sanitize-html": "^2.7.0",
     "uuid": "^9.0.0",
     "vue-concurrency": "4.0.1",
-    "vue-router": "4.2.0",
+    "vue-router": "4.2.5",
     "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",
     "web-app-files": "workspace:*",
