@@ -70,22 +70,17 @@ export default defineComponent({
     const router = useRouter()
     useHead({ store })
 
-    const activeRoutePath = computed(() => router.resolve(unref(router.currentRoute)).path)
+    const activeApp = computed(
+      () => router.resolve(unref(router.currentRoute)).path.split('/')?.[1]
+    )
 
     watch(
-      () => unref(router.currentRoute),
-      (newValue, oldValue) => {
-        if (newValue === oldValue) {
-          return
-        }
-        const oldApp = oldValue.path.split('/')[1]
-        const newApp = newValue.path.split('/')[1]
+      () => unref(activeApp),
+      (newApp, oldApp) => {
         if (oldApp === newApp) {
           return
         }
-        //store.commit('Files/SET_CURRENT_FOLDER', null)
-        console.log(newValue)
-        console.log(newValue.path)
+        store.commit('Files/SET_CURRENT_FOLDER', null)
       }
     )
     //activeRoutePath?.startsWith(app.path)
