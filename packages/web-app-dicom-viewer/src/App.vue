@@ -335,7 +335,26 @@ export default defineComponent({
         transferSyntaxUID: '',
         frameOfReferenceUID: ''
       },
-      otherInformation: {},
+      otherInformation: {
+        specificCharacterSet: '',
+        referringPhysicianName: '',
+        MR_AcquisitionType: '',
+        numberOfAverages: '',
+        percentSampling: '',
+        percentPhaseFieldOfView: '',
+        lowRR_Value: '',
+        highRR_Value: '',
+        intervalsAcquired: '',
+        intervalsRejected: '',
+        heartRate: '',
+        recieveCoilName: '',
+        transmitCoilName: '',
+        inPlanePhaseEncodingDirection: '',
+        flipAngle: '',
+        positionReferenceIndicator: '',
+        windowCenter: '',
+        windowWidth: ''
+      },
 
       imageShowMetadataDescription: $gettext('Show DICOM metadata'),
       imageHideMetadataDescription: $gettext('Hide DICOM metadata')
@@ -600,6 +619,24 @@ export default defineComponent({
       let studyUID, seriesUID, instanceUID, SOP_ClassUID, transferSyntaxUID, frameOfReferenceUID
 
       // otherInformation
+      let specificCharacterSet,
+        referringPhysicianName,
+        MR_AcquisitionType,
+        numberOfAverages,
+        percentSampling,
+        percentPhaseFieldOfView,
+        lowRR_Value,
+        highRR_Value,
+        intervalsAcquired,
+        intervalsRejected,
+        heartRate,
+        recieveCoilName,
+        transmitCoilName,
+        inPlanePhaseEncodingDirection,
+        flipAngle,
+        positionReferenceIndicator,
+        windowCenter,
+        windowWidth
 
       await cornerstoneDICOMImageLoader.wadouri
         .loadImage(imageId)
@@ -631,19 +668,19 @@ export default defineComponent({
           contentDate = dicomImage.data.string('x00080023')
           contentTime = dicomImage.data.string('x00080033')
 
-          rows = dicomImage.data.string('x00280010')
-          columns = dicomImage.data.string('x00280011')
+          rows = dicomImage.data.string('x00280010') // row data separated
+          columns = dicomImage.data.string('x00280011') //column data separated
           photometricInterpretation = dicomImage.data.string('x00280004')
           imageType = dicomImage.data.string('x00080008')
-          bitsAllocated = dicomImage.data.string('x00280100')
-          bitsStored = dicomImage.data.string('x00280101')
-          highBit = dicomImage.data.string('x00280102')
-          pixelRepresentation = dicomImage.data.string('x00280103')
+          bitsAllocated = dicomImage.data.string('x00280100') // icon displayed instead of value
+          bitsStored = dicomImage.data.string('x00280101') // different data
+          highBit = dicomImage.data.string('x00280102') // different data
+          pixelRepresentation = dicomImage.data.string('x00280103')  // different data
           rescaleSlope = dicomImage.data.string('x00281053')
           rescaleIntercept = dicomImage.data.string('x00281052')
           imagePositionPatient = dicomImage.data.string('x00200032')
           pixelSpacing = dicomImage.data.string('x00280030')
-          samplesPerPixel = dicomImage.data.string('x00280002')
+          samplesPerPixel = dicomImage.data.string('x00280002') // icon displayed instead of value
           imageComments = dicomImage.data.string('x00204000')
           imageOrientationPatient = dicomImage.data.string('x00200037')
           patientPosition = dicomImage.data.string('x00185100')
@@ -671,12 +708,31 @@ export default defineComponent({
           numberOfPhaseEncodingSteps = dicomImage.data.string('x00180089')
           echoTrainLength = dicomImage.data.string('x00180091')
 
-          studyUID = dicomImage.data.string('x00200010') // Study Instance UID	?
-          seriesUID = dicomImage.data.string('x0020000E') //Series Instance UID	?
+          studyUID = dicomImage.data.string('x0020000d') // Study Instance UID	?
+          seriesUID = dicomImage.data.string('x0020000e') //Series Instance UID	?
           instanceUID = dicomImage.data.string('x00080018') // SOP Instance UID	?
           SOP_ClassUID = dicomImage.data.string('x00080016')
           transferSyntaxUID = dicomImage.data.string('x00020010')
           frameOfReferenceUID = dicomImage.data.string('x00200052')
+
+          specificCharacterSet = dicomImage.data.string('x00080005')
+          referringPhysicianName = dicomImage.data.string('x00080090')
+          MR_AcquisitionType = dicomImage.data.string('x00180023')
+          numberOfAverages = dicomImage.data.string('x00180083')
+          percentSampling = dicomImage.data.string('x00180093')
+          percentPhaseFieldOfView = dicomImage.data.string('x00180094')
+          lowRR_Value = dicomImage.data.string('x00181081')
+          highRR_Value = dicomImage.data.string('x00181082')
+          intervalsAcquired = dicomImage.data.string('x00181083')
+          intervalsRejected = dicomImage.data.string('x00181084')
+          heartRate = dicomImage.data.string('x00181088')
+          recieveCoilName = dicomImage.data.string('x00181250')
+          transmitCoilName = dicomImage.data.string('x00181251')
+          inPlanePhaseEncodingDirection = dicomImage.data.string('x00181312')
+          flipAngle = dicomImage.data.string('x00181314')
+          positionReferenceIndicator = dicomImage.data.string('x00201040')
+          windowCenter = dicomImage.data.string('x00281050')
+          windowWidth = dicomImage.data.string('x00281051')
         })
 
       //patientInformation
@@ -778,6 +834,24 @@ export default defineComponent({
       this.uidsInformation.frameOfReferenceUID = frameOfReferenceUID
 
       // otherInformation
+      this.otherInformation.specificCharacterSet = specificCharacterSet
+      this.otherInformation.referringPhysicianName = referringPhysicianName
+      this.otherInformation.MR_AcquisitionType = MR_AcquisitionType
+      this.otherInformation.numberOfAverages = numberOfAverages
+      this.otherInformation.percentSampling = percentSampling
+      this.otherInformation.percentPhaseFieldOfView = percentPhaseFieldOfView
+      this.otherInformation.lowRR_Value = lowRR_Value
+      this.otherInformation.highRR_Value = highRR_Value
+      this.otherInformation.intervalsAcquired = intervalsAcquired
+      this.otherInformation.intervalsRejected = intervalsRejected
+      this.otherInformation.heartRate = heartRate
+      this.otherInformation.recieveCoilName = recieveCoilName
+      this.otherInformation.transmitCoilName = transmitCoilName
+      this.otherInformation.inPlanePhaseEncodingDirection = inPlanePhaseEncodingDirection
+      this.otherInformation.flipAngle = flipAngle
+      this.otherInformation.positionReferenceIndicator = positionReferenceIndicator
+      this.otherInformation.windowCenter = windowCenter
+      this.otherInformation.windowWidth = windowWidth
 
       this.isMetadataFetched = true
       // TODO: check that data only gets displayed after all metadata has been fetched
