@@ -30,6 +30,7 @@ import {
 import { merge } from 'lodash-es'
 import { AppConfigObject } from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
+import { getQueryParam } from '../helpers/url'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -49,6 +50,11 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
   const rawConfig = (await request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
   })) as RawConfig
+
+  if (!rawConfig.options?.mode) {
+    rawConfig.options = { ...rawConfig.options, mode: getQueryParam('mode') ?? 'web' }
+  }
+
   configurationManager.initialize(rawConfig)
   // TODO: we might want to get rid of exposing the raw config. needs more refactoring though.
   return rawConfig
