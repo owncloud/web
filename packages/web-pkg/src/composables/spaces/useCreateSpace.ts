@@ -17,10 +17,10 @@ export const useCreateSpace = () => {
       serverUrl: configurationManager.serverUrl
     })
 
-    return await createDefaultConfigFolder(spaceResource)
+    return await createDefaultMetaFolder(spaceResource)
   }
 
-  const createDefaultConfigFolder = async (space: SpaceResource) => {
+  const createDefaultMetaFolder = async (space: SpaceResource) => {
     await clientService.webdav.createFolder(space, { path: '.space' })
     await clientService.webdav.putFileContents(space, {
       path: '.space/readme.md',
@@ -46,5 +46,5 @@ export const useCreateSpace = () => {
     return buildSpace({ ...updatedDriveData, serverUrl: configurationManager.serverUrl })
   }
 
-  return { createSpace, createDefaultConfigFolder }
+  return { createSpace, createDefaultMetaFolder }
 }

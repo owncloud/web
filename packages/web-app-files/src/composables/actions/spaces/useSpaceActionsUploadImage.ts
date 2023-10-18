@@ -25,7 +25,7 @@ export const useSpaceActionsUploadImage = ({
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
-  const { createDefaultConfigFolder } = useCreateSpace()
+  const { createDefaultMetaFolder } = useCreateSpace()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -64,7 +64,7 @@ export const useSpaceActionsUploadImage = ({
       store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
         id: selectedSpace.id,
         field: 'spaceReadmeData',
-        value: (await createDefaultConfigFolder(selectedSpace)).spaceReadmeData
+        value: (await createDefaultMetaFolder(selectedSpace)).spaceReadmeData
       })
     }
 
