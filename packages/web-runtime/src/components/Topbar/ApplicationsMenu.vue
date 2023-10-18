@@ -99,6 +99,7 @@ export default defineComponent({
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const onEditorApplicationClick = async (item: any) => {
+      console.log(getMatchingSpace(unref(currentFolder)))
       let destinationSpace = unref(currentFolder)
       let destinationFiles = unref(files)
 
@@ -126,7 +127,8 @@ export default defineComponent({
         space.getDriveAliasAndItem(emptyResource),
         emptyResource.webDavPath,
         emptyResource.id,
-        EDITOR_MODE_EDIT
+        EDITOR_MODE_EDIT,
+        space.shareId
       )
     }
     const getAdditionalEventBindings = (item: any) => {
