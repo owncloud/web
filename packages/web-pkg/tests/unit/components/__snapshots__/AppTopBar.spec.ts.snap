@@ -5,7 +5,7 @@ exports[`AppTopBar if a resource is present renders a resource and dropdownActio
   <div class="oc-app-top-bar oc-flex">
     <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
       <div class="open-file-bar oc-flex">
-        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfoldername="" resource="undefined"></oc-resource-stub>
+        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="true" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="All files and folders" resource="undefined"></oc-resource-stub>
       </div>
       <div class="oc-flex main-actions">
         <!--v-if-->
@@ -23,7 +23,7 @@ exports[`AppTopBar if a resource is present renders a resource and dropdownActio
   <div class="oc-app-top-bar oc-flex">
     <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
       <div class="open-file-bar oc-flex">
-        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfoldername="" resource="undefined"></oc-resource-stub>
+        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="true" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="All files and folders" resource="undefined"></oc-resource-stub>
       </div>
       <div class="oc-flex main-actions">
         <context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub>
@@ -41,7 +41,7 @@ exports[`AppTopBar if a resource is present renders a resource and mainActions (
   <div class="oc-app-top-bar oc-flex">
     <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
       <div class="open-file-bar oc-flex">
-        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfoldername="" resource="undefined"></oc-resource-stub>
+        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="true" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="All files and folders" resource="undefined"></oc-resource-stub>
       </div>
       <div class="oc-flex main-actions">
         <context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub>
@@ -58,7 +58,7 @@ exports[`AppTopBar if a resource is present renders a resource and no actions (i
   <div class="oc-app-top-bar oc-flex">
     <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
       <div class="open-file-bar oc-flex">
-        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfoldername="" resource="undefined"></oc-resource-stub>
+        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="true" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="All files and folders" resource="undefined"></oc-resource-stub>
       </div>
       <div class="oc-flex main-actions">
         <!--v-if-->
@@ -75,7 +75,7 @@ exports[`AppTopBar if no resource is present renders only a close button 1`] = `
   <div class="oc-app-top-bar oc-flex">
     <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
       <div class="open-file-bar oc-flex">
-        <!--v-if-->
+        <oc-resource-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="true" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="All files and folders" resource="undefined"></oc-resource-stub>
       </div>
       <div class="oc-flex main-actions">
         <!--v-if-->
