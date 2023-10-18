@@ -43,6 +43,7 @@ Summary
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
+* Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 
 Details
 -------
@@ -375,6 +376,15 @@ Details
    `app.runtime.footer`.
 
    https://github.com/owncloud/web/pull/9815
+
+* Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
+
+   We've added a new config option called `mode`. This option can be set via config.json in the
+   options object or query parameter. This config option asserts different modes of the UI.
+   Currently, it will be used in the embed mode to hide certain parts of the UI.
+
+   https://github.com/owncloud/web/issues/9768
+   https://github.com/owncloud/web/pull/9818
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
