@@ -2,6 +2,7 @@ import { Resource } from '@ownclouders/web-client/src'
 import { AppWrapperRoute } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
+import {Store} from "vuex";
 
 const applicationId = 'draw-io'
 
@@ -28,7 +29,9 @@ const appInfo = {
   icon: 'grid',
   color: '#EF6C00',
   applicationMenu: {
-    enabled: () => true,
+    enabled: (store: Store<unknown>) => {
+      return !!store.getters?.user?.id
+    },
     priority: 30,
     openAsEditor: true
   },
