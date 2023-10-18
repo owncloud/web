@@ -2,7 +2,7 @@ import { Resource } from '@ownclouders/web-client/src'
 import { AppWrapperRoute } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
-import {Store} from "vuex";
+import { Store } from 'vuex'
 
 const applicationId = 'draw-io'
 

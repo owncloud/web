@@ -1,7 +1,7 @@
 import translations from '../l10n/translations.json'
 import TextEditor from './App.vue'
 import { AppWrapperRoute } from '@ownclouders/web-pkg'
-import {Store} from "vuex";
+import { Store } from 'vuex'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
