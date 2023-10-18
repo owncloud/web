@@ -4,11 +4,7 @@ module.exports = {
     es6: true,
     amd: true
   },
-  extends: [
-    'plugin:vue/vue3-recommended',
-    'plugin:prettier-vue/recommended',
-    'plugin:jest/recommended'
-  ],
+  extends: ['plugin:vue/vue3-recommended', 'plugin:prettier-vue/recommended'],
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: {
@@ -25,7 +21,6 @@ module.exports = {
      */
     'require-await': 'warn',
     'no-new': 'off',
-    'jest/no-standalone-expect': 'off',
     'node/no-callback-literal': 'off',
     'unused-imports/no-unused-imports': 'error',
     'nonblock-statement-body-position': ['error', 'below'],
@@ -38,7 +33,7 @@ module.exports = {
     require: false,
     requirejs: false
   },
-  plugins: ['jest', 'unused-imports'],
+  plugins: ['unused-imports'],
   overrides: [
     {
       files: ['**/*.vue'],
