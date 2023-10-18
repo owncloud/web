@@ -19,10 +19,8 @@
             @toggle-filter="setAreHiddenFilesShown"
           />
         </div>
-
         <shared-with-me-section
-          v-if="!areHiddenFilesShown"
-          id="files-shared-with-me-visible-view"
+          id="files-shared-with-me-view"
           :display-thumbnails="displayThumbnails"
           :file-list-header-y="fileListHeaderY"
           :items="items"
@@ -33,23 +31,9 @@
           :sort-dir="sortDir"
           :sort-handler="handleSort"
           :title="shareSectionTitle"
-          :empty-message="$gettext('No shares')"
-          :grouping-settings="groupingSettings"
-        />
-        <shared-with-me-section
-          v-if="areHiddenFilesShown"
-          id="files-shared-with-me-hidden-view"
-          :display-thumbnails="displayThumbnails"
-          :file-list-header-y="fileListHeaderY"
-          :items="items"
-          :resource-clickable="true"
-          :show-more-toggle="true"
-          :side-bar-open="sideBarOpen"
-          :sort-by="sortBy"
-          :sort-dir="sortDir"
-          :sort-handler="handleSort"
-          :title="shareSectionTitle"
-          :empty-message="$gettext('No hidden shares')"
+          :empty-message="
+            areHiddenFilesShown ? $gettext('No hidden shares') : $gettext('No shares')
+          "
           :grouping-settings="groupingSettings"
         />
       </template>

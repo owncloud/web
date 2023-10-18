@@ -62,6 +62,10 @@ export default defineComponent({
       const queryStr = queryItemAsString(unref(currentRouteQuery))
       if (queryStr && props.filterOptions.some(({ name }) => name === queryStr)) {
         activeOption.value = queryStr
+        emit(
+          'toggleFilter',
+          props.filterOptions.find(({ name }) => name === queryStr)
+        )
       }
     })
 
