@@ -190,12 +190,10 @@ export default defineComponent({
       const list = []
 
       Object.values(this.apps).forEach((app: any) => {
-        if (app.applicationMenu.enabled instanceof Function && app.applicationMenu.enabled()) {
-          list.push({
-            ...app,
-            type: 'extension'
-          })
-        }
+        list.push({
+          ...app,
+          type: 'extension'
+        })
       })
 
       // Get extensions manually added into config
