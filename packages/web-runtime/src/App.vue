@@ -54,10 +54,10 @@ import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
-import { defineComponent } from 'vue'
+import { computed, defineComponent, unref, watch } from 'vue'
 import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
-import { eventBus } from '@ownclouders/web-pkg'
+import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { useStore } from '@ownclouders/web-pkg'
 
@@ -67,7 +67,28 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const router = useRouter()
     useHead({ store })
+
+    const activeRoutePath = computed(() => router.resolve(unref(router.currentRoute)).path)
+
+    watch(
+      () => unref(router.currentRoute),
+      (newValue, oldValue) => {
+        if (newValue === oldValue) {
+          return
+        }
+        const oldApp = oldValue.path.split('/')[1]
+        const newApp = newValue.path.split('/')[1]
+        if (oldApp === newApp) {
+          return
+        }
+        //store.commit('Files/SET_CURRENT_FOLDER', null)
+        console.log(newValue)
+        console.log(newValue.path)
+      }
+    )
+    //activeRoutePath?.startsWith(app.path)
   },
   data() {
     return {

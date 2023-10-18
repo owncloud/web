@@ -51,7 +51,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, computed, unref } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ComponentPublicInstance,
+  ref,
+  computed,
+  unref,
+  watch
+} from 'vue'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
@@ -65,6 +73,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -96,14 +105,24 @@ export default defineComponent({
       return store.getters['Files/currentFolder']
     })
     const files = computed((): Array<Resource> => store.getters['Files/files'])
+
     const onEditorApplicationClick = async (item: any) => {
+      console.log(unref(currentFolder))
+      let destinationSpace = unref(currentFolder)
+      let destinationFiles = unref(files)
+      if (!destinationSpace) {
+        destinationSpace = unref(store.getters['runtime/spaces/spaces']).find(
+          ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
+        )
+        destinationFiles = (await webdav.listFiles(destinationSpace)).children
+      }
       let fileName = $gettext('New file') + `.${item.defaultExtension}`
 
-      if (unref(files).some((f) => f.name === fileName)) {
-        fileName = resolveFileNameDuplicate(fileName, item.defaultExtension, unref(files))
+      if (destinationFiles.some((f) => f.name === fileName)) {
+        fileName = resolveFileNameDuplicate(fileName, item.defaultExtension, destinationFiles)
       }
 
-      const emptyResource = await webdav.putFileContents(unref(currentFolder), {
+      const emptyResource = await webdav.putFileContents(destinationSpace, {
         path: fileName
       })
 
