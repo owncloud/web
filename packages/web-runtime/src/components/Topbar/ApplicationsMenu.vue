@@ -99,15 +99,16 @@ export default defineComponent({
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const onEditorApplicationClick = async (item: any) => {
-      console.log(unref(currentFolder))
       let destinationSpace = unref(currentFolder)
       let destinationFiles = unref(files)
-      if (!destinationSpace) {
+
+      if (!destinationSpace || !destinationSpace.canCreate()) {
         destinationSpace = unref(store.getters['runtime/spaces/spaces']).find(
           ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
         )
         destinationFiles = (await webdav.listFiles(destinationSpace)).children
       }
+
       let fileName = $gettext('New file') + `.${item.defaultExtension}`
 
       if (destinationFiles.some((f) => f.name === fileName)) {
