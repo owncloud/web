@@ -1,6 +1,6 @@
 import { Page } from 'playwright'
 import * as po from './actions'
-import { resourceIsNotOpenable, isAcceptedSharePresent } from './utils'
+import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
 import { copyLinkArgs } from '../link/actions'
 export class Share {
   #page: Page
@@ -60,6 +60,10 @@ export class Share {
 
   async resourceIsNotOpenable(resource): Promise<boolean> {
     return await resourceIsNotOpenable({ page: this.#page, resource })
+  }
+
+  async resourceIsSynced(resource): Promise<boolean> {
+    return await resourceIsSynced({ page: this.#page, resource })
   }
 
   async setDenyShare(args: Omit<po.setDenyShareArgs, 'page'>): Promise<void> {

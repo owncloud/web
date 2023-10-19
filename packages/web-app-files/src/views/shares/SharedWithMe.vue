@@ -24,8 +24,6 @@
           :display-thumbnails="displayThumbnails"
           :file-list-header-y="fileListHeaderY"
           :items="items"
-          :resource-clickable="true"
-          :show-more-toggle="true"
           :side-bar-open="sideBarOpen"
           :sort-by="sortBy"
           :sort-dir="sortDir"

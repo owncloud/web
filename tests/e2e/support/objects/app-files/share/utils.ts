@@ -4,6 +4,8 @@ import util from 'util'
 const acceptedShareItem =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//span[@data-test-user-name="%s"]'
 const itemSelector = '.files-table [data-test-resource-name="%s"]'
+const syncEnabled =
+  '//*[@data-test-resource-name="%s"]//ancestor::tr//span[contains(@class, "sync-enabled")]'
 
 export const resourceIsNotOpenable = async ({
   page,
@@ -22,6 +24,16 @@ export const resourceIsNotOpenable = async ({
   } catch (e) {
     return true
   }
+}
+
+export const resourceIsSynced = ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<boolean> => {
+  return page.locator(util.format(syncEnabled, resource)).isVisible()
 }
 
 export const isAcceptedSharePresent = async ({
