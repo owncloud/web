@@ -27,6 +27,24 @@
             <span v-text="item.label" />
           </template>
         </item-filter>
+        <item-filter
+          v-if="availableLastModifiedValues.length"
+          ref="lastModifiedFilter"
+          :filter-label="$gettext('Last Modified')"
+          :filterable-attributes="['label']"
+          :items="availableLastModifiedValues"
+          :option-filter-label="$gettext('Filter by last modified date')"
+          :show-option-filter="true"
+          :close-on-click="true"
+          class="files-search-filter-tags oc-mr-s"
+          display-name-attribute="label"
+          filter-name="lastModified"
+        >
+          <template #item="{ item }">
+            <span v-text="item.label" />
+          </template>
+        </item-filter>
+
         <item-filter-toggle
           v-if="fullTextSearchEnabled"
           :filter-label="$gettext('Search only in content')"
@@ -150,6 +168,7 @@ import {
   useKeyboardTableMouseActions,
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { LastModifiedKeyword } from '@ownclouders/web-client/src/ocs/capabilities'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -214,6 +233,7 @@ export default defineComponent({
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
+    const lastModifiedParam = useRouteQuery('q_lastModified')
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
@@ -230,6 +250,20 @@ export default defineComponent({
     onBeforeRouteLeave(() => {
       eventBus.publish('app.search.term.clear')
     })
+
+    const lastModifiedFilter = ref<VNodeRef>()
+    const availableLastModifiedValues = ref<LastModifiedKeyword[]>([
+      { label: 'today', id: 'today' },
+      { label: 'yesterday', id: 'yesterday' },
+      { label: 'this week', id: 'this week' },
+      { label: 'last week', id: 'last week' },
+      { label: 'last 7 days', id: 'last 7 days' },
+      { label: 'this month', id: 'this month' },
+      { label: 'last month', id: 'last month' },
+      { label: 'last 30 days', id: 'last 30 days' },
+      { label: 'this year', id: 'this year' },
+      { label: 'last year', id: 'last year' }
+    ])
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let query = ''
@@ -267,6 +301,21 @@ export default defineComponent({
         }
       }
 
+      const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
+      if (lastModifiedParams) {
+        add('mtime', `"${lastModifiedParams}"`)
+
+        if (manuallyUpdateFilterChip && unref(lastModifiedFilter)) {
+          /**
+           * Handles edge cases where a filter is not being applied via the filter directly,
+           * e.g. when clicking on a tag in the files list.
+           * We need to manually update the selected items in the ItemFilter component because normally
+           * it only does this on mount or when interacting with the filter directly.
+           */
+          ;(unref(lastModifiedFilter) as any).setSelectedItemsBasedOnQuery()
+        }
+      }
+
       return query
     }
 
@@ -290,7 +339,7 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const filters = ['q_fullText', 'q_tags', 'useScope']
+        const filters = ['q_fullText', 'q_tags', 'q_lastModified', 'useScope']
         const isChange =
           newVal?.term !== oldVal?.term ||
           filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined)
@@ -311,7 +360,9 @@ export default defineComponent({
       availableTags,
       tagFilter,
       breadcrumbs,
-      displayFilter
+      displayFilter,
+      availableLastModifiedValues,
+      lastModifiedFilter
     }
   },
   computed: {

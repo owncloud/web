@@ -19,6 +19,13 @@ export interface PasswordPolicyCapability {
   min_special_characters?: number
 }
 
+export interface LastModifiedKeyword {
+  id: string
+  label: string
+}
+export interface LastModifiedFilterCapability {
+  keywords: LastModifiedKeyword[]
+}
 export interface Capabilities {
   capabilities: {
     password_policy?: PasswordPolicyCapability
