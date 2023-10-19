@@ -1,4 +1,4 @@
-  Feature: Search
+Feature: Search
   As a user
   I want to search for resources
   So that I can find them quickly
