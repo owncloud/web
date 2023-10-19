@@ -83,7 +83,6 @@ export default defineComponent({
         store.commit('Files/SET_CURRENT_FOLDER', null)
       }
     )
-    //activeRoutePath?.startsWith(app.path)
   },
   data() {
     return {
