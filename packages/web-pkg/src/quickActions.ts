@@ -1,4 +1,4 @@
-import { createQuicklink } from './helpers/share'
+import { copyQuicklink } from './helpers/share'
 import { eventBus } from './services/eventBus'
 import { SideBarEventTopics } from './composables/sideBar/eventTopics'
 import { Resource } from '@ownclouders/web-client'
@@ -82,7 +82,7 @@ export default {
         return showQuickLinkPasswordModal(
           { store, $gettext: language.$gettext, passwordPolicyService },
           async (password) => {
-            await createQuicklink({
+            await copyQuicklink({
               ability,
               clientService,
               language,
@@ -94,7 +94,7 @@ export default {
         )
       }
 
-      await createQuicklink({
+      await copyQuicklink({
         ability,
         clientService,
         language,
