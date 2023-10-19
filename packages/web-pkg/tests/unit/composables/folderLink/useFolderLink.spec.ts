@@ -7,9 +7,22 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { useFolderLink } from '../../../../src/composables'
-import { ConfigurationManager } from '../../../../src/configuration'
+import { ConfigurationManager, configurationManager } from '../../../../src/configuration'
 
-jest.mock('../../../../src/composables/configuration/useConfigurationManager', () => ({
+jest.mock('../../../../src/configuration', () => {
+  return {
+    configurationManager: {
+      options: {
+        routing: {
+          fullShareOwnerPaths: false,
+          idBased: true
+        }
+      }
+    }
+  }
+})
+
+jest.mock('../../../../src/composables/configuration', () => ({
   useConfigurationManager: () =>
     mock<ConfigurationManager>({
       options: {
@@ -37,8 +50,8 @@ describe('useFolderLink', () => {
   it('getFolderLink should return the correct folder link', () => {
     const resource = {
       path: '/my-folder',
-      id: '1',
-      fileId: '1',
+      id: '2',
+      fileId: '2',
       storageId: '1'
     }
     const wrapper = createWrapper()
@@ -47,16 +60,16 @@ describe('useFolderLink', () => {
     expect(folderLink).toEqual({
       name: 'files-spaces-generic',
       params: { driveAliasAndItem: 'personal/admin' },
-      query: {}
+      query: {fileId: '2'}
     })
   })
 
   it('getParentFolderLink should return the correct parent folder link', () => {
     const resource = {
       path: '/my-folder',
-      id: '1',
-      fileId: '1',
-      storageId: '1',
+      id: '2',
+      fileId: '2',
+      storageId: '2',
       parentFolderId: '1'
     }
 
@@ -65,38 +78,38 @@ describe('useFolderLink', () => {
     expect(parentFolderLink).toEqual({
       name: 'files-spaces-generic',
       params: { driveAliasAndItem: 'personal/admin' },
-      query: {}
+      query: { fileId: '1' }
     })
   })
   /*
-  it('getParentFolderName should return the correct parent folder name', () => {
-    const resource = {
-      path: '/my-folder',
-      shareId: 456
-      // ... other properties as needed
-    }
+        it('getParentFolderName should return the correct parent folder name', () => {
+          const resource = {
+            path: '/my-folder',
+            shareId: 456
+            // ... other properties as needed
+          }
 
-    const { result } = renderHook(() => useFolderLink())
+          const { result } = renderHook(() => useFolderLink())
 
-    const parentFolderName = result.current.getParentFolderName(resource)
-    expect(parentFolderName).toBe('Shared with me')
-  })
+          const parentFolderName = result.current.getParentFolderName(resource)
+          expect(parentFolderName).toBe('Shared with me')
+        })
 
-  it('getParentFolderLinkIconAdditionalAttributes should return the correct icon attributes', () => {
-    // Similar setup as the previous tests
-    const resource = {
-      path: '/my-folder'
-      // ... other properties as needed
-    }
+        it('getParentFolderLinkIconAdditionalAttributes should return the correct icon attributes', () => {
+          // Similar setup as the previous tests
+          const resource = {
+            path: '/my-folder'
+            // ... other properties as needed
+          }
 
-    const { result } = renderHook(() => useFolderLink())
+          const { result } = renderHook(() => useFolderLink())
 
-    const iconAttributes = result.current.getParentFolderLinkIconAdditionalAttributes(resource)
-    expect(iconAttributes).toEqual({
-      name: 'layout-grid',
-      'fill-type': 'fill'
-    })
-  })*/
+          const iconAttributes = result.current.getParentFolderLinkIconAdditionalAttributes(resource)
+          expect(iconAttributes).toEqual({
+            name: 'layout-grid',
+            'fill-type': 'fill'
+          })
+        })*/
 })
 
 const createWrapper = () => {
@@ -112,10 +125,10 @@ const createWrapper = () => {
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     /*currentRoute: mock<RouteLocation>({
-      name: 'files-spaces-generic',
-      path: '/',
-      query: { fileId: undefined }
-    })*/
+                  name: 'files-spaces-generic',
+                  path: '/',
+                  query: { fileId: undefined }
+                })*/
   })
   return getComposableWrapper(
     () => {
