@@ -36,7 +36,7 @@ export const copyQuicklink = async (args: CreateQuicklink) => {
   //
   // https://webkit.org/blog/10855/
   const doCopy = async () => {
-    if (typeof ClipboardItem && navigator && navigator.clipboard && navigator.clipboard.write) {
+    if (typeof ClipboardItem && navigator?.clipboard?.write) {
       await navigator.clipboard.write([
         new ClipboardItem({
           'text/plain': createQuicklink(args).then(
