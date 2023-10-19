@@ -235,19 +235,13 @@ export default defineComponent({
         instanceCreationTime: ''
       },
       exampleInformation: {
-        transferSyntax: '',
-        SOP_ClassUID: '',
-        SOP_InstanceUID: '',
         spacing: '',
         direction: '',
         origin: '',
         modality: '',
         pixelRepresentation: '',
         bitsStored: '',
-        highBit: '',
-        photometricInterpretation: '',
-        windowWidth: '',
-        windowCenter: ''
+        highBit: ''
       },
       patientInformation: {
         patientName: '',
@@ -665,11 +659,11 @@ export default defineComponent({
           contentDate = dicomImage.data.string('x00080023')
           contentTime = dicomImage.data.string('x00080033')
 
-          rows = dicomImage.data.string('x00280010') // row data separated
-          columns = dicomImage.data.string('x00280011') //column data separated
+          //rows = dicomImage.data.string('x00280010') // row data separated
+          //columns = dicomImage.data.string('x00280011') //column data separated
           photometricInterpretation = dicomImage.data.string('x00280004')
           imageType = dicomImage.data.string('x00080008')
-          bitsAllocated = dicomImage.data.string('x00280100') // icon displayed instead of value
+          //bitsAllocated = dicomImage.data.string('x00280100') // icon displayed instead of value
           bitsStored = dicomImage.data.string('x00280101') // different data
           highBit = dicomImage.data.string('x00280102') // different data
           pixelRepresentation = dicomImage.data.string('x00280103') // different data
@@ -826,7 +820,7 @@ export default defineComponent({
       this.uidsInformation.studyUID = studyUID
       this.uidsInformation.seriesUID = seriesUID
       this.uidsInformation.instanceUID = instanceUID
-      this.uidsInformation.SOP_ClassUID = SOP_ClassUID
+      this.uidsInformation.SOP_ClassUID = SOP_ClassUID + ' [' + uids[SOP_ClassUID] + ']' // adding description of the SOP module
       this.uidsInformation.transferSyntaxUID = transferSyntaxUID
       this.uidsInformation.frameOfReferenceUID = frameOfReferenceUID
 
@@ -859,23 +853,12 @@ export default defineComponent({
 
       if (imageId != (null || undefined) && typeof imageId == 'string') {
         console.log('extracting metadata from viewport for image id: ' + imageId)
-        const {
-          pixelRepresentation,
-          bitsAllocated,
-          bitsStored,
-          highBit,
-          photometricInterpretation
-        } = metaData.get('imagePixelModule', imageId)
-
-        const voiLutModuleLocal = metaData.get('voiLutModule', imageId)
-        const sopCommonModule = metaData.get('sopCommonModule', imageId)
-        const transferSyntax = metaData.get('transferSyntax', imageId)
+        const { pixelRepresentation, bitsAllocated, bitsStored, highBit } = metaData.get(
+          'imagePixelModule',
+          imageId
+        )
 
         // adding values to corresponding variable
-        this.exampleInformation.transferSyntax = transferSyntax.transferSyntaxUID
-        this.exampleInformation.SOP_ClassUID =
-          sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']' // adding description of the SOP module
-        this.exampleInformation.SOP_InstanceUID = sopCommonModule.sopInstanceUID
         this.imageInformation.rowsX_Columns =
           this.imageData.dimensions[0] + ' x ' + this.imageData.dimensions[1]
         this.exampleInformation.spacing = this.imageData.spacing.join('\\')
@@ -890,13 +873,6 @@ export default defineComponent({
         this.imageInformation.bitsAllocated = bitsAllocated
         this.exampleInformation.bitsStored = bitsStored
         this.exampleInformation.highBit = highBit
-        this.exampleInformation.photometricInterpretation = photometricInterpretation
-        if (voiLutModuleLocal.windowWidth != (null || undefined)) {
-          this.exampleInformation.windowWidth = voiLutModuleLocal.windowWidth.toString()
-        }
-        if (voiLutModuleLocal.windowCenter != (null || undefined)) {
-          this.exampleInformation.windowCenter = voiLutModuleLocal.windowCenter.toString()
-        }
 
         this.isMetadataExtracted = true
         console.log('metadata from viewport extracted')
