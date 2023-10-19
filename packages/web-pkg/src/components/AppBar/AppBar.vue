@@ -89,9 +89,9 @@ import ContextActions from '../FilesList/ContextActions.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import { ViewMode } from '../../ui/types'
 import {
-  useFileActionsSyncShare,
+  useFileActionsAcceptShare,
   useFileActionsCopy,
-  useFileActionsUnsyncShare,
+  useFileActionsDeclineShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsDownloadFile,
@@ -166,10 +166,10 @@ export default defineComponent({
     const store = useStore()
     const { $gettext } = useGettext()
 
-    const { actions: acceptShareActions } = useFileActionsSyncShare({ store })
+    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
-    const { actions: declineShareActions } = useFileActionsUnsyncShare({ store })
+    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
     const { actions: downloadFileActions } = useFileActionsDownloadFile()

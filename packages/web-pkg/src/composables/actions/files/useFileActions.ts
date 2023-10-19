@@ -19,10 +19,10 @@ import {
 } from '../../actions'
 
 import {
-  useFileActionsSyncShare,
+  useFileActionsAcceptShare,
   useFileActionsToggleHideShare,
   useFileActionsCopy,
-  useFileActionsUnsyncShare,
+  useFileActionsDeclineShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsDownloadFile,
@@ -54,11 +54,11 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const { openUrl } = useWindowOpen()
 
-  const { actions: acceptShareActions } = useFileActionsSyncShare({ store })
+  const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
   const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
   const { actions: deleteActions } = useFileActionsDelete({ store })
-  const { actions: declineShareActions } = useFileActionsUnsyncShare({ store })
+  const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
   const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
   const { actions: downloadFileActions } = useFileActionsDownloadFile()
   const { actions: favoriteActions } = useFileActionsFavorite({ store })

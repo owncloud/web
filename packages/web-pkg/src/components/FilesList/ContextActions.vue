@@ -13,9 +13,9 @@ import {
   useFileActionsPaste,
   useFileActionsShowDetails,
   useFileActionsShowShares,
-  useFileActionsSyncShare,
+  useFileActionsAcceptShare,
   useFileActionsCopy,
-  useFileActionsUnsyncShare,
+  useFileActionsDeclineShare,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsEmptyTrashBin,
@@ -48,10 +48,10 @@ export default defineComponent({
 
     const { editorActions, loadExternalAppActions } = useFileActions()
 
-    const { actions: acceptShareActions } = useFileActionsSyncShare({ store })
+    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
     const { actions: createQuickLinkActions } = useFileActionsCreateQuickLink({ store })
-    const { actions: declineShareActions } = useFileActionsUnsyncShare({ store })
+    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
     const { actions: downloadFileActions } = useFileActionsDownloadFile()

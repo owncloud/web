@@ -27,7 +27,7 @@ const publicLinkInputField =
   '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
 const showAllButton = '#files-shared-with-me-pending-section #files-shared-with-me-show-all'
 const selecAllCheckbox = '#files-shared-with-me-pending-section #resource-table-select-all'
-const acceptButton = '.oc-files-actions-sync-share-trigger'
+const acceptButton = '.oc-files-actions-accept-share-trigger'
 const pendingShareItem =
   '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
 
