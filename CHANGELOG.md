@@ -18,6 +18,7 @@ Summary
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
 * Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
+* Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -122,6 +123,13 @@ Details
 
    https://github.com/owncloud/web/issues/9694
    https://github.com/owncloud/web/pull/9703
+
+* Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
+
+   Copying quicklinks didn't work on safari or other webkit based browsers and is fixed now.
+
+   https://github.com/owncloud/web/issues/9166
+   https://github.com/owncloud/web/pull/9832
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
