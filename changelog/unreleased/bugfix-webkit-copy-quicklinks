@@ -1,0 +1,6 @@
+Bugfix: Copy quicklinks for webkit navigator
+
+Copying quicklinks didn't work on safari or other webkit based browsers and is fixed now.
+
+https://github.com/owncloud/web/pull/9832
+https://github.com/owncloud/web/issues/9166

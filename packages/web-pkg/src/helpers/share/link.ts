@@ -22,6 +22,49 @@ export interface CreateQuicklink {
   ability: Ability
 }
 
+export const copyQuicklink = async (args: CreateQuicklink) => {
+  const { store, language } = args
+  const { $gettext } = language
+
+  // doCopy creates the requested link and copies the url to the clipboard,
+  // the copy action uses the clipboard // clipboardItem api to work around the webkit limitations.
+  //
+  // https://developer.apple.com/forums/thread/691873
+  //
+  // if those apis not available (or like in firefox behind dom.events.asyncClipboard.clipboardItem)
+  // it has a fallback to the vue-use implementation.
+  //
+  // https://webkit.org/blog/10855/
+  const doCopy = async () => {
+    if (typeof ClipboardItem && navigator && navigator.clipboard && navigator.clipboard.write) {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': createQuicklink(args).then(
+            (link) => new Blob([link.url], { type: 'text/plain' })
+          )
+        })
+      ])
+    } else {
+      const link = await createQuicklink(args)
+      const { copy } = useClipboard({ legacy: true })
+      await copy(link.url)
+    }
+  }
+
+  try {
+    await doCopy()
+    await store.dispatch('showMessage', {
+      title: $gettext('The link has been copied to your clipboard.')
+    })
+  } catch (e) {
+    console.error(e)
+    await store.dispatch('showErrorMessage', {
+      title: $gettext('Copy link failed'),
+      error: e
+    })
+  }
+}
+
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
   const { clientService, resource, store, password, language, ability } = args
   const { $gettext } = language
@@ -68,26 +111,10 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
 
   params.spaceRef = resource.fileId || resource.id
 
-  try {
-    const link = await store.dispatch('Files/addLink', {
-      path: resource.path,
-      client: clientService.owncloudSdk,
-      params,
-      storageId: resource.fileId || resource.id
-    })
-    const { copy } = useClipboard({ legacy: true })
-    copy(link.url)
-
-    await store.dispatch('showMessage', {
-      title: $gettext('The link has been copied to your clipboard.')
-    })
-
-    return link
-  } catch (e) {
-    console.error(e)
-    await store.dispatch('showErrorMessage', {
-      title: $gettext('Copy link failed'),
-      error: e
-    })
-  }
+  return store.dispatch('Files/addLink', {
+    path: resource.path,
+    client: clientService.owncloudSdk,
+    params,
+    storageId: resource.fileId || resource.id
+  })
 }

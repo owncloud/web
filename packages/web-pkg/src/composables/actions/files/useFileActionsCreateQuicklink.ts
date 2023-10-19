@@ -1,5 +1,5 @@
 import quickActions, { canShare } from '../../../quickActions'
-import { createQuicklink } from '../../../helpers/share'
+import { copyQuicklink } from '../../../helpers/share'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 
 import { isLocationSharesActive } from '../../../router'
@@ -22,7 +22,7 @@ export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } 
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
-    await createQuicklink({
+    await copyQuicklink({
       clientService,
       resource,
       storageId: space?.id || resource?.fileId || resource?.id,
