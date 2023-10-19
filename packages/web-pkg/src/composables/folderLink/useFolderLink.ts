@@ -12,17 +12,13 @@ import { useGetMatchingSpace } from '../spaces'
 import { dirname } from 'path'
 import { useResourceRouteResolver } from '../filesList'
 import { createLocationShares, createLocationSpaces } from '../../router'
-import { useConfigurationManager } from '../configuration'
 
 export const useFolderLink = () => {
   const { $gettext } = useGettext()
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasProjectSpaces = useCapabilityProjectSpacesEnabled()
   const { getInternalSpace, getMatchingSpace, isResourceAccessible } = useGetMatchingSpace()
-  const configurationManager = useConfigurationManager()
-  const { createFolderLink } = useResourceRouteResolver({
-    configurationManager
-  })
+  const { createFolderLink } = useResourceRouteResolver()
 
   const getFolderLink = (resource: Resource) => {
     return createFolderLink({
