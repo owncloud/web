@@ -99,7 +99,6 @@ export default defineComponent({
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const onEditorApplicationClick = async (item: any) => {
-      console.log(getMatchingSpace(unref(currentFolder)))
       let destinationSpace = unref(currentFolder)
       let destinationFiles = unref(files)
 
