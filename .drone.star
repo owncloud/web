@@ -1256,7 +1256,6 @@ def ocisService(type, tika_enabled = False):
         "WEB_ASSET_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
-        "FRONTEND_AUTO_ACCEPT_SHARES": True,
         "FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
     }
     if type == "app-provider":
