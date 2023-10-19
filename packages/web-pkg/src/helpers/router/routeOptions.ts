@@ -22,7 +22,6 @@ export const createFileRouteOptions = (
   options?: { configurationManager?: ConfigurationManager }
 ): { params: RouteParams; query: LocationQuery } => {
   const config = options?.configurationManager || configurationManager
-  console.log(1337, options?.configurationManager)
   return {
     params: {
       driveAliasAndItem: space.getDriveAliasAndItem({ path: target.path || '' } as Resource)
