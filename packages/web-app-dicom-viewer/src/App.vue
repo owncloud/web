@@ -60,6 +60,7 @@
         :current-image-rotation="currentImageRotation"
         :current-image-zoom="currentImageZoom"
         :is-show-metadata-activated="isShowMetadataActivated"
+        :is-small-screen="isSmallScreen"
         @set-zoom="setZoom"
         @set-rotation="setRotation"
         @set-horizontal-flip="setHorizontalFlip"

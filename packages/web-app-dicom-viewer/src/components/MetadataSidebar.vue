@@ -1,7 +1,8 @@
 <template>
   <div
     id="dicom-metadata-sidebar"
-    class="dicom-metadata-sidebar .sidebar-panel oc-position-relative oc-width-1-3 oc-height-1-1 oc-ml-xs oc-py-s"
+    class="dicom-metadata-sidebar .sidebar-panel oc-position-relative oc-height-1-1 oc-ml-xs oc-py-s"
+    :class="isSmallScreen ? 'oc-width-1-1' : 'oc-width-1-3'"
   >
     <div id="dicom-metadata-sidebar-header" class="sidebar-panel__header header">
       <oc-button
@@ -231,7 +232,7 @@ export default defineComponent({
   border-left: 1px solid var(--oc-color-border); // TODO: hide line on small screen
   position: relative;
   overflow: hidden;
-  width: 600px;
+  max-width: var(--oc-breakpoint-medium-default);
 }
 #dicom-metadata-sidebar-header {
   border-bottom: 1px solid var(--oc-color-border);
