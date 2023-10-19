@@ -33,18 +33,6 @@ jest.mock('../../../../src/composables/configuration', () => ({
     })
 }))
 
-/*jest.mock('../../../../src/composables', () => ({
-  ...jest.requireActual('../../../../src/composables'),
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: true
-        }
-      }
-    })
-}))*/
-
 describe('useFolderLink', () => {
   it('getFolderLink should return the correct folder link', () => {
     const resource = {
