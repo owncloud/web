@@ -238,14 +238,11 @@ export default defineComponent({
         transferSyntax: '',
         SOP_ClassUID: '',
         SOP_InstanceUID: '',
-        rows: '',
-        columns: '',
         spacing: '',
         direction: '',
         origin: '',
         modality: '',
         pixelRepresentation: '',
-        bitsAllocated: '',
         bitsStored: '',
         highBit: '',
         photometricInterpretation: '',
@@ -675,7 +672,7 @@ export default defineComponent({
           bitsAllocated = dicomImage.data.string('x00280100') // icon displayed instead of value
           bitsStored = dicomImage.data.string('x00280101') // different data
           highBit = dicomImage.data.string('x00280102') // different data
-          pixelRepresentation = dicomImage.data.string('x00280103')  // different data
+          pixelRepresentation = dicomImage.data.string('x00280103') // different data
           rescaleSlope = dicomImage.data.string('x00281053')
           rescaleIntercept = dicomImage.data.string('x00281052')
           imagePositionPatient = dicomImage.data.string('x00200032')
@@ -784,10 +781,10 @@ export default defineComponent({
       this.instanceInformation.contentTime = this.formatTime(contentTime, longDateTimeFormat)
 
       // imageInformation
-      this.imageInformation.rowsX_Columns = rows + 'x' + columns
+      // this.imageInformation.rowsX_Columns = rows + ' x ' + columns // extract this from viewport
       this.imageInformation.photometricInterpretation = photometricInterpretation
       this.imageInformation.imageType = imageType
-      this.imageInformation.bitsAllocated = bitsAllocated
+      // this.imageInformation.bitsAllocated = bitsAllocated // // extract this from viewport
       this.imageInformation.bitsStored = bitsStored
       this.imageInformation.highBit = highBit
       this.imageInformation.pixelRepresentation = pixelRepresentation
@@ -879,8 +876,8 @@ export default defineComponent({
         this.exampleInformation.SOP_ClassUID =
           sopCommonModule.sopClassUID + ' [' + uids[sopCommonModule.sopClassUID] + ']' // adding description of the SOP module
         this.exampleInformation.SOP_InstanceUID = sopCommonModule.sopInstanceUID
-        this.exampleInformation.rows = this.imageData.dimensions[0]
-        this.exampleInformation.columns = this.imageData.dimensions[1]
+        this.imageInformation.rowsX_Columns =
+          this.imageData.dimensions[0] + ' x ' + this.imageData.dimensions[1]
         this.exampleInformation.spacing = this.imageData.spacing.join('\\')
         this.exampleInformation.direction = this.imageData.direction
           .map((x) => Math.round(x * 100) / 100)
@@ -890,7 +887,7 @@ export default defineComponent({
           .join(',')
         this.exampleInformation.modality = this.imageData.metadata.Modality
         this.exampleInformation.pixelRepresentation = pixelRepresentation
-        this.exampleInformation.bitsAllocated = bitsAllocated
+        this.imageInformation.bitsAllocated = bitsAllocated
         this.exampleInformation.bitsStored = bitsStored
         this.exampleInformation.highBit = highBit
         this.exampleInformation.photometricInterpretation = photometricInterpretation
