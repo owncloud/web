@@ -1,4 +1,4 @@
-import { unref, Ref } from 'vue'
+import {unref, Ref} from 'vue'
 
 import { ConfigurationManager } from '../../configuration'
 import { useGetMatchingSpace } from '../spaces'
@@ -14,7 +14,10 @@ type ResourceRouteResolverOptions = {
   space?: Ref<SpaceResource>
 }
 
-export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, context) => {
+export const useResourceRouteResolver = (
+  options: ResourceRouteResolverOptions,
+  context?: {emit: Function}
+) => {
   const configurationManager = options.configurationManager || useConfigurationManager()
   const targetRouteCallback = options.targetRouteCallback
   const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace(options)

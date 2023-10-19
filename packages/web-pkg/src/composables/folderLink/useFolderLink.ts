@@ -7,35 +7,80 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
-import { useCapabilityShareJailEnabled } from '../capability'
+import { useCapabilityProjectSpacesEnabled, useCapabilityShareJailEnabled } from '../capability'
 import { useGetMatchingSpace } from '../spaces'
+import { dirname } from 'path'
+import { useResourceRouteResolver } from '../filesList'
+import { createLocationShares, createLocationSpaces } from '../../router'
+import { useConfigurationManager } from '../configuration'
 
 export const useFolderLink = () => {
   const { $gettext } = useGettext()
   const hasShareJail = useCapabilityShareJailEnabled()
-  const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
+  const hasProjectSpaces = useCapabilityProjectSpacesEnabled()
+  const { getInternalSpace, getMatchingSpace, isResourceAccessible } = useGetMatchingSpace()
+  const configurationManager = useConfigurationManager()
+  const { createFolderLink } = useResourceRouteResolver({
+    configurationManager
+  })
 
-  const getParentFolderName = (resource: Resource) => {
-    if (isShareRoot(resource)) {
-      return $gettext('Shared with me')
+  const getFolderLink = (resource: Resource) => {
+    return createFolderLink({
+      path: resource.path,
+      fileId: resource.fileId,
+      resource
+    })
+  }
+
+  const getParentFolderLink = (resource: Resource) => {
+    const space = getMatchingSpace(resource)
+    const parentFolderAccessible = isResourceAccessible({
+      space,
+      path: dirname(resource.path)
+    })
+    if ((resource.shareId && resource.path === '/') || !parentFolderAccessible) {
+      return createLocationShares('files-shares-with-me')
+    }
+    if (isProjectSpaceResource(resource)) {
+      return createLocationSpaces('files-spaces-projects')
     }
 
+    return createFolderLink({
+      path: dirname(resource.path),
+      ...(resource.parentFolderId && { fileId: resource.parentFolderId }),
+      resource
+    })
+  }
+
+  const getParentFolderName = (resource: Resource) => {
+    const space = getMatchingSpace(resource)
+    const parentFolderAccessible = isResourceAccessible({
+      space,
+      path: dirname(resource.path)
+    })
+    if (isShareRoot(resource) || !parentFolderAccessible) {
+      return $gettext('Shared with me')
+    }
     const parentFolder = extractParentFolderName(resource)
     if (parentFolder) {
       return parentFolder
     }
 
+    if (isShareSpaceResource(space)) {
+      return space.name
+    }
+
+    if (unref(hasProjectSpaces)) {
+      if (isProjectSpaceResource(resource)) {
+        return $gettext('Spaces')
+      }
+      if (space?.driveType === 'project') {
+        return space.name
+      }
+    }
+
     if (!unref(hasShareJail)) {
       return $gettext('All files and folders')
-    }
-
-    if (isProjectSpaceResource(resource)) {
-      return $gettext('Spaces')
-    }
-
-    const matchingSpace = unref(getMatchingSpace(resource))
-    if (isProjectSpaceResource(matchingSpace) || isShareSpaceResource(matchingSpace)) {
-      return matchingSpace.name
     }
 
     return $gettext('Personal')
@@ -58,6 +103,8 @@ export const useFolderLink = () => {
   }
 
   return {
+    getFolderLink,
+    getParentFolderLink,
     getParentFolderName,
     getParentFolderLinkIconAdditionalAttributes
   }
