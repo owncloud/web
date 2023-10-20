@@ -60,6 +60,7 @@ import { additionalTranslations } from './helpers/additionalTranslations' // esl
 import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { useStore } from '@ownclouders/web-pkg'
+import { RouteLocation, Router } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -70,16 +71,29 @@ export default defineComponent({
     const router = useRouter()
     useHead({ store })
 
-    const activeApp = computed(
-      () => router.resolve(unref(router.currentRoute)).path.split('/')?.[1]
-    )
+    const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
 
     watch(
-      () => unref(activeApp),
-      (newApp, oldApp) => {
+      () => unref(activeRoute),
+      (newRoute, oldRoute) => {
+        const getAppFromRoute = (route: RouteLocation): string => {
+          return route?.path?.split('/')?.[1]
+        }
+
+        const oldApp = getAppFromRoute(oldRoute)
+        const newApp = getAppFromRoute(newRoute)
+
         if (oldApp === newApp) {
           return
         }
+
+        if ('driveAliasAndItem' in newRoute.params) {
+          return
+        }
+
+        /*
+         * If app has been changed and no file context is set, we will reset current folder.
+         */
         store.commit('Files/SET_CURRENT_FOLDER', null)
       }
     )
