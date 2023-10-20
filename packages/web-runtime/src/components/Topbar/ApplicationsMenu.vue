@@ -67,6 +67,8 @@ import {
 } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { join } from 'path'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
   components: {
@@ -85,7 +87,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const appIconKey = ref('')
-    const { getMatchingSpace } = useGetMatchingSpace()
+    const { getMatchingSpace, getPersonalSpace } = useGetMatchingSpace()
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -99,14 +101,14 @@ export default defineComponent({
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const onEditorApplicationClick = async (item: ApplicationInformation) => {
-      let destinationSpace = unref(currentFolder)
+      let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
       let destinationFiles = unref(files)
+      let filePath = unref(currentFolder)?.path
 
-      if (!destinationSpace || !destinationSpace.canCreate()) {
-        destinationSpace = unref(store.getters['runtime/spaces/spaces']).find(
-          ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
-        )
+      if (!destinationSpace || !unref(currentFolder).canCreate()) {
+        destinationSpace = getPersonalSpace()
         destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
+        filePath = ''
       }
 
       let fileName = $gettext('New file') + `.${item.defaultExtension}`
@@ -116,7 +118,7 @@ export default defineComponent({
       }
 
       const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
-        path: fileName
+        path: urlJoin(filePath, fileName)
       })
 
       const space = getMatchingSpace(emptyResource)

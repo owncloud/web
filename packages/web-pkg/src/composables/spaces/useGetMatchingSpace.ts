@@ -5,6 +5,7 @@ import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   MountPointSpaceResource,
+  PersonalSpaceResource,
   ProjectSpaceResource,
   User,
   buildShareSpaceResource,
@@ -42,12 +43,6 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     if (unref(driveAliasAndItem)?.startsWith('public/')) {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
-
-    console.log("bshare",  buildShareSpaceResource({
-      shareId: resource.shareId,
-      shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
-      serverUrl: configurationManager.serverUrl
-    }))
     return (
       getInternalSpace(storageId) ||
       buildShareSpaceResource({
@@ -62,6 +57,10 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     unref(spaces).filter(
       (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
     )
+
+  const getPersonalSpace = (): PersonalSpaceResource => {
+    return unref(spaces).find((s) => isPersonalSpaceResource(s) && s.isOwner(unref(user)))
+  }
 
   const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
     if (!configurationManager.options.routing.fullShareOwnerPaths) {
@@ -80,6 +79,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   return {
     getInternalSpace,
     getMatchingSpace,
+    getPersonalSpace,
     isResourceAccessible
   }
 }
