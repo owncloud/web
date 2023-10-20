@@ -18,6 +18,7 @@ Summary
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
 * Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
+* Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -123,6 +124,13 @@ Details
 
    https://github.com/owncloud/web/issues/9694
    https://github.com/owncloud/web/pull/9703
+
+* Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
+
+   Creating .space folder and README.md in space if folder has been removed by user.
+
+   https://github.com/owncloud/web/issues/9788
+   https://github.com/owncloud/web/pull/9793
 
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 
