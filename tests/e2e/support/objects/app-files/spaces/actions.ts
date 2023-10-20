@@ -54,7 +54,7 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
   )
   const mkcolResponsePromise = page.waitForResponse(
     (resp) =>
-      resp.status() === 201 && resp.request().method() === 'MKCOL' && resp.url().endsWith('.space/')
+      resp.status() === 201 && resp.request().method() === 'MKCOL' && resp.url().includes('.space')
   )
   const putResponsePromise = page.waitForResponse(
     (resp) =>

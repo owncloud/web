@@ -1,6 +1,7 @@
 import { DavFileInfoResponse } from '@ownclouders/web-client/src/webdav/constants'
 import { User } from '../user'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
+import { DAVResultResponseProps, FileStat } from 'webdav'
 
 export type AbilityActions =
   | 'create'
@@ -136,14 +137,15 @@ export interface FileResource extends Resource {
   __fileResource?: any
 }
 
-export interface WebDavResponseResource {
-  fileInfo: DavFileInfoResponse
-  name?: string
-  type: string
+export interface WebDavResponseTusSupport {
+  extension?: string[]
+  maxSize?: number
+  resumable?: string
+  version?: string[]
+}
+
+export interface WebDavResponseResource extends Omit<FileStat, 'props'> {
+  props?: Omit<DAVResultResponseProps, 'getcontentlength'> & DavFileInfoResponse
   processing?: boolean
-  tusSupport?: {
-    extension?: string[]
-    resumable?: string
-    version?: string[]
-  }
+  tusSupport?: WebDavResponseTusSupport
 }

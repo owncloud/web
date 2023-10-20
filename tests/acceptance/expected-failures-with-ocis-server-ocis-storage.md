@@ -29,7 +29,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFavorites/unfavoriteFile.feature:70](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L70)
 -   [webUIFavorites/unfavoriteFile.feature:86](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L86)
 -   [webUIFavorites/unfavoriteFile.feature:101](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L101)
--   [webUIResharing1/reshareUsers.feature:177](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L177)
+-   [webUIResharing1/reshareUsers.feature:68](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing1/reshareUsers.feature#L68)
 
 ### [when sharer renames the shared resource, sharee get the updated name](https://github.com/owncloud/ocis/issues/2256)
 -   [webUIRenameFiles/renameFiles.feature:227](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L227)
@@ -37,20 +37,20 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Cannot create users with special characters](https://github.com/owncloud/ocis/issues/1417)
 -   [webUISharingAutocompletion/shareAutocompletionSpecialChars.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletionSpecialChars.feature#L37)
 -   [webUISharingAutocompletion/shareAutocompletionSpecialChars.feature:38](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletionSpecialChars.feature#L38)
--   [webUISharingAutocompletion/shareAutocompletionSpecialChars.feature:39](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletionSpecialChars.feature#L39)
+-   [webUISharingAutocompletion/shareAutocompletionSpecialChars.feature:35](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletionSpecialChars.feature#L35)
 -   [webUISharingAutocompletion/shareAutocompletionSpecialChars.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAutocompletion/shareAutocompletionSpecialChars.feature#L36)
 
 
 ### [Share additional info](https://github.com/owncloud/ocis/issues/1253)
--   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:138](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L138)
+-   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:126](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L126)
 
 ### [Expiration date set is not implemented in user share](https://github.com/owncloud/ocis/issues/1250)
--   [webUISharingInternalGroups/shareWithGroups.feature:244](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L244)
+-   [webUISharingInternalGroups/shareWithGroups.feature:228](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L228)
 
 ### [Different path for shares inside folder](https://github.com/owncloud/ocis/issues/1231)
 
 ### [Implement expiration date for shares](https://github.com/owncloud/ocis/issues/1250)
-- [webUISharingInternalGroups/shareWithGroups.feature:222](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L222)
+- [webUISharingInternalGroups/shareWithGroups.feature:208](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L208)
 - [webUISharingExpirationDate/shareWithExpirationDate.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExpirationDate/shareWithExpirationDate.feature#L21)
 
 ### [Listing shares via ocs API does not show path for parent folders](https://github.com/owncloud/ocis/issues/1231)
@@ -108,4 +108,4 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIRenameFiles/renameFiles.feature:250](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L250)
 
 ### [PROPFIND to sub-folder of a shared resources with same name gives 404](https://github.com/owncloud/ocis/issues/3859)
--   [webUISharingAcceptShares/acceptShares.feature:240](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L240)
+-   [webUISharingAcceptShares/acceptShares.feature:163](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L163)

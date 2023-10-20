@@ -104,6 +104,7 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'upload.companionUrl', get(options, 'upload.companionUrl', ''))
     set(this.optionsConfiguration, 'tokenStorageLocal', get(options, 'tokenStorageLocal', true))
     set(this.optionsConfiguration, 'loginUrl', get(options, 'loginUrl', ''))
+    set(this.optionsConfiguration, 'disabledExtensions', get(options, 'disabledExtensions', []))
   }
 
   get options(): OptionsConfiguration {

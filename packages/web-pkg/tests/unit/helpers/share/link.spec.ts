@@ -1,4 +1,4 @@
-import { createQuicklink, CreateQuicklink } from '../../../../src/helpers/share'
+import { copyQuicklink, createQuicklink, CreateQuicklink } from '../../../../src/helpers/share'
 import { DateTime } from 'luxon'
 import { Store } from 'vuex'
 import { ClientService } from '../../../../src/services'
@@ -65,6 +65,7 @@ describe('createQuicklink', () => {
     expect(link).toBeDefined()
     expect(link.url).toBeDefined()
 
+    await copyQuicklink(args)
     expect(useClipboard).toHaveBeenCalled()
 
     expect(mockStore.dispatch).toHaveBeenCalledWith('Files/addLink', {
@@ -106,6 +107,7 @@ describe('createQuicklink', () => {
       expect(link).toBeDefined()
       expect(link.url).toBeDefined()
 
+      await copyQuicklink(args)
       expect(useClipboard).toHaveBeenCalled()
 
       expect(mockStore.dispatch).toHaveBeenCalledWith('Files/addLink', {

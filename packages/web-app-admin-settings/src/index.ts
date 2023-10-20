@@ -109,7 +109,8 @@ const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem[] => [
     },
     enabled: () => {
       return $ability.can('read-all', 'Setting')
-    }
+    },
+    priority: 10
   },
   {
     name: $gettext('Users'),
@@ -119,7 +120,8 @@ const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem[] => [
     },
     enabled: () => {
       return $ability.can('read-all', 'Account')
-    }
+    },
+    priority: 20
   },
   {
     name: $gettext('Groups'),
@@ -129,7 +131,8 @@ const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem[] => [
     },
     enabled: () => {
       return $ability.can('read-all', 'Group')
-    }
+    },
+    priority: 30
   },
   {
     name: $gettext('Spaces'),
@@ -139,7 +142,8 @@ const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem[] => [
     },
     enabled: () => {
       return $ability.can('read-all', 'Drive')
-    }
+    },
+    priority: 40
   }
 ]
 

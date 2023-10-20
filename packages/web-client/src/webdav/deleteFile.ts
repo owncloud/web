@@ -1,19 +1,14 @@
 import { urlJoin } from '../utils'
-import { FileResource, isPublicSpaceResource, SpaceResource } from '../helpers'
+import { SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
+import { DAV, buildAuthHeader } from './client'
+import { unref } from 'vue'
 
-export const DeleteFileFactory = ({ sdk }: WebDavOptions) => {
+export const DeleteFileFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
-    deleteFile(space: SpaceResource, { path }: { path: string }): Promise<FileResource> {
-      if (isPublicSpaceResource(space)) {
-        return sdk.publicFiles.delete(
-          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
-          null,
-          space.publicLinkPassword
-        )
-      }
-
-      return sdk.files.delete(urlJoin(space.webDavPath, path))
+    deleteFile(space: SpaceResource, { path }: { path: string }) {
+      const headers = buildAuthHeader(unref(accessToken), space)
+      return dav.delete(urlJoin(space.webDavPath, path), { headers })
     }
   }
 }

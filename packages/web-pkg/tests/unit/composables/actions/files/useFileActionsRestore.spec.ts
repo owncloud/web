@@ -11,11 +11,7 @@ import {
 import { useStore } from '../../../../../src/composables'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import {
-  FileResource,
-  ProjectSpaceResource,
-  SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
 
 describe('restore', () => {
@@ -194,12 +190,11 @@ function getWrapper({
   mocks.$clientService.webdav.listFiles.mockImplementation(() => {
     return Promise.resolve({ resource: mock<Resource>(), children: [] })
   })
-  mocks.$clientService.webdav.restoreFile.mockImplementation(() => {
-    if (resolveRestore) {
-      return Promise.resolve(mock<FileResource>())
-    }
-    return Promise.reject(new Error(''))
-  })
+  if (resolveRestore) {
+    mocks.$clientService.webdav.restoreFile.mockResolvedValue(undefined)
+  } else {
+    mocks.$clientService.webdav.restoreFile.mockRejectedValue(new Error(''))
+  }
   mocks.$clientService.owncloudSdk.users.getUser.mockImplementation(() => ({ quota: {} }))
 
   const storeOptions = {

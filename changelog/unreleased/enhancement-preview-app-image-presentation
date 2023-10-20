@@ -1,0 +1,8 @@
+Enhancement: Preview image presentation
+
+We've updated the preview app to have a more user friendly image browsing experience,
+image zooming, rotation and movement is smoother, images are no longer cropped.
+
+https://github.com/owncloud/web/pull/9806
+https://github.com/owncloud/ocis/pull/7409
+https://github.com/owncloud/web/issues/7728

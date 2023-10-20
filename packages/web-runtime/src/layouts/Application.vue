@@ -23,6 +23,8 @@
           />
         </template>
       </div>
+
+      <portal-target name="app.runtime.footer" />
     </div>
     <div class="snackbars">
       <message-bar :active-messages="activeMessages" @delete-message="deleteMessage" />
@@ -33,7 +35,8 @@
 
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import orderBy from 'lodash-es/orderBy'
+import { AppLoadingSpinner, SidebarNavExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
@@ -76,6 +79,14 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const isUserContext = useUserContext({ store })
     const activeApp = useActiveApp()
+    const extensionRegistry = useExtensionRegistry()
+
+    const extensionNavItems = computed(() =>
+      extensionRegistry
+        .requestExtensions<SidebarNavExtension>('sidebarNav', unref(activeApp))
+        .map(({ navItem }) => navItem)
+        .filter((n) => n.enabled(store.getters.capabilities))
+    )
 
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
     watch(
@@ -117,36 +128,39 @@ export default defineComponent({
         return []
       }
 
-      const items = store.getters['getNavItemsByExtension'](unref(activeApp)) as AppNavigationItem[]
-      if (!items) {
-        return []
-      }
+      const items = [
+        ...store.getters['getNavItemsByExtension'](unref(activeApp)),
+        ...unref(extensionNavItems)
+      ] as AppNavigationItem[]
 
       const { href: currentHref } = router.resolve(unref(route))
-      return items.map((item) => {
-        let active = typeof item.isActive !== 'function' || item.isActive()
+      return orderBy(
+        items.map((item) => {
+          let active = typeof item.isActive !== 'function' || item.isActive()
 
-        if (active) {
-          active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {
-            try {
-              const comparativeHref = router.resolve(currentItem).href
-              return currentHref.startsWith(comparativeHref)
-            } catch (e) {
-              console.error(e)
-              return false
-            }
-          })
-        }
+          if (active) {
+            active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {
+              try {
+                const comparativeHref = router.resolve(currentItem).href
+                return currentHref.startsWith(comparativeHref)
+              } catch (e) {
+                console.error(e)
+                return false
+              }
+            })
+          }
 
-        const name =
-          typeof item.name === 'function' ? item.name(store.getters['capabilities']) : item.name
+          const name =
+            typeof item.name === 'function' ? item.name(store.getters['capabilities']) : item.name
 
-        return {
-          ...item,
-          name: $gettext(name),
-          active
-        }
-      })
+          return {
+            ...item,
+            name: $gettext(name),
+            active
+          }
+        }),
+        ['priority', 'name']
+      )
     })
 
     const isSidebarVisible = computed(() => {
@@ -226,7 +240,11 @@ export default defineComponent({
   }
 
   #web-content-main {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    justify-content: flex-start;
     overflow-y: hidden;
 
     .app-container {
@@ -234,6 +252,7 @@ export default defineComponent({
       background-color: var(--oc-color-background-default);
       border-radius: 15px;
       overflow: hidden;
+      width: 100%;
 
       .app-content {
         transition: all 0.35s cubic-bezier(0.34, 0.11, 0, 1.12);

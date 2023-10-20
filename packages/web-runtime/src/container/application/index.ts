@@ -130,7 +130,8 @@ export const buildApplication = async ({
         store,
         router,
         gettext,
-        supportedLanguages
+        supportedLanguages,
+        configurationManager
       }).catch()
     }
   } catch (err) {

@@ -5,7 +5,10 @@
     :aria-label="$gettext('Top bar')"
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-start">
-      <applications-menu v-if="appMenuItems.length" :applications-list="appMenuItems" />
+      <applications-menu
+        v-if="appMenuItems.length && !isEmbedModeEnabled"
+        :applications-list="appMenuItems"
+      />
       <router-link
         ref="navigationSidebarLogo"
         v-oc-tooltip="$gettext('Back to home')"
@@ -21,14 +24,16 @@
     <div class="oc-topbar-right oc-flex oc-flex-middle">
       <portal-target name="app.runtime.header.right" multiple />
     </div>
-    <portal to="app.runtime.header.right" :order="50">
-      <theme-switcher v-if="darkThemeAvailable" />
-      <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
-    </portal>
-    <portal to="app.runtime.header.right" :order="100">
-      <notifications v-if="isNotificationBellEnabled" />
-      <user-menu :applications-list="userMenuItems" />
-    </portal>
+    <template v-if="!isEmbedModeEnabled">
+      <portal to="app.runtime.header.right" :order="50">
+        <theme-switcher v-if="darkThemeAvailable" />
+        <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
+      </portal>
+      <portal to="app.runtime.header.right" :order="100">
+        <notifications v-if="isNotificationBellEnabled" />
+        <user-menu :applications-list="userMenuItems" />
+      </portal>
+    </template>
     <portal-target name="app.runtime.header.left" @change="updateLeftPortal" />
   </header>
 </template>
@@ -43,6 +48,7 @@ import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useCapabilityNotifications,
+  useEmbedMode,
   useRouter,
   useStore,
   useUserContext
@@ -71,6 +77,7 @@ export default {
     const isUserContext = useUserContext({ store })
     const language = useGettext()
     const router = useRouter()
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
@@ -169,7 +176,8 @@ export default {
       isNotificationBellEnabled,
       userMenuItems,
       appMenuItems,
-      logoWidth
+      logoWidth,
+      isEmbedModeEnabled
     }
   },
   computed: {

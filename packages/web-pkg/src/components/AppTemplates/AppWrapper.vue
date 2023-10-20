@@ -45,7 +45,7 @@ import { Resource } from '@ownclouders/web-client'
 import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { Action, ActionOptions } from '../../composables/actions/types'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { HttpError } from '../../errors'
+import { HttpError } from '@ownclouders/web-client/src/errors'
 import { ModifierKey, Key, useKeyboardActions } from '../../composables/keyboardActions'
 import { useAppMeta } from '../../composables/appDefaults/useAppMeta'
 

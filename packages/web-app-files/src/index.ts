@@ -8,14 +8,12 @@ import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
-import { quickActions } from '@ownclouders/web-pkg'
+import { defineWebApplication, quickActions } from '@ownclouders/web-pkg'
 import store from './store'
-import { SDKSearch } from './search'
-import { eventBus } from '@ownclouders/web-pkg'
-import { Registry } from './services'
+import { extensions } from './extensions'
 import fileSideBars from './fileSideBars'
 import { buildRoutes } from '@ownclouders/web-pkg'
-import { AppNavigationItem, AppReadyHookArgs } from '@ownclouders/web-pkg'
+import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
@@ -24,7 +22,6 @@ import {
   isPersonalSpaceResource,
   isShareSpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { configurationManager } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -40,7 +37,7 @@ const appInfo = {
   extensions: [],
   fileSideBars
 }
-const navItems = (context): AppNavigationItem[] => {
+export const navItems = (context): AppNavigationItem[] => {
   return [
     {
       name(capabilities) {
@@ -65,7 +62,8 @@ const navItems = (context): AppNavigationItem[] => {
         return !!context?.$store?.getters['runtime/spaces/spaces'].find(
           (drive) => isPersonalSpaceResource(drive) && drive.isOwner(context.$store.getters.user)
         )
-      }
+      },
+      priority: 10
     },
     {
       name: $gettext('Favorites'),
@@ -75,7 +73,8 @@ const navItems = (context): AppNavigationItem[] => {
       },
       enabled(capabilities) {
         return capabilities.files?.favorites
-      }
+      },
+      priority: 20
     },
     {
       name: $gettext('Shares'),
@@ -94,7 +93,8 @@ const navItems = (context): AppNavigationItem[] => {
       ],
       enabled(capabilities) {
         return capabilities.files_sharing?.api_enabled !== false
-      }
+      },
+      priority: 30
     },
     {
       name: $gettext('Spaces'),
@@ -105,7 +105,8 @@ const navItems = (context): AppNavigationItem[] => {
       activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
       enabled(capabilities) {
         return capabilities.spaces?.projects
-      }
+      },
+      priority: 40
     },
     {
       name: $gettext('Deleted files'),
@@ -116,41 +117,39 @@ const navItems = (context): AppNavigationItem[] => {
       activeFor: [{ path: `/${appInfo.id}/trash` }],
       enabled(capabilities) {
         return capabilities.dav?.trashbin === '1.0' && capabilities.files?.undelete
-      }
+      },
+      priority: 50
     }
   ]
 }
 
-export default {
-  appInfo,
-  store,
-  routes: buildRoutes({
-    App,
-    Favorites,
-    FilesDrop,
-    SearchResults,
-    Shares: {
-      SharedViaLink,
-      SharedWithMe,
-      SharedWithOthers
-    },
-    Spaces: {
-      DriveResolver: SpaceDriveResolver,
-      Projects: SpaceProjects
-    },
-    Trash: {
-      Overview: TrashOverview
+export default defineWebApplication({
+  setup(args) {
+    return {
+      appInfo,
+      store,
+      routes: buildRoutes({
+        App,
+        Favorites,
+        FilesDrop,
+        SearchResults,
+        Shares: {
+          SharedViaLink,
+          SharedWithMe,
+          SharedWithOthers
+        },
+        Spaces: {
+          DriveResolver: SpaceDriveResolver,
+          Projects: SpaceProjects
+        },
+        Trash: {
+          Overview: TrashOverview
+        }
+      }),
+      navItems,
+      quickActions,
+      translations,
+      extensions: extensions(args)
     }
-  }),
-  navItems,
-  quickActions,
-  translations,
-  ready({ router, store, globalProperties }: AppReadyHookArgs) {
-    const { $clientService } = globalProperties
-    Registry.sdkSearch = new SDKSearch(store, router, $clientService, configurationManager)
-
-    // when discussing the boot process of applications we need to implement a
-    // registry that does not rely on call order, aka first register "on" and only after emit.
-    eventBus.publish('app.search.register.provider', Registry.sdkSearch)
   }
-}
+})

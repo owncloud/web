@@ -11,6 +11,19 @@ export abstract class DavPermission {
   static readonly Deny: string = 'Z'
 }
 
+export enum DavMethod {
+  copy = 'COPY',
+  delete = 'DELETE',
+  lock = 'LOCK',
+  mkcol = 'MKCOL',
+  move = 'MOVE',
+  propfind = 'PROPFIND',
+  proppatch = 'PROPPATCH',
+  put = 'PUT',
+  report = 'REPORT',
+  unlock = 'UNLOCK'
+}
+
 type M<V, T> = {
   value: V
   type: T
@@ -21,54 +34,50 @@ const def = <V, T>(v: V): M<V, T> => ({
   type: null
 })
 const defString = <V>(v: V) => def<V, string>(v)
+const defNumber = <V>(v: V) => def<V, number>(v)
 const defStringArray = <V>(v: V) => def<V, string[]>(v)
 
 const DavPropertyMapping = {
-  Permissions: defString('{http://owncloud.org/ns}permissions' as const),
-  IsFavorite: defString('{http://owncloud.org/ns}favorite' as const),
-  FileId: defString('{http://owncloud.org/ns}fileid' as const),
-  FileParent: defString('{http://owncloud.org/ns}file-parent' as const),
-  Name: defString('{http://owncloud.org/ns}name' as const),
-  OwnerId: defString('{http://owncloud.org/ns}owner-id' as const),
-  OwnerDisplayName: defString('{http://owncloud.org/ns}owner-display-name' as const),
-  PrivateLink: defString('{http://owncloud.org/ns}privatelink' as const),
-  ContentLength: defString('{DAV:}getcontentlength' as const),
-  ContentSize: defString('{http://owncloud.org/ns}size' as const),
-  LastModifiedDate: defString('{DAV:}getlastmodified' as const),
-  Tags: defString('{http://owncloud.org/ns}tags' as const),
-  ETag: defString('{DAV:}getetag' as const),
-  MimeType: defString('{DAV:}getcontenttype' as const),
-  ResourceType: defStringArray('{DAV:}resourcetype' as const),
-  LockDiscovery: defString('{DAV:}lockdiscovery' as const),
-  LockOwnerName: defString('{http://owncloud.org/ns}ownername' as const),
-  LockTime: defString('{http://owncloud.org/ns}locktime' as const),
+  Permissions: defString('permissions' as const),
+  IsFavorite: defNumber('favorite' as const),
+  FileId: defString('fileid' as const),
+  FileParent: defString('file-parent' as const),
+  Name: defString('name' as const),
+  OwnerId: defString('owner-id' as const),
+  OwnerDisplayName: defString('owner-display-name' as const),
+  PrivateLink: defString('privatelink' as const),
+  ContentLength: defNumber('getcontentlength' as const),
+  ContentSize: defNumber('size' as const),
+  LastModifiedDate: defString('getlastmodified' as const),
+  Tags: defString('tags' as const),
+  ETag: defString('getetag' as const),
+  MimeType: defString('getcontenttype' as const),
+  ResourceType: defStringArray('resourcetype' as const),
+  LockDiscovery: defString('lockdiscovery' as const),
+  LockOwnerName: defString('ownername' as const),
+  LockTime: defString('locktime' as const),
   ActiveLock: {
-    value: '{DAV:}activelock',
+    value: 'activelock',
     type: null as Record<string, unknown>
   },
-  DownloadURL: defString('{http://owncloud.org/ns}downloadURL' as const),
-  Highlights: defString('{http://owncloud.org/ns}highlights' as const),
+  DownloadURL: defString('downloadURL' as const),
+  Highlights: defString('highlights' as const),
+  MetaPathForUser: defString('meta-path-for-user' as const),
 
-  ShareId: defString('{http://owncloud.org/ns}shareid' as const),
-  ShareRoot: defString('{http://owncloud.org/ns}shareroot' as const),
-  ShareTypes: defStringArray('{http://owncloud.org/ns}share-types' as const),
-  SharePermissions: defString(
-    '{http://open-collaboration-services.org/ns}share-permissions' as const
-  ),
+  ShareId: defString('shareid' as const),
+  ShareRoot: defString('shareroot' as const),
+  ShareTypes: defStringArray('share-types' as const),
+  SharePermissions: defString('share-permissions' as const),
 
-  TrashbinOriginalFilename: defString(
-    '{http://owncloud.org/ns}trashbin-original-filename' as const
-  ),
-  TrashbinOriginalLocation: defString(
-    '{http://owncloud.org/ns}trashbin-original-location' as const
-  ),
-  TrashbinDeletedDate: defString('{http://owncloud.org/ns}trashbin-delete-datetime' as const),
+  TrashbinOriginalFilename: defString('trashbin-original-filename' as const),
+  TrashbinOriginalLocation: defString('trashbin-original-location' as const),
+  TrashbinDeletedDate: defString('trashbin-delete-datetime' as const),
 
-  PublicLinkItemType: defString('{http://owncloud.org/ns}public-link-item-type' as const),
-  PublicLinkPermission: defString('{http://owncloud.org/ns}public-link-permission' as const),
-  PublicLinkExpiration: defString('{http://owncloud.org/ns}public-link-expiration' as const),
-  PublicLinkShareDate: defString('{http://owncloud.org/ns}public-link-share-datetime' as const),
-  PublicLinkShareOwner: defString('{http://owncloud.org/ns}public-link-share-owner' as const)
+  PublicLinkItemType: defString('public-link-item-type' as const),
+  PublicLinkPermission: defString('public-link-permission' as const),
+  PublicLinkExpiration: defString('public-link-expiration' as const),
+  PublicLinkShareDate: defString('public-link-share-datetime' as const),
+  PublicLinkShareOwner: defString('public-link-share-owner' as const)
 } as const satisfies Record<string, M<unknown, unknown>>
 
 type DavPropertyMappingType = typeof DavPropertyMapping
@@ -126,5 +135,16 @@ export abstract class DavProperties {
     DavProperty.TrashbinDeletedDate,
     DavProperty.Permissions,
     DavProperty.FileParent
+  ]
+
+  // these dav properties are dav standard and don't live in the oc namespace
+  static readonly DavNamespace: DavPropertyValue[] = [
+    DavProperty.ContentLength,
+    DavProperty.LastModifiedDate,
+    DavProperty.ETag,
+    DavProperty.MimeType,
+    DavProperty.ResourceType,
+    DavProperty.LockDiscovery,
+    DavProperty.ActiveLock
   ]
 }

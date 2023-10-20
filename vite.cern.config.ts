@@ -29,6 +29,11 @@ export default defineConfig(async (args) => {
     projectRootDir,
     'packages/web-pkg/src/cern/composables/useLoadTokenInfo'
   )
+  // create space component
+  config.resolve.alias['../../components/AppBar/CreateSpace.vue'] = join(
+    projectRootDir,
+    'packages/web-pkg/src/cern/components/CreateSpace.vue'
+  )
 
   config.plugins.push(historyModePlugins()[0])
 

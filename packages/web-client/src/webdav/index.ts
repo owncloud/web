@@ -14,37 +14,47 @@ import { RestoreFileVersionFactory } from './restoreFileVersion'
 import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
 import { GetPathForFileIdFactory } from './getPathForFileId'
+import { DAV } from './client/dav'
+import { ListFileVersionsFactory } from './listFileVersions'
 
 export * from './types'
 
 export const webdav = (options: WebDavOptions): WebDAV => {
-  const listFilesFactory = ListFilesFactory(options)
+  const dav = new DAV({
+    accessToken: options.accessToken,
+    baseUrl: options.baseUrl,
+    language: options.language
+  })
+
+  const pathForFileIdFactory = GetPathForFileIdFactory(dav, options)
+  const { getPathForFileId } = pathForFileIdFactory
+
+  const listFilesFactory = ListFilesFactory(dav, pathForFileIdFactory, options)
   const { listFiles } = listFilesFactory
 
   const getFileInfoFactory = GetFileInfoFactory(listFilesFactory, options)
   const { getFileInfo } = getFileInfoFactory
 
-  const { createFolder } = CreateFolderFactory(getFileInfoFactory, options)
-  const getFileContentsFactory = GetFileContentsFactory(options)
+  const { createFolder } = CreateFolderFactory(dav, getFileInfoFactory, options)
+  const getFileContentsFactory = GetFileContentsFactory(dav, options)
   const { getFileContents } = getFileContentsFactory
-  const { putFileContents } = PutFileContentsFactory(getFileInfoFactory, options)
+  const { putFileContents } = PutFileContentsFactory(dav, getFileInfoFactory, options)
 
-  const { getFileUrl, revokeUrl } = GetFileUrlFactory(getFileContentsFactory, options)
-  const { getPublicFileUrl } = GetPublicFileUrlFactory(options)
+  const { getFileUrl, revokeUrl } = GetFileUrlFactory(dav, getFileContentsFactory, options)
+  const { getPublicFileUrl } = GetPublicFileUrlFactory(dav, options)
 
-  const { getPathForFileId } = GetPathForFileIdFactory(options)
+  const { copyFiles } = CopyFilesFactory(dav, options)
+  const { moveFiles } = MoveFilesFactory(dav, options)
 
-  const { copyFiles } = CopyFilesFactory(options)
-  const { moveFiles } = MoveFilesFactory(options)
+  const { deleteFile } = DeleteFileFactory(dav, options)
+  const { restoreFile } = RestoreFileFactory(dav, options)
 
-  const { deleteFile } = DeleteFileFactory(options)
-  const { restoreFile } = RestoreFileFactory(options)
+  const { listFileVersions } = ListFileVersionsFactory(dav, options)
+  const { restoreFileVersion } = RestoreFileVersionFactory(dav, options)
 
-  const { restoreFileVersion } = RestoreFileVersionFactory(options)
+  const { clearTrashBin } = ClearTrashBinFactory(dav, options)
 
-  const { clearTrashBin } = ClearTrashBinFactory(options)
-
-  const { search } = SearchFactory(options)
+  const { search } = SearchFactory(dav, options)
 
   return {
     copyFiles,
@@ -58,6 +68,7 @@ export const webdav = (options: WebDavOptions): WebDAV => {
     getPublicFileUrl,
     getPathForFileId,
     listFiles,
+    listFileVersions,
     moveFiles,
     putFileContents,
     revokeUrl,

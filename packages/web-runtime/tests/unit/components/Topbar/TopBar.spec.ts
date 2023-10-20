@@ -41,9 +41,30 @@ describe('Top Bar component', () => {
       expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
     })
   })
+  it.each(['applications-menu', 'theme-switcher', 'feedback-link', 'notifications', 'user-menu'])(
+    'should hide %s when mode is "embed"',
+    (componentName) => {
+      const { wrapper } = getWrapper({
+        configuration: { options: { disableFeedbackLink: false, mode: 'embed' } }
+      })
+      expect(wrapper.find(`${componentName}-stub`).exists()).toBeFalsy()
+    }
+  )
+  it.each(['applications-menu', 'theme-switcher', 'feedback-link', 'notifications', 'user-menu'])(
+    'should not hide %s when mode is not "embed"',
+    (componentName) => {
+      const { wrapper } = getWrapper({
+        configuration: { options: { disableFeedbackLink: false, mode: 'web' } },
+        capabilities: {
+          notifications: { 'ocs-endpoints': ['list', 'get', 'delete'] }
+        }
+      })
+      expect(wrapper.find(`${componentName}-stub`).exists()).toBeTruthy()
+    }
+  )
 })
 
-const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
+const getWrapper = ({ capabilities = {}, isUserContextReady = true, configuration = {} } = {}) => {
   const mocks = { ...defaultComponentMocks() }
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -62,7 +83,8 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
       logo: {
         topbar: 'example-logo.svg'
       }
-    }
+    },
+    ...configuration
   }))
   storeOptions.getters.user.mockImplementation(() => ({ id: 'einstein' }))
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(

@@ -1,7 +1,8 @@
-import { unref } from 'vue'
 import { Resource, buildResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DavProperties, DavProperty, DavPropertyValue } from './constants'
+import { DAV, buildAuthHeader } from './client'
+import { unref } from 'vue'
 
 export interface SearchResource extends Resource {
   highlights: string
@@ -17,24 +18,24 @@ export type SearchResult = {
   totalResults: number
 }
 
-export const SearchFactory = ({ sdk, capabilities }: WebDavOptions) => {
+export const SearchFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
     async search(
       term: string,
       { davProperties = DavProperties.Default, searchLimit }: SearchOptions
     ): Promise<SearchResult> {
-      const useSpacesEndpoint = unref(capabilities)?.spaces?.enabled === true
-      const { range, results } = await sdk.files.search(
-        term,
-        searchLimit,
-        davProperties,
-        useSpacesEndpoint
-      )
+      const path = '/spaces/'
+      const headers = buildAuthHeader(unref(accessToken))
+      const { range, results } = await dav.search(term, path, {
+        limit: searchLimit,
+        properties: davProperties,
+        headers
+      })
 
       return {
         resources: results.map((r) => ({
           ...buildResource(r),
-          highlights: r.fileInfo[DavProperty.Highlights] || ''
+          highlights: r.props[DavProperty.Highlights] || ''
         })),
         totalResults: range ? parseInt(range?.split('/')[1]) : null
       }

@@ -1,4 +1,4 @@
-import { createQuicklink } from './helpers/share'
+import { copyQuicklink } from './helpers/share'
 import { eventBus } from './services/eventBus'
 import { SideBarEventTopics } from './composables/sideBar/eventTopics'
 import { Resource } from '@ownclouders/web-client'
@@ -6,6 +6,7 @@ import { Language } from 'vue3-gettext'
 import { ClientService, PasswordPolicyService } from './services'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
+import { ApplicationQuickActions } from './apps'
 
 export function canShare(item, store) {
   const { capabilities } = store.state.user
@@ -81,7 +82,7 @@ export default {
         return showQuickLinkPasswordModal(
           { store, $gettext: language.$gettext, passwordPolicyService },
           async (password) => {
-            await createQuicklink({
+            await copyQuicklink({
               ability,
               clientService,
               language,
@@ -93,7 +94,7 @@ export default {
         )
       }
 
-      await createQuicklink({
+      await copyQuicklink({
         ability,
         clientService,
         language,
@@ -103,4 +104,4 @@ export default {
     },
     displayed: canShare
   }
-} // FIXME: fix type, then add: satisfies ApplicationQuickActions
+} satisfies ApplicationQuickActions

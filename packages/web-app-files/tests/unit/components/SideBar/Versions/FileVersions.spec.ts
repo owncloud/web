@@ -21,30 +21,22 @@ jest.mock('@ownclouders/web-pkg', () => ({
 const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
 const sevenDaysBefore = DateTime.now().minus({ days: 7 }).toHTTP()
 const defaultVersions = [
-  {
-    fileInfo: {
-      '{DAV:}getcontentlength': '23',
-      '{DAV:}getcontenttype': 'text/plain',
-      '{DAV:}getetag': '"82add182994ade91e3d5bc47571ea731"',
-      '{DAV:}getlastmodified': yesterday,
-      '{DAV:}resourcetype': ''
-    },
-    name: '/meta/2147524174/v/1625818937',
-    tusSupport: null,
-    type: 'file'
-  },
-  {
-    fileInfo: {
-      '{DAV:}getcontentlength': '11',
-      '{DAV:}getcontenttype': 'text/plain',
-      '{DAV:}getetag': '"311b3319ebc7063069a15ee02b926298"',
-      '{DAV:}getlastmodified': sevenDaysBefore,
-      '{DAV:}resourcetype': ''
-    },
-    name: '/meta/2147524174/v/1625637401',
-    tusSupport: null,
-    type: 'file'
-  }
+  mock<Resource>({
+    name: '1625818937',
+    size: '23',
+    mimeType: 'text/plain',
+    etag: '82add182994ade91e3d5bc47571ea731',
+    mdate: yesterday,
+    type: ''
+  }),
+  mock<Resource>({
+    name: '1625637401',
+    size: '11',
+    mimeType: 'text/plain',
+    etag: '311b3319ebc7063069a15ee02b926298',
+    mdate: sevenDaysBefore,
+    type: ''
+  })
 ]
 
 const loadingStubSelector = 'oc-loader-stub'
@@ -90,15 +82,6 @@ describe('FileVersions', () => {
       const noVersionsMessageElement = wrapper.find(selectors.noVersionsMessage)
 
       expect(noVersionsMessageElement.text()).toBe('No Versions available for this file')
-    })
-
-    describe('currentVersionId method', () => {
-      it('should return last item from slitted file name', () => {
-        const { wrapper } = getMountedWrapper({ mountType: shallowMount })
-        expect(wrapper.vm.currentVersionId({ name: '/meta/2147525688/v/1616851438' })).toBe(
-          '1616851438'
-        )
-      })
     })
 
     describe('when hasVersion is truthy', () => {

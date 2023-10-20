@@ -2,13 +2,13 @@
   <li class="oc-sidebar-nav-item oc-pb-xs oc-px-s" :aria-current="active ? 'page' : null">
     <oc-button
       v-oc-tooltip="toolTip"
-      type="router-link"
+      :type="handler ? 'button' : 'router-link'"
       :appearance="active ? 'raw-inverse' : 'raw'"
       :variation="active ? 'primary' : 'passive'"
-      :class="['oc-sidebar-nav-item-link', { active: active }]"
-      :to="target"
+      :class="['oc-sidebar-nav-item-link', 'oc-oc-width-1-1', { active: active }]"
       :data-nav-id="index"
       :data-nav-name="navName"
+      v-bind="attrs"
     >
       <span class="oc-flex">
         <oc-icon :name="icon" :fill-type="fillType" variation="inherit" />
@@ -19,7 +19,7 @@
   </li>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 
 export default defineComponent({
@@ -60,11 +60,29 @@ export default defineComponent({
       type: String,
       required: false,
       default: null
+    },
+    handler: {
+      type: Function as PropType<() => void>,
+      required: false,
+      default: null
     }
+  },
+  setup(props) {
+    const attrs = computed(() => {
+      return {
+        ...(props.handler && { onClick: props.handler }),
+        ...(props.target && { to: props.target })
+      }
+    })
+
+    return { attrs }
   },
   computed: {
     navName() {
-      return this.$router?.resolve(this.target, this.$route)?.name || 'route.name'
+      if (this.target) {
+        return this.$router?.resolve(this.target, this.$route)?.name || 'route.name'
+      }
+      return this.name
     },
     toolTip() {
       const value = this.collapsed

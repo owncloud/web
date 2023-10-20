@@ -5,8 +5,7 @@ Feature: Sharing files and folders with internal users
   So that those users can access the files and folders
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -60,7 +59,6 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has created folder "/simple-folder/simple-empty-folder/new-folder" in the server
     And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt" in the server
     And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
@@ -76,71 +74,6 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-4167 @issue-6894
-  Scenario: sharing indicator of items inside a re-shared folder
-    Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created file "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
-    And user "Brian" has shared folder "Shares/simple-folder" with user "Carol" in the server
-    When user "Brian" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens the sharing sidebar for folder "simple-folder"
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-direct        |
-    When the user opens folder "simple-folder" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-empty-folder | user-indirect      |
-      | lorem.txt           | user-indirect      |
-
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-4167
-  Scenario: sharing indicator of items inside a re-shared subfolder
-    Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created file "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
-    And user "Brian" has shared folder "Shares/simple-folder/simple-empty-folder" with user "Carol" in the server
-    And user "Brian" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
-    And the user opens the sharing sidebar for folder "simple-folder"
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
-    And the user opens the sharing sidebar for file "lorem.txt"
-    Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-empty-folder | user-direct        |
-      | lorem.txt           | user-indirect      |
-
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060 @issue-4167 @ocis-issue-891
-  Scenario: sharing indicator of items inside an incoming shared folder
-    Given user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created file "/simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/simple-folder" offered by user "Alice" in the server
-    When user "Brian" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens the sharing sidebar for folder "simple-folder"
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-empty-folder | user-indirect      |
-      | lorem.txt           | user-indirect      |
-
   @issue-2060 @issue-4172
   Scenario: no sharing indicator of items inside a not shared folder
     Given user "Brian" has created folder "simple-folder" in the server
@@ -148,7 +81,6 @@ Feature: Sharing files and folders with internal users
     And user "Brian" has created file "/simple-folder/lorem.txt" in the server
     And user "Alice" has created file "textfile0.txt" in the server
     And user "Alice" has shared file "/textfile0.txt" with user "Brian" in the server
-    And user "Brian" has accepted the share "Shares/textfile0.txt" offered by user "Alice" in the server
     When user "Brian" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |

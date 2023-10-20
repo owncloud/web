@@ -18,11 +18,13 @@ Summary
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
 * Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
+* Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
+* Enhancement - Disabling extensions: [#9441](https://github.com/owncloud/web/pull/9441)
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
@@ -38,6 +40,11 @@ Summary
 * Enhancement - Added app banner for mobile devices: [#9696](https://github.com/owncloud/web/pull/9696)
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
+* Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
+* Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
+* Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
+* Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
+* Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 
 Details
 -------
@@ -117,6 +124,13 @@ Details
    https://github.com/owncloud/web/issues/9694
    https://github.com/owncloud/web/pull/9703
 
+* Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
+
+   Copying quicklinks didn't work on safari or other webkit based browsers and is fixed now.
+
+   https://github.com/owncloud/web/issues/9166
+   https://github.com/owncloud/web/pull/9832
+
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
    We've added a new configuration option loginUrl to web, this is helpful if you use an external
@@ -160,6 +174,14 @@ Details
 
    We've added a tooltip with the absolute date for file versions in file details
 
+   https://github.com/owncloud/web/pull/9441
+
+* Enhancement - Disabling extensions: [#9441](https://github.com/owncloud/web/pull/9441)
+
+   A new configuration `disabledExtensions` has been added which enables disabling specific
+   extensions via their id.
+
+   https://github.com/owncloud/web/issues/8524
    https://github.com/owncloud/web/pull/9441
 
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
@@ -322,6 +344,55 @@ Details
 
    https://github.com/owncloud/web/issues/9726
    https://github.com/owncloud/web/pull/9727
+
+* Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
+
+   We've added the functionality to listen for events from the server that update the
+   postprocessing state, this allows the user to see if the postprocessing on a file is finished,
+   without reloading the UI.
+
+   https://github.com/owncloud/web/issues/9769
+   https://github.com/owncloud/web/pull/9771
+
+* Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
+
+   We've updated the preview app to have a more user friendly image browsing experience, image
+   zooming, rotation and movement is smoother, images are no longer cropped.
+
+   https://github.com/owncloud/web/issues/7728
+   https://github.com/owncloud/web/pull/9806
+   https://github.com/owncloud/ocis/pull/7409
+
+* Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
+
+   Nav items can now be registered with the new extension type `SidebarNavExtension`, which
+   consists of a `AppNavigationItem` and optionally `scopes` (a list of app IDs where the nav item
+   should show).
+
+   Also, 2 new optional properties have been added to the `AppNavigationItem` interface:
+
+   `handler` - a click handler that get executes on click. It takes priority over a given route.
+   `priority` - a number that determines the nav item's position.
+
+   https://github.com/owncloud/web/issues/9239
+   https://github.com/owncloud/web/pull/9814
+
+* Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
+
+   We've added a new portal into the application layout of runtime package. This portals allows
+   developers to add new content below the app container. The name of the portal is
+   `app.runtime.footer`.
+
+   https://github.com/owncloud/web/pull/9815
+
+* Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
+
+   We've added a new config option called `mode`. This option can be set via config.json in the
+   options object or query parameter. This config option asserts different modes of the UI.
+   Currently, it will be used in the embed mode to hide certain parts of the UI.
+
+   https://github.com/owncloud/web/issues/9768
+   https://github.com/owncloud/web/pull/9818
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================

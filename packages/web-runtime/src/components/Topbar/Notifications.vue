@@ -67,8 +67,8 @@
                     @click.prevent="
                       executeAction(el.app, action.link, action.type, el.notification_id)
                     "
-                    >{{ action.label }}</oc-button
-                  >
+                    >{{ action.label }}
+                  </oc-button>
                 </div>
                 <div v-if="el.datetime" class="oc-text-small oc-text-muted oc-mt-xs">
                   <span
@@ -89,7 +89,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { eventBus } from '@ownclouders/web-pkg'
+import { eventBus, useCapabilityCoreSSE } from '@ownclouders/web-pkg'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
@@ -98,13 +98,12 @@ import {
   formatRelativeDateFromISO,
   useClientService,
   useRoute,
-  useStore,
-  useServerSentEvents,
-  useCapabilityCoreSSE
+  useStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 
 const POLLING_INTERVAL = 30000
 
@@ -122,35 +121,7 @@ export default {
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
-
     const sseEnabled = useCapabilityCoreSSE()
-    let setupServerSentEvents
-    if (unref(sseEnabled)) {
-      setupServerSentEvents = useServerSentEvents({
-        url: 'ocs/v2.php/apps/notifications/api/v1/notifications/sse',
-        onOpen: (response): void => {
-          fetchNotificationsTask.perform()
-          if (!response.ok) {
-            console.error(`SSE notifications couldn't be set up ${response.status}`)
-          }
-        },
-        onMessage: (msg): void => {
-          if (msg.event === 'FatalError') {
-            console.error(`SSE notifications error: ${msg.data}`)
-            return
-          }
-          const parsedData = JSON.parse(msg.data) as { type: string; data?: Notification }
-          if (!parsedData?.data) {
-            return
-          }
-
-          const { data } = parsedData
-          if (data.notification_id) {
-            notifications.value = [data, ...unref(notifications)]
-          }
-        }
-      })
-    }
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -314,6 +285,18 @@ export default {
       }
     }
 
+    const onSSENotificationEvent = (event) => {
+      try {
+        const notification = JSON.parse(event.data) as Notification
+        if (!notification || !notification.notification_id) {
+          return
+        }
+        notifications.value = [notification, ...unref(notifications)]
+      } catch (_) {
+        console.error('Unable to parse sse notification data')
+      }
+    }
+
     const hideDrop = () => {
       dropdownOpened.value = false
     }
@@ -323,18 +306,26 @@ export default {
     }
 
     onMounted(async () => {
+      fetchNotificationsTask.perform()
       if (unref(sseEnabled)) {
-        await setupServerSentEvents()
+        clientService.sseAuthenticated.addEventListener(
+          MESSAGE_TYPE.NOTIFICATION,
+          onSSENotificationEvent
+        )
       } else {
         notificationsInterval.value = setInterval(() => {
           fetchNotificationsTask.perform()
         }, POLLING_INTERVAL)
-        fetchNotificationsTask.perform()
       }
     })
 
     onUnmounted(() => {
-      if (unref(notificationsInterval)) {
+      if (unref(sseEnabled)) {
+        clientService.sseAuthenticated.removeEventListener(
+          MESSAGE_TYPE.NOTIFICATION,
+          onSSENotificationEvent
+        )
+      } else {
         clearInterval(unref(notificationsInterval))
       }
     })
@@ -363,20 +354,24 @@ export default {
   max-width: 100%;
   max-height: 400px;
 }
+
 .oc-notifications {
   &-item {
     > a {
       color: var(--oc-color-text-default);
     }
   }
+
   &-loading {
     * {
       position: absolute;
     }
+
     &-background {
       background-color: var(--oc-color-background-secondary);
       opacity: 0.6;
     }
+
     &-spinner {
       top: 50%;
       left: 50%;
@@ -384,11 +379,13 @@ export default {
       opacity: 1;
     }
   }
+
   &-actions {
     button:not(:last-child) {
       margin-right: var(--oc-space-small);
     }
   }
+
   &-link {
     white-space: nowrap;
     text-overflow: ellipsis;

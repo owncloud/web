@@ -6,6 +6,7 @@ export type { Graph } from './graph'
 export type { OCS } from './ocs'
 
 export * as helpers from './helpers'
+export * as errors from './errors'
 
 export type { Resource, SpaceResource, User } from './helpers'
 

@@ -1,0 +1,7 @@
+Enhancement: Handle postprocessing state via Server Sent Events
+
+We've added the functionality to listen for events from the server that update the postprocessing state,
+this allows the user to see if the postprocessing on a file is finished, without reloading the UI.
+
+https://github.com/owncloud/web/pull/9771
+https://github.com/owncloud/web/issues/9769

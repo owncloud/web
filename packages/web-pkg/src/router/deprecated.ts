@@ -46,7 +46,7 @@ const deprecatedRedirect = (routeConfig: {
  * listed routes only exist to keep backwards compatibility intact,
  * all routes written in  a flat syntax to keep them readable.
  */
-export const buildRoutes = (): RouteLocationNamedRaw[] =>
+export const buildRoutes = (): RouteRecordRaw[] =>
   [
     {
       path: '/list',

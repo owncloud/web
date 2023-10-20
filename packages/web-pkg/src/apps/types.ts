@@ -1,6 +1,6 @@
 import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
-import { Store } from 'vuex'
+import { Module, Store } from 'vuex'
 import { Extension } from '../composables/piniaStores'
 
 export interface AppReadyHookArgs {
@@ -21,6 +21,8 @@ export interface AppNavigationItem {
   name?: string | ((capabilities?: Record<string, any>) => string)
   route?: RouteLocationRaw
   tag?: string
+  handler?: () => void
+  priority?: number
 }
 
 /**
@@ -31,10 +33,11 @@ export interface AppNavigationItem {
  */
 export interface ApplicationQuickAction {
   id?: string
-  label?: string
+  label?: (...args) => string | string
   icon?: string
-  handler?: () => Promise<void>
-  displayed?: boolean
+  iconFillType?: string
+  handler?: (...args) => Promise<void> | void
+  displayed?: (...args) => boolean | boolean
 }
 
 /**
@@ -64,22 +67,22 @@ export interface ApplicationInformation {
  */
 export interface ApplicationTranslations {
   [lang: string]: {
-    [key: string]: string
+    [key: string]: string | string[]
   }
 }
 
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
-  store?: Store<any>
+  store?: Module<unknown, unknown>
   routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
   initialize?: () => void
-  ready?: () => void
-  mounted?: () => void
+  ready?: (args: AppReadyHookArgs) => void
+  mounted?: (...args) => void
   // TODO: move this to its own type
   setup?: (args: { applicationConfig: AppConfigObject }) => ClassicApplicationScript
 }

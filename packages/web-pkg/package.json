@@ -14,7 +14,8 @@
     "directory": "packages/web-pkg"
   },
   "devDependencies": {
-    "web-test-helpers": "workspace:*"
+    "web-test-helpers": "workspace:*",
+    "zod": "^3.22.4"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
@@ -44,6 +45,7 @@
     "vue-concurrency": "4.0.1",
     "vue-router": "4.2.0",
     "vue3-gettext": "2.5.0-alpha.1",
-    "vuex": "4.1.0"
+    "vuex": "4.1.0",
+    "@microsoft/fetch-event-source": "^2.0.1"
   }
 }

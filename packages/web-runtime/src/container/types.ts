@@ -1,4 +1,4 @@
-import { Store } from 'vuex'
+import { Module, Store } from 'vuex'
 import { Router, RouteRecordRaw } from 'vue-router'
 import { App, Component } from 'vue'
 import {
@@ -16,7 +16,7 @@ export interface RuntimeApi {
   announceNavigationItems: (navigationItems: AppNavigationItem[]) => void
   announceTranslations: (appTranslations: ApplicationTranslations) => void
   announceQuickActions: (quickActions: ApplicationQuickActions) => void
-  announceStore: (applicationStore: Store<unknown>) => void
+  announceStore: (applicationStore: Module<unknown, unknown>) => void
   announceExtension: (extension: { [key: string]: unknown }) => void
   requestStore: () => Store<unknown>
   requestRouter: () => Router

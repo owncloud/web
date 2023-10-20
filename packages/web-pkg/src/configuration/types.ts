@@ -25,6 +25,8 @@ export interface OptionsConfiguration {
   openAppsInTab?: boolean
   openLinksWithDefaultApp?: boolean
   tokenStorageLocal?: boolean
+  disabledExtensions?: string[]
+  mode?: string
 }
 
 export interface OAuth2Configuration {

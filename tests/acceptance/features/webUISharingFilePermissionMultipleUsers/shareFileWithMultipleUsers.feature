@@ -4,8 +4,7 @@ Feature: Sharing files with multiple internal users with different permissions
   So that I can control the access on those files by other collaborators
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And these users have been created with default attributes and without skeleton files in the server:
       | username |
       | Alice    |
@@ -22,8 +21,6 @@ Feature: Sharing files with multiple internal users with different permissions
       | Brian Murphy | user |
       | Carol King   | user |
     And the user shares with the selected collaborators
-    And user "Brian" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
-    And user "Carol" accepts the share "Shares/lorem.txt" offered by user "Alice" using the sharing API in the server
     Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for file "lorem.txt" on the webUI
     And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI

@@ -55,6 +55,26 @@ export class Link {
     await this.#page.goto(startUrl)
   }
 
+  async fillPassword(args: Omit<po.addPasswordArgs, 'page'>): Promise<void> {
+    await po.fillPassword({ page: this.#page, ...args })
+  }
+
+  async showOrHidePassword(args): Promise<void> {
+    return po.showOrHidePassword({ page: this.#page, ...args })
+  }
+
+  async copyEnteredPassword(): Promise<void> {
+    return po.copyEnteredPassword(this.#page)
+  }
+
+  async generatePassword(): Promise<void> {
+    return po.generatePassword(this.#page)
+  }
+
+  async setPassword(): Promise<void> {
+    return po.setPassword(this.#page)
+  }
+
   async changeRole(args: Omit<po.changeRoleArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const role = await po.changeRole({ page: this.#page, ...args })
@@ -79,5 +99,13 @@ export class Link {
 
   async islinkEditButtonVisibile(linkName): Promise<boolean> {
     return await po.getLinkEditButtonVisibility({ page: this.#page, linkName })
+  }
+
+  async checkErrorMessage(): Promise<string> {
+    return await po.getPublicLinkPasswordErrorMessage(this.#page)
+  }
+
+  async clickOnCancelButton(): Promise<void> {
+    await po.clickOnCancelButton(this.#page)
   }
 }

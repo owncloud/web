@@ -72,13 +72,11 @@ Feature: Versions of a file
 
   @issue-ocis-2319 @skipOnOCIS
   Scenario: change the file content of a received shared file
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no" in the server
-    And the administrator has set the default folder for received shares to "Shares" in the server
+    Given the administrator has set the default folder for received shares to "Shares" in the server
     And user "Brian" has been created with default attributes and without skeleton files in the server
     And user "Brian" has created folder "simple-folder" in the server
     And user "Brian" has uploaded file with content "a text file" to "simple-folder/lorem.txt" in the server
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions in the server
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian" in the server
     And user "Alice" has logged in using the webUI
     And the user has opened folder "Shares"
     And the user has opened folder "simple-folder"

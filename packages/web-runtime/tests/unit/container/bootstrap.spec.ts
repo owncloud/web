@@ -2,11 +2,13 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { createApp, defineComponent, App } from 'vue'
 import { createStore } from 'vuex'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
+import fetchMock from 'jest-fetch-mock'
 import {
   initializeApplications,
   announceApplicationsReady,
   announceCustomScripts,
-  announceCustomStyles
+  announceCustomStyles,
+  announceConfiguration
 } from '../../../src/container/bootstrap'
 import { buildApplication } from '../../../src/container/application'
 import { defaultStoreMockOptions } from 'web-test-helpers/src'
@@ -112,5 +114,47 @@ describe('announceCustomStyles', () => {
     announceCustomStyles({ runtimeConfiguration: { styles: [{}, {}] } })
     const elements = document.getElementsByTagName('link')
     expect(elements.length).toBeFalsy()
+  })
+})
+
+describe('announceConfiguration', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('should set "web" as the default mode when none is set', async () => {
+    fetchMock.mockResponseOnce('{}')
+    const config = await announceConfiguration('/config.json')
+    expect(config.options.mode).toStrictEqual('web')
+  })
+
+  it('should use the mode that is defined in config.json', async () => {
+    fetchMock.mockResponseOnce('{ "options": { "mode": "config-mode" } }')
+    const config = await announceConfiguration('/config.json')
+    expect(config.options.mode).toStrictEqual('config-mode')
+  })
+
+  it('should use the mode that is defined in URL query when config.json does not set it', async () => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '?mode=query-mode'
+      },
+      writable: true
+    })
+    fetchMock.mockResponseOnce('{}')
+    const config = await announceConfiguration('/config.json')
+    expect(config.options.mode).toStrictEqual('query-mode')
+  })
+
+  it('should not use the mode that is defined in URL query when config.json sets one', async () => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '?mode=query-mode'
+      },
+      writable: true
+    })
+    fetchMock.mockResponseOnce('{ "options": { "mode": "config-mode" } }')
+    const config = await announceConfiguration('/config.json')
+    expect(config.options.mode).toStrictEqual('config-mode')
   })
 })

@@ -1,13 +1,16 @@
+import { Headers } from 'webdav'
 import { urlJoin } from '../utils'
 import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
+import { buildPublicLinkAuthHeader, DAV } from './client'
+import { HttpError } from '../errors'
 
 export type GetFileContentsResponse = {
   body: any
   [key: string]: any
 }
 
-export const GetFileContentsFactory = ({ sdk }: WebDavOptions) => {
+export const GetFileContentsFactory = (dav: DAV, { clientService }: WebDavOptions) => {
   return {
     async getFileContents(
       space: SpaceResource,
@@ -20,32 +23,39 @@ export const GetFileContentsFactory = ({ sdk }: WebDavOptions) => {
         noCache?: boolean
       } = {}
     ): Promise<GetFileContentsResponse> {
-      if (isPublicSpaceResource(space)) {
-        const res = await sdk.publicFiles.download(
-          '',
-          urlJoin(space.webDavPath.replace(/^\/public-files/, ''), path),
-          space.publicLinkPassword,
-          {
-            noCache
-          }
-        )
-        res.statusCode = res.status
-        return {
-          response: res,
-          body: await res[responseType](),
-          headers: {
-            ETag: res.headers.get('etag'),
-            'OC-ETag': res.headers.get('oc-etag'),
-            'OC-FileId': res.headers.get('oc-fileid')
-          }
-        }
+      const { httpAuthenticated, httpUnAuthenticated } = clientService
+      const client = isPublicSpaceResource(space) ? httpUnAuthenticated : httpAuthenticated
+
+      const requestOptions = {
+        responseType,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(noCache && { 'Cache-Control': 'no-cache' })
+        } as Headers
       }
 
-      return sdk.files.getFileContents(urlJoin(space.webDavPath, path), {
-        resolveWithResponseObject: true,
-        noCache: true,
-        responseType
-      })
+      if (isPublicSpaceResource(space) && space.publicLinkPassword) {
+        requestOptions.headers.Authorization = buildPublicLinkAuthHeader(space.publicLinkPassword)
+      }
+
+      try {
+        const response = await client.get(
+          dav.getFileUrl(urlJoin(space.webDavPath, path)),
+          requestOptions
+        )
+        return {
+          response,
+          body: response.data,
+          headers: {
+            ETag: response.headers.get('etag'),
+            'OC-ETag': response.headers.get('oc-etag'),
+            'OC-FileId': response.headers.get('oc-fileid')
+          }
+        }
+      } catch (error) {
+        const { message, response } = error
+        throw new HttpError(message, response, response.status)
+      }
     }
   }
 }

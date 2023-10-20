@@ -70,3 +70,34 @@ Feature: spaces public link
     When "David" opens the public link "imageLink"
     Then for "David" file "testavatar.jpg" should be selected
     And "David" logs out
+
+
+  Scenario: add banned password for public link
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
+    And "Alice" uploads the following resources
+      | resource  |
+      | lorem.txt |
+    And "Alice" creates a public link for the resource "lorem.txt" using the sidebar panel
+    And "Alice" renames the most recently created public link of resource "lorem.txt" to "myPublicLink"
+    When "Alice" tries to sets the password of the public link named "myPublicLink" of resource "lorem.txt" to "password"
+    Then "Alice" should see an error message
+      """
+      Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
+      """
+    And "Alice" closes the public link password dialog box
+    When "Alice" tries to sets the password of the public link named "myPublicLink" of resource "lorem.txt" to "12345678"
+    Then "Alice" should see an error message
+      """
+      Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
+      """
+    And "Alice" reveals the password of the public link
+    And "Alice" hides the password of the public link
+    And "Alice" generates the password for the public link
+    And "Alice" copies the password of the public link
+    And "Alice" sets the password of the public link
+    And "Anonymous" opens the public link "myPublicLink"
+    And "Anonymous" unlocks the public link with password "%copied_password%"
+    And "Alice" logs out

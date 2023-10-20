@@ -32,6 +32,9 @@ When(
   async function (this: World, stepUser: string, password: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
+    if (password === '%copied_password%') {
+      password = await page.evaluate('navigator.clipboard.readText()')
+    }
     await pageObject.authenticate({ password })
   }
 )
