@@ -1,4 +1,4 @@
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
 import { useClientService } from '../clientService'
@@ -10,36 +10,39 @@ export const useCreateSpace = () => {
   const configurationManager = useConfigurationManager()
 
   const createSpace = async (name: string) => {
-    const { graphAuthenticated, webdav } = clientService
+    const { graphAuthenticated } = clientService
     const { data: createdSpace } = await graphAuthenticated.drives.createDrive({ name }, {})
     const spaceResource = buildSpace({
       ...createdSpace,
       serverUrl: configurationManager.serverUrl
     })
 
-    await webdav.createFolder(spaceResource, { path: '.space' })
-    const markdown = await webdav.putFileContents(spaceResource, {
+    return await createDefaultMetaFolder(spaceResource)
+  }
+
+  const createDefaultMetaFolder = async (space: SpaceResource) => {
+    const { graphAuthenticated, webdav } = clientService
+    await webdav.createFolder(space, { path: '.space' })
+    const file = await webdav.putFileContents(space, {
       path: '.space/readme.md',
       content: $gettext('Here you can add a description for this Space.')
     })
-
-    const { data: updatedSpace } = await graphAuthenticated.drives.updateDrive(
-      createdSpace.id,
+    const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
+      space.id as string,
       {
         special: [
           {
             specialFolder: {
               name: 'readme'
             },
-            id: markdown.id as string
+            id: file.id as string
           }
         ]
       } as Drive,
       {}
     )
-
-    return buildSpace({ ...updatedSpace, serverUrl: configurationManager.serverUrl })
+    return buildSpace({ ...updatedDriveData, serverUrl: configurationManager.serverUrl })
   }
 
-  return { createSpace }
+  return { createSpace, createDefaultMetaFolder }
 }

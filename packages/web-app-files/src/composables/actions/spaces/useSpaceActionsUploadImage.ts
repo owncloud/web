@@ -11,6 +11,7 @@ import {
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
+import { useCreateSpace } from '@ownclouders/web-pkg'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -24,6 +25,7 @@ export const useSpaceActionsUploadImage = ({
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
+  const { createDefaultMetaFolder } = useCreateSpace()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -35,7 +37,7 @@ export const useSpaceActionsUploadImage = ({
     unref(spaceImageInput)?.click()
   }
 
-  const uploadImageSpace = (ev) => {
+  const uploadImageSpace = async (ev) => {
     const graphClient = clientService.graphAuthenticated
     const file = ev.currentTarget.files[0]
 
@@ -54,6 +56,16 @@ export const useSpaceActionsUploadImage = ({
       extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
     } else if (file.lastModified) {
       extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
+    }
+
+    try {
+      await clientService.webdav.getFileInfo(selectedSpace, { path: '.space' })
+    } catch (_) {
+      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+        id: selectedSpace.id,
+        field: 'spaceReadmeData',
+        value: (await createDefaultMetaFolder(selectedSpace)).spaceReadmeData
+      })
     }
 
     return loadingService.addTask(() => {
