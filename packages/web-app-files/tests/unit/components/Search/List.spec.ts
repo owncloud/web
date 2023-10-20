@@ -26,6 +26,7 @@ const selectors = {
   noContentMessageStub: 'no-content-message-stub',
   resourceTableStub: 'resource-table-stub',
   tagFilter: '.files-search-filter-tags',
+  lastModifiedFilter: '.files-search-filter-last-modified',
   fullTextFilter: '.files-search-filter-full-text',
   filter: '.files-search-result-filter'
 }
@@ -89,6 +90,47 @@ describe('List component', () => {
         )
       })
     })
+
+    describe('last modified', () => {
+      it('should show available last modified values', async () => {
+        const lastModifiedValues = [
+          { label: 'today', id: 'today' },
+          { label: 'yesterday', id: 'yesterday' },
+          { label: 'this week', id: 'this week' },
+          { label: 'last week', id: 'last week' },
+          { label: 'last 7 days', id: 'last 7 days' },
+          { label: 'this month', id: 'this month' },
+          { label: 'last month', id: 'last month' },
+          { label: 'last 30 days', id: 'last 30 days' },
+          { label: 'this year', id: 'this year' },
+          { label: 'last year', id: 'last year' }
+        ]
+        // todo mock capabilities
+        const { wrapper } = getWrapper({
+          availableLastModifiedValues: lastModifiedValues,
+          availableTags: ['tag']
+        })
+        await wrapper.vm.loadAvailableTagsTask.last
+
+        expect(wrapper.find(selectors.lastModifiedFilter).exists()).toBeTruthy()
+        expect(wrapper.findComponent<any>(selectors.lastModifiedFilter).props('items')).toEqual(
+          lastModifiedValues
+        )
+      })
+      it('should set initial filter when last modified is given via query param', async () => {
+        const searchTerm = 'Screenshot'
+        const lastModifiedFilterQuery = 'today'
+        const { wrapper } = getWrapper({
+          searchTerm,
+          lastModifiedFilterQuery
+        })
+        await wrapper.vm.loadAvailableTagsTask.last
+        expect(wrapper.emitted('search')[0][0]).toEqual(
+          `name:"*${searchTerm}*" mtime:"${lastModifiedFilterQuery}"`
+        )
+      })
+    })
+
     describe('fullText', () => {
       it('should render filter if enabled via capabilities', () => {
         const { wrapper } = getWrapper({ fullTextSearchEnabled: true })
@@ -114,11 +156,14 @@ function getWrapper({
   searchTerm = '',
   tagFilterQuery = null,
   fullTextFilterQuery = null,
-  fullTextSearchEnabled = false
+  fullTextSearchEnabled = false,
+  availableLastModifiedValues = [],
+  lastModifiedFilterQuery = null
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => lastModifiedFilterQuery)
 
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(resources)
