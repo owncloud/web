@@ -57,6 +57,7 @@ import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/Oc
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
 import {
+  ApplicationInformation,
   EDITOR_MODE_EDIT,
   resolveFileNameDuplicate,
   useClientService,
@@ -82,7 +83,6 @@ export default defineComponent({
     const store = useStore()
     const { openEditor } = useFileActions()
     const clientService = useClientService()
-    const { webdav } = clientService
     const { $gettext } = useGettext()
     const appIconKey = ref('')
     const { getMatchingSpace } = useGetMatchingSpace()
@@ -98,7 +98,7 @@ export default defineComponent({
     })
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
-    const onEditorApplicationClick = async (item: any) => {
+    const onEditorApplicationClick = async (item: ApplicationInformation) => {
       let destinationSpace = unref(currentFolder)
       let destinationFiles = unref(files)
 
@@ -106,7 +106,7 @@ export default defineComponent({
         destinationSpace = unref(store.getters['runtime/spaces/spaces']).find(
           ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
         )
-        destinationFiles = (await webdav.listFiles(destinationSpace)).children
+        destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
       }
 
       let fileName = $gettext('New file') + `.${item.defaultExtension}`
@@ -115,7 +115,7 @@ export default defineComponent({
         fileName = resolveFileNameDuplicate(fileName, item.defaultExtension, destinationFiles)
       }
 
-      const emptyResource = await webdav.putFileContents(destinationSpace, {
+      const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
         path: fileName
       })
 
@@ -130,7 +130,7 @@ export default defineComponent({
         space.shareId
       )
     }
-    const getAdditionalEventBindings = (item: any) => {
+    const getAdditionalEventBindings = (item: ApplicationInformation) => {
       if (item.applicationMenu?.openAsEditor) {
         return {
           click: () => onEditorApplicationClick(item)

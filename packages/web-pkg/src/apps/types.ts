@@ -52,6 +52,11 @@ export interface ApplicationQuickActions {
 
 export type AppConfigObject = Record<string, any>
 
+export interface ApplicationMenuItem {
+  enabled: () => boolean
+  priority: number
+}
+
 /** ApplicationInformation describes required information of an application */
 export interface ApplicationInformation {
   id?: string
@@ -59,7 +64,9 @@ export interface ApplicationInformation {
   icon?: string
   isFileEditor?: boolean
   extensions?: any[]
+  defaultExtension?: string
   fileSideBars?: any[]
+  applicationMenu?: ApplicationMenuItem
 }
 
 /**
