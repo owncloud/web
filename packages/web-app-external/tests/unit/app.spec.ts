@@ -11,6 +11,7 @@ import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMoc
 import { ref } from 'vue'
 import { mock } from 'jest-mock-extended'
 import { RouteLocation } from 'web-test-helpers'
+import { useRouteParam } from 'web-pkg/src/composables/router/useRouteParam'
 
 jest.mock('web-pkg/src/composables/appDefaults', () => {
   const { queryItemAsString } = jest.requireActual('web-pkg/src/composables/appDefaults')
@@ -20,6 +21,8 @@ jest.mock('web-pkg/src/composables/appDefaults', () => {
     queryItemAsString
   }
 })
+
+jest.mock('web-pkg/src/composables/router/useRouteParam')
 
 const componentStubs = {
   AppTopBar: true,
@@ -124,6 +127,7 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
       makeRequest
     })
   )
+  jest.mocked(useRouteParam).mockReturnValue(ref('foo'))
 
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockImplementation(() => ({

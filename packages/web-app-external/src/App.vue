@@ -99,7 +99,6 @@ export default defineComponent({
       if (matchingSpace) {
         path = await clientService.owncloudSdk.files.getPathForFileId(id)
         const driveAliasAndItem = matchingSpace.getDriveAliasAndItem({ path } as Resource)
-        console.log(unref(currentRoute).query)
         return router.push({
           params: {
             ...unref(currentRoute).params,
