@@ -60,7 +60,7 @@ import { additionalTranslations } from './helpers/additionalTranslations' // esl
 import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { useStore } from '@ownclouders/web-pkg'
-import { RouteLocation, Router } from 'vue-router'
+import { RouteLocation } from 'vue-router'
 
 export default defineComponent({
   components: {

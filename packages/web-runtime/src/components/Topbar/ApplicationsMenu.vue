@@ -66,8 +66,6 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { join } from 'path'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({

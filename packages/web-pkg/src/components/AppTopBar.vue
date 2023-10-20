@@ -77,13 +77,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { Action } from '../composables/actions/types'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
 import { useFolderLink, useGetMatchingSpace } from '../composables'
-import { isProjectSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'AppTopBar',
