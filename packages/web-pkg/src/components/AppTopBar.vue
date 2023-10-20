@@ -112,13 +112,19 @@ export default defineComponent({
 
     const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes } = useFolderLink()
 
+    const parentFolderName = computed(() => {
+      return props.resource ? getParentFolderName(props.resource) : null
+    })
+
+    const parentFolderLinkIconAdditionalAttributes = computed(() => {
+      return props.resource ? getParentFolderLinkIconAdditionalAttributes(props.resource) : null
+    })
+
     return {
       contextMenuLabel,
       closeButtonLabel,
-      parentFolderName: getParentFolderName(props.resource),
-      parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
-        props.resource
-      )
+      parentFolderName,
+      parentFolderLinkIconAdditionalAttributes
     }
   }
 })
