@@ -21,15 +21,13 @@ export const useCreateSpace = () => {
   }
 
   const createDefaultMetaFolder = async (space: SpaceResource) => {
-    await clientService.webdav.createFolder(space, { path: '.space' })
-    await clientService.webdav.putFileContents(space, {
+    const { graphAuthenticated, webdav } = clientService
+    await webdav.createFolder(space, { path: '.space' })
+    const file = await webdav.putFileContents(space, {
       path: '.space/readme.md',
       content: $gettext('Here you can add a description for this Space.')
     })
-    const file = await clientService.webdav.getFileInfo(space, {
-      path: '.space/readme.md'
-    })
-    const { data: updatedDriveData } = await clientService.graphAuthenticated.drives.updateDrive(
+    const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
       space.id as string,
       {
         special: [
@@ -37,7 +35,7 @@ export const useCreateSpace = () => {
             specialFolder: {
               name: 'readme'
             },
-            id: file.id
+            id: file.id as string
           }
         ]
       } as Drive,
