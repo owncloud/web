@@ -90,6 +90,51 @@ When(
 )
 
 When(
+  /^"([^"]*)" (reveals|hides) the password of the public link$/,
+  async function (this: World, stepUser: string, showOrHide: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.showOrHidePassword({ showOrHide })
+  }
+)
+
+When(
+  '{string} closes the public link password dialog box',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.clickOnCancelButton()
+  }
+)
+
+When(
+  '{string} copies the password of the public link',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.copyEnteredPassword()
+  }
+)
+
+When(
+  '{string} generates the password for the public link',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.generatePassword()
+  }
+)
+
+When(
+  '{string} sets the password of the public link',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.setPassword()
+  }
+)
+
+When(
   '{string} edits the public link named {string} of resource {string} changing role to {string}',
   async function (
     this: World,
@@ -158,7 +203,6 @@ Then(
     const linkObject = new objects.applicationFiles.Link({ page })
     const actualErrorMessage = await linkObject.checkErrorMessage()
     expect(actualErrorMessage).toBe(errorMessage)
-    await linkObject.clickOnCancelButton()
   }
 )
 
