@@ -43,6 +43,11 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
+    console.log("bshare",  buildShareSpaceResource({
+      shareId: resource.shareId,
+      shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
+      serverUrl: configurationManager.serverUrl
+    }))
     return (
       getInternalSpace(storageId) ||
       buildShareSpaceResource({
