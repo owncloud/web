@@ -96,7 +96,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
         }
 
         const currentFolder = store.getters['Files/currentFolder']
-        if (isLocationPublicActive(router, 'files-public-link')) {
+        if (isLocationPublicActive(router, 'files-public-link') && currentFolder) {
           return currentFolder.canCreate()
         }
 
