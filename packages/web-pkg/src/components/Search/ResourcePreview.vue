@@ -16,7 +16,8 @@
       :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
       :parent-folder-name="parentFolderName"
       :is-thumbnail-displayed="displayThumbnails"
-      @parent-folder-clicked="parentFolderClicked"
+      @click-parent-folder="folderClicked"
+      @click-folder="folderClicked"
     />
   </oc-button>
 </template>
@@ -27,7 +28,6 @@ import { VisibilityObserver } from '../../observer'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import { createLocationSpaces } from '../../router'
 import {
   useCapabilityShareJailEnabled,
   useGetMatchingSpace,
@@ -36,7 +36,7 @@ import {
 } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../services'
-import { createFileRouteOptions, isResourceTxtFileAlmostEmpty } from '../../helpers'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'
 
 const visibilityObserver = new VisibilityObserver()
@@ -108,7 +108,7 @@ export default defineComponent({
     attrs() {
       return this.resource.isFolder
         ? {
-            to: this.createFolderLink(this.resource.path, this.resource.fileId)
+            to: this.folderLink
           }
         : {}
     },
@@ -158,18 +158,8 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    parentFolderClicked() {
+    folderClicked() {
       eventBus.publish('app.search.options-drop.hide')
-    },
-    createFolderLink(p: string, fileId: string | number) {
-      if (!this.space) {
-        return {}
-      }
-
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(this.space, { path: p, fileId })
-      )
     }
   }
 })

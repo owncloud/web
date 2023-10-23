@@ -31,20 +31,6 @@ describe('Preview component', () => {
 
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
-  describe('computed parentFolderLink', () => {
-    it('should use the items storageId for the resource target location if present', () => {
-      const driveAliasAndItem = '1'
-      const { wrapper } = getWrapper({
-        space: mock<SpaceResource>({
-          id: '1',
-          driveType: 'project',
-          name: 'New space',
-          getDriveAliasAndItem: () => driveAliasAndItem
-        })
-      })
-      expect(wrapper.vm.parentFolderLink.params.driveAliasAndItem).toEqual(driveAliasAndItem)
-    })
-  })
 })
 
 function getWrapper({
