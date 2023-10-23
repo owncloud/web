@@ -20,6 +20,7 @@ exports[`Projects view different files view states lists all available project s
       </div>
     </div>
   </div>
+  <!--v-if-->
   <side-bar-stub open="false"></side-bar-stub>
 </div>
 `;
