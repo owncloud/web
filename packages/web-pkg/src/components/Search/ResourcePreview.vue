@@ -27,19 +27,17 @@ import { VisibilityObserver } from '../../observer'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import { createLocationShares, createLocationSpaces } from '../../router'
-import { dirname } from 'path'
+import { createLocationSpaces } from '../../router'
 import {
   useCapabilityShareJailEnabled,
   useGetMatchingSpace,
   useFileActions,
   useFolderLink
 } from '../../composables'
-import { isProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../services'
 import { createFileRouteOptions, isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'
-import { useGettext } from 'vue3-gettext'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -60,9 +58,13 @@ export default defineComponent({
   },
   setup(props) {
     const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
-    const { getPathPrefix, getParentFolderName, getParentFolderLinkIconAdditionalAttributes } =
-      useFolderLink()
-    const { $gettext } = useGettext()
+    const {
+      getPathPrefix,
+      getParentFolderName,
+      getParentFolderLink,
+      getParentFolderLinkIconAdditionalAttributes,
+      getFolderLink
+    } = useFolderLink()
     const previewData = ref()
 
     const resource = computed((): Resource => {
@@ -90,6 +92,8 @@ export default defineComponent({
       previewData,
       resource,
       resourceDisabled,
+      parentFolderLink: getParentFolderLink(unref(resource)),
+      folderLink: getFolderLink(unref(resource)),
       pathPrefix: getPathPrefix(unref(resource)),
       parentFolderName: getParentFolderName(unref(resource)),
       parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
@@ -124,18 +128,6 @@ export default defineComponent({
         !this.configuration?.options?.disablePreviews &&
         !isResourceTxtFileAlmostEmpty(this.resource)
       )
-    },
-    folderLink() {
-      return this.createFolderLink(this.resource.path, this.resource.fileId)
-    },
-    parentFolderLink() {
-      if (this.resource.shareId && this.resource.path === '/') {
-        return createLocationShares('files-shares-with-me')
-      }
-      if (isProjectSpaceResource(this.resource)) {
-        return createLocationSpaces('files-spaces-projects')
-      }
-      return this.createFolderLink(dirname(this.resource.path), this.resource.parentFolderId)
     }
   },
   mounted() {
