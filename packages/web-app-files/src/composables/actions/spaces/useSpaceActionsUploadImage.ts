@@ -1,7 +1,6 @@
 import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { SpaceResource } from '@ownclouders/web-client/src'
 import {
   useClientService,
   useLoadingService,
@@ -39,7 +38,7 @@ export const useSpaceActionsUploadImage = ({
 
   const uploadImageSpace = async (ev) => {
     const graphClient = clientService.graphAuthenticated
-    const file = ev.currentTarget.files[0]
+    const file = ev.currentTarget.files[0] as File
 
     if (!file) {
       return
@@ -49,13 +48,6 @@ export const useSpaceActionsUploadImage = ({
       return store.dispatch('showErrorMessage', {
         title: $gettext('The file type is unsupported')
       })
-    }
-
-    const extraHeaders = {}
-    if (file.lastModifiedDate) {
-      extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
-    } else if (file.lastModified) {
-      extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
     }
 
     try {
@@ -68,49 +60,65 @@ export const useSpaceActionsUploadImage = ({
       })
     }
 
-    return loadingService.addTask(() => {
-      return clientService.webdav
-        .putFileContents(selectedSpace, {
+    const extraHeaders = {
+      'content-type': 'application/offset+octet-stream'
+    }
+
+    return loadingService.addTask(async () => {
+      // overwriting the content-type header only works if the provided content is not of type object,
+      // therefore it has to be converted to a ArrayBuffer which allows the overwrite.
+      //
+      // https://github.com/perry-mitchell/webdav-client/blob/dd8d0dcc319297edc70077abd74b935361bc2412/source/tools/body.ts#L18
+      const content = await file.arrayBuffer()
+      const headers = {
+        'Content-Type': 'application/offset+octet-stream'
+      }
+
+      if (file.lastModifiedDate) {
+        extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
+      } else if (file.lastModified) {
+        extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
+      }
+
+      try {
+        const { fileId } = await clientService.webdav.putFileContents(selectedSpace, {
           path: `/.space/${file.name}`,
-          content: file,
-          headers: extraHeaders,
+          content,
+          headers,
           overwrite: true
         })
-        .then(({ fileId }: Resource) => {
-          return graphClient.drives
-            .updateDrive(
-              selectedSpace.id.toString(),
+
+        const { data } = await graphClient.drives.updateDrive(
+          selectedSpace.id.toString(),
+          {
+            special: [
               {
-                special: [
-                  {
-                    specialFolder: {
-                      name: 'image'
-                    },
-                    id: fileId
-                  }
-                ]
-              } as Drive,
-              {}
-            )
-            .then(({ data }) => {
-              store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-                id: selectedSpace.id.toString(),
-                field: 'spaceImageData',
-                value: data.special.find((special) => special.specialFolder.name === 'image')
-              })
-              store.dispatch('showMessage', {
-                title: $gettext('Space image was uploaded successfully')
-              })
-              eventBus.publish('app.files.list.load')
-            })
+                specialFolder: {
+                  name: 'image'
+                },
+                id: fileId
+              }
+            ]
+          },
+          {}
+        )
+
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+          id: selectedSpace.id.toString(),
+          field: 'spaceImageData',
+          value: data.special.find((special) => special.specialFolder.name === 'image')
         })
-        .catch((error) => {
-          console.error(error)
-          store.dispatch('showErrorMessage', {
-            title: $gettext('Failed to upload space image'),
-            error
-          })
+        await store.dispatch('showMessage', {
+          title: $gettext('Space image was uploaded successfully')
         })
+        eventBus.publish('app.files.list.load')
+      } catch (e) {
+        console.error(e)
+        await store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to upload space image'),
+          error
+        })
+      }
     })
   }
 
