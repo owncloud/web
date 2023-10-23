@@ -1,6 +1,7 @@
 import translations from '../l10n/translations.json'
 import TextEditor from './App.vue'
 import { AppWrapperRoute } from '@ownclouders/web-pkg'
+import { Store } from 'vuex'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -92,7 +93,16 @@ const appInfo = {
   name: $gettext('Text Editor'),
   id: appId,
   icon: 'file-text',
+  color: '#7b27b6',
   isFileEditor: true,
+  applicationMenu: {
+    enabled: (store: Store<unknown>) => {
+      return !!store.getters?.user?.id
+    },
+    priority: 20,
+    openAsEditor: true
+  },
+  defaultExtension: 'txt',
   extensions: fileExtensions().map((extensionItem) => {
     return {
       extension: extensionItem.extension,

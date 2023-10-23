@@ -3,19 +3,20 @@ import { unref, Ref } from 'vue'
 import { ConfigurationManager } from '../../configuration'
 import { useGetMatchingSpace } from '../spaces'
 import { createFileRouteOptions } from '../../helpers/router'
-import { useConfigurationManager } from '../configuration'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 
-type ResourceRouteResolverOptions = {
+export type ResourceRouteResolverOptions = {
   configurationManager?: ConfigurationManager
   targetRouteCallback?: Ref<any>
   space?: Ref<SpaceResource>
 }
 
-export const useResourceRouteResolver = (options: ResourceRouteResolverOptions, context) => {
-  const configurationManager = options.configurationManager || useConfigurationManager()
+export const useResourceRouteResolver = (
+  options: ResourceRouteResolverOptions = {},
+  context?: any
+) => {
   const targetRouteCallback = options.targetRouteCallback
   const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace(options)
 

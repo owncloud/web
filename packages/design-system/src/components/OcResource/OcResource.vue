@@ -50,6 +50,7 @@
         <oc-resource-name
           :key="resource.name"
           :name="resource.name"
+          :path-prefix="pathPrefix"
           :extension="resource.extension"
           :type="resource.type"
           :full-path="resource.path"
@@ -106,6 +107,14 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       required: true
+    },
+    /**
+     * The prefix that will be shown in the path
+     */
+    pathPrefix: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The resource folder link
@@ -301,6 +310,20 @@ export default defineComponent({
   &-indicators {
     display: flex;
 
+    a {
+      &:hover {
+        background-color: var(--oc-color-input-bg);
+        border-radius: 2px;
+      }
+
+      .text {
+        &:hover {
+          color: var(--oc-color-text-default);
+          text-decoration: underline;
+        }
+      }
+    }
+
     .parent-folder {
       display: flex;
       align-items: center;
@@ -315,15 +338,6 @@ export default defineComponent({
       .text {
         font-size: 0.8125rem;
         color: var(--oc-color-text-muted);
-        &:hover {
-          color: var(--oc-color-text-default);
-          text-decoration: underline;
-        }
-      }
-
-      &:hover {
-        background-color: var(--oc-color-input-bg);
-        border-radius: 2px;
       }
     }
   }

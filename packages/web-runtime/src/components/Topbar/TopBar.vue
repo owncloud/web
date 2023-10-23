@@ -47,6 +47,7 @@ import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
+  useAbility,
   useCapabilityNotifications,
   useEmbedMode,
   useRouter,
@@ -77,6 +78,7 @@ export default {
     const isUserContext = useUserContext({ store })
     const language = useGettext()
     const router = useRouter()
+    const ability = useAbility()
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const logoWidth = ref('150px')
@@ -109,7 +111,10 @@ export default {
             return (
               store.getters
                 .getNavItemsByExtension(app.id)
-                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0
+                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0 ||
+              (app.applicationMenu.enabled instanceof Function &&
+                app.applicationMenu.enabled(store, ability) &&
+                !permittedMenus.includes('user'))
             )
           }
           return isNavItemPermitted(permittedMenus, app)
@@ -136,10 +141,13 @@ export default {
           }
 
           const app: any = {
+            id: item.id,
             icon: icon,
             iconUrl: iconUrl,
             title: title,
-            color: color
+            color: color,
+            applicationMenu: item.applicationMenu,
+            defaultExtension: item.defaultExtension
           }
 
           if (item.url) {

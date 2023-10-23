@@ -60,16 +60,17 @@
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
+          :path-prefix="getPathPrefix(item)"
           :is-path-displayed="arePathsDisplayed"
           :parent-folder-name="getParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
-          :folder-link="folderLink(item)"
-          :parent-folder-link="parentFolderLink(item)"
+          :folder-link="getFolderLink(item)"
+          :parent-folder-link="getParentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
-            parentFolderLinkIconAdditionalAttributes(item)
+            getParentFolderLinkIconAdditionalAttributes(item)
           "
           :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
           @click="emitFileClick(item)"
@@ -211,17 +212,9 @@
 <script lang="ts">
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { dirname } from 'path'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
-import {
-  extractDomSelector,
-  extractParentFolderName,
-  isProjectSpaceResource,
-  isShareRoot,
-  isShareSpaceResource,
-  SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 import {
@@ -233,7 +226,8 @@ import {
   useUserContext,
   ViewModeConstants,
   useConfigurationManager,
-  useGetMatchingSpace
+  useGetMatchingSpace,
+  useFolderLink
 } from '../../composables'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
@@ -250,11 +244,12 @@ import { useResourceRouteResolver } from '../../composables/filesList/useResourc
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { determineSortFields } from '../../helpers/ui/resourceTable'
 import { useFileActionsRename } from '../../composables/actions'
-import { createLocationShares, createLocationCommon, createLocationSpaces } from '../../router'
+import { createLocationCommon } from '../../router'
 import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
+import { useGettext } from 'vue3-gettext'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -444,6 +439,8 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const configurationManager = useConfigurationManager()
+    const { getMatchingSpace } = useGetMatchingSpace()
+    const { $gettext } = useGettext()
 
     const { width } = useWindowSize()
     const hasTags = computed(
@@ -455,7 +452,7 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const isResourceDisabled = (resource) => {
+    const isResourceDisabled = (resource: Resource) => {
       return resource.processing === true
     }
 
@@ -479,14 +476,18 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
-      ...useGetMatchingSpace(),
+      getMatchingSpace,
       ...useResourceRouteResolver(
         {
           space: ref(props.space),
           targetRouteCallback: computed(() => props.targetRouteCallback)
         },
         context
-      )
+      ),
+      ...useFolderLink({
+        space: ref(props.space),
+        targetRouteCallback: computed(() => props.targetRouteCallback)
+      })
     }
   },
   data() {
@@ -769,47 +770,6 @@ export default defineComponent({
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
-    folderLink(file: Resource) {
-      return this.createFolderLink({
-        path: file.path,
-        fileId: file.fileId,
-        resource: file
-      })
-    },
-    parentFolderLink(file: Resource) {
-      const space = this.getMatchingSpace(file)
-      const parentFolderAccessible = this.isResourceAccessible({
-        space,
-        path: dirname(file.path)
-      })
-      if ((file.shareId && file.path === '/') || !parentFolderAccessible) {
-        return createLocationShares('files-shares-with-me')
-      }
-      if (isProjectSpaceResource(file)) {
-        return createLocationSpaces('files-spaces-projects')
-      }
-
-      return this.createFolderLink({
-        path: dirname(file.path),
-        ...(file.parentFolderId && { fileId: file.parentFolderId }),
-        resource: file
-      })
-    },
-    parentFolderLinkIconAdditionalAttributes(file) {
-      // Identify if resource is project space or is part of a project space and the resource is located in its root
-      if (
-        isProjectSpaceResource(file) ||
-        (isProjectSpaceResource(this.getInternalSpace(file.storageId) || ({} as Resource)) &&
-          file.path.split('/').length === 2)
-      ) {
-        return {
-          name: 'layout-grid',
-          'fill-type': 'fill'
-        }
-      }
-
-      return {}
-    },
     fileDragged(file) {
       this.addSelectedResource(file)
     },
@@ -978,39 +938,6 @@ export default defineComponent({
         resourceType,
         ownerName: resource.owner[0].displayName
       })
-    },
-    getParentFolderName(resource: Resource) {
-      const space = this.getMatchingSpace(resource)
-      const parentFolderAccessible = this.isResourceAccessible({
-        space,
-        path: dirname(resource.path)
-      })
-      if (isShareRoot(resource) || !parentFolderAccessible) {
-        return this.$gettext('Shared with me')
-      }
-      const parentFolder = extractParentFolderName(resource)
-      if (parentFolder) {
-        return parentFolder
-      }
-
-      if (isShareSpaceResource(space)) {
-        return space.name
-      }
-
-      if (this.hasProjectSpaces) {
-        if (isProjectSpaceResource(resource)) {
-          return this.$gettext('Spaces')
-        }
-        if (space?.driveType === 'project') {
-          return space.name
-        }
-      }
-
-      if (!this.hasShareJail) {
-        return this.$gettext('All files and folders')
-      }
-
-      return this.$gettext('Personal')
     }
   }
 })
@@ -1019,10 +946,12 @@ export default defineComponent({
 .oc-table.condensed > tbody > tr {
   height: 0 !important;
 }
+
 .resource-table {
   &-resource-cut {
     opacity: 0.6;
   }
+
   &-resource-wrapper {
     display: flex;
     align-items: center;
@@ -1037,21 +966,26 @@ export default defineComponent({
       }
     }
   }
+
   &-tag {
     max-width: 80px;
   }
+
   &-tag-more {
     cursor: pointer;
     border: 0 !important;
     vertical-align: text-bottom;
   }
+
   &-edit-name {
     display: inline-flex;
     margin-left: var(--oc-space-xsmall);
+
     svg {
       fill: var(--oc-color-text-muted);
     }
   }
+
   &-people {
     position: absolute;
     right: var(--oc-space-xsmall);
@@ -1266,15 +1200,18 @@ export default defineComponent({
     display: none;
   }
 }
+
 .oc-resource-icon-status-badge,
 .oc-resource-thumbnail-status-badge {
   .oc-icon {
     margin-top: -2px;
     margin-left: -1.5px;
+
     svg {
       fill: var(--oc-color-background-default) !important;
     }
   }
+
   .oc-spinner {
     margin-left: -2px;
     margin-top: -2px;
@@ -1288,26 +1225,32 @@ export default defineComponent({
     bottom: 2px !important;
   }
 }
+
 // on table row hover change the status badge background color
 .oc-tbody-tr:hover .oc-resource-icon-status-badge {
   background: var(--oc-color-background-hover) !important;
+
   .oc-icon {
     svg {
       fill: var(--oc-color-background-hover) !important;
     }
   }
+
   .oc-spinner {
     color: var(--oc-color-background-hover) !important;
   }
 }
+
 // on table row highlight change the status badge background color
 .oc-table-highlighted .oc-resource-icon-status-badge {
   background: var(--oc-color-background-highlight) !important;
+
   .oc-icon {
     svg {
       fill: var(--oc-color-background-highlight) !important;
     }
   }
+
   .oc-spinner {
     color: var(--oc-color-background-highlight) !important;
   }

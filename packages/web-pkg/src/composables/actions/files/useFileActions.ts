@@ -152,7 +152,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const routeOptsHelper = (app, driveAliasAndItem: string, filePath, fileId, mode, shareId) => {
     return {
-      name: app.routeName || app.app,
+      name: app.routeName || app.app || app.id,
       params: {
         driveAliasAndItem,
         filePath,

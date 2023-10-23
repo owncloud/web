@@ -54,12 +54,13 @@ import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
-import { defineComponent } from 'vue'
+import { computed, defineComponent, unref, watch } from 'vue'
 import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
-import { eventBus } from '@ownclouders/web-pkg'
+import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { useStore } from '@ownclouders/web-pkg'
+import { RouteLocation } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -67,7 +68,35 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const router = useRouter()
     useHead({ store })
+
+    const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
+
+    watch(
+      () => unref(activeRoute),
+      (newRoute, oldRoute) => {
+        const getAppFromRoute = (route: RouteLocation): string => {
+          return route?.path?.split('/')?.[1]
+        }
+
+        const oldApp = getAppFromRoute(oldRoute)
+        const newApp = getAppFromRoute(newRoute)
+
+        if (oldApp === newApp) {
+          return
+        }
+
+        if ('driveAliasAndItem' in newRoute.params) {
+          return
+        }
+
+        /*
+         * If app has been changed and no file context is set, we will reset current folder.
+         */
+        store.commit('Files/SET_CURRENT_FOLDER', null)
+      }
+    )
   },
   data() {
     return {

@@ -10,6 +10,7 @@ const dropUploadResourceSelector = '.upload-info-items [data-test-resource-name=
 const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
+
 export class Public {
   #page: Page
 
@@ -93,5 +94,17 @@ export class Public {
     editorToOpen: string
   }): Promise<string> {
     return await po.openAndGetContentOfDocument({ page, editorToOpen })
+  }
+
+  async fillContentOfOpenDocumentOrMicrosoftWordDocument({
+    page,
+    text,
+    editorToOpen
+  }: {
+    page: Page
+    text: string
+    editorToOpen: string
+  }): Promise<void> {
+    return await po.fillContentOfDocument({ page, text, editorToOpen })
   }
 }

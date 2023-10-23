@@ -189,10 +189,9 @@ export default defineComponent({
     applicationsList() {
       const list = []
 
-      // Get extensions which have at least one nav item
-      this.getExtensionsWithNavItems.forEach((extensionId) => {
+      Object.values(this.apps).forEach((app: any) => {
         list.push({
-          ...this.apps[extensionId],
+          ...app,
           type: 'extension'
         })
       })
@@ -205,7 +204,11 @@ export default defineComponent({
         })
       })
 
-      return list
+      return list.sort(
+        (a, b) =>
+          (a.applicationMenu?.priority || Number.MAX_SAFE_INTEGER) -
+          (b.applicationMenu?.priority || Number.MAX_SAFE_INTEGER)
+      )
     }
   },
   mounted() {

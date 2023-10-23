@@ -29,13 +29,12 @@
           <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
             <oc-button
               :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
-              :type="n.url ? 'a' : 'router-link'"
-              :target="n.target"
-              :href="n.url"
-              :to="n.path"
               :appearance="n.active ? 'raw-inverse' : 'raw'"
               :variation="n.active ? 'primary' : 'passive'"
               :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
+              :data-test-id="n.id"
+              v-bind="getAdditionalAttributes(n)"
+              v-on="getAdditionalEventBindings(n)"
             >
               <oc-application-icon
                 :key="`apps-menu-icon-${nid}-${appIconKey}`"
@@ -52,11 +51,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, computed } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, computed, unref } from 'vue'
 import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
+import {
+  ApplicationInformation,
+  EDITOR_MODE_EDIT,
+  resolveFileNameDuplicate,
+  useClientService,
+  useFileActions,
+  useGetMatchingSpace,
+  useStore
+} from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
   components: {
@@ -70,8 +80,12 @@ export default defineComponent({
     }
   },
   setup() {
+    const store = useStore()
+    const { openEditor } = useFileActions()
+    const clientService = useClientService()
     const { $gettext } = useGettext()
     const appIconKey = ref('')
+    const { getMatchingSpace, getPersonalSpace } = useGetMatchingSpace()
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -79,10 +93,69 @@ export default defineComponent({
     const updateAppIcons = () => {
       appIconKey.value = uuid.v4().replaceAll('-', '')
     }
+    const currentFolder = computed(() => {
+      return store.getters['Files/currentFolder']
+    })
+    const files = computed((): Array<Resource> => store.getters['Files/files'])
+
+    const onEditorApplicationClick = async (item: ApplicationInformation) => {
+      let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
+      let destinationFiles = unref(files)
+      let filePath = unref(currentFolder)?.path
+
+      if (!destinationSpace || !unref(currentFolder).canCreate()) {
+        destinationSpace = getPersonalSpace()
+        destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
+        filePath = ''
+      }
+
+      let fileName = $gettext('New file') + `.${item.defaultExtension}`
+
+      if (destinationFiles.some((f) => f.name === fileName)) {
+        fileName = resolveFileNameDuplicate(fileName, item.defaultExtension, destinationFiles)
+      }
+
+      const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
+        path: urlJoin(filePath, fileName)
+      })
+
+      const space = getMatchingSpace(emptyResource)
+
+      openEditor(
+        item,
+        space.getDriveAliasAndItem(emptyResource),
+        emptyResource.webDavPath,
+        emptyResource.id,
+        EDITOR_MODE_EDIT,
+        space.shareId
+      )
+    }
+    const getAdditionalEventBindings = (item: ApplicationInformation) => {
+      if (item.applicationMenu?.openAsEditor) {
+        return {
+          click: () => onEditorApplicationClick(item)
+        }
+      }
+      return {}
+    }
+    const getAdditionalAttributes = (item: any) => {
+      if (item.applicationMenu?.openAsEditor) {
+        return {}
+      }
+      return {
+        type: item.url ? 'a' : 'router-link',
+        target: item.target,
+        href: item.url,
+        to: item.path
+      }
+    }
+
     return {
       appIconKey,
       updateAppIcons,
-      applicationSwitcherLabel
+      applicationSwitcherLabel,
+      getAdditionalAttributes,
+      getAdditionalEventBindings
     }
   },
   mounted() {
@@ -99,12 +172,14 @@ export default defineComponent({
 .oc-drop {
   width: 280px;
 }
+
 .applications-list li {
   margin: var(--oc-space-xsmall) 0;
 
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -123,6 +198,7 @@ export default defineComponent({
         color: var(--oc-color-swatch-primary-contrast) !important;
       }
     }
+
     &.oc-button-passive-raw {
       &:focus,
       &:hover {
@@ -133,6 +209,7 @@ export default defineComponent({
     &:focus {
       text-decoration: none;
     }
+
     &:hover {
       background-color: var(--oc-color-background-hover);
       text-decoration: none;

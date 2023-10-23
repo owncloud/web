@@ -19,11 +19,11 @@ export interface SpaceResource extends Resource {
   getWebDavUrl({ path }: { path: string }): string
   getWebDavTrashUrl({ path }: { path: string }): string
   getDriveAliasAndItem(resource: Resource): string
-  isViewer(uuid: User): boolean
-  isEditor(uuid: User): boolean
-  isManager(uuid: User): boolean
-  isMember(uuid: User): boolean
-  isOwner(uuid: User): boolean
+  isViewer(user: User): boolean
+  isEditor(user: User): boolean
+  isManager(user: User): boolean
+  isMember(user: User): boolean
+  isOwner(user: User): boolean
 }
 
 export interface PersonalSpaceResource extends SpaceResource {

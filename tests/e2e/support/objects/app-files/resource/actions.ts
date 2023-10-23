@@ -102,6 +102,7 @@ const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
+const textEditorTextArea = '#text-editor-input'
 
 export const clickResource = async ({
   page,
@@ -311,6 +312,23 @@ const createDocumentFile = async (
   }
 }
 
+export const fillContentOfDocument = async ({
+  page,
+  text,
+  editorToOpen
+}: {
+  page: Page
+  text: string
+  editorToOpen: string
+}): Promise<void> => {
+  switch (editorToOpen) {
+    case 'TextEditor':
+      await page.locator(textEditorTextArea).fill(text)
+      break
+    default:
+      throw new Error("Editor should be 'TextEditor' but found " + editorToOpen)
+  }
+}
 export const openAndGetContentOfDocument = async ({
   page,
   editorToOpen
@@ -637,6 +655,7 @@ export interface moveOrCopyResourceArgs {
   action: 'copy' | 'move'
   method: string
 }
+
 export const pasteResource = async (
   args: Omit<moveOrCopyResourceArgs, 'action' | 'method'>
 ): Promise<void> => {

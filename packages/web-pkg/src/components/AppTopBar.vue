@@ -7,7 +7,13 @@
             v-if="resource"
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
+            :path-prefix="pathPrefix"
             :resource="resource"
+            :parent-folder-name="parentFolderName"
+            :parent-folder-link-icon-additional-attributes="
+              parentFolderLinkIconAdditionalAttributes
+            "
+            :is-path-displayed="isPathDisplayed"
           />
         </div>
         <div class="oc-flex main-actions">
@@ -72,11 +78,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { Action } from '../composables/actions/types'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
+import { useFolderLink, useGetMatchingSpace } from '../composables'
+import { isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'AppTopBar',
@@ -98,15 +106,42 @@ export default defineComponent({
     }
   },
   emits: ['close'],
-  setup() {
+  setup(props) {
     const { $gettext } = useGettext()
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
 
+    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes, getPathPrefix } =
+      useFolderLink()
+
+    const space = computed(() => getMatchingSpace(props.resource))
+
+    //FIXME: We currently have problems to display the parent folder name of a shared file, so we disabled it for now
+    const isPathDisplayed = computed(() => {
+      return !isShareSpaceResource(unref(space)) && !isPublicSpaceResource(unref(space))
+    })
+
+    const pathPrefix = computed(() => {
+      return props.resource ? getPathPrefix(props.resource) : null
+    })
+
+    const parentFolderName = computed(() => {
+      return props.resource ? getParentFolderName(props.resource) : null
+    })
+
+    const parentFolderLinkIconAdditionalAttributes = computed(() => {
+      return props.resource ? getParentFolderLinkIconAdditionalAttributes(props.resource) : null
+    })
+
     return {
+      pathPrefix,
+      isPathDisplayed,
       contextMenuLabel,
-      closeButtonLabel
+      closeButtonLabel,
+      parentFolderName,
+      parentFolderLinkIconAdditionalAttributes
     }
   }
 })
@@ -138,6 +173,12 @@ export default defineComponent({
   @media (min-width: $oc-breakpoint-small-default) {
     flex-basis: 250px;
     margin: 0;
+  }
+
+  .oc-resource-indicators {
+    .text {
+      color: var(--oc-color-swatch-brand-contrast);
+    }
   }
 }
 

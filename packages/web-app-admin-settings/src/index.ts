@@ -5,6 +5,7 @@ import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { AppNavigationItem } from '@ownclouders/web-pkg'
+import { Store } from 'vuex'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -16,7 +17,13 @@ const appInfo = {
   id: 'admin-settings',
   icon: 'settings-4',
   color: '#2b2b2b',
-  isFileEditor: false
+  isFileEditor: false,
+  applicationMenu: {
+    enabled: (store: Store<unknown>, ability: Ability) => {
+      return !!store.getters?.user?.id && ability.can('read-all', 'Setting')
+    },
+    priority: 40
+  }
 }
 
 const routes = ({ $ability }: { $ability: Ability }) => [

@@ -48,6 +48,32 @@ When(
 )
 
 When(
+  '{string} saves the file viewer',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    await editor.save(page)
+  }
+)
+
+When(
+  '{string} enters the text {string} in editor {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    text: string,
+    editorToOpen: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    await pageObject.fillContentOfOpenDocumentOrMicrosoftWordDocument({
+      page,
+      text,
+      editorToOpen
+    })
+  }
+)
+
+When(
   '{string} should see the content {string} in editor {string}',
   async function (
     this: World,
