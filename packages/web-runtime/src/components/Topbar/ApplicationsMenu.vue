@@ -65,7 +65,7 @@ import {
   useGetMatchingSpace,
   useStore
 } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Resource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
