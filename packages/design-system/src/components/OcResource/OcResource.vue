@@ -254,7 +254,6 @@ export default defineComponent({
 
   methods: {
     emitClick() {
-      console.log('EMIT CLICK')
       /**
        * Triggered when the resource is a file and the name is clicked
        */
