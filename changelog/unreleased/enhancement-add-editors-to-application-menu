@@ -1,0 +1,10 @@
+Enhancement: Add editors to the application menu
+
+We've added 'text-editor' and 'draw.io' to the application menu, so the user can easily
+open those apps with a one-click approach.
+We've also fixed a bug, where the full path of a resource was missing while hovering it, for example in
+the search preview.
+
+https://github.com/owncloud/web/pull/9809
+https://github.com/owncloud/web/pull/9843
+https://github.com/owncloud/web/issues/9807

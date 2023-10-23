@@ -28,18 +28,14 @@ import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
-import path, { dirname } from 'path'
+import { dirname } from 'path'
 import {
   useCapabilityShareJailEnabled,
   useGetMatchingSpace,
   useFileActions,
   useFolderLink
 } from '../../composables'
-import {
-  isProjectSpaceResource,
-  isShareSpaceResource,
-  Resource
-} from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../services'
 import { createFileRouteOptions, isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'
