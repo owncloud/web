@@ -4,13 +4,25 @@
       <slot />
     </div>
   </div>
+
+  <portal v-if="isEmbedModeEnabled" to="app.runtime.footer">
+    <embed-actions />
+  </portal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useEmbedMode } from '@ownclouders/web-pkg'
+import EmbedActions from './EmbedActions/EmbedActions.vue'
 
 export default defineComponent({
-  inheritAttrs: false
+  components: { EmbedActions },
+  inheritAttrs: false,
+  setup() {
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+
+    return { isEmbedModeEnabled }
+  }
 })
 </script>
 

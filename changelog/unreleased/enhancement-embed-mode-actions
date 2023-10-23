@@ -1,0 +1,6 @@
+Enhancement: Add embed mode actions
+
+We've added three new actions available in the embed mode. These actions are "Share", "Select" and "Share". They are emitting events with an optional payload. For more information, check the documentation.
+
+https://github.com/owncloud/web/pull/9841
+https://github.com/owncloud/web/issues/9768
