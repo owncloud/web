@@ -81,21 +81,12 @@ export default defineComponent({
 
     const space = computed(() => getMatchingSpace(unref(resource)))
 
-    const spaceName = computed(() => {
-      if (isShareSpaceResource(unref(space))) {
-        return path.join($gettext('Shared with me'), unref(space).name)
-      }
-
-      return unref(space).name
-    })
-
     const resourceDisabled = computed(() => {
       return unref(resource).disabled === true
     })
 
     return {
       space,
-      spaceName,
       ...useFileActions(),
       getInternalSpace,
       getMatchingSpace,
