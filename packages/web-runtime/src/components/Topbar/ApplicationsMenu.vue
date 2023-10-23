@@ -93,7 +93,7 @@ export default defineComponent({
     const updateAppIcons = () => {
       appIconKey.value = uuid.v4().replaceAll('-', '')
     }
-    const currentFolder = computed((): SpaceResource => {
+    const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
     })
     const files = computed((): Array<Resource> => store.getters['Files/files'])
