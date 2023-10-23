@@ -77,13 +77,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { Action } from '../composables/actions/types'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
 import { useFolderLink, useGetMatchingSpace } from '../composables'
-import { isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'AppTopBar',
@@ -114,9 +114,11 @@ export default defineComponent({
 
     const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes } = useFolderLink()
 
-    //FIXME: We currently have problems to display the parent foler name of a shared file, so we disabled it for now
+    const space = computed(() => getMatchingSpace(props.resource))
+
+    //FIXME: We currently have problems to display the parent folder name of a shared file, so we disabled it for now
     const isPathDisplayed = computed(() => {
-      return !isShareSpaceResource(getMatchingSpace(props.resource))
+      return !isShareSpaceResource(unref(space)) && !isPublicSpaceResource(unref(space))
     })
 
     const parentFolderName = computed(() => {
