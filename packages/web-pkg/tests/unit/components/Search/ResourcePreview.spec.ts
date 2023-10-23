@@ -16,12 +16,19 @@ jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
 }))
 
 describe('Preview component', () => {
+  const driveAliasAndItem = '1'
   jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
   it('should set correct props on oc-resource component', () => {
-    const { wrapper } = getWrapper()
+    const { wrapper } = getWrapper({
+      space: mock<SpaceResource>({
+        id: '1',
+        driveType: 'project',
+        name: 'New space',
+        getDriveAliasAndItem: () => driveAliasAndItem
+      })
+    })
     const ocResource = wrapper.findComponent<any>('oc-resource-stub')
 
-    expect(ocResource.exists()).toBeTruthy()
     expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
   })
   describe('computed parentFolderLink', () => {

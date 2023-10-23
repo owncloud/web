@@ -7,7 +7,7 @@ import { createLocationSpaces, createLocationShares } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 
-type ResourceRouteResolverOptions = {
+export type ResourceRouteResolverOptions = {
   configurationManager?: ConfigurationManager
   targetRouteCallback?: Ref<any>
   space?: Ref<SpaceResource>

@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import path from 'path'
 
 export default defineComponent({
   name: 'OcResourceName',
@@ -33,6 +34,14 @@ export default defineComponent({
     name: {
       type: String,
       required: true
+    },
+    /**
+     * The prefix that will be shown in the path
+     */
+    pathPrefix: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The extension of the resource, if there is one
@@ -123,6 +132,9 @@ export default defineComponent({
       if (this.displayPath === this.fullPath) {
         return null
       }
+      if (this.pathPrefix) {
+        return path.join(this.pathPrefix, this.fullPath)
+      }
       return this.fullPath
     },
 
@@ -146,6 +158,7 @@ export default defineComponent({
   &-name {
     display: flex;
     min-width: 0;
+
     &:hover {
       text-decoration: underline;
       text-decoration-color: var(--oc-color-text-default);
@@ -167,13 +180,21 @@ export default defineComponent({
 
 <docs>
 ```js
-<oc-resource-name full-path="documents/notes.txt" name="notes.txt" extension="txt" type="file" :is-extension-displayed="false" />
-<oc-resource-name full-path="documents/notes.txt" name="notes.txt" extension="txt" type="file" />
-<oc-resource-name full-path="documents/notes.txt" name="super-long-file-name-which-will-be-truncated-when-exceeding-the-screen-space-while-still-preserving-the-file-extension-at-the-end.txt" extension="txt" type="file" />
-<oc-resource-name full-path="documents/notes.txt" name="super-long-file-name-which-will-not-be-truncated-when-you-disable-it-manually-via-the-truncate-property.txt" extension="txt" type="file" :truncate-name="false" />
-<oc-resource-name full-path="images/nature/forest.jpg" :is-path-displayed="true" name="forest.jpg" extension="jpg" type="file" />
-<oc-resource-name full-path="super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root-super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root/asdf.txt" :is-path-displayed="true" name="asdf.txt" extension="txt" type="file" />
-<oc-resource-name full-path="some-folder" name="regular-folder" extension="" type="folder" />
-<oc-resource-name full-path="folder-name-with.dot" name="folder-name-with.dot" extension="" type="folder" />
+<oc-resource-name full-path="documents/notes.txt" name="notes.txt" extension="txt" type="file"
+                  :is-extension-displayed="false"/>
+<oc-resource-name full-path="documents/notes.txt" name="notes.txt" extension="txt" type="file"/>
+<oc-resource-name full-path="documents/notes.txt"
+                  name="super-long-file-name-which-will-be-truncated-when-exceeding-the-screen-space-while-still-preserving-the-file-extension-at-the-end.txt"
+                  extension="txt" type="file"/>
+<oc-resource-name full-path="documents/notes.txt"
+                  name="super-long-file-name-which-will-not-be-truncated-when-you-disable-it-manually-via-the-truncate-property.txt"
+                  extension="txt" type="file" :truncate-name="false"/>
+<oc-resource-name full-path="images/nature/forest.jpg" :is-path-displayed="true" name="forest.jpg" extension="jpg"
+                  type="file"/>
+<oc-resource-name
+  full-path="super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root-super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root/asdf.txt"
+  :is-path-displayed="true" name="asdf.txt" extension="txt" type="file"/>
+<oc-resource-name full-path="some-folder" name="regular-folder" extension="" type="folder"/>
+<oc-resource-name full-path="folder-name-with.dot" name="folder-name-with.dot" extension="" type="folder"/>
 ```
 </docs>

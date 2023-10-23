@@ -7,6 +7,7 @@
             v-if="resource"
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
+            :path-prefix="pathPrefix"
             :resource="resource"
             :parent-folder-name="parentFolderName"
             :parent-folder-link-icon-additional-attributes="
@@ -112,13 +113,18 @@ export default defineComponent({
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
 
-    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes } = useFolderLink()
+    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes, getPathPrefix } =
+      useFolderLink()
 
     const space = computed(() => getMatchingSpace(props.resource))
 
     //FIXME: We currently have problems to display the parent folder name of a shared file, so we disabled it for now
     const isPathDisplayed = computed(() => {
       return !isShareSpaceResource(unref(space)) && !isPublicSpaceResource(unref(space))
+    })
+
+    const pathPrefix = computed(() => {
+      return props.resource ? getPathPrefix(props.resource) : null
     })
 
     const parentFolderName = computed(() => {
@@ -130,6 +136,7 @@ export default defineComponent({
     })
 
     return {
+      pathPrefix,
       isPathDisplayed,
       contextMenuLabel,
       closeButtonLabel,

@@ -9,6 +9,7 @@
   >
     <oc-resource
       :resource="resource"
+      :path-prefix="pathPrefix"
       :is-path-displayed="true"
       :is-resource-clickable="false"
       :parent-folder-link="parentFolderLink"
@@ -27,17 +28,22 @@ import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { createLocationShares, createLocationSpaces } from '../../router'
-import { dirname } from 'path'
+import path, { dirname } from 'path'
 import {
   useCapabilityShareJailEnabled,
   useGetMatchingSpace,
   useFileActions,
   useFolderLink
 } from '../../composables'
-import { isProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
+import {
+  isProjectSpaceResource,
+  isShareSpaceResource,
+  Resource
+} from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../services'
 import { createFileRouteOptions, isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'
+import { useGettext } from 'vue3-gettext'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -58,7 +64,9 @@ export default defineComponent({
   },
   setup(props) {
     const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
-    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes } = useFolderLink()
+    const { getPathPrefix, getParentFolderName, getParentFolderLinkIconAdditionalAttributes } =
+      useFolderLink()
+    const { $gettext } = useGettext()
     const previewData = ref()
 
     const resource = computed((): Resource => {
@@ -71,11 +79,23 @@ export default defineComponent({
       }
     })
 
+    const space = computed(() => getMatchingSpace(unref(resource)))
+
+    const spaceName = computed(() => {
+      if (isShareSpaceResource(unref(space))) {
+        return path.join($gettext('Shared with me'), unref(space).name)
+      }
+
+      return unref(space).name
+    })
+
     const resourceDisabled = computed(() => {
       return unref(resource).disabled === true
     })
 
     return {
+      space,
+      spaceName,
       ...useFileActions(),
       getInternalSpace,
       getMatchingSpace,
@@ -83,6 +103,7 @@ export default defineComponent({
       previewData,
       resource,
       resourceDisabled,
+      pathPrefix: getPathPrefix(unref(resource)),
       parentFolderName: getParentFolderName(unref(resource)),
       parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
         unref(resource)
@@ -106,13 +127,10 @@ export default defineComponent({
         : {
             click: () =>
               this.triggerDefaultAction({
-                space: this.matchingSpace,
+                space: this.space,
                 resources: [this.resource]
               })
           }
-    },
-    matchingSpace() {
-      return this.getMatchingSpace(this.resource)
     },
     displayThumbnails() {
       return (
@@ -146,7 +164,7 @@ export default defineComponent({
       unobserve()
       const preview = await this.$previewService.loadPreview(
         {
-          space: this.matchingSpace,
+          space: this.space,
           resource: this.resource,
           dimensions: ImageDimension.Thumbnail
         },
@@ -165,13 +183,13 @@ export default defineComponent({
       eventBus.publish('app.search.options-drop.hide')
     },
     createFolderLink(p: string, fileId: string | number) {
-      if (!this.matchingSpace) {
+      if (!this.space) {
         return {}
       }
 
       return createLocationSpaces(
         'files-spaces-generic',
-        createFileRouteOptions(this.matchingSpace, { path: p, fileId })
+        createFileRouteOptions(this.space, { path: p, fileId })
       )
     }
   }

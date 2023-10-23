@@ -50,6 +50,7 @@
         <oc-resource-name
           :key="resource.name"
           :name="resource.name"
+          :path-prefix="pathPrefix"
           :extension="resource.extension"
           :type="resource.type"
           :full-path="resource.path"
@@ -106,6 +107,14 @@ export default defineComponent({
     resource: {
       type: Object as PropType<Resource>,
       required: true
+    },
+    /**
+     * The prefix that will be shown in the path
+     */
+    pathPrefix: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The resource folder link

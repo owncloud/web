@@ -9,19 +9,40 @@ import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
 import { useCapabilityProjectSpacesEnabled, useCapabilityShareJailEnabled } from '../capability'
 import { useGetMatchingSpace } from '../spaces'
-import { dirname } from 'path'
-import { useResourceRouteResolver } from '../filesList'
+import path, { dirname } from 'path'
+import { ResourceRouteResolverOptions, useResourceRouteResolver } from '../filesList'
 import { createLocationShares, createLocationSpaces } from '../../router'
 
-export const useFolderLink = () => {
+export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
   const { $gettext } = useGettext()
   const hasShareJail = useCapabilityShareJailEnabled()
   const hasProjectSpaces = useCapabilityProjectSpacesEnabled()
   const { getInternalSpace, getMatchingSpace, isResourceAccessible } = useGetMatchingSpace()
-  const { createFolderLink } = useResourceRouteResolver()
+  const { createFolderLink } = useResourceRouteResolver(options)
+
+  const getPathPrefix = (resource: Resource) => {
+    const space = unref(options.space) || getMatchingSpace(resource)
+
+    if (isProjectSpaceResource(space)) {
+      return path.join($gettext('Spaces'), space.name)
+    }
+
+    if (isShareSpaceResource(space)) {
+      return path.join($gettext('Shares'), $gettext('Shared with me'), space.name)
+    }
+
+    return space.name
+  }
+  const getFolderLink = (resource: Resource) => {
+    return createFolderLink({
+      path: resource.path,
+      fileId: resource.fileId,
+      resource
+    })
+  }
 
   const getParentFolderLink = (resource: Resource) => {
-    const space = getMatchingSpace(resource)
+    const space = unref(options.space) || getMatchingSpace(resource)
     const parentFolderAccessible = isResourceAccessible({
       space,
       path: dirname(resource.path)
@@ -41,7 +62,7 @@ export const useFolderLink = () => {
   }
 
   const getParentFolderName = (resource: Resource) => {
-    const space = getMatchingSpace(resource)
+    const space = unref(options.space) || getMatchingSpace(resource)
     const parentFolderAccessible = isResourceAccessible({
       space,
       path: dirname(resource.path)
@@ -91,6 +112,8 @@ export const useFolderLink = () => {
   }
 
   return {
+    getPathPrefix,
+    getFolderLink,
     getParentFolderLink,
     getParentFolderName,
     getParentFolderLinkIconAdditionalAttributes

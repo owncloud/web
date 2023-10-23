@@ -60,13 +60,14 @@
         <oc-resource
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
+          :path-prefix="getPathPrefix(item)"
           :is-path-displayed="arePathsDisplayed"
           :parent-folder-name="getParentFolderName(item)"
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
-          :folder-link="createFolderLink(item)"
+          :folder-link="getFolderLink(item)"
           :parent-folder-link="getParentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
             getParentFolderLinkIconAdditionalAttributes(item)
@@ -248,6 +249,7 @@ import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
+import { useGettext } from 'vue3-gettext'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -437,6 +439,8 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const configurationManager = useConfigurationManager()
+    const { getMatchingSpace } = useGetMatchingSpace()
+    const { $gettext } = useGettext()
 
     const { width } = useWindowSize()
     const hasTags = computed(
@@ -448,7 +452,7 @@ export default defineComponent({
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
-    const isResourceDisabled = (resource) => {
+    const isResourceDisabled = (resource: Resource) => {
       return resource.processing === true
     }
 
@@ -472,7 +476,7 @@ export default defineComponent({
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       isUserContext: useUserContext({ store }),
-      ...useGetMatchingSpace(),
+      getMatchingSpace,
       ...useResourceRouteResolver(
         {
           space: ref(props.space),
@@ -480,7 +484,10 @@ export default defineComponent({
         },
         context
       ),
-      ...useFolderLink()
+      ...useFolderLink({
+        space: ref(props.space),
+        targetRouteCallback: computed(() => props.targetRouteCallback)
+      })
     }
   },
   data() {
