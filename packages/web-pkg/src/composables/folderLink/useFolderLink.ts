@@ -20,14 +20,6 @@ export const useFolderLink = () => {
   const { getInternalSpace, getMatchingSpace, isResourceAccessible } = useGetMatchingSpace()
   const { createFolderLink } = useResourceRouteResolver()
 
-  const getFolderLink = (resource: Resource) => {
-    return createFolderLink({
-      path: resource.path,
-      fileId: resource.fileId,
-      resource
-    })
-  }
-
   const getParentFolderLink = (resource: Resource) => {
     const space = getMatchingSpace(resource)
     const parentFolderAccessible = isResourceAccessible({
@@ -99,7 +91,6 @@ export const useFolderLink = () => {
   }
 
   return {
-    getFolderLink,
     getParentFolderLink,
     getParentFolderName,
     getParentFolderLinkIconAdditionalAttributes

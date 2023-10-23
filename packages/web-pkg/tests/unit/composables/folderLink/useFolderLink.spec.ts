@@ -34,23 +34,6 @@ jest.mock('../../../../src/composables/configuration', () => ({
 }))
 
 describe('useFolderLink', () => {
-  it('getFolderLink should return the correct folder link', () => {
-    const resource = {
-      path: '/my-folder',
-      id: '2',
-      fileId: '2',
-      storageId: '1'
-    }
-    const wrapper = createWrapper()
-
-    const folderLink = wrapper.vm.getFolderLink(resource)
-    expect(folderLink).toEqual({
-      name: 'files-spaces-generic',
-      params: { driveAliasAndItem: 'personal/admin' },
-      query: { fileId: '2' }
-    })
-  })
-
   it('getParentFolderLink should return the correct parent folder link', () => {
     const resource = {
       path: '/my-folder',
@@ -151,14 +134,12 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
     () => {
       const {
         getParentFolderLink,
-        getFolderLink,
         getParentFolderName,
         getParentFolderLinkIconAdditionalAttributes
       } = useFolderLink()
 
       return {
         getParentFolderLink,
-        getFolderLink,
         getParentFolderName,
         getParentFolderLinkIconAdditionalAttributes
       }

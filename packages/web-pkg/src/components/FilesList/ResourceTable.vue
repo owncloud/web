@@ -66,7 +66,7 @@
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item.id)"
-          :folder-link="getFolderLink(item)"
+          :folder-link="createFolderLink(item)"
           :parent-folder-link="getParentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
             getParentFolderLinkIconAdditionalAttributes(item)
@@ -437,12 +437,6 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const configurationManager = useConfigurationManager()
-    const {
-      getFolderLink,
-      getParentFolderLink,
-      getParentFolderName,
-      getParentFolderLinkIconAdditionalAttributes
-    } = useFolderLink()
 
     const { width } = useWindowSize()
     const hasTags = computed(
@@ -486,10 +480,7 @@ export default defineComponent({
         },
         context
       ),
-      getFolderLink,
-      getParentFolderLink,
-      getParentFolderName,
-      getParentFolderLinkIconAdditionalAttributes
+      ...useFolderLink()
     }
   },
   data() {
