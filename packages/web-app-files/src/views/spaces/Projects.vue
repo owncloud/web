@@ -167,7 +167,6 @@ import {
   useSort,
   useStore,
   useRouteName,
-  SortDir,
   usePagination,
   useRouter,
   useRoute
@@ -263,11 +262,7 @@ export default defineComponent({
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
     const items = computed(() =>
-      orderBy(
-        filter(unref(spaces), unref(filterTerm)),
-        unref(sortBy),
-        unref(sortDir) === SortDir.Desc
-      )
+      orderBy(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir))
     )
 
     const {
