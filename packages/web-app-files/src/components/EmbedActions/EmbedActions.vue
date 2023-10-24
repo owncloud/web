@@ -22,7 +22,7 @@
   </section>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { computed } from 'vue'
 import {
   createQuicklink,
@@ -35,94 +35,107 @@ import {
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 
-const store = useStore()
-const ability = useAbility()
-const clientService = useClientService()
-const passwordPolicyService = usePasswordPolicyService()
-const language = useGettext()
+export default {
+  setup() {
+    const store = useStore()
+    const ability = useAbility()
+    const clientService = useClientService()
+    const passwordPolicyService = usePasswordPolicyService()
+    const language = useGettext()
 
-const selectedFiles = computed<Resource[]>(() => {
-  return store.getters['Files/selectedFiles']
-})
+    const selectedFiles = computed<Resource[]>(() => {
+      return store.getters['Files/selectedFiles']
+    })
 
-const areSelectActionsDisabled = computed<boolean>(() => selectedFiles.value.length < 1)
+    const areSelectActionsDisabled = computed<boolean>(() => selectedFiles.value.length < 1)
 
-const canCreatePublicLinks = computed<boolean>(() => ability.can('create-all', 'PublicLink'))
+    const canCreatePublicLinks = computed<boolean>(() => ability.can('create-all', 'PublicLink'))
 
-const emitSelect = (): void => {
-  const event: CustomEvent<Resource[]> = new CustomEvent('owncloud-embed:select', {
-    detail: selectedFiles.value
-  })
+    const emitSelect = (): void => {
+      const event: CustomEvent<Resource[]> = new CustomEvent('owncloud-embed:select', {
+        detail: selectedFiles.value
+      })
 
-  window.parent.dispatchEvent(event)
-}
-
-const emitCancel = (): void => {
-  const event: CustomEvent<void> = new CustomEvent('owncloud-embed:cancel')
-
-  window.parent.dispatchEvent(event)
-}
-
-const emitShare = (links: string[]): void => {
-  if (!canCreatePublicLinks.value) return
-
-  const event: CustomEvent<string[]> = new CustomEvent('owncloud-embed:share', {
-    detail: links
-  })
-
-  window.parent.dispatchEvent(event)
-}
-
-const sharePublicLinks = async (): Promise<string[]> => {
-  if (!canCreatePublicLinks.value) return
-
-  try {
-    const passwordEnforced: boolean =
-      store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only === true
-
-    if (passwordEnforced) {
-      showQuickLinkPasswordModal(
-        { store, $gettext: language.$gettext, passwordPolicyService },
-        async (password) => {
-          const links: string[] = await Promise.all(
-            selectedFiles.value.map(
-              async (resource) =>
-                (
-                  await createQuicklink({
-                    ability,
-                    resource,
-                    clientService,
-                    language,
-                    store,
-                    password
-                  })
-                ).url
-            )
-          )
-
-          emitShare(links)
-        }
-      )
-
-      return
+      window.parent.dispatchEvent(event)
     }
 
-    const links: string[] = await Promise.all(
-      selectedFiles.value.map(
-        async (resource) =>
-          (
-            await createQuicklink({ ability, resource, clientService, language, store })
-          ).url
-      )
-    )
+    const emitCancel = (): void => {
+      const event: CustomEvent<void> = new CustomEvent('owncloud-embed:cancel')
 
-    emitShare(links)
-  } catch (error) {
-    console.error(error)
-    store.dispatch('showErrorMessage', {
-      title: language.$gettext('Sharing links failed...'),
-      error
-    })
+      window.parent.dispatchEvent(event)
+    }
+
+    const emitShare = (links: string[]): void => {
+      if (!canCreatePublicLinks.value) return
+
+      const event: CustomEvent<string[]> = new CustomEvent('owncloud-embed:share', {
+        detail: links
+      })
+
+      window.parent.dispatchEvent(event)
+    }
+
+    const sharePublicLinks = async (): Promise<string[]> => {
+      if (!canCreatePublicLinks.value) return
+
+      try {
+        const passwordEnforced: boolean =
+          store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
+          true
+
+        if (passwordEnforced) {
+          showQuickLinkPasswordModal(
+            { store, $gettext: language.$gettext, passwordPolicyService },
+            async (password) => {
+              const links: string[] = await Promise.all(
+                selectedFiles.value.map(
+                  async (resource) =>
+                    (
+                      await createQuicklink({
+                        ability,
+                        resource,
+                        clientService,
+                        language,
+                        store,
+                        password
+                      })
+                    ).url
+                )
+              )
+
+              emitShare(links)
+            }
+          )
+
+          return
+        }
+
+        const links: string[] = await Promise.all(
+          selectedFiles.value.map(
+            async (resource) =>
+              (
+                await createQuicklink({ ability, resource, clientService, language, store })
+              ).url
+          )
+        )
+
+        emitShare(links)
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: language.$gettext('Sharing links failed...'),
+          error
+        })
+      }
+    }
+
+    return {
+      areSelectActionsDisabled,
+      canCreatePublicLinks,
+      sharePublicLinks,
+      emitCancel,
+      emitSelect
+    }
   }
 }
 </script>
