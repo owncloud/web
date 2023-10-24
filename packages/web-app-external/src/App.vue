@@ -59,6 +59,7 @@ import {
   isMountPointSpaceResource
 } from 'web-client/src/helpers'
 import { useLoadFileInfoById } from 'web-pkg/src/composables/fileInfo'
+import { dirname } from 'path'
 
 export default defineComponent({
   name: 'ExternalApp',
@@ -105,8 +106,10 @@ export default defineComponent({
             driveAliasAndItem
           },
           query: {
+            fileId: id,
             ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
-            contextRouteName: 'files-spaces-generic'
+            contextRouteName: 'files-spaces-generic',
+            contextRouteParams: { driveAliasAndItem: dirname(driveAliasAndItem) } as any
           }
         })
       }
@@ -145,9 +148,16 @@ export default defineComponent({
           driveAliasAndItem
         },
         query: {
+          fileId: id,
           shareId: matchingSpace.shareId,
           ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
-          contextRouteName: 'files-shares-with-me'
+          contextRouteName: path === '/' ? 'files-shares-with-me' : 'files-spaces-generic',
+          contextRouteParams: {
+            driveAliasAndItem: dirname(driveAliasAndItem)
+          } as any,
+          contextRouteQuery: {
+            shareId: matchingSpace.shareId
+          } as any
         }
       })
     }
