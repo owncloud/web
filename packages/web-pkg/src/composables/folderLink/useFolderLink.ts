@@ -28,7 +28,7 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
     }
 
     if (isShareSpaceResource(space)) {
-      return path.join($gettext('Shares'), $gettext('Shared with me'), space.name)
+      return path.join($gettext('Shares'), space.name)
     }
 
     return space.name

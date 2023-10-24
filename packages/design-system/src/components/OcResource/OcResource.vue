@@ -56,6 +56,7 @@
           :full-path="resource.path"
           :is-path-displayed="isPathDisplayed"
           :is-extension-displayed="isExtensionDisplayed"
+          @click="$emit('clickFolder')"
         />
       </oc-resource-link>
       <div class="oc-resource-indicators">
@@ -65,7 +66,7 @@
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder"
-          @click.stop="$emit('parentFolderClicked')"
+          @click="$emit('clickParentFolder')"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
           <span class="text" v-text="parentFolderName" />
@@ -189,7 +190,7 @@ export default defineComponent({
       default: true
     }
   },
-  emits: ['click', 'parentFolderClicked'],
+  emits: ['click', 'clickFolder', 'clickParentFolder'],
   computed: {
     parentFolderComponentType() {
       return this.parentFolderLink !== null ? 'router-link' : 'span'
@@ -301,6 +302,7 @@ export default defineComponent({
     a {
       text-decoration: none;
     }
+
     a:hover,
     a:focus {
       outline-offset: 0;
@@ -345,94 +347,94 @@ export default defineComponent({
 </style>
 
 <docs>
-  ```js
-    <template>
-      <div>
-        <oc-resource :resource="documents" parent-folder-link="parentFolderLink" class="oc-mb" />
-        <oc-resource :resource="notes" is-path-displayed="true" class="oc-mb" />
-        <oc-resource :resource="notes" is-resource-clickable="false" class="oc-mb" />
-        <oc-resource :resource="notes" :is-extension-displayed="false" class="oc-mb" />
-        <oc-resource :resource="forest" is-path-displayed="true" />
-        <oc-resource :resource="something" is-path-displayed="true" parent-folder-name="Example parent folder"  />
-      </div>
-    </template>
-    <script>
-    export default {
-      computed: {
-        documents() {
-          return {
-            name: "Documents",
-            path: "/Documents",
-            indicators: [],
-            type: "folder",
-            isFolder: true
-          }
-        },
-        notes() {
-          return {
-            name: "notes.txt",
-            extension: "txt",
-            path: "Documents/notes.txt",
-            indicators: this.indicators,
-            type: "file",
-            isFolder: false
-          }
-        },
-        forest() {
-          return {
-            name: "forest-image-with-filename-with-a-lot-of-characters.jpg",
-            extension: "jpg",
-            path: "images/nature/forest-image-with-filename-with-a-lot-of-characters.jpg",
-            thumbnail: "https://picsum.photos/200/300",
-            indicators: [],
-            type: "file",
-            isFolder: false,
-            opensInNewWindow: true,
-          }
-        },
-        something() {
-          return {
-            name: "another-image.jpg",
-            extension: "jpg",
-            path: "another-image.jpg",
-            thumbnail: "https://picsum.photos/200/300",
-            indicators: [],
-            type: "file",
-            isFolder: false,
-            opensInNewWindow: true,
-          }
-        },
-        indicators() {
-          return [
-            {
-              id: 'files-sharing',
-              label: "Shared with other people",
-              visible: true,
-              icon: 'group',
-              handler: (resource, indicatorId) => alert(`Resource: ${resource.name}, indicator: ${indicatorId}`)
-            },
-            {
-              id: 'file-link',
-              label: "Shared via link",
-              visible: true,
-              icon: 'link',
-            }
-          ]
-        },
-        parentFolderLink() {
-          return {
-            name: "home",
-            params: {
-              action: "copy",
-              item: 'Documents',
-            },
-            query: {
-              resource: "notes"
-            }
-          }
+```js
+<template>
+  <div>
+    <oc-resource :resource="documents" parent-folder-link="parentFolderLink" class="oc-mb"/>
+    <oc-resource :resource="notes" is-path-displayed="true" class="oc-mb"/>
+    <oc-resource :resource="notes" is-resource-clickable="false" class="oc-mb"/>
+    <oc-resource :resource="notes" :is-extension-displayed="false" class="oc-mb"/>
+    <oc-resource :resource="forest" is-path-displayed="true"/>
+    <oc-resource :resource="something" is-path-displayed="true" parent-folder-name="Example parent folder"/>
+  </div>
+</template>
+<script>
+  export default {
+    computed: {
+      documents() {
+        return {
+          name: "Documents",
+          path: "/Documents",
+          indicators: [],
+          type: "folder",
+          isFolder: true
         }
       },
-    }
-  </script>
-  ```
+      notes() {
+        return {
+          name: "notes.txt",
+          extension: "txt",
+          path: "Documents/notes.txt",
+          indicators: this.indicators,
+          type: "file",
+          isFolder: false
+        }
+      },
+      forest() {
+        return {
+          name: "forest-image-with-filename-with-a-lot-of-characters.jpg",
+          extension: "jpg",
+          path: "images/nature/forest-image-with-filename-with-a-lot-of-characters.jpg",
+          thumbnail: "https://picsum.photos/200/300",
+          indicators: [],
+          type: "file",
+          isFolder: false,
+          opensInNewWindow: true,
+        }
+      },
+      something() {
+        return {
+          name: "another-image.jpg",
+          extension: "jpg",
+          path: "another-image.jpg",
+          thumbnail: "https://picsum.photos/200/300",
+          indicators: [],
+          type: "file",
+          isFolder: false,
+          opensInNewWindow: true,
+        }
+      },
+      indicators() {
+        return [
+          {
+            id: 'files-sharing',
+            label: "Shared with other people",
+            visible: true,
+            icon: 'group',
+            handler: (resource, indicatorId) => alert(`Resource: ${resource.name}, indicator: ${indicatorId}`)
+          },
+          {
+            id: 'file-link',
+            label: "Shared via link",
+            visible: true,
+            icon: 'link',
+          }
+        ]
+      },
+      parentFolderLink() {
+        return {
+          name: "home",
+          params: {
+            action: "copy",
+            item: 'Documents',
+          },
+          query: {
+            resource: "notes"
+          }
+        }
+      }
+    },
+  }
+</script>
+```
 </docs>
