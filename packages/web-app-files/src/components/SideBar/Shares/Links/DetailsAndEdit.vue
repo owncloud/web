@@ -342,7 +342,7 @@ export default defineComponent({
           })
         }
       }
-      if (!this.isPasswordEnforced && !this.link.password && !this.isAliasLink) {
+      if (!this.link.password && !this.isAliasLink) {
         result.push({
           id: 'add-password',
           title: this.$gettext('Add password'),

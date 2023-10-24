@@ -445,7 +445,7 @@ export default defineComponent({
     checkLinkToUpdate({ link }) {
       const params = this.getParamsForLink(link)
 
-      if (!link.password && this.isPasswordEnforcedFor(link)) {
+      if (!link.password && !this.canDeletePublicLinkPassword(link)) {
         showQuickLinkPasswordModal(
           {
             ...this.$language,
