@@ -141,7 +141,6 @@ export default defineComponent({
       })
     },
     folderClicked() {
-      console.log('parent clicked')
       eventBus.publish('app.search.options-drop.hide')
     }
   }
