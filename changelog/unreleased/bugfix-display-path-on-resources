@@ -1,0 +1,7 @@
+Bugfix: Fix display path on resources
+
+We've fixed a bug, where the display path of a resource was missing parts.
+For example the respective space name or the folder name of a share.
+
+https://github.com/owncloud/web/pull/9843
+
