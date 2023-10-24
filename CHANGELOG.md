@@ -47,6 +47,7 @@ Summary
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
+* Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
 
 Details
 -------
@@ -409,6 +410,15 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9818
+
+* Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
+
+   We've added three new actions available in the embed mode. These actions are "Share", "Select"
+   and "Share". They are emitting events with an optional payload. For more information, check
+   the documentation.
+
+   https://github.com/owncloud/web/issues/9768
+   https://github.com/owncloud/web/pull/9841
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
