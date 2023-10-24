@@ -15,7 +15,25 @@
         @item-dropped="fileDropped"
       >
         <template #actions="{ limitedScreenSpace }">
+          <oc-button
+            v-if="isEmbedModeEnabled"
+            key="new-folder-btn"
+            v-oc-tooltip="limitedScreenSpace ? $gettext('Create a new folder') : ''"
+            data-testid="btn-new-folder"
+            :aria-label="$gettext('Create a new folder')"
+            appearance="filled"
+            variation="primary"
+            :disabled="!canUpload"
+            @click="createNewFolderAction"
+          >
+            <oc-icon name="add" />
+            <span v-if="!limitedScreenSpace" v-text="$gettext('Create a new folder')" />
+          </oc-button>
+
           <create-and-upload
+            v-else
+            key="create-and-upload-actions"
+            data-testid="actions-create-and-upload"
             :space="space"
             :item="item"
             :item-id="itemId"
@@ -152,7 +170,7 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 
-import { useFileActions } from '@ownclouders/web-pkg'
+import { useEmbedMode, useFileActions, useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
 import { ContextActions } from '@ownclouders/web-pkg'
@@ -247,6 +265,11 @@ export default defineComponent({
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({
+      store,
+      space: props.space
+    })
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     let loadResourcesEventToken
 
@@ -503,6 +526,8 @@ export default defineComponent({
       )
     }
 
+    const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
+
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
@@ -520,7 +545,9 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail
+      hasShareJail,
+      createNewFolderAction,
+      isEmbedModeEnabled
     }
   },
 

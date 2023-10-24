@@ -1,0 +1,7 @@
+Enhancement: Show only create folder button in embed mode
+
+We've changed the actions in the AppBar in Files app to show only create folder button instead of create and upload actions.
+In embed mode, it is possible to only create a new folder so it does not make sense to hide this action inside of a dropdown.
+
+https://github.com/owncloud/web/pull/9853
+https://github.com/owncloud/web/issues/9768

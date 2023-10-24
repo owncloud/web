@@ -16,6 +16,8 @@ import {
 import { ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 
+const mockCreateFolder = jest.fn()
+
 jest.mock('web-app-files/src/composables/resourcesViewDefaults')
 jest.mock('web-app-files/src/composables/keyboardActions')
 jest.mock('@ownclouders/web-pkg', () => ({
@@ -28,8 +30,16 @@ jest.mock('@ownclouders/web-pkg', () => ({
           fullShareOwnerPaths: false
         }
       }
-    })
+    }),
+  useFileActionsCreateNewFolder: () => ({
+    actions: [{ handler: mockCreateFolder }]
+  })
 }))
+
+const selectors = Object.freeze({
+  btnCreateFolder: '[data-testid="btn-new-folder"]',
+  actionsCreateAndUpload: '[data-testid="actions-create-and-upload"]'
+})
 
 describe('GenericSpace view', () => {
   it('appBar always present', () => {
@@ -201,6 +211,55 @@ describe('GenericSpace view', () => {
       })
     })
   })
+  describe('create and upload actions', () => {
+    const AppBarStub = { template: '<div><slot name="actions" /></div>' }
+
+    it('should not render create folder button when not in embed mode', () => {
+      const { wrapper } = getMountedWrapper({
+        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
+      })
+
+      expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(false)
+    })
+
+    it('should render create and upload actions when not in embed mode', () => {
+      const { wrapper } = getMountedWrapper({
+        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
+      })
+
+      expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(true)
+    })
+
+    it('should render create folder button when in embed mode', () => {
+      const { wrapper } = getMountedWrapper({
+        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true },
+        configurationOptions: { mode: 'embed' }
+      })
+
+      expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(true)
+    })
+
+    it('should not render create and upload actions when in embed mode', () => {
+      const { wrapper } = getMountedWrapper({
+        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true },
+        configurationOptions: { mode: 'embed' }
+      })
+
+      expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(false)
+    })
+
+    it('should call createNewFolderAction when create folder button is clicked', () => {
+      const { wrapper } = getMountedWrapper({
+        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true },
+        configurationOptions: { mode: 'embed' }
+      })
+
+      // @ts-expect-error even though the vm object is not specified on WrapperLike, it actually is present there
+      wrapper.findComponent(selectors.btnCreateFolder).vm.$emit('click')
+
+      expect(mockCreateFolder).toHaveBeenCalledTimes(1)
+    })
+  })
 })
 
 function getMountedWrapper({
@@ -212,7 +271,9 @@ function getMountedWrapper({
   currentFolder = mock<Resource>() || {},
   runningOnEos = false,
   space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' },
-  breadcrumbsFromPath = []
+  breadcrumbsFromPath = [],
+  stubs = {},
+  configurationOptions = {}
 } = {}) {
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(files),
@@ -237,7 +298,8 @@ function getMountedWrapper({
         return {
           currentTheme: { general: { slogan: 'Public link slogan' } },
           options: {
-            runningOnEos
+            runningOnEos,
+            ...configurationOptions
           }
         }
       }
@@ -264,7 +326,7 @@ function getMountedWrapper({
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         provide: defaultMocks,
-        stubs: { ...defaultStubs, 'resource-details': true, portal: true }
+        stubs: { ...defaultStubs, 'resource-details': true, portal: true, ...stubs }
       }
     })
   }
