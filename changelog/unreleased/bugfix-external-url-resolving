@@ -1,0 +1,6 @@
+Bugfix: Resolving external URLs
+
+Resolving external URLs when only the file ID is given has been fixed.
+
+https://github.com/owncloud/web/issues/9804
+https://github.com/owncloud/web/pull/9833
