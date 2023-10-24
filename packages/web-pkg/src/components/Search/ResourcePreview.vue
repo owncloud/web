@@ -50,7 +50,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace()
+    const { triggerDefaultAction } = useFileActions()
+    const { getMatchingSpace } = useGetMatchingSpace()
     const {
       getPathPrefix,
       getParentFolderName,
@@ -76,15 +77,26 @@ export default defineComponent({
       return unref(resource).disabled === true
     })
 
+    const resourceClicked = () => {
+      eventBus.publish('app.search.options-drop.hide')
+      triggerDefaultAction({
+        space: unref(space),
+        resources: [unref(resource)]
+      })
+    }
+
+    const folderClicked = () => {
+      eventBus.publish('app.search.options-drop.hide')
+    }
+
     return {
       space,
-      ...useFileActions(),
-      getInternalSpace,
-      getMatchingSpace,
       hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
       resource,
       resourceDisabled,
+      resourceClicked,
+      folderClicked,
       parentFolderLink: getParentFolderLink(unref(resource)),
       folderLink: getFolderLink(unref(resource)),
       pathPrefix: getPathPrefix(unref(resource)),
@@ -131,18 +143,6 @@ export default defineComponent({
   },
   beforeUnmount() {
     visibilityObserver.disconnect()
-  },
-  methods: {
-    resourceClicked() {
-      eventBus.publish('app.search.options-drop.hide')
-      this.triggerDefaultAction({
-        space: this.space,
-        resources: [this.resource]
-      })
-    },
-    folderClicked() {
-      eventBus.publish('app.search.options-drop.hide')
-    }
   }
 })
 </script>
