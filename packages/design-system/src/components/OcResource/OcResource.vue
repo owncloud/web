@@ -66,7 +66,7 @@
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder"
-          @click.stop="$emit('clickParentFolder')"
+          @click="$emit('clickParentFolder')"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
           <span class="text" v-text="parentFolderName" />

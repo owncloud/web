@@ -1,25 +1,18 @@
 <template>
-  <oc-button
-    :type="resource.isFolder ? 'router-link' : 'button'"
-    justify-content="left"
-    class="files-search-preview oc-flex oc-width-1-1"
-    appearance="raw"
-    v-bind="attrs"
-    v-on="listeners"
-  >
-    <oc-resource
-      :resource="resource"
-      :path-prefix="pathPrefix"
-      :is-path-displayed="true"
-      :is-resource-clickable="false"
-      :parent-folder-link="parentFolderLink"
-      :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
-      :parent-folder-name="parentFolderName"
-      :is-thumbnail-displayed="displayThumbnails"
-      @click-parent-folder="folderClicked"
-      @click-folder="folderClicked"
-    />
-  </oc-button>
+  <oc-resource
+    :resource="resource"
+    :path-prefix="pathPrefix"
+    :is-path-displayed="true"
+    :is-resource-clickable="true"
+    :folder-link="folderLink"
+    :parent-folder-link="parentFolderLink"
+    :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
+    :parent-folder-name="parentFolderName"
+    :is-thumbnail-displayed="displayThumbnails"
+    @click="resourceClicked"
+    @click-folder="folderClicked"
+    @click-parent-folder="folderClicked"
+  />
 </template>
 
 <script lang="ts">
@@ -105,24 +98,6 @@ export default defineComponent({
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaces']),
 
-    attrs() {
-      return this.resource.isFolder
-        ? {
-            to: this.folderLink
-          }
-        : {}
-    },
-    listeners() {
-      return this.resource.isFolder
-        ? {}
-        : {
-            click: () =>
-              this.triggerDefaultAction({
-                space: this.space,
-                resources: [this.resource]
-              })
-          }
-    },
     displayThumbnails() {
       return (
         !this.configuration?.options?.disablePreviews &&
@@ -158,7 +133,15 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
+    resourceClicked() {
+      eventBus.publish('app.search.options-drop.hide')
+      this.triggerDefaultAction({
+        space: this.space,
+        resources: [this.resource]
+      })
+    },
     folderClicked() {
+      console.log('parent clicked')
       eventBus.publish('app.search.options-drop.hide')
     }
   }
