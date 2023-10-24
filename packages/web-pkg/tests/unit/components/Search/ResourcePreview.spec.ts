@@ -18,7 +18,7 @@ jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
 describe('Preview component', () => {
   const driveAliasAndItem = '1'
   jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
-  it('should set correct props on oc-resource component', () => {
+  it('should render preview component', () => {
     const { wrapper } = getWrapper({
       space: mock<SpaceResource>({
         id: '1',
@@ -27,9 +27,7 @@ describe('Preview component', () => {
         getDriveAliasAndItem: () => driveAliasAndItem
       })
     })
-    const ocResource = wrapper.findComponent<any>('oc-resource-stub')
-
-    expect(ocResource.props().resource).toMatchObject(wrapper.vm.searchResult.data)
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 
@@ -59,6 +57,9 @@ function getWrapper({
 } = {}) {
   jest.mocked(useGetMatchingSpace).mockImplementation(() =>
     useGetMatchingSpaceMock({
+      isResourceAccessible() {
+        return true
+      },
       getMatchingSpace() {
         return space
       }
@@ -76,7 +77,8 @@ function getWrapper({
       }),
       capabilities: () => ({
         spaces: {
-          share_jail: hasShareJail
+          share_jail: hasShareJail,
+          projects: { enabled: true }
         }
       }),
       user: () => user
