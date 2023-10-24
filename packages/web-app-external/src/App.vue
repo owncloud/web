@@ -83,10 +83,10 @@ export default defineComponent({
 
     const driveAliasAndItem = useRouteParam('driveAliasAndItem')
 
-    const getMatchingSpace = (id): SpaceResource => {
+    const getMatchingSpaceByFileId = (id): SpaceResource => {
       return store.getters['runtime/spaces/spaces'].find((space) => id.startsWith(space.id))
     }
-    const findMatchingMountPoint = (id: string | number): SpaceResource => {
+    const getMatchingMountPoint = (id: string | number): SpaceResource => {
       return store.getters['runtime/spaces/spaces'].find(
         (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
       )
@@ -95,7 +95,7 @@ export default defineComponent({
     const addMissingDriveAliasAndItem = async () => {
       const id = unref(fileId)
       let path: string
-      let matchingSpace = getMatchingSpace(id)
+      let matchingSpace = getMatchingSpaceByFileId(id)
       if (matchingSpace) {
         path = await clientService.owncloudSdk.files.getPathForFileId(id)
         const driveAliasAndItem = matchingSpace.getDriveAliasAndItem({ path } as Resource)
@@ -116,7 +116,7 @@ export default defineComponent({
       await store.dispatch('runtime/spaces/loadMountPoints', {
         graphClient: clientService.graphAuthenticated
       })
-      let mountPoint = findMatchingMountPoint(id)
+      let mountPoint = getMatchingMountPoint(id)
       const resource = await loadFileInfoByIdTask.perform(id)
       const sharePathSegments = mountPoint ? [] : [unref(resource).name]
       let tmpResource = unref(resource)
@@ -126,7 +126,7 @@ export default defineComponent({
         } catch (e) {
           throw Error(e)
         }
-        mountPoint = findMatchingMountPoint(tmpResource.id)
+        mountPoint = getMatchingMountPoint(tmpResource.id)
         if (!mountPoint) {
           sharePathSegments.unshift(tmpResource.name)
         }
