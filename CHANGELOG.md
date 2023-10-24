@@ -20,6 +20,7 @@ Summary
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
+* Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -138,6 +139,13 @@ Details
 
    https://github.com/owncloud/web/issues/9166
    https://github.com/owncloud/web/pull/9832
+
+* Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
+
+   Space image upload failed due to some code changes, this fixed and works as expected again.
+
+   https://github.com/owncloud/web/issues/9839
+   https://github.com/owncloud/web/pull/9844
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
