@@ -1,6 +1,7 @@
 import { computed, unref, VNodeRef } from 'vue'
 import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
+import { Drive } from '@ownclouders/web-client/src/generated'
 import {
   useClientService,
   useLoadingService,
@@ -38,7 +39,7 @@ export const useSpaceActionsUploadImage = ({
 
   const uploadImageSpace = async (ev) => {
     const graphClient = clientService.graphAuthenticated
-    const file = ev.currentTarget.files[0] as File
+    const file = ev.currentTarget.files[0]
 
     if (!file) {
       return
@@ -60,10 +61,6 @@ export const useSpaceActionsUploadImage = ({
       })
     }
 
-    const extraHeaders = {
-      'content-type': 'application/offset+octet-stream'
-    }
-
     return loadingService.addTask(async () => {
       // overwriting the content-type header only works if the provided content is not of type object,
       // therefore it has to be converted to a ArrayBuffer which allows the overwrite.
@@ -75,9 +72,9 @@ export const useSpaceActionsUploadImage = ({
       }
 
       if (file.lastModifiedDate) {
-        extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
+        headers['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
       } else if (file.lastModified) {
-        extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
+        headers['X-OC-Mtime'] = '' + file.lastModified / 1000
       }
 
       try {
@@ -99,7 +96,7 @@ export const useSpaceActionsUploadImage = ({
                 id: fileId
               }
             ]
-          },
+          } as Drive,
           {}
         )
 
@@ -112,8 +109,8 @@ export const useSpaceActionsUploadImage = ({
           title: $gettext('Space image was uploaded successfully')
         })
         eventBus.publish('app.files.list.load')
-      } catch (e) {
-        console.error(e)
+      } catch (error) {
+        console.error(error)
         await store.dispatch('showErrorMessage', {
           title: $gettext('Failed to upload space image'),
           error
