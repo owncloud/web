@@ -253,6 +253,12 @@ export const changeSpaceImage = async (args: {
         resp.status() === 207 &&
         resp.request().method() === 'PROPFIND'
     ),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes(resource.name) &&
+        resp.status() === 200 &&
+        resp.request().method() === 'GET'
+    ),
     fileChooser.setFiles(resource.path)
   ])
 

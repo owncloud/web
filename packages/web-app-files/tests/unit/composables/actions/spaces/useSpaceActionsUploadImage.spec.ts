@@ -28,9 +28,17 @@ describe('uploadImage', () => {
                 'YTE0ODkwNGItNTZhNy00NTQ4LTk2N2MtZjcwZjhhYTY0Y2FjOmQ4YzMzMmRiLWUxNWUtNDRjMy05NGM2LTViYjQ2MGMwMWJhMw=='
             })
           )
+
           await uploadImageSpace({
             currentTarget: {
-              files: [{ name: 'image.png', lastModifiedDate: new Date(), type: 'image/png' }]
+              files: [
+                {
+                  name: 'image.png',
+                  lastModifiedDate: new Date(),
+                  type: 'image/png',
+                  arrayBuffer: () => new ArrayBuffer(0)
+                }
+              ]
             }
           })
 
@@ -47,7 +55,14 @@ describe('uploadImage', () => {
 
           await uploadImageSpace({
             currentTarget: {
-              files: [{ name: 'image.png', lastModifiedDate: new Date(), type: 'image/png' }]
+              files: [
+                {
+                  name: 'image.png',
+                  lastModifiedDate: new Date(),
+                  type: 'image/png',
+                  arrayBuffer: () => new ArrayBuffer(0)
+                }
+              ]
             }
           })
 
