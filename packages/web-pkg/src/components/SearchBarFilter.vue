@@ -135,6 +135,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-location-search {
   z-index: 9999;
+  background-color: var(--oc-color-input-bg) !important;
   margin-right: 34px !important;
   float: right;
   .oc-drop {
