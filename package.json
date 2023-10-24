@@ -43,7 +43,7 @@
   },
   "peerDependencies": {
     "caf": "*",
-    "portal-vue": "*",
+    "portal-vue": "3.0.0",
     "uuid": "*",
     "vue-demi": "*",
     "vue-router": "*"

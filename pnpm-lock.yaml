@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   '@uppy/companion-client': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz
   '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
@@ -56,8 +60,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=nmisee7m676ph5sqah5fka5ueu)
       portal-vue:
-        specifier: '*'
-        version: 2.1.7(vue@3.3.4)
+        specifier: 3.0.0
+        version: 3.0.0(vue@3.3.4)
       rollup-plugin-gzip:
         specifier: ^3.1.0
         version: 3.1.0(rollup@3.29.2)
@@ -17418,14 +17422,6 @@ packages:
   /pofile@1.1.4:
     resolution: {integrity: sha512-r6Q21sKsY1AjTVVjOuU02VYKVNQGJNQHjTIvs4dEbeuuYfxgYk/DGD2mqqq4RDaVkwdSq0VEtmQUOPe/wH8X3g==}
 
-  /portal-vue@2.1.7(vue@3.3.4):
-    resolution: {integrity: sha512-+yCno2oB3xA7irTt0EU5Ezw22L2J51uKAacE/6hMPMoO/mx3h4rXFkkBkT4GFsMDv/vEe8TNKC3ujJJ0PTwb6g==}
-    peerDependencies:
-      vue: ^2.5.18
-    dependencies:
-      vue: 3.3.4
-    dev: false
-
   /portal-vue@3.0.0(vue@3.3.4):
     resolution: {integrity: sha512-9eprMxNURLx6ijbcgkWjYNcTWJYu/H8QF8nyAeBzOmk9lKCea01BW1hYBeLkgz+AestmPOvznAEOFmNuO4Adjw==}
     engines: {node: '>=14.19'}
@@ -22746,7 +22742,3 @@ packages:
       lodash: 4.17.21
       vue: 3.3.4
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
