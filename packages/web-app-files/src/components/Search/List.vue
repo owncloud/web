@@ -278,29 +278,26 @@ export default defineComponent({
     )
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      let query = ''
-      const add = (k: string, v: string) => {
-        query = (query + ` ${k}:${v}`).trimStart()
-      }
+      const q = {}
 
       const humanSearchTerm = unref(searchTerm)
       const isContentOnlySearch = queryItemAsString(unref(fullTextParam)) == 'true'
 
       if (isContentOnlySearch && !!humanSearchTerm) {
-        add('content', `"${humanSearchTerm}"`)
+        q['content'] = `"${humanSearchTerm}"`
       } else if (!!humanSearchTerm) {
-        add('name', `"*${humanSearchTerm}*"`)
+        q['name'] = `"*${humanSearchTerm}*"`
       }
 
       const humanScopeQuery = unref(scopeQuery)
       const isScopedSearch = unref(doUseScope) === 'true'
       if (isScopedSearch && humanScopeQuery) {
-        add('scope', `${humanScopeQuery}`)
+        q['scope'] = `${humanScopeQuery}`
       }
 
       const humanTagsParams = queryItemAsString(unref(tagParam))
       if (humanTagsParams) {
-        add('tag', `"${humanTagsParams}"`)
+        q['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
 
         if (manuallyUpdateFilterChip && unref(tagFilter)) {
           /**
@@ -315,7 +312,7 @@ export default defineComponent({
 
       const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
       if (lastModifiedParams) {
-        add('mtime', `"${lastModifiedParams}"`)
+        q['mtime'] = `"${lastModifiedParams}"`
 
         if (manuallyUpdateFilterChip && unref(lastModifiedFilter)) {
           /**
@@ -328,7 +325,30 @@ export default defineComponent({
         }
       }
 
-      return query
+      return (
+        // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
+        // different or identical keys are part of the query.
+        //
+        // We list these operators for the following reasons nevertheless explicit:
+        // * request readability
+        // * code readability
+        // * complex cases readability
+        Object.keys(q)
+          .reduce((acc, k) => {
+            const isArrayValue = Array.isArray(q[k])
+
+            if (!isArrayValue) {
+              acc.push(`${k}:${q[k]}`)
+            }
+
+            if (isArrayValue) {
+              acc.push(`${k}:(${q[k].join(' OR ')})`)
+            }
+
+            return acc
+          }, [])
+          .join(' AND ')
+      )
     }
 
     const breadcrumbs = computed(() => {

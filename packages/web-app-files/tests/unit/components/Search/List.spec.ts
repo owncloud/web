@@ -79,15 +79,15 @@ describe('List component', () => {
       })
       it('should set initial filter when tags are given via query param', async () => {
         const searchTerm = 'term'
-        const tagFilterQuery = 'tag1'
+        const availableTags = ['tag1', 'tag2']
         const { wrapper } = getWrapper({
-          availableTags: [tagFilterQuery],
+          availableTags,
           searchTerm,
-          tagFilterQuery
+          tagFilterQuery: availableTags.join('+')
         })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
-          `name:"*${searchTerm}*" tag:"${tagFilterQuery}"`
+          `name:"*${searchTerm}*" AND tag:("${availableTags[0]}" OR "${availableTags[1]}")`
         )
       })
     })
