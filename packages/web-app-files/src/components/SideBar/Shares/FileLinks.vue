@@ -25,6 +25,7 @@
         :is-folder-share="resource.isFolder"
         :is-modifiable="canEditLink(quicklink)"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
+        :is-password-removable="canDeletePublicLinkPassword(quicklink)"
         :link="quicklink"
         @update-link="checkLinkToUpdate"
         @remove-public-link="deleteLinkConfirmation"
@@ -57,6 +58,7 @@
           :is-folder-share="resource.isFolder"
           :is-modifiable="canEditLink(link)"
           :is-password-enforced="isPasswordEnforcedFor(link)"
+          :is-password-removable="canDeletePublicLinkPassword(link)"
           :link="link"
           @update-link="checkLinkToUpdate"
           @remove-public-link="deleteLinkConfirmation"
@@ -185,6 +187,11 @@ export default defineComponent({
         })
     )
     const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
+
+    const canDeleteReadOnlyPublicLinkPassword = computed(() =>
+      can('delete-all', 'ReadOnlyPublicLinkPassword')
+    )
+
     const canCreateLinks = computed(() => {
       if (unref(resource).isReceivedShare() && !unref(hasResharing)) {
         return false
@@ -225,6 +232,7 @@ export default defineComponent({
       directLinks,
       indirectLinks,
       canCreatePublicLinks,
+      canDeleteReadOnlyPublicLinkPassword,
       configurationManager,
       passwordPolicyService,
       canCreateLinks,
@@ -386,6 +394,21 @@ export default defineComponent({
           currentRole.name === linkRoleContributorFolder.name) ||
         (this.passwordEnforced.read_write_delete === true &&
           currentRole.name === linkRoleEditorFolder.name)
+      )
+    },
+
+    canDeletePublicLinkPassword(link) {
+      const isFolder = link.indirect || this.resource.isFolder
+      const isPasswordEnforced = this.isPasswordEnforcedFor(link)
+
+      if (!isPasswordEnforced) {
+        return true
+      }
+
+      const currentRole = LinkShareRoles.getByBitmask(parseInt(link.permissions), isFolder)
+
+      return (
+        currentRole.name === linkRoleViewerFolder.name && this.canDeleteReadOnlyPublicLinkPassword
       )
     },
 
@@ -626,6 +649,7 @@ export default defineComponent({
 #oc-files-sharing-sidebar {
   border-radius: 5px;
 }
+
 .link-name-container {
   background-color: var(--oc-color-input-bg);
   border: 1px solid var(--oc-color-input-border);

@@ -81,15 +81,20 @@ export default {
       if (passwordEnforced) {
         return showQuickLinkPasswordModal(
           { store, $gettext: language.$gettext, passwordPolicyService },
-          async (password) => {
-            await copyQuicklink({
-              ability,
-              clientService,
-              language,
-              password,
-              resource: item,
-              store
-            })
+          async (password: string) => {
+            try {
+              await copyQuicklink({
+                ability,
+                clientService,
+                language,
+                password,
+                resource: item,
+                store
+              })
+              store.dispatch('hideModal')
+            } catch (e) {
+              console.error(e)
+            }
           }
         )
       }

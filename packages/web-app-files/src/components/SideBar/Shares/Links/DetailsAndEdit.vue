@@ -228,6 +228,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    isPasswordRemovable: {
+      type: Boolean,
+      default: false
+    },
     link: {
       type: Object,
       required: true
@@ -323,7 +327,7 @@ export default defineComponent({
           method: this.showPasswordModal
         })
 
-        if (!this.isPasswordEnforced) {
+        if (this.isPasswordRemovable) {
           result.push({
             id: 'remove-password',
             title: this.$gettext('Remove password'),
