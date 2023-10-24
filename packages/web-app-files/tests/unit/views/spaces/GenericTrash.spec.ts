@@ -84,7 +84,7 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
-        stubs: defaultStubs
+        stubs: { ...defaultStubs, portal: true }
       }
     })
   }
