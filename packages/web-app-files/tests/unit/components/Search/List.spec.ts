@@ -10,8 +10,8 @@ import {
   defaultStoreMockOptions,
   mockAxiosResolve
 } from 'web-test-helpers/src'
-import { queryItemAsString } from '@ownclouders/web-pkg'
-import { ref } from 'vue'
+import { queryItemAsString, useCapabilitySearchModifiedDate } from '@ownclouders/web-pkg'
+import { computed, ref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
 
@@ -19,7 +19,8 @@ jest.mock('web-app-files/src/composables')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   queryItemAsString: jest.fn(),
-  useAppDefaults: jest.fn()
+  useAppDefaults: jest.fn(),
+  useCapabilitySearchModifiedDate: jest.fn()
 }))
 
 const selectors = {
@@ -93,7 +94,7 @@ describe('List component', () => {
 
     describe('last modified', () => {
       it('should show available last modified values', async () => {
-        const lastModifiedValues = [
+        const expectation = [
           { label: 'today', id: 'today' },
           { label: 'yesterday', id: 'yesterday' },
           { label: 'this week', id: 'this week' },
@@ -105,7 +106,20 @@ describe('List component', () => {
           { label: 'this year', id: 'this year' },
           { label: 'last year', id: 'last year' }
         ]
-        // todo mock capabilities
+        const lastModifiedValues = {
+          keywords: [
+            'today',
+            'yesterday',
+            'this week',
+            'last week',
+            'last 7 days',
+            'this month',
+            'last month',
+            'last 30 days',
+            'this year',
+            'last year'
+          ]
+        }
         const { wrapper } = getWrapper({
           availableLastModifiedValues: lastModifiedValues,
           availableTags: ['tag']
@@ -114,7 +128,7 @@ describe('List component', () => {
 
         expect(wrapper.find(selectors.lastModifiedFilter).exists()).toBeTruthy()
         expect(wrapper.findComponent<any>(selectors.lastModifiedFilter).props('items')).toEqual(
-          lastModifiedValues
+          expectation
         )
       })
       it('should set initial filter when last modified is given via query param', async () => {
@@ -157,13 +171,16 @@ function getWrapper({
   tagFilterQuery = null,
   fullTextFilterQuery = null,
   fullTextSearchEnabled = false,
-  availableLastModifiedValues = [],
+  availableLastModifiedValues = {},
   lastModifiedFilterQuery = null
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => lastModifiedFilterQuery)
+  jest
+    .mocked(useCapabilitySearchModifiedDate)
+    .mockReturnValue(computed(() => availableLastModifiedValues as any))
 
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(resources)

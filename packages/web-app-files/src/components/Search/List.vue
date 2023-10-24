@@ -126,7 +126,7 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useCapabilitySearchModifiedDate } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -176,6 +176,10 @@ type Tag = {
   id: string
   label: string
 }
+type LastModifiedKeyword = {
+  id: string
+  label: string
+}
 
 export default defineComponent({
   components: {
@@ -213,6 +217,7 @@ export default defineComponent({
     const clientService = useClientService()
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
+    const modifiedDateCapability = useCapabilitySearchModifiedDate()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -251,19 +256,26 @@ export default defineComponent({
       eventBus.publish('app.search.term.clear')
     })
 
+    // transifex hack
+    const lastModifiedTranslations = {
+      today: $gettext('today'),
+      yesterday: $gettext('yesterday'),
+      'this week': $gettext('this week'),
+      'last week': $gettext('last week'),
+      'last 7 days': $gettext('last 7 days'),
+      'this month': $gettext('this month'),
+      'last month': $gettext('last month'),
+      'last 30 days': $gettext('last 30 days'),
+      'this year': $gettext('this year'),
+      'last year': $gettext('last year')
+    }
+
     const lastModifiedFilter = ref<VNodeRef>()
-    const availableLastModifiedValues = ref<LastModifiedKeyword[]>([
-      { label: 'today', id: 'today' },
-      { label: 'yesterday', id: 'yesterday' },
-      { label: 'this week', id: 'this week' },
-      { label: 'last week', id: 'last week' },
-      { label: 'last 7 days', id: 'last 7 days' },
-      { label: 'this month', id: 'this month' },
-      { label: 'last month', id: 'last month' },
-      { label: 'last 30 days', id: 'last 30 days' },
-      { label: 'this year', id: 'this year' },
-      { label: 'last year', id: 'last year' }
-    ])
+    const availableLastModifiedValues = ref<LastModifiedKeyword[]>(
+      unref(modifiedDateCapability).keywords?.map(
+        (k: string) => ({ id: k, label: lastModifiedTranslations[k] } as LastModifiedKeyword)
+      ) || []
+    )
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let query = ''
