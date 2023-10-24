@@ -20,6 +20,7 @@ Summary
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
+* Bugfix - Fix display path on resources: [#9843](https://github.com/owncloud/web/pull/9843)
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -44,6 +45,7 @@ Summary
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
+* Enhancement - Add editors to the application menu: [#9809](https://github.com/owncloud/web/pull/9809)
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
@@ -140,6 +142,13 @@ Details
 
    https://github.com/owncloud/web/issues/9166
    https://github.com/owncloud/web/pull/9832
+
+* Bugfix - Fix display path on resources: [#9843](https://github.com/owncloud/web/pull/9843)
+
+   We've fixed a bug, where the display path of a resource was missing parts. For example the
+   respective space name or the folder name of a share.
+
+   https://github.com/owncloud/web/pull/9843
 
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
 
@@ -379,6 +388,15 @@ Details
    https://github.com/owncloud/web/issues/7728
    https://github.com/owncloud/web/pull/9806
    https://github.com/owncloud/ocis/pull/7409
+
+* Enhancement - Add editors to the application menu: [#9809](https://github.com/owncloud/web/pull/9809)
+
+   We've added 'text-editor' and 'draw.io' to the application menu, so the user can easily open
+   those apps with a one-click approach.
+
+   https://github.com/owncloud/web/issues/9807
+   https://github.com/owncloud/web/pull/9809
+   https://github.com/owncloud/web/pull/9843
 
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 
