@@ -168,7 +168,6 @@ import {
   useKeyboardTableMouseActions,
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
-import { LastModifiedKeyword } from '@ownclouders/web-client/src/ocs/capabilities'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -256,7 +255,7 @@ export default defineComponent({
       eventBus.publish('app.search.term.clear')
     })
 
-    // transifex hack
+    // transifex hack b/c dynamically fetched values from backend will otherwise not be automatically translated
     const lastModifiedTranslations = {
       today: $gettext('today'),
       yesterday: $gettext('yesterday'),
@@ -272,9 +271,10 @@ export default defineComponent({
 
     const lastModifiedFilter = ref<VNodeRef>()
     const availableLastModifiedValues = ref<LastModifiedKeyword[]>(
-      unref(modifiedDateCapability).keywords?.map(
-        (k: string) => ({ id: k, label: lastModifiedTranslations[k] } as LastModifiedKeyword)
-      ) || []
+      unref(modifiedDateCapability).keywords?.map((k: string) => ({
+        id: k,
+        label: lastModifiedTranslations[k]
+      })) || []
     )
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
