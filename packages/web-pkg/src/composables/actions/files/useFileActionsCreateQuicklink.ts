@@ -11,19 +11,27 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from '../types'
+import { usePasswordPolicyService } from '../../passwordPolicyService'
 
-export const useFileActionsCreateQuickLink = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsCreateQuickLink = ({
+  store
+}: {
+  store?: Store<any>
+} = {}) => {
   store = store || useStore()
   const router = useRouter()
   const language = useGettext()
   const { $gettext } = language
   const ability = useAbility()
   const clientService = useClientService()
+  const passwordPolicyService = usePasswordPolicyService()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
+
     await copyQuicklink({
       clientService,
+      passwordPolicyService,
       resource,
       storageId: space?.id || resource?.fileId || resource?.id,
       store,

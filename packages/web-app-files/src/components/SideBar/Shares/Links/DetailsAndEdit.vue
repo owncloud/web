@@ -530,6 +530,7 @@ export default defineComponent({
     width: 100%;
   }
 }
+
 @media (min-width: $oc-breakpoint-medium-default) {
   .edit-public-link-role-dropdown {
     width: 400px;
@@ -546,6 +547,7 @@ export default defineComponent({
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
