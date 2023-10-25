@@ -49,6 +49,7 @@ Summary
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
+* Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
 
 Details
@@ -428,6 +429,14 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9818
+
+* Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
+
+   We've added a "last modified" filter chip in search to narrow down results based on last
+   modified date.
+
+   https://github.com/owncloud/web/issues/9779
+   https://github.com/owncloud/web/pull/9831
 
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
 
