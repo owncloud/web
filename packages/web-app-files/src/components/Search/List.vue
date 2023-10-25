@@ -10,6 +10,7 @@
         <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
+          :allow-multiple="true"
           :filter-label="$gettext('Tags')"
           :filterable-attributes="['label']"
           :items="availableTags"
@@ -136,7 +137,17 @@ import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
-import { computed, defineComponent, nextTick, onMounted, ref, unref, VNodeRef, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  Ref,
+  ref,
+  unref,
+  VNodeRef,
+  watch
+} from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import { Pagination } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
@@ -295,34 +306,28 @@ export default defineComponent({
         q['scope'] = `${humanScopeQuery}`
       }
 
-      const humanTagsParams = queryItemAsString(unref(tagParam))
-      if (humanTagsParams) {
-        q['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
-
-        if (manuallyUpdateFilterChip && unref(tagFilter)) {
+      const updateFilter = (v: Ref) => {
+        if (manuallyUpdateFilterChip && unref(v)) {
           /**
            * Handles edge cases where a filter is not being applied via the filter directly,
            * e.g. when clicking on a tag in the files list.
            * We need to manually update the selected items in the ItemFilter component because normally
            * it only does this on mount or when interacting with the filter directly.
            */
-          ;(unref(tagFilter) as any).setSelectedItemsBasedOnQuery()
+          ;(unref(v) as any).setSelectedItemsBasedOnQuery()
         }
+      }
+
+      const humanTagsParams = queryItemAsString(unref(tagParam))
+      if (humanTagsParams) {
+        q['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
+        updateFilter(tagFilter)
       }
 
       const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
       if (lastModifiedParams) {
         q['mtime'] = `"${lastModifiedParams}"`
-
-        if (manuallyUpdateFilterChip && unref(lastModifiedFilter)) {
-          /**
-           * Handles edge cases where a filter is not being applied via the filter directly,
-           * e.g. when clicking on a tag in the files list.
-           * We need to manually update the selected items in the ItemFilter component because normally
-           * it only does this on mount or when interacting with the filter directly.
-           */
-          ;(unref(lastModifiedFilter) as any).setSelectedItemsBasedOnQuery()
-        }
+        updateFilter(lastModifiedFilter)
       }
 
       return (
