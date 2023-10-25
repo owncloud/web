@@ -26,7 +26,12 @@
         appearance="raw"
         @click.prevent.stop="$emit('advancedSearch', $event)"
       >
-        <oc-icon :name="icon" fill-type="line" variation="passive" />
+        <oc-icon v-show="!loading" :name="icon" size="small" fill-type="line" variation="passive" />
+        <oc-spinner
+          v-show="loading"
+          :size="spinnerSize"
+          :aria-label="loadingAccessibleLabelValue"
+        />
       </oc-button>
     </div>
     <div class="oc-search-button-wrapper" :class="{ 'oc-invisible-sr': buttonHidden }">

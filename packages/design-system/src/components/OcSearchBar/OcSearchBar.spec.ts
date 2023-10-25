@@ -4,7 +4,6 @@ import OcSearchBar from './OcSearchBar.vue'
 describe('OcSearchBar', () => {
   const selectors = {
     searchButton: '.oc-search-button',
-    advancedSearchButton: '.oc-search-button-icon',
     searchInput: '.oc-search-input',
     searchButtonWrapper: '.oc-search-button-wrapper',
     searchClearButton: '.oc-search-clear'
@@ -42,10 +41,6 @@ describe('OcSearchBar', () => {
   describe('icon prop', () => {
     describe('when icon prop is not false', () => {
       const wrapper = getWrapper({ icon: 'mdi-icon' })
-      it('should add icon class to search input', () => {
-        const searchInput = wrapper.find(selectors.searchInput)
-        expect(searchInput.attributes('class')).toContain('oc-search-input-icon')
-      })
       it('should render icon', () => {
         const iconStub = wrapper.find('oc-icon-stub[name="mdi-icon"]')
         expect(iconStub.exists()).toBeTruthy()

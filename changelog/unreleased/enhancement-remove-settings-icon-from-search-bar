@@ -1,0 +1,6 @@
+Enhancement: Remove settings icon from searchbar
+
+We removed the settings icon from the searchbar.
+
+https://github.com/owncloud/web/pull/9858
+https://github.com/owncloud/web/issues/9664
