@@ -18,13 +18,16 @@ import { showQuickLinkPasswordModal } from '../../quickActions'
 
 export interface CreateQuicklink {
   clientService: ClientService
-  passwordPolicyService: PasswordPolicyService
   language: Language
   store: Store<any>
   storageId?: any
   resource: Resource
   password?: string
   ability: Ability
+}
+
+export interface CopyQuickLink extends CreateQuicklink {
+  passwordPolicyService: PasswordPolicyService
 }
 
 // doCopy creates the requested link and copies the url to the clipboard,
@@ -68,12 +71,12 @@ const doCopy = async ({
     })
   }
 }
-export const copyQuicklink = async (args: CreateQuicklink) => {
+export const copyQuicklink = async (args: CopyQuickLink) => {
   const { store, language, resource, clientService, passwordPolicyService } = args
   const { $gettext } = language
 
   const linkSharesForResource = await clientService.owncloudSdk.shares.getShares(resource.path, {
-    share_types: ShareTypes.link.value.toString(),
+    share_types: ShareTypes?.link?.value?.toString(),
     include_tags: false
   })
 
