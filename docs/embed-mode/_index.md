@@ -29,3 +29,39 @@ The app is emitting various events depending on the goal of the user. All events
 | **owncloud-embed:select** | Resource[] | Gets emitted when user selects resources via the "Attach as copy" action |
 | **owncloud-embed:share** | string[] | Gets emitted when user selects resources and shares them via the "Share links" action |
 | **owncloud-embed:cancel** | void | Gets emitted when user attempts to close the embedded instance via "Cancel" action |
+
+### Example
+
+```html
+<iframe src="https://my-owncloud-web-instance?mode=embed"></iframe>
+
+<script>
+  function selectEventHandler(event) {
+    const resources = event.detail
+
+    doSomethingWithSelectedResources(resources)
+  }
+
+  window.addEventListener('owncloud-embed:select', selectEventHandler)
+</script>
+```
+
+## Location picker
+
+By default, the Embed mode allows users to select resources. In certain cases (e.g. uploading a file), this needs to be changed to allow selecting a location. This can be achieved by running the embed mode with additional parameter `embed-target=location`. With this parameter, resource selection is disabled and the selected resources array always includes the current folder as the only item.
+
+### Example
+
+```html
+<iframe src="https://my-owncloud-web-instance?mode=embed&embed-target=location"></iframe>
+
+<script>
+  function selectEventHandler(event) {
+    const currentFolder = event.detail[0]
+
+    uploadIntoCurrentFolder(currentFolder)
+  }
+
+  window.addEventListener('owncloud-embed:select', selectEventHandler)
+</script>
+```

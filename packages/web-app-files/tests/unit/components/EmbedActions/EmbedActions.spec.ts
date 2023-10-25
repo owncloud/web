@@ -51,6 +51,29 @@ describe('EmbedActions', () => {
         payload: { detail: [{ id: 1 }] }
       })
     })
+
+    it('should enable select action when embedTarget is set to location', () => {
+      const { wrapper } = getWrapper({ configuration: { options: { embedTarget: 'location' } } })
+
+      expect(wrapper.find(selectors.btnSelect).attributes()).not.toHaveProperty('disabled')
+    })
+
+    it('should emit select event with currentFolder as selected resource when select action is triggered', async () => {
+      window.parent.dispatchEvent = jest.fn()
+      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+
+      const { wrapper } = getWrapper({
+        currentFolder: { id: 1 },
+        configuration: { options: { embedTarget: 'location' } }
+      })
+
+      await wrapper.find(selectors.btnSelect).trigger('click')
+
+      expect(window.parent.dispatchEvent).toHaveBeenCalledWith({
+        name: 'owncloud-embed:select',
+        payload: { detail: [{ id: 1 }] }
+      })
+    })
   })
 
   describe('cancel action', () => {
@@ -127,11 +150,23 @@ describe('EmbedActions', () => {
         payload: { detail: ['password-link-1'] }
       })
     })
+
+    it('should hide share action when embedTarget is set to location', () => {
+      const { wrapper } = getWrapper({ configuration: { options: { embedTarget: 'location' } } })
+
+      expect(wrapper.find(selectors.btnShare).exists()).toBe(false)
+    })
   })
 })
 
 function getWrapper(
-  { selectedFiles = [], abilities = [], capabilities = jest.fn().mockReturnValue({}) } = {
+  {
+    selectedFiles = [],
+    abilities = [],
+    capabilities = jest.fn().mockReturnValue({}),
+    configuration = { options: {} },
+    currentFolder = {}
+  } = {
     selectedFiles: [],
     abilities: [],
     capabilities: jest.fn().mockReturnValue({})
@@ -139,14 +174,19 @@ function getWrapper(
 ) {
   const storeOptions = {
     ...defaultStoreMockOptions,
-    getters: { ...defaultStoreMockOptions.getters, capabilities },
+    getters: {
+      ...defaultStoreMockOptions.getters,
+      capabilities,
+      configuration: jest.fn().mockReturnValue(configuration || { options: {} })
+    },
     modules: {
       ...defaultStoreMockOptions.modules,
       Files: {
         ...defaultStoreMockOptions.modules.Files,
         getters: {
           ...defaultStoreMockOptions.modules.Files.getters,
-          selectedFiles: jest.fn().mockReturnValue(selectedFiles)
+          selectedFiles: jest.fn().mockReturnValue(selectedFiles),
+          currentFolder: jest.fn().mockReturnValue(currentFolder)
         }
       }
     }

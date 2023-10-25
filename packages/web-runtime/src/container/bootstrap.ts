@@ -55,6 +55,13 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
     rawConfig.options = { ...rawConfig.options, mode: getQueryParam('mode') ?? 'web' }
   }
 
+  // Can enable location picker in embed mode
+  const embedTarget = getQueryParam('embed-target')
+
+  if (embedTarget) {
+    rawConfig.options.embedTarget = embedTarget
+  }
+
   configurationManager.initialize(rawConfig)
   // TODO: we might want to get rid of exposing the raw config. needs more refactoring though.
   return rawConfig

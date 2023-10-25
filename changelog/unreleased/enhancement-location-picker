@@ -1,0 +1,7 @@
+Enhancement: Location picker in embed mode
+
+We've added a new query param called `embed-target` which can have value `location`. This value is then saved in the `configuration.options` object as `embedTarget`.
+When the value is set to `location`, it allows selecting the `currentFolder` as location instead of selecting resources.
+
+https://github.com/owncloud/web/pull/9863
+https://github.com/owncloud/web/issues/9768

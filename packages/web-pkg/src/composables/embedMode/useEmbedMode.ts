@@ -6,5 +6,9 @@ export const useEmbedMode = () => {
 
   const isEnabled = computed<boolean>(() => store.getters.configuration.options.mode === 'embed')
 
-  return { isEnabled }
+  const isLocationPicker = computed<boolean>(() => {
+    return store.getters.configuration.options.embedTarget === 'location'
+  })
+
+  return { isEnabled, isLocationPicker }
 }

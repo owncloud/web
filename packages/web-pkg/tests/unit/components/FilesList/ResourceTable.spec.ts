@@ -268,6 +268,26 @@ describe('ResourceTable', () => {
         expect((wrapper.emitted('update:selectedIds')[0][0] as any).length).toBe(0)
       })
     })
+
+    describe('embed mode location target', () => {
+      it('should not hide checkboxes when embed mode does not have location as target', () => {
+        const { wrapper } = getMountedWrapper({
+          configuration: { options: { embedTarget: undefined } }
+        })
+
+        expect(wrapper.find('.resource-table-select-all').exists()).toBe(true)
+        expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(true)
+      })
+
+      it('should hide checkboxes when embed mode has location as target', () => {
+        const { wrapper } = getMountedWrapper({
+          configuration: { options: { embedTarget: 'location' } }
+        })
+
+        expect(wrapper.find('.resource-table-select-all').exists()).toBe(false)
+        expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(false)
+      })
+    })
   })
 
   describe('resource activation', () => {
@@ -429,7 +449,8 @@ describe('ResourceTable', () => {
 function getMountedWrapper({
   props = {},
   isUserContextReady = true,
-  addProcessingResources = false
+  addProcessingResources = false,
+  configuration = { options: {} }
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
@@ -438,6 +459,17 @@ function getMountedWrapper({
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files: {
       tags: true
+    }
+  }))
+  storeOptions.getters.configuration.mockImplementation(() => ({
+    currentTheme: { general: { slogan: '' } },
+    ...configuration,
+    options: {
+      editor: {
+        autosaveEnabled: false,
+        autosaveInterval: 120
+      },
+      ...configuration?.options
     }
   }))
 

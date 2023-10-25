@@ -4,6 +4,8 @@
       $gettext('Cancel')
     }}</oc-button>
     <oc-button
+      v-if="!isLocationPicker"
+      key="btn-share"
       data-testid="button-share"
       variation="inverse"
       appearance="filled"
@@ -17,7 +19,7 @@
       appearance="filled"
       :disabled="areSelectActionsDisabled"
       @click="emitSelect"
-      >{{ $gettext('Attach as copy') }}</oc-button
+      >{{ selectLabel }}</oc-button
     >
   </section>
 </template>
@@ -29,6 +31,7 @@ import {
   showQuickLinkPasswordModal,
   useAbility,
   useClientService,
+  useEmbedMode,
   usePasswordPolicyService,
   useStore
 } from '@ownclouders/web-pkg'
@@ -42,14 +45,23 @@ export default {
     const clientService = useClientService()
     const passwordPolicyService = usePasswordPolicyService()
     const language = useGettext()
+    const { isLocationPicker } = useEmbedMode()
 
     const selectedFiles = computed<Resource[]>(() => {
+      if (isLocationPicker.value) {
+        return [store.getters['Files/currentFolder']]
+      }
+
       return store.getters['Files/selectedFiles']
     })
 
     const areSelectActionsDisabled = computed<boolean>(() => selectedFiles.value.length < 1)
 
     const canCreatePublicLinks = computed<boolean>(() => ability.can('create-all', 'PublicLink'))
+
+    const selectLabel = computed<string>(() =>
+      isLocationPicker.value ? language.$gettext('Choose') : language.$gettext('Attach as copy')
+    )
 
     const emitSelect = (): void => {
       const event: CustomEvent<Resource[]> = new CustomEvent('owncloud-embed:select', {
@@ -132,6 +144,8 @@ export default {
     return {
       areSelectActionsDisabled,
       canCreatePublicLinks,
+      isLocationPicker,
+      selectLabel,
       sharePublicLinks,
       emitCancel,
       emitSelect
