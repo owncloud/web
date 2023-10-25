@@ -134,11 +134,6 @@ export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
   'files_sharing.public.alias',
   false
 )
-
-export const useCapabilityPasswordEnforcedForPublicReadOnlyLink = createCapabilityComposable(
-  'files_sharing.public.password?.enforced_for.read_only',
-  true
-)
 export const useCapabilityNotifications = createCapabilityComposable(
   'notifications.ocs-endpoints',
   []
