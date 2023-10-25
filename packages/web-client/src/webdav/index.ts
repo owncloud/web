@@ -17,6 +17,7 @@ import { GetPathForFileIdFactory } from './getPathForFileId'
 import { DAV } from './client/dav'
 import { ListFileVersionsFactory } from './listFileVersions'
 
+export * from './constants'
 export * from './types'
 
 export const webdav = (options: WebDavOptions): WebDAV => {

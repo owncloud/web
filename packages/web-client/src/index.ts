@@ -5,8 +5,9 @@ import { ocs, OCS } from './ocs'
 export type { Graph } from './graph'
 export type { OCS } from './ocs'
 
-export * as helpers from './helpers'
 export * as errors from './errors'
+export * as helpers from './helpers'
+export * as webdav from './webdav'
 
 export type { Resource, SpaceResource, User } from './helpers'
 
