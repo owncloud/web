@@ -1,0 +1,6 @@
+Bugfix: Duplicated file search request
+
+We have fixed a bug where the search was sent unnecessarily twice.
+
+https://github.com/owncloud/web/pull/9861
+https://github.com/owncloud/web/issues/9787
