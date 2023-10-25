@@ -22,7 +22,7 @@
         v-if="icon"
         v-oc-tooltip="$gettext('Search')"
         :aria-label="$gettext('Search')"
-        class="oc-search-button-icon oc-position-small oc-position-center-right oc-mt-rm"
+        class="oc-position-small oc-position-center-right oc-mt-rm"
         appearance="raw"
         @click.prevent.stop="$emit('advancedSearch', $event)"
       >
