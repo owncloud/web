@@ -140,7 +140,7 @@ describe('List component', () => {
         })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
-          `name:"*${searchTerm}*" mtime:"${lastModifiedFilterQuery}"`
+          `name:"*${searchTerm}*" AND mtime:"${lastModifiedFilterQuery}"`
         )
       })
     })
