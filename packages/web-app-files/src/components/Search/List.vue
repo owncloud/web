@@ -353,8 +353,8 @@ export default defineComponent({
       (newVal, oldVal) => {
         // return early if this view is not active, no search needed
         {
-          const isSearchViewPainted = isLocationCommonActive(router, 'files-common-search')
-          if (!isSearchViewPainted) {
+          const isSearchViewActive = isLocationCommonActive(router, 'files-common-search')
+          if (!isSearchViewActive) {
             return
           }
         }
