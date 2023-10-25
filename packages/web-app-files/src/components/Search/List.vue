@@ -27,6 +27,24 @@
             <span v-text="item.label" />
           </template>
         </item-filter>
+        <item-filter
+          v-if="availableLastModifiedValues.length"
+          ref="lastModifiedFilter"
+          :filter-label="$gettext('Last Modified')"
+          :filterable-attributes="['label']"
+          :items="availableLastModifiedValues"
+          :option-filter-label="$gettext('Filter by last modified date')"
+          :show-option-filter="true"
+          :close-on-click="true"
+          class="files-search-filter-last-modified oc-mr-s"
+          display-name-attribute="label"
+          filter-name="lastModified"
+        >
+          <template #item="{ item }">
+            <span v-text="item.label" />
+          </template>
+        </item-filter>
+
         <item-filter-toggle
           v-if="fullTextSearchEnabled"
           :filter-label="$gettext('Search only in content')"
@@ -108,7 +126,7 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useCapabilitySearchModifiedDate } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -157,6 +175,10 @@ type Tag = {
   id: string
   label: string
 }
+type LastModifiedKeyword = {
+  id: string
+  label: string
+}
 
 export default defineComponent({
   components: {
@@ -194,6 +216,7 @@ export default defineComponent({
     const clientService = useClientService()
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
+    const modifiedDateCapability = useCapabilitySearchModifiedDate()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -214,6 +237,7 @@ export default defineComponent({
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
+    const lastModifiedParam = useRouteQuery('q_lastModified')
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
@@ -230,6 +254,28 @@ export default defineComponent({
     onBeforeRouteLeave(() => {
       eventBus.publish('app.search.term.clear')
     })
+
+    // transifex hack b/c dynamically fetched values from backend will otherwise not be automatically translated
+    const lastModifiedTranslations = {
+      today: $gettext('today'),
+      yesterday: $gettext('yesterday'),
+      'this week': $gettext('this week'),
+      'last week': $gettext('last week'),
+      'last 7 days': $gettext('last 7 days'),
+      'this month': $gettext('this month'),
+      'last month': $gettext('last month'),
+      'last 30 days': $gettext('last 30 days'),
+      'this year': $gettext('this year'),
+      'last year': $gettext('last year')
+    }
+
+    const lastModifiedFilter = ref<VNodeRef>()
+    const availableLastModifiedValues = ref<LastModifiedKeyword[]>(
+      unref(modifiedDateCapability).keywords?.map((k: string) => ({
+        id: k,
+        label: lastModifiedTranslations[k]
+      })) || []
+    )
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       let query = ''
@@ -267,6 +313,21 @@ export default defineComponent({
         }
       }
 
+      const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
+      if (lastModifiedParams) {
+        add('mtime', `"${lastModifiedParams}"`)
+
+        if (manuallyUpdateFilterChip && unref(lastModifiedFilter)) {
+          /**
+           * Handles edge cases where a filter is not being applied via the filter directly,
+           * e.g. when clicking on a tag in the files list.
+           * We need to manually update the selected items in the ItemFilter component because normally
+           * it only does this on mount or when interacting with the filter directly.
+           */
+          ;(unref(lastModifiedFilter) as any).setSelectedItemsBasedOnQuery()
+        }
+      }
+
       return query
     }
 
@@ -290,7 +351,7 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const filters = ['q_fullText', 'q_tags', 'useScope']
+        const filters = ['q_fullText', 'q_tags', 'q_lastModified', 'useScope']
         const isChange =
           newVal?.term !== oldVal?.term ||
           filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined)
@@ -311,7 +372,9 @@ export default defineComponent({
       availableTags,
       tagFilter,
       breadcrumbs,
-      displayFilter
+      displayFilter,
+      availableLastModifiedValues,
+      lastModifiedFilter
     }
   },
   computed: {

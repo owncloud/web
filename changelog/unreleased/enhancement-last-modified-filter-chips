@@ -1,0 +1,6 @@
+Enhancement: Last modified filter chips
+
+We've added a "last modified" filter chip in search to narrow down results based on last modified date.
+
+https://github.com/owncloud/web/pull/9831
+https://github.com/owncloud/web/issues/9779

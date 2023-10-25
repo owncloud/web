@@ -19,9 +19,18 @@ export interface PasswordPolicyCapability {
   min_special_characters?: number
 }
 
+export interface LastModifiedFilterCapability {
+  keywords?: string[]
+  enabled?: boolean
+}
 export interface Capabilities {
   capabilities: {
     password_policy?: PasswordPolicyCapability
+    search: {
+      property: {
+        mtime: LastModifiedFilterCapability
+      }
+    }
     notifications: {
       ocs_endpoints: string[]
     }

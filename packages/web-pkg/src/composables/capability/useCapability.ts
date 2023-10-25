@@ -4,6 +4,7 @@ import { computed, ComputedRef } from 'vue'
 import { useStore } from '../store'
 import {
   AppProviderCapability,
+  LastModifiedFilterCapability,
   PasswordPolicyCapability
 } from '@ownclouders/web-client/src/ocs/capabilities'
 
@@ -142,3 +143,6 @@ export const useCapabilityPasswordPolicy = createCapabilityComposable<PasswordPo
   'password_policy',
   {}
 )
+
+export const useCapabilitySearchModifiedDate =
+  createCapabilityComposable<LastModifiedFilterCapability>('search.property.mtime', {})
