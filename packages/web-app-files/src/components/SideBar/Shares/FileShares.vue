@@ -19,6 +19,10 @@
       <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
     </div>
     <template v-if="hasSharees">
+      <portal-target
+        name="app.files.sidebar.sharing.shared-with.top"
+        :slot-props="{ space, resource }"
+      />
       <ul
         id="files-collaborators-list"
         class="oc-list oc-list-divider oc-overflow-hidden"
@@ -37,6 +41,10 @@
             @on-set-deny="setDenyShare"
           />
         </li>
+        <portal-target
+          name="app.files.sidebar.sharing.shared-with.bottom"
+          :slot-props="{ space, resource }"
+        />
       </ul>
       <div v-if="showShareToggle" class="oc-flex oc-flex-center">
         <oc-button

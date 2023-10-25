@@ -1,6 +1,6 @@
 import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { configurationManager } from '@ownclouders/web-pkg'
+import { PortalTarget, configurationManager } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -91,6 +91,14 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announcePreviewService({ app, store, configurationManager })
   await announceClient(runtimeConfiguration)
 
+  app.config.globalProperties.$wormhole = createWormhole()
+  app.use(PortalVue, {
+    wormhole: app.config.globalProperties.$wormhole,
+    // do not register portal-target component so we can register our own wrapper
+    portalTargetName: false
+  })
+  app.component('PortalTarget', PortalTarget)
+
   const applicationsPromise = initializeApplications({
     app,
     runtimeConfiguration,
@@ -119,10 +127,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   app.use(router)
   app.use(store)
   app.use(createHead())
-  app.config.globalProperties.$wormhole = createWormhole()
-  app.use(PortalVue, {
-    wormhole: app.config.globalProperties.$wormhole
-  })
 
   app.component('AvatarImage', Avatar)
   app.mixin(focusMixin)
