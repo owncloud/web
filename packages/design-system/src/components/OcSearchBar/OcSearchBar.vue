@@ -6,14 +6,6 @@
     :class="{ 'oc-search-small': small }"
   >
     <div class="oc-width-expand oc-position-relative">
-      <span v-if="icon" class="oc-search-icon" @click="focusSearchInput">
-        <oc-icon v-show="!loading" :name="icon" fill-type="line" />
-        <oc-spinner
-          v-show="loading"
-          :size="spinnerSize"
-          :aria-label="loadingAccessibleLabelValue"
-        />
-      </span>
       <input
         ref="searchInput"
         :class="inputClass"
@@ -27,14 +19,14 @@
       />
       <slot name="locationFilter" />
       <oc-button
-        v-if="showAdvancedSearchButton"
-        v-oc-tooltip="$gettext('Open advanced search')"
-        :aria-label="$gettext('Open advanced search')"
-        class="oc-advanced-search oc-position-small oc-position-center-right oc-mt-rm"
+        v-if="icon"
+        v-oc-tooltip="$gettext('Search')"
+        :aria-label="$gettext('Search')"
+        class="oc-search-button-icon oc-position-small oc-position-center-right oc-mt-rm"
         appearance="raw"
         @click.prevent.stop="$emit('advancedSearch', $event)"
       >
-        <oc-icon name="equalizer" size="small" variation="passive" />
+        <oc-icon :name="icon" fill-type="line" variation="passive" />
       </oc-button>
     </div>
     <div class="oc-search-button-wrapper" :class="{ 'oc-invisible-sr': buttonHidden }">
@@ -198,13 +190,6 @@ export default defineComponent({
       default: false
     },
     /**
-     * Show a "Advanced search button.
-     */
-    showAdvancedSearchButton: {
-      type: Boolean,
-      default: true
-    },
-    /**
      * Variation of the cancel button
      */
     cancelButtonVariation: {
@@ -263,7 +248,6 @@ export default defineComponent({
     inputClass() {
       const classes = ['oc-search-input', 'oc-input']
 
-      this.icon && classes.push('oc-search-input-icon')
       !this.buttonHidden && classes.push('oc-search-input-button')
 
       return classes
@@ -333,6 +317,7 @@ export default defineComponent({
   &-input {
     border-radius: 25px !important;
     border: none;
+    padding: var(--oc-space-medium);
     color: var(--oc-color-input-text-muted) !important;
 
     &:focus {
