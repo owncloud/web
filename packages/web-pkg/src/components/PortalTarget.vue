@@ -1,18 +1,18 @@
 <template>
-  <portal-target v-bind="properties" />
+  <portal-target-vue v-bind="properties" />
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue'
 import { eventBus } from '../services'
 import { PortalTargetEventTopics } from '../composables/portalTarget'
-import { PortalTarget } from 'portal-vue'
+import { PortalTarget as PortalTargetVue } from 'portal-vue'
 
 export default defineComponent({
   name: 'PortalTarget',
-  components: { PortalTarget },
+  components: { PortalTargetVue },
   props: {
-    ...PortalTarget.props
+    ...PortalTargetVue.props
   },
   setup(props) {
     const properties = computed(() => props)
