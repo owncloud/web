@@ -1,6 +1,7 @@
 <template>
   <span v-if="selectedRole" class="oc-flex oc-flex-middle">
     <span v-if="availableRoles.length === 1">
+      <oc-icon v-if="showIcon" :name="selectedRole.icon" class="oc-mr-s" />
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
     </span>
@@ -12,6 +13,7 @@
       gap-size="none"
       :aria-label="mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
     >
+      <oc-icon v-if="showIcon" :name="selectedRole.icon" class="oc-mr-s" />
       <span v-if="!existingRole" class="oc-text-truncate" v-text="inviteLabel" />
       <span v-else class="oc-text-truncate" v-text="$gettext(selectedRole.label)" />
       <oc-icon name="arrow-down-s" />
@@ -155,6 +157,10 @@ export default defineComponent({
       type: String,
       required: false,
       default: 'create'
+    },
+    showIcon: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['optionChange'],

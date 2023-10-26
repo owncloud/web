@@ -93,87 +93,10 @@
             />
           </td>
         </tr>
-        <tr v-if="runningOnEos && !isPublicLinkContext" data-testid="eosPath">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('FUSE Path')" />
-          <td>
-            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-              <p
-                ref="filePath"
-                v-oc-tooltip="resource.path"
-                class="oc-my-rm oc-text-truncate"
-                v-text="resource.path"
-              />
-              <oc-button
-                v-if="isClipboardCopySupported"
-                v-oc-tooltip="copyEosPathLabel"
-                :aria-label="copyEosPathLabel"
-                appearance="raw"
-                :variation="copiedEos ? 'success' : 'passive'"
-                @click="copyEosPathToClipboard"
-              >
-                <oc-icon
-                  v-if="copiedEos"
-                  key="oc-copy-to-clipboard-copied"
-                  name="checkbox-circle"
-                  class="_clipboard-success-animation"
-                />
-                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
-              </oc-button>
-            </div>
-          </td>
-        </tr>
-        <tr v-if="cernFeatures && sambaPath && !isPublicLinkContext" data-testid="sambaPath">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Windows Path')" />
-          <td>
-            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-              <p
-                ref="sambaFilePath"
-                v-oc-tooltip="sambaPath"
-                class="oc-my-rm oc-text-truncate"
-                v-text="sambaPath"
-              />
-              <oc-button
-                v-oc-tooltip="copySambaPathLabel"
-                :aria-label="copySambaPathLabel"
-                appearance="raw"
-                :variation="copiedSamba ? 'success' : 'passive'"
-                @click="copySambaPathToClipboard"
-              >
-                <oc-icon
-                  v-if="copiedSamba"
-                  key="oc-copy-to-clipboard-copied"
-                  name="checkbox-circle"
-                  class="_clipboard-success-animation"
-                />
-                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
-              </oc-button>
-            </div>
-          </td>
-        </tr>
-        <tr v-if="runningOnEos" data-testid="eosDirectLink">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Direct link')" />
-          <td>
-            <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1">
-              <p v-oc-tooltip="directLink" class="oc-my-rm oc-text-truncate" v-text="directLink" />
-              <oc-button
-                v-if="isClipboardCopySupported"
-                v-oc-tooltip="copyDirectLinkLabel"
-                :aria-label="copyDirectLinkLabel"
-                appearance="raw"
-                :variation="copiedDirect ? 'success' : 'passive'"
-                @click="copyDirectLinkToClipboard"
-              >
-                <oc-icon
-                  v-if="copiedDirect"
-                  key="oc-copy-to-clipboard-copied"
-                  name="checkbox-circle"
-                  class="_clipboard-success-animation"
-                />
-                <oc-icon v-else key="oc-copy-to-clipboard-copy" name="clipboard" />
-              </oc-button>
-            </div>
-          </td>
-        </tr>
+        <portal-target
+          name="app.files.sidebar.file.details.table"
+          :slot-props="{ space, resource }"
+        />
         <tr v-if="showTags" data-testid="tags">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Tags')" />
           <td>
@@ -209,8 +132,6 @@ import {
   useGetMatchingSpace
 } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
-import { useClipboard } from '@vueuse/core'
-import { encodePath } from '@ownclouders/web-pkg'
 import {
   formatDateFromHTTP,
   formatFileSize,
@@ -228,18 +149,8 @@ export default defineComponent({
   name: 'FileDetails',
   setup() {
     const store = useStore()
-    const { $gettext } = useGettext()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
-
-    const copiedDirect = ref(false)
-    const copiedEos = ref(false)
-    const copiedSamba = ref(false)
-    const {
-      copy,
-      copied,
-      isSupported: isClipboardCopySupported
-    } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const resource = inject<Resource>('resource')
     const space = inject<Ref<SpaceResource>>('space')
@@ -248,56 +159,9 @@ export default defineComponent({
     const previewService = usePreviewService()
     const preview = ref(undefined)
 
-    const directLink = computed(() => {
-      return !unref(isPublicLinkContext)
-        ? `${store.getters.configuration.server}files/spaces${encodePath(unref(resource).path)}`
-        : `${store.getters.configuration.server.replace(/\/+$/, '')}${unref(resource).downloadURL}`
-    })
-
     const matchingSpace = computed(() => {
       return getMatchingSpace(unref(resource))
     })
-
-    const copyEosPathToClipboard = () => {
-      copy(unref(resource).path)
-      copiedEos.value = unref(copied)
-      store.dispatch('showMessage', {
-        title: $gettext('FUSE path copied'),
-        desc: $gettext('The FUSE path has been copied to your clipboard.')
-      })
-    }
-
-    const copySambaPathToClipboard = () => {
-      copy(getSambaPath(unref(resource).path))
-      copiedSamba.value = unref(copied)
-      store.dispatch('showMessage', {
-        title: $gettext('Windows path copied'),
-        desc: $gettext('The Windows path has been copied to your clipboard.')
-      })
-    }
-
-    const getSambaPath = (path) => {
-      const pathMappings = {
-        user: '\\\\cernbox-smb\\eos\\user\\',
-        project: '\\\\eosproject-smb\\eos\\project\\',
-        public: '\\\\eospublic-smb\\eos\\',
-        media: '\\\\eosmedia-smb\\eos\\'
-      }
-      const pathComponents = path?.split('/').filter(Boolean)
-      if (pathComponents.length > 1 && pathComponents[0] === 'eos') {
-        const translated = pathMappings[pathComponents[1]]
-        return translated && `${translated}${pathComponents.slice(2).join('\\')}`
-      }
-    }
-
-    const copyDirectLinkToClipboard = () => {
-      copy(unref(directLink))
-      copiedDirect.value = unref(copied)
-      store.dispatch('showMessage', {
-        title: $gettext('Direct link copied'),
-        desc: $gettext('The direct link has been copied to your clipboard.')
-      })
-    }
 
     const loadData = async () => {
       const calls = []
@@ -358,18 +222,9 @@ export default defineComponent({
     )
 
     return {
-      copiedEos,
-      copiedSamba,
       preview,
-      copyEosPathToClipboard,
-      copySambaPathToClipboard,
-      getSambaPath,
-      copiedDirect,
-      copyDirectLinkToClipboard,
-      isClipboardCopySupported,
       isPublicLinkContext,
       space,
-      directLink,
       resource,
       hasTags: useCapabilityFilesTags(),
       isPreviewLoading,
@@ -383,12 +238,6 @@ export default defineComponent({
     ...mapGetters('Files', ['versions']),
     ...mapGetters(['user', 'configuration']),
 
-    runningOnEos() {
-      return !!this.configuration?.options?.runningOnEos
-    },
-    cernFeatures() {
-      return !!this.configuration?.options?.cernFeatures
-    },
     hasContent() {
       return (
         this.hasTimestamp ||
@@ -442,15 +291,6 @@ export default defineComponent({
     ownerAdditionalInfo() {
       return this.resource.owner?.[0].additionalInfo
     },
-    copyDirectLinkLabel() {
-      return this.$gettext('Copy direct link')
-    },
-    copyEosPathLabel() {
-      return this.$gettext('Copy FUSE path')
-    },
-    copySambaPathLabel() {
-      return this.$gettext('Copy Windows path')
-    },
     resourceSize() {
       return formatFileSize(this.resource.size, this.$language.current)
     },
@@ -492,9 +332,6 @@ export default defineComponent({
     },
     sharedByDisplayName() {
       return this.resource.share?.fileOwner?.displayName
-    },
-    sambaPath() {
-      return this.getSambaPath(this.resource.path)
     }
   },
   methods: {

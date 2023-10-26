@@ -82,6 +82,10 @@
           </oc-button>
         </td>
       </tr>
+      <portal-target
+        name="app.files.sidebar.space.details.table"
+        :slot-props="{ space: resource, resource }"
+      />
     </table>
   </div>
 </template>

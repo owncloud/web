@@ -39,9 +39,6 @@ const getResourceMock = ({
   })
 
 const selectors = {
-  eosPath: '[data-testid="eosPath"]',
-  eosDirectLink: '[data-testid="eosDirectLink"]',
-  sambaPath: '[data-testid="sambaPath"]',
   ownerDisplayName: '[data-testid="ownerDisplayName"]',
   preview: '[data-testid="preview"]',
   resourceIcon: '.details-icon',
@@ -153,21 +150,6 @@ describe('Details SideBar Panel', () => {
       expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
     })
   })
-  describe('running on EOS', () => {
-    it('shows eos path and direct link', () => {
-      const resource = getResourceMock()
-      const { wrapper } = createWrapper({ resource, runningOnEos: true })
-      expect(wrapper.find(selectors.eosPath).exists()).toBeTruthy()
-      expect(wrapper.find(selectors.eosDirectLink).exists()).toBeTruthy()
-    })
-  })
-  describe('CERN features', () => {
-    it('show samba link', () => {
-      const resource = getResourceMock({ path: '/eos/user/t/test/123.png' })
-      const { wrapper } = createWrapper({ resource, cernFeatures: true })
-      expect(wrapper.find(selectors.sambaPath).exists()).toBeTruthy()
-    })
-  })
   describe('tags', () => {
     it('show if given', () => {
       const resource = getResourceMock({ tags: ['moon', 'mars'] })
@@ -189,8 +171,6 @@ describe('Details SideBar Panel', () => {
 
 function createWrapper({
   resource = null,
-  runningOnEos = false,
-  cernFeatures = false,
   isPublicLinkContext = false,
   ancestorMetaData = {},
   user = { id: 'marie' },
@@ -198,7 +178,6 @@ function createWrapper({
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.user.mockReturnValue(user)
-  storeOptions.getters.configuration.mockReturnValue({ options: { runningOnEos, cernFeatures } })
   storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
   storeOptions.getters.capabilities.mockReturnValue({ files: { tags: true } })
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
