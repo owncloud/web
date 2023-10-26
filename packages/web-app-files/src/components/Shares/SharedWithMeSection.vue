@@ -42,7 +42,7 @@
           <oc-icon
             v-if="getShowSynchedIcon(resource)"
             v-oc-tooltip="$gettext('Synced with your devices')"
-            name="cloudy-2"
+            name="loop-right"
             class="sync-enabled"
           />
         </div>
