@@ -21,10 +21,10 @@
           filter-name="tags"
         >
           <template #image="{ item }">
-            <oc-avatar :width="24" :user-name="item.label" />
-          </template>
-          <template #item="{ item }">
-            <span v-text="item.label" />
+            <div class="tag-option-wrapper oc-flex oc-flex-middle">
+              <oc-icon name="price-tag-3" size="small" />
+              <span class="oc-ml-s">{{ item.label }}</span>
+            </div>
           </template>
         </item-filter>
         <item-filter
