@@ -22,6 +22,7 @@ Summary
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 * Bugfix - Fix display path on resources: [#9843](https://github.com/owncloud/web/pull/9843)
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
+* Bugfix - Duplicated file search request: [#9861](https://github.com/owncloud/web/pull/9861)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -160,6 +161,13 @@ Details
 
    https://github.com/owncloud/web/issues/9839
    https://github.com/owncloud/web/pull/9844
+
+* Bugfix - Duplicated file search request: [#9861](https://github.com/owncloud/web/pull/9861)
+
+   We have fixed a bug where the search was sent unnecessarily twice.
+
+   https://github.com/owncloud/web/issues/9787
+   https://github.com/owncloud/web/pull/9861
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
