@@ -3,6 +3,7 @@
 exports[`RoleDropdown renders a button with existing role if given for resource type file 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
+    <!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -73,6 +74,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
 exports[`RoleDropdown renders a button with existing role if given for resource type folder 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
+    <!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -143,6 +145,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type file 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
+    <!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -207,6 +210,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type folder 1`] = `
 <span class="oc-flex oc-flex-middle">
   <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
+    <!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
