@@ -39,10 +39,27 @@ import { mapGetters } from 'vuex'
 import { computed, defineComponent, unref } from 'vue'
 import { urlJoin } from 'web-client/src/utils'
 import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
-import { queryItemAsString, useAppDefaults, useRouteQuery } from 'web-pkg/src/composables'
+import {
+  queryItemAsString,
+  useAppDefaults,
+  useClientService,
+  useRoute,
+  useRouteParam,
+  useRouteQuery,
+  useRouter,
+  useStore
+} from 'web-pkg/src/composables'
 import { configurationManager } from 'web-pkg/src/configuration'
 import ErrorScreen from './components/ErrorScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
+import {
+  Resource,
+  SpaceResource,
+  buildShareSpaceResource,
+  isMountPointSpaceResource
+} from 'web-client/src/helpers'
+import { useLoadFileInfoById } from 'web-pkg/src/composables/fileInfo'
+import { dirname } from 'path'
 
 export default defineComponent({
   name: 'ExternalApp',
@@ -52,14 +69,107 @@ export default defineComponent({
     LoadingScreen
   },
   setup() {
+    const store = useStore()
+    const router = useRouter()
+    const currentRoute = useRoute()
+    const clientService = useClientService()
+    const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
     const appName = useRouteQuery('app')
     const applicationName = computed(() => queryItemAsString(unref(appName)))
+
+    const fileIdQueryItem = useRouteQuery('fileId')
+    const fileId = computed(() => {
+      return queryItemAsString(unref(fileIdQueryItem))
+    })
+
+    const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+
+    const getMatchingSpaceByFileId = (id): SpaceResource => {
+      return store.getters['runtime/spaces/spaces'].find((space) => id.startsWith(space.id))
+    }
+    const getMatchingMountPoint = (id: string | number): SpaceResource => {
+      return store.getters['runtime/spaces/spaces'].find(
+        (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
+      )
+    }
+
+    const addMissingDriveAliasAndItem = async () => {
+      const id = unref(fileId)
+      let path: string
+      let matchingSpace = getMatchingSpaceByFileId(id)
+      if (matchingSpace) {
+        path = await clientService.owncloudSdk.files.getPathForFileId(id)
+        const driveAliasAndItem = matchingSpace.getDriveAliasAndItem({ path } as Resource)
+        return router.push({
+          params: {
+            ...unref(currentRoute).params,
+            driveAliasAndItem
+          },
+          query: {
+            fileId: id,
+            ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
+            contextRouteName: 'files-spaces-generic',
+            contextRouteParams: { driveAliasAndItem: dirname(driveAliasAndItem) } as any
+          }
+        })
+      }
+
+      // no matching space found => the file doesn't lie in own spaces => it's a share.
+      // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
+      await store.dispatch('runtime/spaces/loadMountPoints', {
+        graphClient: clientService.graphAuthenticated
+      })
+      let mountPoint = getMatchingMountPoint(id)
+      const resource = await loadFileInfoByIdTask.perform(id)
+      const sharePathSegments = mountPoint ? [] : [unref(resource).name]
+      let tmpResource = unref(resource)
+      while (!mountPoint) {
+        try {
+          tmpResource = await loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
+        } catch (e) {
+          throw Error(e)
+        }
+        mountPoint = getMatchingMountPoint(tmpResource.id)
+        if (!mountPoint) {
+          sharePathSegments.unshift(tmpResource.name)
+        }
+      }
+      matchingSpace = buildShareSpaceResource({
+        shareId: mountPoint.nodeId,
+        shareName: mountPoint.name,
+        serverUrl: configurationManager.serverUrl
+      })
+      path = urlJoin(...sharePathSegments)
+
+      const driveAliasAndItem = matchingSpace.getDriveAliasAndItem({ path } as Resource)
+      return router.push({
+        params: {
+          ...unref(currentRoute).params,
+          driveAliasAndItem
+        },
+        query: {
+          fileId: id,
+          shareId: matchingSpace.shareId,
+          ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
+          contextRouteName: path === '/' ? 'files-shares-with-me' : 'files-spaces-generic',
+          contextRouteParams: {
+            driveAliasAndItem: dirname(driveAliasAndItem)
+          } as any,
+          contextRouteQuery: {
+            shareId: matchingSpace.shareId
+          } as any
+        }
+      })
+    }
+
     return {
       ...useAppDefaults({
         applicationId: 'external',
         applicationName
       }),
-      applicationName
+      applicationName,
+      driveAliasAndItem,
+      addMissingDriveAliasAndItem
     }
   },
 
@@ -94,6 +204,10 @@ export default defineComponent({
   async created() {
     this.loading = true
     try {
+      if (!this.driveAliasAndItem) {
+        await this.addMissingDriveAliasAndItem()
+      }
+
       this.resource = await this.getFileInfo(this.currentFileContext, {
         davProperties: []
       })
