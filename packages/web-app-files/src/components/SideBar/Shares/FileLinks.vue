@@ -531,7 +531,7 @@ export default defineComponent({
         console.error(e)
 
         // Human-readable error message is provided, for example when password is on banned list
-        if (e.status === 400) {
+        if (e.statusCode === 400) {
           return this.setModalInputErrorMessage(this.$gettext(e.message))
         }
 
