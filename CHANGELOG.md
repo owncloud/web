@@ -51,6 +51,7 @@ Summary
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
+* Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
 Details
@@ -447,6 +448,13 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9841
+
+* Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
+
+   We removed the settings icon from the searchbar.
+
+   https://github.com/owncloud/web/issues/9664
+   https://github.com/owncloud/web/pull/9858
 
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
