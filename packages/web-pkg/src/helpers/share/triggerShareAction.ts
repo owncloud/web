@@ -6,23 +6,23 @@ import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 export async function triggerShareAction({
   resource,
   status,
-  hide = false,
   hasResharing,
   hasShareJail,
   client,
+  hidden = undefined,
   spaces = [],
   fullShareOwnerPaths = false
 }: {
   resource: Resource
   status: ShareStatus
-  hide?: boolean
   hasResharing: boolean
   hasShareJail: boolean
   client: OwnCloudSdk
+  hidden?: boolean
   spaces?: SpaceResource[]
   fullShareOwnerPaths?: boolean
 }) {
-  const method = _getRequestMethod(status)
+  const method = _getRequestMethod(status, hidden)
   if (!method) {
     throw new Error('invalid new share status')
   }
@@ -30,7 +30,7 @@ export async function triggerShareAction({
   // exec share action
   let response = await client.requests.ocs({
     service: 'apps/files_sharing',
-    action: `api/v1/shares/pending/${resource.share.id}?hide=${hide ? 'true' : 'false'}`,
+    action: `api/v1/shares/pending/${resource.share.id}?hidden=${hidden ? 'true' : 'false'}`,
     method
   })
 
@@ -58,7 +58,11 @@ export async function triggerShareAction({
   return null
 }
 
-function _getRequestMethod(status) {
+function _getRequestMethod(status: ShareStatus, hidden: boolean) {
+  if (hidden !== undefined) {
+    // setting the hidden state is always done via PUT
+    return 'PUT'
+  }
   switch (status) {
     case ShareStatus.accepted:
       return 'POST'

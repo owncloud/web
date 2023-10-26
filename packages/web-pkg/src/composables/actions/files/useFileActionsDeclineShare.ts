@@ -39,7 +39,6 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
             const share = await triggerShareAction({
               resource,
               status: ShareStatus.declined,
-              // TODO: Hidden implications here?
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,

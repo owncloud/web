@@ -12,7 +12,6 @@ import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import { Resource } from '@ownclouders/web-client'
 
 export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -25,13 +24,11 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
   const loadingService = useLoadingService()
   const configurationManager = useConfigurationManager()
 
-  const highlightedFile = computed<Resource>(() => store.getters['Files/highlightedFile'])
-
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({ concurrency: 4 })
-    const hide = !resources[0].hidden
+    const hidden = !resources[0].hidden
 
     resources.forEach((resource) => {
       triggerPromises.push(
@@ -40,7 +37,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
             const share = await triggerShareAction({
               resource,
               status: resource.status,
-              hide,
+              hidden,
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,
@@ -63,7 +60,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
     if (errors.length === 0) {
       store.dispatch('Files/resetFileSelection')
       store.dispatch('showMessage', {
-        title: hide
+        title: hidden
           ? $gettext('The share was hidden successfully')
           : $gettext('The share was unhidden successfully')
       })
@@ -72,7 +69,9 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
     }
 
     store.dispatch('showErrorMessage', {
-      title: hide ? $gettext('Failed to hide the share') : $gettext('Failed to unhide share share'),
+      title: hidden
+        ? $gettext('Failed to hide the share')
+        : $gettext('Failed to unhide share share'),
       errors
     })
   }
