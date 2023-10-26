@@ -51,6 +51,7 @@ Summary
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
+* Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
@@ -448,6 +449,15 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9841
+
+* Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
+
+   We've changed the actions in the AppBar in Files app to show only create folder button instead of
+   create and upload actions. In embed mode, it is possible to only create a new folder so it does not
+   make sense to hide this action inside of a dropdown.
+
+   https://github.com/owncloud/web/issues/9768
+   https://github.com/owncloud/web/pull/9853
 
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
 
