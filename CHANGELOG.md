@@ -51,6 +51,7 @@ Summary
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
+* Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
 Details
 -------
@@ -446,6 +447,13 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9841
+
+* Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
+
+   We've aligned the style of tags filter in search with the tags panel redesign.
+
+   https://github.com/owncloud/web/issues/9834
+   https://github.com/owncloud/web/pull/9864
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
