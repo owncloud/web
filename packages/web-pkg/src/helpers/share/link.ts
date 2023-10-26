@@ -3,14 +3,18 @@ import {
   LinkShareRoles,
   Share,
   linkRoleInternalFolder,
-  linkRoleViewerFolder
+  linkRoleViewerFolder,
+  ShareTypes,
+  buildShare
 } from '@ownclouders/web-client/src/helpers/share'
 import { Store } from 'vuex'
-import { ClientService } from '../../services'
+import { ClientService, PasswordPolicyService } from '../../services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Resource } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
+import { unref } from 'vue'
+import { showQuickLinkPasswordModal } from '../../quickActions'
 
 export interface CreateQuicklink {
   clientService: ClientService
@@ -22,37 +26,40 @@ export interface CreateQuicklink {
   ability: Ability
 }
 
-export const copyQuicklink = async (args: CreateQuicklink) => {
-  const { store, language } = args
-  const { $gettext } = language
+export interface CopyQuickLink extends CreateQuicklink {
+  passwordPolicyService: PasswordPolicyService
+}
 
-  // doCopy creates the requested link and copies the url to the clipboard,
-  // the copy action uses the clipboard // clipboardItem api to work around the webkit limitations.
-  //
-  // https://developer.apple.com/forums/thread/691873
-  //
-  // if those apis not available (or like in firefox behind dom.events.asyncClipboard.clipboardItem)
-  // it has a fallback to the vue-use implementation.
-  //
-  // https://webkit.org/blog/10855/
-  const doCopy = async () => {
+// doCopy creates the requested link and copies the url to the clipboard,
+// the copy action uses the clipboard // clipboardItem api to work around the webkit limitations.
+//
+// https://developer.apple.com/forums/thread/691873
+//
+// if those apis not available (or like in firefox behind dom.events.asyncClipboard.clipboardItem)
+// it has a fallback to the vue-use implementation.
+//
+// https://webkit.org/blog/10855/
+const doCopy = async ({
+  store,
+  language,
+  quickLinkUrl
+}: {
+  store: Store<unknown>
+  language: Language
+  quickLinkUrl: string
+}) => {
+  const { $gettext } = language
+  try {
     if (typeof ClipboardItem && navigator?.clipboard?.write) {
       await navigator.clipboard.write([
         new ClipboardItem({
-          'text/plain': createQuicklink(args).then(
-            (link) => new Blob([link.url], { type: 'text/plain' })
-          )
+          'text/plain': new Blob([quickLinkUrl], { type: 'text/plain' })
         })
       ])
     } else {
-      const link = await createQuicklink(args)
       const { copy } = useClipboard({ legacy: true })
-      await copy(link.url)
+      await copy(quickLinkUrl)
     }
-  }
-
-  try {
-    await doCopy()
     await store.dispatch('showMessage', {
       title: $gettext('The link has been copied to your clipboard.')
     })
@@ -63,6 +70,40 @@ export const copyQuicklink = async (args: CreateQuicklink) => {
       error: e
     })
   }
+}
+export const copyQuicklink = async (args: CopyQuickLink) => {
+  const { store, language, resource, clientService, passwordPolicyService } = args
+  const { $gettext } = language
+
+  const linkSharesForResource = await clientService.owncloudSdk.shares.getShares(resource.path, {
+    share_types: ShareTypes?.link?.value?.toString(),
+    include_tags: false
+  })
+
+  const existingQuickLink = linkSharesForResource
+    .map((share: any) => buildShare(share.shareInfo, null, null))
+    .find((share: Share) => share.quicklink === true)
+
+  if (existingQuickLink) {
+    return doCopy({ store, language, quickLinkUrl: existingQuickLink.url })
+  }
+
+  const isPasswordEnforced =
+    store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only === true
+
+  if (unref(isPasswordEnforced)) {
+    return showQuickLinkPasswordModal(
+      { $gettext, store, passwordPolicyService },
+      async (password: string) => {
+        await store.dispatch('hideModal')
+        const quickLink = await createQuicklink({ ...args, password })
+        return doCopy({ store, language, quickLinkUrl: quickLink.url })
+      }
+    )
+  }
+
+  const quickLink = await createQuicklink(args)
+  return doCopy({ store, language, quickLinkUrl: quickLink.url })
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
@@ -87,7 +128,9 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     canContribute,
     alias
   ).bitmask(allowResharing)
-  const params: { [key: string]: unknown } = {
+  const params: {
+    [key: string]: unknown
+  } = {
     name: $gettext('Link'),
     permissions: permissions.toString(),
     quicklink: true

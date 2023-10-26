@@ -1,7 +1,7 @@
 import { copyQuicklink, createQuicklink, CreateQuicklink } from '../../../../src/helpers/share'
 import { DateTime } from 'luxon'
 import { Store } from 'vuex'
-import { ClientService } from '../../../../src/services'
+import { ClientService, PasswordPolicyService } from '../../../../src/services'
 import { useClipboard } from '@vueuse/core'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { mock, mockDeep } from 'jest-mock-extended'
@@ -13,6 +13,19 @@ jest.mock('@vueuse/core', () => ({
 }))
 
 const mockStore = {
+  getters: {
+    capabilities: {
+      files_sharing: {
+        public: {
+          password: {
+            enforced_for: {
+              read_only: false
+            }
+          }
+        }
+      }
+    }
+  },
   state: {
     user: {
       capabilities: {
@@ -24,6 +37,11 @@ const mockStore = {
             expire_date: {
               enforced: true,
               days: 5
+            },
+            password: {
+              enforced_for: {
+                read_only: false
+              }
             }
           }
         }
@@ -51,6 +69,8 @@ jest.mock('@ownclouders/web-client/src/helpers/share', () => ({
 describe('createQuicklink', () => {
   it('should create a quicklink with the correct parameters', async () => {
     const clientService = mockDeep<ClientService>()
+    clientService.owncloudSdk.shares.getShares.mockResolvedValue([])
+    const passwordPolicyService = mockDeep<PasswordPolicyService>()
     const args: CreateQuicklink = {
       store: mockStore as unknown as Store<any>,
       resource: mockResource,
@@ -65,7 +85,7 @@ describe('createQuicklink', () => {
     expect(link).toBeDefined()
     expect(link.url).toBeDefined()
 
-    await copyQuicklink(args)
+    await copyQuicklink({ ...args, passwordPolicyService })
     expect(useClipboard).toHaveBeenCalled()
 
     expect(mockStore.dispatch).toHaveBeenCalledWith('Files/addLink', {
@@ -91,6 +111,8 @@ describe('createQuicklink', () => {
     'should create a quicklink without a password if no password is provided and capabilities set to default %s',
     async (role) => {
       const clientService = mockDeep<ClientService>()
+      clientService.owncloudSdk.shares.getShares.mockResolvedValue([])
+      const passwordPolicyService = mockDeep<PasswordPolicyService>()
       returnBitmask = role === 'viewer' ? 1 : 0
       mockStore.state.user.capabilities.files_sharing.quickLink.default_role = role
 
@@ -107,7 +129,7 @@ describe('createQuicklink', () => {
       expect(link).toBeDefined()
       expect(link.url).toBeDefined()
 
-      await copyQuicklink(args)
+      await copyQuicklink({ ...args, passwordPolicyService })
       expect(useClipboard).toHaveBeenCalled()
 
       expect(mockStore.dispatch).toHaveBeenCalledWith('Files/addLink', {

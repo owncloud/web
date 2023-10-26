@@ -23,6 +23,9 @@ export const getAbilities = (
     ],
     'Logo.Write.all': [{ action: 'update-all', subject: 'Logo' }],
     'PublicLink.Write.all': [{ action: 'create-all', subject: 'PublicLink' }],
+    'ReadOnlyPublicLinkPassword.Delete.all': [
+      { action: 'delete-all', subject: 'ReadOnlyPublicLinkPassword' }
+    ],
     'Roles.ReadWrite.all': [
       { action: 'create-all', subject: 'Role' },
       { action: 'delete-all', subject: 'Role' },

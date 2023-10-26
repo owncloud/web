@@ -22,6 +22,7 @@ export type AbilitySubjects =
   | 'Language'
   | 'Logo'
   | 'PublicLink'
+  | 'ReadOnlyPublicLinkPassword'
   | 'Role'
   | 'Setting'
 

@@ -74,28 +74,9 @@ export default {
       store,
       passwordPolicyService
     }: QuickLinkContext) => {
-      const passwordEnforced =
-        store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
-        true
-
-      if (passwordEnforced) {
-        return showQuickLinkPasswordModal(
-          { store, $gettext: language.$gettext, passwordPolicyService },
-          async (password) => {
-            await copyQuicklink({
-              ability,
-              clientService,
-              language,
-              password,
-              resource: item,
-              store
-            })
-          }
-        )
-      }
-
       await copyQuicklink({
         ability,
+        passwordPolicyService,
         clientService,
         language,
         resource: item,

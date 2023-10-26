@@ -228,6 +228,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    isPasswordRemovable: {
+      type: Boolean,
+      default: false
+    },
     link: {
       type: Object,
       required: true
@@ -323,7 +327,7 @@ export default defineComponent({
           method: this.showPasswordModal
         })
 
-        if (!this.isPasswordEnforced) {
+        if (this.isPasswordRemovable) {
           result.push({
             id: 'remove-password',
             title: this.$gettext('Remove password'),
@@ -338,7 +342,7 @@ export default defineComponent({
           })
         }
       }
-      if (!this.isPasswordEnforced && !this.link.password && !this.isAliasLink) {
+      if (!this.link.password && !this.isAliasLink) {
         result.push({
           id: 'add-password',
           title: this.$gettext('Add password'),
@@ -526,6 +530,7 @@ export default defineComponent({
     width: 100%;
   }
 }
+
 @media (min-width: $oc-breakpoint-medium-default) {
   .edit-public-link-role-dropdown {
     width: 400px;
@@ -542,6 +547,7 @@ export default defineComponent({
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
