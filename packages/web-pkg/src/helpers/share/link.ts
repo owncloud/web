@@ -95,9 +95,20 @@ export const copyQuicklink = async (args: CopyQuickLink) => {
     return showQuickLinkPasswordModal(
       { $gettext, store, passwordPolicyService },
       async (password: string) => {
-        await store.dispatch('hideModal')
-        const quickLink = await createQuicklink({ ...args, password })
-        return doCopy({ store, language, quickLinkUrl: quickLink.url })
+        try {
+          const quickLink = await createQuicklink({ ...args, password })
+          await store.dispatch('hideModal')
+
+          return doCopy({ store, language, quickLinkUrl: quickLink.url })
+        } catch (e) {
+          console.log(e)
+          console.log(e.message)
+
+          // Human-readable error message is provided, for example when password is on banned list
+          if (e.status === 400) {
+            return store.dispatch('setModalInputErrorMessage', $gettext(e.message))
+          }
+        }
       }
     )
   }
