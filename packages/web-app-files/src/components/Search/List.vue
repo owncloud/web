@@ -351,13 +351,26 @@ export default defineComponent({
     watch(
       () => unref(route).query,
       (newVal, oldVal) => {
-        const filters = ['q_fullText', 'q_tags', 'q_lastModified', 'useScope']
-        const isChange =
-          newVal?.term !== oldVal?.term ||
-          filters.some((f) => newVal[f] ?? undefined !== oldVal[f] ?? undefined)
-        if (isChange && isLocationCommonActive(router, 'files-common-search')) {
-          emit('search', buildSearchTerm(true))
+        // return early if this view is not active, no search needed
+        {
+          const isSearchViewActive = isLocationCommonActive(router, 'files-common-search')
+          if (!isSearchViewActive) {
+            return
+          }
         }
+
+        // return early if the search term or filter has not changed, no search needed
+        {
+          const isSameTerm = newVal?.term === oldVal?.term
+          const isSameFilter = ['q_fullText', 'q_tags', 'q_lastModified', 'useScope'].every(
+            (key) => newVal[key] === oldVal[key]
+          )
+          if (isSameTerm && isSameFilter) {
+            return
+          }
+        }
+
+        emit('search', buildSearchTerm(true))
       },
       { deep: true }
     )
