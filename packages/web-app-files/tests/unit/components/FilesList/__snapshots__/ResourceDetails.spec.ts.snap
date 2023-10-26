@@ -33,7 +33,7 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
           </span>
         </div>
         <!--v-if-->
-        <portal-target name="app.files.sidebar.file.details.table" slot-props="[object Object]"></portal-target>
+        <portal-target multiple="true" name="app.files.sidebar.file.details.table" slot-props="[object Object]"></portal-target>
         <table aria-label="Overview of the information about the selected file" class="details-table">
           <tbody>
             <tr>

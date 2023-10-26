@@ -96,6 +96,7 @@
         <portal-target
           name="app.files.sidebar.file.details.table"
           :slot-props="{ space, resource }"
+          :multiple="true"
         />
         <tr v-if="showTags" data-testid="tags">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Tags')" />

@@ -22,6 +22,7 @@
       <portal-target
         name="app.files.sidebar.sharing.shared-with.top"
         :slot-props="{ space, resource }"
+        :multiple="true"
       />
       <ul
         id="files-collaborators-list"
@@ -44,6 +45,7 @@
         <portal-target
           name="app.files.sidebar.sharing.shared-with.bottom"
           :slot-props="{ space, resource }"
+          :multiple="true"
         />
       </ul>
       <div v-if="showShareToggle" class="oc-flex oc-flex-center">
