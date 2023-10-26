@@ -105,6 +105,7 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'tokenStorageLocal', get(options, 'tokenStorageLocal', true))
     set(this.optionsConfiguration, 'loginUrl', get(options, 'loginUrl', ''))
     set(this.optionsConfiguration, 'disabledExtensions', get(options, 'disabledExtensions', []))
+    set(this.optionsConfiguration, 'isRunningOnEos', get(options, 'isRunningOnEos', false))
   }
 
   get options(): OptionsConfiguration {

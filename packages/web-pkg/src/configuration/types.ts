@@ -27,6 +27,7 @@ export interface OptionsConfiguration {
   tokenStorageLocal?: boolean
   disabledExtensions?: string[]
   mode?: string
+  isRunningOnEos?: boolean
 }
 
 export interface OAuth2Configuration {
