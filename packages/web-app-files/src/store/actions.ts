@@ -477,7 +477,6 @@ export default {
           resolve(link)
         })
         .catch((e) => {
-          console.log('error', e)
           reject(e)
         })
     })
