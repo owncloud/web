@@ -44,7 +44,8 @@ export default defineComponent({
   name: 'ExternalApp',
   props: {
     space: { type: Object as PropType<SpaceResource>, required: true },
-    resource: { type: Object as PropType<Resource>, required: true }
+    resource: { type: Object as PropType<Resource>, required: true },
+    isReadOnly: { type: Boolean, required: true }
   },
   emits: ['update:applicationName'],
   setup(props, { emit }) {
@@ -81,30 +82,7 @@ export default defineComponent({
       })
     }
 
-    const viewMode = ref('view')
-    const catchClickMicrosoftEdit = (event) => {
-      try {
-        if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
-          viewMode.value = 'write'
-        }
-      } catch (e) {}
-    }
-    watch(
-      applicationName,
-      (newAppName, oldAppName) => {
-        console.log('appNames', newAppName, oldAppName)
-        if (newAppName === 'Office365' && newAppName !== oldAppName) {
-          window.addEventListener('message', catchClickMicrosoftEdit)
-        } else {
-          window.removeEventListener('message', catchClickMicrosoftEdit)
-        }
-      },
-      {
-        immediate: true
-      }
-    )
-
-    const loadAppUrl = useTask(function* () {
+    const loadAppUrl = useTask(function* (signal, viewMode: string) {
       try {
         const fileId = props.resource.fileId
         const baseUrl = urlJoin(
@@ -116,7 +94,7 @@ export default defineComponent({
           file_id: fileId,
           lang: language.current,
           ...(unref(applicationName) && { app_name: unref(applicationName) }),
-          ...(unref(viewMode) && { view_mode: unref(viewMode) })
+          ...(viewMode && { view_mode: viewMode })
         })
 
         const url = `${baseUrl}?${query}`
@@ -164,16 +142,51 @@ export default defineComponent({
       }
     }).restartable()
 
-    watch(
-      [props.resource, viewMode],
-      ([newResource], [oldResource]) => {
-        if (!isSameResource(newResource, oldResource)) {
-          viewMode.value =
-            isShareSpaceResource(props.space) || isPublicSpaceResource(props.space)
-              ? 'view'
-              : 'write'
+    // switch to write mode when edit is clicked
+    const catchClickMicrosoftEdit = (event) => {
+      try {
+        if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
+          if (props.isReadOnly) {
+            console.error('Cannot switch to write mode as file is read-only')
+            return
+          }
+          loadAppUrl.perform('write')
         }
-        loadAppUrl.perform()
+      } catch (e) {}
+    }
+    watch(
+      applicationName,
+      (newAppName, oldAppName) => {
+        console.log('appNames', newAppName, oldAppName)
+        if (newAppName === 'Office365' && newAppName !== oldAppName) {
+          window.addEventListener('message', catchClickMicrosoftEdit)
+        } else {
+          window.removeEventListener('message', catchClickMicrosoftEdit)
+        }
+      },
+      {
+        immediate: true
+      }
+    )
+
+    watch(
+      [props.resource],
+      ([newResource], [oldResource]) => {
+        let viewMode = 'write'
+        // FIXME: introduce config option (?)
+        const featureFlag = true
+        if (!isSameResource(newResource, oldResource)) {
+          if (props.isReadOnly) {
+            viewMode = 'view'
+          } else if (
+            featureFlag &&
+            (isShareSpaceResource(props.space) || isPublicSpaceResource(props.space))
+          ) {
+            viewMode = 'view'
+          }
+        }
+
+        loadAppUrl.perform(unref(viewMode))
       },
       { immediate: true, deep: true }
     )
