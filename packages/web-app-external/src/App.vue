@@ -28,14 +28,22 @@ import { PropType, computed, defineComponent, unref, nextTick, ref, watch, VNode
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { queryItemAsString, useRequest, useRouteQuery, useStore } from '@ownclouders/web-pkg'
+import {
+  isSameResource,
+  queryItemAsString,
+  useRequest,
+  useRouteQuery,
+  useStore
+} from '@ownclouders/web-pkg'
 import { configurationManager } from '@ownclouders/web-pkg'
+import { isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'ExternalApp',
   props: {
+    space: { type: Object as PropType<SpaceResource>, required: true },
     resource: { type: Object as PropType<Resource>, required: true }
   },
   emits: ['update:applicationName'],
@@ -73,6 +81,29 @@ export default defineComponent({
       })
     }
 
+    const viewMode = ref('view')
+    const catchClickMicrosoftEdit = (event) => {
+      try {
+        if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
+          viewMode.value = 'write'
+        }
+      } catch (e) {}
+    }
+    watch(
+      applicationName,
+      (newAppName, oldAppName) => {
+        console.log('appNames', newAppName, oldAppName)
+        if (newAppName === 'Office365' && newAppName !== oldAppName) {
+          window.addEventListener('message', catchClickMicrosoftEdit)
+        } else {
+          window.removeEventListener('message', catchClickMicrosoftEdit)
+        }
+      },
+      {
+        immediate: true
+      }
+    )
+
     const loadAppUrl = useTask(function* () {
       try {
         const fileId = props.resource.fileId
@@ -84,7 +115,8 @@ export default defineComponent({
         const query = stringify({
           file_id: fileId,
           lang: language.current,
-          ...(unref(applicationName) && { app_name: unref(applicationName) })
+          ...(unref(applicationName) && { app_name: unref(applicationName) }),
+          ...(unref(viewMode) && { view_mode: unref(viewMode) })
         })
 
         const url = `${baseUrl}?${query}`
@@ -133,11 +165,17 @@ export default defineComponent({
     }).restartable()
 
     watch(
-      props.resource,
-      () => {
+      [props.resource, viewMode],
+      ([newResource], [oldResource]) => {
+        if (!isSameResource(newResource, oldResource)) {
+          viewMode.value =
+            isShareSpaceResource(props.space) || isPublicSpaceResource(props.space)
+              ? 'view'
+              : 'write'
+        }
         loadAppUrl.perform()
       },
-      { immediate: true }
+      { immediate: true, deep: true }
     )
 
     return {
