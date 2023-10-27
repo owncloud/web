@@ -27,12 +27,13 @@ export async function triggerShareAction({
     throw new Error('invalid new share status')
   }
 
+  let action = `api/v1/shares/pending/${resource.share.id}`
+  if (hidden !== undefined) {
+    action += `?hidden=${hidden ? 'true' : 'false'}`
+  }
+
   // exec share action
-  let response = await client.requests.ocs({
-    service: 'apps/files_sharing',
-    action: `api/v1/shares/pending/${resource.share.id}?hidden=${hidden ? 'true' : 'false'}`,
-    method
-  })
+  let response = await client.requests.ocs({ service: 'apps/files_sharing', action, method })
 
   // exit on failure
   if (response.status !== 200) {
