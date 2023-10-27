@@ -175,20 +175,19 @@ export default defineComponent({
     watch(
       [props.resource],
       ([newResource], [oldResource]) => {
-        let viewMode = 'write'
-        // FIXME: introduce config option (?)
-        const featureFlag = true
-        if (!isSameResource(newResource, oldResource)) {
-          if (props.isReadOnly) {
-            viewMode = 'view'
-          } else if (
-            featureFlag &&
-            (isShareSpaceResource(props.space) || isPublicSpaceResource(props.space))
-          ) {
-            viewMode = 'view'
-          }
+        if (isSameResource(newResource, oldResource)) {
+          return
         }
 
+        let viewMode = props.isReadOnly ? 'view' : 'write'
+        // FIXME: introduce config option (?)
+        const featureFlag = true
+        if (
+          featureFlag &&
+          (isShareSpaceResource(props.space) || isPublicSpaceResource(props.space))
+        ) {
+          viewMode = 'view'
+        }
         loadAppUrl.perform(unref(viewMode))
       },
       { immediate: true, deep: true }
