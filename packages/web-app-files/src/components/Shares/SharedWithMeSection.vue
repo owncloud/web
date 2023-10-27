@@ -5,7 +5,11 @@
       <span class="oc-text-medium">({{ items.length }})</span>
     </h2>
 
-    <no-content-message v-if="!items.length" class="oc-flex-stretch" icon="share-forward">
+    <no-content-message
+      v-if="!items.length"
+      class="files-empty oc-flex-stretch"
+      icon="share-forward"
+    >
       <template #message>
         <span>{{ emptyMessage }}</span>
       </template>
@@ -286,9 +290,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.files-empty {
-  height: auto;
-}
 .oc-files-actions-hide-share-trigger:hover {
   background-color: var(--oc-color-background-secondary) !important;
 }
