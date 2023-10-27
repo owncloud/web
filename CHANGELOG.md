@@ -23,6 +23,7 @@ Summary
 * Bugfix - Fix display path on resources: [#9843](https://github.com/owncloud/web/pull/9843)
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
 * Bugfix - Duplicated file search request: [#9861](https://github.com/owncloud/web/pull/9861)
+* Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -169,6 +170,13 @@ Details
 
    https://github.com/owncloud/web/issues/9787
    https://github.com/owncloud/web/pull/9861
+
+* Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
+
+   Tags are no longer editable for files that are currently locked.
+
+   https://github.com/owncloud/web/issues/9789
+   https://github.com/owncloud/web/pull/9873
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
