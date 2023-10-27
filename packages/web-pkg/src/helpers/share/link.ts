@@ -39,36 +39,16 @@ export interface CopyQuickLink extends CreateQuicklink {
 // it has a fallback to the vue-use implementation.
 //
 // https://webkit.org/blog/10855/
-const doCopy = async ({
-  store,
-  language,
-  quickLinkUrl
-}: {
-  store: Store<unknown>
-  language: Language
-  quickLinkUrl: string
-}) => {
-  const { $gettext } = language
-  try {
-    if (typeof ClipboardItem && navigator?.clipboard?.write) {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/plain': new Blob([quickLinkUrl], { type: 'text/plain' })
-        })
-      ])
-    } else {
-      const { copy } = useClipboard({ legacy: true })
-      await copy(quickLinkUrl)
-    }
-    await store.dispatch('showMessage', {
-      title: $gettext('The link has been copied to your clipboard.')
-    })
-  } catch (e) {
-    console.error(e)
-    await store.dispatch('showErrorMessage', {
-      title: $gettext('Copy link failed'),
-      error: e
-    })
+const copyToClipboard = async (quickLinkUrl: string) => {
+  if (typeof ClipboardItem && navigator?.clipboard?.write) {
+    return navigator.clipboard.write([
+      new ClipboardItem({
+        'text/plain': new Blob([quickLinkUrl], { type: 'text/plain' })
+      })
+    ])
+  } else {
+    const { copy } = useClipboard({ legacy: true })
+    return copy(quickLinkUrl)
   }
 }
 export const copyQuicklink = async (args: CopyQuickLink) => {
@@ -85,7 +65,18 @@ export const copyQuicklink = async (args: CopyQuickLink) => {
     .find((share: Share) => share.quicklink === true)
 
   if (existingQuickLink) {
-    return doCopy({ store, language, quickLinkUrl: existingQuickLink.url })
+    try {
+      await copyToClipboard(existingQuickLink.url)
+      return store.dispatch('showMessage', {
+        title: $gettext('The link has been copied to your clipboard.')
+      })
+    } catch (e) {
+      console.error(e)
+      return store.dispatch('showErrorMessage', {
+        title: $gettext('Copy link failed'),
+        error: e
+      })
+    }
   }
 
   const isPasswordEnforced =
@@ -95,15 +86,43 @@ export const copyQuicklink = async (args: CopyQuickLink) => {
     return showQuickLinkPasswordModal(
       { $gettext, store, passwordPolicyService },
       async (password: string) => {
-        await store.dispatch('hideModal')
-        const quickLink = await createQuicklink({ ...args, password })
-        return doCopy({ store, language, quickLinkUrl: quickLink.url })
+        try {
+          const quickLink = await createQuicklink({ ...args, password })
+          await store.dispatch('hideModal')
+          await copyToClipboard(quickLink.url)
+          return store.dispatch('showMessage', {
+            title: $gettext('The link has been copied to your clipboard.')
+          })
+        } catch (e) {
+          console.log(e)
+
+          // Human-readable error message is provided, for example when password is on banned list
+          if (e.statusCode === 400) {
+            return store.dispatch('setModalInputErrorMessage', $gettext(e.message))
+          }
+
+          return store.dispatch('showErrorMessage', {
+            title: $gettext('Copy link failed'),
+            error: e
+          })
+        }
       }
     )
   }
 
-  const quickLink = await createQuicklink(args)
-  return doCopy({ store, language, quickLinkUrl: quickLink.url })
+  try {
+    const quickLink = await createQuicklink(args)
+    await copyToClipboard(quickLink.url)
+    return store.dispatch('showMessage', {
+      title: $gettext('The link has been copied to your clipboard.')
+    })
+  } catch (e) {
+    console.error(e)
+    return store.dispatch('showErrorMessage', {
+      title: $gettext('Copy link failed'),
+      error: e
+    })
+  }
 }
 
 export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
