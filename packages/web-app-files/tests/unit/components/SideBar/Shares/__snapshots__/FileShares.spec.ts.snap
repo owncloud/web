@@ -10,7 +10,7 @@ exports[`FileShares collaborators list renders sharedWithLabel and sharee list 1
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
   </div>
-  <portal-target name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]"></portal-target>
+  <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]"></portal-target>
   <ul aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
     <li>
       <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="true" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
@@ -24,7 +24,7 @@ exports[`FileShares collaborators list renders sharedWithLabel and sharee list 1
     <li>
       <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="true" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
     </li>
-    <portal-target name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]"></portal-target>
+    <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]"></portal-target>
   </ul>
   <div class="oc-flex oc-flex-center">
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-shares-list-btn" type="button">Show less</button>
@@ -43,12 +43,12 @@ exports[`FileShares current space loads space members if a space is given and th
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
   </div>
-  <portal-target name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]"></portal-target>
+  <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]"></portal-target>
   <ul aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-mb-l" id="files-collaborators-list">
     <li>
       <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
     </li>
-    <portal-target name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]"></portal-target>
+    <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]"></portal-target>
   </ul>
   <!--v-if-->
   <h4 class="oc-text-bold oc-my-s">Space members</h4>

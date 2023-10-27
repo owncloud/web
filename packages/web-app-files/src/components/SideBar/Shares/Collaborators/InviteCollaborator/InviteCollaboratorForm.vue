@@ -38,6 +38,7 @@
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
         mode="create"
+        :show-icon="isRunningOnEos"
         class="role-selection-dropdown"
         @option-change="collaboratorRoleChanged"
       />
@@ -125,7 +126,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { defineComponent, inject, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
@@ -197,6 +198,7 @@ export default defineComponent({
       resharingDefault: useCapabilityFilesSharingResharingDefault(store),
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
+      isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
       clientService,
       saving,
       savingDelayed,
