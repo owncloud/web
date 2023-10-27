@@ -86,7 +86,7 @@ export default defineComponent({
 
     const injectedResource = inject<Resource>('resource')
     const resource = computed<Resource>(() => unref(injectedResource))
-    const readonly = computed<boolean>(() => unref(resource).locked === true)
+    const readonly = computed(() => unref(resource).locked === true)
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
     let allTags: string[] = []
