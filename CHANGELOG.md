@@ -478,12 +478,13 @@ Details
 
 * Enhancement - Add permission to delete link passwords when password is enforced: [#9857](https://github.com/owncloud/web/pull/9857)
 
-   We've enabled to ability to allow delete passwords on public links, even if the password is
+   We've added the ability to allow deleting passwords on public links, even if the password is
    enforced. Therefore, the user needs respective permission, granted by the server. This
    feature is only possible on public links that have the viewer role.
 
    https://github.com/owncloud/ocis/issues/7538
    https://github.com/owncloud/web/pull/9857
+   https://github.com/owncloud/web/pull/9866
 
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
 
