@@ -16,7 +16,6 @@
           :items="availableTags"
           :option-filter-label="$gettext('Filter tags')"
           :show-option-filter="true"
-          :close-on-click="true"
           class="files-search-filter-tags oc-mr-s"
           display-name-attribute="label"
           filter-name="tags"
@@ -289,21 +288,21 @@ export default defineComponent({
     )
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      const q = {}
+      const query = {}
 
       const humanSearchTerm = unref(searchTerm)
       const isContentOnlySearch = queryItemAsString(unref(fullTextParam)) == 'true'
 
       if (isContentOnlySearch && !!humanSearchTerm) {
-        q['content'] = `"${humanSearchTerm}"`
+        query['content'] = `"${humanSearchTerm}"`
       } else if (!!humanSearchTerm) {
-        q['name'] = `"*${humanSearchTerm}*"`
+        query['name'] = `"*${humanSearchTerm}*"`
       }
 
       const humanScopeQuery = unref(scopeQuery)
       const isScopedSearch = unref(doUseScope) === 'true'
       if (isScopedSearch && humanScopeQuery) {
-        q['scope'] = `${humanScopeQuery}`
+        query['scope'] = `${humanScopeQuery}`
       }
 
       const updateFilter = (v: Ref) => {
@@ -320,13 +319,13 @@ export default defineComponent({
 
       const humanTagsParams = queryItemAsString(unref(tagParam))
       if (humanTagsParams) {
-        q['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
+        query['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
         updateFilter(tagFilter)
       }
 
       const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
       if (lastModifiedParams) {
-        q['mtime'] = `"${lastModifiedParams}"`
+        query['mtime'] = `"${lastModifiedParams}"`
         updateFilter(lastModifiedFilter)
       }
 
@@ -338,16 +337,16 @@ export default defineComponent({
         // * request readability
         // * code readability
         // * complex cases readability
-        Object.keys(q)
-          .reduce((acc, k) => {
-            const isArrayValue = Array.isArray(q[k])
+        Object.keys(query)
+          .reduce((acc, prop) => {
+            const isArrayValue = Array.isArray(query[prop])
 
             if (!isArrayValue) {
-              acc.push(`${k}:${q[k]}`)
+              acc.push(`${prop}:${query[prop]}`)
             }
 
             if (isArrayValue) {
-              acc.push(`${k}:(${q[k].join(' OR ')})`)
+              acc.push(`${prop}:(${query[prop].join(' OR ')})`)
             }
 
             return acc
