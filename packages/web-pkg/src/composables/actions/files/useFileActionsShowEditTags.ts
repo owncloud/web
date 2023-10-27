@@ -34,6 +34,10 @@ export const useFileActionsShowEditTags = ({ store }: { store?: Store<any> } = {
           return false
         }
 
+        if (resources[0].locked === true) {
+          return false
+        }
+
         if (
           isLocationTrashActive(router, 'files-trash-generic') ||
           isLocationPublicActive(router, 'files-public-link')

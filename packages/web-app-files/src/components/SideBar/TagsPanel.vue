@@ -8,6 +8,7 @@
         v-model="selectedTags"
         class="oc-mb-s"
         :multiple="true"
+        :disabled="readonly"
         :options="availableTags"
         :contextual-helper="contextualHelper"
         taggable
@@ -85,6 +86,7 @@ export default defineComponent({
 
     const injectedResource = inject<Resource>('resource')
     const resource = computed<Resource>(() => unref(injectedResource))
+    const readonly = computed(() => unref(resource).locked === true)
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
     let allTags: string[] = []
@@ -230,7 +232,8 @@ export default defineComponent({
       save,
       keycode,
       keydownMethods,
-      contextualHelper
+      contextualHelper,
+      readonly
     }
   }
 })
