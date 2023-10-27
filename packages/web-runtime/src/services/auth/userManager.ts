@@ -2,7 +2,9 @@ import {
   Log,
   WebStorageStateStore,
   UserManager as OidcUserManager,
-  UserManagerSettings
+  UserManagerSettings,
+  User,
+  ErrorResponse
 } from 'oidc-client-ts'
 import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
@@ -282,6 +284,52 @@ export class UserManager extends OidcUserManager {
     const capabilities = await this.clientService.ocsUserContext.getCapabilities()
 
     this.store.commit('SET_CAPABILITIES', capabilities)
+  }
+
+  // copied from upstream oidc-client-ts UserManager with CERN customization
+  protected async _signinEnd(url: string, verifySub?: string, ...args): Promise<User> {
+    if (!this.configurationManager.options.isRunningOnEos) {
+      return (super._signinEnd as any)(url, verifySub, ...args)
+    }
+
+    const logger = this._logger.create('_signinEnd')
+    const signinResponse = await this._client.processSigninResponse(url)
+    logger.debug('got signin response')
+
+    const user = new User(signinResponse)
+    if (verifySub) {
+      if (verifySub !== user.profile.sub) {
+        logger.debug(
+          'current user does not match user returned from signin. sub from signin:',
+          user.profile.sub
+        )
+        throw new ErrorResponse({ ...signinResponse, error: 'login_required' })
+      }
+      logger.debug('current user matches user returned from signin')
+    }
+
+    /* CERNBox customization
+      Do a call to the backend, as this will reply with the internal reva token.
+      Use that longer token in all calls to the backend (so, replace the default store token)
+    */
+    try {
+      console.log('CERNBox: login successful, exchange sso token with reva token')
+      const httpClient = this.clientService.httpAuthenticated
+      const revaTokenReq = await httpClient.get('/ocs/v1.php/cloud/user')
+      const revaToken = revaTokenReq.headers['x-access-token']
+      const claims = JSON.parse(atob(revaToken.split('.')[1]))
+      user.access_token = revaToken
+      user.expires_at = claims.exp
+    } catch (e) {
+      console.error('Failed to get reva token, continue with sso one', e)
+    }
+    // end
+
+    await this.storeUser(user)
+    logger.debug('user stored')
+    this._events.load(user)
+
+    return user
   }
 
   private async fetchPermissions({ user }): Promise<any> {
