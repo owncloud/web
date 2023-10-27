@@ -84,6 +84,13 @@ export default defineComponent({
 
     const loadAppUrl = useTask(function* (signal, viewMode: string) {
       try {
+        if (props.isReadOnly && viewMode === 'write') {
+          store.dispatch('showErrorMessage', {
+            title: $gettext('Cannot open file in edit mode as it is read-only')
+          })
+          return
+        }
+
         const fileId = props.resource.fileId
         const baseUrl = urlJoin(
           configurationManager.serverUrl,
@@ -146,10 +153,6 @@ export default defineComponent({
     const catchClickMicrosoftEdit = (event) => {
       try {
         if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
-          if (props.isReadOnly) {
-            console.error('Cannot switch to write mode as file is read-only')
-            return
-          }
           loadAppUrl.perform('write')
         }
       } catch (e) {}
