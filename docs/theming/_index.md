@@ -297,6 +297,14 @@ An empty template for your custom theme is provided below, and you can use the i
         "name": "",
         "slogan": ""
       },
+      "appBanner": {
+        "title": "",
+        "publisher": "",
+        "additionalInformation": "",
+        "ctaText": "",
+        "icon": "",
+        "appScheme": ""
+      },
       "logo": {
         "topbar": "",
         "favicon": "",
