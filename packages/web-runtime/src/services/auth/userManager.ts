@@ -287,9 +287,9 @@ export class UserManager extends OidcUserManager {
   }
 
   // copied from upstream oidc-client-ts UserManager with CERN customization
-  protected async _signinEnd(url: string, verifySub?: string): Promise<User> {
+  protected async _signinEnd(url: string, verifySub?: string, ...args): Promise<User> {
     if (!this.configurationManager.options.isRunningOnEos) {
-      return super._signinEnd(url, verifySub)
+      return (super._signinEnd as any)(url, verifySub, ...args)
     }
 
     const logger = this._logger.create('_signinEnd')
@@ -313,7 +313,7 @@ export class UserManager extends OidcUserManager {
       Use that longer token in all calls to the backend (so, replace the default store token)
     */
     try {
-      console.log('CERNBox: loging successful, exchange sso token with reva token')
+      console.log('CERNBox: login successful, exchange sso token with reva token')
       const httpClient = this.clientService.httpAuthenticated
       const revaTokenReq = await httpClient.get('/ocs/v1.php/cloud/user')
       const revaToken = revaTokenReq.headers['x-access-token']
