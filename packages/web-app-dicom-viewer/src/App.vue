@@ -60,6 +60,7 @@
         :current-image-rotation="currentImageRotation"
         :current-image-zoom="currentImageZoom"
         :is-show-metadata-activated="isShowMetadataActivated"
+        :is-small-screen="isSmallScreen"
         @set-zoom="setZoom"
         @set-rotation="setRotation"
         @set-horizontal-flip="setHorizontalFlip"
@@ -238,10 +239,7 @@ export default defineComponent({
         spacing: '',
         direction: '',
         origin: '',
-        modality: '',
-        pixelRepresentation: '',
-        bitsStored: '',
-        highBit: ''
+        modality: ''
       },
       patientInformation: {
         patientName: '',
@@ -564,21 +562,14 @@ export default defineComponent({
         contentTime
 
       // imageInformation
-      let rows,
-        columns,
-        photometricInterpretation,
+      let photometricInterpretation,
         imageType,
-        bitsAllocated,
-        bitsStored,
-        highBit,
-        pixelRepresentation,
         rescaleSlope,
         rescaleIntercept,
         imagePositionPatient,
         imageOrientationPatient,
         patientPosition,
         pixelSpacing,
-        samplesPerPixel,
         imageComments
 
       // equipmentInformation
@@ -659,19 +650,12 @@ export default defineComponent({
           contentDate = dicomImage.data.string('x00080023')
           contentTime = dicomImage.data.string('x00080033')
 
-          //rows = dicomImage.data.string('x00280010') // row data separated
-          //columns = dicomImage.data.string('x00280011') //column data separated
           photometricInterpretation = dicomImage.data.string('x00280004')
           imageType = dicomImage.data.string('x00080008')
-          //bitsAllocated = dicomImage.data.string('x00280100') // icon displayed instead of value
-          bitsStored = dicomImage.data.string('x00280101') // different data
-          highBit = dicomImage.data.string('x00280102') // different data
-          pixelRepresentation = dicomImage.data.string('x00280103') // different data
           rescaleSlope = dicomImage.data.string('x00281053')
           rescaleIntercept = dicomImage.data.string('x00281052')
           imagePositionPatient = dicomImage.data.string('x00200032')
           pixelSpacing = dicomImage.data.string('x00280030')
-          samplesPerPixel = dicomImage.data.string('x00280002') // icon displayed instead of value
           imageComments = dicomImage.data.string('x00204000')
           imageOrientationPatient = dicomImage.data.string('x00200037')
           patientPosition = dicomImage.data.string('x00185100')
@@ -775,20 +759,14 @@ export default defineComponent({
       this.instanceInformation.contentTime = this.formatTime(contentTime, longDateTimeFormat)
 
       // imageInformation
-      // this.imageInformation.rowsX_Columns = rows + ' x ' + columns // extract this from viewport
       this.imageInformation.photometricInterpretation = photometricInterpretation
       this.imageInformation.imageType = imageType
-      // this.imageInformation.bitsAllocated = bitsAllocated // // extract this from viewport
-      this.imageInformation.bitsStored = bitsStored
-      this.imageInformation.highBit = highBit
-      this.imageInformation.pixelRepresentation = pixelRepresentation
       this.imageInformation.rescaleSlope = rescaleSlope
       this.imageInformation.rescaleIntercept = rescaleIntercept
       this.imageInformation.imagePositionPatient = imagePositionPatient
       this.imageInformation.imageOrientationPatient = imageOrientationPatient
       this.imageInformation.patientPosition = patientPosition
       this.imageInformation.pixelSpacing = pixelSpacing
-      this.imageInformation.samplesPerPixel = samplesPerPixel
       this.imageInformation.imageComments = imageComments
 
       // equipmentInformation
@@ -853,10 +831,8 @@ export default defineComponent({
 
       if (imageId != (null || undefined) && typeof imageId == 'string') {
         console.log('extracting metadata from viewport for image id: ' + imageId)
-        const { pixelRepresentation, bitsAllocated, bitsStored, highBit } = metaData.get(
-          'imagePixelModule',
-          imageId
-        )
+        const { pixelRepresentation, bitsAllocated, bitsStored, highBit, samplesPerPixel } =
+          metaData.get('imagePixelModule', imageId)
 
         // adding values to corresponding variable
         this.imageInformation.rowsX_Columns =
@@ -869,10 +845,11 @@ export default defineComponent({
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
         this.exampleInformation.modality = this.imageData.metadata.Modality
-        this.exampleInformation.pixelRepresentation = pixelRepresentation
         this.imageInformation.bitsAllocated = bitsAllocated
-        this.exampleInformation.bitsStored = bitsStored
-        this.exampleInformation.highBit = highBit
+        this.imageInformation.bitsStored = bitsStored
+        this.imageInformation.highBit = highBit
+        this.imageInformation.pixelRepresentation = pixelRepresentation
+        this.imageInformation.samplesPerPixel = samplesPerPixel
 
         this.isMetadataExtracted = true
         console.log('metadata from viewport extracted')

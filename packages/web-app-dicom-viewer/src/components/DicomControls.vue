@@ -45,6 +45,7 @@
             <oc-icon fill-type="line" name="checkbox-indeterminate" variation="inherit" />
           </oc-button>
           <oc-button
+            v-show="!isSmallScreen"
             v-oc-tooltip="imageOriginalSizeDescription"
             class="preview-controls-image-original-size oc-ml-s oc-mr-s"
             appearance="raw-inverse"
@@ -199,6 +200,10 @@ export default defineComponent({
     },
     isShowMetadataActivated: {
       type: Boolean
+    },
+    isSmallScreen: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [
