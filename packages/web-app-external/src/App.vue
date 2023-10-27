@@ -188,7 +188,7 @@ export default defineComponent({
         ) {
           viewMode = 'view'
         }
-        loadAppUrl.perform(unref(viewMode))
+        loadAppUrl.perform(viewMode)
       },
       { immediate: true, deep: true }
     )
