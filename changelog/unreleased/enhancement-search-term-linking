@@ -1,0 +1,16 @@
+Enhancement: Search query term linking
+
+We've added the option to search for multiple terms with the same type,
+at the moment only the tag search benefits from it.
+
+This makes it possible to search for multiple resources with different tags in one query.
+The UI now empowers the user to perform advanced searches like:
+
+* all resources with the tags `tag1` OR `tag2`
+* all resources with the tags `tag1` OR `tag2` AND containing text `content`
+
+as a rule of thumb, if a property appears multiple times (like `tag1` OR `tag2`)
+the search combines the query with an `OR` and different keys are linked with an `AND`.
+
+https://github.com/owncloud/web/pull/9854
+https://github.com/owncloud/web/issues/9829

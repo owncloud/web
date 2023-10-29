@@ -10,12 +10,12 @@
         <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
+          :allow-multiple="true"
           :filter-label="$gettext('Tags')"
           :filterable-attributes="['label']"
           :items="availableTags"
           :option-filter-label="$gettext('Filter tags')"
           :show-option-filter="true"
-          :close-on-click="true"
           class="files-search-filter-tags oc-mr-s"
           display-name-attribute="label"
           filter-name="tags"
@@ -136,7 +136,17 @@ import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
-import { computed, defineComponent, nextTick, onMounted, ref, unref, VNodeRef, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  Ref,
+  ref,
+  unref,
+  VNodeRef,
+  watch
+} from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import { Pagination } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
@@ -278,57 +288,71 @@ export default defineComponent({
     )
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      let query = ''
-      const add = (k: string, v: string) => {
-        query = (query + ` ${k}:${v}`).trimStart()
-      }
+      const query = {}
 
       const humanSearchTerm = unref(searchTerm)
       const isContentOnlySearch = queryItemAsString(unref(fullTextParam)) == 'true'
 
       if (isContentOnlySearch && !!humanSearchTerm) {
-        add('content', `"${humanSearchTerm}"`)
+        query['content'] = `"${humanSearchTerm}"`
       } else if (!!humanSearchTerm) {
-        add('name', `"*${humanSearchTerm}*"`)
+        query['name'] = `"*${humanSearchTerm}*"`
       }
 
       const humanScopeQuery = unref(scopeQuery)
       const isScopedSearch = unref(doUseScope) === 'true'
       if (isScopedSearch && humanScopeQuery) {
-        add('scope', `${humanScopeQuery}`)
+        query['scope'] = `${humanScopeQuery}`
+      }
+
+      const updateFilter = (v: Ref) => {
+        if (manuallyUpdateFilterChip && unref(v)) {
+          /**
+           * Handles edge cases where a filter is not being applied via the filter directly,
+           * e.g. when clicking on a tag in the files list.
+           * We need to manually update the selected items in the ItemFilter component because normally
+           * it only does this on mount or when interacting with the filter directly.
+           */
+          ;(unref(v) as any).setSelectedItemsBasedOnQuery()
+        }
       }
 
       const humanTagsParams = queryItemAsString(unref(tagParam))
       if (humanTagsParams) {
-        add('tag', `"${humanTagsParams}"`)
-
-        if (manuallyUpdateFilterChip && unref(tagFilter)) {
-          /**
-           * Handles edge cases where a filter is not being applied via the filter directly,
-           * e.g. when clicking on a tag in the files list.
-           * We need to manually update the selected items in the ItemFilter component because normally
-           * it only does this on mount or when interacting with the filter directly.
-           */
-          ;(unref(tagFilter) as any).setSelectedItemsBasedOnQuery()
-        }
+        query['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
+        updateFilter(tagFilter)
       }
 
       const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
       if (lastModifiedParams) {
-        add('mtime', `"${lastModifiedParams}"`)
-
-        if (manuallyUpdateFilterChip && unref(lastModifiedFilter)) {
-          /**
-           * Handles edge cases where a filter is not being applied via the filter directly,
-           * e.g. when clicking on a tag in the files list.
-           * We need to manually update the selected items in the ItemFilter component because normally
-           * it only does this on mount or when interacting with the filter directly.
-           */
-          ;(unref(lastModifiedFilter) as any).setSelectedItemsBasedOnQuery()
-        }
+        query['mtime'] = `"${lastModifiedParams}"`
+        updateFilter(lastModifiedFilter)
       }
 
-      return query
+      return (
+        // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
+        // different or identical keys are part of the query.
+        //
+        // We list these operators for the following reasons nevertheless explicit:
+        // * request readability
+        // * code readability
+        // * complex cases readability
+        Object.keys(query)
+          .reduce((acc, prop) => {
+            const isArrayValue = Array.isArray(query[prop])
+
+            if (!isArrayValue) {
+              acc.push(`${prop}:${query[prop]}`)
+            }
+
+            if (isArrayValue) {
+              acc.push(`${prop}:(${query[prop].join(' OR ')})`)
+            }
+
+            return acc
+          }, [])
+          .join(' AND ')
+      )
     }
 
     const breadcrumbs = computed(() => {
