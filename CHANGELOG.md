@@ -54,6 +54,7 @@ Summary
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
 * Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
+* Enhancement - Search query term linking: [#9854](https://github.com/owncloud/web/pull/9854)
 * Enhancement - Add permission to delete link passwords when password is enforced: [#9857](https://github.com/owncloud/web/pull/9857)
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
@@ -475,6 +476,23 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9853
+
+* Enhancement - Search query term linking: [#9854](https://github.com/owncloud/web/pull/9854)
+
+   We've added the option to search for multiple terms with the same type, at the moment only the tag
+   search benefits from it.
+
+   This makes it possible to search for multiple resources with different tags in one query. The UI
+   now empowers the user to perform advanced searches like:
+
+   * all resources with the tags `tag1` OR `tag2` * all resources with the tags `tag1` OR `tag2` AND
+   containing text `content`
+
+   As a rule of thumb, if a property appears multiple times (like `tag1` OR `tag2`) the search
+   combines the query with an `OR` and different keys are linked with an `AND`.
+
+   https://github.com/owncloud/web/issues/9829
+   https://github.com/owncloud/web/pull/9854
 
 * Enhancement - Add permission to delete link passwords when password is enforced: [#9857](https://github.com/owncloud/web/pull/9857)
 
