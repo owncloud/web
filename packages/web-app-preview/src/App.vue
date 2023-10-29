@@ -68,29 +68,31 @@
   </main>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, getCurrentInstance, ref, unref, watch } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from '@ownclouders/web-client/src'
-import { AppTopBar, ProcessorType } from '@ownclouders/web-pkg'
 import {
+  Action,
+  ActionOptions,
+  AppTopBar,
+  createFileRouteOptions,
+  createLocationShares,
+  createLocationCommon,
+  ProcessorType,
   queryItemAsString,
   sortHelper,
   useAppDefaults,
+  useDownloadFile,
   useRoute,
   useRouteQuery,
   useRouter
 } from '@ownclouders/web-pkg'
-import { Action, ActionOptions } from '@ownclouders/web-pkg'
-import { useDownloadFile } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
 import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
-import { watch } from 'vue'
-import { getCurrentInstance } from 'vue'
 
 export const appId = 'preview'
 
@@ -162,14 +164,31 @@ export default defineComponent({
     }
 
     const filteredFiles = computed<Resource[]>(() => {
-      if (!unref(activeFiles)) {
+      let files = unref(activeFiles) || []
+
+      if (!files.length) {
         return []
       }
 
-      const files = unref(activeFiles).filter((file) => {
+      // filter out files that do not match one of the configured mimeTypes
+      files = files.filter((file) => {
         return mimeTypes().includes(file.mimeType?.toLowerCase())
       })
 
+      // in some cases a single file context is requested,
+      // in such cases the app should only display that exact one file
+      const currentRouteName = unref(unref(currentFileContext).routeName) || ''
+      const isSingleFile = [
+        createLocationShares('files-shares-via-link').name,
+        createLocationShares('files-shares-with-others').name,
+        createLocationCommon('files-common-search').name,
+        createLocationCommon('files-common-favorites').name
+      ].includes(currentRouteName)
+      if (isSingleFile) {
+        files = files.slice(0, 1)
+      }
+
+      // finally sort the files to match the user selected parameters
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
     })
     const activeFilteredFile = computed(() => {

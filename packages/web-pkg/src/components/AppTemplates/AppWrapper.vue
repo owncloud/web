@@ -125,7 +125,6 @@ export default defineComponent({
       getFileContents,
       getFileInfo,
       getUrlForResource,
-      loadFolderForFileContext,
       putFileContents,
       replaceInvalidFileRoute,
       revokeUrl

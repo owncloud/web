@@ -1,0 +1,23 @@
+Enhancement: Context aware preview app media rendering
+
+Until now, the preview app had always displayed all images,
+regardless of what the user had selected or where the request came from.
+
+Of course, permissions have been taken into account so far,\
+but the behavior was still wrong in certain cases.
+
+In the following scenarios, the app displayed all media from the same folder:
+
+* the user created a single file public link, navigated to the `shared via link` panel,
+  clicked the single shared resource.
+* the user created a single file share (regardless of access permissions), navigated to the
+  `shared with others` panel, clicked the single shared resource.
+* the user searched for a file, clicked one of the media search results.
+* the user marked a single file as favorite, navigated to the favorites list,
+  clicked on one from that list.
+
+now the behavior is changed and the preview app takes the referer into consideration and displays
+only the selected resource in one of the above cases.
+
+https://github.com/owncloud/web/pull/9882
+https://github.com/owncloud/web/issues/8932

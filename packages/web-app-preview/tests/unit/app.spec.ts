@@ -8,7 +8,13 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
-import { FileContext, useAppDefaults } from '@ownclouders/web-pkg'
+import {
+  FileContext,
+  useAppDefaults,
+  createLocationShares,
+  createLocationCommon,
+  createLocationSpaces
+} from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 
 jest.mock('@ownclouders/web-pkg', () => {
@@ -79,9 +85,26 @@ const activeFiles = [
 ]
 
 describe('Preview app', () => {
+  it.each([
+    [createLocationShares('files-shares-via-link').name.toString(), 1],
+    [createLocationShares('files-shares-with-others').name.toString(), 1],
+    [createLocationCommon('files-common-search').name.toString(), 1],
+    [createLocationCommon('files-common-favorites').name.toString(), 1],
+    [createLocationSpaces('files-spaces-projects').name.toString(), activeFiles.length],
+    ['', activeFiles.length]
+  ])(
+    'restrict available files based on the currentFileContext routeName("%s")',
+    async (routeName, total) => {
+      const { wrapper } = createShallowMountWrapper({ routeName })
+      await nextTick()
+
+      expect(wrapper.vm.filteredFiles.length).toEqual(total)
+    }
+  )
+
   describe('Method "preloadImages"', () => {
     it('should preload images if active file changes', async () => {
-      const { wrapper } = createShallowMountWrapper()
+      const { wrapper } = createShallowMountWrapper({ routeName: '' })
       await nextTick()
 
       wrapper.vm.toPreloadImageIds = []
@@ -98,12 +121,13 @@ const storeOptions = defaultStoreMockOptions
 storeOptions.modules.Files.getters.activeFiles.mockImplementation(() => ['3'])
 const store = createStore(storeOptions)
 
-function createShallowMountWrapper() {
+function createShallowMountWrapper(props: { routeName: string }) {
   jest.mocked(useAppDefaults).mockImplementation(() =>
     useAppDefaultsMock({
       currentFileContext: ref(
         mock<FileContext>({
           path: 'personal/admin/bear.png',
+          routeName: props.routeName,
           space: {
             getDriveAliasAndItem: jest.fn().mockImplementation((file) => {
               return activeFiles.find((filteredFile) => filteredFile.id == file.id)?.path
