@@ -366,6 +366,11 @@ export default defineComponent({
     })
 
     onMounted(async () => {
+      // Store resources are shared across table views, therefore
+      // the store state needs a reset to prevent the old list of resources
+      // from being rendered while the request retrieves the new resources from the server.
+      store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
+
       if (unref(hasTags)) {
         await loadAvailableTagsTask.perform()
       }

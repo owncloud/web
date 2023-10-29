@@ -25,6 +25,10 @@ describe('search result List view', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.vm.listSearch).toMatchObject(mockProvider.listSearch)
   })
+  it('by default loading is true', () => {
+    const { wrapper } = getWrapper()
+    expect(wrapper.vm.loading).toBeTruthy()
+  })
   it('triggers the search', async () => {
     const { wrapper } = getWrapper()
     await wrapper.vm.search('term')

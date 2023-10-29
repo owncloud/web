@@ -24,7 +24,9 @@ export default defineComponent({
       return listSearch
     })
 
-    const loading = ref(false)
+    // The resources always have to be loaded from the server first.
+    // Therefore, the loading spinner is active by default, which prevents incorrect results from being displayed.
+    const loading = ref(true)
     const searchResult = ref({
       values: [],
       totalResults: null
