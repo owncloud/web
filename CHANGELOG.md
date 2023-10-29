@@ -171,6 +171,7 @@ Details
 
    https://github.com/owncloud/web/issues/9787
    https://github.com/owncloud/web/pull/9861
+   https://github.com/owncloud/web/pull/9880
 
 * Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
 
