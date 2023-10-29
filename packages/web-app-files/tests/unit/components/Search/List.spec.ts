@@ -1,8 +1,11 @@
+import { merge } from 'lodash-es'
 import { describe } from '@jest/globals'
 import { shallowMount } from '@vue/test-utils'
 import List from 'web-app-files/src/components/Search/List.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { createRouter, createMemoryHistory } from 'vue-router'
+
 import {
   createStore,
   defaultComponentMocks,
@@ -45,6 +48,39 @@ describe('List component', () => {
     const { wrapper } = getWrapper()
     await wrapper.vm.loadAvailableTagsTask.last
     expect(wrapper.emitted('search').length).toBeGreaterThan(0)
+  })
+  it('should emit search only if one of the queries changes', async () => {
+    const $router = createRouter({
+      routes: [{ name: 'files-common-search', path: '/files-common-search', redirect: null }],
+      history: createMemoryHistory()
+    })
+
+    const { wrapper } = getWrapper({
+      mocks: { $router }
+    })
+
+    let replacementCounter = 0
+    const queries = [{}, {}, {}, {}, {}, {}, {}, {}, { q_tags: 'foo' }, {}, {}, {}, {}]
+    for (const query of queries) {
+      await $router.replace({
+        name: 'files-common-search',
+        query: merge(
+          {
+            q_fullText: 'q_fullText',
+            q_tags: 'q_tags',
+            q_lastModified: 'q_lastModified',
+            useScope: 'useScope'
+          },
+          query
+        )
+      })
+
+      replacementCounter++
+    }
+
+    await wrapper.vm.loadAvailableTagsTask.last
+    expect(replacementCounter).toBe(queries.length)
+    expect(wrapper.emitted('search').length).toBe(4)
   })
   describe('breadcrumbs', () => {
     it('show "Search" when no search term given', () => {
@@ -172,7 +208,8 @@ function getWrapper({
   fullTextFilterQuery = null,
   fullTextSearchEnabled = false,
   availableLastModifiedValues = {},
-  lastModifiedFilterQuery = null
+  lastModifiedFilterQuery = null,
+  mocks = {}
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
@@ -187,8 +224,11 @@ function getWrapper({
   })
   jest.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
 
-  const mocks = defaultComponentMocks()
-  mocks.$clientService.graphAuthenticated.tags.getTags.mockReturnValue(
+  const localMocks = {
+    ...defaultComponentMocks(),
+    ...mocks
+  }
+  localMocks.$clientService.graphAuthenticated.tags.getTags.mockReturnValue(
     mockAxiosResolve({ value: availableTags })
   )
   const storeOptions = defaultStoreMockOptions
@@ -197,11 +237,11 @@ function getWrapper({
   })
   const store = createStore(storeOptions)
   return {
-    mocks,
+    mocks: localMocks,
     wrapper: shallowMount(List, {
       global: {
-        mocks,
-        provide: mocks,
+        mocks: localMocks,
+        provide: localMocks,
         stubs: {
           FilesViewWrapper: false
         },
