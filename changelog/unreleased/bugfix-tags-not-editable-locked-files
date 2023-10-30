@@ -3,4 +3,5 @@ Bugfix: Tags are no longer editable for a locked file
 Tags are no longer editable for files that are currently locked.
 
 https://github.com/owncloud/web/pull/9873
+https://github.com/owncloud/web/pull/9883
 https://github.com/owncloud/web/issues/9789

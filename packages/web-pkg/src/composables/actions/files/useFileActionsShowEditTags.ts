@@ -34,7 +34,7 @@ export const useFileActionsShowEditTags = ({ store }: { store?: Store<any> } = {
           return false
         }
 
-        if (resources[0].locked === true) {
+        if (resources[0]?.locked === true) {
           return false
         }
 
