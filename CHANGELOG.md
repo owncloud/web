@@ -61,6 +61,7 @@ Summary
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
 * Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
+* Enhancement - Enable dark theme on importer: [#9884](https://github.com/owncloud/web/pull/9884)
 
 Details
 -------
@@ -554,6 +555,14 @@ Details
 
    https://github.com/owncloud/web/issues/9834
    https://github.com/owncloud/web/pull/9864
+
+* Enhancement - Enable dark theme on importer: [#9884](https://github.com/owncloud/web/pull/9884)
+
+   We've enabled the dark theme on our importer, so the user will see a dark-themed dialog,
+   whenever they activate the dark mode.
+
+   https://github.com/owncloud/web/issues/9452
+   https://github.com/owncloud/web/pull/9884
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
