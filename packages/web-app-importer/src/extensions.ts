@@ -51,6 +51,9 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   })
 
   const handler = async () => {
+    const currentThemeName = window.localStorage.getItem('oc_currentThemeName')
+    const renderDarkTheme = unref(currentThemeName) === 'default-dark'
+
     const modal = {
       variation: 'passive',
       title: $gettext('Import files'),
@@ -69,6 +72,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
       disableLocalFiles: true,
       disableStatusBar: true,
       showSelectedFiles: false,
+      ...(renderDarkTheme && { theme: 'dark' }),
       locale: {
         strings: {
           cancel: $gettext('Cancel'),

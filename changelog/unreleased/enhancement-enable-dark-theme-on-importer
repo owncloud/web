@@ -1,0 +1,7 @@
+Enhancement: Enable dark theme on importer
+
+We've enabled the dark theme on our importer, so the user will see a dark-themed dialog, whenever they activate the
+dark mode.
+
+https://github.com/owncloud/web/pull/9884
+https://github.com/owncloud/web/issues/9452
