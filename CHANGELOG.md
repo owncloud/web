@@ -182,6 +182,7 @@ Details
 
    https://github.com/owncloud/web/issues/9789
    https://github.com/owncloud/web/pull/9873
+   https://github.com/owncloud/web/pull/9883
 
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
 
