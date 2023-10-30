@@ -106,14 +106,6 @@ const getRecentLinkName = async (page: Page): Promise<string> => {
   return page.locator(publicLinkNameList).first().textContent()
 }
 
-const getRecentLinkUrl = async (page: Page): Promise<string> => {
-  return page.locator(publicLinkUrlList).first().textContent()
-}
-
-const getRecentLinkName = async (page: Page): Promise<string> => {
-  return page.locator(publicLinkNameList).first().textContent()
-}
-
 export const createLink = async (args: createLinkArgs): Promise<string> => {
   const { space, page, resource } = args
   if (!space) {
