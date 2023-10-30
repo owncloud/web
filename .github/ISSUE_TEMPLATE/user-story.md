@@ -18,21 +18,20 @@ assignees: ''
 ## Acceptance Criteria
 
 ## Definition of ready
-[ ] everybody needs to understand the value written in the user story
-[ ] acceptance criteria has to be defined
-[ ] all dependencies of the user story need to be identified
-[ ] feature should be seen from an end user perspective
-[ ] user story has to be estimated
-[ ] story points need to be less then 20
+- [ ] Everybody needs to understand the value written in the user story
+- [ ] Acceptance criteria have to be defined
+- [ ] All dependencies of the user story need to be identified
+- [ ] Feature should be seen from an end user perspective
+- [ ] Story has to be estimated
+- [ ] Story points need to be less than 20
 
 ## Definition of done
 - Functional requirements
-[ ] functionality described in the user story works
-[ ] acceptance criteria are fulfilled
+  - [ ] Functionality described in the user story works
+  - [ ] Acceptance criteria are fulfilled
 - Quality
-[ ] code review happened
-[ ] CI is green
-[ ] critical code received unit tests by the developer
-[ ] automated tests passed (if automated tests are not available, this test needs to be created and passed
+  - [ ] Code review happened
+  - [ ] CI is green (that includes new and existing automated tests)
+  - [ ] Critical code received unit tests by the developer
 - Non-functional requirements
-[ ] no sonar cloud issues
+  - [ ] No sonar cloud issues
