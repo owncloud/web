@@ -20,10 +20,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, unref, computed } from 'vue'
-import { $gettext } from '../router/utils'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useClientService, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useGettext } from 'vue3-gettext'
+import DOMPurify from 'dompurify'
 
 export default defineComponent({
   name: 'CreateShortcutModal',
@@ -39,6 +40,7 @@ export default defineComponent({
   },
   setup(props) {
     const clientService = useClientService()
+    const { $gettext } = useGettext()
     const store = useStore()
     const inputUrl = ref('')
     const inputFilename = ref('')
@@ -49,14 +51,26 @@ export default defineComponent({
     })
 
     const createShortcut = async () => {
-      const content = `[InternetShortcut]\nURL=${unref(inputUrl)}`
-      const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
-      const resource = await clientService.webdav.putFileContents(props.space, {
-        path,
-        content
-      })
-      store.commit('Files/UPSERT_RESOURCE', resource)
-      props.cancel()
+      try {
+        // Omit possible xss code
+        const sanitizedUrl = DOMPurify.sanitize(unref(inputUrl), { USE_PROFILES: { html: true } })
+
+        const content = `[InternetShortcut]\nURL=${unref(sanitizedUrl)}`
+        const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
+        const resource = await clientService.webdav.putFileContents(props.space, {
+          path,
+          content
+        })
+        store.commit('Files/UPSERT_RESOURCE', resource)
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to create shortcut'),
+          error: e
+        })
+      } finally {
+        props.cancel()
+      }
     }
 
     return {
@@ -65,7 +79,6 @@ export default defineComponent({
       inputUrl,
       inputFilename
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
