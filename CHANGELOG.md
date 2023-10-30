@@ -33,6 +33,7 @@ Summary
 * Enhancement - Add SSE to get notifications instantly: [#9451](https://github.com/owncloud/web/pull/9451)
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
+* Enhancement - Personal shares can be shown and hidden: [#9531](https://github.com/owncloud/web/issues/9531)
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 * Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
 * Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
@@ -266,6 +267,17 @@ Details
 
    https://github.com/owncloud/web/issues/5974
    https://github.com/owncloud/web/pull/9527
+
+* Enhancement - Personal shares can be shown and hidden: [#9531](https://github.com/owncloud/web/issues/9531)
+
+   On the shared-with-me page, there is no distinction between pending, accepted and rejected
+   shares anymore. Instead, the user can toggle to display either shown or hidden shares.
+
+   Furthermore, accepting and rejecting shares has been renamed to "enable sync"/"disable
+   sync" to better reflect what's happening on the server and on other devices.
+
+   https://github.com/owncloud/web/issues/9531
+   https://github.com/owncloud/web/pull/9718
 
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 
