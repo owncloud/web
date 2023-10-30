@@ -357,6 +357,7 @@ def main(ctx):
 def beforePipelines(ctx):
     return checkStarlark() + \
            licenseCheck(ctx) + \
+           checkTestSuitesInExpectedToFailure(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
            pnpmCache(ctx) + \
@@ -1668,6 +1669,34 @@ def licenseCheck(ctx):
                 "commands": [
                     "pnpm licenses:csv",
                     "pnpm licenses:save",
+                ],
+            },
+        ],
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
+
+def checkTestSuitesInExpectedToFailure(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "check-suite-in-expected-to-failure",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
+        "steps": [
+            {
+                "name": "check-suites",
+                "image": OC_CI_ALPINE,
+                "commands": [
+                    "cd %s/tests/acceptance && ./check-deleted-suites-in-expected-to-failure.sh" % dir["web"],
                 ],
             },
         ],
