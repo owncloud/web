@@ -1,0 +1,9 @@
+Bugfix: Prevent rendering of old/wrong set of resources in search list
+
+When entering the search, it displayed the resources from the file list for a short moment,
+this has now been fixed and the search always shows the loading spinner first.
+
+After all results have been loaded from the server, the spinner disappears and the result is rendered.
+
+https://github.com/owncloud/web/pull/9881
+https://github.com/owncloud/web/issues/9790

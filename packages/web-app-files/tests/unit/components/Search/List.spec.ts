@@ -44,6 +44,10 @@ describe('List component', () => {
     const { wrapper } = getWrapper({ resources: [mock<Resource>()] })
     expect(wrapper.find(selectors.resourceTableStub).exists()).toBeTruthy()
   })
+  it('resets the initial store file state', () => {
+    const { storeOptions } = getWrapper({ resources: [mock<Resource>()] })
+    expect(storeOptions.modules.Files.mutations.CLEAR_CURRENT_FILES_LIST).toHaveBeenCalled()
+  })
   it('should emit search event on mount', async () => {
     const { wrapper } = getWrapper()
     await wrapper.vm.loadAvailableTagsTask.last
@@ -237,6 +241,7 @@ function getWrapper({
   })
   const store = createStore(storeOptions)
   return {
+    storeOptions,
     mocks: localMocks,
     wrapper: shallowMount(List, {
       global: {
