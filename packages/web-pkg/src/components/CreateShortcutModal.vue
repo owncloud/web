@@ -5,10 +5,10 @@
       :button-cancel-text="$gettext('Cancel')"
       :button-confirm-text="$gettext('Create')"
       :button-confirm-disabled="confirmButtonDisabled"
-      @confirm="confirm"
       @cancel="cancel"
+      @confirm="createShortcut"
     >
-      <template #content> hello </template>
+      <template #content> hello</template>
     </oc-modal>
   </portal>
 </template>
@@ -23,17 +23,18 @@ export default defineComponent({
     cancel: {
       type: Function as PropType<(...args: any) => unknown>,
       required: true
-    },
-    confirm: {
-      type: Function as PropType<(...args: any) => unknown>,
-      required: true
     }
   },
   setup(props) {
     const confirmButtonDisabled = ref(false)
 
+    const createShortcut = () => {
+      props.cancel()
+    }
+
     return {
-      confirmButtonDisabled
+      confirmButtonDisabled,
+      createShortcut
     }
   },
   methods: { $gettext }

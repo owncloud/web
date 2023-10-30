@@ -2,7 +2,6 @@
   <create-shortcut-modal
     v-if="createNewShortcutModalIsOpen"
     :cancel="closeCreateNewShortcutModal"
-    :confirm="createNewShortcutModalIsOpen"
   />
   <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-mr-s">
     <template v-if="createFileActionsAvailable">

@@ -20,10 +20,6 @@ export const useFileActionsCreateNewShortcut = ({ store }: { store?: Store<any> 
     modalOpen.value = true
   }
 
-  const addNewShortCut = async () => {
-    console.log('addNewModal')
-  }
-
   const actions = computed((): FileAction[] => {
     return [
       {
@@ -44,7 +40,6 @@ export const useFileActionsCreateNewShortcut = ({ store }: { store?: Store<any> 
 
   return {
     actions,
-    addNewShortCut,
     modalOpen,
     closeModal
   }
