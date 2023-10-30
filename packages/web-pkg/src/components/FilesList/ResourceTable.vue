@@ -27,7 +27,7 @@
     @sort="sort"
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <template #selectHeader>
+    <template v-if="!isLocationPicker" #selectHeader>
       <div class="resource-table-select-all">
         <oc-checkbox
           id="resource-table-select-all"
@@ -39,7 +39,7 @@
         />
       </div>
     </template>
-    <template #select="{ item }">
+    <template v-if="!isLocationPicker" #select="{ item }">
       <oc-checkbox
         :id="`resource-table-select-${resourceDomSelector(item)}`"
         :label="getResourceCheckboxLabel(item)"
@@ -227,7 +227,8 @@ import {
   ViewModeConstants,
   useConfigurationManager,
   useGetMatchingSpace,
-  useFolderLink
+  useFolderLink,
+  useEmbedMode
 } from '../../composables'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
@@ -441,6 +442,7 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { $gettext } = useGettext()
+    const { isLocationPicker } = useEmbedMode()
 
     const { width } = useWindowSize()
     const hasTags = computed(
@@ -487,7 +489,8 @@ export default defineComponent({
       ...useFolderLink({
         space: ref(props.space),
         targetRouteCallback: computed(() => props.targetRouteCallback)
-      })
+      }),
+      isLocationPicker
     }
   },
   data() {

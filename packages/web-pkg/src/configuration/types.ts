@@ -28,6 +28,7 @@ export interface OptionsConfiguration {
   disabledExtensions?: string[]
   mode?: string
   isRunningOnEos?: boolean
+  embedTarget?: string
 }
 
 export interface OAuth2Configuration {
