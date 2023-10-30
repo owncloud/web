@@ -30,24 +30,14 @@
     </div>
     <div v-if="isMetadataExtracted" id="dicom-metadata-sidebar-content" class="oc-p-s">
       <table class="details-table">
-        <!-- example information section -->
+        <!-- patient information section -->
         <tr>
           <th colspan="2">
             <p
               class="oc-py-s oc-font-semibold dicom-metadata-section-title dicom-metadata-first-section"
             >
-              Example Information (Section Title)
+              Patient Information
             </p>
-          </th>
-        </tr>
-        <tr v-for="(value, key) in exampleInformation" :key="key">
-          <th scope="col" class="oc-pr-s">{{ formatLabel(key.toString()) }}</th>
-          <td>{{ value || '–' }}</td>
-        </tr>
-        <!-- patient information section -->
-        <tr>
-          <th colspan="2">
-            <p class="oc-py-s oc-font-semibold dicom-metadata-section-title">Patient Information</p>
           </th>
         </tr>
         <tr v-for="(value, key) in patientInformation" :key="key">
@@ -160,9 +150,6 @@ export default defineComponent({
     isSmallScreen: {
       type: Boolean,
       default: false
-    },
-    exampleInformation: {
-      type: Array
     },
     patientInformation: {
       type: Array,
