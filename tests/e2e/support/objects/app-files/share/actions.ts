@@ -7,10 +7,6 @@ import { copyLinkArgs, clearCurrentPopup } from '../link/actions'
 import { config } from '../../../../config.js'
 import { createdLinkStore } from '../../../store'
 
-const filesSharedWithMeAccepted =
-  '#files-shared-with-me-accepted-section [data-test-resource-name="%s"]'
-const shareAcceptDeclineButton =
-  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "file-row-share-%s")]'
 const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]'
 const noPermissionToShareLabel =
@@ -19,14 +15,11 @@ const actionMenuDropdownButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
 const actionsTriggerButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
-const filesSharedWithMeDeclined =
-  '#files-shared-with-me-declined-section [data-test-resource-name="%s"]'
 
 const publicLinkInputField =
   '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
   '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
-const showAllButton = '#files-shared-with-me-pending-section #files-shared-with-me-show-all'
-const selecAllCheckbox = '#files-shared-with-me-pending-section #resource-table-select-all'
+const selecAllCheckbox = '#resource-table-select-all'
 const acceptButton = '.oc-files-actions-accept-share-trigger'
 const pendingShareItem =
   '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
@@ -83,27 +76,11 @@ export interface ShareStatusArgs extends Omit<ShareArgs, 'recipients'> {
 }
 
 export const acceptShare = async (args: ShareStatusArgs): Promise<void> => {
-  const { resource, via, page } = args
-  if (via === 'CONTEXT_MENU') {
-    await clickActionInContextMenu({ page, resource }, 'accept-share')
-  } else {
-    await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().includes('shares') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'POST'
-      ),
-      page.locator(util.format(shareAcceptDeclineButton, resource, 'status-accept')).click()
-    ])
-  }
-  await page.locator(util.format(filesSharedWithMeAccepted, resource)).waitFor()
+  const { resource, page } = args
+  await clickActionInContextMenu({ page, resource }, 'accept-share')
 }
 
 export const acceptAllShare = async ({ page }: { page: Page }): Promise<void> => {
-  if (await page.locator(showAllButton).isVisible()) {
-    await page.locator(showAllButton).click()
-  }
   await page.locator(selecAllCheckbox).click()
   const numberOfPendingShares = await page.locator(pendingShareItem).count()
   const checkResponses = []
@@ -122,21 +99,8 @@ export const acceptAllShare = async ({ page }: { page: Page }): Promise<void> =>
 }
 
 export const declineShare = async (args: ShareStatusArgs): Promise<void> => {
-  const { page, resource, via } = args
-  if (via === 'CONTEXT_MENU') {
-    await clickActionInContextMenu({ page, resource }, 'decline-share')
-  } else {
-    await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().includes('shares') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'DELETE'
-      ),
-      page.locator(util.format(shareAcceptDeclineButton, resource, 'decline')).click()
-    ])
-  }
-  await page.locator(util.format(filesSharedWithMeDeclined, resource)).waitFor()
+  const { page, resource } = args
+  await clickActionInContextMenu({ page, resource }, 'decline-share')
 }
 
 export const clickActionInContextMenu = async (

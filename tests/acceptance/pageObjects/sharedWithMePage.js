@@ -42,16 +42,21 @@ module.exports = {
      */
     hasShareStatusByFilenameAndUser: async function (status, filename, owner) {
       let selector =
-        util.format(this.elements.shareTable.selector, status) +
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename)
       if (owner) {
         selector += util.format(this.elements.shareOwnerName.selector, owner)
       }
+      selector += this.elements.syncEnabled.selector
       let isPresent = false
       await this.api.element('xpath', selector, function (result) {
         isPresent = !!(result.value && result.value.ELEMENT)
       })
-      return isPresent
+
+      if (status === SHARE_STATE.accepted) {
+        return isPresent
+      }
+
+      return !isPresent
     },
     /**
      * Checks if the share matching the given status and filename is present on the given page.
@@ -73,26 +78,6 @@ module.exports = {
         .initAjaxCounters()
         .click('@batchDeclineSharesButton')
         .waitForAjaxCallsToStartAndFinish()
-    },
-    /**
-     * @param {string} filename
-     * @param {string} action - It takes one of the following : Decline and Accept
-     * @param {string} user - The user who created the share
-     *Performs required action, such as accept and decline, on the file row element of the desired file name
-     *  shared by specific user
-     */
-    declineAcceptFile: function (action, filename, user) {
-      const actionLocatorButton = {
-        locateStrategy: this.elements.shareStatusActionOnFileRow.locateStrategy,
-        selector:
-          this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-          util.format(this.elements.shareOwnerName.selector, user) +
-          util.format(this.elements.shareStatusActionOnFileRow.selector, action)
-      }
-      return this.waitForElementVisible(actionLocatorButton)
-        .initAjaxCounters()
-        .click(actionLocatorButton)
-        .waitForOutstandingAjaxCalls()
     },
     /**
      * gets the username of user that the element(file/folder/resource) on the shared-with-me page is shared by
@@ -137,13 +122,13 @@ module.exports = {
     }
   },
   elements: {
-    shareTable: {
-      selector: '//table[@data-test-share-status="%s"]',
-      locateStrategy: 'xpath'
-    },
     shareOwnerName: {
       selector:
         '//td[contains(@class,"oc-table-data-cell-owner")]//span[@data-test-user-name="%s"]',
+      locateStrategy: 'xpath'
+    },
+    syncEnabled: {
+      selector: '/ancestor::tr//span[contains(@class,"sync-enabled")]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {

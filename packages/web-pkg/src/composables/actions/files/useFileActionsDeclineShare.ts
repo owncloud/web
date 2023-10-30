@@ -20,7 +20,7 @@ import { FileAction, FileActionOptions } from '../types'
 export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $ngettext } = useGettext()
+  const { $gettext, $ngettext } = useGettext()
 
   const hasResharing = useCapabilityFilesSharingResharing()
   const hasShareJail = useCapabilityShareJailEnabled()
@@ -58,13 +58,11 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
     await Promise.all(triggerPromises)
 
     if (errors.length === 0) {
-      store.dispatch('Files/resetFileSelection')
-
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
         store.dispatch('showMessage', {
           title: $ngettext(
-            'The selected share was declined successfully',
-            'The selected shares were declined successfully',
+            'Sync for the selected share was disabled successfully',
+            'Sync for the selected shares was disabled successfully',
             resources.length
           )
         })
@@ -76,8 +74,8 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
 
     store.dispatch('showErrorMessage', {
       title: $ngettext(
-        'Failed to decline the selected share',
-        'Failed to decline selected shares',
+        'Failed to disable sync for the the selected share',
+        'Failed to disable sync for the selected shares',
         resources.length
       ),
       errors
@@ -89,7 +87,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
       name: 'decline-share',
       icon: 'spam-3',
       handler: (args) => loadingService.addTask(() => handler(args)),
-      label: ({ resources }) => $ngettext('Decline share', 'Decline shares', resources.length),
+      label: () => $gettext('Disable sync'),
       isEnabled: ({ space, resources }) => {
         if (
           !isLocationSharesActive(router, 'files-shares-with-me') &&
@@ -108,8 +106,9 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
           return false
         }
 
+        // decline (= unsync) is only available for accepted (= synced) shares
         const declineDisabled = resources.some((resource) => {
-          return resource.status === ShareStatus.declined
+          return resource.status !== ShareStatus.accepted
         })
         return !declineDisabled
       },

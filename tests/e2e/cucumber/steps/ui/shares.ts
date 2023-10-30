@@ -202,6 +202,22 @@ When(
   }
 )
 
+When(
+  /"([^"]*)" (should|should not) see a sync status for the (folder|file) "([^"]*)"?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    condition: string,
+    _: string,
+    resource: string
+  ): Promise<void> {
+    const shouldSee = condition === 'should'
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    expect(await shareObject.resourceIsSynced(resource)).toBe(shouldSee)
+  }
+)
+
 Then(
   /"([^"]*)" (should|should not) be able to see the following shares$/,
   async function (

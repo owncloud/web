@@ -809,7 +809,7 @@ When(
   'the user declines share {string} offered by user {string} using the webUI',
   async function (filename, user) {
     await client.pause(200)
-    return client.page.sharedWithMePage().declineAcceptFile('Decline', filename, user)
+    return client.page.FilesPageElement.filesList().declineShare(filename)
   }
 )
 
@@ -817,7 +817,7 @@ When(
   'the user accepts share {string} offered by user {string} using the webUI',
   async function (filename, user) {
     await client.pause(200)
-    return client.page.sharedWithMePage().declineAcceptFile('Accept', filename, user)
+    return client.page.FilesPageElement.filesList().acceptShare(filename)
   }
 )
 

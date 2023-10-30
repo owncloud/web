@@ -5,7 +5,7 @@
 <script lang="ts">
 import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
 
-import { useStore } from '../../composables'
+import { useFileActionsToggleHideShare, useStore } from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
 import {
@@ -49,6 +49,7 @@ export default defineComponent({
     const { editorActions, loadExternalAppActions } = useFileActions()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
     const { actions: createQuickLinkActions } = useFileActionsCreateQuickLink({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
@@ -118,6 +119,7 @@ export default defineComponent({
         ...unref(restoreActions),
         ...unref(acceptShareActions),
         ...unref(declineShareActions),
+        ...unref(hideShareActions),
         ...unref(setSpaceImageActions),
         ...unref(setSpaceReadmeActions)
       ].filter((item) => item.isEnabled(unref(actionOptions)))

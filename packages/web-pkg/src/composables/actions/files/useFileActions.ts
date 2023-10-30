@@ -20,6 +20,7 @@ import {
 
 import {
   useFileActionsAcceptShare,
+  useFileActionsToggleHideShare,
   useFileActionsCopy,
   useFileActionsDeclineShare,
   useFileActionsDelete,
@@ -54,6 +55,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { openUrl } = useWindowOpen()
 
   const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+  const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
   const { actions: copyActions } = useFileActionsCopy({ store })
   const { actions: deleteActions } = useFileActionsDelete({ store })
   const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
@@ -78,6 +80,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     ...unref(showEditTagsActions),
     ...unref(restoreActions),
     ...unref(acceptShareActions),
+    ...unref(hideShareActions),
     ...unref(declineShareActions),
     ...unref(favoriteActions),
     ...unref(navigateActions)

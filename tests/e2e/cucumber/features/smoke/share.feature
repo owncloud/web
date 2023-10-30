@@ -33,10 +33,7 @@ Feature: share
       | name                   |
       | folder_to_shared       |
       | folder_to_customShared |
-    And "Brian" declines the following share
-      | name          |
-      | shared_folder |
-    Then "Brian" should not be able to open the folder "shared_folder"
+    Then "Brian" should not see a sync status for the folder "shared_folder"
     When "Brian" accepts the following share from the context menu
       | name          |
       | shared_folder |
@@ -99,17 +96,14 @@ Feature: share
     
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    Then "Brian" should not be able to open the file "shareToBrian.txt"
+    Then "Brian" should not see a sync status for the file "shareToBrian.txt"
     When "Brian" accepts the following share
       | name             |
       | shareToBrian.txt |
       | shareToBrian.md  |
       | testavatar.jpeg  |
       | simple.pdf       |
-    And "Brian" declines the following share
-      | name           |
-      | sharedFile.txt |
-    Then "Brian" should not be able to open the file "sharedFile.txt"
+    Then "Brian" should not see a sync status for the file "sharedFile.txt"
     When "Brian" accepts the following share from the context menu
       | name           |
       | sharedFile.txt |

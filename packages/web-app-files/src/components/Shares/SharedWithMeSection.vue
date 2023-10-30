@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="oc-px-m oc-py-s">
+    <h2 class="oc-px-m oc-py-s oc-invisible-sr">
       {{ title }}
       <span class="oc-text-medium">({{ items.length }})</span>
     </h2>
@@ -39,25 +39,12 @@
           :key="resource.getDomSelector() + resource.status"
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
-          <oc-button
-            v-if="getShowAcceptButton(resource)"
-            size="small"
-            variation="success"
-            class="file-row-share-status-accept"
-            @click.stop="triggerAction('accept-share', { space: null, resources: [resource] })"
-          >
-            <oc-icon size="small" name="check" />
-            <span v-translate>Accept</span>
-          </oc-button>
-          <oc-button
-            v-if="getShowDeclineButton(resource)"
-            size="small"
-            class="file-row-share-decline oc-ml-s"
-            @click.stop="triggerAction('decline-share', { space: null, resources: [resource] })"
-          >
-            <oc-icon size="small" name="spam-3" fill-type="line" />
-            <span v-translate>Decline</span>
-          </oc-button>
+          <oc-icon
+            v-if="getShowSynchedIcon(resource)"
+            v-oc-tooltip="$gettext('Synced with your devices')"
+            name="loop-right"
+            class="sync-enabled"
+          />
         </div>
       </template>
       <template #contextMenu="{ resource }">
@@ -65,6 +52,17 @@
           v-if="isResourceInSelection(resource)"
           :action-options="{ space: getMatchingSpace(resource), resources: selectedResources }"
         />
+      </template>
+      <template #quickActions="{ resource }">
+        <oc-button
+          size="small"
+          appearance="raw"
+          :class="['oc-ml-s', 'oc-p-s', hideShareAction.class]"
+          @click.stop="hideShareAction.handler({ space: null, resources: [resource] })"
+        >
+          <oc-icon size="small" :name="resource.hidden ? 'eye' : 'eye-off'" fill-type="line" />
+          <span>{{ hideShareAction.label({ space: null, resources: [resource] }) }}</span>
+        </oc-button>
       </template>
       <template #footer>
         <div v-if="showMoreToggle && hasMore" class="oc-width-1-1 oc-text-center oc-mt">
@@ -92,13 +90,12 @@
 </template>
 
 <script lang="ts">
-import { ResourceTable } from '@ownclouders/web-pkg'
-import { defineComponent, PropType } from 'vue'
+import { ResourceTable, useFileActions, useFileActionsToggleHideShare } from '@ownclouders/web-pkg'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { mapActions } from 'vuex'
-import { useFileActions } from '@ownclouders/web-pkg'
 import { SortDir, useStore, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -137,7 +134,7 @@ export default defineComponent({
     },
     shareStatus: {
       type: Number,
-      required: true
+      default: ShareStatus.accepted
     },
     sortBy: {
       type: String,
@@ -195,6 +192,10 @@ export default defineComponent({
     const store = useStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
+    const { triggerDefaultAction } = useFileActions()
+    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
+    const hideShareAction = computed(() => unref(hideShareActions)[0])
+
     const resourceTargetRouteCallback = ({
       path,
       fileId,
@@ -207,7 +208,8 @@ export default defineComponent({
     }
 
     return {
-      ...useFileActions(),
+      triggerDefaultAction,
+      hideShareAction,
       resourceTargetRouteCallback,
       ...useSelectedResources({ store }),
       getMatchingSpace
@@ -271,10 +273,13 @@ export default defineComponent({
         onExit: debounced.cancel
       })
     },
-    getShowAcceptButton(resource) {
+    getShowSynchedIcon(resource: Resource) {
+      return resource.status === ShareStatus.accepted
+    },
+    getShowAcceptButton(resource: Resource) {
       return resource.status === ShareStatus.declined || resource.status === ShareStatus.pending
     },
-    getShowDeclineButton(resource) {
+    getShowDeclineButton(resource: Resource) {
       return resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
     },
     toggleShowMore() {
@@ -285,7 +290,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.files-empty {
-  height: auto;
+.oc-files-actions-hide-share-trigger:hover {
+  background-color: var(--oc-color-background-secondary) !important;
 }
 </style>

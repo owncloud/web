@@ -22,7 +22,7 @@ describe('method triggerShareAction', () => {
     await expect(
       triggerShareAction({
         resource: null,
-        status: ShareStatus.pending,
+        status: 3 as any,
         hasResharing: true,
         hasShareJail: false,
         client: null

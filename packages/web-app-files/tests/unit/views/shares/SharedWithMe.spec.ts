@@ -1,13 +1,11 @@
 import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useSort } from '@ownclouders/web-pkg'
+import { InlineFilterOption, useSort } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
-import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
+import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultPlugins,
@@ -41,48 +39,27 @@ describe('SharedWithMe view', () => {
       expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
     })
   })
-  describe('sections', () => {
-    it('always shows the "accepted"- and "declined"-sections', () => {
+  describe('filter', () => {
+    it('shows the share visibility filter', () => {
       const { wrapper } = getMountedWrapper()
-      expect(wrapper.find('#files-shared-with-me-accepted-section').exists()).toBeTruthy()
-      expect(wrapper.find('#files-shared-with-me-declined-section').exists()).toBeTruthy()
+      expect(wrapper.find('.share-visibility-filter').exists()).toBeTruthy()
+      expect(wrapper.find('item-filter-inline-stub').exists()).toBeTruthy()
     })
-    describe('pending', () => {
-      it('shows when a share is pending', () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mockDeep<Resource>({ status: ShareStatus.pending })]
-        })
-        expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeTruthy()
-      })
-      it('does not show when no share is pending', () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
-        })
-        expect(wrapper.find('#files-shared-with-me-pending-section').exists()).toBeFalsy()
-      })
+    it('shows all visible shares', () => {
+      const { wrapper } = getMountedWrapper()
+      expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
+      expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
+        'Shares'
+      )
     })
-    describe('accepted', () => {
-      it('shows an accepted share', () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mockDeep<Resource>({ status: ShareStatus.accepted })]
-        })
-        expect(wrapper.find('#files-shared-with-me-accepted-section').exists()).toBeTruthy()
-        expect(
-          wrapper.findComponent<any>('#files-shared-with-me-accepted-section').props().items.length
-        ).toEqual(1)
-      })
-    })
-    describe('declined', () => {
-      it('shows a declined share', async () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mockDeep<Resource>({ status: ShareStatus.declined })]
-        })
-        await wrapper.vm.loadResourcesTask.last
-        expect(wrapper.find('#files-shared-with-me-declined-section').exists()).toBeTruthy()
-        expect(
-          wrapper.findComponent<any>('#files-shared-with-me-declined-section').props().items.length
-        ).toEqual(1)
-      })
+    it('shows all hidden shares', async () => {
+      const { wrapper } = getMountedWrapper()
+      wrapper.vm.setAreHiddenFilesShown(mock<InlineFilterOption>({ name: 'hidden' }))
+      await wrapper.vm.$nextTick()
+      expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
+      expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
+        'Hidden Shares'
+      )
     })
   })
 })
@@ -110,7 +87,7 @@ function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
-        stubs: defaultStubs
+        stubs: { ...defaultStubs, itemFilterInline: true }
       }
     })
   }

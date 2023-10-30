@@ -1,6 +1,7 @@
 export * from './useFileActions'
 export * from './useFileActionsSetReadme'
 export * from './useFileActionsAcceptShare'
+export * from './useFileActionsToggleHideShare'
 export * from './useFileActionsCopy'
 export * from './useFileActionsCreateQuicklink'
 export * from './useFileActionsDeclineShare'

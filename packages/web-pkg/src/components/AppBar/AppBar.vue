@@ -101,6 +101,7 @@ import {
 } from '../../composables/actions'
 import {
   useCapabilitySpacesMaxQuota,
+  useFileActionsToggleHideShare,
   useRouteMeta,
   useStore,
   ViewModeConstants
@@ -166,6 +167,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
+    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
@@ -190,6 +192,7 @@ export default defineComponent({
 
     const batchActions = computed(() => {
       let actions = [
+        ...unref(hideShareActions),
         ...unref(acceptShareActions),
         ...unref(declineShareActions),
         ...unref(downloadArchiveActions),
