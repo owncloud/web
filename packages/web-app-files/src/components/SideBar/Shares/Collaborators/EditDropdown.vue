@@ -30,6 +30,7 @@
                 <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
                 <span
                   v-if="isExpirationDateSet"
+                  class="oc-ml-s"
                   v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
                 />
                 <span v-else v-text="$gettext('Set expiration date')" />
