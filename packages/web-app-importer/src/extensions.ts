@@ -52,7 +52,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
 
   const handler = async () => {
     const currentThemeName = window.localStorage.getItem('oc_currentThemeName')
-    const renderDarkTheme = unref(currentThemeName) === 'default-dark'
+    const renderDarkTheme = currentThemeName === 'default-dark'
 
     const modal = {
       variation: 'passive',
