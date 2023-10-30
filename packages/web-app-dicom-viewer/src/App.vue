@@ -75,7 +75,6 @@
 
     <metadata-sidebar
       v-show="isShowMetadataActivated"
-      :exampleInformation="exampleInformation"
       :patientInformation="patientInformation"
       :studyInformation="studyInformation"
       :seriesInformation="seriesInformation"
@@ -192,9 +191,6 @@ export default defineComponent({
       type: Object as PropType<Resource>,
       default: null
     },
-    exampleInformation: {
-      type: Array
-    },
     patientInformation: {
       type: Array
     },
@@ -234,12 +230,6 @@ export default defineComponent({
         institutionName: '',
         instanceCreationDate: '',
         instanceCreationTime: ''
-      },
-      exampleInformation: {
-        spacing: '',
-        direction: '',
-        origin: '',
-        modality: ''
       },
       patientInformation: {
         patientName: '',
@@ -837,14 +827,16 @@ export default defineComponent({
         // adding values to corresponding variable
         this.imageInformation.rowsX_Columns =
           this.imageData.dimensions[0] + ' x ' + this.imageData.dimensions[1]
-        this.exampleInformation.spacing = this.imageData.spacing.join('\\')
+        /*
         this.exampleInformation.direction = this.imageData.direction
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
+          // same as Image Orientation Patient
         this.exampleInformation.origin = this.imageData.origin
           .map((x) => Math.round(x * 100) / 100)
           .join(',')
-        this.exampleInformation.modality = this.imageData.metadata.Modality
+          // same as Image Position Patient
+        */
         this.imageInformation.bitsAllocated = bitsAllocated
         this.imageInformation.bitsStored = bitsStored
         this.imageInformation.highBit = highBit
