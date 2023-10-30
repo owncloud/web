@@ -8,33 +8,62 @@
       @cancel="cancel"
       @confirm="createShortcut"
     >
-      <template #content> hello</template>
+      <template #content>
+        url
+        <oc-text-input v-model="inputUrl" />
+        filename
+        <oc-text-input v-model="inputFilename" />
+      </template>
     </oc-modal>
   </portal>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref, unref, computed } from 'vue'
 import { $gettext } from '../router/utils'
+import { SpaceResource } from '@ownclouders/web-client'
+import { useClientService, useStore } from '../composables'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
   name: 'CreateShortcutModal',
   props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
+    },
     cancel: {
       type: Function as PropType<(...args: any) => unknown>,
       required: true
     }
   },
   setup(props) {
-    const confirmButtonDisabled = ref(false)
+    const clientService = useClientService()
+    const store = useStore()
+    const inputUrl = ref('')
+    const inputFilename = ref('')
+    const confirmButtonDisabled = computed(() => !(unref(inputUrl) && unref(inputFilename)))
 
-    const createShortcut = () => {
+    const currentFolder = computed(() => {
+      return store.getters['Files/currentFolder']
+    })
+
+    const createShortcut = async () => {
+      const content = `[InternetShortcut]\nURL=${unref(inputUrl)}`
+      const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
+      const resource = await clientService.webdav.putFileContents(props.space, {
+        path,
+        content
+      })
+      store.commit('Files/UPSERT_RESOURCE', resource)
       props.cancel()
     }
 
     return {
       confirmButtonDisabled,
-      createShortcut
+      createShortcut,
+      inputUrl,
+      inputFilename
     }
   },
   methods: { $gettext }

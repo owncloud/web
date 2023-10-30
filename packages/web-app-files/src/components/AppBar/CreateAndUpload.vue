@@ -1,6 +1,7 @@
 <template>
   <create-shortcut-modal
     v-if="createNewShortcutModalIsOpen"
+    :space="space"
     :cancel="closeCreateNewShortcutModal"
   />
   <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-mr-s">
