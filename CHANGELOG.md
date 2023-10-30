@@ -24,6 +24,7 @@ Summary
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
 * Bugfix - Duplicated file search request: [#9861](https://github.com/owncloud/web/pull/9861)
 * Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
+* Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -181,6 +182,17 @@ Details
 
    https://github.com/owncloud/web/issues/9789
    https://github.com/owncloud/web/pull/9873
+
+* Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
+
+   When entering the search, it displayed the resources from the file list for a short moment, this
+   has now been fixed and the search always shows the loading spinner first.
+
+   After all results have been loaded from the server, the spinner disappears and the result is
+   rendered.
+
+   https://github.com/owncloud/web/issues/9790
+   https://github.com/owncloud/web/pull/9881
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
