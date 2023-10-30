@@ -48,44 +48,34 @@
 <script lang="ts">
 import {
   useRouteParam,
-  useStore,
   useRouter,
   queryItemAsString,
-  useCapabilitySpacesEnabled,
-  useClientService,
-  useRouteQuery
+  useRouteQuery,
+  useConfigurationManager,
+  createLocationSpaces,
+  createLocationShares
 } from '@ownclouders/web-pkg'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
 import { dirname } from 'path'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { createFileRouteOptions, useGetResourceContext } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
-import {
-  buildShareSpaceResource,
-  isMountPointSpaceResource,
-  isPersonalSpaceResource,
-  Resource,
-  SpaceResource
-} from '@ownclouders/web-client/src/helpers'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager } from '@ownclouders/web-pkg'
-import { RouteLocationRaw } from 'vue-router'
-import { useLoadFileInfoById } from '../composables/fileInfo'
+import { isShareSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ResolvePrivateLink',
   setup() {
-    const store = useStore()
     const router = useRouter()
     const id = useRouteParam('fileId')
+    const configurationManager = useConfigurationManager()
     const { $gettext } = useGettext()
-    const hasSpaces = useCapabilitySpacesEnabled(store)
     const resource: Ref<Resource> = ref()
     const sharedParentResource: Ref<Resource> = ref()
     const isUnacceptedShareError = ref(false)
 
-    const clientService = useClientService()
+    const { getResourceContext } = useGetResourceContext()
 
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const openWithDefaultApp = computed(() => queryItemAsString(unref(openWithDefaultAppQuery)))
@@ -99,96 +89,51 @@ export default defineComponent({
       resolvePrivateLinkTask.perform(queryItemAsString(unref(id)))
     })
 
-    const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
-      let path
-      let matchingSpace = getMatchingSpace(id)
-      let resourceIsNestedInShare = false
-      if (matchingSpace) {
-        path = yield clientService.webdav.getPathForFileId(id)
-        resource.value = yield clientService.webdav.getFileInfo(matchingSpace, { path })
-      } else {
-        // no matching space found => the file doesn't lie in own spaces => it's a share.
-        // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
-        yield store.dispatch('runtime/spaces/loadMountPoints', {
-          graphClient: clientService.graphAuthenticated
-        })
-        let mountPoint = findMatchingMountPoint(id)
-        resourceIsNestedInShare = !mountPoint
-        resource.value = yield loadFileInfoByIdTask.perform(id)
-        const sharePathSegments = mountPoint ? [] : [unref(resource).name]
-        let tmpResource = unref(resource)
-        while (!mountPoint) {
-          try {
-            tmpResource = yield loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
-          } catch (e) {
-            isUnacceptedShareError.value = true
-            throw Error(e)
-          }
-          sharedParentResource.value = tmpResource
-          mountPoint = findMatchingMountPoint(tmpResource.id)
-          if (!mountPoint) {
-            sharePathSegments.unshift(tmpResource.name)
-          }
+      try {
+        const result = yield getResourceContext(id)
+        const { space, resource } = result
+        let { path } = result
+
+        let resourceIsNestedInShare = false
+        if (isShareSpaceResource(space)) {
+          sharedParentResource.value = resource
+          resourceIsNestedInShare = path !== '/'
         }
-        matchingSpace = buildShareSpaceResource({
-          shareId: mountPoint.nodeId,
-          shareName: mountPoint.name,
-          serverUrl: configurationManager.serverUrl
-        })
-        path = urlJoin(...sharePathSegments)
-      }
 
-      let fileId
-      let targetLocation
-      if (unref(resource).type === 'folder') {
-        fileId = unref(resource).fileId
-        targetLocation = 'files-spaces-generic'
-      } else {
-        fileId = unref(resource).parentFolderId
-        path = dirname(path)
-        // FIXME: we should not hardcode the name here, but we should not depend on
-        // createLocationSpaces('files-spaces-generic') in web-app-files either
-        targetLocation =
-          matchingSpace.driveType === 'share' && !resourceIsNestedInShare
-            ? 'files-shares-with-me'
-            : 'files-spaces-generic'
-      }
+        let fileId: string
+        let targetLocation: RouteLocationNamedRaw
+        if (unref(resource).type === 'folder') {
+          fileId = unref(resource).fileId
+          targetLocation = createLocationSpaces('files-spaces-generic')
+        } else {
+          fileId = unref(resource).parentFolderId
+          path = dirname(path)
+          targetLocation =
+            space.driveType === 'share' && !resourceIsNestedInShare
+              ? createLocationShares('files-shares-with-me')
+              : createLocationSpaces('files-spaces-generic')
+        }
 
-      const { params, query } = createFileRouteOptions(matchingSpace, { fileId, path })
-      const location: RouteLocationRaw = {
-        name: targetLocation,
-        params,
-        query: {
+        const { params, query } = createFileRouteOptions(space, { fileId, path })
+        targetLocation.params = params
+        targetLocation.query = {
           ...query,
           scrollTo:
-            targetLocation === 'files-shares-with-me'
-              ? matchingSpace.shareId
-              : unref(resource).fileId,
+            targetLocation.name === 'files-shares-with-me' ? space.shareId : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
           ...(configurationManager.options.openLinksWithDefaultApp &&
             unref(openWithDefaultApp) !== 'false' && {
               openWithDefaultApp: 'true'
             })
         }
+
+        router.push(targetLocation)
+      } catch (e) {
+        isUnacceptedShareError.value = true
+        throw Error(e)
       }
-      router.push(location)
     })
-
-    const getMatchingSpace = (id) => {
-      if (!unref(hasSpaces)) {
-        return store.getters['runtime/spaces/spaces'].find((space) =>
-          isPersonalSpaceResource(space)
-        )
-      }
-      return store.getters['runtime/spaces/spaces'].find((space) => id.startsWith(space.id))
-    }
-
-    const findMatchingMountPoint = (id: string | number): SpaceResource => {
-      return store.getters['runtime/spaces/spaces'].find(
-        (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
-      )
-    }
 
     const loading = computed(() => {
       return !resolvePrivateLinkTask.last || resolvePrivateLinkTask.isRunning
@@ -218,7 +163,6 @@ export default defineComponent({
           )
         }
 
-        let translated
         if (unref(resource).type === 'file') {
           return $gettext(
             'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
