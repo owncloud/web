@@ -359,7 +359,7 @@ def main(ctx):
 def beforePipelines(ctx):
     return checkStarlark() + \
            licenseCheck(ctx) + \
-           checkTestSuitesInExpectedToFailure(ctx) + \
+           checkTestSuitesInExpectedFailures(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
            pnpmCache(ctx) + \
@@ -1690,11 +1690,11 @@ def licenseCheck(ctx):
         },
     }]
 
-def checkTestSuitesInExpectedToFailure(ctx):
+def checkTestSuitesInExpectedFailures(ctx):
     return [{
         "kind": "pipeline",
         "type": "docker",
-        "name": "check-suite-in-expected-to-failure",
+        "name": "check-suites-in-expected-failures",
         "workspace": {
             "base": dir["base"],
             "path": config["app"],
@@ -1704,15 +1704,12 @@ def checkTestSuitesInExpectedToFailure(ctx):
                 "name": "check-suites",
                 "image": OC_CI_ALPINE,
                 "commands": [
-                    "cd %s/tests/acceptance && ./check-deleted-suites-in-expected-to-failure.sh" % dir["web"],
+                    "%s/tests/acceptance/check-deleted-suites-in-expected-to-failure.sh" % dir["web"],
                 ],
             },
         ],
         "trigger": {
             "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
                 "refs/pull/**",
             ],
         },
