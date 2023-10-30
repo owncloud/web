@@ -58,6 +58,7 @@ Summary
 * Enhancement - Search query term linking: [#9854](https://github.com/owncloud/web/pull/9854)
 * Enhancement - Add permission to delete link passwords when password is enforced: [#9857](https://github.com/owncloud/web/pull/9857)
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
+* Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
 Details
@@ -523,6 +524,16 @@ Details
 
    https://github.com/owncloud/web/issues/9664
    https://github.com/owncloud/web/pull/9858
+
+* Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
+
+   We've added a new query param called `embed-target` which can have value `location`. This
+   value is then saved in the `configuration.options` object as `embedTarget`. When the value is
+   set to `location`, it allows selecting the `currentFolder` as location instead of selecting
+   resources.
+
+   https://github.com/owncloud/web/issues/9768
+   https://github.com/owncloud/web/pull/9863
 
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
