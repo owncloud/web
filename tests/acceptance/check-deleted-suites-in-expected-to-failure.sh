@@ -17,47 +17,47 @@ log_success() {
 }
 
 SCRIPT_PATH=$(dirname "$0")
-PATH_TO_SUTES="${SCRIPT_PATH}/features"
-PATH_TO_EXPECTED_TO_FAILURE_FILE="${SCRIPT_PATH}/expected-failures-with-ocis-server-ocis-storage.md"
+PATH_TO_SUITES="${SCRIPT_PATH}/features"
+PATH_TO_EXPECTED_FAILURE_FILE="${SCRIPT_PATH}/expected-failures-with-ocis-server-ocis-storage.md"
 # contains all the suites names inside tests/acceptance/features
-SUITES_AVAILABLE=($(ls -l "$PATH_TO_SUTES" | grep '^d' | awk '{print $NF}'))
+AVAILABLE_SUITES=($(ls -l "$PATH_TO_SUITES" | grep '^d' | awk '{print $NF}'))
 
 # regex to match [someSuites/someFeatureFile.feature:lineNumber]
-REGEX_FOR_TEST_SCENARIO="\[([a-zA-Z0-9]+/[a-zA-Z0-9]+\.feature:[0-9]+)]"
+SCENARIO_REGEX="\[([a-zA-Z0-9]+/[a-zA-Z0-9]+\.feature:[0-9]+)]"
 
 # contains all those suites available in the expected to failure files in pattern [someSuites/someFeatureFile.feature:lineNumber]
-SUITES_IN_EXPECTED_TO_FAILURE=($(grep -Eo ${REGEX_FOR_TEST_SCENARIO} ${PATH_TO_EXPECTED_TO_FAILURE_FILE}))
+EXPECTED_FAILURE_SCENARIOS=($(grep -Eo ${SCENARIO_REGEX} ${PATH_TO_EXPECTED_FAILURE_FILE}))
 
-# get and store only the suites names from SUITES_IN_EXPECTED_TO_FAILURE
-FILTERED_SUITES_IN_EXPECTED_TO_FAILURE=()
-for value in "${SUITES_IN_EXPECTED_TO_FAILURE[@]}"; do
-  if [[ $value =~ \[([a-zA-Z0-9]+) ]]; then
-     current_value="${BASH_REMATCH[1]}"
-     FILTERED_SUITES_IN_EXPECTED_TO_FAILURE+=("$current_value")
+# get and store only the suites names from EXPECTED_FAILURE_SCENARIOS
+EXPECTED_FAILURE_SUITES=()
+for scenario in "${EXPECTED_FAILURE_SCENARIOS[@]}"; do
+  if [[ $scenario =~ \[([a-zA-Z0-9]+) ]]; then
+     suite="${BASH_REMATCH[1]}"
+     EXPECTED_FAILURE_SUITES+=("$suite")
   fi
 done
 
 # also filter the duplicated suites name
-FILTERED_SUITES_IN_EXPECTED_TO_FAILURE=($(echo "${FILTERED_SUITES_IN_EXPECTED_TO_FAILURE[@]}" | tr ' ' '\n' | sort | uniq))
+EXPECTED_FAILURE_SUITES=($(echo "${EXPECTED_FAILURE_SUITES[@]}" | tr ' ' '\n' | sort | uniq))
 
 # Check the existence of the suite
-SCENARIOS_THAT_DOESNOT_EXISTS=()
-for suite in "${FILTERED_SUITES_IN_EXPECTED_TO_FAILURE[@]}"; do
-  if [[ " ${SUITES_AVAILABLE[*]} " != *" $suite "* ]]; then
+NONEXISTING_SCENARIOS=()
+for suite in "${EXPECTED_FAILURE_SUITES[@]}"; do
+  if [[ " ${AVAILABLE_SUITES[*]} " != *" $suite "* ]]; then
     pattern="(${suite}/[a-zA-Z0-9]+\\.feature:[0-9]+)"
-    SCENARIOS_THAT_DOESNOT_EXISTS+=($(grep -Eo ${pattern} ${PATH_TO_EXPECTED_TO_FAILURE_FILE}))
+    NONEXISTING_SCENARIOS+=($(grep -Eo ${pattern} ${PATH_TO_EXPECTED_FAILURE_FILE}))
   fi
 done
 
-count="${#SCENARIOS_THAT_DOESNOT_EXISTS[@]}"
+count="${#NONEXISTING_SCENARIOS[@]}"
 
 if [ "$count" -gt 0 ]; then
-  log_info "The following test scenarios does not exists anymore:"
-  log_info "The below test scenarios can be deleted from the ${PATH_TO_EXPECTED_TO_FAILURE_FILE}."
-  for path_to_scenario in "${SCENARIOS_THAT_DOESNOT_EXISTS[@]}"; do
-    log_error "$path_to_scenario"
+  log_info "The following test scenarios do not exist anymore:"
+  log_info "They can be deleted from the '${PATH_TO_EXPECTED_FAILURE_FILE}'."
+  for scenario_path in "${NONEXISTING_SCENARIOS[@]}"; do
+    log_error "$scenario_path"
   done
   exit 1
 fi
 
-log_success "All the suites in the expected to failure files exists in the test suites"
+log_success "All the suites in the expected failure file exist in the test suites"
