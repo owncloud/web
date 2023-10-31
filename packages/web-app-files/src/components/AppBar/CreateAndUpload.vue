@@ -327,7 +327,10 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
       return [
-        ...extensionRegistry.requestExtensions<ActionExtension>('action').map((e) => e.action)
+        ...extensionRegistry
+          .requestExtensions<ActionExtension>('action')
+          .filter(({ scopes }) => scopes.includes('upload-menu'))
+          .map((e) => e.action)
       ].filter((e) => e.isEnabled())
     })
 
