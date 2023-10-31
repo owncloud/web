@@ -30,24 +30,33 @@ import {
 import { DateTime } from 'luxon'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { onBeforeRouteLeave } from 'vue-router'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 
 import AppTopBar from '../AppTopBar.vue'
 import ErrorScreen from './PartialViews/ErrorScreen.vue'
 import LoadingScreen from './PartialViews/LoadingScreen.vue'
 import {
   UrlForResourceOptions,
+  queryItemAsString,
   useAppDefaults,
   useClientService,
+  useRoute,
+  useRouteParam,
+  useRouteQuery,
   useStore
 } from '../../composables'
 import { Resource } from '@ownclouders/web-client'
 import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { Action, ActionOptions } from '../../composables/actions/types'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { HttpError } from '@ownclouders/web-client/src/errors'
 import { ModifierKey, Key, useKeyboardActions } from '../../composables/keyboardActions'
 import { useAppMeta } from '../../composables/appDefaults/useAppMeta'
+import { dirname } from 'path'
+import { useGetResourceContext } from '../../composables'
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -79,6 +88,10 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
+    const router = useRouter()
+    const currentRoute = useRoute()
+    const clientService = useClientService()
+    const { getResourceContext } = useGetResourceContext()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -116,8 +129,6 @@ export default defineComponent({
       }
     })
 
-    const clientService = useClientService()
-
     const {
       applicationConfig,
       closeApp,
@@ -125,7 +136,6 @@ export default defineComponent({
       getFileContents,
       getFileInfo,
       getUrlForResource,
-      loadFolderForFileContext,
       putFileContents,
       replaceInvalidFileRoute,
       revokeUrl
@@ -144,8 +154,58 @@ export default defineComponent({
       })
     })
 
+    const driveAliasAndItem = useRouteParam('driveAliasAndItem')
+    const fileIdQueryItem = useRouteQuery('fileId')
+    const fileId = computed(() => {
+      return queryItemAsString(unref(fileIdQueryItem))
+    })
+
+    const addMissingDriveAliasAndItem = async () => {
+      const id = unref(fileId)
+      const { space, path } = await getResourceContext(id)
+      const driveAliasAndItem = space.getDriveAliasAndItem({ path } as Resource)
+
+      if (isPersonalSpaceResource(space)) {
+        return router.push({
+          params: {
+            ...unref(currentRoute).params,
+            driveAliasAndItem
+          },
+          query: {
+            fileId: id,
+            ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
+            contextRouteName: 'files-spaces-generic',
+            contextRouteParams: { driveAliasAndItem: dirname(driveAliasAndItem) } as any
+          }
+        })
+      }
+
+      return router.push({
+        params: {
+          ...unref(currentRoute).params,
+          driveAliasAndItem
+        },
+        query: {
+          fileId: id,
+          shareId: space.shareId,
+          ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
+          contextRouteName: path === '/' ? 'files-shares-with-me' : 'files-spaces-generic',
+          contextRouteParams: {
+            driveAliasAndItem: dirname(driveAliasAndItem)
+          } as any,
+          contextRouteQuery: {
+            shareId: space.shareId
+          } as any
+        }
+      })
+    }
+
     const loadFileTask = useTask(function* () {
       try {
+        if (!unref(driveAliasAndItem)) {
+          yield addMissingDriveAliasAndItem()
+        }
+
         resource.value = yield getFileInfo(currentFileContext, {
           davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
         })
