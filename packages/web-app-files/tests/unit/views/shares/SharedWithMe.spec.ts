@@ -1,6 +1,6 @@
 import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { InlineFilterOption, useSort } from '@ownclouders/web-pkg'
+import { queryItemAsString, InlineFilterOption, useSort } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
@@ -13,11 +13,15 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
+import { useOpenWithDefaultApp } from '../../../../src/composables/openWithDefaultApp'
 
-jest.mock('web-app-files/src/composables')
+jest.mock('web-app-files/src/composables/resourcesViewDefaults')
+jest.mock('web-app-files/src/composables/openWithDefaultApp/useOpenWithDefaultApp')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  useSort: jest.fn().mockImplementation(() => useSortMock())
+  useSort: jest.fn().mockImplementation(() => useSortMock()),
+  queryItemAsString: jest.fn(),
+  useRouteQuery: jest.fn()
 }))
 
 describe('SharedWithMe view', () => {
@@ -37,6 +41,18 @@ describe('SharedWithMe view', () => {
     it('does not show the loading spinner after loading finished', () => {
       const { wrapper } = getMountedWrapper()
       expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
+    })
+  })
+  describe('open with default app', () => {
+    it('gets called if given via route query param', async () => {
+      const { wrapper, mocks } = getMountedWrapper({ openWithDefaultAppQuery: 'true' })
+      await wrapper.vm.loadResourcesTask.last
+      expect(mocks.openWithDefaultApp).toHaveBeenCalled()
+    })
+    it('gets not called if not given via route query param', async () => {
+      const { wrapper, mocks } = getMountedWrapper()
+      await wrapper.vm.loadResourcesTask.last
+      expect(mocks.openWithDefaultApp).not.toHaveBeenCalled()
     })
   })
   describe('filter', () => {
@@ -64,7 +80,12 @@ describe('SharedWithMe view', () => {
   })
 })
 
-function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  loading = false,
+  files = [],
+  openWithDefaultAppQuery = ''
+} = {}) {
   jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       storeItems: ref(files),
@@ -72,11 +93,17 @@ function getMountedWrapper({ mocks = {}, loading = false, files = [] } = {}) {
     })
   )
   jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => openWithDefaultAppQuery)
+
+  const openWithDefaultApp = jest.fn()
+  jest.mocked(useOpenWithDefaultApp).mockReturnValue({ openWithDefaultApp })
+
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-shares-with-me' })
     }),
-    ...(mocks && mocks)
+    ...(mocks && mocks),
+    openWithDefaultApp
   }
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)

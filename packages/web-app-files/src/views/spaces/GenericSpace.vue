@@ -215,6 +215,7 @@ import {
   useKeyboardTableNavigation,
   useKeyboardTableSpaceActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { useOpenWithDefaultApp } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -260,18 +261,18 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const { $gettext, $ngettext } = useGettext()
-    const { getDefaultEditorAction } = useFileActions()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
     const hasShareJail = useCapabilityShareJailEnabled()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
+    const { openWithDefaultApp } = useOpenWithDefaultApp()
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,
       space: props.space
     })
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
-    let loadResourcesEventToken
+    let loadResourcesEventToken: string
 
     const canUpload = computed(() => {
       return store.getters['Files/currentFolder']?.canUpload({ user: store.getters.user })
@@ -432,25 +433,6 @@ export default defineComponent({
       }
     }
 
-    const openWithDefaultApp = () => {
-      const highlightedFile = store.getters['Files/highlightedFile']
-
-      if (!highlightedFile || highlightedFile.isFolder) {
-        return
-      }
-
-      const fileActionsOptions = {
-        resources: [highlightedFile],
-        space: props.space
-      }
-
-      const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
-
-      if (defaultEditorAction) {
-        defaultEditorAction.handler({ ...fileActionsOptions })
-      }
-    }
-
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
 
     const keyActions = useKeyboardActions()
@@ -487,7 +469,7 @@ export default defineComponent({
       focusAndAnnounceBreadcrumb(sameRoute)
 
       if (unref(openWithDefaultAppQuery) === 'true') {
-        openWithDefaultApp()
+        openWithDefaultApp({ space: props.space, resource: store.getters['Files/highlightedFile'] })
       }
     }
 

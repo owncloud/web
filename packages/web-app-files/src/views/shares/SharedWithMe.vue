@@ -45,8 +45,9 @@ import { useResourcesViewDefaults } from '../../composables'
 
 import { AppLoadingSpinner, InlineFilterOption } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
+import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -55,6 +56,7 @@ import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '@ownclouders/web-pkg'
+import { useOpenWithDefaultApp } from '../../composables'
 
 export default defineComponent({
   components: {
@@ -68,6 +70,8 @@ export default defineComponent({
   },
 
   setup() {
+    const { openWithDefaultApp } = useOpenWithDefaultApp()
+
     const {
       areResourcesLoading,
       sortFields,
@@ -123,8 +127,23 @@ export default defineComponent({
       return getMatchingSpace(resource)
     })
 
+    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+    const performLoaderTask = async () => {
+      await loadResourcesTask.perform()
+      scrollToResourceFromRoute(unref(items), 'files-app-bar')
+      if (queryItemAsString(unref(openWithDefaultAppQuery)) === 'true') {
+        openWithDefaultApp({
+          space: unref(selectedShareSpace),
+          resource: unref(selectedResources)[0]
+        })
+      }
+    }
+
+    onMounted(() => {
+      performLoaderTask()
+    })
+
     return {
-      // defaults
       loadResourcesTask,
       areResourcesLoading,
       selectedResources,
@@ -133,7 +152,6 @@ export default defineComponent({
       sideBarOpen,
       sideBarActivePanel,
       selectedShareSpace,
-      scrollToResourceFromRoute,
 
       areHiddenFilesShown,
       visibilityOptions,
@@ -151,11 +169,6 @@ export default defineComponent({
       // CERN
       ...useGroupingSettings({ sortBy: sortBy, sortDir: sortDir })
     }
-  },
-
-  async created() {
-    await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.items, 'files-app-bar')
   }
 })
 </script>

@@ -50,9 +50,9 @@ Feature: spaces public link
     Then "Brian" should not be able to edit the public link named "spaceLink"
     And "Brian" should not be able to edit the public link named "folderLink"
     When "Brian" opens the public link "textLink"
-    Then for "Brian" file "shareToBrian.txt" should be selected
+    And "Brian" closes the file viewer
     When "Brian" opens the public link "markdownLink"
-    Then for "Brian" file "shareToBrian.md" should be selected
+    And "Brian" closes the file viewer
     And "Brian" logs out
     When "Carol" logs in
     And "Carol" opens the public link "spaceLink"
@@ -61,14 +61,14 @@ Feature: spaces public link
     When "Carol" opens the public link "folderLink"
     Then "Carol" should see folder "subFolder" but should not be able to edit
     When "Carol" opens the public link "pdfLink"
-    Then for "Carol" file "simple.pdf" should be selected
+    And "Carol" closes the file viewer
     And "Carol" logs out
     When "David" logs in
     And "David" opens the public link "spaceLink"
     And "David" edits the public link named "spaceLink" of the space changing role to "Can edit"
     And "David" edits the public link named "folderLink" of resource "spaceFolder" changing role to "Can edit"
     When "David" opens the public link "imageLink"
-    Then for "David" file "testavatar.jpg" should be selected
+    And "David" closes the file viewer
     And "David" logs out
 
 
