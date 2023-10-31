@@ -129,6 +129,30 @@ When(
 )
 
 When(
+  /^"([^"]*)" (copies|moves) the following resources to "([^"]*)" at once using (keyboard|drag-drop|drag-drop-breadcrumb|dropdown-menu|batch-action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    newLocation: string,
+    method: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    const resources = [].concat(...stepTable.rows())
+    await resourceObject[
+      actionType === 'copies' ? 'copyMultipleResources' : 'moveMultipleResources'
+    ]({
+      newLocation,
+      method,
+      resources
+    })
+  }
+)
+
+When(
   '{string} restores following resource(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
