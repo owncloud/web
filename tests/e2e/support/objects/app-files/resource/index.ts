@@ -80,6 +80,18 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
+  async copyMultipleResources(args: Omit<po.moveOrCopyMultipleResourceArgs, 'page' | 'action'>) {
+    const startUrl = this.#page.url()
+    await po.moveOrCopyMultipleResources({ ...args, page: this.#page, action: 'copy' })
+    await this.#page.goto(startUrl)
+  }
+
+  async moveMultipleResources(args: Omit<po.moveOrCopyMultipleResourceArgs, 'page' | 'action'>) {
+    const startUrl = this.#page.url()
+    await po.moveOrCopyMultipleResources({ ...args, page: this.#page, action: 'move' })
+    await this.#page.goto(startUrl)
+  }
+
   async delete(args: Omit<po.deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.deleteResource({ ...args, page: this.#page })

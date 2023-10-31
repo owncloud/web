@@ -104,6 +104,7 @@ const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
 const textEditorTextArea = '#text-editor-input'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
+const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 
 export const clickResource = async ({
   page,
@@ -657,6 +658,10 @@ export interface moveOrCopyResourceArgs {
   method: string
 }
 
+export interface moveOrCopyMultipleResourceArgs extends Omit<moveOrCopyResourceArgs, 'resource'> {
+  resources: string[]
+}
+
 export const pasteResource = async (
   args: Omit<moveOrCopyResourceArgs, 'action'>
 ): Promise<void> => {
@@ -681,6 +686,97 @@ export const pasteResource = async (
   await waitForResources({
     page,
     names: [resource]
+  })
+}
+
+export const moveOrCopyMultipleResources = async (
+  args: moveOrCopyMultipleResourceArgs
+): Promise<void> => {
+  const { page, newLocation, action, method, resources } = args
+
+  for (const resource of resources) {
+    await page.locator(util.format(checkBox, resource)).click()
+  }
+
+  const waitForMoveResponses = []
+  if (['drag-drop-breadcrumb', 'drag-drop'].includes(method)) {
+    for (const resource of resources) {
+      waitForMoveResponses.push(
+        page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith(resource) &&
+            resp.status() === 201 &&
+            resp.request().method() === 'MOVE'
+        )
+      )
+    }
+  }
+
+  switch (method) {
+    case 'dropdown-menu': {
+      // after selecting multiple resources, resources can be copied or moved by clicking on any of the selected resources
+      await page.locator(highlightedFileRowSelector).first().click({ button: 'right' })
+      await page.locator(util.format(filesContextMenuAction, action)).click()
+
+      await page.locator(breadcrumbRoot).click()
+      const newLocationPath = newLocation.split('/')
+      for (const path of newLocationPath) {
+        if (path !== 'Personal') {
+          await clickResource({ page, path: path })
+        }
+      }
+      await page.locator(filesView).click({ button: 'right' })
+      await page.locator(util.format(filesContextMenuAction, 'copy')).click()
+      break
+    }
+    case 'batch-action': {
+      await page.locator(util.format(filesBatchAction, action)).click()
+
+      await page.locator(breadcrumbRoot).click()
+      const newLocationPath = newLocation.split('/')
+      for (const path of newLocationPath) {
+        if (path !== 'Personal') {
+          await clickResource({ page, path: path })
+        }
+      }
+      await page.locator(pasteButton).click()
+      break
+    }
+    case 'keyboard': {
+      const keyValue = action === 'copy' ? 'c' : 'x'
+      await page.keyboard.press(`Control+${keyValue}`)
+      await page.locator(breadcrumbRoot).click()
+      const newLocationPath = newLocation.split('/')
+      for (const path of newLocationPath) {
+        if (path !== 'Personal') {
+          await clickResource({ page, path: path })
+        }
+      }
+      await page.keyboard.press('Control+v')
+      break
+    }
+    case 'drag-drop': {
+      const source = page.locator(highlightedFileRowSelector).first()
+      const target = page.locator(util.format(resourceNameSelector, newLocation))
+
+      await Promise.all([...waitForMoveResponses, source.dragTo(target)])
+
+      await target.click()
+      break
+    }
+    case 'drag-drop-breadcrumb': {
+      const source = page.locator(highlightedFileRowSelector).first()
+      const target = page.locator(util.format(breadcrumbResourceNameSelector, newLocation))
+
+      await Promise.all([...waitForMoveResponses, source.dragTo(target)])
+
+      await target.click()
+      break
+    }
+  }
+  await waitForResources({
+    page,
+    names: resources
   })
 }
 
