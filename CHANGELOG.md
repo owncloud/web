@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.1.1...master
 
 Summary
 -------
@@ -563,6 +563,28 @@ Details
 
    https://github.com/owncloud/web/issues/9452
    https://github.com/owncloud/web/pull/9884
+
+Changelog for ownCloud Web [7.1.1] (2023-10-25)
+=======================================
+The following sections list the changes in ownCloud web 7.1.1 relevant to
+ownCloud admins and users.
+
+[7.1.1]: https://github.com/owncloud/web/compare/v7.1.0...v7.1.1
+
+Summary
+-------
+
+* Bugfix - Resolving external URLs: [#9804](https://github.com/owncloud/web/issues/9804)
+
+Details
+-------
+
+* Bugfix - Resolving external URLs: [#9804](https://github.com/owncloud/web/issues/9804)
+
+   Resolving external URLs when only the file ID is given has been fixed.
+
+   https://github.com/owncloud/web/issues/9804
+   https://github.com/owncloud/web/pull/9833
 
 Changelog for ownCloud Web [7.1.0] (2023-08-23)
 =======================================
