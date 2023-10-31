@@ -19,6 +19,7 @@ Summary
 * Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
+* Bugfix - Link resolving into default app: [#9799](https://github.com/owncloud/web/issues/9799)
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 * Bugfix - Fix display path on resources: [#9843](https://github.com/owncloud/web/pull/9843)
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
@@ -147,6 +148,15 @@ Details
 
    https://github.com/owncloud/web/issues/9788
    https://github.com/owncloud/web/pull/9793
+
+* Bugfix - Link resolving into default app: [#9799](https://github.com/owncloud/web/issues/9799)
+
+   Internal and public file links now reliably resolve into the default app when
+   `openLinksWithDefaultApp` is enabled.
+
+   https://github.com/owncloud/web/issues/9799
+   https://github.com/owncloud/web/issues/9776
+   https://github.com/owncloud/web/pull/9821
 
 * Bugfix - Copy quicklinks for webkit navigator: [#9832](https://github.com/owncloud/web/pull/9832)
 
