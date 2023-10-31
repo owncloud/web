@@ -215,7 +215,7 @@ import {
   useKeyboardTableNavigation,
   useKeyboardTableSpaceActions
 } from 'web-app-files/src/composables/keyboardActions'
-import { useOpenWithDefaultApp } from '../../composables/openWithDefaultApp'
+import { useOpenWithDefaultApp } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 

@@ -56,7 +56,7 @@ import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '@ownclouders/web-pkg'
-import { useOpenWithDefaultApp } from '../../composables/openWithDefaultApp'
+import { useOpenWithDefaultApp } from '../../composables'
 
 export default defineComponent({
   components: {
