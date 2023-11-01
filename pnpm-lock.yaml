@@ -1010,6 +1010,9 @@ importers:
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
+      dompurify:
+        specifier: ^3.0.6
+        version: 3.0.6
       filesize:
         specifier: ^9.0.11
         version: 9.0.11
@@ -10945,6 +10948,10 @@ packages:
     engines: {node: '>= 4'}
     dependencies:
       domelementtype: 2.2.0
+
+  /dompurify@3.0.6:
+    resolution: {integrity: sha512-ilkD8YEnnGh1zJ240uJsW7AzE+2qpbOUYjacomn3AvJ6J4JhKGSZ2nh4wUIXPZrEPppaCLx5jFe8T89Rk8tQ7w==}
+    dev: false
 
   /domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}

@@ -62,6 +62,9 @@ export default defineComponent({
           content
         })
         store.commit('Files/UPSERT_RESOURCE', resource)
+        store.dispatch('showMessage', {
+          title: $gettext('Shortcut was created successfully')
+        })
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {

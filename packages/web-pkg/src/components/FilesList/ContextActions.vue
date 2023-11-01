@@ -5,7 +5,11 @@
 <script lang="ts">
 import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
 
-import { useFileActionsToggleHideShare, useStore } from '../../composables'
+import {
+  useFileActionsOpenShortcut,
+  useFileActionsToggleHideShare,
+  useStore
+} from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
 import {
@@ -71,6 +75,7 @@ export default defineComponent({
       store
     })
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
+    const { actions: openShortcutActions } = useFileActionsOpenShortcut({ store })
 
     // type cast to make vue-tsc aware of the type
     const actionOptions = toRef(props, 'actionOptions') as Ref<FileActionOptions>
@@ -107,6 +112,7 @@ export default defineComponent({
 
     const menuItemsActions = computed(() => {
       return [
+        ...unref(openShortcutActions),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
         ...unref(deleteActions),
