@@ -1,6 +1,6 @@
 <template>
   <create-shortcut-modal
-    v-if="createNewShortcutModalIsOpen"
+    v-if="isCreateNewShortcutModalOpen"
     :space="space"
     :cancel="closeCreateNewShortcutModal"
   />
@@ -35,7 +35,7 @@
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
-          <li class="create-list-folder oc-menu-item-hover">
+          <li class="create-list-shortcut oc-menu-item-hover">
             <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
               <oc-icon name="global" size="medium" />
               <span v-text="$gettext('Shortcut')" />
@@ -270,7 +270,7 @@ export default defineComponent({
 
     const {
       actions: createNewShortcut,
-      modalOpen: createNewShortcutModalIsOpen,
+      modalOpen: isCreateNewShortcutModalOpen,
       closeModal: closeCreateNewShortcutModal
     } = useFileActionsCreateNewShortcut({ store })
 
@@ -422,7 +422,7 @@ export default defineComponent({
       isActionDisabled,
       actionKeySuffix,
       showDrop,
-      createNewShortcutModalIsOpen,
+      isCreateNewShortcutModalOpen,
       closeCreateNewShortcutModal,
 
       // HACK: exported for unit tests:
@@ -513,7 +513,8 @@ export default defineComponent({
     }
   }
 
-  .create-list-folder {
+  .create-list-folder,
+  .create-list-shortcut {
     border-bottom: 1px solid var(--oc-color-border);
   }
 
