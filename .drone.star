@@ -1696,7 +1696,7 @@ def checkTestSuitesInExpectedFailures(ctx):
                 "name": "check-suites",
                 "image": OC_CI_ALPINE,
                 "commands": [
-                    "%s/tests/acceptance/check-deleted-suites-in-expected-to-failure.sh" % dir["web"],
+                    "%s/tests/acceptance/check-deleted-suites-in-expected-failure.sh" % dir["web"],
                 ],
             },
         ],
