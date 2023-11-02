@@ -13,6 +13,7 @@ import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { useClientService } from '../../clientService'
 import DOMPurify from 'dompurify'
+import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {}) => {
   const router = useRouter()
@@ -20,6 +21,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
   const isFilesAppActive = useIsFilesAppActive()
   const isSearchActive = useIsSearchActive()
   const clientService = useClientService()
+  const configurationManger = useConfigurationManager()
 
   const extractUrl = (fileContents: string) => {
     const regex = /URL=(.+)/
@@ -38,6 +40,10 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
 
       // Omit possible xss code
       const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
+
+      if (sanitizedUrl.startsWith(configurationManger.serverUrl)) {
+        return (window.location.href = sanitizedUrl)
+      }
 
       window.open(sanitizedUrl)
     } catch (e) {
