@@ -31,7 +31,6 @@ import {
   useFileActionsNavigate,
   useFileActionsRename,
   useFileActionsRestore,
-  useFileActionsShowEditTags,
   useFileActionsCreateSpaceFromResource
 } from './index'
 
@@ -66,7 +65,6 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: navigateActions } = useFileActionsNavigate({ store })
   const { actions: renameActions } = useFileActionsRename({ store })
   const { actions: restoreActions } = useFileActionsRestore({ store })
-  const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
   const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource({ store })
 
   const systemActions = computed((): Action[] => [
@@ -77,7 +75,6 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     ...unref(copyActions),
     ...unref(renameActions),
     ...unref(createSpaceFromResource),
-    ...unref(showEditTagsActions),
     ...unref(restoreActions),
     ...unref(acceptShareActions),
     ...unref(hideShareActions),
