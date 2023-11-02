@@ -24,7 +24,7 @@ export const useFileActionsCreateNewShortcut = ({ store }: { store?: Store<any> 
     return [
       {
         name: 'create-shortcut',
-        icon: 'globe',
+        icon: 'external-link',
         handler,
         label: () => {
           return $gettext('New Shortcut')

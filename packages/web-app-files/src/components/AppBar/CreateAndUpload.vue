@@ -35,12 +35,6 @@
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
-          <li class="create-list-shortcut oc-menu-item-hover">
-            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
-              <oc-icon name="global" size="medium" />
-              <span v-text="$gettext('Shortcut')" />
-            </oc-button>
-          </li>
           <li
             v-for="(fileAction, key) in createNewFileActions"
             :key="`file-creation-item-${key}`"
@@ -67,6 +61,12 @@
               </oc-button>
             </li>
           </template>
+          <li class="create-list-shortcut oc-menu-item-hover">
+            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
+              <oc-icon name="external-link" size="medium" />
+              <span v-text="$gettext('Shortcut')" />
+            </oc-button>
+          </li>
         </oc-list>
       </oc-drop>
     </template>
@@ -513,8 +513,7 @@ export default defineComponent({
     }
   }
 
-  .create-list-folder,
-  .create-list-shortcut {
+  .create-list-folder {
     border-bottom: 1px solid var(--oc-color-border);
   }
 

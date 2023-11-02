@@ -52,7 +52,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
   const actions = computed((): FileAction[] => [
     {
       name: 'open-shortcut',
-      icon: 'global',
+      icon: 'external-link',
       handler,
       label: () => {
         return $gettext('Open shortcut')

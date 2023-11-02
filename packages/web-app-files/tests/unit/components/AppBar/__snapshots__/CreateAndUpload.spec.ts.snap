@@ -57,14 +57,6 @@ exports[`CreateAndUpload component file handlers should show additional handlers
           <span>Folder</span>
         </button>
       </li>
-      <li class="create-list-shortcut oc-menu-item-hover">
-        <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="new-shortcut-btn" type="button">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="global" size="medium" type="span" variation="passive"></oc-icon-stub>
-          <span>Shortcut</span>
-        </button>
-      </li>
       <li class="create-list-file oc-menu-item-hover">
         <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-txt" type="button">
           <!--v-if-->
@@ -87,6 +79,14 @@ exports[`CreateAndUpload component file handlers should show additional handlers
           <!-- @slot Content of the button -->
           <oc-resource-icon-stub resource="[object Object]" size="medium"></oc-resource-icon-stub>
           <span>Draw.io document</span>
+        </button>
+      </li>
+      <li class="create-list-shortcut oc-menu-item-hover">
+        <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="new-shortcut-btn" type="button">
+          <!--v-if-->
+          <!-- @slot Content of the button -->
+          <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="external-link" size="medium" type="span" variation="passive"></oc-icon-stub>
+          <span>Shortcut</span>
         </button>
       </li>
     </oc-list-stub>
