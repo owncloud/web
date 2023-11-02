@@ -51,7 +51,7 @@
             name="side-bar-right"
             variation="inherit"
           />
-        </oc-button>
+        </oc-button>    
       </div>
       <dicom-controls
         :files="dicomFiles"
@@ -133,6 +133,7 @@ cornerstoneDICOMImageLoader.configure({
   }
 })
 
+/*
 // configure web worker framework
 let maxWebWorkers = 1
 
@@ -151,6 +152,11 @@ var config = {
       strict: false // true
     }
   }
+}
+*/
+var config = {
+  maxWebWorkers: navigator.hardwareConcurrency || 1,
+  startWebWorkersOnDemand: true
 }
 
 /*
