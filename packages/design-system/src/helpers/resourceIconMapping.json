@@ -387,6 +387,10 @@
     "name": "resource-type-text",
     "color": "var(--oc-color-text-default)"
   },
+  "url": {
+    "name": "resource-type-url",
+    "color": "var(--oc-color-text-default)"
+  },
   "vsd": {
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"

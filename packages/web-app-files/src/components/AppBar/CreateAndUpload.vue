@@ -1,4 +1,9 @@
 <template>
+  <create-shortcut-modal
+    v-if="isCreateNewShortcutModalOpen"
+    :space="space"
+    :cancel="closeCreateNewShortcutModal"
+  />
   <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-mr-s">
     <template v-if="createFileActionsAvailable">
       <span v-oc-tooltip="newButtonTooltip">
@@ -56,6 +61,12 @@
               </oc-button>
             </li>
           </template>
+          <li class="create-list-shortcut oc-menu-item-hover">
+            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
+              <oc-icon name="external-link" size="medium" />
+              <span v-text="$gettext('Shortcut')" />
+            </oc-button>
+          </li>
         </oc-list>
       </oc-drop>
     </template>
@@ -123,7 +134,8 @@
             :disabled="isActionDisabled(action)"
             @click="action.handler"
           >
-            <oc-icon :name="action.icon" fill-type="line" /><span v-text="action.label()"
+            <oc-icon :name="action.icon" fill-type="line" />
+            <span v-text="action.label()"
           /></oc-button>
         </li>
       </oc-list>
@@ -159,16 +171,13 @@
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
 
-import { useFileActions } from '@ownclouders/web-pkg'
+import { useFileActions, useFileActionsCreateNewShortcut } from '@ownclouders/web-pkg'
 import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import {
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,
-  useFileActionsPaste
-} from '@ownclouders/web-pkg'
-
-import {
+  useFileActionsPaste,
   useRequest,
   useCapabilityShareJailEnabled,
   useCapabilitySpacesEnabled,
@@ -178,6 +187,8 @@ import {
 } from '@ownclouders/web-pkg'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
+import CreateShortcutModal from '@ownclouders/web-pkg/src/components/CreateShortcutModal.vue'
+
 import {
   computed,
   defineComponent,
@@ -200,7 +211,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   components: {
-    ResourceUpload
+    ResourceUpload,
+    CreateShortcutModal
   },
   props: {
     space: {
@@ -255,6 +267,14 @@ export default defineComponent({
       space: props.space
     })
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
+
+    const {
+      actions: createNewShortcut,
+      modalOpen: isCreateNewShortcutModalOpen,
+      closeModal: closeCreateNewShortcutModal
+    } = useFileActionsCreateNewShortcut({ store })
+
+    const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
     const newFileHandlers = computed(() => store.getters.newFileHandlers)
 
@@ -396,11 +416,14 @@ export default defineComponent({
       createNewFolder,
       mimetypesAllowedForCreation,
       createNewFolderAction,
+      createNewShortcutAction,
       extensionActions,
       pasteFileAction,
       isActionDisabled,
       actionKeySuffix,
       showDrop,
+      isCreateNewShortcutModalOpen,
+      closeCreateNewShortcutModal,
 
       // HACK: exported for unit tests:
       onUploadComplete
