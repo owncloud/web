@@ -51,7 +51,11 @@
                   class="create-list-file-item-text"
                   v-text="$gettext(mimeTypeAction.label())"
                 />
-                <span class="create-list-file-item-extension" v-text="mimeTypeAction.ext" />
+                <span
+                  v-if="areFileExtensionsShown"
+                  class="create-list-file-item-extension"
+                  v-text="mimeTypeAction.ext"
+                />
               </oc-button>
             </li>
             <li class="bottom-seperator"></li>
@@ -75,7 +79,9 @@
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
               <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
-              <span class="create-list-file-item-extension">{{ fileAction.ext }}</span>
+              <span v-if="areFileExtensionsShown" class="create-list-file-item-extension">{{
+                fileAction.ext
+              }}</span>
             </oc-button>
           </li>
         </oc-list>
@@ -253,6 +259,7 @@ export default defineComponent({
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
+    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
 
     useUpload({ uppyService })
 
@@ -308,7 +315,6 @@ export default defineComponent({
       space: props.space,
       mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
-    console.log('mime-types', createNewFileMimeTypeActions)
 
     const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
@@ -436,6 +442,7 @@ export default defineComponent({
       showDrop,
       isCreateNewShortcutModalOpen,
       closeCreateNewShortcutModal,
+      areFileExtensionsShown,
 
       // HACK: exported for unit tests:
       onUploadComplete
