@@ -57,6 +57,9 @@ export default defineComponent({
     })
 
     const createShortcut = async () => {
+      // Closes the modal
+      props.cancel()
+
       try {
         // Omit possible xss code
         const sanitizedUrl = DOMPurify.sanitize(unref(inputUrl), { USE_PROFILES: { html: true } })
@@ -77,8 +80,6 @@ export default defineComponent({
           title: $gettext('Failed to create shortcut'),
           error: e
         })
-      } finally {
-        props.cancel()
       }
     }
 
