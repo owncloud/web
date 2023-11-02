@@ -35,6 +35,26 @@
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
+          <template v-if="mimetypesAllowedForCreation">
+            <li
+              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
+              :key="`file-creation-item-external-${key}`"
+              class="create-list-file oc-menu-item-hover"
+            >
+              <oc-button appearance="raw" @click="mimeTypeAction.handler">
+                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
+                <span v-text="$gettext(mimeTypeAction.label())" />
+              </oc-button>
+            </li>
+            <li class="bottom-seperator"></li>
+          </template>
+          <li class="create-list-shortcut oc-menu-item-hover">
+            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
+              <oc-icon name="external-link" size="medium" />
+              <span v-text="$gettext('Shortcut')" />
+            </oc-button>
+          </li>
+
           <li
             v-for="(fileAction, key) in createNewFileActions"
             :key="`file-creation-item-${key}`"
@@ -47,24 +67,6 @@
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
               <span>{{ fileAction.label() }}</span>
-            </oc-button>
-          </li>
-          <template v-if="mimetypesAllowedForCreation">
-            <li
-              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
-              :key="`file-creation-item-external-${key}`"
-              class="create-list-file oc-menu-item-hover"
-            >
-              <oc-button appearance="raw" @click="mimeTypeAction.handler">
-                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
-                <span v-text="$gettext(mimeTypeAction.label())" />
-              </oc-button>
-            </li>
-          </template>
-          <li class="create-list-shortcut oc-menu-item-hover">
-            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
-              <oc-icon name="external-link" size="medium" />
-              <span v-text="$gettext('Shortcut')" />
             </oc-button>
           </li>
         </oc-list>
@@ -297,6 +299,7 @@ export default defineComponent({
       space: props.space,
       mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
+    console.log('mime-types', createNewFileMimeTypeActions)
 
     const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
@@ -541,6 +544,10 @@ export default defineComponent({
 
 #extension-list {
   border-top: 1px solid var(--oc-color-border);
+}
+
+.bottom-seperator {
+  border-bottom: 1px solid var(--oc-color-border) !important;
 }
 
 #clipboard-btns {
