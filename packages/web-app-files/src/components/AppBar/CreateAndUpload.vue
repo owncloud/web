@@ -42,19 +42,16 @@
               class="create-list-file oc-menu-item-hover"
             >
               <oc-button
-                style="display: inline-flex; text-align: left; justify-content: flex-start; gap 10px;"
+                style="display: inline-flex"
                 appearance="raw"
                 @click="mimeTypeAction.handler"
               >
                 <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
                 <span
-                  style="display: inline-flex; text-align: left; justify-content: flex-start"
+                  class="create-list-file-item-text"
                   v-text="$gettext(mimeTypeAction.label())"
                 />
-                <span
-                  style="display: inline-flex; text-align: left; justify-content: right; gap: 10px"
-                  v-text="mimeTypeAction.ext"
-                />
+                <span class="create-list-file-item-extension" v-text="mimeTypeAction.ext" />
               </oc-button>
             </li>
             <li class="bottom-seperator"></li>
@@ -77,8 +74,8 @@
               @click="fileAction.handler"
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
-              <span>{{ fileAction.label() }}</span>
-              <span>{{ fileAction.ext }}</span>
+              <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
+              <span class="create-list-file-item-extension">{{ fileAction.ext }}</span>
             </oc-button>
           </li>
         </oc-list>
@@ -522,6 +519,7 @@ export default defineComponent({
     border: 1px solid transparent;
 
     button {
+      display: inline-flex;
       gap: 10px;
       justify-content: left;
       width: 100%;
@@ -538,6 +536,25 @@ export default defineComponent({
 
   .create-list-file:nth-child(2) button {
     margin-top: 6px;
+  }
+}
+
+.create-list {
+  &-file-item {
+    &-text {
+      display: inline-flex;
+      text-align: left;
+      justify-content: flex-start;
+    }
+    &-extension {
+      display: inline-flex;
+      text-align: left;
+      justify-content: right;
+      flex: 1;
+      font-weight: normal !important;
+      font-size: var(--oc-font-size-small);
+      opacity: 0.7;
+    }
   }
 }
 
