@@ -41,9 +41,20 @@
               :key="`file-creation-item-external-${key}`"
               class="create-list-file oc-menu-item-hover"
             >
-              <oc-button appearance="raw" @click="mimeTypeAction.handler">
+              <oc-button
+                style="display: inline-flex; text-align: left; justify-content: flex-start; gap 10px;"
+                appearance="raw"
+                @click="mimeTypeAction.handler"
+              >
                 <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
-                <span v-text="$gettext(mimeTypeAction.label())" />
+                <span
+                  style="display: inline-flex; text-align: left; justify-content: flex-start"
+                  v-text="$gettext(mimeTypeAction.label())"
+                />
+                <span
+                  style="display: inline-flex; text-align: left; justify-content: right; gap: 10px"
+                  v-text="mimeTypeAction.ext"
+                />
               </oc-button>
             </li>
             <li class="bottom-seperator"></li>
@@ -67,6 +78,7 @@
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
               <span>{{ fileAction.label() }}</span>
+              <span>{{ fileAction.ext }}</span>
             </oc-button>
           </li>
         </oc-list>
@@ -531,7 +543,7 @@ export default defineComponent({
 
 #upload-list,
 #new-file-menu-drop {
-  min-width: 230px;
+  min-width: 280px;
 }
 
 #create-list,
@@ -548,6 +560,7 @@ export default defineComponent({
 
 .bottom-seperator {
   border-bottom: 1px solid var(--oc-color-border) !important;
+  margin-bottom: 8px;
 }
 
 #clipboard-btns {
