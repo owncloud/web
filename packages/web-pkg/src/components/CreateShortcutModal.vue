@@ -11,7 +11,7 @@
       <template #content>
         url
         <oc-text-input v-model="inputUrl" />
-        <div v-if="inputUrl" class="oc-flex oc-flex-bottom oc-width-1-1 oc-mt-m">
+        <div class="oc-flex oc-flex-bottom oc-width-1-1 oc-mt-m">
           <oc-text-input
             v-model="inputFilename"
             class="oc-width-1-1"

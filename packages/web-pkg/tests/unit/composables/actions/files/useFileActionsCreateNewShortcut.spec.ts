@@ -12,7 +12,7 @@ import { Resource } from '@ownclouders/web-client'
 
 describe('createNewShortcut', () => {
   describe('computed property "actions"', () => {
-    describe('method isEnabled returns correct value', () => {
+    describe('method "isEnabled"', () => {
       it.each([
         {
           currentFolderCanCreate: true,
@@ -31,8 +31,8 @@ describe('createNewShortcut', () => {
         })
       })
     })
-    describe('method handler', () => {
-      it('sets modalOpen to true', () => {
+    describe('method "handler"', () => {
+      it('sets property "modalOpen" to true', () => {
         getWrapper({
           setup: ({ actions, modalOpen }) => {
             unref(actions)[0].handler()

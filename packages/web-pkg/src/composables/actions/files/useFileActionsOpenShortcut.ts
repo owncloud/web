@@ -28,7 +28,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
     if (match && match[1]) {
       return match[1]
     } else {
-      throw new Error('Unable to extract url')
+      throw new Error('unable to extract url')
     }
   }
   const handler = async ({ resources, space }: FileActionOptions) => {
@@ -39,7 +39,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
       // Omit possible xss code
       const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
-      location.href = sanitizedUrl
+      window.location.href = sanitizedUrl
     } catch (e) {
       console.error(e)
       store.dispatch('showErrorMessage', {
@@ -85,6 +85,9 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
   ])
 
   return {
-    actions
+    actions,
+
+    // Hack for unit tests
+    extractUrl
   }
 }
