@@ -108,7 +108,6 @@ function getWrapper({
     })
   }
 
-  // url contains xss code to test xss protection
   mocks.$clientService.webdav.getFileContents.mockResolvedValue(
     mock<GetFileContentsResponse>({
       body: getFileContentsValue
