@@ -16,19 +16,23 @@ Feature: Copy
       | PARENTCopy3           |
       | PARENTCopy4/Sub1/Sub2 |
     And "Alice" creates the following files into personal space using API
-      | pathToFile              | content                             |
-      | PARENTCopy3/example.txt | example text                        |
-      | KeyboardExample.txt     | copy with the help of keyboard      |
-      | dragDrop.txt            | copy with the help of drag-drop     |
-      | sidebar.txt             | copy with the help of sidebar panel |
+      | pathToFile               | content                             |
+      | PARENTCopy3/example1.txt | example text                        |
+      | PARENTCopy3/example2.txt | example text                        |
+      | KeyboardExample.txt      | copy with the help of keyboard      |
+      | dragDrop.txt             | copy with the help of drag-drop     |
+      | sidebar.txt              | copy with the help of sidebar panel |
     And "Alice" opens the "files" app
 
     When "Alice" copies the following resource using sidebar-panel
       | resource    | to          |
       | sidebar.txt | PARENTCopy2 |
     And "Alice" copies the following resource using dropdown-menu
-      | resource                | to          |
-      | PARENTCopy3/example.txt | PARENTCopy1 |
+      | resource                 | to          |
+      | PARENTCopy3/example1.txt | PARENTCopy1 |
+    And "Alice" copies the following resource using batch-action
+      | resource                 | to          |
+      | PARENTCopy3/example2.txt | PARENTCopy1 |
     And "Alice" copies the following resource using keyboard
       | resource            | to          |
       | KeyboardExample.txt | PARENTCopy3 |
@@ -36,8 +40,11 @@ Feature: Copy
       | resource     | to          |
       | dragDrop.txt | PARENTCopy2 |
     And "Alice" moves the following resource using dropdown-menu
-      | resource                | to         |
-      | PARENTCopy1/example.txt | PARENTMove |
+      | resource                 | to         |
+      | PARENTCopy1/example1.txt | PARENTMove |
+    And "Alice" moves the following resource using batch-action
+      | resource                 | to         |
+      | PARENTCopy1/example2.txt | PARENTMove |
     And "Alice" moves the following resource using keyboard
       | resource    | to         |
       | PARENTCopy2 | PARENTMove |

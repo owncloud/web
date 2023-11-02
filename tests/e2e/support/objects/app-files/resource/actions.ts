@@ -37,7 +37,7 @@ const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
-const filesAction = `.oc-files-actions-%s-trigger`
+const filesBatchAction = '.files-app-bar-actions .oc-files-actions-%s-trigger'
 const pasteButton = '.paste-files-btn'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]'
 const fileRenameInput = '.oc-text-input'
@@ -103,6 +103,8 @@ const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
+const textEditorTextArea = '#text-editor-input'
+const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 
 export const clickResource = async ({
   page,
@@ -643,10 +645,11 @@ export interface moveOrCopyResourceArgs {
   action: 'copy' | 'move'
   method: string
 }
+
 export const pasteResource = async (
-  args: Omit<moveOrCopyResourceArgs, 'action' | 'method'>
+  args: Omit<moveOrCopyResourceArgs, 'action'>
 ): Promise<void> => {
-  const { page, resource, newLocation } = args
+  const { page, resource, newLocation, method } = args
 
   await page.locator(breadcrumbRoot).click()
   const newLocationPath = newLocation.split('/')
@@ -657,7 +660,13 @@ export const pasteResource = async (
     }
   }
 
-  await page.locator(pasteButton).click()
+  if (method === 'dropdown-menu') {
+    await page.locator(filesView).click({ button: 'right' })
+    await page.locator(util.format(filesContextMenuAction, 'copy')).click()
+  } else {
+    await page.locator(pasteButton).click()
+  }
+
   await waitForResources({
     page,
     names: [resource]
@@ -675,8 +684,14 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   switch (method) {
     case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
-      await page.locator(util.format(filesAction, action)).first().click()
-      await pasteResource({ page, resource: resourceBase, newLocation })
+      await page.locator(util.format(filesContextMenuAction, action)).click()
+      await pasteResource({ page, resource: resourceBase, newLocation, method })
+      break
+    }
+    case 'batch-action': {
+      await page.locator(util.format(checkBox, resourceBase)).click()
+      await page.locator(util.format(filesBatchAction, action)).click()
+      await pasteResource({ page, resource: resourceBase, newLocation, method })
       break
     }
     case 'sidebar-panel': {
@@ -685,7 +700,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
       const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
       await page.locator(util.format(sideBarActionButton, actionButtonType)).click()
-      await pasteResource({ page, resource: resourceBase, newLocation })
+      await pasteResource({ page, resource: resourceBase, newLocation, method })
       break
     }
     case 'keyboard': {
@@ -783,7 +798,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
   }
 
   await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
-  await page.locator(util.format(filesAction, 'rename')).click()
+  await page.locator(util.format(filesContextMenuAction, 'rename')).click()
   await page.locator(fileRenameInput).fill(newName)
   await Promise.all([
     page.waitForResponse(
