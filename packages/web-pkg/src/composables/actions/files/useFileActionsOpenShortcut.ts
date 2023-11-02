@@ -39,7 +39,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
       // Omit possible xss code
       const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
-      window.location.href = sanitizedUrl
+      window.open(sanitizedUrl)
     } catch (e) {
       console.error(e)
       store.dispatch('showErrorMessage', {

@@ -23,6 +23,9 @@ Object.defineProperty(window, 'location', {
   },
   writable: true
 })
+Object.defineProperty(window, 'open', { writable: true })
+window.open = jest.fn()
+
 describe('openShortcut', () => {
   describe('computed property "actions"', () => {
     describe('method "isEnabled"', () => {
@@ -52,14 +55,16 @@ describe('openShortcut', () => {
       })
     })
     describe('method "handler"', () => {
-      it('omits xss code and opens the url in same window', () => {
+      it('omits xss code and opens the url in a new tab', () => {
         getWrapper({
+          getFileContentsValue:
+            '[InternetShortcut]\nURL=https://owncloud.com?default=<script>alert(document.cookie)</script>',
           setup: async ({ actions }) => {
             await unref(actions)[0].handler({
               resources: [mock<Resource>()],
               space: null
             })
-            expect(window.location.href).toEqual('https://owncloud.com?default=')
+            expect(window.open).toHaveBeenCalledWith('https://owncloud.com?default=')
           }
         })
       })
@@ -86,8 +91,10 @@ describe('openShortcut', () => {
 })
 
 function getWrapper({
-  setup
+  setup,
+  getFileContentsValue = null
 }: {
+  getFileContentsValue?: string
   setup: (
     instance: ReturnType<typeof useFileActionsOpenShortcut>,
     options: {
@@ -104,9 +111,7 @@ function getWrapper({
   // url contains xss code to test xss protection
   mocks.$clientService.webdav.getFileContents.mockResolvedValue(
     mock<GetFileContentsResponse>({
-      body:
-        '[InternetShortcut]\n' +
-        'URL=https://owncloud.com?default=<script>alert(document.cookie)</script>'
+      body: getFileContentsValue
     })
   )
 
