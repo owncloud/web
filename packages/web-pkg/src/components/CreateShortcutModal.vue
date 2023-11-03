@@ -9,8 +9,34 @@
       @confirm="createShortcut"
     >
       <template #content>
-        url
-        <oc-text-input v-model="inputUrl" />
+        <oc-text-input
+          id="create-shortcut-modal-url-input"
+          v-model="inputUrl"
+          :label="$gettext('Shortcut to a webpage or file')"
+        />
+        <oc-drop
+          v-if="showDrop"
+          class="oc-pt-s"
+          ref="dropRef"
+          padding-size="remove"
+          drop-id="create-shortcut-modal-contextmenu"
+          toggle="#create-shortcut-modal-url-input"
+          :close-on-click="true"
+        >
+          <oc-list>
+            <li class="oc-p-s">
+              <oc-button
+                class="oc-width-1-1"
+                appearance="raw"
+                justify-content="left"
+                @click="dropItemUrlClicked"
+              >
+                <oc-icon name="external-link" />
+                <span v-text="dropItemUrl" />
+              </oc-button>
+            </li>
+          </oc-list>
+        </oc-drop>
         <div class="oc-flex oc-flex-bottom oc-width-1-1 oc-mt-m">
           <oc-text-input
             v-model="inputFilename"
@@ -25,12 +51,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed } from 'vue'
+import { defineComponent, PropType, ref, unref, computed, watch, nextTick } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useClientService, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
+import { OcDrop } from '@ownclouders/design-system/src/components'
 
 export default defineComponent({
   name: 'CreateShortcutModal',
@@ -48,13 +75,39 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
+    const dropRef = ref(null)
     const inputUrl = ref('')
     const inputFilename = ref('')
+
+    const showDrop = computed(() => unref(inputUrl).trim())
+
+    const isMaybeUrl = (input: string) => {
+      const urlPrefixes = ['http://', 'https://']
+      return urlPrefixes.some((prefix) => prefix.startsWith(input) || input.startsWith(prefix))
+    }
+
+    const dropItemUrl = computed(() => {
+      let url = unref(inputUrl).trim()
+
+      if (isMaybeUrl(url)) {
+        return url
+      }
+
+      return `https://${url}`
+    })
+
     const confirmButtonDisabled = computed(() => !(unref(inputUrl) && unref(inputFilename)))
 
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
     })
+
+    const dropItemUrlClicked = () => {
+      inputUrl.value = unref(dropItemUrl)
+      try {
+        inputFilename.value = new URL(unref(dropItemUrl)).host
+      } catch (e) {}
+    }
 
     const createShortcut = async () => {
       // Closes the modal
@@ -83,12 +136,32 @@ export default defineComponent({
       }
     }
 
+    watch(inputUrl, async (value) => {
+      await nextTick()
+      if (unref(showDrop) && unref(dropRef)) {
+        ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
+      }
+    })
+
     return {
-      confirmButtonDisabled,
-      createShortcut,
       inputUrl,
-      inputFilename
+      inputFilename,
+      showDrop,
+      dropRef,
+      dropItemUrl,
+      dropItemUrlClicked,
+      createShortcut,
+      confirmButtonDisabled
     }
   }
 })
 </script>
+<style lang="scss" scoped>
+#create-shortcut-modal-contextmenu {
+  width: 458px;
+
+  li:hover {
+    background-color: var(--oc-color-background-highlight);
+  }
+}
+</style>
