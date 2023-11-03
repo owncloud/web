@@ -41,11 +41,7 @@
               :key="`file-creation-item-external-${key}`"
               class="create-list-file oc-menu-item-hover"
             >
-              <oc-button
-                style="display: inline-flex"
-                appearance="raw"
-                @click="mimeTypeAction.handler"
-              >
+              <oc-button appearance="raw" @click="mimeTypeAction.handler">
                 <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
                 <span
                   class="create-list-file-item-text"
