@@ -59,18 +59,6 @@
             v-if="mimetypesAllowedForCreation && createNewFileMimeTypeActions.length > 0"
             class="bottom-seperator"
           />
-          <li class="create-list-shortcut oc-menu-item-hover">
-            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
-              <oc-icon name="external-link" size="medium" />
-              <span v-text="$gettext('Shortcut')" />
-              <span
-                v-if="areFileExtensionsShown"
-                class="create-list-file-item-extension"
-                v-text="'url'"
-              />
-            </oc-button>
-          </li>
-
           <li
             v-for="(fileAction, key) in createNewFileActions"
             :key="`file-creation-item-${key}`"
@@ -88,6 +76,17 @@
                 class="create-list-file-item-extension"
                 >{{ fileAction.ext }}</span
               >
+            </oc-button>
+          </li>
+          <li class="create-list-shortcut oc-menu-item-hover">
+            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
+              <oc-icon name="external-link" size="medium" />
+              <span v-text="$gettext('Shortcut')" />
+              <span
+                v-if="areFileExtensionsShown"
+                class="create-list-file-item-extension"
+                v-text="'url'"
+              />
             </oc-button>
           </li>
         </oc-list>
