@@ -108,7 +108,7 @@
             ></oc-contextual-helper>
           </th>
           <td>
-            <tag-select :resource="resource"></tag-select>
+            <tags-select :resource="resource"></tags-select>
           </td>
         </tr>
       </table>
@@ -145,11 +145,11 @@ import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
-import TagSelect from './TagSelect.vue'
+import TagsSelect from './TagsSelect.vue'
 
 export default defineComponent({
   name: 'FileDetails',
-  components: { TagSelect },
+  components: { TagsSelect },
   setup() {
     const configurationManager = useConfigurationManager()
     const store = useStore()

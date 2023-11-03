@@ -6,7 +6,7 @@ import {
   defaultPlugins,
   mockAxiosResolve
 } from 'web-test-helpers'
-import TagsPanel from 'web-app-files/src/components/SideBar/TagsPanel.vue'
+import TagsSelect from 'web-app-files/src/components/SideBar/Details/TagsSelect.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ClientService, eventBus } from '@ownclouders/web-pkg'
@@ -16,11 +16,11 @@ jest.mock('@ownclouders/web-pkg', () => ({
   useAccessToken: jest.fn()
 }))
 
-describe('Tags Panel', () => {
+describe('Tag Select', () => {
   it('show tags input form if loaded successfully', () => {
     const resource = mockDeep<Resource>({ tags: [] })
     const { wrapper } = createWrapper(resource)
-    expect(wrapper.find('#tags-form').exists()).toBeTruthy()
+    expect(wrapper.find('[data-test-id="tags-select"]').exists()).toBeTruthy()
   })
 
   it('all available tags are selectable', async () => {
@@ -143,12 +143,15 @@ function createWrapper(resource, clientService = mockDeep<ClientService>(), stub
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
   return {
     storeOptions,
-    wrapper: mount(TagsPanel, {
+    wrapper: mount(TagsSelect, {
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,
-        provide: { ...mocks, resource },
+        provide: { ...mocks },
         stubs: { VueSelect: stubVueSelect, CompareSaveDialog: true }
+      },
+      props: {
+        resource
       }
     })
   }

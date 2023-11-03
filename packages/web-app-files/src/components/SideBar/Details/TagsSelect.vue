@@ -10,6 +10,7 @@
     :create-option="createOption"
     :selectable="isOptionSelectable"
     :map-keydown="keydownMethods"
+    data-test-id="tags-select"
     @update:model-value="save"
   >
     <template #selected-option-container="{ option, deselect }">
@@ -84,7 +85,7 @@ type TagOption = {
 const tagsMaxCount = 100
 
 export default defineComponent({
-  name: 'TagSelect',
+  name: 'TagsSelect',
   props: {
     /**
      * The resource
