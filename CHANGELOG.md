@@ -63,6 +63,7 @@ Summary
 * Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 * Enhancement - Enable dark theme on importer: [#9884](https://github.com/owncloud/web/pull/9884)
+* Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 
 Details
 -------
@@ -573,6 +574,14 @@ Details
 
    https://github.com/owncloud/web/issues/9452
    https://github.com/owncloud/web/pull/9884
+
+* Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
+
+   We've reorganized the "new" menu and added optional file extension indicators that will show
+   if the user has file extensions enabled in the files view.
+
+   https://github.com/owncloud/web/issues/9847
+   https://github.com/owncloud/web/pull/9906
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
