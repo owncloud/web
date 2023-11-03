@@ -1,0 +1,7 @@
+Enhancment: Reorganize "New" menu
+
+We've reorganized the "new" menu and added optional file extension indicators that will show if the user has
+file extensions enabled in the files view.
+
+https://github.com/owncloud/web/pull/9906
+https://github.com/owncloud/web/issues/9847
