@@ -54,8 +54,11 @@
                 />
               </oc-button>
             </li>
-            <li class="bottom-seperator"></li>
           </template>
+          <li
+            v-if="mimetypesAllowedForCreation && createNewFileMimeTypeActions.length > 0"
+            class="bottom-seperator"
+          />
           <li class="create-list-shortcut oc-menu-item-hover">
             <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
               <oc-icon name="external-link" size="medium" />
@@ -63,7 +66,7 @@
               <span
                 v-if="areFileExtensionsShown"
                 class="create-list-file-item-extension"
-                v-text="'.url'"
+                v-text="'url'"
               />
             </oc-button>
           </li>
