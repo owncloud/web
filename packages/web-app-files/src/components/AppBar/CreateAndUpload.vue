@@ -28,7 +28,7 @@
         class="oc-width-auto"
         padding-size="small"
       >
-        <oc-list id="create-list">
+        <oc-list id="create-list" :class="areFileExtensionsShown ? 'expanded-list' : null">
           <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
               <oc-resource-icon :resource="folderIconResource" size="medium" />
@@ -48,7 +48,7 @@
                   v-text="$gettext(mimeTypeAction.label())"
                 />
                 <span
-                  v-if="areFileExtensionsShown"
+                  v-if="areFileExtensionsShown && mimeTypeAction.ext"
                   class="create-list-file-item-extension"
                   v-text="mimeTypeAction.ext"
                 />
@@ -60,6 +60,11 @@
             <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
               <oc-icon name="external-link" size="medium" />
               <span v-text="$gettext('Shortcut')" />
+              <span
+                v-if="areFileExtensionsShown"
+                class="create-list-file-item-extension"
+                v-text="'.url'"
+              />
             </oc-button>
           </li>
 
@@ -75,9 +80,11 @@
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
               <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
-              <span v-if="areFileExtensionsShown" class="create-list-file-item-extension">{{
-                fileAction.ext
-              }}</span>
+              <span
+                v-if="areFileExtensionsShown && fileAction.ext"
+                class="create-list-file-item-extension"
+                >{{ fileAction.ext }}</span
+              >
             </oc-button>
           </li>
         </oc-list>
@@ -563,9 +570,12 @@ export default defineComponent({
 
 #upload-list,
 #new-file-menu-drop {
-  min-width: 280px;
+  min-width: 230px;
 }
 
+.expanded-list {
+  min-width: 280px !important;
+}
 #create-list,
 #upload-list,
 #new-file-menu-drop {
