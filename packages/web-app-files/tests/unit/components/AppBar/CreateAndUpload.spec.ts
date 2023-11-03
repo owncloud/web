@@ -90,6 +90,13 @@ describe('CreateAndUpload component', () => {
       const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
       expect(wrapper.html()).toMatchSnapshot()
     })
+    it('should show file extension if file extensions are enabled', () => {
+      const { wrapper } = getWrapper({
+        newFileHandlers: fileHandlerMocks,
+        areFileExtensionsShown: true
+      })
+      expect(wrapper.html()).toMatchSnapshot()
+    })
   })
   describe('clipboard buttons', () => {
     it('should show if clipboard is empty', () => {
@@ -175,7 +182,8 @@ function getWrapper({
   spaces = [],
   item = undefined,
   itemId = undefined,
-  newFileAction = false
+  newFileAction = false,
+  areFileExtensionsShown = false
 } = {}) {
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest: jest.fn().mockResolvedValue({ status: 200 })
@@ -197,6 +205,7 @@ function getWrapper({
   storeOptions.getters.apps.mockImplementation(() => ({
     fileEditors: []
   }))
+  storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
   storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)

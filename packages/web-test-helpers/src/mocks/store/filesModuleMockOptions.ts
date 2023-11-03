@@ -4,7 +4,8 @@ export const filesModuleMockOptions = {
     state: {
       highlightedFile: undefined,
       currentFolder: undefined,
-      latestSelectedId: undefined
+      latestSelectedId: undefined,
+      areFileExtensionsShown: undefined
     },
     getters: {
       currentFolder: jest.fn(),

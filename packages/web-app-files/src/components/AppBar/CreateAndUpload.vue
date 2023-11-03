@@ -28,13 +28,37 @@
         class="oc-width-auto"
         padding-size="small"
       >
-        <oc-list id="create-list">
+        <oc-list id="create-list" :class="areFileExtensionsShown ? 'expanded-list' : null">
           <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
               <oc-resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
+          <template v-if="mimetypesAllowedForCreation">
+            <li
+              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
+              :key="`file-creation-item-external-${key}`"
+              class="create-list-file oc-menu-item-hover"
+            >
+              <oc-button appearance="raw" @click="mimeTypeAction.handler">
+                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
+                <span
+                  class="create-list-file-item-text"
+                  v-text="$gettext(mimeTypeAction.label())"
+                />
+                <span
+                  v-if="areFileExtensionsShown && mimeTypeAction.ext"
+                  class="create-list-file-item-extension"
+                  v-text="mimeTypeAction.ext"
+                />
+              </oc-button>
+            </li>
+          </template>
+          <li
+            v-if="mimetypesAllowedForCreation && createNewFileMimeTypeActions.length > 0"
+            class="bottom-seperator"
+          />
           <li
             v-for="(fileAction, key) in createNewFileActions"
             :key="`file-creation-item-${key}`"
@@ -46,25 +70,23 @@
               @click="fileAction.handler"
             >
               <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
-              <span>{{ fileAction.label() }}</span>
+              <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
+              <span
+                v-if="areFileExtensionsShown && fileAction.ext"
+                class="create-list-file-item-extension"
+                >{{ fileAction.ext }}</span
+              >
             </oc-button>
           </li>
-          <template v-if="mimetypesAllowedForCreation">
-            <li
-              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
-              :key="`file-creation-item-external-${key}`"
-              class="create-list-file oc-menu-item-hover"
-            >
-              <oc-button appearance="raw" @click="mimeTypeAction.handler">
-                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
-                <span v-text="$gettext(mimeTypeAction.label())" />
-              </oc-button>
-            </li>
-          </template>
           <li class="create-list-shortcut oc-menu-item-hover">
             <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
               <oc-icon name="external-link" size="medium" />
               <span v-text="$gettext('Shortcut')" />
+              <span
+                v-if="areFileExtensionsShown"
+                class="create-list-file-item-extension"
+                v-text="'url'"
+              />
             </oc-button>
           </li>
         </oc-list>
@@ -242,6 +264,7 @@ export default defineComponent({
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
+    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
 
     useUpload({ uppyService })
 
@@ -424,6 +447,7 @@ export default defineComponent({
       showDrop,
       isCreateNewShortcutModalOpen,
       closeCreateNewShortcutModal,
+      areFileExtensionsShown,
 
       // HACK: exported for unit tests:
       onUploadComplete
@@ -507,6 +531,7 @@ export default defineComponent({
     border: 1px solid transparent;
 
     button {
+      display: inline-flex;
       gap: 10px;
       justify-content: left;
       width: 100%;
@@ -526,11 +551,33 @@ export default defineComponent({
   }
 }
 
+.create-list {
+  &-file-item {
+    &-text {
+      display: inline-flex;
+      text-align: left;
+      justify-content: flex-start;
+    }
+    &-extension {
+      display: inline-flex;
+      text-align: left;
+      justify-content: right;
+      flex: 1;
+      font-weight: normal !important;
+      font-size: var(--oc-font-size-small);
+      opacity: 0.7;
+    }
+  }
+}
+
 #upload-list,
 #new-file-menu-drop {
   min-width: 230px;
 }
 
+.expanded-list {
+  min-width: 280px !important;
+}
 #create-list,
 #upload-list,
 #new-file-menu-drop {
@@ -541,6 +588,11 @@ export default defineComponent({
 
 #extension-list {
   border-top: 1px solid var(--oc-color-border);
+}
+
+.bottom-seperator {
+  border-bottom: 1px solid var(--oc-color-border) !important;
+  margin-bottom: 8px;
 }
 
 #clipboard-btns {
