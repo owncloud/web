@@ -196,7 +196,7 @@
     "color": "var(--oc-color-icon-document)"
   },
   "md": {
-    "name": "resource-type-file",
+    "name": "resource-type-markdown",
     "color": "var(--oc-color-text-default)"
   },
   "mdb": {
