@@ -69,7 +69,7 @@ import {
   useGetMatchingSpace,
   useRouter,
   useStore
-} from '@ownclouders/web-pkg/src'
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import diff from 'lodash-es/difference'
