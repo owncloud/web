@@ -16,8 +16,8 @@
         />
         <oc-drop
           v-if="showDrop"
-          class="oc-pt-s"
           ref="dropRef"
+          class="oc-pt-s"
           padding-size="remove"
           drop-id="create-shortcut-modal-contextmenu"
           toggle="#create-shortcut-modal-url-input"
@@ -37,11 +37,13 @@
             </li>
           </oc-list>
         </oc-drop>
-        <div class="oc-flex oc-flex-bottom oc-width-1-1 oc-mt-m">
+        <div class="oc-flex oc-width-1-1 oc-mt-m">
           <oc-text-input
             v-model="inputFilename"
             class="oc-width-1-1"
             :label="$gettext('Shortcut name')"
+            :error-message="inputFileNameErrorMessage"
+            :fix-message-line="true"
           />
           <span class="oc-ml-s">.url</span>
         </div>
@@ -52,12 +54,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, unref, computed, watch, nextTick } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useClientService, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
 import { OcDrop } from '@ownclouders/design-system/src/components'
+import { resolveFileNameDuplicate } from '../helpers'
 
 export default defineComponent({
   name: 'CreateShortcutModal',
@@ -79,13 +82,6 @@ export default defineComponent({
     const inputUrl = ref('')
     const inputFilename = ref('')
 
-    const showDrop = computed(() => unref(inputUrl).trim())
-
-    const isMaybeUrl = (input: string) => {
-      const urlPrefixes = ['http://', 'https://']
-      return urlPrefixes.some((prefix) => prefix.startsWith(input) || input.startsWith(prefix))
-    }
-
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
 
@@ -96,17 +92,40 @@ export default defineComponent({
       return `https://${url}`
     })
 
-    const confirmButtonDisabled = computed(() => !(unref(inputUrl) && unref(inputFilename)))
+    const showDrop = computed(() => unref(inputUrl).trim())
+    const confirmButtonDisabled = computed(
+      () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
+    )
+    const currentFolder = computed(() => store.getters['Files/currentFolder'])
+    const files = computed((): Array<Resource> => store.getters['Files/files'])
+    const fileAlreadyExists = computed(
+      () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+    )
 
-    const currentFolder = computed(() => {
-      return store.getters['Files/currentFolder']
+    const inputFileNameErrorMessage = computed(() => {
+      if (unref(fileAlreadyExists)) {
+        return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
+      }
+
+      return ''
     })
+
+    const isMaybeUrl = (input: string) => {
+      const urlPrefixes = ['http://', 'https://']
+      return urlPrefixes.some((prefix) => prefix.startsWith(input) || input.startsWith(prefix))
+    }
 
     const dropItemUrlClicked = () => {
       inputUrl.value = unref(dropItemUrl)
       try {
-        inputFilename.value = new URL(unref(dropItemUrl)).host
-      } catch (e) {}
+        let fileName = new URL(unref(dropItemUrl)).host
+        if (unref(files).some((f) => f.name === `${fileName}.url`)) {
+          fileName = resolveFileNameDuplicate(`${fileName}.url`, 'url', unref(files)).slice(0, -4)
+        }
+        inputFilename.value = fileName
+      } catch (e) {
+        throw e
+      }
     }
 
     const createShortcut = async () => {
@@ -151,7 +170,8 @@ export default defineComponent({
       dropItemUrl,
       dropItemUrlClicked,
       createShortcut,
-      confirmButtonDisabled
+      confirmButtonDisabled,
+      inputFileNameErrorMessage
     }
   }
 })
