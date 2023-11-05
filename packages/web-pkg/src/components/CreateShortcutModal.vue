@@ -7,6 +7,7 @@
       :button-confirm-disabled="confirmButtonDisabled"
       @cancel="cancel"
       @confirm="createShortcut"
+      @keydown.enter="onKeyDownEnter"
     >
       <template #content>
         <oc-text-input
@@ -128,6 +129,11 @@ export default defineComponent({
       }
     }
 
+    const onKeyDownEnter = () => {
+      if (!unref(confirmButtonDisabled)) {
+        createShortcut()
+      }
+    }
     const createShortcut = async () => {
       // Closes the modal
       props.cancel()
@@ -171,7 +177,8 @@ export default defineComponent({
       dropItemUrlClicked,
       createShortcut,
       confirmButtonDisabled,
-      inputFileNameErrorMessage
+      inputFileNameErrorMessage,
+      onKeyDownEnter
     }
   }
 })
