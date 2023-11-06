@@ -57,7 +57,6 @@ import { computed, defineComponent, onMounted, ref, unref, VNodeRef } from 'vue'
 import {
   useStore,
   queryItemAsString,
-  useRouteQuery,
   useClientService,
   useRoute,
   useRouter
@@ -73,9 +72,6 @@ export default defineComponent({
     const router = useRouter()
     const clientService = useClientService()
     const { $gettext } = useGettext()
-
-    const tokenQuery = useRouteQuery('token')
-    const providerDomainQuery = useRouteQuery('providerDomain')
 
     const token = ref(undefined)
     const provider = ref(undefined)
@@ -110,12 +106,10 @@ export default defineComponent({
     }
     const acceptInvite = async () => {
       try {
-        const response = await clientService.httpAuthenticated.post('/sciencemesh/accept-invite', {
+        await clientService.httpAuthenticated.post('/sciencemesh/accept-invite', {
           token: unref(token),
           providerDomain: unref(provider).domain
         })
-        // FIXME: what is this?!
-        const connectionInfo = { providerDomain: 'ddd' } //await response.json()
         token.value = undefined
         provider.value = undefined
 

@@ -43,6 +43,15 @@
           </template>
         </no-content-message>
         <oc-table v-else :fields="fields" :data="connections" :highlighted="highlightedConnections">
+          <template #actions="{ item }">
+            <oc-button
+              appearance="raw"
+              class="oc-p-s action-menu-item"
+              @click="deleteConnection(item)"
+            >
+              <oc-icon name="delete-bin-5" fill-type="line" size="medium" />
+              <span v-text="$gettext('Delete')" /> </oc-button
+          ></template>
         </oc-table>
       </template>
     </div>
@@ -50,9 +59,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { NoContentMessage, AppLoadingSpinner, useRouter } from '@ownclouders/web-pkg'
+import { computed, defineComponent, PropType } from 'vue'
+import {
+  NoContentMessage,
+  AppLoadingSpinner,
+  useRouter,
+  useClientService
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { FederatedConnection } from '../types'
 
 export default defineComponent({
   components: {
@@ -64,7 +79,7 @@ export default defineComponent({
      * Accepted connections
      */
     connections: {
-      type: Array,
+      type: Array as PropType<FederatedConnection[]>,
       required: true
     },
     /**
@@ -84,14 +99,16 @@ export default defineComponent({
       default: () => true
     }
   },
-  setup() {
+  emits: ['update:connections'],
+  setup(props, { emit }) {
     const router = useRouter()
     const { $gettext } = useGettext()
+    const clientService = useClientService()
 
     const fields = computed(() => {
       return [
         {
-          name: 'user',
+          name: 'display_name',
           title: $gettext('User'),
           alignH: 'left'
         },
@@ -101,9 +118,17 @@ export default defineComponent({
           alignH: 'right'
         },
         {
-          name: 'institution',
+          name: 'idp',
           title: $gettext('Institution'),
           alignH: 'right'
+        },
+        {
+          name: 'actions',
+          title: $gettext('Actions'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
         }
       ]
     })
@@ -123,7 +148,31 @@ export default defineComponent({
       router.push({ name: 'files-shares-with-others', query: { filterSM: 'true' } })
     }
 
-    return { helperContent, toSharedWithOthers, toSharedWithMe, fields }
+    const deleteConnection = async (user) => {
+      try {
+        await clientService.httpAuthenticated.delete('/sciencemesh/delete-accepted-user', {
+          params: {
+            user_id: user.user_id,
+            idp: user.idp
+          }
+        })
+
+        const updatedConnections = []
+        props.connections.forEach((connection) => {
+          if (connection.user_id === user.user_id || connection.idp === user.idp) {
+            return
+          }
+
+          updatedConnections.push(connection)
+        })
+
+        emit('update:connections', updatedConnections)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    return { helperContent, toSharedWithOthers, toSharedWithMe, fields, deleteConnection }
   }
 })
 </script>

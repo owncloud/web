@@ -11,7 +11,7 @@
       </div>
       <div id="sciencemesh-connections" class="oc-width-1-1 oc-height-1-2">
         <connections
-          :connections="connections"
+          v-model:connections="connections"
           :highlighted-connections="highlightedConnections.map((c) => c.id)"
           :loading="loadingConnections"
         />
@@ -21,12 +21,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref, unref } from 'vue'
+import { defineComponent, onMounted, onUnmounted, ref, unref, Ref } from 'vue'
 import Connections from './Connections.vue'
 import IncomingInvitations from './IncomingInvitations.vue'
 import OutgoingInvitations from './OutgoingInvitations.vue'
 import { useClientService, useScrollTo, useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { FederatedConnection } from '../types'
+import { buildConnection } from '../functions'
 
 export default defineComponent({
   components: {
@@ -40,28 +42,19 @@ export default defineComponent({
     const clientSerivce = useClientService()
     const { $gettext } = useGettext()
 
-    const connections = ref([])
-    const newConnections = ref([])
-    const highlightedConnections = ref([])
+    const connections: Ref<FederatedConnection[]> = ref([])
+    const newConnections: Ref<FederatedConnection[]> = ref([])
+    const highlightedConnections: Ref<FederatedConnection[]> = ref([])
     const highlightNewConnectionsInterval = ref(null)
     const loadingConnections = ref(true)
 
     const findAcceptedUsers = async () => {
       try {
-        const { data: acceptedUsers } = await clientSerivce.httpAuthenticated.get(
-          '/sciencemesh/find-accepted-users'
-        )
+        const { data: acceptedUsers } = await clientSerivce.httpAuthenticated.get<
+          FederatedConnection[]
+        >('/sciencemesh/find-accepted-users')
         loadingConnections.value = false
-        acceptedUsers.forEach((u) => {
-          newConnections.value.push({
-            id: `${u.mail}${u.idp}`,
-            user: u.display_name,
-            mail: u.mail,
-            institution: u.idp
-          })
-        })
-        connections.value = [...unref(newConnections)]
-        newConnections.value = []
+        connections.value = acceptedUsers.map(buildConnection)
       } catch (error) {
         connections.value = []
         loadingConnections.value = false
@@ -81,12 +74,12 @@ export default defineComponent({
             title: $gettext('New federated connection'),
             status: 'success',
             desc: $gettext('You can share with and recieve shares from %{user} now', {
-              user: unref(highlightedConnections)[0].user
+              user: unref(highlightedConnections)[0].display_name
             })
           })
         } else if (unref(highlightedConnections).length > 1) {
           let newConnections
-          unref(highlightedConnections).forEach((c) => (newConnections += c.user + ', '))
+          unref(highlightedConnections).forEach((c) => (newConnections += c.display_name + ', '))
           newConnections.slice(0, -2)
           store.dispatch('showMessage', {
             title: $gettext('New federated connections'),
