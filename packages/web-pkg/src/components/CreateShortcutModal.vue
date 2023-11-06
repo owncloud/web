@@ -126,9 +126,7 @@ export default defineComponent({
           fileName = resolveFileNameDuplicate(`${fileName}.url`, 'url', unref(files)).slice(0, -4)
         }
         inputFilename.value = fileName
-      } catch (e) {
-        throw e
-      }
+      } catch (_) {}
     }
 
     const onKeyDownEnter = () => {
