@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, useSlots, watch } from 'vue'
 
 import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
@@ -227,6 +227,7 @@ export default defineComponent({
   },
   emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
   setup(props) {
+    const slots = useSlots()
     const query = ref<string>('')
     watch(
       () => props.value,
@@ -236,8 +237,14 @@ export default defineComponent({
         }
       }
     )
+    const inputIconRightPadding = computed(() => {
+      if (slots.locationFilter().length > 0) {
+        return '125px'
+      }
+      return '48px'
+    })
 
-    return { query }
+    return { query, inputIconRightPadding }
   },
   computed: {
     searchQuery() {
@@ -339,7 +346,8 @@ export default defineComponent({
   }
 
   &-input-icon {
-    padding: 0 var(--oc-space-xlarge) !important;
+    padding-left: var(--oc-space-xlarge) !important;
+    padding-right: v-bind(inputIconRightPadding) !important;
   }
 
   &-input-button {
