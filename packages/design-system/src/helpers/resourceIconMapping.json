@@ -87,6 +87,14 @@
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
   },
+  "docf": {
+    "name": "resource-type-form",
+    "color": "var(--oc-color-icon-document)"
+  },
+  "oform": {
+    "name": "resource-type-form",
+    "color": "var(--oc-color-icon-document)"
+  },
   "docm": {
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
