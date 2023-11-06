@@ -54,10 +54,10 @@ export default defineComponent({
         loadingConnections.value = false
         acceptedUsers.forEach((u) => {
           newConnections.value.push({
-            id: u.mail + u.id.idp,
+            id: `${u.mail}${u.idp}`,
             user: u.display_name,
             mail: u.mail,
-            institution: u.id.idp
+            institution: u.idp
           })
         })
         connections.value = [...unref(newConnections)]
