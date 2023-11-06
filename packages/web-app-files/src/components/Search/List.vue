@@ -22,7 +22,7 @@
         >
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
-              <oc-icon name="price-tag-3" size="small" />
+              <oc-resource-icon :resource="{ type: 'file', extension: item.icon }" />
               <span class="oc-ml-s">{{ item.label }}</span>
             </div>
           </template>
@@ -204,6 +204,7 @@ const visibilityObserver = new VisibilityObserver()
 type FileType = {
   id: string
   label: string
+  icon: string
 }
 type Tag = {
   id: string
@@ -268,39 +269,43 @@ export default defineComponent({
       (): Array<FileType> => [
         {
           id: 'document',
-          label: 'Document'
+          label: 'Document',
+          icon: 'doc'
         },
         {
           id: 'spreadsheet',
-          label: 'Spreadsheet'
-        },
-        {
-          id: 'spreadsheet',
-          label: 'Spreadsheet'
+          label: 'Spreadsheet',
+          icon: 'xls'
         },
         {
           id: 'presentation',
-          label: 'Presentation'
+          label: 'Presentation',
+          icon: 'ppt'
         },
         {
           id: 'pdf',
-          label: 'PDF'
+          label: 'PDF',
+          icon: 'pdf'
         },
         {
           id: 'image',
-          label: 'Image'
+          label: 'Image',
+          icon: 'jpg'
         },
         {
           id: 'video',
-          label: 'Video'
+          label: 'Video',
+          icon: 'mp4'
         },
         {
           id: 'audio',
-          label: 'Audio'
+          label: 'Audio',
+          icon: 'mp3'
         },
         {
           id: 'archive',
-          label: 'Archive'
+          label: 'Archive',
+          icon: 'zip'
         }
       ]
     )
