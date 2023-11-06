@@ -264,7 +264,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .create-shortcut-modal {
   &-url-extension {
     margin-bottom: calc(var(--oc-space-xsmall) + 1.3125rem);
@@ -275,7 +275,7 @@ export default defineComponent({
   width: 458px;
 
   .oc-resource-name {
-    text-decoration: none;
+    text-decoration: none !important;
   }
 
   li:hover {
