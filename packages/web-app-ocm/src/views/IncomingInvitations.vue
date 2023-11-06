@@ -1,5 +1,5 @@
 <template>
-  <div id="incomiing" class="sciencemesh-app">
+  <div id="incoming" class="sciencemesh-app">
     <div>
       <div class="oc-flex oc-flex-middle oc-px-m oc-py-s">
         <oc-icon name="user-received" />
@@ -53,15 +53,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, unref, VNodeRef } from 'vue'
-import { useStore, queryItemAsString, useRouteQuery, useClientService } from '@ownclouders/web-pkg'
+import { computed, defineComponent, onMounted, ref, unref, VNodeRef } from 'vue'
+import {
+  useStore,
+  queryItemAsString,
+  useRouteQuery,
+  useClientService,
+  useRoute,
+  useRouter
+} from '@ownclouders/web-pkg'
 import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
+import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
 
 export default defineComponent({
   emits: ['highlightNewConnections'],
   setup(props, { emit }) {
     const store = useStore()
+    const router = useRouter()
     const clientService = useClientService()
     const { $gettext } = useGettext()
 
@@ -75,14 +84,15 @@ export default defineComponent({
     const providerError = ref(false)
     const tokenInput = ref<VNodeRef>()
 
-    const helperContent = () => {
+    const helperContent = computed(() => {
       return {
         text: $gettext('Once you accept invitation, the inviter will be added to your connections.')
       }
-    }
-    const acceptInvitationButtonDisabled = () => {
+    })
+
+    const acceptInvitationButtonDisabled = computed(() => {
       return !unref(token) || !unref(provider) || unref(provider).full_name === 'Unknown provider'
-    }
+    })
 
     const providerErrorMessage = () => {
       return isMyProviderSelectedProvider(unref(provider))
@@ -108,6 +118,13 @@ export default defineComponent({
         const connectionInfo = { providerDomain: 'ddd' } //await response.json()
         token.value = undefined
         provider.value = undefined
+
+        const { token: currentToken, providerDomain, ...query } = unref(route).query
+        router.replace({
+          name: 'sciencemesh-app-invitations',
+          query
+        })
+
         emit('highlightNewConnections')
       } catch (error) {
         errorPopup(error)
@@ -135,16 +152,17 @@ export default defineComponent({
       return p.domain === window.location.host
     }
 
-    onMounted(async () => {
-      await listProviders()
-      if (unref(tokenQuery)) {
-        token.value = queryItemAsString(unref(tokenQuery))
+    const handleParams = (to: RouteLocationNormalized) => {
+      const tokenQuery = to.query.token
+      if (tokenQuery) {
+        token.value = queryItemAsString(tokenQuery)
         ;(unref(tokenInput) as any).focus()
         scrollToForm()
       }
-      if (unref(providerDomainQuery)) {
+      const providerDomainQuery = to.query.providerDomain
+      if (providerDomainQuery) {
         let matchedProvider = unref(providers)?.find(
-          (p) => p.domain === queryItemAsString(unref(providerDomainQuery))
+          (p) => p.domain === queryItemAsString(providerDomainQuery)
         )
         if (matchedProvider) {
           provider.value = matchedProvider
@@ -152,11 +170,20 @@ export default defineComponent({
         } else {
           provider.value = {
             full_name: 'Unknown provider',
-            domain: queryItemAsString(unref(providerDomainQuery))
+            domain: queryItemAsString(providerDomainQuery)
           }
           providerError.value = true
         }
       }
+    }
+
+    const route = useRoute()
+    onMounted(async () => {
+      await listProviders()
+      handleParams(unref(route))
+    })
+    onBeforeRouteUpdate((to, from) => {
+      handleParams(to)
     })
 
     return {
