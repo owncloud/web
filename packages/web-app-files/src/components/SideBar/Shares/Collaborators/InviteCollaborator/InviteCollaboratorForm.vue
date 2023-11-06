@@ -134,7 +134,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
@@ -144,6 +144,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
+import { FederatedConnection, FederatedUser } from '../../../../../../../web-app-ocm/src/types'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -201,6 +202,20 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
 
+    const federatedUsers = ref([] as FederatedUser[])
+    onMounted(async () => {
+      try {
+        const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
+          FederatedConnection[]
+        >('/sciencemesh/find-accepted-users')
+
+        federatedUsers.value = acceptedUsers
+        console.log('Federated users loaded', acceptedUsers)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -214,7 +229,8 @@ export default defineComponent({
       ...useShares(),
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
-      notifyEnabled
+      notifyEnabled,
+      federatedUsers
     }
   },
 
@@ -319,7 +335,26 @@ export default defineComponent({
         })
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-        this.autocompleteResults = [...users, ...groups, ...remotes].filter((collaborator) => {
+        const federatedCollaborators = this.federatedUsers.map((u) => {
+          return {
+            label: u.display_name,
+            value: {
+              shareType: 6,
+              shareWithUser: u.user_id,
+              shareWithProvider: u.idp,
+              shareWithAdditionalInfo: u.mail,
+              userType: 0
+            }
+          }
+        })
+
+        this.autocompleteResults = [
+          ...users,
+          ...groups,
+          ...remotes,
+          ...federatedCollaborators
+        ].filter((collaborator) => {
+          console.log('COLLABORATOR', collaborator)
           const selected = this.selectedCollaborators.find((selectedCollaborator) => {
             return (
               collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
