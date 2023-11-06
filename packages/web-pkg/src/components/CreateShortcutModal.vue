@@ -161,7 +161,7 @@ export default defineComponent({
 
         searchResults.value = resources
       } catch (e) {
-        // Don't show user faced error, as the core functionality does work without an intact search
+        // Don't show user facing error, as the core functionality does work without an intact search
         console.error(e)
         searchResults.value = []
       }
