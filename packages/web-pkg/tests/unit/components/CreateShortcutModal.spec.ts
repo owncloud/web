@@ -9,9 +9,21 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
-import { mock } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { FileResource } from '@ownclouders/web-client/src/helpers'
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
+import { ConfigurationManager } from '../../../src'
+
+jest.mock('../../../src/composables/configuration/useConfigurationManager', () => ({
+  useConfigurationManager: () =>
+    mockDeep<ConfigurationManager>({
+      options: {
+        routing: {
+          fullShareOwnerPaths: false
+        }
+      }
+    })
+}))
 
 describe('CreateShortcutModal', () => {
   describe('method "createShortcut"', () => {
@@ -30,16 +42,16 @@ describe('CreateShortcutModal', () => {
     })
   })
   describe('method "searchTask"', () => {
-    it('should set "searchResults" correctly', async () => {
+    it('should set "searchResult" correctly', async () => {
       const { wrapper } = getWrapper()
       await wrapper.vm.searchTask.perform()
-      expect(wrapper.vm.searchResults.length).toBe(3)
+      expect(wrapper.vm.searchResult.values.length).toBe(3)
     })
-    it('should reset "searchResults" on error', async () => {
+    it('should reset "searchResult" on error', async () => {
       console.error = jest.fn()
       const { wrapper } = getWrapper({ rejectSearch: true })
       await wrapper.vm.searchTask.perform()
-      expect(wrapper.vm.searchResults.length).toBe(0)
+      expect(wrapper.vm.searchResult.values.length).toBe(0)
     })
   })
 })

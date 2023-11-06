@@ -3,14 +3,11 @@
     :resource="resource"
     :path-prefix="pathPrefix"
     :is-path-displayed="true"
-    :is-resource-clickable="true"
     :folder-link="folderLink"
-    :parent-folder-link="parentFolderLink"
     :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
     :parent-folder-name="parentFolderName"
     :is-thumbnail-displayed="displayThumbnails"
-    @click="resourceClicked"
-    @click-folder="folderClicked"
+    v-bind="additionalAttrs"
     @click-parent-folder="folderClicked"
   />
 </template>
@@ -21,12 +18,7 @@ import { VisibilityObserver } from '../../observer'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import {
-  useCapabilityShareJailEnabled,
-  useGetMatchingSpace,
-  useFileActions,
-  useFolderLink
-} from '../../composables'
+import { useGetMatchingSpace, useFileActions, useFolderLink } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../services'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
@@ -42,11 +34,9 @@ export default defineComponent({
         return {}
       }
     },
-    provider: {
-      type: Object,
-      default: function () {
-        return {}
-      }
+    isClickable: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props) {
@@ -89,9 +79,22 @@ export default defineComponent({
       eventBus.publish('app.search.options-drop.hide')
     }
 
+    const additionalAttrs = computed(() => {
+      if (!props.isClickable) {
+        return {}
+      }
+
+      return {
+        isResourceClickable: true,
+        parentFolderLink: getParentFolderLink(unref(resource)),
+        onClick: resourceClicked,
+        onClickFolder: folderClicked,
+        onClickParentFolder: folderClicked
+      }
+    })
+
     return {
       space,
-      hasShareJail: useCapabilityShareJailEnabled(),
       previewData,
       resource,
       resourceDisabled,
@@ -103,7 +106,8 @@ export default defineComponent({
       parentFolderName: getParentFolderName(unref(resource)),
       parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
         unref(resource)
-      )
+      ),
+      additionalAttrs
     }
   },
   computed: {

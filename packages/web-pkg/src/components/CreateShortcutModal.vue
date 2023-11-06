@@ -39,24 +39,14 @@
             <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
               <oc-spinner />
             </li>
-            <li v-for="(resource, index) in searchResults" :key="index" class="oc-p-xs">
+            <li v-for="(value, index) in searchResult?.values" v-else :key="index" class="oc-p-xs">
               <oc-button
                 class="oc-width-1-1"
                 appearance="raw"
                 justify-content="left"
-                @click="dropItemResourceClicked(resource)"
+                @click="dropItemResourceClicked(value)"
               >
-                <oc-resource
-                  :resource="resource"
-                  :is-resource-clickable="false"
-                  :path-prefix="getPathPrefix(resource)"
-                  :is-path-displayed="true"
-                  :folder-link="getFolderLink(resource)"
-                  :parent-folder-link-icon-additional-attributes="
-                    getParentFolderLinkIconAdditionalAttributes(resource)
-                  "
-                  :parent-folder-name="getParentFolderName(resource)"
-                />
+                <ResourcePreview :search-result="value" :is-clickable="false"></ResourcePreview>
               </oc-button>
             </li>
           </oc-list>
@@ -79,23 +69,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed, watch, nextTick } from 'vue'
+import { defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useClientService, useConfigurationManager, useFolderLink, useStore } from '../composables'
+import { useClientService, useFolderLink, useSearch, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
 import { OcDrop } from '@ownclouders/design-system/src/components'
 import { resolveFileNameDuplicate } from '../helpers'
-import { DavProperties } from '@ownclouders/web-client/src/webdav'
 import { useTask } from 'vue-concurrency'
 import { debounce } from 'lodash-es'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import ResourcePreview from './Search/ResourcePreview.vue'
+import { SearchResult } from './Search'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
+
 export default defineComponent({
   name: 'CreateShortcutModal',
+  components: { ResourcePreview },
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -110,6 +102,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
+    const { search } = useSearch()
     const {
       getPathPrefix,
       getParentFolderName,
@@ -117,12 +110,11 @@ export default defineComponent({
       getParentFolderLinkIconAdditionalAttributes,
       getFolderLink
     } = useFolderLink()
-    const configurationManager = useConfigurationManager()
 
     const dropRef = ref(null)
     const inputUrl = ref('')
     const inputFilename = ref('')
-    const searchResults = ref(null)
+    const searchResult: Ref<SearchResult> = ref()
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -147,12 +139,6 @@ export default defineComponent({
       () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
     )
 
-    const projectSpaces = computed(() =>
-      (store.getters['runtime/spaces/spaces'] as SpaceResource[]).filter((s) =>
-        isProjectSpaceResource(s)
-      )
-    )
-
     const inputFileNameErrorMessage = computed(() => {
       if (unref(fileAlreadyExists)) {
         return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
@@ -162,31 +148,17 @@ export default defineComponent({
     })
 
     const searchTask = useTask(function* (signal, searchTerm: string) {
-      searchTerm = `name:"*${searchTerm}*"`
+      searchTerm = `name:"*${searchTerm}*" NOT name:"*.url"`
 
       try {
-        const { resources } = yield clientService.webdav.search(searchTerm, {
-          searchLimit: SEARCH_LIMIT,
-          davProperties: DavProperties.Default
-        })
-
-        searchResults.value = resources.map((resource) => {
-          const projectSpace = unref(projectSpaces).find(
-            (space) => space.id === resource.parentFolderId
-          )
-
-          resource = projectSpace ? projectSpace : resource
-
-          if (configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
-            resource.path = urlJoin(resource.shareRoot, resource.path)
-          }
-
-          return resource
-        })
+        searchResult.value = yield search(searchTerm, SEARCH_LIMIT)
       } catch (e) {
         // Don't show user facing error, as the core functionality does work without an intact search
         console.error(e)
-        searchResults.value = []
+        searchResult.value = {
+          totalResults: 0,
+          values: []
+        }
       }
     })
 
@@ -210,11 +182,11 @@ export default defineComponent({
       } catch (_) {}
     }
 
-    const dropItemResourceClicked = (resource: Resource) => {
+    const dropItemResourceClicked = ({ data }) => {
       const webURL = new URL(window.location.href)
-      let filename = resource.name
+      let filename = data.name
 
-      inputUrl.value = `${webURL.origin}/f/${resource.id}`
+      inputUrl.value = `${webURL.origin}/f/${data.id}`
 
       if (unref(files).some((f) => f.name === `${filename}.url`)) {
         filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
@@ -270,7 +242,7 @@ export default defineComponent({
       showDrop,
       dropRef,
       dropItemUrl,
-      searchResults,
+      searchResult,
       confirmButtonDisabled,
       inputFileNameErrorMessage,
       searchTask,
