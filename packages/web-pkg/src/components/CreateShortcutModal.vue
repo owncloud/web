@@ -81,7 +81,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, unref, computed, watch, nextTick } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useClientService, useFolderLink, useStore } from '../composables'
+import { useClientService, useConfigurationManager, useFolderLink, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
@@ -90,6 +90,7 @@ import { resolveFileNameDuplicate } from '../helpers'
 import { DavProperties } from '@ownclouders/web-client/src/webdav'
 import { useTask } from 'vue-concurrency'
 import { debounce } from 'lodash-es'
+import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
@@ -116,6 +117,7 @@ export default defineComponent({
       getParentFolderLinkIconAdditionalAttributes,
       getFolderLink
     } = useFolderLink()
+    const configurationManager = useConfigurationManager()
 
     const dropRef = ref(null)
     const inputUrl = ref('')
@@ -133,13 +135,22 @@ export default defineComponent({
     })
 
     const showDrop = computed(() => unref(inputUrl).trim())
+
     const confirmButtonDisabled = computed(
       () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
     )
     const currentFolder = computed(() => store.getters['Files/currentFolder'])
+
     const files = computed((): Array<Resource> => store.getters['Files/files'])
+
     const fileAlreadyExists = computed(
       () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+    )
+
+    const projectSpaces = computed(() =>
+      (store.getters['runtime/spaces/spaces'] as SpaceResource[]).filter((s) =>
+        isProjectSpaceResource(s)
+      )
     )
 
     const inputFileNameErrorMessage = computed(() => {
@@ -159,7 +170,19 @@ export default defineComponent({
           davProperties: DavProperties.Default
         })
 
-        searchResults.value = resources
+        searchResults.value = resources.map((resource) => {
+          const projectSpace = unref(projectSpaces).find(
+            (space) => space.id === resource.parentFolderId
+          )
+
+          resource = projectSpace ? projectSpace : resource
+
+          if (configurationManager.options.routing.fullShareOwnerPaths && resource.shareRoot) {
+            resource.path = urlJoin(resource.shareRoot, resource.path)
+          }
+
+          return resource
+        })
       } catch (e) {
         // Don't show user facing error, as the core functionality does work without an intact search
         console.error(e)
