@@ -8,6 +8,26 @@
           <span v-text="$gettext('Filter:')" />
         </div>
         <item-filter
+          v-if="availableFileTypes.length"
+          ref="fileTypeFilter"
+          :allow-multiple="true"
+          :filter-label="$gettext('File type')"
+          :filterable-attributes="['label']"
+          :items="availableFileTypes"
+          :option-filter-label="$gettext('Filter file type')"
+          :show-option-filter="true"
+          class="files-search-filter-file-type oc-mr-s"
+          display-name-attribute="label"
+          filter-name="file-type"
+        >
+          <template #image="{ item }">
+            <div class="tag-option-wrapper oc-flex oc-flex-middle">
+              <oc-icon name="price-tag-3" size="small" />
+              <span class="oc-ml-s">{{ item.label }}</span>
+            </div>
+          </template>
+        </item-filter>
+        <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
           :allow-multiple="true"
@@ -181,6 +201,10 @@ import {
 
 const visibilityObserver = new VisibilityObserver()
 
+type FileType = {
+  id: string
+  label: string
+}
 type Tag = {
   id: string
   label: string
@@ -239,6 +263,47 @@ export default defineComponent({
     useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources, resourcesView.viewMode)
     useKeyboardTableMouseActions(keyActions, resourcesView.viewMode)
     useKeyboardTableActions(keyActions)
+
+    const availableFileTypes = computed(
+      (): Array<FileType> => [
+        {
+          id: 'document',
+          label: 'Document'
+        },
+        {
+          id: 'spreadsheet',
+          label: 'Spreadsheet'
+        },
+        {
+          id: 'spreadsheet',
+          label: 'Spreadsheet'
+        },
+        {
+          id: 'presentation',
+          label: 'Presentation'
+        },
+        {
+          id: 'pdf',
+          label: 'PDF'
+        },
+        {
+          id: 'image',
+          label: 'Image'
+        },
+        {
+          id: 'video',
+          label: 'Video'
+        },
+        {
+          id: 'audio',
+          label: 'Audio'
+        },
+        {
+          id: 'archive',
+          label: 'Archive'
+        }
+      ]
+    )
 
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
@@ -416,7 +481,8 @@ export default defineComponent({
       breadcrumbs,
       displayFilter,
       availableLastModifiedValues,
-      lastModifiedFilter
+      lastModifiedFilter,
+      availableFileTypes
     }
   },
   computed: {
