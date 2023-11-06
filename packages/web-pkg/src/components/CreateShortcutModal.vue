@@ -97,16 +97,16 @@ export default defineComponent({
 
     const showDrop = computed(() => unref(inputUrl).trim())
     const confirmButtonDisabled = computed(
-      () => unref(fileAlreadyExistss) || !unref(inputFilename) || !unref(inputUrl)
+      () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
     )
     const currentFolder = computed(() => store.getters['Files/currentFolder'])
     const files = computed((): Array<Resource> => store.getters['Files/files'])
-    const fileAlreadyExistss = computed(
+    const fileAlreadyExists = computed(
       () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
     )
 
     const inputFileNameErrorMessage = computed(() => {
-      if (unref(fileAlreadyExistss)) {
+      if (unref(fileAlreadyExists)) {
         return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
       }
 
@@ -134,6 +134,7 @@ export default defineComponent({
         createShortcut(unref(inputUrl), unref(inputFilename))
       }
     }
+
     const createShortcut = async (url: string, filename: string) => {
       // Closes the modal
       props.cancel()
@@ -161,7 +162,7 @@ export default defineComponent({
       }
     }
 
-    watch(inputUrl, async (value) => {
+    watch(inputUrl, async () => {
       await nextTick()
       if (unref(showDrop) && unref(dropRef)) {
         ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
@@ -188,13 +189,13 @@ export default defineComponent({
   &-url-extension {
     margin-bottom: calc(var(--oc-space-xsmall) + 1.3125rem);
   }
+}
 
-  &-contextmenu {
-    width: 458px;
+#create-shortcut-modal-contextmenu {
+  width: 458px;
 
-    li:hover {
-      background-color: var(--oc-color-background-highlight);
-    }
+  li:hover {
+    background-color: var(--oc-color-background-highlight);
   }
 }
 </style>
