@@ -1,0 +1,5 @@
+Enhancement: Add file type filter chip
+
+We've added a new filter option in the search list to filter by file type.
+
+https://github.com/owncloud/ocis/issues/7432
