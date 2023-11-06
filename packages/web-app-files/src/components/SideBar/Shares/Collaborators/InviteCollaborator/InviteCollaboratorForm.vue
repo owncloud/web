@@ -431,6 +431,8 @@ export default defineComponent({
                 shareWith: collaborator.value.shareWith,
                 displayName: collaborator.label,
                 shareType: collaborator.value.shareType,
+                shareWithUser: collaborator.value.shareWithUser,
+                shareWithProvider: collaborator.value.shareWithProvider,
                 permissions: bitmask,
                 role: this.selectedRole,
                 expirationDate: this.expirationDate,

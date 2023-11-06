@@ -303,7 +303,9 @@ export default {
       role,
       expirationDate,
       storageId,
-      notify = undefined
+      notify = undefined,
+      shareWithUser,
+      shareWithProvider
     }
   ) {
     const isGroupShare = shareType === ShareTypes.group.value
@@ -313,7 +315,9 @@ export default {
       expirationDate,
       spaceRef: storageId,
       remoteUser: undefined,
-      ...(notify && { notify })
+      ...(notify && { notify }),
+      ...(shareWithUser && { shareWithUser }),
+      ...(shareWithProvider && { shareWithProvider })
     }
 
     if (!isGroupShare) {
