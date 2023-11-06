@@ -62,6 +62,18 @@ describe('openShortcut', () => {
       })
     })
     describe('method "handler"', () => {
+      it('adds http(s) protocol if missing and opens the url in a new tab', () => {
+        getWrapper({
+          getFileContentsValue: '[InternetShortcut]\nURL=owncloud.com',
+          setup: async ({ actions }) => {
+            await unref(actions)[0].handler({
+              resources: [mock<Resource>()],
+              space: null
+            })
+            expect(window.open).toHaveBeenCalledWith('https://owncloud.com')
+          }
+        })
+      })
       it('omits xss code and opens the url in a new tab', () => {
         getWrapper({
           getFileContentsValue:

@@ -36,16 +36,20 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
   const handler = async ({ resources, space }: FileActionOptions) => {
     try {
       const fileContents = (await clientService.webdav.getFileContents(space, resources[0])).body
-      const url = extractUrl(fileContents)
+      let url = extractUrl(fileContents)
+
+      // Add protocol if missing
+      url = url.match(/^http[s]?:\/\//) ? url : `https://${url}`
 
       // Omit possible xss code
-      const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
+      url = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
-      if (sanitizedUrl.startsWith(configurationManger.serverUrl)) {
-        return (window.location.href = sanitizedUrl)
+      if (url.startsWith(configurationManger.serverUrl)) {
+        window.location.href = url
+        return
       }
 
-      window.open(sanitizedUrl)
+      window.open(url)
     } catch (e) {
       console.error(e)
       store.dispatch('showErrorMessage', {
