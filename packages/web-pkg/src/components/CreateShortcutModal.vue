@@ -6,7 +6,7 @@
       :button-confirm-text="$gettext('Create')"
       :button-confirm-disabled="confirmButtonDisabled"
       @cancel="cancel"
-      @confirm="createShortcut"
+      @confirm="createShortcut(inputUrl, inputFilename)"
       @keydown.enter="onKeyDownEnter"
     >
       <template #content>
@@ -133,19 +133,19 @@ export default defineComponent({
 
     const onKeyDownEnter = () => {
       if (!unref(confirmButtonDisabled)) {
-        createShortcut()
+        createShortcut(unref(inputUrl), unref(inputFilename))
       }
     }
-    const createShortcut = async () => {
+    const createShortcut = async (url: string, filename: string) => {
       // Closes the modal
       props.cancel()
 
       try {
         // Omit possible xss code
-        const sanitizedUrl = DOMPurify.sanitize(unref(inputUrl), { USE_PROFILES: { html: true } })
+        const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
-        const content = `[InternetShortcut]\nURL=${unref(sanitizedUrl)}`
-        const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
+        const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
+        const path = urlJoin(unref(currentFolder).path, `${filename}.url`)
         const resource = await clientService.webdav.putFileContents(props.space, {
           path,
           content
