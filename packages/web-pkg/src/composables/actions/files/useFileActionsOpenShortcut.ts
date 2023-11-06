@@ -13,7 +13,6 @@ import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { useClientService } from '../../clientService'
 import DOMPurify from 'dompurify'
-import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {}) => {
   const router = useRouter()
@@ -21,7 +20,6 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
   const isFilesAppActive = useIsFilesAppActive()
   const isSearchActive = useIsSearchActive()
   const clientService = useClientService()
-  const configurationManger = useConfigurationManager()
 
   const extractUrl = (fileContents: string) => {
     const regex = /URL=(.+)/
@@ -35,6 +33,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
   }
   const handler = async ({ resources, space }: FileActionOptions) => {
     try {
+      const webURL = new URL(window.location.href)
       const fileContents = (await clientService.webdav.getFileContents(space, resources[0])).body
       let url = extractUrl(fileContents)
 
@@ -44,7 +43,7 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
       // Omit possible xss code
       url = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
-      if (url.startsWith(configurationManger.serverUrl)) {
+      if (url.startsWith(webURL.origin)) {
         window.location.href = url
         return
       }

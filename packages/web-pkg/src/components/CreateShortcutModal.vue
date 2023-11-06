@@ -25,7 +25,7 @@
           :close-on-click="true"
         >
           <oc-list>
-            <li class="oc-p-s">
+            <li class="oc-p-xs">
               <oc-button
                 class="oc-width-1-1"
                 appearance="raw"
@@ -34,6 +34,29 @@
               >
                 <oc-icon name="external-link" />
                 <span v-text="dropItemUrl" />
+              </oc-button>
+            </li>
+            <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
+              <oc-spinner />
+            </li>
+            <li v-for="(resource, index) in searchResults" :key="index" class="oc-p-xs">
+              <oc-button
+                class="oc-width-1-1"
+                appearance="raw"
+                justify-content="left"
+                @click="dropItemResourceClicked(resource)"
+              >
+                <oc-resource
+                  :resource="resource"
+                  :is-resource-clickable="false"
+                  :path-prefix="getPathPrefix(resource)"
+                  :is-path-displayed="true"
+                  :folder-link="getFolderLink(resource)"
+                  :parent-folder-link-icon-additional-attributes="
+                    getParentFolderLinkIconAdditionalAttributes(resource)
+                  "
+                  :parent-folder-name="getParentFolderName(resource)"
+                />
               </oc-button>
             </li>
           </oc-list>
@@ -58,13 +81,18 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, unref, computed, watch, nextTick } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useClientService, useStore } from '../composables'
+import { useClientService, useFolderLink, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
 import { OcDrop } from '@ownclouders/design-system/src/components'
 import { resolveFileNameDuplicate } from '../helpers'
+import { DavProperties } from '@ownclouders/web-client/src/webdav'
+import { useTask } from 'vue-concurrency'
+import { debounce } from 'lodash-es'
 
+const SEARCH_LIMIT = 7
+const SEARCH_DEBOUNCE_TIME = 200
 export default defineComponent({
   name: 'CreateShortcutModal',
   props: {
@@ -81,9 +109,18 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
+    const {
+      getPathPrefix,
+      getParentFolderName,
+      getParentFolderLink,
+      getParentFolderLinkIconAdditionalAttributes,
+      getFolderLink
+    } = useFolderLink()
+
     const dropRef = ref(null)
     const inputUrl = ref('')
     const inputFilename = ref('')
+    const searchResults = ref(null)
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -113,6 +150,22 @@ export default defineComponent({
       return ''
     })
 
+    const searchTask = useTask(function* (signal, searchTerm: string) {
+      searchTerm = `name:"*${searchTerm}*"`
+
+      try {
+        const { resources } = yield clientService.webdav.search(searchTerm, {
+          searchLimit: SEARCH_LIMIT,
+          davProperties: DavProperties.Default
+        })
+
+        searchResults.value = resources
+      } catch (e) {
+        console.error(e)
+        searchResults.value = []
+      }
+    })
+
     const isMaybeUrl = (input: string) => {
       const urlPrefixes = ['http://', 'https://']
       return urlPrefixes.some((prefix) => prefix.startsWith(input) || input.startsWith(prefix))
@@ -121,12 +174,25 @@ export default defineComponent({
     const dropItemUrlClicked = () => {
       inputUrl.value = unref(dropItemUrl)
       try {
-        let fileName = new URL(unref(dropItemUrl)).host
-        if (unref(files).some((f) => f.name === `${fileName}.url`)) {
-          fileName = resolveFileNameDuplicate(`${fileName}.url`, 'url', unref(files)).slice(0, -4)
+        let filename = new URL(unref(dropItemUrl)).host
+        if (unref(files).some((f) => f.name === `${filename}.url`)) {
+          filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
         }
-        inputFilename.value = fileName
+        inputFilename.value = filename
       } catch (_) {}
+    }
+
+    const dropItemResourceClicked = (resource: Resource) => {
+      const webURL = new URL(window.location.href)
+      let filename = resource.name
+
+      inputUrl.value = `${webURL.origin}/f/${resource.id}`
+
+      if (unref(files).some((f) => f.name === `${filename}.url`)) {
+        filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
+      }
+
+      inputFilename.value = filename
     }
 
     const onKeyDownEnter = () => {
@@ -166,6 +232,12 @@ export default defineComponent({
       await nextTick()
       if (unref(showDrop) && unref(dropRef)) {
         ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
+
+        const debouncedSearch = debounce(() => {
+          searchTask.perform(unref(inputUrl))
+        }, SEARCH_DEBOUNCE_TIME)
+
+        debouncedSearch()
       }
     })
 
@@ -175,11 +247,19 @@ export default defineComponent({
       showDrop,
       dropRef,
       dropItemUrl,
-      dropItemUrlClicked,
-      createShortcut,
+      searchResults,
       confirmButtonDisabled,
       inputFileNameErrorMessage,
-      onKeyDownEnter
+      searchTask,
+      createShortcut,
+      onKeyDownEnter,
+      dropItemUrlClicked,
+      dropItemResourceClicked,
+      getPathPrefix,
+      getFolderLink,
+      getParentFolderLink,
+      getParentFolderName,
+      getParentFolderLinkIconAdditionalAttributes
     }
   }
 })
@@ -193,6 +273,10 @@ export default defineComponent({
 
 #create-shortcut-modal-contextmenu {
   width: 458px;
+
+  .oc-resource-name {
+    text-decoration: none;
+  }
 
   li:hover {
     background-color: var(--oc-color-background-highlight);
