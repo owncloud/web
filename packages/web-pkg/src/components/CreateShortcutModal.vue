@@ -161,10 +161,15 @@ export default defineComponent({
 
         searchResults.value = resources
       } catch (e) {
+        // Don't show user faced error, as the core functionality does work without an intact search
         console.error(e)
         searchResults.value = []
       }
     })
+
+    const debouncedSearch = debounce(() => {
+      searchTask.perform(unref(inputUrl))
+    }, SEARCH_DEBOUNCE_TIME)
 
     const isMaybeUrl = (input: string) => {
       const urlPrefixes = ['http://', 'https://']
@@ -232,11 +237,6 @@ export default defineComponent({
       await nextTick()
       if (unref(showDrop) && unref(dropRef)) {
         ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
-
-        const debouncedSearch = debounce(() => {
-          searchTask.perform(unref(inputUrl))
-        }, SEARCH_DEBOUNCE_TIME)
-
         debouncedSearch()
       }
     })

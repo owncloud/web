@@ -11,6 +11,7 @@ import {
 import { SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'jest-mock-extended'
 import { FileResource } from '@ownclouders/web-client/src/helpers'
+import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
 
 describe('CreateShortcutModal', () => {
   describe('method "createShortcut"', () => {
@@ -28,9 +29,22 @@ describe('CreateShortcutModal', () => {
       expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
+  describe('method "searchTask"', () => {
+    it('should set "searchResults" correctly', async () => {
+      const { wrapper } = getWrapper()
+      await wrapper.vm.searchTask.perform()
+      expect(wrapper.vm.searchResults.length).toBe(3)
+    })
+    it('should reset "searchResults" on error', async () => {
+      console.error = jest.fn()
+      const { wrapper } = getWrapper({ rejectSearch: true })
+      await wrapper.vm.searchTask.perform()
+      expect(wrapper.vm.searchResults.length).toBe(0)
+    })
+  })
 })
 
-function getWrapper({ rejectPutFileContents = false } = {}) {
+function getWrapper({ rejectPutFileContents = false, rejectSearch = false } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions
   }
@@ -49,6 +63,15 @@ function getWrapper({ rejectPutFileContents = false } = {}) {
     mocks.$clientService.webdav.putFileContents.mockRejectedValue(() => mockAxiosReject())
   } else {
     mocks.$clientService.webdav.putFileContents.mockResolvedValue(mock<FileResource>())
+  }
+
+  if (rejectSearch) {
+    mocks.$clientService.webdav.search.mockRejectedValue(() => mockAxiosReject())
+  } else {
+    mocks.$clientService.webdav.search.mockResolvedValue({
+      resources: [mock<SearchResource>(), mock<SearchResource>(), mock<SearchResource>()],
+      totalResults: 20
+    })
   }
 
   return {
