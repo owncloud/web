@@ -72,10 +72,6 @@ export default class Preview implements SearchPreview {
           const matchingSpace = this.getProjectSpace(resource.parentFolderId)
           const data = matchingSpace ? matchingSpace : resource
 
-          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
-          if (!data.storageId) {
-            data.storageId = this.store.getters.user.id
-          }
           if (this.configurationManager.options.routing.fullShareOwnerPaths && data.shareRoot) {
             data.path = urlJoin(data.shareRoot, data.path)
           }
