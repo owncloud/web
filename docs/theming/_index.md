@@ -276,8 +276,8 @@ To configure the app banner shown on mobile devices, you can use the following s
 ```
 
 `title` is usually your app's name as shown in the App Store or Google Play. `publisher` is the app developer's name.
-`additionalInformation` can be used to specify pricing information, such as "FREE" or a catchphrase like "don't miss out our awesome app!".
-`ctaText` refers to the text in the call to action button on the right side. The `icon` directive may be used to specify your own app icon. `appScheme` is the first part of the URL that is used to tell the mobile os which app to open, so using `owncloud` will generate links such as `owncloud://yourdomain.com/f/2b61b822...`.
+`additionalInformation` can be used to specify pricing information, such as "FREE" or a catchphrase like "Don't miss out on our awesome app!".
+`ctaText` refers to the text in the call to action button on the right side. The `icon` directive may be used to specify your own app icon. `appScheme` is the first part of the URL that is used to tell the mobile OS which app to open, so using `ownCloud` will generate links such as `owncloud://yourdomain.com/f/2b61b822...`.
 
 ## Example theme
 
