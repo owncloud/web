@@ -1,39 +1,58 @@
 <template>
   <div id="new-collaborators-form" data-testid="new-collaborators-form">
-    <oc-select
-      id="files-share-invite-input"
-      ref="ocSharingAutocomplete"
-      :model-value="selectedCollaborators"
-      :options="autocompleteResults"
-      :loading="searchInProgress"
-      :multiple="true"
-      :filter="filterRecipients"
-      :label="selectedCollaboratorsLabel"
-      aria-describedby="files-share-invite-hint"
-      :dropdown-should-open="
-        ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
-      "
-      @search:input="onSearch"
-      @update:model-value="resetFocusOnInvite"
-    >
-      <template #option="option">
-        <autocomplete-item :item="option" />
-      </template>
-      <template #no-options>
-        <span v-text="$gettext('No users or groups found.')" />
-      </template>
-      <template #selected-option-container="{ option, deselect }">
-        <recipient-container
-          :key="option.value.shareWith"
-          :recipient="option"
-          :deselect="deselect"
-        />
-      </template>
-      <template #open-indicator>
-        <!-- Empty to hide the caret -->
-        <span />
-      </template>
-    </oc-select>
+    <div :class="['oc-flex', 'oc-width-1-1', { 'new-collaborators-form-cern': isRunningOnEos }]">
+      <oc-select
+        id="files-share-account-type-input"
+        v-if="isRunningOnEos"
+        v-model="accountType"
+        :options="accountTypes"
+        :label="$gettext('Account type')"
+        class="cern-account-type-input"
+        :reduce="(option) => option.description"
+      >
+        <template #option="{ description }">
+          <span class="option oc-text-xsmall" v-text="description" />
+        </template>
+        <template #selected-option="{ description }">
+          <span class="option oc-text-xsmall" v-text="description" />
+        </template>
+      </oc-select>
+      <oc-select
+        id="files-share-invite-input"
+        :class="['oc-width-1-1', { 'cern-files-share-invite-input': isRunningOnEos }]"
+        ref="ocSharingAutocomplete"
+        :model-value="selectedCollaborators"
+        :options="autocompleteResults"
+        :loading="searchInProgress"
+        :multiple="true"
+        :filter="filterRecipients"
+        :label="selectedCollaboratorsLabel"
+        aria-describedby="files-share-invite-hint"
+        :dropdown-should-open="
+          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+        "
+        @search:input="onSearch"
+        @update:model-value="resetFocusOnInvite"
+      >
+        <template #option="option">
+          <autocomplete-item :item="option" />
+        </template>
+        <template #no-options>
+          <span v-text="$gettext('No users or groups found.')" />
+        </template>
+        <template #selected-option-container="{ option, deselect }">
+          <recipient-container
+            :key="option.value.shareWith"
+            :recipient="option"
+            :deselect="deselect"
+          />
+        </template>
+        <template #open-indicator>
+          <!-- Empty to hide the caret -->
+          <span />
+        </template>
+      </oc-select>
+    </div>
     <div class="oc-flex oc-flex-between oc-flex-wrap oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
@@ -134,7 +153,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted, Ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
@@ -216,6 +235,15 @@ export default defineComponent({
       }
     })
 
+    const accountType = ref('standard')
+    const accountTypes = [
+      { prefix: '', description: 'standard' },
+      { prefix: 'a:', description: 'secondary' },
+      { prefix: 'a:', description: 'service' },
+      { prefix: 'l:', description: 'guest' },
+      { prefix: 'sm:', description: 'federated' }
+    ]
+
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -230,7 +258,11 @@ export default defineComponent({
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
       notifyEnabled,
-      federatedUsers
+      federatedUsers,
+
+      // CERN
+      accountType,
+      accountTypes
     }
   },
 
@@ -401,6 +433,13 @@ export default defineComponent({
 
       this.searchInProgress = true
 
+      // CERN
+      if (this.isRunningOnEos) {
+        query = `${
+          this.accountTypes.find((t) => t.description === this.accountType)?.prefix || ''
+        }${query}`
+      }
+
       this.fetchRecipients(query)
     },
 
@@ -524,5 +563,13 @@ export default defineComponent({
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;
+}
+
+.new-collaborators-form-cern > .cern-files-share-invite-input {
+  width: 75%;
+}
+
+.new-collaborators-form-cern > .cern-account-type-input {
+  width: 30%;
 }
 </style>
