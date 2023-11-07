@@ -110,6 +110,11 @@ export const useCapabilityFilesFullTextSearch = createCapabilityComposable(
   'files.full_text_search',
   false
 )
+export const useCapabilityFilesSharing = createCapabilityComposable('files_sharing', null)
+export const useCapabilityFilesSharingApiEnabled = createCapabilityComposable(
+  'files_sharing.api_enabled',
+  true
+)
 export const useCapabilityFilesSharingCanDenyAccess = createCapabilityComposable(
   'files_sharing.deny_access',
   false
@@ -120,6 +125,10 @@ export const useCapabilityFilesSharingCanRename = createCapabilityComposable(
 )
 export const useCapabilityFilesSharingAllowCustomPermissions = createCapabilityComposable(
   'files_sharing.allow_custom',
+  true
+)
+export const useCapabilityFilesSharingPublicEnabled = createCapabilityComposable(
+  'files_sharing.public.enabled',
   true
 )
 export const useCapabilityFilesSharingPublicCanEdit = createCapabilityComposable(

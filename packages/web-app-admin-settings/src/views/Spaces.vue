@@ -6,6 +6,7 @@
       :breadcrumbs="breadcrumbs"
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
+      :side-bar-panel-context="sideBarPanelContext"
       :side-bar-open="sideBarOpen"
       :is-side-bar-header-compact="selectedSpaces.length === 1"
       :show-batch-actions="!!selectedSpaces.length"
@@ -57,39 +58,39 @@
 </template>
 
 <script lang="ts">
-import { NoContentMessage } from '@ownclouders/web-pkg'
+import AppTemplate from '../components/AppTemplate.vue'
+import SpacesList from '../components/Spaces/SpacesList.vue'
+import ContextActions from '../components/Spaces/ContextActions.vue'
+import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
+import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import {
+  NoContentMessage,
+  QuotaModal,
+  SideBarPanel,
+  SideBarPanelContext,
+  SpaceAction,
+  SpaceDetails,
+  SpaceDetailsMultiple,
+  SpaceInfo,
+  SpaceNoSelection,
+  eventBus,
+  configurationManager,
   queryItemAsString,
   useAccessToken,
   useCapabilitySpacesMaxQuota,
   useClientService,
   useRouteQuery,
-  useStore
-} from '@ownclouders/web-pkg'
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
-import { useTask } from 'vue-concurrency'
-import { eventBus } from '@ownclouders/web-pkg'
-import AppTemplate from '../components/AppTemplate.vue'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import { configurationManager } from '@ownclouders/web-pkg'
-import SpacesList from '../components/Spaces/SpacesList.vue'
-import { SpaceDetails } from '@ownclouders/web-pkg'
-import { SpaceDetailsMultiple } from '@ownclouders/web-pkg'
-import { SpaceNoSelection } from '@ownclouders/web-pkg'
-import ContextActions from '../components/Spaces/ContextActions.vue'
-import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
-import { SpaceInfo } from '@ownclouders/web-pkg'
-import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
-import { QuotaModal } from '@ownclouders/web-pkg'
-import { useSideBar } from '@ownclouders/web-pkg'
-import { useGettext } from 'vue3-gettext'
-import {
+  useSideBar,
   useSpaceActionsDelete,
   useSpaceActionsDisable,
   useSpaceActionsRestore,
-  useSpaceActionsEditQuota
+  useSpaceActionsEditQuota,
+  useStore
 } from '@ownclouders/web-pkg'
-import { SpaceAction } from '@ownclouders/web-pkg'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -189,56 +190,62 @@ export default defineComponent({
       ].filter((item) => item.isEnabled({ resources: unref(selectedSpaces) }))
     })
 
-    const sideBarAvailablePanels = computed(() => {
-      return [
-        {
-          app: 'SpaceNoSelection',
-          icon: 'layout-grid',
-          title: $gettext('Details'),
-          component: SpaceNoSelection,
-          default: true,
-          enabled: unref(selectedSpaces).length === 0
-        },
-        {
-          app: 'SpaceDetails',
-          icon: 'layout-grid',
-          title: $gettext('Details'),
-          component: SpaceDetails,
-          default: true,
-          enabled: unref(selectedSpaces).length === 1,
-          componentAttrs: {
-            showSpaceImage: false,
-            showShareIndicators: false
+    const sideBarPanelContext = computed<SideBarPanelContext<any, SpaceResource>>(() => {
+      return {
+        parent: null,
+        items: unref(selectedSpaces)
+      }
+    })
+    const sideBarAvailablePanels = computed<SideBarPanel<any, SpaceResource>[]>(() => {
+      return (
+        [
+          {
+            name: 'SpaceNoSelection',
+            icon: 'layout-grid',
+            title: () => $gettext('Details'),
+            component: SpaceNoSelection,
+            isRoot: () => true,
+            isEnabled: ({ items }) => items.length === 0
+          },
+          {
+            name: 'SpaceDetails',
+            icon: 'layout-grid',
+            title: () => $gettext('Details'),
+            component: SpaceDetails,
+            componentAttrs: () => ({
+              showSpaceImage: false,
+              showShareIndicators: false
+            }),
+            isRoot: () => true,
+            isEnabled: ({ items }) => items.length === 1
+          },
+          {
+            name: 'SpaceDetailsMultiple',
+            icon: 'layout-grid',
+            title: () => $gettext('Details'),
+            component: SpaceDetailsMultiple,
+            componentAttrs: ({ items }) => ({
+              selectedSpaces: items
+            }),
+            isRoot: () => true,
+            isEnabled: ({ items }) => items.length > 1
+          },
+          {
+            name: 'SpaceActions',
+            icon: 'slideshow-3',
+            title: () => $gettext('Actions'),
+            component: ActionsPanel,
+            isEnabled: ({ items }) => items.length === 1
+          },
+          {
+            name: 'SpaceMembers',
+            icon: 'group',
+            title: () => $gettext('Members'),
+            component: MembersPanel,
+            isEnabled: ({ items }) => items.length === 1
           }
-        },
-        {
-          app: 'SpaceDetailsMultiple',
-          icon: 'layout-grid',
-          title: $gettext('Details'),
-          component: SpaceDetailsMultiple,
-          default: true,
-          enabled: unref(selectedSpaces).length > 1,
-          componentAttrs: {
-            selectedSpaces: unref(selectedSpaces)
-          }
-        },
-        {
-          app: 'SpaceActions',
-          icon: 'slideshow-3',
-          title: $gettext('Actions'),
-          component: ActionsPanel,
-          default: false,
-          enabled: unref(selectedSpaces).length === 1
-        },
-        {
-          app: 'SpaceMembers',
-          icon: 'group',
-          title: $gettext('Members'),
-          component: MembersPanel,
-          default: false,
-          enabled: unref(selectedSpaces).length === 1
-        }
-      ].filter((p) => p.enabled)
+        ] satisfies SideBarPanel<any, SpaceResource>[]
+      ).filter((p) => p.isEnabled(unref(sideBarPanelContext)))
     })
 
     onMounted(async () => {
@@ -287,6 +294,7 @@ export default defineComponent({
       batchActions,
       selectedSpaces,
       sideBarAvailablePanels,
+      sideBarPanelContext,
       template,
       selectSpaces,
       toggleSelectSpace,

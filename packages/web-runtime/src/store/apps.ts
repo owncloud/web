@@ -2,7 +2,6 @@ const state = {
   fileEditors: [],
   fileEditorConfigs: {},
   newFileHandlers: [],
-  fileSideBars: [],
   customFilesListIndicators: [],
   meta: {}
 }
@@ -55,15 +54,6 @@ const mutations = {
         })
       })
     }
-    if (appInfo.fileSideBars) {
-      // Merge in file side bars into global list
-      // Reassign object in whole so that it updates the state properly
-      const list = state.fileSideBars
-      appInfo.fileSideBars.forEach((sideBar) => {
-        list.push(sideBar)
-      })
-      state.fileSideBars = list
-    }
 
     if (appInfo.filesListIndicators) {
       const indicators = state.customFilesListIndicators
@@ -108,9 +98,6 @@ const getters = {
   },
   newFileHandlers: (state) => {
     return state.newFileHandlers
-  },
-  fileSideBars: (state) => {
-    return state.fileSideBars
   },
   customFilesListIndicators: (state) => state.customFilesListIndicators,
   extensionConfigByAppId: (state) => (appId) => {

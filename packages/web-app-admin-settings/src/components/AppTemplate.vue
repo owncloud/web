@@ -54,6 +54,7 @@
         v-if="sideBarOpen"
         :active-panel="sideBarActivePanel"
         :available-panels="sideBarAvailablePanels"
+        :panel-context="sideBarPanelContext"
         :loading="sideBarLoading"
         :open="sideBarOpen"
         :is-header-compact="isSideBarHeaderCompact"
@@ -70,7 +71,7 @@
 
 <script lang="ts">
 import { perPageDefault, paginationOptions } from 'web-app-admin-settings/src/defaults'
-import { AppLoadingSpinner, SideBar, BatchActions } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, SideBar, BatchActions, SideBarPanelContext } from '@ownclouders/web-pkg'
 import {
   defineComponent,
   inject,
@@ -84,7 +85,7 @@ import {
 } from 'vue'
 import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { Panel } from '@ownclouders/web-pkg'
+import { SideBarPanel } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { ViewOptions } from '@ownclouders/web-pkg'
 
@@ -107,8 +108,12 @@ export default defineComponent({
     },
     sideBarAvailablePanels: {
       required: false,
-      type: Array as PropType<Panel[]>,
+      type: Array as PropType<SideBarPanel<any, any>[]>,
       default: () => []
+    },
+    sideBarPanelContext: {
+      type: Object as PropType<SideBarPanelContext<any, any>>,
+      required: true
     },
     sideBarActivePanel: {
       required: false,

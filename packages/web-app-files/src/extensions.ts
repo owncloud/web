@@ -9,6 +9,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
+import { sideBarPanels } from './fileSideBars'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const store = useStore()
@@ -21,6 +22,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   return computed(
     () =>
       [
+        ...unref(sideBarPanels()),
         {
           id: 'com.github.owncloud.web.files.search',
           type: 'search',

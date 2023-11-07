@@ -3,6 +3,7 @@ import { User } from '../user'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
 import { DAVResultResponseProps, FileStat } from 'webdav'
 import { Audio, GeoCoordinates } from '../../generated'
+import { Item } from '../item'
 
 export type AbilityActions =
   | 'create'
@@ -41,8 +42,7 @@ export interface SpaceRole {
 }
 
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
-export interface Resource {
-  id: number | string
+export interface Resource extends Item {
   fileId?: string
   parentFolderId?: string
   storageId?: string

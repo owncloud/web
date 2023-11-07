@@ -7,9 +7,8 @@
     :open="open"
     :active-panel="activePanel"
     :available-panels="availablePanels"
-    :warning-message="warningMessage"
-    :is-content-displayed="isContentDisplayed"
-    :loading="loading"
+    :panel-context="panelContext"
+    :loading="isLoading"
     :is-header-compact="!!loadedResource"
     v-bind="$attrs"
     data-custom-key-bindings-disabled="true"
@@ -21,22 +20,24 @@
   >
     <template #header>
       <file-info
-        v-if="highlightedFile && loadedResource && !highlightedFileIsSpace"
+        v-if="isFileHeaderVisible"
         class="sidebar-panel__file_info"
         :is-sub-panel-active="!!activePanel"
       />
-      <space-info
-        v-if="highlightedFile && loadedResource && highlightedFileIsSpace"
-        class="sidebar-panel__space_info"
-      />
+      <space-info v-else-if="isSpaceHeaderVisible" class="sidebar-panel__space_info" />
     </template>
   </InnerSideBar>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, ref, unref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
-import { useActiveLocation } from '@ownclouders/web-pkg'
+import {
+  SideBarPanelContext,
+  SidebarPanelExtension,
+  useActiveLocation,
+  useExtensionRegistry,
+  useSelectedResources
+} from '@ownclouders/web-pkg'
 import FileInfo from './FileInfo.vue'
 import {
   isProjectSpaceResource,
@@ -46,7 +47,6 @@ import {
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { SideBar as InnerSideBar } from '@ownclouders/web-pkg'
 import { SpaceInfo } from '@ownclouders/web-pkg'
-import { Panel } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import {
   isLocationCommonActive,
@@ -55,12 +55,7 @@ import {
   isLocationSpacesActive,
   isLocationTrashActive
 } from '@ownclouders/web-pkg'
-import {
-  useCapabilityShareJailEnabled,
-  useClientService,
-  useStore,
-  useRouter
-} from '@ownclouders/web-pkg'
+import { useClientService, useStore, useRouter } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -84,20 +79,27 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const router = useRouter()
-    const { $gettext } = useGettext()
     const clientService = useClientService()
+    const extensionRegistry = useExtensionRegistry()
 
     const loadedResource = ref()
-    const loading = ref(false)
+    const isLoading = ref(false)
 
-    const highlightedFile = computed(() => {
-      return store.getters['Files/highlightedFile']
-    })
-    const selectedFiles = computed(() => {
-      return store.getters['Files/selectedFiles']
-    })
+    const { selectedResources } = useSelectedResources({ store })
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
+    })
+    const panelContext = computed<SideBarPanelContext<Resource, Resource>>(() => {
+      if (unref(selectedResources).length === 0) {
+        return {
+          parent: null,
+          items: [unref(currentFolder)]
+        }
+      }
+      return {
+        parent: unref(currentFolder),
+        items: unref(selectedResources)
+      }
     })
 
     const isSharedWithMeLocation = useActiveLocation(isLocationSharesActive, 'files-shares-with-me')
@@ -114,7 +116,6 @@ export default defineComponent({
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
     const isPublicFilesLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
     const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
-    const hasShareJail = useCapabilityShareJailEnabled()
 
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
@@ -133,48 +134,19 @@ export default defineComponent({
       focusSideBar(component, event)
       eventBus.publish(SideBarEventTopics.close)
     }
+    const isFileHeaderVisible = computed(() => {
+      return (
+        unref(panelContext).items?.length === 1 &&
+        !isProjectSpaceResource(unref(panelContext).items[0])
+      )
+    })
+    const isSpaceHeaderVisible = computed(() => {
+      return (
+        unref(panelContext).items?.length === 1 &&
+        isProjectSpaceResource(unref(panelContext).items[0])
+      )
+    })
 
-    const isShareAccepted = computed(() => {
-      return unref(highlightedFile)?.status === 0
-    })
-    const isContentDisplayed = computed(() => {
-      return unref(isSharedWithMeLocation) ? unref(isShareAccepted) : true
-    })
-    const warningMessage = computed(() => {
-      if (!unref(isShareAccepted)) {
-        return $gettext('Select an accepted share to show details.')
-      }
-
-      return null
-    })
-    const areMultipleSelected = computed(() => {
-      return unref(selectedFiles)?.length > 1
-    })
-    const isRootFolder = computed(() => {
-      const pathSegments = unref(highlightedFile)?.path?.split('/').filter(Boolean) || []
-      if (unref(isSharedWithMeLocation) || unref(isSearchLocation)) {
-        return !unref(highlightedFile)
-      }
-      if (unref(hasShareJail) && props.space?.driveType === 'share') {
-        return false
-      }
-      if (unref(isTrashLocation) && !unref(highlightedFile)?.id) {
-        return true
-      }
-      if (props.space?.driveType === 'project') {
-        return false
-      }
-      return !pathSegments.length
-    })
-    const highlightedFileIsSpace = computed(() => {
-      return isProjectSpaceResource(unref(highlightedFile) || {})
-    })
-    const highlightedSpace = computed(() => {
-      return store.getters['runtime/spaces/spaces'].find((s) => s.id === unref(highlightedFile).id)
-    })
-    const sharesLoadingDisabledOnCurrentRoute = computed(() => {
-      return unref(isPublicFilesLocation) || unref(isTrashLocation)
-    })
     const isShareLocation = computed(() => {
       return (
         unref(isSharedWithMeLocation) ||
@@ -186,114 +158,70 @@ export default defineComponent({
       return unref(isShareLocation) || unref(isSearchLocation) || unref(isFavoritesLocation)
     })
 
-    const availablePanels = computed((): Panel[] => {
-      const { panels } = store.getters.fileSideBars.reduce(
-        (result, panelGenerator) => {
-          const panel = panelGenerator({
-            capabilities: store.getters.capabilities,
-            resource: unref(loadedResource),
-            selectedFiles: unref(selectedFiles),
-            router,
-            multipleSelection: unref(areMultipleSelected),
-            rootFolder: unref(isRootFolder),
-            user: store.getters.user
-          })
-
-          if (panel.enabled) {
-            result.panels.push(panel)
-          }
-          return result
-        },
-        { panels: [] }
-      )
-
-      return panels
-    })
-
-    const getSelectedResource = () => {
-      if (unref(highlightedFileIsSpace) && unref(selectedFiles).length === 1) {
-        return unref(highlightedSpace)
-      }
-      if (unref(selectedFiles).length === 1) {
-        return unref(selectedFiles)[0]
-      }
-      if (unref(currentFolder)?.id && !unref(isRootFolder) && !unref(areMultipleSelected)) {
-        return unref(currentFolder)
-      }
-      return null
-    }
-    const setLoadedResource = async (resource: Resource) => {
-      if (!unref(isShareLocation)) {
-        loadedResource.value = resource
-        return
-      }
-
-      // shared resources look different, hence we need to fetch the actual resource here
-      try {
-        let shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
-          path: unref(highlightedFile).path
-        })
-        shareResource.share = unref(highlightedFile).share
-        shareResource.status = unref(highlightedFile).status
-        if (unref(highlightedFileIsSpace)) {
-          shareResource = { ...shareResource, ...unref(highlightedFile) }
-        }
-        loadedResource.value = shareResource
-      } catch (error) {
-        loadedResource.value = resource
-        console.error(error)
-      }
-    }
-
-    const loadShares = () => {
-      store.dispatch('Files/loadShares', {
-        client: clientService.owncloudSdk,
-        path: unref(highlightedFile).path,
-        storageId: unref(highlightedFile).fileId,
-        // cache must not be used on flat file lists that gather resources form various locations
-        useCached: !unref(isFlatFileList) && !unref(isProjectsLocation)
-      })
-    }
+    // TODO: get rid of `highlightedFile` getter... only ever used in sidebar. change panels to show the parent resource if needed.
+    const availablePanels = computed(() =>
+      extensionRegistry
+        .requestExtensions<SidebarPanelExtension<Resource, Resource>>('sidebarPanel', 'resource')
+        .map((e) => e.panel)
+        .filter((p) => p.isEnabled(unref(panelContext)))
+    )
 
     watch(
-      () => [...unref(selectedFiles), props.open],
-      () => {
+      () => [...unref(panelContext).items, props.open],
+      async () => {
         if (!props.open) {
           return
         }
-        if (
-          unref(selectedFiles).length === 1 &&
-          unref(loadedResource)?.id === unref(selectedFiles)[0].id
-        ) {
+        if (unref(panelContext).items?.length !== 1) {
+          // don't load additional metadata for empty or multi-select contexts
+          return
+        }
+        const resource = unref(panelContext).items[0]
+        if (unref(loadedResource)?.id === resource.id) {
           // current resource is already loaded
           return
         }
 
-        loading.value = true
-        let selectedResource = getSelectedResource()
-        if (selectedResource) {
-          if (!unref(sharesLoadingDisabledOnCurrentRoute)) {
-            loadShares()
-          }
+        isLoading.value = true
+        if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
+          store.dispatch('Files/loadShares', {
+            client: clientService.owncloudSdk,
+            path: resource.path,
+            storageId: resource.fileId,
+            // cache must not be used on flat file lists that gather resources from various locations
+            useCached: !unref(isFlatFileList) && !unref(isProjectsLocation)
+          })
+        }
 
-          if (unref(highlightedFileIsSpace)) {
-            store.dispatch('runtime/spaces/loadSpaceMembers', {
-              graphClient: clientService.graphAuthenticated,
-              space: unref(highlightedSpace)
-            })
-          }
+        if (isProjectSpaceResource(resource)) {
+          store.dispatch('runtime/spaces/loadSpaceMembers', {
+            graphClient: clientService.graphAuthenticated,
+            space: resource
+          })
+        }
 
-          setLoadedResource(selectedResource)
-          loading.value = false
+        if (!unref(isShareLocation)) {
+          loadedResource.value = resource
+          isLoading.value = false
           return
         }
 
-        const currentFolderRequired = !unref(isFlatFileList) && !unref(isProjectsLocation)
-        if (!currentFolderRequired || unref(currentFolder)) {
-          store.commit('Files/PRUNE_SHARES')
-          loadedResource.value = null
-          loading.value = false
+        // shared resources look different, hence we need to fetch the actual resource here
+        try {
+          let shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
+            path: resource.path
+          })
+          shareResource.share = resource.share
+          shareResource.status = resource.status
+          if (isProjectSpaceResource(resource)) {
+            shareResource = { ...shareResource, ...resource }
+          }
+          loadedResource.value = shareResource
+        } catch (error) {
+          loadedResource.value = resource
+          console.error(error)
         }
+        isLoading.value = false
       },
       { deep: true }
     )
@@ -313,16 +241,15 @@ export default defineComponent({
 
     return {
       loadedResource,
-      highlightedFile,
       setActiveSideBarPanel,
       closeSideBar,
       destroySideBar,
       focusSideBar,
+      panelContext,
       availablePanels,
-      loading,
-      warningMessage,
-      isContentDisplayed,
-      highlightedFileIsSpace
+      isLoading,
+      isFileHeaderVisible,
+      isSpaceHeaderVisible
     }
   }
 })

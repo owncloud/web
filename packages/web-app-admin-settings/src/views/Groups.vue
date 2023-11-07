@@ -6,6 +6,7 @@
       :breadcrumbs="breadcrumbs"
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
+      :side-bar-panel-context="sideBarPanelContext"
       :side-bar-open="sideBarOpen"
       :show-batch-actions="!!selectedGroups.length"
       :batch-actions="batchActions"
@@ -19,7 +20,7 @@
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
-            @click="toggleCreateGroupModal"
+            @click="onToggleCreateGroupModal"
           >
             <oc-icon name="add" />
             <span v-text="$gettext('New group')" />
@@ -54,28 +55,36 @@
     </app-template>
     <create-group-modal
       v-if="createGroupModalOpen"
-      @cancel="toggleCreateGroupModal"
-      @confirm="createGroup"
+      @cancel="onToggleCreateGroupModal"
+      @confirm="onCreateGroup"
     />
   </div>
 </template>
 
 <script lang="ts">
-import GroupsList from '../components/Groups/GroupsList.vue'
+import AppTemplate from '../components/AppTemplate.vue'
 import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
-import { NoContentMessage } from '@ownclouders/web-pkg'
-import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
-import { useTask } from 'vue-concurrency'
-import { eventBus } from '@ownclouders/web-pkg'
-import { mapActions } from 'vuex'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
-import { queryItemAsString, useClientService, useRouteQuery, useStore } from '@ownclouders/web-pkg'
-import AppTemplate from '../components/AppTemplate.vue'
-import { useSideBar } from '@ownclouders/web-pkg'
-import { useGroupActionsDelete } from '../composables/actions/groups'
+import GroupsList from '../components/Groups/GroupsList.vue'
 import MembersPanel from '../components/Groups/SideBar/MembersPanel.vue'
+import { useGroupActionsDelete } from '../composables'
+import {
+  NoContentMessage,
+  SideBarPanel,
+  SideBarPanelContext,
+  eventBus,
+  queryItemAsString,
+  useClientService,
+  useRouteQuery,
+  useSideBar,
+  useStore
+} from '@ownclouders/web-pkg'
+import { Group } from '@ownclouders/web-client/src/helpers'
+import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
+import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -98,6 +107,7 @@ export default defineComponent({
     const selectedGroups = ref([])
     const createGroupModalOpen = ref(false)
     const clientService = useClientService()
+    const { $gettext } = useGettext()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -122,6 +132,97 @@ export default defineComponent({
       return [...unref(deleteActions)].filter((item) =>
         item.isEnabled({ resources: unref(selectedGroups) })
       )
+    })
+
+    const onToggleCreateGroupModal = () => {
+      createGroupModalOpen.value = !unref(createGroupModalOpen)
+    }
+    const onCreateGroup = async (group: Group) => {
+      try {
+        const client = clientService.graphAuthenticated
+        const response = await client.groups.createGroup(group)
+        onToggleCreateGroupModal()
+        store.dispatch('showMessage', {
+          title: $gettext('Group was created successfully')
+        })
+        groups.value.push({ ...response?.data, members: [] })
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to create group'),
+          error
+        })
+      }
+    }
+    const onEditGroup = async (editGroup: Group) => {
+      try {
+        const client = clientService.graphAuthenticated
+        await client.groups.editGroup(editGroup.id, editGroup)
+        const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
+        const groupIndex = unref(groups).findIndex((group) => group.id === editGroup.id)
+        groups.value[groupIndex] = updatedGroup
+        const selectedGroupIndex = unref(selectedGroups).findIndex(
+          (group) => group.id === updatedGroup.id
+        )
+        if (selectedGroupIndex >= 0) {
+          // FIXME: why do we need to update selectedGroups?
+          selectedGroups.value[selectedGroupIndex] = updatedGroup
+        }
+
+        eventBus.publish('sidebar.entity.saved')
+
+        return updatedGroup
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to edit group'),
+          error
+        })
+      }
+    }
+
+    const sideBarPanelContext = computed<SideBarPanelContext<any, Group>>(() => {
+      return {
+        parent: null,
+        items: unref(selectedGroups)
+      }
+    })
+    const sideBarAvailablePanels = computed<SideBarPanel<any, Group>[]>(() => {
+      return (
+        [
+          {
+            name: 'DetailsPanel',
+            icon: 'group-2',
+            title: () => $gettext('Group details'),
+            component: DetailsPanel,
+            componentAttrs: () => ({ groups: unref(selectedGroups) }),
+            isRoot: () => true,
+            isEnabled: () => true
+          },
+          {
+            name: 'EditPanel',
+            icon: 'pencil',
+            title: () => $gettext('Edit group'),
+            component: EditPanel,
+            componentAttrs: ({ items }) => {
+              return {
+                group: items.length === 1 ? items[0] : null,
+                onConfirm: onEditGroup
+              }
+            },
+            isEnabled: ({ items }) => {
+              return items.length === 1 && !items[0].groupTypes?.includes('ReadOnly')
+            }
+          },
+          {
+            name: 'GroupMembers',
+            icon: 'group',
+            title: () => $gettext('Members'),
+            component: MembersPanel,
+            isEnabled: ({ items }) => items.length === 1
+          }
+        ] satisfies SideBarPanel<any, Group>[]
+      ).filter((p) => p.isEnabled(unref(sideBarPanelContext)))
     })
 
     onMounted(async () => {
@@ -150,15 +251,15 @@ export default defineComponent({
       template,
       loadResourcesTask,
       clientService,
-      batchActions
+      batchActions,
+      sideBarAvailablePanels,
+      sideBarPanelContext,
+      onCreateGroup,
+      onEditGroup,
+      onToggleCreateGroupModal
     }
   },
   computed: {
-    selectedGroupsText() {
-      return this.$gettext('%{count} groups selected', {
-        count: this.selectedGroups.length.toString()
-      })
-    },
     breadcrumbs() {
       return [
         { text: this.$gettext('Administration Settings'), to: { path: '/admin-settings' } },
@@ -167,47 +268,10 @@ export default defineComponent({
           onClick: () => eventBus.publish('app.admin-settings.list.load')
         }
       ]
-    },
-    sideBarAvailablePanels() {
-      return [
-        {
-          app: 'DetailsPanel',
-          icon: 'group-2',
-          title: this.$gettext('Group details'),
-          component: DetailsPanel,
-          default: true,
-          enabled: true,
-          componentAttrs: { groups: this.selectedGroups }
-        },
-        {
-          app: 'EditPanel',
-          icon: 'pencil',
-          title: this.$gettext('Edit group'),
-          component: EditPanel,
-          default: false,
-          enabled:
-            this.selectedGroups.length === 1 &&
-            !this.selectedGroups[0].groupTypes?.includes('ReadOnly'),
-          componentAttrs: {
-            group: this.selectedGroups.length === 1 ? this.selectedGroups[0] : null,
-            onConfirm: this.editGroup
-          }
-        },
-        {
-          app: 'GroupMembers',
-          icon: 'group',
-          title: this.$gettext('Members'),
-          component: MembersPanel,
-          default: false,
-          enabled: this.selectedGroups.length === 1
-        }
-      ].filter((p) => p.enabled)
     }
   },
 
   methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
-
     selectGroups(groups) {
       this.selectedGroups.splice(0, this.selectedGroups.length, ...groups)
     },
@@ -224,52 +288,6 @@ export default defineComponent({
     },
     unselectAllGroups() {
       this.selectedGroups.splice(0, this.selectedGroups.length)
-    },
-    toggleCreateGroupModal() {
-      this.createGroupModalOpen = !this.createGroupModalOpen
-    },
-    async createGroup(group) {
-      try {
-        const client = this.clientService.graphAuthenticated
-        const response = await client.groups.createGroup(group)
-        this.toggleCreateGroupModal()
-        this.showMessage({
-          title: this.$gettext('Group was created successfully')
-        })
-        this.groups.push({ ...response?.data, members: [] })
-      } catch (error) {
-        console.error(error)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to create group'),
-          error
-        })
-      }
-    },
-    async editGroup(editGroup) {
-      try {
-        const client = this.clientService.graphAuthenticated
-        await client.groups.editGroup(editGroup.id, editGroup)
-        const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
-        const groupIndex = this.groups.findIndex((group) => group.id === editGroup.id)
-        this.groups[groupIndex] = updatedGroup
-        const selectedGroupIndex = this.selectedGroups.findIndex(
-          (group) => group.id === updatedGroup.id
-        )
-        if (selectedGroupIndex >= 0) {
-          // FIXME: why do we need to update selectedUsers?
-          this.selectedGroups[selectedGroupIndex] = updatedGroup
-        }
-
-        eventBus.publish('sidebar.entity.saved')
-
-        return updatedGroup
-      } catch (error) {
-        console.error(error)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to edit group'),
-          error
-        })
-      }
     }
   }
 })

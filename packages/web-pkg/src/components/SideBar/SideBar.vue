@@ -11,26 +11,26 @@
     <template v-else>
       <div
         v-for="panel in availablePanels"
-        :id="`sidebar-panel-${panel.app}`"
-        :key="`panel-${panel.app}`"
+        :id="`sidebar-panel-${panel.name}`"
+        :key="`panel-${panel.name}`"
         ref="panels"
-        :data-testid="`sidebar-panel-${panel.app}`"
-        :tabindex="activePanelName === panel.app ? -1 : null"
+        :data-testid="`sidebar-panel-${panel.name}`"
+        :tabindex="activePanelName === panel.name ? -1 : null"
         class="sidebar-panel"
         :class="{
-          'is-active-sub-panel': activeAvailablePanelName === panel.app,
-          'is-active-default-panel': panel.default && activePanelName === panel.app,
-          'sidebar-panel-default': panel.default,
+          'is-active-sub-panel': activeAvailablePanelName === panel.name,
+          'is-active-default-panel': panel.isRoot?.(panelContext) && activePanelName === panel.name,
+          'sidebar-panel-default': panel.isRoot?.(panelContext),
           'compact-header': isHeaderCompact
         }"
       >
-        <template v-if="panel.enabled !== false">
+        <template v-if="panel.isEnabled(panelContext) !== false">
           <div
-            v-if="[activePanelName, oldPanelName].includes(panel.app)"
+            v-if="[activePanelName, oldPanelName].includes(panel.name)"
             class="sidebar-panel__header header"
           >
             <oc-button
-              v-if="!panel.default"
+              v-if="!panel.isRoot?.(panelContext)"
               v-oc-tooltip="accessibleLabelBack"
               class="header__back"
               appearance="raw"
@@ -41,7 +41,7 @@
             </oc-button>
 
             <h2 class="header__title oc-my-rm">
-              {{ $gettext(panel.title) }}
+              {{ panel.title(panelContext) }}
             </h2>
 
             <oc-button
@@ -55,39 +55,36 @@
           </div>
 
           <slot name="header" />
-          <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.app}`]">
-            <template v-if="isContentDisplayed">
-              <div class="sidebar-panel__body-content">
-                <slot name="body">
-                  <component
-                    :is="panel.component"
-                    v-bind="panel.componentAttrs"
-                    @scroll-to-element="scrollToElement"
-                  />
-                </slot>
-              </div>
+          <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.name}`]">
+            <div class="sidebar-panel__body-content">
+              <slot name="body">
+                <component
+                  :is="panel.component"
+                  v-bind="panel.componentAttrs?.(panelContext) || {}"
+                  @scroll-to-element="scrollToElement"
+                />
+              </slot>
+            </div>
 
-              <div
-                v-if="panel.default && availablePanels.length > 1"
-                class="sidebar-panel__navigation oc-mt-m"
+            <div
+              v-if="panel.isRoot?.(panelContext) && availablePanels.length > 1"
+              class="sidebar-panel__navigation oc-mt-m"
+            >
+              <oc-button
+                v-for="panelSelect in availablePanels.filter(
+                  (p) => !p.isRoot?.(panelContext) && p.isEnabled(panelContext) !== false
+                )"
+                :id="`sidebar-panel-${panelSelect.name}-select`"
+                :key="`panel-select-${panelSelect.name}`"
+                :data-testid="`sidebar-panel-${panelSelect.name}-select`"
+                appearance="raw"
+                @click="openPanel(panelSelect.name)"
               >
-                <oc-button
-                  v-for="panelSelect in availablePanels.filter(
-                    (p) => !p.default && p.enabled !== false
-                  )"
-                  :id="`sidebar-panel-${panelSelect.app}-select`"
-                  :key="`panel-select-${panelSelect.app}`"
-                  :data-testid="`sidebar-panel-${panelSelect.app}-select`"
-                  appearance="raw"
-                  @click="openPanel(panelSelect.app)"
-                >
-                  <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
-                  {{ $gettext(panelSelect.title) }}
-                  <oc-icon name="arrow-right-s" fill-type="line" />
-                </oc-button>
-              </div>
-            </template>
-            <p v-else class="oc-text-center">{{ warningMessage }}</p>
+                <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
+                {{ panelSelect.title(panelContext) }}
+                <oc-icon name="arrow-right-s" fill-type="line" />
+              </oc-button>
+            </div>
           </div>
         </template>
       </div>
@@ -98,7 +95,7 @@
 <script lang="ts">
 import { VisibilityObserver } from '../../observer'
 import { defineComponent, PropType } from 'vue'
-import { Panel } from './types'
+import { SideBarPanel, SideBarPanelContext } from './types'
 
 let visibilityObserver: VisibilityObserver
 let hiddenObserver: VisibilityObserver
@@ -114,23 +111,17 @@ export default defineComponent({
       required: true
     },
     availablePanels: {
-      type: Array as PropType<Panel[]>,
+      type: Array as PropType<SideBarPanel<any, any>[]>,
+      required: true
+    },
+    panelContext: {
+      type: Object as PropType<SideBarPanelContext<any, any>>,
       required: true
     },
     activePanel: {
       type: String,
       required: false,
       default: ''
-    },
-    warningMessage: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    isContentDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
     },
     isHeaderCompact: {
       type: Boolean,
@@ -154,20 +145,20 @@ export default defineComponent({
       if (!panelName) {
         return null
       }
-      if (!this.availablePanels.map((p) => p.app).includes(panelName)) {
+      if (!this.availablePanels.map((p) => p.name).includes(panelName)) {
         return null
       }
       return panelName
     },
     activePanelName() {
-      return this.activeAvailablePanelName || this.defaultPanel.app
+      return this.activeAvailablePanelName || this.rootPanel.name
     },
-    defaultPanel() {
-      return this.availablePanels.find((panel) => panel.default)
+    rootPanel() {
+      return this.availablePanels.find((panel) => panel.isRoot?.(this.panelContext))
     },
     accessibleLabelBack() {
       return this.$gettext('Back to %{panel} panel', {
-        panel: this.defaultPanel.title
+        panel: this.rootPanel.title(this.panelContext)
       })
     }
   },

@@ -5,233 +5,306 @@ import FileVersions from './components/SideBar/Versions/FileVersions.vue'
 import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from './components/SideBar/NoSelection.vue'
 import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
-import { SpaceDetails } from '@ownclouders/web-pkg'
-import { SpaceNoSelection } from '@ownclouders/web-pkg'
 import {
+  SpaceDetails,
+  SpaceDetailsMultiple,
+  SpaceNoSelection,
   isLocationTrashActive,
   isLocationPublicActive,
   isLocationSpacesActive,
   isLocationSharesActive,
-  Panel
+  useCapabilityFilesSharing,
+  useCapabilityFilesSharingApiEnabled,
+  useCapabilityFilesSharingPublicEnabled,
+  useRouter,
+  useStore,
+  SidebarPanelExtension
 } from '@ownclouders/web-pkg'
+import {
+  isProjectSpaceResource,
+  spaceRoleEditor,
+  spaceRoleManager
+} from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
+import { useGettext } from 'vue3-gettext'
+import { computed, unref } from 'vue'
 
-import { spaceRoleEditor, spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
+export const sideBarPanels = () => {
+  const router = useRouter()
+  const store = useStore()
+  const user = computed(() => store.getters.user)
+  const { $gettext } = useGettext()
+  const isSharingEnabled = useCapabilityFilesSharing(store)
+  const isSharingApiEnabled = useCapabilityFilesSharingApiEnabled(store)
+  const arePublicLinksEnabled = useCapabilityFilesSharingPublicEnabled(store)
 
-import { Resource, User } from '@ownclouders/web-client'
-import { Router } from 'vue-router'
-import { SpaceDetailsMultiple } from '@ownclouders/web-pkg'
-
-function $gettext(msg: string): string {
-  return msg
+  return computed(
+    () =>
+      [
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.no-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'no-selection',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: NoSelection,
+            isRoot: () => true,
+            isEnabled: ({ parent, items }) => {
+              if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+                // project spaces overview has its own "no selection" panel
+                return false
+              }
+              if (items?.length > 0) {
+                return false
+              }
+              // empty selection in a project space root shows a "details" panel for the space itself
+              return !isProjectSpaceResource(parent)
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.details-single-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'details',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: FileDetails,
+            isRoot: () => !isLocationTrashActive(router, 'files-trash-generic'),
+            isEnabled: ({ items }) => {
+              if (isLocationTrashActive(router, 'files-trash-generic')) {
+                // details panel is not available in trash
+                return false
+              }
+              if (items?.length !== 1) {
+                return false
+              }
+              // project spaces have their own "details" panel
+              return !isProjectSpaceResource(items[0])
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.details-multi-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'details-multiple',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: FileDetailsMultiple,
+            componentAttrs: () => ({
+              get showSpaceCount() {
+                return (
+                  !isLocationSpacesActive(router, 'files-spaces-generic') &&
+                  !isLocationSharesActive(router, 'files-shares-with-me') &&
+                  !isLocationTrashActive(router, 'files-trash-generic')
+                )
+              }
+            }),
+            isRoot: () => true,
+            isEnabled: ({ items }) => {
+              if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+                // project spaces overview has its own "no selection" panel
+                return false
+              }
+              return items?.length > 1
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.actions',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'actions',
+            icon: 'slideshow-3',
+            title: () => $gettext('Actions'),
+            component: FileActions,
+            isRoot: () => isLocationTrashActive(router, 'files-trash-generic'),
+            isEnabled: ({ items }) => {
+              if (items?.length !== 1) {
+                return false
+              }
+              // project spaces have their own "actions" panel
+              return !isProjectSpaceResource(items[0])
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.sharing',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'sharing',
+            icon: 'user-add',
+            iconFillType: 'line',
+            title: () => $gettext('Shares'),
+            component: SharesPanel,
+            componentAttrs: () => ({
+              showSpaceMembers: false,
+              get showLinks() {
+                if (unref(isSharingEnabled)) {
+                  return unref(arePublicLinksEnabled)
+                }
+                return false
+              }
+            }),
+            isEnabled: ({ items }) => {
+              if (items?.length !== 1) {
+                return false
+              }
+              if (isProjectSpaceResource(items[0])) {
+                // project space roots have their own "sharing" panel (= space members)
+                return false
+              }
+              if (
+                isLocationTrashActive(router, 'files-trash-generic') ||
+                isLocationPublicActive(router, 'files-public-link')
+              ) {
+                return false
+              }
+              if (unref(isSharingEnabled)) {
+                return unref(isSharingApiEnabled)
+              }
+              return false
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.versions',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'versions',
+            icon: 'git-branch',
+            title: () => $gettext('Versions'),
+            component: FileVersions,
+            isEnabled: ({ items }) => {
+              if (items?.length !== 1) {
+                return false
+              }
+              if (isProjectSpaceResource(items[0])) {
+                // project space roots don't support versions
+                return false
+              }
+              if (
+                isLocationTrashActive(router, 'files-trash-generic') ||
+                isLocationPublicActive(router, 'files-public-link')
+              ) {
+                return false
+              }
+              return items[0].type !== 'folder'
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.projects.no-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'no-selection',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: SpaceNoSelection,
+            isRoot: () => true,
+            isEnabled: ({ items }) => {
+              if (!isLocationSpacesActive(router, 'files-spaces-projects')) {
+                // only for project spaces overview
+                return false
+              }
+              return items?.length === 0
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.projects.details-single-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'details-space',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: SpaceDetails,
+            isRoot: () => true,
+            isEnabled: ({ items }) => {
+              return items?.length === 1 && isProjectSpaceResource(items[0])
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.projects.details-multi-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'details-space-multiple',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: SpaceDetailsMultiple,
+            componentAttrs: ({ items }) => ({
+              selectedSpaces: items
+            }),
+            isRoot: () => true,
+            isEnabled: ({ items }) => {
+              return items?.length > 1 && isLocationSpacesActive(router, 'files-spaces-projects')
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.projects.actions',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'space-actions',
+            icon: 'slideshow-3',
+            title: () => $gettext('Actions'),
+            component: SpaceActions,
+            isEnabled: ({ items }) => {
+              if (items?.length !== 1) {
+                return false
+              }
+              if (!isProjectSpaceResource(items[0])) {
+                return false
+              }
+              if (
+                !isLocationSpacesActive(router, 'files-spaces-projects') &&
+                !isLocationSpacesActive(router, 'files-spaces-generic')
+              ) {
+                return false
+              }
+              return [
+                ...items[0].spaceRoles[spaceRoleManager.name],
+                ...items[0].spaceRoles[spaceRoleEditor.name]
+              ].some((role) => role.id === unref(user).uuid)
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebarPanels.projects.sharing',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'space-share',
+            icon: 'group',
+            title: () => $gettext('Members'),
+            component: SharesPanel,
+            componentAttrs: () => ({
+              showSpaceMembers: true,
+              get showLinks() {
+                if (unref(isSharingEnabled)) {
+                  return unref(arePublicLinksEnabled)
+                }
+                return false
+              }
+            }),
+            isEnabled: ({ items }) => {
+              return items?.length === 1 && isProjectSpaceResource(items[0])
+            }
+          }
+        }
+      ] satisfies SidebarPanelExtension<Resource, Resource>[]
+  )
 }
-
-const panelGenerators: (({
-  rootFolder,
-  resource,
-  selectedFiles,
-  router,
-  multipleSelection,
-  user,
-  capabilities
-}: {
-  rootFolder: boolean
-  resource: Resource
-  selectedFiles: Resource[]
-  router: Router
-  multipleSelection: boolean
-  user: User
-  capabilities: any
-}) => Panel)[] = [
-  // We don't have file details in the trashbin, yet.
-  // Only allow `actions` panel on trashbin route for now.
-  ({ router, multipleSelection, rootFolder, resource }): Panel => ({
-    app: 'no-selection',
-    icon: 'questionnaire-line',
-    title: $gettext('Details'),
-    component: NoSelection,
-    default: () => true,
-    get enabled() {
-      return (
-        !multipleSelection &&
-        !isLocationSpacesActive(router, 'files-spaces-projects') &&
-        (!resource || (rootFolder && resource?.type !== 'space'))
-      )
-    }
-  }),
-  ({ router, resource, multipleSelection }): Panel => ({
-    app: 'no-selection',
-    icon: 'questionnaire-line',
-    title: $gettext('Details'),
-    component: SpaceNoSelection,
-    default: () => true,
-    get enabled() {
-      return (
-        isLocationSpacesActive(router, 'files-spaces-projects') && !multipleSelection && !resource
-      )
-    }
-  }),
-  ({ router, multipleSelection, rootFolder, resource }) => ({
-    app: 'details',
-    icon: 'questionnaire-line',
-    title: $gettext('Details'),
-    component: FileDetails,
-    default: !isLocationTrashActive(router, 'files-trash-generic'),
-    get enabled() {
-      return !!(
-        !isLocationTrashActive(router, 'files-trash-generic') &&
-        !multipleSelection &&
-        !rootFolder &&
-        resource &&
-        resource.type !== 'space'
-      )
-    }
-  }),
-  ({ multipleSelection, router }) => ({
-    app: 'details-multiple',
-    icon: 'questionnaire-line',
-    title: $gettext('Details'),
-    component: FileDetailsMultiple,
-    componentAttrs: {
-      get showSpaceCount() {
-        return (
-          !isLocationSpacesActive(router, 'files-spaces-generic') &&
-          !isLocationSharesActive(router, 'files-shares-with-me') &&
-          !isLocationTrashActive(router, 'files-trash-generic')
-        )
-      }
-    },
-    default: () => true,
-    get enabled() {
-      return multipleSelection && !isLocationSpacesActive(router, 'files-spaces-projects')
-    }
-  }),
-  ({ multipleSelection, selectedFiles, router }) => ({
-    app: 'details-space-multiple',
-    icon: 'questionnaire-line',
-    title: $gettext('Details'),
-    component: SpaceDetailsMultiple,
-    componentAttrs: {
-      selectedSpaces: selectedFiles
-    },
-    default: () => true,
-    get enabled() {
-      return multipleSelection && isLocationSpacesActive(router, 'files-spaces-projects')
-    }
-  }),
-  ({ multipleSelection, resource }) => ({
-    app: 'details-space',
-    icon: 'questionnaire-line',
-    title: $gettext('Details'),
-    component: SpaceDetails,
-    default: () => true,
-    get enabled() {
-      return resource?.type === 'space' && !multipleSelection
-    }
-  }),
-  ({ router, multipleSelection, rootFolder, resource }) => ({
-    app: 'actions',
-    icon: 'slideshow-3',
-    title: $gettext('Actions'),
-    component: FileActions,
-    default: isLocationTrashActive(router, 'files-trash-generic'),
-    get enabled() {
-      return !!(!multipleSelection && !rootFolder && resource && resource.type !== 'space')
-    }
-  }),
-  ({ multipleSelection, resource, router, user }) => ({
-    app: 'space-actions',
-    icon: 'slideshow-3',
-    title: $gettext('Actions'),
-    component: SpaceActions,
-    get enabled() {
-      if (multipleSelection) {
-        return false
-      }
-      if (resource?.type !== 'space') {
-        return false
-      }
-      if (
-        !isLocationSpacesActive(router, 'files-spaces-projects') &&
-        !isLocationSpacesActive(router, 'files-spaces-generic')
-      ) {
-        return false
-      }
-      return !![
-        ...resource.spaceRoles[spaceRoleManager.name],
-        ...resource.spaceRoles[spaceRoleEditor.name]
-      ].find((role) => role.id === user.uuid)
-    }
-  }),
-  ({ capabilities, router, multipleSelection, rootFolder, resource }) => ({
-    app: 'sharing',
-    icon: 'user-add',
-    iconFillType: 'line',
-    title: $gettext('Shares'),
-    component: SharesPanel,
-    componentAttrs: {
-      showSpaceMembers: false,
-      get showLinks() {
-        if (capabilities.files_sharing) {
-          return capabilities.files_sharing.public.enabled
-        }
-        return false
-      }
-    },
-    get enabled() {
-      if (multipleSelection || rootFolder || !resource || resource.type === 'space') {
-        return false
-      }
-      if (
-        isLocationTrashActive(router, 'files-trash-generic') ||
-        isLocationPublicActive(router, 'files-public-link')
-      ) {
-        return false
-      }
-
-      if (capabilities.files_sharing) {
-        return capabilities.files_sharing.api_enabled
-      }
-      return false
-    }
-  }),
-  ({ multipleSelection, resource, capabilities }) => ({
-    app: 'space-share',
-    icon: 'group',
-    title: $gettext('Members'),
-    component: SharesPanel,
-    componentAttrs: {
-      showSpaceMembers: true,
-      get showLinks() {
-        if (capabilities.files_sharing) {
-          return capabilities.files_sharing.public.enabled
-        }
-        return false
-      }
-    },
-    get enabled() {
-      return resource?.type === 'space' && !multipleSelection
-    }
-  }),
-  ({ capabilities, resource, router, multipleSelection, rootFolder }) => ({
-    app: 'versions',
-    icon: 'git-branch',
-    title: $gettext('Versions'),
-    component: FileVersions,
-    get enabled() {
-      if (multipleSelection || rootFolder) {
-        return false
-      }
-      if (
-        isLocationTrashActive(router, 'files-trash-generic') ||
-        isLocationPublicActive(router, 'files-public-link')
-      ) {
-        return false
-      }
-      return (
-        !!capabilities.core && resource && resource.type !== 'folder' && resource.type !== 'space'
-      )
-    }
-  })
-]
-
-export default panelGenerators

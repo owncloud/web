@@ -1,5 +1,7 @@
-export interface User {
-  id?: string
+import { Item } from '../item'
+import { User as ApiUser } from '../../generated/api'
+
+export interface User extends Item, ApiUser {
   uuid?: string
   name?: string
   username?: string

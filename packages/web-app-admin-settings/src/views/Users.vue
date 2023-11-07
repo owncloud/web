@@ -5,6 +5,7 @@
       :breadcrumbs="breadcrumbs"
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
+      :side-bar-panel-context="sideBarPanelContext"
       :side-bar-open="sideBarOpen"
       :side-bar-loading="sideBarLoading"
       :show-batch-actions="!!selectedUsers.length"
@@ -20,7 +21,7 @@
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
-            @click="toggleCreateUserModal"
+            @click="onToggleCreateUserModal"
           >
             <oc-icon name="add" />
             <span v-text="$gettext('New user')" />
@@ -151,8 +152,8 @@
     />
     <create-user-modal
       v-if="createUserModalOpen"
-      @cancel="toggleCreateUserModal"
-      @confirm="createUser"
+      @cancel="onToggleCreateUserModal"
+      @confirm="onCreateUser"
     />
     <quota-modal
       v-if="quotaModalIsOpen"
@@ -167,50 +168,12 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash-es/isEqual'
-import isEmpty from 'lodash-es/isEmpty'
-import omit from 'lodash-es/omit'
+import AppTemplate from '../components/AppTemplate.vue'
 import UsersList from '../components/Users/UsersList.vue'
 import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import { NoContentMessage, QuotaModal, useConfigurationManager } from '@ownclouders/web-pkg'
-import {
-  queryItemAsString,
-  useAccessToken,
-  useCapabilityCreateUsersDisabled,
-  useCapabilitySpacesMaxQuota,
-  useClientService,
-  useLoadingService,
-  useRoute,
-  useRouteQuery,
-  useRouter,
-  useStore
-} from '@ownclouders/web-pkg'
-import {
-  computed,
-  defineComponent,
-  ref,
-  onBeforeUnmount,
-  onMounted,
-  unref,
-  watch,
-  nextTick
-} from 'vue'
-import { useTask } from 'vue-concurrency'
-import { eventBus } from '@ownclouders/web-pkg'
-import { mapActions, mapMutations, mapState } from 'vuex'
-import AppTemplate from '../components/AppTemplate.vue'
-import { useSideBar } from '@ownclouders/web-pkg'
-import { ItemFilter } from '@ownclouders/web-pkg'
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
-import { toRaw } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client'
-import { useGettext } from 'vue3-gettext'
-import { diff } from 'deep-object-diff'
-import Mark from 'mark.js'
-import { format } from 'util'
 import GroupsModal from '../components/Users/GroupsModal.vue'
 import LoginModal from '../components/Users/LoginModal.vue'
 import {
@@ -219,9 +182,48 @@ import {
   useUserActionsAddToGroups,
   useUserActionsEditLogin,
   useUserActionsEditQuota
-} from '../composables/actions/users'
-import { Drive, Group, User } from '@ownclouders/web-client/src/generated'
-import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
+} from '../composables'
+import { SpaceResource } from '@ownclouders/web-client'
+import { Drive } from '@ownclouders/web-client/src/generated'
+import { isPersonalSpaceResource, User, Group } from '@ownclouders/web-client/src/helpers'
+import {
+  AppLoadingSpinner,
+  ItemFilter,
+  NoContentMessage,
+  QuotaModal,
+  eventBus,
+  queryItemAsString,
+  useAccessToken,
+  useCapabilityCreateUsersDisabled,
+  useCapabilitySpacesMaxQuota,
+  useClientService,
+  useConfigurationManager,
+  useLoadingService,
+  useRoute,
+  useRouteQuery,
+  useRouter,
+  useSideBar,
+  useStore,
+  SideBarPanel,
+  SideBarPanelContext
+} from '@ownclouders/web-pkg'
+import {
+  computed,
+  defineComponent,
+  ref,
+  onBeforeUnmount,
+  onMounted,
+  toRaw,
+  unref,
+  watch,
+  nextTick
+} from 'vue'
+import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
+import { diff } from 'deep-object-diff'
+import Mark from 'mark.js'
+import { format } from 'util'
+import { isEqual, isEmpty, omit } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersView',
@@ -382,6 +384,10 @@ export default defineComponent({
       unref(additionalUserDataLoadedForUserIds).push(user.id)
 
       Object.assign(user, data)
+    })
+
+    const currentUser = computed(() => {
+      return store.state.user
     })
 
     const resetPagination = () => {
@@ -838,6 +844,166 @@ export default defineComponent({
       return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
     })
 
+    const onToggleCreateUserModal = () => {
+      createUserModalOpen.value = !unref(createUserModalOpen)
+    }
+    const onCreateUser = async (user) => {
+      try {
+        const client = clientService.graphAuthenticated
+        const { id: createdUserId } = (await client.users.createUser(user))?.data
+        const { data: createdUser } = await client.users.getUser(createdUserId)
+        users.value.push(createdUser)
+
+        onToggleCreateUserModal()
+        store.dispatch('showMessage', {
+          title: $gettext('User was created successfully')
+        })
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to create user'),
+          error
+        })
+      }
+    }
+    const onEditUser = async ({ user, editUser }) => {
+      try {
+        const client = clientService.graphAuthenticated
+        const graphEditUserPayloadExtractor = (user) => {
+          return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
+        }
+        const graphEditUserPayload = diff(
+          graphEditUserPayloadExtractor(user),
+          graphEditUserPayloadExtractor(editUser)
+        )
+
+        if (!isEmpty(graphEditUserPayload)) {
+          await client.users.editUser(editUser.id, graphEditUserPayload)
+        }
+
+        if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
+          await onUpdateUserDrive(editUser)
+        }
+
+        if (!isEqual(user.memberOf, editUser.memberOf)) {
+          await onUpdateUserGroupAssignments(user, editUser)
+        }
+
+        if (
+          !isEqual(user.appRoleAssignments[0]?.appRoleId, editUser.appRoleAssignments[0]?.appRoleId)
+        ) {
+          await onUpdateUserAppRoleAssignments(user, editUser)
+        }
+
+        const { data: updatedUser } = await client.users.getUser(user.id)
+        const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
+        users.value[userIndex] = updatedUser
+        const selectedUserIndex = unref(selectedUsers).findIndex(
+          (user) => user.id === updatedUser.id
+        )
+        if (selectedUserIndex >= 0) {
+          // FIXME: why do we need to update selectedUsers?
+          selectedUsers.value[selectedUserIndex] = updatedUser
+        }
+
+        eventBus.publish('sidebar.entity.saved')
+
+        return updatedUser
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to edit user'),
+          error
+        })
+      }
+    }
+
+    const onUpdateUserDrive = async (editUser: User) => {
+      const client = clientService.graphAuthenticated
+      const updateDriveResponse = await client.drives.updateDrive(
+        editUser.drive.id,
+        { quota: { total: editUser.drive.quota.total } } as Drive,
+        {}
+      )
+
+      if (editUser.id === unref(currentUser).uuid) {
+        // Load current user quota
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+          id: editUser.drive.id,
+          field: 'spaceQuota',
+          value: updateDriveResponse.data.quota
+        })
+      }
+    }
+    const onUpdateUserAppRoleAssignments = (user: User, editUser: User) => {
+      const client = clientService.graphAuthenticated
+      return client.users.createUserAppRoleAssignment(user.id, {
+        appRoleId: editUser.appRoleAssignments[0].appRoleId,
+        resourceId: unref(applicationId),
+        principalId: editUser.id
+      })
+    }
+    const onUpdateUserGroupAssignments = (user: User, editUser: User) => {
+      const client = clientService.graphAuthenticated
+      const groupsToAdd = editUser.memberOf.filter(
+        (editUserGroup) => !user.memberOf.some((g) => g.id === editUserGroup.id)
+      )
+      const groupsToDelete = user.memberOf.filter(
+        (editUserGroup) => !editUser.memberOf.some((g) => g.id === editUserGroup.id)
+      )
+      const requests = []
+
+      for (const groupToAdd of groupsToAdd) {
+        requests.push(
+          client.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
+        )
+      }
+      for (const groupToDelete of groupsToDelete) {
+        requests.push(client.groups.deleteMember(groupToDelete.id, user.id))
+      }
+
+      return Promise.all(requests)
+    }
+
+    const sideBarPanelContext = computed<SideBarPanelContext<any, User>>(() => {
+      return {
+        parent: null,
+        items: unref(selectedUsers)
+      }
+    })
+    const sideBarAvailablePanels = computed<SideBarPanel<any, User>[]>(() => {
+      return (
+        [
+          {
+            name: 'DetailsPanel',
+            icon: 'user',
+            title: () => $gettext('User details'),
+            component: DetailsPanel,
+            componentAttrs: ({ items }) => ({
+              user: items.length === 1 ? items[0] : null,
+              users: items,
+              roles: unref(roles)
+            }),
+            isRoot: () => true,
+            isEnabled: () => true
+          },
+          {
+            name: 'EditPanel',
+            icon: 'pencil',
+            title: () => $gettext('Edit user'),
+            component: EditPanel,
+            isEnabled: ({ items }) => items.length === 1,
+            componentAttrs: ({ items }) => ({
+              user: items.length === 1 ? items[0] : null,
+              roles: unref(roles),
+              groups: unref(groups),
+              onConfirm: onEditUser
+            })
+          }
+        ] satisfies SideBarPanel<any, User>[]
+      ).filter((p) => p.isEnabled(unref(sideBarPanelContext)))
+    })
+
     return {
       ...useSideBar(),
       maxQuota: useCapabilitySpacesMaxQuota(),
@@ -848,6 +1014,7 @@ export default defineComponent({
       roles,
       groups,
       applicationId,
+      loadResourcesTask,
       loadAdditionalUserDataTask,
       clientService,
       accessToken,
@@ -871,21 +1038,16 @@ export default defineComponent({
       addUsersToGroups,
       removeUsersFromGroups,
       writableGroups,
-      loadResourcesTask,
-      createUsersDisabled,
       isFilteringActive,
       isFilteringMandatory,
-      configurationManager
+      createUsersDisabled,
+      sideBarPanelContext,
+      sideBarAvailablePanels,
+      onToggleCreateUserModal,
+      onCreateUser
     }
   },
   computed: {
-    ...mapState({ currentUser: 'user' }),
-
-    selectedUsersText() {
-      return this.$gettext('%{count} users selected', {
-        count: this.selectedUsers.length.toString()
-      })
-    },
     breadcrumbs() {
       return [
         { text: this.$gettext('Administration Settings'), to: { path: '/admin-settings' } },
@@ -894,43 +1056,9 @@ export default defineComponent({
           onClick: () => eventBus.publish('app.admin-settings.list.load')
         }
       ]
-    },
-    sideBarAvailablePanels() {
-      return [
-        {
-          app: 'DetailsPanel',
-          icon: 'user',
-          title: this.$gettext('User details'),
-          component: DetailsPanel,
-          default: true,
-          enabled: true,
-          componentAttrs: {
-            user: this.selectedUsers.length === 1 ? this.selectedUsers[0] : null,
-            users: this.selectedUsers,
-            roles: this.roles
-          }
-        },
-        {
-          app: 'EditPanel',
-          icon: 'pencil',
-          title: this.$gettext('Edit user'),
-          component: EditPanel,
-          default: false,
-          enabled: this.selectedUsers.length === 1,
-          componentAttrs: {
-            user: this.selectedUsers.length === 1 ? this.selectedUsers[0] : null,
-            roles: this.roles,
-            groups: this.groups,
-            onConfirm: this.editUser
-          }
-        }
-      ].filter((p) => p.enabled)
     }
   },
   methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
-    ...mapMutations('runtime/spaces', ['UPDATE_SPACE_FIELD']),
-
     selectUsers(users) {
       this.selectedUsers.splice(0, this.selectedUsers.length, ...users)
     },
@@ -949,124 +1077,6 @@ export default defineComponent({
     },
     unselectAllUsers() {
       this.selectedUsers.splice(0, this.selectedUsers.length)
-    },
-    toggleCreateUserModal() {
-      this.createUserModalOpen = !this.createUserModalOpen
-    },
-    async createUser(user) {
-      try {
-        const client = this.clientService.graphAuthenticated
-        const { id: createdUserId } = (await client.users.createUser(user))?.data
-        const { data: createdUser } = await client.users.getUser(createdUserId)
-        this.users.push(createdUser)
-
-        this.toggleCreateUserModal()
-        this.showMessage({
-          title: this.$gettext('User was created successfully')
-        })
-      } catch (error) {
-        console.error(error)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to create user'),
-          error
-        })
-      }
-    },
-    async editUser({ user, editUser }) {
-      try {
-        const client = this.clientService.graphAuthenticated
-        const graphEditUserPayloadExtractor = (user) => {
-          return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
-        }
-        const graphEditUserPayload = diff(
-          graphEditUserPayloadExtractor(user),
-          graphEditUserPayloadExtractor(editUser)
-        )
-
-        if (!isEmpty(graphEditUserPayload)) {
-          await client.users.editUser(editUser.id, graphEditUserPayload)
-        }
-
-        if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
-          await this.updateUserDrive(editUser)
-        }
-
-        if (!isEqual(user.memberOf, editUser.memberOf)) {
-          await this.updateUserGroupAssignments(user, editUser)
-        }
-
-        if (
-          !isEqual(user.appRoleAssignments[0]?.appRoleId, editUser.appRoleAssignments[0]?.appRoleId)
-        ) {
-          await this.updateUserAppRoleAssignments(user, editUser)
-        }
-
-        const { data: updatedUser } = await client.users.getUser(user.id)
-        const userIndex = this.users.findIndex((user) => user.id === updatedUser.id)
-        this.users[userIndex] = updatedUser
-        const selectedUserIndex = this.selectedUsers.findIndex((user) => user.id === updatedUser.id)
-        if (selectedUserIndex >= 0) {
-          // FIXME: why do we need to update selectedUsers?
-          this.selectedUsers[selectedUserIndex] = updatedUser
-        }
-
-        eventBus.publish('sidebar.entity.saved')
-
-        return updatedUser
-      } catch (error) {
-        console.error(error)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to edit user'),
-          error
-        })
-      }
-    },
-
-    async updateUserDrive(editUser) {
-      const client = this.clientService.graphAuthenticated
-      const updateDriveResponse = await client.drives.updateDrive(
-        editUser.drive.id,
-        { quota: { total: editUser.drive.quota.total } } as Drive,
-        {}
-      )
-
-      if (editUser.id === this.currentUser.uuid) {
-        // Load current user quota
-        this.UPDATE_SPACE_FIELD({
-          id: editUser.drive.id,
-          field: 'spaceQuota',
-          value: updateDriveResponse.data.quota
-        })
-      }
-    },
-    updateUserAppRoleAssignments(user, editUser) {
-      const client = this.clientService.graphAuthenticated
-      return client.users.createUserAppRoleAssignment(user.id, {
-        appRoleId: editUser.appRoleAssignments[0].appRoleId,
-        resourceId: this.applicationId,
-        principalId: editUser.id
-      })
-    },
-    updateUserGroupAssignments(user, editUser) {
-      const client = this.clientService.graphAuthenticated
-      const groupsToAdd = editUser.memberOf.filter(
-        (editUserGroup) => !user.memberOf.some((g) => g.id === editUserGroup.id)
-      )
-      const groupsToDelete = user.memberOf.filter(
-        (editUserGroup) => !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-      )
-      const requests = []
-
-      for (const groupToAdd of groupsToAdd) {
-        requests.push(
-          client.groups.addMember(groupToAdd.id, user.id, this.configurationManager.serverUrl)
-        )
-      }
-      for (const groupToDelete of groupsToDelete) {
-        requests.push(client.groups.deleteMember(groupToDelete.id, user.id))
-      }
-
-      return Promise.all(requests)
     }
   }
 })

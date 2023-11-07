@@ -11,7 +11,6 @@ import translations from '../l10n/translations.json'
 import { defineWebApplication } from '@ownclouders/web-pkg'
 import store from './store'
 import { extensions } from './extensions'
-import fileSideBars from './fileSideBars'
 import { buildRoutes } from '@ownclouders/web-pkg'
 import { AppNavigationItem } from '@ownclouders/web-pkg'
 
@@ -35,7 +34,6 @@ const appInfo = {
   color: 'var(--oc-color-swatch-primary-muted)',
   isFileEditor: false,
   extensions: [],
-  fileSideBars,
   applicationMenu: {
     enabled: () => true,
     priority: 10

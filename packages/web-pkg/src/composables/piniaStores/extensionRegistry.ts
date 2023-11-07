@@ -1,15 +1,18 @@
 import { Action } from '../actions'
-import { SearchProvider } from '../../components/Search'
+import { SearchProvider, SideBarPanel } from '../../components'
 import { defineStore } from 'pinia'
 import { Ref, hasInjectionContext, unref } from 'vue'
 import { useConfigurationManager } from '../configuration'
 import { ConfigurationManager } from '../../configuration'
 import { AppNavigationItem } from '../../apps'
+import { Item } from '@ownclouders/web-client/src/helpers'
+
+export type ExtensionScope = 'resource' | 'user' | 'group' | string
 
 export type BaseExtension = {
   id: string
   type: string
-  scopes?: string[]
+  scopes?: ExtensionScope[]
 }
 
 export interface ActionExtension extends BaseExtension {
@@ -27,7 +30,16 @@ export interface SidebarNavExtension extends BaseExtension {
   navItem: AppNavigationItem
 }
 
-export type Extension = ActionExtension | SearchExtension | SidebarNavExtension
+export interface SidebarPanelExtension<P, T extends Item> extends BaseExtension {
+  type: 'sidebarPanel'
+  panel: SideBarPanel<P, T>
+}
+
+export type Extension =
+  | ActionExtension
+  | SearchExtension
+  | SidebarNavExtension
+  | SidebarPanelExtension<any, any>
 
 export const useExtensionRegistry = ({
   configurationManager
