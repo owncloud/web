@@ -3,13 +3,12 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { App, computed, unref } from 'vue'
+import { App, computed } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { useLocalStorage, useThemeStore } from '@ownclouders/web-pkg'
-import { useDefaultThemeName } from '../composables'
+import { useThemeStore } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
   ClientService,
@@ -321,12 +320,8 @@ export const announceTheme = async ({
   const { currentTheme, initializeThemes } = useThemeStore()
 
   const { web, common } = await loadTheme(runtimeConfiguration?.theme)
-  const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
-  if (unref(currentThemeName) === null) {
-    currentThemeName.value = useDefaultThemeName()
-  }
 
-  await initializeThemes([web], common, unref(currentThemeName))
+  await initializeThemes([web], common)
 
   app.use(designSystem, {
     tokens: currentTheme.designTokens

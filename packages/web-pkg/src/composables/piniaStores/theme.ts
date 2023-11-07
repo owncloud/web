@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { ThemeName } from '../../../../web-runtime/src/composables/theme/useDefaultThemeName'
+import { ref, computed, unref } from 'vue'
+import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 
 interface CommonTheme {
   name: string
@@ -33,6 +33,11 @@ interface WebTheme {
   }
 }
 
+const themeNameLight = 'default'
+const themeNameDark = 'default-dark'
+
+type ThemeName = typeof themeNameDark | typeof themeNameLight
+
 export const useThemeStore = defineStore('theme', () => {
   const commonTheme = ref<CommonTheme | undefined>()
   const currentTheme = ref<WebTheme | undefined>()
@@ -48,17 +53,19 @@ export const useThemeStore = defineStore('theme', () => {
       availableThemes.value.some((x) => x.isDark !== true)
   )
 
-  const initializeThemes = (
-    themes: WebTheme[],
-    newCommonTheme: CommonTheme,
-    defaultThemeName: ThemeName
-  ) => {
+  const initializeThemes = (themes: WebTheme[], newCommonTheme: CommonTheme) => {
     availableThemes.value = themes
     commonTheme.value = newCommonTheme
 
+    const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
+    // Set default fallback theme names
+    if (unref(currentThemeName) === null) {
+      currentThemeName.value = usePreferredDark().value ? themeNameDark : themeNameLight
+    }
+
     // TODO: Fix this by passing full theme?
     // TODO: Discuss handling (former) default scenario
-    setCurrentTheme(availableThemes.value.find((x) => x.general.name === defaultThemeName))
+    setCurrentTheme(availableThemes.value.find((x) => x.general.name === currentThemeName.value))
   }
 
   const setCurrentTheme = (theme: WebTheme) => {

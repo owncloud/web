@@ -3,7 +3,7 @@ import defaultTheme from '../../themes/owncloud/theme.json'
 import { v4 as uuidV4 } from 'uuid'
 
 export const loadTheme = async (location = '') => {
-  const defaults = { web: defaultTheme.web || defaultTheme, common: defaultTheme.common || {} }
+  const defaults = { web: defaultTheme.web, common: defaultTheme.common }
 
   if (location.split('.').pop() !== 'json') {
     if (isEqual(process.env.NODE_ENV, 'development')) {
@@ -18,7 +18,7 @@ export const loadTheme = async (location = '') => {
       return defaults
     }
     const theme = await response.json()
-    return { web: theme.web || theme, common: theme.common || {} }
+    return { web: theme.web, common: theme.common || {} }
   } catch (e) {
     console.error(
       `Failed to load theme '${location}' is not a valid json file, using default theme.`
