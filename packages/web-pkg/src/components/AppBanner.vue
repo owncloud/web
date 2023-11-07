@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
-import { useRouter } from '../composables'
+import { useRouter, useThemeStore } from '../composables'
 import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
 

@@ -8,7 +8,7 @@ import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { useLocalStorage } from '@ownclouders/web-pkg'
+import { useLocalStorage, useThemeStore } from '@ownclouders/web-pkg'
 import { useDefaultThemeName } from '../composables'
 import { authService } from '../services/auth'
 import {
@@ -19,7 +19,6 @@ import {
   UppyService
 } from '@ownclouders/web-pkg'
 import { default as storeOptions } from '../store'
-import { useThemeStore } from '../store/theme'
 import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'

@@ -67,9 +67,8 @@ import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
-import { useStore } from '@ownclouders/web-pkg'
+import { useStore, useThemeStore } from '@ownclouders/web-pkg'
 import { RouteLocation } from 'vue-router'
-import { useThemeStore } from './store/theme'
 
 export default defineComponent({
   components: {
@@ -243,3 +242,4 @@ iframe {
   border: 0;
 }
 </style>
+@ownclouders/web-pkg/src/composables/piniaStores/theme

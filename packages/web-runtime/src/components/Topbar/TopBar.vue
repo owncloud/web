@@ -52,11 +52,11 @@ import {
   useEmbedMode,
   useRouter,
   useStore,
+  useThemeStore,
   useUserContext
 } from '@ownclouders/web-pkg'
 import { computed, unref, PropType, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useThemeStore } from '../../store/theme'
 
 export default {
   components: {
@@ -301,3 +301,4 @@ export default {
   }
 }
 </style>
+@ownclouders/web-pkg/src/composables/piniaStores/theme

@@ -9,6 +9,7 @@
   </div>
 </template>
 <script lang="ts">
+import { useThemeStore } from '@ownclouders/web-pkg'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

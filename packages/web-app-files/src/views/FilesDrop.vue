@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
+import { createLocationPublic, createLocationSpaces, useThemeStore } from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
   computed,

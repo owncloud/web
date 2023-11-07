@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref, computed, unref } from 'vue'
-import { ThemeName } from '../composables/theme/useDefaultThemeName'
+import { ref, computed } from 'vue'
+import { ThemeName } from '../../../../web-runtime/src/composables/theme/useDefaultThemeName'
 
 interface CommonTheme {
   name: string
