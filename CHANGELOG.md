@@ -26,6 +26,7 @@ Summary
 * Bugfix - Duplicated file search request: [#9861](https://github.com/owncloud/web/pull/9861)
 * Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
+* Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -207,6 +208,13 @@ Details
 
    https://github.com/owncloud/web/issues/9790
    https://github.com/owncloud/web/pull/9881
+
+* Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
+
+   Resolving private links via the share jail ID has been fixed.
+
+   https://github.com/owncloud/web/issues/9867
+   https://github.com/owncloud/web/pull/9913
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
