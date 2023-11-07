@@ -301,4 +301,3 @@ export default {
   }
 }
 </style>
-@ownclouders/web-pkg/src/composables/piniaStores/theme

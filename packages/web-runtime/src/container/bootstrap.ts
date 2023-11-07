@@ -34,6 +34,7 @@ import { z } from 'zod'
 import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -316,15 +317,16 @@ export const announceTheme = async ({
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  // TODO: StoreToRefs, or nah?
-  const { currentTheme, initializeThemes } = useThemeStore()
+  const themeStore = useThemeStore()
+  const { initializeThemes } = themeStore
+  const { currentTheme } = storeToRefs(themeStore)
 
   const { web, common } = await loadTheme(runtimeConfiguration?.theme)
 
   await initializeThemes([web], common)
 
   app.use(designSystem, {
-    tokens: currentTheme.designTokens
+    tokens: currentTheme.value.designTokens
   })
 }
 
