@@ -8,11 +8,11 @@
           <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
         </div>
         <div id="shares-links" class="oc-flex oc-flex-middle oc-mr-m">
-          <label v-text="$gettext('Federated shares')" />
+          <label class="oc-mr-s" v-text="$gettext('Federated shares:')" />
           <oc-button
             :aria-current="$gettext('Federated shares with me')"
             appearance="raw"
-            class="oc-ml-l"
+            class="oc-p-s oc-mr-s"
             @click="toSharedWithMe"
           >
             <oc-icon name="share-forward" />
@@ -21,7 +21,7 @@
           <oc-button
             :aria-current="$gettext('Federated shares with me')"
             appearance="raw"
-            class="oc-ml-l"
+            class="oc-p-s"
             @click="toSharedWithOthers"
           >
             <oc-icon name="reply" />
@@ -50,7 +50,7 @@
               @click="deleteConnection(item)"
             >
               <oc-icon name="delete-bin-5" fill-type="line" size="medium" />
-              <span v-text="$gettext('Delete')" /> </oc-button
+              <span v-text="$gettext('Delete')" /></oc-button
           ></template>
         </oc-table>
       </template>
@@ -68,6 +68,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { FederatedConnection } from '../types'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -142,10 +143,13 @@ export default defineComponent({
     })
 
     const toSharedWithMe = () => {
-      router.push({ name: 'files-shares-with-me', query: { filterSM: 'true' } })
+      router.push({ name: 'files-shares-with-me', query: { q_shareType: ShareTypes.remote.key } })
     }
     const toSharedWithOthers = () => {
-      router.push({ name: 'files-shares-with-others', query: { filterSM: 'true' } })
+      router.push({
+        name: 'files-shares-with-others',
+        query: { q_shareType: ShareTypes.remote.key }
+      })
     }
 
     const deleteConnection = async (user) => {
@@ -183,6 +187,11 @@ export default defineComponent({
 }
 
 #shares-links {
+  button:hover {
+    background-color: var(--oc-color-background-hover);
+    border-color: var(--oc-color-background-hover);
+  }
+
   @media (max-width: 850px) {
     visibility: none;
   }
