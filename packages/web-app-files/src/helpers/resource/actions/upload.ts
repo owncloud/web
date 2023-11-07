@@ -73,10 +73,13 @@ export class ResourceConflict extends ConflictDialog {
     let allConflictsStrategy
     let doForAllConflictsFolders = false
     let allConflictsStrategyFolders
+    console.log('upload.ts executed')
 
     for (const conflict of conflicts) {
+      console.log(conflict, 'conflict')
       const isFolder = conflict.type === 'folder'
       const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
+      console.log(conflict, 'conflictArr')
 
       if (doForAllConflicts && !isFolder) {
         conflictArray.push({
@@ -165,18 +168,18 @@ export class ResourceConflict extends ConflictDialog {
           `/${newFolderName}/`
         )
         file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
-          new RegExp(`/${encodeURIComponent(folder)}`),
+          new RegExp(`/${encodeURIComponent(folder)}$`),
           `/${encodeURIComponent(newFolderName)}`
         )
         if (file.xhrUpload?.endpoint) {
           file.xhrUpload.endpoint = file.xhrUpload.endpoint.replace(
-            new RegExp(`/${encodeURIComponent(folder)}`),
+            new RegExp(`/${encodeURIComponent(folder)}$`),
             `/${encodeURIComponent(newFolderName)}`
           )
         }
         if (file.tus?.endpoint) {
           file.tus.endpoint = file.tus.endpoint.replace(
-            new RegExp(`/${encodeURIComponent(folder)}`),
+            new RegExp(`/${encodeURIComponent(folder)}$`),
             `/${encodeURIComponent(newFolderName)}`
           )
         }
