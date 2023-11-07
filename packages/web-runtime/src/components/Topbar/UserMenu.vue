@@ -144,16 +144,10 @@ export default defineComponent({
     })
     const store = useStore()
     const imprintUrl = computed(() => {
-      return (
-        store.getters.configuration.currentTheme.general?.imprintUrl ||
-        store.getters.configuration.options.imprintUrl
-      )
+      return store.getters.configuration.options.imprintUrl
     })
     const privacyUrl = computed(() => {
-      return (
-        store.getters.configuration.currentTheme.general?.privacyUrl ||
-        store.getters.configuration.options.privacyUrl
-      )
+      return store.getters.configuration.options.privacyUrl
     })
     return {
       hasSpaces: useCapabilitySpacesEnabled(),

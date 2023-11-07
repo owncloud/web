@@ -69,6 +69,7 @@ import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { useStore } from '@ownclouders/web-pkg'
 import { RouteLocation } from 'vue-router'
+import { useThemeStore } from './store/theme'
 
 export default defineComponent({
   components: {
@@ -76,6 +77,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { currentTheme } = useThemeStore()
     const router = useRouter()
     useHead({ store })
 
@@ -133,6 +135,7 @@ export default defineComponent({
     )
 
     return {
+      currentTheme,
       modalComponent,
       onModalConfirm,
       onModalCancel,
@@ -212,10 +215,9 @@ export default defineComponent({
       }
       const glue = ' - '
       const titleSegments = [routeTitle]
-      const generalName = this.configuration.currentTheme.general.name
       return {
         shortDocumentTitle: titleSegments.join(glue),
-        fullDocumentTitle: [...titleSegments, generalName].join(glue)
+        fullDocumentTitle: [...titleSegments, this.currentTheme.general.name].join(glue)
       }
     }
   }

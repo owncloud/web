@@ -5,15 +5,19 @@
     "logo": "themes/owncloud/assets/logo.svg"
   },
   "ios": {},
-  "web": {
-    "default": {
-      "general": {
-        "name": "ownCloud",
-        "slogan": "ownCloud – A safe home for all your data",
-        "privacyUrl": "",
-        "imprintUrl": ""
+  "web": [
+    {
+      "isDark": false,
+      "title": "Light Theme",
+      "name": "ownCloud Light Theme",
+      "appBanner": {
+        "title": "ownCloud",
+        "publisher": "ownCloud GmbH",
+        "additionalInformation": "",
+        "ctaText": "OPEN",
+        "icon": "themes/owncloud/assets/owncloud-app-icon.png",
+        "appScheme": "owncloud"
       },
-      "appBanner": {},
       "logo": {
         "topbar": "themes/owncloud/assets/logo.svg",
         "favicon": "themes/owncloud/assets/favicon.jpg",
@@ -83,14 +87,18 @@
         }
       }
     },
-    "default-dark": {
-      "general": {
-        "name": "ownCloud",
-        "slogan": "ownCloud – A safe home for all your data",
-        "privacyUrl": "",
-        "imprintUrl": ""
+    {
+      "isDark": true,
+      "title": "Dark Theme",
+      "name": "ownCloud Dark Theme",
+      "appBanner": {
+        "title": "ownCloud",
+        "publisher": "ownCloud GmbH",
+        "additionalInformation": "",
+        "ctaText": "OPEN",
+        "icon": "themes/owncloud/assets/owncloud-app-icon.png",
+        "appScheme": "owncloud"
       },
-      "appBanner": {},
       "logo": {
         "topbar": "themes/owncloud/assets/logo.svg",
         "favicon": "themes/owncloud/assets/favicon.jpg",
@@ -195,5 +203,5 @@
         }
       }
     }
-  }
+  ]
 }

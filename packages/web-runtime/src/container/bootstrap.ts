@@ -19,6 +19,7 @@ import {
   UppyService
 } from '@ownclouders/web-pkg'
 import { default as storeOptions } from '../store'
+import { useThemeStore } from '../store/theme'
 import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'
@@ -309,26 +310,27 @@ const rewriteDeprecatedAppNames = (
  * @param designSystem
  */
 export const announceTheme = async ({
-  store,
   app,
   designSystem,
   runtimeConfiguration
 }: {
-  store: Store<unknown>
   app: App
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
+  // TODO: StoreToRefs, or nah?
+  const { currentTheme, initializeThemes } = useThemeStore()
+
   const { web, common } = await loadTheme(runtimeConfiguration?.theme)
-  await store.dispatch('loadThemes', { theme: web, common })
   const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
   if (unref(currentThemeName) === null) {
     currentThemeName.value = useDefaultThemeName()
   }
-  await store.dispatch('loadTheme', { theme: web[unref(currentThemeName)] || web.default })
+
+  await initializeThemes([web], common, unref(currentThemeName))
 
   app.use(designSystem, {
-    tokens: store.getters.theme.designTokens
+    tokens: currentTheme.designTokens
   })
 }
 

@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
-import { useRouter, useStore } from '../composables'
+import { useRouter } from '../composables'
 import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
 
@@ -52,12 +52,11 @@ export default defineComponent({
   setup(props) {
     const appBannerWasClosed = useSessionStorage('app_banner_closed', null)
     const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
-    const store = useStore()
+
     const router = useRouter()
-    const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
-    const isAppBannerAvailable = computed(
-      () => appBannerSettings && Object.keys(appBannerSettings).length != 0
-    )
+    const themeStore = useThemeStore()
+
+    const appBannerSettings = themeStore.currentTheme.appBanner
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()

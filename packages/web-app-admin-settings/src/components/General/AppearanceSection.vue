@@ -26,7 +26,7 @@
       </div>
       <div>
         <div class="logo-wrapper">
-          <img alt="" :src="logo" class="oc-p-xs" />
+          <img alt="" :src="currentTheme.logo.topbar" class="oc-p-xs" />
         </div>
         <input
           id="logo-upload-input"
@@ -59,6 +59,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { currentTheme } = useThemeStore()
 
     const logoInput: VNodeRef = ref(null)
 
@@ -75,7 +76,6 @@ export default defineComponent({
       resources: unref(menuItems)
     }))
 
-    const logo = computed(() => store.getters.configuration.currentTheme.logo.topbar)
     const menuSections = computed(() => [
       {
         name: 'primaryActions',
@@ -87,7 +87,7 @@ export default defineComponent({
 
     return {
       actionOptions,
-      logo,
+      currentTheme,
       menuItems,
       menuSections,
       supportedLogoMimeTypesAcceptValue,

@@ -28,7 +28,7 @@
       </div>
 
       <div class="oc-text-center oc-mt-xxl">
-        <p v-text="configuration.currentTheme.general.slogan" />
+        <p v-text="currentTheme.general.slogan" />
       </div>
     </div>
   </div>
@@ -78,6 +78,7 @@ export default defineComponent({
   setup() {
     const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
+    const { currentTheme } = useThemeStore()
     const router = useRouter()
     const route = useRoute()
     const language = useGettext()
@@ -204,6 +205,7 @@ export default defineComponent({
     })
 
     return {
+      currentTheme,
       dragareaEnabled,
       loading,
       errorMessage,

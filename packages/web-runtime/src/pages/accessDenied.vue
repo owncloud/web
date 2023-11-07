@@ -57,6 +57,7 @@ export default defineComponent({
 
     const accessDeniedHelpUrl = computed(() => {
       return (
+        // TODO: Discuss if this can be reduced to config only?
         store.getters.configuration?.commonTheme?.accessDeniedHelpUrl ||
         store.getters.configuration?.options?.accessDeniedHelpUrl
       )

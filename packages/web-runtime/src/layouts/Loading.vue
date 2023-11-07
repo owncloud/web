@@ -2,7 +2,7 @@
   <div
     class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
     :style="{
-      backgroundImage: 'url(' + configuration.currentTheme.loginPage.backgroundImg + ')'
+      backgroundImage: 'url(' + currentTheme.loginPage.backgroundImg + ')'
     }"
   >
     <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" />
@@ -10,12 +10,15 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'LoadingLayout',
-  computed: {
-    ...mapGetters(['configuration'])
+  setup() {
+    const { currentTheme } = useThemeStore()
+
+    return {
+      currentTheme
+    }
   }
 })
 </script>

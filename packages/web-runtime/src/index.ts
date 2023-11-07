@@ -112,7 +112,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
 
   const customTranslationsPromise = loadCustomTranslations({ configurationManager })
-  const themePromise = announceTheme({ store, app, designSystem, runtimeConfiguration })
+  const themePromise = announceTheme({ app, designSystem, runtimeConfiguration })
   const [customTranslations] = await Promise.all([
     customTranslationsPromise,
     applicationsPromise,
@@ -272,7 +272,7 @@ export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   const store = await announceStore({ runtimeConfiguration: {} })
   announceVersions({ store })
   const app = createApp(pages.failure)
-  await announceTheme({ store, app, designSystem })
+  await announceTheme({ app, designSystem })
   console.error(err)
   app.use(store)
   await announceTranslations({
