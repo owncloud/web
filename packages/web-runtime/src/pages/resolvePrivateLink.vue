@@ -60,7 +60,7 @@ import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 import { dirname } from 'path'
 import { createFileRouteOptions, useGetResourceContext } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
-import { isShareSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { isShareSpaceResource, Resource, SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
@@ -91,6 +91,10 @@ export default defineComponent({
 
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
       try {
+        if (id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`) {
+          return router.push(createLocationShares('files-shares-with-me'))
+        }
+
         const result = yield getResourceContext(id)
         const { space, resource } = result
         let { path } = result
