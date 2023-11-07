@@ -200,7 +200,7 @@ export function buildSharedResource(
     resource.sharedWith = share.sharedWith || []
     resource.shareOwner = share.uid_owner
     resource.shareOwnerDisplayname = share.displayname_owner
-    resource.name = path.basename(share.path)
+    resource.name = isRemoteShare ? share.name : path.basename(share.path)
     resource.path = share.path
     resource.webDavPath = hasShareJail
       ? buildWebDavSpacesPath(resource.storageId, share.path)
