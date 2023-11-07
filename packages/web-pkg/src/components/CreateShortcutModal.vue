@@ -39,22 +39,23 @@
             <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
               <oc-spinner />
             </li>
-            <li
-              v-if="searchResult?.values?.length"
-              class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
-            >
-              <span v-text="$gettext('Link to a file')" />
-            </li>
-            <li v-for="(value, index) in searchResult?.values" :key="index" class="oc-p-xs">
-              <oc-button
-                class="oc-width-1-1"
-                appearance="raw"
-                justify-content="left"
-                @click="dropItemResourceClicked(value)"
+            <template v-if="searchResult">
+              <li
+                class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
               >
-                <resource-preview :search-result="value" :is-clickable="false" />
-              </oc-button>
-            </li>
+                <span v-text="$gettext('Link to a file')" />
+              </li>
+              <li v-for="(value, index) in searchResult.values" :key="index" class="oc-p-xs">
+                <oc-button
+                  class="oc-width-1-1"
+                  appearance="raw"
+                  justify-content="left"
+                  @click="dropItemResourceClicked(value)"
+                >
+                  <resource-preview :search-result="value" :is-clickable="false" />
+                </oc-button>
+              </li>
+            </template>
           </oc-list>
         </oc-drop>
         <div class="oc-flex oc-width-1-1 oc-mt-m">
@@ -77,7 +78,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useClientService, useFolderLink, useSearch, useStore } from '../composables'
+import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
@@ -87,6 +88,7 @@ import { useTask } from 'vue-concurrency'
 import { debounce } from 'lodash-es'
 import ResourcePreview from './Search/ResourcePreview.vue'
 import { SearchResult, SearchResultValue } from './Search'
+import { isLocationPublicActive } from '../router'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
@@ -108,6 +110,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
+    const router = useRouter()
     const { search } = useSearch()
     const {
       getPathPrefix,
@@ -120,7 +123,7 @@ export default defineComponent({
     const dropRef = ref(null)
     const inputUrl = ref('')
     const inputFilename = ref('')
-    const searchResult: Ref<SearchResult> = ref()
+    const searchResult: Ref<SearchResult> = ref(null)
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -154,17 +157,13 @@ export default defineComponent({
     })
 
     const searchTask = useTask(function* (signal, searchTerm: string) {
+      searchResult.value = null
       searchTerm = `name:"*${searchTerm}*" NOT name:"*.url"`
 
       try {
         searchResult.value = yield search(searchTerm, SEARCH_LIMIT)
       } catch (e) {
         // Don't show user facing error, as the core functionality does work without an intact search
-        console.error(e)
-        searchResult.value = {
-          totalResults: 0,
-          values: []
-        }
       }
     })
 
@@ -238,7 +237,10 @@ export default defineComponent({
       await nextTick()
       if (unref(showDrop) && unref(dropRef)) {
         ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
-        debouncedSearch()
+
+        if (!isLocationPublicActive(router, 'files-public-link')) {
+          debouncedSearch()
+        }
       }
     })
 

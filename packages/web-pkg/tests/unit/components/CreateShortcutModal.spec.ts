@@ -51,7 +51,7 @@ describe('CreateShortcutModal', () => {
       console.error = jest.fn()
       const { wrapper } = getWrapper({ rejectSearch: true })
       await wrapper.vm.searchTask.perform('new folder')
-      expect(wrapper.vm.searchResult.values.length).toBe(0)
+      expect(wrapper.vm.searchResult).toBe(null)
     })
   })
 })

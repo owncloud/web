@@ -95,6 +95,7 @@ export default defineComponent({
 
     const menuItemsContext = computed(() => {
       const fileHandlers = [
+        ...unref(openShortcutActions),
         ...unref(editorActions),
         ...loadExternalAppActions(unref(actionOptions))
       ]
@@ -112,7 +113,6 @@ export default defineComponent({
 
     const menuItemsActions = computed(() => {
       return [
-        ...unref(openShortcutActions),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
         ...unref(deleteActions),
