@@ -18,6 +18,24 @@
             :filter-options="visibilityOptions"
             @toggle-filter="setAreHiddenFilesShown"
           />
+          <item-filter
+            :allow-multiple="true"
+            :filter-label="$gettext('Share Type')"
+            :filterable-attributes="['label']"
+            :items="shareTypes"
+            :option-filter-label="$gettext('Filter share types')"
+            :show-option-filter="true"
+            id-attribute="key"
+            class="oc-mr-s"
+            display-name-attribute="label"
+            filter-name="shareType"
+          >
+            <template #image="{ item }">
+              <div class="tag-option-wrapper oc-flex oc-flex-middle">
+                <span class="oc-ml-s">{{ item.label }}</span>
+              </div>
+            </template>
+          </item-filter>
         </div>
         <shared-with-me-section
           id="files-shared-with-me-view"
@@ -43,7 +61,7 @@
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
 
-import { AppLoadingSpinner, InlineFilterOption } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, InlineFilterOption, ItemFilter } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
@@ -57,6 +75,8 @@ import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigati
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '@ownclouders/web-pkg'
 import { useOpenWithDefaultApp } from '../../composables'
+import { ShareType, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { uniq } from 'lodash-es'
 
 export default defineComponent({
   components: {
@@ -66,7 +86,8 @@ export default defineComponent({
     AppLoadingSpinner,
     SharedWithMeSection,
     SideBar,
-    ItemFilterInline
+    ItemFilterInline,
+    ItemFilter
   },
 
   setup() {
@@ -109,8 +130,19 @@ export default defineComponent({
       return unref(areHiddenFilesShown) ? unref(hiddenShares) : unref(visibleShares)
     })
 
+    const selectedShareTypesQuery = useRouteQuery('q_shareType')
+    const filteredItems = computed(() => {
+      const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
+      if (!selectedShareTypes || selectedShareTypes.length === 0) {
+        return unref(currentItems)
+      }
+      return unref(currentItems).filter((item) => {
+        return selectedShareTypes.map((t) => ShareTypes[t].value).includes(item.share.shareType)
+      })
+    })
+
     const { sortBy, sortDir, items, handleSort } = useSort({
-      items: currentItems,
+      items: filteredItems,
       fields: sortFields
     })
 
@@ -139,6 +171,11 @@ export default defineComponent({
       }
     }
 
+    const shareTypes = computed(() => {
+      const uniqueShareTypes = uniq(unref(currentItems).map((i) => i.share?.shareType))
+      return ShareTypes.getByValues(uniqueShareTypes)
+    })
+
     onMounted(() => {
       performLoaderTask()
     })
@@ -160,6 +197,7 @@ export default defineComponent({
       setAreHiddenFilesShown,
       shareSectionTitle,
       visibleShares,
+      shareTypes,
 
       handleSort,
       sortBy,

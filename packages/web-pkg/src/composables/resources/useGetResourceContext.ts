@@ -67,6 +67,8 @@ export const useGetResourceContext = () => {
     }
 
     space = buildShareSpaceResource({
+      // FIXME: handle ocm shares when they are added to the drive listing
+      driveAliasPrefix: 'share',
       shareId: mountPoint.nodeId,
       shareName: mountPoint.name,
       serverUrl: configurationManager.serverUrl

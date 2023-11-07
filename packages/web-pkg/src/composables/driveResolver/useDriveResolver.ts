@@ -1,7 +1,11 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from 'vue'
-import { buildShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  buildShareSpaceResource,
+  ShareTypes,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { Resource } from '@ownclouders/web-client'
 import { useSpacesLoading } from './useSpacesLoading'
@@ -88,9 +92,14 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
         path = item.join('/')
-      } else if (driveAliasAndItem.startsWith('share/')) {
+      } else if (
+        driveAliasAndItem.startsWith('share/') ||
+        driveAliasAndItem.startsWith('ocm-share/')
+      ) {
         const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
+        const driveAliasPrefix = driveAliasAndItem.startsWith('ocm-share/') ? 'ocm-share' : 'share'
         matchingSpace = buildShareSpaceResource({
+          driveAliasPrefix,
           shareId: queryItemAsString(unref(shareId)),
           shareName: unref(shareName),
           serverUrl: configurationManager.serverUrl

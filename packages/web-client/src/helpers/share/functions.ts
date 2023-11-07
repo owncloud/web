@@ -143,6 +143,7 @@ export function buildSharedResource(
   hasShareJail = false
 ): Resource {
   const isFolder = share.item_type === 'folder'
+  const isRemoteShare = parseInt(share.share_type) === ShareTypes.remote.value
   let resource: Resource = {
     id: share.id,
     fileId: share.item_source,
@@ -175,8 +176,11 @@ export function buildSharedResource(
     resource.sharedWith = share.sharedWith || []
     resource.status = parseInt(share.state)
     resource.hidden = share.hidden === 'true' || share.hidden === true
-    resource.name = share.name || path.basename(share.file_target)
-    if (hasShareJail) {
+    resource.name = isRemoteShare ? share.name : path.basename(share.file_target)
+    if (isRemoteShare) {
+      resource.path = '/'
+      resource.webDavPath = buildWebDavSpacesPath(share.space_id, '/')
+    } else if (hasShareJail) {
       // FIXME, HACK 1: path needs to be '/' because the share has it's own webdav endpoint (we access it's root). should ideally be removed backend side.
       // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root. should ideally be changed backend side.
       resource.path = '/'

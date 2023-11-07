@@ -1,7 +1,20 @@
 import { User } from '../user'
 import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
-import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
-import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
+import {
+  ShareType,
+  ShareTypes,
+  SpacePeopleShareRoles,
+  spaceRoleEditor,
+  spaceRoleManager,
+  spaceRoleViewer
+} from '../share'
+import {
+  PublicSpaceResource,
+  ShareSpaceResource,
+  SpaceResource,
+  SHARE_JAIL_ID,
+  OCM_PROVIDER_ID
+} from './types'
 
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath } from '../publicLink'
@@ -60,24 +73,33 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
 }
 
 export function buildShareSpaceResource({
+  driveAliasPrefix,
   shareId,
   shareName,
   serverUrl
 }: {
+  driveAliasPrefix: 'share' | 'ocm-share'
   shareId: string | number
   shareName: string
   serverUrl: string
 }): ShareSpaceResource {
+  let id
+  if (driveAliasPrefix === 'ocm-share') {
+    id = `${OCM_PROVIDER_ID}$${shareId}!${shareId}`
+  } else {
+    id = [SHARE_JAIL_ID, shareId].join('!')
+  }
+
   const space = buildSpace({
-    id: [SHARE_JAIL_ID, shareId].join('!'),
-    driveAlias: `share/${shareName}`,
+    id,
+    driveAlias: `${driveAliasPrefix}/${shareName}`,
     driveType: 'share',
     name: shareName,
     shareId,
     serverUrl
   }) as ShareSpaceResource
   space.rename = (newName: string) => {
-    space.driveAlias = `share/${newName}`
+    space.driveAlias = `${driveAliasPrefix}/${newName}`
     space.name = newName
   }
   return space

@@ -12,7 +12,8 @@ import {
   extractStorageId,
   isMountPointSpaceResource,
   isPersonalSpaceResource,
-  isProjectSpaceResource
+  isProjectSpaceResource,
+  ShareTypes
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
@@ -43,9 +44,13 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     if (unref(driveAliasAndItem)?.startsWith('public/')) {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
+
+    const driveAliasPrefix =
+      resource?.share?.shareType === ShareTypes.remote.value ? 'ocm-share' : 'share'
     return (
       getInternalSpace(storageId) ||
       buildShareSpaceResource({
+        driveAliasPrefix,
         shareId: resource.shareId,
         shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
         serverUrl: configurationManager.serverUrl
