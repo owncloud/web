@@ -134,6 +134,7 @@ export default defineComponent({
     max-width: 150px;
     height: 24px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
+    height: 100%;
   }
   &-button-selected.oc-pill,
   &-button-selected.oc-pill:hover {

@@ -19,6 +19,7 @@
             @toggle-filter="setAreHiddenFilesShown"
           />
           <item-filter
+            v-if="shareTypes.length > 1"
             :allow-multiple="true"
             :filter-label="$gettext('Share Type')"
             :filterable-attributes="['label']"
@@ -26,14 +27,12 @@
             :option-filter-label="$gettext('Filter share types')"
             :show-option-filter="true"
             id-attribute="key"
-            class="oc-mr-s"
+            class="oc-mx-s"
             display-name-attribute="label"
             filter-name="shareType"
           >
             <template #image="{ item }">
-              <div class="tag-option-wrapper oc-flex oc-flex-middle">
-                <span class="oc-ml-s">{{ item.label }}</span>
-              </div>
+              <span class="oc-ml-s">{{ item.label }}</span>
             </template>
           </item-filter>
         </div>
@@ -75,7 +74,7 @@ import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigati
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '@ownclouders/web-pkg'
 import { useOpenWithDefaultApp } from '../../composables'
-import { ShareType, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { uniq } from 'lodash-es'
 
 export default defineComponent({
@@ -172,7 +171,7 @@ export default defineComponent({
     }
 
     const shareTypes = computed(() => {
-      const uniqueShareTypes = uniq(unref(currentItems).map((i) => i.share?.shareType))
+      const uniqueShareTypes = uniq(unref(storeItems).map((i) => i.share?.shareType))
       return ShareTypes.getByValues(uniqueShareTypes)
     })
 
