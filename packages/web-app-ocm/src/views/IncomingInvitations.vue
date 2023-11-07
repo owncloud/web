@@ -90,11 +90,11 @@ export default defineComponent({
       return !unref(token) || !unref(provider) || unref(provider).full_name === 'Unknown provider'
     })
 
-    const providerErrorMessage = () => {
+    const providerErrorMessage = computed(() => {
       return isMyProviderSelectedProvider(unref(provider))
         ? $gettext('You cannot select your institution')
         : $gettext('Unknown institution. Check invitation url or select from list')
-    }
+    })
 
     const errorPopup = (error: Error) => {
       console.error(error)
