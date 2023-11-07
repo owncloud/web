@@ -73,13 +73,10 @@ export class ResourceConflict extends ConflictDialog {
     let allConflictsStrategy
     let doForAllConflictsFolders = false
     let allConflictsStrategyFolders
-    console.log('upload.ts executed')
 
     for (const conflict of conflicts) {
-      console.log(conflict, 'conflict')
       const isFolder = conflict.type === 'folder'
       const conflictArray = isFolder ? resolvedFolderConflicts : resolvedFileConflicts
-      console.log(conflict, 'conflictArr')
 
       if (doForAllConflicts && !isFolder) {
         conflictArray.push({
