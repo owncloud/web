@@ -44,13 +44,13 @@ describe('CreateShortcutModal', () => {
   describe('method "searchTask"', () => {
     it('should set "searchResult" correctly', async () => {
       const { wrapper } = getWrapper()
-      await wrapper.vm.searchTask.perform()
+      await wrapper.vm.searchTask.perform('new file')
       expect(wrapper.vm.searchResult.values.length).toBe(3)
     })
     it('should reset "searchResult" on error', async () => {
       console.error = jest.fn()
       const { wrapper } = getWrapper({ rejectSearch: true })
-      await wrapper.vm.searchTask.perform()
+      await wrapper.vm.searchTask.perform('new folder')
       expect(wrapper.vm.searchResult.values.length).toBe(0)
     })
   })
@@ -81,8 +81,12 @@ function getWrapper({ rejectPutFileContents = false, rejectSearch = false } = {}
     mocks.$clientService.webdav.search.mockRejectedValue(() => mockAxiosReject())
   } else {
     mocks.$clientService.webdav.search.mockResolvedValue({
-      resources: [mock<SearchResource>(), mock<SearchResource>(), mock<SearchResource>()],
-      totalResults: 20
+      resources: [
+        mock<SearchResource>({ name: 'New File' }),
+        mock<SearchResource>({ name: 'New File (1)' }),
+        mock<SearchResource>({ name: 'New Folder' })
+      ],
+      totalResults: 3
     })
   }
 
