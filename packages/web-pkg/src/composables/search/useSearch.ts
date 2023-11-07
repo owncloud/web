@@ -11,8 +11,8 @@ export const useSearch = () => {
   const store = useStore()
   const configurationManager = useConfigurationManager()
   const clientService = useClientService()
-  const areHiddenFilesShown = store.state.Files?.areHiddenFilesShown
 
+  const areHiddenFilesShown = computed(() => store.state.Files?.areHiddenFilesShown)
   const projectSpaces = computed(() =>
     store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s))
   )
@@ -53,7 +53,7 @@ export const useSearch = () => {
         })
         .filter(({ data }) => {
           // filter results if hidden files shouldn't be shown due to settings
-          return !data.name.startsWith('.') || areHiddenFilesShown
+          return !data.name.startsWith('.') || unref(areHiddenFilesShown)
         })
     }
   }

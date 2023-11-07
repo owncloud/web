@@ -39,14 +39,20 @@
             <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
               <oc-spinner />
             </li>
-            <li v-for="(value, index) in searchResult?.values" v-else :key="index" class="oc-p-xs">
+            <li
+              v-if="searchResult?.values?.length"
+              class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
+            >
+              <span v-text="$gettext('Link to a file')" />
+            </li>
+            <li v-for="(value, index) in searchResult?.values" :key="index" class="oc-p-xs">
               <oc-button
                 class="oc-width-1-1"
                 appearance="raw"
                 justify-content="left"
                 @click="dropItemResourceClicked(value)"
               >
-                <ResourcePreview :search-result="value" :is-clickable="false"></ResourcePreview>
+                <resource-preview :search-result="value" :is-clickable="false" />
               </oc-button>
             </li>
           </oc-list>
@@ -80,7 +86,7 @@ import { resolveFileNameDuplicate } from '../helpers'
 import { useTask } from 'vue-concurrency'
 import { debounce } from 'lodash-es'
 import ResourcePreview from './Search/ResourcePreview.vue'
-import { SearchResult } from './Search'
+import { SearchResult, SearchResultValue } from './Search'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
@@ -182,11 +188,11 @@ export default defineComponent({
       } catch (_) {}
     }
 
-    const dropItemResourceClicked = ({ data }) => {
+    const dropItemResourceClicked = (item: SearchResultValue) => {
       const webURL = new URL(window.location.href)
-      let filename = data.name
+      let filename = item.data.name
 
-      inputUrl.value = `${webURL.origin}/f/${data.id}`
+      inputUrl.value = `${webURL.origin}/f/${item.id}`
 
       if (unref(files).some((f) => f.name === `${filename}.url`)) {
         filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
@@ -263,6 +269,10 @@ export default defineComponent({
 .create-shortcut-modal {
   &-url-extension {
     margin-bottom: calc(var(--oc-space-xsmall) + 1.3125rem);
+  }
+
+  &-search-separator:hover {
+    background: none !important;
   }
 }
 
