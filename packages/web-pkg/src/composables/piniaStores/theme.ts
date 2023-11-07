@@ -16,6 +16,14 @@ interface WebTheme {
     privacyUrl: string
     imprintUrl: string
   }
+  appBanner: {
+    title: string
+    publisher: string
+    additionalInformation: string
+    ctaText: string
+    icon: string
+    appScheme: string
+  }
   isDark: boolean
   logo: {
     topbar: string
@@ -35,8 +43,6 @@ interface WebTheme {
 
 const themeNameLight = 'default'
 const themeNameDark = 'default-dark'
-
-type ThemeName = typeof themeNameDark | typeof themeNameLight
 
 export const useThemeStore = defineStore('theme', () => {
   const commonTheme = ref<CommonTheme | undefined>()

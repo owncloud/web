@@ -12,14 +12,17 @@
       </oc-button>
       <div
         class="app-banner-icon"
-        :style="{ 'background-image': `url('${appBannerSettings.icon}')` }"
+        :style="{ 'background-image': `url('${currentTheme.appBanner.icon}')` }"
       ></div>
       <div class="info-container">
         <div>
-          <div class="app-title">{{ appBannerSettings.title }}</div>
-          <div class="app-publisher">{{ appBannerSettings.publisher }}</div>
-          <div v-if="appBannerSettings.additionalInformation !== ''" class="app-additional-info">
-            {{ $gettext(appBannerSettings.additionalInformation) }}
+          <div class="app-title">{{ currentTheme.appBanner.title }}</div>
+          <div class="app-publisher">{{ currentTheme.appBanner.publisher }}</div>
+          <div
+            v-if="currentTheme.appBanner.additionalInformation !== ''"
+            class="app-additional-info"
+          >
+            {{ $gettext(currentTheme.appBanner.additionalInformation) }}
           </div>
         </div>
       </div>
@@ -28,8 +31,8 @@
         target="_blank"
         class="app-banner-cta"
         rel="noopener"
-        aria-label="{{ $gettext(appBannerSettings.ctaText) }}"
-        >{{ $gettext(appBannerSettings.ctaText) }}</a
+        aria-label="{{ $gettext(currentTheme.appBanner.ctaText) }}"
+        >{{ $gettext(currentTheme.appBanner.ctaText) }}</a
       >
     </div>
   </portal>
@@ -40,6 +43,7 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import { useRouter, useThemeStore } from '../composables'
 import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {},
@@ -55,12 +59,12 @@ export default defineComponent({
 
     const router = useRouter()
     const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
-    const appBannerSettings = themeStore.currentTheme.appBanner
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()
-        .replace('https', appBannerSettings.appScheme)
+        .replace('https', currentTheme.value.appBanner.appScheme)
     })
 
     const close = () => {
@@ -71,9 +75,8 @@ export default defineComponent({
     return {
       appUrl,
       close,
-      isVisible,
-      appBannerSettings,
-      isAppBannerAvailable
+      currentTheme,
+      isVisible
     }
   }
 })

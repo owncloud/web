@@ -1,5 +1,4 @@
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
-import { themeNameDark, themeNameLight } from '../../../../src/composables'
 import {
   createStore,
   defaultPlugins,
@@ -68,13 +67,13 @@ describe('ThemeSwitcher component', () => {
 
   describe('restores', () => {
     it('light theme if light theme is saved in localstorage', async () => {
-      window.localStorage.setItem('oc_currentThemeName', themeNameLight)
+      window.localStorage.setItem('oc_currentThemeName', 'themeNameLight')
       const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('dark theme if dark theme is saved in localstorage', async () => {
-      window.localStorage.setItem('oc_currentThemeName', themeNameDark)
+      window.localStorage.setItem('oc_currentThemeName', 'themeNameDark')
       const { wrapper } = getWrapper()
       await wrapper.vm.$nextTick()
       expect(wrapper.html()).toMatchSnapshot()

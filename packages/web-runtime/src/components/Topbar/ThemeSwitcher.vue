@@ -19,9 +19,10 @@
       data-testid="files-view-options-btn"
       :aria-label="buttonLabel"
       appearance="raw"
-      class="oc-my-s oc-p-xs"
+      variation="inverse"
+      class="oc-mr-s"
     >
-      <oc-icon name="settings-3" fill-type="line" />
+      <oc-icon name="paint" />
     </oc-button>
     <oc-drop
       drop-id="files-view-options-drop"

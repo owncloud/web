@@ -1,4 +1,4 @@
-import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg'
+import { useStore, usePublicLinkContext, useThemeStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
@@ -51,8 +51,8 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   })
 
   const handler = async () => {
-    const currentThemeName = window.localStorage.getItem('oc_currentThemeName')
-    const renderDarkTheme = currentThemeName === 'default-dark'
+    const { currentTheme } = useThemeStore()
+    const renderDarkTheme = currentTheme.isDark
 
     const modal = {
       variation: 'passive',
