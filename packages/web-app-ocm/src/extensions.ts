@@ -11,6 +11,7 @@ import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { Extension } from '@ownclouders/web-pkg'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
+import { OCM_PROVIDER_ID } from '@ownclouders/web-client/src/helpers'
 
 export const extensions = (options: ApplicationSetupOptions) => {
   const store = useStore()
@@ -57,17 +58,7 @@ export const extensions = (options: ApplicationSetupOptions) => {
             handler,
             label: () => $gettext('Open remotely'),
             isEnabled: ({ resources }: FileActionOptions) => {
-              // FIXME: make easier to read
-              if (
-                resources.length === 1 &&
-                resources[0].isFolder === false &&
-                resources[0].path?.split('/').filter(Boolean)?.[0] === 'sciencemesh' &&
-                (isLocationSpacesActive(router, 'files-spaces-generic') ||
-                  isLocationSharesActive(router, 'files-shares-with-me'))
-              ) {
-                return true
-              }
-              return false
+              return !resources[0]?.isFolder && resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
             },
             componentType: 'button',
             class: 'oc-files-actions-open-file-remote'
