@@ -424,6 +424,7 @@ Details
    session is started, e.g. by opening a new tab.
 
    https://github.com/owncloud/web/pull/9696
+   https://github.com/owncloud/web/pull/9872
 
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 
