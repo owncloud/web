@@ -24,9 +24,13 @@ export const extensions = (options: ApplicationSetupOptions) => {
     const resource = resources[0]
 
     try {
-      const { data } = await clientService.httpAuthenticated.get('/sciencemesh/open-in-app', {
-        params: { file: resource.path }
-      })
+      const params = new URLSearchParams()
+      params.append('file', resource.path)
+
+      const { data } = await clientService.httpAuthenticated.post(
+        '/sciencemesh/open-in-app',
+        params
+      )
       if (data.app_url) {
         openUrl(data.app_url)
       } else {
