@@ -172,8 +172,8 @@ export default defineComponent({
             driveAliasAndItem
           },
           query: {
+            ...unref(currentRoute).query,
             fileId: id,
-            ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
             contextRouteName: 'files-spaces-generic',
             contextRouteParams: { driveAliasAndItem: dirname(driveAliasAndItem) } as any
           }
@@ -186,9 +186,9 @@ export default defineComponent({
           driveAliasAndItem
         },
         query: {
+          ...unref(currentRoute).query,
           fileId: id,
           shareId: space.shareId,
-          ...(unref(currentRoute).query?.app && { app: unref(currentRoute).query?.app }),
           contextRouteName: path === '/' ? 'files-shares-with-me' : 'files-spaces-generic',
           contextRouteParams: {
             driveAliasAndItem: dirname(driveAliasAndItem)
