@@ -15,7 +15,11 @@
   >
     <template #selected-option-container="{ option, deselect }">
       <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
-        <router-link class="oc-flex oc-flex-middle" :to="generateTagLink(option.label)">
+        <router-link
+          class="oc-flex oc-flex-middle"
+          :to="generateTagLink(option.label)"
+          @click="onTagClicked"
+        >
           <oc-icon name="price-tag-3" class="oc-mr-xs" size="small" />
           <span class="oc-text-truncate">{{ option.label }}</span>
         </router-link>
@@ -65,8 +69,8 @@ import {
 import {
   createLocationCommon,
   eventBus,
+  SideBarEventTopics,
   useClientService,
-  useGetMatchingSpace,
   useRouter,
   useStore
 } from '@ownclouders/web-pkg'
@@ -98,8 +102,6 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const clientService = useClientService()
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const language = useGettext()
     const $router = useRouter()
 
     const resource = toRef(props, 'resource')
@@ -118,6 +120,10 @@ export default defineComponent({
     const currentTags = computed<TagOption[]>(() => {
       return [...unref(resource).tags.map((t) => ({ label: t }))]
     })
+
+    const onTagClicked = () => {
+      eventBus.publish(SideBarEventTopics.close)
+    }
 
     const loadAvailableTagsTask = useTask(function* () {
       const {
@@ -257,7 +263,8 @@ export default defineComponent({
       keycode,
       keydownMethods,
       readonly,
-      generateTagLink
+      generateTagLink,
+      onTagClicked
     }
   }
 })
