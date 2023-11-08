@@ -294,6 +294,7 @@ export default defineComponent({
 
 .tags-control-tag {
   &-link {
+    color: var(--oc-color-swatch-passive-default);
     pointer-events: visible;
   }
 }
