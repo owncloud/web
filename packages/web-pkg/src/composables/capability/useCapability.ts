@@ -5,6 +5,7 @@ import { useStore } from '../store'
 import {
   AppProviderCapability,
   LastModifiedFilterCapability,
+  MimeTypeCapability,
   PasswordPolicyCapability
 } from '@ownclouders/web-client/src/ocs/capabilities'
 
@@ -146,3 +147,8 @@ export const useCapabilityPasswordPolicy = createCapabilityComposable<PasswordPo
 
 export const useCapabilitySearchModifiedDate =
   createCapabilityComposable<LastModifiedFilterCapability>('search.property.mtime', {})
+
+export const useCapabilitySearchMimeType = createCapabilityComposable<MimeTypeCapability>(
+  'search.property.mimetype',
+  {}
+)

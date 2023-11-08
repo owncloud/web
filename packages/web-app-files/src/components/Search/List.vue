@@ -8,12 +8,12 @@
           <span v-text="$gettext('Filter:')" />
         </div>
         <item-filter
-          v-if="availableFileTypes.length"
-          ref="fileTypeFilter"
+          v-if="availableMimeTypeValues.length"
+          ref="mimeTypesFilter"
           :allow-multiple="true"
           :filter-label="$gettext('File type')"
           :filterable-attributes="['label']"
-          :items="availableFileTypes"
+          :items="availableMimeTypeValues"
           :option-filter-label="$gettext('Filter file type')"
           :show-option-filter="true"
           class="files-search-filter-file-type oc-mr-s"
@@ -22,7 +22,10 @@
         >
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
-              <oc-resource-icon :resource="{ type: 'file', extension: item.icon }" />
+              <oc-resource-icon
+                size="medium"
+                :resource="{ type: 'file', extension: item.icon, isFolder: item.icon == 'folder' }"
+              />
               <span class="oc-ml-s">{{ item.label }}</span>
             </div>
           </template>
@@ -146,7 +149,11 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import { AppLoadingSpinner, useCapabilitySearchModifiedDate } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  useCapabilitySearchMimeType,
+  useCapabilitySearchModifiedDate
+} from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -201,7 +208,7 @@ import {
 
 const visibilityObserver = new VisibilityObserver()
 
-type FileType = {
+type MimeTypeKeyword = {
   id: string
   label: string
   icon: string
@@ -252,6 +259,7 @@ export default defineComponent({
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
     const modifiedDateCapability = useCapabilitySearchModifiedDate()
+    const mimeTypeCapability = useCapabilitySearchMimeType()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -259,56 +267,10 @@ export default defineComponent({
     const doUseScope = useRouteQuery('useScope')
 
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
-
     const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources, resourcesView.viewMode)
     useKeyboardTableMouseActions(keyActions, resourcesView.viewMode)
     useKeyboardTableActions(keyActions)
-
-    const availableFileTypes = computed(
-      (): Array<FileType> => [
-        {
-          id: 'document',
-          label: 'Document',
-          icon: 'doc'
-        },
-        {
-          id: 'spreadsheet',
-          label: 'Spreadsheet',
-          icon: 'xls'
-        },
-        {
-          id: 'presentation',
-          label: 'Presentation',
-          icon: 'ppt'
-        },
-        {
-          id: 'pdf',
-          label: 'PDF',
-          icon: 'pdf'
-        },
-        {
-          id: 'image',
-          label: 'Image',
-          icon: 'jpg'
-        },
-        {
-          id: 'video',
-          label: 'Video',
-          icon: 'mp4'
-        },
-        {
-          id: 'audio',
-          label: 'Audio',
-          icon: 'mp3'
-        },
-        {
-          id: 'archive',
-          label: 'Archive',
-          icon: 'zip'
-        }
-      ]
-    )
 
     const searchTerm = computed(() => {
       return queryItemAsString(unref(searchTermQuery))
@@ -316,12 +278,14 @@ export default defineComponent({
 
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
+    const mimeTypesFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
     const lastModifiedParam = useRouteQuery('q_lastModified')
+    const mimeTypesParam = useRouteQuery('q_mimeTypes')
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
-      return unref(fullTextSearchEnabled) || unref(availableTags).length
+      return unref(fullTextSearchEnabled) || unref(availableTags).length || true
     })
 
     const loadAvailableTagsTask = useTask(function* () {
@@ -356,6 +320,40 @@ export default defineComponent({
         label: lastModifiedTranslations[k]
       })) || []
     )
+
+    const mimeTypeMapping = {
+      file: { label: $gettext('File'), icon: 'file' },
+      folder: { label: $gettext('Folder'), icon: 'folder' },
+      document: { label: $gettext('Document'), icon: 'doc' },
+      spreadsheet: { label: $gettext('Spreadsheet'), icon: 'xls' },
+      presentation: { label: $gettext('Presentation'), icon: 'ppt' },
+      pdf: { label: $gettext('PDF'), icon: 'pdf' },
+      image: { label: $gettext('Image'), icon: 'jpg' },
+      video: { label: $gettext('Video'), icon: 'mp4' },
+      audio: { label: $gettext('Audio'), icon: 'mp3' },
+      archive: { label: $gettext('Archive'), icon: 'zip' }
+    }
+    const availableMimeTypeValues = []
+    unref(mimeTypeCapability).keywords?.forEach((key: string) => {
+      if (!mimeTypeMapping[key]) {
+        return
+      }
+      availableMimeTypeValues.push({
+        id: key,
+        ...mimeTypeMapping[key]
+      })
+    })
+    /*const availableMimeTypeValues = ref<MimeTypeKeyword[]>(
+      unref(mimeTypeCapability).keywords?.map(
+        (k: string) =>
+          ({
+            id: k,
+            ...mimeTypeMapping[k]
+          } as MimeTypeKeyword)
+      ) || []
+    )*/
+
+    console.log('mtv', availableMimeTypeValues)
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       const query = {}
@@ -398,6 +396,14 @@ export default defineComponent({
         query['mtime'] = `"${lastModifiedParams}"`
         updateFilter(lastModifiedFilter)
       }
+
+      /*const mimeTypeParams = queryItemAsString(unref(mimeTypesParam))
+      console.log('QueryParam', mimeTypesParam)
+      if (mimeTypesParam) {
+        query['mimetype'] = mimeTypeParams.split('+').map((t) => `"${t}"`)
+        console.log('Query:' + query)
+        updateFilter(mimeTypesFilter)
+      }*/
 
       return (
         // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
@@ -487,7 +493,8 @@ export default defineComponent({
       displayFilter,
       availableLastModifiedValues,
       lastModifiedFilter,
-      availableFileTypes
+      mimeTypesFilter,
+      availableMimeTypeValues
     }
   },
   computed: {

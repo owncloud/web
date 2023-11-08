@@ -23,12 +23,19 @@ export interface LastModifiedFilterCapability {
   keywords?: string[]
   enabled?: boolean
 }
+
+export interface MimeTypeCapability {
+  keywords?: string[]
+  enabled?: boolean
+}
+
 export interface Capabilities {
   capabilities: {
     password_policy?: PasswordPolicyCapability
     search: {
       property: {
         mtime: LastModifiedFilterCapability
+        mimetype: MimeTypeCapability
       }
     }
     notifications: {
