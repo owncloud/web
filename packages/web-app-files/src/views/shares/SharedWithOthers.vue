@@ -8,6 +8,28 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
+        <div v-if="shareTypes.length > 1" class="share-visibility-filter oc-flex oc-m-m">
+          <div class="oc-mr-m oc-flex oc-flex-middle">
+            <oc-icon name="filter-2" class="oc-mr-xs" />
+            <span v-text="$gettext('Filter:')" />
+          </div>
+          <item-filter
+            :allow-multiple="true"
+            :filter-label="$gettext('Share Type')"
+            :filterable-attributes="['label']"
+            :items="shareTypes"
+            :option-filter-label="$gettext('Filter share types')"
+            :show-option-filter="true"
+            id-attribute="key"
+            class="oc-mx-s"
+            display-name-attribute="label"
+            filter-name="shareType"
+          >
+            <template #image="{ item }">
+              <span class="oc-ml-s">{{ item.label }}</span>
+            </template>
+          </item-filter>
+        </div>
         <no-content-message
           v-if="isEmpty"
           id="files-shared-with-others-empty"
@@ -27,7 +49,7 @@
           :fields-displayed="['name', 'sharedWith', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
-          :resources="paginatedResources"
+          :resources="filteredItems"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
@@ -45,7 +67,7 @@
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
             <list-info
-              v-if="paginatedResources.length > 0"
+              v-if="filteredItems.length > 0"
               class="oc-width-1-1 oc-my-s"
               :files="totalFilesCount.files"
               :folders="totalFilesCount.folders"
@@ -65,10 +87,10 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { useFileActions } from '@ownclouders/web-pkg'
-import { VisibilityObserver } from '@ownclouders/web-pkg'
+import { queryItemAsString, useFileActions, useRouteQuery } from '@ownclouders/web-pkg'
+import { VisibilityObserver, ItemFilter } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
-import { debounce, find } from 'lodash-es'
+import { debounce, find, uniq } from 'lodash-es'
 
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
@@ -81,11 +103,12 @@ import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from 'vue'
+import { defineComponent, computed, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace, useMutationSubscription } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -100,7 +123,8 @@ export default defineComponent({
     ListInfo,
     Pagination,
     ContextActions,
-    SideBar
+    SideBar,
+    ItemFilter
   },
 
   setup() {
@@ -109,6 +133,21 @@ export default defineComponent({
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
       resourcesViewDefaults
+
+    const shareTypes = computed(() => {
+      const uniqueShareTypes = uniq(unref(paginatedResources).map((i) => i.share?.shareType))
+      return ShareTypes.getByValues(uniqueShareTypes)
+    })
+    const selectedShareTypesQuery = useRouteQuery('q_shareType')
+    const filteredItems = computed(() => {
+      const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
+      if (!selectedShareTypes || selectedShareTypes.length === 0) {
+        return unref(paginatedResources)
+      }
+      return unref(paginatedResources).filter((item) => {
+        return selectedShareTypes.map((t) => ShareTypes[t].value).includes(item.share.shareType)
+      })
+    })
 
     useMutationSubscription(['Files/UPDATE_RESOURCE_FIELD'], async (mutation) => {
       if (mutation.payload.field === 'shareTypes') {
@@ -130,6 +169,8 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
+      filteredItems,
+      shareTypes,
       getMatchingSpace,
 
       // CERN
