@@ -123,14 +123,14 @@ export default defineComponent({
 }
 .sciencemesh-top {
   height: 360px;
-  overflow: auto;
+  overflow: hidden;
   @media (max-width: 1000px) {
     flex-direction: column;
-    overflow: hidden;
     height: auto;
   }
 }
-#sciencemesh-invite {
+#sciencemesh-invite,
+#sciencemesh-accept-invites {
   margin: var(--oc-space-small);
   overflow-y: auto;
 }
