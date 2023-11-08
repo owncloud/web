@@ -160,7 +160,6 @@ export default defineComponent({
     watch(
       applicationName,
       (newAppName, oldAppName) => {
-        console.log('appNames', newAppName, oldAppName)
         if (newAppName === 'Office365' && newAppName !== oldAppName) {
           window.addEventListener('message', catchClickMicrosoftEdit)
         } else {
