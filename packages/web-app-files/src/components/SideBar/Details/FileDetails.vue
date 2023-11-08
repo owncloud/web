@@ -163,10 +163,6 @@ export default defineComponent({
     const previewService = usePreviewService()
     const preview = ref(undefined)
 
-    const matchingSpace = computed(() => {
-      return getMatchingSpace(unref(resource))
-    })
-
     const loadData = async () => {
       const calls = []
       if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
@@ -211,6 +207,12 @@ export default defineComponent({
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
     })
+    const sharedAncestorRoute = computed(() => {
+      return getSharedAncestorRoute({
+        sharedAncestor: unref(sharedAncestor),
+        matchingSpace: unref(space) || getMatchingSpace(unref(resource))
+      })
+    })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
@@ -240,8 +242,8 @@ export default defineComponent({
       isPreviewLoading,
       ancestorMetaData,
       sharedAncestor,
+      sharedAncestorRoute,
       formatDateRelative,
-      matchingSpace,
       contextualHelper
     }
   },
@@ -270,12 +272,6 @@ export default defineComponent({
     },
     showSharedVia() {
       return this.showShares && this.sharedAncestor
-    },
-    sharedAncestorRoute() {
-      return getSharedAncestorRoute({
-        sharedAncestor: this.sharedAncestor,
-        matchingSpace: this.space || this.matchingSpace
-      })
     },
     showShares() {
       if (this.isPublicLinkContext) {
