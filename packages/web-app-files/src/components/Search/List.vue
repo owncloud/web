@@ -22,9 +22,7 @@
         >
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
-              <oc-resource-icon
-                :resource="{ type: 'file', extension: item.icon, isFolder: item.icon == 'folder' }"
-              />
+              <oc-resource-icon :resource="getFakeResourceForIcon(item)" />
               <span class="oc-ml-s">{{ item.label }}</span>
             </div>
           </template>
@@ -347,6 +345,10 @@ export default defineComponent({
       })
     })
 
+    const getFakeResourceForIcon = (item) => {
+      return { type: 'file', extension: item.icon, isFolder: item.icon == 'folder' } as Resource
+    }
+
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       const query = {}
 
@@ -488,7 +490,8 @@ export default defineComponent({
       availableLastModifiedValues,
       lastModifiedFilter,
       mimeTypesFilter,
-      availableMimeTypeValues
+      availableMimeTypeValues,
+      getFakeResourceForIcon
     }
   },
   computed: {
