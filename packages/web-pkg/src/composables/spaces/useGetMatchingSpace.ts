@@ -13,7 +13,8 @@ import {
   isMountPointSpaceResource,
   isPersonalSpaceResource,
   isProjectSpaceResource,
-  ShareTypes
+  ShareTypes,
+  OCM_PROVIDER_ID
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
@@ -45,8 +46,13 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
+    console.log('RESOURCE', resource)
     const driveAliasPrefix =
-      resource?.share?.shareType === ShareTypes.remote.value ? 'ocm-share' : 'share'
+      resource?.share?.shareType === ShareTypes.remote.value ||
+      resource.id.toString().startsWith(OCM_PROVIDER_ID)
+        ? 'ocm-share'
+        : 'share'
+    console.log('DRIVE ALIAS PREFIX', driveAliasPrefix)
     return (
       getInternalSpace(storageId) ||
       buildShareSpaceResource({

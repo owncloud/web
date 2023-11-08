@@ -195,7 +195,7 @@ export default defineComponent({
       }
 
       try {
-        const { data: tokenInfo } = await clientService.httpAuthenticated.get(
+        const { data: tokenInfo } = await clientService.httpAuthenticated.post(
           '/sciencemesh/generate-invite',
           {
             params: {

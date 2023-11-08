@@ -84,6 +84,12 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
+        // FIXME: HACK:
+        console.log('space.shareId', space.shareId)
+        if (space.shareId) {
+          resources.forEach((r) => (r.shareId = space.shareId))
+        }
+
         store.commit('Files/LOAD_FILES', {
           currentFolder,
           files: resources
