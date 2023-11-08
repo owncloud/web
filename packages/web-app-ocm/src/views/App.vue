@@ -2,14 +2,14 @@
   <div class="sciencemesh">
     <div class="oc-flex oc-flex-column sciencemesh-wrapper">
       <div class="oc-flex sciencemesh-top">
-        <div id="sciencemesh-invite" class="oc-width-1-2 oc-height-1-2">
+        <div id="sciencemesh-invite" class="oc-width-1-2">
           <outgoing-invitations />
         </div>
-        <div id="sciencemesh-accept-invites" class="oc-width-1-2 oc-height-1-2">
+        <div id="sciencemesh-accept-invites" class="oc-width-1-2">
           <incoming-invitations @highlight-new-connections="highlightNewConnections" />
         </div>
       </div>
-      <div id="sciencemesh-connections" class="oc-width-1-1 oc-height-1-2">
+      <div id="sciencemesh-connections">
         <connections
           v-model:connections="connections"
           :highlighted-connections="highlightedConnections.map((c) => c.id)"
@@ -116,46 +116,41 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .sciencemesh {
-  overflow-y: auto;
-  background-image: linear-gradient(
-    to right,
-    var(--oc-color-background-default) 0%,
-    var(--oc-color-background-hover) 1%
-  );
+  background-color: var(--oc-color-background-hover);
 }
 .sciencemesh-wrapper {
-  margin: var(--oc-space-small);
+  height: 100%;
 }
 .sciencemesh-top {
-  margin-bottom: var(--oc-space-small);
+  height: 360px;
+  overflow: auto;
   @media (max-width: 1000px) {
     flex-direction: column;
+    overflow: hidden;
+    height: auto;
   }
 }
 #sciencemesh-invite {
-  margin-right: var(--oc-space-small);
+  margin: var(--oc-space-small);
   overflow-y: auto;
 }
 #sciencemesh-invite,
 #sciencemesh-accept-invites,
 #sciencemesh-connections {
+  margin: var(--oc-space-small);
   background-color: var(--oc-color-background-default);
   border-radius: 15px;
-  min-height: 40vh;
   padding: var(--oc-space-small);
   @media (max-width: 1000px) {
-    width: 100%;
+    width: auto;
   }
+}
+#sciencemesh-connections {
+  flex: 1;
 }
 #sciencemesh-invite {
   @media (max-width: 1000px) {
     margin-bottom: var(--oc-space-small);
   }
-}
-#sciencemesh-invite {
-  height: 40vh;
-}
-#sciencemesh-connections {
-  min-height: 52vh;
 }
 </style>
