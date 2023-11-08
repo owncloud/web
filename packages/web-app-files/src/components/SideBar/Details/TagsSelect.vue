@@ -15,14 +15,15 @@
   >
     <template #selected-option-container="{ option, deselect }">
       <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
-        <router-link
+        <component
+          :is="type"
+          v-bind="getAdditionalAttributes(option.label)"
           class="oc-flex oc-flex-middle"
-          :to="generateTagLink(option.label)"
           @click="onTagClicked"
         >
           <oc-icon name="price-tag-3" class="oc-mr-xs" size="small" />
-          <span class="oc-text-truncate">{{ option.label }}</span>
-        </router-link>
+          <span class="oc-text-truncate">{{ option.label }} test</span>
+        </component>
 
         <span class="oc-flex oc-flex-middle oc-mr-xs">
           <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
@@ -69,7 +70,9 @@ import {
 import {
   createLocationCommon,
   eventBus,
+  isLocationPublicActive,
   SideBarEventTopics,
+  useActiveLocation,
   useClientService,
   useRouter,
   useStore
@@ -104,6 +107,8 @@ export default defineComponent({
     const clientService = useClientService()
     const $router = useRouter()
 
+    const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
+    const type = unref(isPublicLocation) ? 'span' : 'router-link'
     const resource = toRef(props, 'resource')
     const { $gettext } = useGettext()
     const readonly = computed(
@@ -112,6 +117,7 @@ export default defineComponent({
         (typeof unref(resource).canEditTags === 'function' &&
           unref(resource).canEditTags() === false) // where is canEditTags implemented? it's not present here...
     )
+
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
     let allTags: string[] = []
@@ -120,6 +126,8 @@ export default defineComponent({
     const currentTags = computed<TagOption[]>(() => {
       return [...unref(resource).tags.map((t) => ({ label: t }))]
     })
+
+    console.log('!!!')
 
     const onTagClicked = () => {
       eventBus.publish(SideBarEventTopics.close)
@@ -248,6 +256,16 @@ export default defineComponent({
       })
     }
 
+    const getAdditionalAttributes = (tag: string) => {
+      if (unref(isPublicLocation)) {
+        return {}
+      }
+      return {
+        to: generateTagLink(tag),
+        class: 'tags-control-tag-link'
+      }
+    }
+
     return {
       loadAvailableTagsTask,
       availableTags,
@@ -263,8 +281,10 @@ export default defineComponent({
       keycode,
       keydownMethods,
       readonly,
-      generateTagLink,
-      onTagClicked
+      getAdditionalAttributes,
+      onTagClicked,
+      isPublicLocation,
+      type
     }
   }
 })
@@ -273,5 +293,11 @@ export default defineComponent({
 <style scoped lang="scss">
 .oc-tag {
   height: 1.5rem;
+}
+
+.tags-control-tag {
+  &-link {
+    pointer-events: visible;
+  }
 }
 </style>

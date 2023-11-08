@@ -1,9 +1,5 @@
 import fileSideBars from 'web-app-files/src/fileSideBars'
-import {
-  createLocationPublic,
-  createLocationSpaces,
-  createLocationTrash
-} from '@ownclouders/web-pkg'
+import { createLocationSpaces } from '@ownclouders/web-pkg'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
@@ -132,57 +128,11 @@ describe('SideBar', () => {
       })
     })
   })
-  describe('tags panel', () => {
-    it('shows when enabled via capabilities and possible on the resource', async () => {
-      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
-      const { wrapper } = createWrapper({ item })
-      wrapper.vm.loadedResource = item
-      await wrapper.vm.$nextTick()
-      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
-      expect(panels.some(({ app }) => app === 'tags')).toBeTruthy()
-    })
-    it('does not show when disabled via capabilities', async () => {
-      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
-      const { wrapper } = createWrapper({ item, tagsEnabled: false })
-      wrapper.vm.loadedResource = item
-      await wrapper.vm.$nextTick()
-      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
-      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
-    })
-    it('does not show for root folders', async () => {
-      const item = mockDeep<Resource>({ path: '/', canEditTags: () => true })
-      const { wrapper } = createWrapper({ item })
-      wrapper.vm.loadedResource = item
-      await wrapper.vm.$nextTick()
-      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
-      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
-    })
-    it('does not show when not possible on the resource', async () => {
-      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => false })
-      const { wrapper } = createWrapper({ item })
-      wrapper.vm.loadedResource = item
-      await wrapper.vm.$nextTick()
-      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
-      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
-    })
-    it.each([
-      createLocationTrash('files-trash-generic'),
-      createLocationPublic('files-public-link')
-    ])('does not show on trash and public routes', async (currentRoute) => {
-      const item = mockDeep<Resource>({ path: '/someFolder', canEditTags: () => true })
-      const { wrapper } = createWrapper({ item, currentRoute })
-      wrapper.vm.loadedResource = item
-      await wrapper.vm.$nextTick()
-      const panels = wrapper.findComponent<any>({ ref: 'sidebar' }).props('availablePanels')
-      expect(panels.some(({ app }) => app === 'tags')).toBeFalsy()
-    })
-  })
 })
 
 function createWrapper({
   item = undefined,
-  currentRoute = createLocationSpaces('files-spaces-generic'),
-  tagsEnabled = true
+  currentRoute = createLocationSpaces('files-spaces-generic')
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -192,7 +142,6 @@ function createWrapper({
         return { id: 'marie' }
       },
       capabilities: () => ({
-        files: { tags: tagsEnabled },
         files_sharing: {
           api_enabled: true,
           public: { enabled: true }

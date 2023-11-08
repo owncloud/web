@@ -5,10 +5,13 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  RouteLocation
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { createLocationSpaces } from '@ownclouders/web-pkg/'
+import { mount } from '@vue/test-utils'
 
 const getResourceMock = ({
   type = 'file',
@@ -18,7 +21,8 @@ const getResourceMock = ({
   shareTypes = [],
   share = null,
   path = '/somePath/someResource',
-  locked = false
+  locked = false,
+  canEditTags = true
 } = {}) =>
   mock<Resource>({
     id: '1',
@@ -35,7 +39,8 @@ const getResourceMock = ({
     thumbnail,
     shareTypes,
     share,
-    locked
+    locked,
+    canEditTags: jest.fn(() => canEditTags)
   })
 
 const selectors = {
@@ -150,11 +155,28 @@ describe('Details SideBar Panel', () => {
       expect(wrapper.find(selectors.versionsInfo).exists()).toBeFalsy()
     })
   })
+
   describe('tags', () => {
-    it('show if given', () => {
-      const resource = getResourceMock({ tags: ['moon', 'mars'] })
+    it('shows when enabled via capabilities and possible on the resource', async () => {
+      const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource })
       expect(wrapper.find(selectors.tags).exists()).toBeTruthy()
+    })
+    it('does not show when disabled via capabilities', async () => {
+      const resource = getResourceMock()
+      const { wrapper } = createWrapper({ resource, tagsEnabled: false })
+      expect(wrapper.find(selectors.tags).exists()).toBeFalsy()
+    })
+    it('does not show for root folders', async () => {
+      const resource = getResourceMock({ path: '/' })
+      const { wrapper } = createWrapper({ resource })
+      expect(wrapper.find(selectors.tags).exists()).toBeTruthy()
+    })
+    it('shows as disabled when permission not set', async () => {
+      const resource = getResourceMock({ canEditTags: false })
+      const { wrapper } = createWrapper({ resource })
+      console.log(wrapper.html())
+      expect(wrapper.find(selectors.tags).find('.vs--disabled ').exists()).toBeTruthy()
     })
     it('should use router-link on private page', () => {
       const resource = getResourceMock({ tags: ['moon', 'mars'] })
@@ -174,12 +196,14 @@ function createWrapper({
   isPublicLinkContext = false,
   ancestorMetaData = {},
   user = { id: 'marie' },
-  versions = []
+  versions = [],
+  tagsEnabled = true,
+  currentRoute = createLocationSpaces('files-spaces-generic')
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.user.mockReturnValue(user)
   storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
-  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: true } })
+  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: tagsEnabled } })
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
@@ -187,9 +211,9 @@ function createWrapper({
     isPublicLinkContext
   )
   const store = createStore(storeOptions)
-  const mocks = { ...defaultComponentMocks() }
+  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
   return {
-    wrapper: shallowMount(FileDetails, {
+    wrapper: mount(FileDetails, {
       global: {
         stubs: { 'router-link': true, 'oc-resource-icon': true },
         provide: {
