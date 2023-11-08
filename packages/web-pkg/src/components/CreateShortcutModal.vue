@@ -1,58 +1,58 @@
 <template>
   <portal to="app.runtime.modal">
     <oc-modal
-        :title="$gettext('Create a Shortcut')"
-        :button-cancel-text="$gettext('Cancel')"
-        :button-confirm-text="$gettext('Create')"
-        :button-confirm-disabled="confirmButtonDisabled"
-        @cancel="cancel"
-        @confirm="createShortcut(inputUrl, inputFilename)"
-        @keydown.enter="onKeyDownEnter"
+      :title="$gettext('Create a Shortcut')"
+      :button-cancel-text="$gettext('Cancel')"
+      :button-confirm-text="$gettext('Create')"
+      :button-confirm-disabled="confirmButtonDisabled"
+      @cancel="cancel"
+      @confirm="createShortcut(inputUrl, inputFilename)"
+      @keydown.enter="onKeyDownEnter"
     >
       <template #content>
         <oc-text-input
-            id="create-shortcut-modal-url-input"
-            v-model="inputUrl"
-            :label="$gettext('Shortcut to a webpage or file')"
+          id="create-shortcut-modal-url-input"
+          v-model="inputUrl"
+          :label="$gettext('Shortcut to a webpage or file')"
         />
         <oc-drop
-            v-if="showDrop"
-            ref="dropRef"
-            class="oc-pt-s"
-            padding-size="remove"
-            drop-id="create-shortcut-modal-contextmenu"
-            toggle="#create-shortcut-modal-url-input"
-            :close-on-click="true"
+          v-if="showDrop"
+          ref="dropRef"
+          class="oc-pt-s"
+          padding-size="remove"
+          drop-id="create-shortcut-modal-contextmenu"
+          toggle="#create-shortcut-modal-url-input"
+          :close-on-click="true"
         >
           <oc-list>
             <li class="oc-p-xs">
               <oc-button
-                  class="oc-width-1-1"
-                  appearance="raw"
-                  justify-content="left"
-                  @click="dropItemUrlClicked"
+                class="oc-width-1-1"
+                appearance="raw"
+                justify-content="left"
+                @click="dropItemUrlClicked"
               >
-                <oc-icon name="external-link"/>
-                <span v-text="dropItemUrl"/>
+                <oc-icon name="external-link" />
+                <span v-text="dropItemUrl" />
               </oc-button>
             </li>
             <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
-              <oc-spinner/>
+              <oc-spinner />
             </li>
-            <template v-if="searchResult">
-              <li v-if="searchResult.values.length"
-                  class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
+            <template v-if="searchResult?.values?.length">
+              <li
+                class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
               >
-                <span v-text="$gettext('Link to a file')"/>
+                <span v-text="$gettext('Link to a file')" />
               </li>
               <li v-for="(value, index) in searchResult.values" :key="index" class="oc-p-xs">
                 <oc-button
-                    class="oc-width-1-1"
-                    appearance="raw"
-                    justify-content="left"
-                    @click="dropItemResourceClicked(value)"
+                  class="oc-width-1-1"
+                  appearance="raw"
+                  justify-content="left"
+                  @click="dropItemResourceClicked(value)"
                 >
-                  <resource-preview :search-result="value" :is-clickable="false"/>
+                  <resource-preview :search-result="value" :is-clickable="false" />
                 </oc-button>
               </li>
             </template>
@@ -60,14 +60,14 @@
         </oc-drop>
         <div class="oc-flex oc-width-1-1 oc-mt-m">
           <oc-text-input
-              v-model="inputFilename"
-              class="oc-width-1-1"
-              :label="$gettext('Shortcut name')"
-              :error-message="inputFileNameErrorMessage"
-              :fix-message-line="true"
+            v-model="inputFilename"
+            class="oc-width-1-1"
+            :label="$gettext('Shortcut name')"
+            :error-message="inputFileNameErrorMessage"
+            :fix-message-line="true"
           />
           <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension"
-          >.url</span
+            >.url</span
           >
         </div>
       </template>
@@ -76,26 +76,26 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref} from 'vue'
-import {Resource, SpaceResource} from '@ownclouders/web-client'
-import {useClientService, useFolderLink, useRouter, useSearch, useStore} from '../composables'
-import {urlJoin} from '@ownclouders/web-client/src/utils'
-import {useGettext} from 'vue3-gettext'
+import { defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref } from 'vue'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
-import {OcDrop} from '@ownclouders/design-system/src/components'
-import {resolveFileNameDuplicate} from '../helpers'
-import {useTask} from 'vue-concurrency'
-import {debounce} from 'lodash-es'
+import { OcDrop } from '@ownclouders/design-system/src/components'
+import { resolveFileNameDuplicate } from '../helpers'
+import { useTask } from 'vue-concurrency'
+import { debounce } from 'lodash-es'
 import ResourcePreview from './Search/ResourcePreview.vue'
-import {SearchResult, SearchResultValue} from './Search'
-import {isLocationPublicActive} from '../router'
+import { SearchResult, SearchResultValue } from './Search'
+import { isLocationPublicActive } from '../router'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
 
 export default defineComponent({
   name: 'CreateShortcutModal',
-  components: {ResourcePreview},
+  components: { ResourcePreview },
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -108,10 +108,10 @@ export default defineComponent({
   },
   setup(props) {
     const clientService = useClientService()
-    const {$gettext} = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore()
     const router = useRouter()
-    const {search} = useSearch()
+    const { search } = useSearch()
     const {
       getPathPrefix,
       getParentFolderName,
@@ -138,19 +138,19 @@ export default defineComponent({
     const showDrop = computed(() => unref(inputUrl).trim())
 
     const confirmButtonDisabled = computed(
-        () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
+      () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
     )
     const currentFolder = computed(() => store.getters['Files/currentFolder'])
 
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const fileAlreadyExists = computed(
-        () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+      () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
     )
 
     const inputFileNameErrorMessage = computed(() => {
       if (unref(fileAlreadyExists)) {
-        return $gettext('%{name} already exists', {name: `${unref(inputFilename)}.url`})
+        return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
       }
 
       return ''
@@ -184,8 +184,7 @@ export default defineComponent({
           filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
         }
         inputFilename.value = filename
-      } catch (_) {
-      }
+      } catch (_) {}
     }
 
     const dropItemResourceClicked = (item: SearchResultValue) => {
@@ -213,7 +212,7 @@ export default defineComponent({
 
       try {
         // Omit possible xss code
-        const sanitizedUrl = DOMPurify.sanitize(url, {USE_PROFILES: {html: true}})
+        const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
         const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
         const path = urlJoin(unref(currentFolder).path, `${filename}.url`)
