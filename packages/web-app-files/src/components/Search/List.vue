@@ -23,7 +23,6 @@
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
               <oc-resource-icon
-                size="medium"
                 :resource="{ type: 'file', extension: item.icon, isFolder: item.icon == 'folder' }"
               />
               <span class="oc-ml-s">{{ item.label }}</span>
@@ -285,7 +284,11 @@ export default defineComponent({
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
-      return unref(fullTextSearchEnabled) || unref(availableTags).length || true
+      return (
+        unref(fullTextSearchEnabled) ||
+        unref(availableTags).length ||
+        unref(modifiedDateCapability).enabled
+      )
     })
 
     const loadAvailableTagsTask = useTask(function* () {
@@ -343,8 +346,6 @@ export default defineComponent({
         ...mimeTypeMapping[key]
       })
     })
-
-    console.log('mtv', availableMimeTypeValues)
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       const query = {}
