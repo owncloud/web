@@ -35,6 +35,7 @@
     "vuex": "4.1.0",
     "web-app-files": "workspace:*",
     "web-app-search": "workspace:*",
-    "web-runtime": "workspace:*"
+    "web-runtime": "workspace:*",
+    "dompurify": "^3.0.6"
   }
 }

@@ -2,17 +2,12 @@ import Preview from './preview'
 import List from './list'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import {
-  ClientService,
-  ConfigurationManager,
-  SearchList,
-  SearchPreview,
-  SearchProvider
-} from '@ownclouders/web-pkg'
+import { SearchFunction, SearchList, SearchPreview, SearchProvider } from '@ownclouders/web-pkg'
 
 function $gettext(msg) {
   return msg
 }
+
 export default class Provider implements SearchProvider {
   public readonly id: string
   public readonly displayName: string
@@ -20,16 +15,11 @@ export default class Provider implements SearchProvider {
   public readonly listSearch: SearchList
   private readonly store: Store<any>
 
-  constructor(
-    store: Store<any>,
-    router: Router,
-    clientService: ClientService,
-    configurationManager: ConfigurationManager
-  ) {
+  constructor(store: Store<any>, router: Router, searchFunction: SearchFunction) {
     this.id = 'files.sdk'
     this.displayName = $gettext('Files')
-    this.previewSearch = new Preview(store, router, clientService, configurationManager)
-    this.listSearch = new List(store, clientService, configurationManager)
+    this.previewSearch = new Preview(router, searchFunction)
+    this.listSearch = new List(searchFunction)
     this.store = store
   }
 

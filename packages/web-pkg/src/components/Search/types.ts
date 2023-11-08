@@ -1,6 +1,8 @@
+import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
+
 export interface SearchResultValue {
   id: string | number
-  data: unknown
+  data: SearchResource
 }
 
 export interface SearchResult {

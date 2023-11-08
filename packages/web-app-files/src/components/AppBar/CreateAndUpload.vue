@@ -192,9 +192,12 @@
 
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
-
-import { useFileActions, useFileActionsCreateNewShortcut } from '@ownclouders/web-pkg'
-import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
+import {
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  useFileActions,
+  useFileActionsCreateNewShortcut
+} from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import {
   useFileActionsCreateNewFile,

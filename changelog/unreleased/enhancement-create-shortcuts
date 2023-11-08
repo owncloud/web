@@ -1,0 +1,12 @@
+Enhancement: Create shortcuts
+
+We've added a new functionality to add to shortcuts to web, those can be created via the "+ New" context menu.
+Users can enter URLs or pick a file via the drop down menu and create a '.url' file.
+
+'.url' files can be opened via web or downloaded and opened on the desktop.
+
+https://github.com/owncloud/web/pull/9890
+https://github.com/owncloud/web/pull/9908
+https://github.com/owncloud/web/issues/9796
+https://github.com/owncloud/web/issues/9887
+https://github.com/owncloud/web/issues/9850
