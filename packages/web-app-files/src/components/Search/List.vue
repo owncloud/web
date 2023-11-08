@@ -18,7 +18,7 @@
           :show-option-filter="true"
           class="files-search-filter-file-type oc-mr-s"
           display-name-attribute="label"
-          filter-name="file-type"
+          filter-name="mimeTypes"
         >
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
@@ -322,7 +322,7 @@ export default defineComponent({
     )
 
     const mimeTypeMapping = {
-      file: { label: $gettext('File'), icon: 'file' },
+      file: { label: $gettext('File'), icon: 'txt' },
       folder: { label: $gettext('Folder'), icon: 'folder' },
       document: { label: $gettext('Document'), icon: 'doc' },
       spreadsheet: { label: $gettext('Spreadsheet'), icon: 'xls' },
@@ -343,15 +343,6 @@ export default defineComponent({
         ...mimeTypeMapping[key]
       })
     })
-    /*const availableMimeTypeValues = ref<MimeTypeKeyword[]>(
-      unref(mimeTypeCapability).keywords?.map(
-        (k: string) =>
-          ({
-            id: k,
-            ...mimeTypeMapping[k]
-          } as MimeTypeKeyword)
-      ) || []
-    )*/
 
     console.log('mtv', availableMimeTypeValues)
 
@@ -397,13 +388,11 @@ export default defineComponent({
         updateFilter(lastModifiedFilter)
       }
 
-      /*const mimeTypeParams = queryItemAsString(unref(mimeTypesParam))
-      console.log('QueryParam', mimeTypesParam)
-      if (mimeTypesParam) {
+      const mimeTypeParams = queryItemAsString(unref(mimeTypesParam))
+      if (mimeTypeParams) {
         query['mimetype'] = mimeTypeParams.split('+').map((t) => `"${t}"`)
-        console.log('Query:' + query)
         updateFilter(mimeTypesFilter)
-      }*/
+      }
 
       return (
         // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
@@ -467,9 +456,13 @@ export default defineComponent({
         // return early if the search term or filter has not changed, no search needed
         {
           const isSameTerm = newVal?.term === oldVal?.term
-          const isSameFilter = ['q_fullText', 'q_tags', 'q_lastModified', 'useScope'].every(
-            (key) => newVal[key] === oldVal[key]
-          )
+          const isSameFilter = [
+            'q_fullText',
+            'q_tags',
+            'q_lastModified',
+            'q_mimeTypes',
+            'useScope'
+          ].every((key) => newVal[key] === oldVal[key])
           if (isSameTerm && isSameFilter) {
             return
           }
