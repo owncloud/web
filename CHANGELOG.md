@@ -64,6 +64,7 @@ Summary
 * Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 * Enhancement - Enable dark theme on importer: [#9884](https://github.com/owncloud/web/pull/9884)
+* Enhancement - Create shortcuts: [#9890](https://github.com/owncloud/web/pull/9890)
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 * Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
 
@@ -583,6 +584,19 @@ Details
 
    https://github.com/owncloud/web/issues/9452
    https://github.com/owncloud/web/pull/9884
+
+* Enhancement - Create shortcuts: [#9890](https://github.com/owncloud/web/pull/9890)
+
+   We've added a new functionality to add to shortcuts to web, those can be created via the "+ New"
+   context menu. Users can enter URLs or pick a file via the drop down menu and create a '.url' file.
+
+   '.url' files can be opened via web or downloaded and opened on the desktop.
+
+   https://github.com/owncloud/web/issues/9796
+   https://github.com/owncloud/web/issues/9887
+   https://github.com/owncloud/web/issues/9850
+   https://github.com/owncloud/web/pull/9890
+   https://github.com/owncloud/web/pull/9908
 
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 
