@@ -72,7 +72,6 @@ import {
   eventBus,
   isLocationPublicActive,
   SideBarEventTopics,
-  useActiveLocation,
   useClientService,
   useRouter,
   useStore
@@ -105,9 +104,9 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const clientService = useClientService()
-    const $router = useRouter()
+    const router = useRouter()
 
-    const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
+    const isPublicLocation = isLocationPublicActive(router, 'files-public-link')
     const type = unref(isPublicLocation) ? 'span' : 'router-link'
     const resource = toRef(props, 'resource')
     const { $gettext } = useGettext()
@@ -248,7 +247,7 @@ export default defineComponent({
     }
 
     const generateTagLink = (tag: string) => {
-      const currentTerm = unref($router.currentRoute).query?.term
+      const currentTerm = unref(router.currentRoute).query?.term
       return createLocationCommon('files-common-search', {
         query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
       })

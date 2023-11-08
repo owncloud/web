@@ -52,75 +52,7 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
             </tr>
             <!--v-if-->
 
-            <tr>
-              <th class="oc-pr-s oc-font-semibold" scope="col">Tags
-                <!--v-if-->
-              </th>
-              <td>
-                <div create-option="function createOption(label) {
-      if (!label.trim().length) {
-        return {
-          label: label.toLowerCase().trim(),
-          error: $gettext('Tag must not consist of blanks only'),
-          selectable: false
-        };
-      }
-      return {
-        label: label.toLowerCase().trim()
-      };
-    }" map-keydown="function keydownMethods(map, vm) {
-      var objectMapping = __assign({}, map);
-      objectMapping[(0, keycode_1.default)('backspace')] = function (e) {
-        return __awaiter(_this, void 0, void 0, function () {
-          return __generator(this, function (_a) {
-            switch (_a.label) {
-              case 0:
-                if (e.target.value || selectedTags.value.length === 0) {
-                  return [2 /*return*/];
-                }
-
-                e.preventDefault();
-                availableTags.value.push(selectedTags.value.pop());
-                return [4 /*yield*/, save((0, vue_1.unref)(selectedTags))];
-              case 1:
-                _a.sent();
-                return [2 /*return*/];
-            }
-          });
-        });
-      };
-
-      return objectMapping;
-    }" modelvalue="" options="" select-on-key-codes="13,188" selectable="function isOptionSelectable(option) {
-      return (0, vue_1.unref)(selectedTags).length <= tagsMaxCount &amp;&amp; option.selectable !== false;
-    }" taggable="">
-                  <label class="oc-label" for="oc-select-1"></label>
-                  <!--v-if-->
-                  <div class="v-select vs--multiple vs--searchable oc-select" dir="auto" style="background: transparent;">
-                    <div aria-expanded="false" aria-label="Search for option" aria-owns="vs1__listbox" class="vs__dropdown-toggle" id="vs1__combobox" role="combobox">
-                      <div class="vs__selected-options">
-                        <input aria-autocomplete="list" aria-controls="vs1__listbox" aria-labelledby="vs1__combobox" autocomplete="off" class="vs__search" id="oc-select-1" type="search">
-                      </div>
-                      <div class="vs__actions">
-                        <button aria-label="Clear Selected" class="vs__clear" style="display: none;" title="Clear Selected" type="button">
-                          <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6.895455 5l2.842897-2.842898c.348864-.348863.348864-.914488 0-1.263636L9.106534.261648c-.348864-.348864-.914489-.348864-1.263636 0L5 3.104545 2.157102.261648c-.348863-.348864-.914488-.348864-1.263636 0L.261648.893466c-.348864.348864-.348864.914489 0 1.263636L3.104545 5 .261648 7.842898c-.348864.348863-.348864.914488 0 1.263636l.631818.631818c.348864.348864.914773.348864 1.263636 0L5 6.895455l2.842898 2.842897c.348863.348864.914772.348864 1.263636 0l.631818-.631818c.348864-.348864.348864-.914489 0-1.263636L6.895455 5z"></path>
-                          </svg>
-                        </button>
-                        <svg class="vs__open-indicator" height="10" role="presentation" width="14" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path>
-                        </svg>
-                        <div class="vs__spinner" style="display: none;">Loading...</div>
-                      </div>
-                    </div>
-                    <transition-stub appear="false" css="true" name="vs__fade" persisted="false">
-                      <ul id="vs1__listbox" role="listbox" style="display: none; visibility: hidden;"></ul>
-                    </transition-stub>
-                  </div>
-                  <!--v-if-->
-                </div>
-              </td>
-            </tr>
+            <!--v-if-->
           </tbody>
         </table>
       </div>
