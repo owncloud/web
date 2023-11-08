@@ -10,7 +10,7 @@
         </div>
       </div>
       <div id="sciencemesh-connections">
-        <connections
+        <connections-panel
           v-model:connections="connections"
           :highlighted-connections="highlightedConnections.map((c) => c.id)"
           :loading="loadingConnections"
@@ -22,19 +22,18 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, ref, unref, Ref } from 'vue'
-import Connections from './Connections.vue'
+import ConnectionsPanel from './Connections.vue'
 import IncomingInvitations from './IncomingInvitations.vue'
 import OutgoingInvitations from './OutgoingInvitations.vue'
-import { useClientService, useScrollTo, useStore } from '@ownclouders/web-pkg'
+import { useClientService, useScrollTo, useStore, FederatedConnection } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { FederatedConnection } from '../types'
 import { buildConnection } from '../functions'
 
 export default defineComponent({
   components: {
     IncomingInvitations,
     OutgoingInvitations,
-    Connections
+    ConnectionsPanel
   },
   setup() {
     const store = useStore()
@@ -43,7 +42,6 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const connections: Ref<FederatedConnection[]> = ref([])
-    const newConnections: Ref<FederatedConnection[]> = ref([])
     const highlightedConnections: Ref<FederatedConnection[]> = ref([])
     const highlightNewConnectionsInterval = ref(null)
     const loadingConnections = ref(true)

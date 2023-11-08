@@ -64,10 +64,10 @@ import {
   NoContentMessage,
   AppLoadingSpinner,
   useRouter,
-  useClientService
+  useClientService,
+  FederatedConnection
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { FederatedConnection } from '../types'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({

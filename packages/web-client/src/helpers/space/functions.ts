@@ -1,13 +1,6 @@
 import { User } from '../user'
 import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
-import {
-  ShareType,
-  ShareTypes,
-  SpacePeopleShareRoles,
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
-} from '../share'
+import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import {
   PublicSpaceResource,
   ShareSpaceResource,

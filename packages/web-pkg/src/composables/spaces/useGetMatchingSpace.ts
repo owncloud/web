@@ -47,15 +47,15 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     }
 
     // HACK:
-    const driveAliasPrefix =
+    const driveAliasPrefix = () =>
       resource?.share?.shareType === ShareTypes.remote.value ||
-      resource.id.toString().startsWith(OCM_PROVIDER_ID)
+      resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
         ? 'ocm-share'
         : 'share'
     return (
       getInternalSpace(storageId) ||
       buildShareSpaceResource({
-        driveAliasPrefix,
+        driveAliasPrefix: driveAliasPrefix(),
         shareId: resource.shareId,
         shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
         serverUrl: configurationManager.serverUrl

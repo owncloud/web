@@ -1,7 +1,5 @@
 import {
   FileActionOptions,
-  isLocationSharesActive,
-  isLocationSpacesActive,
   useClientService,
   useRouter,
   useStore,

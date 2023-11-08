@@ -1,11 +1,7 @@
 import { useStore } from '../store'
 import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from 'vue'
-import {
-  buildShareSpaceResource,
-  ShareTypes,
-  SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { buildShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouteQuery } from '../router'
 import { Resource } from '@ownclouders/web-client'
 import { useSpacesLoading } from './useSpacesLoading'

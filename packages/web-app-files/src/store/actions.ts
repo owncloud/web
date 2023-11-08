@@ -304,8 +304,8 @@ export default {
       expirationDate,
       storageId,
       notify = undefined,
-      shareWithUser,
-      shareWithProvider
+      shareWithUser = undefined,
+      shareWithProvider = undefined
     }
   ) {
     const isGroupShare = shareType === ShareTypes.group.value

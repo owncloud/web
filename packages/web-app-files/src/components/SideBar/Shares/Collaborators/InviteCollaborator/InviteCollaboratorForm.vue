@@ -2,8 +2,8 @@
   <div id="new-collaborators-form" data-testid="new-collaborators-form">
     <div :class="['oc-flex', 'oc-width-1-1', { 'new-collaborators-form-cern': isRunningOnEos }]">
       <oc-select
-        id="files-share-account-type-input"
         v-if="isRunningOnEos"
+        id="files-share-account-type-input"
         v-model="accountType"
         :options="accountTypes"
         :label="$gettext('Account type')"
@@ -19,8 +19,8 @@
       </oc-select>
       <oc-select
         id="files-share-invite-input"
-        :class="['oc-width-1-1', { 'cern-files-share-invite-input': isRunningOnEos }]"
         ref="ocSharingAutocomplete"
+        :class="['oc-width-1-1', { 'cern-files-share-invite-input': isRunningOnEos }]"
         :model-value="selectedCollaborators"
         :options="autocompleteResults"
         :loading="searchInProgress"
@@ -153,17 +153,18 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch, onMounted, Ref } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
   displayPositionedDropdown,
   formatDateFromDateTime,
-  formatRelativeDateFromDateTime
+  formatRelativeDateFromDateTime,
+  FederatedConnection,
+  FederatedUser
 } from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
-import { FederatedConnection, FederatedUser } from '../../../../../../../web-app-ocm/src/types'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -223,6 +224,7 @@ export default defineComponent({
 
     const federatedUsers = ref([] as FederatedUser[])
     onMounted(async () => {
+      // HACK: remove when federated users are returned from search
       try {
         const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
           FederatedConnection[]

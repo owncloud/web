@@ -1,4 +1,4 @@
-import { FederatedConnection, FederatedUser } from './types'
+import { FederatedConnection, FederatedUser } from '@ownclouders/web-pkg'
 
 export const getConnectionId = (user: FederatedUser) => {
   return `${user.user_id}@${user.idp}`

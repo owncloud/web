@@ -25,7 +25,7 @@
         :title="$gettext('Generate new invitation')"
         :button-cancel-text="$gettext('Cancel')"
         :button-confirm-text="$gettext('Generate')"
-        :button-confirm-disabled="descriptionErrorMessage"
+        :button-confirm-disabled="!!descriptionErrorMessage"
         focus-trap-initial="#invite_token_description"
         @cancel="resetGenerateInviteToken"
         @confirm="generateToken"
