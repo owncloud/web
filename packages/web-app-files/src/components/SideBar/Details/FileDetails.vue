@@ -98,7 +98,7 @@
           :slot-props="{ space, resource }"
           :multiple="true"
         />
-        <tr data-testid="tags" v-if="hasTags">
+        <tr v-if="hasTags" data-testid="tags">
           <th scope="col" class="oc-pr-s oc-font-semibold">
             {{ $gettext('Tags') }}
             <oc-contextual-helper

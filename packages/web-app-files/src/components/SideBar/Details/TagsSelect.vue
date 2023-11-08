@@ -127,8 +127,6 @@ export default defineComponent({
       return [...unref(resource).tags.map((t) => ({ label: t }))]
     })
 
-    console.log('!!!')
-
     const onTagClicked = () => {
       eventBus.publish(SideBarEventTopics.close)
     }
