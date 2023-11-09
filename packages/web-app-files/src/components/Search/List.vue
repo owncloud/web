@@ -9,7 +9,7 @@
         </div>
         <item-filter
           v-if="availableMimeTypeValues.length"
-          ref="mimeTypesFilter"
+          ref="fileCategoryFilter"
           :allow-multiple="true"
           :filter-label="$gettext('File type')"
           :filterable-attributes="['label']"
@@ -18,10 +18,10 @@
           :show-option-filter="true"
           class="files-search-filter-file-type oc-mr-s"
           display-name-attribute="label"
-          filter-name="mimeTypes"
+          filter-name="fileCategory"
         >
           <template #image="{ item }">
-            <div class="tag-option-wrapper oc-flex oc-flex-middle">
+            <div class="file-category-option-wrapper oc-flex oc-flex-middle">
               <oc-resource-icon :resource="getFakeResourceForIcon(item)" />
               <span class="oc-ml-s">{{ item.label }}</span>
             </div>
@@ -205,7 +205,7 @@ import {
 
 const visibilityObserver = new VisibilityObserver()
 
-type MimeTypeKeyword = {
+type FileCategoryKeyword = {
   id: string
   label: string
   icon: string
@@ -256,7 +256,7 @@ export default defineComponent({
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
     const modifiedDateCapability = useCapabilitySearchModifiedDate()
-    const mimeTypeCapability = useCapabilitySearchMimeType()
+    const fileCategoryCapability = useCapabilitySearchMimeType()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -275,17 +275,17 @@ export default defineComponent({
 
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
-    const mimeTypesFilter = ref<VNodeRef>()
+    const fileCategoryFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
     const lastModifiedParam = useRouteQuery('q_lastModified')
-    const mimeTypesParam = useRouteQuery('q_mimeTypes')
+    const fileCategoryParam = useRouteQuery('q_fileCategory')
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
       return (
         unref(fullTextSearchEnabled) ||
         unref(availableTags).length ||
-        unref(modifiedDateCapability).enabled
+        (unref(modifiedDateCapability) && unref(modifiedDateCapability).enabled)
       )
     })
 
@@ -322,7 +322,7 @@ export default defineComponent({
       })) || []
     )
 
-    const mimeTypeMapping = {
+    const fileCategoryMapping = {
       file: { label: $gettext('File'), icon: 'txt' },
       folder: { label: $gettext('Folder'), icon: 'folder' },
       document: { label: $gettext('Document'), icon: 'doc' },
@@ -334,14 +334,14 @@ export default defineComponent({
       audio: { label: $gettext('Audio'), icon: 'mp3' },
       archive: { label: $gettext('Archive'), icon: 'zip' }
     }
-    const availableMimeTypeValues = []
-    unref(mimeTypeCapability).keywords?.forEach((key: string) => {
-      if (!mimeTypeMapping[key]) {
+    const availableFileCategoryValues: FileCategoryKeyword[] = []
+    unref(fileCategoryCapability).keywords?.forEach((key: string) => {
+      if (!fileCategoryMapping[key]) {
         return
       }
-      availableMimeTypeValues.push({
+      availableFileCategoryValues.push({
         id: key,
-        ...mimeTypeMapping[key]
+        ...fileCategoryMapping[key]
       })
     })
 
@@ -391,10 +391,10 @@ export default defineComponent({
         updateFilter(lastModifiedFilter)
       }
 
-      const mimeTypeParams = queryItemAsString(unref(mimeTypesParam))
-      if (mimeTypeParams) {
-        query['mimetype'] = mimeTypeParams.split('+').map((t) => `"${t}"`)
-        updateFilter(mimeTypesFilter)
+      const fileCategoryParams = queryItemAsString(unref(fileCategoryParam))
+      if (fileCategoryParams) {
+        query['mimetype'] = fileCategoryParams.split('+').map((t) => `"${t}"`)
+        updateFilter(fileCategoryFilter)
       }
 
       return (
@@ -463,7 +463,7 @@ export default defineComponent({
             'q_fullText',
             'q_tags',
             'q_lastModified',
-            'q_mimeTypes',
+            'q_fileCategory',
             'useScope'
           ].every((key) => newVal[key] === oldVal[key])
           if (isSameTerm && isSameFilter) {
@@ -489,8 +489,8 @@ export default defineComponent({
       displayFilter,
       availableLastModifiedValues,
       lastModifiedFilter,
-      mimeTypesFilter,
-      availableMimeTypeValues,
+      fileCategoryFilter,
+      availableFileCategoryValues,
       getFakeResourceForIcon
     }
   },

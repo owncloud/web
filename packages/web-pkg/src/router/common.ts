@@ -33,6 +33,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
             'q_tags',
             'q_lastModified',
             'q_fullText',
+            'q_fileCategory',
             'scope',
             'useScope'
           ]
