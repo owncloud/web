@@ -81,7 +81,7 @@ describe('SharedWithMe view', () => {
         )
       })
     })
-    describe('share status', () => {
+    describe('share type', () => {
       it('shows filter if more than one share types are present', () => {
         const { wrapper } = getMountedWrapper({
           files: [
@@ -138,7 +138,7 @@ function getMountedWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
-        stubs: { ...defaultStubs, itemFilterInline: true, itemFilter: true }
+        stubs: { ...defaultStubs, itemFilterInline: true, ItemFilter: true }
       }
     })
   }

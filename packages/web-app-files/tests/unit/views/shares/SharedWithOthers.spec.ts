@@ -53,7 +53,7 @@ describe('SharedWithOthers view', () => {
     })
   })
   describe('filter', () => {
-    describe('share status', () => {
+    describe('share type', () => {
       it('shows filter if more than one share types are present', () => {
         const { wrapper } = getMountedWrapper({
           files: [

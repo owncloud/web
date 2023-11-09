@@ -29,7 +29,6 @@
           </oc-button>
         </div>
       </div>
-      <br />
       <app-loading-spinner v-if="loading" />
       <template v-else>
         <no-content-message
