@@ -65,6 +65,7 @@ Summary
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 * Enhancement - Enable dark theme on importer: [#9884](https://github.com/owncloud/web/pull/9884)
 * Enhancement - Create shortcuts: [#9890](https://github.com/owncloud/web/pull/9890)
+* Enhancement - Manage tags in details panel: [#9905](https://github.com/owncloud/web/pull/9905)
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 * Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
 
@@ -598,6 +599,15 @@ Details
    https://github.com/owncloud/web/issues/9850
    https://github.com/owncloud/web/pull/9890
    https://github.com/owncloud/web/pull/9908
+
+* Enhancement - Manage tags in details panel: [#9905](https://github.com/owncloud/web/pull/9905)
+
+   We've enhanced the details panel, now tags are viewable and manageable there. That change
+   makes it easier for the user to manage tags, as they don't need to click an additional context
+   menu action.
+
+   https://github.com/owncloud/web/issues/9783
+   https://github.com/owncloud/web/pull/9905
 
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 
