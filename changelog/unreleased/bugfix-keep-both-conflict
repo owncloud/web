@@ -1,0 +1,6 @@
+Bugfix: Keep both folders and their files when parent and child folder has same name
+
+Parsing has been adjusted to account for edge case of multiple folders and sub-folders with the same name
+
+https://github.com/owncloud/web/pull/9915
+https://github.com/owncloud/web/issues/9158
