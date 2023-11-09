@@ -42,7 +42,7 @@
       </oc-tag>
     </template>
     <template #option="{ label, error }">
-      <div class="oc-flex">
+      <div class="oc-flex test">
         <span class="oc-flex oc-flex-center">
           <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
             <oc-icon name="price-tag-3" size="small" />

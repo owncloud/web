@@ -1225,8 +1225,14 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
 
   for (const tag of tags) {
     await inputForm.fill(tag)
-    await page.waitForTimeout(1000)
-    await page.locator('.vs__dropdown-option').first().click()
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith('tags') && resp.status() === 200 && resp.request().method() === 'PUT'
+      ),
+
+      page.locator('.vs__dropdown-option').first().press('Enter')
+    ])
   }
 
   await sidebar.close({ page })

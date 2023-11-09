@@ -1,5 +1,4 @@
 import fileSideBars from 'web-app-files/src/fileSideBars'
-import { createLocationSpaces } from '@ownclouders/web-pkg'
 import SideBar from 'web-app-files/src/components/SideBar/SideBar.vue'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
@@ -130,10 +129,7 @@ describe('SideBar', () => {
   })
 })
 
-function createWrapper({
-  item = undefined,
-  currentRoute = createLocationSpaces('files-spaces-generic')
-} = {}) {
+function createWrapper({ item = undefined } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
@@ -155,7 +151,9 @@ function createWrapper({
     (state) => state.highlightedFile
   )
   const store = createStore(storeOptions)
-  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+  })
   return {
     wrapper: shallowMount(SideBar, {
       props: {
