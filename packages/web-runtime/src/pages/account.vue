@@ -158,6 +158,7 @@ export default defineComponent({
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const valuesList = ref<SettingsValue[]>()
+    const graphUser = ref()
     const accountBundle = ref<SettingsBundle>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
@@ -215,6 +216,20 @@ export default defineComponent({
       }
     }).restartable()
 
+    const loadGraphUserTask = useTask(function* () {
+      try {
+        const { data } = yield clientService.graphAuthenticated.users.getMe()
+        graphUser.value = data
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Unable to load account data…'),
+          error: e
+        })
+        graphUser.value = undefined
+      }
+    }).restartable()
+
     const isLoading = computed(() => {
       if (!unref(isSettingsServiceSupported)) {
         return false
@@ -223,7 +238,9 @@ export default defineComponent({
         loadValuesListTask.isRunning ||
         !loadValuesListTask.last ||
         loadAccountBundleTask.isRunning ||
-        !loadAccountBundleTask.last
+        !loadAccountBundleTask.last ||
+        loadGraphUserTask.isRunning ||
+        !loadGraphUserTask.last
       )
     })
 
@@ -285,7 +302,7 @@ export default defineComponent({
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
-        await clientService.graphAuthenticated.users.editUser(unref(user).uuid, {
+        await clientService.graphAuthenticated.users.editUser(unref(graphUser).id, {
           preferredLanguage: option.value
         } as any)
         selectedLanguageValue.value = option
@@ -332,15 +349,11 @@ export default defineComponent({
       if (unref(isSettingsServiceSupported)) {
         await loadAccountBundleTask.perform()
         await loadValuesListTask.perform()
+        await loadGraphUserTask.perform()
 
-        const languageConfiguration = unref(valuesList)?.find(
-          (cV) => cV.identifier.setting === 'language'
-        )
-        selectedLanguageValue.value = languageConfiguration
-          ? unref(languageOptions)?.find(
-              (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
-            )
-          : unref(languageOptions)?.find((o) => o.value === language.current)
+        selectedLanguageValue.value =
+          unref(graphUser).preferredLanguage ||
+          unref(languageOptions)?.find((lO) => lO.value === language.current)
 
         const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
           (cV) => cV.identifier.setting === 'disable-email-notifications'

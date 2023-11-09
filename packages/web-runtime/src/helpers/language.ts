@@ -2,14 +2,12 @@ import { Language } from 'vue3-gettext'
 
 export const setCurrentLanguage = ({
   language,
-  languageSetting = null,
-  user = null
+  languageSetting = null
 }: {
   language: Language
   languageSetting?: string
-  user?: any
 }): void => {
-  let currentLanguage = languageSetting || user?.language
+  let currentLanguage = languageSetting
   if (currentLanguage) {
     if (currentLanguage.indexOf('-')) {
       currentLanguage = currentLanguage.split('-')[0]
@@ -17,4 +15,3 @@ export const setCurrentLanguage = ({
     language.current = currentLanguage
     document.documentElement.lang = currentLanguage
   }
-}

@@ -154,8 +154,7 @@ export class UserManager extends OidcUserManager {
 
       setCurrentLanguage({
         language: this.language,
-        languageSetting: this.store.getters.user.language,
-        user: this.store.getters.user
+        languageSetting: this.store.getters.user.language
       })
       this.initializeOwnCloudSdk(accessToken)
 
@@ -232,8 +231,7 @@ export class UserManager extends OidcUserManager {
     if (graphUser?.data?.preferredLanguage) {
       setCurrentLanguage({
         language: this.language,
-        languageSetting: graphUser.data.preferredLanguage,
-        user: login
+        languageSetting: graphUser.data.preferredLanguage
       })
     }
 
