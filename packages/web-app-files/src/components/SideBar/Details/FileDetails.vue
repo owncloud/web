@@ -98,18 +98,17 @@
           :slot-props="{ space, resource }"
           :multiple="true"
         />
-        <tr v-if="showTags" data-testid="tags">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Tags')" />
+        <tr v-if="hasTags" data-testid="tags">
+          <th scope="col" class="oc-pr-s oc-font-semibold">
+            {{ $gettext('Tags') }}
+            <oc-contextual-helper
+              v-if="contextualHelper?.isEnabled"
+              v-bind="contextualHelper?.data"
+              class="oc-pl-xs"
+            ></oc-contextual-helper>
+          </th>
           <td>
-            <span v-for="(tag, index) in resource.tags" :key="tag">
-              <component
-                :is="!isPublicLinkContext ? 'router-link' : 'span'"
-                v-bind="getTagComponentAttrs(tag)"
-              >
-                <span v-if="index + 1 < resource.tags.length">{{ tag }}</span>
-                <span v-else v-text="tag" /></component
-              ><span v-if="index + 1 < resource.tags.length" class="oc-mr-xs">,</span>
-            </span>
+            <tags-select :resource="resource"></tags-select>
           </td>
         </tr>
       </table>
@@ -120,9 +119,8 @@
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
-import { ImageDimension } from '@ownclouders/web-pkg'
+import { ImageDimension, useConfigurationManager } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { createLocationCommon } from '@ownclouders/web-pkg'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityFilesTags,
@@ -145,24 +143,25 @@ import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
+import { tagsHelper } from '../../../helpers/contextualHelpers'
+import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
+import TagsSelect from './TagsSelect.vue'
 
 export default defineComponent({
   name: 'FileDetails',
+  components: { TagsSelect },
   setup() {
+    const configurationManager = useConfigurationManager()
     const store = useStore()
+    const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
 
     const resource = inject<Resource>('resource')
     const space = inject<Ref<SpaceResource>>('space')
     const isPublicLinkContext = usePublicLinkContext({ store })
-    const clientService = useClientService()
     const previewService = usePreviewService()
     const preview = ref(undefined)
-
-    const matchingSpace = computed(() => {
-      return getMatchingSpace(unref(resource))
-    })
 
     const loadData = async () => {
       const calls = []
@@ -208,6 +207,12 @@ export default defineComponent({
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
     })
+    const sharedAncestorRoute = computed(() => {
+      return getSharedAncestorRoute({
+        sharedAncestor: unref(sharedAncestor),
+        matchingSpace: unref(space) || getMatchingSpace(unref(resource))
+      })
+    })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
@@ -223,6 +228,11 @@ export default defineComponent({
       { immediate: true }
     )
 
+    const contextualHelper = {
+      isEnabled: configurationManager.options.contextHelpers,
+      data: tagsHelper({ configurationManager: configurationManager })
+    } as ContextualHelper
+
     return {
       preview,
       isPublicLinkContext,
@@ -232,8 +242,9 @@ export default defineComponent({
       isPreviewLoading,
       ancestorMetaData,
       sharedAncestor,
+      sharedAncestorRoute,
       formatDateRelative,
-      matchingSpace
+      contextualHelper
     }
   },
   computed: {
@@ -261,12 +272,6 @@ export default defineComponent({
     },
     showSharedVia() {
       return this.showShares && this.sharedAncestor
-    },
-    sharedAncestorRoute() {
-      return getSharedAncestorRoute({
-        sharedAncestor: this.sharedAncestor,
-        matchingSpace: this.space || this.matchingSpace
-      })
     },
     showShares() {
       if (this.isPublicLinkContext) {
@@ -312,9 +317,6 @@ export default defineComponent({
       const displayDate = formatDateFromHTTP(this.resource.mdate, this.$language.current)
       return upperFirst(displayDate)
     },
-    showTags() {
-      return this.hasTags && this.resource.tags?.length
-    },
     hasAnyShares() {
       return (
         this.resource.shareTypes?.length > 0 ||
@@ -339,21 +341,6 @@ export default defineComponent({
   methods: {
     expandVersionsPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
-    },
-    getTagLink(tag) {
-      const currentTerm = unref(this.$router.currentRoute).query?.term
-      return createLocationCommon('files-common-search', {
-        query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
-      })
-    },
-    getTagComponentAttrs(tag) {
-      if (this.isPublicLinkContext) {
-        return {}
-      }
-
-      return {
-        to: this.getTagLink(tag)
-      }
     }
   }
 })

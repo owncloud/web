@@ -28,7 +28,6 @@ import {
   useFileActionsDownloadFile,
   useFileActionsRename,
   useFileActionsSetImage,
-  useFileActionsShowEditTags,
   useFileActionsNavigate,
   useFileActionsFavorite,
   useFileActionsCreateSpaceFromResource,
@@ -70,7 +69,6 @@ export default defineComponent({
     const { actions: setSpaceImageActions } = useFileActionsSetImage({ store })
     const { actions: setSpaceReadmeActions } = useFileActionsSetReadme({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
-    const { actions: showEditTagsActions } = useFileActionsShowEditTags({ store })
     const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource({
       store
     })
@@ -121,7 +119,6 @@ export default defineComponent({
         ...unref(pasteActions),
         ...unref(renameActions),
         ...unref(createSpaceFromResourceActions),
-        ...unref(showEditTagsActions),
         ...unref(restoreActions),
         ...unref(acceptShareActions),
         ...unref(declineShareActions),

@@ -1,74 +1,86 @@
 <template>
-  <div id="tags-panel">
-    <div id="tags-form" class="oc-background-highlight oc-p-m">
-      <oc-loader v-if="loadAvailableTagsTask.isRunning" />
-      <oc-select
-        v-else
-        ref="tagSelect"
-        v-model="selectedTags"
-        class="oc-mb-s"
-        :multiple="true"
-        :disabled="readonly"
-        :options="availableTags"
-        :contextual-helper="contextualHelper"
-        taggable
-        :select-on-key-codes="[keycode('enter'), keycode(',')]"
-        :label="$gettext('Add or edit tags')"
-        :create-option="createOption"
-        :selectable="isOptionSelectable"
-        :fix-message-line="true"
-        :map-keydown="keydownMethods"
-        @update:model-value="save"
-      >
-        <template #selected-option-container="{ option, deselect }">
+  <oc-select
+    ref="tagSelect"
+    v-model="selectedTags"
+    :multiple="true"
+    :disabled="readonly"
+    :options="availableTags"
+    taggable
+    :select-on-key-codes="[keycode('enter'), keycode(',')]"
+    :create-option="createOption"
+    :selectable="isOptionSelectable"
+    :map-keydown="keydownMethods"
+    data-test-id="tags-select"
+    @update:model-value="save"
+  >
+    <template #selected-option-container="{ option, deselect }">
+      <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+        <component
+          :is="type"
+          v-bind="getAdditionalAttributes(option.label)"
+          class="oc-flex oc-flex-middle"
+          @click="onTagClicked"
+        >
+          <oc-icon name="price-tag-3" class="oc-mr-xs" size="small" />
+          <span class="oc-text-truncate">{{ option.label }}</span>
+        </component>
+
+        <span class="oc-flex oc-flex-middle oc-mr-xs">
+          <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
+          <oc-button
+            v-else
+            appearance="raw"
+            :title="$gettext('Deselect %{label}', { label: option.label })"
+            :aria-label="$gettext('Deselect %{label}', { label: option.label })"
+            class="vs__deselect oc-mx-rm"
+            @mousedown.stop.prevent
+            @click="deselect(option)"
+          >
+            <oc-icon name="close" size="small" />
+          </oc-button>
+        </span>
+      </oc-tag>
+    </template>
+    <template #option="{ label, error }">
+      <div class="oc-flex test">
+        <span class="oc-flex oc-flex-center">
           <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
             <oc-icon name="price-tag-3" size="small" />
-            <span class="oc-text-truncate">{{ option.label }}</span>
-            <span class="oc-flex oc-flex-middle oc-ml-s oc-mr-xs">
-              <oc-icon v-if="option.readonly" class="vs__deselect-lock" name="lock" size="small" />
-              <oc-button
-                v-else
-                appearance="raw"
-                :title="$gettext('Deselect %{label}', { label: option.label })"
-                :aria-label="$gettext('Deselect %{label}', { label: option.label })"
-                class="vs__deselect oc-mx-rm"
-                @mousedown.stop.prevent
-                @click="deselect(option)"
-              >
-                <oc-icon name="close" size="small" />
-              </oc-button>
-            </span>
+            <span class="oc-text-truncate">{{ label }}</span>
           </oc-tag>
-        </template>
-        <template #option="{ label, error }">
-          <div class="oc-flex">
-            <span class="oc-flex oc-flex-center">
-              <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
-                <oc-icon name="price-tag-3" size="small" />
-                <span class="oc-text-truncate">{{ label }}</span>
-              </oc-tag>
-            </span>
-          </div>
-          <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
-        </template>
-      </oc-select>
-    </div>
-  </div>
+        </span>
+      </div>
+      <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
+    </template>
+  </oc-select>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, ref, unref, VNodeRef, watch } from 'vue'
-import { eventBus } from '@ownclouders/web-pkg'
-import { useTask } from 'vue-concurrency'
-import { useClientService, useConfigurationManager, useStore } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client'
-import diff from 'lodash-es/difference'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  PropType,
+  ref,
+  toRef,
+  unref,
+  VNodeRef,
+  watch
+} from 'vue'
+import {
+  createLocationCommon,
+  eventBus,
+  isLocationPublicActive,
+  SideBarEventTopics,
+  useClientService,
+  useRouter,
+  useStore
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { useTask } from 'vue-concurrency'
+import diff from 'lodash-es/difference'
 import keycode from 'keycode'
-import { tagsHelper } from 'web-app-files/src/helpers/contextualHelpers'
-import { ContextualHelper } from 'design-system/src/helpers'
-
-const tagsMaxCount = 100
+import { Resource } from '@ownclouders/web-client'
 
 type TagOption = {
   label: string
@@ -76,17 +88,35 @@ type TagOption = {
   selectable?: boolean
 }
 
+const tagsMaxCount = 100
+
 export default defineComponent({
-  name: 'TagsPanel',
-  setup() {
+  name: 'TagsSelect',
+  props: {
+    /**
+     * The resource
+     */
+    resource: {
+      type: Object as PropType<Resource>,
+      required: true
+    }
+  },
+  setup(props) {
     const store = useStore()
     const clientService = useClientService()
-    const { $gettext } = useGettext()
-    const configurationManager = useConfigurationManager()
+    const router = useRouter()
 
-    const injectedResource = inject<Resource>('resource')
-    const resource = computed<Resource>(() => unref(injectedResource))
-    const readonly = computed(() => unref(resource).locked === true)
+    const isPublicLocation = isLocationPublicActive(router, 'files-public-link')
+    const type = unref(isPublicLocation) ? 'span' : 'router-link'
+    const resource = toRef(props, 'resource')
+    const { $gettext } = useGettext()
+    const readonly = computed(
+      () =>
+        unref(resource).locked === true ||
+        (typeof unref(resource).canEditTags === 'function' &&
+          unref(resource).canEditTags() === false)
+    )
+
     const selectedTags = ref<TagOption[]>([])
     const availableTags = ref<TagOption[]>([])
     let allTags: string[] = []
@@ -95,6 +125,10 @@ export default defineComponent({
     const currentTags = computed<TagOption[]>(() => {
       return [...unref(resource).tags.map((t) => ({ label: t }))]
     })
+
+    const onTagClicked = () => {
+      eventBus.publish(SideBarEventTopics.close)
+    }
 
     const loadAvailableTagsTask = useTask(function* () {
       const {
@@ -212,17 +246,28 @@ export default defineComponent({
       return objectMapping
     }
 
-    const contextualHelper = {
-      isEnabled: configurationManager.options.contextHelpers,
-      data: tagsHelper({ configurationManager: configurationManager })
-    } as ContextualHelper
+    const generateTagLink = (tag: string) => {
+      const currentTerm = unref(router.currentRoute).query?.term
+      return createLocationCommon('files-common-search', {
+        query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
+      })
+    }
+
+    const getAdditionalAttributes = (tag: string) => {
+      if (unref(isPublicLocation)) {
+        return {}
+      }
+      return {
+        to: generateTagLink(tag),
+        class: 'tags-control-tag-link'
+      }
+    }
 
     return {
       loadAvailableTagsTask,
       availableTags,
       tagsMaxCount,
       selectedTags,
-      resource,
       tagSelect,
       currentTags,
       revertChanges,
@@ -232,21 +277,25 @@ export default defineComponent({
       save,
       keycode,
       keydownMethods,
-      contextualHelper,
-      readonly
+      readonly,
+      getAdditionalAttributes,
+      onTagClicked,
+      isPublicLocation,
+      type
     }
   }
 })
 </script>
 
-<style lang="scss">
-#tags-panel {
-  #tags-form {
-    border-radius: 5px;
-  }
+<style scoped lang="scss">
+.oc-tag {
+  height: 1.5rem;
 }
+
 .tags-control-tag {
-  max-width: 12rem;
-  height: var(--oc-space-large);
+  &-link {
+    color: var(--oc-color-swatch-passive-default);
+    pointer-events: visible;
+  }
 }
 </style>
