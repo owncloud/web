@@ -152,10 +152,9 @@ export class UserManager extends OidcUserManager {
         return
       }
 
-      const settings = await this.fetchSettings()
       setCurrentLanguage({
         language: this.language,
-        languageSetting: settings?.find((s) => s.identifier.setting === 'language'),
+        languageSetting: this.store.getters.user.language,
         user: this.store.getters.user
       })
       this.initializeOwnCloudSdk(accessToken)
@@ -227,12 +226,15 @@ export class UserManager extends OidcUserManager {
       email: login?.email || user?.email || '',
       groups: graphUser?.data?.memberOf || userGroups || [],
       role,
-      language: login?.language
+      language: graphUser?.data?.preferredLanguage || ''
     })
 
-    if (login.language) {
-      // language is saved in user object for oC10
-      setCurrentLanguage({ language: this.language, user: login })
+    if (graphUser?.data?.preferredLanguage) {
+      setCurrentLanguage({
+        language: this.language,
+        languageSetting: graphUser.data.preferredLanguage,
+        user: login
+      })
     }
 
     if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
@@ -309,9 +311,9 @@ export class UserManager extends OidcUserManager {
     }
 
     /* CERNBox customization
-      Do a call to the backend, as this will reply with the internal reva token.
-      Use that longer token in all calls to the backend (so, replace the default store token)
-    */
+                                                  Do a call to the backend, as this will reply with the internal reva token.
+                                                  Use that longer token in all calls to the backend (so, replace the default store token)
+                                                */
     try {
       console.log('CERNBox: login successful, exchange sso token with reva token')
       const httpClient = this.clientService.httpAuthenticated

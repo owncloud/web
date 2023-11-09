@@ -285,21 +285,13 @@ export default defineComponent({
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
-        const value = await saveValue({
-          identifier: 'language',
-          valueOptions: { listValue: { values: [{ stringValue: option.value }] } }
-        })
+        await clientService.graphAuthenticated.users.editUser(unref(user).uuid, {
+          preferredLanguage: option.value
+        } as any)
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,
-          languageSetting: {
-            identifier: {
-              extension: 'ocis-accounts',
-              bundle: 'profile',
-              setting: 'language'
-            },
-            value
-          }
+          languageSetting: option.value
         })
         if (unref(sseEnabled)) {
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)

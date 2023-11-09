@@ -137,7 +137,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           new Set<any>(['drive', 'memberOf', 'appRoleAssignments'])
         ),
       createUser: (user: User) => usersApiFactory.createUser(user),
-      getMe: () => meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])),
+      getMe: () =>
+        meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])).then((result) => {
+          ;(result.data as any).preferredLanguage = 'cs'
+          return result
+        }),
       changeOwnPassword: (currentPassword, newPassword) =>
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),

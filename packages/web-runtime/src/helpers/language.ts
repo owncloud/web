@@ -6,13 +6,13 @@ export const setCurrentLanguage = ({
   user = null
 }: {
   language: Language
-  languageSetting?: Record<string, any>
+  languageSetting?: string
   user?: any
 }): void => {
-  let currentLanguage = languageSetting?.value?.listValue?.values[0]?.stringValue || user?.language
+  let currentLanguage = languageSetting || user?.language
   if (currentLanguage) {
-    if (currentLanguage.indexOf('_')) {
-      currentLanguage = currentLanguage.split('_')[0]
+    if (currentLanguage.indexOf('-')) {
+      currentLanguage = currentLanguage.split('-')[0]
     }
     language.current = currentLanguage
     document.documentElement.lang = currentLanguage
