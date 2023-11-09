@@ -385,8 +385,4 @@ export default defineComponent({
   max-width: 192px !important;
   width: 192px !important;
 }
-
-.oc-tag:hover {
-  cursor: pointer;
-}
 </style>
