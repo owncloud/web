@@ -284,7 +284,6 @@ export default defineComponent({
     }
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
-      console.log(unref(languageOptions))
       try {
         const value = await saveValue({
           identifier: 'language',
