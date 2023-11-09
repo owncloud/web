@@ -1,0 +1,8 @@
+Enhancement: Manage tags in details panel
+
+We've enhanced the details panel, now tags are viewable and manageable there.
+That change makes it easier for the user to manage tags, as they don't need to click an additional
+context menu action.
+
+https://github.com/owncloud/web/pull/9905
+https://github.com/owncloud/web/issues/9783
