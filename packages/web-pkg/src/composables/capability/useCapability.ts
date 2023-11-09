@@ -149,6 +149,6 @@ export const useCapabilitySearchModifiedDate =
   createCapabilityComposable<LastModifiedFilterCapability>('search.property.mtime', {})
 
 export const useCapabilitySearchMediaType = createCapabilityComposable<MediaTypeCapability>(
-  'search.property.mimetype',
+  'search.property.mediatype',
   {}
 )

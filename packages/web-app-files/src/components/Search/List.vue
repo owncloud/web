@@ -8,12 +8,12 @@
           <span v-text="$gettext('Filter:')" />
         </div>
         <item-filter
-          v-if="availableMimeTypeValues.length"
+          v-if="availableMediaTypeValues.length"
           ref="mediaTypeFilter"
           :allow-multiple="true"
           :filter-label="$gettext('Media type')"
           :filterable-attributes="['label']"
-          :items="availableMimeTypeValues"
+          :items="availableMediaTypeValues"
           :option-filter-label="$gettext('Filter media type')"
           :show-option-filter="true"
           class="files-search-filter-file-type oc-mr-s"
@@ -148,7 +148,7 @@
 import { useResourcesViewDefaults } from '../../composables'
 import {
   AppLoadingSpinner,
-  useCapabilitySearchMimeType,
+  useCapabilitySearchMediaType,
   useCapabilitySearchModifiedDate
 } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
@@ -256,7 +256,7 @@ export default defineComponent({
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
     const modifiedDateCapability = useCapabilitySearchModifiedDate()
-    const mediaTypeCapability = useCapabilitySearchMimeType()
+    const mediaTypeCapability = useCapabilitySearchMediaType()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -393,7 +393,7 @@ export default defineComponent({
 
       const mediaTypeParams = queryItemAsString(unref(mediaTypeParam))
       if (mediaTypeParams) {
-        query['mimetype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
+        query['mediatype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
         updateFilter(mediaTypeFilter)
       }
 
