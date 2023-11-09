@@ -59,6 +59,7 @@ export type OwnCloudSdk = {
     shareFileWithUser(...args): any
     deleteShare(...args): any
     updateShare(...args): any
+    notifyShare(...args): any
   }
   /** @deprecated */
   tags: {

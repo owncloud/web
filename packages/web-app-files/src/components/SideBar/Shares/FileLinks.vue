@@ -504,6 +504,8 @@ export default defineComponent({
         quicklink: link.quicklink,
         name: link.name,
         spaceRef: this.resource.fileId,
+        notifyUploads: link.notifyUploads,
+        notifyUploadsExtraRecipients: link.notifyUploadsExtraRecipients,
         ...(this.currentStorageId && {
           storageId: this.currentStorageId
         })

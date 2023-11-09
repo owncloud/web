@@ -34,7 +34,7 @@
         <span />
       </template>
     </oc-select>
-    <div class="oc-flex oc-flex-between oc-mb-l oc-mt-s">
+    <div class="oc-flex oc-flex-between oc-flex-wrap oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
         mode="create"
@@ -95,6 +95,14 @@
         >
           <span v-text="$gettext(saveButtonLabel)" />
         </oc-button>
+      </div>
+      <div class="oc-width-1-1 oc-mt-s">
+        <oc-checkbox
+          v-if="isRunningOnEos"
+          v-model="notifyEnabled"
+          :value="false"
+          :label="$gettext('Notify via mail')"
+        />
       </div>
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
@@ -168,6 +176,7 @@ export default defineComponent({
     const clientService = useClientService()
     const saving = ref(false)
     const savingDelayed = ref(false)
+    const notifyEnabled = ref(false)
 
     watch(saving, (newValue) => {
       if (!newValue) {
@@ -204,7 +213,8 @@ export default defineComponent({
       savingDelayed,
       ...useShares(),
       showContextMenuOnBtnClick,
-      contextMenuButtonRef
+      contextMenuButtonRef,
+      notifyEnabled
     }
   },
 
@@ -424,7 +434,8 @@ export default defineComponent({
                 permissions: bitmask,
                 role: this.selectedRole,
                 expirationDate: this.expirationDate,
-                storageId: this.resource.fileId || this.resource.id
+                storageId: this.resource.fileId || this.resource.id,
+                notify: this.notifyEnabled
               })
             } catch (e) {
               console.error(e)

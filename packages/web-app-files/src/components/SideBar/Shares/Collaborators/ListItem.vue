@@ -113,6 +113,7 @@
           @remove-share="removeShare"
           @set-deny-share="setDenyShare"
           @show-access-details="showAccessDetails"
+          @notify-share="showNotifyShareModal"
         />
         <oc-info-drop
           ref="accessDetailsDrop"
@@ -136,7 +137,8 @@ import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src
 import {
   queryItemAsString,
   useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingResharingDefault
+  useCapabilityFilesSharingResharingDefault,
+  useStore
 } from '@ownclouders/web-pkg'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
@@ -145,6 +147,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclou
 import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ListItem',
@@ -180,7 +183,9 @@ export default defineComponent({
   },
   emits: ['onDelete', 'onSetDeny'],
   setup(props, { emit }) {
+    const store = useStore()
     const clientService = useClientService()
+    const { $gettext } = useGettext()
 
     const sharedParentDir = computed(() => {
       return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
@@ -190,12 +195,47 @@ export default defineComponent({
       emit('onSetDeny', { share: props.share, value })
     }
 
+    const showNotifyShareModal = () => {
+      const modal = {
+        variation: 'warning',
+        icon: 'mail-send',
+        title: $gettext('Send a reminder'),
+        cancelText: $gettext('Cancel'),
+        confirmText: $gettext('Send'),
+        message: $gettext('Are you sure you want to send a reminder about this share?'),
+        hasInput: false,
+        onCancel: () => store.dispatch('hideModal'),
+        onConfirm: () => notifyShare()
+      }
+      store.dispatch('createModal', modal)
+    }
+    const notifyShare = async () => {
+      try {
+        const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
+        store.dispatch('showMessage', {
+          title: $gettext('Success'),
+          desc: $gettext('Email reminder sent to %{ recipient }', { recipient: response[0] }),
+          status: 'success'
+        })
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('An error occurred'),
+          desc: $gettext('Email notification could not be sent'),
+          error
+        })
+      } finally {
+        store.dispatch('hideModal')
+      }
+    }
+
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
       clientService,
       sharedParentDir,
-      setDenyShare
+      setDenyShare,
+      showNotifyShareModal
     }
   },
   computed: {

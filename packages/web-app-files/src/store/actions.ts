@@ -294,7 +294,17 @@ export default {
   },
   async addShare(
     context,
-    { client, path, shareWith, shareType, permissions, role, expirationDate, storageId }
+    {
+      client,
+      path,
+      shareWith,
+      shareType,
+      permissions,
+      role,
+      expirationDate,
+      storageId,
+      notify = undefined
+    }
   ) {
     const isGroupShare = shareType === ShareTypes.group.value
     const options = {
@@ -302,7 +312,8 @@ export default {
       role: role.name,
       expirationDate,
       spaceRef: storageId,
-      remoteUser: undefined
+      remoteUser: undefined,
+      ...(notify && { notify })
     }
 
     if (!isGroupShare) {
