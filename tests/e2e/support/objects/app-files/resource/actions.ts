@@ -75,7 +75,7 @@ const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//anc
 const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
 const tagInInputForm =
   '//span[contains(@class, "tags-control-tag")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
-const tagFormInput = '#tags-form input'
+const tagFormInput = '//*[@data-testid="tags"]//input'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
 const noLinkMessage = '#web .oc-link-resolve-error-message'
@@ -1221,12 +1221,11 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
   }
 
   await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'tags' })
-
   const inputForm = page.locator(tagFormInput)
 
   for (const tag of tags) {
     await inputForm.fill(tag)
+    await page.waitForTimeout(1000)
     await page.locator('.vs__dropdown-option').first().click()
   }
 
@@ -1245,7 +1244,6 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
   }
 
   await sidebar.open({ page: page, resource: resourceName })
-  await sidebar.openPanel({ page: page, name: 'tags' })
 
   for (const tag of tags) {
     await page.locator(util.format(tagInInputForm, tag)).click()

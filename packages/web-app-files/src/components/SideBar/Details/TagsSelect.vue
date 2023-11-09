@@ -22,7 +22,7 @@
           @click="onTagClicked"
         >
           <oc-icon name="price-tag-3" class="oc-mr-xs" size="small" />
-          <span class="oc-text-truncate">{{ option.label }} test</span>
+          <span class="oc-text-truncate">{{ option.label }}</span>
         </component>
 
         <span class="oc-flex oc-flex-middle oc-mr-xs">
@@ -114,7 +114,7 @@ export default defineComponent({
       () =>
         unref(resource).locked === true ||
         (typeof unref(resource).canEditTags === 'function' &&
-          unref(resource).canEditTags() === false) // where is canEditTags implemented? it's not present here...
+          unref(resource).canEditTags() === false)
     )
 
     const selectedTags = ref<TagOption[]>([])
