@@ -1,11 +1,11 @@
-import { mock } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import {
   createStore,
   defaultPlugins,
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
-import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
+import { ConfigurationManager, useRequest, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
 import { Resource } from '@ownclouders/web-client'
@@ -14,7 +14,15 @@ import App from '../../src/App.vue'
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useRequest: jest.fn(),
-  useRouteQuery: jest.fn()
+  useRouteQuery: jest.fn(),
+  useConfigurationManager: () =>
+    mockDeep<ConfigurationManager>({
+      options: {
+        editors: {
+          openAsPreview: false
+        }
+      }
+    })
 }))
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
@@ -36,10 +44,6 @@ const providerSuccessResponseGet = {
 describe('The app provider extension', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => undefined)
-  })
-
-  afterEach(() => {
-    jest.clearAllMocks()
   })
 
   it('should fail for unauthenticated users', async () => {
