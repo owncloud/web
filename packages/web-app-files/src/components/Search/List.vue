@@ -9,16 +9,16 @@
         </div>
         <item-filter
           v-if="availableMimeTypeValues.length"
-          ref="fileCategoryFilter"
+          ref="mediaTypeFilter"
           :allow-multiple="true"
-          :filter-label="$gettext('File type')"
+          :filter-label="$gettext('Media type')"
           :filterable-attributes="['label']"
           :items="availableMimeTypeValues"
-          :option-filter-label="$gettext('Filter file type')"
+          :option-filter-label="$gettext('Filter media type')"
           :show-option-filter="true"
           class="files-search-filter-file-type oc-mr-s"
           display-name-attribute="label"
-          filter-name="fileCategory"
+          filter-name="mediaType"
         >
           <template #image="{ item }">
             <div class="file-category-option-wrapper oc-flex oc-flex-middle">
@@ -256,7 +256,7 @@ export default defineComponent({
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
     const modifiedDateCapability = useCapabilitySearchModifiedDate()
-    const fileCategoryCapability = useCapabilitySearchMimeType()
+    const mediaTypeCapability = useCapabilitySearchMimeType()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -275,10 +275,10 @@ export default defineComponent({
 
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
-    const fileCategoryFilter = ref<VNodeRef>()
+    const mediaTypeFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
     const lastModifiedParam = useRouteQuery('q_lastModified')
-    const fileCategoryParam = useRouteQuery('q_fileCategory')
+    const mediaTypeParam = useRouteQuery('q_mediaType')
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
@@ -322,7 +322,7 @@ export default defineComponent({
       })) || []
     )
 
-    const fileCategoryMapping = {
+    const mediaTypeMapping = {
       file: { label: $gettext('File'), icon: 'txt' },
       folder: { label: $gettext('Folder'), icon: 'folder' },
       document: { label: $gettext('Document'), icon: 'doc' },
@@ -335,13 +335,13 @@ export default defineComponent({
       archive: { label: $gettext('Archive'), icon: 'zip' }
     }
     const availableFileCategoryValues: FileCategoryKeyword[] = []
-    unref(fileCategoryCapability).keywords?.forEach((key: string) => {
-      if (!fileCategoryMapping[key]) {
+    unref(mediaTypeCapability).keywords?.forEach((key: string) => {
+      if (!mediaTypeMapping[key]) {
         return
       }
       availableFileCategoryValues.push({
         id: key,
-        ...fileCategoryMapping[key]
+        ...mediaTypeMapping[key]
       })
     })
 
@@ -391,10 +391,10 @@ export default defineComponent({
         updateFilter(lastModifiedFilter)
       }
 
-      const fileCategoryParams = queryItemAsString(unref(fileCategoryParam))
-      if (fileCategoryParams) {
-        query['mimetype'] = fileCategoryParams.split('+').map((t) => `"${t}"`)
-        updateFilter(fileCategoryFilter)
+      const mediaTypeParams = queryItemAsString(unref(mediaTypeParam))
+      if (mediaTypeParams) {
+        query['mimetype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
+        updateFilter(mediaTypeFilter)
       }
 
       return (
@@ -463,7 +463,7 @@ export default defineComponent({
             'q_fullText',
             'q_tags',
             'q_lastModified',
-            'q_fileCategory',
+            'q_mediaType',
             'useScope'
           ].every((key) => newVal[key] === oldVal[key])
           if (isSameTerm && isSameFilter) {
@@ -489,7 +489,7 @@ export default defineComponent({
       displayFilter,
       availableLastModifiedValues,
       lastModifiedFilter,
-      fileCategoryFilter,
+      mediaTypeFilter,
       availableFileCategoryValues,
       getFakeResourceForIcon
     }

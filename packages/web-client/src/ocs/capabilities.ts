@@ -24,7 +24,7 @@ export interface LastModifiedFilterCapability {
   enabled?: boolean
 }
 
-export interface MimeTypeCapability {
+export interface MediaTypeCapability {
   keywords?: string[]
   enabled?: boolean
 }
@@ -35,7 +35,7 @@ export interface Capabilities {
     search: {
       property: {
         mtime: LastModifiedFilterCapability
-        mimetype: MimeTypeCapability
+        mimetype: MediaTypeCapability
       }
     }
     notifications: {
