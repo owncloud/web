@@ -54,7 +54,9 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
       </oc-list-stub>
     </oc-drop-stub>
   </div>
+  <!--v-if-->
   <div class="details-buttons">
+    <!--v-if-->
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
@@ -103,7 +105,9 @@ exports[`DetailsAndEdit component if user can not edit does not render dropdown 
   <p class="oc-my-rm">
     <span class="link-current-role">Anyone with the link can view</span>
   </p>
+  <!--v-if-->
   <div class="oc-pr-s details-buttons">
+    <!--v-if-->
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
