@@ -165,18 +165,18 @@ export class ResourceConflict extends ConflictDialog {
           `/${newFolderName}/`
         )
         file.meta.tusEndpoint = file.meta.tusEndpoint.replace(
-          new RegExp(`/${encodeURIComponent(folder)}`),
+          new RegExp(`/${encodeURIComponent(folder)}$`),
           `/${encodeURIComponent(newFolderName)}`
         )
         if (file.xhrUpload?.endpoint) {
           file.xhrUpload.endpoint = file.xhrUpload.endpoint.replace(
-            new RegExp(`/${encodeURIComponent(folder)}`),
+            new RegExp(`/${encodeURIComponent(folder)}$`),
             `/${encodeURIComponent(newFolderName)}`
           )
         }
         if (file.tus?.endpoint) {
           file.tus.endpoint = file.tus.endpoint.replace(
-            new RegExp(`/${encodeURIComponent(folder)}`),
+            new RegExp(`/${encodeURIComponent(folder)}$`),
             `/${encodeURIComponent(newFolderName)}`
           )
         }
