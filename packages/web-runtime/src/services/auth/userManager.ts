@@ -311,9 +311,9 @@ export class UserManager extends OidcUserManager {
     }
 
     /* CERNBox customization
-                                                  Do a call to the backend, as this will reply with the internal reva token.
-                                                  Use that longer token in all calls to the backend (so, replace the default store token)
-                                                */
+     * Do a call to the backend, as this will reply with the internal reva token.
+     * Use that longer token in all calls to the backend (so, replace the default store token)
+     */
     try {
       console.log('CERNBox: login successful, exchange sso token with reva token')
       const httpClient = this.clientService.httpAuthenticated
