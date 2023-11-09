@@ -27,6 +27,7 @@ Summary
 * Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
 * Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
+* Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
@@ -217,6 +218,14 @@ Details
 
    https://github.com/owncloud/web/issues/9867
    https://github.com/owncloud/web/pull/9913
+
+* Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
+
+   Parsing has been adjusted to account for edge case of multiple folders and sub-folders with the
+   same name
+
+   https://github.com/owncloud/web/issues/9158
+   https://github.com/owncloud/web/pull/9915
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
