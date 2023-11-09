@@ -15,3 +15,4 @@ export const setCurrentLanguage = ({
     language.current = currentLanguage
     document.documentElement.lang = currentLanguage
   }
+}

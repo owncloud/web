@@ -313,6 +313,7 @@ export default defineComponent({
         if (unref(sseEnabled)) {
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
         }
+        store.commit('SET_LANGUAGE', language.current)
 
         store.dispatch('showMessage', {
           title: $gettext('Language was saved successfully.')
