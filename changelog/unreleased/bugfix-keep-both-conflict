@@ -1,4 +1,4 @@
-Bugfix: Keep both folders and their files when parent and child folder has same name
+Bugfix: Keep both folders conflict in same-named folders
 
 Parsing has been adjusted to account for edge case of multiple folders and sub-folders with the same name
 
