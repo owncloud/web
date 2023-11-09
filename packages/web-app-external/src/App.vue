@@ -38,7 +38,6 @@ import {
   useRouteQuery,
   useStore
 } from '@ownclouders/web-pkg'
-import { configurationManager } from '@ownclouders/web-pkg'
 import { isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
