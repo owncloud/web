@@ -17,19 +17,11 @@ export const translations = merge(
   odsTranslations
 )
 export const supportedLanguages = {
-  ar: 'اَلْعَرَبِيَّةُ',
-  bg: 'български',
-  en: 'English',
-  de: 'Deutsch',
-  es: 'Español',
   cs: 'Czech',
+  de: 'Deutsch',
+  en: 'English',
+  es: 'Español',
   fr: 'Français',
   gl: 'Galego',
-  he: 'עִבְרִית',
-  it: 'Italiano',
-  pl: 'Polski',
-  ru: 'русский язык',
-  sk: 'Slovenčina',
-  sq: 'Shqipja',
-  tr: 'Türkçe'
+  it: 'Italiano'
 }

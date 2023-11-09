@@ -142,6 +142,7 @@ import { useConfigurationManager } from '@ownclouders/web-pkg'
 import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
+import { supportedLanguages } from '../defaults'
 
 export default defineComponent({
   name: 'AccountPage',
@@ -226,14 +227,10 @@ export default defineComponent({
       )
     })
 
-    const languageOptions = computed(() => {
-      const languageOptions = unref(accountBundle)?.settings?.find((s) => s.name === 'language')
-        ?.singleChoiceValue.options
-      return languageOptions?.map((l) => ({
-        label: l.displayValue,
-        value: l.value.stringValue
-      }))
-    })
+    const languageOptions = Object.keys(supportedLanguages).map((langCode) => ({
+      label: supportedLanguages[langCode],
+      value: langCode
+    }))
 
     const groupNames = computed(() => {
       if (unref(spacesEnabled)) {
@@ -287,6 +284,7 @@ export default defineComponent({
     }
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
+      console.log(unref(languageOptions))
       try {
         const value = await saveValue({
           identifier: 'language',
