@@ -89,7 +89,7 @@ import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from '@ownclouders/web-client/src'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
+import { formatRelativeDateFromDateTime, useConfigurationManager } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -121,9 +121,17 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['expirationDateChanged', 'removeShare', 'showAccessDetails', 'setDenyShare'],
+  emits: [
+    'expirationDateChanged',
+    'removeShare',
+    'showAccessDetails',
+    'setDenyShare',
+    'notifyShare'
+  ],
   setup(props, { emit }) {
     const language = useGettext()
+    const configurationManager = useConfigurationManager()
+
     const toggleShareDenied = (value) => {
       emit('setDenyShare', value)
     }
@@ -136,6 +144,7 @@ export default defineComponent({
     )
 
     return {
+      configurationManager,
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
       dateExpire
@@ -177,6 +186,13 @@ export default defineComponent({
           icon: 'stop-circle',
           class: 'deny-share',
           hasSwitch: true
+        },
+        {
+          title: this.$gettext('Notify via mail'),
+          method: () => this.$emit('notifyShare'),
+          enabled: this.configurationManager.options.isRunningOnEos,
+          icon: 'mail',
+          class: 'notify-via-mail'
         }
       ]
     },

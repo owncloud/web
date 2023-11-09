@@ -69,6 +69,12 @@
         v-text="$gettext(currentLinkRoleLabel)"
       />
     </p>
+    <oc-checkbox
+      v-if="isRunningOnEos && isCurrentLinkRoleUploader()"
+      :model-value="currentLinkNotifyUploads"
+      :label="$gettext('Notify me about uploads')"
+      @input="toggleNotifyUploads"
+    />
     <div :class="{ 'oc-pr-s': !isModifiable }" class="details-buttons">
       <oc-button
         v-if="link.indirect"
@@ -95,6 +101,13 @@
         :data-testid="`files-link-id-${link.id}-expiration-date`"
         :aria-label="expirationDateTooltip"
         name="calendar-event"
+        fill-type="line"
+      />
+      <oc-icon
+        v-if="isRunningOnEos && currentLinkNotifyUploadsExtraRecipients"
+        v-oc-tooltip="$gettext('Uploads will be notified to a third party')"
+        :aria-label="$gettext('Uploads will be notified to a third party')"
+        name="mail-add"
         fill-type="line"
       />
       <div v-if="isModifiable">
@@ -185,10 +198,12 @@
 import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
-import { createLocationSpaces } from '@ownclouders/web-pkg'
+import * as EmailValidator from 'email-validator'
+import { createLocationSpaces, useConfigurationManager } from '@ownclouders/web-pkg'
 import {
   linkRoleInternalFile,
   linkRoleInternalFolder,
+  linkRoleUploaderFolder,
   LinkShareRoles,
   ShareRole
 } from '@ownclouders/web-client/src/helpers/share'
@@ -240,6 +255,7 @@ export default defineComponent({
   emits: ['removePublicLink', 'updateLink'],
   setup(props) {
     const { current } = useGettext()
+    const configurationManager = useConfigurationManager()
     const passwordPolicyService = usePasswordPolicyService()
     const dateExpire = computed(() => {
       return formatRelativeDateFromDateTime(
@@ -252,7 +268,8 @@ export default defineComponent({
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
       passwordPolicyService,
-      dateExpire
+      dateExpire,
+      isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos)
     }
   },
   data() {
@@ -351,6 +368,29 @@ export default defineComponent({
         })
       }
 
+      if (this.isCurrentLinkRoleUploader && this.currentLinkNotifyUploads) {
+        result.push({
+          id: 'add-notify-uploads-extra-recipients',
+          title: this.notifyUploadsExtraRecipientsMenuEntry,
+          icon: 'mail-add',
+          method: this.showNotifyUploadsExtraRecipientsModal
+        })
+      }
+      if (this.currentLinkNotifyUploadsExtraRecipients) {
+        result.push({
+          id: 'remove-notify-uploads-extra-recipients',
+          title: this.$gettext('Remove third party notification'),
+          icon: 'mail-close',
+          method: () =>
+            this.updateLink({
+              link: {
+                ...this.link,
+                notifyUploadsExtraRecipients: ''
+              }
+            })
+        })
+      }
+
       return result
     },
 
@@ -419,6 +459,19 @@ export default defineComponent({
 
     isAliasLink() {
       return [linkRoleInternalFolder, linkRoleInternalFile].includes(this.currentLinkRole)
+    },
+
+    currentLinkNotifyUploads() {
+      return this.link.notifyUploads
+    },
+    currentLinkNotifyUploadsExtraRecipients() {
+      return this.link.notifyUploadsExtraRecipients
+    },
+    notifyUploadsExtraRecipientsMenuEntry() {
+      if (this.currentLinkNotifyUploadsExtraRecipients) {
+        return this.$gettext('Edit third party notification')
+      }
+      return this.$gettext('Notify a third party about uploads')
     }
   },
   watch: {
@@ -513,6 +566,62 @@ export default defineComponent({
         }
       }
       this.createModal(modal)
+    },
+
+    toggleNotifyUploads() {
+      if (this.currentLinkNotifyUploads) {
+        this.$emit('updateLink', {
+          link: { ...this.link, notifyUploads: false, notifyUploadsExtraRecipients: '' }
+        })
+      } else {
+        this.$emit('updateLink', { link: { ...this.link, notifyUploads: true } })
+      }
+    },
+    isCurrentLinkRoleUploader() {
+      return (
+        LinkShareRoles.getByBitmask(parseInt(this.link.permissions), this.isFolderShare).bitmask(
+          false
+        ) === linkRoleUploaderFolder.bitmask(false)
+      )
+    },
+    showNotifyUploadsExtraRecipientsModal() {
+      const modal = {
+        variation: 'passive',
+        icon: 'mail-add',
+        title: this.$gettext('Notify a third party about uploads'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Apply'),
+        hasInput: true,
+        inputDescription: this.$gettext(
+          'When a file is uploaded, this address will be notified as well.'
+        ),
+        inputValue: this.currentLinkNotifyUploadsExtraRecipients,
+        inputLabel: this.$gettext('Email address'),
+        inputType: 'email',
+        onCancel: this.hideModal,
+        onInput: (value) => this.checkEmailValid(value),
+        onConfirm: (value) => {
+          this.updateLink({
+            link: {
+              ...this.link,
+              notifyUploadsExtraRecipients: value
+            },
+            onSuccess: () => {
+              this.hideModal()
+            }
+          })
+        }
+      }
+      this.createModal(modal)
+    },
+    checkEmailValid(email) {
+      if (!EmailValidator.validate(email)) {
+        return this.setModalInputErrorMessage(this.$gettext('Email is invalid'))
+      }
+      if (email === '') {
+        return this.setModalInputErrorMessage(this.$gettext("Email can't be empty"))
+      }
+      return this.setModalInputErrorMessage(null)
     }
   }
 })

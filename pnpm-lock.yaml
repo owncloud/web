@@ -732,6 +732,9 @@ importers:
       dompurify:
         specifier: ^3.0.6
         version: 3.0.6
+      email-validator:
+        specifier: ^2.0.4
+        version: 2.0.4
       filesize:
         specifier: ^9.0.11
         version: 9.0.11
