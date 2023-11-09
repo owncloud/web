@@ -29,6 +29,9 @@ export interface OptionsConfiguration {
   mode?: string
   isRunningOnEos?: boolean
   embedTarget?: string
+  editors?: {
+    openAsPreview?: boolean | string[]
+  }
 }
 
 export interface OAuth2Configuration {

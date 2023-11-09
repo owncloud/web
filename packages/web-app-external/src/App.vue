@@ -33,6 +33,7 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import {
   isSameResource,
   queryItemAsString,
+  useConfigurationManager,
   useRequest,
   useRouteQuery,
   useStore
@@ -51,6 +52,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const language = useGettext()
     const store = useStore()
+    const configurationManager = useConfigurationManager()
 
     const { $gettext } = language
     const { makeRequest } = useRequest()
@@ -149,6 +151,13 @@ export default defineComponent({
       }
     }).restartable()
 
+    const determineOpenAsPreview = (appName: string) => {
+      const openAsPreview = configurationManager.options.editors.openAsPreview
+      return (
+        openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
+      )
+    }
+
     // switch to write mode when edit is clicked
     const catchClickMicrosoftEdit = (event) => {
       try {
@@ -160,7 +169,7 @@ export default defineComponent({
     watch(
       applicationName,
       (newAppName, oldAppName) => {
-        if (newAppName === 'Office365' && newAppName !== oldAppName) {
+        if (determineOpenAsPreview(newAppName) && newAppName !== oldAppName) {
           window.addEventListener('message', catchClickMicrosoftEdit)
         } else {
           window.removeEventListener('message', catchClickMicrosoftEdit)
@@ -178,11 +187,11 @@ export default defineComponent({
           return
         }
 
+        debugger
+
         let viewMode = props.isReadOnly ? 'view' : 'write'
-        // FIXME: introduce config option (?)
-        const featureFlag = true
         if (
-          featureFlag &&
+          determineOpenAsPreview(unref(applicationName)) &&
           (isShareSpaceResource(props.space) || isPublicSpaceResource(props.space))
         ) {
           viewMode = 'view'
