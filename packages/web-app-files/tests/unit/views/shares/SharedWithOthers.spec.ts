@@ -12,8 +12,16 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { useSortMock } from '../../../mocks/useSortMock'
 
 jest.mock('web-app-files/src/composables')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useSort: jest.fn().mockImplementation(() => useSortMock()),
+  queryItemAsString: jest.fn(),
+  useRouteQuery: jest.fn()
+}))
 
 describe('SharedWithOthers view', () => {
   it('appBar always present', () => {
@@ -44,6 +52,25 @@ describe('SharedWithOthers view', () => {
       )
     })
   })
+  describe('filter', () => {
+    describe('share status', () => {
+      it('shows filter if more than one share types are present', () => {
+        const { wrapper } = getMountedWrapper({
+          files: [
+            mock<Resource>({ share: { shareType: ShareTypes.user.value } }),
+            mock<Resource>({ share: { shareType: ShareTypes.group.value } })
+          ]
+        })
+        expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
+      })
+      it('does not show filter if only one share type is present', () => {
+        const { wrapper } = getMountedWrapper({
+          files: [mock<Resource>({ share: { shareType: ShareTypes.user.value } })]
+        })
+        expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
+      })
+    })
+  })
 })
 
 function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
@@ -69,7 +96,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         provide: defaultMocks,
-        stubs: defaultStubs
+        stubs: { ...defaultStubs, ItemFilter: true }
       }
     })
   }

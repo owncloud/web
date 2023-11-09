@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, ref, unref, Ref } from 'vue'
-import ConnectionsPanel from './Connections.vue'
+import ConnectionsPanel from './ConnectionsPanel.vue'
 import IncomingInvitations from './IncomingInvitations.vue'
 import OutgoingInvitations from './OutgoingInvitations.vue'
 import { useClientService, useScrollTo, useStore, FederatedConnection } from '@ownclouders/web-pkg'

@@ -8,7 +8,7 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <div v-if="shareTypes.length > 1" class="share-visibility-filter oc-flex oc-m-m">
+        <div v-if="shareTypes.length > 1" class="oc-flex oc-m-m">
           <div class="oc-mr-m oc-flex oc-flex-middle">
             <oc-icon name="filter-2" class="oc-mr-xs" />
             <span v-text="$gettext('Filter:')" />
@@ -21,7 +21,7 @@
             :option-filter-label="$gettext('Filter share types')"
             :show-option-filter="true"
             id-attribute="key"
-            class="oc-mx-s"
+            class="share-type-filter oc-mx-s"
             display-name-attribute="label"
             filter-name="shareType"
           >

@@ -8,12 +8,13 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <div class="share-visibility-filter oc-flex oc-m-m">
+        <div class="oc-flex oc-m-m">
           <div class="oc-mr-m oc-flex oc-flex-middle">
             <oc-icon name="filter-2" class="oc-mr-xs" />
             <span v-text="$gettext('Filter:')" />
           </div>
           <item-filter-inline
+            class="share-visibility-filter"
             filter-name="share-visibility"
             :filter-options="visibilityOptions"
             @toggle-filter="setAreHiddenFilesShown"
@@ -27,7 +28,7 @@
             :option-filter-label="$gettext('Filter share types')"
             :show-option-filter="true"
             id-attribute="key"
-            class="oc-mx-s"
+            class="share-type-filter oc-mx-s"
             display-name-attribute="label"
             filter-name="shareType"
           >

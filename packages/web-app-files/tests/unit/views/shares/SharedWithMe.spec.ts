@@ -14,6 +14,8 @@ import {
   defaultComponentMocks
 } from 'web-test-helpers'
 import { useOpenWithDefaultApp } from '../../../../src/composables/openWithDefaultApp'
+import { Resource } from '@ownclouders/web-client'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables/resourcesViewDefaults')
 jest.mock('web-app-files/src/composables/openWithDefaultApp/useOpenWithDefaultApp')
@@ -56,26 +58,45 @@ describe('SharedWithMe view', () => {
     })
   })
   describe('filter', () => {
-    it('shows the share visibility filter', () => {
-      const { wrapper } = getMountedWrapper()
-      expect(wrapper.find('.share-visibility-filter').exists()).toBeTruthy()
-      expect(wrapper.find('item-filter-inline-stub').exists()).toBeTruthy()
+    describe('share visibility', () => {
+      it('shows filter', () => {
+        const { wrapper } = getMountedWrapper()
+        expect(wrapper.find('.share-visibility-filter').exists()).toBeTruthy()
+        expect(wrapper.find('item-filter-inline-stub').exists()).toBeTruthy()
+      })
+      it('shows all visible shares', () => {
+        const { wrapper } = getMountedWrapper()
+        expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
+        expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
+          'Shares'
+        )
+      })
+      it('shows all hidden shares', async () => {
+        const { wrapper } = getMountedWrapper()
+        wrapper.vm.setAreHiddenFilesShown(mock<InlineFilterOption>({ name: 'hidden' }))
+        await wrapper.vm.$nextTick()
+        expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
+        expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
+          'Hidden Shares'
+        )
+      })
     })
-    it('shows all visible shares', () => {
-      const { wrapper } = getMountedWrapper()
-      expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
-      expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
-        'Shares'
-      )
-    })
-    it('shows all hidden shares', async () => {
-      const { wrapper } = getMountedWrapper()
-      wrapper.vm.setAreHiddenFilesShown(mock<InlineFilterOption>({ name: 'hidden' }))
-      await wrapper.vm.$nextTick()
-      expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
-      expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
-        'Hidden Shares'
-      )
+    describe('share status', () => {
+      it('shows filter if more than one share types are present', () => {
+        const { wrapper } = getMountedWrapper({
+          files: [
+            mock<Resource>({ share: { shareType: ShareTypes.user.value } }),
+            mock<Resource>({ share: { shareType: ShareTypes.group.value } })
+          ]
+        })
+        expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
+      })
+      it('does not show filter if only one share type is present', () => {
+        const { wrapper } = getMountedWrapper({
+          files: [mock<Resource>({ share: { shareType: ShareTypes.user.value } })]
+        })
+        expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
+      })
     })
   })
 })
@@ -93,6 +114,9 @@ function getMountedWrapper({
     })
   )
   jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
+  // selected share types
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
+  // openWithDefaultAppQuery
   jest.mocked(queryItemAsString).mockImplementationOnce(() => openWithDefaultAppQuery)
 
   const openWithDefaultApp = jest.fn()
@@ -114,7 +138,7 @@ function getMountedWrapper({
       global: {
         plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
-        stubs: { ...defaultStubs, itemFilterInline: true }
+        stubs: { ...defaultStubs, itemFilterInline: true, itemFilter: true }
       }
     })
   }
