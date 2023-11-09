@@ -3,7 +3,7 @@
     <div>
       <div class="oc-flex oc-flex-middle oc-px-m oc-py-s">
         <oc-icon name="user-shared" />
-        <h2 class="oc-px-s">Invite users</h2>
+        <h2 class="oc-px-s" v-text="$gettext('Invite users')"></h2>
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
       </div>
       <div class="oc-flex oc-flex-middle oc-flex-center">
@@ -146,8 +146,10 @@ export default defineComponent({
     const inputForFocusEmail = ref<VNodeRef>()
 
     const fields = computed(() => {
+      const haveLinks = unref(sortedTokens)[0]?.link
+
       return [
-        {
+        haveLinks && {
           name: 'link',
           title: $gettext('Invitation link'),
           alignH: 'left',
@@ -155,8 +157,8 @@ export default defineComponent({
         },
         {
           name: 'token',
-          title: $gettext('Invitate token'),
-          alignH: 'right',
+          title: $gettext('Invite code'),
+          alignH: haveLinks ? 'right' : 'left',
           type: 'slot'
         },
         {
@@ -169,7 +171,7 @@ export default defineComponent({
           title: $gettext('Expires'),
           alignH: 'right'
         }
-      ]
+      ].filter(Boolean)
     })
     const sortedTokens = computed(() => {
       return [...unref(tokens)].sort((a, b) => (a.expirationSeconds < b.expirationSeconds ? 1 : -1))
