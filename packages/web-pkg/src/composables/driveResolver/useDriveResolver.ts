@@ -84,7 +84,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
       let matchingSpace = null
       let path = null
-      if (driveAliasAndItem.startsWith('public/')) {
+      if (driveAliasAndItem.startsWith('public/') || driveAliasAndItem.startsWith('ocm/')) {
         const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
         path = item.join('/')

@@ -235,10 +235,16 @@ export class AuthService {
     this.hasAuthErrorOccurred = true
   }
 
-  public async resolvePublicLink(token: string, passwordRequired: boolean, password: string) {
+  public async resolvePublicLink(
+    token: string,
+    passwordRequired: boolean,
+    password: string,
+    type: 'ocm' | 'public-link'
+  ) {
     this.publicLinkManager.setPasswordRequired(token, passwordRequired)
     this.publicLinkManager.setPassword(token, password)
     this.publicLinkManager.setResolved(token, true)
+    this.publicLinkManager.setType(token, type)
 
     await this.publicLinkManager.updateContext(token)
   }

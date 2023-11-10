@@ -228,12 +228,16 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       // Create virtual space for public link
       const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
       const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
+      const publicLinkType = store.getters['runtime/auth/publicLinkType']
+
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
         name: app.config.globalProperties.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
-        serverUrl: configurationManager.serverUrl
+        serverUrl: configurationManager.serverUrl,
+        publicLinkType: publicLinkType
       })
+
       store.commit('runtime/spaces/ADD_SPACES', [space])
       store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },

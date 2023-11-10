@@ -70,6 +70,12 @@ export const router = patchRouter(
         meta: { title: $gettext('Public link'), authContext: 'anonymous' }
       },
       {
+        path: '/o/:token',
+        name: 'resolvePublicLink',
+        component: ResolvePublicLinkPage,
+        meta: { title: $gettext('OCM link'), authContext: 'anonymous' }
+      },
+      {
         path: '/access-denied',
         name: 'accessDenied',
         component: AccessDeniedPage,

@@ -67,6 +67,7 @@ import {
   useCapabilitySpacesEnabled,
   useClientService,
   useConfigurationManager,
+  useRoute,
   useRouteParam,
   useRouteQuery,
   useRouter,
@@ -77,6 +78,7 @@ import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {
   buildWebDavPublicPath,
+  buildWebDavOcmPath,
   buildPublicSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
@@ -92,20 +94,35 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const clientService = useClientService()
     const router = useRouter()
+    const route = useRoute()
     const store = useStore()
     const { $gettext } = useGettext()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
     const password = ref('')
+
+    const isOcmLink = computed(() => {
+      const split = unref(route).path.split('/')[1]
+      return split === 'o'
+    })
+
+    const driveAlias = computed(() => {
+      return unref(isOcmLink) ? `ocm/${unref(token)}` : `public/${unref(token)}`
+    })
+
+    const publicLinkType = computed(() => {
+      return unref(isOcmLink) ? 'ocm' : 'public-link'
+    })
+
     const publicLinkSpace = computed(() =>
       buildPublicSpaceResource({
         id: unref(token),
-        driveAlias: `public/${unref(token)}`,
         driveType: 'public',
-        webDavPath: buildWebDavPublicPath(unref(token), ''),
+        publicLinkType: unref(publicLinkType),
         ...(unref(password) && { publicLinkPassword: unref(password) })
       })
     )
+
     const isUserContext = useUserContext({ store })
     const hasSpaces = useCapabilitySpacesEnabled(store)
 
@@ -192,7 +209,8 @@ export default defineComponent({
       yield authService.resolvePublicLink(
         unref(token),
         unref(passwordRequired),
-        unref(passwordRequired) ? unref(password) : ''
+        unref(passwordRequired) ? unref(password) : '',
+        unref(publicLinkType)
       )
 
       const url = queryItemAsString(unref(redirectUrl))
@@ -229,7 +247,7 @@ export default defineComponent({
           }),
           ...(!!fileId && { fileId })
         },
-        params: { driveAliasAndItem: `public/${unref(token)}` }
+        params: { driveAliasAndItem: unref(driveAlias) }
       })
     })
 
@@ -264,6 +282,11 @@ export default defineComponent({
     })
 
     onMounted(async () => {
+      if (unref(isOcmLink)) {
+        await resolvePublicLinkTask.perform(false)
+        return
+      }
+
       tokenInfo.value = await loadTokenInfoTask.perform(unref(token))
       isPasswordRequired.value = await isPasswordRequiredTask.perform()
       if (!unref(isPasswordRequired)) {

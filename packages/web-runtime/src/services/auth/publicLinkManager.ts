@@ -40,6 +40,14 @@ export class PublicLinkManager {
     sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'resolved'), resolved + '')
   }
 
+  setType(token: string, type: 'ocm' | 'public-link'): void {
+    sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'type'), type)
+  }
+
+  getType(token: string): 'ocm' | 'public-link' {
+    return sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'type')) as any
+  }
+
   isPasswordRequired(token: string): boolean {
     const passwordRequired = sessionStorage.getItem(
       PublicLinkManager.buildStorageKey(token, 'passwordRequired')
@@ -103,7 +111,8 @@ export class PublicLinkManager {
     this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
       publicLinkToken: token,
       publicLinkPassword: password,
-      publicLinkContextReady: true
+      publicLinkContextReady: true,
+      publicLinkType: this.getType(token)
     })
   }
 

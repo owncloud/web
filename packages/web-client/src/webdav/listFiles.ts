@@ -65,7 +65,12 @@ export const ListFilesFactory = (
         if (!path) {
           const [rootFolder, ...children] = webDavResources
           return {
-            resource: buildPublicSpaceResource(rootFolder),
+            resource: buildPublicSpaceResource({
+              ...rootFolder,
+              id: space.id,
+              driveAlias: space.driveAlias,
+              webDavPath: space.webDavPath
+            }),
             children: children.map(buildResource)
           } as ListFilesResult
         }

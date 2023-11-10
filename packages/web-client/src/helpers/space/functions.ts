@@ -10,7 +10,7 @@ import {
 } from './types'
 
 import { DavProperty } from '../../webdav/constants'
-import { buildWebDavPublicPath } from '../publicLink'
+import { buildWebDavPublicPath, buildWebDavOcmPath } from '../publicLink'
 import { urlJoin } from '../../utils'
 import { Drive, DriveItem } from '@ownclouders/web-client/src/generated'
 
@@ -36,7 +36,9 @@ export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'i
   return webDavPathComponents.slice(webDavPathComponents.indexOf(idComponent) + 1).join('/')
 }
 
-export function buildPublicSpaceResource(data): PublicSpaceResource {
+export function buildPublicSpaceResource(
+  data: any & { publicLinkType: 'ocm' | 'public-link' }
+): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
 
   const fileId = data.props?.[DavProperty.FileId]
@@ -46,12 +48,22 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkShareDate = data.props?.[DavProperty.PublicLinkShareDate]
   const publicLinkShareOwner = data.props?.[DavProperty.PublicLinkShareOwner]
 
+  let driveAlias
+  let webDavPath
+  if (data.publicLinkType === 'ocm') {
+    driveAlias = `ocm/${data.id}`
+    webDavPath = buildWebDavOcmPath(data.id)
+  } else {
+    driveAlias = `public/${data.id}`
+    webDavPath = buildWebDavPublicPath(data.id)
+  }
+
   return Object.assign(
     buildSpace({
       ...data,
       driveType: 'public',
-      driveAlias: `public/${data.id}`,
-      webDavPath: buildWebDavPublicPath(data.id)
+      driveAlias,
+      webDavPath
     }),
     {
       ...(fileId && { fileId }),
