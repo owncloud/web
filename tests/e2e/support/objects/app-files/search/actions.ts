@@ -5,6 +5,9 @@ const searchResultMessageSelector = '//p[@class="oc-text-muted"]'
 const selectTagDropdownSelector =
   '//div[contains(@class,"files-search-filter-tags")]//button[contains(@class,"oc-filter-chip-button")]'
 const tagFilterChipSelector = '//button[contains(@data-test-value,"%s")]'
+const mediaTypeFilterSelector = '.item-filter-mediaType'
+const mediaTypeFilterItem = '[data-test-id="media-type-%s"]'
+const mediaTypeOutside = '.files-search-result-filter'
 const clearTagFilterSelector =
   '//div[contains(@class,"files-search-filter-tags")]//button[contains(@class,"oc-filter-chip-clear")]'
 const enableSearchInFileContentSelector =
@@ -37,7 +40,11 @@ export const selectMediaTypeFilter = async ({
 }: {
   mediaType: string
   page: Page
-}): Promise<void> => {}
+}): Promise<void> => {
+  await page.locator(mediaTypeFilterSelector).click()
+  await page.locator(util.format(mediaTypeFilterItem, mediaType.toLowerCase())).click()
+  await page.locator(mediaTypeOutside).click()
+}
 
 export const toggleSearchInFileContent = async ({
   enableOrDisable,

@@ -186,3 +186,6 @@ Feature: Search
     And "Alice" opens the "files" app
     And "Alice" searches "mediaTest" using the global search and the "everywhere" filter and presses enter
     And "Alice" selects mediaType "Document" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.txt |

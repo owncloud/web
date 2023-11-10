@@ -21,7 +21,10 @@
           filter-name="mediaType"
         >
           <template #image="{ item }">
-            <div class="file-category-option-wrapper oc-flex oc-flex-middle">
+            <div
+              class="file-category-option-wrapper oc-flex oc-flex-middle"
+              :data-test-id="`media-type-${item.id.toLowerCase()}`"
+            >
               <oc-resource-icon :resource="getFakeResourceForIcon(item)" />
               <span class="oc-ml-s">{{ item.label }}</span>
             </div>

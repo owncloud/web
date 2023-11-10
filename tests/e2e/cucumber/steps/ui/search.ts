@@ -42,6 +42,5 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
     await searchObject.selectMediaTypeFilter({ mediaType })
-    await page.waitForTimeout(20000)
   }
 )
