@@ -7,6 +7,7 @@ import { coreTranslations, clientTranslations, pkgTranslations, odsTranslations 
 import '@fortawesome/fontawesome-free/attribution'
 
 export { default as DesignSystem } from 'design-system'
+export * from './languages'
 
 export const pages = { success: App, failure: missingOrInvalidConfigPage }
 export const translations = merge(
@@ -16,12 +17,3 @@ export const translations = merge(
   pkgTranslations,
   odsTranslations
 )
-export const supportedLanguages = {
-  cs: 'Czech',
-  de: 'Deutsch',
-  en: 'English',
-  es: 'Español',
-  fr: 'Français',
-  gl: 'Galego',
-  it: 'Italiano'
-}
