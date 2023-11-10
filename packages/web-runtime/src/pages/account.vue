@@ -138,7 +138,8 @@ import { useConfigurationManager } from '@ownclouders/web-pkg'
 import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
-import { supportedLanguages } from '../defaults'
+
+const supportedLanguages = {}
 
 export default defineComponent({
   name: 'AccountPage',
