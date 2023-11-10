@@ -236,10 +236,9 @@ export default defineComponent({
         return
       }
 
-      const item = unref(route).path.split('/').slice(3).join('/')
+      const item = unref(route).path.split('/').slice(2).join('/')
       const driveAliasAndItem = urlJoin(
         unref(isOcmLink) ? `ocm/` : `public/`,
-        unref(token),
         decodeURIComponent(item)
       )
 
