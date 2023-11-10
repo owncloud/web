@@ -159,7 +159,7 @@ describe('account page', () => {
 
   describe('gdpr export section', () => {
     it('does show if announced via capabilities and user has a personal space', async () => {
-      const spaces = [mock<SpaceResource>({ driveType: 'personal' })]
+      const spaces = [mock<SpaceResource>({ driveType: 'personal', isOwner: () => true })]
       const { wrapper } = getWrapper({
         spaces,
         capabilities: { graph: { 'personal-data-export': true } }
