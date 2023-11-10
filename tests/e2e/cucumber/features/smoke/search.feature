@@ -171,3 +171,18 @@ Feature: Search
       | resource                          |
       | exampleInsideThePersonalSpace.txt |
     And "Alice" logs out
+
+  Scenario: Search using mediaType filter
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
+    And "Alice" creates the following files into personal space using API
+      | pathToFile    | content        |
+      | mediaTest.txt | I'm a Document |
+      | mediaTest.pdf | I'm a PDF      |
+      | mediaTest.mp3 | I'm a Audio    |
+      | mediaTest.zip | I'm a Archive  |
+    And "Alice" opens the "files" app
+    And "Alice" searches "mediaTest" using the global search and the "everywhere" filter and presses enter
+    And "Alice" selects mediaType "Document" from the search result filter chip
