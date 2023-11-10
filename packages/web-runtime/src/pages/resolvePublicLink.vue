@@ -77,8 +77,6 @@ import {
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {
-  buildWebDavPublicPath,
-  buildWebDavOcmPath,
   buildPublicSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
