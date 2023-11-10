@@ -16,6 +16,10 @@ export class Search {
     await po.selectTagFilter({ tag: string, page: this.#page })
   }
 
+  async selectMediaTypeFilter({ mediaType: string }): Promise<void> {
+    await po.selectMediaTypeFilter({ mediaType: string, page: this.#page })
+  }
+
   async clearTagFilter(): Promise<void> {
     await po.clearTagFilter({ page: this.#page })
   }

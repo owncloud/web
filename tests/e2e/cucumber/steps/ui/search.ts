@@ -36,3 +36,12 @@ When(
     await searchObject.toggleSearchInFileContent({ enableOrDisable })
   }
 )
+When(
+  '{string} selects mediaType {string} from the search result filter chip',
+  async function (this: World, stepUser: string, mediaType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const searchObject = new objects.applicationFiles.Search({ page })
+    await searchObject.selectMediaTypeFilter({ mediaType })
+    await page.waitForTimeout(20000)
+  }
+)

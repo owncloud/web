@@ -31,6 +31,14 @@ export const clearTagFilter = async ({ page }: { page: Page }): Promise<void> =>
   await page.locator(clearTagFilterSelector).click()
 }
 
+export const selectMediaTypeFilter = async ({
+  mediaType,
+  page
+}: {
+  mediaType: string
+  page: Page
+}): Promise<void> => {}
+
 export const toggleSearchInFileContent = async ({
   enableOrDisable,
   page
