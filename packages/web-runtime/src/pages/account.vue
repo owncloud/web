@@ -380,6 +380,7 @@ export default defineComponent({
       isLoading,
       disableEmailNotificationsValue,
       loadAccountBundleTask,
+      loadGraphUserTask,
       loadValuesListTask
     }
   },
