@@ -87,6 +87,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
 // full import is needed here so it can be overwritten via CERN config
 import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -104,10 +105,6 @@ export default defineComponent({
     const isOcmLink = computed(() => {
       const split = unref(route).path.split('/')[1]
       return split === 'o'
-    })
-
-    const driveAlias = computed(() => {
-      return unref(isOcmLink) ? `ocm/${unref(token)}` : `public/${unref(token)}`
     })
 
     const publicLinkType = computed(() => {
@@ -239,6 +236,13 @@ export default defineComponent({
         return
       }
 
+      const item = unref(route).path.split('/').slice(3).join('/')
+      const driveAliasAndItem = urlJoin(
+        unref(isOcmLink) ? `ocm/` : `public/`,
+        unref(token),
+        decodeURIComponent(item)
+      )
+
       router.push({
         name: 'files-public-link',
         query: {
@@ -247,7 +251,9 @@ export default defineComponent({
           }),
           ...(!!fileId && { fileId })
         },
-        params: { driveAliasAndItem: unref(driveAlias) }
+        params: {
+          driveAliasAndItem
+        }
       })
     })
 
