@@ -70,7 +70,7 @@ export const router = patchRouter(
         meta: { title: $gettext('Public link'), authContext: 'anonymous' }
       },
       {
-        path: '/o/:token',
+        path: '/o/:token/:driveAliasAndItem(.*)?',
         name: 'resolvePublicLink',
         component: ResolvePublicLinkPage,
         meta: { title: $gettext('OCM link'), authContext: 'anonymous' }
