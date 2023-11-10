@@ -128,6 +128,7 @@ import {
   useCapabilityCoreSSE,
   useCapabilityGraphPersonalDataExport,
   useClientService,
+  useGetMatchingSpace,
   useStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
@@ -135,7 +136,6 @@ import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from '@ownclouders/web-pkg'
-import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
@@ -153,6 +153,7 @@ export default defineComponent({
     const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
+    const { getPersonalSpace } = useGetMatchingSpace()
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref()
     const accountBundle = ref<SettingsBundle>()
@@ -172,10 +173,7 @@ export default defineComponent({
       return store.getters.user
     })
 
-    const personalSpace = computed<SpaceResource>(() => {
-      return store.getters['runtime/spaces/spaces'].find((s) => isPersonalSpaceResource(s))
-    })
-
+    const personalSpace = computed(() => getPersonalSpace())
     const showGdprExport = computed(() => {
       return unref(isPersonalDataExportEnabled) && unref(personalSpace)
     })
@@ -313,6 +311,13 @@ export default defineComponent({
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
         }
         store.commit('SET_LANGUAGE', language.current)
+
+        // update personal space name with new translation
+        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+          id: unref(personalSpace).id,
+          field: 'name',
+          value: $gettext('Personal')
+        })
 
         store.dispatch('showMessage', {
           title: $gettext('Language was saved successfully.')

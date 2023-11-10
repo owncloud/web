@@ -140,7 +140,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       createUser: (user: User) => usersApiFactory.createUser(user),
       getMe: () =>
         meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])).then((result) => {
-          ;(result.data as any).preferredLanguage = 'cs'
+          ;(result.data as any).preferredLanguage = 'en'
           return result
         }),
       changeOwnPassword: (currentPassword, newPassword) =>

@@ -253,19 +253,6 @@ export class UserManager extends OidcUserManager {
     }
   }
 
-  private async fetchSettings(): Promise<any> {
-    const httpClient = this.clientService.httpAuthenticated
-    try {
-      const {
-        data: { values }
-      } = await httpClient.post('/api/v0/settings/values-list', { account_uuid: 'me' })
-      return values
-    } catch (e) {
-      console.error(e)
-      return null
-    }
-  }
-
   private async fetchRole({ graphUser, roles }): Promise<any> {
     const httpClient = this.clientService.httpAuthenticated
     const userAssignmentResponse = await httpClient.post('/api/v0/settings/assignments-list', {
