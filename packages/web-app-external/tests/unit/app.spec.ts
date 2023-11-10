@@ -18,7 +18,7 @@ jest.mock('@ownclouders/web-pkg', () => ({
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {
-        editors: {
+        editor: {
           openAsPreview: false
         }
       }
