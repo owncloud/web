@@ -24,6 +24,10 @@ export class Search {
     await po.clearTagFilter({ page: this.#page })
   }
 
+  async clearMediaTypeFilter(): Promise<void> {
+    await po.clearMediaTypeFilter({ page: this.#page })
+  }
+
   async toggleSearchInFileContent({ enableOrDisable: string }): Promise<void> {
     await po.toggleSearchInFileContent({ enableOrDisable: string, page: this.#page })
   }

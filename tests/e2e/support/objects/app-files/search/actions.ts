@@ -10,6 +10,8 @@ const mediaTypeFilterItem = '[data-test-id="media-type-%s"]'
 const mediaTypeOutside = '.files-search-result-filter'
 const clearTagFilterSelector =
   '//div[contains(@class,"files-search-filter-tags")]//button[contains(@class,"oc-filter-chip-clear")]'
+const clearMediaTypeFilterSelector =
+  '//div[contains(@class,"item-filter-mediaType")]//button[contains(@class,"oc-filter-chip-clear")]'
 const enableSearchInFileContentSelector =
   '//div[contains(@class,"files-search-filter-full-text")]//button[contains(@class,"oc-filter-chip-button")]'
 const disableSearchInFileContentSelector =
@@ -44,6 +46,10 @@ export const selectMediaTypeFilter = async ({
   await page.locator(mediaTypeFilterSelector).click()
   await page.locator(util.format(mediaTypeFilterItem, mediaType.toLowerCase())).click()
   await page.locator(mediaTypeOutside).click()
+}
+
+export const clearMediaTypeFilter = async ({ page }: { page: Page }): Promise<void> => {
+  await page.locator(clearMediaTypeFilterSelector).click()
 }
 
 export const toggleSearchInFileContent = async ({

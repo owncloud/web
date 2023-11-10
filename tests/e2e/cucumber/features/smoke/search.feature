@@ -189,3 +189,18 @@ Feature: Search
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.txt |
+    And "Alice" clears mediaType filter
+    And "Alice" selects mediaType "PDF" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.pdf |
+    And "Alice" clears mediaType filter
+    And "Alice" selects mediaType "Audio" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.mp3 |
+    And "Alice" clears mediaType filter
+    And "Alice" selects mediaType "Archive" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.zip |

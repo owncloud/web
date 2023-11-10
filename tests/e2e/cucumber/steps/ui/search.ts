@@ -44,3 +44,11 @@ When(
     await searchObject.selectMediaTypeFilter({ mediaType })
   }
 )
+When(
+  '{string} clears mediaType filter',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const searchObject = new objects.applicationFiles.Search({ page })
+    await searchObject.clearMediaTypeFilter()
+  }
+)
