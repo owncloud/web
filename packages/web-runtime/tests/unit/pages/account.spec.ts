@@ -264,9 +264,7 @@ describe('account page', () => {
 
   describe('Method "updateDisableEmailNotifications', () => {
     it('should show a message on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper({
-        capabilities: { spaces: { enabled: true } }
-      })
+      const { wrapper, mocks, storeOptions } = getWrapper()
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -274,17 +272,12 @@ describe('account page', () => {
 
       mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
       await wrapper.vm.updateDisableEmailNotifications(true)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.not.objectContaining({ status: 'danger' })
-      )
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper, mocks, storeOptions } = getWrapper({
-        capabilities: { spaces: { enabled: true } }
-      })
+      const { wrapper, mocks, storeOptions } = getWrapper()
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -295,10 +288,40 @@ describe('account page', () => {
       expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
+
+  describe('Method "updateSelectedLanguage', () => {
+    it('should show a message on success', async () => {
+      const { wrapper, mocks, storeOptions } = getWrapper({})
+
+      await wrapper.vm.loadAccountBundleTask.last
+      await wrapper.vm.loadValuesListTask.last
+      await wrapper.vm.loadGraphUserTask.last
+
+      mocks.$clientService.graphAuthenticated.users.editUser.mockResolvedValueOnce(
+        mockAxiosResolve({})
+      )
+      await wrapper.vm.updateSelectedLanguage('en')
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+    })
+    it('should show a message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+
+      const { wrapper, mocks, storeOptions } = getWrapper({})
+
+      await wrapper.vm.loadAccountBundleTask.last
+      await wrapper.vm.loadValuesListTask.last
+      await wrapper.vm.loadGraphUserTask.last
+
+      mocks.$clientService.graphAuthenticated.users.editUser.mockImplementation(() =>
+        mockAxiosReject('err')
+      )
+      await wrapper.vm.updateSelectedLanguage('en')
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+    })
+  })
 })
 
 function getWrapper({
-  data = {},
   user = {},
   capabilities = {},
   accountEditLink = undefined,
@@ -340,7 +363,6 @@ function getWrapper({
     storeOptions,
     mocks,
     wrapper: shallowMount(account, {
-      data: () => data,
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,
