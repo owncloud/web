@@ -103,12 +103,12 @@ export class ConfigurationManager {
     )
 
     // when this setting is enabled, non-personal files i.e. files in shares, spaces or public links
-    // are opened in read only mode and the user needs another click to switch to edit mode
-    // it can be set to true/false or an array of wopi app names
+    // are opened in read only mode and the user needs another click to switch to edit mode.
+    // it can be set to true/false or an array of web app/editor names.
     set(
       this.optionsConfiguration,
-      'editors.openAsPreview',
-      get(options, 'editors.openAsPreview', false)
+      'editor.openAsPreview',
+      get(options, 'editor.openAsPreview', false)
     )
 
     set(this.optionsConfiguration, 'upload.companionUrl', get(options, 'upload.companionUrl', ''))

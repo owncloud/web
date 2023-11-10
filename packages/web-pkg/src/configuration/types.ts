@@ -29,7 +29,7 @@ export interface OptionsConfiguration {
   mode?: string
   isRunningOnEos?: boolean
   embedTarget?: string
-  editors?: {
+  editor?: {
     openAsPreview?: boolean | string[]
   }
 }

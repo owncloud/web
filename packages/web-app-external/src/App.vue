@@ -38,7 +38,11 @@ import {
   useRouteQuery,
   useStore
 } from '@ownclouders/web-pkg'
-import { isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'ExternalApp',
@@ -151,7 +155,7 @@ export default defineComponent({
     }).restartable()
 
     const determineOpenAsPreview = (appName: string) => {
-      const openAsPreview = configurationManager.options.editors.openAsPreview
+      const openAsPreview = configurationManager.options.editor.openAsPreview
       return (
         openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
       )
@@ -191,7 +195,9 @@ export default defineComponent({
         let viewMode = props.isReadOnly ? 'view' : 'write'
         if (
           determineOpenAsPreview(unref(applicationName)) &&
-          (isShareSpaceResource(props.space) || isPublicSpaceResource(props.space))
+          (isShareSpaceResource(props.space) ||
+            isPublicSpaceResource(props.space) ||
+            isProjectSpaceResource(props.space))
         ) {
           viewMode = 'view'
         }
