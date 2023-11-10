@@ -69,10 +69,7 @@
           />
         </dd>
       </div>
-      <div
-        v-if="isSettingsServiceSupported"
-        class="account-page-info-language oc-mb oc-width-1-2@s"
-      >
+      <div class="account-page-info-language oc-mb oc-width-1-2@s">
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
         <dd data-testid="language">
           <oc-select
@@ -130,7 +127,6 @@ import {
   useCapabilityChangeSelfPasswordDisabled,
   useCapabilityCoreSSE,
   useCapabilityGraphPersonalDataExport,
-  useCapabilitySpacesEnabled,
   useClientService,
   useStore
 } from '@ownclouders/web-pkg'
@@ -165,8 +161,10 @@ export default defineComponent({
     const sseEnabled = useCapabilityCoreSSE()
 
     // FIXME: Use settings service capability when we have it
-    const isSettingsServiceSupported = useCapabilitySpacesEnabled()
-    const spacesEnabled = useCapabilitySpacesEnabled()
+    const isSettingsServiceSupported = computed(
+      () => !store.getters.configuration?.options?.runningOnEos
+    )
+
     const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
 
@@ -183,6 +181,10 @@ export default defineComponent({
     })
 
     const loadValuesListTask = useTask(function* () {
+      if (!unref(isSettingsServiceSupported)) {
+        return
+      }
+
       try {
         const {
           data: { values }
@@ -201,6 +203,10 @@ export default defineComponent({
     }).restartable()
 
     const loadAccountBundleTask = useTask(function* () {
+      if (!unref(isSettingsServiceSupported)) {
+        return
+      }
+
       try {
         const {
           data: { bundles }
@@ -250,13 +256,9 @@ export default defineComponent({
     }))
 
     const groupNames = computed(() => {
-      if (unref(spacesEnabled)) {
-        return unref(user)
-          .groups.map((group) => group.displayName)
-          .join(', ')
-      }
-
-      return unref(user).groups.join(', ')
+      return unref(user)
+        .groups.map((group) => group.displayName)
+        .join(', ')
     })
 
     const saveValue = async ({
@@ -347,23 +349,22 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      if (unref(isSettingsServiceSupported)) {
-        await loadAccountBundleTask.perform()
-        await loadValuesListTask.perform()
-        await loadGraphUserTask.perform()
+      await loadAccountBundleTask.perform()
+      await loadValuesListTask.perform()
+      await loadGraphUserTask.perform()
 
-        selectedLanguageValue.value =
-          unref(graphUser).preferredLanguage ||
-          unref(languageOptions)?.find((lO) => lO.value === language.current)
+      selectedLanguageValue.value = unref(languageOptions)?.find(
+        (languageOption) =>
+          languageOption.value === (unref(graphUser).preferredLanguage || language.current)
+      )
 
-        const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
-          (cV) => cV.identifier.setting === 'disable-email-notifications'
-        )
+      const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
+        (cV) => cV.identifier.setting === 'disable-email-notifications'
+      )
 
-        disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
-          ? !disableEmailNotificationsConfiguration.value?.boolValue
-          : true
-      }
+      disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
+        ? !disableEmailNotificationsConfiguration.value?.boolValue
+        : true
     })
 
     return {
