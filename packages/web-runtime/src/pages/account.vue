@@ -237,9 +237,6 @@ export default defineComponent({
     }).restartable()
 
     const isLoading = computed(() => {
-      if (!unref(isSettingsServiceSupported)) {
-        return false
-      }
       return (
         loadValuesListTask.isRunning ||
         !loadValuesListTask.last ||
