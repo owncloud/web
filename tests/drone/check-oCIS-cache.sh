@@ -2,18 +2,12 @@
 
 source .drone.env
 
-url="https://cache.owncloud.com/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis"
+ocis_cache=$(mc find s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis | grep 'Object does not exist')
 
-echo "Checking oCIS version - $OCIS_COMMITID in cache."
-echo "Downloading oCIS from '$url'."
-
-if curl --output /dev/null --silent --head --fail "$url"
+if [[ "$ocis_cache" != "" ]]
 then
-	echo "oCIS binary for $OCIS_COMMITID already available in cache."
-	echo "Skipping the caching pipeline..."
-	# https://discourse.drone.io/t/how-to-exit-a-pipeline-early-without-failing/3951
-	# exit a Pipeline early without failing
-	exit 78
-else
-	echo "oCIS binary for $OCIS_COMMITID not available in cache."
+    echo "$OCIS_COMMITID doesn't exist"
+    exit 0
 fi
+exit 78
+

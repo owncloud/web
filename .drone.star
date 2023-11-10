@@ -1312,12 +1312,14 @@ def checkForExistingOcisCache(ctx):
     return [
         {
             "name": "check-for-existing-cache",
-            "image": OC_UBUNTU,
+            "image": MINIO_MC,
             "environment": minio_mc_environment,
             "commands": [
                 "curl -o .drone.env %s/.drone.env" % web_repo_path,
                 "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % web_repo_path,
                 ". ./.drone.env",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
                 "bash check-oCIS-cache.sh",
             ],
         },
