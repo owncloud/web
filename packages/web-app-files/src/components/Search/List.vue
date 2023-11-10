@@ -334,12 +334,12 @@ export default defineComponent({
       audio: { label: $gettext('Audio'), icon: 'mp3' },
       archive: { label: $gettext('Archive'), icon: 'zip' }
     }
-    const availableFileCategoryValues: FileCategoryKeyword[] = []
+    const availableMediaTypeValues: FileCategoryKeyword[] = []
     unref(mediaTypeCapability).keywords?.forEach((key: string) => {
       if (!mediaTypeMapping[key]) {
         return
       }
-      availableFileCategoryValues.push({
+      availableMediaTypeValues.push({
         id: key,
         ...mediaTypeMapping[key]
       })
@@ -490,7 +490,7 @@ export default defineComponent({
       availableLastModifiedValues,
       lastModifiedFilter,
       mediaTypeFilter,
-      availableFileCategoryValues,
+      availableMediaTypeValues,
       getFakeResourceForIcon
     }
   },
