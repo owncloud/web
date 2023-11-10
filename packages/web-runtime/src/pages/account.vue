@@ -307,17 +307,20 @@ export default defineComponent({
           language,
           languageSetting: option.value
         })
+
         if (unref(sseEnabled)) {
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
         }
-        store.commit('SET_LANGUAGE', language.current)
 
-        // update personal space name with new translation
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-          id: unref(personalSpace).id,
-          field: 'name',
-          value: $gettext('Personal')
-        })
+        store.commit('SET_LANGUAGE', language.current)
+        if (unref(personalSpace)) {
+          // update personal space name with new translation
+          store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+            id: unref(personalSpace).id,
+            field: 'name',
+            value: $gettext('Personal')
+          })
+        }
 
         store.dispatch('showMessage', {
           title: $gettext('Language was saved successfully.')
