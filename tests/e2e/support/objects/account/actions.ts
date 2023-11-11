@@ -85,9 +85,9 @@ export const changeLanguage = async (args: { page: Page; language: string }): Pr
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('api/v0/settings/values-save') &&
-        res.request().method() === 'POST' &&
-        res.status() === 201
+        res.url().includes('graph/v1.0/users') &&
+        res.request().method() === 'PATCH' &&
+        res.status() === 204
     ),
     page.locator(languageInput).fill(language),
     page.locator(util.format(languageValueDropDown, language)).click()
