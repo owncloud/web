@@ -64,7 +64,6 @@ import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
-  useCapabilitySpacesEnabled,
   useClientService,
   useConfigurationManager,
   useRoute,
@@ -86,6 +85,8 @@ import { useGettext } from 'vue3-gettext'
 // full import is needed here so it can be overwritten via CERN config
 import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { RouteLocationNamedRaw } from 'vue-router'
+import { dirname } from 'path'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -118,8 +119,11 @@ export default defineComponent({
       })
     )
 
+    const item = computed(() => {
+      return queryItemAsString(unref(route).params.driveAliasAndItem)
+    })
+
     const isUserContext = useUserContext({ store })
-    const hasSpaces = useCapabilitySpacesEnabled(store)
 
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
@@ -214,15 +218,15 @@ export default defineComponent({
         return
       }
 
-      let { fileId } = publicLink
-      if (!fileId && unref(hasSpaces)) {
-        const { children } = yield clientService.webdav.listFiles(unref(publicLinkSpace), {
-          path: '/'
-        })
-        if (children.length === 1) {
-          // single shared file which means the actual resource is the first and only child element
-          fileId = children[0].fileId
-        }
+      let fileId: string
+      const { resource, children } = yield clientService.webdav.listFiles(unref(publicLinkSpace), {
+        path: unref(item)
+      })
+      if (children.length === 1) {
+        // single shared file which means the actual resource is the first and only child element
+        fileId = children[0].fileId
+      } else {
+        fileId = resource.fileId
       }
 
       if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
@@ -234,24 +238,34 @@ export default defineComponent({
         return
       }
 
-      const item = unref(route).path.split('/').slice(2).join('/')
-      const driveAliasAndItem = urlJoin(
-        unref(isOcmLink) ? `ocm/` : `public/`,
-        decodeURIComponent(item)
-      )
+      let scrollTo: string
+      let path: string
+      if (resource.type === 'folder') {
+        fileId = resource.fileId
+        path = unref(item)
+      } else {
+        fileId = resource.parentFolderId
+        scrollTo = resource.fileId
+        path = dirname(unref(item))
+      }
 
-      router.push({
+      const driveAliasAndItem = urlJoin(unref(isOcmLink) ? `ocm/` : `public/`, unref(token), path)
+      const targetLocation: RouteLocationNamedRaw = {
         name: 'files-public-link',
         query: {
           ...(configurationManager.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'
           }),
-          ...(!!fileId && { fileId })
+          ...(!!fileId && { fileId }),
+          ...(!!scrollTo && { scrollTo }),
+          ...(unref(details) && { details: unref(details) })
         },
         params: {
           driveAliasAndItem
         }
-      })
+      }
+
+      router.push(targetLocation)
     })
 
     const isLoading = computed<boolean>(() => {
