@@ -46,7 +46,6 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
-    // HACK:
     const driveAliasPrefix = () =>
       resource?.share?.shareType === ShareTypes.remote.value ||
       resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
