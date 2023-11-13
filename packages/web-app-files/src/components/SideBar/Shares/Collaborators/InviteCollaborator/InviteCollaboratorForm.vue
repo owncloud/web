@@ -145,6 +145,8 @@ import {
   SpacePeopleShareRoles
 } from '@ownclouders/web-client/src/helpers/share'
 import {
+  FederatedConnection,
+  FederatedUser,
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
@@ -153,7 +155,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
