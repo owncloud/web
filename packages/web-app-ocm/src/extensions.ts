@@ -60,7 +60,7 @@ export const extensions = (options: ApplicationSetupOptions) => {
             handler,
             label: () => $gettext('Open remotely'),
             isEnabled: ({ resources }: FileActionOptions) => {
-              return !resources[0]?.isFolder && resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
+              return resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
             },
             componentType: 'button',
             class: 'oc-files-actions-open-file-remote'
