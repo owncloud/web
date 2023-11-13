@@ -1,6 +1,11 @@
 import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { queryItemAsString, InlineFilterOption, useSort } from '@ownclouders/web-pkg'
+import {
+  queryItemAsString,
+  InlineFilterOption,
+  useSort,
+  useOpenWithDefaultApp
+} from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
@@ -13,17 +18,16 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
-import { useOpenWithDefaultApp } from '../../../../src/composables/openWithDefaultApp'
 import { Resource } from '@ownclouders/web-client'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables/resourcesViewDefaults')
-jest.mock('web-app-files/src/composables/openWithDefaultApp/useOpenWithDefaultApp')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useSort: jest.fn().mockImplementation(() => useSortMock()),
   queryItemAsString: jest.fn(),
-  useRouteQuery: jest.fn()
+  useRouteQuery: jest.fn(),
+  useOpenWithDefaultApp: jest.fn()
 }))
 
 describe('SharedWithMe view', () => {

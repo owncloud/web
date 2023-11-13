@@ -1,11 +1,10 @@
 import { getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useOpenWithDefaultApp } from '../../../../src/composables/openWithDefaultApp'
-import { useFileActions, Action } from '@ownclouders/web-pkg'
+import { useFileActions, Action, useOpenWithDefaultApp } from '../../../../src/composables'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
+jest.mock('../../../../src/composables/actions/files', () => ({
+  ...jest.requireActual('../../../../src/composables/actions/files'),
   useFileActions: jest.fn()
 }))
 
