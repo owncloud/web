@@ -244,7 +244,8 @@ export default defineComponent({
 
       let scrollTo: string
       let path: string
-      if (resource.type === 'folder') {
+
+      if (['folder', 'space'].includes(resource.type)) {
         fileId = resource.fileId
         path = unref(item)
       } else {
