@@ -45,8 +45,8 @@ describe('getAbilities', () => {
     expect(abilities).toEqual(expectedActions.map((action) => ({ action, subject: 'PublicLink' })))
   })
   it('gets correct abilities for subject "Share"', function () {
-    const abilities = getAbilities(['Share.Create.all'])
-    const expectedActions = ['create-all']
+    const abilities = getAbilities(['Shares.Write.all'])
+    const expectedActions = ['create-all', 'update-all']
     expect(abilities).toEqual(expectedActions.map((action) => ({ action, subject: 'Share' })))
   })
   it('gets correct abilities for subject "Setting"', function () {

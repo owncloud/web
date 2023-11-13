@@ -37,7 +37,10 @@ export const getAbilities = (
       { action: 'read-all', subject: 'Role' },
       { action: 'update-all', subject: 'Role' }
     ],
-    'Share.Create.all': [{ action: 'create-all', subject: 'Share' }],
+    'Shares.Write.all': [
+      { action: 'create-all', subject: 'Share' },
+      { action: 'update-all', subject: 'Share' }
+    ],
     'Settings.ReadWrite.all': [
       { action: 'read-all', subject: 'Setting' },
       { action: 'update-all', subject: 'Setting' }
