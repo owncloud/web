@@ -1,6 +1,7 @@
 import {
   FileActionOptions,
   useClientService,
+  useConfigurationManager,
   useRouter,
   useStore,
   useWindowOpen
@@ -15,6 +16,7 @@ export const extensions = (options: ApplicationSetupOptions) => {
   const store = useStore()
   const router = useRouter()
   const clientService = useClientService()
+  const configurationManager = useConfigurationManager()
   const { $gettext } = useGettext()
   const { openUrl } = useWindowOpen()
 
@@ -60,7 +62,10 @@ export const extensions = (options: ApplicationSetupOptions) => {
             handler,
             label: () => $gettext('Open remotely'),
             isEnabled: ({ resources }: FileActionOptions) => {
-              return resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
+              return (
+                configurationManager.options.ocm.openRemotely &&
+                resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
+              )
             },
             componentType: 'button',
             class: 'oc-files-actions-open-file-remote'

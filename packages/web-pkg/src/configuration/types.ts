@@ -32,6 +32,9 @@ export interface OptionsConfiguration {
   editor?: {
     openAsPreview?: boolean | string[]
   }
+  ocm?: {
+    openRemotely?: boolean
+  }
 }
 
 export interface OAuth2Configuration {

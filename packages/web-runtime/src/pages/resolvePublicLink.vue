@@ -193,6 +193,10 @@ export default defineComponent({
       })
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
+      if (unref(isOcmLink) && !configurationManager.options.ocm.openRemotely) {
+        throw new Error($gettext('OCM links are disabled'))
+      }
+
       if (!isEmpty(unref(tokenInfo)) && unref(tokenInfo)?.alias_link) {
         redirectToPrivateLink(unref(tokenInfo).id)
         return
