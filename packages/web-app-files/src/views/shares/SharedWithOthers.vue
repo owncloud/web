@@ -25,7 +25,7 @@
             display-name-attribute="label"
             filter-name="shareType"
           >
-            <template #image="{ item }">
+            <template #item="{ item }">
               <span class="oc-ml-s">{{ item.label }}</span>
             </template>
           </item-filter>
