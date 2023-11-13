@@ -204,3 +204,4 @@ Feature: Search
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.zip |
+    And "Alice" logs out
