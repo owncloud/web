@@ -51,12 +51,26 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
         ? 'ocm-share'
         : 'share'
+
+    let shareName: string
+    if (resource.shareRoot) {
+      shareName = basename(resource.shareRoot)
+    } else if (
+      unref(driveAliasAndItem)?.startsWith('share/') ||
+      unref(driveAliasAndItem)?.startsWith('ocm-share/')
+    ) {
+      shareName = unref(driveAliasAndItem).split('/')[1]
+    } else {
+      shareName = resource.name
+    }
+
+    console.log('getMatchingSpace', driveAliasAndItem, shareName, resource)
     return (
       getInternalSpace(storageId) ||
       buildShareSpaceResource({
         driveAliasPrefix: driveAliasPrefix(),
         shareId: resource.shareId,
-        shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
+        shareName,
         serverUrl: configurationManager.serverUrl
       })
     )
