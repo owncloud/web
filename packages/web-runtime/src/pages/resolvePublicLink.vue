@@ -102,7 +102,7 @@ export default defineComponent({
     const password = ref('')
 
     const isOcmLink = computed(() => {
-      const split = unref(route).path.split('/')[1]
+      const split = unref(route).path.split('/')?.[1]
       return split === 'o'
     })
 
