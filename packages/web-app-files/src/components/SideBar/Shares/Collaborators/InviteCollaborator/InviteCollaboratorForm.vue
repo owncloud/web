@@ -153,15 +153,13 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
   displayPositionedDropdown,
   formatDateFromDateTime,
-  formatRelativeDateFromDateTime,
-  FederatedConnection,
-  FederatedUser
+  formatRelativeDateFromDateTime
 } from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
