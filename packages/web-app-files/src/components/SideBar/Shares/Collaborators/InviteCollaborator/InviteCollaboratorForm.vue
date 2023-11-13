@@ -220,6 +220,21 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
 
+    const federatedUsers = ref([] as FederatedUser[])
+    onMounted(async () => {
+      // HACK: remove when federated users are returned from search
+      try {
+        const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
+          FederatedConnection[]
+        >('/sciencemesh/find-accepted-users')
+
+        federatedUsers.value = acceptedUsers
+        console.log('Federated users loaded', acceptedUsers)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
     const accountType = ref('standard')
     const accountTypes = [
       { prefix: '', description: 'standard' },
@@ -243,6 +258,7 @@ export default defineComponent({
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
       notifyEnabled,
+      federatedUsers,
 
       // CERN
       accountType,
@@ -351,7 +367,26 @@ export default defineComponent({
         })
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-        this.autocompleteResults = [...users, ...groups, ...remotes].filter((collaborator) => {
+        const federatedCollaborators = this.federatedUsers.map((u) => {
+          return {
+            label: u.display_name,
+            value: {
+              shareType: 6,
+              shareWithUser: u.user_id,
+              shareWithProvider: u.idp,
+              shareWithAdditionalInfo: u.mail,
+              userType: 0
+            }
+          }
+        })
+
+        this.autocompleteResults = [
+          ...users,
+          ...groups,
+          ...remotes,
+          ...federatedCollaborators
+        ].filter((collaborator) => {
+          console.log('COLLABORATOR', collaborator)
           const selected = this.selectedCollaborators.find((selectedCollaborator) => {
             return (
               collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
