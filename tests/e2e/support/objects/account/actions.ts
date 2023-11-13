@@ -42,7 +42,7 @@ export const requestGdprExport = async (args: { page: Page }): Promise<void> => 
     page.waitForResponse(
       (resp) =>
         resp.url().endsWith('exportPersonalData') &&
-        resp.status() === 201 &&
+        resp.status() === 202 &&
         resp.request().method() === 'POST'
     ),
     // not waiting for the generation report

@@ -62,7 +62,7 @@ export const createUser = async (args: {
   const [response] = await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith('users') && resp.status() === 200 && resp.request().method() === 'POST'
+        resp.url().endsWith('users') && resp.status() === 201 && resp.request().method() === 'POST'
     ),
     page.locator(actionConfirmButton).click()
   ])
