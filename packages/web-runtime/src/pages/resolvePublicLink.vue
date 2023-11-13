@@ -194,7 +194,7 @@ export default defineComponent({
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
       if (unref(isOcmLink) && !configurationManager.options.ocm.openRemotely) {
-        throw new Error($gettext('OCM links are disabled'))
+        throw new Error($gettext('Opening files from remote is disabled'))
       }
 
       if (!isEmpty(unref(tokenInfo)) && unref(tokenInfo)?.alias_link) {
