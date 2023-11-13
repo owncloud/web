@@ -1,0 +1,84 @@
+<template>
+  <div class="file_info oc-flex oc-flex-between oc-p-s">
+    <div class="oc-flex oc-flex-middle">
+      <oc-resource-icon
+        v-if="isSubPanelActive"
+        :resource="resource"
+        size="large"
+        class="file_info__icon oc-mr-s"
+      />
+      <div class="file_info__body oc-text-overflow">
+        <h3 data-testid="files-info-name" class="oc-font-semibold">
+          <oc-resource-name
+            :name="resource.name"
+            :extension="resource.extension"
+            :type="resource.type"
+            :full-path="resource.webDavPath"
+            :is-extension-displayed="areFileExtensionsShown"
+            :is-path-displayed="false"
+            :truncate-name="false"
+          />
+        </h3>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent, inject } from 'vue'
+import { Resource } from '@ownclouders/web-client'
+import { useStore } from '../../../composables'
+
+export default defineComponent({
+  name: 'FileInfo',
+  props: {
+    isSubPanelActive: {
+      type: Boolean,
+      default: true
+    }
+  },
+  setup() {
+    const store = useStore()
+    const resource = inject<Resource>('resource')
+    const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
+
+    return { resource, areFileExtensionsShown }
+  }
+})
+</script>
+
+<style lang="scss">
+.file_info {
+  &.sidebar-panel__file_info {
+    border-bottom: 1px solid var(--oc-color-border);
+  }
+
+  button {
+    white-space: nowrap;
+  }
+
+  &__body {
+    text-align: left;
+
+    h3 {
+      font-size: var(--oc-font-size-medium);
+      margin: 0;
+      word-break: break-all;
+    }
+  }
+
+  &__favorite {
+    .oc-star {
+      display: inline-block;
+
+      &-shining svg {
+        fill: #ffba0a !important;
+
+        path:not([fill='none']) {
+          stroke: var(--oc-color-swatch-passive-default);
+        }
+      }
+    }
+  }
+}
+</style>

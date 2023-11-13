@@ -76,7 +76,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar
+    <file-side-bar
       :open="sideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
@@ -92,14 +92,13 @@ import { VisibilityObserver, ItemFilter } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { debounce, find, uniq } from 'lodash-es'
 
-import { ResourceTable } from '@ownclouders/web-pkg'
+import { FileSideBar, ResourceTable } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { AppBar } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { Pagination } from '@ownclouders/web-pkg'
 import { ContextActions } from '@ownclouders/web-pkg'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
@@ -117,13 +116,13 @@ export default defineComponent({
     SharesNavigation,
     FilesViewWrapper,
     AppBar,
+    FileSideBar,
     ResourceTable,
     AppLoadingSpinner,
     NoContentMessage,
     ListInfo,
     Pagination,
     ContextActions,
-    SideBar,
     ItemFilter
   },
 

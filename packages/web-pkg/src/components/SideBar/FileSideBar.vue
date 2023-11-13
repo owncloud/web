@@ -31,34 +31,36 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, ref, unref, watch } from 'vue'
-import {
-  SideBarPanelContext,
-  SidebarPanelExtension,
-  useActiveLocation,
-  useExtensionRegistry,
-  useSelectedResources
-} from '@ownclouders/web-pkg'
-import FileInfo from './FileInfo.vue'
-import {
-  isProjectSpaceResource,
-  SpaceResource,
-  Resource
-} from '@ownclouders/web-client/src/helpers'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { SideBar as InnerSideBar } from '@ownclouders/web-pkg'
-import { SpaceInfo } from '@ownclouders/web-pkg'
-import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { SideBarPanelContext, SideBar as InnerSideBar } from '../SideBar'
+import { SpaceInfo } from './Spaces'
+import { FileInfo } from './Files'
 import {
   isLocationCommonActive,
   isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
-} from '@ownclouders/web-pkg'
-import { useClientService, useStore, useRouter } from '@ownclouders/web-pkg'
-import { eventBus } from '@ownclouders/web-pkg'
+} from '../../router'
+import {
+  SidebarPanelExtension,
+  SideBarEventTopics,
+  useClientService,
+  useEventBus,
+  useStore,
+  useRouter,
+  useActiveLocation,
+  useExtensionRegistry,
+  useSelectedResources
+} from '../../composables'
+import {
+  isProjectSpaceResource,
+  SpaceResource,
+  Resource
+} from '@ownclouders/web-client/src/helpers'
+import { WebDAV } from '@ownclouders/web-client/src/webdav'
 
 export default defineComponent({
+  name: 'FileSideBar',
   components: { FileInfo, SpaceInfo, InnerSideBar },
   props: {
     open: {
@@ -81,6 +83,7 @@ export default defineComponent({
     const router = useRouter()
     const clientService = useClientService()
     const extensionRegistry = useExtensionRegistry()
+    const eventBus = useEventBus()
 
     const loadedResource = ref()
     const isLoading = ref(false)
@@ -158,7 +161,6 @@ export default defineComponent({
       return unref(isShareLocation) || unref(isSearchLocation) || unref(isFavoritesLocation)
     })
 
-    // TODO: get rid of `highlightedFile` getter... only ever used in sidebar. change panels to show the parent resource if needed.
     const availablePanels = computed(() =>
       extensionRegistry
         .requestExtensions<SidebarPanelExtension<Resource, Resource>>('sidebarPanel', 'resource')

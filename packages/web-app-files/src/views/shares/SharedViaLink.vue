@@ -55,7 +55,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar
+    <file-side-bar
       :open="sideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
@@ -66,7 +66,7 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { useFileActions } from '@ownclouders/web-pkg'
+import { FileSideBar, useFileActions } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { debounce, find } from 'lodash-es'
@@ -76,7 +76,6 @@ import { NoContentMessage } from '@ownclouders/web-pkg'
 import { AppBar } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ContextActions } from '@ownclouders/web-pkg'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
@@ -104,7 +103,7 @@ export default defineComponent({
     ListInfo,
     Pagination,
     ContextActions,
-    SideBar
+    FileSideBar
   },
 
   setup() {

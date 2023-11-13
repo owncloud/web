@@ -84,7 +84,11 @@
         />
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="selectedShareSpace" />
+    <file-side-bar
+      :open="sideBarOpen"
+      :active-panel="sideBarActivePanel"
+      :space="selectedShareSpace"
+    />
   </div>
 </template>
 
@@ -93,13 +97,12 @@ import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { useResourcesViewDefaults } from '../../composables'
 
-import { AppLoadingSpinner, InlineFilterOption, ItemFilter } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, FileSideBar, InlineFilterOption, ItemFilter } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
 import { computed, defineComponent, onMounted, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
@@ -116,7 +119,7 @@ export default defineComponent({
     AppBar,
     AppLoadingSpinner,
     SharedWithMeSection,
-    SideBar,
+    FileSideBar,
     ItemFilterInline,
     ItemFilter
   },

@@ -138,7 +138,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar
+    <file-side-bar
       :open="sideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
@@ -157,7 +157,7 @@ import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
-import { ContextActions } from '@ownclouders/web-pkg'
+import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -179,7 +179,6 @@ import { useFileActions } from '@ownclouders/web-pkg'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from '@ownclouders/web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import {
   queryItemAsString,
   useCapabilityFilesTags,
@@ -225,7 +224,7 @@ type LastModifiedKeyword = {
 export default defineComponent({
   components: {
     AppBar,
-    SideBar,
+    FileSideBar,
     AppLoadingSpinner,
     ContextActions,
     ListInfo,

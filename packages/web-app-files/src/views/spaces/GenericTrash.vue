@@ -56,19 +56,17 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+    <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
 
-import { AppBar } from '@ownclouders/web-pkg'
-import { ContextActions } from '@ownclouders/web-pkg'
+import { AppBar, ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
@@ -90,12 +88,12 @@ export default defineComponent({
     AppBar,
     AppLoadingSpinner,
     ContextActions,
+    FileSideBar,
     FilesViewWrapper,
     ListInfo,
     NoContentMessage,
     Pagination,
-    ResourceTable,
-    SideBar
+    ResourceTable
   },
 
   props: {

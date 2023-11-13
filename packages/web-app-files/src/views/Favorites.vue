@@ -52,7 +52,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar
+    <file-side-bar
       :open="sideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
@@ -69,7 +69,7 @@ import { Resource } from '@ownclouders/web-client'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
-import { NoContentMessage } from '@ownclouders/web-pkg'
+import { FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
@@ -79,7 +79,6 @@ import QuickActions from '../components/FilesList/QuickActions.vue'
 import ListInfo from '../components/FilesList/ListInfo.vue'
 import { ContextActions } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
-import SideBar from '../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
@@ -90,14 +89,14 @@ export default defineComponent({
   components: {
     FilesViewWrapper,
     AppBar,
+    FileSideBar,
     ResourceTable,
     QuickActions,
     AppLoadingSpinner,
     Pagination,
     NoContentMessage,
     ListInfo,
-    ContextActions,
-    SideBar
+    ContextActions
   },
 
   setup() {

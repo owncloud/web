@@ -150,7 +150,7 @@
         </template>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+    <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 
@@ -172,44 +172,46 @@ import {
 
 import { useEmbedMode, useFileActions, useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
 
-import { AppBar } from '@ownclouders/web-pkg'
-import { ContextActions } from '@ownclouders/web-pkg'
+import {
+  AppBar,
+  AppLoadingSpinner,
+  ContextActions,
+  FileSideBar,
+  NoContentMessage,
+  Pagination,
+  ResourceTable,
+  CreateTargetRouteOptions,
+  ImageType,
+  ViewModeConstants,
+  VisibilityObserver,
+  createFileRouteOptions,
+  createLocationPublic,
+  createLocationSpaces,
+  displayPositionedDropdown,
+  useBreadcrumbsFromPath,
+  useCapabilityShareJailEnabled,
+  useClientService,
+  useDocumentTitle,
+  useOpenWithDefaultApp,
+  useKeyboardActions,
+  useRoute,
+  useRouteQuery
+} from '@ownclouders/web-pkg'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import NotFoundMessage from '../../components/FilesList/NotFoundMessage.vue'
 import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceDetails from '../../components/FilesList/ResourceDetails.vue'
-import { ResourceTable } from '@ownclouders/web-pkg'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
-import { NoContentMessage } from '@ownclouders/web-pkg'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
-import { Pagination } from '@ownclouders/web-pkg'
-import {
-  useRoute,
-  useRouteQuery,
-  useClientService,
-  ViewModeConstants,
-  useCapabilityShareJailEnabled,
-  useBreadcrumbsFromPath
-} from '@ownclouders/web-pkg'
-import { useDocumentTitle } from '@ownclouders/web-pkg'
-import { ImageType } from '@ownclouders/web-pkg'
-import { VisibilityObserver } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
-import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
-import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
-import { useKeyboardActions, useOpenWithDefaultApp } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation,
@@ -226,6 +228,7 @@ export default defineComponent({
     AppLoadingSpinner,
     ContextActions,
     CreateAndUpload,
+    FileSideBar,
     FilesViewWrapper,
     ListInfo,
     NoContentMessage,
@@ -235,7 +238,6 @@ export default defineComponent({
     ResourceDetails,
     ResourceTable,
     ResourceTiles,
-    SideBar,
     SpaceHeader,
     WhitespaceContextMenu
   },
@@ -468,7 +470,10 @@ export default defineComponent({
       focusAndAnnounceBreadcrumb(sameRoute)
 
       if (unref(openWithDefaultAppQuery) === 'true') {
-        openWithDefaultApp({ space: props.space, resource: store.getters['Files/highlightedFile'] })
+        openWithDefaultApp({
+          space: props.space,
+          resource: unref(resourcesViewDefaults.selectedResources)[0]
+        })
       }
     }
 
