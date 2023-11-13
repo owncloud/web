@@ -3,6 +3,7 @@ import {
   AuthContext,
   authContextValues,
   contextQueryToFileContextProps,
+  queryItemAsString,
   WebRouteMeta
 } from '@ownclouders/web-pkg'
 
@@ -96,7 +97,8 @@ export const extractPublicLinkToken = (to: RouteLocation): string => {
  */
 const extractPublicLinkTokenFromRouteParams = (params: RouteParams): string => {
   if (Object.prototype.hasOwnProperty.call(params, 'driveAliasAndItem')) {
-    if (!(params.driveAliasAndItem as string).startsWith('public/')) {
+    const driveAliasAndItem = queryItemAsString(params.driveAliasAndItem)
+    if (!driveAliasAndItem.startsWith('public/') && !driveAliasAndItem.startsWith('ocm/')) {
       return ''
     }
     return (params.driveAliasAndItem as string).split('/')[1]
