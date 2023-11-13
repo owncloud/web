@@ -1,0 +1,65 @@
+{
+  "server": "https://host.docker.internal:10200",
+  "theme": "https://host.docker.internal:10200/themes/owncloud/theme.json",
+  "openIdConnect": {
+    "metadata_url": "https://host.docker.internal:10200/.well-known/openid-configuration",
+    "authority": "https://host.docker.internal:10200",
+    "client_id": "web",
+    "response_type": "code",
+    "scope": "openid profile email"
+  },
+  "options": {
+    "topCenterNotifications": true,
+    "disablePreviews": true,
+    "displayResourcesLazy": false,
+    "sidebar": {
+      "shares": {
+        "showAllOnLoad": true
+      }
+    },
+    "previewFileMimeTypes": [
+      "image/gif",
+      "image/png",
+      "image/jpeg",
+      "text/plain",
+      "image/tiff",
+      "image/bmp",
+      "image/x-ms-bmp"
+    ],
+    "contextHelpersReadMore": true
+  },
+  "apps": [
+    "files",
+    "text-editor",
+    "pdf-viewer",
+    "search",
+    "external",
+    "admin-settings",
+    "ocm",
+    "webfinger"
+  ],
+  "external_apps": [
+    {
+      "id": "preview",
+      "path": "web-app-preview",
+      "config": {
+        "mimeTypes": ["image/tiff", "image/bmp", "image/x-ms-bmp"]
+      }
+    },
+    {
+      "id": "draw-io",
+      "path": "web-app-draw-io",
+      "config": {
+        "url": "https://embed.diagrams.net",
+        "theme": "minimal"
+      }
+    },
+    {
+      "id": "importer",
+      "path": "web-app-importer",
+      "config": {
+        "companionUrl": "https://host.docker.internal:9200/companion"
+      }
+    }
+  ]
+}
