@@ -26,7 +26,6 @@ import {
   AppRoleAssignment,
   ExportPersonalDataRequest
 } from './generated'
-import { omit } from 'lodash-es'
 
 export interface Graph {
   applications: {
@@ -143,8 +142,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       editMe: (user: User) => meUserApiFactory.updateOwnUser(user),
       changeOwnPassword: (currentPassword, newPassword) =>
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
-      editUser: (userId: string, user: User) =>
-        userApiFactory.updateUser(userId, omit(user, ['preferredLanguage'])),
+      editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
       listUsers: (orderBy?: any, filter?: string) =>
         usersApiFactory.listUsers(
