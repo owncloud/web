@@ -1015,7 +1015,7 @@ def installPnpm():
         "commands": [
             "pnpm config set store-dir ./.pnpm-store",
             "pnpm install",
-            "pnpm playwright install chromium"
+            "pnpm playwright install chromium",
         ],
     }]
 
