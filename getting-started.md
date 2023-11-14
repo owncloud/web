@@ -81,6 +81,7 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.logoutUrl` Adds a link to the user's profile page to point him to an external page, where he can manage his session and devices. This is helpful when an external IdP is used. This option is disabled by default.
 - `options.imprintUrl` Specifies the target URL for the imprint link valid for the ocis instance in the account menu.
 - `options.privacyUrl` Specifies the target URL for the privacy link valid for the ocis instance in the account menu.
+- `options.ocm.openRemotely` Specifies whether opening files in remote shares in their original ocm instance should be enabled. Defaults to `false`.
 
 #### Scripts and Styles
 
