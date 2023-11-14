@@ -68,6 +68,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { buildConnection } from '../functions'
 
 export default defineComponent({
   components: {
@@ -160,14 +161,9 @@ export default defineComponent({
           }
         })
 
-        const updatedConnections = []
-        props.connections.forEach((connection) => {
-          if (connection.user_id === user.user_id || connection.idp === user.idp) {
-            return
-          }
-
-          updatedConnections.push(connection)
-        })
+        const updatedConnections = props.connections.filter(
+          ({ id }) => id !== buildConnection(user).id
+        )
 
         emit('update:connections', updatedConnections)
       } catch (e) {
