@@ -84,6 +84,11 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
+        // TODO: remove when server returns share id for federated shares in propfind response
+        if (space.shareId) {
+          resources.forEach((r) => (r.shareId = space.shareId))
+        }
+
         store.commit('Files/LOAD_FILES', {
           currentFolder,
           files: resources

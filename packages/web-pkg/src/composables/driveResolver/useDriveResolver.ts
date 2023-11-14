@@ -84,13 +84,18 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
 
       let matchingSpace = null
       let path = null
-      if (driveAliasAndItem.startsWith('public/')) {
+      if (driveAliasAndItem.startsWith('public/') || driveAliasAndItem.startsWith('ocm/')) {
         const [publicLinkToken, ...item] = driveAliasAndItem.split('/').slice(1)
         matchingSpace = unref(spaces).find((s) => s.id === publicLinkToken)
         path = item.join('/')
-      } else if (driveAliasAndItem.startsWith('share/')) {
+      } else if (
+        driveAliasAndItem.startsWith('share/') ||
+        driveAliasAndItem.startsWith('ocm-share/')
+      ) {
         const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
+        const driveAliasPrefix = driveAliasAndItem.startsWith('ocm-share/') ? 'ocm-share' : 'share'
         matchingSpace = buildShareSpaceResource({
+          driveAliasPrefix,
           shareId: queryItemAsString(unref(shareId)),
           shareName: unref(shareName),
           serverUrl: configurationManager.serverUrl

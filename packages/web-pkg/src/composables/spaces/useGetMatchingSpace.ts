@@ -12,7 +12,9 @@ import {
   extractStorageId,
   isMountPointSpaceResource,
   isPersonalSpaceResource,
-  isProjectSpaceResource
+  isProjectSpaceResource,
+  ShareTypes,
+  OCM_PROVIDER_ID
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
@@ -40,17 +42,43 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const getMatchingSpace = (resource: Resource): SpaceResource => {
     let storageId = resource.storageId
 
-    if (unref(driveAliasAndItem)?.startsWith('public/')) {
+    if (
+      unref(driveAliasAndItem)?.startsWith('public/') ||
+      unref(driveAliasAndItem)?.startsWith('ocm/')
+    ) {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
-    return (
-      getInternalSpace(storageId) ||
-      buildShareSpaceResource({
-        shareId: resource.shareId,
-        shareName: resource.shareRoot ? basename(resource.shareRoot) : resource.name,
-        serverUrl: configurationManager.serverUrl
-      })
-    )
+
+    const space = getInternalSpace(storageId)
+
+    if (space) {
+      return space
+    }
+
+    const driveAliasPrefix =
+      resource?.share?.shareType === ShareTypes.remote.value ||
+      resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
+        ? 'ocm-share'
+        : 'share'
+
+    let shareName: string
+    if (resource.shareRoot) {
+      shareName = basename(resource.shareRoot)
+    } else if (
+      unref(driveAliasAndItem)?.startsWith('share/') ||
+      unref(driveAliasAndItem)?.startsWith('ocm-share/')
+    ) {
+      shareName = unref(driveAliasAndItem).split('/')[1]
+    } else {
+      shareName = resource.name
+    }
+
+    return buildShareSpaceResource({
+      driveAliasPrefix,
+      shareId: resource.shareId,
+      shareName,
+      serverUrl: configurationManager.serverUrl
+    })
   }
 
   const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>

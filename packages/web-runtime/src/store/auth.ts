@@ -4,6 +4,7 @@ const state = {
   userContextReady: false,
   publicLinkToken: null,
   publicLinkPassword: null,
+  publicLinkType: null,
   publicLinkContextReady: false
 }
 
@@ -13,6 +14,7 @@ const getters = {
   isUserContextReady: (state) => state.userContextReady,
   publicLinkToken: (state) => state.publicLinkToken,
   publicLinkPassword: (state) => state.publicLinkPassword,
+  publicLinkType: (state) => state.publicLinkType,
   isPublicLinkContextReady: (state) => state.publicLinkContextReady
 }
 
@@ -26,9 +28,13 @@ const mutations = {
   SET_USER_CONTEXT_READY(state, ready) {
     state.userContextReady = ready
   },
-  SET_PUBLIC_LINK_CONTEXT(state, { publicLinkToken, publicLinkPassword, publicLinkContextReady }) {
+  SET_PUBLIC_LINK_CONTEXT(
+    state,
+    { publicLinkToken, publicLinkPassword, publicLinkType, publicLinkContextReady }
+  ) {
     state.publicLinkToken = publicLinkToken
     state.publicLinkPassword = publicLinkPassword
+    state.publicLinkType = publicLinkType
     if (typeof publicLinkContextReady === 'boolean') {
       state.publicLinkContextReady = publicLinkContextReady
     }
@@ -45,6 +51,7 @@ const actions = {
     commit('SET_PUBLIC_LINK_CONTEXT', {
       publicLinkToken: null,
       publicLinkPassword: null,
+      publicLinkType: null,
       publicLinkContextReady: false
     })
   }

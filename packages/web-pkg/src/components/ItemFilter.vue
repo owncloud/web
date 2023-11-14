@@ -100,6 +100,11 @@ export default defineComponent({
       required: false,
       default: false
     },
+    idAttribute: {
+      type: String,
+      required: false,
+      default: 'id'
+    },
     displayNameAttribute: {
       type: String,
       required: false,
@@ -127,6 +132,11 @@ export default defineComponent({
 
     const queryParam = `q_${props.filterName}`
     const currentRouteQuery = useRouteQuery(queryParam)
+
+    const getId = (item) => {
+      return item[props.idAttribute]
+    }
+
     const setRouteQuery = () => {
       return router.push({
         query: {
@@ -134,7 +144,7 @@ export default defineComponent({
           ...(!!unref(selectedItems).length && {
             [queryParam]: unref(selectedItems)
               .reduce((acc, item) => {
-                acc += `${item.id}+`
+                acc += `${getId(item)}+`
                 return acc
               }, '')
               .slice(0, -1)
@@ -144,12 +154,12 @@ export default defineComponent({
     }
 
     const isItemSelected = (item) => {
-      return !!unref(selectedItems).find((s) => s.id === item.id)
+      return !!unref(selectedItems).find((s) => getId(s) === getId(item))
     }
 
     const toggleItemSelection = async (item) => {
       if (isItemSelected(item)) {
-        selectedItems.value = unref(selectedItems).filter((s) => s.id !== item.id)
+        selectedItems.value = unref(selectedItems).filter((s) => getId(s) !== getId(item))
       } else {
         if (!props.allowMultiple) {
           selectedItems.value = []
@@ -161,10 +171,11 @@ export default defineComponent({
     }
 
     const sortItems = (items) => {
-      const selectedItemIds = unref(selectedItems).map((i) => i.id)
+      const selectedItemIds = unref(selectedItems).map((i) => getId(i))
       return items.sort(
         (a: any, b: any) =>
-          (selectedItemIds.includes(b.id) as any) - (selectedItemIds.includes(a.id) as any) ||
+          (selectedItemIds.includes(getId(b)) as any) -
+            (selectedItemIds.includes(getId(a)) as any) ||
           a[props.displayNameAttribute].localeCompare(b[props.displayNameAttribute])
       )
     }
@@ -213,7 +224,7 @@ export default defineComponent({
       const queryStr = queryItemAsString(unref(currentRouteQuery))
       if (queryStr) {
         const ids = queryStr.split('+')
-        selectedItems.value = props.items.filter((s: any) => ids.includes(s.id))
+        selectedItems.value = props.items.filter((s: any) => ids.includes(getId(s)))
       }
     }
 

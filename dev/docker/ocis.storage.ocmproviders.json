@@ -1,0 +1,46 @@
+[
+  {
+    "name": "host.docker.internal:9200",
+    "full_name": "host.docker.internal 9200",
+    "organization": "ownCloud",
+    "domain": "host.docker.internal",
+    "homepage": "https://owncloud.com",
+    "services": [
+      {
+        "endpoint": {
+          "type": {
+            "name": "OCM",
+            "description": "ownCloud Open Cloud Mesh API"
+          },
+          "name": "ownCloud - OCM API",
+          "path": "https://host.docker.internal:9200/ocm/",
+          "is_monitored": true
+        },
+        "api_version": "0.0.1",
+        "host": "host.docker.internal:9200"
+      }
+    ]
+  },
+  {
+    "name": "ocis.owncloud.test:10200",
+    "full_name": "ocis.owncloud.test 10200",
+    "organization": "ownCloud",
+    "domain": "ocis.owncloud.test",
+    "homepage": "https://owncloud.com",
+    "services": [
+      {
+        "endpoint": {
+          "type": {
+            "name": "OCM",
+            "description": "ownCloud Open Cloud Mesh API"
+          },
+          "name": "ownCloud - OCM API",
+          "path": "https://ocis.owncloud.test:10200/ocm/",
+          "is_monitored": true
+        },
+        "api_version": "0.0.1",
+        "host": "ocis.owncloud.test:10200"
+      }
+    ]
+  }
+]
