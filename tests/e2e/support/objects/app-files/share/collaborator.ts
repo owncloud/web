@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import { startCase, difference } from 'lodash'
 import util from 'util'
 import { Group, User } from '../../../types'

@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const saveTextEditorOrViewerButton = '#app-save-action'

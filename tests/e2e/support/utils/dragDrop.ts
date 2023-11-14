@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 
 interface File {
   name: string

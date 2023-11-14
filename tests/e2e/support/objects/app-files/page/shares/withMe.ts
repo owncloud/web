@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import { Actor } from '../../../../../support/types'
 
 const sharesNavSelector = '//a[@data-nav-name="files-shares"]'

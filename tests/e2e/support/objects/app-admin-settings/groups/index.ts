@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import { UsersEnvironment } from '../../../environment'
 import * as po from './actions'
 
