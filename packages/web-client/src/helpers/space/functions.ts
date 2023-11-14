@@ -36,8 +36,9 @@ export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'i
   return webDavPathComponents.slice(webDavPathComponents.indexOf(idComponent) + 1).join('/')
 }
 
+export type PublicLinkType = 'ocm' | 'public-link'
 export function buildPublicSpaceResource(
-  data: any & { publicLinkType: 'ocm' | 'public-link' }
+  data: any & { publicLinkType: PublicLinkType }
 ): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
 

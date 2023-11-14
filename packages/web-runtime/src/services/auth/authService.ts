@@ -14,6 +14,7 @@ import {
 import { unref } from 'vue'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
+import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export class AuthService {
   private clientService: ClientService
@@ -239,7 +240,7 @@ export class AuthService {
     token: string,
     passwordRequired: boolean,
     password: string,
-    type: 'ocm' | 'public-link'
+    type: PublicLinkType
   ) {
     this.publicLinkManager.setPasswordRequired(token, passwordRequired)
     this.publicLinkManager.setPassword(token, password)

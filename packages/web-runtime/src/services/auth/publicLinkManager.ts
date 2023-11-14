@@ -2,6 +2,7 @@ import { ClientService } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
+import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export interface PublicLinkManagerOptions {
   clientService: ClientService
@@ -40,11 +41,11 @@ export class PublicLinkManager {
     sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'resolved'), resolved + '')
   }
 
-  setType(token: string, type: 'ocm' | 'public-link'): void {
+  setType(token: string, type: PublicLinkType): void {
     sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'type'), type)
   }
 
-  getType(token: string): 'ocm' | 'public-link' {
+  getType(token: string): PublicLinkType {
     return sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'type')) as any
   }
 
