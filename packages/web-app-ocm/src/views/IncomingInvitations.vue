@@ -200,8 +200,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.sciencemesh-app {
-}
 .option {
   display: block;
 }

@@ -33,7 +33,7 @@
             filter-name="shareType"
           >
             <template #item="{ item }">
-              <span class="oc-ml-s">{{ item.label }}</span>
+              <span class="oc-ml-s" v-text="item.label" />
             </template>
           </item-filter>
         </div>

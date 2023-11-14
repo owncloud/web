@@ -78,6 +78,7 @@ services:
       OCIS_CORS_ALLOW_ORIGINS: 'https://host.docker.internal:9201'
       # ATTENTION: not in ocis-federated
       WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
+      OCM_WEBAPP_TEMPLATE: https://host.docker.internal:9201/o/{{.Token}}/{relative-path-to-shared-resource}
 
       # make the registry available to the app provider containers
       MICRO_REGISTRY: 'mdns'
@@ -107,6 +108,7 @@ services:
       <<: *ocis-environment
       OCIS_URL: https://ocis.owncloud.test:10200
       OCIS_CORS_ALLOW_ORIGINS: https://ocis.owncloud.test:10201
+      OCM_WEBAPP_TEMPLATE: https://ocis.owncloud.test:10201/o/{{.Token}}/{relative-path-to-shared-resource}
     labels:
       traefik.enable: true
       traefik.http.routers.ocis-federated.tls: true

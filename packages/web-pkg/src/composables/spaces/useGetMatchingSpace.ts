@@ -42,7 +42,10 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const getMatchingSpace = (resource: Resource): SpaceResource => {
     let storageId = resource.storageId
 
-    if (unref(driveAliasAndItem)?.startsWith('public/')) {
+    if (
+      unref(driveAliasAndItem)?.startsWith('public/') ||
+      unref(driveAliasAndItem)?.startsWith('ocm/')
+    ) {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 

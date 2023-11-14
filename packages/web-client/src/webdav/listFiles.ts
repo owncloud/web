@@ -5,7 +5,7 @@ import {
   Resource,
   WebDavResponseResource
 } from '../helpers/resource'
-import { DavProperties, DavPropertyValue } from './constants'
+import { DavProperties, DavProperty, DavPropertyValue } from './constants'
 import {
   buildPublicSpaceResource,
   buildWebDavSpacesTrashPath,
@@ -61,6 +61,25 @@ export const ListFilesFactory = (
         webDavResources.forEach((resource) => {
           resource.filename = resource.filename.split('/').slice(2).join('/')
         })
+
+        if (
+          (!path || path === '/') &&
+          depth > 0 &&
+          space.driveAlias.startsWith('ocm/') &&
+          webDavResources[0].props[DavProperty.PublicLinkItemType] === 'file'
+        ) {
+          // ocm public single file shares are missing the current folder in the webdav response from the server.
+          // therefore we need to create a dummy resource here to use it as current folder.
+          webDavResources = [
+            {
+              basename: space.fileId,
+              type: 'directory',
+              filename: '',
+              props: {}
+            } as WebDavResponseResource,
+            ...webDavResources
+          ]
+        }
 
         if (!path) {
           const [rootFolder, ...children] = webDavResources
