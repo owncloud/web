@@ -18,7 +18,12 @@
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
-            <li v-for="(item, index) in displayedItems" :key="index" class="oc-my-xs">
+            <li
+              v-for="(item, index) in displayedItems"
+              :key="index"
+              class="oc-my-xs"
+              v-show="item.isVisible"
+            >
               <oc-button
                 class="item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs"
                 :class="{
@@ -126,7 +131,7 @@ export default defineComponent({
     const currentRoute = useRoute()
     const filterInputRef = ref()
     const selectedItems = ref([])
-    const displayedItems = ref(props.items)
+    const displayedItems = ref(props.items.map((item: any) => ({ ...item, isVisible: true })))
     const markInstance = ref(null)
     const itemFilterListRef = ref(null)
 
@@ -183,14 +188,17 @@ export default defineComponent({
     const filterTerm = ref()
     const filter = (items, filterTerm) => {
       if (!(filterTerm || '').trim()) {
-        return items
+        return items.map((item) => ({ ...item, isVisible: true }))
       }
-      const usersSearchEngine = new Fuse(items, {
+      const fuse = new Fuse(items, {
         ...defaultFuseOptions,
         keys: props.filterableAttributes as any
       })
 
-      return usersSearchEngine.search(filterTerm).map((r) => r.item)
+      const result = fuse.search(filterTerm)
+      const matchedIds = new Set(result.map((r) => (r.item as any).id))
+
+      return items.map((item) => ({ ...item, isVisible: matchedIds.has(item.id) }))
     }
     const clearFilter = () => {
       selectedItems.value = []
@@ -199,11 +207,11 @@ export default defineComponent({
     }
 
     const setDisplayedItems = (items) => {
-      displayedItems.value = sortItems(items)
+      displayedItems.value = items
     }
 
     const showDrop = async () => {
-      setDisplayedItems(props.items)
+      setDisplayedItems(props.items.map((item: any) => ({ ...item, isVisible: true })))
       await nextTick()
       unref(filterInputRef).focus()
     }
