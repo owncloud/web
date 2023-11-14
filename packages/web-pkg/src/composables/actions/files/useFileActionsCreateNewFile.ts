@@ -147,7 +147,8 @@ export const useFileActionsCreateNewFile = ({
           space.getDriveAliasAndItem(resource),
           resource.webDavPath,
           resource.fileId,
-          EDITOR_MODE_CREATE
+          EDITOR_MODE_CREATE,
+          space.shareId
         )
         store.dispatch('hideModal')
 
