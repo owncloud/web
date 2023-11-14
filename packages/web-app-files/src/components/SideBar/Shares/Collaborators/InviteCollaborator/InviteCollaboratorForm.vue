@@ -145,7 +145,7 @@ import {
   SpacePeopleShareRoles
 } from '@ownclouders/web-client/src/helpers/share'
 import {
-  FederatedConnection,
+  // FederatedConnection,
   FederatedUser,
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharing,
@@ -224,17 +224,16 @@ export default defineComponent({
 
     const federatedUsers = ref([] as FederatedUser[])
     onMounted(async () => {
-      // HACK: remove when federated users are returned from search
-      try {
-        const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
-          FederatedConnection[]
-        >('/sciencemesh/find-accepted-users')
-
-        federatedUsers.value = acceptedUsers
-        console.log('Federated users loaded', acceptedUsers)
-      } catch (e) {
-        console.error(e)
-      }
+      // // HACK: remove when federated users are returned from search
+      // try {
+      //   const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
+      //     FederatedConnection[]
+      //   >('/sciencemesh/find-accepted-users')
+      //   federatedUsers.value = acceptedUsers
+      //   console.log('Federated users loaded', acceptedUsers)
+      // } catch (e) {
+      //   console.error(e)
+      // }
     })
 
     const accountType = ref('standard')
