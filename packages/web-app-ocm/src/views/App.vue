@@ -76,9 +76,10 @@ export default defineComponent({
             })
           })
         } else if (unref(highlightedConnections).length > 1) {
-          let newConnections
-          unref(highlightedConnections).forEach((c) => (newConnections += c.display_name + ', '))
-          newConnections.slice(0, -2)
+          const newConnections = unref(highlightedConnections)
+            .map((c) => c.display_name)
+            .join(', ')
+
           store.dispatch('showMessage', {
             title: $gettext('New federated connections'),
             status: 'success',

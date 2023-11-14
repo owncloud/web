@@ -49,7 +49,13 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       storageId = unref(driveAliasAndItem).split('/')[1]
     }
 
-    const driveAliasPrefix = () =>
+    const space = getInternalSpace(storageId)
+
+    if (space) {
+      return space
+    }
+
+    const driveAliasPrefix =
       resource?.share?.shareType === ShareTypes.remote.value ||
       resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
         ? 'ocm-share'
@@ -67,16 +73,12 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       shareName = resource.name
     }
 
-    console.log('getMatchingSpace', driveAliasAndItem, shareName, resource)
-    return (
-      getInternalSpace(storageId) ||
-      buildShareSpaceResource({
-        driveAliasPrefix: driveAliasPrefix(),
-        shareId: resource.shareId,
-        shareName,
-        serverUrl: configurationManager.serverUrl
-      })
-    )
+    return buildShareSpaceResource({
+      driveAliasPrefix,
+      shareId: resource.shareId,
+      shareName,
+      serverUrl: configurationManager.serverUrl
+    })
   }
 
   const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>

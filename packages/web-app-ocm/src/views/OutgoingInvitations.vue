@@ -86,7 +86,7 @@
             </oc-button>
           </template>
           <template #link="rowData">
-            <a :href="rowData.item.link">link</a>
+            <a :href="rowData.item.link" v-text="$gettext('Link')" />
             <oc-button
               id="oc-sciencemesh-copy-token"
               v-oc-tooltip="$gettext('Copy invitation link')"
@@ -210,7 +210,7 @@ export default defineComponent({
         if (tokenInfo.token) {
           tokens.value.push({
             id: tokenInfo.token,
-            link: `https://sciencemesh.cesnet.cz/iop/meshdir?token=${tokenInfo.token}&providerDomain=${window.location.host}`,
+            link: tokenInfo.invite_link,
             token: tokenInfo.token,
             ...(tokenInfo.expiration?.seconds && {
               expiration: toDateTime(tokenInfo.expiration.seconds)

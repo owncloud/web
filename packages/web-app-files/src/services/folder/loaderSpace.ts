@@ -84,7 +84,7 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        // FIXME: HACK:
+        // TODO: remove when server returns share id for federated shares in propfind response
         if (space.shareId) {
           resources.forEach((r) => (r.shareId = space.shareId))
         }

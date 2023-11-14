@@ -224,7 +224,7 @@ export default defineComponent({
 
     const federatedUsers = ref([] as FederatedUser[])
     onMounted(async () => {
-      // // HACK: remove when federated users are returned from search
+      // HACK: remove when federated users are returned from search
       // try {
       //   const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
       //     FederatedConnection[]
@@ -368,26 +368,25 @@ export default defineComponent({
         })
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-        const federatedCollaborators = this.federatedUsers.map((u) => {
-          return {
-            label: u.display_name,
-            value: {
-              shareType: 6,
-              shareWithUser: u.user_id,
-              shareWithProvider: u.idp,
-              shareWithAdditionalInfo: u.mail,
-              userType: 0
-            }
-          }
-        })
+        // const federatedCollaborators = this.federatedUsers.map((u) => {
+        //   return {
+        //     label: u.display_name,
+        //     value: {
+        //       shareType: ShareTypes.remote.value,
+        //       shareWithUser: u.user_id,
+        //       shareWithProvider: u.idp,
+        //       shareWithAdditionalInfo: u.mail,
+        //       userType: 0
+        //     }
+        //   }
+        // })
 
         this.autocompleteResults = [
           ...users,
           ...groups,
-          ...remotes,
-          ...federatedCollaborators
+          ...remotes
+          // ...federatedCollaborators
         ].filter((collaborator) => {
-          console.log('COLLABORATOR', collaborator)
           const selected = this.selectedCollaborators.find((selectedCollaborator) => {
             return (
               collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
@@ -436,9 +435,9 @@ export default defineComponent({
 
       // CERN
       if (this.isRunningOnEos) {
-        query = `${
+        const prefix =
           this.accountTypes.find((t) => t.description === this.accountType)?.prefix || ''
-        }${query}`
+        query = `${prefix}${query}`
       }
 
       this.fetchRecipients(query)

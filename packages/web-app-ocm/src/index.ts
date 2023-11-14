@@ -5,23 +5,16 @@ import { extensions } from './extensions'
 import { RouteRecordRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
-const appInfo = {
-  name: 'ScienceMesh',
-  id: 'sciencemesh-app',
-  icon: 'contacts-book',
-  isFileEditor: false
-}
-
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: () => {
-      return { name: 'sciencemesh-app-invitations' }
+      return { name: 'ocm-app-invitations' }
     }
   },
   {
     path: '/invitations',
-    name: 'sciencemesh-app-invitations',
+    name: 'ocm-app-invitations',
     component: App,
     meta: {
       patchCleanPath: true,
@@ -34,6 +27,13 @@ export default defineWebApplication({
   setup(args) {
     const { $gettext } = useGettext()
     const router = useRouter()
+
+    const appInfo = {
+      name: $gettext('ScienceMesh'),
+      id: 'ocm',
+      icon: 'contacts-book',
+      isFileEditor: false
+    }
 
     router.addRoute({
       path: '/accept',

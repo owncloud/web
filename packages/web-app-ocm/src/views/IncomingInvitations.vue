@@ -34,11 +34,17 @@
             <template #no-options> No institutions found with this name </template>
             <template #selected-option="{ full_name, domain }">
               <strong class="oc-mr-s" v-text="full_name" />
-              <small v-text="domain.length > 17 ? domain.slice(0, 20) + '...' : domain" />
+              <small
+                v-oc-tooltip="domain"
+                v-text="domain.length > 17 ? domain.slice(0, 20) + '...' : domain"
+              />
             </template>
           </oc-select>
           <div v-if="providerError" class="oc-text-input-message">
-            <span class="oc-text-input-danger">{{ providerErrorMessage }}</span>
+            <span
+              class="oc-text-input-danger"
+              v-text="$gettext('Unknown institution. Check invitation url or select from list')"
+            />
           </div>
         </div>
         <br />
@@ -92,12 +98,6 @@ export default defineComponent({
       return !unref(token) || !unref(provider) || unref(provider).full_name === 'Unknown provider'
     })
 
-    const providerErrorMessage = computed(() => {
-      return isMyProviderSelectedProvider(unref(provider))
-        ? $gettext('You cannot select your institution')
-        : $gettext('Unknown institution. Check invitation url or select from list')
-    })
-
     const errorPopup = (error: Error) => {
       console.error(error)
       store.dispatch('showErrorMessage', {
@@ -145,7 +145,7 @@ export default defineComponent({
       }
     }
     const isMyProviderSelectedProvider = (p) => {
-      return p.domain === new URL(configurationManager.serverUrl).host
+      return p.domain === new URL(configurationManager.serverUrl).hostname
     }
 
     const handleParams = (to: RouteLocationNormalized) => {
@@ -190,7 +190,6 @@ export default defineComponent({
       providers,
       loading,
       providerError,
-      providerErrorMessage,
       acceptInvitationButtonDisabled,
       acceptInvite
     }
