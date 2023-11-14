@@ -9,7 +9,7 @@ import {
   Status
 } from '@cucumber/cucumber'
 import pino from 'pino'
-import { Browser, chromium, firefox, webkit } from 'playwright'
+import { Browser, chromium, firefox, webkit } from '@playwright/test'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'

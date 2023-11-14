@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import { locatorUtils } from '../../../utils'
 
 const openForResource = async ({

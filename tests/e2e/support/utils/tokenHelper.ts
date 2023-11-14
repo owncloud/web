@@ -1,4 +1,4 @@
-import { Browser } from 'playwright'
+import { Browser } from '@playwright/test'
 import { Session } from '../objects/runtime/session'
 import { TokenProviderType } from '../environment'
 import { UsersEnvironment } from '../environment'

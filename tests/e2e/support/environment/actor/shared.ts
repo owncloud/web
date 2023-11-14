@@ -1,4 +1,4 @@
-import { Browser, BrowserContextOptions } from 'playwright'
+import { Browser, BrowserContextOptions } from '@playwright/test'
 import path from 'path'
 
 export interface ActorsOptions {

@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 
 const personalSpaceNavSelector = '//a[@data-nav-name="files-spaces-generic"]'
 
