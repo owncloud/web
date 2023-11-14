@@ -15,6 +15,15 @@ describe('getAbilities', () => {
     const expectedActions = ['create-all', 'delete-all', 'read-all', 'update-all']
     expect(abilities).toEqual(expectedActions.map((action) => ({ action, subject: 'Group' })))
   })
+  it.each([
+    { permissions: [''], expectedActions: [] },
+    { permissions: ['Favorites.List.all'], expectedActions: ['read-all'] },
+    { permissions: ['Favorites.Write.all'], expectedActions: ['create-all', 'update-all'] }
+  ])('gets correct abilities for subject "Favorites"', function (data) {
+    const abilities = getAbilities(data.permissions)
+    const expectedResult = data.expectedActions.map((action) => ({ action, subject: 'Favorite' }))
+    expect(abilities).toEqual(expectedResult)
+  })
   it('gets correct abilities for subject "Language"', function () {
     const abilities = getAbilities(['Language.ReadWrite.all'])
     const expectedActions = ['read-all', 'update-all']
@@ -34,6 +43,11 @@ describe('getAbilities', () => {
     const abilities = getAbilities(['PublicLink.Write.all'])
     const expectedActions = ['create-all']
     expect(abilities).toEqual(expectedActions.map((action) => ({ action, subject: 'PublicLink' })))
+  })
+  it('gets correct abilities for subject "Share"', function () {
+    const abilities = getAbilities(['Shares.Write.all'])
+    const expectedActions = ['create-all', 'update-all']
+    expect(abilities).toEqual(expectedActions.map((action) => ({ action, subject: 'Share' })))
   })
   it('gets correct abilities for subject "Setting"', function () {
     const abilities = getAbilities(['Settings.ReadWrite.all'])

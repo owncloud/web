@@ -76,7 +76,7 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/favorites`
       },
       enabled(capabilities) {
-        return capabilities.files?.favorites
+        return capabilities.files?.favorites && context.$ability.can('read-all', 'Favorite')
       },
       priority: 20
     },

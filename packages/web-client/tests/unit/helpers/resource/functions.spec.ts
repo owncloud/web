@@ -1,9 +1,14 @@
+import { mock, mockDeep } from 'jest-mock-extended'
 import {
+  Ability,
   Resource,
+  WebDavResponseResource,
+  buildResource,
   extractDomSelector,
   extractExtensionFromFile,
   extractNameWithoutExtension
 } from '../../../../src/helpers'
+import { DavPermission, DavProperty } from '../../../../src/webdav/constants'
 
 describe('extractDomSelector', () => {
   it.each([
@@ -72,6 +77,50 @@ describe('filterResources', () => {
       { name: 'afolder', type: 'folder' }
     ])('should return empty string if folder', (resource) => {
       expect(extractExtensionFromFile(resource as Resource)).toEqual('')
+    })
+  })
+})
+
+describe('buildResource', () => {
+  describe('canShare', () => {
+    it('is true when ability and share permissions are given', () => {
+      const webDavResponse = mockDeep<WebDavResponseResource>({
+        props: {
+          [DavProperty.Permissions]: DavPermission.Shareable,
+          [DavProperty.Tags]: undefined
+        }
+      })
+      const resource = buildResource(webDavResponse)
+      const ability = mock<Ability>()
+      ability.can.mockReturnValue(true)
+      expect(resource.canShare({ ability })).toBeTruthy()
+      expect(ability.can).toHaveBeenCalledWith('create-all', 'Share')
+    })
+    it('is false when ability is not given', () => {
+      const webDavResponse = mockDeep<WebDavResponseResource>({
+        props: {
+          [DavProperty.Permissions]: DavPermission.Shareable,
+          [DavProperty.Tags]: undefined
+        }
+      })
+      const resource = buildResource(webDavResponse)
+      const ability = mock<Ability>()
+      ability.can.mockReturnValue(false)
+      expect(resource.canShare({ ability })).toBeFalsy()
+      expect(ability.can).toHaveBeenCalledWith('create-all', 'Share')
+    })
+    it('is false when share permissions are not given', () => {
+      const webDavResponse = mockDeep<WebDavResponseResource>({
+        props: {
+          [DavProperty.Permissions]: '',
+          [DavProperty.Tags]: undefined
+        }
+      })
+      const resource = buildResource(webDavResponse)
+      const ability = mock<Ability>()
+      ability.can.mockReturnValue(true)
+      expect(resource.canShare({ ability })).toBeFalsy()
+      expect(ability.can).toHaveBeenCalledWith('create-all', 'Share')
     })
   })
 })

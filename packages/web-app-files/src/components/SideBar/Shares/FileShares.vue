@@ -89,6 +89,7 @@
 <script lang="ts">
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import {
+  useAbility,
   useStore,
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
@@ -125,6 +126,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const resource = inject<Ref<Resource>>('resource')
@@ -164,6 +166,7 @@ export default defineComponent({
 
     return {
       ...useShares(),
+      ability,
       resource,
       space: inject<Ref<SpaceResource>>('space'),
       matchingSpace,
@@ -270,7 +273,7 @@ export default defineComponent({
       if (isShareJail && !this.hasResharing) {
         return false
       }
-      return this.resource.canShare({ user: this.user })
+      return this.resource.canShare({ user: this.user, ability: this.ability })
     },
 
     noResharePermsMessage() {

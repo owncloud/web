@@ -49,7 +49,7 @@ export default defineComponent({
     const language = useGettext()
 
     const filteredActions = computed(() =>
-      pickBy(props.actions, (action) => action.displayed(props.item, store) === true)
+      pickBy(props.actions, (action) => action.displayed(props.item, store, ability) === true)
     )
 
     return {

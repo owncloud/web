@@ -8,6 +8,7 @@ import { FileAction, FileActionOptions, useIsFilesAppActive } from '../../action
 import { useStore } from '../../store'
 import { useRouter } from '../../router'
 import { useClientService } from '../../clientService'
+import { useAbility } from '../../ability'
 
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -16,6 +17,8 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
   const hasFavorites = useCapabilityFilesFavorites()
   const isFilesAppActive = useIsFilesAppActive()
+  const ability = useAbility()
+
   const handler = ({ resources }: FileActionOptions) => {
     store
       .dispatch('Files/markFavorite', {
@@ -58,7 +61,7 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
           return false
         }
 
-        return unref(hasFavorites)
+        return unref(hasFavorites) && ability.can('create-all', 'Favorite')
       },
       componentType: 'button',
       class: 'oc-files-actions-favorite-trigger'

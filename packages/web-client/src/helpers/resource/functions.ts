@@ -155,8 +155,10 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     canRename: function () {
       return this.permissions.indexOf(DavPermission.Renameable) >= 0
     },
-    canShare: function () {
-      return this.permissions.indexOf(DavPermission.Shareable) >= 0
+    canShare: function ({ ability }) {
+      return (
+        ability.can('create-all', 'Share') && this.permissions.indexOf(DavPermission.Shareable) >= 0
+      )
     },
     canCreate: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
@@ -182,7 +184,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       return this.permissions.indexOf(DavPermission.Deny) >= 0
     },
     getDomSelector: () => extractDomSelector(id)
-  }
+  } satisfies Resource
   Object.defineProperty(r, 'nodeId', {
     get() {
       return extractNodeId(this.id)
