@@ -19,6 +19,11 @@ export default defineConfig(async (args) => {
     config = _defineConfig
   }
 
+  config.server = {
+    port: 9201,
+    strictPort: true
+  }
+
   // collapsible table
   config.resolve.alias['design-system/src/components/OcTable/OcTable.vue'] = join(
     projectRootDir,

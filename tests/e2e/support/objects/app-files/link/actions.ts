@@ -1,5 +1,4 @@
-import { Page } from 'playwright'
-import { expect } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'

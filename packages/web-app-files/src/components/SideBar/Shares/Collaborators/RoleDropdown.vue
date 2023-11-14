@@ -122,6 +122,7 @@ import {
 import * as uuid from 'uuid'
 import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
 import {
+  useAbility,
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharingDefault,
   useStore
@@ -166,7 +167,9 @@ export default defineComponent({
   emits: ['optionChange'],
   setup() {
     const store = useStore()
+    const ability = useAbility()
     return {
+      ability,
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Share>('incomingParentShare'),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
@@ -202,7 +205,7 @@ export default defineComponent({
       return PeopleShareRoles.custom(this.resource.isFolder)
     },
     resourceIsSharable() {
-      return this.allowSharePermission && this.resource.canShare()
+      return this.allowSharePermission && this.resource.canShare({ ability: this.ability })
     },
     availableRoles() {
       if (this.resourceIsSpace) {

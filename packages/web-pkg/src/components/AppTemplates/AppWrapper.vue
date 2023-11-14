@@ -418,6 +418,7 @@ export default defineComponent({
 
     const slotAttrs = computed(() => ({
       url: unref(url),
+      space: unref(unref(currentFileContext).space),
       resource: unref(resource),
       isDirty: unref(isDirty),
       isReadOnly: unref(isReadOnly),

@@ -29,6 +29,7 @@ Summary
 * Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
+* Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
@@ -234,6 +235,13 @@ Details
 
    https://github.com/owncloud/web/issues/9707
    https://github.com/owncloud/ocis/pull/7317
+
+* Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
+
+   Permission checks for creating shares and favorites have been added.
+
+   https://github.com/owncloud/ocis/issues/7497
+   https://github.com/owncloud/web/pull/9810
 
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
 

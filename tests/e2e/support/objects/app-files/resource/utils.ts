@@ -1,4 +1,4 @@
-import { errors, Page } from 'playwright'
+import { errors, Page } from '@playwright/test'
 import util from 'util'
 
 const resourceNameSelector = '#files-space-table [data-test-resource-name="%s"]'

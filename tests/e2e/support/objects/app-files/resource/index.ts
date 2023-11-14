@@ -1,4 +1,4 @@
-import { Download, Page } from 'playwright'
+import { Download, Page } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 

@@ -11,6 +11,11 @@ export const getAbilities = (
       { action: 'read-all', subject: 'Account' },
       { action: 'update-all', subject: 'Account' }
     ],
+    'Favorites.List.all': [{ action: 'read-all', subject: 'Favorite' }],
+    'Favorites.Write.all': [
+      { action: 'create-all', subject: 'Favorite' },
+      { action: 'update-all', subject: 'Favorite' }
+    ],
     'Groups.ReadWrite.all': [
       { action: 'create-all', subject: 'Group' },
       { action: 'delete-all', subject: 'Group' },
@@ -31,6 +36,10 @@ export const getAbilities = (
       { action: 'delete-all', subject: 'Role' },
       { action: 'read-all', subject: 'Role' },
       { action: 'update-all', subject: 'Role' }
+    ],
+    'Shares.Write.all': [
+      { action: 'create-all', subject: 'Share' },
+      { action: 'update-all', subject: 'Share' }
     ],
     'Settings.ReadWrite.all': [
       { action: 'read-all', subject: 'Setting' },

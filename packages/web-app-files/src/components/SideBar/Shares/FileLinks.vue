@@ -158,7 +158,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const { can } = useAbility()
+    const ability = useAbility()
+    const { can } = ability
     const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
 
@@ -206,7 +207,7 @@ export default defineComponent({
         return false
       }
 
-      return unref(resource).canShare({ user: store.getters.user })
+      return unref(resource).canShare({ user: store.getters.user, ability })
     })
 
     const canEditLink = ({ permissions }: Share) => {

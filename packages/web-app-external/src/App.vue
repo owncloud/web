@@ -28,20 +28,34 @@ import { PropType, computed, defineComponent, unref, nextTick, ref, watch, VNode
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { queryItemAsString, useRequest, useRouteQuery, useStore } from '@ownclouders/web-pkg'
-import { configurationManager } from '@ownclouders/web-pkg'
+import {
+  isSameResource,
+  queryItemAsString,
+  useConfigurationManager,
+  useRequest,
+  useRouteQuery,
+  useStore
+} from '@ownclouders/web-pkg'
+import {
+  isProjectSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'ExternalApp',
   props: {
-    resource: { type: Object as PropType<Resource>, required: true }
+    space: { type: Object as PropType<SpaceResource>, required: true },
+    resource: { type: Object as PropType<Resource>, required: true },
+    isReadOnly: { type: Boolean, required: true }
   },
   emits: ['update:applicationName'],
   setup(props, { emit }) {
     const language = useGettext()
     const store = useStore()
+    const configurationManager = useConfigurationManager()
 
     const { $gettext } = language
     const { makeRequest } = useRequest()
@@ -73,8 +87,15 @@ export default defineComponent({
       })
     }
 
-    const loadAppUrl = useTask(function* () {
+    const loadAppUrl = useTask(function* (signal, viewMode: string) {
       try {
+        if (props.isReadOnly && viewMode === 'write') {
+          store.dispatch('showErrorMessage', {
+            title: $gettext('Cannot open file in edit mode as it is read-only')
+          })
+          return
+        }
+
         const fileId = props.resource.fileId
         const baseUrl = urlJoin(
           configurationManager.serverUrl,
@@ -84,7 +105,8 @@ export default defineComponent({
         const query = stringify({
           file_id: fileId,
           lang: language.current,
-          ...(unref(applicationName) && { app_name: unref(applicationName) })
+          ...(unref(applicationName) && { app_name: unref(applicationName) }),
+          ...(viewMode && { view_mode: viewMode })
         })
 
         const url = `${baseUrl}?${query}`
@@ -132,12 +154,56 @@ export default defineComponent({
       }
     }).restartable()
 
+    const determineOpenAsPreview = (appName: string) => {
+      const openAsPreview = configurationManager.options.editor.openAsPreview
+      return (
+        openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
+      )
+    }
+
+    // switch to write mode when edit is clicked
+    const catchClickMicrosoftEdit = (event) => {
+      try {
+        if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
+          loadAppUrl.perform('write')
+        }
+      } catch (e) {}
+    }
     watch(
-      props.resource,
-      () => {
-        loadAppUrl.perform()
+      applicationName,
+      (newAppName, oldAppName) => {
+        if (determineOpenAsPreview(newAppName) && newAppName !== oldAppName) {
+          window.addEventListener('message', catchClickMicrosoftEdit)
+        } else {
+          window.removeEventListener('message', catchClickMicrosoftEdit)
+        }
       },
-      { immediate: true }
+      {
+        immediate: true
+      }
+    )
+
+    watch(
+      [props.resource],
+      ([newResource], [oldResource]) => {
+        if (isSameResource(newResource, oldResource)) {
+          return
+        }
+
+        debugger
+
+        let viewMode = props.isReadOnly ? 'view' : 'write'
+        if (
+          determineOpenAsPreview(unref(applicationName)) &&
+          (isShareSpaceResource(props.space) ||
+            isPublicSpaceResource(props.space) ||
+            isProjectSpaceResource(props.space))
+        ) {
+          viewMode = 'view'
+        }
+        loadAppUrl.perform(viewMode)
+      },
+      { immediate: true, deep: true }
     )
 
     return {
