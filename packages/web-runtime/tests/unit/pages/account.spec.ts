@@ -297,7 +297,7 @@ describe('account page', () => {
       await wrapper.vm.loadValuesListTask.last
       await wrapper.vm.loadGraphUserTask.last
 
-      mocks.$clientService.graphAuthenticated.users.editUser.mockResolvedValueOnce(
+      mocks.$clientService.graphAuthenticated.users.editMe.mockResolvedValueOnce(
         mockAxiosResolve({})
       )
       await wrapper.vm.updateSelectedLanguage('en')
@@ -312,7 +312,7 @@ describe('account page', () => {
       await wrapper.vm.loadValuesListTask.last
       await wrapper.vm.loadGraphUserTask.last
 
-      mocks.$clientService.graphAuthenticated.users.editUser.mockImplementation(() =>
+      mocks.$clientService.graphAuthenticated.users.editMe.mockImplementation(() =>
         mockAxiosReject('err')
       )
       await wrapper.vm.updateSelectedLanguage('en')
