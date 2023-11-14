@@ -57,7 +57,10 @@ export const isIdpContext = (router: Router, to: RouteLocation): boolean => {
  * @returns {boolean}
  */
 export const isPublicLinkContext = (router: Router, to: RouteLocation): boolean => {
-  if ((to.params.driveAliasAndItem as string)?.startsWith('public/')) {
+  if (
+    (to.params.driveAliasAndItem as string)?.startsWith('public/') ||
+    (to.params.driveAliasAndItem as string)?.startsWith('ocm/')
+  ) {
     return true
   }
 
