@@ -50,6 +50,7 @@ export interface Graph {
     getUser: (userId: string) => AxiosPromise<User>
     createUser: (user: User) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
+    editMe: (user: User) => AxiosPromise<User>
     changeOwnPassword: (currentPassword: string, newPassword: string) => AxiosPromise<void>
     editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
@@ -138,11 +139,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           new Set<any>(['drive', 'memberOf', 'appRoleAssignments'])
         ),
       createUser: (user: User) => usersApiFactory.createUser(user),
-      getMe: () =>
-        meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])).then((result) => {
-          ;(result.data as any).preferredLanguage = 'en'
-          return result
-        }),
+      getMe: () => meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])),
+      editMe: (user: User) => meUserApiFactory.updateOwnUser(user),
       changeOwnPassword: (currentPassword, newPassword) =>
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) =>

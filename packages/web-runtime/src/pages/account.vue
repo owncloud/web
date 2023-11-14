@@ -139,6 +139,7 @@ import { useConfigurationManager } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
+import { User } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'AccountPage',
@@ -155,7 +156,7 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const { getPersonalSpace } = useGetMatchingSpace()
     const valuesList = ref<SettingsValue[]>()
-    const graphUser = ref()
+    const graphUser = ref<User>()
     const accountBundle = ref<SettingsBundle>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
@@ -299,9 +300,9 @@ export default defineComponent({
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
-        await clientService.graphAuthenticated.users.editUser(unref(graphUser).id, {
+        await clientService.graphAuthenticated.users.editMe({
           preferredLanguage: option.value
-        } as any)
+        })
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,
