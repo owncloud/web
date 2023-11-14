@@ -76,7 +76,7 @@ export interface Graph {
 
 export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const url = new URL(baseURI)
-  url.pathname = [...url.pathname.split('/'), 'graph', 'v1.0'].filter(Boolean).join('/')
+  url.pathname = [...url.pathname.split('/'), 'graph'].filter(Boolean).join('/')
   const config = new Configuration({
     basePath: url.href
   })
