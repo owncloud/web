@@ -69,7 +69,7 @@
           icon="user-shared"
         >
           <template #message>
-            <span v-text="$gettext('You have no valid invitation links')" />
+            <span v-text="$gettext('You have no invitation links')" />
           </template>
         </no-content-message>
         <oc-table v-else :fields="fields" :data="sortedTokens" :highlighted="lastCreatedToken">
@@ -187,7 +187,7 @@ export default defineComponent({
     const generateToken = async () => {
       const { description, recipient } = unref(formInput)
       if (recipient.length > 0 && !EmailValidator.validate(recipient)) {
-        emailErrorMessage.value = $gettext('Please enter a valid email adress!')
+        emailErrorMessage.value = $gettext('Please enter a valid email address!')
         ;(unref(inputForFocusEmail) as any).focus()
         return
       }
@@ -279,14 +279,14 @@ export default defineComponent({
       navigator.clipboard.writeText(rowData.item.token)
       store.dispatch('showMessage', {
         title: $gettext('Invite token copied'),
-        desc: $gettext('Invitate token has been copied to your clipboard.')
+        desc: $gettext('Invite token has been copied to your clipboard.')
       })
     }
     const errorPopup = (error: Error) => {
       console.error(error)
       store.dispatch('showErrorMessage', {
         title: $gettext('Error'),
-        desc: $gettext('An error occurred by generating the token'),
+        desc: $gettext('An error occurred when generating the token'),
         error
       })
     }

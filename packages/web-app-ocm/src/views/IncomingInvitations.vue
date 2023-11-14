@@ -90,7 +90,7 @@ export default defineComponent({
 
     const helperContent = computed(() => {
       return {
-        text: $gettext('Once you accept invitation, the inviter will be added to your connections.')
+        text: $gettext('Once you accept the invitation, the inviter will be added to your connections.')
       }
     })
 

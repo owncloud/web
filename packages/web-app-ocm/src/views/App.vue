@@ -83,7 +83,7 @@ export default defineComponent({
           store.dispatch('showMessage', {
             title: $gettext('New federated connections'),
             status: 'success',
-            desc: $gettext('You can share with and recieve shares from %{newConnections} now', {
+            desc: $gettext('You can share with and receive shares from %{ connections } now', {
               connections: newConnections
             })
           })

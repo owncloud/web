@@ -54,7 +54,7 @@ describe('SharedWithOthers view', () => {
   })
   describe('filter', () => {
     describe('share type', () => {
-      it('shows filter if more than one share types are present', () => {
+      it('shows filter if multiple share types are present', () => {
         const { wrapper } = getMountedWrapper({
           files: [
             mock<Resource>({ share: { shareType: ShareTypes.user.value } }),
