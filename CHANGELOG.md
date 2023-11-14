@@ -70,6 +70,7 @@ Summary
 * Enhancement - Manage tags in details panel: [#9905](https://github.com/owncloud/web/pull/9905)
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 * Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
+* Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
 
 Details
 -------
@@ -640,6 +641,13 @@ Details
 
    https://github.com/owncloud/web/issues/9847
    https://github.com/owncloud/web/pull/9911
+
+* Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
+
+   We've added a new filter option in the search list to filter by media type.
+
+   https://github.com/owncloud/web/issues/9780
+   https://github.com/owncloud/web/pull/9912
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
