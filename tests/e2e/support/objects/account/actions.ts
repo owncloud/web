@@ -87,7 +87,7 @@ export const changeLanguage = async (args: { page: Page; language: string }): Pr
       (res) =>
         res.url().includes('graph/v1.0/me') &&
         res.request().method() === 'PATCH' &&
-        res.status() === 204
+        res.status() === 200
     ),
     page.locator(languageInput).fill(language),
     page.locator(util.format(languageValueDropDown, language)).click()
