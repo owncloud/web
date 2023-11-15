@@ -584,6 +584,9 @@ def buildCacheWeb(ctx):
                  [{
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
+                     "environment": {
+                         "NO_INSTALL": "true",
+                     },
                      "commands": [
                          "make dist",
                      ],
