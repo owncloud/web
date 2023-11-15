@@ -69,10 +69,7 @@
           />
         </dd>
       </div>
-      <div
-        v-if="isSettingsServiceSupported"
-        class="account-page-info-language oc-mb oc-width-1-2@s"
-      >
+      <div class="account-page-info-language oc-mb oc-width-1-2@s">
         <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
         <dd data-testid="language">
           <oc-select
@@ -130,8 +127,8 @@ import {
   useCapabilityChangeSelfPasswordDisabled,
   useCapabilityCoreSSE,
   useCapabilityGraphPersonalDataExport,
-  useCapabilitySpacesEnabled,
   useClientService,
+  useGetMatchingSpace,
   useStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
@@ -139,9 +136,10 @@ import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { useConfigurationManager } from '@ownclouders/web-pkg'
-import { SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
+import { supportedLanguages } from '../defaults/languages'
+import { User } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'AccountPage',
@@ -156,15 +154,19 @@ export default defineComponent({
     const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
+    const { getPersonalSpace } = useGetMatchingSpace()
     const valuesList = ref<SettingsValue[]>()
+    const graphUser = ref<User>()
     const accountBundle = ref<SettingsBundle>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
     const sseEnabled = useCapabilityCoreSSE()
 
     // FIXME: Use settings service capability when we have it
-    const isSettingsServiceSupported = useCapabilitySpacesEnabled()
-    const spacesEnabled = useCapabilitySpacesEnabled()
+    const isSettingsServiceSupported = computed(
+      () => !store.getters.configuration?.options?.runningOnEos
+    )
+
     const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
 
@@ -172,15 +174,16 @@ export default defineComponent({
       return store.getters.user
     })
 
-    const personalSpace = computed<SpaceResource>(() => {
-      return store.getters['runtime/spaces/spaces'].find((s) => isPersonalSpaceResource(s))
-    })
-
+    const personalSpace = computed(() => getPersonalSpace())
     const showGdprExport = computed(() => {
       return unref(isPersonalDataExportEnabled) && unref(personalSpace)
     })
 
     const loadValuesListTask = useTask(function* () {
+      if (!unref(isSettingsServiceSupported)) {
+        return
+      }
+
       try {
         const {
           data: { values }
@@ -199,6 +202,10 @@ export default defineComponent({
     }).restartable()
 
     const loadAccountBundleTask = useTask(function* () {
+      if (!unref(isSettingsServiceSupported)) {
+        return
+      }
+
       try {
         const {
           data: { bundles }
@@ -214,35 +221,40 @@ export default defineComponent({
       }
     }).restartable()
 
-    const isLoading = computed(() => {
-      if (!unref(isSettingsServiceSupported)) {
-        return false
+    const loadGraphUserTask = useTask(function* () {
+      try {
+        const { data } = yield clientService.graphAuthenticated.users.getMe()
+        graphUser.value = data
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Unable to load account data…'),
+          error: e
+        })
+        graphUser.value = undefined
       }
+    }).restartable()
+
+    const isLoading = computed(() => {
       return (
         loadValuesListTask.isRunning ||
         !loadValuesListTask.last ||
         loadAccountBundleTask.isRunning ||
-        !loadAccountBundleTask.last
+        !loadAccountBundleTask.last ||
+        loadGraphUserTask.isRunning ||
+        !loadGraphUserTask.last
       )
     })
 
-    const languageOptions = computed(() => {
-      const languageOptions = unref(accountBundle)?.settings?.find((s) => s.name === 'language')
-        ?.singleChoiceValue.options
-      return languageOptions?.map((l) => ({
-        label: l.displayValue,
-        value: l.value.stringValue
-      }))
-    })
+    const languageOptions = Object.keys(supportedLanguages).map((langCode) => ({
+      label: supportedLanguages[langCode],
+      value: langCode
+    }))
 
     const groupNames = computed(() => {
-      if (unref(spacesEnabled)) {
-        return unref(user)
-          .groups.map((group) => group.displayName)
-          .join(', ')
-      }
-
-      return unref(user).groups.join(', ')
+      return unref(user)
+        .groups.map((group) => group.displayName)
+        .join(', ')
     })
 
     const saveValue = async ({
@@ -288,33 +300,29 @@ export default defineComponent({
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
-        const value = await saveValue({
-          identifier: 'language',
-          valueOptions: { listValue: { values: [{ stringValue: option.value }] } }
+        await clientService.graphAuthenticated.users.editMe({
+          preferredLanguage: option.value
         })
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,
-          languageSetting: {
-            identifier: {
-              extension: 'ocis-accounts',
-              bundle: 'profile',
-              setting: 'language'
-            },
-            value
-          }
+          languageSetting: option.value
         })
+
         if (unref(sseEnabled)) {
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
         }
+
+        store.commit('SET_LANGUAGE', language.current)
         if (unref(personalSpace)) {
           // update personal space name with new translation
           store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
             id: unref(personalSpace).id,
             field: 'name',
-            value: unref(spacesEnabled) ? $gettext('Personal') : $gettext('All files')
+            value: $gettext('Personal')
           })
         }
+
         store.dispatch('showMessage', {
           title: $gettext('Language was saved successfully.')
         })
@@ -347,27 +355,22 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      if (unref(isSettingsServiceSupported)) {
-        await loadAccountBundleTask.perform()
-        await loadValuesListTask.perform()
+      await loadAccountBundleTask.perform()
+      await loadValuesListTask.perform()
+      await loadGraphUserTask.perform()
 
-        const languageConfiguration = unref(valuesList)?.find(
-          (cV) => cV.identifier.setting === 'language'
-        )
-        selectedLanguageValue.value = languageConfiguration
-          ? unref(languageOptions)?.find(
-              (lO) => lO.value === languageConfiguration.value?.listValue?.values?.[0]?.stringValue
-            )
-          : unref(languageOptions)?.find((o) => o.value === language.current)
+      selectedLanguageValue.value = unref(languageOptions)?.find(
+        (languageOption) =>
+          languageOption.value === (unref(graphUser).preferredLanguage || language.current)
+      )
 
-        const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
-          (cV) => cV.identifier.setting === 'disable-email-notifications'
-        )
+      const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
+        (cV) => cV.identifier.setting === 'disable-email-notifications'
+      )
 
-        disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
-          ? !disableEmailNotificationsConfiguration.value?.boolValue
-          : true
-      }
+      disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
+        ? !disableEmailNotificationsConfiguration.value?.boolValue
+        : true
     })
 
     return {
@@ -386,6 +389,7 @@ export default defineComponent({
       isLoading,
       disableEmailNotificationsValue,
       loadAccountBundleTask,
+      loadGraphUserTask,
       loadValuesListTask
     }
   },
