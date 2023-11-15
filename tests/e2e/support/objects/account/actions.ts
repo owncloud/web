@@ -81,7 +81,7 @@ export const downloadGdprExport = async (args: { page: Page }): Promise<string> 
 
 export const changeLanguage = async (args: { page: Page; language: string }): Promise<string> => {
   const { page, language } = args
-
+  await page.locator(languageInput).waitFor()
   await Promise.all([
     page.waitForResponse(
       (res) =>
