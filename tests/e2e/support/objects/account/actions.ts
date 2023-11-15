@@ -85,7 +85,7 @@ export const changeLanguage = async (args: { page: Page; language: string }): Pr
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('graph/v1.0/users') &&
+        res.url().includes('graph/v1.0/me') &&
         res.request().method() === 'PATCH' &&
         res.status() === 204
     ),
