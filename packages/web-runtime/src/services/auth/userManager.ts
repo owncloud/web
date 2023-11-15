@@ -152,10 +152,6 @@ export class UserManager extends OidcUserManager {
         return
       }
 
-      setCurrentLanguage({
-        language: this.language,
-        languageSetting: this.store.getters.user.language
-      })
       this.initializeOwnCloudSdk(accessToken)
 
       if (this.store.getters.capabilities?.core?.['support-sse']) {
@@ -163,7 +159,7 @@ export class UserManager extends OidcUserManager {
       }
 
       if (!userKnown) {
-        await this.fetchUserInfo()
+        await this.fetchUserInfo(accessToken)
         await this.updateUserAbilities(this.store.getters.user)
         this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
@@ -192,7 +188,7 @@ export class UserManager extends OidcUserManager {
     this.clientService.owncloudSdk.init(options)
   }
 
-  private async fetchUserInfo(): Promise<void> {
+  private async fetchUserInfo(accessToken: string): Promise<void> {
     const [login] = await Promise.all([
       this.clientService.owncloudSdk.getCurrentUser(),
       this.fetchCapabilities()
@@ -233,6 +229,7 @@ export class UserManager extends OidcUserManager {
         language: this.language,
         languageSetting: graphUser.data.preferredLanguage
       })
+      this.initializeOwnCloudSdk(accessToken)
     }
 
     if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
