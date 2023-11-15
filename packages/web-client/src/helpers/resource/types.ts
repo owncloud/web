@@ -18,6 +18,7 @@ export type AbilityActions =
 export type AbilitySubjects =
   | 'Account'
   | 'Drive'
+  | 'Favorite'
   | 'Group'
   | 'Language'
   | 'Logo'
@@ -25,6 +26,7 @@ export type AbilitySubjects =
   | 'ReadOnlyPublicLinkPassword'
   | 'Role'
   | 'Setting'
+  | 'Share'
 
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>
@@ -84,7 +86,7 @@ export interface Resource {
   canCreate?(): boolean
   canUpload?({ user }: { user?: User }): boolean
   canDownload?(): boolean
-  canShare?({ user }?: { user?: User }): boolean
+  canShare?({ user, ability }?: { user?: User; ability?: Ability }): boolean
   canRename?({ user }?: { user?: User; ability?: Ability }): boolean
   canBeDeleted?({ user }?: { user?: User; ability?: Ability }): boolean
   canBeRestored?(): boolean

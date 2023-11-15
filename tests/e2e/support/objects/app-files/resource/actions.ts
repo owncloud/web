@@ -1,4 +1,4 @@
-import { Download, Page } from 'playwright'
+import { Download, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'

@@ -1,6 +1,6 @@
 import { Actor } from '../../types'
 import { ActorOptions, buildBrowserContextOptions } from './shared'
-import { BrowserContext, Page } from 'playwright'
+import { BrowserContext, Page } from '@playwright/test'
 import path from 'path'
 import EventEmitter from 'events'
 

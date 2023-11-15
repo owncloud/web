@@ -100,6 +100,7 @@ import {
   useFileActionsRestore
 } from '../../composables/actions'
 import {
+  useAbility,
   useCapabilitySpacesMaxQuota,
   useFileActionsToggleHideShare,
   useRouteMeta,
@@ -165,6 +166,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore()
     const { $gettext } = useGettext()
+    const { can } = useAbility()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
@@ -188,7 +190,9 @@ export default defineComponent({
     const breadcrumbMaxWidth = ref<number>(0)
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
 
-    const hasSharesNavigation = computed(() => useSlots().hasOwnProperty('navigation'))
+    const hasSharesNavigation = computed(
+      () => useSlots().hasOwnProperty('navigation') && can('create-all', 'Share')
+    )
 
     const batchActions = computed(() => {
       let actions = [

@@ -10,10 +10,12 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from '../types'
+import { useAbility } from '../../ability'
 
 export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
+  const ability = useAbility()
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
 
@@ -46,7 +48,7 @@ export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {})
             return false
           }
         }
-        return canShare(resources[0], store)
+        return canShare(resources[0], store, ability)
       },
       componentType: 'button',
       class: 'oc-files-actions-show-shares-trigger'

@@ -1,0 +1,6 @@
+Enhancement: Permission checks for shares and favorites
+
+Permission checks for creating shares and favorites have been added.
+
+https://github.com/owncloud/ocis/issues/7497
+https://github.com/owncloud/web/pull/9810

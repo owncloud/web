@@ -163,13 +163,6 @@ export default defineConfig(async ({ mode, command }) => {
   const configUrl =
     process.env.OWNCLOUD_WEB_CONFIG_URL || 'https://host.docker.internal:9200/config.json'
 
-  let proxiedServerUrl
-  if (command === 'serve') {
-    // determine server url
-    const configJson = await getJson(configUrl)
-    proxiedServerUrl = configJson.server
-  }
-
   config = {
     ...(!production && {
       server: {

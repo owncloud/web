@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
 import { TokenEnvironmentFactory, TokenProviderType } from '../../environment'

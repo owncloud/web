@@ -8,7 +8,7 @@ import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Store } from 'vuex'
 import { ApplicationQuickActions } from './apps'
 
-export function canShare(item, store) {
+export function canShare(item: Resource, store: Store<any>, ability: Ability) {
   const { capabilities } = store.state.user
   if (!capabilities.files_sharing || !capabilities.files_sharing.api_enabled) {
     return false
@@ -16,7 +16,7 @@ export function canShare(item, store) {
   if (item.isReceivedShare() && !capabilities.files_sharing.resharing) {
     return false
   }
-  return item.canShare()
+  return item.canShare({ ability })
 }
 
 export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyService }, onConfirm) {
