@@ -175,16 +175,6 @@ export default defineComponent({
       emit('selectionChange', unref(selectedItems))
     }
 
-    const sortItems = (items) => {
-      const selectedItemIds = unref(selectedItems).map((i) => getId(i))
-      return items.sort(
-        (a: any, b: any) =>
-          (selectedItemIds.includes(getId(b)) as any) -
-            (selectedItemIds.includes(getId(a)) as any) ||
-          a[props.displayNameAttribute].localeCompare(b[props.displayNameAttribute])
-      )
-    }
-
     const filterTerm = ref()
     const filter = (items, filterTerm) => {
       if (!(filterTerm || '').trim()) {
