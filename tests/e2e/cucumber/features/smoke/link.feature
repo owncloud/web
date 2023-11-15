@@ -15,13 +15,12 @@ Feature: link
     And "Alice" uploads the following resources
       | resource  | to           |
       | lorem.txt | folderPublic |
-    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "myPublicLink" of resource "folderPublic" to "+5 days"
-    And "Alice" sets the password of the public link named "myPublicLink" of resource "folderPublic" to "12345"
     When "Anonymous" opens the public link "myPublicLink"
-    And "Anonymous" unlocks the public link with password "12345"
+    And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |
@@ -57,8 +56,9 @@ Feature: link
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
     And "Alice" opens the "files" app
-    When "Alice" copies quick link of the resource "folderPublic" from the context menu
+    When "Alice" creates quick link of the resource "folderPublic" with password "%public%" from the context menu
     And "Anonymous" opens the public link "Link"
+    And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" downloads the following public link resources using the sidebar panel
       | resource  | type |
       | lorem.txt | file |
@@ -86,28 +86,37 @@ Feature: link
       | folderPublic   | Brian     | user | Can edit |
       | simple.pdf     | Brian     | user | Can edit |
       | testavatar.jpg | Brian     | user | Can edit |
-    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "folderLink"
-    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.txt" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.txt" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.txt" to "textLink"
-    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.md" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.md" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.md" to "markdownLink"
-    And "Alice" creates a public link for the resource "simple.pdf" using the sidebar panel
+    And "Alice" creates a public link for the resource "simple.pdf" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
-    And "Alice" creates a public link for the resource "testavatar.jpg" using the sidebar panel
+    And "Alice" creates a public link for the resource "testavatar.jpg" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
     And "Brian" logs in
     When "Brian" opens the public link "folderLink"
+    And "Brian" unlocks the public link with password "%public%"
     And "Brian" uploads the following resources
       | resource  |
       | lorem.txt |
     When "Brian" opens the public link "textLink"
+    And "Brian" unlocks the public link with password "%public%"
+    Then "Brian" is in a text-editor
     And "Brian" closes the file viewer
     When "Brian" opens the public link "markdownLink"
+    And "Brian" unlocks the public link with password "%public%"
+    Then "Brian" is in a text-editor
     And "Brian" closes the file viewer
     When "Brian" opens the public link "pdfLink"
+    And "Brian" unlocks the public link with password "%public%"
+    Then "Brian" is in a pdf-viewer
     And "Brian" closes the file viewer
     When "Brian" opens the public link "imageLink"
+    And "Brian" unlocks the public link with password "%public%"
+    Then "Brian" is in a image-viewer
     And "Brian" closes the file viewer
     And "Brian" logs out

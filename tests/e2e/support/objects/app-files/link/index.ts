@@ -18,6 +18,8 @@ export class Link {
     'Can edit': 'Anyone with the link can edit',
     'Secret File Drop': 'Secret File drop'
   }
+  securePassword = 'Pwd:12345'
+
   async create(args: Omit<po.createLinkArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     const url = await po.createLink({ ...args, page: this.#page })

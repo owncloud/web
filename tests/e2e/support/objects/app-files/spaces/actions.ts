@@ -294,10 +294,13 @@ export const changeSpaceRole = async (args: SpaceMembersArgs): Promise<void> => 
   }
 }
 
-export const createPublicLinkForSpace = async (args: { page: Page }): Promise<string> => {
-  const { page } = args
+export const createPublicLinkForSpace = async (args: {
+  page: Page
+  password: string
+}): Promise<string> => {
+  const { page, password } = args
   await openSharingPanel(page)
-  return createLink({ page: page, space: true })
+  return createLink({ page: page, space: true, password: password })
 }
 
 export const addExpirationDateToMember = async (args: {

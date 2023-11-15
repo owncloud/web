@@ -1,5 +1,6 @@
 Feature: internal link share
 
+
   Scenario: share a link with internal role
     Given "Admin" creates following users using API
       | id    |
@@ -13,7 +14,7 @@ Feature: internal link share
       | resource | recipient | type | role     |
       | myfolder | Brian     | user | Can edit |
     And "Alice" opens the "files" app
-    And "Alice" creates a public link for the resource "myfolder" using the sidebar panel
+    And "Alice" creates a public link for the resource "myfolder" with password "%public%" using the sidebar panel
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link

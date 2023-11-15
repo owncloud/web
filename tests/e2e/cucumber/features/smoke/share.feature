@@ -37,7 +37,7 @@ Feature: share
     When "Brian" accepts the following share from the context menu
       | name          |
       | shared_folder |
-    And "Brian" copies quick link of the resource "shared_folder" from the context menu
+    And "Brian" creates quick link of the resource "shared_folder" with password "%public%" from the context menu
     And "Brian" declines the following share from the context menu
       | name          |
       | shared_folder |
@@ -107,7 +107,7 @@ Feature: share
     When "Brian" accepts the following share from the context menu
       | name           |
       | sharedFile.txt |
-    And "Brian" copies quick link of the resource "sharedFile.txt" from the context menu
+    And "Brian" creates quick link of the resource "sharedFile.txt" with password "%public%" from the context menu
     And "Brian" declines the following share from the context menu
       | name           |
       | sharedFile.txt |
