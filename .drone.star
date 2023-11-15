@@ -1273,7 +1273,7 @@ def ocisService(type, tika_enabled = False):
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
-        "OCIS_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD": False, # FIXME: remove when oCIS doesn't set it as default anymore
+        "OCIS_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD": False,  # FIXME: remove when oCIS doesn't set it as default anymore
     }
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
