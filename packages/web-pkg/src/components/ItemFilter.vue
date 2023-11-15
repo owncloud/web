@@ -21,12 +21,13 @@
             <li
               v-for="(item, index) in displayedItems"
               :key="index"
-              :class="['oc-my-xs', { 'item-filter-list-item-visible': item.isVisible }]"
+              class="oc-my-xs"
               v-show="item.isVisible"
             >
               <oc-button
                 class="item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs"
                 :class="{
+                  'item-filter-list-item-visible': item.isVisible,
                   'item-filter-list-item-active': !allowMultiple && isItemSelected(item),
                   'oc-flex-left': allowMultiple,
                   'oc-flex-between': !allowMultiple

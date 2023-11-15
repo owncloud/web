@@ -21,7 +21,7 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
         <div>
           <ul class="oc-list oc-my-rm oc-mx-rm item-filter-list">
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs oc-flex-between" data-test-value="Albert Einstein" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs item-filter-list-item-visible oc-flex-between" data-test-value="Albert Einstein" type="button">
                 <!--v-if-->
                 <!-- @slot Content of the button -->
                 <div class="oc-flex oc-flex-middle oc-text-truncate">
@@ -35,7 +35,7 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
               </button>
             </li>
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs oc-flex-between" data-test-value="Marie Curie" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs item-filter-list-item-visible oc-flex-between" data-test-value="Marie Curie" type="button">
                 <!--v-if-->
                 <!-- @slot Content of the button -->
                 <div class="oc-flex oc-flex-middle oc-text-truncate">
@@ -78,7 +78,7 @@ exports[`ItemFilter renders all items 1`] = `
         <div>
           <ul class="oc-list oc-my-rm oc-mx-rm item-filter-list">
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs oc-flex-between" data-test-value="Albert Einstein" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs item-filter-list-item-visible oc-flex-between" data-test-value="Albert Einstein" type="button">
                 <!--v-if-->
                 <!-- @slot Content of the button -->
                 <div class="oc-flex oc-flex-middle oc-text-truncate">
@@ -92,7 +92,7 @@ exports[`ItemFilter renders all items 1`] = `
               </button>
             </li>
             <li class="oc-my-xs">
-              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs oc-flex-between" data-test-value="Marie Curie" type="button">
+              <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs item-filter-list-item-visible oc-flex-between" data-test-value="Marie Curie" type="button">
                 <!--v-if-->
                 <!-- @slot Content of the button -->
                 <div class="oc-flex oc-flex-middle oc-text-truncate">
