@@ -226,10 +226,6 @@ export default defineComponent({
         return this.$gettext('Upload cancelled')
       }
       if (Object.keys(this.errors).length) {
-        const isLocked = Object.values(this.errors).some((error: any) => error?.statusCode === 423)
-        if (isLocked) {
-          return this.$gettext('Upload failed: Locked')
-        }
         return this.$gettext('Upload failed')
       }
       if (!this.runningUploads) {

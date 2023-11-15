@@ -1,0 +1,6 @@
+Enhancement: Display error message for upload to locked folder
+
+Added error message to indicate that the upload failed due to folder being locked.
+
+https://github.com/owncloud/web/pull/9940
+https://github.com/owncloud/web/issues/5741
