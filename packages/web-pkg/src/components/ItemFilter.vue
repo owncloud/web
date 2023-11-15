@@ -187,9 +187,9 @@ export default defineComponent({
       })
 
       const result = fuse.search(filterTerm)
-      const matchedIds = new Set(result.map((r) => (r.item as any).id))
+      const matchedIds = new Set(result.map((r) => getId(r.item)))
 
-      return items.map((item) => ({ ...item, isVisible: matchedIds.has(item.id) }))
+      return items.map((item) => ({ ...item, isVisible: matchedIds.has(getId(item)) }))
     }
     const clearFilter = () => {
       selectedItems.value = []
