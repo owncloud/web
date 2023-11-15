@@ -627,7 +627,7 @@ export default defineComponent({
 
       const errorObject = formatErrorMessageToObject(error.message)
       if (this.errors[item.meta.uploadId]?.statusCode === 423) {
-        return this.$gettext('Upload folder is locked')
+        return this.$gettext('The folder you\'re uploading to is locked')
       }
 
       switch (errorObject.responseCode) {
