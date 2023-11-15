@@ -81,16 +81,16 @@ export const downloadGdprExport = async (args: { page: Page }): Promise<string> 
 
 export const changeLanguage = async (args: { page: Page; language: string }): Promise<string> => {
   const { page, language } = args
-
+  await page.locator(languageInput).waitFor()
+  await page.locator(languageInput).fill(language)
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('api/v0/settings/values-save') &&
-        res.request().method() === 'POST' &&
-        res.status() === 201
+        res.url().includes('graph/v1.0/me') &&
+        res.request().method() === 'PATCH' &&
+        res.status() === 200
     ),
-    page.locator(languageInput).fill(language),
-    page.locator(util.format(languageValueDropDown, language)).click()
+    page.locator(util.format(languageValueDropDown, language)).press('Enter')
   ])
   return (await page.locator(languageValue).textContent()).trim()
 }

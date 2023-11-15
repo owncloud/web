@@ -21,7 +21,7 @@ import globalAxios from 'axios';
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
  * 
@@ -141,6 +141,109 @@ export interface Application {
     'displayName'?: string | null;
 }
 /**
+ * The Audio resource groups audio-related properties on an item into a single structure.  If a DriveItem has a non-null audio facet, the item represents an audio file. The properties of the Audio resource are populated by extracting metadata from the file. 
+ * @export
+ * @interface Audio
+ */
+export interface Audio {
+    /**
+     * The title of the album for this audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'album'?: string;
+    /**
+     * The artist named on the album for the audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'albumArtist'?: string;
+    /**
+     * The performing artist for the audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'artist'?: string;
+    /**
+     * Bitrate expressed in kbps.
+     * @type {number}
+     * @memberof Audio
+     */
+    'bitrate'?: number;
+    /**
+     * The name of the composer of the audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'composers'?: string;
+    /**
+     * Copyright information for the audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'copyright'?: string;
+    /**
+     * The number of the disc this audio file came from.
+     * @type {number}
+     * @memberof Audio
+     */
+    'disc'?: number;
+    /**
+     * The total number of discs in this album.
+     * @type {number}
+     * @memberof Audio
+     */
+    'discCount'?: number;
+    /**
+     * Duration of the audio file, expressed in milliseconds
+     * @type {number}
+     * @memberof Audio
+     */
+    'duration'?: number;
+    /**
+     * The genre of this audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'genre'?: string;
+    /**
+     * Indicates if the file is protected with digital rights management.
+     * @type {boolean}
+     * @memberof Audio
+     */
+    'hasDrm'?: boolean;
+    /**
+     * Indicates if the file is encoded with a variable bitrate.
+     * @type {boolean}
+     * @memberof Audio
+     */
+    'isVariableBitrate'?: boolean;
+    /**
+     * The title of the audio file.
+     * @type {string}
+     * @memberof Audio
+     */
+    'title'?: string;
+    /**
+     * The number of the track on the original disc for this audio file.
+     * @type {number}
+     * @memberof Audio
+     */
+    'track'?: number;
+    /**
+     * The total number of tracks on the original disc for this audio file.
+     * @type {number}
+     * @memberof Audio
+     */
+    'trackCount'?: number;
+    /**
+     * The year the audio file was recorded.
+     * @type {number}
+     * @memberof Audio
+     */
+    'year'?: number;
+}
+/**
  * 
  * @export
  * @interface ClassMemberReference
@@ -246,6 +349,19 @@ export interface CollectionOfDriveItems {
 /**
  * 
  * @export
+ * @interface CollectionOfDriveItems1
+ */
+export interface CollectionOfDriveItems1 {
+    /**
+     * 
+     * @type {Array<DriveItem>}
+     * @memberof CollectionOfDriveItems1
+     */
+    'value'?: Array<DriveItem>;
+}
+/**
+ * 
+ * @export
  * @interface CollectionOfDrives
  */
 export interface CollectionOfDrives {
@@ -332,6 +448,31 @@ export interface CollectionOfGroup {
      * @memberof CollectionOfGroup
      */
     '@odata.nextLink'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CollectionOfPermissions
+ */
+export interface CollectionOfPermissions {
+    /**
+     * A list of role definitions that can be chosen for the resource.
+     * @type {Array<UnifiedRoleDefinition>}
+     * @memberof CollectionOfPermissions
+     */
+    '@libre.graph.permissions.roles.allowedValues'?: Array<UnifiedRoleDefinition>;
+    /**
+     * A list of actions that can be chosen for a custom role.  Following the CS3 API we can represent the CS3 permissions by mapping them to driveItem properties or relations like this: | [CS3 ResourcePermission](https://cs3org.github.io/cs3apis/#cs3.storage.provider.v1beta1.ResourcePermissions) | action | comment | | ------------------------------------------------------------------------------------------------------------ | ------ | ------- | | `stat` | `libre.graph/driveItem/basic/read` | `basic` because it does not include versions or trashed items | | `get_quota` | `libre.graph/driveItem/quota/read` | read only the `quota` property | | `get_path` | `libre.graph/driveItem/path/read` | read only the `path` property | | `move` | `libre.graph/driveItem/path/update` | allows updating the `path` property of a CS3 resource | | `delete` | `libre.graph/driveItem/standard/delete` | `standard` because deleting is a common update operation | | `list_container` | `libre.graph/driveItem/children/read` | | | `create_container` | `libre.graph/driveItem/children/create` | | | `initiate_file_download` | `libre.graph/driveItem/content/read` | `content` is the property read when initiating a download | | `initiate_file_upload` | `libre.graph/driveItem/upload/create` | `uploads` are a separate property. postprocessing creates the `content` | | `add_grant` | `libre.graph/driveItem/permissions/create` | | | `list_grant` | `libre.graph/driveItem/permissions/read` | | | `update_grant` | `libre.graph/driveItem/permissions/update` | | | `remove_grant` | `libre.graph/driveItem/permissions/delete` | | | `deny_grant` | `libre.graph/driveItem/permissions/deny` | uses a non CRUD action `deny` | | `list_file_versions` | `libre.graph/driveItem/versions/read` | `versions` is a `driveItemVersion` collection | | `restore_file_version` | `libre.graph/driveItem/versions/update` | the only `update` action is restore | | `list_recycle` | `libre.graph/driveItem/deleted/read` | reading a driveItem `deleted` property implies listing | | `restore_recycle_item` | `libre.graph/driveItem/deleted/update` | the only `update` action is restore | | `purge_recycle` | `libre.graph/driveItem/deleted/delete` | allows purging deleted `driveItems` | 
+     * @type {Array<string>}
+     * @memberof CollectionOfPermissions
+     */
+    '@libre.graph.permissions.actions.allowedValues'?: Array<string>;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof CollectionOfPermissions
+     */
+    'value'?: Array<Permission>;
 }
 /**
  * 
@@ -533,7 +674,7 @@ export interface Drive {
     'special'?: Array<DriveItem>;
 }
 /**
- * Reprensents a resource inside a drive. Read-only.
+ * Represents a resource inside a drive. Read-only.
  * @export
  * @interface DriveItem
  */
@@ -641,6 +782,18 @@ export interface DriveItem {
      */
     'image'?: Image;
     /**
+     * 
+     * @type {Photo}
+     * @memberof DriveItem
+     */
+    'photo'?: Photo;
+    /**
+     * 
+     * @type {GeoCoordinates}
+     * @memberof DriveItem
+     */
+    'location'?: GeoCoordinates;
+    /**
      * If this property is non-null, it indicates that the driveItem is the top-most driveItem in the drive.
      * @type {object}
      * @memberof DriveItem
@@ -688,6 +841,95 @@ export interface DriveItem {
      * @memberof DriveItem
      */
     'permissions'?: Array<Permission>;
+    /**
+     * 
+     * @type {Audio}
+     * @memberof DriveItem
+     */
+    'audio'?: Audio;
+}
+/**
+ * 
+ * @export
+ * @interface DriveItemCreateLink
+ */
+export interface DriveItemCreateLink {
+    /**
+     * 
+     * @type {SharingLinkType}
+     * @memberof DriveItemCreateLink
+     */
+    'type'?: SharingLinkType;
+    /**
+     * Optional. A String with format of yyyy-MM-ddTHH:mm:ssZ of DateTime indicates the expiration time of the permission.
+     * @type {string}
+     * @memberof DriveItemCreateLink
+     */
+    'expirationDateTime'?: string;
+    /**
+     * Optional.The password of the sharing link that is set by the creator.
+     * @type {string}
+     * @memberof DriveItemCreateLink
+     */
+    'password'?: string;
+    /**
+     * Provides a user-visible display name of the link. Optional. Libregraph only.
+     * @type {string}
+     * @memberof DriveItemCreateLink
+     */
+    'displayName'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface DriveItemInvite
+ */
+export interface DriveItemInvite {
+    /**
+     * A collection of recipients who will receive access and the sharing invitation. Currently, only internal users or gorups are supported.
+     * @type {Array<DriveRecipient>}
+     * @memberof DriveItemInvite
+     */
+    'recipients'?: Array<DriveRecipient>;
+    /**
+     * Specifies the roles that are to be granted to the recipients of the sharing invitation.
+     * @type {Array<string>}
+     * @memberof DriveItemInvite
+     */
+    'roles'?: Array<string>;
+    /**
+     * Specifies the actions that are to be granted to the recipients of the sharing invitation, in effect creating a custom role.
+     * @type {Array<string>}
+     * @memberof DriveItemInvite
+     */
+    '@libre.graph.permissions.actions'?: Array<string>;
+    /**
+     * Specifies the dateTime after which the permission expires.
+     * @type {string}
+     * @memberof DriveItemInvite
+     */
+    'expirationDateTime'?: string;
+}
+/**
+ * Represents a person, group, or other recipient to share a drive item with using the invite action.  When using invite to add permissions, the `driveRecipient` object would specify the `email`, `alias`, or `objectId` of the recipient. Only one of these values is required; multiple values are not accepted. 
+ * @export
+ * @interface DriveRecipient
+ */
+export interface DriveRecipient {
+    /**
+     * The unique identifier for the recipient in the directory.
+     * @type {string}
+     * @memberof DriveRecipient
+     */
+    'objectId'?: string;
+    /**
+     * When the recipient is referenced by objectId this annotation is used to differentiate `user` and `group` recipients.
+     * @type {string}
+     * @memberof DriveRecipient
+     */
+    '@libre.graph.recipient.type'?: string;
 }
 /**
  * And extension of group representing a class or course
@@ -996,6 +1238,31 @@ export interface FolderView {
     'viewType'?: string;
 }
 /**
+ * The GeoCoordinates resource provides geographic coordinates and elevation of a location based on metadata contained within the file. If a DriveItem has a non-null location facet, the item represents a file with a known location assocaited with it. 
+ * @export
+ * @interface GeoCoordinates
+ */
+export interface GeoCoordinates {
+    /**
+     * The altitude (height), in feet, above sea level for the item. Read-only.
+     * @type {number}
+     * @memberof GeoCoordinates
+     */
+    'altitude'?: number;
+    /**
+     * The latitude, in decimal, for the item. Read-only.
+     * @type {number}
+     * @memberof GeoCoordinates
+     */
+    'latitude'?: number;
+    /**
+     * The longitude, in decimal, for the item. Read-only.
+     * @type {number}
+     * @memberof GeoCoordinates
+     */
+    'longitude'?: number;
+}
+/**
  * 
  * @export
  * @interface Group
@@ -1174,12 +1441,6 @@ export interface ItemReference {
      * @memberof ItemReference
      */
     'path'?: string;
-    /**
-     * A unique identifier for a shared resource that can be accessed via the [Shares][] API.
-     * @type {string}
-     * @memberof ItemReference
-     */
-    'shareId'?: string;
 }
 /**
  * 
@@ -1352,11 +1613,23 @@ export interface PasswordProfile {
     'password'?: string;
 }
 /**
- * The Permission resource provides information about a sharing permission granted for a DriveItem resource.
+ * The Permission resource provides information about a sharing permission granted for a DriveItem resource.  ### Remarks  The Permission resource uses *facets* to provide information about the kind of permission represented by the resource.  Permissions with a `link` facet represent sharing links created on the item. Sharing links contain a unique token that provides access to the item for anyone with the link.  Permissions with a `invitation` facet represent permissions added by inviting specific users or groups to have access to the file. 
  * @export
  * @interface Permission
  */
 export interface Permission {
+    /**
+     * The unique identifier of the permission among all permissions on the item. Read-only.
+     * @type {string}
+     * @memberof Permission
+     */
+    'id'?: string;
+    /**
+     * Indicates whether the password is set for this permission. This property only appears in the response. Optional. Read-only. 
+     * @type {boolean}
+     * @memberof Permission
+     */
+    'hasPassword'?: boolean;
     /**
      * An optional expiration date which limits the permission in time.
      * @type {string}
@@ -1365,16 +1638,102 @@ export interface Permission {
     'expirationDateTime'?: string;
     /**
      * 
-     * @type {Array<IdentitySet>}
+     * @type {SharePointIdentitySet}
      * @memberof Permission
      */
-    'grantedToIdentities'?: Array<IdentitySet>;
+    'grantedToV2'?: SharePointIdentitySet;
+    /**
+     * 
+     * @type {SharingLink}
+     * @memberof Permission
+     */
+    'link'?: SharingLink;
     /**
      * 
      * @type {Array<string>}
      * @memberof Permission
      */
     'roles'?: Array<string>;
+    /**
+     * For link type permissions, the details of the identity to whom permission was granted. This could be used to grant access to a an external user that can be identified by email, aka guest accounts.
+     * @type {Array<IdentitySet>}
+     * @memberof Permission
+     * @deprecated
+     */
+    'grantedToIdentities'?: Array<IdentitySet>;
+    /**
+     * Use this to create a permission with custom actions.
+     * @type {Array<string>}
+     * @memberof Permission
+     */
+    '@libre.graph.permissions.actions'?: Array<string>;
+    /**
+     * Properties or facets (see UI.Facet) annotated with this term will not be rendered if the annotation evaluates to true. Users can set this to hide permissons.
+     * @type {boolean}
+     * @memberof Permission
+     */
+    '@UI.Hidden'?: boolean;
+}
+/**
+ * The photo resource provides photo and camera properties, for example, EXIF metadata, on a driveItem. 
+ * @export
+ * @interface Photo
+ */
+export interface Photo {
+    /**
+     * Camera manufacturer. Read-only.
+     * @type {string}
+     * @memberof Photo
+     */
+    'cameraMake'?: string;
+    /**
+     * Camera model. Read-only.
+     * @type {string}
+     * @memberof Photo
+     */
+    'cameraModel'?: string;
+    /**
+     * The denominator for the exposure time fraction from the camera. Read-only.
+     * @type {number}
+     * @memberof Photo
+     */
+    'exposureDenominator'?: number;
+    /**
+     * The numerator for the exposure time fraction from the camera. Read-only.
+     * @type {number}
+     * @memberof Photo
+     */
+    'exposureNumerator'?: number;
+    /**
+     * The F-stop value from the camera. Read-only.
+     * @type {number}
+     * @memberof Photo
+     */
+    'fNumber'?: number;
+    /**
+     * The focal length from the camera. Read-only.
+     * @type {number}
+     * @memberof Photo
+     */
+    'focalLength'?: number;
+    /**
+     * The ISO value from the camera. Read-only.
+     * @type {number}
+     * @memberof Photo
+     */
+    'iso'?: number;
+    /**
+     * The orientation value from the camera. Read-only.
+     * @type {number}
+     * @memberof Photo
+     */
+    'orientation'?: number;
+    /**
+     * Represents the date and time the photo was taken. Read-only.
+     * @type {string}
+     * @memberof Photo
+     */
+    'takenDateTime'?: string;
 }
 /**
  * Optional. Information about the drive\'s storage space quota. Read-only.
@@ -1547,6 +1906,25 @@ export interface RemoteItem {
     'webUrl'?: string;
 }
 /**
+ * This resource is used to represent a set of identities associated with various events for an item, such as created by or last modified by.
+ * @export
+ * @interface SharePointIdentitySet
+ */
+export interface SharePointIdentitySet {
+    /**
+     * 
+     * @type {Identity}
+     * @memberof SharePointIdentitySet
+     */
+    'user'?: Identity;
+    /**
+     * 
+     * @type {Identity}
+     * @memberof SharePointIdentitySet
+     */
+    'group'?: Identity;
+}
+/**
  * 
  * @export
  * @interface Shared
@@ -1577,6 +1955,56 @@ export interface Shared {
      */
     'sharedDateTime'?: string;
 }
+/**
+ * The `SharingLink` resource groups link-related data items into a single structure.  If a `permission` resource has a non-null `sharingLink` facet, the permission represents a sharing link (as opposed to permissions granted to a person or group). 
+ * @export
+ * @interface SharingLink
+ */
+export interface SharingLink {
+    /**
+     * 
+     * @type {SharingLinkType}
+     * @memberof SharingLink
+     */
+    'type'?: SharingLinkType;
+    /**
+     * If `true` then the user can only use this link to view the item on the web, and cannot use it to download the contents of the item.
+     * @type {boolean}
+     * @memberof SharingLink
+     */
+    'preventsDownload'?: boolean;
+    /**
+     * A URL that opens the item in the browser on the website.
+     * @type {string}
+     * @memberof SharingLink
+     */
+    'webUrl'?: string;
+    /**
+     * Provides a user-visible display name of the link. Optional. Libregraph only.
+     * @type {string}
+     * @memberof SharingLink
+     */
+    '@libre.graph.displayName'?: string;
+}
+
+
+/**
+ * The type of the link created.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
+ * @export
+ * @enum {string}
+ */
+
+export const SharingLinkType = {
+    View: 'view',
+    Upload: 'upload',
+    Edit: 'edit',
+    CreateOnly: 'createOnly',
+    BlocksDownload: 'blocksDownload'
+} as const;
+
+export type SharingLinkType = typeof SharingLinkType[keyof typeof SharingLinkType];
+
+
 /**
  * If the current item is also available as a special folder, this facet is returned. Read-only
  * @export
@@ -1646,6 +2074,62 @@ export interface Trash {
      * @memberof Trash
      */
     'trashedDateTime'?: string;
+}
+/**
+ * A role definition is a collection of permissions in libre graph listing the operations that can be performed and the resources against which they can performed. 
+ * @export
+ * @interface UnifiedRoleDefinition
+ */
+export interface UnifiedRoleDefinition {
+    /**
+     * The description for the unifiedRoleDefinition.
+     * @type {string}
+     * @memberof UnifiedRoleDefinition
+     */
+    'description'?: string;
+    /**
+     * The display name for the unifiedRoleDefinition. Required. Supports $filter (`eq`, `in`).
+     * @type {string}
+     * @memberof UnifiedRoleDefinition
+     */
+    'displayName'?: string;
+    /**
+     * The unique identifier for the role definition. Key, not nullable, Read-only. Inherited from entity. Supports $filter (`eq`, `in`).
+     * @type {string}
+     * @memberof UnifiedRoleDefinition
+     */
+    'id'?: string;
+    /**
+     * List of permissions included in the role.
+     * @type {Array<UnifiedRolePermission>}
+     * @memberof UnifiedRoleDefinition
+     */
+    'rolePermissions'?: Array<UnifiedRolePermission>;
+    /**
+     * When presenting a list of roles the weight can be used to order them in a meaningful way. Lower weight gets higher precedence. So content with lower weight will come first. If set, weights should be non-zero, as 0 is interpreted as an unset weight. 
+     * @type {number}
+     * @memberof UnifiedRoleDefinition
+     */
+    '@libre.graph.weight'?: number;
+}
+/**
+ * Represents a collection of allowed resource actions and the conditions that must be met for the action to be allowed. Resource actions are tasks that can be performed on a resource. For example, an application resource may support create, update, delete, and reset password actions. 
+ * @export
+ * @interface UnifiedRolePermission
+ */
+export interface UnifiedRolePermission {
+    /**
+     * Set of tasks that can be performed on a resource. Required.  The following is the schema for resource actions:  ```    {Namespace}/{Entity}/{PropertySet}/{Action} ```   For example: `libre.graph/applications/credentials/update`    * *{Namespace}* - The services that exposes the task. For example, all tasks in libre graph use the namespace `libre.graph`.  * *{Entity}* - The logical features or components exposed by the service in libre graph. For example, `applications`, `servicePrincipals`, or `groups`.  * *{PropertySet}* - Optional. The specific properties or aspects of the entity for which access is being granted.    For example, `libre.graph/applications/authentication/read` grants the ability to read the reply URL, logout URL,    and implicit flow property on the **application** object in libre graph. The following are reserved names for common property sets:    * `allProperties` - Designates all properties of the entity, including privileged properties.      Examples include `libre.graph/applications/allProperties/read` and `libre.graph/applications/allProperties/update`.    * `basic` - Designates common read properties but excludes privileged ones.      For example, `libre.graph/applications/basic/update` includes the ability to update standard properties like display name.    * `standard` - Designates common update properties but excludes privileged ones.      For example, `libre.graph/applications/standard/read`.  * *{Actions}* - The operations being granted. In most circumstances, permissions should be expressed in terms of CRUD operations or allTasks. Actions include:    * `create` - The ability to create a new instance of the entity.    * `read` - The ability to read a given property set (including allProperties).    * `update` - The ability to update a given property set (including allProperties).    * `delete` - The ability to delete a given entity.    * `allTasks` - Represents all CRUD operations (create, read, update, and delete).   Following the CS3 API we can represent the CS3 permissions by mapping them to driveItem properties or relations like this:  | [CS3 ResourcePermission](https://cs3org.github.io/cs3apis/#cs3.storage.provider.v1beta1.ResourcePermissions) | action | comment |  | ------------------------------------------------------------------------------------------------------------ | ------ | ------- |  | `stat` | `libre.graph/driveItem/basic/read` | `basic` because it does not include versions or trashed items |  | `get_quota` | `libre.graph/driveItem/quota/read` | read only the `quota` property |  | `get_path` | `libre.graph/driveItem/path/read` | read only the `path` property |  | `move` | `libre.graph/driveItem/path/update` | allows updating the `path` property of a CS3 resource |  | `delete` | `libre.graph/driveItem/standard/delete` | `standard` because deleting is a common update operation |  | `list_container` | `libre.graph/driveItem/children/read` | |  | `create_container` | `libre.graph/driveItem/children/create` | |  | `initiate_file_download` | `libre.graph/driveItem/content/read` | `content` is the property read when initiating a download |  | `initiate_file_upload` | `libre.graph/driveItem/upload/create` | `uploads` are a separate property. postprocessing creates the `content` |  | `add_grant` | `libre.graph/driveItem/permissions/create` | |  | `list_grant` | `libre.graph/driveItem/permissions/read` | |  | `update_grant` | `libre.graph/driveItem/permissions/update` | |  | `remove_grant` | `libre.graph/driveItem/permissions/delete` | |  | `deny_grant` | `libre.graph/driveItem/permissions/deny` | uses a non CRUD action `deny` |  | `list_file_versions` | `libre.graph/driveItem/versions/read` | `versions` is a `driveItemVersion` collection |  | `restore_file_version` | `libre.graph/driveItem/versions/update` | the only `update` action is restore |  | `list_recycle` | `libre.graph/driveItem/deleted/read` | reading a driveItem `deleted` property implies listing |  | `restore_recycle_item` | `libre.graph/driveItem/deleted/update` | the only `update` action is restore |  | `purge_recycle` | `libre.graph/driveItem/deleted/delete` | allows purging deleted `driveItems` |   Managing drives would be a different entity. A space manager role could be written as `libre.graph/drive/permission/allTasks`. 
+     * @type {Array<string>}
+     * @memberof UnifiedRolePermission
+     */
+    'allowedResourceActions'?: Array<string>;
+    /**
+     * Optional constraints that must be met for the permission to be effective. Not supported for custom roles.  Conditions define constraints that must be met. For example, a requirement that the principal be an owner of the target resource. The following are the supported conditions:  * Self: `@Subject.objectId == @Resource.objectId` * Owner: `@Subject.objectId Any_of @Resource.owners` * Grantee: `@Subject.objectId Any_of @Resource.grantee` - does not exist in MS Graph, but we use it to express permissions on shared resources.  The following is an example of a role permission with a condition that the principal be the owner of the target resource. ```json   \"rolePermissions\": [       {           \"allowedResourceActions\": [               \"libre.graph/applications/basic/update\",               \"libre.graph/applications/credentials/update\"           ],           \"condition\":  \"@Subject.objectId Any_of @Resource.owners\"       }   ] ``` Conditions aren\'t supported for custom roles. 
+     * @type {string}
+     * @memberof UnifiedRolePermission
+     */
+    'condition'?: string;
 }
 /**
  * Represents an Active Directory user object.
@@ -1737,6 +2221,12 @@ export interface User {
      * @memberof User
      */
     'userType'?: string;
+    /**
+     * Represents the users language setting, ISO-639-1 Code
+     * @type {string}
+     * @memberof User
+     */
+    'preferredLanguage'?: string;
 }
 
 /**
@@ -1755,7 +2245,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         getApplication: async (applicationId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationId' is not null or undefined
             assertParamExists('getApplication', 'applicationId', applicationId)
-            const localVarPath = `/applications/{application-id}`
+            const localVarPath = `/v1.0/applications/{application-id}`
                 .replace(`{${"application-id"}}`, encodeURIComponent(String(applicationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1767,6 +2257,8 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -1786,7 +2278,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @throws {RequiredError}
          */
         listApplications: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/applications`;
+            const localVarPath = `/v1.0/applications`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1797,6 +2289,8 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -1828,7 +2322,9 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          */
         async getApplication(applicationId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Application>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getApplication(applicationId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['ApplicationsApi.getApplication']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -1838,7 +2334,9 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          */
         async listApplications(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfApplications>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listApplications(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['ApplicationsApi.listApplications']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -1904,6 +2402,7 @@ export class ApplicationsApi extends BaseAPI {
 }
 
 
+
 /**
  * DrivesApi - axios parameter creator
  * @export
@@ -1920,7 +2419,7 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
         createDrive: async (drive: Drive, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'drive' is not null or undefined
             assertParamExists('createDrive', 'drive', drive)
-            const localVarPath = `/drives`;
+            const localVarPath = `/v1.0/drives`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1931,6 +2430,8 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -1957,7 +2458,7 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
         deleteDrive: async (driveId: string, ifMatch?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'driveId' is not null or undefined
             assertParamExists('deleteDrive', 'driveId', driveId)
-            const localVarPath = `/drives/{drive-id}`
+            const localVarPath = `/v1.0/drives/{drive-id}`
                 .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1969,6 +2470,8 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
@@ -1995,7 +2498,7 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
         getDrive: async (driveId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'driveId' is not null or undefined
             assertParamExists('getDrive', 'driveId', driveId)
-            const localVarPath = `/drives/{drive-id}`
+            const localVarPath = `/v1.0/drives/{drive-id}`
                 .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2007,6 +2510,8 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -2032,7 +2537,7 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('updateDrive', 'driveId', driveId)
             // verify required parameter 'drive' is not null or undefined
             assertParamExists('updateDrive', 'drive', drive)
-            const localVarPath = `/drives/{drive-id}`
+            const localVarPath = `/v1.0/drives/{drive-id}`
                 .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2044,6 +2549,8 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -2078,7 +2585,9 @@ export const DrivesApiFp = function(configuration?: Configuration) {
          */
         async createDrive(drive: Drive, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createDrive(drive, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesApi.createDrive']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2090,7 +2599,9 @@ export const DrivesApiFp = function(configuration?: Configuration) {
          */
         async deleteDrive(driveId: string, ifMatch?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDrive(driveId, ifMatch, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesApi.deleteDrive']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2101,7 +2612,9 @@ export const DrivesApiFp = function(configuration?: Configuration) {
          */
         async getDrive(driveId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDrive(driveId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesApi.getDrive']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2113,7 +2626,9 @@ export const DrivesApiFp = function(configuration?: Configuration) {
          */
         async updateDrive(driveId: string, drive: Drive, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateDrive(driveId, drive, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesApi.updateDrive']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -2229,6 +2744,7 @@ export class DrivesApi extends BaseAPI {
 }
 
 
+
 /**
  * DrivesGetDrivesApi - axios parameter creator
  * @export
@@ -2244,7 +2760,7 @@ export const DrivesGetDrivesApiAxiosParamCreator = function (configuration?: Con
          * @throws {RequiredError}
          */
         listAllDrives: async ($orderby?: string, $filter?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/drives`;
+            const localVarPath = `/v1.0/drives`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2255,6 +2771,8 @@ export const DrivesGetDrivesApiAxiosParamCreator = function (configuration?: Con
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if ($orderby !== undefined) {
                 localVarQueryParameter['$orderby'] = $orderby;
@@ -2295,7 +2813,9 @@ export const DrivesGetDrivesApiFp = function(configuration?: Configuration) {
          */
         async listAllDrives($orderby?: string, $filter?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfDrives1>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listAllDrives($orderby, $filter, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesGetDrivesApi.listAllDrives']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -2343,6 +2863,558 @@ export class DrivesGetDrivesApi extends BaseAPI {
 }
 
 
+
+/**
+ * DrivesPermissionsApi - axios parameter creator
+ * @export
+ */
+export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * You can use the createLink action to share a driveItem via a sharing link.  The response will be a permission object with the link facet containing the created link details.  ## Link types  For now, The following values are allowed for the type parameter.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
+         * @summary Create a sharing link for a DriveItem
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {DriveItemCreateLink} [driveItemCreateLink] In the request body, provide a JSON object with the following parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createLink: async (driveId: string, itemId: string, driveItemCreateLink?: DriveItemCreateLink, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('createLink', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('createLink', 'itemId', itemId)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/createLink`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(driveItemCreateLink, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Remove access to a DriveItem.  Only sharing permissions that are not inherited can be deleted. The `inheritedFrom` property must be `null`. 
+         * @summary Remove access to a DriveItem
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePermission: async (driveId: string, itemId: string, permId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('deletePermission', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('deletePermission', 'itemId', itemId)
+            // verify required parameter 'permId' is not null or undefined
+            assertParamExists('deletePermission', 'permId', permId)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)))
+                .replace(`{${"perm-id"}}`, encodeURIComponent(String(permId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Return the effective sharing permission for a particular permission resource. 
+         * @summary Get sharing permission for a file or folder
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPermission: async (driveId: string, itemId: string, permId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('getPermission', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('getPermission', 'itemId', itemId)
+            // verify required parameter 'permId' is not null or undefined
+            assertParamExists('getPermission', 'permId', permId)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)))
+                .replace(`{${"perm-id"}}`, encodeURIComponent(String(permId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Sends a sharing invitation for a `driveItem`. A sharing invitation provides permissions to the recipients and optionally sends them an email with a sharing link.  The response will be a permission object with the grantedToV2 property containing the created grant details.  ## Roles property values For now, roles are only identified by a uuid. There are no hardcoded aliases like `read` or `write` because role actions can be completely customized. 
+         * @summary Send a sharing invitation
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {DriveItemInvite} [driveItemInvite] In the request body, provide a JSON object with the following parameters. To create a custom role submit a list of actions instead of roles.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        invite: async (driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('invite', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('invite', 'itemId', itemId)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/invite`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(driveItemInvite, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * The permissions collection includes potentially sensitive information and may not be available for every caller.  * For the owner of the item, all sharing permissions will be returned. This includes co-owners. * For a non-owner caller, only the sharing permissions that apply to the caller are returned. * Sharing permission properties that contain secrets (e.g. `webUrl`) are only returned for callers that are able to create the sharing permission.  All permission objects have an `id`. A permission representing * a link has the `link` facet filled with details.  * a share has the `roles` property set and the `grantedToV2` property filled with the grant recipient details. 
+         * @summary List the effective sharing permissions on a driveItem.
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPermissions: async (driveId: string, itemId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('listPermissions', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('listPermissions', 'itemId', itemId)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/permissions`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update the properties of a sharing permission by patching the permission resource.  Only the `roles`, `expirationDateTime` and `password` properties can be modified this way. 
+         * @summary Update sharing permission
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {Permission} permission New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePermission: async (driveId: string, itemId: string, permId: string, permission: Permission, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('updatePermission', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('updatePermission', 'itemId', itemId)
+            // verify required parameter 'permId' is not null or undefined
+            assertParamExists('updatePermission', 'permId', permId)
+            // verify required parameter 'permission' is not null or undefined
+            assertParamExists('updatePermission', 'permission', permission)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)))
+                .replace(`{${"perm-id"}}`, encodeURIComponent(String(permId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(permission, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DrivesPermissionsApi - functional programming interface
+ * @export
+ */
+export const DrivesPermissionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DrivesPermissionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * You can use the createLink action to share a driveItem via a sharing link.  The response will be a permission object with the link facet containing the created link details.  ## Link types  For now, The following values are allowed for the type parameter.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
+         * @summary Create a sharing link for a DriveItem
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {DriveItemCreateLink} [driveItemCreateLink] In the request body, provide a JSON object with the following parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createLink(driveId: string, itemId: string, driveItemCreateLink?: DriveItemCreateLink, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Permission>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createLink(driveId, itemId, driveItemCreateLink, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.createLink']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Remove access to a DriveItem.  Only sharing permissions that are not inherited can be deleted. The `inheritedFrom` property must be `null`. 
+         * @summary Remove access to a DriveItem
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePermission(driveId: string, itemId: string, permId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePermission(driveId, itemId, permId, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.deletePermission']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Return the effective sharing permission for a particular permission resource. 
+         * @summary Get sharing permission for a file or folder
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPermission(driveId: string, itemId: string, permId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Permission>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPermission(driveId, itemId, permId, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.getPermission']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Sends a sharing invitation for a `driveItem`. A sharing invitation provides permissions to the recipients and optionally sends them an email with a sharing link.  The response will be a permission object with the grantedToV2 property containing the created grant details.  ## Roles property values For now, roles are only identified by a uuid. There are no hardcoded aliases like `read` or `write` because role actions can be completely customized. 
+         * @summary Send a sharing invitation
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {DriveItemInvite} [driveItemInvite] In the request body, provide a JSON object with the following parameters. To create a custom role submit a list of actions instead of roles.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Permission>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.invite(driveId, itemId, driveItemInvite, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.invite']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * The permissions collection includes potentially sensitive information and may not be available for every caller.  * For the owner of the item, all sharing permissions will be returned. This includes co-owners. * For a non-owner caller, only the sharing permissions that apply to the caller are returned. * Sharing permission properties that contain secrets (e.g. `webUrl`) are only returned for callers that are able to create the sharing permission.  All permission objects have an `id`. A permission representing * a link has the `link` facet filled with details.  * a share has the `roles` property set and the `grantedToV2` property filled with the grant recipient details. 
+         * @summary List the effective sharing permissions on a driveItem.
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPermissions(driveId: string, itemId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfPermissions>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPermissions(driveId, itemId, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.listPermissions']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Update the properties of a sharing permission by patching the permission resource.  Only the `roles`, `expirationDateTime` and `password` properties can be modified this way. 
+         * @summary Update sharing permission
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {Permission} permission New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePermission(driveId: string, itemId: string, permId: string, permission: Permission, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Permission>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePermission(driveId, itemId, permId, permission, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.updatePermission']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DrivesPermissionsApi - factory interface
+ * @export
+ */
+export const DrivesPermissionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DrivesPermissionsApiFp(configuration)
+    return {
+        /**
+         * You can use the createLink action to share a driveItem via a sharing link.  The response will be a permission object with the link facet containing the created link details.  ## Link types  For now, The following values are allowed for the type parameter.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
+         * @summary Create a sharing link for a DriveItem
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {DriveItemCreateLink} [driveItemCreateLink] In the request body, provide a JSON object with the following parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createLink(driveId: string, itemId: string, driveItemCreateLink?: DriveItemCreateLink, options?: any): AxiosPromise<Permission> {
+            return localVarFp.createLink(driveId, itemId, driveItemCreateLink, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Remove access to a DriveItem.  Only sharing permissions that are not inherited can be deleted. The `inheritedFrom` property must be `null`. 
+         * @summary Remove access to a DriveItem
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePermission(driveId: string, itemId: string, permId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePermission(driveId, itemId, permId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Return the effective sharing permission for a particular permission resource. 
+         * @summary Get sharing permission for a file or folder
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPermission(driveId: string, itemId: string, permId: string, options?: any): AxiosPromise<Permission> {
+            return localVarFp.getPermission(driveId, itemId, permId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Sends a sharing invitation for a `driveItem`. A sharing invitation provides permissions to the recipients and optionally sends them an email with a sharing link.  The response will be a permission object with the grantedToV2 property containing the created grant details.  ## Roles property values For now, roles are only identified by a uuid. There are no hardcoded aliases like `read` or `write` because role actions can be completely customized. 
+         * @summary Send a sharing invitation
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {DriveItemInvite} [driveItemInvite] In the request body, provide a JSON object with the following parameters. To create a custom role submit a list of actions instead of roles.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: any): AxiosPromise<Permission> {
+            return localVarFp.invite(driveId, itemId, driveItemInvite, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * The permissions collection includes potentially sensitive information and may not be available for every caller.  * For the owner of the item, all sharing permissions will be returned. This includes co-owners. * For a non-owner caller, only the sharing permissions that apply to the caller are returned. * Sharing permission properties that contain secrets (e.g. `webUrl`) are only returned for callers that are able to create the sharing permission.  All permission objects have an `id`. A permission representing * a link has the `link` facet filled with details.  * a share has the `roles` property set and the `grantedToV2` property filled with the grant recipient details. 
+         * @summary List the effective sharing permissions on a driveItem.
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPermissions(driveId: string, itemId: string, options?: any): AxiosPromise<CollectionOfPermissions> {
+            return localVarFp.listPermissions(driveId, itemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update the properties of a sharing permission by patching the permission resource.  Only the `roles`, `expirationDateTime` and `password` properties can be modified this way. 
+         * @summary Update sharing permission
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {Permission} permission New property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePermission(driveId: string, itemId: string, permId: string, permission: Permission, options?: any): AxiosPromise<Permission> {
+            return localVarFp.updatePermission(driveId, itemId, permId, permission, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DrivesPermissionsApi - object-oriented interface
+ * @export
+ * @class DrivesPermissionsApi
+ * @extends {BaseAPI}
+ */
+export class DrivesPermissionsApi extends BaseAPI {
+    /**
+     * You can use the createLink action to share a driveItem via a sharing link.  The response will be a permission object with the link facet containing the created link details.  ## Link types  For now, The following values are allowed for the type parameter.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
+     * @summary Create a sharing link for a DriveItem
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {DriveItemCreateLink} [driveItemCreateLink] In the request body, provide a JSON object with the following parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public createLink(driveId: string, itemId: string, driveItemCreateLink?: DriveItemCreateLink, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).createLink(driveId, itemId, driveItemCreateLink, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Remove access to a DriveItem.  Only sharing permissions that are not inherited can be deleted. The `inheritedFrom` property must be `null`. 
+     * @summary Remove access to a DriveItem
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {string} permId key: id of permission
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public deletePermission(driveId: string, itemId: string, permId: string, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).deletePermission(driveId, itemId, permId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Return the effective sharing permission for a particular permission resource. 
+     * @summary Get sharing permission for a file or folder
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {string} permId key: id of permission
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public getPermission(driveId: string, itemId: string, permId: string, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).getPermission(driveId, itemId, permId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Sends a sharing invitation for a `driveItem`. A sharing invitation provides permissions to the recipients and optionally sends them an email with a sharing link.  The response will be a permission object with the grantedToV2 property containing the created grant details.  ## Roles property values For now, roles are only identified by a uuid. There are no hardcoded aliases like `read` or `write` because role actions can be completely customized. 
+     * @summary Send a sharing invitation
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {DriveItemInvite} [driveItemInvite] In the request body, provide a JSON object with the following parameters. To create a custom role submit a list of actions instead of roles.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).invite(driveId, itemId, driveItemInvite, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * The permissions collection includes potentially sensitive information and may not be available for every caller.  * For the owner of the item, all sharing permissions will be returned. This includes co-owners. * For a non-owner caller, only the sharing permissions that apply to the caller are returned. * Sharing permission properties that contain secrets (e.g. `webUrl`) are only returned for callers that are able to create the sharing permission.  All permission objects have an `id`. A permission representing * a link has the `link` facet filled with details.  * a share has the `roles` property set and the `grantedToV2` property filled with the grant recipient details. 
+     * @summary List the effective sharing permissions on a driveItem.
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public listPermissions(driveId: string, itemId: string, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).listPermissions(driveId, itemId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update the properties of a sharing permission by patching the permission resource.  Only the `roles`, `expirationDateTime` and `password` properties can be modified this way. 
+     * @summary Update sharing permission
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {string} permId key: id of permission
+     * @param {Permission} permission New property values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public updatePermission(driveId: string, itemId: string, permId: string, permission: Permission, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).updatePermission(driveId, itemId, permId, permission, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
 /**
  * DrivesRootApi - axios parameter creator
  * @export
@@ -2359,7 +3431,7 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
         getRoot: async (driveId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'driveId' is not null or undefined
             assertParamExists('getRoot', 'driveId', driveId)
-            const localVarPath = `/drives/{drive-id}/root`
+            const localVarPath = `/v1.0/drives/{drive-id}/root`
                 .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2371,6 +3443,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -2402,7 +3476,9 @@ export const DrivesRootApiFp = function(configuration?: Configuration) {
          */
         async getRoot(driveId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DriveItem>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getRoot(driveId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesRootApi.getRoot']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -2448,6 +3524,7 @@ export class DrivesRootApi extends BaseAPI {
 }
 
 
+
 /**
  * EducationClassApi - axios parameter creator
  * @export
@@ -2467,7 +3544,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             assertParamExists('addUserToClass', 'classId', classId)
             // verify required parameter 'classMemberReference' is not null or undefined
             assertParamExists('addUserToClass', 'classMemberReference', classMemberReference)
-            const localVarPath = `/education/classes/{class-id}/members/$ref`
+            const localVarPath = `/v1.0/education/classes/{class-id}/members/$ref`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2508,7 +3585,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
         createClass: async (educationClass: EducationClass, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'educationClass' is not null or undefined
             assertParamExists('createClass', 'educationClass', educationClass)
-            const localVarPath = `/education/classes`;
+            const localVarPath = `/v1.0/education/classes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2548,7 +3625,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
         deleteClass: async (classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'classId' is not null or undefined
             assertParamExists('deleteClass', 'classId', classId)
-            const localVarPath = `/education/classes/{class-id}`
+            const localVarPath = `/v1.0/education/classes/{class-id}`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2589,7 +3666,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             assertParamExists('deleteUserFromClass', 'classId', classId)
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteUserFromClass', 'userId', userId)
-            const localVarPath = `/education/classes/{class-id}/members/{user-id}/$ref`
+            const localVarPath = `/v1.0/education/classes/{class-id}/members/{user-id}/$ref`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)))
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2628,7 +3705,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
         getClass: async (classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'classId' is not null or undefined
             assertParamExists('getClass', 'classId', classId)
-            const localVarPath = `/education/classes/{class-id}`
+            const localVarPath = `/v1.0/education/classes/{class-id}`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2666,7 +3743,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
         listClassMembers: async (classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'classId' is not null or undefined
             assertParamExists('listClassMembers', 'classId', classId)
-            const localVarPath = `/education/classes/{class-id}/members`
+            const localVarPath = `/v1.0/education/classes/{class-id}/members`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2701,7 +3778,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
          * @throws {RequiredError}
          */
         listClasses: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/education/classes`;
+            const localVarPath = `/v1.0/education/classes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2741,7 +3818,7 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             assertParamExists('updateClass', 'classId', classId)
             // verify required parameter 'educationClass' is not null or undefined
             assertParamExists('updateClass', 'educationClass', educationClass)
-            const localVarPath = `/education/classes/{class-id}`
+            const localVarPath = `/v1.0/education/classes/{class-id}`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2792,7 +3869,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async addUserToClass(classId: string, classMemberReference: ClassMemberReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addUserToClass(classId, classMemberReference, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.addUserToClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2803,7 +3882,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async createClass(educationClass: EducationClass, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationClass>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createClass(educationClass, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.createClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2814,7 +3895,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async deleteClass(classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteClass(classId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.deleteClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2826,7 +3909,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async deleteUserFromClass(classId: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserFromClass(classId, userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.deleteUserFromClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2837,7 +3922,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async getClass(classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationClass>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getClass(classId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.getClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2848,7 +3935,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async listClassMembers(classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listClassMembers(classId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.listClassMembers']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2858,7 +3947,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async listClasses(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfClass>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listClasses(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.listClasses']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -2870,7 +3961,9 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
          */
         async updateClass(classId: string, educationClass: EducationClass, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationClass>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateClass(classId, educationClass, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassApi.updateClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -3074,6 +4167,7 @@ export class EducationClassApi extends BaseAPI {
 }
 
 
+
 /**
  * EducationClassTeachersApi - axios parameter creator
  * @export
@@ -3093,7 +4187,7 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
             assertParamExists('addTeacherToClass', 'classId', classId)
             // verify required parameter 'classTeacherReference' is not null or undefined
             assertParamExists('addTeacherToClass', 'classTeacherReference', classTeacherReference)
-            const localVarPath = `/education/classes/{class-id}/teachers/$ref`
+            const localVarPath = `/v1.0/education/classes/{class-id}/teachers/$ref`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3137,7 +4231,7 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
             assertParamExists('deleteTeacherFromClass', 'classId', classId)
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteTeacherFromClass', 'userId', userId)
-            const localVarPath = `/education/classes/{class-id}/teachers/{user-id}/$ref`
+            const localVarPath = `/v1.0/education/classes/{class-id}/teachers/{user-id}/$ref`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)))
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3176,7 +4270,7 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
         getTeachers: async (classId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'classId' is not null or undefined
             assertParamExists('getTeachers', 'classId', classId)
-            const localVarPath = `/education/classes/{class-id}/teachers`
+            const localVarPath = `/v1.0/education/classes/{class-id}/teachers`
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3224,7 +4318,9 @@ export const EducationClassTeachersApiFp = function(configuration?: Configuratio
          */
         async addTeacherToClass(classId: string, classTeacherReference: ClassTeacherReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addTeacherToClass(classId, classTeacherReference, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassTeachersApi.addTeacherToClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3236,7 +4332,9 @@ export const EducationClassTeachersApiFp = function(configuration?: Configuratio
          */
         async deleteTeacherFromClass(classId: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTeacherFromClass(classId, userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassTeachersApi.deleteTeacherFromClass']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3247,7 +4345,9 @@ export const EducationClassTeachersApiFp = function(configuration?: Configuratio
          */
         async getTeachers(classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTeachers(classId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationClassTeachersApi.getTeachers']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -3341,6 +4441,7 @@ export class EducationClassTeachersApi extends BaseAPI {
 }
 
 
+
 /**
  * EducationSchoolApi - axios parameter creator
  * @export
@@ -3360,7 +4461,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             assertParamExists('addClassToSchool', 'schoolId', schoolId)
             // verify required parameter 'classReference' is not null or undefined
             assertParamExists('addClassToSchool', 'classReference', classReference)
-            const localVarPath = `/education/schools/{school-id}/classes/$ref`
+            const localVarPath = `/v1.0/education/schools/{school-id}/classes/$ref`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3404,7 +4505,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             assertParamExists('addUserToSchool', 'schoolId', schoolId)
             // verify required parameter 'educationUserReference' is not null or undefined
             assertParamExists('addUserToSchool', 'educationUserReference', educationUserReference)
-            const localVarPath = `/education/schools/{school-id}/users/$ref`
+            const localVarPath = `/v1.0/education/schools/{school-id}/users/$ref`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3445,7 +4546,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
         createSchool: async (educationSchool: EducationSchool, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'educationSchool' is not null or undefined
             assertParamExists('createSchool', 'educationSchool', educationSchool)
-            const localVarPath = `/education/schools`;
+            const localVarPath = `/v1.0/education/schools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3488,7 +4589,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             assertParamExists('deleteClassFromSchool', 'schoolId', schoolId)
             // verify required parameter 'classId' is not null or undefined
             assertParamExists('deleteClassFromSchool', 'classId', classId)
-            const localVarPath = `/education/schools/{school-id}/classes/{class-id}/$ref`
+            const localVarPath = `/v1.0/education/schools/{school-id}/classes/{class-id}/$ref`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)))
                 .replace(`{${"class-id"}}`, encodeURIComponent(String(classId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3527,7 +4628,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
         deleteSchool: async (schoolId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('deleteSchool', 'schoolId', schoolId)
-            const localVarPath = `/education/schools/{school-id}`
+            const localVarPath = `/v1.0/education/schools/{school-id}`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3568,7 +4669,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             assertParamExists('deleteUserFromSchool', 'schoolId', schoolId)
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteUserFromSchool', 'userId', userId)
-            const localVarPath = `/education/schools/{school-id}/users/{user-id}/$ref`
+            const localVarPath = `/v1.0/education/schools/{school-id}/users/{user-id}/$ref`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)))
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -3607,7 +4708,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
         getSchool: async (schoolId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('getSchool', 'schoolId', schoolId)
-            const localVarPath = `/education/schools/{school-id}`
+            const localVarPath = `/v1.0/education/schools/{school-id}`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3645,7 +4746,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
         listSchoolClasses: async (schoolId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('listSchoolClasses', 'schoolId', schoolId)
-            const localVarPath = `/education/schools/{school-id}/classes`
+            const localVarPath = `/v1.0/education/schools/{school-id}/classes`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3683,7 +4784,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
         listSchoolUsers: async (schoolId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('listSchoolUsers', 'schoolId', schoolId)
-            const localVarPath = `/education/schools/{school-id}/users`
+            const localVarPath = `/v1.0/education/schools/{school-id}/users`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3718,7 +4819,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
          * @throws {RequiredError}
          */
         listSchools: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/education/schools`;
+            const localVarPath = `/v1.0/education/schools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3758,7 +4859,7 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             assertParamExists('updateSchool', 'schoolId', schoolId)
             // verify required parameter 'educationSchool' is not null or undefined
             assertParamExists('updateSchool', 'educationSchool', educationSchool)
-            const localVarPath = `/education/schools/{school-id}`
+            const localVarPath = `/v1.0/education/schools/{school-id}`
                 .replace(`{${"school-id"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3809,7 +4910,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async addClassToSchool(schoolId: string, classReference: ClassReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addClassToSchool(schoolId, classReference, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.addClassToSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3821,7 +4924,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async addUserToSchool(schoolId: string, educationUserReference: EducationUserReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addUserToSchool(schoolId, educationUserReference, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.addUserToSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3832,7 +4937,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async createSchool(educationSchool: EducationSchool, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationSchool>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createSchool(educationSchool, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.createSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3844,7 +4951,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async deleteClassFromSchool(schoolId: string, classId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteClassFromSchool(schoolId, classId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.deleteClassFromSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * Deletes a school. A school can only be delete if it has the terminationDate property set. And if that termination Date is in the past.
@@ -3855,7 +4964,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async deleteSchool(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSchool(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.deleteSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3867,7 +4978,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async deleteUserFromSchool(schoolId: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUserFromSchool(schoolId, userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.deleteUserFromSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3878,7 +4991,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async getSchool(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationSchool>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSchool(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.getSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3889,7 +5004,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async listSchoolClasses(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationClass>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listSchoolClasses(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.listSchoolClasses']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3900,7 +5017,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async listSchoolUsers(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser1>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listSchoolUsers(schoolId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.listSchoolUsers']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3910,7 +5029,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async listSchools(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfSchools>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listSchools(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.listSchools']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -3922,7 +5043,9 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          */
         async updateSchool(schoolId: string, educationSchool: EducationSchool, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationSchool>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateSchool(schoolId, educationSchool, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationSchoolApi.updateSchool']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -4196,6 +5319,7 @@ export class EducationSchoolApi extends BaseAPI {
 }
 
 
+
 /**
  * EducationUserApi - axios parameter creator
  * @export
@@ -4212,7 +5336,7 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
         createEducationUser: async (educationUser: EducationUser, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'educationUser' is not null or undefined
             assertParamExists('createEducationUser', 'educationUser', educationUser)
-            const localVarPath = `/education/users`;
+            const localVarPath = `/v1.0/education/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4252,7 +5376,7 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
         deleteEducationUser: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteEducationUser', 'userId', userId)
-            const localVarPath = `/education/users/{user-id}`
+            const localVarPath = `/v1.0/education/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4284,14 +5408,14 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
          * 
          * @summary Get properties of educationUser
          * @param {string} userId key: id or username of user
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<GetEducationUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getEducationUser: async (userId: string, $expand?: Set<'memberOf'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getEducationUser: async (userId: string, $expand?: Set<GetEducationUserExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getEducationUser', 'userId', userId)
-            const localVarPath = `/education/users/{user-id}`
+            const localVarPath = `/v1.0/education/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4326,13 +5450,13 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @summary Get entities from education users
-         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<ListEducationUsersOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListEducationUsersExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEducationUsers: async ($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/education/users`;
+        listEducationUsers: async ($orderby?: Set<ListEducationUsersOrderbyEnum>, $expand?: Set<ListEducationUsersExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/education/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4380,7 +5504,7 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
             assertParamExists('updateEducationUser', 'userId', userId)
             // verify required parameter 'educationUser' is not null or undefined
             assertParamExists('updateEducationUser', 'educationUser', educationUser)
-            const localVarPath = `/education/users/{user-id}`
+            const localVarPath = `/v1.0/education/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4430,7 +5554,9 @@ export const EducationUserApiFp = function(configuration?: Configuration) {
          */
         async createEducationUser(educationUser: EducationUser, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createEducationUser(educationUser, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationUserApi.createEducationUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -4441,31 +5567,37 @@ export const EducationUserApiFp = function(configuration?: Configuration) {
          */
         async deleteEducationUser(userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteEducationUser(userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationUserApi.deleteEducationUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
          * @summary Get properties of educationUser
          * @param {string} userId key: id or username of user
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<GetEducationUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getEducationUser(userId: string, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
+        async getEducationUser(userId: string, $expand?: Set<GetEducationUserExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getEducationUser(userId, $expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationUserApi.getEducationUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
          * @summary Get entities from education users
-         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<ListEducationUsersOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListEducationUsersExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listEducationUsers($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser>> {
+        async listEducationUsers($orderby?: Set<ListEducationUsersOrderbyEnum>, $expand?: Set<ListEducationUsersExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listEducationUsers($orderby, $expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationUserApi.listEducationUsers']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -4477,7 +5609,9 @@ export const EducationUserApiFp = function(configuration?: Configuration) {
          */
         async updateEducationUser(userId: string, educationUser: EducationUser, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateEducationUser(userId, educationUser, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['EducationUserApi.updateEducationUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -4513,22 +5647,22 @@ export const EducationUserApiFactory = function (configuration?: Configuration, 
          * 
          * @summary Get properties of educationUser
          * @param {string} userId key: id or username of user
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<GetEducationUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getEducationUser(userId: string, $expand?: Set<'memberOf'>, options?: any): AxiosPromise<EducationUser> {
+        getEducationUser(userId: string, $expand?: Set<GetEducationUserExpandEnum>, options?: any): AxiosPromise<EducationUser> {
             return localVarFp.getEducationUser(userId, $expand, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get entities from education users
-         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<ListEducationUsersOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListEducationUsersExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listEducationUsers($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options?: any): AxiosPromise<CollectionOfEducationUser> {
+        listEducationUsers($orderby?: Set<ListEducationUsersOrderbyEnum>, $expand?: Set<ListEducationUsersExpandEnum>, options?: any): AxiosPromise<CollectionOfEducationUser> {
             return localVarFp.listEducationUsers($orderby, $expand, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4580,25 +5714,25 @@ export class EducationUserApi extends BaseAPI {
      * 
      * @summary Get properties of educationUser
      * @param {string} userId key: id or username of user
-     * @param {Set<'memberOf'>} [$expand] Expand related entities
+     * @param {Set<GetEducationUserExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EducationUserApi
      */
-    public getEducationUser(userId: string, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig) {
+    public getEducationUser(userId: string, $expand?: Set<GetEducationUserExpandEnum>, options?: AxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).getEducationUser(userId, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get entities from education users
-     * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-     * @param {Set<'memberOf'>} [$expand] Expand related entities
+     * @param {Set<ListEducationUsersOrderbyEnum>} [$orderby] Order items by property values
+     * @param {Set<ListEducationUsersExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EducationUserApi
      */
-    public listEducationUsers($orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $expand?: Set<'memberOf'>, options?: AxiosRequestConfig) {
+    public listEducationUsers($orderby?: Set<ListEducationUsersOrderbyEnum>, $expand?: Set<ListEducationUsersExpandEnum>, options?: AxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).listEducationUsers($orderby, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -4615,6 +5749,33 @@ export class EducationUserApi extends BaseAPI {
         return EducationUserApiFp(this.configuration).updateEducationUser(userId, educationUser, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+/**
+ * @export
+ */
+export const GetEducationUserExpandEnum = {
+    MemberOf: 'memberOf'
+} as const;
+export type GetEducationUserExpandEnum = typeof GetEducationUserExpandEnum[keyof typeof GetEducationUserExpandEnum];
+/**
+ * @export
+ */
+export const ListEducationUsersOrderbyEnum = {
+    DisplayName: 'displayName',
+    DisplayNameDesc: 'displayName desc',
+    Mail: 'mail',
+    MailDesc: 'mail desc',
+    OnPremisesSamAccountName: 'onPremisesSamAccountName',
+    OnPremisesSamAccountNameDesc: 'onPremisesSamAccountName desc'
+} as const;
+export type ListEducationUsersOrderbyEnum = typeof ListEducationUsersOrderbyEnum[keyof typeof ListEducationUsersOrderbyEnum];
+/**
+ * @export
+ */
+export const ListEducationUsersExpandEnum = {
+    MemberOf: 'memberOf'
+} as const;
+export type ListEducationUsersExpandEnum = typeof ListEducationUsersExpandEnum[keyof typeof ListEducationUsersExpandEnum];
 
 
 /**
@@ -4636,7 +5797,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             assertParamExists('addMember', 'groupId', groupId)
             // verify required parameter 'memberReference' is not null or undefined
             assertParamExists('addMember', 'memberReference', memberReference)
-            const localVarPath = `/groups/{group-id}/members/$ref`
+            const localVarPath = `/v1.0/groups/{group-id}/members/$ref`
                 .replace(`{${"group-id"}}`, encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4648,6 +5809,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -4674,7 +5837,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         deleteGroup: async (groupId: string, ifMatch?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('deleteGroup', 'groupId', groupId)
-            const localVarPath = `/groups/{group-id}`
+            const localVarPath = `/v1.0/groups/{group-id}`
                 .replace(`{${"group-id"}}`, encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4686,6 +5849,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
@@ -4716,7 +5881,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             assertParamExists('deleteMember', 'groupId', groupId)
             // verify required parameter 'directoryObjectId' is not null or undefined
             assertParamExists('deleteMember', 'directoryObjectId', directoryObjectId)
-            const localVarPath = `/groups/{group-id}/members/{directory-object-id}/$ref`
+            const localVarPath = `/v1.0/groups/{group-id}/members/{directory-object-id}/$ref`
                 .replace(`{${"group-id"}}`, encodeURIComponent(String(groupId)))
                 .replace(`{${"directory-object-id"}}`, encodeURIComponent(String(directoryObjectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -4729,6 +5894,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
@@ -4749,15 +5916,15 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Get entity from groups by key
          * @param {string} groupId key: id or name of group
-         * @param {Set<'id' | 'description' | 'displayName' | 'members'>} [$select] Select properties to be returned
-         * @param {Set<'members'>} [$expand] Expand related entities
+         * @param {Set<GetGroupSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<GetGroupExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGroup: async (groupId: string, $select?: Set<'id' | 'description' | 'displayName' | 'members'>, $expand?: Set<'members'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getGroup: async (groupId: string, $select?: Set<GetGroupSelectEnum>, $expand?: Set<GetGroupExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('getGroup', 'groupId', groupId)
-            const localVarPath = `/groups/{group-id}`
+            const localVarPath = `/v1.0/groups/{group-id}`
                 .replace(`{${"group-id"}}`, encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4769,6 +5936,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if ($select) {
                 localVarQueryParameter['$select'] = Array.from($select).join(COLLECTION_FORMATS.csv);
@@ -4799,7 +5968,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         listMembers: async (groupId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('listMembers', 'groupId', groupId)
-            const localVarPath = `/groups/{group-id}/members`
+            const localVarPath = `/v1.0/groups/{group-id}/members`
                 .replace(`{${"group-id"}}`, encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4811,6 +5980,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -4836,7 +6007,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             assertParamExists('updateGroup', 'groupId', groupId)
             // verify required parameter 'group' is not null or undefined
             assertParamExists('updateGroup', 'group', group)
-            const localVarPath = `/groups/{group-id}`
+            const localVarPath = `/v1.0/groups/{group-id}`
                 .replace(`{${"group-id"}}`, encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4848,6 +6019,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -4883,7 +6056,9 @@ export const GroupApiFp = function(configuration?: Configuration) {
          */
         async addMember(groupId: string, memberReference: MemberReference, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addMember(groupId, memberReference, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.addMember']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -4895,7 +6070,9 @@ export const GroupApiFp = function(configuration?: Configuration) {
          */
         async deleteGroup(groupId: string, ifMatch?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteGroup(groupId, ifMatch, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.deleteGroup']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -4908,20 +6085,24 @@ export const GroupApiFp = function(configuration?: Configuration) {
          */
         async deleteMember(groupId: string, directoryObjectId: string, ifMatch?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMember(groupId, directoryObjectId, ifMatch, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.deleteMember']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
          * @summary Get entity from groups by key
          * @param {string} groupId key: id or name of group
-         * @param {Set<'id' | 'description' | 'displayName' | 'members'>} [$select] Select properties to be returned
-         * @param {Set<'members'>} [$expand] Expand related entities
+         * @param {Set<GetGroupSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<GetGroupExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getGroup(groupId: string, $select?: Set<'id' | 'description' | 'displayName' | 'members'>, $expand?: Set<'members'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Group>> {
+        async getGroup(groupId: string, $select?: Set<GetGroupSelectEnum>, $expand?: Set<GetGroupExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Group>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getGroup(groupId, $select, $expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.getGroup']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -4932,7 +6113,9 @@ export const GroupApiFp = function(configuration?: Configuration) {
          */
         async listMembers(groupId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfUsers>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listMembers(groupId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.listMembers']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -4944,7 +6127,9 @@ export const GroupApiFp = function(configuration?: Configuration) {
          */
         async updateGroup(groupId: string, group: Group, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateGroup(groupId, group, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupApi.updateGroup']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -4994,12 +6179,12 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * 
          * @summary Get entity from groups by key
          * @param {string} groupId key: id or name of group
-         * @param {Set<'id' | 'description' | 'displayName' | 'members'>} [$select] Select properties to be returned
-         * @param {Set<'members'>} [$expand] Expand related entities
+         * @param {Set<GetGroupSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<GetGroupExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGroup(groupId: string, $select?: Set<'id' | 'description' | 'displayName' | 'members'>, $expand?: Set<'members'>, options?: any): AxiosPromise<Group> {
+        getGroup(groupId: string, $select?: Set<GetGroupSelectEnum>, $expand?: Set<GetGroupExpandEnum>, options?: any): AxiosPromise<Group> {
             return localVarFp.getGroup(groupId, $select, $expand, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5077,13 +6262,13 @@ export class GroupApi extends BaseAPI {
      * 
      * @summary Get entity from groups by key
      * @param {string} groupId key: id or name of group
-     * @param {Set<'id' | 'description' | 'displayName' | 'members'>} [$select] Select properties to be returned
-     * @param {Set<'members'>} [$expand] Expand related entities
+     * @param {Set<GetGroupSelectEnum>} [$select] Select properties to be returned
+     * @param {Set<GetGroupExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public getGroup(groupId: string, $select?: Set<'id' | 'description' | 'displayName' | 'members'>, $expand?: Set<'members'>, options?: AxiosRequestConfig) {
+    public getGroup(groupId: string, $select?: Set<GetGroupSelectEnum>, $expand?: Set<GetGroupExpandEnum>, options?: AxiosRequestConfig) {
         return GroupApiFp(this.configuration).getGroup(groupId, $select, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -5113,6 +6298,24 @@ export class GroupApi extends BaseAPI {
     }
 }
 
+/**
+ * @export
+ */
+export const GetGroupSelectEnum = {
+    Id: 'id',
+    Description: 'description',
+    DisplayName: 'displayName',
+    Members: 'members'
+} as const;
+export type GetGroupSelectEnum = typeof GetGroupSelectEnum[keyof typeof GetGroupSelectEnum];
+/**
+ * @export
+ */
+export const GetGroupExpandEnum = {
+    Members: 'members'
+} as const;
+export type GetGroupExpandEnum = typeof GetGroupExpandEnum[keyof typeof GetGroupExpandEnum];
+
 
 /**
  * GroupsApi - axios parameter creator
@@ -5130,7 +6333,7 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
         createGroup: async (group: Group, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'group' is not null or undefined
             assertParamExists('createGroup', 'group', group)
-            const localVarPath = `/groups`;
+            const localVarPath = `/v1.0/groups`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5141,6 +6344,8 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -5160,14 +6365,14 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @summary Get entities from groups
          * @param {string} [$search] Search items by search phrases
-         * @param {Set<'displayName' | 'displayName desc'>} [$orderby] Order items by property values
-         * @param {Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>} [$select] Select properties to be returned
-         * @param {Set<'members'>} [$expand] Expand related entities
+         * @param {Set<ListGroupsOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListGroupsSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<ListGroupsExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listGroups: async ($search?: string, $orderby?: Set<'displayName' | 'displayName desc'>, $select?: Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>, $expand?: Set<'members'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/groups`;
+        listGroups: async ($search?: string, $orderby?: Set<ListGroupsOrderbyEnum>, $select?: Set<ListGroupsSelectEnum>, $expand?: Set<ListGroupsExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/groups`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5178,6 +6383,8 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if ($search !== undefined) {
                 localVarQueryParameter['$search'] = $search;
@@ -5225,21 +6432,25 @@ export const GroupsApiFp = function(configuration?: Configuration) {
          */
         async createGroup(group: Group, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Group>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createGroup(group, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupsApi.createGroup']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
          * @summary Get entities from groups
          * @param {string} [$search] Search items by search phrases
-         * @param {Set<'displayName' | 'displayName desc'>} [$orderby] Order items by property values
-         * @param {Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>} [$select] Select properties to be returned
-         * @param {Set<'members'>} [$expand] Expand related entities
+         * @param {Set<ListGroupsOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListGroupsSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<ListGroupsExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listGroups($search?: string, $orderby?: Set<'displayName' | 'displayName desc'>, $select?: Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>, $expand?: Set<'members'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfGroup>> {
+        async listGroups($search?: string, $orderby?: Set<ListGroupsOrderbyEnum>, $select?: Set<ListGroupsSelectEnum>, $expand?: Set<ListGroupsExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfGroup>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listGroups($search, $orderby, $select, $expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['GroupsApi.listGroups']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5265,13 +6476,13 @@ export const GroupsApiFactory = function (configuration?: Configuration, basePat
          * 
          * @summary Get entities from groups
          * @param {string} [$search] Search items by search phrases
-         * @param {Set<'displayName' | 'displayName desc'>} [$orderby] Order items by property values
-         * @param {Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>} [$select] Select properties to be returned
-         * @param {Set<'members'>} [$expand] Expand related entities
+         * @param {Set<ListGroupsOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListGroupsSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<ListGroupsExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listGroups($search?: string, $orderby?: Set<'displayName' | 'displayName desc'>, $select?: Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>, $expand?: Set<'members'>, options?: any): AxiosPromise<CollectionOfGroup> {
+        listGroups($search?: string, $orderby?: Set<ListGroupsOrderbyEnum>, $select?: Set<ListGroupsSelectEnum>, $expand?: Set<ListGroupsExpandEnum>, options?: any): AxiosPromise<CollectionOfGroup> {
             return localVarFp.listGroups($search, $orderby, $select, $expand, options).then((request) => request(axios, basePath));
         },
     };
@@ -5300,17 +6511,44 @@ export class GroupsApi extends BaseAPI {
      * 
      * @summary Get entities from groups
      * @param {string} [$search] Search items by search phrases
-     * @param {Set<'displayName' | 'displayName desc'>} [$orderby] Order items by property values
-     * @param {Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>} [$select] Select properties to be returned
-     * @param {Set<'members'>} [$expand] Expand related entities
+     * @param {Set<ListGroupsOrderbyEnum>} [$orderby] Order items by property values
+     * @param {Set<ListGroupsSelectEnum>} [$select] Select properties to be returned
+     * @param {Set<ListGroupsExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupsApi
      */
-    public listGroups($search?: string, $orderby?: Set<'displayName' | 'displayName desc'>, $select?: Set<'id' | 'description' | 'displayName' | 'mail' | 'members'>, $expand?: Set<'members'>, options?: AxiosRequestConfig) {
+    public listGroups($search?: string, $orderby?: Set<ListGroupsOrderbyEnum>, $select?: Set<ListGroupsSelectEnum>, $expand?: Set<ListGroupsExpandEnum>, options?: AxiosRequestConfig) {
         return GroupsApiFp(this.configuration).listGroups($search, $orderby, $select, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+/**
+ * @export
+ */
+export const ListGroupsOrderbyEnum = {
+    DisplayName: 'displayName',
+    DisplayNameDesc: 'displayName desc'
+} as const;
+export type ListGroupsOrderbyEnum = typeof ListGroupsOrderbyEnum[keyof typeof ListGroupsOrderbyEnum];
+/**
+ * @export
+ */
+export const ListGroupsSelectEnum = {
+    Id: 'id',
+    Description: 'description',
+    DisplayName: 'displayName',
+    Mail: 'mail',
+    Members: 'members'
+} as const;
+export type ListGroupsSelectEnum = typeof ListGroupsSelectEnum[keyof typeof ListGroupsSelectEnum];
+/**
+ * @export
+ */
+export const ListGroupsExpandEnum = {
+    Members: 'members'
+} as const;
+export type ListGroupsExpandEnum = typeof ListGroupsExpandEnum[keyof typeof ListGroupsExpandEnum];
 
 
 /**
@@ -5329,7 +6567,7 @@ export const MeChangepasswordApiAxiosParamCreator = function (configuration?: Co
         changeOwnPassword: async (passwordChange: PasswordChange, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'passwordChange' is not null or undefined
             assertParamExists('changeOwnPassword', 'passwordChange', passwordChange)
-            const localVarPath = `/me/changePassword`;
+            const localVarPath = `/v1.0/me/changePassword`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5340,6 +6578,8 @@ export const MeChangepasswordApiAxiosParamCreator = function (configuration?: Co
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -5374,7 +6614,9 @@ export const MeChangepasswordApiFp = function(configuration?: Configuration) {
          */
         async changeOwnPassword(passwordChange: PasswordChange, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.changeOwnPassword(passwordChange, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeChangepasswordApi.changeOwnPassword']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5420,6 +6662,7 @@ export class MeChangepasswordApi extends BaseAPI {
 }
 
 
+
 /**
  * MeDriveApi - axios parameter creator
  * @export
@@ -5433,7 +6676,7 @@ export const MeDriveApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getHome: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/me/drive`;
+            const localVarPath = `/v1.0/me/drive`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5444,6 +6687,72 @@ export const MeDriveApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * The `driveItems` returned from the `sharedByMe` method always include the `permissions` relation that indicates they are shared items. 
+         * @summary Get a list of driveItem objects shared by the current user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSharedByMe: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1beta1/me/drive/sharedByMe`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * The `driveItems` returned from the `sharedWithMe` method always include the `remoteItem` facet that indicates they are items from a different drive. 
+         * @summary Get a list of driveItem objects shared with the owner of a drive.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSharedWithMe: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1beta1/me/drive/sharedWithMe`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -5474,7 +6783,33 @@ export const MeDriveApiFp = function(configuration?: Configuration) {
          */
         async getHome(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getHome(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeDriveApi.getHome']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * The `driveItems` returned from the `sharedByMe` method always include the `permissions` relation that indicates they are shared items. 
+         * @summary Get a list of driveItem objects shared by the current user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listSharedByMe(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfDriveItems1>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSharedByMe(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeDriveApi.listSharedByMe']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * The `driveItems` returned from the `sharedWithMe` method always include the `remoteItem` facet that indicates they are items from a different drive. 
+         * @summary Get a list of driveItem objects shared with the owner of a drive.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listSharedWithMe(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfDriveItems1>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listSharedWithMe(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeDriveApi.listSharedWithMe']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5494,6 +6829,24 @@ export const MeDriveApiFactory = function (configuration?: Configuration, basePa
          */
         getHome(options?: any): AxiosPromise<Drive> {
             return localVarFp.getHome(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * The `driveItems` returned from the `sharedByMe` method always include the `permissions` relation that indicates they are shared items. 
+         * @summary Get a list of driveItem objects shared by the current user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSharedByMe(options?: any): AxiosPromise<CollectionOfDriveItems1> {
+            return localVarFp.listSharedByMe(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * The `driveItems` returned from the `sharedWithMe` method always include the `remoteItem` facet that indicates they are items from a different drive. 
+         * @summary Get a list of driveItem objects shared with the owner of a drive.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listSharedWithMe(options?: any): AxiosPromise<CollectionOfDriveItems1> {
+            return localVarFp.listSharedWithMe(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5515,7 +6868,30 @@ export class MeDriveApi extends BaseAPI {
     public getHome(options?: AxiosRequestConfig) {
         return MeDriveApiFp(this.configuration).getHome(options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * The `driveItems` returned from the `sharedByMe` method always include the `permissions` relation that indicates they are shared items. 
+     * @summary Get a list of driveItem objects shared by the current user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeDriveApi
+     */
+    public listSharedByMe(options?: AxiosRequestConfig) {
+        return MeDriveApiFp(this.configuration).listSharedByMe(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * The `driveItems` returned from the `sharedWithMe` method always include the `remoteItem` facet that indicates they are items from a different drive. 
+     * @summary Get a list of driveItem objects shared with the owner of a drive.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeDriveApi
+     */
+    public listSharedWithMe(options?: AxiosRequestConfig) {
+        return MeDriveApiFp(this.configuration).listSharedWithMe(options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 
 /**
@@ -5531,7 +6907,7 @@ export const MeDriveRootApiAxiosParamCreator = function (configuration?: Configu
          * @throws {RequiredError}
          */
         homeGetRoot: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/me/drive/root`;
+            const localVarPath = `/v1.0/me/drive/root`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5542,6 +6918,8 @@ export const MeDriveRootApiAxiosParamCreator = function (configuration?: Configu
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -5572,7 +6950,9 @@ export const MeDriveRootApiFp = function(configuration?: Configuration) {
          */
         async homeGetRoot(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DriveItem>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.homeGetRoot(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeDriveRootApi.homeGetRoot']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5616,6 +6996,7 @@ export class MeDriveRootApi extends BaseAPI {
 }
 
 
+
 /**
  * MeDriveRootChildrenApi - axios parameter creator
  * @export
@@ -5629,7 +7010,7 @@ export const MeDriveRootChildrenApiAxiosParamCreator = function (configuration?:
          * @throws {RequiredError}
          */
         homeGetChildren: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/me/drive/root/children`;
+            const localVarPath = `/v1.0/me/drive/root/children`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5640,6 +7021,8 @@ export const MeDriveRootChildrenApiAxiosParamCreator = function (configuration?:
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -5670,7 +7053,9 @@ export const MeDriveRootChildrenApiFp = function(configuration?: Configuration) 
          */
         async homeGetChildren(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfDriveItems>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.homeGetChildren(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeDriveRootChildrenApi.homeGetChildren']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5714,6 +7099,7 @@ export class MeDriveRootChildrenApi extends BaseAPI {
 }
 
 
+
 /**
  * MeDrivesApi - axios parameter creator
  * @export
@@ -5729,7 +7115,7 @@ export const MeDrivesApiAxiosParamCreator = function (configuration?: Configurat
          * @throws {RequiredError}
          */
         listMyDrives: async ($orderby?: string, $filter?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/me/drives`;
+            const localVarPath = `/v1.0/me/drives`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5740,6 +7126,8 @@ export const MeDrivesApiAxiosParamCreator = function (configuration?: Configurat
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if ($orderby !== undefined) {
                 localVarQueryParameter['$orderby'] = $orderby;
@@ -5780,7 +7168,9 @@ export const MeDrivesApiFp = function(configuration?: Configuration) {
          */
         async listMyDrives($orderby?: string, $filter?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfDrives>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listMyDrives($orderby, $filter, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeDrivesApi.listMyDrives']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5828,6 +7218,7 @@ export class MeDrivesApi extends BaseAPI {
 }
 
 
+
 /**
  * MeUserApi - axios parameter creator
  * @export
@@ -5837,12 +7228,12 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @summary Get current user
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<GetOwnUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getOwnUser: async ($expand?: Set<'memberOf'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/me`;
+        getOwnUser: async ($expand?: Set<GetOwnUserExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5854,6 +7245,8 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication openId required
+
             if ($expand) {
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
@@ -5863,6 +7256,42 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update the current user
+         * @param {User} [user] New user values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateOwnUser: async (user?: User, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(user, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5882,13 +7311,28 @@ export const MeUserApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get current user
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<GetOwnUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getOwnUser($expand?: Set<'memberOf'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async getOwnUser($expand?: Set<GetOwnUserExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getOwnUser($expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeUserApi.getOwnUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update the current user
+         * @param {User} [user] New user values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateOwnUser(user?: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateOwnUser(user, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['MeUserApi.updateOwnUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -5903,12 +7347,22 @@ export const MeUserApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @summary Get current user
-         * @param {Set<'memberOf'>} [$expand] Expand related entities
+         * @param {Set<GetOwnUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getOwnUser($expand?: Set<'memberOf'>, options?: any): AxiosPromise<User> {
+        getOwnUser($expand?: Set<GetOwnUserExpandEnum>, options?: any): AxiosPromise<User> {
             return localVarFp.getOwnUser($expand, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update the current user
+         * @param {User} [user] New user values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateOwnUser(user?: User, options?: any): AxiosPromise<User> {
+            return localVarFp.updateOwnUser(user, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5923,15 +7377,209 @@ export class MeUserApi extends BaseAPI {
     /**
      * 
      * @summary Get current user
-     * @param {Set<'memberOf'>} [$expand] Expand related entities
+     * @param {Set<GetOwnUserExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MeUserApi
      */
-    public getOwnUser($expand?: Set<'memberOf'>, options?: AxiosRequestConfig) {
+    public getOwnUser($expand?: Set<GetOwnUserExpandEnum>, options?: AxiosRequestConfig) {
         return MeUserApiFp(this.configuration).getOwnUser($expand, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @summary Update the current user
+     * @param {User} [user] New user values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeUserApi
+     */
+    public updateOwnUser(user?: User, options?: AxiosRequestConfig) {
+        return MeUserApiFp(this.configuration).updateOwnUser(user, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
+/**
+ * @export
+ */
+export const GetOwnUserExpandEnum = {
+    MemberOf: 'memberOf'
+} as const;
+export type GetOwnUserExpandEnum = typeof GetOwnUserExpandEnum[keyof typeof GetOwnUserExpandEnum];
+
+
+/**
+ * RoleManagementApi - axios parameter creator
+ * @export
+ */
+export const RoleManagementApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Read the properties and relationships of a `unifiedRoleDefinition` object. 
+         * @summary Get unifiedRoleDefinition
+         * @param {string} roleId key: id of roleDefinition
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPermissionRoleDefinition: async (roleId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roleId' is not null or undefined
+            assertParamExists('getPermissionRoleDefinition', 'roleId', roleId)
+            const localVarPath = `/v1beta1/roleManagement/permissions/roleDefinitions/{role-id}`
+                .replace(`{${"role-id"}}`, encodeURIComponent(String(roleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a list of `unifiedRoleDefinition` objects for the permissions provider. This list determines the roles that can be selected when creating sharing invites. 
+         * @summary List roleDefinitions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPermissionRoleDefinitions: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1beta1/roleManagement/permissions/roleDefinitions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RoleManagementApi - functional programming interface
+ * @export
+ */
+export const RoleManagementApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RoleManagementApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Read the properties and relationships of a `unifiedRoleDefinition` object. 
+         * @summary Get unifiedRoleDefinition
+         * @param {string} roleId key: id of roleDefinition
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPermissionRoleDefinition(roleId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnifiedRoleDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPermissionRoleDefinition(roleId, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['RoleManagementApi.getPermissionRoleDefinition']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Get a list of `unifiedRoleDefinition` objects for the permissions provider. This list determines the roles that can be selected when creating sharing invites. 
+         * @summary List roleDefinitions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPermissionRoleDefinitions(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UnifiedRoleDefinition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPermissionRoleDefinitions(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['RoleManagementApi.listPermissionRoleDefinitions']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * RoleManagementApi - factory interface
+ * @export
+ */
+export const RoleManagementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RoleManagementApiFp(configuration)
+    return {
+        /**
+         * Read the properties and relationships of a `unifiedRoleDefinition` object. 
+         * @summary Get unifiedRoleDefinition
+         * @param {string} roleId key: id of roleDefinition
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPermissionRoleDefinition(roleId: string, options?: any): AxiosPromise<UnifiedRoleDefinition> {
+            return localVarFp.getPermissionRoleDefinition(roleId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a list of `unifiedRoleDefinition` objects for the permissions provider. This list determines the roles that can be selected when creating sharing invites. 
+         * @summary List roleDefinitions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPermissionRoleDefinitions(options?: any): AxiosPromise<UnifiedRoleDefinition> {
+            return localVarFp.listPermissionRoleDefinitions(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RoleManagementApi - object-oriented interface
+ * @export
+ * @class RoleManagementApi
+ * @extends {BaseAPI}
+ */
+export class RoleManagementApi extends BaseAPI {
+    /**
+     * Read the properties and relationships of a `unifiedRoleDefinition` object. 
+     * @summary Get unifiedRoleDefinition
+     * @param {string} roleId key: id of roleDefinition
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoleManagementApi
+     */
+    public getPermissionRoleDefinition(roleId: string, options?: AxiosRequestConfig) {
+        return RoleManagementApiFp(this.configuration).getPermissionRoleDefinition(roleId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get a list of `unifiedRoleDefinition` objects for the permissions provider. This list determines the roles that can be selected when creating sharing invites. 
+     * @summary List roleDefinitions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoleManagementApi
+     */
+    public listPermissionRoleDefinitions(options?: AxiosRequestConfig) {
+        return RoleManagementApiFp(this.configuration).listPermissionRoleDefinitions(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 
 
 /**
@@ -5948,7 +7596,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         assignTags: async (tagAssignment?: TagAssignment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/extensions/org.libregraph/tags`;
+            const localVarPath = `/v1.0/extensions/org.libregraph/tags`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5959,6 +7607,8 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -5981,7 +7631,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         getTags: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/extensions/org.libregraph/tags`;
+            const localVarPath = `/v1.0/extensions/org.libregraph/tags`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5992,6 +7642,8 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6012,7 +7664,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         unassignTags: async (tagUnassignment?: TagUnassignment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/extensions/org.libregraph/tags`;
+            const localVarPath = `/v1.0/extensions/org.libregraph/tags`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6023,6 +7675,8 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6057,7 +7711,9 @@ export const TagsApiFp = function(configuration?: Configuration) {
          */
         async assignTags(tagAssignment?: TagAssignment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.assignTags(tagAssignment, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['TagsApi.assignTags']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -6067,7 +7723,9 @@ export const TagsApiFp = function(configuration?: Configuration) {
          */
         async getTags(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfTags>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTags(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['TagsApi.getTags']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -6078,7 +7736,9 @@ export const TagsApiFp = function(configuration?: Configuration) {
          */
         async unassignTags(tagUnassignment?: TagUnassignment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.unassignTags(tagUnassignment, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['TagsApi.unassignTags']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -6166,6 +7826,7 @@ export class TagsApi extends BaseAPI {
 }
 
 
+
 /**
  * UserApi - axios parameter creator
  * @export
@@ -6183,7 +7844,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         deleteUser: async (userId: string, ifMatch?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('deleteUser', 'userId', userId)
-            const localVarPath = `/users/{user-id}`
+            const localVarPath = `/v1.0/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6195,6 +7856,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
@@ -6222,7 +7885,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         exportPersonalData: async (userId: string, exportPersonalDataRequest?: ExportPersonalDataRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('exportPersonalData', 'userId', userId)
-            const localVarPath = `/users/{user-id}/exportPersonalData`
+            const localVarPath = `/v1.0/users/{user-id}/exportPersonalData`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6234,6 +7897,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6253,15 +7918,15 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Get entity from users by key
          * @param {string} userId key: id or name of user
-         * @param {Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-         * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+         * @param {Set<GetUserSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<GetUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUser: async (userId: string, $select?: Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getUser: async (userId: string, $select?: Set<GetUserSelectEnum>, $expand?: Set<GetUserExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('getUser', 'userId', userId)
-            const localVarPath = `/users/{user-id}`
+            const localVarPath = `/v1.0/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6273,6 +7938,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if ($select) {
                 localVarQueryParameter['$select'] = Array.from($select).join(COLLECTION_FORMATS.csv);
@@ -6306,7 +7973,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('updateUser', 'userId', userId)
             // verify required parameter 'user' is not null or undefined
             assertParamExists('updateUser', 'user', user)
-            const localVarPath = `/users/{user-id}`
+            const localVarPath = `/v1.0/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6318,6 +7985,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6353,7 +8022,9 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async deleteUser(userId: string, ifMatch?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteUser(userId, ifMatch, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserApi.deleteUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -6365,20 +8036,24 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async exportPersonalData(userId: string, exportPersonalDataRequest?: ExportPersonalDataRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.exportPersonalData(userId, exportPersonalDataRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserApi.exportPersonalData']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
          * @summary Get entity from users by key
          * @param {string} userId key: id or name of user
-         * @param {Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-         * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+         * @param {Set<GetUserSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<GetUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUser(userId: string, $select?: Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async getUser(userId: string, $select?: Set<GetUserSelectEnum>, $expand?: Set<GetUserExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUser(userId, $select, $expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserApi.getUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -6390,7 +8065,9 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async updateUser(userId: string, user: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(userId, user, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserApi.updateUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -6428,12 +8105,12 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Get entity from users by key
          * @param {string} userId key: id or name of user
-         * @param {Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-         * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+         * @param {Set<GetUserSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<GetUserExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUser(userId: string, $select?: Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options?: any): AxiosPromise<User> {
+        getUser(userId: string, $select?: Set<GetUserSelectEnum>, $expand?: Set<GetUserExpandEnum>, options?: any): AxiosPromise<User> {
             return localVarFp.getUser(userId, $select, $expand, options).then((request) => request(axios, basePath));
         },
         /**
@@ -6487,13 +8164,13 @@ export class UserApi extends BaseAPI {
      * 
      * @summary Get entity from users by key
      * @param {string} userId key: id or name of user
-     * @param {Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-     * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+     * @param {Set<GetUserSelectEnum>} [$select] Select properties to be returned
+     * @param {Set<GetUserExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public getUser(userId: string, $select?: Set<'id' | 'displayName' | 'drive' | 'drives' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options?: AxiosRequestConfig) {
+    public getUser(userId: string, $select?: Set<GetUserSelectEnum>, $expand?: Set<GetUserExpandEnum>, options?: AxiosRequestConfig) {
         return UserApiFp(this.configuration).getUser(userId, $select, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -6510,6 +8187,31 @@ export class UserApi extends BaseAPI {
         return UserApiFp(this.configuration).updateUser(userId, user, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+/**
+ * @export
+ */
+export const GetUserSelectEnum = {
+    Id: 'id',
+    DisplayName: 'displayName',
+    Drive: 'drive',
+    Drives: 'drives',
+    Mail: 'mail',
+    MemberOf: 'memberOf',
+    OnPremisesSamAccountName: 'onPremisesSamAccountName',
+    Surname: 'surname'
+} as const;
+export type GetUserSelectEnum = typeof GetUserSelectEnum[keyof typeof GetUserSelectEnum];
+/**
+ * @export
+ */
+export const GetUserExpandEnum = {
+    Drive: 'drive',
+    Drives: 'drives',
+    MemberOf: 'memberOf',
+    AppRoleAssignments: 'appRoleAssignments'
+} as const;
+export type GetUserExpandEnum = typeof GetUserExpandEnum[keyof typeof GetUserExpandEnum];
 
 
 /**
@@ -6531,7 +8233,7 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             assertParamExists('userCreateAppRoleAssignments', 'userId', userId)
             // verify required parameter 'appRoleAssignment' is not null or undefined
             assertParamExists('userCreateAppRoleAssignments', 'appRoleAssignment', appRoleAssignment)
-            const localVarPath = `/users/{user-id}/appRoleAssignments`
+            const localVarPath = `/v1.0/users/{user-id}/appRoleAssignments`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6543,6 +8245,8 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6572,7 +8276,7 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             assertParamExists('userDeleteAppRoleAssignments', 'userId', userId)
             // verify required parameter 'appRoleAssignmentId' is not null or undefined
             assertParamExists('userDeleteAppRoleAssignments', 'appRoleAssignmentId', appRoleAssignmentId)
-            const localVarPath = `/users/{user-id}/appRoleAssignments/{appRoleAssignment-id}`
+            const localVarPath = `/v1.0/users/{user-id}/appRoleAssignments/{appRoleAssignment-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)))
                 .replace(`{${"appRoleAssignment-id"}}`, encodeURIComponent(String(appRoleAssignmentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -6585,6 +8289,8 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
@@ -6611,7 +8317,7 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
         userListAppRoleAssignments: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('userListAppRoleAssignments', 'userId', userId)
-            const localVarPath = `/users/{user-id}/appRoleAssignments`
+            const localVarPath = `/v1.0/users/{user-id}/appRoleAssignments`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6623,6 +8329,8 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6655,7 +8363,9 @@ export const UserAppRoleAssignmentApiFp = function(configuration?: Configuration
          */
         async userCreateAppRoleAssignments(userId: string, appRoleAssignment: AppRoleAssignment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppRoleAssignment>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userCreateAppRoleAssignments(userId, appRoleAssignment, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserAppRoleAssignmentApi.userCreateAppRoleAssignments']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
@@ -6668,7 +8378,9 @@ export const UserAppRoleAssignmentApiFp = function(configuration?: Configuration
          */
         async userDeleteAppRoleAssignments(userId: string, appRoleAssignmentId: string, ifMatch?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userDeleteAppRoleAssignments(userId, appRoleAssignmentId, ifMatch, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserAppRoleAssignmentApi.userDeleteAppRoleAssignments']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * Represents the global roles a user has been granted for an application.
@@ -6679,7 +8391,9 @@ export const UserAppRoleAssignmentApiFp = function(configuration?: Configuration
          */
         async userListAppRoleAssignments(userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfAppRoleAssignments>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userListAppRoleAssignments(userId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UserAppRoleAssignmentApi.userListAppRoleAssignments']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -6775,6 +8489,7 @@ export class UserAppRoleAssignmentApi extends BaseAPI {
 }
 
 
+
 /**
  * UsersApi - axios parameter creator
  * @export
@@ -6791,7 +8506,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         createUser: async (user: User, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'user' is not null or undefined
             assertParamExists('createUser', 'user', user)
-            const localVarPath = `/users`;
+            const localVarPath = `/v1.0/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6802,6 +8517,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
 
     
@@ -6822,14 +8539,14 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @summary Get entities from users
          * @param {string} [$search] Search items by search phrases
          * @param {string} [$filter] Filter users by property values and relationship attributes
-         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-         * @param {Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-         * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+         * @param {Set<ListUsersOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListUsersSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<ListUsersExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUsers: async ($search?: string, $filter?: string, $orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $select?: Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/users`;
+        listUsers: async ($search?: string, $filter?: string, $orderby?: Set<ListUsersOrderbyEnum>, $select?: Set<ListUsersSelectEnum>, $expand?: Set<ListUsersExpandEnum>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1.0/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6840,6 +8557,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication openId required
 
             if ($search !== undefined) {
                 localVarQueryParameter['$search'] = $search;
@@ -6891,22 +8610,26 @@ export const UsersApiFp = function(configuration?: Configuration) {
          */
         async createUser(user: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(user, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UsersApi.createUser']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
          * 
          * @summary Get entities from users
          * @param {string} [$search] Search items by search phrases
          * @param {string} [$filter] Filter users by property values and relationship attributes
-         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-         * @param {Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-         * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+         * @param {Set<ListUsersOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListUsersSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<ListUsersExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUsers($search?: string, $filter?: string, $orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $select?: Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfUser>> {
+        async listUsers($search?: string, $filter?: string, $orderby?: Set<ListUsersOrderbyEnum>, $select?: Set<ListUsersSelectEnum>, $expand?: Set<ListUsersExpandEnum>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers($search, $filter, $orderby, $select, $expand, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['UsersApi.listUsers']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
 };
@@ -6933,13 +8656,13 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @summary Get entities from users
          * @param {string} [$search] Search items by search phrases
          * @param {string} [$filter] Filter users by property values and relationship attributes
-         * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-         * @param {Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-         * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+         * @param {Set<ListUsersOrderbyEnum>} [$orderby] Order items by property values
+         * @param {Set<ListUsersSelectEnum>} [$select] Select properties to be returned
+         * @param {Set<ListUsersExpandEnum>} [$expand] Expand related entities
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUsers($search?: string, $filter?: string, $orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $select?: Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options?: any): AxiosPromise<CollectionOfUser> {
+        listUsers($search?: string, $filter?: string, $orderby?: Set<ListUsersOrderbyEnum>, $select?: Set<ListUsersSelectEnum>, $expand?: Set<ListUsersExpandEnum>, options?: any): AxiosPromise<CollectionOfUser> {
             return localVarFp.listUsers($search, $filter, $orderby, $select, $expand, options).then((request) => request(axios, basePath));
         },
     };
@@ -6969,16 +8692,51 @@ export class UsersApi extends BaseAPI {
      * @summary Get entities from users
      * @param {string} [$search] Search items by search phrases
      * @param {string} [$filter] Filter users by property values and relationship attributes
-     * @param {Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>} [$orderby] Order items by property values
-     * @param {Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>} [$select] Select properties to be returned
-     * @param {Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>} [$expand] Expand related entities
+     * @param {Set<ListUsersOrderbyEnum>} [$orderby] Order items by property values
+     * @param {Set<ListUsersSelectEnum>} [$select] Select properties to be returned
+     * @param {Set<ListUsersExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public listUsers($search?: string, $filter?: string, $orderby?: Set<'displayName' | 'displayName desc' | 'mail' | 'mail desc' | 'onPremisesSamAccountName' | 'onPremisesSamAccountName desc'>, $select?: Set<'id' | 'displayName' | 'mail' | 'memberOf' | 'onPremisesSamAccountName' | 'surname'>, $expand?: Set<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>, options?: AxiosRequestConfig) {
+    public listUsers($search?: string, $filter?: string, $orderby?: Set<ListUsersOrderbyEnum>, $select?: Set<ListUsersSelectEnum>, $expand?: Set<ListUsersExpandEnum>, options?: AxiosRequestConfig) {
         return UsersApiFp(this.configuration).listUsers($search, $filter, $orderby, $select, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+/**
+ * @export
+ */
+export const ListUsersOrderbyEnum = {
+    DisplayName: 'displayName',
+    DisplayNameDesc: 'displayName desc',
+    Mail: 'mail',
+    MailDesc: 'mail desc',
+    OnPremisesSamAccountName: 'onPremisesSamAccountName',
+    OnPremisesSamAccountNameDesc: 'onPremisesSamAccountName desc'
+} as const;
+export type ListUsersOrderbyEnum = typeof ListUsersOrderbyEnum[keyof typeof ListUsersOrderbyEnum];
+/**
+ * @export
+ */
+export const ListUsersSelectEnum = {
+    Id: 'id',
+    DisplayName: 'displayName',
+    Mail: 'mail',
+    MemberOf: 'memberOf',
+    OnPremisesSamAccountName: 'onPremisesSamAccountName',
+    Surname: 'surname'
+} as const;
+export type ListUsersSelectEnum = typeof ListUsersSelectEnum[keyof typeof ListUsersSelectEnum];
+/**
+ * @export
+ */
+export const ListUsersExpandEnum = {
+    Drive: 'drive',
+    Drives: 'drives',
+    MemberOf: 'memberOf',
+    AppRoleAssignments: 'appRoleAssignments'
+} as const;
+export type ListUsersExpandEnum = typeof ListUsersExpandEnum[keyof typeof ListUsersExpandEnum];
 
 

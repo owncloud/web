@@ -152,12 +152,6 @@ export class UserManager extends OidcUserManager {
         return
       }
 
-      const settings = await this.fetchSettings()
-      setCurrentLanguage({
-        language: this.language,
-        languageSetting: settings?.find((s) => s.identifier.setting === 'language'),
-        user: this.store.getters.user
-      })
       this.initializeOwnCloudSdk(accessToken)
 
       if (this.store.getters.capabilities?.core?.['support-sse']) {
@@ -165,7 +159,7 @@ export class UserManager extends OidcUserManager {
       }
 
       if (!userKnown) {
-        await this.fetchUserInfo()
+        await this.fetchUserInfo(accessToken)
         await this.updateUserAbilities(this.store.getters.user)
         this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
@@ -194,7 +188,7 @@ export class UserManager extends OidcUserManager {
     this.clientService.owncloudSdk.init(options)
   }
 
-  private async fetchUserInfo(): Promise<void> {
+  private async fetchUserInfo(accessToken: string): Promise<void> {
     const [login] = await Promise.all([
       this.clientService.owncloudSdk.getCurrentUser(),
       this.fetchCapabilities()
@@ -227,12 +221,15 @@ export class UserManager extends OidcUserManager {
       email: login?.email || user?.email || '',
       groups: graphUser?.data?.memberOf || userGroups || [],
       role,
-      language: login?.language
+      language: graphUser?.data?.preferredLanguage || ''
     })
 
-    if (login.language) {
-      // language is saved in user object for oC10
-      setCurrentLanguage({ language: this.language, user: login })
+    if (graphUser?.data?.preferredLanguage) {
+      setCurrentLanguage({
+        language: this.language,
+        languageSetting: graphUser.data.preferredLanguage
+      })
+      this.initializeOwnCloudSdk(accessToken)
     }
 
     if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
@@ -250,19 +247,6 @@ export class UserManager extends OidcUserManager {
     } catch (e) {
       console.error(e)
       return []
-    }
-  }
-
-  private async fetchSettings(): Promise<any> {
-    const httpClient = this.clientService.httpAuthenticated
-    try {
-      const {
-        data: { values }
-      } = await httpClient.post('/api/v0/settings/values-list', { account_uuid: 'me' })
-      return values
-    } catch (e) {
-      console.error(e)
-      return null
     }
   }
 
@@ -309,9 +293,9 @@ export class UserManager extends OidcUserManager {
     }
 
     /* CERNBox customization
-      Do a call to the backend, as this will reply with the internal reva token.
-      Use that longer token in all calls to the backend (so, replace the default store token)
-    */
+     * Do a call to the backend, as this will reply with the internal reva token.
+     * Use that longer token in all calls to the backend (so, replace the default store token)
+     */
     try {
       console.log('CERNBox: login successful, exchange sso token with reva token')
       const httpClient = this.clientService.httpAuthenticated

@@ -1,88 +1,130 @@
+x-ocis-server: &ocis-service
+  image: ${OCIS_IMAGE:-owncloud/ocis:latest}
+  entrypoint: /bin/sh
+  command: ['-c', 'ocis init || true && ocis server']
+  environment: &ocis-environment
+    OCIS_INSECURE: '${OCIS_INSECURE:-true}'
+    OCIS_LOG_LEVEL: '${OCIS_LOG_LEVEL:-error}'
+    OCIS_LOG_PRETTY: '${OCIS_LOG_PRETTY:-true}'
+    OCIS_LOG_COLOR: '${OCIS_LOG_COLOR:-true}'
+
+    # WEB
+    WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
+    WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
+
+    #FRONTEND
+    FRONTEND_SEARCH_MIN_LENGTH: '2'
+    FRONTEND_OCS_ENABLE_DENIALS: 'true'
+    FRONTEND_FULL_TEXT_SEARCH_ENABLED: 'true'
+    FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
+
+    # IDM
+    IDM_CREATE_DEMO_USERS: '${DEMO_USERS:-true}'
+    IDM_ADMIN_PASSWORD: '${ADMIN_PASSWORD:-admin}' # override the random admin password from `ocis init`
+    IDM_SVC_PASSWORD: '${IDM_SVC_PASSWORD:-some-ldap-idm-password}'
+    IDM_REVASVC_PASSWORD: '${IDM_REVASVC_PASSWORD:-some-ldap-reva-password}'
+    IDM_IDPSVC_PASSWORD: '${IDM_IDPSVC_PASSWORD:-some-ldap-idp-password}'
+
+    # IDP
+    IDP_LDAP_BIND_PASSWORD: '${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}'
+
+    # STORAGE
+    STORAGE_HOME_DRIVER: '${STORAGE_HOME_DRIVER:-ocis}'
+    STORAGE_USERS_DRIVER: '${STORAGE_USERS_DRIVER:-ocis}'
+    STORAGE_TRANSFER_SECRET: '${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}'
+
+    # LDAP
+    GROUPS_LDAP_BIND_PASSWORD: '${GROUPS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}'
+    USERS_LDAP_BIND_PASSWORD: '${USERS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}'
+    AUTH_BASIC_LDAP_BIND_PASSWORD: '${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}'
+    GRAPH_APPLICATION_ID: '${GRAPH_APPLICATION_ID:-some-graph-app-id}'
+    GRAPH_LDAP_BIND_PASSWORD: '${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}'
+    LDAP_GROUP_SUBSTRING_FILTER_TYPE: 'any'
+    LDAP_USER_SUBSTRING_FILTER_TYPE: 'any'
+
+    # PROXY
+    PROXY_ENABLE_BASIC_AUTH: '${PROXY_ENABLE_BASIC_AUTH:-true}'
+    PROXY_TLS: 'false'
+
+    # TIKA
+    SEARCH_EXTRACTOR_TYPE: 'tika'
+    SEARCH_EXTRACTOR_TIKA_TIKA_URL: 'http://host.docker.internal:9998'
+    SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: 'true'
+    GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
+
+    # OCM
+    OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE: '/etc/ocis/ocmproviders.json'
+    OCM_OCM_INVITE_MANAGER_INSECURE: 'true'
+    OCM_OCM_SHARE_PROVIDER_INSECURE: 'true'
+    OCM_DEBUG_ADDR: '127.0.0.1:10281'
+    OCM_HTTP_ADDR: '127.0.0.1:10280'
+    OCM_GRPC_ADDR: '127.0.0.1:10282'
+
+  extra_hosts:
+    - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    - ocis.owncloud.test:${DOCKER_HOST:-host-gateway}
+  restart: unless-stopped
+  depends_on:
+    - traefik
+    - tika-service
+
 services:
   ocis:
-    image: ${OCIS_IMAGE:-owncloud/ocis:latest}
+    <<: *ocis-service
     container_name: web_ocis
-    entrypoint: /bin/sh
-    command: ['-c', 'ocis init || true && ocis server']
     environment:
-      # OCIS
+      <<: *ocis-environment
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
-      OCIS_INSECURE: "${OCIS_INSECURE:-true}"
-      OCIS_LOG_LEVEL: "${OCIS_LOG_LEVEL:-error}"
-      OCIS_LOG_PRETTY: "${OCIS_LOG_PRETTY:-true}"
-      OCIS_LOG_COLOR: "${OCIS_LOG_COLOR:-true}"
-
-      # WEB
+      OCIS_CORS_ALLOW_ORIGINS: 'https://host.docker.internal:9201'
+      # ATTENTION: not in ocis-federated
       WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
-      WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
-      WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
+      OCM_WEBAPP_TEMPLATE: https://host.docker.internal:9201/o/{{.Token}}/{relative-path-to-shared-resource}
 
-      #FRONTEND
-      FRONTEND_SEARCH_MIN_LENGTH: "2"
-      FRONTEND_OCS_ENABLE_DENIALS: "true"
-      FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
-      FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
-
-      # IDM
-      IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-true}"
-      IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # override the random admin password from `ocis init`
-      IDM_SVC_PASSWORD: "${IDM_SVC_PASSWORD:-some-ldap-idm-password}"
-      IDM_REVASVC_PASSWORD: "${IDM_REVASVC_PASSWORD:-some-ldap-reva-password}"
-      IDM_IDPSVC_PASSWORD: "${IDM_IDPSVC_PASSWORD:-some-ldap-idp-password}"
-
-      # IDP
-      IDP_LDAP_BIND_PASSWORD: "${IDP_LDAP_BIND_PASSWORD:-some-ldap-idp-password}"
-
-      # STORAGE
-      STORAGE_HOME_DRIVER: "${STORAGE_HOME_DRIVER:-ocis}"
-      STORAGE_USERS_DRIVER: "${STORAGE_USERS_DRIVER:-ocis}"
-      STORAGE_TRANSFER_SECRET: "${STORAGE_TRANSFER_SECRET:-some-ocis-transfer-secret}"
-
-      # LDAP
-      GROUPS_LDAP_BIND_PASSWORD: "${GROUPS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
-      USERS_LDAP_BIND_PASSWORD: "${USERS_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
-      AUTH_BASIC_LDAP_BIND_PASSWORD: "${AUTH_BASIC_LDAP_BIND_PASSWORD:-some-ldap-reva-password}"
-      GRAPH_APPLICATION_ID: "${GRAPH_APPLICATION_ID:-some-graph-app-id}"
-      GRAPH_LDAP_BIND_PASSWORD: "${GRAPH_LDAP_BIND_PASSWORD:-some-ldap-idm-password}"
-      LDAP_GROUP_SUBSTRING_FILTER_TYPE: "any"
-      LDAP_USER_SUBSTRING_FILTER_TYPE: "any"
-
-      # PROXY
-      PROXY_ENABLE_BASIC_AUTH: "${PROXY_ENABLE_BASIC_AUTH:-true}"
-      PROXY_TLS: "false"
-
-      # CORS
-      OCIS_CORS_ALLOW_ORIGINS: "https://host.docker.internal:9201"
-
-      # TIKA
-      SEARCH_EXTRACTOR_TYPE: "tika"
-      SEARCH_EXTRACTOR_TIKA_TIKA_URL: "http://host.docker.internal:9998"
-      SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: "true"
-      GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
       # make the registry available to the app provider containers
-      MICRO_REGISTRY: "mdns"
-    volumes:
-      - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
-      - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
-      - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
-      - ./dist:/web/dist
-      - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
-      - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
-      - ocis-config:/etc/ocis
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+      MICRO_REGISTRY: 'mdns'
     labels:
       traefik.enable: true
       traefik.http.routers.ocis.tls: true
-      traefik.http.routers.ocis.rule: PathPrefix(`/`)
+      traefik.http.routers.ocis.rule: Host(`host.docker.internal`) && PathPrefix(`/`)
       traefik.http.routers.ocis.entrypoints: ocis
       traefik.http.services.ocis.loadbalancer.server.port: 9200
       # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.routers.ocis.middlewares: cors
-    restart: unless-stopped
-    depends_on:
-      - traefik
-      - tika-service
+    volumes:
+      - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
+      - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
+      - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
+      - ./dev/docker/ocis.storage.ocmproviders.json:/etc/ocis/ocmproviders.json
+      - ./dist:/web/dist
+      - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
+      - ocis-config:/etc/ocis
+      # ATTENTION: not in ocis-federated
+      - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
+
+  ocis-federated:
+    <<: *ocis-service
+    container_name: web_ocis_federated
+    environment:
+      <<: *ocis-environment
+      OCIS_URL: https://ocis.owncloud.test:10200
+      OCIS_CORS_ALLOW_ORIGINS: https://ocis.owncloud.test:10201
+      OCM_WEBAPP_TEMPLATE: https://ocis.owncloud.test:10201/o/{{.Token}}/{relative-path-to-shared-resource}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ocis-federated.tls: true
+      traefik.http.routers.ocis-federated.rule: Host(`ocis.owncloud.test`) && PathPrefix(`/`)
+      traefik.http.routers.ocis-federated.entrypoints: ocis-federated
+      traefik.http.services.ocis-federated.loadbalancer.server.port: 9200
+      # workaround: https://github.com/owncloud/ocis/issues/5108
+      traefik.http.routers.ocis-federated.middlewares: cors
+    volumes:
+      - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
+      - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
+      - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
+      - ./dev/docker/ocis.storage.ocmproviders.json:/etc/ocis/ocmproviders.json
+      - ./dist:/web/dist
+      - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
+      - ocis-federated-config:/etc/ocis
 
   selenium:
     build:
@@ -102,7 +144,7 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
-      VNC_NO_PASSWORD: "true"
+      VNC_NO_PASSWORD: 'true'
 
   middleware-ocis:
     image: owncloud/owncloud-test-middleware:latest
@@ -110,17 +152,17 @@ services:
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - uploads:/uploads
     environment:
       MIDDLEWARE_PORT: 3000
-      MIDDLEWARE_HOST: "0.0.0.0"
+      MIDDLEWARE_HOST: '0.0.0.0'
       RUN_ON_OCIS: 'true'
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
-      BACKEND_HOST: "https://host.docker.internal:9200"
-      REMOTE_UPLOAD_DIR: "/uploads"
-      TEST_WITH_GRAPH_API: "true"
+      BACKEND_HOST: 'https://host.docker.internal:9200'
+      REMOTE_UPLOAD_DIR: '/uploads'
+      TEST_WITH_GRAPH_API: 'true'
 
   companion:
     image: owncloud/uppy-companion:3.12.13-owncloud
@@ -128,13 +170,13 @@ services:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     environment:
       NODE_TLS_REJECT_UNAUTHORIZED: 0
-      COMPANION_ALLOW_LOCAL_URLS: "true"
+      COMPANION_ALLOW_LOCAL_URLS: 'true'
       COMPANION_DATADIR: /tmp/companion/
       COMPANION_DOMAIN: host.docker.internal:9200
       COMPANION_PROTOCOL: https
       COMPANION_PATH: /companion
-      COMPANION_ONEDRIVE_KEY: "${COMPANION_ONEDRIVE_KEY}"
-      COMPANION_ONEDRIVE_SECRET: "${COMPANION_ONEDRIVE_SECRET}"
+      COMPANION_ONEDRIVE_KEY: '${COMPANION_ONEDRIVE_KEY}'
+      COMPANION_ONEDRIVE_SECRET: '${COMPANION_ONEDRIVE_SECRET}'
     volumes:
       - uppy_companion_datadir:/tmp/companion/
     labels:
@@ -272,22 +314,28 @@ services:
   traefik:
     image: traefik:v2.10.1
     restart: unless-stopped
-    entrypoint: ["/bin/sh", "-c", "[ -f /certificates/server.key ] && ./entrypoint.sh $$@ || (apk add openssl && openssl req -subj '/CN=ocis.test' -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout /certificates/server.key -out /certificates/server.crt && chmod -R 777 /certificates && ./entrypoint.sh $$@)"]
+    entrypoint:
+      [
+        '/bin/sh',
+        '-c',
+        "[ -f /certificates/server.key ] && ./entrypoint.sh $$@ || (apk add openssl && openssl req -subj '/CN=ocis.test' -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout /certificates/server.key -out /certificates/server.crt && chmod -R 777 /certificates && ./entrypoint.sh $$@)"
+      ]
     command:
-      - "--pilot.dashboard=false"
-      - "--log.level=DEBUG"
-      - "--api.dashboard=true"
-      - "--api.insecure=true"
-      - "--providers.file.directory=/configs"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.ocis.address=:9200"
-      - "--entrypoints.collabora.address=:9980"
-      - "--entrypoints.wopi.address=:8880"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.websecure.http.middlewares=https_config@docker"
-      - "--entrypoints.websecure.http.tls.options=default"
+      - '--pilot.dashboard=false'
+      - '--log.level=DEBUG'
+      - '--api.dashboard=true'
+      - '--api.insecure=true'
+      - '--providers.file.directory=/configs'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.ocis.address=:9200'
+      - '--entrypoints.ocis-federated.address=:10200'
+      - '--entrypoints.collabora.address=:9980'
+      - '--entrypoints.wopi.address=:8880'
+      - '--entrypoints.websecure.address=:443'
+      - '--entrypoints.websecure.http.middlewares=https_config@docker'
+      - '--entrypoints.websecure.http.tls.options=default'
     labels:
       traefik.enable: true
       traefik.http.routers.http_catchall.rule: HostRegexp(`{any:.+}`)
@@ -296,23 +344,24 @@ services:
       traefik.http.middlewares.https_config.headers.sslRedirect: true
       traefik.http.middlewares.https_config.headers.stsSeconds: 63072000
       traefik.http.middlewares.https_config.headers.stsIncludeSubdomains: true
-      traefik.http.middlewares.cors.headers.accesscontrolallowmethods: "*"
-      traefik.http.middlewares.cors.headers.accesscontrolallowheaders: "*"
-      traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist: "*"
-      traefik.http.middlewares.cors.headers.accesscontrolexposeheaders: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolallowmethods: '*'
+      traefik.http.middlewares.cors.headers.accesscontrolallowheaders: '*'
+      traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist: '*'
+      traefik.http.middlewares.cors.headers.accesscontrolexposeheaders: '*'
       traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
       traefik.http.middlewares.cors.headers.addvaryheader: true
     ports:
-      - "80:80"
-      - "8090:8080"
-      - "9200:9200"
-      - "9980:9980"
-      - "8880:8880"
-      - "9981:443"
+      - '80:80'
+      - '8090:8080'
+      - '9200:9200'
+      - '10200:10200'
+      - '9980:9980'
+      - '8880:8880'
+      - '9981:443'
     volumes:
-      - "./dev/docker/traefik/certificates:/certificates"
-      - "./dev/docker/traefik/configs:/configs"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - './dev/docker/traefik/certificates:/certificates'
+      - './dev/docker/traefik/configs:/configs'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
   tika-service:
     image: dadarek/wait-for-dependencies
@@ -332,3 +381,7 @@ volumes:
   uploads:
   uppy_companion_datadir:
   ocis-config:
+  ocis-federated-config:
+
+networks:
+  traefik:

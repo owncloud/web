@@ -171,3 +171,37 @@ Feature: Search
       | resource                          |
       | exampleInsideThePersonalSpace.txt |
     And "Alice" logs out
+
+  Scenario: Search using mediaType filter
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
+    And "Alice" creates the following files into personal space using API
+      | pathToFile    | content        |
+      | mediaTest.txt | I'm a Document |
+      | mediaTest.pdf | I'm a PDF      |
+      | mediaTest.mp3 | I'm a Audio    |
+      | mediaTest.zip | I'm a Archive  |
+    And "Alice" opens the "files" app
+    And "Alice" searches "mediaTest" using the global search and the "everywhere" filter and presses enter
+    And "Alice" selects mediaType "Document" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.txt |
+    And "Alice" clears mediaType filter
+    And "Alice" selects mediaType "PDF" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.pdf |
+    And "Alice" clears mediaType filter
+    And "Alice" selects mediaType "Audio" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.mp3 |
+    And "Alice" clears mediaType filter
+    And "Alice" selects mediaType "Archive" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.zip |
+    And "Alice" logs out

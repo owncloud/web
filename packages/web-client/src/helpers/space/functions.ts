@@ -1,10 +1,16 @@
 import { User } from '../user'
 import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
-import { PublicSpaceResource, ShareSpaceResource, SpaceResource, SHARE_JAIL_ID } from './types'
+import {
+  PublicSpaceResource,
+  ShareSpaceResource,
+  SpaceResource,
+  SHARE_JAIL_ID,
+  OCM_PROVIDER_ID
+} from './types'
 
 import { DavProperty } from '../../webdav/constants'
-import { buildWebDavPublicPath } from '../publicLink'
+import { buildWebDavPublicPath, buildWebDavOcmPath } from '../publicLink'
 import { urlJoin } from '../../utils'
 import { Drive, DriveItem } from '@ownclouders/web-client/src/generated'
 
@@ -30,7 +36,10 @@ export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'i
   return webDavPathComponents.slice(webDavPathComponents.indexOf(idComponent) + 1).join('/')
 }
 
-export function buildPublicSpaceResource(data): PublicSpaceResource {
+export type PublicLinkType = 'ocm' | 'public-link'
+export function buildPublicSpaceResource(
+  data: any & { publicLinkType: PublicLinkType }
+): PublicSpaceResource {
   const publicLinkPassword = data.publicLinkPassword
 
   const fileId = data.props?.[DavProperty.FileId]
@@ -40,12 +49,22 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
   const publicLinkShareDate = data.props?.[DavProperty.PublicLinkShareDate]
   const publicLinkShareOwner = data.props?.[DavProperty.PublicLinkShareOwner]
 
+  let driveAlias
+  let webDavPath
+  if (data.publicLinkType === 'ocm') {
+    driveAlias = `ocm/${data.id}`
+    webDavPath = buildWebDavOcmPath(data.id)
+  } else {
+    driveAlias = `public/${data.id}`
+    webDavPath = buildWebDavPublicPath(data.id)
+  }
+
   return Object.assign(
     buildSpace({
       ...data,
       driveType: 'public',
-      driveAlias: `public/${data.id}`,
-      webDavPath: buildWebDavPublicPath(data.id)
+      driveAlias,
+      webDavPath
     }),
     {
       ...(fileId && { fileId }),
@@ -60,24 +79,33 @@ export function buildPublicSpaceResource(data): PublicSpaceResource {
 }
 
 export function buildShareSpaceResource({
+  driveAliasPrefix,
   shareId,
   shareName,
   serverUrl
 }: {
+  driveAliasPrefix: 'share' | 'ocm-share'
   shareId: string | number
   shareName: string
   serverUrl: string
 }): ShareSpaceResource {
+  let id
+  if (driveAliasPrefix === 'ocm-share') {
+    id = `${OCM_PROVIDER_ID}$${shareId}!${shareId}`
+  } else {
+    id = [SHARE_JAIL_ID, shareId].join('!')
+  }
+
   const space = buildSpace({
-    id: [SHARE_JAIL_ID, shareId].join('!'),
-    driveAlias: `share/${shareName}`,
+    id,
+    driveAlias: `${driveAliasPrefix}/${shareName}`,
     driveType: 'share',
     name: shareName,
     shareId,
     serverUrl
   }) as ShareSpaceResource
   space.rename = (newName: string) => {
-    space.driveAlias = `share/${newName}`
+    space.driveAlias = `${driveAliasPrefix}/${newName}`
     space.name = newName
   }
   return space

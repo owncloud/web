@@ -2,6 +2,7 @@ import { ClientService } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
+import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export interface PublicLinkManagerOptions {
   clientService: ClientService
@@ -38,6 +39,14 @@ export class PublicLinkManager {
 
   setResolved(token: string, resolved: boolean): void {
     sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'resolved'), resolved + '')
+  }
+
+  setType(token: string, type: PublicLinkType): void {
+    sessionStorage.setItem(PublicLinkManager.buildStorageKey(token, 'type'), type)
+  }
+
+  getType(token: string): PublicLinkType {
+    return sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'type')) as any
   }
 
   isPasswordRequired(token: string): boolean {
@@ -103,7 +112,8 @@ export class PublicLinkManager {
     this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
       publicLinkToken: token,
       publicLinkPassword: password,
-      publicLinkContextReady: true
+      publicLinkContextReady: true,
+      publicLinkType: this.getType(token)
     })
   }
 

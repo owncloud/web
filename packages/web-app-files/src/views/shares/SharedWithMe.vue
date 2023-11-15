@@ -8,16 +8,34 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <div class="share-visibility-filter oc-flex oc-m-m">
+        <div class="oc-flex oc-m-m">
           <div class="oc-mr-m oc-flex oc-flex-middle">
             <oc-icon name="filter-2" class="oc-mr-xs" />
             <span v-text="$gettext('Filter:')" />
           </div>
           <item-filter-inline
+            class="share-visibility-filter"
             filter-name="share-visibility"
             :filter-options="visibilityOptions"
             @toggle-filter="setAreHiddenFilesShown"
           />
+          <item-filter
+            v-if="shareTypes.length > 1"
+            :allow-multiple="true"
+            :filter-label="$gettext('Share Type')"
+            :filterable-attributes="['label']"
+            :items="shareTypes"
+            :option-filter-label="$gettext('Filter share types')"
+            :show-option-filter="true"
+            id-attribute="key"
+            class="share-type-filter oc-mx-s"
+            display-name-attribute="label"
+            filter-name="shareType"
+          >
+            <template #item="{ item }">
+              <span class="oc-ml-s" v-text="item.label" />
+            </template>
+          </item-filter>
         </div>
         <shared-with-me-section
           id="files-shared-with-me-view"
@@ -43,7 +61,7 @@
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
 
-import { AppLoadingSpinner, InlineFilterOption } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, InlineFilterOption, ItemFilter } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
@@ -55,8 +73,9 @@ import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
-import { useStore } from '@ownclouders/web-pkg'
-import { useOpenWithDefaultApp } from '../../composables'
+import { useStore, useOpenWithDefaultApp } from '@ownclouders/web-pkg'
+import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { uniq } from 'lodash-es'
 
 export default defineComponent({
   components: {
@@ -66,7 +85,8 @@ export default defineComponent({
     AppLoadingSpinner,
     SharedWithMeSection,
     SideBar,
-    ItemFilterInline
+    ItemFilterInline,
+    ItemFilter
   },
 
   setup() {
@@ -109,8 +129,19 @@ export default defineComponent({
       return unref(areHiddenFilesShown) ? unref(hiddenShares) : unref(visibleShares)
     })
 
+    const selectedShareTypesQuery = useRouteQuery('q_shareType')
+    const filteredItems = computed(() => {
+      const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
+      if (!selectedShareTypes || selectedShareTypes.length === 0) {
+        return unref(currentItems)
+      }
+      return unref(currentItems).filter((item) => {
+        return selectedShareTypes.map((t) => ShareTypes[t].value).includes(item.share.shareType)
+      })
+    })
+
     const { sortBy, sortDir, items, handleSort } = useSort({
-      items: currentItems,
+      items: filteredItems,
       fields: sortFields
     })
 
@@ -139,6 +170,11 @@ export default defineComponent({
       }
     }
 
+    const shareTypes = computed(() => {
+      const uniqueShareTypes = uniq(unref(storeItems).map((i) => i.share?.shareType))
+      return ShareTypes.getByValues(uniqueShareTypes)
+    })
+
     onMounted(() => {
       performLoaderTask()
     })
@@ -160,6 +196,7 @@ export default defineComponent({
       setAreHiddenFilesShown,
       shareSectionTitle,
       visibleShares,
+      shareTypes,
 
       handleSort,
       sortBy,

@@ -4,7 +4,12 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { ref, unref } from 'vue'
-import { ClientService, UppyService, UppyResource } from '@ownclouders/web-pkg'
+import {
+  ClientService,
+  UppyService,
+  UppyResource,
+  locationSpacesGeneric
+} from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
 
@@ -130,6 +135,68 @@ describe('HandleUpload', () => {
         await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
         expect(checkQuotaExceededSpy).not.toHaveBeenCalled()
       })
+      it.each([
+        { size: 100, remaining: 90, driveType: 'project', quotaExceeded: true },
+        { size: 10, remaining: 90, driveType: 'project', quotaExceeded: false },
+        { size: 100, remaining: 90, driveType: 'personal', quotaExceeded: true },
+        { size: 10, remaining: 90, driveType: 'personal', quotaExceeded: false }
+      ])(
+        'returns a correct result after quota has been checked for own personal and project spaces',
+        async ({ size, remaining, driveType, quotaExceeded }) => {
+          const space = mock<SpaceResource>({
+            driveType,
+            id: '1',
+            spaceQuota: { remaining },
+            isOwner: () => true
+          })
+          const { instance } = getWrapper({ spaces: [space] })
+          const result = await instance.checkQuotaExceeded([
+            mock<UppyResource>({
+              name: 'name',
+              meta: { spaceId: '1', routeName: locationSpacesGeneric.name as any },
+              data: { size }
+            })
+          ])
+          expect(result).toBe(quotaExceeded)
+        }
+      )
+      it('does not check quota for share spaces', async () => {
+        const size = 100
+        const remaining = 90
+        const space = mock<SpaceResource>({
+          driveType: 'share',
+          id: '1',
+          spaceQuota: { remaining }
+        })
+        const { instance } = getWrapper({ spaces: [space] })
+        const result = await instance.checkQuotaExceeded([
+          mock<UppyResource>({
+            name: 'name',
+            meta: { spaceId: '1', routeName: locationSpacesGeneric.name as any },
+            data: { size }
+          })
+        ])
+        expect(result).toBeFalsy()
+      })
+      it("does not check quota for other's personal spaces", async () => {
+        const size = 100
+        const remaining = 90
+        const space = mock<SpaceResource>({
+          driveType: 'personal',
+          id: '1',
+          spaceQuota: { remaining },
+          isOwner: () => false
+        })
+        const { instance } = getWrapper({ spaces: [space] })
+        const result = await instance.checkQuotaExceeded([
+          mock<UppyResource>({
+            name: 'name',
+            meta: { spaceId: '1', routeName: locationSpacesGeneric.name as any },
+            data: { size }
+          })
+        ])
+        expect(result).toBeFalsy()
+      })
     })
     describe('conflict handling check', () => {
       it('checks for conflicts if check enabled', async () => {
@@ -183,7 +250,8 @@ const getWrapper = ({
   directoryTreeCreateEnabled = true,
   quotaCheckEnabled = true,
   conflicts = [],
-  conflictHandlerResult = []
+  conflictHandlerResult = [],
+  spaces = []
 } = {}) => {
   const resourceConflict = mock<ResourceConflict>()
   resourceConflict.getConflicts.mockReturnValue(conflicts)
@@ -194,8 +262,9 @@ const getWrapper = ({
     getters: {
       'Files/currentFolder': mock<Resource>({ path: '/' }),
       'Files/files': [mock<Resource>()],
-      'runtime/spaces/spaces': mock<SpaceResource>()
-    }
+      'runtime/spaces/spaces': spaces
+    },
+    dispatch: jest.fn()
   } as any
   const route = mock<RouteLocationNormalizedLoaded>()
   route.params.driveAliasAndItem = '1'

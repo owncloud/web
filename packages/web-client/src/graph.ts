@@ -49,6 +49,7 @@ export interface Graph {
     getUser: (userId: string) => AxiosPromise<User>
     createUser: (user: User) => AxiosPromise<User>
     getMe: () => AxiosPromise<User>
+    editMe: (user: User) => AxiosPromise<User>
     changeOwnPassword: (currentPassword: string, newPassword: string) => AxiosPromise<void>
     editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
@@ -75,7 +76,7 @@ export interface Graph {
 
 export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const url = new URL(baseURI)
-  url.pathname = [...url.pathname.split('/'), 'graph', 'v1.0'].filter(Boolean).join('/')
+  url.pathname = [...url.pathname.split('/'), 'graph'].filter(Boolean).join('/')
   const config = new Configuration({
     basePath: url.href
   })
@@ -138,6 +139,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         ),
       createUser: (user: User) => usersApiFactory.createUser(user),
       getMe: () => meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])),
+      editMe: (user: User) => meUserApiFactory.updateOwnUser(user),
       changeOwnPassword: (currentPassword, newPassword) =>
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),

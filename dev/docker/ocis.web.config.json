@@ -35,6 +35,7 @@
     "search",
     "external",
     "admin-settings",
+    "ocm",
     "webfinger"
   ],
   "external_apps": [

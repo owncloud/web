@@ -67,6 +67,9 @@ const mutations = {
 
     state.quota = quota
   },
+  SET_LANGUAGE(state, language) {
+    state.language = language
+  },
   SET_ROLES(state, roles) {
     state.roles = roles
   },
