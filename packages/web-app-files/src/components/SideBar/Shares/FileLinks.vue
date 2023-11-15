@@ -636,7 +636,6 @@ export default defineComponent({
           this.hasPublicLinkEditing,
           this.hasPublicLinkContribute,
           this.hasPublicLinkAliasSupport,
-          false,
           this.canCreatePublicLinks
         )
       }
@@ -646,7 +645,6 @@ export default defineComponent({
         this.hasPublicLinkEditing,
         this.hasPublicLinkContribute,
         this.hasPublicLinkAliasSupport,
-        false,
         this.canCreatePublicLinks
       )
     }
