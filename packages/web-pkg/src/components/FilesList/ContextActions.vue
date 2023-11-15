@@ -7,6 +7,8 @@ import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
 
 import {
   useFileActionsOpenShortcut,
+  ActionExtension,
+  useExtensionRegistry,
   useFileActionsToggleHideShare,
   useStore
 } from '../../composables'
@@ -75,6 +77,14 @@ export default defineComponent({
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
     const { actions: openShortcutActions } = useFileActionsOpenShortcut({ store })
 
+    const extensionRegistry = useExtensionRegistry()
+    const extensionContextActions = computed(() => {
+      return extensionRegistry
+        .requestExtensions<ActionExtension>('action')
+        .filter(({ scopes }) => scopes.includes('files.context-menu'))
+        .map((e) => e.action)
+    })
+
     // type cast to make vue-tsc aware of the type
     const actionOptions = toRef(props, 'actionOptions') as Ref<FileActionOptions>
     const menuItemsBatchActions = computed(() =>
@@ -124,7 +134,8 @@ export default defineComponent({
         ...unref(declineShareActions),
         ...unref(hideShareActions),
         ...unref(setSpaceImageActions),
-        ...unref(setSpaceReadmeActions)
+        ...unref(setSpaceReadmeActions),
+        ...unref(extensionContextActions)
       ].filter((item) => item.isEnabled(unref(actionOptions)))
     })
 

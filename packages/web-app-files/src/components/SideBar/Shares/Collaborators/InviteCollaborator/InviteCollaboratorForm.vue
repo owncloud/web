@@ -1,39 +1,58 @@
 <template>
   <div id="new-collaborators-form" data-testid="new-collaborators-form">
-    <oc-select
-      id="files-share-invite-input"
-      ref="ocSharingAutocomplete"
-      :model-value="selectedCollaborators"
-      :options="autocompleteResults"
-      :loading="searchInProgress"
-      :multiple="true"
-      :filter="filterRecipients"
-      :label="selectedCollaboratorsLabel"
-      aria-describedby="files-share-invite-hint"
-      :dropdown-should-open="
-        ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
-      "
-      @search:input="onSearch"
-      @update:model-value="resetFocusOnInvite"
-    >
-      <template #option="option">
-        <autocomplete-item :item="option" />
-      </template>
-      <template #no-options>
-        <span v-text="$gettext('No users or groups found.')" />
-      </template>
-      <template #selected-option-container="{ option, deselect }">
-        <recipient-container
-          :key="option.value.shareWith"
-          :recipient="option"
-          :deselect="deselect"
-        />
-      </template>
-      <template #open-indicator>
-        <!-- Empty to hide the caret -->
-        <span />
-      </template>
-    </oc-select>
+    <div :class="['oc-flex', 'oc-width-1-1', { 'new-collaborators-form-cern': isRunningOnEos }]">
+      <oc-select
+        v-if="isRunningOnEos"
+        id="files-share-account-type-input"
+        v-model="accountType"
+        :options="accountTypes"
+        :label="$gettext('Account type')"
+        class="cern-account-type-input"
+        :reduce="(option) => option.description"
+      >
+        <template #option="{ description }">
+          <span class="option oc-text-xsmall" v-text="description" />
+        </template>
+        <template #selected-option="{ description }">
+          <span class="option oc-text-xsmall" v-text="description" />
+        </template>
+      </oc-select>
+      <oc-select
+        id="files-share-invite-input"
+        ref="ocSharingAutocomplete"
+        :class="['oc-width-1-1', { 'cern-files-share-invite-input': isRunningOnEos }]"
+        :model-value="selectedCollaborators"
+        :options="autocompleteResults"
+        :loading="searchInProgress"
+        :multiple="true"
+        :filter="filterRecipients"
+        :label="selectedCollaboratorsLabel"
+        aria-describedby="files-share-invite-hint"
+        :dropdown-should-open="
+          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+        "
+        @search:input="onSearch"
+        @update:model-value="resetFocusOnInvite"
+      >
+        <template #option="option">
+          <autocomplete-item :item="option" />
+        </template>
+        <template #no-options>
+          <span v-text="$gettext('No users or groups found.')" />
+        </template>
+        <template #selected-option-container="{ option, deselect }">
+          <recipient-container
+            :key="option.value.shareWith"
+            :recipient="option"
+            :deselect="deselect"
+          />
+        </template>
+        <template #open-indicator>
+          <!-- Empty to hide the caret -->
+          <span />
+        </template>
+      </oc-select>
+    </div>
     <div class="oc-flex oc-flex-between oc-flex-wrap oc-mb-l oc-mt-s">
       <role-dropdown
         :allow-share-permission="hasResharing || resourceIsSpace"
@@ -126,6 +145,8 @@ import {
   SpacePeopleShareRoles
 } from '@ownclouders/web-client/src/helpers/share'
 import {
+  // FederatedConnection,
+  FederatedUser,
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
@@ -134,7 +155,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useShares } from 'web-app-files/src/composables'
 import {
@@ -201,6 +222,29 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
 
+    const federatedUsers = ref([] as FederatedUser[])
+    onMounted(async () => {
+      // HACK: remove when federated users are returned from search
+      // try {
+      //   const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
+      //     FederatedConnection[]
+      //   >('/sciencemesh/find-accepted-users')
+      //   federatedUsers.value = acceptedUsers
+      //   console.log('Federated users loaded', acceptedUsers)
+      // } catch (e) {
+      //   console.error(e)
+      // }
+    })
+
+    const accountType = ref('standard')
+    const accountTypes = [
+      { prefix: '', description: 'standard' },
+      { prefix: 'a:', description: 'secondary' },
+      { prefix: 'a:', description: 'service' },
+      { prefix: 'l:', description: 'guest' },
+      { prefix: 'sm:', description: 'federated' }
+    ]
+
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -214,7 +258,12 @@ export default defineComponent({
       ...useShares(),
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
-      notifyEnabled
+      notifyEnabled,
+      federatedUsers,
+
+      // CERN
+      accountType,
+      accountTypes
     }
   },
 
@@ -319,7 +368,25 @@ export default defineComponent({
         })
         const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-        this.autocompleteResults = [...users, ...groups, ...remotes].filter((collaborator) => {
+        // const federatedCollaborators = this.federatedUsers.map((u) => {
+        //   return {
+        //     label: u.display_name,
+        //     value: {
+        //       shareType: ShareTypes.remote.value,
+        //       shareWithUser: u.user_id,
+        //       shareWithProvider: u.idp,
+        //       shareWithAdditionalInfo: u.mail,
+        //       userType: 0
+        //     }
+        //   }
+        // })
+
+        this.autocompleteResults = [
+          ...users,
+          ...groups,
+          ...remotes
+          // ...federatedCollaborators
+        ].filter((collaborator) => {
           const selected = this.selectedCollaborators.find((selectedCollaborator) => {
             return (
               collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
@@ -365,6 +432,13 @@ export default defineComponent({
       }
 
       this.searchInProgress = true
+
+      // CERN
+      if (this.isRunningOnEos) {
+        const prefix =
+          this.accountTypes.find((t) => t.description === this.accountType)?.prefix || ''
+        query = `${prefix}${query}`
+      }
 
       this.fetchRecipients(query)
     },
@@ -431,6 +505,8 @@ export default defineComponent({
                 shareWith: collaborator.value.shareWith,
                 displayName: collaborator.label,
                 shareType: collaborator.value.shareType,
+                shareWithUser: collaborator.value.shareWithUser,
+                shareWithProvider: collaborator.value.shareWithProvider,
                 permissions: bitmask,
                 role: this.selectedRole,
                 expirationDate: this.expirationDate,
@@ -487,5 +563,13 @@ export default defineComponent({
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;
+}
+
+.new-collaborators-form-cern > .cern-files-share-invite-input {
+  width: 75%;
+}
+
+.new-collaborators-form-cern > .cern-account-type-input {
+  width: 30%;
 }
 </style>

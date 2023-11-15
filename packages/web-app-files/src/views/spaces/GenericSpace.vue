@@ -209,13 +209,12 @@ import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
-import { useKeyboardActions } from '@ownclouders/web-pkg'
+import { useKeyboardActions, useOpenWithDefaultApp } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation,
   useKeyboardTableSpaceActions
 } from 'web-app-files/src/composables/keyboardActions'
-import { useOpenWithDefaultApp } from '../../composables'
 
 const visibilityObserver = new VisibilityObserver()
 

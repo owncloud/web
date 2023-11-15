@@ -41,6 +41,11 @@ export const buildPublicLinkAuthHeader = (password: string) => {
 
 export const buildAuthHeader = (token: string, space: SpaceResource = null): Headers => {
   if (isPublicSpaceResource(space)) {
+    // TODO: make check cleaner
+    if (space.driveAlias.startsWith('ocm/')) {
+      return { Authorization: `Bearer ${space.id}` }
+    }
+
     if (space.publicLinkPassword) {
       return { Authorization: buildPublicLinkAuthHeader(space.publicLinkPassword) }
     }

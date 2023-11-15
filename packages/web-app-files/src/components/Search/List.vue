@@ -8,6 +8,29 @@
           <span v-text="$gettext('Filter:')" />
         </div>
         <item-filter
+          v-if="availableMediaTypeValues.length"
+          ref="mediaTypeFilter"
+          :allow-multiple="true"
+          :filter-label="$gettext('Media type')"
+          :filterable-attributes="['label']"
+          :items="availableMediaTypeValues"
+          :option-filter-label="$gettext('Filter media type')"
+          :show-option-filter="true"
+          class="files-search-filter-file-type oc-mr-s"
+          display-name-attribute="label"
+          filter-name="mediaType"
+        >
+          <template #image="{ item }">
+            <div
+              class="file-category-option-wrapper oc-flex oc-flex-middle"
+              :data-test-id="`media-type-${item.id.toLowerCase()}`"
+            >
+              <oc-resource-icon :resource="getFakeResourceForIcon(item)" />
+              <span class="oc-ml-s">{{ item.label }}</span>
+            </div>
+          </template>
+        </item-filter>
+        <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
           :allow-multiple="true"
@@ -126,7 +149,11 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import { AppLoadingSpinner, useCapabilitySearchModifiedDate } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  useCapabilitySearchMediaType,
+  useCapabilitySearchModifiedDate
+} from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -181,6 +208,11 @@ import {
 
 const visibilityObserver = new VisibilityObserver()
 
+type FileCategoryKeyword = {
+  id: string
+  label: string
+  icon: string
+}
 type Tag = {
   id: string
   label: string
@@ -227,6 +259,7 @@ export default defineComponent({
     const hasTags = useCapabilityFilesTags()
     const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
     const modifiedDateCapability = useCapabilitySearchModifiedDate()
+    const mediaTypeCapability = useCapabilitySearchMediaType()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -234,7 +267,6 @@ export default defineComponent({
     const doUseScope = useRouteQuery('useScope')
 
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
-
     const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources, resourcesView.viewMode)
     useKeyboardTableMouseActions(keyActions, resourcesView.viewMode)
@@ -246,12 +278,18 @@ export default defineComponent({
 
     const availableTags = ref<Tag[]>([])
     const tagFilter = ref<VNodeRef>()
+    const mediaTypeFilter = ref<VNodeRef>()
     const tagParam = useRouteQuery('q_tags')
     const lastModifiedParam = useRouteQuery('q_lastModified')
+    const mediaTypeParam = useRouteQuery('q_mediaType')
     const fullTextParam = useRouteQuery('q_fullText')
 
     const displayFilter = computed(() => {
-      return unref(fullTextSearchEnabled) || unref(availableTags).length
+      return (
+        unref(fullTextSearchEnabled) ||
+        unref(availableTags).length ||
+        (unref(modifiedDateCapability) && unref(modifiedDateCapability).enabled)
+      )
     })
 
     const loadAvailableTagsTask = useTask(function* () {
@@ -286,6 +324,33 @@ export default defineComponent({
         label: lastModifiedTranslations[k]
       })) || []
     )
+
+    const mediaTypeMapping = {
+      file: { label: $gettext('File'), icon: 'txt' },
+      folder: { label: $gettext('Folder'), icon: 'folder' },
+      document: { label: $gettext('Document'), icon: 'doc' },
+      spreadsheet: { label: $gettext('Spreadsheet'), icon: 'xls' },
+      presentation: { label: $gettext('Presentation'), icon: 'ppt' },
+      pdf: { label: $gettext('PDF'), icon: 'pdf' },
+      image: { label: $gettext('Image'), icon: 'jpg' },
+      video: { label: $gettext('Video'), icon: 'mp4' },
+      audio: { label: $gettext('Audio'), icon: 'mp3' },
+      archive: { label: $gettext('Archive'), icon: 'zip' }
+    }
+    const availableMediaTypeValues: FileCategoryKeyword[] = []
+    unref(mediaTypeCapability).keywords?.forEach((key: string) => {
+      if (!mediaTypeMapping[key]) {
+        return
+      }
+      availableMediaTypeValues.push({
+        id: key,
+        ...mediaTypeMapping[key]
+      })
+    })
+
+    const getFakeResourceForIcon = (item) => {
+      return { type: 'file', extension: item.icon, isFolder: item.icon == 'folder' } as Resource
+    }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
       const query = {}
@@ -327,6 +392,12 @@ export default defineComponent({
       if (lastModifiedParams) {
         query['mtime'] = `"${lastModifiedParams}"`
         updateFilter(lastModifiedFilter)
+      }
+
+      const mediaTypeParams = queryItemAsString(unref(mediaTypeParam))
+      if (mediaTypeParams) {
+        query['mediatype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
+        updateFilter(mediaTypeFilter)
       }
 
       return (
@@ -391,9 +462,13 @@ export default defineComponent({
         // return early if the search term or filter has not changed, no search needed
         {
           const isSameTerm = newVal?.term === oldVal?.term
-          const isSameFilter = ['q_fullText', 'q_tags', 'q_lastModified', 'useScope'].every(
-            (key) => newVal[key] === oldVal[key]
-          )
+          const isSameFilter = [
+            'q_fullText',
+            'q_tags',
+            'q_lastModified',
+            'q_mediaType',
+            'useScope'
+          ].every((key) => newVal[key] === oldVal[key])
           if (isSameTerm && isSameFilter) {
             return
           }
@@ -416,7 +491,10 @@ export default defineComponent({
       breadcrumbs,
       displayFilter,
       availableLastModifiedValues,
-      lastModifiedFilter
+      lastModifiedFilter,
+      mediaTypeFilter,
+      availableMediaTypeValues,
+      getFakeResourceForIcon
     }
   },
   computed: {

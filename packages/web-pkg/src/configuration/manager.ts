@@ -116,6 +116,8 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'loginUrl', get(options, 'loginUrl', ''))
     set(this.optionsConfiguration, 'disabledExtensions', get(options, 'disabledExtensions', []))
     set(this.optionsConfiguration, 'isRunningOnEos', get(options, 'isRunningOnEos', false))
+
+    set(this.optionsConfiguration, 'ocm.openRemotely', get(options, 'ocm.openRemotely', false))
   }
 
   get options(): OptionsConfiguration {

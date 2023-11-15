@@ -1,4 +1,4 @@
-import { useFileActions } from '@ownclouders/web-pkg'
+import { useFileActions } from './files'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export function useOpenWithDefaultApp() {

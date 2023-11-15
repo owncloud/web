@@ -64,9 +64,9 @@ import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
-  useCapabilitySpacesEnabled,
   useClientService,
   useConfigurationManager,
+  useRoute,
   useRouteParam,
   useRouteQuery,
   useRouter,
@@ -76,7 +76,6 @@ import {
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {
-  buildWebDavPublicPath,
   buildPublicSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
@@ -85,6 +84,9 @@ import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
 // full import is needed here so it can be overwritten via CERN config
 import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { RouteLocationNamedRaw } from 'vue-router'
+import { dirname } from 'path'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -92,22 +94,36 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const clientService = useClientService()
     const router = useRouter()
+    const route = useRoute()
     const store = useStore()
     const { $gettext } = useGettext()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
     const password = ref('')
+
+    const isOcmLink = computed(() => {
+      const split = unref(route).path.split('/')?.[1]
+      return split === 'o'
+    })
+
+    const publicLinkType = computed(() => {
+      return unref(isOcmLink) ? 'ocm' : 'public-link'
+    })
+
     const publicLinkSpace = computed(() =>
       buildPublicSpaceResource({
         id: unref(token),
-        driveAlias: `public/${unref(token)}`,
         driveType: 'public',
-        webDavPath: buildWebDavPublicPath(unref(token), ''),
+        publicLinkType: unref(publicLinkType),
         ...(unref(password) && { publicLinkPassword: unref(password) })
       })
     )
+
+    const item = computed(() => {
+      return queryItemAsString(unref(route).params.driveAliasAndItem)
+    })
+
     const isUserContext = useUserContext({ store })
-    const hasSpaces = useCapabilitySpacesEnabled(store)
 
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
@@ -177,6 +193,10 @@ export default defineComponent({
       })
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
+      if (unref(isOcmLink) && !configurationManager.options.ocm.openRemotely) {
+        throw new Error($gettext('Opening files from remote is disabled'))
+      }
+
       if (!isEmpty(unref(tokenInfo)) && unref(tokenInfo)?.alias_link) {
         redirectToPrivateLink(unref(tokenInfo).id)
         return
@@ -192,7 +212,8 @@ export default defineComponent({
       yield authService.resolvePublicLink(
         unref(token),
         unref(passwordRequired),
-        unref(passwordRequired) ? unref(password) : ''
+        unref(passwordRequired) ? unref(password) : '',
+        unref(publicLinkType)
       )
 
       const url = queryItemAsString(unref(redirectUrl))
@@ -201,15 +222,15 @@ export default defineComponent({
         return
       }
 
-      let { fileId } = publicLink
-      if (!fileId && unref(hasSpaces)) {
-        const { children } = yield clientService.webdav.listFiles(unref(publicLinkSpace), {
-          path: '/'
-        })
-        if (children.length === 1) {
-          // single shared file which means the actual resource is the first and only child element
-          fileId = children[0].fileId
-        }
+      let fileId: string
+      const { resource, children } = yield clientService.webdav.listFiles(unref(publicLinkSpace), {
+        path: unref(item)
+      })
+      if (children.length === 1) {
+        // single shared file which means the actual resource is the first and only child element
+        fileId = children[0].fileId
+      } else {
+        fileId = resource.fileId
       }
 
       if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
@@ -221,16 +242,35 @@ export default defineComponent({
         return
       }
 
-      router.push({
+      let scrollTo: string
+      let path: string
+
+      if (['folder', 'space'].includes(resource.type)) {
+        fileId = resource.fileId
+        path = unref(item)
+      } else {
+        fileId = resource.parentFolderId
+        scrollTo = resource.fileId
+        path = dirname(unref(item))
+      }
+
+      const driveAliasAndItem = urlJoin(unref(isOcmLink) ? `ocm/` : `public/`, unref(token), path)
+      const targetLocation: RouteLocationNamedRaw = {
         name: 'files-public-link',
         query: {
           ...(configurationManager.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'
           }),
-          ...(!!fileId && { fileId })
+          ...(!!fileId && { fileId }),
+          ...(!!scrollTo && { scrollTo }),
+          ...(unref(details) && { details: unref(details) })
         },
-        params: { driveAliasAndItem: `public/${unref(token)}` }
-      })
+        params: {
+          driveAliasAndItem
+        }
+      }
+
+      router.push(targetLocation)
     })
 
     const isLoading = computed<boolean>(() => {
@@ -264,6 +304,11 @@ export default defineComponent({
     })
 
     onMounted(async () => {
+      if (unref(isOcmLink)) {
+        await resolvePublicLinkTask.perform(false)
+        return
+      }
+
       tokenInfo.value = await loadTokenInfoTask.perform(unref(token))
       isPasswordRequired.value = await isPasswordRequiredTask.perform()
       if (!unref(isPasswordRequired)) {

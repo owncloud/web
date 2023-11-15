@@ -2,7 +2,8 @@ import {
   Resource,
   SpaceResource,
   buildShareSpaceResource,
-  isMountPointSpaceResource
+  isMountPointSpaceResource,
+  OCM_PROVIDER_ID
 } from '@ownclouders/web-client/src/helpers'
 import { computed, unref } from 'vue'
 import { useStore } from '../store'
@@ -67,6 +68,7 @@ export const useGetResourceContext = () => {
     }
 
     space = buildShareSpaceResource({
+      driveAliasPrefix: resource.storageId?.startsWith(OCM_PROVIDER_ID) ? 'ocm-share' : 'share',
       shareId: mountPoint.nodeId,
       shareName: mountPoint.name,
       serverUrl: configurationManager.serverUrl

@@ -822,6 +822,36 @@ importers:
         specifier: workspace:*
         version: link:../web-test-helpers
 
+  packages/web-app-ocm:
+    dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
+      axios:
+        specifier: ^0.27.2
+        version: 0.27.2
+      email-validator:
+        specifier: ^2.0.4
+        version: 2.0.4
+      fuse.js:
+        specifier: ^6.5.3
+        version: 6.5.3
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+      vue-concurrency:
+        specifier: 4.0.0
+        version: 4.0.0(vue@3.3.4)
+      vuex:
+        specifier: 4.1.0
+        version: 4.1.0(vue@3.3.4)
+
   packages/web-app-pdf-viewer:
     dependencies:
       '@ownclouders/web-pkg':
@@ -8080,6 +8110,15 @@ packages:
     transitivePeerDependencies:
       - debug
     dev: true
+
+  /axios@0.27.2:
+    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+    dependencies:
+      follow-redirects: 1.15.1(debug@4.3.4)
+      form-data: 4.0.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /axios@1.4.0:
     resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
@@ -21484,6 +21523,15 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
     requiresBuild: true
+
+  /vue-concurrency@4.0.0(vue@3.3.4):
+    resolution: {integrity: sha512-YOLrHang8w15bMOpftw6iPsoqlZT/u5zsblnT+CrVvc2HZ0eP76hjj77sgepHxB6FRcN3dlFXDNBMQ6iZzpiNw==}
+    peerDependencies:
+      vue: ^3.2.20 || ^2.7.0
+    dependencies:
+      caf: 15.0.1
+      vue: 3.3.4
+    dev: false
 
   /vue-concurrency@4.0.1(vue@3.3.4):
     resolution: {integrity: sha512-gzZjC8o9EE1/d7OEndI0C8lO09nkLSbviT94/gQR372iLVbYKZiGto87upjV9TAHodTfzbBgjyQXH53AVI5ugA==}

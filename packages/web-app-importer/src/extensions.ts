@@ -112,6 +112,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
         {
           id: 'com.github.owncloud.web.import-file',
           type: 'action',
+          scopes: ['files', 'upload-menu'],
           action: {
             name: 'import-files',
             icon: 'cloud',

@@ -11,6 +11,7 @@ import { Resource } from '../resource'
 import { User } from '../user'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
+export const OCM_PROVIDER_ID = '89f37a33-858b-45fa-8890-a1f2b27d90e1'
 
 export interface SpaceResource extends Resource {
   disabled?: boolean
