@@ -226,9 +226,9 @@ export default defineComponent({
         return this.$gettext('Upload cancelled')
       }
       if (Object.keys(this.errors).length) {
-        const isLocked = Object.values(this.errors).some((error: any) => error.statusCode === 423)
+        const isLocked = Object.values(this.errors).some((error: any) => error?.statusCode === 423)
         if (isLocked) {
-          return this.$gettext('Upload failed because the current folder is locked.')
+          return this.$gettext('Upload failed: Locked')
         }
         return this.$gettext('Upload failed')
       }
@@ -630,6 +630,9 @@ export default defineComponent({
       }
 
       const errorObject = formatErrorMessageToObject(error.message)
+      if (this.errors[item.meta.uploadId]?.statusCode === 423) {
+        return this.$gettext('Upload folder is locked')
+      }
 
       switch (errorObject.responseCode) {
         case 507:
