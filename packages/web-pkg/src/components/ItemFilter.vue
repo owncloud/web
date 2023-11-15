@@ -21,7 +21,7 @@
             <li
               v-for="(item, index) in displayedItems"
               :key="index"
-              class="oc-my-xs"
+              :class="['oc-my-xs', { 'item-filter-list-item-visible': item.isVisible }]"
               v-show="item.isVisible"
             >
               <oc-button

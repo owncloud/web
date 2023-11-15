@@ -12,7 +12,7 @@ const filterItems = [
 const selectors = {
   filterInput: '.item-filter-input input',
   checkboxStub: 'oc-checkbox-stub',
-  filterListItem: '.item-filter-list-item',
+  filterListItem: '.item-filter-list-item-visible',
   activeFilterListItem: '.item-filter-list-item-active',
   clearBtn: '.oc-filter-chip-clear'
 }
