@@ -27,6 +27,7 @@
           padding-size="remove"
           drop-id="create-shortcut-modal-contextmenu"
           mode="manual"
+          position="bottom-start"
           :close-on-click="true"
           @hide-drop="onHideDrop"
           @show-drop="onShowDrop"
