@@ -282,8 +282,8 @@ export default defineConfig(async ({ mode, command }) => {
         {
           name: 'ejs',
           transformIndexHtml: {
-            enforce: 'pre',
-            transform(html, { filename }) {
+            order: 'pre',
+            handler(html, { filename }) {
               if (basename(filename) !== 'index.html') {
                 return
               }
@@ -302,7 +302,7 @@ export default defineConfig(async ({ mode, command }) => {
         {
           name: 'import-map',
           transformIndexHtml: {
-            transform(html, { bundle, filename }) {
+            handler(html, { bundle, filename }) {
               if (basename(filename) !== 'index.html') {
                 return
               }
