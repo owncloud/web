@@ -2,6 +2,7 @@
 
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { UppyService } from '@ownclouders/web-pkg'
+import { Route, Router } from 'vue-router'
 
 // This file must have at least one export or import on top-level
 export {}
@@ -12,6 +13,9 @@ declare module 'vue' {
     $client: OwnCloudSdk
 
     $uppyService: UppyService
+
+    $router: Router
+    $route: Route
   }
 
   interface GlobalComponents {
