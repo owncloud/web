@@ -1135,8 +1135,8 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz'
       '@vueuse/head':
-        specifier: 1.1.26
-        version: 1.1.26(vue@3.3.4)
+        specifier: 2.0.0
+        version: 2.0.0(vue@3.3.4)
       axios:
         specifier: ^1.0.0
         version: 1.4.0
@@ -6871,42 +6871,42 @@ packages:
       '@ucast/core': 1.10.1
     dev: false
 
-  /@unhead/dom@1.1.26:
-    resolution: {integrity: sha512-6I8z170OAO19h/AslASN4Xw0hqItQFMKhRJQtplQs1BZ62LsDmNKuqJiYueX39U+IfIvIV3j/q1mQwt9lgMwTw==}
+  /@unhead/dom@1.8.4:
+    resolution: {integrity: sha512-WJ/NM+M+JqHJpiRUcPlj+H1qqbw3MykqvfHh1tT1J/WMNFS4lac+gAFCSFFSP1P19CW+30Q92XbAgMbgA45cow==}
     dependencies:
-      '@unhead/schema': 1.1.26
-      '@unhead/shared': 1.1.26
+      '@unhead/schema': 1.8.4
+      '@unhead/shared': 1.8.4
     dev: false
 
-  /@unhead/schema@1.1.26:
-    resolution: {integrity: sha512-l93zaizm+pu36uMssdtzSC2Y61ncZaBBouZn0pB8rVI14V0hPxeXuSNIuPh2WjAm8wfb8EnCSE3LNguoqTar7g==}
+  /@unhead/schema@1.8.4:
+    resolution: {integrity: sha512-Lfeu123sFpqUJbFYIWUygUXjTq9TTtEH148VV8iiN1NC4THa7GeDgHWbb7FbigV9c5pFTGI7oREHKFCaTtLGSg==}
     dependencies:
       hookable: 5.5.3
-      zhead: 2.0.4
+      zhead: 2.2.4
     dev: false
 
-  /@unhead/shared@1.1.26:
-    resolution: {integrity: sha512-gnUfNrl8w7hQHke9P0au7klcG9bHVOXqbDvya2uARA/8TyxNz87i0uakraO+P6/+zf484dw3b3MYkXq0thK2eg==}
+  /@unhead/shared@1.8.4:
+    resolution: {integrity: sha512-DXgzbFPqdrms2TLJzmjG1F1tZPyejuCF95AF0cz/GjVEJErEyBMKyhWogVbkyYqPGiVCQT1uCKMYucuM9LhdZw==}
     dependencies:
-      '@unhead/schema': 1.1.26
+      '@unhead/schema': 1.8.4
     dev: false
 
-  /@unhead/ssr@1.1.26:
-    resolution: {integrity: sha512-KYJDGgVNtU2i+NHu17o2zFXqsoLukOFEz81XrWQ8nQdY5+VNjy7IiTLp1dlx3umn1ohZjHySz4LXQCT4zUApSw==}
+  /@unhead/ssr@1.8.4:
+    resolution: {integrity: sha512-PBFLKqaNXY1kHYpLuv+DnpHa9ioQcfHwL7kqpgK6WqUdNqMrxxSFn/rLMpqYTuifx58WBweaAMXRajOQ4GcUVQ==}
     dependencies:
-      '@unhead/schema': 1.1.26
-      '@unhead/shared': 1.1.26
+      '@unhead/schema': 1.8.4
+      '@unhead/shared': 1.8.4
     dev: false
 
-  /@unhead/vue@1.1.26(vue@3.3.4):
-    resolution: {integrity: sha512-UpxQ0KGmOoiN+Dg19zto5KTcnGV5chBmgiVJTDqUF4BPfr24vRrR65sZGdMoNV7weuD3AD/K0osk2ru+vXxRrA==}
+  /@unhead/vue@1.8.4(vue@3.3.4):
+    resolution: {integrity: sha512-U2rXe5qocVK5qHaEj5/V2VimHVWbc6IJ4PpjpD7IwgN8uhxSt9oxNObhLIyRzdqim13PoAfS+zUAwFii4y0hpQ==}
     peerDependencies:
       vue: '>=2.7 || >=3'
     dependencies:
-      '@unhead/schema': 1.1.26
-      '@unhead/shared': 1.1.26
+      '@unhead/schema': 1.8.4
+      '@unhead/shared': 1.8.4
       hookable: 5.5.3
-      unhead: 1.1.26
+      unhead: 1.8.4
       vue: 3.3.4
     dev: false
 
@@ -7232,15 +7232,15 @@ packages:
       - '@vue/composition-api'
       - vue
 
-  /@vueuse/head@1.1.26(vue@3.3.4):
-    resolution: {integrity: sha512-VUrqvcxKtxt2moKtUa7R/KscnDsNYj5u7HFULLsr84VhWsztzBedxW/8Wh/kTz2+/eMf5gC1KtkZBTFQYOmauQ==}
+  /@vueuse/head@2.0.0(vue@3.3.4):
+    resolution: {integrity: sha512-ykdOxTGs95xjD4WXE4na/umxZea2Itl0GWBILas+O4oqS7eXIods38INvk3XkJKjqMdWPcpCyLX/DioLQxU1KA==}
     peerDependencies:
       vue: '>=2.7 || >=3'
     dependencies:
-      '@unhead/dom': 1.1.26
-      '@unhead/schema': 1.1.26
-      '@unhead/ssr': 1.1.26
-      '@unhead/vue': 1.1.26(vue@3.3.4)
+      '@unhead/dom': 1.8.4
+      '@unhead/schema': 1.8.4
+      '@unhead/ssr': 1.8.4
+      '@unhead/vue': 1.8.4(vue@3.3.4)
       vue: 3.3.4
     dev: false
 
@@ -20939,12 +20939,12 @@ packages:
       which-boxed-primitive: 1.0.2
     dev: true
 
-  /unhead@1.1.26:
-    resolution: {integrity: sha512-MshcPoPLXSGRgYtczddGvMgLUISTbt2pxihqD5kZVXKmY2FZLj1OQIY111aX45Xq47XJxjvYavvoyeUFroKQcg==}
+  /unhead@1.8.4:
+    resolution: {integrity: sha512-r2SFK18KzjKgSaOBawjQXXAz4odqKjy+fYtw7g+nwlc3FU1JNQqScVeTic0gEK69IJ/cRsqL6bPqF1ILkyVmTQ==}
     dependencies:
-      '@unhead/dom': 1.1.26
-      '@unhead/schema': 1.1.26
-      '@unhead/shared': 1.1.26
+      '@unhead/dom': 1.8.4
+      '@unhead/schema': 1.8.4
+      '@unhead/shared': 1.8.4
       hookable: 5.5.3
     dev: false
 
@@ -22476,8 +22476,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zhead@2.0.4:
-    resolution: {integrity: sha512-V4R94t3ifk9AURym6OskbKcnowzgp5Z88tkoL/NF67vyryNxC62u6mx5F1Ux4oh4+YN7FFmKYEyWy6m5kfPH6g==}
+  /zhead@2.2.4:
+    resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
     dev: false
 
   /zip-stream@4.1.0:
