@@ -18,14 +18,15 @@
           @keydown.down="onKeyDownDrop"
           @keydown.esc="onKeyEscDrop"
           @keydown.enter="onKeyEnterDrop"
+          @input="onInput"
+          @click="onClickInput"
         />
         <oc-drop
-          v-if="showDrop"
           ref="dropRef"
           class="oc-pt-s"
           padding-size="remove"
           drop-id="create-shortcut-modal-contextmenu"
-          toggle="#create-shortcut-modal-url-input"
+          mode="manual"
           :close-on-click="true"
           @hide-drop="onHideDrop"
           @show-drop="onShowDrop"
@@ -94,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref } from 'vue'
+import { defineComponent, PropType, ref, unref, computed, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
@@ -155,8 +156,6 @@ export default defineComponent({
       return `https://${url}`
     })
 
-    const showDrop = computed(() => unref(inputUrl).trim())
-
     const confirmButtonDisabled = computed(
       () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
     )
@@ -197,6 +196,7 @@ export default defineComponent({
     }
 
     const dropItemUrlClicked = () => {
+      searchResult.value = null
       inputUrl.value = unref(dropItemUrl)
       try {
         let filename = new URL(unref(dropItemUrl)).host
@@ -208,6 +208,7 @@ export default defineComponent({
     }
 
     const dropItemResourceClicked = (item: SearchResultValue) => {
+      searchResult.value = null
       const webURL = new URL(window.location.href)
       let filename = item.data.name
 
@@ -312,6 +313,32 @@ export default defineComponent({
       isDropOpen.value = true
     }
 
+    const onClickInput = () => {
+      const showDrop = inputUrl.value.trim().length
+
+      if (showDrop) {
+        ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
+      }
+    }
+
+    const onInput = async () => {
+      await nextTick()
+
+      const hideDrop = !inputUrl.value.trim().length
+
+      if (hideDrop) {
+        ;(unref(dropRef) as InstanceType<typeof OcDrop>).hide()
+        return
+      }
+
+      ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
+
+      if (!isLocationPublicActive(router, 'files-public-link')) {
+        activeDropItemIndex.value = null
+        debouncedSearch()
+      }
+    }
+
     const createShortcut = async (url: string, filename: string) => {
       // Closes the modal
       props.cancel()
@@ -339,22 +366,9 @@ export default defineComponent({
       }
     }
 
-    watch(inputUrl, async () => {
-      await nextTick()
-      if (unref(showDrop) && unref(dropRef)) {
-        ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
-
-        if (!isLocationPublicActive(router, 'files-public-link')) {
-          activeDropItemIndex.value = null
-          debouncedSearch()
-        }
-      }
-    })
-
     return {
       inputUrl,
       inputFilename,
-      showDrop,
       dropRef,
       dropItemUrl,
       searchResult,
@@ -375,6 +389,8 @@ export default defineComponent({
       onKeyUpDrop,
       onHideDrop,
       onShowDrop,
+      onInput,
+      onClickInput,
       onKeyEscDrop,
       isDropItemActive
     }
