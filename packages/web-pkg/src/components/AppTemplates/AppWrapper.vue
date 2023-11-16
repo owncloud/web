@@ -9,8 +9,9 @@
     />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" :message="loadingError.message" />
-    <div v-else class="oc-height-1-1">
+    <div v-else class="oc-flex oc-width-1-1 oc-height-1-1">
       <slot v-bind="slotAttrs" />
+      <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
   </main>
 </template>
@@ -35,6 +36,7 @@ import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import AppTopBar from '../AppTopBar.vue'
 import ErrorScreen from './PartialViews/ErrorScreen.vue'
 import LoadingScreen from './PartialViews/LoadingScreen.vue'
+import { FileSideBar } from '../SideBar'
 import {
   UrlForResourceOptions,
   queryItemAsString,
@@ -43,25 +45,34 @@ import {
   useRoute,
   useRouteParam,
   useRouteQuery,
-  useStore
+  useStore,
+  useSelectedResources,
+  useSideBar
 } from '../../composables'
-import { Resource } from '@ownclouders/web-client'
-import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
-import { Action, ActionOptions } from '../../composables/actions/types'
 import {
+  Action,
+  ActionOptions,
+  ModifierKey,
+  Key,
+  useAppMeta,
+  useGetResourceContext,
+  useKeyboardActions
+} from '../../composables'
+import {
+  Resource,
+  SpaceResource,
   isPersonalSpaceResource,
   isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
+import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { HttpError } from '@ownclouders/web-client/src/errors'
-import { ModifierKey, Key, useKeyboardActions } from '../../composables/keyboardActions'
-import { useAppMeta } from '../../composables/appDefaults/useAppMeta'
 import { dirname } from 'path'
-import { useGetResourceContext } from '../../composables'
 
 export default defineComponent({
   name: 'AppWrapper',
   components: {
     AppTopBar,
+    FileSideBar,
     ErrorScreen,
     LoadingScreen
   },
@@ -92,9 +103,11 @@ export default defineComponent({
     const currentRoute = useRoute()
     const clientService = useClientService()
     const { getResourceContext } = useGetResourceContext()
+    const { selectedResources } = useSelectedResources({ store })
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
+    const space: Ref<SpaceResource> = ref()
     const currentETag = ref('')
     const url = ref('')
     const loading = ref(true)
@@ -206,18 +219,21 @@ export default defineComponent({
           yield addMissingDriveAliasAndItem()
         }
 
+        space.value = unref(unref(currentFileContext).space)
         resource.value = yield getFileInfo(currentFileContext, {
           davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
         })
-
-        const space = unref(unref(currentFileContext).space)
+        // FIXME: setter only writes ids => files need to be loaded into activeFiles array as well
+        // FIXME: currentFolder not null every time... needs some more thought
+        store.commit('Files/LOAD_FILES', { currentFolder: null, files: [unref(resource)] })
+        selectedResources.value = [unref(resource)]
 
         const newExtension = props.importResourceWithExtension(unref(resource))
         if (newExtension) {
           const timestamp = DateTime.local().toFormat('yyyyMMddHHmmss')
           const targetPath = `${unref(resource).name}_${timestamp}.${newExtension}`
           if (
-            !(yield clientService.webdav.copyFiles(space, unref(resource), space, {
+            !(yield clientService.webdav.copyFiles(unref(space), unref(resource), unref(space), {
               path: targetPath
             }))
           ) {
@@ -242,12 +258,11 @@ export default defineComponent({
         }
 
         if (unref(hasProp('url'))) {
-          const tmpUrl = yield getUrlForResource(
-            space,
+          url.value = yield getUrlForResource(
+            unref(space),
             unref(resource),
             props.urlForResourceOptions
           )
-          url.value = tmpUrl
         }
         loading.value = false
       } catch (e) {
@@ -441,6 +456,7 @@ export default defineComponent({
     }))
 
     return {
+      ...useSideBar(),
       isEditor,
       closeApp,
       fileActions,
@@ -448,6 +464,7 @@ export default defineComponent({
       loadingError,
       pageTitle,
       resource,
+      space,
       slotAttrs
     }
   }

@@ -73,18 +73,31 @@
           </oc-button>
         </div>
       </span>
+      <oc-button @click="toggleSideBar">
+        {{ sideBarOpen }}
+        <oc-icon name="side-bar-right" />
+      </oc-button>
     </div>
   </portal>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
-import { Resource } from '@ownclouders/web-client/src'
-import { Action } from '../composables/actions/types'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
-import { useFolderLink, useGetMatchingSpace } from '../composables'
-import { isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  Action,
+  SideBarEventTopics,
+  useEventBus,
+  useFolderLink,
+  useGetMatchingSpace,
+  useSideBar
+} from '../composables'
+import {
+  Resource,
+  isPublicSpaceResource,
+  isShareSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'AppTopBar',
@@ -108,6 +121,7 @@ export default defineComponent({
   emits: ['close'],
   setup(props) {
     const { $gettext } = useGettext()
+    const eventBus = useEventBus()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
@@ -135,13 +149,20 @@ export default defineComponent({
       return props.resource ? getParentFolderLinkIconAdditionalAttributes(props.resource) : null
     })
 
+    const toggleSideBar = () => {
+      eventBus.publish(SideBarEventTopics.toggle)
+    }
+    const { sideBarOpen } = useSideBar()
+
     return {
       pathPrefix,
       isPathDisplayed,
       contextMenuLabel,
       closeButtonLabel,
       parentFolderName,
-      parentFolderLinkIconAdditionalAttributes
+      parentFolderLinkIconAdditionalAttributes,
+      sideBarOpen,
+      toggleSideBar
     }
   }
 })
