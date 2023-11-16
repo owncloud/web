@@ -120,16 +120,18 @@ export default defineComponent({
         }
 
         const { params, query } = createFileRouteOptions(space, { fileId, path })
+        const openWithDefault =
+          configurationManager.options.openLinksWithDefaultApp &&
+          unref(openWithDefaultApp) !== 'false' &&
+          !unref(details)
+
         targetLocation.params = params
         targetLocation.query = {
           ...query,
           scrollTo:
             targetLocation.name === 'files-shares-with-me' ? space.shareId : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
-          ...(configurationManager.options.openLinksWithDefaultApp &&
-            unref(openWithDefaultApp) !== 'false' && {
-              openWithDefaultApp: 'true'
-            })
+          ...(openWithDefault && { openWithDefaultApp: 'true' })
         }
 
         router.push(targetLocation)
