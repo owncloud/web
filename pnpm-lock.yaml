@@ -84,8 +84,8 @@ importers:
         specifier: '*'
         version: 0.13.11(vue@3.3.4)
       vue-router:
-        specifier: '*'
-        version: 4.1.6(vue@3.3.4)
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.3.4)
     devDependencies:
       '@babel/core':
         specifier: 7.21.8
@@ -509,8 +509,8 @@ importers:
         specifier: ^15.9.0
         version: 15.10.1(@vue/compiler-sfc@3.3.4)(babel-core@7.0.0-bridge.0)(css-loader@5.2.7)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0)
       vue-router:
-        specifier: 4.2.0
-        version: 4.2.0(vue@3.3.4)
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.3.4)
       vue-select:
         specifier: 4.0.0-beta.6
         version: 4.0.0-beta.6(vue@3.3.4)
@@ -21668,24 +21668,6 @@ packages:
       - whiskers
     dev: true
 
-  /vue-router@4.1.6(vue@3.3.4):
-    resolution: {integrity: sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ==}
-    peerDependencies:
-      vue: ^3.2.0
-    dependencies:
-      '@vue/devtools-api': 6.4.5
-      vue: 3.3.4
-    dev: false
-
-  /vue-router@4.2.0(vue@3.3.4):
-    resolution: {integrity: sha512-c+usESa6ZoWsm4PPdzRSyenp5A4dsUtnDJnrI03fY1IpIihA9TK3x5ffgkFDpjhLJZewsXoKURapNLFdZjuqTg==}
-    peerDependencies:
-      vue: ^3.2.0
-    dependencies:
-      '@vue/devtools-api': 6.5.0
-      vue: 3.3.4
-    dev: true
-
   /vue-router@4.2.5(vue@3.3.4):
     resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}
     peerDependencies:
@@ -21693,7 +21675,6 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.5.0
       vue: 3.3.4
-    dev: false
 
   /vue-select@4.0.0-beta.6(vue@3.3.4):
     resolution: {integrity: sha512-K+zrNBSpwMPhAxYLTCl56gaMrWZGgayoWCLqe5rWwkB8aUbAUh7u6sXjIR7v4ckp2WKC7zEEUY27g6h1MRsIHw==}

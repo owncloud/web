@@ -47,7 +47,7 @@
     "portal-vue": "3.0.0",
     "uuid": "*",
     "vue-demi": "*",
-    "vue-router": "*"
+    "vue-router": "4.2.5"
   },
   "devDependencies": {
     "@babel/core": "7.21.8",
