@@ -81,11 +81,12 @@ export default defineComponent({
 
     const additionalAttrs = computed(() => {
       if (!props.isClickable) {
-        return {}
+        return {
+          isResourceClickable: false
+        }
       }
 
       return {
-        isResourceClickable: true,
         parentFolderLink: getParentFolderLink(unref(resource)),
         onClick: resourceClicked,
         onClickFolder: folderClicked,
