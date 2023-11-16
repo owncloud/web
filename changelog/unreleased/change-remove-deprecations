@@ -1,0 +1,7 @@
+Change: Remove deprecated code
+
+We have removed the `getToken` getter from our vuex store and support for the deprecated `user-management` name for the `admin-settings` app.
+See linked "Deprecations" issue for more information.
+
+https://github.com/owncloud/web/issues/7338
+https://github.com/owncloud/web/pull/9959
