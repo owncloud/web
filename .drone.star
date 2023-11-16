@@ -1093,6 +1093,9 @@ def buildRelease(ctx):
             {
                 "name": "make",
                 "image": OC_CI_NODEJS,
+                "environment": {
+                    "NO_INSTALL": "true",
+                },
                 "commands": [
                     "cd %s" % dir["web"],
                     "make -f Makefile.release",
