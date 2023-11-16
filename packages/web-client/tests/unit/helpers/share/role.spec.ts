@@ -239,7 +239,7 @@ describe('roles', () => {
           }
         ]
       ])('%s', (name: string, { folder, result }) => {
-        expect(LinkShareRoles.list(folder, true, true, true, false)).toEqual(result)
+        expect(LinkShareRoles.list(folder, true, true, true, true)).toEqual(result)
       })
     })
     describe('getByBitmask', () => {

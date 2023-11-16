@@ -444,7 +444,14 @@ export default defineComponent({
     },
 
     checkLinkToUpdate({ link }) {
-      const params = this.getParamsForLink(link)
+      let params = this.getParamsForLink(link)
+      if (link.permissions === 0) {
+        params = {
+          ...params,
+          password: '',
+          expireDate: ''
+        }
+      }
 
       if (!link.password && !this.canDeletePublicLinkPassword(link)) {
         showQuickLinkPasswordModal(
@@ -630,7 +637,6 @@ export default defineComponent({
           this.hasPublicLinkEditing,
           this.hasPublicLinkContribute,
           this.hasPublicLinkAliasSupport,
-          !!link.password,
           this.canCreatePublicLinks
         )
       }
@@ -640,7 +646,6 @@ export default defineComponent({
         this.hasPublicLinkEditing,
         this.hasPublicLinkContribute,
         this.hasPublicLinkAliasSupport,
-        !!link.password,
         this.canCreatePublicLinks
       )
     }
