@@ -46,7 +46,7 @@
     "caf": "15.0.1",
     "portal-vue": "3.0.0",
     "uuid": "9.0.0",
-    "vue-demi": "0.14.5",
+    "vue-demi": "0.14.6",
     "vue-router": "4.2.5"
   },
   "devDependencies": {
