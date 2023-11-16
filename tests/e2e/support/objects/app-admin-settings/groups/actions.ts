@@ -26,7 +26,7 @@ export const createGroup = async (args: { page: Page; key: string }): Promise<Re
   const [response] = await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith('groups') && resp.status() === 200 && resp.request().method() === 'POST'
+        resp.url().endsWith('groups') && resp.status() === 201 && resp.request().method() === 'POST'
     ),
     page.locator(actionConfirmButton).click()
   ])
