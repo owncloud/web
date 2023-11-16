@@ -849,8 +849,8 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       vue-concurrency:
-        specifier: 4.0.0
-        version: 4.0.0(vue@3.3.4)
+        specifier: 4.0.1
+        version: 4.0.1(vue@3.3.4)
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
@@ -21426,15 +21426,6 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
     requiresBuild: true
-
-  /vue-concurrency@4.0.0(vue@3.3.4):
-    resolution: {integrity: sha512-YOLrHang8w15bMOpftw6iPsoqlZT/u5zsblnT+CrVvc2HZ0eP76hjj77sgepHxB6FRcN3dlFXDNBMQ6iZzpiNw==}
-    peerDependencies:
-      vue: ^3.2.20 || ^2.7.0
-    dependencies:
-      caf: 15.0.1
-      vue: 3.3.4
-    dev: false
 
   /vue-concurrency@4.0.1(vue@3.3.4):
     resolution: {integrity: sha512-gzZjC8o9EE1/d7OEndI0C8lO09nkLSbviT94/gQR372iLVbYKZiGto87upjV9TAHodTfzbBgjyQXH53AVI5ugA==}
