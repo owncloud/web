@@ -30,6 +30,7 @@ Summary
 * Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -248,6 +249,15 @@ Details
 
    https://github.com/owncloud/web/issues/9922
    https://github.com/owncloud/web/pull/9931
+
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+
+   We have removed the `getToken` getter from our vuex store and support for the deprecated
+   `user-management` name for the `admin-settings` app. See linked "Deprecations" issue for
+   more information.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/9959
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
