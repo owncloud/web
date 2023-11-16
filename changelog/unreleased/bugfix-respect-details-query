@@ -1,0 +1,6 @@
+Bugfix: Respect "details"-query on private links
+
+The "details"-query on private links is now being respected properly when `openLinksWithDefaultApp` is enabled. This fixed an issue where the sidebar would not open despite requesting to do so.
+
+https://github.com/owncloud/web/issues/9868
+https://github.com/owncloud/web/pull/9947
