@@ -5,7 +5,7 @@
     <div class="oc-card oc-text-center oc-width-large">
       <template v-if="loading">
         <div class="oc-card-header">
-          <h2 key="private-link-loading">
+          <h2 key="private-link-loading" class="oc-link-resolve-loading">
             <span v-text="$gettext('Resolving private link…')" />
           </h2>
         </div>
@@ -198,7 +198,10 @@ export default defineComponent({
       resource,
       isUnacceptedShareError,
       sharedWithMeRoute,
-      openSharedWithMeLabel
+      openSharedWithMeLabel,
+
+      // HACK: for unit tests
+      resolvePrivateLinkTask
     }
   }
 })
