@@ -28,6 +28,7 @@ Summary
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
 * Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
+* Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -228,6 +229,14 @@ Details
 
    https://github.com/owncloud/web/issues/9158
    https://github.com/owncloud/web/pull/9915
+
+* Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
+
+   Enables selecting "invite people" for password-protected folder/file. Selecting this
+   permission will drop password protection and expiration date.
+
+   https://github.com/owncloud/web/issues/9922
+   https://github.com/owncloud/web/pull/9931
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
