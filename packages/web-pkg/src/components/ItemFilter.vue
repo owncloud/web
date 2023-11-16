@@ -18,10 +18,16 @@
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
-            <li v-for="(item, index) in displayedItems" :key="index" class="oc-my-xs">
+            <li
+              v-for="(item, index) in displayedItems"
+              :key="index"
+              class="oc-my-xs"
+              v-show="item.isVisible"
+            >
               <oc-button
                 class="item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs"
                 :class="{
+                  'item-filter-list-item-visible': item.isVisible,
                   'item-filter-list-item-active': !allowMultiple && isItemSelected(item),
                   'oc-flex-left': allowMultiple,
                   'oc-flex-between': !allowMultiple
@@ -126,7 +132,7 @@ export default defineComponent({
     const currentRoute = useRoute()
     const filterInputRef = ref()
     const selectedItems = ref([])
-    const displayedItems = ref(props.items)
+    const displayedItems = ref(props.items.map((item: any) => ({ ...item, isVisible: true })))
     const markInstance = ref(null)
     const itemFilterListRef = ref(null)
 
@@ -170,27 +176,20 @@ export default defineComponent({
       emit('selectionChange', unref(selectedItems))
     }
 
-    const sortItems = (items) => {
-      const selectedItemIds = unref(selectedItems).map((i) => getId(i))
-      return items.sort(
-        (a: any, b: any) =>
-          (selectedItemIds.includes(getId(b)) as any) -
-            (selectedItemIds.includes(getId(a)) as any) ||
-          a[props.displayNameAttribute].localeCompare(b[props.displayNameAttribute])
-      )
-    }
-
     const filterTerm = ref()
     const filter = (items, filterTerm) => {
       if (!(filterTerm || '').trim()) {
-        return items
+        return items.map((item) => ({ ...item, isVisible: true }))
       }
-      const usersSearchEngine = new Fuse(items, {
+      const fuse = new Fuse(items, {
         ...defaultFuseOptions,
         keys: props.filterableAttributes as any
       })
 
-      return usersSearchEngine.search(filterTerm).map((r) => r.item)
+      const result = fuse.search(filterTerm)
+      const matchedIds = new Set(result.map((r) => getId(r.item)))
+
+      return items.map((item) => ({ ...item, isVisible: matchedIds.has(getId(item)) }))
     }
     const clearFilter = () => {
       selectedItems.value = []
@@ -199,11 +198,11 @@ export default defineComponent({
     }
 
     const setDisplayedItems = (items) => {
-      displayedItems.value = sortItems(items)
+      displayedItems.value = items
     }
 
     const showDrop = async () => {
-      setDisplayedItems(props.items)
+      setDisplayedItems(props.items.map((item: any) => ({ ...item, isVisible: true })))
       await nextTick()
       unref(filterInputRef).focus()
     }
