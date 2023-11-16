@@ -6,7 +6,6 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
 import compression from 'rollup-plugin-gzip'
-import history from 'connect-history-api-fallback'
 
 import ejs from 'ejs'
 import { basename, join } from 'path'
@@ -110,35 +109,6 @@ export const historyModePlugins = () =>
           ]
         }
       }
-    },
-    {
-      name: 'fallback-to-index-html',
-      configureServer(server: ViteDevServer) {
-        return () => {
-          const handler = history({
-            disableDotRule: true,
-            rewrites: [
-              {
-                from: /$/,
-                to({ parsedUrl, request }) {
-                  const root = projectRootDir
-                  const decodedPath = decodeURIComponent(parsedUrl.pathname)
-                  const rewritten = decodedPath + 'index.html'
-                  if (decodedPath !== '/' && existsSync(join(root, decodedPath))) {
-                    return decodedPath
-                  }
-                  if (existsSync(join(root, rewritten))) {
-                    return rewritten
-                  }
-                  return `/index.html`
-                }
-              }
-            ]
-          })
-
-          server.middlewares.use(handler)
-        }
-      }
     }
   ] as const
 
@@ -218,6 +188,7 @@ export default defineConfig(async ({ mode, command }) => {
           crypto: join(projectRootDir, 'polyfills/crypto.js'),
           buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
           path: 'rollup-plugin-node-polyfills/polyfills/path',
+          caf: 'caf/caf',
 
           // owncloud-sdk // sax
           stream: 'rollup-plugin-node-polyfills/polyfills/stream',
