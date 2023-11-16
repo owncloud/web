@@ -7,15 +7,17 @@
       :button-confirm-disabled="confirmButtonDisabled"
       @cancel="cancel"
       @confirm="createShortcut(inputUrl, inputFilename)"
-      @keydown.enter="onKeyDownEnter"
+      @keydown.enter="onKeyEnter"
     >
       <template #content>
         <oc-text-input
           id="create-shortcut-modal-url-input"
           v-model="inputUrl"
           :label="$gettext('Shortcut to a webpage or file')"
-          @keyup.up="onKeyUpDrop"
-          @keyup.down="onKeyDownDrop"
+          @keydown.up="onKeyUpDrop"
+          @keydown.down="onKeyDownDrop"
+          @keydown.esc="onKeyEscDrop"
+          @keydown.enter="onKeyEnterDrop"
         />
         <oc-drop
           v-if="showDrop"
@@ -25,37 +27,50 @@
           drop-id="create-shortcut-modal-contextmenu"
           toggle="#create-shortcut-modal-url-input"
           :close-on-click="true"
-
+          @hide-drop="onHideDrop"
+          @show-drop="onShowDrop"
         >
           <oc-list>
-            <li class="oc-p-xs selectable-item">
+            <li
+              class="oc-p-xs selectable-item"
+              :class="{
+                active: isDropItemActive(0)
+              }"
+            >
               <oc-button
                 class="oc-width-1-1"
                 appearance="raw"
                 justify-content="left"
                 @click="dropItemUrlClicked"
               >
-                <oc-icon name="external-link"/>
-                <span v-text="dropItemUrl"/>
+                <oc-icon name="external-link" />
+                <span v-text="dropItemUrl" />
               </oc-button>
             </li>
             <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
-              <oc-spinner/>
+              <oc-spinner />
             </li>
             <template v-if="searchResult?.values?.length">
               <li
                 class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
               >
-                <span v-text="$gettext('Link to a file')"/>
+                <span v-text="$gettext('Link to a file')" />
               </li>
-              <li v-for="(value, index) in searchResult.values" :key="index" class="oc-p-xs selectable-item">
+              <li
+                v-for="(value, index) in searchResult.values"
+                :key="index"
+                class="oc-p-xs selectable-item"
+                :class="{
+                  active: isDropItemActive(index + 1)
+                }"
+              >
                 <oc-button
                   class="oc-width-1-1"
                   appearance="raw"
                   justify-content="left"
                   @click="dropItemResourceClicked(value)"
                 >
-                  <resource-preview :search-result="value" :is-clickable="false"/>
+                  <resource-preview :search-result="value" :is-clickable="false" />
                 </oc-button>
               </li>
             </template>
@@ -70,7 +85,7 @@
             :fix-message-line="true"
           />
           <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension"
-          >.url</span
+            >.url</span
           >
         </div>
       </template>
@@ -79,26 +94,26 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref} from 'vue'
-import {Resource, SpaceResource} from '@ownclouders/web-client'
-import {useClientService, useFolderLink, useRouter, useSearch, useStore} from '../composables'
-import {urlJoin} from '@ownclouders/web-client/src/utils'
-import {useGettext} from 'vue3-gettext'
+import { defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref } from 'vue'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
-import {OcDrop} from '@ownclouders/design-system/src/components'
-import {resolveFileNameDuplicate} from '../helpers'
-import {useTask} from 'vue-concurrency'
-import {debounce} from 'lodash-es'
+import { OcDrop } from '@ownclouders/design-system/src/components'
+import { resolveFileNameDuplicate } from '../helpers'
+import { useTask } from 'vue-concurrency'
+import { debounce } from 'lodash-es'
 import ResourcePreview from './Search/ResourcePreview.vue'
-import {SearchResult, SearchResultValue} from './Search'
-import {isLocationPublicActive} from '../router'
+import { SearchResult, SearchResultValue } from './Search'
+import { isLocationPublicActive } from '../router'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
 
 export default defineComponent({
   name: 'CreateShortcutModal',
-  components: {ResourcePreview},
+  components: { ResourcePreview },
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -111,10 +126,10 @@ export default defineComponent({
   },
   setup(props) {
     const clientService = useClientService()
-    const {$gettext} = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore()
     const router = useRouter()
-    const {search} = useSearch()
+    const { search } = useSearch()
     const {
       getPathPrefix,
       getParentFolderName,
@@ -128,6 +143,7 @@ export default defineComponent({
     const inputFilename = ref('')
     const searchResult: Ref<SearchResult> = ref(null)
     const activeDropItemIndex = ref(null)
+    const isDropOpen = ref(false)
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -154,7 +170,7 @@ export default defineComponent({
 
     const inputFileNameErrorMessage = computed(() => {
       if (unref(fileAlreadyExists)) {
-        return $gettext('%{name} already exists', {name: `${unref(inputFilename)}.url`})
+        return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
       }
 
       return ''
@@ -188,8 +204,7 @@ export default defineComponent({
           filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
         }
         inputFilename.value = filename
-      } catch (_) {
-      }
+      } catch (_) {}
     }
 
     const dropItemResourceClicked = (item: SearchResultValue) => {
@@ -205,19 +220,25 @@ export default defineComponent({
       inputFilename.value = filename
     }
 
-    const onKeyDownEnter = () => {
+    const onKeyEnter = () => {
       if (!unref(confirmButtonDisabled)) {
         createShortcut(unref(inputUrl), unref(inputFilename))
       }
     }
 
+    const isDropItemActive = (index) => {
+      return unref(activeDropItemIndex) === index
+    }
+
     const findNextDropItemIndex = (previous = false) => {
       const elements = Array.from(document.querySelectorAll('li.selectable-item'))
       let index =
-        unref(activeDropItemIndex) !== null ? unref(activeDropItemIndex) : previous ? elements.length : -1
+        unref(activeDropItemIndex) !== null
+          ? unref(activeDropItemIndex)
+          : previous
+          ? elements.length
+          : -1
       const increment = previous ? -1 : 1
-
-      console.log(elements)
 
       do {
         index += increment
@@ -225,7 +246,6 @@ export default defineComponent({
           return null
         }
       } while (elements[index].classList.contains('disabled'))
-
 
       return index
     }
@@ -235,23 +255,17 @@ export default defineComponent({
         return
       }
 
-      console.log("SCROLL TO")
-
       const elements = unref(dropRef).$el.querySelectorAll('.selectable-item')
-
-      console.log(elements[unref(activeDropItemIndex)].getBoundingClientRect().y)
-
 
       unref(dropRef).$el.scrollTo(
         0,
         unref(activeDropItemIndex) === null
           ? 0
           : elements[unref(activeDropItemIndex)].getBoundingClientRect().y -
-          elements[unref(activeDropItemIndex)].getBoundingClientRect().height
+              elements[unref(activeDropItemIndex)].getBoundingClientRect().height
       )
     }
     const onKeyUpDrop = () => {
-
       activeDropItemIndex.value = findNextDropItemIndex(true)
       scrollToActiveDropItemIndex()
     }
@@ -261,6 +275,42 @@ export default defineComponent({
       scrollToActiveDropItemIndex()
     }
 
+    const onKeyEscDrop = (e: Event) => {
+      if (!unref(isDropOpen)) {
+        return
+      }
+
+      e.stopPropagation()
+      ;(unref(dropRef) as InstanceType<typeof OcDrop>).hide()
+    }
+
+    const onKeyEnterDrop = (e: Event) => {
+      if (!unref(isDropOpen)) {
+        return
+      }
+
+      e.stopPropagation()
+      if (unref(activeDropItemIndex) === null) {
+        return
+      }
+
+      if (unref(activeDropItemIndex) === 0) {
+        dropItemUrlClicked()
+      } else {
+        dropItemResourceClicked(unref(searchResult)?.values?.[unref(activeDropItemIndex) - 1])
+      }
+
+      ;(unref(dropRef) as InstanceType<typeof OcDrop>).hide()
+    }
+
+    const onHideDrop = () => {
+      isDropOpen.value = false
+      activeDropItemIndex.value = null
+    }
+
+    const onShowDrop = () => {
+      isDropOpen.value = true
+    }
 
     const createShortcut = async (url: string, filename: string) => {
       // Closes the modal
@@ -268,7 +318,7 @@ export default defineComponent({
 
       try {
         // Omit possible xss code
-        const sanitizedUrl = DOMPurify.sanitize(url, {USE_PROFILES: {html: true}})
+        const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
         const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
         const path = urlJoin(unref(currentFolder).path, `${filename}.url`)
@@ -312,7 +362,7 @@ export default defineComponent({
       inputFileNameErrorMessage,
       searchTask,
       createShortcut,
-      onKeyDownEnter,
+      onKeyEnter,
       dropItemUrlClicked,
       dropItemResourceClicked,
       getPathPrefix,
@@ -320,8 +370,13 @@ export default defineComponent({
       getParentFolderLink,
       getParentFolderName,
       getParentFolderLinkIconAdditionalAttributes,
+      onKeyEnterDrop,
       onKeyDownDrop,
       onKeyUpDrop,
+      onHideDrop,
+      onShowDrop,
+      onKeyEscDrop,
+      isDropItemActive
     }
   }
 })
