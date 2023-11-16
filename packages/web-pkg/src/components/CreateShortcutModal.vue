@@ -18,8 +18,8 @@
           @keydown.down="onKeyDownDrop"
           @keydown.esc="onKeyEscDrop"
           @keydown.enter="onKeyEnterDrop"
-          @input="onInput"
-          @click="onClickInput"
+          @input="onInputUrlInput"
+          @click="onClickUrlInput"
         />
         <oc-drop
           ref="dropRef"
@@ -313,7 +313,7 @@ export default defineComponent({
       isDropOpen.value = true
     }
 
-    const onClickInput = () => {
+    const onClickUrlInput = () => {
       const showDrop = inputUrl.value.trim().length
 
       if (showDrop) {
@@ -321,7 +321,7 @@ export default defineComponent({
       }
     }
 
-    const onInput = async () => {
+    const onInputUrlInput = async () => {
       await nextTick()
 
       const hideDrop = !inputUrl.value.trim().length
@@ -387,11 +387,11 @@ export default defineComponent({
       onKeyEnterDrop,
       onKeyDownDrop,
       onKeyUpDrop,
+      onKeyEscDrop,
       onHideDrop,
       onShowDrop,
-      onInput,
-      onClickInput,
-      onKeyEscDrop,
+      onInputUrlInput,
+      onClickUrlInput,
       isDropItemActive
     }
   }
