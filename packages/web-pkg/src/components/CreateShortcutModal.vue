@@ -7,25 +7,38 @@
       :button-confirm-disabled="confirmButtonDisabled"
       @cancel="cancel"
       @confirm="createShortcut(inputUrl, inputFilename)"
-      @keydown.enter="onKeyDownEnter"
+      @keydown.enter="onKeyEnter"
     >
       <template #content>
         <oc-text-input
           id="create-shortcut-modal-url-input"
           v-model="inputUrl"
           :label="$gettext('Shortcut to a webpage or file')"
+          @keydown.up="onKeyUpDrop"
+          @keydown.down="onKeyDownDrop"
+          @keydown.esc="onKeyEscDrop"
+          @keydown.enter="onKeyEnterDrop"
+          @input="onInputUrlInput"
+          @click="onClickUrlInput"
         />
         <oc-drop
-          v-if="showDrop"
           ref="dropRef"
           class="oc-pt-s"
           padding-size="remove"
           drop-id="create-shortcut-modal-contextmenu"
-          toggle="#create-shortcut-modal-url-input"
+          mode="manual"
+          position="bottom-start"
           :close-on-click="true"
+          @hide-drop="onHideDrop"
+          @show-drop="onShowDrop"
         >
           <oc-list>
-            <li class="oc-p-xs">
+            <li
+              class="oc-p-xs selectable-item"
+              :class="{
+                active: isDropItemActive(0)
+              }"
+            >
               <oc-button
                 class="oc-width-1-1"
                 appearance="raw"
@@ -45,7 +58,14 @@
               >
                 <span v-text="$gettext('Link to a file')" />
               </li>
-              <li v-for="(value, index) in searchResult.values" :key="index" class="oc-p-xs">
+              <li
+                v-for="(value, index) in searchResult.values"
+                :key="index"
+                class="oc-p-xs selectable-item"
+                :class="{
+                  active: isDropItemActive(index + 1)
+                }"
+              >
                 <oc-button
                   class="oc-width-1-1"
                   appearance="raw"
@@ -76,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed, watch, nextTick, Ref } from 'vue'
+import { defineComponent, PropType, ref, unref, computed, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
@@ -124,6 +144,8 @@ export default defineComponent({
     const inputUrl = ref('')
     const inputFilename = ref('')
     const searchResult: Ref<SearchResult> = ref(null)
+    const activeDropItemIndex = ref(null)
+    const isDropOpen = ref(false)
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -134,8 +156,6 @@ export default defineComponent({
 
       return `https://${url}`
     })
-
-    const showDrop = computed(() => unref(inputUrl).trim())
 
     const confirmButtonDisabled = computed(
       () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
@@ -177,6 +197,7 @@ export default defineComponent({
     }
 
     const dropItemUrlClicked = () => {
+      searchResult.value = null
       inputUrl.value = unref(dropItemUrl)
       try {
         let filename = new URL(unref(dropItemUrl)).host
@@ -188,6 +209,7 @@ export default defineComponent({
     }
 
     const dropItemResourceClicked = (item: SearchResultValue) => {
+      searchResult.value = null
       const webURL = new URL(window.location.href)
       let filename = item.data.name
 
@@ -200,9 +222,121 @@ export default defineComponent({
       inputFilename.value = filename
     }
 
-    const onKeyDownEnter = () => {
+    const onKeyEnter = () => {
       if (!unref(confirmButtonDisabled)) {
         createShortcut(unref(inputUrl), unref(inputFilename))
+      }
+    }
+
+    const isDropItemActive = (index) => {
+      return unref(activeDropItemIndex) === index
+    }
+
+    const findNextDropItemIndex = (previous = false) => {
+      const elements = Array.from(document.querySelectorAll('li.selectable-item'))
+      let index =
+        unref(activeDropItemIndex) !== null
+          ? unref(activeDropItemIndex)
+          : previous
+          ? elements.length
+          : -1
+      const increment = previous ? -1 : 1
+
+      do {
+        index += increment
+        if (index < 0 || index > elements.length - 1) {
+          return null
+        }
+      } while (elements[index].classList.contains('disabled'))
+
+      return index
+    }
+
+    const scrollToActiveDropItemIndex = () => {
+      if (typeof unref(dropRef).$el.scrollTo !== 'function') {
+        return
+      }
+
+      const elements = unref(dropRef).$el.querySelectorAll('.selectable-item')
+
+      unref(dropRef).$el.scrollTo(
+        0,
+        unref(activeDropItemIndex) === null
+          ? 0
+          : elements[unref(activeDropItemIndex)].getBoundingClientRect().y -
+              elements[unref(activeDropItemIndex)].getBoundingClientRect().height
+      )
+    }
+    const onKeyUpDrop = () => {
+      activeDropItemIndex.value = findNextDropItemIndex(true)
+      scrollToActiveDropItemIndex()
+    }
+
+    const onKeyDownDrop = () => {
+      activeDropItemIndex.value = findNextDropItemIndex(false)
+      scrollToActiveDropItemIndex()
+    }
+
+    const onKeyEscDrop = (e: Event) => {
+      if (!unref(isDropOpen)) {
+        return
+      }
+
+      e.stopPropagation()
+      ;(unref(dropRef) as InstanceType<typeof OcDrop>).hide()
+    }
+
+    const onKeyEnterDrop = (e: Event) => {
+      if (!unref(isDropOpen)) {
+        return
+      }
+
+      e.stopPropagation()
+      if (unref(activeDropItemIndex) === null) {
+        return
+      }
+
+      if (unref(activeDropItemIndex) === 0) {
+        dropItemUrlClicked()
+      } else {
+        dropItemResourceClicked(unref(searchResult)?.values?.[unref(activeDropItemIndex) - 1])
+      }
+
+      ;(unref(dropRef) as InstanceType<typeof OcDrop>).hide()
+    }
+
+    const onHideDrop = () => {
+      isDropOpen.value = false
+      activeDropItemIndex.value = null
+    }
+
+    const onShowDrop = () => {
+      isDropOpen.value = true
+    }
+
+    const onClickUrlInput = () => {
+      const showDrop = inputUrl.value.trim().length
+
+      if (showDrop) {
+        ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
+      }
+    }
+
+    const onInputUrlInput = async () => {
+      await nextTick()
+
+      const hideDrop = !inputUrl.value.trim().length
+
+      if (hideDrop) {
+        ;(unref(dropRef) as InstanceType<typeof OcDrop>).hide()
+        return
+      }
+
+      ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
+
+      if (!isLocationPublicActive(router, 'files-public-link')) {
+        activeDropItemIndex.value = null
+        debouncedSearch()
       }
     }
 
@@ -233,21 +367,9 @@ export default defineComponent({
       }
     }
 
-    watch(inputUrl, async () => {
-      await nextTick()
-      if (unref(showDrop) && unref(dropRef)) {
-        ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
-
-        if (!isLocationPublicActive(router, 'files-public-link')) {
-          debouncedSearch()
-        }
-      }
-    })
-
     return {
       inputUrl,
       inputFilename,
-      showDrop,
       dropRef,
       dropItemUrl,
       searchResult,
@@ -255,14 +377,23 @@ export default defineComponent({
       inputFileNameErrorMessage,
       searchTask,
       createShortcut,
-      onKeyDownEnter,
+      onKeyEnter,
       dropItemUrlClicked,
       dropItemResourceClicked,
       getPathPrefix,
       getFolderLink,
       getParentFolderLink,
       getParentFolderName,
-      getParentFolderLinkIconAdditionalAttributes
+      getParentFolderLinkIconAdditionalAttributes,
+      onKeyEnterDrop,
+      onKeyDownDrop,
+      onKeyUpDrop,
+      onKeyEscDrop,
+      onHideDrop,
+      onShowDrop,
+      onInputUrlInput,
+      onClickUrlInput,
+      isDropItemActive
     }
   }
 })
@@ -285,7 +416,8 @@ export default defineComponent({
     text-decoration: none !important;
   }
 
-  li:hover {
+  li:hover,
+  li.active {
     background-color: var(--oc-color-background-highlight);
   }
 }

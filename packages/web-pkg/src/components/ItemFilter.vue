@@ -20,9 +20,9 @@
           <oc-list class="item-filter-list">
             <li
               v-for="(item, index) in displayedItems"
+              v-show="item.isVisible"
               :key="index"
               class="oc-my-xs"
-              v-show="item.isVisible"
             >
               <oc-button
                 class="item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs"
