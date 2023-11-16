@@ -9,7 +9,7 @@
     "fuse.js": "^6.5.3",
     "lodash-es": "4.17.21",
     "uuid": "^9.0.0",
-    "vue-concurrency": "4.0.0",
+    "vue-concurrency": "4.0.1",
     "vuex": "4.1.0",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*"
