@@ -72,6 +72,7 @@ Summary
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 * Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
 * Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
+* Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
 
 Details
 -------
@@ -658,6 +659,13 @@ Details
    https://github.com/owncloud/web/issues/9780
    https://github.com/owncloud/web/pull/9912
    https://github.com/owncloud/web/pull/9942
+
+* Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
+
+   Added error message to indicate that the upload failed due to folder being locked.
+
+   https://github.com/owncloud/web/issues/5741
+   https://github.com/owncloud/web/pull/9940
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
