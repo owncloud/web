@@ -629,7 +629,7 @@ export default defineComponent({
       }
     },
 
-     (link) {
+    getAvailableRoleOptions(link) {
       if (this.incomingParentShare && this.canCreateLinks) {
         return LinkShareRoles.filterByBitmask(
           this.incomingParentShare.permissions,
