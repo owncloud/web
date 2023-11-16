@@ -161,6 +161,11 @@ export default defineComponent({
       }
 
       const { params, query } = createFileRouteOptions(matchingSpace, { fileId, path })
+      const openWithDefault =
+        configurationManager.options.openLinksWithDefaultApp &&
+        unref(openWithDefaultApp) !== 'false' &&
+        !unref(details)
+
       const location: RouteLocationRaw = {
         name: targetLocation,
         params,
@@ -171,10 +176,7 @@ export default defineComponent({
               ? matchingSpace.shareId
               : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
-          ...(configurationManager.options.openLinksWithDefaultApp &&
-            unref(openWithDefaultApp) !== 'false' && {
-              openWithDefaultApp: 'true'
-            })
+          ...(openWithDefault && { openWithDefaultApp: 'true' })
         }
       }
       router.push(location)
