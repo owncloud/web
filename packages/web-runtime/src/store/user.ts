@@ -16,15 +16,6 @@ const getInitialState = () => ({
 const state = getInitialState()
 
 const getters = {
-  /**
-   * The `getToken` getter is deprecated. Please use getters['runtime/auth/accessToken'] instead.
-   *
-   * @param state
-   * @param getters
-   * @param rootState
-   * @param rootGetters
-   */
-  getToken: (state, getters, rootState, rootGetters) => rootGetters['runtime/auth/accessToken'],
   capabilities: (state) => state.capabilities,
   quota: (state) => state.quota,
   user: (state) => state
