@@ -160,7 +160,8 @@
     },
     "patchedDependencies": {
       "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
-      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch"
+      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch",
+      "@cucumber/cucumber@7.3.2": "patches/@cucumber__cucumber@7.3.2.patch"
     }
   },
   "jestSerializer": {

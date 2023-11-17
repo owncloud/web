@@ -27,6 +27,9 @@ patchedDependencies:
   '@adobe/leonardo-contrast-colors@1.0.0-alpha.16':
     hash: uknaqjiop66j4kgrr7nmysu5gi
     path: patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch
+  '@cucumber/cucumber@7.3.2':
+    hash: osirrxjy37ihtwvbtara7bmgci
+    path: patches/@cucumber__cucumber@7.3.2.patch
   jest-serializer-vue-tjw@3.19.0:
     hash: n3ezndisi6xx2kbxcsk5pv4dxy
     path: patches/jest-serializer-vue-tjw@3.19.0.patch
@@ -89,7 +92,7 @@ importers:
         version: 7.21.0(@babel/core@7.21.8)
       '@cucumber/cucumber':
         specifier: 7.3.2
-        version: 7.3.2
+        version: 7.3.2(patch_hash=osirrxjy37ihtwvbtara7bmgci)
       '@cucumber/messages':
         specifier: 22.0.0
         version: 22.0.0
@@ -1283,14 +1286,14 @@ importers:
         specifier: ^7.13.16
         version: 7.17.7(@babel/core@7.17.5)
       '@cucumber/cucumber':
-        specifier: ^7.3.1
-        version: 7.3.1
+        specifier: 7.3.2
+        version: 7.3.2(patch_hash=osirrxjy37ihtwvbtara7bmgci)
       '@cucumber/messages':
         specifier: ^17.1.1
         version: 17.1.1
       '@cucumber/pretty-formatter':
         specifier: ^1.0.0-alpha.1
-        version: 1.0.0-alpha.2(@cucumber/cucumber@7.3.1)(@cucumber/messages@17.1.1)
+        version: 1.0.0-alpha.2(@cucumber/cucumber@7.3.2)(@cucumber/messages@17.1.1)
       archiver:
         specifier: ^5.3.0
         version: 5.3.1
@@ -5005,47 +5008,7 @@ packages:
       becke-ch--regex--s0-0-v1--base--pl--lib: 1.4.0
     dev: true
 
-  /@cucumber/cucumber@7.3.1:
-    resolution: {integrity: sha512-x1+/AvouZy205ZvfYbeEVat5aBAj4EeLt9TZfD7pO9j+tQ3W6uxSuDB1TKfxAXFU3WYrswor0CXoJBYOIZhzMw==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      '@cucumber/create-meta': 5.0.0
-      '@cucumber/cucumber-expressions': 12.1.2
-      '@cucumber/gherkin': 19.0.3
-      '@cucumber/gherkin-streams': 2.0.2
-      '@cucumber/html-formatter': 15.0.2
-      '@cucumber/messages': 16.0.1
-      '@cucumber/tag-expressions': 3.0.1
-      assertion-error-formatter: 3.0.0
-      bluebird: 3.7.2
-      capital-case: 1.0.4
-      cli-table3: 0.6.0
-      colors: 1.4.0
-      commander: 7.2.0
-      create-require: 1.1.1
-      duration: 0.2.2
-      durations: 3.4.2
-      figures: 3.2.0
-      glob: 7.2.0
-      indent-string: 4.0.0
-      is-generator: 1.0.3
-      is-stream: 2.0.0
-      knuth-shuffle-seeded: 1.0.6
-      lodash: 4.17.21
-      mz: 2.7.0
-      progress: 2.0.3
-      resolve: 1.22.1
-      resolve-pkg: 2.0.0
-      stack-chain: 2.0.0
-      stacktrace-js: 2.0.2
-      string-argv: 0.3.1
-      tmp: 0.2.1
-      util-arity: 1.1.0
-      verror: 1.10.0
-    dev: true
-
-  /@cucumber/cucumber@7.3.2:
+  /@cucumber/cucumber@7.3.2(patch_hash=osirrxjy37ihtwvbtara7bmgci):
     resolution: {integrity: sha512-qqptM9w+UqXEYBAkrIGpIVPXDWv+zp0LrS89LiwHZwBp0cJg00su/iPMZ4j8TvCJiKfAwJXsAI1yjrd1POtU+w==}
     engines: {node: '>=10'}
     hasBin: true
@@ -5084,6 +5047,7 @@ packages:
       util-arity: 1.1.0
       verror: 1.10.0
     dev: true
+    patched: true
 
   /@cucumber/gherkin-streams@2.0.2:
     resolution: {integrity: sha512-cKmXOBz4OwGlrHMBCc4qCC3KzLaqcEZ11nWWskIbv6jyfvlIRuM2OgEF6VLcNVewczifW1p6DrDj0OO+BeXocA==}
@@ -5151,7 +5115,7 @@ packages:
       '@cucumber/cucumber': '>=7.0.0'
       '@cucumber/messages': '*'
     dependencies:
-      '@cucumber/cucumber': 7.3.2
+      '@cucumber/cucumber': 7.3.2(patch_hash=osirrxjy37ihtwvbtara7bmgci)
       '@cucumber/messages': 22.0.0
       ansi-styles: 5.2.0
       cli-table3: 0.6.0
@@ -5159,13 +5123,13 @@ packages:
       ts-dedent: 2.2.0
     dev: true
 
-  /@cucumber/pretty-formatter@1.0.0-alpha.2(@cucumber/cucumber@7.3.1)(@cucumber/messages@17.1.1):
+  /@cucumber/pretty-formatter@1.0.0-alpha.2(@cucumber/cucumber@7.3.2)(@cucumber/messages@17.1.1):
     resolution: {integrity: sha512-+tFbS2idJ8yL+saEYGBaJLkhU9glxmS6FMD22S/bfZsi/c3LeLMeo1ZkNeyzuxV7Yq9jGFjiwgZ+iRaO/bN8hw==}
     peerDependencies:
       '@cucumber/cucumber': '>=7.0.0'
       '@cucumber/messages': '*'
     dependencies:
-      '@cucumber/cucumber': 7.3.1
+      '@cucumber/cucumber': 7.3.2(patch_hash=osirrxjy37ihtwvbtara7bmgci)
       '@cucumber/messages': 17.1.1
       ansi-styles: 5.2.0
       cli-table3: 0.6.0
