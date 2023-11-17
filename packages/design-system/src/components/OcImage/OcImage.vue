@@ -2,6 +2,7 @@
   <img :src="src" :alt="alt" :aria-hidden="`${!alt}`" :title="title" :loading="loadingType" />
 </template>
 <script lang="ts">
+import { PropType } from 'vue'
 import { defineComponent } from 'vue'
 
 /**
@@ -42,7 +43,7 @@ export default defineComponent({
      * Defines whether the image gets loaded immediately or once it comes near the user's viewport
      */
     loadingType: {
-      type: String,
+      type: String as PropType<'lazy' | 'eager'>,
       required: false,
       default: 'eager',
       validator: (value: string) => {
