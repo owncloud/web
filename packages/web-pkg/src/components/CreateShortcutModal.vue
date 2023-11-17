@@ -1,78 +1,78 @@
 <template>
   <portal to="app.runtime.modal">
     <oc-modal
-        :title="$gettext('Create a Shortcut')"
-        :button-cancel-text="$gettext('Cancel')"
-        :button-confirm-text="$gettext('Create')"
-        :button-confirm-disabled="confirmButtonDisabled"
-        @cancel="cancel"
-        @confirm="createShortcut(inputUrl, inputFilename)"
-        @keydown.enter="onKeyEnter"
+      :title="$gettext('Create a Shortcut')"
+      :button-cancel-text="$gettext('Cancel')"
+      :button-confirm-text="$gettext('Create')"
+      :button-confirm-disabled="confirmButtonDisabled"
+      @cancel="cancel"
+      @confirm="createShortcut(inputUrl, inputFilename)"
+      @keydown.enter="onKeyEnter"
     >
       <template #content>
         <oc-text-input
-            id="create-shortcut-modal-url-input"
-            v-model="inputUrl"
-            :label="$gettext('Shortcut to a webpage or file')"
-            @keydown.up="onKeyUpDrop"
-            @keydown.down="onKeyDownDrop"
-            @keydown.esc="onKeyEscDrop"
-            @keydown.enter="onKeyEnterDrop"
-            @input="onInputUrlInput"
-            @click="onClickUrlInput"
+          id="create-shortcut-modal-url-input"
+          v-model="inputUrl"
+          :label="$gettext('Shortcut to a webpage or file')"
+          @keydown.up="onKeyUpDrop"
+          @keydown.down="onKeyDownDrop"
+          @keydown.esc="onKeyEscDrop"
+          @keydown.enter="onKeyEnterDrop"
+          @input="onInputUrlInput"
+          @click="onClickUrlInput"
         />
         <oc-drop
-            ref="dropRef"
-            class="oc-pt-s"
-            padding-size="remove"
-            drop-id="create-shortcut-modal-contextmenu"
-            mode="manual"
-            position="bottom-start"
-            :close-on-click="true"
-            @hide-drop="onHideDrop"
-            @show-drop="onShowDrop"
+          ref="dropRef"
+          class="oc-pt-s"
+          padding-size="remove"
+          drop-id="create-shortcut-modal-contextmenu"
+          mode="manual"
+          position="bottom-start"
+          :close-on-click="true"
+          @hide-drop="onHideDrop"
+          @show-drop="onShowDrop"
         >
           <oc-list>
             <li
-                class="oc-p-xs selectable-item"
-                :class="{
+              class="oc-p-xs selectable-item selectable-item-url"
+              :class="{
                 active: isDropItemActive(0)
               }"
             >
               <oc-button
-                  class="oc-width-1-1"
-                  appearance="raw"
-                  justify-content="left"
-                  @click="dropItemUrlClicked"
+                class="oc-width-1-1"
+                appearance="raw"
+                justify-content="left"
+                @click="dropItemUrlClicked"
               >
-                <oc-icon name="external-link"/>
-                <span v-text="dropItemUrl"/>
+                <oc-icon name="external-link" />
+                <span v-text="dropItemUrl" />
               </oc-button>
             </li>
             <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
-              <oc-spinner/>
+              <oc-spinner />
             </li>
             <template v-if="searchResult?.values?.length">
               <li
-                  class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
+                class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
               >
-                <span v-text="$gettext('Link to a file')"/>
+                <span v-text="$gettext('Link to a file')" />
               </li>
               <li
-                  v-for="(value, index) in searchResult.values"
-                  :key="index"
-                  class="oc-p-xs selectable-item"
-                  :class="{
+                v-for="(value, index) in searchResult.values"
+                :key="index"
+                class="oc-p-xs selectable-item"
+                :class="{
                   active: isDropItemActive(index + 1)
                 }"
               >
                 <oc-button
-                    class="oc-width-1-1"
-                    appearance="raw"
-                    justify-content="left"
-                    @click="dropItemResourceClicked(value)"
+                  class="oc-width-1-1"
+                  appearance="raw"
+                  justify-content="left"
+                  @click="dropItemResourceClicked(value)"
                 >
-                  <resource-preview :search-result="value" :is-clickable="false"/>
+                  <resource-preview :search-result="value" :is-clickable="false" />
                 </oc-button>
               </li>
             </template>
@@ -80,14 +80,14 @@
         </oc-drop>
         <div class="oc-flex oc-width-1-1 oc-mt-m">
           <oc-text-input
-              v-model="inputFilename"
-              class="oc-width-1-1"
-              :label="$gettext('Shortcut name')"
-              :error-message="inputFileNameErrorMessage"
-              :fix-message-line="true"
+            v-model="inputFilename"
+            class="oc-width-1-1"
+            :label="$gettext('Shortcut name')"
+            :error-message="inputFileNameErrorMessage"
+            :fix-message-line="true"
           />
           <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension"
-          >.url</span
+            >.url</span
           >
         </div>
       </template>
@@ -96,26 +96,37 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref, unref, computed, nextTick, Ref, watch} from 'vue'
-import {Resource, SpaceResource} from '@ownclouders/web-client'
-import {useClientService, useFolderLink, useRouter, useSearch, useStore} from '../composables'
-import {urlJoin} from '@ownclouders/web-client/src/utils'
-import {useGettext} from 'vue3-gettext'
+import {
+  defineComponent,
+  PropType,
+  ref,
+  unref,
+  computed,
+  nextTick,
+  Ref,
+  watch,
+  onMounted
+} from 'vue'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
-import {OcDrop} from '@ownclouders/design-system/src/components'
-import {resolveFileNameDuplicate} from '../helpers'
-import {useTask} from 'vue-concurrency'
-import {debounce} from 'lodash-es'
+import Mark from 'mark.js'
+import { OcDrop } from '@ownclouders/design-system/src/components'
+import { resolveFileNameDuplicate } from '../helpers'
+import { useTask } from 'vue-concurrency'
+import { debounce } from 'lodash-es'
 import ResourcePreview from './Search/ResourcePreview.vue'
-import {SearchResult, SearchResultValue} from './Search'
-import {isLocationPublicActive} from '../router'
+import { SearchResult, SearchResultValue } from './Search'
+import { isLocationPublicActive } from '../router'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
 
 export default defineComponent({
   name: 'CreateShortcutModal',
-  components: {ResourcePreview},
+  components: { ResourcePreview },
   props: {
     space: {
       type: Object as PropType<SpaceResource>,
@@ -128,10 +139,10 @@ export default defineComponent({
   },
   setup(props) {
     const clientService = useClientService()
-    const {$gettext} = useGettext()
+    const { $gettext } = useGettext()
     const store = useStore()
     const router = useRouter()
-    const {search} = useSearch()
+    const { search } = useSearch()
     const {
       getPathPrefix,
       getParentFolderName,
@@ -146,6 +157,7 @@ export default defineComponent({
     const searchResult: Ref<SearchResult> = ref(null)
     const activeDropItemIndex = ref(null)
     const isDropOpen = ref(false)
+    let markInstance = null
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -158,19 +170,19 @@ export default defineComponent({
     })
 
     const confirmButtonDisabled = computed(
-        () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
+      () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
     )
     const currentFolder = computed(() => store.getters['Files/currentFolder'])
 
     const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const fileAlreadyExists = computed(
-        () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+      () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
     )
 
     const inputFileNameErrorMessage = computed(() => {
       if (unref(fileAlreadyExists)) {
-        return $gettext('%{name} already exists', {name: `${unref(inputFilename)}.url`})
+        return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
       }
 
       return ''
@@ -205,8 +217,7 @@ export default defineComponent({
           filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
         }
         inputFilename.value = filename
-      } catch (_) {
-      }
+      } catch (_) {}
     }
 
     const dropItemResourceClicked = (item: SearchResultValue) => {
@@ -236,11 +247,11 @@ export default defineComponent({
     const findNextDropItemIndex = (previous = false) => {
       const elements = Array.from(document.querySelectorAll('li.selectable-item'))
       let index =
-          unref(activeDropItemIndex) !== null
-              ? unref(activeDropItemIndex)
-              : previous
-                  ? elements.length
-                  : -1
+        unref(activeDropItemIndex) !== null
+          ? unref(activeDropItemIndex)
+          : previous
+          ? elements.length
+          : -1
       const increment = previous ? -1 : 1
 
       do {
@@ -252,7 +263,6 @@ export default defineComponent({
 
       return index
     }
-
 
     const onKeyUpDrop = () => {
       activeDropItemIndex.value = findNextDropItemIndex(true)
@@ -331,7 +341,7 @@ export default defineComponent({
 
       try {
         // Omit possible xss code
-        const sanitizedUrl = DOMPurify.sanitize(url, {USE_PROFILES: {html: true}})
+        const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
 
         const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
         const path = urlJoin(unref(currentFolder).path, `${filename}.url`)
@@ -352,6 +362,28 @@ export default defineComponent({
       }
     }
 
+    onMounted(async () => {
+      await nextTick()
+      markInstance = new Mark(unref(dropRef)?.$refs?.drop)
+    })
+
+    watch(
+      searchResult,
+      async () => {
+        await nextTick()
+        if (!unref(isDropOpen) || !markInstance) {
+          return
+        }
+
+        markInstance.unmark()
+        markInstance.mark(unref(inputUrl), {
+          element: 'span',
+          className: 'highlight-mark',
+          exclude: ['.selectable-item-url *', '.create-shortcut-modal-search-separator *']
+        })
+      },
+      { deep: true }
+    )
 
     watch(activeDropItemIndex, () => {
       if (!unref(isDropOpen) || typeof unref(dropRef)?.$el?.scrollTo !== 'function') {
@@ -361,10 +393,10 @@ export default defineComponent({
       const elements = unref(dropRef).$el.querySelectorAll('.selectable-item')
 
       unref(dropRef).$el.scrollTo(
-          0,
-          unref(activeDropItemIndex) === null
-              ? 0
-              : elements[unref(activeDropItemIndex)].getBoundingClientRect().y -
+        0,
+        unref(activeDropItemIndex) === null
+          ? 0
+          : elements[unref(activeDropItemIndex)].getBoundingClientRect().y -
               elements[unref(activeDropItemIndex)].getBoundingClientRect().height
       )
     })
