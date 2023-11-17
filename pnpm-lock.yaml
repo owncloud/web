@@ -30,9 +30,6 @@ patchedDependencies:
   jest-serializer-vue-tjw@3.19.0:
     hash: n3ezndisi6xx2kbxcsk5pv4dxy
     path: patches/jest-serializer-vue-tjw@3.19.0.patch
-  keycode@2.2.1:
-    hash: nmisee7m676ph5sqah5fka5ueu
-    path: patches/keycode@2.2.1.patch
 
 importers:
 
@@ -53,9 +50,6 @@ importers:
       caf:
         specifier: 15.0.1
         version: 15.0.1
-      keycode:
-        specifier: ^2.2.1
-        version: 2.2.1(patch_hash=nmisee7m676ph5sqah5fka5ueu)
       portal-vue:
         specifier: 3.0.0
         version: 3.0.0(vue@3.3.4)
@@ -14942,11 +14936,6 @@ packages:
   /jwt-decode@3.1.2:
     resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
-
-  /keycode@2.2.1(patch_hash=nmisee7m676ph5sqah5fka5ueu):
-    resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==}
-    dev: false
-    patched: true
 
   /killable@1.0.1:
     resolution: {integrity: sha512-LzqtLKlUwirEUyl/nicirVmNiPvYs7l5n8wOPP7fyJVpUPkvCnW/vuiXGpylGUlnPDnB7311rARzAt3Mhswpjg==}

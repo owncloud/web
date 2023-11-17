@@ -322,9 +322,9 @@ export default defineComponent({
         return
       }
 
-      const { keyCode } = event
-      const isArrowUp = keyCode === 38
-      const isArrowDown = keyCode === 40
+      const { code } = event
+      const isArrowUp = code === 'ArrowUp'
+      const isArrowDown = code === 'ArrowDown'
 
       // to cycle through the list of roles only up and down keyboard events are allowed
       // if this is not the case we can return early and stop the script execution from here

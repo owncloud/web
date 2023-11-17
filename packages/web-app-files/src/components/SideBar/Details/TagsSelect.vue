@@ -6,7 +6,7 @@
     :disabled="readonly"
     :options="availableTags"
     taggable
-    :select-on-key-codes="[keycode('enter'), keycode(',')]"
+    :select-on-key-codes="selectOnKeyCodes"
     :create-option="createOption"
     :selectable="isOptionSelectable"
     :map-keydown="keydownMethods"
@@ -79,7 +79,6 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import diff from 'lodash-es/difference'
-import keycode from 'keycode'
 import { Resource } from '@ownclouders/web-client'
 
 type TagOption = {
@@ -89,6 +88,13 @@ type TagOption = {
 }
 
 const tagsMaxCount = 100
+
+// the keycode property is deprecated in the JS event API, vue-select still works with it though
+enum KeyCode {
+  Backspace = 8,
+  Enter = 13,
+  ',' = 188
+}
 
 export default defineComponent({
   name: 'TagsSelect',
@@ -232,7 +238,7 @@ export default defineComponent({
       const objectMapping = {
         ...map
       }
-      objectMapping[keycode('backspace')] = async (e) => {
+      objectMapping[KeyCode.Backspace] = async (e) => {
         if (e.target.value || selectedTags.value.length === 0) {
           return
         }
@@ -275,7 +281,7 @@ export default defineComponent({
       isOptionSelectable,
       showSelectNewLabel,
       save,
-      keycode,
+      selectOnKeyCodes: [KeyCode.Enter, KeyCode[',']],
       keydownMethods,
       readonly,
       getAdditionalAttributes,
