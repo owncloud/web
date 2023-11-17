@@ -1,5 +1,4 @@
 <template>
-  <span>
     <oc-resource
       :resource="resource"
       :path-prefix="pathPrefix"
@@ -10,7 +9,6 @@
       :is-thumbnail-displayed="displayThumbnails"
       v-bind="additionalAttrs"
     />
-  </span>
 </template>
 
 <script lang="ts">
