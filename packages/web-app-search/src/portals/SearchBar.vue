@@ -51,6 +51,7 @@
       ref="optionsDropRef"
       mode="manual"
       target="#files-global-search-bar"
+      close-on-click
     >
       <oc-list class="oc-list-divider">
         <li
@@ -69,11 +70,7 @@
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span class="display-name" v-text="$gettext(provider.displayName)" />
                 <span v-if="!!provider.listSearch">
-                  <router-link
-                    class="more-results"
-                    :to="getMoreResultsLinkForProvider(provider)"
-                    @click="hideOptionsDrop"
-                  >
+                  <router-link class="more-results" :to="getMoreResultsLinkForProvider(provider)">
                     <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
                   </router-link>
                 </span>
@@ -92,7 +89,6 @@
                   class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
-                  @click="hideOptionsDrop"
                 />
               </li>
             </oc-list>
@@ -304,7 +300,6 @@ export default defineComponent({
       optionsVisible: false,
       markInstance: null,
       debouncedSearch: undefined,
-      hideOptionsDropEvent: null,
       clearTermEvent: null
     }
   },
@@ -387,14 +382,10 @@ export default defineComponent({
     this.clearTermEvent = eventBus.subscribe('app.search.term.clear', () => {
       this.term = ''
     })
-    this.hideOptionsDropEvent = eventBus.subscribe('app.search.options-drop.hide', () => {
-      this.optionsDrop.hide()
-    })
   },
 
   beforeUnmount() {
     eventBus.unsubscribe('app.search.term.clear', this.clearTermEvent)
-    eventBus.unsubscribe('app.search.options-drop.hide', this.hideOptionsDropEvent)
   },
 
   methods: {

@@ -7,7 +7,7 @@
     :aria-describedby="opensInNewWindowDescriptionId"
     :draggable="false"
     @dragstart.prevent.stop
-    @click.stop="emitClick"
+    @click="emitClick"
   >
     <slot :opens-in-new-window-description-id="opensInNewWindowDescriptionId" />
   </component>

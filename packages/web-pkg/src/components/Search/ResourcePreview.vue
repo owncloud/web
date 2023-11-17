@@ -8,7 +8,6 @@
     :parent-folder-name="parentFolderName"
     :is-thumbnail-displayed="displayThumbnails"
     v-bind="additionalAttrs"
-    @click-parent-folder="folderClicked"
   />
 </template>
 
@@ -20,7 +19,6 @@ import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useGetMatchingSpace, useFileActions, useFolderLink } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
-import { eventBus } from '../../services'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'
 
@@ -68,15 +66,10 @@ export default defineComponent({
     })
 
     const resourceClicked = () => {
-      eventBus.publish('app.search.options-drop.hide')
       triggerDefaultAction({
         space: unref(space),
         resources: [unref(resource)]
       })
-    }
-
-    const folderClicked = () => {
-      eventBus.publish('app.search.options-drop.hide')
     }
 
     const additionalAttrs = computed(() => {
@@ -88,9 +81,7 @@ export default defineComponent({
 
       return {
         parentFolderLink: getParentFolderLink(unref(resource)),
-        onClick: resourceClicked,
-        onClickFolder: folderClicked,
-        onClickParentFolder: folderClicked
+        onClick: resourceClicked
       }
     })
 
@@ -100,7 +91,6 @@ export default defineComponent({
       resource,
       resourceDisabled,
       resourceClicked,
-      folderClicked,
       parentFolderLink: getParentFolderLink(unref(resource)),
       folderLink: getFolderLink(unref(resource)),
       pathPrefix: getPathPrefix(unref(resource)),
