@@ -34,7 +34,7 @@
         >
           <oc-list>
             <li
-              class="oc-p-xs selectable-item"
+              class="oc-p-xs selectable-item selectable-item-url"
               :class="{
                 active: isDropItemActive(0)
               }"
@@ -96,12 +96,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed, nextTick, Ref } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  ref,
+  unref,
+  computed,
+  nextTick,
+  Ref,
+  watch,
+  onMounted
+} from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
+import Mark from 'mark.js'
 import { OcDrop } from '@ownclouders/design-system/src/components'
 import { resolveFileNameDuplicate } from '../helpers'
 import { useTask } from 'vue-concurrency'
@@ -146,6 +157,7 @@ export default defineComponent({
     const searchResult: Ref<SearchResult> = ref(null)
     const activeDropItemIndex = ref(null)
     const isDropOpen = ref(false)
+    let markInstance = null
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -252,29 +264,12 @@ export default defineComponent({
       return index
     }
 
-    const scrollToActiveDropItemIndex = () => {
-      if (typeof unref(dropRef).$el.scrollTo !== 'function') {
-        return
-      }
-
-      const elements = unref(dropRef).$el.querySelectorAll('.selectable-item')
-
-      unref(dropRef).$el.scrollTo(
-        0,
-        unref(activeDropItemIndex) === null
-          ? 0
-          : elements[unref(activeDropItemIndex)].getBoundingClientRect().y -
-              elements[unref(activeDropItemIndex)].getBoundingClientRect().height
-      )
-    }
     const onKeyUpDrop = () => {
       activeDropItemIndex.value = findNextDropItemIndex(true)
-      scrollToActiveDropItemIndex()
     }
 
     const onKeyDownDrop = () => {
       activeDropItemIndex.value = findNextDropItemIndex(false)
-      scrollToActiveDropItemIndex()
     }
 
     const onKeyEscDrop = (e: Event) => {
@@ -312,6 +307,7 @@ export default defineComponent({
 
     const onShowDrop = () => {
       isDropOpen.value = true
+      activeDropItemIndex.value = 0
     }
 
     const onClickUrlInput = () => {
@@ -335,7 +331,6 @@ export default defineComponent({
       ;(unref(dropRef) as InstanceType<typeof OcDrop>).show()
 
       if (!isLocationPublicActive(router, 'files-public-link')) {
-        activeDropItemIndex.value = null
         debouncedSearch()
       }
     }
@@ -366,6 +361,45 @@ export default defineComponent({
         })
       }
     }
+
+    onMounted(async () => {
+      await nextTick()
+      markInstance = new Mark(unref(dropRef)?.$refs?.drop)
+    })
+
+    watch(
+      searchResult,
+      async () => {
+        await nextTick()
+        if (!unref(isDropOpen) || !markInstance) {
+          return
+        }
+
+        markInstance.unmark()
+        markInstance.mark(unref(inputUrl), {
+          element: 'span',
+          className: 'highlight-mark',
+          exclude: ['.selectable-item-url *', '.create-shortcut-modal-search-separator *']
+        })
+      },
+      { deep: true }
+    )
+
+    watch(activeDropItemIndex, () => {
+      if (!unref(isDropOpen) || typeof unref(dropRef)?.$el?.scrollTo !== 'function') {
+        return
+      }
+
+      const elements = unref(dropRef).$el.querySelectorAll('.selectable-item')
+
+      unref(dropRef).$el.scrollTo(
+        0,
+        unref(activeDropItemIndex) === null
+          ? 0
+          : elements[unref(activeDropItemIndex)].getBoundingClientRect().y -
+              elements[unref(activeDropItemIndex)].getBoundingClientRect().height
+      )
+    })
 
     return {
       inputUrl,
