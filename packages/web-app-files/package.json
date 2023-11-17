@@ -22,7 +22,7 @@
     "design-system": "workspace:@ownclouders/design-system@*",
     "email-validator": "^2.0.4",
     "filesize": "^9.0.11",
-    "fuse.js": "6.5.3",
+    "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
     "luxon": "3.0.1",
     "marked": "^4.0.12",

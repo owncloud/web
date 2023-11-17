@@ -628,8 +628,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 6.5.3
-        version: 6.5.3
+        specifier: 6.6.2
+        version: 6.6.2
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -727,8 +727,8 @@ importers:
         specifier: ^9.0.11
         version: 9.0.11
       fuse.js:
-        specifier: 6.5.3
-        version: 6.5.3
+        specifier: 6.6.2
+        version: 6.6.2
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -828,8 +828,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 6.5.3
-        version: 6.5.3
+        specifier: 6.6.2
+        version: 6.6.2
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -1041,8 +1041,8 @@ importers:
         specifier: ^9.0.11
         version: 9.0.11
       fuse.js:
-        specifier: 6.5.3
-        version: 6.5.3
+        specifier: 6.6.2
+        version: 6.6.2
       js-generate-password:
         specifier: ^0.1.9
         version: 0.1.9
@@ -1144,8 +1144,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(focus-trap@7.2.0)(vue@3.3.8)
       fuse.js:
-        specifier: 6.5.3
-        version: 6.5.3
+        specifier: 6.6.2
+        version: 6.6.2
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -12503,6 +12503,12 @@ packages:
   /fuse.js@6.5.3:
     resolution: {integrity: sha512-sA5etGE7yD/pOqivZRBvUBd/NaL2sjAu6QuSaFoe1H2BrJSkH/T/UXAJ8CdXdw7DvY3Hs8CXKYkDWX7RiP5KOg==}
     engines: {node: '>=10'}
+    dev: true
+
+  /fuse.js@6.6.2:
+    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
+    engines: {node: '>=10'}
+    dev: false
 
   /gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
