@@ -12,7 +12,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "uuid": "9.0.1",
     "vue-concurrency": "4.0.1",
-    "vue3-gettext": "2.3.3",
+    "vue3-gettext": "2.4.0",
     "vuex": "4.1.0"
   }
 }
