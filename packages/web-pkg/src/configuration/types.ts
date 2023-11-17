@@ -26,14 +26,17 @@ export interface OptionsConfiguration {
   openLinksWithDefaultApp?: boolean
   tokenStorageLocal?: boolean
   disabledExtensions?: string[]
-  mode?: string
   isRunningOnEos?: boolean
-  embedTarget?: string
   editor?: {
     openAsPreview?: boolean | string[]
   }
   ocm?: {
     openRemotely?: boolean
+  }
+  embed?: {
+    enabled?: boolean
+    target?: string
+    messagesOrigin?: string
   }
 }
 

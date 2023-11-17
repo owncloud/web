@@ -39,56 +39,107 @@ describe('EmbedActions', () => {
     })
 
     it('should emit select event when the select action is triggered', async () => {
-      window.parent.dispatchEvent = jest.fn()
+      window.parent.postMessage = jest.fn()
       global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
 
       const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       await wrapper.find(selectors.btnSelect).trigger('click')
 
-      expect(window.parent.dispatchEvent).toHaveBeenCalledWith({
-        name: 'owncloud-embed:select',
-        payload: { detail: [{ id: 1 }] }
-      })
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:select',
+          data: [{ id: 1 }]
+        },
+        {}
+      )
     })
 
     it('should enable select action when embedTarget is set to location', () => {
-      const { wrapper } = getWrapper({ configuration: { options: { embedTarget: 'location' } } })
+      const { wrapper } = getWrapper({
+        configuration: { options: { embed: { target: 'location' } } }
+      })
 
       expect(wrapper.find(selectors.btnSelect).attributes()).not.toHaveProperty('disabled')
     })
 
     it('should emit select event with currentFolder as selected resource when select action is triggered', async () => {
-      window.parent.dispatchEvent = jest.fn()
+      window.parent.postMessage = jest.fn()
       global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
 
       const { wrapper } = getWrapper({
         currentFolder: { id: 1 },
-        configuration: { options: { embedTarget: 'location' } }
+        configuration: { options: { embed: { target: 'location' } } }
       })
 
       await wrapper.find(selectors.btnSelect).trigger('click')
 
-      expect(window.parent.dispatchEvent).toHaveBeenCalledWith({
-        name: 'owncloud-embed:select',
-        payload: { detail: [{ id: 1 }] }
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:select',
+          data: [{ id: 1 }]
+        },
+        {}
+      )
+    })
+
+    it('should specify the targetOrigin when it is set in the config', async () => {
+      window.parent.postMessage = jest.fn()
+      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+
+      const { wrapper } = getWrapper({
+        selectedFiles: [{ id: 1 }],
+        configuration: { options: { embed: { messagesOrigin: 'https://example.org' } } }
       })
+
+      await wrapper.find(selectors.btnSelect).trigger('click')
+
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:select',
+          data: [{ id: 1 }]
+        },
+        { targetOrigin: 'https://example.org' }
+      )
     })
   })
 
   describe('cancel action', () => {
     it('should emit cancel event when the cancel action is triggered', async () => {
-      window.parent.dispatchEvent = jest.fn()
+      window.parent.postMessage = jest.fn()
       global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
 
       const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       await wrapper.find(selectors.btnCancel).trigger('click')
 
-      expect(window.parent.dispatchEvent).toHaveBeenCalledWith({
-        name: 'owncloud-embed:cancel',
-        payload: undefined
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:cancel',
+          data: null
+        },
+        {}
+      )
+    })
+
+    it('should specify the targetOrigin when it is set in the config', async () => {
+      window.parent.postMessage = jest.fn()
+      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+
+      const { wrapper } = getWrapper({
+        selectedFiles: [{ id: 1 }],
+        configuration: { options: { embed: { messagesOrigin: 'https://example.org' } } }
       })
+
+      await wrapper.find(selectors.btnCancel).trigger('click')
+
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:cancel',
+          data: null
+        },
+        { targetOrigin: 'https://example.org' }
+      )
     })
   })
 
@@ -115,7 +166,7 @@ describe('EmbedActions', () => {
     })
 
     it('should emit share event when share action is triggered', async () => {
-      window.parent.dispatchEvent = jest.fn()
+      window.parent.postMessage = jest.fn()
       global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
 
       const { wrapper } = getWrapper({
@@ -125,14 +176,17 @@ describe('EmbedActions', () => {
 
       await wrapper.find(selectors.btnShare).trigger('click')
 
-      expect(window.parent.dispatchEvent).toHaveBeenCalledWith({
-        name: 'owncloud-embed:share',
-        payload: { detail: ['link-1'] }
-      })
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:share',
+          data: ['link-1']
+        },
+        {}
+      )
     })
 
     it('should ask for password first when required when share action is triggered', async () => {
-      window.parent.dispatchEvent = jest.fn()
+      window.parent.postMessage = jest.fn()
       global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
 
       const { wrapper } = getWrapper({
@@ -145,16 +199,42 @@ describe('EmbedActions', () => {
 
       await wrapper.find(selectors.btnShare).trigger('click')
 
-      expect(window.parent.dispatchEvent).toHaveBeenCalledWith({
-        name: 'owncloud-embed:share',
-        payload: { detail: ['password-link-1'] }
-      })
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:share',
+          data: ['password-link-1']
+        },
+        {}
+      )
     })
 
     it('should hide share action when embedTarget is set to location', () => {
-      const { wrapper } = getWrapper({ configuration: { options: { embedTarget: 'location' } } })
+      const { wrapper } = getWrapper({
+        configuration: { options: { embed: { target: 'location' } } }
+      })
 
       expect(wrapper.find(selectors.btnShare).exists()).toBe(false)
+    })
+
+    it('should specify the targetOrigin when it is set in the config', async () => {
+      window.parent.postMessage = jest.fn()
+      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+
+      const { wrapper } = getWrapper({
+        selectedFiles: [{ id: 1 }],
+        configuration: { options: { embed: { messagesOrigin: 'https://example.org' } } },
+        abilities: [{ action: 'create-all', subject: 'PublicLink' }]
+      })
+
+      await wrapper.find(selectors.btnShare).trigger('click')
+
+      expect(window.parent.postMessage).toHaveBeenCalledWith(
+        {
+          name: 'owncloud-embed:share',
+          data: ['link-1']
+        },
+        { targetOrigin: 'https://example.org' }
+      )
     })
   })
 })

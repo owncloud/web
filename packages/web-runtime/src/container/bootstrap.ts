@@ -51,15 +51,21 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
     throw new Error(`config could not be parsed. ${error}`)
   })) as RawConfig
 
-  if (!rawConfig.options?.mode) {
-    rawConfig.options = { ...rawConfig.options, mode: getQueryParam('mode') ?? 'web' }
+  if (
+    !rawConfig.options?.embed ||
+    !Object.prototype.hasOwnProperty.call(rawConfig.options.embed, 'enabled')
+  ) {
+    rawConfig.options = {
+      ...rawConfig.options,
+      embed: { ...rawConfig.options?.embed, enabled: getQueryParam('embed') === 'true' }
+    }
   }
 
   // Can enable location picker in embed mode
   const embedTarget = getQueryParam('embed-target')
 
   if (embedTarget) {
-    rawConfig.options.embedTarget = embedTarget
+    rawConfig.options.embed = { ...rawConfig.options.embed, target: embedTarget }
   }
 
   configurationManager.initialize(rawConfig)

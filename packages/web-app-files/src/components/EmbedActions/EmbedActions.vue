@@ -45,7 +45,7 @@ export default {
     const clientService = useClientService()
     const passwordPolicyService = usePasswordPolicyService()
     const language = useGettext()
-    const { isLocationPicker } = useEmbedMode()
+    const { isLocationPicker, postMessage } = useEmbedMode()
 
     const selectedFiles = computed<Resource[]>(() => {
       if (isLocationPicker.value) {
@@ -64,27 +64,20 @@ export default {
     )
 
     const emitSelect = (): void => {
-      const event: CustomEvent<Resource[]> = new CustomEvent('owncloud-embed:select', {
-        detail: selectedFiles.value
-      })
-
-      window.parent.dispatchEvent(event)
+      postMessage<Resource[]>(
+        'owncloud-embed:select',
+        JSON.parse(JSON.stringify(selectedFiles.value))
+      )
     }
 
     const emitCancel = (): void => {
-      const event: CustomEvent<void> = new CustomEvent('owncloud-embed:cancel')
-
-      window.parent.dispatchEvent(event)
+      postMessage<null>('owncloud-embed:cancel', null)
     }
 
     const emitShare = (links: string[]): void => {
       if (!canCreatePublicLinks.value) return
 
-      const event: CustomEvent<string[]> = new CustomEvent('owncloud-embed:share', {
-        detail: links
-      })
-
-      window.parent.dispatchEvent(event)
+      postMessage<string[]>('owncloud-embed:share', links)
     }
 
     const sharePublicLinks = async (): Promise<string[]> => {
