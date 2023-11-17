@@ -15,7 +15,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "axios": "1.0.0",
+    "axios": "1.6.2",
     "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "6.5.3",
     "lodash-es": "4.17.21",
