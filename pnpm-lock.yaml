@@ -1114,8 +1114,8 @@ importers:
         specifier: ^2.11.5
         version: 2.11.5
       '@sentry/vue':
-        specifier: 7.55.2
-        version: 7.55.2(vue@3.3.8)
+        specifier: 7.80.1
+        version: 7.80.1(vue@3.3.8)
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz'
@@ -6206,70 +6206,66 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@sentry-internal/tracing@7.55.2:
-    resolution: {integrity: sha512-yBW+R7NfwLrOjpwOJHoOSvGDDoM3ZKod5OKXi7Gd5tYqVm1mCaL0n2/wlNMcGTbPbulLBtgzjoTU1bPJAGhmYw==}
+  /@sentry-internal/tracing@7.80.1:
+    resolution: {integrity: sha512-5gZ4LPIj2vpQl2/dHBM4uXMi9OI5E0VlOhJQt0foiuN6JJeiOjdpJFcfVqJk69wrc0deVENTtgKKktxqMwVeWQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.55.2
-      '@sentry/types': 7.55.2
-      '@sentry/utils': 7.55.2
-      tslib: 1.14.1
+      '@sentry/core': 7.80.1
+      '@sentry/types': 7.80.1
+      '@sentry/utils': 7.80.1
     dev: false
 
-  /@sentry/browser@7.55.2:
-    resolution: {integrity: sha512-RgA4KOD6t8XHVLm6D2oTh9KW19g3DoQ0QsrUmAq4+giSj2AyDW67VP2V4E72mCZ9Ln9AkNhY0Eh3XuD3opiFQA==}
+  /@sentry/browser@7.80.1:
+    resolution: {integrity: sha512-1dPR6vPJ9vOTzgXff9HGheb178XeEv5hyjBNhCO1f6rjCgnVj99XGNZIgO1Ee1ALJbqlfPWaeV+uSWbbcmgJMA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.55.2
-      '@sentry/core': 7.55.2
-      '@sentry/replay': 7.55.2
-      '@sentry/types': 7.55.2
-      '@sentry/utils': 7.55.2
-      tslib: 1.14.1
+      '@sentry-internal/tracing': 7.80.1
+      '@sentry/core': 7.80.1
+      '@sentry/replay': 7.80.1
+      '@sentry/types': 7.80.1
+      '@sentry/utils': 7.80.1
     dev: false
 
-  /@sentry/core@7.55.2:
-    resolution: {integrity: sha512-clzQirownxqADv9+fopyMJTHzaoWedkN2+mi4ro1LxjLgROdXBFurMCC1nT+7cH/xvQ5gMIRkM/y/4gRtKy2Ew==}
+  /@sentry/core@7.80.1:
+    resolution: {integrity: sha512-3Yh+O9Q86MxwIuJFYtuSSoUCpdx99P1xDAqL0FIPTJ+ekaVMiUJq9NmyaNh9uN2myPSmxvEXW6q3z37zta9ZHg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.55.2
-      '@sentry/utils': 7.55.2
-      tslib: 1.14.1
+      '@sentry/types': 7.80.1
+      '@sentry/utils': 7.80.1
     dev: false
 
-  /@sentry/replay@7.55.2:
-    resolution: {integrity: sha512-G9iAcI9bvy5X8fvdz0QxF3LJ8oGB0Vxt0iOPdRZYhjIcPbNpE3NaeT6xZlNX1pCcHLroE6BMRF/6TTalcl5Erw==}
+  /@sentry/replay@7.80.1:
+    resolution: {integrity: sha512-yjpftIyybQeWD2i0Nd7C96tZwjNbSMRW515EL9jwlNxYbQtGtMs0HavP9Y7uQvQrzwSHY0Wp+ooe9PMuvzqbHw==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.55.2
-      '@sentry/types': 7.55.2
-      '@sentry/utils': 7.55.2
+      '@sentry-internal/tracing': 7.80.1
+      '@sentry/core': 7.80.1
+      '@sentry/types': 7.80.1
+      '@sentry/utils': 7.80.1
     dev: false
 
-  /@sentry/types@7.55.2:
-    resolution: {integrity: sha512-mAtkA8wvUDrLjAAmy9tjn+NiXcxVz/ltbslTKaIW6JNgVRz5kMt1Ny8RJsgqaZqa4LFP8q+IvWw4Vd91kb57rA==}
+  /@sentry/types@7.80.1:
+    resolution: {integrity: sha512-CVu4uPVTOI3U9kYiOdA085R7jX5H1oVODbs9y+A8opJ0dtJTMueCXgZyE8oXQ0NjGVs6HEeaLkOuiV0mj8X3yw==}
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/utils@7.55.2:
-    resolution: {integrity: sha512-Yv9XtbOESdN7bkK2AMrKsmKMF5OOVv5v5hVcOqXtSTw1t2oMAtRjXXqGpUo+TkdTOjeoX6dr19ozVFHaGvqHkw==}
+  /@sentry/utils@7.80.1:
+    resolution: {integrity: sha512-bfFm2e/nEn+b9++QwjNEYCbS7EqmteT8uf0XUs7PljusSimIqqxDtK1pfD9zjynPgC8kW/fVBKv0pe2LufomeA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.55.2
-      tslib: 1.14.1
+      '@sentry/types': 7.80.1
     dev: false
 
-  /@sentry/vue@7.55.2(vue@3.3.8):
-    resolution: {integrity: sha512-n74HNLmRY9xyY8rRNVBNY3euLd6tcBURoU7sOs0BPJkuB0tZPb0hvGjd0ZDOTgNiOt8CofdjuwYv4TUOUBpT/Q==}
+  /@sentry/vue@7.80.1(vue@3.3.8):
+    resolution: {integrity: sha512-6X9LM1rrJg31jJQ+9LnCCbzDNbD7RaGwfXHAiAtV2aH1ya40YKNK/DjYNzTVMXiXNiJJyjeeFTkLwBt7OFk2tg==}
     engines: {node: '>=8'}
     peerDependencies:
       vue: 2.x || 3.x
     dependencies:
-      '@sentry/browser': 7.55.2
-      '@sentry/core': 7.55.2
-      '@sentry/types': 7.55.2
-      '@sentry/utils': 7.55.2
-      tslib: 1.14.1
+      '@sentry/browser': 7.80.1
+      '@sentry/core': 7.80.1
+      '@sentry/types': 7.80.1
+      '@sentry/utils': 7.80.1
       vue: 3.3.8(typescript@5.0.3)
     dev: false
 
