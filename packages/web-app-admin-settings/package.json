@@ -19,7 +19,7 @@
     "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "6.5.3",
     "lodash-es": "4.17.21",
-    "uuid": "9.0.0",
+    "uuid": "9.0.1",
     "vue-concurrency": "4.0.1",
     "vuex": "4.1.0",
     "web-app-admin-settings": "workspace:*"
