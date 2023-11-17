@@ -15,3 +15,4 @@ Feature: Application menu
     Then following resources should be displayed in the files list for user "Alice"
       | resource     |
       | New file.txt |
+    And "Alice" logs out
