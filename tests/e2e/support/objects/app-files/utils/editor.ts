@@ -20,7 +20,7 @@ export const save = async (page: Page): Promise<unknown> => {
   ])
 }
 
-export const isOpen = async ({
+export const fileViewerLocator = async ({
   page,
   fileViewerType
 }: {
@@ -29,11 +29,11 @@ export const isOpen = async ({
 }): Promise<Locator> => {
   switch (fileViewerType) {
     case 'text-editor':
-      return await page.locator(texEditor)
+      return page.locator(texEditor)
     case 'pdf-viewer':
-      return await page.locator(pdfViewer)
+      return page.locator(pdfViewer)
     case 'image-viewer':
-      return await page.locator(imageViewer)
+      return page.locator(imageViewer)
     default:
       throw new Error(`${fileViewerType} not implemented`)
   }

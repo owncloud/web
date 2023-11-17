@@ -61,8 +61,8 @@ Then(
   /^"([^"]*)" is in a (text-editor|pdf-viewer|image-viewer)$/,
   async function (this: World, stepUser: string, fileViewerType: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const isOpen = await editor.isOpen({ page, fileViewerType })
-    await expect(isOpen).toBeVisible()
+    const fileViewerLocator = await editor.fileViewerLocator({ page, fileViewerType })
+    await expect(fileViewerLocator).toBeVisible()
   }
 )
 

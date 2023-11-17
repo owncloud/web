@@ -882,7 +882,7 @@ def acceptance(ctx):
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
                         # Services and steps required for running tests with oCIS
-                        steps += restoreOcisCache() + ocisService("acceptance-tests", enforce_password_public_link_disabled = True) + getSkeletonFiles()
+                        steps += restoreOcisCache() + ocisService("acceptance-tests", enforce_password_public_link = True) + getSkeletonFiles()
 
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
@@ -1263,7 +1263,7 @@ def webService():
         ],
     }]
 
-def ocisService(type, tika_enabled = False, enforce_password_public_link_disabled = False):
+def ocisService(type, tika_enabled = False, enforce_password_public_link = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         "OCIS_INSECURE": "true",
@@ -1291,7 +1291,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link_disable
         environment["SEARCH_EXTRACTOR_TIKA_TIKA_URL"] = "http://tika:9998"
         environment["SEARCH_EXTRACTOR_CS3SOURCE_INSECURE"] = True
 
-    if enforce_password_public_link_disabled:
+    if enforce_password_public_link:
         environment["OCIS_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD"] = False
         environment["FRONTEND_PASSWORD_POLICY_MIN_CHARACTERS"] = 0
         environment["FRONTEND_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS"] = 0
