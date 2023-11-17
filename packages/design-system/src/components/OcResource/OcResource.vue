@@ -56,7 +56,6 @@
           :full-path="resource.path"
           :is-path-displayed="isPathDisplayed"
           :is-extension-displayed="isExtensionDisplayed"
-          @click="$emit('clickFolder')"
         />
       </oc-resource-link>
       <div class="oc-resource-indicators">
@@ -66,7 +65,6 @@
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder"
-          @click="$emit('clickParentFolder')"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
           <span class="text" v-text="parentFolderName" />
@@ -190,7 +188,7 @@ export default defineComponent({
       default: true
     }
   },
-  emits: ['click', 'clickFolder', 'clickParentFolder'],
+  emits: ['click'],
   computed: {
     parentFolderComponentType() {
       return this.parentFolderLink !== null ? 'router-link' : 'span'
