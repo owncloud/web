@@ -645,9 +645,12 @@ Details
    https://github.com/owncloud/web/issues/9796
    https://github.com/owncloud/web/issues/9887
    https://github.com/owncloud/web/issues/9850
+   https://github.com/owncloud/web/issues/9963
+   https://github.com/owncloud/web/issues/9969
    https://github.com/owncloud/web/pull/9890
    https://github.com/owncloud/web/pull/9908
    https://github.com/owncloud/web/pull/9936
+   https://github.com/owncloud/web/pull/9971
 
 * Enhancement - Manage tags in details panel: [#9905](https://github.com/owncloud/web/pull/9905)
 
