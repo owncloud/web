@@ -1,9 +1,9 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import Collaborator, { ICollaborator } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
-import { copyLinkArgs, clearCurrentPopup } from '../link/actions'
+import { clearCurrentPopup, createLinkArgs } from '../link/actions'
 import { config } from '../../../../config.js'
 import { createdLinkStore } from '../../../store'
 
@@ -23,6 +23,8 @@ const selecAllCheckbox = '#resource-table-select-all'
 const acceptButton = '.oc-files-actions-accept-share-trigger'
 const pendingShareItem =
   '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
+const passwordInput = '.oc-modal-body input.oc-text-input'
+const passwordSetButton = '.oc-modal-body-actions-confirm'
 
 export interface ShareArgs {
   page: Page
@@ -108,26 +110,35 @@ export const clickActionInContextMenu = async (
   action: string
 ): Promise<void> => {
   const { page, resource } = args
-  let method = 'GET'
-  switch (action) {
-    case 'accept-share':
-    case 'create-quicklink':
-      method = 'POST'
-      break
-    case 'decline-share':
-      method = 'DELETE'
-      break
-  }
-
   await page.locator(util.format(actionMenuDropdownButton, resource)).click()
 
-  await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().includes('shares') && resp.status() === 200 && resp.request().method() === method
-    ),
-    page.locator(util.format(actionsTriggerButton, resource, action)).click()
-  ])
+  switch (action) {
+    case 'accept-share':
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'POST'
+        ),
+        page.locator(util.format(actionsTriggerButton, resource, action)).click()
+      ])
+      break
+    case 'create-quicklink':
+      await page.locator(util.format(actionsTriggerButton, resource, action)).click()
+      break
+    case 'decline-share':
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes('shares') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'DELETE'
+        ),
+        page.locator(util.format(actionsTriggerButton, resource, action)).click()
+      ])
+      break
+  }
 }
 
 export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
@@ -184,17 +195,31 @@ export const hasPermissionToShare = async (
   return !(await page.isVisible(noPermissionToShareLabel))
 }
 
-export const copyQuickLink = async (args: copyLinkArgs): Promise<string> => {
-  const { page, resource, via } = args
+export const createQuickLink = async (args: createLinkArgs): Promise<string> => {
+  const { page, resource, password } = args
   let url = ''
   const linkName = 'Link'
+  await page.pause()
 
-  if (via === 'CONTEXT_MENU') {
-    await clickActionInContextMenu({ page, resource }, 'create-quicklink')
-  }
+  await clickActionInContextMenu({ page, resource }, 'create-quicklink')
+  await page.locator(passwordInput).fill(password)
 
+  await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('api/v1/shares') &&
+        res.request().method() === 'POST' &&
+        res.status() === 200
+    ),
+    page.locator(passwordSetButton).click()
+  ])
   if (config.backendUrl.startsWith('https')) {
+    // here is flaky https://github.com/owncloud/web/issues/9941
+    // sometimes test doesn't have time to pick up the correct buffer
+    await page.waitForTimeout(500)
     url = await page.evaluate(() => navigator.clipboard.readText())
+
+    expect(url).toContain(config.baseUrlOcis)
   } else {
     const quickLinkUrlLocator = util.format(publicLinkInputField, linkName)
     if (!(await page.locator(quickLinkUrlLocator).isVisible())) {

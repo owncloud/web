@@ -6,7 +6,7 @@ export const dummyUserStore = new Map<string, User>([
     {
       id: 'admin',
       displayName: process.env.ADMIN_USERNAME || 'admin',
-      password: 'admin',
+      password: process.env.ADMIN_PASSWORD || 'admin',
       email: 'admin@example.org'
     }
   ],

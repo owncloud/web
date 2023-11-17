@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
-import { copyLinkArgs } from '../link/actions'
+import { createLinkArgs } from '../link/actions'
 export class Share {
   #page: Page
 
@@ -54,8 +54,8 @@ export class Share {
     return await po.hasPermissionToShare({ page: this.#page, resource })
   }
 
-  async copyQuickLink(args: Omit<copyLinkArgs, 'page'>): Promise<void> {
-    await po.copyQuickLink({ ...args, page: this.#page })
+  async createQuickLink(args: Omit<createLinkArgs, 'page'>): Promise<void> {
+    await po.createQuickLink({ ...args, page: this.#page })
   }
 
   async resourceIsNotOpenable(resource): Promise<boolean> {

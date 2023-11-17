@@ -190,8 +190,6 @@ export default defineComponent({
           return
         }
 
-        debugger
-
         let viewMode = props.isReadOnly ? 'view' : 'write'
         if (
           determineOpenAsPreview(unref(applicationName)) &&

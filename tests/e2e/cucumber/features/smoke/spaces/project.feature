@@ -48,11 +48,10 @@ Feature: spaces.personal
       | lorem.txt | folderPublic     |
       | lorem.txt | folder_to_shared |
 
-    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "team.1"
     And "Alice" edits the public link named "team.1" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "team.1" of resource "folderPublic" to "+5 days"
-    And "Alice" sets the password of the public link named "team.1" of resource "folderPublic" to "12345"
 
     # borrowed from share.feature
     When "Alice" shares the following resource using the sidebar panel
@@ -75,15 +74,15 @@ Feature: spaces.personal
       | resource  | to           |
       | lorem.txt | folderPublic |
 
-    And "Alice" creates a public link for the resource "folderPublic" using the sidebar panel
+    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "team.2"
     And "Alice" edits the public link named "team.2" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "team.2" of resource "folderPublic" to "+5 days"
-    And "Alice" sets the password of the public link named "team.2" of resource "folderPublic" to "54321"
+    And "Alice" changes the password of the public link named "team.2" of resource "folderPublic" to "new-strongPass1"
 
     # borrowed from link.feature, all existing resource actions can be reused
     When "Anonymous" opens the public link "team.1"
-    And "Anonymous" unlocks the public link with password "12345"
+    And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |
@@ -118,7 +117,7 @@ Feature: spaces.personal
 
     # borrowed from link.feature, all existing resource actions can be reused
     When "Anonymous" opens the public link "team.2"
-    And "Anonymous" unlocks the public link with password "54321"
+    And "Anonymous" unlocks the public link with password "new-strongPass1"
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |

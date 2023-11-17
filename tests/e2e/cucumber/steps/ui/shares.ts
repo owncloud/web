@@ -182,13 +182,20 @@ When(
 )
 
 When(
-  '{string} copies quick link of the resource {string} from the context menu',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
+  '{string} creates quick link of the resource {string} with password {string} from the context menu',
+  async function (
+    this: World,
+    stepUser: string,
+    resource: string,
+    password: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    await shareObject.copyQuickLink({
+    const linkObject = new objects.applicationFiles.Link({ page })
+    password = password === '%public%' ? linkObject.securePassword : password
+    await shareObject.createQuickLink({
       resource,
-      via: 'CONTEXT_MENU'
+      password
     })
   }
 )

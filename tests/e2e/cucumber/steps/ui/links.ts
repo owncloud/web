@@ -4,23 +4,27 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 
 When(
-  '{string} creates a public link for the resource {string} using the sidebar panel',
-  async function (this: World, stepUser: string, resource: string) {
+  '{string} creates a public link for the resource {string} with password {string} using the sidebar panel',
+  async function (this: World, stepUser: string, resource: string, password: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
+    password = password === '%public%' ? linkObject.securePassword : password
     await linkObject.create({
       resource,
-      name: 'Link'
+      name: 'Link',
+      password
     })
   }
 )
 
 When(
-  '{string} creates a public link for the space using the sidebar panel',
-  async function (this: World, stepUser: string): Promise<void> {
+  '{string} creates a public link for the space with password {string} using the sidebar panel',
+  async function (this: World, stepUser: string, password: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spaceObject = new objects.applicationFiles.Spaces({ page })
-    await spaceObject.createPublicLink()
+    const linkObject = new objects.applicationFiles.Link({ page })
+    password = password === '%public%' ? linkObject.securePassword : password
+    await spaceObject.createPublicLink({ password })
   }
 )
 
@@ -60,7 +64,7 @@ When(
 )
 
 When(
-  '{string} sets the password of the public link named {string} of resource {string} to {string}',
+  '{string} changes the password of the public link named {string} of resource {string} to {string}',
   async function (
     this: World,
     stepUser: string,
@@ -75,13 +79,13 @@ When(
 )
 
 When(
-  '{string} tries to sets the password of the public link named {string} of resource {string} to {string}',
+  '{string} tries to sets a new password {string} of the public link named {string} of resource {string}',
   async function (
     this: World,
     stepUser: string,
+    newPassword: string,
     linkName: string,
-    resource: string,
-    newPassword: string
+    resource: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })

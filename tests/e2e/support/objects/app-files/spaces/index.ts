@@ -89,8 +89,8 @@ export class Spaces {
     await po.changeSpaceImage({ id, resource, page: this.#page })
   }
 
-  async createPublicLink(): Promise<void> {
-    const url = await po.createPublicLinkForSpace({ page: this.#page })
+  async createPublicLink({ password }: { password: string }): Promise<void> {
+    const url = await po.createPublicLinkForSpace({ page: this.#page, password })
     this.#linksEnvironment.createLink({
       key: 'Link',
       link: { name: 'Link', url }

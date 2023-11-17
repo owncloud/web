@@ -16,10 +16,11 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Alice" creates the following resources
       | resource         | type         | content              |
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
-    And "Alice" creates a public link for the resource "OpenDocument.odt" using the sidebar panel
+    And "Alice" creates a public link for the resource "OpenDocument.odt" with password "%public%" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "OpenDocument.odt" changing role to "Can edit"
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
+    And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "OpenDocument Content" in editor "Collabora"
 
 
@@ -27,8 +28,9 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Alice" creates the following resources
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
-    And "Alice" creates a public link for the resource "MicrosoftWord.docx" using the sidebar panel
+    And "Alice" creates a public link for the resource "MicrosoftWord.docx" with password "%public%" using the sidebar panel
     And "Alice" edits the public link named "Link" of resource "MicrosoftWord.docx" changing role to "Can edit"
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
+    And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "Microsoft Word Content" in editor "OnlyOffice"

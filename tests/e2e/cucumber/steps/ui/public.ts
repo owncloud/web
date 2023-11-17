@@ -31,8 +31,11 @@ When(
   async function (this: World, stepUser: string, password: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
+    const linkObject = new objects.applicationFiles.Link({ page })
     if (password === '%copied_password%') {
       password = await page.evaluate('navigator.clipboard.readText()')
+    } else {
+      password = password === '%public%' ? linkObject.securePassword : password
     }
     await pageObject.authenticate({ password })
   }
@@ -51,6 +54,15 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     await editor.save(page)
+  }
+)
+
+Then(
+  /^"([^"]*)" is in a (text-editor|pdf-viewer|image-viewer)$/,
+  async function (this: World, stepUser: string, fileViewerType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const fileViewerLocator = await editor.fileViewerLocator({ page, fileViewerType })
+    await expect(fileViewerLocator).toBeVisible()
   }
 )
 

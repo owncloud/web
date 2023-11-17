@@ -32,42 +32,54 @@ Feature: spaces public link
       | resource       |
       | simple.pdf     |
       | testavatar.jpg |
-    And "Alice" creates a public link for the space using the sidebar panel
+    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
-    And "Alice" creates a public link for the resource "spaceFolder" using the sidebar panel
+    And "Alice" creates a public link for the resource "spaceFolder" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "spaceFolder" to "folderLink"
-    And "Alice" creates a public link for the resource "spaceFolder/shareToBrian.txt" using the sidebar panel
+    And "Alice" creates a public link for the resource "spaceFolder/shareToBrian.txt" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "spaceFolder/shareToBrian.txt" to "textLink"
-    And "Alice" creates a public link for the resource "spaceFolder/subFolder/shareToBrian.md" using the sidebar panel
+    And "Alice" creates a public link for the resource "spaceFolder/subFolder/shareToBrian.md" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "spaceFolder/subFolder/shareToBrian.md" to "markdownLink"
-    And "Alice" creates a public link for the resource "simple.pdf" using the sidebar panel
+    And "Alice" creates a public link for the resource "simple.pdf" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
-    And "Alice" creates a public link for the resource "testavatar.jpg" using the sidebar panel
+    And "Alice" creates a public link for the resource "testavatar.jpg" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
     When "Brian" logs in
     And "Brian" opens the public link "spaceLink"
+    And "Brian" unlocks the public link with password "%public%"
     Then "Brian" should not be able to edit the public link named "spaceLink"
     And "Brian" should not be able to edit the public link named "folderLink"
     When "Brian" opens the public link "textLink"
+    And "Brian" unlocks the public link with password "%public%"
+    Then "Brian" is in a text-editor
     And "Brian" closes the file viewer
     When "Brian" opens the public link "markdownLink"
+    And "Brian" unlocks the public link with password "%public%"
+    Then "Brian" is in a text-editor
     And "Brian" closes the file viewer
     And "Brian" logs out
     When "Carol" logs in
     And "Carol" opens the public link "spaceLink"
+    And "Carol" unlocks the public link with password "%public%"
     But "Carol" should not be able to edit the public link named "spaceLink"
     And "Carol" should not be able to edit the public link named "folderLink"
     When "Carol" opens the public link "folderLink"
+    And "Carol" unlocks the public link with password "%public%"
     Then "Carol" should see folder "subFolder" but should not be able to edit
     When "Carol" opens the public link "pdfLink"
+    And "Carol" unlocks the public link with password "%public%"
+    Then "Carol" is in a pdf-viewer
     And "Carol" closes the file viewer
     And "Carol" logs out
     When "David" logs in
     And "David" opens the public link "spaceLink"
+    And "David" unlocks the public link with password "%public%"
     And "David" edits the public link named "spaceLink" of the space changing role to "Can edit"
     And "David" edits the public link named "folderLink" of resource "spaceFolder" changing role to "Can edit"
     When "David" opens the public link "imageLink"
+    And "David" unlocks the public link with password "%public%"
+    Then "David" is in a image-viewer
     And "David" closes the file viewer
     And "David" logs out
 
@@ -80,15 +92,15 @@ Feature: spaces public link
     And "Alice" uploads the following resources
       | resource  |
       | lorem.txt |
-    And "Alice" creates a public link for the resource "lorem.txt" using the sidebar panel
+    And "Alice" creates a public link for the resource "lorem.txt" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "lorem.txt" to "myPublicLink"
-    When "Alice" tries to sets the password of the public link named "myPublicLink" of resource "lorem.txt" to "password"
+    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "myPublicLink" of resource "lorem.txt"
     Then "Alice" should see an error message
       """
       Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
       """
     And "Alice" closes the public link password dialog box
-    When "Alice" tries to sets the password of the public link named "myPublicLink" of resource "lorem.txt" to "12345678"
+    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "myPublicLink" of resource "lorem.txt"
     Then "Alice" should see an error message
       """
       Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety

@@ -10,6 +10,7 @@ export interface createLinkArgs {
   resource?: string
   name?: string
   space?: boolean
+  password?: string
 }
 
 export interface copyLinkArgs {
@@ -82,7 +83,7 @@ const editPublicLinkRenameButton =
 const editPublicLinkSetExpirationButton =
   '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Set expiration date"]'
 const editPublicLinkAddPasswordButton =
-  '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Add password"]'
+  '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Edit password"]'
 const editPublicLinkInput = '.oc-modal-body input.oc-text-input'
 const editPublicLinkRenameConfirm = '.oc-modal-body-actions-confirm'
 const deleteLinkButton =
@@ -106,7 +107,7 @@ const getRecentLinkName = async (page: Page): Promise<string> => {
 }
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
-  const { space, page, resource } = args
+  const { space, page, resource, password } = args
   if (!space) {
     const resourcePaths = resource.split('/')
     const resourceName = resourcePaths.pop()
@@ -117,6 +118,8 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
+  await page.locator(editPublicLinkInput).fill(password)
+  setPassword(page)
   await clearCurrentPopup(page)
   return await getRecentLinkUrl(page)
 }

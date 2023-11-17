@@ -1,7 +1,10 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const saveTextEditorOrViewerButton = '#app-save-action'
+const texEditor = '#text-editor'
+const pdfViewer = '#pdf-viewer'
+const imageViewer = '#preview'
 
 export const close = (page: Page): Promise<unknown> => {
   return Promise.all([
@@ -15,4 +18,23 @@ export const save = async (page: Page): Promise<unknown> => {
     page.waitForResponse((res) => res.request().method() === 'PUT' && res.status() === 204),
     page.locator(saveTextEditorOrViewerButton).click()
   ])
+}
+
+export const fileViewerLocator = async ({
+  page,
+  fileViewerType
+}: {
+  page: Page
+  fileViewerType: string
+}): Promise<Locator> => {
+  switch (fileViewerType) {
+    case 'text-editor':
+      return page.locator(texEditor)
+    case 'pdf-viewer':
+      return page.locator(pdfViewer)
+    case 'image-viewer':
+      return page.locator(imageViewer)
+    default:
+      throw new Error(`${fileViewerType} not implemented`)
+  }
 }
