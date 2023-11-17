@@ -101,7 +101,7 @@
     "pino": "7.11.0",
     "pino-pretty": "7.6.1",
     "postcss": "8.4.20",
-    "qs": "6.11.1",
+    "qs": "6.11.2",
     "react": "17.0.2",
     "requirejs": "2.3.6",
     "rollup-plugin-node-polyfills": "0.2.1",
