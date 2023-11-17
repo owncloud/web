@@ -1,0 +1,6 @@
+Enhancement: Support more audio formats with correct icon
+
+We've updated our list of supported audio formats, so further formats/extensions (`.flac`,`.ogg`, among others) get displayed correctly.
+
+https://github.com/owncloud/web/issues/9966
+https://github.com/owncloud/web/pull/9985

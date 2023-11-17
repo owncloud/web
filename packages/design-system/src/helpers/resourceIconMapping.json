@@ -1,19 +1,67 @@
 {
+  "3gp": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "7z": {
     "name": "resource-type-archive",
     "color": "var(--oc-color-icon-archive)"
+  },
+  "8svx": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "aa": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "aac": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "aax": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "accdb": {
     "name": "resource-type-file",
     "color": "var(--oc-color-text-default)"
   },
+  "act": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "ai": {
     "name": "resource-type-image",
     "color": "var(--oc-color-icon-image)"
   },
+  "aiff": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "alac": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "amr": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "ape": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "apk": {
     "name": "resource-type-archive",
     "color": "var(--oc-color-icon-archive)"
+  },
+  "au": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "awb": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "bash": {
     "name": "resource-type-code",
@@ -59,6 +107,10 @@
     "name": "resource-type-code",
     "color": "var(--oc-color-text-default)"
   },
+  "cda": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "cdr": {
     "name": "resource-type-image",
     "color": "var(--oc-color-icon-image)"
@@ -90,6 +142,14 @@
   "docf": {
     "name": "resource-type-form",
     "color": "var(--oc-color-icon-document)"
+  },
+  "dss": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "dvf": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "oform": {
     "name": "resource-type-form",
@@ -135,6 +195,10 @@
     "name": "resource-type-code",
     "color": "var(--oc-color-text-default)"
   },
+  "flac": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "go": {
     "name": "resource-type-code",
     "color": "var(--oc-color-text-default)"
@@ -142,6 +206,10 @@
   "gif": {
     "name": "resource-type-image",
     "color": "var(--oc-color-icon-image)"
+  },
+  "gsm": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "gz": {
     "name": "resource-type-archive",
@@ -175,9 +243,17 @@
     "name": "resource-type-ifc",
     "color": "var(--oc-color-icon-ifc)"
   },
+  "iklax": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "ipynb": {
     "name": "resource-type-jupyter",
     "color": "var(--oc-color-icon-jupyter)"
+  },
+  "ivs": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "java": {
     "name": "resource-type-code",
@@ -203,6 +279,18 @@
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
   },
+  "m4a": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "m4b": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "m4p": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "md": {
     "name": "resource-type-markdown",
     "color": "var(--oc-color-text-default)"
@@ -211,9 +299,21 @@
     "name": "resource-type-text",
     "color": "var(--oc-color-text-default)"
   },
+  "mmf": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "mogg": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "mov": {
     "name": "resource-type-video",
     "color": "var(--oc-color-icon-video)"
+  },
+  "movpkg": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "mp3": {
     "name": "resource-type-audio",
@@ -222,6 +322,18 @@
   "mp4": {
     "name": "resource-type-video",
     "color": "var(--oc-color-icon-video)"
+  },
+  "mpc": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "msv": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "nmf": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "odp": {
     "name": "resource-type-presentation",
@@ -239,9 +351,21 @@
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
   },
+  "oga": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "ogga": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "one": {
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
+  },
+  "opus": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "otf": {
     "name": "resource-type-image",
@@ -323,9 +447,25 @@
     "name": "resource-type-code",
     "color": "var(--oc-color-text-default)"
   },
+  "ra": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "rar": {
     "name": "resource-type-archive",
     "color": "var(--oc-color-icon-archive)"
+  },
+  "raw": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "rf64": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "rm": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "root": {
     "name": "resource-type-root",
@@ -346,6 +486,10 @@
   "sh-lib": {
     "name": "resource-type-code",
     "color": "var(--oc-color-text-default)"
+  },
+  "sln": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "sql": {
     "name": "resource-type-code",
@@ -387,6 +531,10 @@
     "name": "resource-type-code",
     "color": "var(--oc-color-text-default)"
   },
+  "tta": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "ttf": {
     "name": "resource-type-image",
     "color": "var(--oc-color-icon-image)"
@@ -398,6 +546,14 @@
   "url": {
     "name": "resource-type-url",
     "color": "var(--oc-color-text-default)"
+  },
+  "voc": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
+  "vox": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "vsd": {
     "name": "resource-type-document",
@@ -411,6 +567,10 @@
     "name": "resource-type-video",
     "color": "var(--oc-color-icon-video)"
   },
+  "wma": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
+  },
   "wmv": {
     "name": "resource-type-video",
     "color": "var(--oc-color-icon-video)"
@@ -422,6 +582,10 @@
   "wpd": {
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
+  },
+  "wv": {
+    "name": "resource-type-audio",
+    "color": "var(--oc-color-icon-audio)"
   },
   "xcf": {
     "name": "resource-type-image",
