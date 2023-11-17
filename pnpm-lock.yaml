@@ -238,8 +238,8 @@ importers:
         specifier: 8.4.20
         version: 8.4.20
       qs:
-        specifier: 6.11.1
-        version: 6.11.1
+        specifier: 6.11.2
+        version: 6.11.2
       react:
         specifier: 17.0.2
         version: 17.0.2
@@ -751,8 +751,8 @@ importers:
         specifier: ^6.6.2
         version: 6.6.2
       qs:
-        specifier: 6.11.1
-        version: 6.11.1
+        specifier: 6.11.2
+        version: 6.11.2
       sanitize-html:
         specifier: ^2.7.0
         version: 2.7.0
@@ -1071,8 +1071,8 @@ importers:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.0.3)(vue@3.3.4)
       qs:
-        specifier: 6.11.1
-        version: 6.11.1
+        specifier: 6.11.2
+        version: 6.11.2
       semver:
         specifier: 7.3.8
         version: 7.3.8
@@ -1166,7 +1166,7 @@ importers:
         version: 2.1.0
       owncloud-sdk:
         specifier: 3.1.0-alpha.10
-        version: 3.1.0-alpha.10(axios@1.0.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.1)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.0)(xml-js@1.6.11)
+        version: 3.1.0-alpha.10(axios@1.0.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.0)(xml-js@1.6.11)
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -1186,8 +1186,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       qs:
-        specifier: 6.11.1
-        version: 6.11.1
+        specifier: 6.11.2
+        version: 6.11.2
       sanitize-html:
         specifier: ^2.7.0
         version: 2.7.0
@@ -16679,7 +16679,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /owncloud-sdk@3.1.0-alpha.10(axios@1.0.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.1)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.0)(xml-js@1.6.11):
+  /owncloud-sdk@3.1.0-alpha.10(axios@1.0.0)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.0)(xml-js@1.6.11):
     resolution: {integrity: sha512-cAq6BKkyDvm5MpcksicpBsfkr4ZEB+nm1Yl74FH3Qtm/wbI4uWwaTjqQmzYF5prAQDBDbi9F6nADp83zqfmPTA==}
     peerDependencies:
       axios: ^0.27.2
@@ -16694,7 +16694,7 @@ packages:
       axios: 1.0.0
       cross-fetch: 3.1.4
       promise: 8.1.0
-      qs: 6.11.1
+      qs: 6.11.2
       utf8: 3.0.0
       uuid: 9.0.1
       webdav: 5.3.0
@@ -18059,8 +18059,8 @@ packages:
       side-channel: 1.0.4
     dev: true
 
-  /qs@6.11.1:
-    resolution: {integrity: sha512-0wsrzgTz/kAVIeuxSjnpGC56rzYtr6JT/2BwEvMaPhFIoYa1aGO8LbzuU1R0uUYQkLpWBTOj0l/CLAJB64J6nQ==}
+  /qs@6.11.2:
+    resolution: {integrity: sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
