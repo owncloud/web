@@ -371,7 +371,7 @@ services:
     command: tika:9998
 
   tika:
-    image: apache/tika:2.8.0.0
+    image: apache/tika:2.9.1.0
     container_name: web_tika
     ports:
       - 9998:9998
