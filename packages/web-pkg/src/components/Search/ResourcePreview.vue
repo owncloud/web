@@ -1,14 +1,14 @@
 <template>
-    <oc-resource
-      :resource="resource"
-      :path-prefix="pathPrefix"
-      :is-path-displayed="true"
-      :folder-link="folderLink"
-      :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
-      :parent-folder-name="parentFolderName"
-      :is-thumbnail-displayed="displayThumbnails"
-      v-bind="additionalAttrs"
-    />
+  <oc-resource
+    :resource="resource"
+    :path-prefix="pathPrefix"
+    :is-path-displayed="true"
+    :folder-link="folderLink"
+    :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
+    :parent-folder-name="parentFolderName"
+    :is-thumbnail-displayed="displayThumbnails"
+    v-bind="additionalAttrs"
+  />
 </template>
 
 <script lang="ts">
