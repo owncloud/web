@@ -51,7 +51,7 @@
     "@babel/preset-env": "^7.14.8",
     "@babel/runtime": "^7.19.4",
     "@popperjs/core": "^2.4.0",
-    "autoprefixer": "^10.0.0",
+    "autoprefixer": "10.4.16",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^29.0.2",
     "babel-loader": "^9.0.0",
