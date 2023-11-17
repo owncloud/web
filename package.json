@@ -76,7 +76,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "29.5.0",
     "browserslist-to-esbuild": "^1.2.0",
-    "browserslist-useragent-regexp": "^3.0.2",
+    "browserslist-useragent-regexp": "^4.0.0",
     "commander": "8.3.0",
     "core-js": "3.30.2",
     "cucumber-html-reporter": "5.5.1",
