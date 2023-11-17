@@ -264,7 +264,7 @@ services:
       - traefik
 
   onlyoffice:
-    image: onlyoffice/documentserver:7.3.3
+    image: onlyoffice/documentserver:7.5.1
     entrypoint:
       - /bin/sh
       - /entrypoint-override.sh
