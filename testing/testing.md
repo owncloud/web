@@ -82,7 +82,8 @@ Various options are available via ENV variables, e.g.
 - `SLOW_MO=n` to slow the execution time by `n` milliseconds
 - `TIMEOUT=n` to set tests to timeout after `n` milliseconds
 - `HEADLESS=bool` to open the browser while the tests run (defaults to true => headless mode)
-- `BROWSER=name` to run tests against a specific browser. Defaults to Chrome, available are Chrome, Firefox, Webkit, Chromium
+- `BROWSER=name` to run tests against a specific browser. Defaults to chromium, available are chromium, firefox, webkit, chromium
+- `ADMIN_PASSWORD` to set administrator password. By default, the `admin` password is used in the test
 
 For debugging reasons, you may want to record a video or traces of your test run.
 Again, you can use the following ENV variables in your command:
@@ -137,7 +138,7 @@ If you're using a M1 Mac, you need to use `seleniarm/standalone-chromium:4.7.0-2
 #### Run acceptance tests
 
 - Change the directory to `tests/acceptance`
-- Install all the test dependencies with `pnpm` command
+- Install all the test dependencies with `pnpm install` command
 - Run the tests
 
   ```shell
