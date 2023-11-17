@@ -161,8 +161,7 @@
     "patchedDependencies": {
       "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
       "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch",
-      "keycode@2.2.1": "patches/keycode@2.2.1.patch",
-      "vue-inline-svg@3.1.0": "patches/vue-inline-svg@3.1.0.patch"
+      "keycode@2.2.1": "patches/keycode@2.2.1.patch"
     }
   },
   "jestSerializer": {
