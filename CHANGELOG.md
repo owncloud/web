@@ -75,6 +75,7 @@ Summary
 * Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
 * Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
 * Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
+* Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
 
 Details
 -------
@@ -690,6 +691,14 @@ Details
 
    https://github.com/owncloud/web/issues/5741
    https://github.com/owncloud/web/pull/9940
+
+* Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
+
+   We've updated our list of supported audio formats, so further formats/extensions
+   (`.flac`,`.ogg`, among others) get displayed correctly.
+
+   https://github.com/owncloud/web/issues/9966
+   https://github.com/owncloud/web/pull/9985
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
