@@ -163,8 +163,8 @@ importers:
         specifier: ^4.0.0
         version: 4.1.0(browserslist@4.22.1)
       commander:
-        specifier: 8.3.0
-        version: 8.3.0
+        specifier: 11.1.0
+        version: 11.1.0
       core-js:
         specifier: 3.30.2
         version: 3.30.2
@@ -9270,6 +9270,11 @@ packages:
       find-replace: 3.0.0
       lodash.camelcase: 4.3.0
       typical: 4.0.0
+
+  /commander@11.1.0:
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
+    engines: {node: '>=16'}
+    dev: true
 
   /commander@2.1.0:
     resolution: {integrity: sha512-J2wnb6TKniXNOtoHS8TSrG9IOQluPrsmyAJ8oCUJOBmv+uLBCyPYAZkD2jFvw2DCzIXNnISIM01NIvr35TkBMQ==}
