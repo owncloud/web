@@ -42,8 +42,14 @@
       @mounted="focusModal"
       @before-unmount="focusModal"
     >
-      <template v-if="modal.customContent" #content>
-        <div v-html="modal.customContent" />
+      <template v-if="modal.customContent || modal.customComponent" #content>
+        <div v-if="modal.customContent" v-html="modal.customContent" />
+        <component
+          :is="modal.customComponent"
+          v-else
+          :modal="modal"
+          v-bind="modal.customComponentAttrs"
+        />
       </template>
     </oc-modal>
   </div>
