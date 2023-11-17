@@ -167,9 +167,8 @@ export class ResourceTransfer extends ConflictDialog {
       let targetName = resource.name
       let overwriteTarget = false
       if (hasConflict) {
-        const resolveStrategy = resolvedConflicts.find(
-          (e) => e.resource.id === resource.id
-        )?.strategy
+        const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)
+          ?.strategy
         if (resolveStrategy === ResolveStrategy.SKIP) {
           continue
         }

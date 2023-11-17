@@ -250,8 +250,8 @@ export default defineComponent({
         unref(activeDropItemIndex) !== null
           ? unref(activeDropItemIndex)
           : previous
-          ? elements.length
-          : -1
+            ? elements.length
+            : -1
       const increment = previous ? -1 : 1
 
       do {

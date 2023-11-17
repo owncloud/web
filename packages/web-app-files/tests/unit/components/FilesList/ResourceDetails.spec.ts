@@ -22,7 +22,7 @@ jest.mock('@ownclouders/web-pkg', () => ({
 describe('ResourceDetails component', () => {
   jest.mocked(useFileActions).mockImplementation(() =>
     mock<ReturnType<typeof useFileActions>>({
-      getDefaultEditorAction: () => ({ handler: jest.fn() } as any)
+      getDefaultEditorAction: () => ({ handler: jest.fn() }) as any
     })
   )
 

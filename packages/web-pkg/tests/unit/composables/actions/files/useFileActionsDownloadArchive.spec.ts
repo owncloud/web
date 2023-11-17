@@ -69,7 +69,7 @@ function getWrapper({
         ...jest.requireActual('../../../../..//src/composables/archiverService/useArchiverService'),
         triggerDownload: triggerDownloadMock,
         fileIdsSupported: true
-      } as any as any)
+      }) as any
   )
 
   const mocks = {

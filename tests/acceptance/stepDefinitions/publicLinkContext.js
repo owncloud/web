@@ -223,9 +223,8 @@ When(
 Then(
   'public link named {string} should not be listed on the public links list on the webUI',
   async function (linkName) {
-    const isPresent = await client.page.FilesPageElement.publicLinksDialog().isPublicLinkPresent(
-      linkName
-    )
+    const isPresent =
+      await client.page.FilesPageElement.publicLinksDialog().isPublicLinkPresent(linkName)
     return assert.ok(
       !isPresent,
       `expected public-link '${linkName}' to be 'not listed' but got found`

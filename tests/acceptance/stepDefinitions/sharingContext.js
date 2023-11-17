@@ -793,8 +793,8 @@ Then(
       expectedStatus === 'Accepted'
         ? SHARE_STATE.accepted
         : expectedStatus === 'Declined'
-        ? SHARE_STATE.declined
-        : SHARE_STATE.pending
+          ? SHARE_STATE.declined
+          : SHARE_STATE.pending
     const hasShareStatus = await client.page
       .sharedWithMePage()
       .hasShareStatusByFilenameAndUser(shareStatus, resource, sharer)

@@ -4,10 +4,6 @@ import { BrowserContext, Page } from '@playwright/test'
 import path from 'path'
 import EventEmitter from 'events'
 
-export declare interface ActorEnvironment {
-  on(event: 'closed', listener: () => void): this
-}
-
 export class ActorEnvironment extends EventEmitter implements Actor {
   private readonly options: ActorOptions
   public context: BrowserContext

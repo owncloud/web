@@ -125,9 +125,7 @@ export default {
         const links: string[] = await Promise.all(
           selectedFiles.value.map(
             async (resource) =>
-              (
-                await createQuicklink({ ability, resource, clientService, language, store })
-              ).url
+              (await createQuicklink({ ability, resource, clientService, language, store })).url
           )
         )
 
