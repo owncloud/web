@@ -1,0 +1,13 @@
+diff --git a/lib/cli/profile_loader.js b/lib/cli/profile_loader.js
+index ae1ecf729035ad0e38dccb3cb89272d8c03d0cd8..04974ef9deba744e5dd5367ffad1123f433c462d 100644
+--- a/lib/cli/profile_loader.js
++++ b/lib/cli/profile_loader.js
+@@ -13,7 +13,7 @@ class ProfileLoader {
+         this.directory = directory;
+     }
+     async getDefinitions() {
+-        const definitionsFilePath = path_1.default.join(this.directory, 'cucumber.js');
++        const definitionsFilePath = path_1.default.join(this.directory, 'cucumber.cjs');
+         const exists = await fs_1.default.exists(definitionsFilePath);
+         if (!exists) {
+             return {};

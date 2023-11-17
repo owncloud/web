@@ -1,6 +1,6 @@
 import type { Config } from 'jest'
 import path from 'path'
-import { compilerOptions } from '../../../vite.config'
+import { compilerOptions } from '../../../vite.config.common'
 const rootDir = path.resolve(__dirname, '../../../')
 
 // We need to transpile these modules as they are using esm syntax
