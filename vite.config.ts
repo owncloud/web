@@ -13,18 +13,14 @@ import { existsSync, readdirSync, readFileSync } from 'fs'
 
 // build config
 import packageJson from './package.json'
+import { compilerOptions } from './vite.config.common'
 import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
-import { CompilerOptions } from '@vue/compiler-sfc'
 import fetch from 'node-fetch'
 import { Agent } from 'https'
 
 // ignoredPackages specifies which packages should be explicitly ignored and thus not be transpiled
 const ignoredPackages = ['web-app-skeleton']
-
-export const compilerOptions: CompilerOptions = {
-  whitespace: 'preserve'
-}
 
 const buildConfig = {
   requirejs: {},
@@ -97,7 +93,7 @@ export const historyModePlugins = () =>
     {
       name: 'base-href',
       transformIndexHtml: {
-        transform() {
+        handler() {
           return [
             {
               injectTo: 'head-prepend',

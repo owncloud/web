@@ -4,6 +4,7 @@
   "homepage": "https://github.com/owncloud/web",
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
+  "type": "module",
   "scripts": {
     "build": "vue-demi-fix && pnpm build:tokens && pnpm vite build",
     "build:w": "pnpm build --watch",
