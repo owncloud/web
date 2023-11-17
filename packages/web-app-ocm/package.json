@@ -6,7 +6,7 @@
   "peerDependencies": {
     "axios": "1.6.2",
     "email-validator": "^2.0.4",
-    "fuse.js": "6.5.3",
+    "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
     "vue-concurrency": "4.0.1",
     "uuid": "9.0.1",

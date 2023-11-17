@@ -31,7 +31,7 @@
     "axios": "1.6.2",
     "design-system": "workspace:@ownclouders/design-system@*",
     "filesize": "^9.0.11",
-    "fuse.js": "6.5.3",
+    "fuse.js": "6.6.2",
     "js-generate-password": "^0.1.9",
     "lodash-es": "^4.17.21",
     "luxon": "3.0.1",
