@@ -33,9 +33,6 @@ patchedDependencies:
   keycode@2.2.1:
     hash: nmisee7m676ph5sqah5fka5ueu
     path: patches/keycode@2.2.1.patch
-  vue-inline-svg@3.1.0:
-    hash: agvlx64p3fh52dmj7mriww4tnm
-    path: patches/vue-inline-svg@3.1.0.patch
 
 importers:
 
@@ -500,8 +497,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4
       vue-inline-svg:
-        specifier: 3.1.0
-        version: 3.1.0(patch_hash=agvlx64p3fh52dmj7mriww4tnm)(vue@3.3.4)
+        specifier: 3.1.2
+        version: 3.1.2(vue@3.3.4)
       vue-loader:
         specifier: ^15.9.0
         version: 15.10.1(@vue/compiler-sfc@3.3.4)(babel-core@7.0.0-bridge.0)(css-loader@5.2.7)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0)
@@ -1213,8 +1210,8 @@ importers:
         specifier: 4.0.1
         version: 4.0.1(vue@3.3.4)
       vue-inline-svg:
-        specifier: 3.1.0
-        version: 3.1.0(patch_hash=agvlx64p3fh52dmj7mriww4tnm)(vue@3.3.4)
+        specifier: 3.1.2
+        version: 3.1.2(vue@3.3.4)
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.3.4)
@@ -21344,13 +21341,12 @@ packages:
       - vue-template-compiler
     dev: true
 
-  /vue-inline-svg@3.1.0(patch_hash=agvlx64p3fh52dmj7mriww4tnm)(vue@3.3.4):
-    resolution: {integrity: sha512-4FUu6q7l6jSL0sc8bs0lzV7MgWMsuSSQAJiQdKsxhGP9sNJfepCWiPfWxU1IPY1mf4LZjTtX93DAiEegWt6cTg==}
+  /vue-inline-svg@3.1.2(vue@3.3.4):
+    resolution: {integrity: sha512-K01sLANBnjosObee4JrBu/igXpYIFhQfy4EcEyVWxEWf6nmrxp7Isz6pmeRCsWx6XGrGWfrQH3uNwt4nOmrFdA==}
     peerDependencies:
       vue: ^3
     dependencies:
       vue: 3.3.4
-    patched: true
 
   /vue-loader@15.10.1(@vue/compiler-sfc@3.3.4)(babel-core@7.0.0-bridge.0)(css-loader@5.2.7)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0):
     resolution: {integrity: sha512-SaPHK1A01VrNthlix6h1hq4uJu7S/z0kdLUb6klubo738NeQoLbS6V9/d8Pv19tU0XdQKju3D1HSKuI8wJ5wMA==}
