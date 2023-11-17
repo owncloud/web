@@ -46,13 +46,13 @@ export const router = patchRouter(
         meta: { title: $gettext('Logout'), authContext: 'anonymous' }
       },
       {
-        path: '/oidc-callback',
+        path: '/web-oidc-callback',
         name: 'oidcCallback',
         component: OidcCallbackPage,
         meta: { title: $gettext('Oidc callback'), authContext: 'anonymous' }
       },
       {
-        path: '/oidc-silent-redirect',
+        path: '/web-oidc-silent-redirect',
         name: 'oidcSilentRedirect',
         component: OidcCallbackPage,
         meta: { title: $gettext('Oidc redirect'), authContext: 'anonymous' }

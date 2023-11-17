@@ -6,7 +6,6 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
 import compression from 'rollup-plugin-gzip'
-import history from 'connect-history-api-fallback'
 
 import ejs from 'ejs'
 import { basename, join } from 'path'
@@ -110,35 +109,6 @@ export const historyModePlugins = () =>
           ]
         }
       }
-    },
-    {
-      name: 'fallback-to-index-html',
-      configureServer(server: ViteDevServer) {
-        return () => {
-          const handler = history({
-            disableDotRule: true,
-            rewrites: [
-              {
-                from: /$/,
-                to({ parsedUrl, request }) {
-                  const root = projectRootDir
-                  const decodedPath = decodeURIComponent(parsedUrl.pathname)
-                  const rewritten = decodedPath + 'index.html'
-                  if (decodedPath !== '/' && existsSync(join(root, decodedPath))) {
-                    return decodedPath
-                  }
-                  if (existsSync(join(root, rewritten))) {
-                    return rewritten
-                  }
-                  return `/index.html`
-                }
-              }
-            ]
-          })
-
-          server.middlewares.use(handler)
-        }
-      }
     }
   ] as const
 
@@ -218,6 +188,7 @@ export default defineConfig(async ({ mode, command }) => {
           crypto: join(projectRootDir, 'polyfills/crypto.js'),
           buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
           path: 'rollup-plugin-node-polyfills/polyfills/path',
+          caf: 'caf/caf',
 
           // owncloud-sdk // sax
           stream: 'rollup-plugin-node-polyfills/polyfills/stream',
@@ -311,8 +282,8 @@ export default defineConfig(async ({ mode, command }) => {
         {
           name: 'ejs',
           transformIndexHtml: {
-            enforce: 'pre',
-            transform(html, { filename }) {
+            order: 'pre',
+            handler(html, { filename }) {
               if (basename(filename) !== 'index.html') {
                 return
               }
@@ -331,33 +302,30 @@ export default defineConfig(async ({ mode, command }) => {
         {
           name: 'import-map',
           transformIndexHtml: {
-            transform(html, { bundle, filename }) {
+            handler(html, { bundle, filename }) {
               if (basename(filename) !== 'index.html') {
                 return
               }
 
               // Build an import map for loading internal (as in: shipped and built within this mono repo) apps
               let moduleNames: string[]
-              let re: RegExp
               let buildModulePath: any
               if (bundle) {
                 moduleNames = Object.keys(bundle)
                 // We are in production mode here and need to provide paths relative to the module that contains the import, i.e. web-runtime-*.mjs
                 // so it works when oC Web is hosted in a sub folder, e.g. when using the oC 10 integration app
-                // The regexp here needs to match the filenames defined in `build.rollupOptions.entryFileNames`
-                re = new RegExp(/js\/(web-app-.*)-.*\.(.+)/)
                 buildModulePath = (moduleName) => moduleName.replace('js/', './')
               } else {
                 // We are in development mode here, so we can just use absolute module paths
                 moduleNames = Object.keys(input)
-                re = new RegExp(/(web-app-.*)/)
                 buildModulePath = (moduleName) => `/packages/${moduleName}/src/index`
               }
 
+              const re = new RegExp(/(web-app-.*)/)
               const map = Object.fromEntries(
                 moduleNames
                   .map((m) => {
-                    const appName = re.exec(m)?.[1]
+                    const appName = re.exec(bundle?.[m]?.name || m)?.[1]
                     if (appName) {
                       return [appName, buildModulePath(m)]
                     }

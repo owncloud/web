@@ -14,12 +14,12 @@
     "directory": "packages/extension-sdk"
   },
   "dependencies": {
-    "@vitejs/plugin-vue": "4.2.3",
+    "@vitejs/plugin-vue": "4.5.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-serve": "^2.0.2"
   },
   "peerDependencies": {
-    "vite": "^4.1.1",
+    "vite": "^5.0.0",
     "sass": "^1.62.1"
   }
 }
