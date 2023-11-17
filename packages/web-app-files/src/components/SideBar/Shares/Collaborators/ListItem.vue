@@ -188,7 +188,9 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const sharedParentDir = computed(() => {
-      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
+      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
+        .split('/')
+        .pop()
     })
 
     const setDenyShare = (value) => {

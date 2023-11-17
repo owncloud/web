@@ -388,8 +388,8 @@ export const processDownload = async (
         actionType === 'batch action'
           ? 'BATCH_ACTION'
           : actionType === 'sidebar panel'
-          ? 'SIDEBAR_PANEL'
-          : 'SINGLE_SHARE_VIEW'
+            ? 'SIDEBAR_PANEL'
+            : 'SINGLE_SHARE_VIEW'
     })
 
     downloads.forEach((download) => {

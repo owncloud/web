@@ -23,7 +23,7 @@ export const breadcrumbsFromPath = (
           query: omit(currentRoute.query, 'fileId', 'page') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
         },
         isStaticNav: false
-      } as BreadcrumbItem)
+      }) as BreadcrumbItem
   )
 }
 

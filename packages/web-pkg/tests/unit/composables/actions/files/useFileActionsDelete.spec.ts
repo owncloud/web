@@ -148,10 +148,10 @@ function getWrapper({
   const routeName = invalidLocation
     ? 'files-shares-via-link'
     : deletePermanent
-    ? 'files-trash-generic'
-    : searchLocation
-    ? 'files-common-search'
-    : 'files-spaces-generic'
+      ? 'files-trash-generic'
+      : searchLocation
+        ? 'files-common-search'
+        : 'files-spaces-generic'
   jest
     .mocked(useFileActionsDeleteResources)
     .mockImplementation(() => ({ filesList_delete: filesListDeleteMock, displayDialog: jest.fn() }))

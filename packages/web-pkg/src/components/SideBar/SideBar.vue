@@ -310,7 +310,9 @@ export default defineComponent({
   top: 0;
   position: absolute;
   transform: translateX(100%);
-  transition: transform 0.4s ease, visibility 0.4s 0s;
+  transition:
+    transform 0.4s ease,
+    visibility 0.4s 0s;
   // visibility is here to prevent focusing panel child elements,
   // the transition delay keeps care that it will only apply if the element is visible or not.
   // hidden: if element is off screen
