@@ -14,7 +14,7 @@ import { existsSync, readdirSync, readFileSync } from 'fs'
 // build config
 import packageJson from './package.json'
 import { compilerOptions } from './vite.config.common'
-import { getUserAgentRegExp } from 'browserslist-useragent-regexp'
+import { getUserAgentRegex } from 'browserslist-useragent-regexp'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
 import fetch from 'node-fetch'
 import { Agent } from 'https'
@@ -33,7 +33,7 @@ const buildConfig = {
 
 const projectRootDir = searchForWorkspaceRoot(process.cwd())
 const { version } = packageJson
-const supportedBrowsersRegex = getUserAgentRegExp({ allowHigherVersions: true })
+const supportedBrowsersRegex = getUserAgentRegex({ allowHigherVersions: true })
 
 const stripScssMarker = '/* STYLES STRIP IMPORTS MARKER */'
 
