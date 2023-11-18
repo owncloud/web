@@ -105,7 +105,7 @@ export const changeGroup = async (args: {
   value: string
 }): Promise<void> => {
   const { page, attribute, value, uuid } = args
-  await page.locator(util.format(userInput, attribute)).fill(value)
+  await page.locator(util.format(userInput, attribute)).pressSequentially(value)
 
   await Promise.all([
     page.waitForResponse(

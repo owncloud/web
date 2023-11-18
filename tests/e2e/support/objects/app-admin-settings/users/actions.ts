@@ -101,7 +101,7 @@ export const changeQuota = async (args: {
   value: string
 }): Promise<void> => {
   const { page, value, uuid } = args
-  await page.locator(quotaInput).fill(value)
+  await page.locator(quotaInput).pressSequentially(value)
   await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
 
   await Promise.all([
@@ -176,7 +176,7 @@ export const addSelectedUsersToGroups = async (args: {
   for (const group of groups) {
     groupIds.push(getGroupId(group))
     await page.locator(groupsModalInput).click()
-    await page.locator(groupsModalInput).fill(group)
+    await page.locator(groupsModalInput).pressSequentially(group)
     await page.keyboard.press('Enter')
   }
 
@@ -268,6 +268,7 @@ export const changeUser = async (args: {
 }): Promise<unknown> => {
   const { page, attribute, value, uuid } = args
   await page.locator(util.format(userInput, attribute)).fill(value)
+  await page.locator(util.format(userInput, attribute)).press('Enter')
 
   if (attribute === 'role') {
     await page.locator(util.format(roleValueDropDown, value)).click()
@@ -302,7 +303,7 @@ export const addUserToGroups = async (args: {
   const groupIds = []
   for (const group of groups) {
     groupIds.push(getGroupId(group))
-    await page.locator(groupsInput).fill(group)
+    await page.locator(groupsInput).pressSequentially(group)
     await page.keyboard.press('Enter')
   }
 

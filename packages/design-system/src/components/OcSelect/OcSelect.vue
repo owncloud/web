@@ -311,8 +311,7 @@ export default defineComponent({
       dropdownEnabled.value = enabled
     }
 
-    const selectDropdownShouldOpen = (vueSelect) => {
-      const { noDrop, open, mutableLoading } = vueSelect
+    const selectDropdownShouldOpen = ({ noDrop, open, mutableLoading }) => {
       return !noDrop && open && !mutableLoading && unref(dropdownEnabled)
     }
 
