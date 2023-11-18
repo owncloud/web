@@ -12,7 +12,7 @@ exports[`LoginModal renders the input including two options 1`] = `
       </div>
       <div class="oc-modal-body">
         <div class="oc-modal-body-message">
-          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="oc-select-1" label="Login" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." readonly="false" searchable="true" warningmessage=""></oc-select-stub>
+          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-1" label="Login" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." readonly="false" searchable="true" warningmessage=""></oc-select-stub>
         </div>
         <!--v-if-->
       </div>

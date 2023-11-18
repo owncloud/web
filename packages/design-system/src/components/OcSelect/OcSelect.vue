@@ -174,6 +174,26 @@ export default defineComponent({
       type: String,
       default: 'label'
     },
+    getOptionLabel: {
+      type: Function,
+      default(this: any, option) {
+        if (typeof option === 'object') {
+          // we pass this function down to vue-select
+          // so it needs to work in this component and in vue-select
+          // hence we need to handle optionLabel and label
+          const key = this.optionLabel || this.label
+          if (!option.hasOwnProperty(key)) {
+            return console.warn(
+              `[vue-select warn]: Label key "option.${key}" does not` +
+                ` exist in options object ${JSON.stringify(option)}.\n` +
+                'https://vue-select.org/api/props.html#getoptionlabel'
+            )
+          }
+          return option[key]
+        }
+        return option
+      }
+    },
     /**
      * Determines if the select field is searchable
      */
@@ -256,20 +276,6 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const select: VNodeRef = ref()
 
-    const getOptionLabel = (option) => {
-      if (typeof option === 'object') {
-        if (!option.hasOwnProperty(props.optionLabel)) {
-          return console.warn(
-            `[vue-select warn]: Label key "option.${props.optionLabel}" does not` +
-              ` exist in options object ${JSON.stringify(option)}.\n` +
-              'https://vue-select.org/api/props.html#getoptionlabel'
-          )
-        }
-        return option[props.optionLabel]
-      }
-      return option
-    }
-
     const setComboBoxAriaLabel = () => {
       const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
         'div:first-child'
@@ -290,15 +296,15 @@ export default defineComponent({
       setComboBoxAriaLabel()
     })
 
-    return { select, getOptionLabel, userInput }
+    return { select, userInput }
   },
   computed: {
     additionalAttributes() {
       const additionalAttrs = {}
       additionalAttrs['input-id'] = this.id
-      if (this.optionLabel) {
-        additionalAttrs['label'] = this.optionLabel
-      }
+      additionalAttrs['getOptionLabel'] = this.getOptionLabel
+      additionalAttrs['label'] = this.optionLabel
+
       return { ...this.$attrs, ...additionalAttrs }
     },
     showMessageLine() {

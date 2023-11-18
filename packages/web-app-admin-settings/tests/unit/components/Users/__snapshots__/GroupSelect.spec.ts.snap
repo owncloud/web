@@ -2,6 +2,6 @@
 
 exports[`GroupSelect renders the select input 1`] = `
 <div id="user-group-select-form">
-  <oc-select-stub class="oc-mb-s" clearable="false" disabled="false" filter="[Function]" fixmessageline="true" id="oc-select-1" label="Groups" loading="false" model-value="[object Object]" multiple="true" optionlabel="displayName" options="undefined" readonly="false" searchable="true"></oc-select-stub>
+  <oc-select-stub class="oc-mb-s" clearable="false" disabled="false" filter="[Function]" fixmessageline="true" getoptionlabel="[Function]" id="oc-select-1" label="Groups" loading="false" model-value="[object Object]" multiple="true" optionlabel="displayName" options="undefined" readonly="false" searchable="true"></oc-select-stub>
 </div>
 `;
