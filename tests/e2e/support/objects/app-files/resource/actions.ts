@@ -1333,7 +1333,8 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
   const inputForm = page.locator(tagFormInput)
 
   for (const tag of tags) {
-    await inputForm.fill(tag)
+    await inputForm.pressSequentially(tag)
+
     await Promise.all([
       page.waitForResponse(
         (resp) =>
