@@ -10,11 +10,11 @@ exports[`EditPanel renders all available inputs 1`] = `
       <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="email-input" label="Email" modelvalue="jan@owncloud.com" passwordpolicy="[object Object]" readonly="false" type="email"></oc-text-input-stub>
       <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="true" id="password-input" label="Password" modelvalue="" passwordpolicy="[object Object]" placeholder="●●●●●●●●" readonly="false" type="password"></oc-text-input-stub>
       <div class="oc-mb-s">
-        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="role-input" label="Role" loading="false" multiple="false" optionlabel="displayName" options="[object Object]" readonly="false" searchable="true"></oc-select-stub>
+        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="role-input" label="Role" loading="false" multiple="false" optionlabel="displayName" options="[object Object]" readonly="false" searchable="true"></oc-select-stub>
         <div class="oc-text-input-message"></div>
       </div>
       <div class="oc-mb-s">
-        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" id="login-input" label="Login" loading="false" model-value="[object Object]" multiple="false" optionlabel="label" options="[object Object],[object Object]" readonly="false" searchable="true"></oc-select-stub>
+        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="login-input" label="Login" loading="false" model-value="[object Object]" multiple="false" optionlabel="label" options="[object Object],[object Object]" readonly="false" searchable="true"></oc-select-stub>
         <div class="oc-text-input-message"></div>
       </div>
       <quota-select-stub class="oc-mb-s" description-message="" disabled="false" fix-message-line="true" id="quota-select-form" label="Personal quota" maxquota="0" read-only="false" totalquota="0"></quota-select-stub>
