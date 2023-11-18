@@ -276,6 +276,11 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       return []
     }
 
+    // enforce open url files with system actions
+    if (options.resources[0].extension === 'url') {
+      return []
+    }
+
     const resource = options.resources[0]
     const { mimeType, webDavPath, fileId } = resource
     const driveAliasAndItem = options.space?.getDriveAliasAndItem(resource)
