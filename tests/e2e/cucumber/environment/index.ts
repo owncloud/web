@@ -106,13 +106,13 @@ const defaults = {
   reportTracing: config.reportTracing
 }
 
-After(async function (this: World, { result }: ITestCaseHookParameter) {
+After(async function (this: World, { result, willBeRetried }: ITestCaseHookParameter) {
   if (!result) {
     return
   }
 
-  config.reportHar = result.willBeRetried || defaults.reportHar
-  config.reportTracing = result.willBeRetried || defaults.reportTracing
+  config.reportHar = willBeRetried || defaults.reportHar
+  config.reportTracing = willBeRetried || defaults.reportTracing
 
   if (result.status !== Status.PASSED) {
     await this.actorsEnvironment.close()

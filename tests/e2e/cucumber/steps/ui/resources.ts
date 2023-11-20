@@ -4,11 +4,15 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { config } from '../../../config'
-import { displayedResourceType } from '../../../support/objects/app-files/resource/actions'
+import {
+  createResourceTypes,
+  displayedResourceType
+} from '../../../support/objects/app-files/resource/actions'
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
 import * as runtimeFs from '../../../support/utils/runtimeFs'
 import { searchFilter } from '../../../support/objects/app-files/resource/actions'
+import { File } from '../../../support/types'
 
 When(
   '{string} creates the following resource(s)',
@@ -17,7 +21,11 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      await resourceObject.create({ name: info.resource, type: info.type, content: info.content })
+      await resourceObject.create({
+        name: info.resource,
+        type: info.type as createResourceTypes,
+        content: info.content
+      })
     }
   }
 )
@@ -171,7 +179,7 @@ When(
       }
 
       return acc
-    }, {})
+    }, [])
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.restoreVersion({ folder, files: fileInfo[folder] })
@@ -194,7 +202,7 @@ When(
       acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
-    }, {})
+    }, [])
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.downloadVersion({ folder, files: fileInfo[folder] })
@@ -343,7 +351,7 @@ export const processDelete = async (
     }
     acc[from].push(resourceInfo)
     return acc
-  }, {})
+  }, [])
 
   for (const folder of Object.keys(deleteInfo)) {
     files = deleteInfo[folder]
@@ -376,7 +384,7 @@ export const processDownload = async (
     acc[from].push(resourceInfo)
 
     return acc
-  }, {})
+  }, [])
 
   for (const folder of Object.keys(downloadInfo)) {
     files = downloadInfo[folder]
@@ -553,7 +561,7 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const fileInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const fileInfo = stepTable.hashes().reduce<File[]>((acc, stepRow) => {
       const { to, resource } = stepRow
 
       if (!acc[to]) {
@@ -563,7 +571,7 @@ Then(
       acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
-    }, {})
+    }, [])
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.checkThatFileVersionIsNotAvailable({ folder, files: fileInfo[folder] })

@@ -128,10 +128,18 @@ export const clickResource = async ({
 
 /**/
 
+export type createResourceTypes =
+  | 'folder'
+  | 'txtFile'
+  | 'mdFile'
+  | 'drawioFile'
+  | 'OpenDocument'
+  | 'Microsoft Word'
+
 export interface createResourceArgs {
   page: Page
   name: string
-  type: 'folder' | 'txtFile' | 'mdFile' | 'drawioFile' | 'OpenDocument' | 'Microsoft Word'
+  type: createResourceTypes
   content?: string
 }
 
