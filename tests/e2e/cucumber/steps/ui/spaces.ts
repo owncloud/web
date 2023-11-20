@@ -2,6 +2,7 @@ import { DataTable, When, Then } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { Space } from '../../../support/types'
 
 When(
   '{string} navigates to the personal space page',
@@ -28,7 +29,7 @@ When(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
     for (const space of stepTable.hashes()) {
-      await spacesObject.create({ key: space.id || space.name, space })
+      await spacesObject.create({ key: space.id || space.name, space: space as unknown as Space })
     }
   }
 )

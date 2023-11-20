@@ -23,7 +23,7 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
     })
 
     return acc
-  }, {})
+  }, [])
 }
 
 When(

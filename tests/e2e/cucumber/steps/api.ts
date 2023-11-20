@@ -2,6 +2,7 @@ import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
 import { api } from '../../support'
 import fs from 'fs'
+import { Space } from '../../support/types'
 
 Given(
   '{string} creates following user(s) using API',
@@ -146,7 +147,7 @@ Given(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     for (const space of stepTable.hashes()) {
-      const spaceId = await api.graph.createSpace({ user, space })
+      const spaceId = await api.graph.createSpace({ user, space: space as unknown as Space })
       this.spacesEnvironment.createSpace({
         key: space.id || space.name,
         space: { name: space.name, id: spaceId }
