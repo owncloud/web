@@ -1,0 +1,7 @@
+Enhancement: Additional languages
+
+We've added some items to the list of available languages because of good translation coverage in transifex.
+
+https://github.com/owncloud/web/issues/10007
+https://github.com/owncloud/web/pull/10008
+https://github.com/owncloud/ocis/pull/7754
