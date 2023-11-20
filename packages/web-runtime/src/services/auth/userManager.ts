@@ -67,7 +67,7 @@ export class UserManager extends OidcUserManager {
     if (options.configurationManager.isOIDC) {
       Object.assign(openIdConfig, {
         scope: 'openid profile',
-        loadUserInfo: true,
+        loadUserInfo: false,
         ...options.configurationManager.oidc
       })
     } else if (options.configurationManager.isOAuth2) {
