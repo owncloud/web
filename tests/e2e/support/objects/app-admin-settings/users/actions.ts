@@ -122,8 +122,8 @@ export const changeQuotaUsingBatchAction = async (args: {
 }): Promise<void> => {
   const { page, value, userIds } = args
   await page.locator(editQuotaBtn).click()
-  await page.locator(quotaInputBatchAction).fill(value)
-  await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
+  await page.locator(quotaInputBatchAction).pressSequentially(value, { delay: 100 });
+  await page.locator(quotaInputBatchAction).press('Enter');
 
   const checkResponses = []
   for (const id of userIds) {
