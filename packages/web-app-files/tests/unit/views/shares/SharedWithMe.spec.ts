@@ -102,6 +102,27 @@ describe('SharedWithMe view', () => {
         expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
       })
     })
+    describe('shared by', () => {
+      it('shows all available collaborators as filter option', () => {
+        const collaborator1 = { username: 'user1', displayName: 'user1' }
+        const collaborator2 = { username: 'user2', displayName: 'user2' }
+        const { wrapper } = getMountedWrapper({
+          files: [
+            mock<Resource>({
+              owner: [collaborator1],
+              share: { shareType: ShareTypes.user.value }
+            }),
+            mock<Resource>({
+              owner: [collaborator2],
+              share: { shareType: ShareTypes.user.value }
+            })
+          ]
+        })
+        const filterItems = wrapper.findComponent<any>('.shared-by-filter').props('items')
+        expect(wrapper.find('.shared-by-filter').exists()).toBeTruthy()
+        expect(filterItems).toEqual([collaborator1, collaborator2])
+      })
+    })
   })
 })
 
@@ -119,6 +140,8 @@ function getMountedWrapper({
   )
   jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
   // selected share types
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
+  // selected shared by
   jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
   // openWithDefaultAppQuery
   jest.mocked(queryItemAsString).mockImplementationOnce(() => openWithDefaultAppQuery)
