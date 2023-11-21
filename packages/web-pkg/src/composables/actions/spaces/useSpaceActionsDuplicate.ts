@@ -22,6 +22,7 @@ export const useSpaceActionsDuplicate = ({ store }: { store?: Store<any> } = {})
 
   const duplicateSpace = async (spaces: SpaceResource[]) => {
     const originalSpace = spaces[0]
+    console.log(originalSpace)
     const projectSpaces: SpaceResource[] = store.getters['runtime/spaces/spaces'].filter(
       (space: SpaceResource) => isProjectSpaceResource(space)
     )
@@ -47,7 +48,7 @@ export const useSpaceActionsDuplicate = ({ store }: { store?: Store<any> } = {})
 
         if (originalSpace.spaceReadmeData) {
           const newSpaceReadmeFile = await clientService.webdav.getFileInfo(newSpace, {
-            path: '.space/readme.md'
+            path: `.space/${originalSpace.spaceReadmeData.name}`
           })
           specialRequestData.special.push([
             {
@@ -61,7 +62,7 @@ export const useSpaceActionsDuplicate = ({ store }: { store?: Store<any> } = {})
 
         if (originalSpace.spaceImageData) {
           const newSpaceImageFile = await clientService.webdav.getFileInfo(newSpace, {
-            path: '.space/readme.md'
+            path: `.space/${originalSpace.spaceImageData.name}`
           })
           specialRequestData.special.push([
             {
