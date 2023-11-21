@@ -130,7 +130,7 @@ export default defineComponent({
     }
     const listProviders = async () => {
       try {
-        const { data: allProviders } = await clientService.httpAuthenticated.get(
+        const { data: allProviders } = await clientService.httpAuthenticated.get<any[]>(
           '/sciencemesh/list-providers'
         )
         providers.value = allProviders.filter((p) => !isMyProviderSelectedProvider(p))

@@ -18,7 +18,7 @@ describe('resetLogo', () => {
     it('should show message on request success', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions, clientService, router }) => {
-          clientService.httpAuthenticated.delete.mockResolvedValue(() => mockAxiosResolve())
+          clientService.httpAuthenticated.delete.mockImplementation(() => mockAxiosResolve())
           await unref(actions)[0].handler()
           jest.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(1)

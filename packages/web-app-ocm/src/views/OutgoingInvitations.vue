@@ -247,7 +247,7 @@ export default defineComponent({
     const listTokens = async () => {
       const url = '/sciencemesh/list-invite'
       try {
-        const { data } = await clientService.httpAuthenticated.get(url)
+        const { data } = await clientService.httpAuthenticated.get<any[]>(url)
         data.forEach((t) => {
           tokens.value.push({
             id: t.token,

@@ -83,7 +83,7 @@ export class ArchiverService {
       : await this.clientService.owncloudSdk.signUrl(downloadUrl)
 
     try {
-      const response = await this.clientService.httpUnAuthenticated.get(url, {
+      const response = await this.clientService.httpUnAuthenticated.get<ArrayBuffer>(url, {
         headers: {
           ...(!!options.publicLinkPassword && {
             Authorization:

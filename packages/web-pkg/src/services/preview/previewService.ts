@@ -133,7 +133,7 @@ export class PreviewService {
       this.buildQueryString({ etag: resource.etag, dimensions, processor })
     ].join('')
     try {
-      const { data } = await this.clientService.httpAuthenticated.get(url, {
+      const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
         responseType: 'blob'
       })
       return window.URL.createObjectURL(data)

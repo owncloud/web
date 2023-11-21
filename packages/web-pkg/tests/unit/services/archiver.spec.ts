@@ -3,6 +3,7 @@ import { RuntimeError } from '../../../src/errors'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '../../../src/services'
 import { unref, ref, Ref } from 'vue'
+import { AxiosResponse } from 'axios'
 
 const serverUrl = 'https://demo.owncloud.com'
 const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => {
@@ -10,7 +11,7 @@ const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => 
   clientServiceMock.httpUnAuthenticated.get.mockResolvedValue({
     data: new ArrayBuffer(8),
     headers: { 'content-disposition': 'filename="download.tar"' }
-  })
+  } as any as AxiosResponse)
   clientServiceMock.owncloudSdk.signUrl.mockImplementation((url) => url)
 
   return new ArchiverService(clientServiceMock, serverUrl, capabilities)

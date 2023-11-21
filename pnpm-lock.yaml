@@ -714,6 +714,9 @@ importers:
       '@uppy/onedrive':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@3.3.0)'
+      axios:
+        specifier: 1.6.2
+        version: 1.6.2
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
