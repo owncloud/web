@@ -583,6 +583,7 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9841
+   https://github.com/owncloud/web/pull/9981
 
 * Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
 
@@ -639,6 +640,7 @@ Details
 
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9863
+   https://github.com/owncloud/web/pull/9981
 
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
