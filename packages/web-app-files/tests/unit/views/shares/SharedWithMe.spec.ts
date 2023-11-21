@@ -86,20 +86,21 @@ describe('SharedWithMe view', () => {
       })
     })
     describe('share type', () => {
-      it('shows filter if more than one share types are present', () => {
+      it('shows all available share types as filter option', () => {
+        const shareType1 = ShareTypes.user
+        const shareType2 = ShareTypes.group
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<Resource>({ share: { shareType: ShareTypes.user.value } }),
-            mock<Resource>({ share: { shareType: ShareTypes.group.value } })
+            mock<Resource>({ share: { shareType: shareType1.value } }),
+            mock<Resource>({ share: { shareType: shareType2.value } })
           ]
         })
+        const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
-      })
-      it('does not show filter if only one share type is present', () => {
-        const { wrapper } = getMountedWrapper({
-          files: [mock<Resource>({ share: { shareType: ShareTypes.user.value } })]
-        })
-        expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
+        expect(filterItems).toEqual([
+          { label: shareType1.label, key: shareType1.key },
+          { label: shareType2.label, key: shareType2.key }
+        ])
       })
     })
     describe('shared by', () => {

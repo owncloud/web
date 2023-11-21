@@ -20,7 +20,6 @@
             @toggle-filter="setAreHiddenFilesShown"
           />
           <item-filter
-            v-if="shareTypes.length > 1"
             :allow-multiple="true"
             :filter-label="$gettext('Share Type')"
             :filterable-attributes="['label']"
