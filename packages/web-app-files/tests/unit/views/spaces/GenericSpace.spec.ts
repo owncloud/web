@@ -233,7 +233,7 @@ describe('GenericSpace view', () => {
     it('should render create folder button when in embed mode', () => {
       const { wrapper } = getMountedWrapper({
         stubs: { 'app-bar': AppBarStub, CreateAndUpload: true },
-        configurationOptions: { mode: 'embed' }
+        configurationOptions: { embed: { enabled: true } }
       })
 
       expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(true)
@@ -242,7 +242,7 @@ describe('GenericSpace view', () => {
     it('should not render create and upload actions when in embed mode', () => {
       const { wrapper } = getMountedWrapper({
         stubs: { 'app-bar': AppBarStub, CreateAndUpload: true },
-        configurationOptions: { mode: 'embed' }
+        configurationOptions: { embed: { enabled: true } }
       })
 
       expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(false)
@@ -251,7 +251,7 @@ describe('GenericSpace view', () => {
     it('should call createNewFolderAction when create folder button is clicked', () => {
       const { wrapper } = getMountedWrapper({
         stubs: { 'app-bar': AppBarStub, CreateAndUpload: true },
-        configurationOptions: { mode: 'embed' }
+        configurationOptions: { embed: { enabled: true } }
       })
 
       // @ts-expect-error even though the vm object is not specified on WrapperLike, it actually is present there

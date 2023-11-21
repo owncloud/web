@@ -122,39 +122,39 @@ describe('announceConfiguration', () => {
     jest.clearAllMocks()
   })
 
-  it('should set "web" as the default mode when none is set', async () => {
+  it('should not enable embed mode when it is not set', async () => {
     fetchMock.mockResponseOnce('{}')
     const config = await announceConfiguration('/config.json')
-    expect(config.options.mode).toStrictEqual('web')
+    expect(config.options.embed.enabled).toStrictEqual(false)
   })
 
-  it('should use the mode that is defined in config.json', async () => {
-    fetchMock.mockResponseOnce('{ "options": { "mode": "config-mode" } }')
+  it('should embed mode when it is set in config.json', async () => {
+    fetchMock.mockResponseOnce('{ "options": { "embed": { "enabled": true } } }')
     const config = await announceConfiguration('/config.json')
-    expect(config.options.mode).toStrictEqual('config-mode')
+    expect(config.options.embed.enabled).toStrictEqual(true)
   })
 
-  it('should use the mode that is defined in URL query when config.json does not set it', async () => {
+  it('should enable embed mode when it is set in URL query but config.json does not set it', async () => {
     Object.defineProperty(window, 'location', {
       value: {
-        search: '?mode=query-mode'
+        search: '?embed=true'
       },
       writable: true
     })
     fetchMock.mockResponseOnce('{}')
     const config = await announceConfiguration('/config.json')
-    expect(config.options.mode).toStrictEqual('query-mode')
+    expect(config.options.embed.enabled).toStrictEqual(true)
   })
 
-  it('should not use the mode that is defined in URL query when config.json sets one', async () => {
+  it('should not enable the embed mode when it is set in URL query but config.json disables it', async () => {
     Object.defineProperty(window, 'location', {
       value: {
-        search: '?mode=query-mode'
+        search: '?embed=true'
       },
       writable: true
     })
-    fetchMock.mockResponseOnce('{ "options": { "mode": "config-mode" } }')
+    fetchMock.mockResponseOnce('{ "options": { "embed": { "enabled": false } } }')
     const config = await announceConfiguration('/config.json')
-    expect(config.options.mode).toStrictEqual('config-mode')
+    expect(config.options.embed.enabled).toStrictEqual(false)
   })
 })

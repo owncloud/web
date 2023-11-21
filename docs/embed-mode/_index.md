@@ -20,15 +20,23 @@ To integrate ownCloud Web into your application, add an iframe element pointing 
 <iframe src="<web-url>?mode=embed"></iframe>
 ```
 
-## Events
+## Communication
 
-The app is emitting various events depending on the goal of the user. All events are prefixed with `owncloud-embed:` to prevent any naming conflicts with other events.
+To establish seamless cross-origin communication between the embedded instance and the parent application, our approach involves emitting events using the `postMessage` method. These events can be conveniently captured by utilizing the standard `window.addEventListener('message', listener)` pattern.
 
-| Event name | Payload | Description |
+### Target origin
+
+By default, the `postMessage` method does not specify the `targetOrigin` parameter. However, it is recommended best practice to explicitly pass in the URI of the iframe origin (not the parent application). To enhance security, you can specify this value by modifying the config option `options.embed.messagesOrigin`.
+
+### Events
+
+To maintain uniformity and ease of handling, each event encapsulates the same structure within its payload: `{ name: string, data: any }`.
+
+| Name | Data | Description |
 | --- | --- | --- |
-| **owncloud-embed:select** | Resource[] | Gets emitted when user selects resources via the "Attach as copy" action |
+| **owncloud-embed:select** | Resource[] | Gets emitted when user selects resources or location via the select action |
 | **owncloud-embed:share** | string[] | Gets emitted when user selects resources and shares them via the "Share links" action |
-| **owncloud-embed:cancel** | void | Gets emitted when user attempts to close the embedded instance via "Cancel" action |
+| **owncloud-embed:cancel** | null | Gets emitted when user attempts to close the embedded instance via "Cancel" action |
 
 ### Example
 
@@ -37,12 +45,16 @@ The app is emitting various events depending on the goal of the user. All events
 
 <script>
   function selectEventHandler(event) {
-    const resources = event.detail
+    if (event.data?.name !== 'owncloud-embed:select') {
+      return
+    }
+
+    const resources = event.data.data
 
     doSomethingWithSelectedResources(resources)
   }
 
-  window.addEventListener('owncloud-embed:select', selectEventHandler)
+  window.addEventListener('message', selectEventHandler)
 </script>
 ```
 
@@ -57,11 +69,15 @@ By default, the Embed mode allows users to select resources. In certain cases (e
 
 <script>
   function selectEventHandler(event) {
-    const currentFolder = event.detail[0]
+    if (event.data?.name !== 'owncloud-embed:select') {
+      return
+    }
 
-    uploadIntoCurrentFolder(currentFolder)
+    const resources = event.data.data[0]
+
+    doSomethingWithSelectedResources(resources)
   }
 
-  window.addEventListener('owncloud-embed:select', selectEventHandler)
+  window.addEventListener('message', selectEventHandler)
 </script>
 ```

@@ -73,7 +73,12 @@ const state = {
     privacyUrl: '',
     imprintUrl: '',
     accessDeniedHelpUrl: '',
-    disabledExtensions: []
+    disabledExtensions: [],
+    embed: {
+      enabled: false,
+      target: 'resources',
+      messagesOrigin: null
+    }
   }
 }
 

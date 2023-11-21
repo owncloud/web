@@ -272,7 +272,7 @@ describe('ResourceTable', () => {
     describe('embed mode location target', () => {
       it('should not hide checkboxes when embed mode does not have location as target', () => {
         const { wrapper } = getMountedWrapper({
-          configuration: { options: { embedTarget: undefined } }
+          configuration: { options: { embed: { target: undefined } } }
         })
 
         expect(wrapper.find('.resource-table-select-all').exists()).toBe(true)
@@ -281,7 +281,7 @@ describe('ResourceTable', () => {
 
       it('should hide checkboxes when embed mode has location as target', () => {
         const { wrapper } = getMountedWrapper({
-          configuration: { options: { embedTarget: 'location' } }
+          configuration: { options: { embed: { target: 'location' } } }
         })
 
         expect(wrapper.find('.resource-table-select-all').exists()).toBe(false)

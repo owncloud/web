@@ -45,7 +45,7 @@ describe('Top Bar component', () => {
     'should hide %s when mode is "embed"',
     (componentName) => {
       const { wrapper } = getWrapper({
-        configuration: { options: { disableFeedbackLink: false, mode: 'embed' } }
+        configuration: { options: { disableFeedbackLink: false, embed: { enabled: true } } }
       })
       expect(wrapper.find(`${componentName}-stub`).exists()).toBeFalsy()
     }
@@ -54,7 +54,7 @@ describe('Top Bar component', () => {
     'should not hide %s when mode is not "embed"',
     (componentName) => {
       const { wrapper } = getWrapper({
-        configuration: { options: { disableFeedbackLink: false, mode: 'web' } },
+        configuration: { options: { disableFeedbackLink: false, embed: { enabled: false } } },
         capabilities: {
           notifications: { 'ocs-endpoints': ['list', 'get', 'delete'] }
         }
