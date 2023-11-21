@@ -71,6 +71,7 @@ import {
 import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
+import { providerListSchema } from '../schemas'
 
 export default defineComponent({
   emits: ['highlightNewConnections'],
@@ -130,8 +131,11 @@ export default defineComponent({
     }
     const listProviders = async () => {
       try {
-        const { data: allProviders } = await clientService.httpAuthenticated.get<any[]>(
-          '/sciencemesh/list-providers'
+        const { data: allProviders } = await clientService.httpAuthenticated.get(
+          '/sciencemesh/list-providers',
+          {
+            schema: providerListSchema
+          }
         )
         providers.value = allProviders.filter((p) => !isMyProviderSelectedProvider(p))
       } catch (error) {
