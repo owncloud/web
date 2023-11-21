@@ -1,19 +1,21 @@
 import { SpaceResource } from '@ownclouders/web-client'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
-import { useRoute, useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { Store } from 'vuex'
 import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useCreateSpace } from '../../spaces'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { resolveFileNameDuplicate } from '../../../helpers'
 
-export const useSpaceActionsDuplicate = ({ store }: { store?: Store<any> } = {}) => {
+export const useSpaceActionsDuplicate = ({
+  store
+}: {
+  store?: Store<any>
+} = {}) => {
   store = store || useStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
@@ -21,62 +23,61 @@ export const useSpaceActionsDuplicate = ({ store }: { store?: Store<any> } = {})
   const loadingService = useLoadingService()
 
   const duplicateSpace = async (spaces: SpaceResource[]) => {
-    const originalSpace = spaces[0]
-    console.log(originalSpace)
+    const existingSpace = spaces[0]
+    console.log(existingSpace)
     const projectSpaces: SpaceResource[] = store.getters['runtime/spaces/spaces'].filter(
       (space: SpaceResource) => isProjectSpaceResource(space)
     )
     let newSpace: SpaceResource = null
-    const newSpaceName = resolveFileNameDuplicate(originalSpace.name, '', projectSpaces)
+    const newSpaceName = resolveFileNameDuplicate(existingSpace.name, '', projectSpaces)
 
     try {
       const { data: createdSpace } = await clientService.graphAuthenticated.drives.createDrive(
         {
           name: newSpaceName,
-          description: originalSpace.description
+          description: existingSpace.description
         },
         {}
       )
       newSpace = buildSpace(createdSpace)
 
-      await clientService.webdav.copyFiles(originalSpace, { path: '/' }, newSpace, { path: '/' })
+      const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
+      for (const file of existingSpaceFiles.children) {
+        await clientService.webdav.copyFiles(existingSpace, file, newSpace, { path: file.name })
+      }
 
-      if (originalSpace.spaceReadmeData || originalSpace.spaceImageData) {
+      if (existingSpace.spaceReadmeData || existingSpace.spaceImageData) {
         const specialRequestData = {
           special: []
         }
 
-        if (originalSpace.spaceReadmeData) {
+        if (existingSpace.spaceReadmeData) {
           const newSpaceReadmeFile = await clientService.webdav.getFileInfo(newSpace, {
-            path: `.space/${originalSpace.spaceReadmeData.name}`
+            path: `.space/${existingSpace.spaceReadmeData.name}`
           })
-          specialRequestData.special.push([
-            {
-              specialFolder: {
-                name: 'readme'
-              },
-              id: newSpaceReadmeFile.id as string
-            }
-          ])
+          specialRequestData.special.push({
+            specialFolder: {
+              name: 'readme'
+            },
+            id: newSpaceReadmeFile.id
+          })
         }
 
-        if (originalSpace.spaceImageData) {
+        if (existingSpace.spaceImageData) {
           const newSpaceImageFile = await clientService.webdav.getFileInfo(newSpace, {
-            path: `.space/${originalSpace.spaceImageData.name}`
+            path: `.space/${existingSpace.spaceImageData.name}`
           })
-          specialRequestData.special.push([
-            {
-              specialFolder: {
-                name: 'image'
-              },
-              id: newSpaceImageFile.id as string
-            }
-          ])
+          specialRequestData.special.push({
+            specialFolder: {
+              name: 'image'
+            },
+            id: newSpaceImageFile.id
+          })
         }
 
         const { data: updatedDriveData } =
           await clientService.graphAuthenticated.drives.updateDrive(
-            newSpace.id as string,
+            newSpace.id.toString(),
             specialRequestData as Drive,
             {}
           )
