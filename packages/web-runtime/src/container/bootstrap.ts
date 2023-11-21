@@ -31,6 +31,9 @@ import { merge } from 'lodash-es'
 import { AppConfigObject } from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
+import { z } from 'zod'
+import { Resource } from '@ownclouders/web-client'
+import PQueue from 'p-queue'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -581,22 +584,48 @@ export const announceCustomStyles = ({
   })
 }
 
-const onSSEProcessingFinishedEvent = ({
+const fileReadyEventSchema = z.object({
+  itemid: z.string(),
+  parentitemid: z.string()
+})
+
+const onSSEProcessingFinishedEvent = async ({
   store,
-  msg
+  msg,
+  clientService,
+  resourceQueue
 }: {
   store: Store<unknown>
   msg: MessageEvent
-}): void => {
+  clientService: ClientService
+  resourceQueue: PQueue
+}) => {
   try {
-    const postProcessingData = JSON.parse(msg.data)
-    store.commit('Files/UPDATE_RESOURCE_FIELD', {
-      id: postProcessingData.itemid,
-      field: 'processing',
-      value: false
-    })
-  } catch (_) {
-    console.error('Unable to parse sse postprocessing data')
+    const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const currentFolder = store.getters['Files/currentFolder']
+    // UPDATE_RESOURCE_FIELD only handles files in the currentFolder, so we can shortcut here for now
+    if (currentFolder.id !== postProcessingData.parentitemid) {
+      return
+    }
+    const isFileLoaded = !!(store.getters['Files/files'] as Resource[]).find(
+      (f) => f.id === postProcessingData.itemid
+    )
+    if (isFileLoaded) {
+      store.commit('Files/UPDATE_RESOURCE_FIELD', {
+        id: postProcessingData.itemid,
+        field: 'processing',
+        value: false
+      })
+    } else {
+      resourceQueue.add(async () => {
+        const { resource } = await clientService.webdav.listFilesById({
+          fileId: postProcessingData.itemid
+        })
+        store.commit('Files/UPSERT_RESOURCE', resource)
+      })
+    }
+  } catch (e) {
+    console.error('Unable to parse sse postprocessing data', e)
   }
 }
 
@@ -607,7 +636,14 @@ export const registerSSEEventListeners = ({
   store: Store<unknown>
   clientService: ClientService
 }): void => {
+  const resourceQueue = new PQueue({ concurrency: 4 })
+  store.watch(
+    (state, getters) => getters['Files/currentFolder'],
+    () => {
+      resourceQueue.clear()
+    }
+  )
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
-    onSSEProcessingFinishedEvent({ store, msg })
+    onSSEProcessingFinishedEvent({ store, msg, clientService, resourceQueue })
   )
 }

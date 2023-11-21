@@ -18,6 +18,7 @@ import { GetPathForFileIdFactory } from './getPathForFileId'
 import { Capabilities } from '../ocs'
 import { User } from '../helpers'
 import { Ref } from 'vue'
+import { ListFilesByIdFactory } from './listFilesById'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
@@ -35,6 +36,7 @@ export interface WebDAV {
   getPublicFileUrl: ReturnType<typeof GetPublicFileUrlFactory>['getPublicFileUrl']
   revokeUrl: ReturnType<typeof GetFileUrlFactory>['revokeUrl']
   listFiles: ReturnType<typeof ListFilesFactory>['listFiles']
+  listFilesById: ReturnType<typeof ListFilesByIdFactory>['listFilesById']
   createFolder: ReturnType<typeof CreateFolderFactory>['createFolder']
   getFileContents: ReturnType<typeof GetFileContentsFactory>['getFileContents']
   putFileContents: ReturnType<typeof PutFileContentsFactory>['putFileContents']
