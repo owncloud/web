@@ -35,6 +35,7 @@ import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
+  useSpaceActionsDuplicate,
   useSpaceActionsEditDescription,
   useSpaceActionsEditQuota,
   useSpaceActionsEditReadmeContent,
@@ -76,6 +77,7 @@ export default defineComponent({
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const {
       actions: editQuotaActions,
       modalOpen: quotaModalIsOpen,
@@ -108,6 +110,7 @@ export default defineComponent({
     const menuItemsPrimaryActions = computed(() => {
       const fileHandlers = [
         ...unref(renameActions),
+        ...unref(duplicateActions),
         ...unref(editDescriptionActions),
         ...unref(uploadImageActions)
       ]

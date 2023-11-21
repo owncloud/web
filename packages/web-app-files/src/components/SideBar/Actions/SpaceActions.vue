@@ -42,6 +42,7 @@ import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from '@owncl
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
+  useSpaceActionsDuplicate,
   useSpaceActionsEditDescription,
   useSpaceActionsEditQuota,
   useSpaceActionsEditReadmeContent,
@@ -50,6 +51,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
 import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
+
 export default defineComponent({
   name: 'SpaceActions',
   components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
@@ -68,6 +70,7 @@ export default defineComponent({
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const {
       actions: editQuotaActions,
@@ -91,6 +94,7 @@ export default defineComponent({
       [
         ...unref(downloadArchiveActions),
         ...unref(renameActions),
+        ...unref(duplicateActions),
         ...unref(editDescriptionActions),
         ...unref(uploadImageActions),
         ...unref(editReadmeContentActions),

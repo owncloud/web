@@ -1,5 +1,6 @@
 export * from './useSpaceActionsDelete'
 export * from './useSpaceActionsDisable'
+export * from './useSpaceActionsDuplicate'
 export * from './useSpaceActionsEditDescription'
 export * from './useSpaceActionsEditQuota'
 export * from './useSpaceActionsEditReadmeContent'
