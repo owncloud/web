@@ -714,6 +714,9 @@ importers:
       '@uppy/onedrive':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@3.3.0)'
+      axios:
+        specifier: 1.6.2
+        version: 1.6.2
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -842,6 +845,9 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.8)
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
 
   packages/web-app-pdf-viewer:
     dependencies:
@@ -22667,7 +22673,6 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-    dev: true
 
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}

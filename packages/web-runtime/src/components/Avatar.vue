@@ -91,7 +91,7 @@ export default defineComponent({
       const instance = this.configuration.server || window.location.origin
       const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
       this.$clientService.httpAuthenticated
-        .get(url, { responseType: 'blob' })
+        .get<Blob>(url, { responseType: 'blob' })
         .then((response) => {
           if (response.status === 200) {
             return response.data

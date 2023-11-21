@@ -113,6 +113,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { inviteListSchema, inviteSchema } from '../schemas'
 
 type Token = {
   id: string
@@ -204,6 +205,9 @@ export default defineComponent({
               ...(description && { description }),
               ...(recipient && { recipient })
             }
+          },
+          {
+            schema: inviteSchema
           }
         )
 
@@ -212,11 +216,11 @@ export default defineComponent({
             id: tokenInfo.token,
             link: tokenInfo.invite_link,
             token: tokenInfo.token,
-            ...(tokenInfo.expiration?.seconds && {
-              expiration: toDateTime(tokenInfo.expiration.seconds)
+            ...(tokenInfo.expiration && {
+              expiration: toDateTime(tokenInfo.expiration)
             }),
-            ...(tokenInfo.expiration?.seconds && {
-              expirationSeconds: tokenInfo.expiration.seconds
+            ...(tokenInfo.expiration && {
+              expirationSeconds: tokenInfo.expiration
             }),
             ...(tokenInfo.description && { description: tokenInfo.description })
           })
@@ -247,16 +251,18 @@ export default defineComponent({
     const listTokens = async () => {
       const url = '/sciencemesh/list-invite'
       try {
-        const { data } = await clientService.httpAuthenticated.get(url)
+        const { data } = await clientService.httpAuthenticated.get(url, {
+          schema: inviteListSchema
+        })
         data.forEach((t) => {
           tokens.value.push({
             id: t.token,
             token: t.token,
-            ...(t.expiration?.seconds && {
-              expiration: toDateTime(t.expiration.seconds)
+            ...(t.expiration && {
+              expiration: toDateTime(t.expiration)
             }),
-            ...(t.expiration?.seconds && {
-              expirationSeconds: t.expiration.seconds
+            ...(t.expiration && {
+              expirationSeconds: t.expiration
             }),
             ...(t.description && { description: t.description })
           })

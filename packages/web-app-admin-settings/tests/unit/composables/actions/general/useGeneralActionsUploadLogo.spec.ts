@@ -18,7 +18,7 @@ describe('uploadImage', () => {
     it('should show message on request success', () => {
       getWrapper({
         setup: async ({ uploadImage }, { storeOptions, clientService, router }) => {
-          clientService.httpAuthenticated.post.mockResolvedValue(() => mockAxiosResolve())
+          clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosResolve())
           await uploadImage({
             currentTarget: {
               files: [{ name: 'image.png', type: 'image/png' }]

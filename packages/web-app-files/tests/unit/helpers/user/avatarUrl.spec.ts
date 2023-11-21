@@ -2,6 +2,7 @@ import { avatarUrl } from '../../../../src/helpers/user'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { mockDeep } from 'jest-mock-extended'
+import { AxiosResponse } from 'axios'
 
 const getDefaultOptions = () => ({
   clientService: mockDeep<ClientService>(),
@@ -13,7 +14,9 @@ const getDefaultOptions = () => ({
 describe('avatarUrl', () => {
   it('throws an error', async () => {
     const defaultOptions = getDefaultOptions()
-    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({ status: 200 })
+    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
+      status: 200
+    } as AxiosResponse)
     defaultOptions.clientService.owncloudSdk.signUrl.mockRejectedValue(new Error('error'))
     const avatarUrlPromise = avatarUrl(defaultOptions)
     await expect(avatarUrlPromise).rejects.toThrow(new Error('error'))
@@ -24,13 +27,17 @@ describe('avatarUrl', () => {
   it('returns an unsigned url', async () => {
     const defaultOptions = getDefaultOptions()
     defaultOptions.clientService.owncloudSdk = null
-    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({ status: 200 })
+    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
+      status: 200
+    } as AxiosResponse)
     const avatarUrlPromise = avatarUrl(defaultOptions)
     await expect(avatarUrlPromise).resolves.toBe(buildUrl(defaultOptions))
   })
   it('returns a signed url', async () => {
     const defaultOptions = getDefaultOptions()
-    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({ status: 200 })
+    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
+      status: 200
+    } as AxiosResponse)
     defaultOptions.clientService.owncloudSdk.signUrl.mockImplementation((url) => {
       return `${url}?signed=true`
     })
@@ -39,7 +46,9 @@ describe('avatarUrl', () => {
   })
   it('handles caching', async () => {
     const defaultOptions = getDefaultOptions()
-    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({ status: 200 })
+    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
+      status: 200
+    } as AxiosResponse)
     defaultOptions.clientService.owncloudSdk.signUrl.mockImplementation((url) => url)
 
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)

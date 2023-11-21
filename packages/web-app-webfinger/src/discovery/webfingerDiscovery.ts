@@ -22,7 +22,7 @@ export class WebfingerDiscovery {
     const client = this.clientService.httpAuthenticated
     const url =
       urlJoin(this.serverUrl, '.well-known', 'webfinger') + `?resource=${encodeURI(this.serverUrl)}`
-    const response: OwnCloudInstancesResponse = (await client.get(url)).data
+    const response = (await client.get<OwnCloudInstancesResponse>(url)).data
     return response.links.filter((o) => o.rel === OWNCLOUD_REL)
   }
 }

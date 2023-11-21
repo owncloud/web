@@ -3,6 +3,7 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { ConfigurationManager } from '../../../src/configuration'
 import { createStore, defaultStoreMockOptions } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { AxiosResponse } from 'axios'
 
 describe('PreviewService', () => {
   describe('method "isMimetypeSupported"', () => {
@@ -141,8 +142,11 @@ const getWrapper = ({
   })
   const store = createStore(storeOptions)
   const clientService = mockDeep<ClientService>()
-  clientService.httpAuthenticated.get.mockResolvedValue({ data: {}, status: 200 })
-  clientService.httpUnAuthenticated.head.mockResolvedValue({ data: {}, status: 200 })
+  clientService.httpAuthenticated.get.mockResolvedValue({ data: {}, status: 200 } as AxiosResponse)
+  clientService.httpUnAuthenticated.head.mockResolvedValue({
+    data: {},
+    status: 200
+  } as AxiosResponse)
   const configurationManager = mock<ConfigurationManager>()
   configurationManager.serverUrl = 'https://someUrl.com'
   return {
