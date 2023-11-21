@@ -114,7 +114,7 @@ export const useSpaceActionsDuplicate = ({
         return ability.can('create-all', 'Drive')
       },
       componentType: 'button',
-      class: 'oc-files-actions-disable-trigger'
+      class: 'oc-files-actions-duplicate-trigger'
     }
   ])
 
