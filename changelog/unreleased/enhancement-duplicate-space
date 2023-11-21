@@ -1,0 +1,8 @@
+Enhancement: Duplicate space
+
+We've added a new functionality, where users can simply duplicate spaces, via the context menu.
+This includes copying the contents, the space name, subtitle, description, and image but not metadata
+like tags or members.
+
+https://github.com/owncloud/web/pull/10024
+https://github.com/owncloud/web/issues/10016
