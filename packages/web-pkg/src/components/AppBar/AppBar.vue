@@ -97,7 +97,8 @@ import {
   useFileActionsDownloadFile,
   useFileActionsEmptyTrashBin,
   useFileActionsMove,
-  useFileActionsRestore
+  useFileActionsRestore,
+  useSpaceActionsDuplicate
 } from '../../composables/actions'
 import {
   useAbility,
@@ -171,6 +172,7 @@ export default defineComponent({
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
+    const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
@@ -215,6 +217,7 @@ export default defineComponent({
       if (!isSearchLocation.value) {
         actions = [
           ...actions,
+          ...unref(duplicateActions),
           ...unref(editSpaceQuotaActions),
           ...unref(restoreSpaceActions),
           ...unref(deleteSpaceActions),

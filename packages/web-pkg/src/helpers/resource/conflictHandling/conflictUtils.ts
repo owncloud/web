@@ -5,19 +5,24 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 
-export const resolveFileNameDuplicate = (name, extension, existingFiles, iteration = 1) => {
+export const resolveFileNameDuplicate = (
+  name: string,
+  extension: string,
+  existingResources: Resource[],
+  iteration = 1
+) => {
   let potentialName
-  if (extension.length === 0) {
+  if (!extension) {
     potentialName = `${name} (${iteration})`
   } else {
     const nameWithoutExtension = extractNameWithoutExtension({ name, extension } as Resource)
     potentialName = `${nameWithoutExtension} (${iteration}).${extension}`
   }
-  const hasConflict = existingFiles.some((f) => f.name === potentialName)
+  const hasConflict = existingResources.some((f) => f.name === potentialName)
   if (!hasConflict) {
     return potentialName
   }
-  return resolveFileNameDuplicate(name, extension, existingFiles, iteration + 1)
+  return resolveFileNameDuplicate(name, extension, existingResources, iteration + 1)
 }
 
 export const isResourceBeeingMovedToSameLocation = (
