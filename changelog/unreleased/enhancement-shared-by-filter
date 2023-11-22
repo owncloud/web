@@ -1,0 +1,6 @@
+Enhancement: Shared by filter
+
+The received shares on the "Shared with me"-page can now be filtered by the users that created the share.
+
+https://github.com/owncloud/web/issues/10013
+https://github.com/owncloud/web/pull/10029

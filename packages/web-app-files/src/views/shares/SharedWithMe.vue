@@ -20,7 +20,6 @@
             @toggle-filter="setAreHiddenFilesShown"
           />
           <item-filter
-            v-if="shareTypes.length > 1"
             :allow-multiple="true"
             :filter-label="$gettext('Share Type')"
             :filterable-attributes="['label']"
@@ -28,12 +27,31 @@
             :option-filter-label="$gettext('Filter share types')"
             :show-option-filter="true"
             id-attribute="key"
-            class="share-type-filter oc-mx-s"
+            class="share-type-filter oc-ml-s"
             display-name-attribute="label"
             filter-name="shareType"
           >
             <template #item="{ item }">
               <span class="oc-ml-s" v-text="item.label" />
+            </template>
+          </item-filter>
+          <item-filter
+            :allow-multiple="true"
+            :filter-label="$gettext('Shared By')"
+            :filterable-attributes="['displayName']"
+            :items="fileOwners"
+            :option-filter-label="$gettext('Filter shared by')"
+            :show-option-filter="true"
+            id-attribute="username"
+            class="shared-by-filter oc-ml-s"
+            display-name-attribute="displayName"
+            filter-name="sharedBy"
+          >
+            <template #image="{ item }">
+              <avatar-image :width="32" :userid="item.username" :user-name="item.displayName" />
+            </template>
+            <template #item="{ item }">
+              <span class="oc-ml-s" v-text="item.displayName" />
             </template>
           </item-filter>
         </div>
@@ -130,14 +148,25 @@ export default defineComponent({
     })
 
     const selectedShareTypesQuery = useRouteQuery('q_shareType')
+    const selectedSharedByQuery = useRouteQuery('q_sharedBy')
     const filteredItems = computed(() => {
+      let result = unref(currentItems)
+
       const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
-      if (!selectedShareTypes || selectedShareTypes.length === 0) {
-        return unref(currentItems)
+      if (selectedShareTypes?.length) {
+        result = result.filter(({ share }) => {
+          return selectedShareTypes.map((t) => ShareTypes[t].value).includes(share.shareType)
+        })
       }
-      return unref(currentItems).filter((item) => {
-        return selectedShareTypes.map((t) => ShareTypes[t].value).includes(item.share.shareType)
-      })
+
+      const selectedSharedBy = queryItemAsString(unref(selectedSharedByQuery))?.split('+')
+      if (selectedSharedBy?.length) {
+        result = result.filter(({ owner }) =>
+          owner.some(({ username }) => selectedSharedBy.includes(username))
+        )
+      }
+
+      return result
     })
 
     const { sortBy, sortDir, items, handleSort } = useSort({
@@ -172,7 +201,14 @@ export default defineComponent({
 
     const shareTypes = computed(() => {
       const uniqueShareTypes = uniq(unref(storeItems).map((i) => i.share?.shareType))
-      return ShareTypes.getByValues(uniqueShareTypes)
+      return ShareTypes.getByValues(uniqueShareTypes).map(({ label, key }) => ({ label, key }))
+    })
+
+    const fileOwners = computed(() => {
+      const flatList = unref(storeItems)
+        .map((i) => i.owner)
+        .flat()
+      return [...new Map(flatList.map((item) => [item.username, item])).values()]
     })
 
     onMounted(() => {
@@ -197,6 +233,7 @@ export default defineComponent({
       shareSectionTitle,
       visibleShares,
       shareTypes,
+      fileOwners,
 
       handleSort,
       sortBy,

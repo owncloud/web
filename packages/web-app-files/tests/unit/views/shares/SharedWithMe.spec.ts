@@ -86,20 +86,42 @@ describe('SharedWithMe view', () => {
       })
     })
     describe('share type', () => {
-      it('shows filter if more than one share types are present', () => {
+      it('shows all available share types as filter option', () => {
+        const shareType1 = ShareTypes.user
+        const shareType2 = ShareTypes.group
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<Resource>({ share: { shareType: ShareTypes.user.value } }),
-            mock<Resource>({ share: { shareType: ShareTypes.group.value } })
+            mock<Resource>({ share: { shareType: shareType1.value } }),
+            mock<Resource>({ share: { shareType: shareType2.value } })
           ]
         })
+        const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
+        expect(filterItems).toEqual([
+          { label: shareType1.label, key: shareType1.key },
+          { label: shareType2.label, key: shareType2.key }
+        ])
       })
-      it('does not show filter if only one share type is present', () => {
+    })
+    describe('shared by', () => {
+      it('shows all available collaborators as filter option', () => {
+        const collaborator1 = { username: 'user1', displayName: 'user1' }
+        const collaborator2 = { username: 'user2', displayName: 'user2' }
         const { wrapper } = getMountedWrapper({
-          files: [mock<Resource>({ share: { shareType: ShareTypes.user.value } })]
+          files: [
+            mock<Resource>({
+              owner: [collaborator1],
+              share: { shareType: ShareTypes.user.value }
+            }),
+            mock<Resource>({
+              owner: [collaborator2],
+              share: { shareType: ShareTypes.user.value }
+            })
+          ]
         })
-        expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
+        const filterItems = wrapper.findComponent<any>('.shared-by-filter').props('items')
+        expect(wrapper.find('.shared-by-filter').exists()).toBeTruthy()
+        expect(filterItems).toEqual([collaborator1, collaborator2])
       })
     })
   })
@@ -119,6 +141,8 @@ function getMountedWrapper({
   )
   jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
   // selected share types
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
+  // selected shared by
   jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
   // openWithDefaultAppQuery
   jest.mocked(queryItemAsString).mockImplementationOnce(() => openWithDefaultAppQuery)
