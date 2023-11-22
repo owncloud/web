@@ -35,22 +35,41 @@ describe('restore', () => {
         setup: ({ actions }, { storeOptions }) => {
           expect(
             unref(actions)[0].isEnabled({
-              resources: [
-                mock<SpaceResource>({ disabled: false }),
-                mock<SpaceResource>({ disabled: false })
-              ]
+              resources: [mock<SpaceResource>(), mock<SpaceResource>()]
             })
           ).toBe(false)
         }
       })
     })
     it('should be false when the space is disabled', () => {
-      const spaceMock = mock<SpaceResource>({
-        disabled: true
-      })
       const { wrapper } = getWrapper({
         setup: ({ actions }, { storeOptions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [spaceMock] })).toBe(false)
+          expect(
+            unref(actions)[0].isEnabled({
+              resources: [
+                mock<SpaceResource>({
+                  disabled: true,
+                  driveType: 'project'
+                })
+              ]
+            })
+          ).toBe(false)
+        }
+      })
+    })
+    it('should be false when the space is no project space', () => {
+      const { wrapper } = getWrapper({
+        setup: ({ actions }, { storeOptions }) => {
+          expect(
+            unref(actions)[0].isEnabled({
+              resources: [
+                mock<SpaceResource>({
+                  disabled: false,
+                  driveType: 'personal'
+                })
+              ]
+            })
+          ).toBe(false)
         }
       })
     })
@@ -59,7 +78,9 @@ describe('restore', () => {
         abilities: [],
         setup: ({ actions }, { storeOptions }) => {
           expect(
-            unref(actions)[0].isEnabled({ resources: [mock<SpaceResource>({ disabled: false })] })
+            unref(actions)[0].isEnabled({
+              resources: [mock<SpaceResource>({ disabled: false, driveType: 'project' })]
+            })
           ).toBe(false)
         }
       })
@@ -68,7 +89,9 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(
-            unref(actions)[0].isEnabled({ resources: [mock<SpaceResource>({ disabled: false })] })
+            unref(actions)[0].isEnabled({
+              resources: [mock<SpaceResource>({ disabled: false, driveType: 'project' })]
+            })
           ).toBe(true)
         }
       })

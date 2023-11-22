@@ -114,6 +114,10 @@ export const useSpaceActionsDuplicate = ({
           return false
         }
 
+        if (!isProjectSpaceResource(resources[0])) {
+          return false
+        }
+
         return ability.can('create-all', 'Drive')
       },
       componentType: 'button',
