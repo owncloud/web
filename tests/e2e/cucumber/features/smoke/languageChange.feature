@@ -21,12 +21,12 @@ Feature: language settings
 
     And "Alice" logs in
     And "Alice" opens the user menu
-    And "Alice" changes the language to "Deutsch"
+    And "Alice" changes the language to "Deutsch - German"
     When "Alice" logs out
     And "Alice" logs in
     Then "Alice" should see the following notifications
       | message                                          |
       | Brian Murphy hat check_message mit Ihnen geteilt |
     And "Alice" logs out
-    
+
 
