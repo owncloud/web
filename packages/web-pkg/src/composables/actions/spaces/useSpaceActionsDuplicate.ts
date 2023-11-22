@@ -10,6 +10,7 @@ import { Store } from 'vuex'
 import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { resolveFileNameDuplicate } from '../../../helpers'
+import PQueue from 'p-queue'
 
 export const useSpaceActionsDuplicate = ({
   store
@@ -40,8 +41,19 @@ export const useSpaceActionsDuplicate = ({
       let newSpace = buildSpace(createdSpace)
 
       const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
-      for (const file of existingSpaceFiles.children) {
-        await clientService.webdav.copyFiles(existingSpace, file, newSpace, { path: file.name })
+
+      if (existingSpaceFiles.children.length) {
+        const queue = new PQueue({ concurrency: 4 })
+        const copyOps = []
+
+        for (const file of existingSpaceFiles.children) {
+          copyOps.push(
+            queue.add(() =>
+              clientService.webdav.copyFiles(existingSpace, file, newSpace, { path: file.name })
+            )
+          )
+        }
+        await Promise.all(copyOps)
       }
 
       if (existingSpace.spaceReadmeData || existingSpace.spaceImageData) {
