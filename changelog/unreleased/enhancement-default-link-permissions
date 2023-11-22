@@ -1,0 +1,6 @@
+Enhancement: Default link permission
+
+When creating a new link, Web now respects the default permissions coming from the server.
+
+https://github.com/owncloud/web/pull/10037
+https://github.com/owncloud/web/issues/9919

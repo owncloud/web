@@ -26,22 +26,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, unref } from 'vue'
-import {
-  useAbility,
-  useCapabilityFilesSharingPublicAlias,
-  useCapabilityFilesSharingPublicCanContribute,
-  useCapabilityFilesSharingPublicCanEdit,
-  useCapabilityFilesSharingQuickLinkDefaultRole,
-  useCapabilityFilesSharingResharing
-} from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client/src'
+import { defineComponent } from 'vue'
+import { useAbility, getDefaultLinkPermissions, useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import {
-  LinkShareRoles,
-  linkRoleInternalFolder,
-  linkRoleViewerFolder
-} from '@ownclouders/web-client/src/helpers/share'
 
 export default defineComponent({
   name: 'CreateQuickLink',
@@ -54,32 +41,15 @@ export default defineComponent({
   },
   emits: ['createPublicLink'],
   setup(props, { emit }) {
-    const { can } = useAbility()
+    const store = useStore()
+    const ability = useAbility()
     const { $gettext } = useGettext()
 
-    const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
-    const resource = inject<Resource>('resource')
-    const allowResharing = useCapabilityFilesSharingResharing()
-    const canEdit = useCapabilityFilesSharingPublicCanEdit()
-    const canContribute = useCapabilityFilesSharingPublicCanContribute()
-    const alias = useCapabilityFilesSharingPublicAlias()
-    const capabilitiesRoleName = useCapabilityFilesSharingQuickLinkDefaultRole()
     const createQuickLink = () => {
-      const roleName = !unref(canCreatePublicLinks)
-        ? linkRoleInternalFolder.name
-        : unref(capabilitiesRoleName) || linkRoleViewerFolder.name
       const emitData = {
         link: {
           name: $gettext('Link'),
-          permissions: LinkShareRoles.getByName(
-            roleName,
-            unref(resource).isFolder,
-            unref(canEdit),
-            unref(canContribute),
-            unref(alias)
-          )
-            .bitmask(unref(allowResharing))
-            .toString(),
+          permissions: getDefaultLinkPermissions({ ability, store }).toString(),
           expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
           quicklink: true,
           password: false

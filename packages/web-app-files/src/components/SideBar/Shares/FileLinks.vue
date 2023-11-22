@@ -122,7 +122,8 @@ import {
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicAlias,
   useAbility,
-  usePasswordPolicyService
+  usePasswordPolicyService,
+  getDefaultLinkPermissions
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -219,6 +220,7 @@ export default defineComponent({
 
     return {
       $store: store,
+      ability,
       space,
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
@@ -417,7 +419,10 @@ export default defineComponent({
       this.checkLinkToCreate({
         link: {
           name: this.$gettext('Link'),
-          permissions: this.canCreatePublicLinks ? 1 : 0,
+          permissions: getDefaultLinkPermissions({
+            ability: this.ability,
+            store: this.$store
+          }).toString(),
           expiration: this.expirationDate.default,
           password: false
         }

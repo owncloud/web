@@ -1,11 +1,9 @@
 import { DateTime } from 'luxon'
 import {
-  LinkShareRoles,
   Share,
-  linkRoleInternalFolder,
-  linkRoleViewerFolder,
   ShareTypes,
-  buildShare
+  buildShare,
+  SharePermissionBit
 } from '@ownclouders/web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { ClientService, PasswordPolicyService } from '../../services'
@@ -39,7 +37,7 @@ export interface CopyQuickLink extends CreateQuicklink {
 // it has a fallback to the vue-use implementation.
 //
 // https://webkit.org/blog/10855/
-const copyToClipboard = async (quickLinkUrl: string) => {
+const copyToClipboard = (quickLinkUrl: string) => {
   if (typeof ClipboardItem && navigator?.clipboard?.write) {
     return navigator.clipboard.write([
       new ClipboardItem({
@@ -52,7 +50,7 @@ const copyToClipboard = async (quickLinkUrl: string) => {
   }
 }
 export const copyQuicklink = async (args: CopyQuickLink) => {
-  const { store, language, resource, clientService, passwordPolicyService } = args
+  const { ability, store, language, resource, clientService, passwordPolicyService } = args
   const { $gettext } = language
 
   const linkSharesForResource = await clientService.owncloudSdk.shares.getShares(resource.path, {
@@ -82,7 +80,9 @@ export const copyQuicklink = async (args: CopyQuickLink) => {
   const isPasswordEnforced =
     store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only === true
 
-  if (unref(isPasswordEnforced)) {
+  const permissions = getDefaultLinkPermissions({ ability, store })
+
+  if (unref(isPasswordEnforced) && permissions > SharePermissionBit.Internal) {
     return showQuickLinkPasswordModal(
       { $gettext, store, passwordPolicyService },
       async (password: string) => {
@@ -125,33 +125,13 @@ export const copyQuicklink = async (args: CopyQuickLink) => {
   }
 }
 
-export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => {
+export const createQuicklink = (args: CreateQuicklink): Promise<Share> => {
   const { clientService, resource, store, password, language, ability } = args
   const { $gettext } = language
 
-  const canCreatePublicLink = ability.can('create-all', 'PublicLink')
-  const allowResharing = store.state.user.capabilities.files_sharing?.resharing
-  const capabilitiesRoleName =
-    store.state.user.capabilities.files_sharing?.quick_link?.default_role ||
-    linkRoleViewerFolder.name
-  const canEdit = store.state.user.capabilities.files_sharing?.public?.can_edit || false
-  const canContribute = store.state.user.capabilities.files_sharing?.public?.can_contribute || false
-  const alias = store.state.user.capabilities.files_sharing?.public?.alias
-  const roleName = !canCreatePublicLink
-    ? linkRoleInternalFolder.name
-    : capabilitiesRoleName || linkRoleViewerFolder.name
-  const permissions = LinkShareRoles.getByName(
-    roleName,
-    resource.isFolder,
-    canEdit,
-    canContribute,
-    alias
-  ).bitmask(allowResharing)
-  const params: {
-    [key: string]: unknown
-  } = {
+  const params: Record<string, unknown> = {
     name: $gettext('Link'),
-    permissions: permissions.toString(),
+    permissions: getDefaultLinkPermissions({ ability, store }).toString(),
     quicklink: true
   }
 
@@ -179,4 +159,25 @@ export const createQuicklink = async (args: CreateQuicklink): Promise<Share> => 
     params,
     storageId: resource.fileId || resource.id
   })
+}
+
+export const getDefaultLinkPermissions = ({
+  ability,
+  store
+}: {
+  ability: Ability
+  store: Store<any>
+}) => {
+  const canCreatePublicLink = ability.can('create-all', 'PublicLink')
+  if (!canCreatePublicLink) {
+    return SharePermissionBit.Internal
+  }
+
+  let defaultPermissions: number =
+    store.state.user.capabilities.files_sharing?.public?.default_permissions
+  if (defaultPermissions === undefined) {
+    defaultPermissions = SharePermissionBit.Read
+  }
+
+  return defaultPermissions
 }
