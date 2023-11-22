@@ -34,6 +34,7 @@ import { getQueryParam } from '../helpers/url'
 import { z } from 'zod'
 import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
+import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -604,9 +605,17 @@ const onSSEProcessingFinishedEvent = async ({
     const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
     const currentFolder = store.getters['Files/currentFolder']
     // UPDATE_RESOURCE_FIELD only handles files in the currentFolder, so we can shortcut here for now
-    if (currentFolder.id !== postProcessingData.parentitemid) {
-      return
+    if (!extractNodeId(currentFolder.id)) {
+      // if we don't have a nodeId here, we have a space (root) as current folder and can only check against the storageId
+      if (currentFolder.id !== extractStorageId(postProcessingData.parentitemid)) {
+        return
+      }
+    } else {
+      if (currentFolder.id !== postProcessingData.parentitemid) {
+        return
+      }
     }
+
     const isFileLoaded = !!(store.getters['Files/files'] as Resource[]).find(
       (f) => f.id === postProcessingData.itemid
     )
