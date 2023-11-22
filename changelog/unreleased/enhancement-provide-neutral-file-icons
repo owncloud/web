@@ -2,5 +2,6 @@ Enhancement: Provide vendor neutral file icons
 
 We replaced the icons for Document, Spreadsheet, Presentation, Forms and Markdown
 
-https://github.com/owncloud/web/pull/9911
 https://github.com/owncloud/web/issues/9847
+https://github.com/owncloud/web/pull/9911
+https://github.com/owncloud/web/pull/10037

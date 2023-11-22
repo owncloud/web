@@ -153,6 +153,10 @@ color:
       value: rgb(0, 182, 87)
     document:
       value: rgb(44, 101, 255)
+    form:
+      value: rgb(102, 166, 163)
+    markdown:
+      value: rgb(75, 100, 137)
     video:
       value: rgb(0, 187, 219)
     audio:
