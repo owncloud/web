@@ -1,0 +1,6 @@
+Enhancement: Share search filter
+
+The received shares on the "Shared with me"-page can now be filtered by their names via a text input field.
+
+https://github.com/owncloud/web/issues/10014
+https://github.com/owncloud/web/pull/10033

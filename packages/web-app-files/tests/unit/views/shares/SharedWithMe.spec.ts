@@ -124,6 +124,33 @@ describe('SharedWithMe view', () => {
         expect(filterItems).toEqual([collaborator1, collaborator2])
       })
     })
+    describe('search', () => {
+      it('shows filter', () => {
+        const { wrapper } = getMountedWrapper()
+        expect(wrapper.find('.search-filter').exists()).toBeTruthy()
+      })
+      it('filters shares accordingly by name', async () => {
+        const { wrapper } = getMountedWrapper({
+          files: [
+            mock<Resource>({
+              name: 'share1',
+              hidden: false,
+              share: { shareType: ShareTypes.user.value }
+            }),
+            mock<Resource>({
+              name: 'share2',
+              hidden: false,
+              share: { shareType: ShareTypes.user.value }
+            })
+          ]
+        })
+
+        await wrapper.vm.$nextTick()
+        wrapper.vm.filterTerm = 'share1'
+        expect(wrapper.vm.items.find(({ name }) => name === 'share1')).toBeDefined()
+        expect(wrapper.vm.items.find(({ name }) => name === 'share2')).toBeUndefined()
+      })
+    })
   })
 })
 

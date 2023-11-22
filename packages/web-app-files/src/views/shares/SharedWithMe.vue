@@ -8,52 +8,64 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <div class="oc-flex oc-m-m">
-          <div class="oc-mr-m oc-flex oc-flex-middle">
-            <oc-icon name="filter-2" class="oc-mr-xs" />
-            <span v-text="$gettext('Filter:')" />
+        <div
+          class="shared-with-me-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
+        >
+          <div class="oc-flex">
+            <div class="oc-mr-m oc-flex oc-flex-middle">
+              <oc-icon name="filter-2" class="oc-mr-xs" />
+              <span v-text="$gettext('Filter:')" />
+            </div>
+            <item-filter-inline
+              class="share-visibility-filter"
+              filter-name="share-visibility"
+              :filter-options="visibilityOptions"
+              @toggle-filter="setAreHiddenFilesShown"
+            />
+            <item-filter
+              :allow-multiple="true"
+              :filter-label="$gettext('Share Type')"
+              :filterable-attributes="['label']"
+              :items="shareTypes"
+              :option-filter-label="$gettext('Filter share types')"
+              :show-option-filter="true"
+              id-attribute="key"
+              class="share-type-filter oc-ml-s"
+              display-name-attribute="label"
+              filter-name="shareType"
+            >
+              <template #item="{ item }">
+                <span class="oc-ml-s" v-text="item.label" />
+              </template>
+            </item-filter>
+            <item-filter
+              :allow-multiple="true"
+              :filter-label="$gettext('Shared By')"
+              :filterable-attributes="['displayName']"
+              :items="fileOwners"
+              :option-filter-label="$gettext('Filter shared by')"
+              :show-option-filter="true"
+              id-attribute="username"
+              class="shared-by-filter oc-ml-s"
+              display-name-attribute="displayName"
+              filter-name="sharedBy"
+            >
+              <template #image="{ item }">
+                <avatar-image :width="32" :userid="item.username" :user-name="item.displayName" />
+              </template>
+              <template #item="{ item }">
+                <span class="oc-ml-s" v-text="item.displayName" />
+              </template>
+            </item-filter>
           </div>
-          <item-filter-inline
-            class="share-visibility-filter"
-            filter-name="share-visibility"
-            :filter-options="visibilityOptions"
-            @toggle-filter="setAreHiddenFilesShown"
-          />
-          <item-filter
-            :allow-multiple="true"
-            :filter-label="$gettext('Share Type')"
-            :filterable-attributes="['label']"
-            :items="shareTypes"
-            :option-filter-label="$gettext('Filter share types')"
-            :show-option-filter="true"
-            id-attribute="key"
-            class="share-type-filter oc-ml-s"
-            display-name-attribute="label"
-            filter-name="shareType"
-          >
-            <template #item="{ item }">
-              <span class="oc-ml-s" v-text="item.label" />
-            </template>
-          </item-filter>
-          <item-filter
-            :allow-multiple="true"
-            :filter-label="$gettext('Shared By')"
-            :filterable-attributes="['displayName']"
-            :items="fileOwners"
-            :option-filter-label="$gettext('Filter shared by')"
-            :show-option-filter="true"
-            id-attribute="username"
-            class="shared-by-filter oc-ml-s"
-            display-name-attribute="displayName"
-            filter-name="sharedBy"
-          >
-            <template #image="{ item }">
-              <avatar-image :width="32" :userid="item.username" :user-name="item.displayName" />
-            </template>
-            <template #item="{ item }">
-              <span class="oc-ml-s" v-text="item.displayName" />
-            </template>
-          </item-filter>
+          <div>
+            <oc-text-input
+              v-model="filterTerm"
+              class="search-filter"
+              :label="$gettext('Search')"
+              autocomplete="off"
+            />
+          </div>
         </div>
         <shared-with-me-section
           id="files-shared-with-me-view"
@@ -77,13 +89,15 @@
 </template>
 
 <script lang="ts">
+import Fuse from 'fuse.js'
+import Mark from 'mark.js'
 import { useResourcesViewDefaults } from '../../composables'
 
 import { AppLoadingSpinner, InlineFilterOption, ItemFilter } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
-import { computed, defineComponent, onMounted, ref, unref } from 'vue'
+import { computed, defineComponent, onMounted, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -91,7 +105,7 @@ import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
-import { useStore, useOpenWithDefaultApp } from '@ownclouders/web-pkg'
+import { useStore, useOpenWithDefaultApp, defaultFuseOptions } from '@ownclouders/web-pkg'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { uniq } from 'lodash-es'
 
@@ -126,9 +140,11 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const areHiddenFilesShown = ref(false)
+    const filterTerm = ref('')
+    const markInstance = ref<Mark>()
 
     const shareSectionTitle = computed(() => {
-      return areHiddenFilesShown.value ? $gettext('Hidden Shares') : $gettext('Shares')
+      return unref(areHiddenFilesShown) ? $gettext('Hidden Shares') : $gettext('Shares')
     })
 
     const visibilityOptions = computed(() => [
@@ -166,7 +182,27 @@ export default defineComponent({
         )
       }
 
+      if (unref(filterTerm).trim()) {
+        const usersSearchEngine = new Fuse(result, { ...defaultFuseOptions, keys: ['name'] })
+        const fuseResult = usersSearchEngine.search(unref(filterTerm)).map((r) => r.item)
+        result = fuseResult.filter((item) => result.includes(item))
+      }
+
       return result
+    })
+
+    watch(filteredItems, () => {
+      if (!unref(areResourcesLoading)) {
+        if (!unref(markInstance)) {
+          markInstance.value = new Mark('.oc-resource-details')
+        }
+
+        unref(markInstance).unmark()
+        unref(markInstance).mark(unref(filterTerm), {
+          element: 'span',
+          className: 'highlight-mark'
+        })
+      }
     })
 
     const { sortBy, sortDir, items, handleSort } = useSort({
@@ -234,6 +270,7 @@ export default defineComponent({
       visibleShares,
       shareTypes,
       fileOwners,
+      filterTerm,
 
       handleSort,
       sortBy,
@@ -246,3 +283,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.search-filter {
+  width: 16rem;
+}
+</style>
