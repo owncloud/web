@@ -30,7 +30,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
         <span class="oc-icon oc-icon-s oc-icon-passive">
           <!---->
         </span>
-        <span class="text">Example parent folder name</span>
+        <span class="text oc-text-truncate">Example parent folder name</span>
       </span>
     </div>
   </div>

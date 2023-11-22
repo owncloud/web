@@ -67,7 +67,7 @@
           class="parent-folder"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
-          <span class="text" v-text="parentFolderName" />
+          <span class="text oc-text-truncate" v-text="parentFolderName" />
         </component>
       </div>
     </div>
