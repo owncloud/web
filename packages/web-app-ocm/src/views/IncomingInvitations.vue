@@ -120,7 +120,7 @@ export default defineComponent({
 
         const { token: currentToken, providerDomain, ...query } = unref(route).query
         router.replace({
-          name: 'sciencemesh-app-invitations',
+          name: 'ocm-app-invitations',
           query
         })
 
