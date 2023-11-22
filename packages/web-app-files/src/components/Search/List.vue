@@ -14,7 +14,6 @@
           :filter-label="$gettext('Type')"
           :filterable-attributes="['label']"
           :items="availableMediaTypeValues"
-          :option-filter-label="$gettext('Filter media type')"
           class="files-search-filter-file-type oc-mr-s"
           display-name-attribute="label"
           filter-name="mediaType"
