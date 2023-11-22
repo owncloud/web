@@ -30,17 +30,6 @@ describe('restore', () => {
         }
       })
     })
-    it('should be false when multiple resource given', () => {
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
-          expect(
-            unref(actions)[0].isEnabled({
-              resources: [mock<SpaceResource>(), mock<SpaceResource>()]
-            })
-          ).toBe(false)
-        }
-      })
-    })
     it('should be false when the space is disabled', () => {
       const { wrapper } = getWrapper({
         setup: ({ actions }, { storeOptions }) => {
@@ -90,7 +79,10 @@ describe('restore', () => {
         setup: ({ actions }, { storeOptions }) => {
           expect(
             unref(actions)[0].isEnabled({
-              resources: [mock<SpaceResource>({ disabled: false, driveType: 'project' })]
+              resources: [
+                mock<SpaceResource>({ name: 'Moon', disabled: false, driveType: 'project' }),
+                mock<SpaceResource>({ name: 'Sun', disabled: false, driveType: 'project' })
+              ]
             })
           ).toBe(true)
         }
@@ -103,7 +95,7 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockRejectedValue(new Error())
-          await duplicateSpace([spaces[0]])
+          await duplicateSpace(spaces[0])
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
@@ -120,7 +112,7 @@ describe('restore', () => {
             })
           )
           clientService.webdav.listFiles.mockResolvedValue({ children: [] } as ListFilesResult)
-          await duplicateSpace([spaces[0]])
+          await duplicateSpace(spaces[0])
           expect(clientService.graphAuthenticated.drives.createDrive).toHaveBeenCalledWith(
             {
               description: 'To the moon',

@@ -23,22 +23,21 @@ export const useSpaceActionsDuplicate = ({
   const clientService = useClientService()
   const loadingService = useLoadingService()
 
-  const duplicateSpace = async (spaces: SpaceResource[]) => {
-    const existingSpace = spaces[0]
+  const duplicateSpace = async (existingSpace: SpaceResource) => {
     const projectSpaces: SpaceResource[] = store.getters['runtime/spaces/spaces'].filter(
       (space: SpaceResource) => isProjectSpaceResource(space)
     )
-    const newSpaceName = resolveFileNameDuplicate(existingSpace.name, '', projectSpaces)
+    const duplicatedSpaceName = resolveFileNameDuplicate(existingSpace.name, '', projectSpaces)
 
     try {
       const { data: createdSpace } = await clientService.graphAuthenticated.drives.createDrive(
         {
-          name: newSpaceName,
+          name: duplicatedSpaceName,
           description: existingSpace.description
         },
         {}
       )
-      let newSpace = buildSpace(createdSpace)
+      let duplicatedSpace = buildSpace(createdSpace)
 
       const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
 
@@ -49,7 +48,9 @@ export const useSpaceActionsDuplicate = ({
         for (const file of existingSpaceFiles.children) {
           copyOps.push(
             queue.add(() =>
-              clientService.webdav.copyFiles(existingSpace, file, newSpace, { path: file.name })
+              clientService.webdav.copyFiles(existingSpace, file, duplicatedSpace, {
+                path: file.name
+              })
             )
           )
         }
@@ -62,7 +63,7 @@ export const useSpaceActionsDuplicate = ({
         }
 
         if (existingSpace.spaceReadmeData) {
-          const newSpaceReadmeFile = await clientService.webdav.getFileInfo(newSpace, {
+          const newSpaceReadmeFile = await clientService.webdav.getFileInfo(duplicatedSpace, {
             path: `.space/${existingSpace.spaceReadmeData.name}`
           })
           specialRequestData.special.push({
@@ -74,7 +75,7 @@ export const useSpaceActionsDuplicate = ({
         }
 
         if (existingSpace.spaceImageData) {
-          const newSpaceImageFile = await clientService.webdav.getFileInfo(newSpace, {
+          const newSpaceImageFile = await clientService.webdav.getFileInfo(duplicatedSpace, {
             path: `.space/${existingSpace.spaceImageData.name}`
           })
           specialRequestData.special.push({
@@ -87,28 +88,35 @@ export const useSpaceActionsDuplicate = ({
 
         const { data: updatedDriveData } =
           await clientService.graphAuthenticated.drives.updateDrive(
-            newSpace.id.toString(),
+            duplicatedSpace.id.toString(),
             specialRequestData as Drive,
             {}
           )
-        newSpace = buildSpace(updatedDriveData)
+        duplicatedSpace = buildSpace(updatedDriveData)
       }
 
-      store.commit('runtime/spaces/UPSERT_SPACE', newSpace)
+      store.commit('runtime/spaces/UPSERT_SPACE', duplicatedSpace)
       store.dispatch('showMessage', {
-        title: $gettext('Space was duplicated successfully')
+        title: $gettext('Space "%{space}" was duplicated successfully', {
+          space: existingSpace.name
+        })
       })
     } catch (error) {
       console.error(error)
       store.dispatch('showErrorMessage', {
-        title: $gettext('Failed to duplicate space'),
+        title: $gettext('Failed to duplicate space "%{space}"', { space: existingSpace.name }),
         error
       })
     }
   }
 
-  const handler = ({ resources }: SpaceActionOptions) => {
-    return duplicateSpace(resources)
+  const handler = async ({ resources }: SpaceActionOptions) => {
+    for (const resource of resources) {
+      if (resource.disabled || !isProjectSpaceResource(resource)) {
+        continue
+      }
+      await duplicateSpace(resource)
+    }
   }
 
   const actions = computed((): SpaceAction[] => [
@@ -118,15 +126,15 @@ export const useSpaceActionsDuplicate = ({
       label: () => $gettext('Duplicate'),
       handler: (args) => loadingService.addTask(() => handler(args)),
       isEnabled: ({ resources }) => {
-        if (resources?.length !== 1) {
+        if (!resources?.length) {
           return false
         }
 
-        if (resources[0].disabled) {
+        if (resources.every((resource) => resource.disabled)) {
           return false
         }
 
-        if (!isProjectSpaceResource(resources[0])) {
+        if (resources.every((resource) => !isProjectSpaceResource(resource))) {
           return false
         }
 
