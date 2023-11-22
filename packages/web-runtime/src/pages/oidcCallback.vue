@@ -44,7 +44,7 @@ export default defineComponent({
         return
       }
 
-      if (unref(route).path === '/oidc-silent-redirect') {
+      if (unref(route).path === '/web-oidc-silent-redirect') {
         authService.signInSilentCallback()
       } else {
         authService.signInCallback()
