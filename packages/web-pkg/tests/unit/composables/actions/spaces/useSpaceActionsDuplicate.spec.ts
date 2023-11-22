@@ -1,5 +1,5 @@
 import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions'
-import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -7,13 +7,20 @@ import {
   mockAxiosResolve,
   defaultStoreMockOptions,
   RouteLocation,
-  getComposableWrapper,
-  defaultPlugins
+  getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from '@ownclouders/web-client/src/generated'
-import { Ability } from '@casl/ability'
+import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 
+const spaces = [
+  mock<SpaceResource>({
+    name: 'Moon',
+    description: 'To the moon',
+    type: 'project',
+    spaceImageData: null,
+    spaceReadmeData: null
+  })
+]
 describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
@@ -67,6 +74,45 @@ describe('restore', () => {
       })
     })
   })
+  describe('method "duplicateSpace"', () => {
+    it('should show error message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper } = getWrapper({
+        setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
+          clientService.graphAuthenticated.drives.createDrive.mockRejectedValue(new Error())
+          await duplicateSpace([spaces[0]])
+          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+        }
+      })
+    })
+    it('should show message on success', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper } = getWrapper({
+        setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
+          clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
+            mockAxiosResolve({
+              id: '1',
+              name: 'Moon (1)',
+              special: []
+            })
+          )
+          clientService.webdav.listFiles.mockResolvedValue({ children: [] } as ListFilesResult)
+          await duplicateSpace([spaces[0]])
+          expect(clientService.graphAuthenticated.drives.createDrive).toHaveBeenCalledWith(
+            {
+              description: 'To the moon',
+              name: 'Moon (1)'
+            },
+            expect.anything()
+          )
+          expect(
+            storeOptions.modules.runtime.modules.spaces.mutations.UPSERT_SPACE
+          ).toHaveBeenCalled()
+          expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+        }
+      })
+    })
+  })
 })
 
 function getWrapper({
@@ -88,7 +134,7 @@ function getWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  storeOptions.getters.user.mockReturnValue({ id: 'alice', uuid: 1 })
+  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })

@@ -24,11 +24,9 @@ export const useSpaceActionsDuplicate = ({
 
   const duplicateSpace = async (spaces: SpaceResource[]) => {
     const existingSpace = spaces[0]
-    console.log(existingSpace)
     const projectSpaces: SpaceResource[] = store.getters['runtime/spaces/spaces'].filter(
       (space: SpaceResource) => isProjectSpaceResource(space)
     )
-    let newSpace: SpaceResource = null
     const newSpaceName = resolveFileNameDuplicate(existingSpace.name, '', projectSpaces)
 
     try {
@@ -39,7 +37,7 @@ export const useSpaceActionsDuplicate = ({
         },
         {}
       )
-      newSpace = buildSpace(createdSpace)
+      let newSpace = buildSpace(createdSpace)
 
       const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
       for (const file of existingSpaceFiles.children) {
@@ -124,6 +122,7 @@ export const useSpaceActionsDuplicate = ({
   ])
 
   return {
-    actions
+    actions,
+    duplicateSpace
   }
 }
