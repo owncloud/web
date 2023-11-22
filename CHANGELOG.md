@@ -79,6 +79,7 @@ Summary
 * Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
 * Enhancement - Additional languages: [#10007](https://github.com/owncloud/web/issues/10007)
 * Enhancement - Shared by filter: [#10013](https://github.com/owncloud/web/issues/10013)
+* Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
 
 Details
 -------
@@ -753,6 +754,15 @@ Details
 
    https://github.com/owncloud/web/issues/10013
    https://github.com/owncloud/web/pull/10029
+
+* Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
+
+   We've added a new functionality, where users can simply duplicate spaces, via
+   the context menu or batch actions. This includes copying the contents, the space
+   name, subtitle, description, and image but not metadata like tags or members.
+
+   https://github.com/owncloud/web/issues/10016
+   https://github.com/owncloud/web/pull/10024
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
