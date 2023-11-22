@@ -26,7 +26,7 @@ exports[`account page account information displays basic user information 1`] = 
   <div class="account-page-info-language oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Language</dt>
     <dd>
-      <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-11" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" placeholder="Please choose..." readonly="false" searchable="true"></oc-select-stub>
+      <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-11" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" placeholder="Please choose..." readonly="false" searchable="true"></oc-select-stub>
     </dd>
   </div>
   <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">

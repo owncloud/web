@@ -1,9 +1,14 @@
 export const supportedLanguages = {
-  cs: 'Czech',
-  de: 'Deutsch',
+  bg: 'български - Bulgarian',
+  cs: 'Čeština - Czech',
+  de: 'Deutsch - German',
   en: 'English',
-  es: 'Español',
-  fr: 'Français',
-  gl: 'Galego',
-  it: 'Italiano'
+  es: 'Español - Spanish',
+  fr: 'Français - French',
+  it: 'Italiano - Italian',
+  nl: 'Nederlands - Dutch',
+  ko: '한국어 - Korean',
+  sq: 'Shqipja - Albanian',
+  sv: 'Svenska - Swedish',
+  tr: 'Türkçe - Turkish'
 }
