@@ -109,7 +109,6 @@ export const historyModePlugins = () =>
   ] as const
 
 export default defineConfig(async ({ mode, command }) => {
-  const watch = process.argv.includes('--watch')
   const production = mode === 'production'
   let config: UserConfig
 
@@ -151,7 +150,7 @@ export default defineConfig(async ({ mode, command }) => {
         // c.f. https://github.com/vitejs/vite-plugin-vue2/issues/18
         // That's why we need to put all styles of our monorepo apps into a monolithic css file for now
         // Once the above issue is resolved or we switch to @vitejs/plugin-vue, we can remove the `cssCodeSplit` setting here
-        sourcemap: watch,
+        sourcemap: command === 'serve',
         cssCodeSplit: false,
         rollupOptions: {
           preserveEntrySignatures: 'strict',
