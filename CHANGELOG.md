@@ -528,6 +528,7 @@ Details
 
    https://github.com/owncloud/web/issues/9782
    https://github.com/owncloud/web/pull/10026
+   https://github.com/owncloud/web/pull/10042
 
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 
