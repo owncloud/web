@@ -11,6 +11,7 @@ x-ocis-server: &ocis-service
     # WEB
     WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
     WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
+    WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
 
     #FRONTEND
     FRONTEND_SEARCH_MIN_LENGTH: '2'
@@ -56,6 +57,7 @@ x-ocis-server: &ocis-service
     OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE: '/etc/ocis/ocmproviders.json'
     OCM_OCM_INVITE_MANAGER_INSECURE: 'true'
     OCM_OCM_SHARE_PROVIDER_INSECURE: 'true'
+    OCM_OCM_STORAGE_PROVIDER_INSECURE: 'true'
     OCM_DEBUG_ADDR: '127.0.0.1:10281'
     OCM_HTTP_ADDR: '127.0.0.1:10280'
     OCM_GRPC_ADDR: '127.0.0.1:10282'
@@ -76,8 +78,6 @@ services:
       <<: *ocis-environment
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
       OCIS_CORS_ALLOW_ORIGINS: 'https://host.docker.internal:9201'
-      # ATTENTION: not in ocis-federated
-      WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
       OCM_WEBAPP_TEMPLATE: https://host.docker.internal:9201/o/{{.Token}}/{relative-path-to-shared-resource}
 
       # make the registry available to the app provider containers
@@ -98,7 +98,6 @@ services:
       - ./dist:/web/dist
       - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
       - ocis-config:/etc/ocis
-      # ATTENTION: not in ocis-federated
       - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web.config.json}:/web/config.json:ro
 
   ocis-federated:
@@ -125,6 +124,7 @@ services:
       - ./dist:/web/dist
       - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
       - ocis-federated-config:/etc/ocis
+      - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web-federated.config.json}:/web/config.json:ro
 
   selenium:
     build:
