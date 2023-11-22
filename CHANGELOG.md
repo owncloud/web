@@ -77,6 +77,7 @@ Summary
 * Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
 * Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
 * Enhancement - Additional languages: [#10007](https://github.com/owncloud/web/issues/10007)
+* Enhancement - Shared by filter: [#10013](https://github.com/owncloud/web/issues/10013)
 
 Details
 -------
@@ -733,6 +734,14 @@ Details
    https://github.com/owncloud/web/issues/10007
    https://github.com/owncloud/web/pull/10008
    https://github.com/owncloud/ocis/pull/7754
+
+* Enhancement - Shared by filter: [#10013](https://github.com/owncloud/web/issues/10013)
+
+   The received shares on the "Shared with me"-page can now be filtered by the
+   users that created the share.
+
+   https://github.com/owncloud/web/issues/10013
+   https://github.com/owncloud/web/pull/10029
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
