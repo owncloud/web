@@ -16,8 +16,13 @@
       :multiple="multiple"
       class="oc-select"
       style="background: transparent"
+      :dropdown-should-open="selectDropdownShouldOpen"
+      :map-keydown="selectMapKeydown"
       v-bind="additionalAttributes"
       @update:model-value="$emit('update:modelValue', $event)"
+      @click="onSelectClick()"
+      @search:blur="onSelectBlur()"
+      @keydown="onSelectKeyDown($event)"
     >
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
@@ -98,6 +103,11 @@ import {
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
 import { ContextualHelper } from '../../helpers'
+
+// the keycode property is deprecated in the JS event API, vue-select still works with it though
+enum KeyCode {
+  Enter = 13
+}
 
 /**
  * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
@@ -296,7 +306,54 @@ export default defineComponent({
       setComboBoxAriaLabel()
     })
 
-    return { select, userInput }
+    const dropdownEnabled = ref(false)
+    const setDropdownEnabled = (enabled) => {
+      dropdownEnabled.value = enabled
+    }
+
+    const selectDropdownShouldOpen = ({ noDrop, open, mutableLoading }) => {
+      return !noDrop && open && !mutableLoading && unref(dropdownEnabled)
+    }
+
+    const onSelectClick = () => {
+      setDropdownEnabled(true)
+    }
+
+    const onSelectBlur = () => {
+      setDropdownEnabled(false)
+    }
+
+    const selectMapKeydown = (map, vm) => {
+      return {
+        ...map,
+        [KeyCode.Enter]: (e: KeyboardEvent) => {
+          if (!unref(dropdownEnabled)) {
+            setDropdownEnabled(true)
+            return
+          }
+          map[KeyCode.Enter](e)
+          unref(select).searchEl.focus()
+        }
+      }
+    }
+
+    const onSelectKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === 'Tab') {
+        return
+      }
+
+      setDropdownEnabled(true)
+    }
+
+    return {
+      select,
+      userInput,
+      selectDropdownShouldOpen,
+      selectMapKeydown,
+      onSelectKeyDown,
+      onSelectBlur,
+      onSelectClick
+    }
   },
   computed: {
     additionalAttributes() {
