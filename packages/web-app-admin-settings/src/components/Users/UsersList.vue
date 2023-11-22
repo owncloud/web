@@ -1,13 +1,14 @@
 <template>
   <div id="user-list">
-    <oc-text-input
-      id="users-filter"
-      v-model="filterTerm"
-      class="oc-ml-m oc-my-s"
-      :label="$gettext('Search')"
-      autocomplete="off"
-    />
-    <slot name="filter" />
+    <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
+      <slot name="filter" />
+      <oc-text-input
+        id="users-filter"
+        v-model="filterTerm"
+        :label="$gettext('Search')"
+        autocomplete="off"
+      />
+    </div>
     <no-content-message v-if="!users.length" icon="user">
       <template #message>
         <span v-text="$gettext('No users in here')" />

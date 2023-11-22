@@ -2,15 +2,17 @@
 
 exports[`SpacesList should render all spaces in a table 1`] = `
 <div headerposition="0" id="space-list">
-  <div class="oc-ml-m oc-my-s">
-    <label class="oc-label" for="spaces-filter">Search</label>
-    <div class="oc-position-relative">
+  <div class="space-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
+    <div class="">
+      <label class="oc-label" for="spaces-filter">Search</label>
+      <div class="oc-position-relative">
+        <!--v-if-->
+        <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+        <!--v-if-->
+      </div>
       <!--v-if-->
-      <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
       <!--v-if-->
     </div>
-    <!--v-if-->
-    <!--v-if-->
   </div>
   <table class="oc-table oc-table-hover oc-table-sticky has-item-context-menu spaces-table">
     <thead class="oc-thead">

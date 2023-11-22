@@ -43,7 +43,7 @@
               <context-actions :items="selectedUsers" />
             </template>
             <template #filter>
-              <div class="oc-flex oc-flex-middle oc-ml-m oc-mb-m oc-mt-m">
+              <div class="oc-flex oc-flex-middle">
                 <div class="oc-mr-m oc-flex oc-flex-middle">
                   <oc-icon name="filter-2" class="oc-mr-xs" />
                   <span v-text="$gettext('Filter:')" />
