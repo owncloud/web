@@ -76,6 +76,7 @@ Summary
 * Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
 * Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
 * Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
+* Enhancement - Additional languages: [#10007](https://github.com/owncloud/web/issues/10007)
 
 Details
 -------
@@ -723,6 +724,15 @@ Details
 
    https://github.com/owncloud/web/issues/9966
    https://github.com/owncloud/web/pull/9985
+
+* Enhancement - Additional languages: [#10007](https://github.com/owncloud/web/issues/10007)
+
+   We've added some items to the list of available languages because of good
+   translation coverage in transifex.
+
+   https://github.com/owncloud/web/issues/10007
+   https://github.com/owncloud/web/pull/10008
+   https://github.com/owncloud/ocis/pull/7754
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
