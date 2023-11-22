@@ -1,6 +1,6 @@
 Enhancement: Duplicate space
 
-We've added a new functionality, where users can simply duplicate spaces, via the context menu.
+We've added a new functionality, where users can simply duplicate spaces, via the context menu or batch actions.
 This includes copying the contents, the space name, subtitle, description, and image but not metadata
 like tags or members.
 
