@@ -15,6 +15,13 @@
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" class="oc-mr-s" />
+          <div v-if="!selectedResourcesIds?.length" class="oc-flex oc-flex-middle oc-pl-s">
+            <span v-text="$gettext('Learn about spaces')" />
+            <oc-contextual-helper
+              :text="$gettext('Spaces are special folders built for collaboration.')"
+              class="oc-ml-xs"
+            />
+          </div>
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -120,8 +127,8 @@
             <template #totalQuota="{ resource }">
               {{ getTotalQuota(resource) }}
             </template>
-            <template #usedQuota="{ resource }"> {{ getUsedQuota(resource) }} </template>
-            <template #remainingQuota="{ resource }"> {{ getRemainingQuota(resource) }} </template>
+            <template #usedQuota="{ resource }"> {{ getUsedQuota(resource) }}</template>
+            <template #remainingQuota="{ resource }"> {{ getRemainingQuota(resource) }}</template>
             <template #image="{ resource }">
               <img
                 v-if="imageContentObject[resource.id]"
@@ -204,6 +211,7 @@ import {
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   components: {
@@ -468,6 +476,7 @@ export default defineComponent({
     }
   },
   methods: {
+    $gettext,
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
     openSidebarSharePanel(space: SpaceResource) {
       this.SET_FILE_SELECTION([space])
@@ -481,9 +490,11 @@ export default defineComponent({
 #files-spaces-empty {
   height: 75vh;
 }
+
 .table-preview {
   border-radius: 3px;
 }
+
 .state-trashed {
   .tile-preview,
   .tile-default-image > svg {
