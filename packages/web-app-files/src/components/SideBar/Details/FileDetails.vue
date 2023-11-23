@@ -28,9 +28,11 @@
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
       <table
-        class="details-table"
+        class="details-table oc-width-1-1"
         :aria-label="$gettext('Overview of the information about the selected file')"
       >
+        <col class="oc-width-1-3" />
+        <col class="oc-width-2-3" />
         <tr v-if="hasTimestamp" data-testid="timestamp">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last modified')" />
           <td>
@@ -80,6 +82,42 @@
         <tr v-if="showSize" data-testid="sizeInfo">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
           <td v-text="resourceSize" />
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav path'" />
+          <td class="oc-flex oc-flex-middle">
+            <div
+              v-oc-tooltip="resource.webDavPath"
+              class="oc-text-truncate"
+              v-text="resource.webDavPath"
+            />
+            <oc-button
+              v-oc-tooltip="$gettext('Copy WebDAV path')"
+              class="oc-ml-s"
+              appearance="raw"
+              size="small"
+              :aria-label="$gettext('Copy WebDAV path to clipboard')"
+              @click="copyWebDAVPathToClipboard"
+            >
+              <oc-icon :name="copyWebDAVPathIcon" />
+            </oc-button>
+          </td>
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav url'" />
+          <td class="oc-flex oc-flex-middle">
+            <div v-oc-tooltip="webDavUrl" class="oc-text-truncate" v-text="webDavUrl" />
+            <oc-button
+              v-oc-tooltip="$gettext('Copy WebDAV url')"
+              class="oc-ml-s"
+              appearance="raw"
+              size="small"
+              :aria-label="$gettext('Copy WebDAV url to clipboard')"
+              @click="copyWebDAVUrlToClipboard"
+            >
+              <oc-icon :name="copyWebDAVUrlIcon" />
+            </oc-button>
+          </td>
         </tr>
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
@@ -146,6 +184,7 @@ import { AncestorMetaData } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
+import {urlJoin} from "@ownclouders/web-client/src/utils";
 
 export default defineComponent({
   name: 'FileDetails',
@@ -162,6 +201,10 @@ export default defineComponent({
     const isPublicLinkContext = usePublicLinkContext({ store })
     const previewService = usePreviewService()
     const preview = ref(undefined)
+    const copiedIcon = 'check'
+    const copyIcon = 'file-copy'
+    const copyWebDAVPathIcon = ref(copyIcon)
+    const copyWebDAVUrlIcon = ref(copyIcon)
 
     const loadData = async () => {
       const calls = []
@@ -176,6 +219,9 @@ export default defineComponent({
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
+    const webDavUrl = computed(() => {
+      return urlJoin(configurationManager.serverUrl, unref(resource).webDavPath)
+    })
     const isFolder = computed(() => {
       return unref(resource).isFolder
     })
@@ -216,6 +262,17 @@ export default defineComponent({
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
+    const copyWebDAVPathToClipboard = () => {
+      navigator.clipboard.writeText(unref(resource).webDavPath)
+      copyWebDAVPathIcon.value = copiedIcon
+      setTimeout(() => (copyWebDAVPathIcon.value = copyIcon), 500)
+    }
+
+    const copyWebDAVUrlToClipboard = () => {
+      navigator.clipboard.writeText(unref(webDavUrl))
+      copyWebDAVUrlIcon.value = copiedIcon
+      setTimeout(() => (copyWebDAVUrlIcon.value = copyIcon), 500)
+    }
 
     watch(
       resource,
@@ -244,7 +301,12 @@ export default defineComponent({
       sharedAncestor,
       sharedAncestorRoute,
       formatDateRelative,
-      contextualHelper
+      contextualHelper,
+      copyWebDAVPathIcon,
+      copyWebDAVPathToClipboard,
+      copyWebDAVUrlIcon,
+      copyWebDAVUrlToClipboard,
+      webDavUrl
     }
   },
   computed: {
@@ -348,23 +410,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .details-table {
   text-align: left;
+  table-layout: fixed;
 
   tr {
     height: 1.5rem;
-
-    td {
-      max-width: 0;
-      width: 100%;
-      overflow-wrap: break-word;
-
-      div {
-        min-width: 0;
-      }
-    }
-  }
-
-  th {
-    white-space: nowrap;
   }
 }
 
