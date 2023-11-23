@@ -97,10 +97,7 @@ describe('SharedWithMe view', () => {
         })
         const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
-        expect(filterItems).toEqual([
-          { label: shareType1.label, key: shareType1.key },
-          { label: shareType2.label, key: shareType2.key }
-        ])
+        expect(filterItems).toEqual([shareType1, shareType2])
       })
     })
     describe('shared by', () => {
