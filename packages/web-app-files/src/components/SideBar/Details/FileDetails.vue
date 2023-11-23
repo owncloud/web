@@ -184,7 +184,7 @@ import { AncestorMetaData } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
-import {urlJoin} from "@ownclouders/web-client/src/utils";
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
   name: 'FileDetails',
