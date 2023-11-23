@@ -1,12 +1,13 @@
 <template>
   <div id="group-list">
-    <oc-text-input
-      id="groups-filter"
-      v-model="filterTerm"
-      class="oc-ml-m oc-my-s"
-      :label="$gettext('Search')"
-      autocomplete="off"
-    />
+    <div class="group-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
+      <oc-text-input
+        id="groups-filter"
+        v-model="filterTerm"
+        :label="$gettext('Search')"
+        autocomplete="off"
+      />
+    </div>
     <oc-table
       ref="tableRef"
       :sort-by="sortBy"

@@ -17,13 +17,16 @@
           </template>
         </no-content-message>
         <template v-else>
-          <oc-text-input
-            id="spaces-filter"
-            v-model="filterTerm"
-            class="oc-ml-m oc-my-s"
-            :label="$gettext('Search')"
-            autocomplete="off"
-          />
+          <div
+            class="trash-bin-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
+          >
+            <oc-text-input
+              id="spaces-filter"
+              v-model="filterTerm"
+              :label="$gettext('Search')"
+              autocomplete="off"
+            />
+          </div>
           <oc-table
             ref="tableRef"
             class="spaces-table"

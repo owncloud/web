@@ -30,13 +30,14 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-mt-l">
-          <oc-text-input
-            id="spaces-filter"
-            v-model="filterTerm"
-            class="oc-ml-m oc-my-m"
-            :label="$gettext('Search')"
-            autocomplete="off"
-          />
+          <div class="spaces-list-filters oc-flex oc-flex-right oc-px-m oc-mb-m">
+            <oc-text-input
+              id="spaces-filter"
+              v-model="filterTerm"
+              :label="$gettext('Search')"
+              autocomplete="off"
+            />
+          </div>
           <resource-tiles
             v-if="viewMode === ViewModeConstants.tilesView.name"
             v-model:selectedIds="selectedResourcesIds"
