@@ -1,6 +1,6 @@
 <template>
   <portal to="app.app-banner">
-    <div class="app-banner hide-desktop" :hidden="isVisible === false">
+    <div v-if="isAppBannerAvailable" class="app-banner hide-desktop" :hidden="isVisible === false">
       <oc-button
         variation="brand"
         appearance="raw"
@@ -55,6 +55,9 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
+    const isAppBannerAvailable = computed(
+      () => appBannerSettings && Object.keys(appBannerSettings).length != 0
+    )
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()
@@ -70,7 +73,8 @@ export default defineComponent({
       appUrl,
       close,
       isVisible,
-      appBannerSettings
+      appBannerSettings,
+      isAppBannerAvailable
     }
   }
 })
