@@ -18,16 +18,10 @@
         />
         <div ref="itemFilterListRef">
           <oc-list class="item-filter-list">
-            <li
-              v-for="(item, index) in displayedItems"
-              v-show="item.isVisible"
-              :key="index"
-              class="oc-my-xs"
-            >
+            <li v-for="(item, index) in displayedItems" :key="index" class="oc-my-xs">
               <oc-button
                 class="item-filter-list-item oc-flex oc-flex-middle oc-width-1-1 oc-p-xs"
                 :class="{
-                  'item-filter-list-item-visible': item.isVisible,
                   'item-filter-list-item-active': !allowMultiple && isItemSelected(item),
                   'oc-flex-left': allowMultiple,
                   'oc-flex-between': !allowMultiple
@@ -132,7 +126,7 @@ export default defineComponent({
     const currentRoute = useRoute()
     const filterInputRef = ref()
     const selectedItems = ref([])
-    const displayedItems = ref(props.items.map((item: any) => ({ ...item, isVisible: true })))
+    const displayedItems = ref(props.items)
     const markInstance = ref(null)
     const itemFilterListRef = ref(null)
 
@@ -177,19 +171,17 @@ export default defineComponent({
     }
 
     const filterTerm = ref()
-    const filter = (items, filterTerm) => {
+    const filter = (items: unknown[], filterTerm) => {
       if (!(filterTerm || '').trim()) {
-        return items.map((item) => ({ ...item, isVisible: true }))
+        return items
       }
       const fuse = new Fuse(items, {
         ...defaultFuseOptions,
         keys: props.filterableAttributes as any
       })
 
-      const result = fuse.search(filterTerm)
-      const matchedIds = new Set(result.map((r) => getId(r.item)))
-
-      return items.map((item) => ({ ...item, isVisible: matchedIds.has(getId(item)) }))
+      const results = fuse.search(filterTerm).map((r) => r.item)
+      return items.filter((item) => results.includes(item))
     }
     const clearFilter = () => {
       selectedItems.value = []
@@ -202,7 +194,7 @@ export default defineComponent({
     }
 
     const showDrop = async () => {
-      setDisplayedItems(props.items.map((item: any) => ({ ...item, isVisible: true })))
+      setDisplayedItems(props.items)
       await nextTick()
       unref(filterInputRef).focus()
     }

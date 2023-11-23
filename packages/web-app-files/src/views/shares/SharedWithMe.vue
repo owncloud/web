@@ -201,7 +201,7 @@ export default defineComponent({
 
     const shareTypes = computed(() => {
       const uniqueShareTypes = uniq(unref(storeItems).map((i) => i.share?.shareType))
-      return ShareTypes.getByValues(uniqueShareTypes).map(({ label, key }) => ({ label, key }))
+      return ShareTypes.getByValues(uniqueShareTypes)
     })
 
     const fileOwners = computed(() => {
