@@ -35,7 +35,6 @@ import { z } from 'zod'
 import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -627,13 +626,15 @@ const onSSEProcessingFinishedEvent = ({
         value: false
       })
     } else {
-      resourceQueue.add(async () => {
-        const { resource } = await clientService.webdav.listFilesById({
-          fileId: postProcessingData.itemid
-        })
-        resource.path = urlJoin(currentFolder.path, resource.name)
-        store.commit('Files/UPSERT_RESOURCE', resource)
-      })
+      // FIXME: we currently cannot do this, we need to block this for ongoing uploads and copy operations
+      // when fixing revert the changelog removal
+      // resourceQueue.add(async () => {
+      //   const { resource } = await clientService.webdav.listFilesById({
+      //     fileId: postProcessingData.itemid
+      //   })
+      //   resource.path = urlJoin(currentFolder.path, resource.name)
+      //   store.commit('Files/UPSERT_RESOURCE', resource)
+      // })
     }
   } catch (e) {
     console.error('Unable to parse sse postprocessing data', e)
