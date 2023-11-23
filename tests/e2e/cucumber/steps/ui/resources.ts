@@ -6,7 +6,8 @@ import { expect } from '@playwright/test'
 import { config } from '../../../config'
 import {
   createResourceTypes,
-  displayedResourceType
+  displayedResourceType,
+  shortcutType
 } from '../../../support/objects/app-files/resource/actions'
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
@@ -657,5 +658,39 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     await resourceObject.uploadLargeNumberOfResources({ resources: files })
+  }
+)
+
+When(
+  '{string} creates a shortcut for the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      await resourceObject.createShotcut({
+        resource: info.resource,
+        name: info.name,
+        type: info.type as shortcutType
+      })
+    }
+  }
+)
+
+When(
+  '{string} opens a shortcut {string}',
+  async function (this: World, stepUser: string, name: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.openShotcut({ name: name })
+  }
+)
+
+Then(
+  '{string} can open a shortcut {string} with external url {string}',
+  async function (this: World, stepUser: string, name: string, url: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.openShotcut({ name: name, url: url })
   }
 )
