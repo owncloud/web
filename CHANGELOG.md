@@ -55,7 +55,6 @@ Summary
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
-* Enhancement - New file event handling: [#9782](https://github.com/owncloud/web/issues/9782)
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 * Enhancement - Add editors to the application menu: [#9809](https://github.com/owncloud/web/pull/9809)
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
@@ -519,18 +518,6 @@ Details
 
    https://github.com/owncloud/web/issues/9769
    https://github.com/owncloud/web/pull/9771
-
-* Enhancement - New file event handling: [#9782](https://github.com/owncloud/web/issues/9782)
-
-   When new files are uploaded to a folder they automatically appear in the folder
-   in all browser windows, not only the one where the upload happened. Currently
-   this only works for completely new files with content. It is not yet implemented
-   for empty, restored or copied files.
-
-   https://github.com/owncloud/web/issues/9782
-   https://github.com/owncloud/web/pull/10026
-   https://github.com/owncloud/web/pull/10042
-   https://github.com/owncloud/web/pull/10053
 
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 
