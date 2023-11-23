@@ -211,7 +211,6 @@ import {
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   components: {
@@ -476,7 +475,6 @@ export default defineComponent({
     }
   },
   methods: {
-    $gettext,
     ...mapMutations('Files', ['SET_FILE_SELECTION']),
     openSidebarSharePanel(space: SpaceResource) {
       this.SET_FILE_SELECTION([space])
