@@ -1,4 +1,4 @@
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import * as po from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'

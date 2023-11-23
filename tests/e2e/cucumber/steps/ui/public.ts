@@ -1,10 +1,9 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
-import { Page } from 'playwright'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
 import { editor } from '../../../support/objects/app-files/utils'
-import { expect } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 
 When(
   '{string} opens the public link {string}',

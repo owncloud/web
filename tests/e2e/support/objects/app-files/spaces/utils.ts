@@ -1,5 +1,4 @@
-import { expect } from '@playwright/test'
-import { Page } from 'playwright'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 
 const spaceIdSelector = `[data-item-id="%s"]`
