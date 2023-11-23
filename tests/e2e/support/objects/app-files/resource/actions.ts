@@ -707,17 +707,15 @@ export const moveOrCopyMultipleResources = async (
   }
 
   const waitForMoveResponses = []
-  if (['drag-drop-breadcrumb', 'drag-drop'].includes(method)) {
-    for (const resource of resources) {
-      waitForMoveResponses.push(
-        page.waitForResponse(
-          (resp) =>
-            resp.url().endsWith(resource) &&
-            resp.status() === 201 &&
-            resp.request().method() === 'MOVE'
-        )
+  for (const resource of resources) {
+    waitForMoveResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(resource) &&
+          resp.status() === 201 &&
+          resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
       )
-    }
+    )
   }
 
   switch (method) {
@@ -734,7 +732,11 @@ export const moveOrCopyMultipleResources = async (
         }
       }
       await page.locator(filesView).click({ button: 'right' })
-      await page.locator(util.format(filesContextMenuAction, 'copy')).click()
+      await Promise.all([
+        ...waitForMoveResponses,
+        page.locator(util.format(filesContextMenuAction, 'copy')).click()
+      ])
+      // await page.locator(util.format(filesContextMenuAction, 'copy')).click()
       break
     }
     case 'batch-action': {
@@ -747,7 +749,8 @@ export const moveOrCopyMultipleResources = async (
           await clickResource({ page, path: path })
         }
       }
-      await page.locator(pasteButton).click()
+      await Promise.all([...waitForMoveResponses, page.locator(pasteButton).click()])
+      // await page.locator(pasteButton).click()
       break
     }
     case 'keyboard': {
@@ -760,7 +763,8 @@ export const moveOrCopyMultipleResources = async (
           await clickResource({ page, path: path })
         }
       }
-      await page.keyboard.press('Control+v')
+      await Promise.all([...waitForMoveResponses, page.keyboard.press('Control+v')])
+      // await page.keyboard.press('Control+v')
       break
     }
     case 'drag-drop': {
@@ -782,6 +786,7 @@ export const moveOrCopyMultipleResources = async (
       break
     }
   }
+  await page.reload()
   await waitForResources({
     page,
     names: resources
