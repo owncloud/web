@@ -35,6 +35,7 @@ import { z } from 'zod'
 import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
+import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
@@ -590,7 +591,7 @@ const fileReadyEventSchema = z.object({
   parentitemid: z.string()
 })
 
-const onSSEProcessingFinishedEvent = async ({
+const onSSEProcessingFinishedEvent = ({
   store,
   msg,
   clientService,
@@ -630,6 +631,7 @@ const onSSEProcessingFinishedEvent = async ({
         const { resource } = await clientService.webdav.listFilesById({
           fileId: postProcessingData.itemid
         })
+        resource.path = urlJoin(currentFolder.path, resource.name)
         store.commit('Files/UPSERT_RESOURCE', resource)
       })
     }
