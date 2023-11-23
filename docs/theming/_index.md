@@ -260,7 +260,7 @@ Spacing variables get prepended with `--oc-space-`, so e.g. _"xlarge"_ creates t
 ```
 
 ### App Banner
-To configure the app banner shown on mobile devices, you can use the following settings:
+To configure the app banner shown on mobile devices, you can use the following settings (without these the app banner is disabled per default):
 
 ```json 
 {
