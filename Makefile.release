@@ -33,7 +33,7 @@ build: build-web copy-config
 
 .PHONY: build-web
 build-web:
-	$(PNPM) install
+	[ -n "${NO_INSTALL}" ] || $(PNPM) install
 	$(PNPM) check:types
 	$(PNPM) build
 

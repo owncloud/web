@@ -1,4 +1,4 @@
-import { BrowserContext, Page } from 'playwright'
+import { BrowserContext, Page } from '@playwright/test'
 
 export interface Link {
   name: string

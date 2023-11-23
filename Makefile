@@ -5,7 +5,8 @@ RELEASE := ${CURDIR}/release
 NODE_MODULES := ${CURDIR}/node_modules
 
 node_modules: package.json pnpm-lock.yaml
-	pnpm install && touch ${NODE_MODULES}
+	[ -n "${NO_INSTALL}" ] || pnpm install
+	touch ${NODE_MODULES}
 
 .PHONY: clean
 clean:
