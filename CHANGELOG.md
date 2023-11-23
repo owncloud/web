@@ -79,6 +79,7 @@ Summary
 * Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
 * Enhancement - Additional languages: [#10007](https://github.com/owncloud/web/issues/10007)
 * Enhancement - Shared by filter: [#10013](https://github.com/owncloud/web/issues/10013)
+* Enhancement - Share search filter: [#10014](https://github.com/owncloud/web/issues/10014)
 * Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
 
 Details
@@ -755,6 +756,14 @@ Details
 
    https://github.com/owncloud/web/issues/10013
    https://github.com/owncloud/web/pull/10029
+
+* Enhancement - Share search filter: [#10014](https://github.com/owncloud/web/issues/10014)
+
+   The received shares on the "Shared with me"-page can now be filtered by their
+   names via a text input field.
+
+   https://github.com/owncloud/web/issues/10014
+   https://github.com/owncloud/web/pull/10033
 
 * Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
 
