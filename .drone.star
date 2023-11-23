@@ -386,6 +386,7 @@ def pnpmCache(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
+                 installPlaywright() +
                  rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  rebuildBuildArtifactCache(ctx, "playwright", ".playwright"),
         "trigger": {
@@ -580,9 +581,13 @@ def buildCacheWeb(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 installPnpm() +
                  [{
                      "name": "build-web",
                      "image": OC_CI_NODEJS,
+                     "environment": {
+                         "NO_INSTALL": "true",
+                     },
                      "commands": [
                          "pnpm config set store-dir ./.pnpm-store",
                          "make dist",
@@ -740,6 +745,7 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installPnpm() + \
+                installPlaywright() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                 copyFilesForUpload()
 
@@ -1012,12 +1018,22 @@ def installPnpm():
     return [{
         "name": "pnpm-install",
         "image": OC_CI_NODEJS,
+        "commands": [
+            'npm install --silent --global --force "$(jq -r ".packageManager" < package.json)"',
+            "pnpm config set store-dir ./.pnpm-store",
+            "pnpm install",
+        ],
+    }]
+
+def installPlaywright():
+    return [{
+        "name": "playwright-install",
+        "image": OC_CI_NODEJS,
         "environment": {
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm config set store-dir ./.pnpm-store",
-            "pnpm install",
+            "pnpm playwright install chromium",
         ],
     }]
 
@@ -1388,13 +1404,11 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     for env in extraEnvironment:
         environment[env] = extraEnvironment[env]
 
-    return restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + [{
+    return restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + installPnpm() + [{
         "name": "webui-acceptance-tests",
         "image": OC_CI_NODEJS,
         "environment": environment,
         "commands": [
-            "pnpm config set store-dir ./.pnpm-store",
-            "pnpm install",  # FIXME: use --filter ./tests/acceptance (currently @babel/register is not found)
             "cd %s/tests/acceptance && ./run.sh" % dir["web"],
         ],
         "volumes": [{
@@ -1654,15 +1668,7 @@ def licenseCheck(ctx):
             "os": "linux",
             "arch": "amd64",
         },
-        "steps": [
-            {
-                "name": "pnpm-install",
-                "image": OC_CI_NODEJS,
-                "commands": [
-                    "pnpm config set store-dir ./.pnpm-store",
-                    "pnpm install",
-                ],
-            },
+        "steps": installPnpm() + [
             {
                 "name": "node-check-licenses",
                 "image": OC_CI_NODEJS,
