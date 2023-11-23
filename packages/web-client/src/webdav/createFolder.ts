@@ -12,11 +12,16 @@ export const CreateFolderFactory = (
   { accessToken }: WebDavOptions
 ) => {
   return {
-    async createFolder(space: SpaceResource, { path }: { path?: string }): Promise<FolderResource> {
+    async createFolder(
+      space: SpaceResource,
+      { path, fetchFolder = true }: { path?: string; fetchFolder?: boolean }
+    ): Promise<FolderResource> {
       const headers = buildAuthHeader(unref(accessToken), space)
       await dav.mkcol(urlJoin(space.webDavPath, path, { leadingSlash: true }), { headers })
 
-      return getFileInfoFactory.getFileInfo(space, { path })
+      if (fetchFolder) {
+        return getFileInfoFactory.getFileInfo(space, { path })
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 import Uppy, { UppyFile } from '@uppy/core'
 import BasePlugin from '@uppy/core/lib/BasePlugin.js'
 import filesize from 'filesize'
-import { dirname, join } from 'path'
+import { basename, dirname, join } from 'path'
 import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'
 import { Ref, unref } from 'vue'
@@ -269,81 +269,87 @@ export class HandleUpload extends BasePlugin {
     const space = this.space
     const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
 
-    const createdFolders = []
-    const failedFolders = []
+    const routeName = filesToUpload[0].meta.routeName
+    const routeDriveAliasAndItem = filesToUpload[0].meta.routeDriveAliasAndItem
+    const routeShareId = filesToUpload[0].meta.routeShareId
 
-    for (const file of filesToUpload) {
-      const directory = file.meta.relativeFolder
+    const failedFolders: string[] = []
+    const directoryTree: Record<string, any> = {}
+    const topLevelIds: Record<string, string> = {}
 
-      if (!directory || createdFolders.includes(directory)) {
-        continue
+    for (const file of filesToUpload.filter(({ meta }) => !!meta.relativeFolder)) {
+      const folders = file.meta.relativeFolder.split('/').filter(Boolean)
+      let current = directoryTree
+      if (folders.length <= 1) {
+        topLevelIds[file.meta.relativeFolder] = file.meta.topLevelFolderId
       }
+      for (const folder of folders) {
+        current[folder] = current[folder] || {}
+        current = current[folder]
+      }
+    }
 
-      const folders = directory.split('/')
-      let createdSubFolders = ''
-      for (const subFolder of folders) {
-        if (!subFolder) {
-          continue
-        }
+    const createDirectoryLevel = async (current: Record<string, any>, path = '') => {
+      if (path) {
+        const isRoot = path.split('/').length <= 1
+        path = urlJoin(path, { leadingSlash: true })
+        const uploadId = !isRoot ? uuid.v4() : topLevelIds[path]
+        const relativeFolder = dirname(path) === '/' ? '' : dirname(path)
 
-        const folderToCreate = `${createdSubFolders}/${subFolder}`
-        if (createdFolders.includes(folderToCreate)) {
-          createdSubFolders += `/${subFolder}`
-          createdFolders.push(createdSubFolders)
-          continue
-        }
-
-        if (failedFolders.includes(folderToCreate)) {
-          // only care about top level folders, no need to go deeper
-          break
-        }
-
-        const uploadId = createdSubFolders ? uuid.v4() : file.meta.topLevelFolderId
         const uppyResource = {
           id: uuid.v4(),
-          name: subFolder,
+          name: basename(path),
           isFolder: true,
           type: 'folder',
           meta: {
-            // current space & folder
             spaceId: space.id,
             spaceName: space.name,
             driveAlias: space.driveAlias,
             driveType: space.driveType,
             currentFolder: currentFolderPath,
             currentFolderId,
-            // upload data
-            relativeFolder: createdSubFolders,
+            relativeFolder,
             uploadId,
-            // route data
-            routeName: file.meta.routeName,
-            routeDriveAliasAndItem: file.meta.routeDriveAliasAndItem,
-            routeShareId: file.meta.routeShareId
+            routeName,
+            routeDriveAliasAndItem,
+            routeShareId
           }
+        }
+
+        if (failedFolders.includes(relativeFolder)) {
+          // return if top level folder failed to create
+          return
         }
 
         this.uppyService.publish('addedForUpload', [uppyResource])
 
         try {
           const folder = await webdav.createFolder(space, {
-            path: join(currentFolderPath, folderToCreate)
+            path: urlJoin(currentFolderPath, path),
+            fetchFolder: isRoot
           })
           this.uppyService.publish('uploadSuccess', {
             ...uppyResource,
             meta: { ...uppyResource.meta, fileId: folder?.fileId }
           })
-
-          createdSubFolders += `/${subFolder}`
-          createdFolders.push(createdSubFolders)
         } catch (error) {
           if (error.statusCode !== 405) {
             console.error(error)
-            failedFolders.push(folderToCreate)
+            failedFolders.push(path)
             this.uppyService.publish('uploadError', { file: uppyResource, error })
           }
         }
       }
+
+      const foldersToBeCreated = Object.keys(current)
+      const promises = []
+      for (const folder of foldersToBeCreated) {
+        promises.push(createDirectoryLevel(current[folder], join(path, folder)))
+      }
+      return Promise.allSettled(promises)
     }
+
+    await createDirectoryLevel(directoryTree)
 
     let filesToRemove: string[] = []
     if (failedFolders.length) {
