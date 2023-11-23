@@ -722,8 +722,10 @@ Details
    We've added a new filter option in the search list to filter by media type.
 
    https://github.com/owncloud/web/issues/9780
+   https://github.com/owncloud/web/issues/9978
    https://github.com/owncloud/web/pull/9912
    https://github.com/owncloud/web/pull/9942
+   https://github.com/owncloud/web/pull/10030
 
 * Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
 
