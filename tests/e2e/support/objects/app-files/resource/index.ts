@@ -251,4 +251,14 @@ export class Resource {
   async expectFileToBeSelected(args: Omit<po.expectFileToBeSelectedArgs, 'page'>): Promise<void> {
     await po.expectFileToBeSelected({ ...args, page: this.#page })
   }
+
+  async createShotcut(args: Omit<po.shortcutArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.createShotcut({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async openShotcut({ name, url }: { name: string; url?: string }): Promise<void> {
+    await po.openShotcut({ page: this.#page, name: name, url: url })
+  }
 }

@@ -5,6 +5,7 @@ import { resourceExists, waitForResources } from './utils'
 import { editor, sidebar } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
+import { LinksEnvironment } from '../../../environment'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -30,6 +31,8 @@ const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewDrawioFileButton = '.new-file-btn-drawio'
 const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
+const createNewShortcutButton = '#new-shortcut-btn'
+const shortcutResorceInput = '#create-shortcut-modal-url-input'
 const saveTextFileInEditorButton = '#app-save-action:visible'
 const textEditorInput = '#text-editor-input'
 const resourceNameInput = '.oc-modal input'
@@ -1494,4 +1497,77 @@ export interface expectFileToBeSelectedArgs {
 
 export const expectFileToBeSelected = async ({ page, fileName }): Promise<void> => {
   await expect(page.locator(util.format(checkBox, fileName))).toBeChecked()
+}
+
+export const createShotcut = async (args: shortcutArgs): Promise<void> => {
+  const { page, resource, name, type } = args
+  await page.locator(addNewResourceButton).click()
+  await page.locator(createNewShortcutButton).click()
+
+  switch (type) {
+    case 'folder':
+    case 'space':
+    case 'file': {
+      await page.locator(shortcutResorceInput).fill(resource)
+      const searchResult = page.locator('#create-shortcut-modal-contextmenu .oc-resource-name')
+      await expect(searchResult).toHaveText(resource)
+      await searchResult.click()
+      break
+    }
+    case 'public link':
+      const link = new LinksEnvironment()
+      await page.locator(shortcutResorceInput).fill(link.getLink({ name: resource }).url)
+      break
+    case 'website': {
+      await page.locator(shortcutResorceInput).fill(resource)
+      await page.locator('#create-shortcut-modal-contextmenu').click()
+      break
+    }
+  }
+
+  if (name) {
+    await page.getByLabel('Shortcut name').fill(name)
+  }
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 201 && resp.request().method() === 'PUT' && resp.url().endsWith('url')
+    ),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
+}
+
+export interface shortcutArgs {
+  page: Page
+  resource: string
+  name: string
+  type: shortcutType
+}
+
+export type shortcutType = 'folder' | 'file' | 'public link' | 'space' | 'website'
+
+export const openShotcut = async ({
+  page,
+  name,
+  url
+}: {
+  page: Page
+  name: string
+  url?: string
+}): Promise<void> => {
+  const resource = page.locator(util.format(resourceNameSelector, name))
+  if (url) {
+    const popupPromise = page.waitForEvent('popup')
+    await resource.click()
+    const popup = await popupPromise
+    await popup.waitForURL(url)
+  } else {
+    const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
+    await Promise.all([
+      page.waitForResponse(
+        (resp) => resp.url().endsWith(encodeURIComponent(name)) || resp.url().endsWith(itemId)
+      ),
+      resource.click()
+    ])
+  }
 }
