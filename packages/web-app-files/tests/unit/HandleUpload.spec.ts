@@ -90,7 +90,8 @@ describe('HandleUpload', () => {
       )
       expect(mocks.opts.clientService.webdav.createFolder).toHaveBeenCalledTimes(1)
       expect(mocks.opts.clientService.webdav.createFolder).toHaveBeenCalledWith(mocks.opts.space, {
-        path: relativeFolder
+        path: relativeFolder,
+        fetchFolder: true
       })
       expect(result.length).toBe(1)
     })

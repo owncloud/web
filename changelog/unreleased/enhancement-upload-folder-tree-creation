@@ -1,0 +1,6 @@
+Enhancement: Folder tree creation during upload
+
+The performance of the folder tree creation during upload has been improved.
+
+https://github.com/owncloud/web/pull/10057
+https://github.com/owncloud/web/issues/9817

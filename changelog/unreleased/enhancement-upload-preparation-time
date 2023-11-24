@@ -1,0 +1,6 @@
+Enhancement: Upload preparation time
+
+The performance of the preparation time before each upload has been improved.
+
+https://github.com/owncloud/web/pull/9552
+https://github.com/owncloud/web/issues/9817
