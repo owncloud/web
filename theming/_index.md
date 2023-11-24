@@ -259,26 +259,6 @@ Spacing variables get prepended with `--oc-space-`, so e.g. _"xlarge"_ creates t
 }
 ```
 
-### App Banner
-To configure the app banner shown on mobile devices, you can use the following settings (without these the app banner is disabled per default):
-
-```json 
-{
-  "appBanner": {
-    "title": "ownCloud",
-    "publisher": "ownCloud GmbH",
-    "additionalInformation": "",
-    "ctaText": "OPEN",
-    "icon": "themes/owncloud/assets/owncloud-app-icon.png",
-    "appScheme": "owncloud"
-  }
-}
-```
-
-`title` is usually your app's name as shown in the App Store or Google Play. `publisher` is the app developer's name.
-`additionalInformation` can be used to specify pricing information, such as "FREE" or a catchphrase like "Don't miss out on our awesome app!".
-`ctaText` refers to the text in the call to action button on the right side. The `icon` directive may be used to specify your own app icon. `appScheme` is the first part of the URL that is used to tell the mobile OS which app to open, so using `ownCloud` will generate links such as `owncloud://yourdomain.com/f/2b61b822...`.
-
 ## Example theme
 
 An empty template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs. Please note that since changing themes at runtime is not yet supported it only consists of a `default` theme.
@@ -296,14 +276,6 @@ An empty template for your custom theme is provided below, and you can use the i
       "general": {
         "name": "",
         "slogan": ""
-      },
-      "appBanner": {
-        "title": "",
-        "publisher": "",
-        "additionalInformation": "",
-        "ctaText": "",
-        "icon": "",
-        "appScheme": ""
       },
       "logo": {
         "topbar": "",
