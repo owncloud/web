@@ -40,6 +40,7 @@ Summary
 * Enhancement - Tags form improved: [#9525](https://github.com/owncloud/web/pull/9525)
 * Enhancement - Don't display confirmation dialog on file deletion: [#9527](https://github.com/owncloud/web/pull/9527)
 * Enhancement - Personal shares can be shown and hidden: [#9531](https://github.com/owncloud/web/issues/9531)
+* Enhancement - Upload preparation time: [#9552](https://github.com/owncloud/web/pull/9552)
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 * Enhancement - Display locking information: [#9566](https://github.com/owncloud/web/pull/9566)
 * Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
@@ -79,6 +80,7 @@ Summary
 * Enhancement - Share search filter: [#10014](https://github.com/owncloud/web/issues/10014)
 * Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
 * Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
+* Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
 
 Details
 -------
@@ -362,6 +364,13 @@ Details
 
    https://github.com/owncloud/web/issues/9531
    https://github.com/owncloud/web/pull/9718
+
+* Enhancement - Upload preparation time: [#9552](https://github.com/owncloud/web/pull/9552)
+
+   The performance of the preparation time before each upload has been improved.
+
+   https://github.com/owncloud/web/issues/9817
+   https://github.com/owncloud/web/pull/9552
 
 * Enhancement - Indicate processing state: [#9561](https://github.com/owncloud/web/pull/9561)
 
@@ -752,6 +761,13 @@ Details
 
    https://github.com/owncloud/web/issues/8163
    https://github.com/owncloud/web/pull/10047
+
+* Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
+
+   The performance of the folder tree creation during upload has been improved.
+
+   https://github.com/owncloud/web/issues/9817
+   https://github.com/owncloud/web/pull/10057
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
