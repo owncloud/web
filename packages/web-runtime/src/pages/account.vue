@@ -350,12 +350,12 @@ export default defineComponent({
         }
 
         store.dispatch('showMessage', {
-          title: $gettext('Language was saved successfully.')
+          title: $gettext('Preference saved.')
         })
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Saving language failed…'),
+          title: $gettext('Unable to save preference…'),
           error: e
         })
       }
@@ -369,12 +369,12 @@ export default defineComponent({
         })
         disableEmailNotificationsValue.value = option
         store.dispatch('showMessage', {
-          title: $gettext('Email notifications preference saved successfully.')
+          title: $gettext('Preference saved.')
         })
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Unable to save email notifications preference…'),
+          title: $gettext('Unable to save preference…'),
           error: e
         })
       }
@@ -385,12 +385,12 @@ export default defineComponent({
         store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', option)
         viewOptionWebDavDetailsValue.value = option
         store.dispatch('showMessage', {
-          title: $gettext('WebDav information view options preference saved successfully.')
+          title: $gettext('Preference saved.')
         })
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Unable to save WebDav information view options…'),
+          title: $gettext('Unable to save preference…'),
           error: e
         })
       }

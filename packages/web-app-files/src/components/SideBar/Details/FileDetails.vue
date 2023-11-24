@@ -218,7 +218,7 @@ export default defineComponent({
       })
     })
     const showWebDavDetails = computed(() => {
-      return store.state.Files.areWebDavDetailsShown
+      return store.getters['Files/areWebDavDetailsShown']
     })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)

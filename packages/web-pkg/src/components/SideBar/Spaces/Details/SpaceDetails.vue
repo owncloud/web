@@ -136,7 +136,7 @@ export default defineComponent({
     })
 
     const showWebDavDetails = computed(() => {
-      return store.state.Files.areWebDavDetailsShown
+      return store.getters['Files/areWebDavDetailsShown']
     })
 
     return {
