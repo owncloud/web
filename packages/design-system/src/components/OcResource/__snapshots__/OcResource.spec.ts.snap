@@ -26,7 +26,7 @@ exports[`OcResource displays parent folder name default if calculated name is em
       </span>
     </button>
     <div class="oc-resource-indicators">
-      <span class="parent-folder" style="cursor: default;">
+      <span class="parent-folder oc-text-truncate" style="cursor: default;">
         <span class="oc-icon oc-icon-s oc-icon-passive">
           <!---->
         </span>
