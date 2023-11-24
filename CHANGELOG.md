@@ -80,6 +80,7 @@ Summary
 * Enhancement - Shared by filter: [#10013](https://github.com/owncloud/web/issues/10013)
 * Enhancement - Share search filter: [#10014](https://github.com/owncloud/web/issues/10014)
 * Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
+* Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
 
 Details
 -------
@@ -764,6 +765,11 @@ Details
 
    https://github.com/owncloud/web/issues/10016
    https://github.com/owncloud/web/pull/10024
+
+* Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
+
+   https://github.com/owncloud/web/issues/8163
+   https://github.com/owncloud/web/pull/10047
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
