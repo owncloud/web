@@ -75,7 +75,7 @@
 <script lang="ts">
 import last from 'lodash-es/last'
 import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
@@ -296,11 +296,6 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
-    ...mapState('Files', [
-      'areHiddenFilesShown',
-      'areFileExtensionsShown',
-      'areWebDavDetailsShown'
-    ]),
 
     showContextActions() {
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
@@ -336,12 +331,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapMutations('Files', [
-      'SET_HIDDEN_FILES_VISIBILITY',
-      'SET_FILE_EXTENSIONS_VISIBILITY',
-      'SET_FILE_WEB_DAV_DETAILS_VISIBILITY'
-    ]),
-
     onResize() {
       const totalContentWidth =
         document.getElementById('web-content-main')?.getBoundingClientRect().width || 0
