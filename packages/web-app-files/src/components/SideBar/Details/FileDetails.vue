@@ -28,9 +28,11 @@
         <p class="oc-my-rm oc-mx-s" v-text="detailSharingInformation" />
       </div>
       <table
-        class="details-table"
+        class="details-table oc-width-1-1"
         :aria-label="$gettext('Overview of the information about the selected file')"
       >
+        <col class="oc-width-1-3" />
+        <col class="oc-width-2-3" />
         <tr v-if="hasTimestamp" data-testid="timestamp">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last modified')" />
           <td>
@@ -81,6 +83,7 @@
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
           <td v-text="resourceSize" />
         </tr>
+        <web-dav-details />
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
           <td>
@@ -146,10 +149,11 @@ import { AncestorMetaData } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
+import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDetails.vue'
 
 export default defineComponent({
   name: 'FileDetails',
-  components: { TagsSelect },
+  components: { TagsSelect, WebDavDetails },
   setup() {
     const configurationManager = useConfigurationManager()
     const store = useStore()
@@ -348,23 +352,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .details-table {
   text-align: left;
+  table-layout: fixed;
 
   tr {
     height: 1.5rem;
-
-    td {
-      max-width: 0;
-      width: 100%;
-      overflow-wrap: break-word;
-
-      div {
-        min-width: 0;
-      }
-    }
-  }
-
-  th {
-    white-space: nowrap;
   }
 }
 

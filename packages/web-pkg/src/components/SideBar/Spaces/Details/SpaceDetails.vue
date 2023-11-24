@@ -66,22 +66,7 @@
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
-      <tr v-if="showSpaceId">
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Copy Space ID')" />
-        <td class="oc-flex oc-flex-middle">
-          <div class="oc-text-truncate" v-text="resource.id" />
-          <oc-button
-            v-oc-tooltip="$gettext('Copy Space ID')"
-            class="oc-ml-s"
-            appearance="raw"
-            size="small"
-            :aria-label="$gettext('Copy Space ID to clipboard')"
-            @click="copySpaceIdToClipboard"
-          >
-            <oc-icon :name="copySpaceIdIcon" />
-          </oc-button>
-        </td>
-      </tr>
+      <web-dav-details />
       <portal-target
         name="app.files.sidebar.space.details.table"
         :slot-props="{ space: resource, resource }"
@@ -101,6 +86,7 @@ import {
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import { useStore, usePreviewService, useClientService } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
+import WebDavDetails from '../../WebDavDetails.vue'
 import { formatDateFromISO } from '../../../../helpers'
 import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
@@ -108,17 +94,12 @@ import { ImageDimension } from '../../../../constants'
 
 export default defineComponent({
   name: 'SpaceDetails',
-  components: { SpaceQuota },
+  components: { SpaceQuota, WebDavDetails },
   props: {
     showSpaceImage: {
       type: Boolean,
       required: false,
       default: true
-    },
-    showSpaceId: {
-      type: Boolean,
-      required: false,
-      default: false
     },
     showShareIndicators: {
       type: Boolean,
@@ -132,8 +113,6 @@ export default defineComponent({
     const clientService = useClientService()
     const resource = inject<Ref<SpaceResource>>('resource')
     const spaceImage = ref('')
-    const copySpaceIdIconInitial = 'file-copy'
-    const copySpaceIdIcon = ref(copySpaceIdIconInitial)
 
     const loadImageTask = useTask(function* (signal, ref) {
       if (!ref.resource?.spaceImageData || !props.showSpaceImage) {
@@ -156,19 +135,11 @@ export default defineComponent({
       return store.getters['Files/outgoingLinks'].length
     })
 
-    const copySpaceIdToClipboard = () => {
-      navigator.clipboard.writeText(unref(resource).id.toString())
-      copySpaceIdIcon.value = 'check'
-      setTimeout(() => (copySpaceIdIcon.value = copySpaceIdIconInitial), 500)
-    }
-
     return {
       loadImageTask,
       spaceImage,
       resource,
-      linkShareCount,
-      copySpaceIdIcon,
-      copySpaceIdToClipboard
+      linkShareCount
     }
   },
   computed: {
