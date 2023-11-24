@@ -54,32 +54,7 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
               <th class="oc-pr-s oc-font-semibold" scope="col">Size</th>
               <td>24 kB</td>
             </tr>
-            <tr>
-              <th class="oc-pr-s oc-font-semibold" scope="col">WebDav path</th>
-              <td class="oc-flex oc-flex-middle">
-                <div class="oc-text-truncate"></div>
-                <button aria-label="Copy WebDAV path to clipboard" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" type="button">
-                  <!--v-if-->
-                  <!-- @slot Content of the button -->
-                  <span class="oc-icon oc-icon-m oc-icon-passive">
-                    <!---->
-                  </span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <th class="oc-pr-s oc-font-semibold" scope="col">WebDav url</th>
-              <td class="oc-flex oc-flex-middle">
-                <div class="oc-text-truncate">/</div>
-                <button aria-label="Copy WebDAV url to clipboard" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" type="button">
-                  <!--v-if-->
-                  <!-- @slot Content of the button -->
-                  <span class="oc-icon oc-icon-m oc-icon-passive">
-                    <!---->
-                  </span>
-                </button>
-              </td>
-            </tr>
+            <!--v-if-->
             <!--v-if-->
 
             <!--v-if-->
