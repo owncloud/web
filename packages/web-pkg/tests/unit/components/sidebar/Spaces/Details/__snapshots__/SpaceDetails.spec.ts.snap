@@ -11,6 +11,7 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
     <p>This space has 1 member.</p>
     <oc-button-stub appearance="raw" arialabel="Open share panel" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="small" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
+  <web-dav-details-stub></web-dav-details-stub>
   <portal-target multiple="true" name="app.files.sidebar.space.details.table" slot-props="[object Object]"></portal-target>
   <table aria-label="Overview of the information about the selected space" class="details-table oc-width-1-1">
     <colgroup>
@@ -35,20 +36,7 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
           <space-quota-stub spacequota="[object Object]"></space-quota-stub>
         </td>
       </tr>
-      <tr>
-        <th class="oc-pr-s oc-font-semibold" scope="col">WebDav path</th>
-        <td class="oc-flex oc-flex-middle">
-          <div class="oc-text-truncate"></div>
-          <oc-button-stub appearance="raw" arialabel="Copy WebDAV path to clipboard" class="oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="small" submit="button" type="button" variation="passive"></oc-button-stub>
-        </td>
-      </tr>
-      <tr>
-        <th class="oc-pr-s oc-font-semibold" scope="col">WebDav url</th>
-        <td class="oc-flex oc-flex-middle">
-          <div class="oc-text-truncate">/</div>
-          <oc-button-stub appearance="raw" arialabel="Copy WebDAV url to clipboard" class="oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="small" submit="button" type="button" variation="passive"></oc-button-stub>
-        </td>
-      </tr>
+
 
     </tbody>
   </table>

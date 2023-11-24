@@ -66,42 +66,7 @@
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav path'" />
-        <td class="oc-flex oc-flex-middle">
-          <div
-            v-oc-tooltip="resource.webDavPath"
-            class="oc-text-truncate"
-            v-text="resource.webDavPath"
-          />
-          <oc-button
-            v-oc-tooltip="$gettext('Copy WebDAV path')"
-            class="oc-ml-s"
-            appearance="raw"
-            size="small"
-            :aria-label="$gettext('Copy WebDAV path to clipboard')"
-            @click="copyWebDAVPathToClipboard"
-          >
-            <oc-icon :name="copyWebDAVPathIcon" />
-          </oc-button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav url'" />
-        <td class="oc-flex oc-flex-middle">
-          <div v-oc-tooltip="webDavUrl" class="oc-text-truncate" v-text="webDavUrl" />
-          <oc-button
-            v-oc-tooltip="$gettext('Copy WebDAV url')"
-            class="oc-ml-s"
-            appearance="raw"
-            size="small"
-            :aria-label="$gettext('Copy WebDAV url to clipboard')"
-            @click="copyWebDAVUrlToClipboard"
-          >
-            <oc-icon :name="copyWebDAVUrlIcon" />
-          </oc-button>
-        </td>
-      </tr>
+      <web-dav-details />
       <portal-target
         name="app.files.sidebar.space.details.table"
         :slot-props="{ space: resource, resource }"
@@ -119,22 +84,17 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
-import {
-  useStore,
-  usePreviewService,
-  useClientService,
-  useConfigurationManager
-} from '../../../../composables'
+import { useStore, usePreviewService, useClientService } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
+import WebDavDetails from '../../WebDavDetails.vue'
 import { formatDateFromISO } from '../../../../helpers'
 import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
 import { ImageDimension } from '../../../../constants'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
 
 export default defineComponent({
   name: 'SpaceDetails',
-  components: { SpaceQuota },
+  components: { SpaceQuota, WebDavDetails },
   props: {
     showSpaceImage: {
       type: Boolean,
@@ -151,17 +111,8 @@ export default defineComponent({
     const store = useStore()
     const previewService = usePreviewService()
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
     const resource = inject<Ref<SpaceResource>>('resource')
     const spaceImage = ref('')
-    const copiedIcon = 'check'
-    const copyIcon = 'file-copy'
-    const copyWebDAVPathIcon = ref(copyIcon)
-    const copyWebDAVUrlIcon = ref(copyIcon)
-
-    const webDavUrl = computed(() => {
-      return urlJoin(configurationManager.serverUrl, unref(resource).webDavPath)
-    })
 
     const loadImageTask = useTask(function* (signal, ref) {
       if (!ref.resource?.spaceImageData || !props.showSpaceImage) {
@@ -184,28 +135,11 @@ export default defineComponent({
       return store.getters['Files/outgoingLinks'].length
     })
 
-    const copyWebDAVPathToClipboard = () => {
-      navigator.clipboard.writeText(unref(resource).webDavPath)
-      copyWebDAVPathIcon.value = copiedIcon
-      setTimeout(() => (copyWebDAVPathIcon.value = copyIcon), 500)
-    }
-
-    const copyWebDAVUrlToClipboard = () => {
-      navigator.clipboard.writeText(unref(webDavUrl))
-      copyWebDAVUrlIcon.value = copiedIcon
-      setTimeout(() => (copyWebDAVUrlIcon.value = copyIcon), 500)
-    }
-
     return {
       loadImageTask,
       spaceImage,
       resource,
-      linkShareCount,
-      copyWebDAVPathIcon,
-      copyWebDAVPathToClipboard,
-      copyWebDAVUrlIcon,
-      copyWebDAVUrlToClipboard,
-      webDavUrl
+      linkShareCount
     }
   },
   computed: {

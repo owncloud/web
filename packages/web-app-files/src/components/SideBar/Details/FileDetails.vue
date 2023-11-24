@@ -83,42 +83,7 @@
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
           <td v-text="resourceSize" />
         </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav path'" />
-          <td class="oc-flex oc-flex-middle">
-            <div
-              v-oc-tooltip="resource.webDavPath"
-              class="oc-text-truncate"
-              v-text="resource.webDavPath"
-            />
-            <oc-button
-              v-oc-tooltip="$gettext('Copy WebDAV path')"
-              class="oc-ml-s"
-              appearance="raw"
-              size="small"
-              :aria-label="$gettext('Copy WebDAV path to clipboard')"
-              @click="copyWebDAVPathToClipboard"
-            >
-              <oc-icon :name="copyWebDAVPathIcon" />
-            </oc-button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav url'" />
-          <td class="oc-flex oc-flex-middle">
-            <div v-oc-tooltip="webDavUrl" class="oc-text-truncate" v-text="webDavUrl" />
-            <oc-button
-              v-oc-tooltip="$gettext('Copy WebDAV url')"
-              class="oc-ml-s"
-              appearance="raw"
-              size="small"
-              :aria-label="$gettext('Copy WebDAV url to clipboard')"
-              @click="copyWebDAVUrlToClipboard"
-            >
-              <oc-icon :name="copyWebDAVUrlIcon" />
-            </oc-button>
-          </td>
-        </tr>
+        <web-dav-details />
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
           <td>
@@ -184,11 +149,11 @@ import { AncestorMetaData } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDetails.vue'
 
 export default defineComponent({
   name: 'FileDetails',
-  components: { TagsSelect },
+  components: { TagsSelect, WebDavDetails },
   setup() {
     const configurationManager = useConfigurationManager()
     const store = useStore()
@@ -201,10 +166,6 @@ export default defineComponent({
     const isPublicLinkContext = usePublicLinkContext({ store })
     const previewService = usePreviewService()
     const preview = ref(undefined)
-    const copiedIcon = 'check'
-    const copyIcon = 'file-copy'
-    const copyWebDAVPathIcon = ref(copyIcon)
-    const copyWebDAVUrlIcon = ref(copyIcon)
 
     const loadData = async () => {
       const calls = []
@@ -219,9 +180,6 @@ export default defineComponent({
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
-    const webDavUrl = computed(() => {
-      return urlJoin(configurationManager.serverUrl, unref(resource).webDavPath)
-    })
     const isFolder = computed(() => {
       return unref(resource).isFolder
     })
@@ -262,17 +220,6 @@ export default defineComponent({
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
-    const copyWebDAVPathToClipboard = () => {
-      navigator.clipboard.writeText(unref(resource).webDavPath)
-      copyWebDAVPathIcon.value = copiedIcon
-      setTimeout(() => (copyWebDAVPathIcon.value = copyIcon), 500)
-    }
-
-    const copyWebDAVUrlToClipboard = () => {
-      navigator.clipboard.writeText(unref(webDavUrl))
-      copyWebDAVUrlIcon.value = copiedIcon
-      setTimeout(() => (copyWebDAVUrlIcon.value = copyIcon), 500)
-    }
 
     watch(
       resource,
@@ -301,12 +248,7 @@ export default defineComponent({
       sharedAncestor,
       sharedAncestorRoute,
       formatDateRelative,
-      contextualHelper,
-      copyWebDAVPathIcon,
-      copyWebDAVPathToClipboard,
-      copyWebDAVUrlIcon,
-      copyWebDAVUrlToClipboard,
-      webDavUrl
+      contextualHelper
     }
   },
   computed: {
