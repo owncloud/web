@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, unref, inject } from 'vue'
+import { computed, defineComponent, inject, PropType, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
