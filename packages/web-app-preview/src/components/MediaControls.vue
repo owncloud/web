@@ -57,7 +57,7 @@
             :aria-label="imageShrinkDescription"
             @click="imageShrink"
           >
-            <oc-icon fill-type="line" name="checkbox-indeterminate" variation="inherit" />
+            <oc-icon fill-type="line" name="zoom-out" variation="inherit" />
           </oc-button>
           <oc-button
             v-oc-tooltip="imageOriginalSizeDescription"
@@ -77,7 +77,7 @@
             :aria-label="imageZoomDescription"
             @click="imageZoom"
           >
-            <oc-icon fill-type="line" name="add-box" variation="inherit" />
+            <oc-icon fill-type="line" name="zoom-in" variation="inherit" />
           </oc-button>
         </div>
         <div class="oc-ml-m">
