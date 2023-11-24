@@ -265,8 +265,7 @@ export class AuthService {
     await this.store.dispatch('resetUserState')
     await Promise.all([
       this.store.dispatch('clearDynamicNavItems'),
-      this.store.dispatch('hideModal'),
-      this.store.dispatch('clearSettingsValues')
+      this.store.dispatch('hideModal')
     ])
   }
 }
