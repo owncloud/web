@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.1.1...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.1.2...master
 
 Summary
 -------
@@ -24,10 +24,8 @@ Summary
 * Bugfix - Fix display path on resources: [#9843](https://github.com/owncloud/web/pull/9843)
 * Bugfix - Upload space image: [#9844](https://github.com/owncloud/web/pull/9844)
 * Bugfix - Duplicated file search request: [#9861](https://github.com/owncloud/web/pull/9861)
-* Bugfix - Respect "details"-query on private links: [#9868](https://github.com/owncloud/web/issues/9868)
 * Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
-* Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
@@ -211,15 +209,6 @@ Details
    https://github.com/owncloud/web/pull/9861
    https://github.com/owncloud/web/pull/9880
 
-* Bugfix - Respect "details"-query on private links: [#9868](https://github.com/owncloud/web/issues/9868)
-
-   The "details"-query on private links is now being respected properly when
-   `openLinksWithDefaultApp` is enabled. This fixed an issue where the sidebar
-   would not open despite requesting to do so.
-
-   https://github.com/owncloud/web/issues/9868
-   https://github.com/owncloud/web/pull/9947
-
 * Bugfix - Tags are no longer editable for a locked file: [#9873](https://github.com/owncloud/web/pull/9873)
 
    Tags are no longer editable for files that are currently locked.
@@ -239,13 +228,6 @@ Details
 
    https://github.com/owncloud/web/issues/9790
    https://github.com/owncloud/web/pull/9881
-
-* Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
-
-   Resolving private links via the share jail ID has been fixed.
-
-   https://github.com/owncloud/web/issues/9867
-   https://github.com/owncloud/web/pull/9913
 
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 
@@ -770,6 +752,38 @@ Details
 
    https://github.com/owncloud/web/issues/8163
    https://github.com/owncloud/web/pull/10047
+
+Changelog for ownCloud Web [7.1.2] (2023-11-16)
+=======================================
+The following sections list the changes in ownCloud web 7.1.2 relevant to
+ownCloud admins and users.
+
+[7.1.2]: https://github.com/owncloud/web/compare/v7.1.1...v7.1.2
+
+Summary
+-------
+
+* Bugfix - Respect "details"-query on private links: [#9868](https://github.com/owncloud/web/issues/9868)
+* Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
+
+Details
+-------
+
+* Bugfix - Respect "details"-query on private links: [#9868](https://github.com/owncloud/web/issues/9868)
+
+   The "details"-query on private links is now being respected properly when
+   `openLinksWithDefaultApp` is enabled. This fixed an issue where the sidebar
+   would not open despite requesting to do so.
+
+   https://github.com/owncloud/web/issues/9868
+   https://github.com/owncloud/web/pull/9947
+
+* Bugfix - Private link resolving via share jail ID: [#9913](https://github.com/owncloud/web/pull/9913)
+
+   Resolving private links via the share jail ID has been fixed.
+
+   https://github.com/owncloud/web/issues/9867
+   https://github.com/owncloud/web/pull/9913
 
 Changelog for ownCloud Web [7.1.1] (2023-10-25)
 =======================================
