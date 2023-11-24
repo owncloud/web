@@ -163,6 +163,10 @@
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
   },
+  "docxf": {
+    "name": "resource-type-form",
+    "color": "var(--oc-color-icon-form)"
+  },
   "dot": {
     "name": "resource-type-document",
     "color": "var(--oc-color-icon-document)"
@@ -293,7 +297,7 @@
   },
   "md": {
     "name": "resource-type-markdown",
-    "color": "var(--oc-color-text-default)"
+    "color": "var(--oc-color-icon-markdown)"
   },
   "mdb": {
     "name": "resource-type-text",
