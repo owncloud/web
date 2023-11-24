@@ -1,0 +1,6 @@
+Bugfix: Private link resolving via share jail ID
+
+Resolving private links via the share jail ID has been fixed.
+
+https://github.com/owncloud/web/pull/9913
+https://github.com/owncloud/web/issues/9867

@@ -1,5 +1,4 @@
-import { Download, Page } from '@playwright/test'
-import { expect } from '@playwright/test'
+import { Download, Page, expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
