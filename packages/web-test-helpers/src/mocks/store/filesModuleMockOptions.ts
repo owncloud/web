@@ -26,6 +26,7 @@ export const filesModuleMockOptions = {
       RENAME_FILE: jest.fn(),
       SET_HIDDEN_FILES_VISIBILITY: jest.fn(),
       SET_FILE_EXTENSIONS_VISIBILITY: jest.fn(),
+      SET_FILE_WEB_DAV_DETAILS_VISIBILITY: jest.fn(),
       UPSERT_RESOURCE: jest.fn(),
       CLEAR_CURRENT_FILES_LIST: jest.fn(),
       SET_CURRENT_FOLDER: jest.fn(),

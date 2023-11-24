@@ -19,5 +19,6 @@ export default {
    * View settings
    */
   areHiddenFilesShown: true,
-  areFileExtensionsShown: true
+  areFileExtensionsShown: true,
+  areWebDavDetailsShown: false
 }

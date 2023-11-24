@@ -26,7 +26,8 @@ import {
   announcePreviewService,
   announcePasswordPolicyService,
   announceAdditionalTranslations,
-  registerSSEEventListeners
+  registerSSEEventListeners,
+  setViewOptions
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -132,6 +133,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   app.mixin(focusMixin)
 
   app.mount('#owncloud')
+
+  setViewOptions({ store })
 
   const applications = Array.from(applicationStore.values())
   applications.forEach((application) => application.mounted(app))

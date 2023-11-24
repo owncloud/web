@@ -23,12 +23,6 @@ exports[`account page account information displays basic user information 1`] = 
       <span>You are not part of any group</span>
     </dd>
   </div>
-  <div class="account-page-info-language oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Language</dt>
-    <dd>
-      <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-11" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" placeholder="Please choose..." readonly="false" searchable="true"></oc-select-stub>
-    </dd>
-  </div>
   <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Logout from active devices</dt>
     <dd>
@@ -36,12 +30,6 @@ exports[`account page account information displays basic user information 1`] = 
     </dd>
   </div>
   <!--v-if-->
-  <div class="account-page-notification oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Notifications</dt>
-    <dd>
-      <oc-checkbox-stub disabled="false" hidelabel="false" id="oc-checkbox-12" label="Receive notification mails" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
-    </dd>
-  </div>
 </dl>
 `;
 

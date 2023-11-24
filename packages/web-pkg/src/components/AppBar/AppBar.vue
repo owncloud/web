@@ -75,7 +75,7 @@
 <script lang="ts">
 import last from 'lodash-es/last'
 import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
@@ -296,7 +296,6 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['files', 'selectedFiles']),
-    ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
 
     showContextActions() {
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
@@ -331,27 +330,7 @@ export default defineComponent({
     window.removeEventListener('resize', this.onResize)
   },
 
-  created() {
-    // Storage returns a string so we need to convert it into a boolean
-    const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
-    const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
-
-    if (areHiddenFilesShownBoolean !== this.areHiddenFilesShown) {
-      this.SET_HIDDEN_FILES_VISIBILITY(areHiddenFilesShownBoolean)
-    }
-
-    // Storage returns a string so we need to convert it into a boolean
-    const areFileExtensionsShown = window.localStorage.getItem('oc_fileExtensionsShown') || 'true'
-    const areFileExtensionsShownBoolean = areFileExtensionsShown === 'true'
-
-    if (areFileExtensionsShownBoolean !== this.areFileExtensionsShown) {
-      this.SET_FILE_EXTENSIONS_VISIBILITY(areFileExtensionsShownBoolean)
-    }
-  },
-
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
-
     onResize() {
       const totalContentWidth =
         document.getElementById('web-content-main')?.getBoundingClientRect().width || 0

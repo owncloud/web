@@ -31,90 +31,115 @@
         </oc-button>
       </div>
     </div>
-    <h2 class="oc-text-bold oc-mb" v-text="$gettext('Account Information')" />
-    <dl class="account-page-info oc-flex oc-flex-wrap">
-      <div class="account-page-info-username oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
-        <dd>
-          {{ user.username || user.id }}
-        </dd>
-      </div>
-      <div v-if="user.username && user.id" class="account-page-info-userid">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
-        <dd>
-          {{ user.id }}
-        </dd>
-      </div>
-      <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
-        <dd>
-          {{ user.displayname }}
-        </dd>
-      </div>
-      <div class="account-page-info-email oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
-        <dd>
-          <template v-if="user.email">{{ user.email }}</template>
-          <span v-else v-text="$gettext('No email has been set up')" />
-        </dd>
-      </div>
-      <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
-        <dd data-testid="group-names">
-          <span v-if="groupNames">{{ groupNames }}</span>
-          <span
-            v-else
-            data-testid="group-names-empty"
-            v-text="$gettext('You are not part of any group')"
+    <div>
+      <h2 class="oc-text-bold oc-mb" v-text="$gettext('Account Information')" />
+      <dl class="account-page-info oc-flex oc-flex-wrap">
+        <div class="account-page-info-username oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
+          <dd>
+            {{ user.username || user.id }}
+          </dd>
+        </div>
+        <div v-if="user.username && user.id" class="account-page-info-userid">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
+          <dd>
+            {{ user.id }}
+          </dd>
+        </div>
+        <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
+          <dd>
+            {{ user.displayname }}
+          </dd>
+        </div>
+        <div class="account-page-info-email oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
+          <dd>
+            <template v-if="user.email">{{ user.email }}</template>
+            <span v-else v-text="$gettext('No email has been set up')" />
+          </dd>
+        </div>
+        <div class="account-page-info-groups oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
+          <dd data-testid="group-names">
+            <span v-if="groupNames">{{ groupNames }}</span>
+            <span
+              v-else
+              data-testid="group-names-empty"
+              v-text="$gettext('You are not part of any group')"
+            />
+          </dd>
+        </div>
+        <div v-if="logoutUrl" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+          <dt
+            class="oc-text-normal oc-text-muted"
+            v-text="$gettext('Logout from active devices')"
           />
-        </dd>
-      </div>
-      <div class="account-page-info-language oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
-        <dd data-testid="language">
-          <oc-select
-            v-if="languageOptions"
-            :placeholder="$gettext('Please choose...')"
-            :model-value="selectedLanguageValue"
-            :clearable="false"
-            :options="languageOptions"
-            @update:model-value="updateSelectedLanguage"
-          />
-        </dd>
-      </div>
-      <div v-if="logoutUrl" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Logout from active devices')" />
-        <dd data-testid="logout">
-          <oc-button
-            appearance="raw"
-            type="a"
-            :href="logoutUrl"
-            target="_blank"
-            data-testid="account-page-logout-url-btn"
-          >
-            <span v-text="$gettext('Show devices')" />
-          </oc-button>
-        </dd>
-      </div>
-      <div v-if="showGdprExport" class="account-page-gdpr-export oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
-        <dd data-testid="gdpr-export">
-          <gdpr-export />
-        </dd>
-      </div>
-      <div v-if="isSettingsServiceSupported" class="account-page-notification oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
-        <dd data-testid="notification-mails">
-          <oc-checkbox
-            :model-value="disableEmailNotificationsValue"
-            size="large"
-            :label="$gettext('Receive notification mails')"
-            data-testid="account-page-notification-mails-checkbox"
-            @update:model-value="updateDisableEmailNotifications"
-          />
-        </dd>
-      </div>
-    </dl>
+          <dd data-testid="logout">
+            <oc-button
+              appearance="raw"
+              type="a"
+              :href="logoutUrl"
+              target="_blank"
+              data-testid="account-page-logout-url-btn"
+            >
+              <span v-text="$gettext('Show devices')" />
+            </oc-button>
+          </dd>
+        </div>
+        <div v-if="showGdprExport" class="account-page-gdpr-export oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
+          <dd data-testid="gdpr-export">
+            <gdpr-export />
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div>
+      <h2 class="oc-text-bold oc-mb" v-text="$gettext('Preferences')" />
+      <dl class="account-page-preferences oc-flex oc-flex-wrap">
+        <div class="account-page-info-language oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
+          <dd data-testid="language" class="oc-width-1-3">
+            <oc-select
+              v-if="languageOptions"
+              :placeholder="$gettext('Please choose...')"
+              :model-value="selectedLanguageValue"
+              :clearable="false"
+              :options="languageOptions"
+              @update:model-value="updateSelectedLanguage"
+            />
+          </dd>
+        </div>
+        <div
+          v-if="isSettingsServiceSupported"
+          class="account-page-notification oc-mb oc-width-1-2@s"
+        >
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
+          <dd data-testid="notification-mails">
+            <oc-checkbox
+              :model-value="disableEmailNotificationsValue"
+              size="large"
+              :label="$gettext('Receive notification mails')"
+              data-testid="account-page-notification-mails-checkbox"
+              @update:model-value="updateDisableEmailNotifications"
+            />
+          </dd>
+        </div>
+        <div class="account-page-view-options oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('View options')" />
+          <dd data-testid="view-options">
+            <oc-checkbox
+              :model-value="viewOptionWebDavDetailsValue"
+              size="large"
+              :label="$gettext('Show WebDav information in file details')"
+              data-testid="account-page-webdav-details-checkbox"
+              @update:model-value="updateViewOptionsWebDavDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+    </div>
   </main>
 </template>
 
@@ -160,6 +185,7 @@ export default defineComponent({
     const accountBundle = ref<SettingsBundle>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
+    const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
     const sseEnabled = useCapabilityCoreSSE()
 
     // FIXME: Use settings service capability when we have it
@@ -324,12 +350,12 @@ export default defineComponent({
         }
 
         store.dispatch('showMessage', {
-          title: $gettext('Language was saved successfully.')
+          title: $gettext('Preference saved.')
         })
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Saving language failed…'),
+          title: $gettext('Unable to save preference…'),
           error: e
         })
       }
@@ -343,12 +369,28 @@ export default defineComponent({
         })
         disableEmailNotificationsValue.value = option
         store.dispatch('showMessage', {
-          title: $gettext('Email notifications preference saved successfully.')
+          title: $gettext('Preference saved.')
         })
       } catch (e) {
         console.error(e)
         store.dispatch('showErrorMessage', {
-          title: $gettext('Unable to save email notifications preference…'),
+          title: $gettext('Unable to save preference…'),
+          error: e
+        })
+      }
+    }
+
+    const updateViewOptionsWebDavDetails = (option: boolean) => {
+      try {
+        store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', option)
+        viewOptionWebDavDetailsValue.value = option
+        store.dispatch('showMessage', {
+          title: $gettext('Preference saved.')
+        })
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Unable to save preference…'),
           error: e
         })
       }
@@ -379,6 +421,7 @@ export default defineComponent({
       selectedLanguageValue,
       updateSelectedLanguage,
       updateDisableEmailNotifications,
+      updateViewOptionsWebDavDetails,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
       isChangePasswordDisabled,
       showGdprExport,
@@ -388,6 +431,7 @@ export default defineComponent({
       logoutUrl: configurationManager.logoutUrl,
       isLoading,
       disableEmailNotificationsValue,
+      viewOptionWebDavDetailsValue,
       loadAccountBundleTask,
       loadGraphUserTask,
       loadValuesListTask
@@ -431,8 +475,8 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-.account-page-info dd {
+<style lang="scss" scoped>
+dd {
   margin-left: 0;
 }
 </style>

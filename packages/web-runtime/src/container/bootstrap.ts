@@ -659,3 +659,29 @@ export const registerSSEEventListeners = ({
     onSSEProcessingFinishedEvent({ store, msg, clientService, resourceQueue })
   )
 }
+
+export const setViewOptions = ({ store }: { store: Store<unknown> }): void => {
+  /**
+   *   Storage returns a string so we need to convert it into a boolean
+   */
+  const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
+  const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
+
+  if (areHiddenFilesShownBoolean !== store.getters['Files/areHiddenFilesShown']) {
+    store.commit('Files/SET_HIDDEN_FILES_VISIBILITY', areHiddenFilesShownBoolean)
+  }
+
+  const areFileExtensionsShown = window.localStorage.getItem('oc_fileExtensionsShown') || 'true'
+  const areFileExtensionsShownBoolean = areFileExtensionsShown === 'true'
+
+  if (areFileExtensionsShownBoolean !== store.getters['Files/areFileExtensionsShownBoolean']) {
+    store.commit('Files/SET_FILE_EXTENSIONS_VISIBILITY', areFileExtensionsShownBoolean)
+  }
+
+  const areWebDavDetailsShown = window.localStorage.getItem('oc_webDavDetailsShown') || 'false'
+  const areWebDavDetailsShownBoolean = areWebDavDetailsShown === 'true'
+
+  if (areWebDavDetailsShownBoolean !== store.getters['Files/areWebDavDetailsShown']) {
+    store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', areWebDavDetailsShownBoolean)
+  }
+}
