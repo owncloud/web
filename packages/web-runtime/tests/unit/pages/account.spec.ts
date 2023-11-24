@@ -319,6 +319,22 @@ describe('account page', () => {
       expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
+
+  describe('Method "updateViewOptionsWebDavDetails', () => {
+    it('should show a message on success', async () => {
+      const { wrapper, storeOptions } = getWrapper({})
+
+      await wrapper.vm.loadAccountBundleTask.last
+      await wrapper.vm.loadValuesListTask.last
+      await wrapper.vm.loadGraphUserTask.last
+
+      await wrapper.vm.updateViewOptionsWebDavDetails(true)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      expect(
+        storeOptions.modules.Files.mutations.SET_FILE_WEB_DAV_DETAILS_VISIBILITY
+      ).toHaveBeenCalled()
+    })
+  })
 })
 
 function getWrapper({

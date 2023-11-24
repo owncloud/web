@@ -380,7 +380,7 @@ export default defineComponent({
       }
     }
 
-    const updateViewOptionsWebDavDetails = async (option: boolean) => {
+    const updateViewOptionsWebDavDetails = (option: boolean) => {
       try {
         store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', option)
         viewOptionWebDavDetailsValue.value = option
@@ -421,6 +421,7 @@ export default defineComponent({
       selectedLanguageValue,
       updateSelectedLanguage,
       updateDisableEmailNotifications,
+      updateViewOptionsWebDavDetails,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
       isChangePasswordDisabled,
       showGdprExport,
@@ -433,8 +434,7 @@ export default defineComponent({
       viewOptionWebDavDetailsValue,
       loadAccountBundleTask,
       loadGraphUserTask,
-      loadValuesListTask,
-      updateViewOptionsWebDavDetails
+      loadValuesListTask
     }
   },
   data() {
