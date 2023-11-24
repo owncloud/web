@@ -4,7 +4,7 @@ import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource, WebDavResponseResource } from './types'
 
 const fileExtensions = {
-  complex: ['tar.bz2', 'tar.gz', '.tar.xz']
+  complex: ['tar.bz2', 'tar.gz', 'tar.xz']
 }
 
 export function buildWebDavFilesPath(userId: string, path: string) {

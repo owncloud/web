@@ -16,11 +16,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref, inject } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
-import { AVAILABLE_SIZES, IconType, resolveFileIcon } from '../../helpers'
+import { AVAILABLE_SIZES, IconType, createDefaultFileIconMapping } from '../../helpers'
+
+import { OcResourceIconMapping, ocResourceIconMappingInjectionKey } from './types'
 
 const defaultFolderIcon: IconType = {
   name: 'resource-type-folder',
@@ -35,6 +37,8 @@ const defaultFallbackIcon: IconType = {
   name: 'resource-type-file',
   color: 'var(--oc-color-text-default)'
 }
+
+const defaultFileIconMapping = createDefaultFileIconMapping()
 
 export default defineComponent({
   name: 'OcResourceIcon',
@@ -62,6 +66,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const iconMappingInjection = inject<OcResourceIconMapping>(ocResourceIconMappingInjectionKey)
+
     const isFolder = computed(() => {
       // fallback is necessary since
       // sometimes resources without a type
@@ -87,9 +93,13 @@ export default defineComponent({
         return defaultFolderIcon
       }
 
-      let icon = resolveFileIcon(unref(extension))
+      const icon =
+        defaultFileIconMapping[unref(extension)] ||
+        iconMappingInjection?.mimeType[unref(mimeType)] ||
+        iconMappingInjection?.extension[unref(extension)]
 
       return {
+        ...defaultFallbackIcon,
         ...icon
       }
     })
