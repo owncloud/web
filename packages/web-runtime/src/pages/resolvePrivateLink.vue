@@ -65,6 +65,7 @@ import {
   isMountPointSpaceResource,
   isPersonalSpaceResource,
   Resource,
+  SHARE_JAIL_ID,
   SpaceResource
 } from 'web-client/src/helpers'
 import { urlJoin } from 'web-client/src/utils'
@@ -101,6 +102,10 @@ export default defineComponent({
 
     const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
+      if (id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`) {
+        return router.push({ name: 'files-shares-with-me' })
+      }
+
       let path
       let matchingSpace = getMatchingSpace(id)
       let resourceIsNestedInShare = false
@@ -156,6 +161,11 @@ export default defineComponent({
       }
 
       const { params, query } = createFileRouteOptions(matchingSpace, { fileId, path })
+      const openWithDefault =
+        configurationManager.options.openLinksWithDefaultApp &&
+        unref(openWithDefaultApp) !== 'false' &&
+        !unref(details)
+
       const location: RouteLocationRaw = {
         name: targetLocation,
         params,
@@ -166,10 +176,7 @@ export default defineComponent({
               ? matchingSpace.shareId
               : unref(resource).fileId,
           ...(unref(details) && { details: unref(details) }),
-          ...(configurationManager.options.openLinksWithDefaultApp &&
-            unref(openWithDefaultApp) !== 'false' && {
-              openWithDefaultApp: 'true'
-            })
+          ...(openWithDefault && { openWithDefaultApp: 'true' })
         }
       }
       router.push(location)
