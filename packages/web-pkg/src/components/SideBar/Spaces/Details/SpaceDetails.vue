@@ -66,7 +66,7 @@
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
-      <web-dav-details />
+      <web-dav-details v-if="showWebDavDetails" />
       <portal-target
         name="app.files.sidebar.space.details.table"
         :slot-props="{ space: resource, resource }"
@@ -135,11 +135,16 @@ export default defineComponent({
       return store.getters['Files/outgoingLinks'].length
     })
 
+    const showWebDavDetails = computed(() => {
+      return store.state.Files.areWebDavDetailsShown
+    })
+
     return {
       loadImageTask,
       spaceImage,
       resource,
-      linkShareCount
+      linkShareCount,
+      showWebDavDetails
     }
   },
   computed: {

@@ -214,6 +214,12 @@ export default {
     state.areFileExtensionsShown = value
 
     window.localStorage.setItem('oc_fileExtensionsShown', value)
+  },
+
+  SET_FILE_WEB_DAV_DETAILS_VISIBILITY(state, value) {
+    state.areWebDavDetailsShown = value
+
+    window.localStorage.setItem('oc_webDavDetailsShown', value)
   }
 }
 

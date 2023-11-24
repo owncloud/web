@@ -83,7 +83,7 @@
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
           <td v-text="resourceSize" />
         </tr>
-        <web-dav-details />
+        <web-dav-details v-if="showWebDavDetails" />
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
           <td>
@@ -217,6 +217,9 @@ export default defineComponent({
         matchingSpace: unref(space) || getMatchingSpace(unref(resource))
       })
     })
+    const showWebDavDetails = computed(() => {
+      return store.state.Files.areWebDavDetailsShown
+    })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
@@ -248,7 +251,8 @@ export default defineComponent({
       sharedAncestor,
       sharedAncestorRoute,
       formatDateRelative,
-      contextualHelper
+      contextualHelper,
+      showWebDavDetails
     }
   },
   computed: {

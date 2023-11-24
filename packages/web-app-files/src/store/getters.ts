@@ -67,5 +67,14 @@ export default {
   },
   versions: (state) => {
     return state.versions
+  },
+  areHiddenFilesShown: (state) => {
+    return state.areHiddenFilesShown
+  },
+  areFileExtensionsShown: (state) => {
+    return state.areFileExtensionsShown
+  },
+  areWebDavDetailsShown: (state) => {
+    return state.areWebDavDetailsShown
   }
 }
