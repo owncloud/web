@@ -81,6 +81,7 @@ Summary
 * Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
 * Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
 * Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
+* Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
 
 Details
 -------
@@ -768,6 +769,17 @@ Details
 
    https://github.com/owncloud/web/issues/9817
    https://github.com/owncloud/web/pull/10057
+
+* Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
+
+   We've added WebDav path and WebDav url information to the details view, this
+   might be usefully when the user wants to add an external WebDav client.
+
+   By default this view option is disabled but can be enabled via
+   account->preferences view.
+
+   https://github.com/owncloud/web/issues/9714
+   https://github.com/owncloud/web/pull/10062
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
