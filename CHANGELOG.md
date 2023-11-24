@@ -62,6 +62,7 @@ Summary
 * Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 * Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
+* Enhancement - Provide vendor neutral file icons: [#9847](https://github.com/owncloud/web/issues/9847)
 * Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
 * Enhancement - Search query term linking: [#9854](https://github.com/owncloud/web/pull/9854)
 * Enhancement - Add permission to delete link passwords when password is enforced: [#9857](https://github.com/owncloud/web/pull/9857)
@@ -72,7 +73,6 @@ Summary
 * Enhancement - Create shortcuts: [#9890](https://github.com/owncloud/web/pull/9890)
 * Enhancement - Manage tags in details panel: [#9905](https://github.com/owncloud/web/pull/9905)
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
-* Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
 * Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
 * Enhancement - Display error message for upload to locked folder: [#9940](https://github.com/owncloud/web/pull/9940)
 * Enhancement - Support more audio formats with correct icon: [#9966](https://github.com/owncloud/web/issues/9966)
@@ -589,6 +589,15 @@ Details
    https://github.com/owncloud/web/pull/9841
    https://github.com/owncloud/web/pull/9981
 
+* Enhancement - Provide vendor neutral file icons: [#9847](https://github.com/owncloud/web/issues/9847)
+
+   We replaced the icons for Document, Spreadsheet, Presentation, Forms and
+   Markdown
+
+   https://github.com/owncloud/web/issues/9847
+   https://github.com/owncloud/web/pull/9911
+   https://github.com/owncloud/web/pull/10037
+
 * Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
 
    We've changed the actions in the AppBar in Files app to show only create folder
@@ -695,14 +704,6 @@ Details
 
    https://github.com/owncloud/web/issues/9847
    https://github.com/owncloud/web/pull/9906
-
-* Enhancement - Provide vendor neutral file icons: [#9911](https://github.com/owncloud/web/pull/9911)
-
-   We replaced the icons for Document, Spreadsheet, Presentation, Forms and
-   Markdown
-
-   https://github.com/owncloud/web/issues/9847
-   https://github.com/owncloud/web/pull/9911
 
 * Enhancement - Add media type filter chip: [#9912](https://github.com/owncloud/web/pull/9912)
 
