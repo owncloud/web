@@ -1,0 +1,6 @@
+Change: Remove skeleton app
+
+Due to improvements in the extension system in general, we have removed the skeleton app.
+Documentation regarding the extension API and guides/examples can be found in the dev docs.
+
+https://github.com/owncloud/web/pull/10067
