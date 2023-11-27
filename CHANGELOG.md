@@ -28,6 +28,7 @@ Summary
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
+* Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
@@ -247,6 +248,15 @@ Details
 
    https://github.com/owncloud/web/issues/9922
    https://github.com/owncloud/web/pull/9931
+
+* Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
+
+   We have simplified the mapping between file extensions and their display in the
+   web UI (icon and its color). Now, further formats/extensions
+   (`.tar.gz`,`.tar.xz`,`.bz2`, ...) get displayed correctly.
+
+   https://github.com/owncloud/web/issues/10031
+   https://github.com/owncloud/web/pull/10059
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
