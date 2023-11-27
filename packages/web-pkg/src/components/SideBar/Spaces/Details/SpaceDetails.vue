@@ -96,7 +96,6 @@ import { formatDateFromISO } from '../../../../helpers'
 import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
 import { ImageDimension } from '../../../../constants'
-import { $gettext } from '../../../../router/utils'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -246,7 +245,6 @@ export default defineComponent({
     this.loadImageTask.perform(this)
   },
   methods: {
-    $gettext,
     expandSharesPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'space-share')
     },
