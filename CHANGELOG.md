@@ -29,6 +29,7 @@ Summary
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
 * Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
+* Bugfix - Logout page after token expiry: [#10065](https://github.com/owncloud/web/pull/10065)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
@@ -257,6 +258,14 @@ Details
 
    https://github.com/owncloud/web/issues/10031
    https://github.com/owncloud/web/pull/10059
+
+* Bugfix - Logout page after token expiry: [#10065](https://github.com/owncloud/web/pull/10065)
+
+   Wrongly showing the logout page after revisiting Web with an expired token has
+   been fixed. Users now get redirected to the login page instead.
+
+   https://github.com/owncloud/web/issues/10063
+   https://github.com/owncloud/web/pull/10065
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
