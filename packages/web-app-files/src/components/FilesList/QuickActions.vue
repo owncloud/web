@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-flex">
+  <div v-if="!isEmbedModeEnabled" class="oc-flex">
     <oc-button
       v-for="action in filteredActions"
       :key="action.label($gettext)"
@@ -23,6 +23,7 @@ import { computed, defineComponent } from 'vue'
 import {
   useAbility,
   useClientService,
+  useEmbedMode,
   usePasswordPolicyService,
   useStore
 } from '@ownclouders/web-pkg'
@@ -47,6 +48,7 @@ export default defineComponent({
     const clientService = useClientService()
     const passwordPolicyService = usePasswordPolicyService()
     const language = useGettext()
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const filteredActions = computed(() =>
       pickBy(props.actions, (action) => action.displayed(props.item, store, ability) === true)
@@ -58,7 +60,8 @@ export default defineComponent({
       passwordPolicyService,
       store,
       language,
-      filteredActions
+      filteredActions,
+      isEmbedModeEnabled
     }
   }
 })

@@ -1,5 +1,13 @@
+import { useEmbedMode } from '@ownclouders/web-pkg'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
+import { ref } from 'vue'
+
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useEmbedMode: jest.fn()
+}))
 
 const collaboratorAction = {
   displayed: jest.fn(() => true),
@@ -25,10 +33,6 @@ const testItem = {
 }
 
 describe('QuickActions', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('when multiple actions are provided', () => {
     const { wrapper } = getWrapper()
 
@@ -67,9 +71,18 @@ describe('QuickActions', () => {
       })
     })
   })
+
+  it('does not show actions in embed mode', () => {
+    const { wrapper } = getWrapper({ embedModeEnabled: true })
+    expect(wrapper.findAll('.oc-button').length).toBe(0)
+  })
 })
 
-function getWrapper() {
+function getWrapper({ embedModeEnabled = false } = {}) {
+  jest
+    .mocked(useEmbedMode)
+    .mockReturnValue(mock<ReturnType<typeof useEmbedMode>>({ isEnabled: ref(embedModeEnabled) }))
+
   return {
     wrapper: shallowMount(QuickActions, {
       props: {
