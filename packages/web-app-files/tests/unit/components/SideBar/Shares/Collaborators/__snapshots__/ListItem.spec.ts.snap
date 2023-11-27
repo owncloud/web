@@ -13,7 +13,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
             <span translate="no">Brian Murphy</span>
             <!--v-if-->
           </span>
-          <span class="oc-invisible-sr">Share receiver name: %{ displayName } (%{ additionalInfo })</span>
+          <span class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span>
         </div>
         <div>
           <div class="oc-flex oc-flex-nowrap oc-flex-middle">

@@ -147,7 +147,6 @@ import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'ListItem',
@@ -412,7 +411,6 @@ export default defineComponent({
     }
   },
   methods: {
-    $gettext,
     ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['changeShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),

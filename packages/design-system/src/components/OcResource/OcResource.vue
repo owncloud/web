@@ -1,5 +1,5 @@
 <template>
-  <div v-oc-browser-translate-off class="oc-resource oc-text-overflow">
+  <div class="oc-resource oc-text-overflow">
     <oc-resource-link
       v-if="isIconDisplayed"
       :resource="resource"
@@ -64,6 +64,7 @@
           v-if="isPathDisplayed"
           :to="parentFolderLink"
           :style="parentFolderStyle"
+          :translate="translate"
           class="parent-folder"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
@@ -190,6 +191,10 @@ export default defineComponent({
   },
   emits: ['click'],
   computed: {
+    translate() {
+      const isInRoot = this.resource.path.split('/').length === 2
+      return isInRoot ? 'yes' : 'no'
+    },
     parentFolderComponentType() {
       return this.parentFolderLink !== null ? 'router-link' : 'span'
     },

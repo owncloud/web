@@ -150,7 +150,6 @@ import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
 import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDetails.vue'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -348,7 +347,6 @@ export default defineComponent({
     }
   },
   methods: {
-    $gettext,
     expandVersionsPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
     }

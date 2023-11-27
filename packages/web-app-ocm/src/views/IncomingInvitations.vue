@@ -68,7 +68,6 @@ import {
   useRouter,
   useConfigurationManager
 } from '@ownclouders/web-pkg'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
 import { providerListSchema } from '../schemas'
@@ -199,8 +198,7 @@ export default defineComponent({
       acceptInvitationButtonDisabled,
       acceptInvite
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 
