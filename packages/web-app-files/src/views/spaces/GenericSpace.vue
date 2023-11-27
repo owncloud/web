@@ -18,16 +18,16 @@
           <oc-button
             v-if="isEmbedModeEnabled"
             key="new-folder-btn"
-            v-oc-tooltip="limitedScreenSpace ? $gettext('Create a new folder') : ''"
+            v-oc-tooltip="limitedScreenSpace ? $gettext('New folder') : ''"
             data-testid="btn-new-folder"
-            :aria-label="$gettext('Create a new folder')"
+            :aria-label="$gettext('New folder')"
             appearance="filled"
             variation="primary"
             :disabled="!canUpload"
             @click="createNewFolderAction"
           >
             <oc-icon name="add" />
-            <span v-if="!limitedScreenSpace" v-text="$gettext('Create a new folder')" />
+            <span v-if="!limitedScreenSpace" v-text="$gettext('New folder')" />
           </oc-button>
 
           <create-and-upload

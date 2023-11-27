@@ -9,8 +9,10 @@
       data-testid="button-share"
       variation="inverse"
       appearance="filled"
-      :disabled="areSelectActionsDisabled || !canCreatePublicLinks"
-      @click="sharePublicLinks"
+      :disabled="
+        areSelectActionsDisabled || !createLinkAction.isEnabled({ resources: selectedFiles, space })
+      "
+      @click="createLinkAction.handler({ resources: selectedFiles, space })"
       >{{ $gettext('Share links') }}</oc-button
     >
     <oc-button
@@ -25,30 +27,25 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import {
-  createQuicklink,
-  getDefaultLinkPermissions,
-  showQuickLinkPasswordModal,
+  FileAction,
   useAbility,
-  useClientService,
   useEmbedMode,
-  usePasswordPolicyService,
+  useFileActionsCreateLink,
   useStore
 } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
-import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 export default {
   setup() {
     const store = useStore()
     const ability = useAbility()
-    const clientService = useClientService()
-    const passwordPolicyService = usePasswordPolicyService()
     const language = useGettext()
     const { isLocationPicker, postMessage } = useEmbedMode()
 
+    const space = computed<SpaceResource>(() => store.getters['runtime/spaces/currentSpace'])
     const selectedFiles = computed<Resource[]>(() => {
       if (isLocationPicker.value) {
         return [store.getters['Files/currentFolder']]
@@ -56,6 +53,9 @@ export default {
 
       return store.getters['Files/selectedFiles']
     })
+
+    const { actions: createLinkActions } = useFileActionsCreateLink({ store })
+    const createLinkAction = computed<FileAction>(() => unref(createLinkActions)[0])
 
     const areSelectActionsDisabled = computed<boolean>(() => selectedFiles.value.length < 1)
 
@@ -76,74 +76,16 @@ export default {
       postMessage<null>('owncloud-embed:cancel', null)
     }
 
-    const emitShare = (links: string[]): void => {
-      if (!canCreatePublicLinks.value) return
-
-      postMessage<string[]>('owncloud-embed:share', links)
-    }
-
-    const sharePublicLinks = async (): Promise<string[]> => {
-      if (!canCreatePublicLinks.value) return
-
-      try {
-        const passwordEnforced: boolean =
-          store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
-          true
-
-        const permissions = getDefaultLinkPermissions({ ability, store })
-
-        if (passwordEnforced && permissions > SharePermissionBit.Internal) {
-          showQuickLinkPasswordModal(
-            { store, $gettext: language.$gettext, passwordPolicyService },
-            async (password) => {
-              const links: string[] = await Promise.all(
-                selectedFiles.value.map(
-                  async (resource) =>
-                    (
-                      await createQuicklink({
-                        ability,
-                        resource,
-                        clientService,
-                        language,
-                        store,
-                        password
-                      })
-                    ).url
-                )
-              )
-
-              emitShare(links)
-            }
-          )
-
-          return
-        }
-
-        const links: string[] = await Promise.all(
-          selectedFiles.value.map(
-            async (resource) =>
-              (await createQuicklink({ ability, resource, clientService, language, store })).url
-          )
-        )
-
-        emitShare(links)
-      } catch (error) {
-        console.error(error)
-        store.dispatch('showErrorMessage', {
-          title: language.$gettext('Sharing links failed...'),
-          error
-        })
-      }
-    }
-
     return {
+      selectedFiles,
       areSelectActionsDisabled,
       canCreatePublicLinks,
       isLocationPicker,
       selectLabel,
-      sharePublicLinks,
       emitCancel,
-      emitSelect
+      emitSelect,
+      space,
+      createLinkAction
     }
   }
 }
