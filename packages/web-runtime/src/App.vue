@@ -32,11 +32,11 @@
       :checkbox-label="modal.checkboxLabel"
       :contextual-helper-label="modal.contextualHelperLabel"
       :contextual-helper-data="modal.contextualHelperData"
-      @cancel="modal.onCancel"
-      @confirm="modal.onConfirm"
+      @cancel="onModalCancel"
+      @confirm="onModalConfirm"
       @input="modal.onInput"
       @checkbox-changed="modal.onCheckboxValueChanged"
-      @confirm-secondary="modal.onConfirmSecondary"
+      @confirm-secondary="onModalConfirmSecondary"
       @passwordChallengeCompleted="modal.onPasswordChallengeCompleted"
       @passwordChallengeFailed="modal.onPasswordChallengeFailed"
       @mounted="focusModal"
@@ -45,6 +45,7 @@
       <template v-if="modal.customContent || modal.customComponent" #content>
         <div v-if="modal.customContent" v-html="modal.customContent" />
         <component
+          ref="modalComponent"
           :is="modal.customComponent"
           v-else
           :modal="modal"
@@ -60,7 +61,7 @@ import SkipTo from './components/SkipTo.vue'
 import LayoutApplication from './layouts/Application.vue'
 import LayoutLoading from './layouts/Loading.vue'
 import LayoutPlain from './layouts/Plain.vue'
-import { computed, defineComponent, unref, watch } from 'vue'
+import { computed, defineComponent, ref, unref, watch, VNodeRef } from 'vue'
 import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus, useRouter } from '@ownclouders/web-pkg'
@@ -78,6 +79,32 @@ export default defineComponent({
     useHead({ store })
 
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
+
+    const modalComponent = ref<VNodeRef>()
+    const onModalConfirm = (...args) => {
+      if (store.state.modal.onConfirm) {
+        return store.state.modal.onConfirm(...args, { component: modalComponent })
+      }
+      if ((unref(modalComponent) as any)?.onConfirm) {
+        return (unref(modalComponent) as any)?.onConfirm()
+      }
+    }
+    const onModalConfirmSecondary = (...args) => {
+      if (store.state.modal.onConfirmSecondary) {
+        return store.state.modal.onConfirmSecondary(...args, { component: modalComponent })
+      }
+      if ((unref(modalComponent) as any)?.onConfirmSecondary) {
+        return (unref(modalComponent) as any)?.onConfirmSecondary()
+      }
+    }
+    const onModalCancel = (...args) => {
+      if (store.state.modal.onCancel) {
+        return store.state.modal.onCancel(...args, { component: modalComponent })
+      }
+      if ((unref(modalComponent) as any)?.onCancel) {
+        return (unref(modalComponent) as any)?.onCancel()
+      }
+    }
 
     watch(
       () => unref(activeRoute),
@@ -103,6 +130,13 @@ export default defineComponent({
         store.commit('Files/SET_CURRENT_FOLDER', null)
       }
     )
+
+    return {
+      modalComponent,
+      onModalConfirm,
+      onModalCancel,
+      onModalConfirmSecondary
+    }
   },
   data() {
     return {
