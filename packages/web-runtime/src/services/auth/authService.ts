@@ -227,6 +227,16 @@ export class AuthService {
       })
     }
     if (isUserContext(this.router, route) || isIdpContext(this.router, route)) {
+      // defines a number of seconds after a token expired.
+      // if that threshold surpasses we assume a regular token expiry instead of an auth error.
+      // as a result, the user will be logged out.
+      const TOKEN_EXPIRY_THRESHOLD = 5
+
+      const user = await this.userManager.getUser()
+      if (user?.expires_in && user.expires_in < -TOKEN_EXPIRY_THRESHOLD) {
+        return this.logoutUser()
+      }
+
       await this.userManager.removeUser('authError')
       return
     }
@@ -265,8 +275,7 @@ export class AuthService {
     await this.store.dispatch('resetUserState')
     await Promise.all([
       this.store.dispatch('clearDynamicNavItems'),
-      this.store.dispatch('hideModal'),
-      this.store.dispatch('clearSettingsValues')
+      this.store.dispatch('hideModal')
     ])
   }
 }
