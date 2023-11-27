@@ -1,4 +1,9 @@
-import { copyQuicklink, createQuicklink, CreateQuicklink } from '../../../../src/helpers/share'
+import {
+  copyQuicklink,
+  createQuicklink,
+  CreateQuicklink,
+  getDefaultLinkPermissions
+} from '../../../../src/helpers/share'
 import { DateTime } from 'luxon'
 import { Store } from 'vuex'
 import { ClientService, PasswordPolicyService } from '../../../../src/services'
@@ -7,6 +12,7 @@ import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Language } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
+import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('@vueuse/core', () => ({
   useClipboard: jest.fn().mockReturnValue({ copy: jest.fn() })
@@ -17,6 +23,7 @@ const mockStore = {
     capabilities: {
       files_sharing: {
         public: {
+          default_permissions: 1,
           password: {
             enforced_for: {
               read_only: false
@@ -30,10 +37,8 @@ const mockStore = {
     user: {
       capabilities: {
         files_sharing: {
-          quickLink: {
-            default_role: 'viewer'
-          },
           public: {
+            default_permissions: 1,
             expire_date: {
               enforced: true,
               days: 5
@@ -60,6 +65,7 @@ const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermissi
 
 let returnBitmask = 1
 jest.mock('@ownclouders/web-client/src/helpers/share', () => ({
+  ...jest.requireActual('@ownclouders/web-client/src/helpers/share'),
   LinkShareRoles: {
     getByName: jest.fn().mockReturnValue({ bitmask: jest.fn(() => returnBitmask) })
   },
@@ -114,7 +120,7 @@ describe('createQuicklink', () => {
       clientService.owncloudSdk.shares.getShares.mockResolvedValue([])
       const passwordPolicyService = mockDeep<PasswordPolicyService>()
       returnBitmask = role === 'viewer' ? 1 : 0
-      mockStore.state.user.capabilities.files_sharing.quickLink.default_role = role
+      mockStore.state.user.capabilities.files_sharing.public.default_permissions = returnBitmask
 
       const args: CreateQuicklink = {
         store: mockStore as unknown as Store<any>,
@@ -148,6 +154,35 @@ describe('createQuicklink', () => {
       expect(mockStore.dispatch).toHaveBeenCalledWith('showMessage', {
         title: 'The link has been copied to your clipboard.'
       })
+    }
+  )
+})
+
+describe('getDefaultLinkPermissions', () => {
+  it('returns internal if user is not allowed to create public links', () => {
+    const permissions = getDefaultLinkPermissions({
+      ability: mock<Ability>({ can: () => false }),
+      store: mockStore as any
+    })
+    expect(permissions).toBe(SharePermissionBit.Internal)
+  })
+  it.each([SharePermissionBit.Internal, SharePermissionBit.Read])(
+    'returns the defined default permissions from the capabilities if user is allowed to create public links',
+    (defaultPermissions) => {
+      const store = {
+        state: {
+          user: {
+            capabilities: {
+              files_sharing: { public: { default_permissions: defaultPermissions } }
+            }
+          }
+        }
+      }
+      const permissions = getDefaultLinkPermissions({
+        ability: mock<Ability>({ can: () => true }),
+        store: store as any
+      })
+      expect(permissions).toBe(defaultPermissions)
     }
   )
 })

@@ -5,13 +5,16 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
+import { getDefaultLinkPermissions } from '@ownclouders/web-pkg'
+import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   createQuicklink: jest.fn().mockImplementation(({ resource, password }) => ({
     url: (password ? password + '-' : '') + 'link-' + resource.id
   })),
-  showQuickLinkPasswordModal: jest.fn().mockImplementation((_options, cb) => cb('password'))
+  showQuickLinkPasswordModal: jest.fn().mockImplementation((_options, cb) => cb('password')),
+  getDefaultLinkPermissions: jest.fn()
 }))
 
 const selectors = Object.freeze({
@@ -192,6 +195,7 @@ describe('EmbedActions', () => {
       const { wrapper } = getWrapper({
         selectedFiles: [{ id: 1 }],
         abilities: [{ action: 'create-all', subject: 'PublicLink' }],
+        defaultLinkPermissions: SharePermissionBit.Read,
         capabilities: jest.fn().mockReturnValue({
           files_sharing: { public: { password: { enforced_for: { read_only: true } } } }
         })
@@ -245,13 +249,15 @@ function getWrapper(
     abilities = [],
     capabilities = jest.fn().mockReturnValue({}),
     configuration = { options: {} },
-    currentFolder = {}
+    currentFolder = {},
+    defaultLinkPermissions = SharePermissionBit.Internal
   } = {
     selectedFiles: [],
     abilities: [],
     capabilities: jest.fn().mockReturnValue({})
   }
 ) {
+  jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {

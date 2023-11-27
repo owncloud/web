@@ -28,6 +28,7 @@
 import { computed } from 'vue'
 import {
   createQuicklink,
+  getDefaultLinkPermissions,
   showQuickLinkPasswordModal,
   useAbility,
   useClientService,
@@ -37,6 +38,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
+import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 export default {
   setup() {
@@ -88,7 +90,9 @@ export default {
           store.getters.capabilities?.files_sharing?.public?.password?.enforced_for?.read_only ===
           true
 
-        if (passwordEnforced) {
+        const permissions = getDefaultLinkPermissions({ ability, store })
+
+        if (passwordEnforced && permissions > SharePermissionBit.Internal) {
           showQuickLinkPasswordModal(
             { store, $gettext: language.$gettext, passwordPolicyService },
             async (password) => {

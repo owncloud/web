@@ -7,8 +7,9 @@ import {
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
+import { SharePermissionBit, SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
+import { getDefaultLinkPermissions } from '@ownclouders/web-pkg'
 
 const defaultLinksList = [
   {
@@ -37,6 +38,11 @@ const selectors = {
 
 const linkListItemNameAndCopy = 'name-and-copy-stub'
 const linkListItemDetailsAndEdit = 'details-and-edit-stub'
+
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  getDefaultLinkPermissions: jest.fn()
+}))
 
 describe('FileLinks', () => {
   describe('links', () => {
@@ -143,31 +149,39 @@ describe('FileLinks', () => {
       expect(availableRoleOptions[0].permissions()).toEqual([SharePermissions.internal])
       expect(isModifiable).toBeTruthy()
     })
-    it('creates new links with permission 0', async () => {
-      const { wrapper, storeOptions } = getWrapper({ abilities: [] })
-      await wrapper.find(selectors.linkAddButton).trigger('click')
-      expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledTimes(1)
-      expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          params: expect.objectContaining({
-            permissions: '0'
+  })
+  describe('new links', () => {
+    it.each([SharePermissionBit.Internal, SharePermissionBit.Read])(
+      'creates new links according to the default link permissions',
+      async (defaultLinkPermissions) => {
+        const { wrapper, storeOptions } = getWrapper({ abilities: [], defaultLinkPermissions })
+        await wrapper.find(selectors.linkAddButton).trigger('click')
+        expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledTimes(1)
+        expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            params: expect.objectContaining({
+              permissions: defaultLinkPermissions.toString()
+            })
           })
-        })
-      )
-    })
+        )
+      }
+    )
   })
 })
 
 function getWrapper({
   resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
   links = defaultLinksList,
-  abilities = [{ action: 'create-all', subject: 'PublicLink' }]
+  abilities = [{ action: 'create-all', subject: 'PublicLink' }],
+  defaultLinkPermissions = 0
 }: {
   resource?: Resource
   links?: typeof defaultLinksList
   abilities?: AbilityRule[]
+  defaultLinkPermissions?: number
 } = {}) {
+  jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {

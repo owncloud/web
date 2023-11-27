@@ -8,6 +8,7 @@ import {
   MediaTypeCapability,
   PasswordPolicyCapability
 } from '@ownclouders/web-client/src/ocs/capabilities'
+import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 export const useCapability = <T>(
   store: Store<any>,
@@ -38,10 +39,6 @@ export const useCapabilityCoreSSE = createCapabilityComposable('core.support-sse
 export const useCapabilityGraphPersonalDataExport = createCapabilityComposable(
   'graph.personal-data-export',
   false
-)
-export const useCapabilityFilesSharingQuickLinkDefaultRole = createCapabilityComposable(
-  'files_sharing.quick_link.default_role',
-  'viewer'
 )
 export const useCapabilityFilesSharingResharing = createCapabilityComposable(
   'files_sharing.resharing',
@@ -135,6 +132,10 @@ export const useCapabilityFilesSharingPublicCanContribute = createCapabilityComp
 export const useCapabilityFilesSharingPublicAlias = createCapabilityComposable(
   'files_sharing.public.alias',
   false
+)
+export const useCapabilityFilesSharingPublicDefaultPermissions = createCapabilityComposable(
+  'files_sharing.public.default_permissions',
+  SharePermissionBit.Read
 )
 export const useCapabilityNotifications = createCapabilityComposable(
   'notifications.ocs-endpoints',
