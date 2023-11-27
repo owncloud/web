@@ -81,6 +81,7 @@ Summary
 * Enhancement - Shared by filter: [#10013](https://github.com/owncloud/web/issues/10013)
 * Enhancement - Share search filter: [#10014](https://github.com/owncloud/web/issues/10014)
 * Enhancement - Duplicate space: [#10024](https://github.com/owncloud/web/pull/10024)
+* Enhancement - Default link permission: [#10037](https://github.com/owncloud/web/pull/10037)
 * Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
 * Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
 * Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
@@ -777,6 +778,14 @@ Details
 
    https://github.com/owncloud/web/issues/10016
    https://github.com/owncloud/web/pull/10024
+
+* Enhancement - Default link permission: [#10037](https://github.com/owncloud/web/pull/10037)
+
+   When creating a new link, Web now respects the default permissions coming from
+   the server.
+
+   https://github.com/owncloud/web/issues/9919
+   https://github.com/owncloud/web/pull/10037
 
 * Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
 
