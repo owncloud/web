@@ -591,6 +591,7 @@ Details
    https://github.com/owncloud/web/issues/9768
    https://github.com/owncloud/web/pull/9841
    https://github.com/owncloud/web/pull/9981
+   https://github.com/owncloud/web/pull/10071
 
 * Enhancement - Provide vendor neutral file icons: [#9847](https://github.com/owncloud/web/issues/9847)
 
