@@ -100,49 +100,49 @@ exports[`OcResourceIcon renders OcIcon for resource type file with extension "no
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size large 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="large" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="large" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size medium 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="medium" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="medium" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size small 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="small" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="small" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size xlarge 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="xlarge" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="xlarge" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size xsmall 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="xsmall" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="xsmall" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size xxlarge 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;
 
 exports[`OcResourceIcon renders OcIcon for resource type file with mimetype "not-a-real-mimetype" in size xxxlarge 1`] = `
 <span>
-  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="blue" filltype="fill" name="resource-type-madeup-mimetype" size="xxxlarge" type="span" variation="passive"></oc-icon-stub>
+  <oc-icon-stub accessiblelabel="" class="oc-resource-icon oc-resource-icon-file" color="var(--oc-color-text-default)" filltype="fill" name="resource-type-file" size="xxxlarge" type="span" variation="passive"></oc-icon-stub>
   <!--v-if-->
 </span>
 `;

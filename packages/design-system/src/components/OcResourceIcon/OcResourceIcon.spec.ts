@@ -13,8 +13,8 @@ const resourceIconMapping: OcResourceIconMapping = {
   },
   mimeType: {
     'not-a-real-mimetype': {
-      name: 'resource-type-madeup-mimetype',
-      color: 'blue'
+      name: 'resource-type-file',
+      color: 'var(--oc-color-text-default)'
     }
   }
 }

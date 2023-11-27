@@ -79,10 +79,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         {
           from: path.resolve(__dirname, '../l10n/translations.json'),
           to: config.system.assetsSubDirectory
-        },
-        {
-          from: path.resolve(__dirname, '../src/helpers/resourceIconMapping.json'),
-          to: config.system.assetsSubDirectory
         }
       ]
     })

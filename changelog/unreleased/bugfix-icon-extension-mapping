@@ -1,0 +1,7 @@
+Bugfix: Icon extension mapping
+
+We have simplified the mapping between file extensions and their display in the web UI (icon and its color).
+Now, further formats/extensions (`.tar.gz`,`.tar.xz`,`.bz2`, ...) get displayed correctly.
+
+https://github.com/owncloud/web/issues/10031
+https://github.com/owncloud/web/pull/10059
