@@ -71,8 +71,8 @@
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Owner')" />
           <td>
             <p class="oc-m-rm">
-              {{ ownerDisplayName }}
-              <span v-if="ownedByCurrentUser" v-translate>(me)</span>
+              <span v-oc-browser-translate-off v-text="ownerDisplayName" />
+              <span v-if="ownedByCurrentUser" v-text="$gettext('(me)')" />
               <span v-if="!ownedByCurrentUser && ownerAdditionalInfo"
                 >({{ ownerAdditionalInfo }})</span
               >
@@ -150,6 +150,7 @@ import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
 import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDetails.vue'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -347,6 +348,7 @@ export default defineComponent({
     }
   },
   methods: {
+    $gettext,
     expandVersionsPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
     }

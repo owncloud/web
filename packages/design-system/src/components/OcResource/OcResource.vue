@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-resource oc-text-overflow">
+  <div v-oc-browser-translate-off class="oc-resource oc-text-overflow">
     <oc-resource-link
       v-if="isIconDisplayed"
       :resource="resource"

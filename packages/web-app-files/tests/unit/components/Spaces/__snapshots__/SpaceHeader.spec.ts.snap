@@ -12,7 +12,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
-        <h2 class="space-header-name"></h2>
+        <h2 class="space-header-name" translate="no"></h2>
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
           <!--v-if-->
           <!-- @slot Content of the button -->
@@ -31,7 +31,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
     <!--v-if-->
     <div>
       <!-- eslint-disable vue/no-v-html -->
-      <div class="markdown-container"></div> <!-- eslint-enable -->
+      <div class="markdown-container" translate="no"></div> <!-- eslint-enable -->
       <!--v-if-->
     </div>
   </div>
@@ -50,7 +50,7 @@ exports[`SpaceHeader space image should show the default image if no other image
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
-        <h2 class="space-header-name"></h2>
+        <h2 class="space-header-name" translate="no"></h2>
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
           <!--v-if-->
           <!-- @slot Content of the button -->
@@ -69,7 +69,7 @@ exports[`SpaceHeader space image should show the default image if no other image
     <!--v-if-->
     <div>
       <!-- eslint-disable vue/no-v-html -->
-      <div class="markdown-container"></div> <!-- eslint-enable -->
+      <div class="markdown-container" translate="no"></div> <!-- eslint-enable -->
       <!--v-if-->
     </div>
   </div>
@@ -84,7 +84,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
-        <h2 class="space-header-name"></h2>
+        <h2 class="space-header-name" translate="no"></h2>
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
           <!--v-if-->
           <!-- @slot Content of the button -->
@@ -103,7 +103,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
     <!--v-if-->
     <div>
       <!-- eslint-disable vue/no-v-html -->
-      <div class="markdown-container"></div> <!-- eslint-enable -->
+      <div class="markdown-container" translate="no"></div> <!-- eslint-enable -->
       <!--v-if-->
     </div>
   </div>

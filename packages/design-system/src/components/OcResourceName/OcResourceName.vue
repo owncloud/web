@@ -1,6 +1,7 @@
 <template>
   <span
     v-oc-tooltip="tooltip"
+    v-oc-browser-translate-off
     class="oc-resource-name"
     :class="[{ 'oc-display-inline-block': !truncateName }]"
     :data-test-resource-path="fullPath"
@@ -192,8 +193,8 @@ export default defineComponent({
 <oc-resource-name full-path="images/nature/forest.jpg" :is-path-displayed="true" name="forest.jpg" extension="jpg"
                   type="file"/>
 <oc-resource-name
-  full-path="super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root-super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root/asdf.txt"
-  :is-path-displayed="true" name="asdf.txt" extension="txt" type="file"/>
+    full-path="super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root-super-long-path-to-a-subfolder-which-is-a-lot-of-levels-away-from–the-root/asdf.txt"
+    :is-path-displayed="true" name="asdf.txt" extension="txt" type="file"/>
 <oc-resource-name full-path="some-folder" name="regular-folder" extension="" type="folder"/>
 <oc-resource-name full-path="folder-name-with.dot" name="folder-name-with.dot" extension="" type="folder"/>
 ```

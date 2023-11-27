@@ -7,6 +7,7 @@
         :data-key="index"
         :data-item-id="item.id"
         :aria-hidden="item.isTruncationPlaceholder"
+        :translate="index === 0 ? 'yes' : 'no'"
         :class="[
           'oc-breadcrumb-list-item',
           'oc-flex',
@@ -327,6 +328,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-breadcrumb {
   overflow: visible;
+
   &-item-dragover {
     transition:
       background 0.06s,
@@ -337,6 +339,7 @@ export default defineComponent({
     box-shadow: 0 0 0 5px var(--oc-color-background-highlight);
     border-radius: 5px;
   }
+
   &-item-text {
     max-width: 200px;
     white-space: nowrap;
@@ -398,9 +401,8 @@ export default defineComponent({
     span:first-of-type {
       font-size: var(--oc-font-size-medium);
       color: var(--oc-color-text-default);
-      display: inline-block;
-      vertical-align: sub;
       line-height: normal;
+      display: flex;
     }
   }
 
@@ -417,29 +419,29 @@ export default defineComponent({
 <docs>
 ```js
 <template>
-<section>
-  <div>
-    <oc-breadcrumb :items="items" />
-  </div>
-  <div>
-    <oc-breadcrumb :items="items" variation="lead" />
-    <oc-breadcrumb :items="items" >
-      <template v-slot:contextMenu>
-        <p class="oc-my-rm">I'm an example item</p>
-      </template>
-    </oc-breadcrumb>
-  </div>
-</section>
+  <section>
+    <div>
+      <oc-breadcrumb :items="items"/>
+    </div>
+    <div>
+      <oc-breadcrumb :items="items" variation="lead"/>
+      <oc-breadcrumb :items="items">
+        <template v-slot:contextMenu>
+          <p class="oc-my-rm">I'm an example item</p>
+        </template>
+      </oc-breadcrumb>
+    </div>
+  </section>
 </template>
 <script>
   export default {
     data: () => {
       return {
         items: [
-          {text:'First folder',to:{path:'folder'}},
-          {text:'Subfolder', to: {path: 'subfolder'}},
-          {text:'Deep',to:{path:'deep'}},
-          {text:'Deeper ellipsize in responsive mode'},
+          {text: 'First folder', to: {path: 'folder'}},
+          {text: 'Subfolder', to: {path: 'subfolder'}},
+          {text: 'Deep', to: {path: 'deep'}},
+          {text: 'Deeper ellipsize in responsive mode'},
         ]
       }
     }

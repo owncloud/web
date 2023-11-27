@@ -52,12 +52,16 @@
       </tr>
       <tr v-if="resource.description">
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Subtitle')" />
-        <td v-text="resource.description" />
+        <td v-oc-browser-translate-off v-text="resource.description" />
       </tr>
       <tr>
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Manager')" />
         <td>
-          <span v-text="ownerUsernames" />
+          <span v-for="(owner, index) in owners" :key="index">
+            <span v-text="owner.displayName" />
+            <span v-if="isMe(owner)" v-text="$gettext('(me)')" />
+            <span v-if="index + 1 < owners.length">, </span>
+          </span>
         </td>
       </tr>
       <tr v-if="!resource.disabled">
@@ -81,7 +85,8 @@ import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import {
   getRelativeSpecialFolderSpacePath,
-  SpaceResource
+  SpaceResource,
+  SpaceRole
 } from '@ownclouders/web-client/src/helpers'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import { useStore, usePreviewService, useClientService } from '../../../../composables'
@@ -91,6 +96,7 @@ import { formatDateFromISO } from '../../../../helpers'
 import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
 import { ImageDimension } from '../../../../constants'
+import { $gettext } from '../../../../router/utils'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -199,15 +205,8 @@ export default defineComponent({
     lastModifiedDate() {
       return formatDateFromISO(this.resource.mdate, this.$language.current)
     },
-    ownerUsernames() {
+    owners() {
       return this.resource.spaceRoles[spaceRoleManager.name]
-        .map((share) => {
-          if (share.id === this.user?.uuid) {
-            return this.$gettext('%{displayName} (me)', { displayName: share.displayName })
-          }
-          return share.displayName
-        })
-        .join(', ')
     },
     hasMemberShares() {
       return this.memberShareCount > 0
@@ -247,8 +246,12 @@ export default defineComponent({
     this.loadImageTask.perform(this)
   },
   methods: {
+    $gettext,
     expandSharesPanel() {
       eventBus.publish(SideBarEventTopics.setActivePanel, 'space-share')
+    },
+    isMe(share: SpaceRole) {
+      return share.id === this.user?.uuid
     }
   }
 })

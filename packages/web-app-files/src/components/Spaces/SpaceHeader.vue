@@ -21,7 +21,7 @@
     <div class="space-header-infos">
       <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
         <div class="oc-flex oc-flex-middle space-header-infos-heading">
-          <h2 class="space-header-name">{{ space.name }}</h2>
+          <h2 v-oc-browser-translate-off class="space-header-name">{{ space.name }}</h2>
           <oc-button
             :id="`space-context-btn`"
             v-oc-tooltip="$gettext('Show context menu')"
@@ -53,10 +53,17 @@
           <span class="space-header-people-count oc-text-small" v-text="memberCountString"></span>
         </oc-button>
       </div>
-      <p v-if="space.description" class="oc-mt-rm oc-text-bold">{{ space.description }}</p>
+      <p v-if="space.description" v-oc-browser-translate-off class="oc-mt-rm oc-text-bold">
+        {{ space.description }}
+      </p>
       <div>
         <!-- eslint-disable vue/no-v-html -->
-        <div ref="markdownContainerRef" class="markdown-container" v-html="markdownContent"></div>
+        <div
+          ref="markdownContainerRef"
+          v-oc-browser-translate-off
+          class="markdown-container"
+          v-html="markdownContent"
+        ></div>
         <!-- eslint-enable -->
         <div v-if="showMarkdownCollapse" class="markdown-collapse oc-text-center oc-mt-s">
           <oc-button appearance="raw" @click="toggleMarkdownCollapsed">
@@ -285,17 +292,20 @@ export default defineComponent({
     aspect-ratio: 16 / 9;
     margin-right: var(--oc-space-large);
     max-height: 158px;
+
     &-default {
       background-color: var(--oc-color-background-highlight);
       height: 100%;
       border-radius: 10px;
     }
+
     &-expanded {
       width: 100%;
       margin: 0;
       max-height: 100%;
       max-width: 100%;
     }
+
     img {
       border-radius: 10px;
       height: 100%;
@@ -307,6 +317,7 @@ export default defineComponent({
 
   &-infos {
     flex: 1;
+
     &-heading {
       max-width: 100%;
     }

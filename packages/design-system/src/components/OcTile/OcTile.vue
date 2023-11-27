@@ -65,7 +65,11 @@
           <slot name="contextMenu" :item="resource" />
         </div>
       </div>
-      <p v-if="resource.description" class="oc-text-left oc-my-rm oc-text-truncate">
+      <p
+        v-if="resource.description"
+        v-oc-browser-translate-off
+        class="oc-text-left oc-my-rm oc-text-truncate"
+      >
         <small v-text="resource.description" />
       </p>
     </div>
@@ -235,6 +239,7 @@ export default defineComponent({
       .oc-tile-card-hover {
         border-radius: 5px !important;
       }
+
       .oc-tile-card-hover {
         opacity: 10%;
       }
@@ -250,6 +255,7 @@ export default defineComponent({
     input {
       background-color: var(--oc-color-background-muted);
     }
+
     input.oc-checkbox-checked {
       background-color: var(--oc-color-swatch-inverse-default);
     }
@@ -263,11 +269,13 @@ export default defineComponent({
 
     .oc-resource-icon-status-badge {
       background: var(--oc-color-background-highlight) !important;
+
       .oc-icon {
         svg {
           fill: var(--oc-color-background-highlight) !important;
         }
       }
+
       .oc-spinner {
         color: var(--oc-color-background-highlight) !important;
       }

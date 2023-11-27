@@ -26,7 +26,11 @@ exports[`Details SideBar Panel displays the details side panel 1`] = `
       <tr>
         <th class="oc-pr-s oc-font-semibold" scope="col">Manager</th>
         <td>
-          <span>alice (me)</span>
+          <span>
+            <span>alice</span>
+            <span>(me)</span>
+            <!--v-if-->
+          </span>
         </td>
       </tr>
       <tr>

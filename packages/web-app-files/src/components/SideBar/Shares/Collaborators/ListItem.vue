@@ -37,11 +37,10 @@
         </div>
         <div class="oc-pl-s oc-text-truncate">
           <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
-            <span
-              aria-hidden="true"
-              class="files-collaborators-collaborator-name"
-              v-text="shareDisplayName"
-            />
+            <span aria-hidden="true" class="files-collaborators-collaborator-name">
+              <span v-oc-browser-translate-off v-text="shareDisplayName" />
+              <span v-if="isMe" v-text="$gettext('(me)')" />
+            </span>
             <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
           </div>
           <div>
@@ -148,6 +147,7 @@ import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'ListItem',
@@ -286,14 +286,11 @@ export default defineComponent({
     },
 
     shareDisplayName() {
-      if (this.user.id === this.share.collaborator.name) {
-        return this.$gettext('%{collaboratorName} (me)', {
-          collaboratorName: this.share.collaborator.displayName
-        })
-      }
       return this.share.collaborator.displayName
     },
-
+    isMe() {
+      return this.user.id === this.share.collaborator.name
+    },
     shareAdditionalInfo() {
       return this.share.collaborator.additionalInfo
     },
@@ -415,6 +412,7 @@ export default defineComponent({
     }
   },
   methods: {
+    $gettext,
     ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['changeShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),
@@ -509,6 +507,7 @@ export default defineComponent({
     margin-left: var(--oc-space-medium);
   }
 }
+
 .files-collaborators-collaborator-expiration {
   margin-top: 5px;
 }
@@ -516,6 +515,7 @@ export default defineComponent({
 .files-collaborators-collaborator-navigation {
   justify-content: end;
 }
+
 .files-collaborators-collaborator-role {
   max-width: 100%;
 }

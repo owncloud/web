@@ -37,7 +37,11 @@
       :accessible-label="$gettext('User')"
     />
     <div class="files-collaborators-autocomplete-user-text oc-text-truncate">
-      <span class="files-collaborators-autocomplete-username" v-text="item.label" />
+      <span
+        v-oc-browser-translate-off
+        class="files-collaborators-autocomplete-username"
+        v-text="item.label"
+      />
       <template v-if="!isUser && !isSpaceUser && !isGroup && !isSpaceGroup">
         <span
           class="files-collaborators-autocomplete-share-type"
@@ -108,6 +112,7 @@ export default {
 .vs__dropdown-option--highlight .files-recipient-suggestion-avatar svg {
   fill: white !important;
 }
+
 .files-collaborators-autocomplete-additional-info {
   font-size: var(--oc-font-size-small);
 }

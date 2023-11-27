@@ -45,6 +45,7 @@
             </template>
             <template #name="{ item }">
               <oc-button
+                v-oc-browser-translate-off
                 class="oc-display-block"
                 appearance="raw"
                 v-bind="getSpaceAttributes(item)"
