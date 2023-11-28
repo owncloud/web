@@ -245,20 +245,20 @@ export default {
     context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
   },
-  updateCurrentFileShareTypes({ state, getters, commit, rootState }) {
-    const highlighted = getters.highlightedFile
-    if (!highlighted || isProjectSpaceResource(highlighted)) {
+  updateFileShareTypes({ state, getters, commit, rootState }, path) {
+    const file = [...getters.files, getters.currentFolder].find((f) => f?.path === path)
+    if (!file || isProjectSpaceResource(file)) {
       return
     }
+
     commit('UPDATE_RESOURCE_FIELD', {
-      id: highlighted.id,
+      id: file.id,
       field: 'shareTypes',
       value: computeShareTypes(state.outgoingShares.filter((s) => !s.indirect))
     })
 
     const ancestorEntry =
-      (rootState.runtime.ancestorMetaData.ancestorMetaData as AncestorMetaData)[highlighted.path] ??
-      null
+      (rootState.runtime.ancestorMetaData.ancestorMetaData as AncestorMetaData)[file.path] ?? null
     if (ancestorEntry) {
       commit(
         'runtime/ancestorMetaData/UPDATE_ANCESTOR_FIELD',
@@ -335,7 +335,7 @@ export default {
       await Promise.resolve(context.state.sharesLoading)
     }
     context.commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
-    context.dispatch('updateCurrentFileShareTypes')
+    context.dispatch('updateFileShareTypes', path)
     context.commit('LOAD_INDICATORS', path)
   },
   async deleteShare(context, { client, share, path, loadIndicators = false }) {
@@ -344,7 +344,7 @@ export default {
       await Promise.resolve(context.state.sharesLoading)
     }
     context.commit('OUTGOING_SHARES_REMOVE', share)
-    context.dispatch('updateCurrentFileShareTypes')
+    context.dispatch('updateFileShareTypes', path)
     if (loadIndicators) {
       context.commit('LOAD_INDICATORS', path)
     }
@@ -462,13 +462,15 @@ export default {
           if (state.sharesLoading) {
             await Promise.resolve(state.sharesLoading)
           }
-          const indirect =
-            !!getters.highlightedFile?.path &&
-            path !== getters.highlightedFile.path &&
-            !isProjectSpaceResource(getters.highlightedFile)
-          commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true, indirect })
-          dispatch('updateCurrentFileShareTypes')
-          if (indirect) {
+
+          const fileIsSelected =
+            getters.selectedFiles.some(({ fileId }) => fileId === storageId) ||
+            (getters.selectedFiles.length === 0 && getters.currentFolder.fileId === storageId)
+
+          commit('OUTGOING_SHARES_UPSERT', { ...link, outgoing: true, indirect: !fileIsSelected })
+          dispatch('updateFileShareTypes', path)
+
+          if (!fileIsSelected) {
             // we might need to update the share types for the ancestor resource as well
             const ancestor =
               (rootState.runtime.ancestorMetaData.ancestorMetaData as AncestorMetaData)[path] ??
@@ -516,7 +518,7 @@ export default {
         await Promise.resolve(context.state.sharesLoading)
       }
       context.commit('OUTGOING_SHARES_REMOVE', share)
-      context.dispatch('updateCurrentFileShareTypes')
+      context.dispatch('updateFileShareTypes', path)
       if (loadIndicators) {
         context.commit('LOAD_INDICATORS', path)
       }
