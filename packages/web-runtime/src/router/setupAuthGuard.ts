@@ -1,10 +1,13 @@
 import { extractPublicLinkToken, isIdpContext, isPublicLinkContext, isUserContext } from './index'
 import { Router, RouteLocation } from 'vue-router'
-import { contextRouteNameKey, queryItemAsString } from '@ownclouders/web-pkg'
+import { contextRouteNameKey, queryItemAsString, useEmbedMode } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth/authService'
+import { unref } from 'vue'
 
 export const setupAuthGuard = (router: Router) => {
   router.beforeEach(async (to, from) => {
+    const { isDelegatingAuthentication } = useEmbedMode()
+
     if (from && to.path === from.path && !hasContextRouteNameChanged(to, from)) {
       // note: except for the context route, query changes can never trigger re-init of the auth context
       return true
@@ -34,6 +37,10 @@ export const setupAuthGuard = (router: Router) => {
 
     if (isUserContext(router, to)) {
       if (!store.getters['runtime/auth/isUserContextReady']) {
+        if (unref(isDelegatingAuthentication)) {
+          return { path: '/web-oidc-callback' }
+        }
+
         return { path: '/login', query: { redirectUrl: to.fullPath } }
       }
       return true
@@ -41,6 +48,10 @@ export const setupAuthGuard = (router: Router) => {
 
     if (isIdpContext(router, to)) {
       if (!store.getters['runtime/auth/isIdpContextReady']) {
+        if (unref(isDelegatingAuthentication)) {
+          return { path: '/web-oidc-callback' }
+        }
+
         return { path: '/login', query: { redirectUrl: to.fullPath } }
       }
       return true

@@ -36,6 +36,37 @@ import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 
+const getEmbedConfigFromQuery = (
+  doesEmbedEnabledOptionExists: boolean
+): RawConfig['options']['embed'] => {
+  const config: RawConfig['options']['embed'] = {}
+
+  if (!doesEmbedEnabledOptionExists) {
+    config.enabled = getQueryParam('embed') === 'true'
+  }
+
+  // Can enable location picker in embed mode
+  const embedTarget = getQueryParam('embed-target')
+
+  if (embedTarget) {
+    config.target = embedTarget
+  }
+
+  const delegateAuthentication = getQueryParam('embed-delegate-authentication')
+
+  if (delegateAuthentication) {
+    config.delegateAuthentication = delegateAuthentication === 'true'
+  }
+
+  const delegateAuthenticationOrigin = getQueryParam('embed-delegate-authentication-origin')
+
+  if (delegateAuthentication) {
+    config.delegateAuthenticationOrigin = delegateAuthenticationOrigin
+  }
+
+  return config
+}
+
 /**
  * fetch runtime configuration, this step is optional, all later steps can use a static
  * configuration object as well
@@ -55,21 +86,14 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
     throw new Error(`config could not be parsed. ${error}`)
   })) as RawConfig
 
-  if (
-    !rawConfig.options?.embed ||
-    !Object.prototype.hasOwnProperty.call(rawConfig.options.embed, 'enabled')
-  ) {
-    rawConfig.options = {
-      ...rawConfig.options,
-      embed: { ...rawConfig.options?.embed, enabled: getQueryParam('embed') === 'true' }
-    }
-  }
+  const embedConfigFromQuery = getEmbedConfigFromQuery(
+    rawConfig.options?.embed &&
+      Object.prototype.hasOwnProperty.call(rawConfig.options.embed, 'enabled')
+  )
 
-  // Can enable location picker in embed mode
-  const embedTarget = getQueryParam('embed-target')
-
-  if (embedTarget) {
-    rawConfig.options.embed = { ...rawConfig.options.embed, target: embedTarget }
+  rawConfig.options = {
+    ...rawConfig.options,
+    embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery }
   }
 
   configurationManager.initialize(rawConfig)

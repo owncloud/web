@@ -77,7 +77,9 @@ const state = {
     embed: {
       enabled: false,
       target: 'resources',
-      messagesOrigin: null
+      messagesOrigin: null,
+      delegateAuthentication: false,
+      delegateAuthenticationOrigin: null
     }
   }
 }
