@@ -326,16 +326,14 @@ export default defineComponent({
               })
           }
         })
-      } else {
-        if (!this.isAliasLink) {
-          result.push({
-            id: 'add-expiration',
-            title: this.$gettext('Set expiration date'),
-            method: this.updateLink,
-            icon: 'calendar-event',
-            showDatepicker: true
-          })
-        }
+      } else if (!this.isAliasLink) {
+        result.push({
+          id: 'add-expiration',
+          title: this.$gettext('Set expiration date'),
+          method: this.updateLink,
+          icon: 'calendar-event',
+          showDatepicker: true
+        })
       }
 
       if (this.link.password) {
