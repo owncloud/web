@@ -73,7 +73,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
             </oc-button-stub>
           </li>
           <li class="oc-rounded oc-menu-item-hover">
-            <date-picker-stub class="oc-datepicker link-expiry-picker oc-flex oc-width-1-1 link-expiry-picker oc-flex oc-width-1-1" inputdebounce="1000" is24hr="false" isrange="false" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" mode="date" modelconfig="[object Object]" popover="[object Object]" updateoninput="true">
+            <date-picker-stub class="oc-datepicker link-expiry-picker oc-flex oc-width-1-1 link-expiry-picker oc-flex oc-width-1-1" inputdebounce="1000" is24hr="false" isrange="false" isrequired="false" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" mode="date" modelconfig="[object Object]" popover="[object Object]" updateoninput="true">
               <!-- @slot Default slot to use as the popover anchor for datepicker -->
               <!-- args is undefined during initial render, hence we check it here -->
               <!--v-if-->

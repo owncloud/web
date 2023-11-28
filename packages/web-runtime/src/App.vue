@@ -45,9 +45,9 @@
       <template v-if="modal.customContent || modal.customComponent" #content>
         <div v-if="modal.customContent" v-html="modal.customContent" />
         <component
-          ref="modalComponent"
           :is="modal.customComponent"
           v-else
+          ref="modalComponent"
           :modal="modal"
           v-bind="modal.customComponentAttrs"
         />

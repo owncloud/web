@@ -77,7 +77,7 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
       props: {
         availableRoleOptions,
         canRename: true,
-        expirationDate: {
+        expirationRules: {
           enforced: expireDateEnforced,
           default: null,
           min: 'Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)',

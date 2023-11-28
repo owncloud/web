@@ -26,6 +26,12 @@ export interface PasswordEnforcedForCapability {
   read_write_delete?: boolean
 }
 
+export interface PublicExpirationCapability {
+  days?: string
+  enabled?: boolean
+  enforced?: boolean
+}
+
 export interface LastModifiedFilterCapability {
   keywords?: string[]
   enabled?: boolean
@@ -101,9 +107,7 @@ export interface Capabilities {
         alias?: boolean
         can_edit: boolean
         enabled: boolean
-        expire_date: {
-          enabled: boolean
-        }
+        expire_date: PublicExpirationCapability
         multiple: boolean
         password: {
           enforced: boolean

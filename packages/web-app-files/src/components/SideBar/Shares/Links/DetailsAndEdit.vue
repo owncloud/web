@@ -136,10 +136,10 @@
                 v-if="option.showDatepicker"
                 v-model="newExpiration"
                 class="link-expiry-picker oc-flex oc-width-1-1"
-                :min-date="expirationDate.min"
-                :max-date="expirationDate.max"
+                :min-date="expirationRules.min"
+                :max-date="expirationRules.max"
                 :locale="$language.current"
-                :is-required="expirationDate.enforce"
+                :is-required="expirationRules.enforced"
               >
                 <template #default="{ togglePopover }">
                   <oc-button
@@ -212,7 +212,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclou
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
-import { usePasswordPolicyService } from '@ownclouders/web-pkg'
+import { usePasswordPolicyService, ExpirationRules } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -226,9 +226,8 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    expirationDate: {
-      type: Object,
-      default: () => ({}),
+    expirationRules: {
+      type: Object as PropType<ExpirationRules>,
       required: true
     },
     isFolderShare: {
@@ -316,7 +315,7 @@ export default defineComponent({
             id: 'remove-expiration',
             title: this.$gettext('Remove expiration date'),
             icon: 'close',
-            isRemovable: !this.expirationDate.enforced,
+            isRemovable: !this.expirationRules.enforced,
             method: () =>
               this.updateLink({
                 link: {
