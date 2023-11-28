@@ -185,6 +185,7 @@ export default defineComponent({
      * - **wrap**: text behaviour of a data cell, can be `truncate`, `overflow`, `nowrap`, `break`. Omitted if not set. Header cells are always fixed to `nowrap`.<br />
      * - **thClass**:additional classes on header cells, provided as a string, classes separated by spaces. Optional, falls back to an empty string.<br />
      * - **tdClass**: additional classes on data cells, provided as a string, classes separated by spaces. Optional, falls back to an empty string.<br />
+     * - **tdAttributes**: additional attributes on data cells, provided as an object. Optional, falls back to an empty object.<br />
      * - **sortable**: defines if the column is sortable, can be `true` or `false`.
      */
     fields: {

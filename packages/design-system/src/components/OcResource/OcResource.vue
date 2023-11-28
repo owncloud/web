@@ -192,6 +192,7 @@ export default defineComponent({
   emits: ['click'],
   computed: {
     translate() {
+      //TODO: FIXME
       const isInRoot = this.resource.path.split('/').length === 2
       return isInRoot ? 'yes' : 'no'
     },
