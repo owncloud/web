@@ -30,6 +30,7 @@ Summary
 * Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
 * Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
 * Bugfix - Logout page after token expiry: [#10065](https://github.com/owncloud/web/pull/10065)
+* Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
@@ -267,6 +268,14 @@ Details
 
    https://github.com/owncloud/web/issues/10063
    https://github.com/owncloud/web/pull/10065
+
+* Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
+
+   We've disabled the option to set an expiration date on an internal link, since
+   it could be misleading and doesn't serve any use.
+
+   https://github.com/owncloud/web/issues/9923
+   https://github.com/owncloud/web/pull/10083
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
