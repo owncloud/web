@@ -121,6 +121,7 @@ import {
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicAlias,
+  useCapabilityFilesSharingPublicPasswordEnforcedFor,
   useAbility,
   usePasswordPolicyService,
   getDefaultLinkPermissions
@@ -229,6 +230,7 @@ export default defineComponent({
       hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
       hasPublicLinkContribute: useCapabilityFilesSharingPublicCanContribute(),
       hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
+      passwordEnforced: useCapabilityFilesSharingPublicPasswordEnforcedFor(),
       indirectLinkListCollapsed,
       linkListCollapsed,
       outgoingLinks,
@@ -290,16 +292,6 @@ export default defineComponent({
         min: DateTime.now().setLocale(getLocaleFromLanguage(this.$language.current)).toJSDate(),
         max: maxExpireDateFromCaps
       }
-    },
-
-    passwordEnforced() {
-      return (
-        this.capabilities.files_sharing.public.password?.enforced_for || {
-          read_only: false,
-          upload_only: false,
-          read_write: false
-        }
-      )
     },
 
     helpersEnabled() {
