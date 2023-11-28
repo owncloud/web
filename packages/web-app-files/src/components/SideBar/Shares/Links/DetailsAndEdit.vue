@@ -1,66 +1,12 @@
 <template>
   <div class="link-details oc-flex oc-flex-between oc-flex-middle">
     <div v-if="isModifiable">
-      <oc-button
-        :id="`edit-public-link-role-dropdown-toggle-${link.id}`"
-        appearance="raw"
-        class="edit-public-link-role-dropdown-toggle oc-text-left"
-        gap-size="none"
-      >
-        <span
-          class="link-current-role"
-          v-text="currentLinkRoleLabel || $gettext('Select a role')"
-        />
-        <oc-icon name="arrow-down-s" />
-      </oc-button>
-      <oc-drop
-        ref="editPublicLinkRoleDropdown"
-        class="edit-public-link-role-dropdown"
-        :drop-id="`edit-public-link-role-dropdown`"
-        :toggle="`#edit-public-link-role-dropdown-toggle-${link.id}`"
-        padding-size="small"
-        offset="0"
-        mode="click"
-      >
-        <oc-list class="role-dropdown-list">
-          <li v-for="roleOption in availableRoleOptions" :key="`role-dropdown-${roleOption.key}`">
-            <oc-button
-              :id="`files-role-${roleOption.name}`"
-              :class="{
-                selected: isSelectedRole(roleOption),
-                'oc-background-primary-gradient': isSelectedRole(roleOption)
-              }"
-              :appearance="isSelectedRole(roleOption) ? 'raw-inverse' : 'raw'"
-              :variation="isSelectedRole(roleOption) ? 'primary' : 'passive'"
-              justify-content="space-between"
-              class="oc-p-s"
-              @click="
-                updateLink({
-                  link: {
-                    ...link,
-                    permissions: roleOption.bitmask(false)
-                  },
-                  dropRef: $refs.editPublicLinkRoleDropdown
-                })
-              "
-            >
-              <span class="oc-flex oc-flex-middle">
-                <oc-icon :name="roleOption.icon" class="oc-pl-s oc-pr-m" variation="inherit" />
-                <span>
-                  <span
-                    class="oc-text-bold oc-display-block oc-width-1-1"
-                    v-text="$gettext(roleOption.label)"
-                  />
-                  <span class="oc-text-small">{{ $gettext(roleOption.description(false)) }}</span>
-                </span>
-              </span>
-              <span class="oc-flex">
-                <oc-icon v-if="isSelectedRole(roleOption)" name="check" variation="inherit" />
-              </span>
-            </oc-button>
-          </li>
-        </oc-list>
-      </oc-drop>
+      <link-role-dropdown
+        :model-value="currentLinkRole"
+        :available-role-options="availableRoleOptions"
+        drop-offset="0"
+        @update:model-value="updateSelectedRole"
+      />
     </div>
     <p v-else class="oc-my-rm">
       <span
@@ -199,7 +145,11 @@ import { basename } from 'path'
 import { DateTime } from 'luxon'
 import { mapActions, mapGetters } from 'vuex'
 import * as EmailValidator from 'email-validator'
-import { createLocationSpaces, useConfigurationManager } from '@ownclouders/web-pkg'
+import {
+  createLocationSpaces,
+  useConfigurationManager,
+  LinkRoleDropdown
+} from '@ownclouders/web-pkg'
 import {
   linkRoleInternalFile,
   linkRoleInternalFolder,
@@ -207,7 +157,7 @@ import {
   LinkShareRoles,
   ShareRole
 } from '@ownclouders/web-client/src/helpers/share'
-import { computed, defineComponent, inject, PropType, Ref } from 'vue'
+import { computed, defineComponent, inject, PropType, Ref, ref } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
@@ -217,6 +167,7 @@ import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
+  components: { LinkRoleDropdown },
   props: {
     availableRoleOptions: {
       type: Array as PropType<ShareRole[]>,
@@ -253,10 +204,15 @@ export default defineComponent({
     }
   },
   emits: ['removePublicLink', 'updateLink'],
-  setup(props) {
+  setup(props, { emit }) {
     const { current } = useGettext()
     const configurationManager = useConfigurationManager()
     const passwordPolicyService = usePasswordPolicyService()
+
+    const currentLinkRole = ref<ShareRole>(
+      LinkShareRoles.getByBitmask(props.link.permissions, props.isFolderShare)
+    ) as Ref<ShareRole>
+
     const dateExpire = computed(() => {
       return formatRelativeDateFromDateTime(
         DateTime.fromISO(props.link.expiration).endOf('day'),
@@ -264,11 +220,25 @@ export default defineComponent({
       )
     })
 
+    const updateLink = ({ link, onSuccess = () => {} }) => {
+      link = link || props.link
+      emit('updateLink', { link, onSuccess })
+    }
+    const updateSelectedRole = (role: ShareRole) => {
+      currentLinkRole.value = role
+      updateLink({
+        link: { ...props.link, permissions: role.bitmask(false) }
+      })
+    }
+
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
       passwordPolicyService,
       dateExpire,
+      updateLink,
+      updateSelectedRole,
+      currentLinkRole,
       isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos)
     }
   },
@@ -279,9 +249,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaces']),
-    currentLinkRole() {
-      return LinkShareRoles.getByBitmask(this.link.permissions, this.isFolderShare)
-    },
+
     currentLinkRoleDescription() {
       return this.currentLinkRole?.description(false) || ''
     },
@@ -492,15 +460,6 @@ export default defineComponent({
       'setModalConfirmButtonDisabled'
     ]),
 
-    isSelectedRole(role: ShareRole) {
-      return this.link.permissions === role.bitmask(false)
-    },
-    updateLink({ link, dropRef = undefined, onSuccess = () => {} }) {
-      link = link || this.link
-      dropRef = dropRef || this.$refs.editPublicLinkDropdown
-      dropRef.hide()
-      this.$emit('updateLink', { link, onSuccess })
-    },
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
       ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
@@ -632,46 +591,6 @@ export default defineComponent({
   min-width: 5rem !important;
   display: flex;
   justify-content: flex-end;
-}
-
-@media (max-width: $oc-breakpoint-medium-default) {
-  .edit-public-link-role-dropdown {
-    width: 100%;
-  }
-}
-
-@media (min-width: $oc-breakpoint-medium-default) {
-  .edit-public-link-role-dropdown {
-    width: 400px;
-  }
-}
-
-.role-dropdown-list span {
-  line-height: 1.3;
-}
-
-.role-dropdown-list li {
-  margin: var(--oc-space-xsmall) 0;
-
-  &:first-child {
-    margin-top: 0;
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  .oc-button {
-    text-align: left;
-    width: 100%;
-    gap: var(--oc-space-medium);
-
-    &:hover,
-    &:focus {
-      background-color: var(--oc-color-background-hover);
-      text-decoration: none;
-    }
-  }
 }
 
 .edit-public-link-dropdown-menu {

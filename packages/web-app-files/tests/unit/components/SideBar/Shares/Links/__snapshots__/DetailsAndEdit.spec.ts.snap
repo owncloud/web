@@ -3,56 +3,7 @@
 exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
 <div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
   <div>
-    <oc-button-stub appearance="raw" class="edit-public-link-role-dropdown-toggle oc-text-left" disabled="false" gapsize="none" id="edit-public-link-role-dropdown-toggle-undefined" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-      <span class="link-current-role">Anyone with the link can view</span>
-      <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
-    </oc-button-stub>
-    <oc-drop-stub class="edit-public-link-role-dropdown" closeonclick="false" dropid="edit-public-link-role-dropdown" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#edit-public-link-role-dropdown-toggle-undefined">
-      <oc-list-stub class="role-dropdown-list" raw="false">
-        <li>
-          <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-internal" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-            <span class="oc-flex oc-flex-middle">
-              <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="user" size="medium" type="span" variation="inherit"></oc-icon-stub>
-              <span>
-                <span class="oc-text-bold oc-display-block oc-width-1-1">Invited People</span>
-                <span class="oc-text-small">Link works only for invited people. Login is required.</span>
-              </span>
-            </span>
-            <span class="oc-flex">
-              <!--v-if-->
-            </span>
-          </oc-button-stub>
-        </li>
-        <li>
-          <oc-button-stub appearance="raw-inverse" class="selected oc-background-primary-gradient oc-p-s" disabled="false" gapsize="medium" id="files-role-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
-            <span class="oc-flex oc-flex-middle">
-              <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
-              <span>
-                <span class="oc-text-bold oc-display-block oc-width-1-1">Can view</span>
-                <span class="oc-text-small">Anyone with the link can view and download.</span>
-              </span>
-            </span>
-            <span class="oc-flex">
-              <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            </span>
-          </oc-button-stub>
-        </li>
-        <li>
-          <oc-button-stub appearance="raw" class="oc-p-s" disabled="false" gapsize="medium" id="files-role-editor" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-            <span class="oc-flex oc-flex-middle">
-              <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
-              <span>
-                <span class="oc-text-bold oc-display-block oc-width-1-1">Can edit</span>
-                <span class="oc-text-small">Anyone with the link can view, download and edit.</span>
-              </span>
-            </span>
-            <span class="oc-flex">
-              <!--v-if-->
-            </span>
-          </oc-button-stub>
-        </li>
-      </oc-list-stub>
-    </oc-drop-stub>
+    <link-role-dropdown-stub availableroleoptions="[object Object],[object Object],[object Object]" dropoffset="0" modelvalue="[object Object]"></link-role-dropdown-stub>
   </div>
   <!--v-if-->
   <div class="details-buttons">
