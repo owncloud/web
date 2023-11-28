@@ -205,7 +205,6 @@ import {
   linkRoleInternalFolder,
   linkRoleUploaderFolder,
   LinkShareRoles,
-  SharePermissionBit,
   ShareRole
 } from '@ownclouders/web-client/src/helpers/share'
 import { computed, defineComponent, inject, PropType, Ref } from 'vue'
