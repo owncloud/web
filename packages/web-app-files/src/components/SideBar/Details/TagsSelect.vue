@@ -22,7 +22,7 @@
           @click="onTagClicked"
         >
           <oc-icon name="price-tag-3" class="oc-mr-xs" size="small" />
-          <span class="oc-text-truncate">{{ option.label }}</span>
+          <span v-oc-browser-translate-off class="oc-text-truncate">{{ option.label }}</span>
         </component>
 
         <span class="oc-flex oc-flex-middle oc-mr-xs">

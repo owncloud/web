@@ -1,7 +1,15 @@
 <template>
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
-      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
+      <app-bar :has-bulk-actions="true" :side-bar-open="sideBarOpen" has-navigation-slot>
+        <template #navigation>
+          <span v-if="searchTerm">
+            <span v-text="$gettext('Search results for')" />
+            <span v-oc-browser-translate-off v-text="searchTerm"></span>
+          </span>
+          <span v-else v-text="$gettext('Search')" />
+        </template>
+      </app-bar>
       <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
@@ -31,6 +39,7 @@
         <item-filter
           v-if="availableTags.length"
           ref="tagFilter"
+          v-oc-browser-translate-off
           :allow-multiple="true"
           :filter-label="$gettext('Tags')"
           :filterable-attributes="['label']"
@@ -44,7 +53,7 @@
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
               <oc-icon name="price-tag-3" size="small" />
-              <span v-oc-browser-translate-off class="oc-ml-s">{{ item.label }}</span>
+              <span class="oc-ml-s">{{ item.label }}</span>
             </div>
           </template>
         </item-filter>
@@ -203,6 +212,7 @@ import {
   useKeyboardTableMouseActions,
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -424,16 +434,6 @@ export default defineComponent({
       )
     }
 
-    const breadcrumbs = computed(() => {
-      return [
-        {
-          text: unref(searchTerm)
-            ? $gettext('Search results for "%{searchTerm}"', { searchTerm: unref(searchTerm) })
-            : $gettext('Search')
-        }
-      ]
-    })
-
     onMounted(async () => {
       // Store resources are shared across table views, therefore
       // the store state needs a reset to prevent the old list of resources
@@ -486,13 +486,13 @@ export default defineComponent({
       getMatchingSpace,
       availableTags,
       tagFilter,
-      breadcrumbs,
       displayFilter,
       availableLastModifiedValues,
       lastModifiedFilter,
       mediaTypeFilter,
       availableMediaTypeValues,
-      getFakeResourceForIcon
+      getFakeResourceForIcon,
+      searchTerm
     }
   },
   computed: {
@@ -552,6 +552,7 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
+    $gettext,
     ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES']),
     ...mapActions('Files', ['loadPreview']),
     rowMounted(resource, component) {

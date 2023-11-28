@@ -39,6 +39,7 @@
               </template>
             </item-filter>
             <item-filter
+              v-oc-browser-translate-off
               :allow-multiple="true"
               :filter-label="$gettext('Shared By')"
               :filterable-attributes="['displayName']"
@@ -54,7 +55,7 @@
                 <avatar-image :width="32" :userid="item.username" :user-name="item.displayName" />
               </template>
               <template #item="{ item }">
-                <span v-oc-browser-translate-off class="oc-ml-s" v-text="item.displayName" />
+                <span class="oc-ml-s" v-text="item.displayName" />
               </template>
             </item-filter>
           </div>

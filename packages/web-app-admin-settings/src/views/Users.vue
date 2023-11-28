@@ -49,6 +49,7 @@
                   <span v-text="$gettext('Filter:')" />
                 </div>
                 <item-filter
+                  v-oc-browser-translate-off
                   :allow-multiple="true"
                   :filter-label="$gettext('Groups')"
                   :filterable-attributes="['displayName']"
@@ -64,7 +65,7 @@
                     <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
                   </template>
                   <template #item="{ item }">
-                    <div v-oc-browser-translate-off v-text="item.displayName" />
+                    <div v-text="item.displayName" />
                   </template>
                 </item-filter>
                 <item-filter

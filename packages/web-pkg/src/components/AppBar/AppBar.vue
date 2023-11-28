@@ -13,8 +13,8 @@
       <div
         class="oc-flex oc-flex-middle files-app-bar-controls"
         :class="{
-          'oc-flex-between': breadcrumbs.length || hasSharesNavigation,
-          'oc-flex-right': !breadcrumbs.length && !hasSharesNavigation
+          'oc-flex-between': breadcrumbs.length || hasNavigation,
+          'oc-flex-right': !breadcrumbs.length && !hasNavigation
         }"
       >
         <oc-breadcrumb
@@ -36,7 +36,7 @@
           </template>
         </oc-breadcrumb>
         <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
-        <slot v-if="hasSharesNavigation" name="navigation" />
+        <slot v-if="hasNavigation" name="navigation" />
         <div
           v-if="hasViewOptions || hasSidebarToggle"
           id="files-app-bar-controls-right"
@@ -162,6 +162,10 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: false,
       default: null
+    },
+    hasNavigationSlot: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
@@ -195,6 +199,10 @@ export default defineComponent({
     const hasSharesNavigation = computed(
       () => useSlots().hasOwnProperty('navigation') && can('create-all', 'Share')
     )
+
+    const hasNavigation = computed(() => {
+      return props.hasNavigationSlot || hasSharesNavigation
+    })
 
     const batchActions = computed(() => {
       let actions = [
@@ -275,7 +283,7 @@ export default defineComponent({
     })
 
     return {
-      hasSharesNavigation,
+      hasNavigation,
       batchActions,
       showBreadcrumb,
       showMobileNav,
