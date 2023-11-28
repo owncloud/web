@@ -122,6 +122,7 @@ export type FieldType = {
   wrap?: string
   thClass?: string
   tdClass?: string
+  tdAttributes?: object
   sortable?: boolean
 }
 
@@ -437,7 +438,7 @@ export default defineComponent({
       }
     },
     extractTdProps(field, index, item) {
-      const props = this.extractCellProps(field)
+      let props = this.extractCellProps(field)
       props.class = `oc-table-data-cell oc-table-data-cell-${field.name}`
       if (Object.prototype.hasOwnProperty.call(field, 'tdClass')) {
         props.class += ` ${field.tdClass}`
@@ -456,6 +457,10 @@ export default defineComponent({
 
       if (Object.prototype.hasOwnProperty.call(field, 'accessibleLabelCallback')) {
         props['aria-label'] = field.accessibleLabelCallback(item)
+      }
+
+      if (Object.prototype.hasOwnProperty.call(field, 'tdAttributes')) {
+        props = { ...props, ...field.tdAttributes }
       }
 
       return props
@@ -613,6 +618,7 @@ export default defineComponent({
     vertical-align: middle;
     display: inline-table;
     color: var(--oc-color-swatch-passive-default);
+
     &:hover {
       text-decoration: underline;
     }
@@ -629,12 +635,15 @@ export default defineComponent({
     }
   }
 }
+
 .oc-button-sort {
   display: inline-table;
   vertical-align: middle;
+
   .oc-icon {
     display: table-cell !important;
     vertical-align: middle !important;
+
     &:hover {
       background-color: var(--oc-color-background-hover);
     }
@@ -649,7 +658,7 @@ export default defineComponent({
       A simple table with plain field types
     </h3>
     <oc-table :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
+              :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
       <template #footer>
         3 resources
       </template>
@@ -695,8 +704,9 @@ export default defineComponent({
     <h3 class="oc-heading-divider">
       A sortable table with plain field types
     </h3>
-    <oc-table @sort="handleSort" :sort-by="sortBy" :sort-dir="sortDir" :fields="fields" :data="data" highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
-      :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
+    <oc-table @sort="handleSort" :sort-by="sortBy" :sort-dir="sortDir" :fields="fields" :data="data"
+              highlighted="4b136c0a-5057-11eb-ac70-eba264112003"
+              :disabled="['8468c9f0-5057-11eb-924b-934c6fd827a2']" :sticky="true">
       <template #footer>
         3 resources
       </template>
@@ -711,7 +721,8 @@ export default defineComponent({
 
       if (a == b) {
         return 0
-      };
+      }
+      ;
       return (desc ? a > b : a < b) ? -1 : 1;
     });
   };
@@ -772,13 +783,13 @@ export default defineComponent({
     <oc-table :fields="fields" :data="data">
       <template v-slot:resourceHeader>
         <div class="oc-flex oc-flex-middle">
-          <oc-icon name="folder" class="oc-mr-s" />
+          <oc-icon name="folder" class="oc-mr-s"/>
           Resource
         </div>
       </template>
       <template v-slot:resource="rowData">
         <oc-tag>
-          <oc-icon :name="rowData.item.icon" />
+          <oc-icon :name="rowData.item.icon"/>
           {{ rowData.item.resource }}
         </oc-tag>
       </template>
@@ -798,7 +809,7 @@ export default defineComponent({
           name: "last_modified",
           title: "Last modified",
           type: "callback",
-          callback: function(timestamp) {
+          callback: function (timestamp) {
             const date = new Date(timestamp * 1000)
             const hours = date.getHours()
             const minutes = "0" + date.getMinutes()
@@ -836,7 +847,7 @@ export default defineComponent({
     <h3 class="oc-heading-divider">
       A table with long text showing the different text wrapping mechanisms
     </h3>
-    <oc-table :fields="fields" :data="data" :has-header="true" :hover="true" />
+    <oc-table :fields="fields" :data="data" :has-header="true" :hover="true"/>
   </section>
 </template>
 <script>

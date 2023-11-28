@@ -44,7 +44,7 @@
           <template #image="{ item }">
             <div class="tag-option-wrapper oc-flex oc-flex-middle">
               <oc-icon name="price-tag-3" size="small" />
-              <span class="oc-ml-s">{{ item.label }}</span>
+              <span v-oc-browser-translate-off class="oc-ml-s">{{ item.label }}</span>
             </div>
           </template>
         </item-filter>

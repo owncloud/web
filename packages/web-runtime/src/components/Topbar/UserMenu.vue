@@ -59,7 +59,11 @@
             >
               <avatar-image :width="32" :userid="userId" :user-name="user.displayname" />
               <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.email }">
-                <span class="oc-display-block" v-text="user.displayname" />
+                <span
+                  v-oc-browser-translate-off
+                  class="oc-display-block"
+                  v-text="user.displayname"
+                />
                 <span v-if="user.email" class="oc-text-small" v-text="user.email" />
               </span>
             </oc-button>

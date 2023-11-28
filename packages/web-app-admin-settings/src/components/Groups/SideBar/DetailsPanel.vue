@@ -16,7 +16,7 @@
       >
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Group name')" />
-          <td v-text="group.displayName" />
+          <td v-oc-browser-translate-off v-text="group.displayName" />
         </tr>
       </table>
     </div>

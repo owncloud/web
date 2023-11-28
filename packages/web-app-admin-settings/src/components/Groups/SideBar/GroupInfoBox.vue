@@ -1,7 +1,11 @@
 <template>
   <div class="oc-flex group-info oc-mb-l">
     <avatar-image class="oc-mb-m" :width="80" :userid="_group.id" :user-name="_group.displayName" />
-    <span class="oc-text-muted group-info-display-name" v-text="_group.displayName"></span>
+    <span
+      v-oc-browser-translate-off
+      class="oc-text-muted group-info-display-name"
+      v-text="_group.displayName"
+    ></span>
     <span class="oc-text-muted" v-text="groupMembersText"></span>
   </div>
 </template>
@@ -9,6 +13,7 @@
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
+
 export default defineComponent({
   name: 'GroupInfoBox',
   props: {
@@ -43,6 +48,7 @@ export default defineComponent({
   align-items: center;
   flex-direction: column;
 }
+
 .group-info-display-name {
   font-size: 1.5rem;
 }

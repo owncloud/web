@@ -332,7 +332,10 @@ export default defineComponent({
           name: 'displayName',
           title: this.$gettext('Group name'),
           type: 'slot',
-          sortable: true
+          sortable: true,
+          tdAttributes: {
+            translate: 'no'
+          }
         },
         {
           name: 'members',

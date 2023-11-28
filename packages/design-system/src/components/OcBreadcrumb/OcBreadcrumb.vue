@@ -7,7 +7,7 @@
         :data-key="index"
         :data-item-id="item.id"
         :aria-hidden="item.isTruncationPlaceholder"
-        :translate="index === 0 ? 'yes' : 'no'"
+        :translate="translate(index)"
         :class="[
           'oc-breadcrumb-list-item',
           'oc-flex',
@@ -195,6 +195,13 @@ export default defineComponent({
     showContextActions: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Determines if the breadcrumb represents a folder structure.
+     */
+    representsFolderStructure: {
+      type: Boolean,
+      default: true
     }
   },
   emits: [EVENT_ITEM_DROPPED_BREADCRUMB],
@@ -256,6 +263,13 @@ export default defineComponent({
       hiddenItems.value.length >= 1 ? unref(hiddenItems)[unref(hiddenItems).length - 1] : { to: {} }
     )
 
+    const translate = (breadcrumbIndex: Number) => {
+      if (!props.representsFolderStructure) {
+        return 'yes'
+      }
+      return breadcrumbIndex === 0 ? 'yes' : 'no'
+    }
+
     const renderBreadcrumb = () => {
       displayItems.value = [...props.items]
       if (displayItems.value.length > props.truncationOffset - 1) {
@@ -315,6 +329,7 @@ export default defineComponent({
       getAriaCurrent,
       visibleItems,
       hiddenItems,
+      translate,
       renderBreadcrumb,
       displayItems,
       lastHiddenItem,

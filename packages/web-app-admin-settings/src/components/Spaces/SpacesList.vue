@@ -63,9 +63,9 @@
       <template #members="{ item }">
         {{ getMemberCount(item) }}
       </template>
-      <template #totalQuota="{ item }"> {{ getTotalQuota(item) }} </template>
-      <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
-      <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
+      <template #totalQuota="{ item }"> {{ getTotalQuota(item) }}</template>
+      <template #usedQuota="{ item }"> {{ getUsedQuota(item) }}</template>
+      <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }}</template>
       <template #mdate="{ item }">
         <span
           v-oc-tooltip="formatDate(item.mdate)"
@@ -93,7 +93,8 @@
             appearance="raw"
             class="spaces-table-btn-details"
             @click.stop.prevent="showDetailsForSpace(item)"
-            ><oc-icon name="information" fill-type="line" />
+          >
+            <oc-icon name="information" fill-type="line" />
           </oc-button>
           <context-menu-quick-action
             ref="contextMenuButtonRef"
@@ -281,12 +282,18 @@ export default defineComponent({
         name: 'name',
         title: $gettext('Name'),
         type: 'slot',
-        sortable: true
+        sortable: true,
+        tdAttributes: {
+          translate: 'no'
+        }
       },
       {
         name: 'manager',
         title: $gettext('Manager'),
-        type: 'slot'
+        type: 'slot',
+        tdAttributes: {
+          translate: 'no'
+        }
       },
       {
         name: 'members',
@@ -545,6 +552,7 @@ export default defineComponent({
       display: table-cell;
     }
   }
+
   .oc-table-header-cell-totalQuota,
   .oc-table-data-cell-totalQuota,
   .oc-table-header-cell-usedQuota,
@@ -555,6 +563,7 @@ export default defineComponent({
       display: table-cell;
     }
   }
+
   &-squashed {
     .oc-table-header-cell-manager,
     .oc-table-data-cell-manager,
@@ -564,6 +573,7 @@ export default defineComponent({
     .oc-table-data-cell-usedQuota {
       display: none;
     }
+
     .oc-table-header-cell-remainingQuota,
     .oc-table-data-cell-remainingQuota,
     .oc-table-header-cell-mdate,

@@ -36,19 +36,19 @@
       <dl class="account-page-info oc-flex oc-flex-wrap">
         <div class="account-page-info-username oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
-          <dd>
+          <dd v-oc-browser-translate-off>
             {{ user.username || user.id }}
           </dd>
         </div>
         <div v-if="user.username && user.id" class="account-page-info-userid">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
-          <dd>
+          <dd v-oc-browser-translate-off>
             {{ user.id }}
           </dd>
         </div>
         <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
-          <dd>
+          <dd v-oc-browser-translate-off>
             {{ user.displayname }}
           </dd>
         </div>
@@ -62,7 +62,12 @@
         <div class="account-page-info-groups oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
           <dd data-testid="group-names">
-            <span v-if="groupNames">{{ groupNames }}</span>
+            <template v-if="user.groups?.length">
+              <span v-for="(group, index) in user.groups" :key="index" class="oc-flex-inline">
+                <span v-oc-browser-translate-off v-text="group.displayName" />
+                <span v-if="index + 1 < user.groups.length" class="oc-mr-xs">,</span>
+              </span>
+            </template>
             <span
               v-else
               data-testid="group-names-empty"

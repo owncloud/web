@@ -57,10 +57,10 @@
       <tr>
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Manager')" />
         <td>
-          <span v-for="(owner, index) in owners" :key="index">
-            <span v-text="owner.displayName" />
+          <span v-for="(owner, index) in owners" :key="index" class="oc-flex-inline">
+            <span v-oc-browser-translate-off v-text="owner.displayName" />
             <span v-if="isMe(owner)" v-text="$gettext('(me)')" />
-            <span v-if="index + 1 < owners.length">, </span>
+            <span v-if="index + 1 < owners.length" class="oc-mr-xs">,</span>
           </span>
         </td>
       </tr>

@@ -10,6 +10,7 @@
               id="admin-settings-breadcrumb"
               class="oc-flex oc-flex-middle"
               :items="breadcrumbs"
+              :represents-folder-structure="false"
             />
             <portal-target name="app.runtime.mobile.nav" />
             <div class="oc-flex">
@@ -237,6 +238,7 @@ export default defineComponent({
 #files-toggle-sidebar {
   vertical-align: middle;
   border: 3px solid transparent;
+
   &:hover {
     background-color: var(--oc-color-background-hover);
     border-radius: 3px;

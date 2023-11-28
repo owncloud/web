@@ -79,8 +79,9 @@
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
           @click="showDetails(item)"
         >
-          <oc-icon name="information" fill-type="line" /></oc-button
-        ><oc-button
+          <oc-icon name="information" fill-type="line" />
+        </oc-button>
+        <oc-button
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
@@ -393,12 +394,18 @@ export default defineComponent({
         {
           name: 'onPremisesSamAccountName',
           title: this.$gettext('User name'),
-          sortable: true
+          sortable: true,
+          tdAttributes: {
+            translate: 'no'
+          }
         },
         {
           name: 'displayName',
           title: this.$gettext('First and last name'),
-          sortable: true
+          sortable: true,
+          tdAttributes: {
+            translate: 'no'
+          }
         },
         {
           name: 'mail',

@@ -11,7 +11,8 @@
         :user-name="member.displayName"
         :width="36"
         class="oc-mr-s"
-      /><oc-avatar-item
+      />
+      <oc-avatar-item
         v-else
         :width="36"
         icon-size="medium"
@@ -19,7 +20,7 @@
         name="group"
         class="oc-mr-s"
       />
-      {{ member.displayName }}
+      <span v-oc-browser-translate-off v-text="member.displayName" />
     </li>
   </ul>
 </template>

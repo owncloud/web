@@ -16,11 +16,11 @@
       >
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
-          <td v-text="_user.onPremisesSamAccountName" />
+          <td v-oc-browser-translate-off v-text="_user.onPremisesSamAccountName" />
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
-          <td v-text="_user.displayName" />
+          <td v-oc-browser-translate-off v-text="_user.displayName" />
         </tr>
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
@@ -57,7 +57,11 @@
         <tr>
           <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
           <td>
-            <span v-if="_user.memberOf.length" v-text="groupsDisplayValue" />
+            <span
+              v-if="_user.memberOf.length"
+              v-oc-browser-translate-off
+              v-text="groupsDisplayValue"
+            />
             <span v-else>
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper :text="$gettext('No groups assigned.')" />

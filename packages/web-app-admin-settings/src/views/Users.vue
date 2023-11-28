@@ -64,7 +64,7 @@
                     <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
                   </template>
                   <template #item="{ item }">
-                    <div v-text="item.displayName" />
+                    <div v-oc-browser-translate-off v-text="item.displayName" />
                   </template>
                 </item-filter>
                 <item-filter
