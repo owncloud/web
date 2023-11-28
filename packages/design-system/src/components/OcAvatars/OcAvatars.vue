@@ -1,7 +1,7 @@
 <template>
   <span>
     <span
-      v-oc-tooltip="tooltip"
+      v-oc-tooltip.browser-translate-off="tooltip"
       class="oc-avatars"
       :class="{ 'oc-avatars-stacked': stacked }"
       aria-hidden="true"

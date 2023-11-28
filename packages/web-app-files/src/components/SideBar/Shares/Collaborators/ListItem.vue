@@ -36,7 +36,10 @@
           </template>
         </div>
         <div class="oc-pl-s oc-text-truncate">
-          <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
+          <div
+            v-oc-tooltip.browser-translate-off="shareDisplayNameTooltip"
+            class="oc-text-truncate"
+          >
             <span aria-hidden="true" class="files-collaborators-collaborator-name">
               <span v-oc-browser-translate-off v-text="shareDisplayName" />
               <span v-if="isMe" v-text="$gettext('(me)')" />

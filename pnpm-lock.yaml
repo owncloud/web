@@ -294,6 +294,9 @@ importers:
       portal-vue:
         specifier: '*'
         version: 3.0.0(vue@3.3.8)
+      sanitize-html:
+        specifier: ^2.7.0
+        version: 2.7.0
     devDependencies:
       '@adobe/leonardo-contrast-colors':
         specifier: 1.0.0-alpha.16

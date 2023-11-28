@@ -103,7 +103,7 @@
       >
         <oc-tag
           v-oc-browser-translate-off
-          v-oc-tooltip="getTagToolTip(tag)"
+          v-oc-tooltip.browser-translate-off="getTagToolTip(tag)"
           class="resource-table-tag oc-ml-xs"
           :rounded="true"
           size="small"

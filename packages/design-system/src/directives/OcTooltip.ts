@@ -1,6 +1,8 @@
 import tippy from 'tippy.js'
 import merge from 'deepmerge'
 import __logger from '../utils/logger'
+import sanitizeHtml from 'sanitize-html'
+import { DirectiveBinding } from 'vue'
 
 export const hideOnEsc = {
   name: 'hideOnEsc',
@@ -47,7 +49,7 @@ export const destroy = (_tippy) => {
   }
 }
 
-const initOrUpdate = (el, { value = {} }: any) => {
+const initOrUpdate = (el, { value, modifiers }: DirectiveBinding) => {
   if (Object.prototype.toString.call(value) !== '[object Object]') {
     value = { content: value }
   }
@@ -58,8 +60,13 @@ const initOrUpdate = (el, { value = {} }: any) => {
     return
   }
 
+  if (modifiers['browser-translate-off']) {
+    value.content = `<span translate="no">${sanitizeHtml(value.content)}</span>`
+  }
+
   const props = merge.all([
     {
+      ...(!!modifiers['browser-translate-off'] && { allowHTML: true }),
       ignoreAttributes: true,
       aria: {
         content: null,

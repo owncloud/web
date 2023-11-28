@@ -137,7 +137,8 @@
     "vue-inline-svg": "3.1.2",
     "vue-select": "^3.12.0",
     "webfontloader": "^1.6.28",
-    "portal-vue": "*"
+    "portal-vue": "*",
+    "sanitize-html": "^2.7.0"
   },
   "engines": {
     "node": ">= 14.0.0",

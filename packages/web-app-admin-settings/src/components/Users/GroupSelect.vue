@@ -1,6 +1,7 @@
 <template>
   <div id="user-group-select-form">
     <oc-select
+      v-oc-browser-translate-off
       :model-value="selectedOptions"
       class="oc-mb-s"
       :multiple="true"
