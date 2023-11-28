@@ -11,7 +11,7 @@ exports[`User Menu component when no quota and email is set the user menu does n
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -46,7 +46,7 @@ exports[`User Menu component when no quota and no email is set the user menu doe
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -81,7 +81,7 @@ exports[`User Menu component when quota and no email is set renders a navigation
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -125,7 +125,7 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -169,7 +169,7 @@ exports[`User Menu component when quota is above 90% renders a danger quota prog
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -213,7 +213,7 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -257,7 +257,7 @@ exports[`User Menu component when quota is not defined renders no percentag of t
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -301,7 +301,7 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
           <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block" translate="no"></span>
             <!--v-if-->
           </span>
         </oc-button-stub>

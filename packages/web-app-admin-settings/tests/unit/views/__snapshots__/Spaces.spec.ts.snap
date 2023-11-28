@@ -6,7 +6,7 @@ exports[`Spaces view loading states should render spaces list after loading has 
     <div class="oc-width-expand oc-height-1-1 oc-position-relative" id="admin-settings-wrapper">
       <div class="oc-app-bar oc-py-s" id="admin-settings-app-bar">
         <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
-          <oc-breadcrumb-stub class="oc-flex oc-flex-middle" contextmenupadding="medium" id="admin-settings-breadcrumb" items="[object Object],[object Object]" maxwidth="-1" showcontextactions="false" truncationoffset="2" variation="default"></oc-breadcrumb-stub>
+          <oc-breadcrumb-stub class="oc-flex oc-flex-middle" contextmenupadding="medium" id="admin-settings-breadcrumb" items="[object Object],[object Object]" maxwidth="-1" representsfolderstructure="false" showcontextactions="false" truncationoffset="2" variation="default"></oc-breadcrumb-stub>
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div class="oc-flex">
             <view-options-stub hasfileextensions="false" hashiddenfiles="false" haspagination="true" paginationoptions="20,50,100,250" perpagedefault="50" perpagequeryname="items-per-page" perpagestorageprefix="admin-settings" viewmodedefault="resource-table" viewmodes=""></view-options-stub>

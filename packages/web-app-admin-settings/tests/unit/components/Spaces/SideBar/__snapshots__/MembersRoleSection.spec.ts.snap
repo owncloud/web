@@ -3,10 +3,12 @@
 exports[`MembersRoleSection should render all members accordingly 1`] = `
 <ul class="oc-list">
   <li class="oc-flex oc-flex-middle oc-mb-s">
-    <oc-avatar-stub accessiblelabel="" class="oc-mr-s" src="" username="einstein" width="36"></oc-avatar-stub> einstein
+    <oc-avatar-stub accessiblelabel="" class="oc-mr-s" src="" username="einstein" width="36"></oc-avatar-stub>
+    <span translate="no">einstein</span>
   </li>
   <li class="oc-flex oc-flex-middle oc-mb-s">
-    <oc-avatar-item-stub accessiblelabel="" background="var(--oc-color-swatch-passive-default)" class="oc-mr-s" icon="group" iconcolor="var(--oc-color-text-inverse)" iconfilltype="fill" iconsize="medium" name="group" width="36"></oc-avatar-item-stub> physic-lovers
+    <oc-avatar-item-stub accessiblelabel="" background="var(--oc-color-swatch-passive-default)" class="oc-mr-s" icon="group" iconcolor="var(--oc-color-text-inverse)" iconfilltype="fill" iconsize="medium" name="group" width="36"></oc-avatar-item-stub>
+    <span translate="no">physic-lovers</span>
   </li>
 </ul>
 `;

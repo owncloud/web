@@ -4,7 +4,7 @@ exports[`EditPanel renders all available inputs 1`] = `
 <div class="oc-mt-xl" id="group-edit-panel">
   <div class="oc-flex group-info oc-mb-l">
     <avatar-image-stub class="oc-mb-m" user-name="group" width="80"></avatar-image-stub>
-    <span class="oc-text-muted group-info-display-name">group</span>
+    <span class="oc-text-muted group-info-display-name" translate="no">group</span>
     <span class="oc-text-muted">0 members</span>
   </div>
   <form autocomplete="off" class="oc-background-highlight oc-p-m" id="group-edit-form">

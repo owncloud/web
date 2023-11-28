@@ -4,12 +4,12 @@ exports[`account page account information displays basic user information 1`] = 
 <dl class="account-page-info oc-flex oc-flex-wrap">
   <div class="account-page-info-username oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Username</dt>
-    <dd></dd>
+    <dd translate="no"></dd>
   </div>
   <!--v-if-->
   <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Display name</dt>
-    <dd></dd>
+    <dd translate="no"></dd>
   </div>
   <div class="account-page-info-email oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Email</dt>
@@ -35,7 +35,18 @@ exports[`account page account information displays basic user information 1`] = 
 
 exports[`account page account information group membership displays group names 1`] = `
 <dd>
-  <span>one, two, three</span>
+  <span class="oc-flex-inline">
+    <span translate="no">one</span>
+    <span class="oc-mr-xs">,</span>
+  </span>
+  <span class="oc-flex-inline">
+    <span translate="no">two</span>
+    <span class="oc-mr-xs">,</span>
+  </span>
+  <span class="oc-flex-inline">
+    <span translate="no">three</span>
+    <!--v-if-->
+  </span>
 </dd>
 `;
 
