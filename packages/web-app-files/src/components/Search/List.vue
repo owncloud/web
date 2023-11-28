@@ -120,6 +120,7 @@
           <template #additionalResourceContent="{ resource }">
             <span
               v-if="resource.highlights"
+              v-oc-browser-translate-off
               class="files-search-resource-highlights oc-text-truncate"
               v-html="resource.highlights"
             />
