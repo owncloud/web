@@ -326,7 +326,7 @@ export default defineComponent({
               })
           }
         })
-      } else {
+      } else if (!this.isAliasLink) {
         result.push({
           id: 'add-expiration',
           title: this.$gettext('Set expiration date'),
