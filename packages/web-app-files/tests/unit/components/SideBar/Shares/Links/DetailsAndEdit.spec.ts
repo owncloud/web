@@ -49,6 +49,23 @@ describe('DetailsAndEdit component', () => {
       expect(setModalInputErrorMessageStub).toHaveBeenCalledWith(expect.anything())
     })
   })
+
+  describe('editOptions computed property', () => {
+    it('does not add "add-expiration" option if isAliasLink is true', () => {
+      const exampleLinkInternal = {
+        name: 'Example link',
+        url: 'https://some-url.com/abc',
+        permissions: 0
+      }
+      const { wrapper } = getShallowMountedWrapper(exampleLinkInternal, false, true)
+      expect(wrapper.vm.editOptions.some((option) => option.id === 'add-expiration')).toBe(false)
+    })
+
+    it('adds "add-expiration" option if isAliasLink is false', () => {
+      const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
+      expect(wrapper.vm.editOptions.some((option) => option.id === 'add-expiration')).toBe(true)
+    })
+  })
 })
 
 function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable = false) {
