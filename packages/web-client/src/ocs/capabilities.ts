@@ -19,6 +19,13 @@ export interface PasswordPolicyCapability {
   min_special_characters?: number
 }
 
+export interface PasswordEnforcedForCapability {
+  read_only?: boolean
+  read_write?: boolean
+  upload_only?: boolean
+  read_write_delete?: boolean
+}
+
 export interface LastModifiedFilterCapability {
   keywords?: string[]
   enabled?: boolean
@@ -100,11 +107,7 @@ export interface Capabilities {
         multiple: boolean
         password: {
           enforced: boolean
-          enforced_for: {
-            read_only: boolean
-            read_write: boolean
-            upload_only: boolean
-          }
+          enforced_for: PasswordEnforcedForCapability
         }
         send_mail: boolean
         supports_upload_only: boolean

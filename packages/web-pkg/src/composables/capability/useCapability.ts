@@ -6,7 +6,8 @@ import {
   AppProviderCapability,
   LastModifiedFilterCapability,
   MediaTypeCapability,
-  PasswordPolicyCapability
+  PasswordPolicyCapability,
+  PasswordEnforcedForCapability
 } from '@ownclouders/web-client/src/ocs/capabilities'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
@@ -153,3 +154,13 @@ export const useCapabilitySearchMediaType = createCapabilityComposable<MediaType
   'search.property.mediatype',
   {}
 )
+
+export const useCapabilityFilesSharingPublicPasswordEnforcedFor =
+  createCapabilityComposable<PasswordEnforcedForCapability>(
+    'files_sharing.public.password.enforced_for',
+    {
+      read_only: false,
+      upload_only: false,
+      read_write: false
+    }
+  )
