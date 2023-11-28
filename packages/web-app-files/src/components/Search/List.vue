@@ -3,11 +3,13 @@
     <files-view-wrapper>
       <app-bar :has-bulk-actions="true" :side-bar-open="sideBarOpen" has-navigation-slot>
         <template #navigation>
-          <span v-if="searchTerm">
-            <span v-text="$gettext('Search results for')" />
-            <span v-oc-browser-translate-off v-text="searchTerm"></span>
+          <span id="search-navigation">
+            <span v-if="searchTerm">
+              <span v-text="$gettext('Search results for')" />
+              <span v-oc-browser-translate-off v-text="searchTerm"></span>
+            </span>
+            <span v-else v-text="$gettext('Search')" />
           </span>
-          <span v-else v-text="$gettext('Search')" />
         </template>
       </app-bar>
       <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">

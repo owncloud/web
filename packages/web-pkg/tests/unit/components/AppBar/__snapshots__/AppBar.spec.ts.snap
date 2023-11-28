@@ -6,10 +6,9 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
+    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-between">
       <!--v-if-->
       <portal-target name="app.runtime.mobile.nav"></portal-target>
-      <!--v-if-->
       <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
@@ -31,10 +30,9 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
+    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-between">
       <!--v-if-->
       <portal-target name="app.runtime.mobile.nav"></portal-target>
-      <!--v-if-->
       <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
@@ -56,10 +54,9 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
   <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div class="files-topbar oc-py-s">
     <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
+    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-between">
       <!--v-if-->
       <portal-target name="app.runtime.mobile.nav"></portal-target>
-      <!--v-if-->
       <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
         <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
