@@ -205,6 +205,7 @@ import {
   linkRoleInternalFolder,
   linkRoleUploaderFolder,
   LinkShareRoles,
+  SharePermissionBit,
   ShareRole
 } from '@ownclouders/web-client/src/helpers/share'
 import { computed, defineComponent, inject, PropType, Ref } from 'vue'
@@ -327,13 +328,15 @@ export default defineComponent({
           }
         })
       } else {
-        result.push({
-          id: 'add-expiration',
-          title: this.$gettext('Set expiration date'),
-          method: this.updateLink,
-          icon: 'calendar-event',
-          showDatepicker: true
-        })
+        if (!this.isAliasLink) {
+          result.push({
+            id: 'add-expiration',
+            title: this.$gettext('Set expiration date'),
+            method: this.updateLink,
+            icon: 'calendar-event',
+            showDatepicker: true
+          })
+        }
       }
 
       if (this.link.password) {
