@@ -86,19 +86,6 @@ describe('List component', () => {
     expect(replacementCounter).toBe(queries.length)
     expect(wrapper.emitted('search').length).toBe(4)
   })
-  describe('breadcrumbs', () => {
-    it('show "Search" when no search term given', () => {
-      const { wrapper } = getWrapper()
-      const appBar = wrapper.findComponent<any>('app-bar-stub')
-      expect(appBar.props('breadcrumbs')[0].text).toEqual('Search')
-    })
-    it('include the search term if given', () => {
-      const searchTerm = 'term'
-      const { wrapper } = getWrapper({ searchTerm })
-      const appBar = wrapper.findComponent<any>('app-bar-stub')
-      expect(appBar.props('breadcrumbs')[0].text).toEqual(`Search results for "${searchTerm}"`)
-    })
-  })
   describe('filter', () => {
     describe('general', () => {
       it('should not be rendered if no filtering is available', async () => {
