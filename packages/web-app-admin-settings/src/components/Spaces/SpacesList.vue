@@ -9,7 +9,6 @@
       />
     </div>
     <oc-table
-      ref="tableRef"
       class="spaces-table"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -63,9 +62,9 @@
       <template #members="{ item }">
         {{ getMemberCount(item) }}
       </template>
-      <template #totalQuota="{ item }"> {{ getTotalQuota(item) }} </template>
-      <template #usedQuota="{ item }"> {{ getUsedQuota(item) }} </template>
-      <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }} </template>
+      <template #totalQuota="{ item }"> {{ getTotalQuota(item) }}</template>
+      <template #usedQuota="{ item }"> {{ getUsedQuota(item) }}</template>
+      <template #remainingQuota="{ item }"> {{ getRemainingQuota(item) }}</template>
       <template #mdate="{ item }">
         <span
           v-oc-tooltip="formatDate(item.mdate)"
@@ -93,7 +92,8 @@
             appearance="raw"
             class="spaces-table-btn-details"
             @click.stop.prevent="showDetailsForSpace(item)"
-            ><oc-icon name="information" fill-type="line" />
+          >
+            <oc-icon name="information" fill-type="line" />
           </oc-button>
           <context-menu-quick-action
             ref="contextMenuButtonRef"
@@ -174,7 +174,6 @@ export default defineComponent({
     const sortDir = ref(SortDir.Asc)
     const filterTerm = ref('')
     const markInstance = ref(undefined)
-    const tableRef = ref(undefined)
 
     const lastSelectedSpaceIndex = ref(0)
     const lastSelectedSpaceId = ref(null)
@@ -386,21 +385,19 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(() => {
-        markInstance.value = new Mark(unref(tableRef).$el)
+        markInstance.value = new Mark('td.oc-table-data-cell-name')
       })
     })
 
     watch(filterTerm, async () => {
-      const instance = unref(markInstance)
-      if (!instance) {
-        return
-      }
-      await router.push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
-      instance.unmark()
-      instance.mark(unref(filterTerm), {
+      await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
+    })
+
+    watch([filterTerm, paginatedItems], () => {
+      unref(markInstance)?.unmark()
+      unref(markInstance)?.mark(unref(filterTerm), {
         element: 'span',
-        className: 'highlight-mark',
-        exclude: ['th *', 'tfoot *']
+        className: 'highlight-mark'
       })
     })
 
@@ -491,7 +488,6 @@ export default defineComponent({
       footerTextFilter,
       fields,
       highlighted,
-      tableRef,
       filter,
       getManagerNames,
       formatDate,
@@ -545,6 +541,7 @@ export default defineComponent({
       display: table-cell;
     }
   }
+
   .oc-table-header-cell-totalQuota,
   .oc-table-data-cell-totalQuota,
   .oc-table-header-cell-usedQuota,
@@ -555,6 +552,7 @@ export default defineComponent({
       display: table-cell;
     }
   }
+
   &-squashed {
     .oc-table-header-cell-manager,
     .oc-table-data-cell-manager,
@@ -564,6 +562,7 @@ export default defineComponent({
     .oc-table-data-cell-usedQuota {
       display: none;
     }
+
     .oc-table-header-cell-remainingQuota,
     .oc-table-data-cell-remainingQuota,
     .oc-table-header-cell-mdate,

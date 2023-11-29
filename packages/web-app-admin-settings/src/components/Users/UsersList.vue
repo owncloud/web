@@ -16,7 +16,6 @@
     </no-content-message>
     <oc-table
       v-else
-      ref="tableRef"
       class="users-table"
       :sort-by="sortBy"
       :sort-dir="sortDir"
@@ -79,8 +78,9 @@
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
           @click="showDetails(item)"
         >
-          <oc-icon name="information" fill-type="line" /></oc-button
-        ><oc-button
+          <oc-icon name="information" fill-type="line" />
+        </oc-button>
+        <oc-button
           v-oc-tooltip="$gettext('Edit')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
@@ -112,22 +112,16 @@
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import {
-  defineComponent,
-  PropType,
-  ref,
-  unref,
-  ComponentPublicInstance,
-  watch,
-  computed
-} from 'vue'
+import { defineComponent, PropType, ref, unref, watch, nextTick, onMounted, computed } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import {
   defaultFuseOptions,
   displayPositionedDropdown,
   eventBus,
-  SortDir
+  SortDir,
+  useRoute,
+  useRouter
 } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { AppRole, User } from '@ownclouders/web-client/src/generated'
@@ -169,6 +163,9 @@ export default defineComponent({
     const sortBy = ref<string>('onPremisesSamAccountName')
     const sortDir = ref<string>(SortDir.Asc)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
+    const router = useRouter()
+    const route = useRoute()
+    const markInstance = ref(null)
 
     const lastSelectedUserIndex = ref(0)
     const lastSelectedUserId = ref(null)
@@ -254,7 +251,7 @@ export default defineComponent({
       }
       const usersSearchEngine = new Fuse(users, {
         ...defaultFuseOptions,
-        keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
+        keys: ['displayName']
       })
 
       return usersSearchEngine.search(filterTerm).map((r) => r.item)
@@ -306,8 +303,21 @@ export default defineComponent({
       total: totalPages
     } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
-    watch(currentPage, () => {
-      emit('unSelectAllUsers')
+    onMounted(async () => {
+      await nextTick()
+      markInstance.value = new Mark('td.oc-table-data-cell-displayName')
+    })
+
+    watch(filterTerm, async () => {
+      await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
+    })
+
+    watch([filterTerm, paginatedItems], () => {
+      unref(markInstance)?.unmark()
+      unref(markInstance)?.mark(unref(filterTerm), {
+        element: 'span',
+        className: 'highlight-mark'
+      })
     })
 
     const keyActions = useKeyboardActions()
@@ -428,22 +438,6 @@ export default defineComponent({
     },
     highlighted() {
       return this.selectedUsers.map((user) => user.id)
-    }
-  },
-  watch: {
-    async filterTerm() {
-      if (!this.$refs.tableRef) {
-        return
-      }
-
-      await this.$router.push({ ...this.$route, query: { ...this.$route.query, page: '1' } })
-      this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
-      this.markInstance.unmark()
-      this.markInstance.mark(this.filterTerm, {
-        element: 'span',
-        className: 'highlight-mark',
-        exclude: ['th *', 'tfoot *']
-      })
     }
   },
   methods: {

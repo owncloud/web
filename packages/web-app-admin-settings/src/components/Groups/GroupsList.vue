@@ -9,7 +9,6 @@
       />
     </div>
     <oc-table
-      ref="tableRef"
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
@@ -107,18 +106,16 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  ref,
-  unref,
-  ComponentPublicInstance,
-  computed,
-  watch
-} from 'vue'
+import { defineComponent, PropType, ref, unref, computed, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { displayPositionedDropdown, eventBus, SortDir } from '@ownclouders/web-pkg'
+import {
+  displayPositionedDropdown,
+  eventBus,
+  SortDir,
+  useRoute,
+  useRouter
+} from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
@@ -155,6 +152,9 @@ export default defineComponent({
     const sortBy = ref<string>('displayName')
     const sortDir = ref<string>(SortDir.Asc)
     const filterTerm = ref<string>('')
+    const router = useRouter()
+    const route = useRoute()
+    const markInstance = ref(null)
 
     const lastSelectedGroupIndex = ref(0)
     const lastSelectedGroupId = ref(null)
@@ -285,6 +285,18 @@ export default defineComponent({
       emit('unSelectAllGroups')
     })
 
+    watch(filterTerm, async () => {
+      await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
+    })
+
+    watch([filterTerm, paginatedItems], () => {
+      unref(markInstance)?.unmark()
+      unref(markInstance)?.mark(unref(filterTerm), {
+        element: 'span',
+        className: 'highlight-mark'
+      })
+    })
+
     return {
       showDetails,
       rowClicked,
@@ -304,12 +316,8 @@ export default defineComponent({
       currentPage,
       totalPages,
       filter,
-      orderBy
-    }
-  },
-  data() {
-    return {
-      markInstance: null
+      orderBy,
+      markInstance
     }
   },
   computed: {
@@ -366,23 +374,9 @@ export default defineComponent({
       return this.selectedGroups.map((group) => group.id)
     }
   },
-  watch: {
-    async filterTerm() {
-      if (!this.markInstance) {
-        return
-      }
-      await this.$router.push({ ...this.$route, query: { ...this.$route.query, page: '1' } })
-      this.markInstance.unmark()
-      this.markInstance.mark(this.filterTerm, {
-        element: 'span',
-        className: 'highlight-mark',
-        exclude: ['th *', 'tfoot *']
-      })
-    }
-  },
   mounted() {
     this.$nextTick(() => {
-      this.markInstance = new Mark((this.$refs.tableRef as ComponentPublicInstance).$el)
+      this.markInstance = new Mark('td.oc-table-data-cell-displayName')
     })
   },
   methods: {
