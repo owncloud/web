@@ -65,7 +65,7 @@ exports[`DetailsAndEdit component if user can edit renders dropdown and edit but
         <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="more-2" size="medium" type="span" variation="passive"></oc-icon-stub>
       </oc-button-stub>
       <oc-drop-stub closeonclick="false" dropid="edit-public-link-dropdown" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#edit-public-link-dropdown-toggl-undefined">
-        <oc-list-stub class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s" raw="false">
+        <oc-list-stub class="edit-public-link-dropdown-menu oc-pb-s oc-files-context-actions-border" raw="false">
           <li class="oc-rounded oc-menu-item-hover">
             <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
               <oc-icon-stub accessiblelabel="" color="" filltype="line" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
