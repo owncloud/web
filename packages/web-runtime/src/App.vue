@@ -32,6 +32,7 @@
       :checkbox-label="modal.checkboxLabel"
       :contextual-helper-label="modal.contextualHelperLabel"
       :contextual-helper-data="modal.contextualHelperData"
+      :hide-actions="modal.hideActions"
       @cancel="onModalCancel"
       @confirm="onModalConfirm"
       @input="modal.onInput"

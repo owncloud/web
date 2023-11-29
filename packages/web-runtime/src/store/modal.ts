@@ -29,7 +29,8 @@ const state = {
   onConfirmSecondary: emptyReturn,
   contextualHelperLabel: '',
   contextualHelperData: {},
-  customContent: ''
+  customContent: '',
+  hideActions: false
 }
 
 const actions = {
@@ -90,6 +91,7 @@ const mutations = {
     state.customContent = modal.customContent || ''
     state.onPasswordChallengeCompleted = modal.onPasswordChallengeCompleted
     state.onPasswordChallengeFailed = modal.onPasswordChallengeFailed
+    state.hideActions = modal.hideActions || false
   },
 
   HIDE_MODAL(state) {
