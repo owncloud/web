@@ -251,7 +251,7 @@ export default defineComponent({
       }
       const usersSearchEngine = new Fuse(users, {
         ...defaultFuseOptions,
-        keys: ['displayName', 'mail', 'onPremisesSamAccountName', 'role.displayName']
+        keys: ['displayName']
       })
 
       return usersSearchEngine.search(filterTerm).map((r) => r.item)
