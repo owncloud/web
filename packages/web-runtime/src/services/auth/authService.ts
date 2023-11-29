@@ -183,9 +183,21 @@ export class AuthService {
   /**
    * Sign in callback gets called from the IDP after initial login.
    */
-  public async signInCallback() {
+  public async signInCallback(accessToken?: string) {
     try {
-      await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
+      if (
+        this.configurationManager.options.embed.enabled &&
+        this.configurationManager.options.embed.delegateAuthentication &&
+        accessToken
+      ) {
+        await this.userManager.updateContext(accessToken, true)
+
+        // Setup a listener to handle token refresh
+        window.addEventListener('message', this.handleDelegatedTokenUpdate)
+      } else {
+        await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
+      }
+
       const redirectRoute = this.router.resolve(this.userManager.getAndClearPostLoginRedirectUrl())
       return this.router.replace({
         path: redirectRoute.path,
@@ -277,6 +289,21 @@ export class AuthService {
       this.store.dispatch('clearDynamicNavItems'),
       this.store.dispatch('hideModal')
     ])
+  }
+
+  private handleDelegatedTokenUpdate(event: MessageEvent): void {
+    if (
+      this.configurationManager.options.embed?.delegateAuthenticationOrigin &&
+      event.origin !== this.configurationManager.options.embed.delegateAuthenticationOrigin
+    ) {
+      return
+    }
+
+    if (event.data?.name !== 'owncloud-embed:update-token') {
+      return
+    }
+
+    this.userManager.updateContext(event.data, false)
   }
 }
 

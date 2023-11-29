@@ -118,6 +118,24 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'isRunningOnEos', get(options, 'isRunningOnEos', false))
 
     set(this.optionsConfiguration, 'ocm.openRemotely', get(options, 'ocm.openRemotely', false))
+
+    set(this.optionsConfiguration, 'embed.enabled', get(options, 'embed.enabled', false))
+    set(this.optionsConfiguration, 'embed.target', get(options, 'embed.target', 'resources'))
+    set(
+      this.optionsConfiguration,
+      'embed.messagesOrigin',
+      get(options, 'embed.messagesOrigin', null)
+    )
+    set(
+      this.optionsConfiguration,
+      'embed.delegateAuthentication',
+      get(options, 'embed.delegateAuthentication', false)
+    )
+    set(
+      this.optionsConfiguration,
+      'embed.delegateAuthenticationOrigin',
+      get(options, 'embed.delegateAuthenticationOrigin', null)
+    )
   }
 
   get options(): OptionsConfiguration {

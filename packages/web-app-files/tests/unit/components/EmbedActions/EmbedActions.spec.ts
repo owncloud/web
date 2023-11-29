@@ -7,6 +7,12 @@ import {
 import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
 import { getDefaultLinkPermissions } from '@ownclouders/web-pkg'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
+import { computed } from 'vue'
+
+const mockPostMessage = jest.fn()
+const mockUseEmbedMode = jest
+  .fn()
+  .mockReturnValue({ isLocationPicker: computed(() => false), postMessage: mockPostMessage })
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
@@ -14,7 +20,8 @@ jest.mock('@ownclouders/web-pkg', () => ({
     url: (password ? password + '-' : '') + 'link-' + resource.id
   })),
   showQuickLinkPasswordModal: jest.fn().mockImplementation((_options, cb) => cb('password')),
-  getDefaultLinkPermissions: jest.fn()
+  getDefaultLinkPermissions: jest.fn(),
+  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 
 const selectors = Object.freeze({
@@ -42,124 +49,79 @@ describe('EmbedActions', () => {
     })
 
     it('should emit select event when the select action is triggered', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
-
       const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       await wrapper.find(selectors.btnSelect).trigger('click')
 
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:select',
-          data: [{ id: 1 }]
-        },
-        {}
-      )
+      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:select', [{ id: 1 }])
     })
 
     it('should enable select action when embedTarget is set to location', () => {
-      const { wrapper } = getWrapper({
-        configuration: { options: { embed: { target: 'location' } } }
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => true),
+        postMessage: mockPostMessage
       })
+
+      const { wrapper } = getWrapper()
 
       expect(wrapper.find(selectors.btnSelect).attributes()).not.toHaveProperty('disabled')
     })
 
     it('should emit select event with currentFolder as selected resource when select action is triggered', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => true),
+        postMessage: mockPostMessage
+      })
 
       const { wrapper } = getWrapper({
-        currentFolder: { id: 1 },
-        configuration: { options: { embed: { target: 'location' } } }
+        currentFolder: { id: 1 }
       })
 
       await wrapper.find(selectors.btnSelect).trigger('click')
 
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:select',
-          data: [{ id: 1 }]
-        },
-        {}
-      )
-    })
-
-    it('should specify the targetOrigin when it is set in the config', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
-
-      const { wrapper } = getWrapper({
-        selectedFiles: [{ id: 1 }],
-        configuration: { options: { embed: { messagesOrigin: 'https://example.org' } } }
-      })
-
-      await wrapper.find(selectors.btnSelect).trigger('click')
-
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:select',
-          data: [{ id: 1 }]
-        },
-        { targetOrigin: 'https://example.org' }
-      )
+      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:select', [{ id: 1 }])
     })
   })
 
   describe('cancel action', () => {
     it('should emit cancel event when the cancel action is triggered', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
-
       const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       await wrapper.find(selectors.btnCancel).trigger('click')
 
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:cancel',
-          data: null
-        },
-        {}
-      )
-    })
-
-    it('should specify the targetOrigin when it is set in the config', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
-
-      const { wrapper } = getWrapper({
-        selectedFiles: [{ id: 1 }],
-        configuration: { options: { embed: { messagesOrigin: 'https://example.org' } } }
-      })
-
-      await wrapper.find(selectors.btnCancel).trigger('click')
-
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:cancel',
-          data: null
-        },
-        { targetOrigin: 'https://example.org' }
-      )
+      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:cancel', null)
     })
   })
 
   describe('share action', () => {
     it('should disable share action when link creation is disabled', () => {
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => false),
+        postMessage: mockPostMessage
+      })
+
       const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       expect(wrapper.find(selectors.btnShare).attributes()).toHaveProperty('disabled')
     })
 
     it('should disable share action when no resources are selected', () => {
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => false),
+        postMessage: mockPostMessage
+      })
+
       const { wrapper } = getWrapper()
 
       expect(wrapper.find(selectors.btnShare).attributes()).toHaveProperty('disabled')
     })
 
     it('should enable share action when at least one resource is selected and link creation is enabled', () => {
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => false),
+        postMessage: mockPostMessage
+      })
+
       const { wrapper } = getWrapper({
         selectedFiles: [{ id: 1 }],
         abilities: [{ action: 'create-all', subject: 'PublicLink' }]
@@ -169,8 +131,10 @@ describe('EmbedActions', () => {
     })
 
     it('should emit share event when share action is triggered', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => false),
+        postMessage: mockPostMessage
+      })
 
       const { wrapper } = getWrapper({
         selectedFiles: [{ id: 1 }],
@@ -179,18 +143,14 @@ describe('EmbedActions', () => {
 
       await wrapper.find(selectors.btnShare).trigger('click')
 
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:share',
-          data: ['link-1']
-        },
-        {}
-      )
+      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:share', ['link-1'])
     })
 
     it('should ask for password first when required when share action is triggered', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => false),
+        postMessage: mockPostMessage
+      })
 
       const { wrapper } = getWrapper({
         selectedFiles: [{ id: 1 }],
@@ -203,42 +163,18 @@ describe('EmbedActions', () => {
 
       await wrapper.find(selectors.btnShare).trigger('click')
 
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:share',
-          data: ['password-link-1']
-        },
-        {}
-      )
+      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:share', ['password-link-1'])
     })
 
     it('should hide share action when embedTarget is set to location', () => {
-      const { wrapper } = getWrapper({
-        configuration: { options: { embed: { target: 'location' } } }
+      mockUseEmbedMode.mockReturnValue({
+        isLocationPicker: computed(() => true),
+        postMessage: mockPostMessage
       })
+
+      const { wrapper } = getWrapper()
 
       expect(wrapper.find(selectors.btnShare).exists()).toBe(false)
-    })
-
-    it('should specify the targetOrigin when it is set in the config', async () => {
-      window.parent.postMessage = jest.fn()
-      global.CustomEvent = jest.fn().mockImplementation(mockCustomEvent)
-
-      const { wrapper } = getWrapper({
-        selectedFiles: [{ id: 1 }],
-        configuration: { options: { embed: { messagesOrigin: 'https://example.org' } } },
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }]
-      })
-
-      await wrapper.find(selectors.btnShare).trigger('click')
-
-      expect(window.parent.postMessage).toHaveBeenCalledWith(
-        {
-          name: 'owncloud-embed:share',
-          data: ['link-1']
-        },
-        { targetOrigin: 'https://example.org' }
-      )
     })
   })
 })
@@ -248,7 +184,6 @@ function getWrapper(
     selectedFiles = [],
     abilities = [],
     capabilities = jest.fn().mockReturnValue({}),
-    configuration = { options: {} },
     currentFolder = {},
     defaultLinkPermissions = SharePermissionBit.Internal
   } = {
@@ -262,8 +197,7 @@ function getWrapper(
     ...defaultStoreMockOptions,
     getters: {
       ...defaultStoreMockOptions.getters,
-      capabilities,
-      configuration: jest.fn().mockReturnValue(configuration || { options: {} })
+      capabilities
     },
     modules: {
       ...defaultStoreMockOptions.modules,
@@ -286,8 +220,4 @@ function getWrapper(
       }
     })
   }
-}
-
-function mockCustomEvent(name, payload) {
-  return { name, payload }
 }

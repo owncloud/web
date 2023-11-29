@@ -1,3 +1,4 @@
+import { computed } from 'vue'
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
 import {
   createStore,
@@ -6,6 +7,13 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
+
+const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
+
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
+}))
 
 describe('Top Bar component', () => {
   it('Displays applications menu', () => {
@@ -44,17 +52,22 @@ describe('Top Bar component', () => {
   it.each(['applications-menu', 'theme-switcher', 'feedback-link', 'notifications', 'user-menu'])(
     'should hide %s when mode is "embed"',
     (componentName) => {
-      const { wrapper } = getWrapper({
-        configuration: { options: { disableFeedbackLink: false, embed: { enabled: true } } }
+      mockUseEmbedMode.mockReturnValue({
+        isEnabled: computed(() => true)
       })
+
+      const { wrapper } = getWrapper()
       expect(wrapper.find(`${componentName}-stub`).exists()).toBeFalsy()
     }
   )
   it.each(['applications-menu', 'theme-switcher', 'feedback-link', 'notifications', 'user-menu'])(
     'should not hide %s when mode is not "embed"',
     (componentName) => {
+      mockUseEmbedMode.mockReturnValue({
+        isEnabled: computed(() => false)
+      })
+
       const { wrapper } = getWrapper({
-        configuration: { options: { disableFeedbackLink: false, embed: { enabled: false } } },
         capabilities: {
           notifications: { 'ocs-endpoints': ['list', 'get', 'delete'] }
         }
@@ -64,7 +77,7 @@ describe('Top Bar component', () => {
   )
 })
 
-const getWrapper = ({ capabilities = {}, isUserContextReady = true, configuration = {} } = {}) => {
+const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
   const mocks = { ...defaultComponentMocks() }
   const storeOptions = {
     ...defaultStoreMockOptions,
@@ -83,8 +96,7 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true, configuratio
       logo: {
         topbar: 'example-logo.svg'
       }
-    },
-    ...configuration
+    }
   }))
   storeOptions.getters.user.mockImplementation(() => ({ id: 'einstein' }))
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(

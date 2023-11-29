@@ -61,7 +61,11 @@ export class UserManager extends OidcUserManager {
       post_logout_redirect_uri: buildUrl(router, '/'),
       accessTokenExpiringNotificationTimeInSeconds: 10,
       authority: '',
-      client_id: ''
+      client_id: '',
+
+      automaticSilentRenew: options.configurationManager.options.embed?.enabled
+        ? !options.configurationManager.options.embed.delegateAuthentication
+        : true
     }
 
     if (options.configurationManager.isOIDC) {

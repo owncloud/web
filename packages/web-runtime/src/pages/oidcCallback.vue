@@ -16,14 +16,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, unref } from 'vue'
-import { useRoute, useStore } from '@ownclouders/web-pkg'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import { useEmbedMode, useRoute, useStore } from '@ownclouders/web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
 
 export default defineComponent({
   name: 'OidcCallbackPage',
   setup() {
     const store = useStore()
+    const { isDelegatingAuthentication, postMessage, verifyDelegatedAuthenticationOrigin } =
+      useEmbedMode()
 
     const error = ref(false)
 
@@ -35,6 +37,19 @@ export default defineComponent({
     })
 
     const route = useRoute()
+
+    const handleRequestedTokenEvent = (event: MessageEvent): void => {
+      if (verifyDelegatedAuthenticationOrigin(event.origin) === false) {
+        return
+      }
+
+      if (event.data?.name !== 'owncloud-embed:update-token') {
+        return
+      }
+
+      authService.signInCallback(event.data.data.access_token)
+    }
+
     onMounted(() => {
       if (unref(route).query.error) {
         error.value = true
@@ -44,11 +59,26 @@ export default defineComponent({
         return
       }
 
+      if (unref(isDelegatingAuthentication)) {
+        postMessage<void>('owncloud-embed:request-token')
+        window.addEventListener('message', handleRequestedTokenEvent)
+
+        return
+      }
+
       if (unref(route).path === '/web-oidc-silent-redirect') {
         authService.signInSilentCallback()
       } else {
         authService.signInCallback()
       }
+    })
+
+    onBeforeUnmount(() => {
+      if (!unref(isDelegatingAuthentication)) {
+        return
+      }
+
+      window.removeEventListener('message', handleRequestedTokenEvent)
     })
 
     return {

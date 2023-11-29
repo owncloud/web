@@ -36,7 +36,9 @@ export interface OptionsConfiguration {
   embed?: {
     enabled?: boolean
     target?: string
-    messagesOrigin?: string
+    messagesOrigin?: string | null
+    delegateAuthentication?: boolean
+    delegateAuthenticationOrigin?: string | null
   }
 }
 

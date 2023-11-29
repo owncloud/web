@@ -6,6 +6,9 @@ import { ConfigurationManager, displayPositionedDropdown } from '../../../../src
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock, mockDeep } from 'jest-mock-extended'
+import { computed } from 'vue'
+
+const mockUseEmbedMode = jest.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
 
 jest.mock('../../../../src/helpers')
 jest.mock('../../../../src/composables/configuration/useConfigurationManager', () => ({
@@ -16,7 +19,8 @@ jest.mock('../../../../src/composables/configuration/useConfigurationManager', (
           fullShareOwnerPaths: false
         }
       }
-    })
+    }),
+  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 
 const router = {
@@ -271,18 +275,22 @@ describe('ResourceTable', () => {
 
     describe('embed mode location target', () => {
       it('should not hide checkboxes when embed mode does not have location as target', () => {
-        const { wrapper } = getMountedWrapper({
-          configuration: { options: { embed: { target: undefined } } }
+        mockUseEmbedMode.mockReturnValue({
+          isLocationPicker: computed(() => false)
         })
+
+        const { wrapper } = getMountedWrapper()
 
         expect(wrapper.find('.resource-table-select-all').exists()).toBe(true)
         expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(true)
       })
 
       it('should hide checkboxes when embed mode has location as target', () => {
-        const { wrapper } = getMountedWrapper({
-          configuration: { options: { embed: { target: 'location' } } }
+        mockUseEmbedMode.mockReturnValue({
+          isLocationPicker: computed(() => true)
         })
+
+        const { wrapper } = getMountedWrapper()
 
         expect(wrapper.find('.resource-table-select-all').exists()).toBe(false)
         expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(false)
@@ -449,8 +457,7 @@ describe('ResourceTable', () => {
 function getMountedWrapper({
   props = {},
   isUserContextReady = true,
-  addProcessingResources = false,
-  configuration = { options: {} }
+  addProcessingResources = false
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
@@ -463,13 +470,11 @@ function getMountedWrapper({
   }))
   storeOptions.getters.configuration.mockImplementation(() => ({
     currentTheme: { general: { slogan: '' } },
-    ...configuration,
     options: {
       editor: {
         autosaveEnabled: false,
         autosaveInterval: 120
-      },
-      ...configuration?.options
+      }
     }
   }))
 
