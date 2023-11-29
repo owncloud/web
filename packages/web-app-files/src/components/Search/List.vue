@@ -420,7 +420,7 @@ export default defineComponent({
 
       // moving scope to the end of the query to prevent invalid query starting with AND
       if (searchTermArray.length > 1) {
-        const scopeIndex = searchTermArray.findIndex((item) => item.includes('scope'))
+        const scopeIndex = searchTermArray.findIndex((item) => item.includes('scope:'))
         if (scopeIndex > -1 && scopeIndex !== searchTermArray.length - 1) {
           const scope = searchTermArray.splice(scopeIndex, 1)
           searchTermArray = [...searchTermArray, ...scope]
