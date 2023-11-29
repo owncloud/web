@@ -186,7 +186,7 @@ export default defineComponent({
   #app-top-bar-resource {
     max-width: 360px;
 
-    @media (max-width: $oc-breakpoint-small-default) {
+    @media (max-width: $oc-breakpoint-medium-default) {
       max-width: 240px;
     }
 
