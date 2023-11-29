@@ -180,7 +180,7 @@
           </oc-list>
           <oc-list
             class="edit-public-link-dropdown-menu"
-            :class="{ 'oc-pt-s': editOptions.length > 1 }"
+            :class="{ 'oc-pt-s': editOptions.length > 0 }"
           >
             <li class="oc-rounded oc-menu-item-hover">
               <oc-button
