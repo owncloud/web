@@ -86,6 +86,7 @@ Summary
 * Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
 * Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
 * Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
+* Enhancement - Add authentication delegation in the Embed mode: [#10082](https://github.com/owncloud/web/pull/10082)
 
 Details
 -------
@@ -819,6 +820,15 @@ Details
 
    https://github.com/owncloud/web/issues/9714
    https://github.com/owncloud/web/pull/10062
+
+* Enhancement - Add authentication delegation in the Embed mode: [#10082](https://github.com/owncloud/web/pull/10082)
+
+   We've added authentication delegation so that the user does not need to
+   reauthenticate when the parent application already holds a valid access token
+   for the user.
+
+   https://github.com/owncloud/web/issues/10072
+   https://github.com/owncloud/web/pull/10082
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
