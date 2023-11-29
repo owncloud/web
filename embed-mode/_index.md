@@ -14,7 +14,7 @@ The ownCloud Web can be consumed by another application in a stripped down versi
 
 ## Getting started
 
-To integrate ownCloud Web into your application, add an iframe element pointing to your ownCloud Web deployed instance with additional query parameter `mode=embed`.
+To integrate ownCloud Web into your application, add an iframe element pointing to your ownCloud Web deployed instance with additional query parameter `embed=true`.
 
 ```html
 <iframe src="<web-url>?mode=embed"></iframe>
@@ -41,7 +41,7 @@ To maintain uniformity and ease of handling, each event encapsulates the same st
 ### Example
 
 ```html
-<iframe src="https://my-owncloud-web-instance?mode=embed"></iframe>
+<iframe src="https://my-owncloud-web-instance?embed=true"></iframe>
 
 <script>
   function selectEventHandler(event) {
@@ -65,7 +65,7 @@ By default, the Embed mode allows users to select resources. In certain cases (e
 ### Example
 
 ```html
-<iframe src="https://my-owncloud-web-instance?mode=embed&embed-target=location"></iframe>
+<iframe src="https://my-owncloud-web-instance?embed=true&embed-target=location"></iframe>
 
 <script>
   function selectEventHandler(event) {
@@ -81,3 +81,25 @@ By default, the Embed mode allows users to select resources. In certain cases (e
   window.addEventListener('message', selectEventHandler)
 </script>
 ```
+
+## Delegate authentication
+
+If you already have a valid `access_token` that can be used to call the API from within the Embed mode and do not want to force the user to authenticate again, you can delegate the authentication. Delegating authentication will disable internal login form in ownCloud Web and will instead use events to obtain the token and update it.
+
+### Configuration
+
+To allow authentication delegation, you need to set the config option `options.embed.delegateAuthentication` to `true`. This can be achieved via query parameter `embed-delegate-authentication=true`. Because we are using the `postMessage` method to communicate across different origins, it is best practice to verify that the event originated from a known origin and not from some malicious site. We highly recommend to allow this check in production environments. You can enable it by setting the config option `options.embed.delegateAuthenticationOrigin` via query parameter `embed-delegate-authentication-origin=my-origin`. The value of this parameter will be compared against the `MessageEvent.origin` value and if they do not match, the token will be rejected.
+
+### Events
+
+#### Opening Embed mode
+
+As already mentioned, we're using the `postMessage` method to allow communication between the Embed mode and the parent application. When the Embed mode is opened for the first time, the user gets redirected to the `/web-oidc-callback` page where a message with payload `{ name: 'owncloud-embed:request-token', data: undefined }` is sent to request the `access_token` from the parent application. The parent application should set an event listener before opening the Embed mode and once received, it should send a message with payload `{ name: 'owncloud-embed:update-token', data: { access_token: '<bearer-token>' } }`. Once the Embed mode receives this message, it will save the token in the application state and will automatically authenticate the user.
+
+{{< hint info >}}
+To save unnecessary duplication of messages with only different names, the name in the message payload above is exactly the same for both the initial authentication and subsequent token updates after renewal.
+{{< /hint >}}
+
+#### Updating the token
+
+When authentication is delegated, the automatic renewal of the token inside of ownCloud Web is disabled. In order to update the token, a listener is created which awaits a message with payload `{ name: 'owncloud-embed:update-token', data: { access_token: '<bearer-token>' } }`. The token will then be replaced inside of the Embed mode automatically.
