@@ -150,7 +150,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           filter,
           new Set<any>([orderBy]),
           new Set<any>([]),
-          new Set<any>(['memberOf', 'appRoleAssignments'])
+          new Set<any>(['appRoleAssignments'])
         ),
       createUserAppRoleAssignment: (userId: string, appRoleAssignment: AppRoleAssignment) =>
         userAppRoleAssignmentApiFactory.userCreateAppRoleAssignments(userId, appRoleAssignment),
