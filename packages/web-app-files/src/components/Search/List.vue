@@ -397,31 +397,36 @@ export default defineComponent({
         query['mediatype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
         updateFilter(mediaTypeFilter)
       }
+      // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
+      // different or identical keys are part of the query.
+      //
+      // We list these operators for the following reasons nevertheless explicit:
+      // * request readability
+      // * code readability
+      // * complex cases readability
+      let searchTermArray = Object.keys(query).reduce((acc, prop) => {
+        const isArrayValue = Array.isArray(query[prop])
 
-      return (
-        // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
-        // different or identical keys are part of the query.
-        //
-        // We list these operators for the following reasons nevertheless explicit:
-        // * request readability
-        // * code readability
-        // * complex cases readability
-        Object.keys(query)
-          .reduce((acc, prop) => {
-            const isArrayValue = Array.isArray(query[prop])
+        if (!isArrayValue) {
+          acc.push(`${prop}:${query[prop]}`)
+        }
 
-            if (!isArrayValue) {
-              acc.push(`${prop}:${query[prop]}`)
-            }
+        if (isArrayValue) {
+          acc.push(`${prop}:(${query[prop].join(' OR ')})`)
+        }
 
-            if (isArrayValue) {
-              acc.push(`${prop}:(${query[prop].join(' OR ')})`)
-            }
+        return acc
+      }, [])
 
-            return acc
-          }, [])
-          .join(' AND ')
-      )
+      // moving scope to the end of the query to prevent invalid query starting with AND
+      if (searchTermArray.length > 1) {
+        const scopeIndex = searchTermArray.findIndex((item) => item.includes('scope'))
+        if (scopeIndex > -1 && scopeIndex !== searchTermArray.length - 1) {
+          const scope = searchTermArray.splice(scopeIndex, 1)
+          searchTermArray = [...searchTermArray, ...scope]
+        }
+      }
+      return searchTermArray.join(' AND ')
     }
 
     const breadcrumbs = computed(() => {
