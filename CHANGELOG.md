@@ -276,6 +276,7 @@ Details
 
    https://github.com/owncloud/web/issues/9923
    https://github.com/owncloud/web/pull/10083
+   https://github.com/owncloud/web/pull/10085
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
