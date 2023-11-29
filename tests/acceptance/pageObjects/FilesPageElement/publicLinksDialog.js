@@ -603,7 +603,7 @@ module.exports = {
     },
     publicLinkEditRoleButton: {
       selector:
-        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/div/button[contains(@class, "edit-public-link-role-dropdown-toggle")]',
+        '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/div/button[contains(@class, "link-role-dropdown-toggle")]',
       locateStrategy: 'xpath'
     },
     publicLinkEditButton: {
