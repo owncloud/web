@@ -4,4 +4,5 @@ We've disabled the option to set an expiration date on an internal link,
 since it could be misleading and doesn't serve any use.
 
 https://github.com/owncloud/web/pull/10083
+https://github.com/owncloud/web/pull/10085
 https://github.com/owncloud/web/issues/9923

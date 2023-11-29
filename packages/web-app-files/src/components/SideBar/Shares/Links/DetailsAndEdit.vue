@@ -72,7 +72,10 @@
           padding-size="small"
           mode="click"
         >
-          <oc-list class="edit-public-link-dropdown-menu oc-files-context-actions-border oc-pb-s">
+          <oc-list
+            v-if="editOptions.length > 0"
+            class="edit-public-link-dropdown-menu oc-pb-s oc-files-context-actions-border"
+          >
             <li
               v-for="(option, i) in editOptions"
               :key="`public-link-edit-option-${i}`"
@@ -121,7 +124,10 @@
               </oc-button>
             </li>
           </oc-list>
-          <oc-list class="edit-public-link-dropdown-menu oc-pt-s">
+          <oc-list
+            class="edit-public-link-dropdown-menu"
+            :class="{ 'oc-pt-s': editOptions.length > 0 }"
+          >
             <li class="oc-rounded oc-menu-item-hover">
               <oc-button
                 appearance="raw"
