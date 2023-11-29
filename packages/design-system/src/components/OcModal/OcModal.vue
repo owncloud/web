@@ -65,7 +65,7 @@
           </div>
         </div>
 
-        <div class="oc-modal-body-actions oc-flex oc-flex-right">
+        <div v-if="!hideActions" class="oc-modal-body-actions oc-flex oc-flex-right">
           <oc-button
             ref="cancelButton"
             class="oc-modal-body-actions-cancel"
@@ -388,6 +388,13 @@ export default defineComponent({
       type: String,
       required: false,
       default: null
+    },
+    /**
+     * Hide the actions at the bottom of the modal
+     */
+    hideActions: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [
