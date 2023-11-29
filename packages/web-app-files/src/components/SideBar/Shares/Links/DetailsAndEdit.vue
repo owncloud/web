@@ -432,7 +432,10 @@ export default defineComponent({
     },
 
     isAliasLink() {
-      return [linkRoleInternalFolder, linkRoleInternalFile].includes(this.currentLinkRole)
+      if (this.isFolderShare) {
+        return parseInt(this.link.permissions) == linkRoleInternalFolder.bitmask(false)
+      }
+      return parseInt(this.link.permissions) == linkRoleInternalFile.bitmask(false)
     },
 
     currentLinkNotifyUploads() {
