@@ -757,10 +757,10 @@ def e2eTests(ctx):
 
         if suite == "oCIS-app-provider":
             # app-provider specific steps
-            steps += wopiServer() + \
-                     collaboraService() + \
+            steps += collaboraService() + \
                      onlyofficeService() + \
                      ocisService("app-provider") + \
+                     wopiServer() + \
                      appProviderService("collabora") + \
                      appProviderService("onlyoffice")
         else:
@@ -2119,7 +2119,7 @@ def wopiServer():
         {
             "name": "wopiserver",
             "type": "docker",
-            "image": "cs3org/wopiserver:v9.4.1",
+            "image": "cs3org/wopiserver:v10.2.1",
             "detach": True,
             "commands": [
                 "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
@@ -2141,7 +2141,7 @@ def collaboraService():
         {
             "name": "collabora",
             "type": "docker",
-            "image": "collabora/code:22.05.14.3.1",
+            "image": "collabora/code:23.05.5.4.1",
             "detach": True,
             "environment": {
                 "DONT_GEN_SSL_CERT": "set",
@@ -2162,7 +2162,7 @@ def onlyofficeService():
         {
             "name": "onlyoffice",
             "type": "docker",
-            "image": "onlyoffice/documentserver:7.3.3",
+            "image": "onlyoffice/documentserver:7.5.1",
             "detach": True,
             "environment": {
                 "WOPI_ENABLED": "true",

@@ -6,6 +6,7 @@ import { editor, sidebar } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
 import { LinksEnvironment } from '../../../environment'
+import { config } from '../../../../config'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -95,9 +96,9 @@ const pauseResumeUploadButton = '#pause-upload-info-btn'
 const cancelUploadButton = '#cancel-upload-info-btn'
 const uploadPauseTooltip = '//div[text()="Pause upload"]'
 const uploadResumeTooltip = '//div[text()="Resume upload"]'
-const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar .savemodified'
+const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar #save'
 const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
-const onlyOfficeSaveButtonSelector = '#asc-gen578'
+const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
 const collaboraDocTextAreaSelector = '#clipboard-area'
 const onlyofficeDocTextAreaSelector = '#area_id'
 const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
@@ -300,20 +301,26 @@ const createDocumentFile = async (
     page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
-  const editorMainFrame = await page.frameLocator(externalEditorIframe)
+  const editorMainFrame = page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
-      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
-      await page.keyboard.press('Escape')
-      await editorMainFrame.locator(collaboraDocTextAreaSelector).type(content)
-      const saveModified = await editorMainFrame.locator(collaboraEditorSaveSelector)
-      await expect(saveModified).toBeVisible()
-      await editorMainFrame.locator('#Save').click()
-      await expect(saveModified).not.toBeVisible()
+      try {
+        await editorMainFrame
+          .locator(collaboraWelcomeModalIframe)
+          .waitFor({ timeout: config.minTimeout * 1000 })
+        await page.keyboard.press('Escape')
+      } catch (e) {
+        console.log('No welcome modal found. Continue...')
+      }
+      await editorMainFrame.locator(collaboraDocTextAreaSelector).fill(content)
+      const saveLocator = editorMainFrame.locator(collaboraEditorSaveSelector)
+      await expect(saveLocator).toHaveAttribute('class', /.*savemodified.*/)
+      await saveLocator.click()
+      await expect(saveLocator).not.toHaveAttribute('class', /.*savemodified.*/)
       break
     case 'OnlyOffice':
-      const innerIframe = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
-      await innerIframe.locator(onlyofficeDocTextAreaSelector).type(content)
+      const innerIframe = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerIframe.locator(onlyofficeDocTextAreaSelector).fill(content)
       const saveButtonDisabledLocator = innerIframe.locator(onlyOfficeSaveButtonSelector)
       await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
       break
@@ -350,7 +357,7 @@ export const openAndGetContentOfDocument = async ({
 }): Promise<string> => {
   await page.waitForLoadState()
   await page.waitForURL('**/external/public/**')
-  const editorMainFrame = await page.frameLocator(externalEditorIframe)
+  const editorMainFrame = page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
       await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
@@ -358,7 +365,7 @@ export const openAndGetContentOfDocument = async ({
       await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
       break
     case 'OnlyOffice':
-      const innerFrame = await editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      const innerFrame = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
       await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
       await innerFrame.locator(onlyOfficeCanvasCursorSelector).waitFor()
       break

@@ -31,6 +31,7 @@ exports.config = {
   // playwright
   slowMo: parseInt(process.env.SLOW_MO) || 0,
   timeout: parseInt(process.env.TIMEOUT) || 60,
+  minTimeout: parseInt(process.env.MIN_TIMEOUT) || 5,
   headless: process.env.HEADLESS === 'true',
   acceptDownloads: process.env.DOWNLOADS !== 'false',
   browser: process.env.BROWSER ?? 'chrome',

@@ -186,7 +186,7 @@ services:
     restart: always
 
   collabora:
-    image: collabora/code:22.05.10.1.1
+    image: collabora/code:23.05.5.4.1
     networks:
       ocis-net:
     environment:
@@ -209,7 +209,7 @@ services:
     restart: always
 
   onlyoffice:
-    image: onlyoffice/documentserver:7.3.0
+    image: onlyoffice/documentserver:7.5.1
     networks:
       ocis-net:
     entrypoint:
