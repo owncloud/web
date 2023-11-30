@@ -2,18 +2,8 @@
   <div id="user-list">
     <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
       <slot name="filter" />
-      <oc-text-input
-        id="users-filter"
-        v-model="filterTerm"
-        :label="$gettext('Search')"
-        autocomplete="off"
-      />
     </div>
-    <no-content-message v-if="!users.length" icon="user">
-      <template #message>
-        <span v-text="$gettext('No users in here')" />
-      </template>
-    </no-content-message>
+    <slot v-if="!users.length" name="noResults" />
     <oc-table
       v-else
       class="users-table"
@@ -103,7 +93,6 @@
         <pagination :pages="totalPages" :current-page="currentPage" />
         <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
-          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
         </div>
       </template>
     </oc-table>
@@ -112,21 +101,11 @@
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import { defineComponent, PropType, ref, unref, watch, nextTick, onMounted, computed } from 'vue'
-import Fuse from 'fuse.js'
-import Mark from 'mark.js'
-import {
-  defaultFuseOptions,
-  displayPositionedDropdown,
-  eventBus,
-  SortDir,
-  useRoute,
-  useRouter
-} from '@ownclouders/web-pkg'
+import { defineComponent, PropType, ref, unref, computed } from 'vue'
+import { displayPositionedDropdown, eventBus, SortDir } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { AppRole, User } from '@ownclouders/web-client/src/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
-import { NoContentMessage } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
@@ -139,7 +118,7 @@ import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersList',
-  components: { ContextMenuQuickAction, NoContentMessage, Pagination },
+  components: { ContextMenuQuickAction, Pagination },
   props: {
     users: {
       type: Array as PropType<User[]>,
@@ -159,13 +138,9 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const contextMenuButtonRef = ref(undefined)
-    const filterTerm = ref<string>('')
     const sortBy = ref<string>('onPremisesSamAccountName')
     const sortDir = ref<string>(SortDir.Asc)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
-    const router = useRouter()
-    const route = useRoute()
-    const markInstance = ref(null)
 
     const lastSelectedUserIndex = ref(0)
     const lastSelectedUserId = ref(null)
@@ -245,18 +220,6 @@ export default defineComponent({
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }
 
-    const filter = (users: User[], filterTerm: string) => {
-      if (!(filterTerm || '').trim()) {
-        return users
-      }
-      const usersSearchEngine = new Fuse(users, {
-        ...defaultFuseOptions,
-        keys: ['displayName']
-      })
-
-      return usersSearchEngine.search(filterTerm).map((r) => r.item)
-    }
-
     const getRoleDisplayNameByUser = (user: User) => {
       const assignedRole = user.appRoleAssignments[0]
 
@@ -290,11 +253,7 @@ export default defineComponent({
     }
 
     const items = computed(() => {
-      return orderBy(
-        filter(props.users, unref(filterTerm)),
-        unref(sortBy),
-        unref(sortDir) === SortDir.Desc
-      )
+      return orderBy(props.users, unref(sortBy), unref(sortDir) === SortDir.Desc)
     })
 
     const {
@@ -302,23 +261,6 @@ export default defineComponent({
       page: currentPage,
       total: totalPages
     } = usePagination({ items, perPageDefault, perPageStoragePrefix })
-
-    onMounted(async () => {
-      await nextTick()
-      markInstance.value = new Mark('td.oc-table-data-cell-displayName')
-    })
-
-    watch(filterTerm, async () => {
-      await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
-    })
-
-    watch([filterTerm, paginatedItems], () => {
-      unref(markInstance)?.unmark()
-      unref(markInstance)?.mark(unref(filterTerm), {
-        element: 'span',
-        className: 'highlight-mark'
-      })
-    })
 
     const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(
@@ -356,13 +298,11 @@ export default defineComponent({
       fileListHeaderY,
       getRoleDisplayNameByUser,
       items,
-      filterTerm,
       sortBy,
       sortDir,
       paginatedItems,
       currentPage,
       totalPages,
-      filter,
       orderBy
     }
   },
@@ -378,11 +318,6 @@ export default defineComponent({
     footerTextTotal() {
       return this.$gettext('%{userCount} users in total', {
         userCount: this.users.length.toString()
-      })
-    },
-    footerTextFilter() {
-      return this.$gettext('%{userCount} matching users', {
-        userCount: this.items.length.toString()
       })
     },
     fields() {
@@ -453,10 +388,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#users-filter {
-  width: 16rem;
-}
-
 .highlight-mark {
   font-weight: 600;
 }

@@ -420,19 +420,6 @@ export interface CollectionOfEducationUser {
 /**
  * 
  * @export
- * @interface CollectionOfEducationUser1
- */
-export interface CollectionOfEducationUser1 {
-    /**
-     * 
-     * @type {Array<EducationClass>}
-     * @memberof CollectionOfEducationUser1
-     */
-    'value'?: Array<EducationClass>;
-}
-/**
- * 
- * @export
  * @interface CollectionOfGroup
  */
 export interface CollectionOfGroup {
@@ -456,21 +443,34 @@ export interface CollectionOfGroup {
  */
 export interface CollectionOfPermissions {
     /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof CollectionOfPermissions
+     */
+    'value'?: Array<Permission>;
+}
+/**
+ * 
+ * @export
+ * @interface CollectionOfPermissionsWithAllowedValues
+ */
+export interface CollectionOfPermissionsWithAllowedValues {
+    /**
      * A list of role definitions that can be chosen for the resource.
      * @type {Array<UnifiedRoleDefinition>}
-     * @memberof CollectionOfPermissions
+     * @memberof CollectionOfPermissionsWithAllowedValues
      */
     '@libre.graph.permissions.roles.allowedValues'?: Array<UnifiedRoleDefinition>;
     /**
      * A list of actions that can be chosen for a custom role.  Following the CS3 API we can represent the CS3 permissions by mapping them to driveItem properties or relations like this: | [CS3 ResourcePermission](https://cs3org.github.io/cs3apis/#cs3.storage.provider.v1beta1.ResourcePermissions) | action | comment | | ------------------------------------------------------------------------------------------------------------ | ------ | ------- | | `stat` | `libre.graph/driveItem/basic/read` | `basic` because it does not include versions or trashed items | | `get_quota` | `libre.graph/driveItem/quota/read` | read only the `quota` property | | `get_path` | `libre.graph/driveItem/path/read` | read only the `path` property | | `move` | `libre.graph/driveItem/path/update` | allows updating the `path` property of a CS3 resource | | `delete` | `libre.graph/driveItem/standard/delete` | `standard` because deleting is a common update operation | | `list_container` | `libre.graph/driveItem/children/read` | | | `create_container` | `libre.graph/driveItem/children/create` | | | `initiate_file_download` | `libre.graph/driveItem/content/read` | `content` is the property read when initiating a download | | `initiate_file_upload` | `libre.graph/driveItem/upload/create` | `uploads` are a separate property. postprocessing creates the `content` | | `add_grant` | `libre.graph/driveItem/permissions/create` | | | `list_grant` | `libre.graph/driveItem/permissions/read` | | | `update_grant` | `libre.graph/driveItem/permissions/update` | | | `remove_grant` | `libre.graph/driveItem/permissions/delete` | | | `deny_grant` | `libre.graph/driveItem/permissions/deny` | uses a non CRUD action `deny` | | `list_file_versions` | `libre.graph/driveItem/versions/read` | `versions` is a `driveItemVersion` collection | | `restore_file_version` | `libre.graph/driveItem/versions/update` | the only `update` action is restore | | `list_recycle` | `libre.graph/driveItem/deleted/read` | reading a driveItem `deleted` property implies listing | | `restore_recycle_item` | `libre.graph/driveItem/deleted/update` | the only `update` action is restore | | `purge_recycle` | `libre.graph/driveItem/deleted/delete` | allows purging deleted `driveItems` | 
      * @type {Array<string>}
-     * @memberof CollectionOfPermissions
+     * @memberof CollectionOfPermissionsWithAllowedValues
      */
     '@libre.graph.permissions.actions.allowedValues'?: Array<string>;
     /**
      * 
      * @type {Array<Permission>}
-     * @memberof CollectionOfPermissions
+     * @memberof CollectionOfPermissionsWithAllowedValues
      */
     'value'?: Array<Permission>;
 }
@@ -878,6 +878,12 @@ export interface DriveItemCreateLink {
      * @memberof DriveItemCreateLink
      */
     'displayName'?: string;
+    /**
+     * The quicklink property can be assigned to only one link per resource. A quicklink can be used in the clients to provide a one-click copy to clipboard action. Optional. Libregraph only.
+     * @type {boolean}
+     * @memberof DriveItemCreateLink
+     */
+    '@libre.graph.quickLink'?: boolean;
 }
 
 
@@ -1635,7 +1641,7 @@ export interface Permission {
      * @type {string}
      * @memberof Permission
      */
-    'expirationDateTime'?: string;
+    'expirationDateTime'?: string | null;
     /**
      * 
      * @type {SharePointIdentitySet}
@@ -1985,16 +1991,36 @@ export interface SharingLink {
      * @memberof SharingLink
      */
     '@libre.graph.displayName'?: string;
+    /**
+     * The quicklink property can be assigned to only one link per resource. A quicklink can be used in the clients to provide a one-click copy to clipboard action. Optional. Libregraph only.
+     * @type {boolean}
+     * @memberof SharingLink
+     */
+    '@libre.graph.quickLink'?: boolean;
 }
 
 
 /**
- * The type of the link created.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
+ * The sharing link password which should be set. 
+ * @export
+ * @interface SharingLinkPassword
+ */
+export interface SharingLinkPassword {
+    /**
+     * Password. It may require a password policy.
+     * @type {string}
+     * @memberof SharingLinkPassword
+     */
+    'password'?: string;
+}
+/**
+ * The type of the link created.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | internal       | Internal          | Creates an internal link without any permissions.               | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
  * @export
  * @enum {string}
  */
 
 export const SharingLinkType = {
+    Internal: 'internal',
     View: 'view',
     Upload: 'upload',
     Edit: 'edit',
@@ -3087,6 +3113,56 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             };
         },
         /**
+         * Set the password of a sharing permission.  Only the `password` property can be modified this way. 
+         * @summary Set sharing link password
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {SharingLinkPassword} sharingLinkPassword New password value
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setPermissionPassword: async (driveId: string, itemId: string, permId: string, sharingLinkPassword: SharingLinkPassword, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('setPermissionPassword', 'driveId', driveId)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('setPermissionPassword', 'itemId', itemId)
+            // verify required parameter 'permId' is not null or undefined
+            assertParamExists('setPermissionPassword', 'permId', permId)
+            // verify required parameter 'sharingLinkPassword' is not null or undefined
+            assertParamExists('setPermissionPassword', 'sharingLinkPassword', sharingLinkPassword)
+            const localVarPath = `/v1beta1/drives/{drive-id}/items/{item-id}/permissions/{perm-id}/setPassword`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)))
+                .replace(`{${"item-id"}}`, encodeURIComponent(String(itemId)))
+                .replace(`{${"perm-id"}}`, encodeURIComponent(String(permId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sharingLinkPassword, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Update the properties of a sharing permission by patching the permission resource.  Only the `roles`, `expirationDateTime` and `password` properties can be modified this way. 
          * @summary Update sharing permission
          * @param {string} driveId key: id of drive
@@ -3200,7 +3276,7 @@ export const DrivesPermissionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Permission>> {
+        async invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfPermissions>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.invite(driveId, itemId, driveItemInvite, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DrivesPermissionsApi.invite']?.[index]?.url;
@@ -3214,10 +3290,26 @@ export const DrivesPermissionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listPermissions(driveId: string, itemId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfPermissions>> {
+        async listPermissions(driveId: string, itemId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfPermissionsWithAllowedValues>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listPermissions(driveId, itemId, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DrivesPermissionsApi.listPermissions']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * Set the password of a sharing permission.  Only the `password` property can be modified this way. 
+         * @summary Set sharing link password
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {SharingLinkPassword} sharingLinkPassword New password value
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async setPermissionPassword(driveId: string, itemId: string, permId: string, sharingLinkPassword: SharingLinkPassword, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Permission>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setPermissionPassword(driveId, itemId, permId, sharingLinkPassword, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DrivesPermissionsApi.setPermissionPassword']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
@@ -3291,7 +3383,7 @@ export const DrivesPermissionsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: any): AxiosPromise<Permission> {
+        invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: any): AxiosPromise<CollectionOfPermissions> {
             return localVarFp.invite(driveId, itemId, driveItemInvite, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3302,8 +3394,21 @@ export const DrivesPermissionsApiFactory = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listPermissions(driveId: string, itemId: string, options?: any): AxiosPromise<CollectionOfPermissions> {
+        listPermissions(driveId: string, itemId: string, options?: any): AxiosPromise<CollectionOfPermissionsWithAllowedValues> {
             return localVarFp.listPermissions(driveId, itemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Set the password of a sharing permission.  Only the `password` property can be modified this way. 
+         * @summary Set sharing link password
+         * @param {string} driveId key: id of drive
+         * @param {string} itemId key: id of item
+         * @param {string} permId key: id of permission
+         * @param {SharingLinkPassword} sharingLinkPassword New password value
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setPermissionPassword(driveId: string, itemId: string, permId: string, sharingLinkPassword: SharingLinkPassword, options?: any): AxiosPromise<Permission> {
+            return localVarFp.setPermissionPassword(driveId, itemId, permId, sharingLinkPassword, options).then((request) => request(axios, basePath));
         },
         /**
          * Update the properties of a sharing permission by patching the permission resource.  Only the `roles`, `expirationDateTime` and `password` properties can be modified this way. 
@@ -3395,6 +3500,21 @@ export class DrivesPermissionsApi extends BaseAPI {
      */
     public listPermissions(driveId: string, itemId: string, options?: AxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).listPermissions(driveId, itemId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Set the password of a sharing permission.  Only the `password` property can be modified this way. 
+     * @summary Set sharing link password
+     * @param {string} driveId key: id of drive
+     * @param {string} itemId key: id of item
+     * @param {string} permId key: id of permission
+     * @param {SharingLinkPassword} sharingLinkPassword New password value
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DrivesPermissionsApi
+     */
+    public setPermissionPassword(driveId: string, itemId: string, permId: string, sharingLinkPassword: SharingLinkPassword, options?: AxiosRequestConfig) {
+        return DrivesPermissionsApiFp(this.configuration).setPermissionPassword(driveId, itemId, permId, sharingLinkPassword, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5015,7 +5135,7 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listSchoolUsers(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser1>> {
+        async listSchoolUsers(schoolId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectionOfEducationUser>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listSchoolUsers(schoolId, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['EducationSchoolApi.listSchoolUsers']?.[index]?.url;
@@ -5148,7 +5268,7 @@ export const EducationSchoolApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listSchoolUsers(schoolId: string, options?: any): AxiosPromise<CollectionOfEducationUser1> {
+        listSchoolUsers(schoolId: string, options?: any): AxiosPromise<CollectionOfEducationUser> {
             return localVarFp.listSchoolUsers(schoolId, options).then((request) => request(axios, basePath));
         },
         /**

@@ -90,6 +90,38 @@
                   </template>
                 </item-filter>
               </div>
+              <div class="oc-flex oc-flex-middle">
+                <oc-text-input
+                  id="users-filter"
+                  v-model.trim="filterTermDisplayName"
+                  :label="$gettext('Search')"
+                  autocomplete="off"
+                  @keypress.enter="filterUsers"
+                />
+                <oc-button
+                  id="users-filter-confirm"
+                  class="oc-ml-xs"
+                  appearance="raw"
+                  @click="filterUsers"
+                >
+                  <oc-icon name="search" fill-type="line" />
+                </oc-button>
+              </div>
+            </template>
+            <template #noResults>
+              <no-content-message
+                v-if="isFilteringMandatory && !isFilteringActive"
+                icon="error-warning"
+              >
+                <template #message>
+                  <span v-text="$gettext('Please specify a filter to see results')" />
+                </template>
+              </no-content-message>
+              <no-content-message v-else icon="user">
+                <template #message>
+                  <span v-text="$gettext('No users in here')" />
+                </template>
+              </no-content-message>
             </template>
           </UsersList>
         </div>
@@ -143,7 +175,7 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import { QuotaModal } from '@ownclouders/web-pkg'
+import { NoContentMessage, QuotaModal } from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   useAccessToken,
@@ -156,7 +188,16 @@ import {
   useRouter,
   useStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, ref, onBeforeUnmount, onMounted, unref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  ref,
+  onBeforeUnmount,
+  onMounted,
+  unref,
+  watch,
+  nextTick
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { eventBus } from '@ownclouders/web-pkg'
 import { mapActions, mapMutations, mapState } from 'vuex'
@@ -185,6 +226,7 @@ import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 export default defineComponent({
   name: 'UsersView',
   components: {
+    NoContentMessage,
     AppLoadingSpinner,
     AppTemplate,
     UsersList,
@@ -234,12 +276,16 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
+    const isFilteringMandatory = ref(true)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
     const removeFromGroupsModalIsOpen = ref(false)
     const editLoginModalIsOpen = ref(false)
     const template = ref()
+    const displayNameQuery = useRouteQuery('q_displayName')
+    const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
+    const markInstance = ref(null)
     let loadResourcesEventToken
     let addToGroupsActionEventToken
     let removeFromGroupsActionEventToken
@@ -268,19 +314,6 @@ export default defineComponent({
       )
     })
 
-    const filters = {
-      groups: {
-        param: useRouteQuery('q_groups'),
-        query: `memberOf/any(m:m/id eq '%s')`,
-        ids: ref([])
-      },
-      roles: {
-        param: useRouteQuery('q_roles'),
-        query: `appRoleAssignments/any(m:m/appRoleId eq '%s')`,
-        ids: ref([])
-      }
-    }
-
     const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups('displayName')
       groups.value = groupsResponse.data.value
@@ -294,8 +327,19 @@ export default defineComponent({
     })
 
     const loadUsersTask = useTask(function* (signal) {
+      if (unref(isFilteringMandatory) && !unref(isFilteringActive)) {
+        return (users.value = [])
+      }
+
       const filter = Object.values(filters)
         .reduce((acc, f) => {
+          if (f.hasOwnProperty('value')) {
+            if (unref(f.value)) {
+              acc.push(format(f.query, unref(f.value)))
+            }
+            return acc
+          }
+
           const str = unref(f.ids)
             .map((id) => format(f.query, id))
             .join(' or ')
@@ -325,11 +369,11 @@ export default defineComponent({
      * this is necessary as we don't load all the data while listing the users
      * for performance reasons
      */
-    const loadAdditionalUserDataTask = useTask(function* (signal, user, forceReload = false) {
+    const loadAdditionalUserDataTask = useTask(function* (signal, user) {
       /**
        * Prevent load additional user data multiple times if not needed
        */
-      if (!forceReload && unref(additionalUserDataLoadedForUserIds).includes(user.id)) {
+      if (unref(additionalUserDataLoadedForUserIds).includes(user.id)) {
         return
       }
 
@@ -343,6 +387,31 @@ export default defineComponent({
       return router.push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
     }
 
+    const filters = {
+      groups: {
+        param: useRouteQuery('q_groups'),
+        query: `memberOf/any(m:m/id eq '%s')`,
+        ids: ref([])
+      },
+      roles: {
+        param: useRouteQuery('q_roles'),
+        query: `appRoleAssignments/any(m:m/appRoleId eq '%s')`,
+        ids: ref([])
+      },
+      displayName: {
+        param: useRouteQuery('q_displayName'),
+        query: `contains(displayName, %s )`,
+        value: ref('')
+      }
+    }
+
+    const isFilteringActive = computed(() => {
+      return (
+        unref(filters.groups.ids)?.length ||
+        unref(filters.roles.ids)?.length ||
+        unref(filters.displayName.value)?.length
+      )
+    })
     const filterGroups = (groups) => {
       filters.groups.ids.value = groups.map((g) => g.id)
       loadUsersTask.perform()
@@ -353,6 +422,17 @@ export default defineComponent({
     const filterRoles = (roles) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
+      selectedUsers.value = []
+      additionalUserDataLoadedForUserIds.value = []
+      return resetPagination()
+    }
+    const filterUsers = async (term) => {
+      await router.push({
+        ...unref(route),
+        query: { ...unref(route).query, q_displayName: unref(filterTermDisplayName) }
+      })
+      filters.displayName.value.value = unref(filterTermDisplayName)
+      loadUsersTask.perform(term)
       selectedUsers.value = []
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
@@ -436,7 +516,12 @@ export default defineComponent({
 
     onMounted(async () => {
       for (const f in filters) {
-        filters[f].ids.value = queryItemAsString(unref(filters[f].param))?.split('+') || []
+        if (unref(filters[f]).hasOwnProperty('ids')) {
+          filters[f].ids.value = queryItemAsString(unref(filters[f].param))?.split('+') || []
+        }
+        if (unref(filters[f]).hasOwnProperty('value')) {
+          filters[f].value.value = queryItemAsString(unref(filters[f].param))
+        }
       }
 
       await loadResourcesTask.perform()
@@ -449,6 +534,17 @@ export default defineComponent({
           // reset pagination to avoid empty lists (happens when deleting all items on the last page)
           currentPageQuery.value = pageCount.toString()
         }
+
+        await nextTick()
+        markInstance.value = new Mark('td.oc-table-data-cell-displayName')
+      })
+
+      watch([filterTermDisplayName, users], () => {
+        unref(markInstance)?.unmark()
+        unref(markInstance)?.mark(unref(filterTerm), {
+          element: 'span',
+          className: 'highlight-mark'
+        })
       })
 
       addToGroupsActionEventToken = eventBus.subscribe(
@@ -743,7 +839,6 @@ export default defineComponent({
       roles,
       groups,
       applicationId,
-      loadResourcesTask,
       loadAdditionalUserDataTask,
       clientService,
       accessToken,
@@ -757,6 +852,8 @@ export default defineComponent({
       batchActions,
       filterGroups,
       filterRoles,
+      filterUsers,
+      filterTermDisplayName,
       quotaModalIsOpen,
       quotaModalWarningMessage,
       quotaWarningMessageContextualHelperData,
@@ -765,7 +862,10 @@ export default defineComponent({
       addUsersToGroups,
       removeUsersFromGroups,
       writableGroups,
-      createUsersDisabled
+      loadResourcesTask,
+      createUsersDisabled,
+      isFilteringActive,
+      isFilteringMandatory
     }
   },
   computed: {
@@ -961,3 +1061,16 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+#users-filter {
+  width: 16rem;
+
+  &-confirm {
+    margin-top: calc(0.2rem + var(--oc-font-size-default));
+  }
+}
+
+#users-filter-confirm {
+  margin-top: calc(0.2rem + var(--oc-font-size-default));
+}
+</style>
