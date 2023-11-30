@@ -370,11 +370,11 @@ export default defineComponent({
      * this is necessary as we don't load all the data while listing the users
      * for performance reasons
      */
-    const loadAdditionalUserDataTask = useTask(function* (signal, user) {
+    const loadAdditionalUserDataTask = useTask(function* (signal, user, forceReload = false) {
       /**
        * Prevent load additional user data multiple times if not needed
        */
-      if (unref(additionalUserDataLoadedForUserIds).includes(user.id)) {
+      if (!forceReload && unref(additionalUserDataLoadedForUserIds).includes(user.id)) {
         return
       }
 
@@ -427,13 +427,13 @@ export default defineComponent({
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
-    const filterUsers = async (term) => {
+    const filterUsers = async () => {
       await router.push({
         ...unref(route),
         query: { ...unref(route).query, q_displayName: unref(filterTermDisplayName) }
       })
       filters.displayName.value.value = unref(filterTermDisplayName)
-      loadUsersTask.perform(term)
+      loadUsersTask.perform()
       selectedUsers.value = []
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
