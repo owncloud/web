@@ -200,7 +200,7 @@ export default defineComponent({
         unref(markInstance).unmark()
         unref(markInstance).mark(unref(filterTerm), {
           element: 'span',
-          className: 'highlight-mark'
+          className: 'mark-highlight'
         })
       }
     })

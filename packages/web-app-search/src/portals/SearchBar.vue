@@ -342,7 +342,7 @@ export default defineComponent({
             this.markInstance.unmark()
             this.markInstance.mark(this.term, {
               element: 'span',
-              className: 'highlight-mark',
+              className: 'mark-highlight',
               exclude: ['.provider-details *']
             })
           }
@@ -541,7 +541,7 @@ export default defineComponent({
       padding: 0 !important;
     }
 
-    .highlight-mark {
+    .mark-highlight {
       font-weight: 600;
     }
 

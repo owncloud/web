@@ -60,7 +60,7 @@ export default defineComponent({
         const searchTermRegex = unref(filterTerm)
         unref(markInstance).mark(searchTermRegex, {
           element: 'span',
-          className: 'highlight-mark'
+          className: 'mark-highlight'
         })
       }
     })

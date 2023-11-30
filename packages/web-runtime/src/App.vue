@@ -231,6 +231,10 @@ body {
   height: 100vh;
   max-height: 100vh;
   overflow-y: hidden;
+
+  .mark-highlight {
+    font-weight: 600;
+  }
 }
 
 iframe {

@@ -541,11 +541,11 @@ export default defineComponent({
         [users, filterTermDisplayName],
         async () => {
           await nextTick()
-          markInstance.value = new Mark('td.oc-table-data-cell-displayName')
+          markInstance.value = new Mark('.mark-element')
           unref(markInstance)?.unmark()
           unref(markInstance)?.mark(unref(filterTermDisplayName), {
             element: 'span',
-            className: 'highlight-mark'
+            className: 'mark-highlight'
           })
         },
         {

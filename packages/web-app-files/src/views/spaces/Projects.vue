@@ -292,7 +292,7 @@ export default defineComponent({
       instance.unmark()
       instance.mark(unref(filterTerm), {
         element: 'span',
-        className: 'highlight-mark',
+        className: 'mark-highlight',
         exclude: ['th *', 'tfoot *']
       })
     })

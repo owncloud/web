@@ -343,7 +343,8 @@ export default defineComponent({
         {
           name: 'displayName',
           title: this.$gettext('First and last name'),
-          sortable: true
+          sortable: true,
+          tdClass: 'mark-element'
         },
         {
           name: 'mail',
@@ -388,10 +389,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.highlight-mark {
-  font-weight: 600;
-}
-
 .users-table {
   .oc-table-header-cell-actions,
   .oc-table-data-cell-actions {

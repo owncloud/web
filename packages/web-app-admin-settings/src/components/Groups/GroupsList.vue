@@ -293,7 +293,7 @@ export default defineComponent({
       unref(markInstance)?.unmark()
       unref(markInstance)?.mark(unref(filterTerm), {
         element: 'span',
-        className: 'highlight-mark'
+        className: 'mark-highlight'
       })
     })
 
@@ -340,7 +340,8 @@ export default defineComponent({
           name: 'displayName',
           title: this.$gettext('Group name'),
           type: 'slot',
-          sortable: true
+          sortable: true,
+          tdClass: 'mark-element'
         },
         {
           name: 'members',
@@ -376,7 +377,7 @@ export default defineComponent({
   },
   mounted() {
     this.$nextTick(() => {
-      this.markInstance = new Mark('td.oc-table-data-cell-displayName')
+      this.markInstance = new Mark('.mark-element')
     })
   },
   methods: {
@@ -394,9 +395,5 @@ export default defineComponent({
 <style lang="scss">
 #groups-filter {
   width: 16rem;
-}
-
-.highlight-mark {
-  font-weight: 600;
 }
 </style>
