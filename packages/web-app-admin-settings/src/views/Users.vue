@@ -332,8 +332,8 @@ export default defineComponent({
         return (users.value = [])
       }
 
-      const filter = Object.values(filters as any)
-        .reduce((acc, f) => {
+      const filter = Object.values(filters)
+        .reduce((acc, f: any) => {
           if (f.hasOwnProperty('value')) {
             if (unref(f.value)) {
               acc.push(format(f.query, unref(f.value)))
@@ -348,7 +348,7 @@ export default defineComponent({
             acc.push(`(${str})`)
           }
           return acc
-        }, [] as string[])
+        }, [])
         .filter(Boolean)
         .join(' and ')
 
