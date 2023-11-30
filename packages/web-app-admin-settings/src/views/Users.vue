@@ -209,6 +209,7 @@ import { toRaw } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { diff } from 'deep-object-diff'
+import Mark from 'mark.js'
 import { format } from 'util'
 import GroupsModal from '../components/Users/GroupsModal.vue'
 import LoginModal from '../components/Users/LoginModal.vue'
@@ -534,18 +535,23 @@ export default defineComponent({
           // reset pagination to avoid empty lists (happens when deleting all items on the last page)
           currentPageQuery.value = pageCount.toString()
         }
-
-        await nextTick()
-        markInstance.value = new Mark('td.oc-table-data-cell-displayName')
       })
 
-      watch([filterTermDisplayName, users], () => {
-        unref(markInstance)?.unmark()
-        unref(markInstance)?.mark(unref(filterTerm), {
-          element: 'span',
-          className: 'highlight-mark'
-        })
-      })
+      watch(
+        [users, filterTermDisplayName],
+        async () => {
+          await nextTick()
+          markInstance.value = new Mark('td.oc-table-data-cell-displayName')
+          unref(markInstance)?.unmark()
+          unref(markInstance)?.mark(unref(filterTermDisplayName), {
+            element: 'span',
+            className: 'highlight-mark'
+          })
+        },
+        {
+          immediate: true
+        }
+      )
 
       addToGroupsActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.actions.add-to-groups',
