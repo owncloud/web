@@ -220,7 +220,6 @@ export default defineComponent({
           scope = unref(scopeQueryValue)
         }
         const useScope =
-          unref(term) &&
           unref(currentFolderAvailable) &&
           unref(locationFilterId) === SearchLocationFilterConstants.inHere
         router.push(
