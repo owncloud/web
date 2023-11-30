@@ -31,6 +31,7 @@ Summary
 * Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
 * Bugfix - Logout page after token expiry: [#10065](https://github.com/owncloud/web/pull/10065)
 * Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
+* Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
@@ -279,6 +280,14 @@ Details
    https://github.com/owncloud/web/issues/9923
    https://github.com/owncloud/web/pull/10083
    https://github.com/owncloud/web/pull/10085
+
+* Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
+
+   Allowing empty search queries in the "in-here" search instead of fallback to
+   search "everywhere".
+
+   https://github.com/owncloud/web/issues/9970
+   https://github.com/owncloud/web/pull/10092
 
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
 
