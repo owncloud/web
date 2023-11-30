@@ -285,7 +285,7 @@ export default defineComponent({
     const editLoginModalIsOpen = ref(false)
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
-    const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery) || ''))
+    const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
     const markInstance = ref(null)
     let loadResourcesEventToken
     let addToGroupsActionEventToken
@@ -546,7 +546,7 @@ export default defineComponent({
           await nextTick()
           markInstance.value = new Mark('.mark-element')
           unref(markInstance)?.unmark()
-          unref(markInstance)?.mark(queryItemAsString(unref(displayNameQuery)), {
+          unref(markInstance)?.mark(queryItemAsString(unref(displayNameQuery)) || '', {
             element: 'span',
             className: 'mark-highlight'
           })
