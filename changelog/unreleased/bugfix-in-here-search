@@ -1,0 +1,6 @@
+Bugfix: Allow empty search query in "in-here" search
+
+Allowing empty search queries in the "in-here" search instead of fallback to search "everywhere".
+
+https://github.com/owncloud/web/pull/10092
+https://github.com/owncloud/web/issues/9970
