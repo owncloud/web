@@ -66,7 +66,7 @@
           :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
-          :is-resource-clickable="isResourceClickable(item.id)"
+          :is-resource-clickable="isResourceClickable(item)"
           :folder-link="getFolderLink(item)"
           :parent-folder-link="getParentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
@@ -215,7 +215,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 import {
   useCapabilityFilesTags,
@@ -893,12 +893,17 @@ export default defineComponent({
        */
       this.$emit('fileClick', { space, resources: [resource] })
     },
-    isResourceClickable(resourceId) {
+    isResourceClickable({ id, status }: Resource) {
       if (!this.areResourcesClickable) {
         return false
       }
 
-      return !this.disabledResources.includes(resourceId)
+      // TODO: remove as soon as pending & declined shares are accessible
+      if (status === ShareStatus.pending || status === ShareStatus.declined) {
+        return false
+      }
+
+      return !this.disabledResources.includes(id)
     },
     getResourceCheckboxLabel(resource) {
       if (resource.type === 'folder') {
