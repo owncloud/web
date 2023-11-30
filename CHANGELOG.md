@@ -405,6 +405,7 @@ Details
 
    https://github.com/owncloud/web/issues/9531
    https://github.com/owncloud/web/pull/9718
+   https://github.com/owncloud/web/pull/10097
 
 * Enhancement - Upload preparation time: [#9552](https://github.com/owncloud/web/pull/9552)
 
