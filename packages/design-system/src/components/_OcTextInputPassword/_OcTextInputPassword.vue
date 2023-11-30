@@ -11,10 +11,11 @@
       ref="passwordInput"
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
+      :disabled="disabled"
       @input="onPasswordEntered"
     />
     <oc-button
-      v-if="password"
+      v-if="password && !disabled"
       v-oc-tooltip="$gettext('Show password')"
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
       appearance="raw"
@@ -24,7 +25,7 @@
       <oc-icon size="small" :name="showPassword ? 'eye-off' : 'eye'" />
     </oc-button>
     <oc-button
-      v-if="password"
+      v-if="password && !disabled"
       v-oc-tooltip="$gettext('Copy password')"
       class="oc-text-input-copy-password-button oc-px-s oc-background-default"
       appearance="raw"
@@ -34,7 +35,7 @@
       <oc-icon size="small" :name="copyPasswordIcon" />
     </oc-button>
     <oc-button
-      v-if="generatePasswordMethod"
+      v-if="generatePasswordMethod && !disabled"
       v-oc-tooltip="$gettext('Generate password')"
       class="oc-text-input-generate-password-button oc-px-s oc-background-default"
       appearance="raw"
@@ -102,6 +103,11 @@ export default defineComponent({
       default: false
     },
     hasError: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       required: false,
       default: false
