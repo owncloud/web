@@ -88,6 +88,10 @@ describe('OcTextInput', () => {
         const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
         expect(wrapper2.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
       })
+      it('should not exist if the input is disabled', () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password', disabled: true } })
+        expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
+      })
       it('should exist if type is "password" and value entered', async () => {
         const wrapper = getMountedWrapper({ props: { type: 'password' } })
         await wrapper.find(selectors.inputField).setValue('password')
@@ -107,6 +111,10 @@ describe('OcTextInput', () => {
 
         const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
         expect(wrapper2.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
+      })
+      it('should not exist if the input is disabled', () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password', disabled: true } })
+        expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
       })
       it('should exist if type is "password" and value entered', async () => {
         const wrapper = getMountedWrapper({ props: { type: 'password' } })
@@ -129,6 +137,10 @@ describe('OcTextInput', () => {
 
         const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
         expect(wrapper2.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
+      })
+      it('should not exist if the input is disabled', () => {
+        const wrapper = getMountedWrapper({ props: { type: 'password', disabled: true } })
+        expect(wrapper.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
       })
       it('should exist if type is "password" and prop "generatePasswordMethod" is provided', () => {
         const wrapper = getMountedWrapper({
