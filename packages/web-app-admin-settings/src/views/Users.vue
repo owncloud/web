@@ -1078,8 +1078,4 @@ export default defineComponent({
     margin-top: calc(0.2rem + var(--oc-font-size-default));
   }
 }
-
-#users-filter-confirm {
-  margin-top: calc(0.2rem + var(--oc-font-size-default));
-}
 </style>
