@@ -1,0 +1,15 @@
+Enhancement: Embed mode
+
+We've introduced a so called "Embed Mode" that allows Web to be consumed by another application in a stripped down version. This mode is supposed to be used in the context of selecting or sharing resources.
+
+Please see our documentation for more information and a guide on how to set it up.
+
+https://github.com/owncloud/web/issues/9768
+https://github.com/owncloud/web/pull/9841
+https://github.com/owncloud/web/pull/9853
+https://github.com/owncloud/web/pull/9863
+https://github.com/owncloud/web/pull/9981
+https://github.com/owncloud/web/pull/10113
+https://github.com/owncloud/web/pull/10071
+https://github.com/owncloud/web/pull/10076
+https://github.com/owncloud/web/pull/10082
