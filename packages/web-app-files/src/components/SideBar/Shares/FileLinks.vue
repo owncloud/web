@@ -113,7 +113,6 @@
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import { useGettext } from 'vue3-gettext'
 import {
   useStore,
   useCapabilitySpacesEnabled,
@@ -126,7 +125,7 @@ import {
   useAbility,
   usePasswordPolicyService,
   getDefaultLinkPermissions,
-  getExpirationRules
+  useExpirationRules
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -162,9 +161,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const { current: currentLanguage } = useGettext()
     const ability = useAbility()
     const { can } = ability
+    const { expirationRules } = useExpirationRules()
     const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
 
@@ -221,8 +220,6 @@ export default defineComponent({
         (can('create-all', 'PublicLink') || permissions === SharePermissions.internal.bit)
       )
     }
-
-    const expirationRules = computed(() => getExpirationRules({ store, currentLanguage }))
 
     return {
       $store: store,
