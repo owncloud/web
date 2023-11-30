@@ -15,6 +15,12 @@ import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/src/generated'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 
+jest.mock('mark.js', () => {
+  return jest.fn().mockImplementation(() => ({
+    mark: () => jest.fn(),
+    unmark: () => jest.fn()
+  }))
+})
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   queryItemAsString: jest.fn(),

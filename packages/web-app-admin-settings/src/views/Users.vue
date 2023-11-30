@@ -430,7 +430,10 @@ export default defineComponent({
     const filterUsers = async () => {
       await router.push({
         ...unref(route),
-        query: { ...unref(route).query, q_displayName: unref(filterTermDisplayName) }
+        query: {
+          ...omit(unref(route).query, 'q_displayName'),
+          ...(unref(filterTermDisplayName) && { q_displayName: unref(filterTermDisplayName) })
+        }
       })
       filters.displayName.value.value = unref(filterTermDisplayName)
       loadUsersTask.perform()
