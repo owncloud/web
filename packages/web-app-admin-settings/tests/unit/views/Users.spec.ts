@@ -448,10 +448,12 @@ describe('Users view', () => {
 function getMountedWrapper({
   mountType = shallowMount,
   clientService = getClientService(),
+  displayNameFilterQuery = null,
   groupFilterQuery = null,
   roleFilterQuery = null,
   capabilities = {}
 } = {}) {
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
   const mocks = {

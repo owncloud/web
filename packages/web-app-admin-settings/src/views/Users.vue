@@ -277,7 +277,7 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
-    const isFilteringMandatory = ref(true)
+    const isFilteringMandatory = ref(false)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
@@ -332,7 +332,7 @@ export default defineComponent({
         return (users.value = [])
       }
 
-      const filter = Object.values(filters)
+      const filter = Object.values(filters as any)
         .reduce((acc, f) => {
           if (f.hasOwnProperty('value')) {
             if (unref(f.value)) {
@@ -348,7 +348,7 @@ export default defineComponent({
             acc.push(`(${str})`)
           }
           return acc
-        }, [])
+        }, [] as string[])
         .filter(Boolean)
         .join(' and ')
 
