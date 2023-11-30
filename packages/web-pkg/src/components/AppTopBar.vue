@@ -184,7 +184,11 @@ export default defineComponent({
 
 .open-file-bar {
   #app-top-bar-resource {
-    max-width: 50vw;
+    max-width: 360px;
+
+    @media (max-width: $oc-breakpoint-medium-default) {
+      max-width: 240px;
+    }
 
     @media (min-width: $oc-breakpoint-small-default) {
       widows: initial;
