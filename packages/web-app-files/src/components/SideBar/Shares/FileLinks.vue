@@ -14,14 +14,14 @@
       <name-and-copy v-if="quicklink" :link="quicklink" />
       <create-quick-link
         v-else-if="canCreateLinks"
-        :expiration-date="expirationDate"
+        :expiration-rules="expirationRules"
         @create-public-link="checkLinkToCreate"
       />
       <details-and-edit
         v-if="quicklink"
         :available-role-options="getAvailableRoleOptions(quicklink)"
         :can-rename="false"
-        :expiration-date="expirationDate"
+        :expiration-rules="expirationRules"
         :is-folder-share="resource.isFolder"
         :is-modifiable="canEditLink(quicklink)"
         :is-password-enforced="isPasswordEnforcedFor(quicklink)"
@@ -54,7 +54,7 @@
         <details-and-edit
           :available-role-options="getAvailableRoleOptions(link)"
           :can-rename="true"
-          :expiration-date="expirationDate"
+          :expiration-rules="expirationRules"
           :is-folder-share="resource.isFolder"
           :is-modifiable="canEditLink(link)"
           :is-password-enforced="isPasswordEnforcedFor(link)"
@@ -89,7 +89,7 @@
           <name-and-copy :link="link" />
           <details-and-edit
             :available-role-options="getAvailableRoleOptions(link)"
-            :expiration-date="expirationDate"
+            :expiration-rules="expirationRules"
             :is-folder-share="true"
             :is-modifiable="false"
             :link="link"
@@ -124,7 +124,8 @@ import {
   useCapabilityFilesSharingPublicPasswordEnforcedFor,
   useAbility,
   usePasswordPolicyService,
-  getDefaultLinkPermissions
+  getDefaultLinkPermissions,
+  useExpirationRules
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -162,6 +163,7 @@ export default defineComponent({
     const store = useStore()
     const ability = useAbility()
     const { can } = ability
+    const { expirationRules } = useExpirationRules()
     const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
 
@@ -241,7 +243,8 @@ export default defineComponent({
       configurationManager,
       passwordPolicyService,
       canCreateLinks,
-      canEditLink
+      canEditLink,
+      expirationRules
     }
   },
   computed: {
@@ -262,36 +265,6 @@ export default defineComponent({
 
     quicklink() {
       return this.outgoingLinks.find((link) => link.quicklink === true && !link.indirect)
-    },
-
-    expirationDate() {
-      const expireDate = this.capabilities.files_sharing.public.expire_date
-
-      let defaultExpireDate = null
-      let maxExpireDateFromCaps = null
-
-      if (expireDate.days) {
-        const days = parseInt(expireDate.days)
-        defaultExpireDate = DateTime.now()
-          .setLocale(getLocaleFromLanguage(this.$language.current))
-          .plus({ days })
-          .toJSDate()
-      }
-
-      if (expireDate.enforced) {
-        const days = parseInt(expireDate.days)
-        maxExpireDateFromCaps = DateTime.now()
-          .setLocale(getLocaleFromLanguage(this.$language.current))
-          .plus({ days })
-          .toJSDate()
-      }
-
-      return {
-        enforced: expireDate.enforced,
-        default: defaultExpireDate,
-        min: DateTime.now().setLocale(getLocaleFromLanguage(this.$language.current)).toJSDate(),
-        max: maxExpireDateFromCaps
-      }
     },
 
     helpersEnabled() {
@@ -415,7 +388,7 @@ export default defineComponent({
             ability: this.ability,
             store: this.$store
           }).toString(),
-          expiration: this.expirationDate.default,
+          expiration: this.expirationRules.default,
           password: false
         }
       })

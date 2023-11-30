@@ -13,6 +13,8 @@ import { Resource } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
 import { unref } from 'vue'
 import { showQuickLinkPasswordModal } from '../../quickActions'
+import { getLocaleFromLanguage } from '../locale'
+import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 
 export interface CreateQuicklink {
   clientService: ClientService
@@ -180,4 +182,43 @@ export const getDefaultLinkPermissions = ({
   }
 
   return defaultPermissions
+}
+
+export type ExpirationRules = { enforced: boolean; default: DateTime; min: DateTime; max: DateTime }
+
+export const getExpirationRules = ({
+  store,
+  currentLanguage
+}: {
+  store: Store<any>
+  currentLanguage: string
+}): ExpirationRules => {
+  const expireDate: PublicExpirationCapability =
+    store.getters.capabilities.files_sharing.public.expire_date
+
+  let defaultExpireDate: DateTime = null
+  let maxExpireDateFromCaps: DateTime = null
+
+  if (expireDate.days) {
+    const days = parseInt(expireDate.days)
+    defaultExpireDate = DateTime.now()
+      .setLocale(getLocaleFromLanguage(currentLanguage))
+      .plus({ days })
+      .toJSDate()
+  }
+
+  if (expireDate.enforced) {
+    const days = parseInt(expireDate.days)
+    maxExpireDateFromCaps = DateTime.now()
+      .setLocale(getLocaleFromLanguage(currentLanguage))
+      .plus({ days })
+      .toJSDate()
+  }
+
+  return {
+    enforced: expireDate.enforced,
+    default: defaultExpireDate,
+    min: DateTime.now().setLocale(getLocaleFromLanguage(currentLanguage)).toJSDate(),
+    max: maxExpireDateFromCaps
+  }
 }

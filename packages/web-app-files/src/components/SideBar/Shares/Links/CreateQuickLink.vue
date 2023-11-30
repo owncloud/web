@@ -26,16 +26,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useAbility, getDefaultLinkPermissions, useStore } from '@ownclouders/web-pkg'
+import { defineComponent, PropType } from 'vue'
+import {
+  useAbility,
+  getDefaultLinkPermissions,
+  useStore,
+  ExpirationRules
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'CreateQuickLink',
   props: {
-    expirationDate: {
-      type: Object,
-      default: () => {},
+    expirationRules: {
+      type: Object as PropType<ExpirationRules>,
       required: true
     }
   },
@@ -50,7 +54,7 @@ export default defineComponent({
         link: {
           name: $gettext('Link'),
           permissions: getDefaultLinkPermissions({ ability, store }).toString(),
-          expiration: props.expirationDate.enforced ? props.expirationDate.default : null,
+          expiration: props.expirationRules.enforced ? props.expirationRules.default : null,
           quicklink: true,
           password: false
         }
