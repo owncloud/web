@@ -82,6 +82,7 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.imprintUrl` Specifies the target URL for the imprint link valid for the ocis instance in the account menu.
 - `options.privacyUrl` Specifies the target URL for the privacy link valid for the ocis instance in the account menu.
 - `options.ocm.openRemotely` Specifies whether opening files in remote shares in their original ocm instance should be enabled. Defaults to `false`.
+- `options.userListRequiresFilter` Defines whether one or more filters must be set in order to list users in the Web admin settings. Set this option to 'true' if running in an environment with a lot of users and listing all users could slow down performance. Defaults to `false`.
 
 #### Scripts and Styles
 
