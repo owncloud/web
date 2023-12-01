@@ -126,8 +126,8 @@
               <quick-actions
                 :class="resource.preview"
                 class="oc-visible@s"
+                :space="space"
                 :item="resource"
-                :actions="app.quickActions"
               />
             </template>
             <template #contextMenu="{ resource }">
