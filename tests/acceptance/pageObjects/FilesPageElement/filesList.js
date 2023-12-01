@@ -619,7 +619,7 @@ module.exports = {
     },
 
     useQuickAction: async function (resource, action) {
-      const className = action === 'collaborators' ? 'show-shares' : 'create-quicklink'
+      const className = action === 'collaborators' ? 'show-shares' : 'copy-quicklink'
       const actionSelector = util.format(filesRow.elements.quickAction.selector, className)
       const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
 

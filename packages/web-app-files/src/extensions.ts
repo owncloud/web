@@ -5,7 +5,7 @@ import {
   useRouter,
   useSearch,
   useFileActionsShowShares,
-  useFileActionsCreateQuickLink
+  useFileActionsCopyQuickLink
 } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
@@ -16,7 +16,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { search: searchFunction } = useSearch()
 
   const { actions: showSharesActions } = useFileActionsShowShares()
-  const { actions: quickLinkActions } = useFileActionsCreateQuickLink()
+  const { actions: quickLinkActions } = useFileActionsCopyQuickLink()
 
   return computed(
     () =>

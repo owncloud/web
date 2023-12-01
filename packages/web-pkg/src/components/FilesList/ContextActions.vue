@@ -15,7 +15,7 @@ import {
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
 import {
-  useFileActionsCreateQuickLink,
+  useFileActionsCopyQuickLink,
   useFileActionsPaste,
   useFileActionsShowDetails,
   useFileActionsShowShares,
@@ -56,7 +56,7 @@ export default defineComponent({
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
-    const { actions: createQuickLinkActions } = useFileActionsCreateQuickLink({ store })
+    const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })

@@ -118,14 +118,14 @@
       </oc-list>
     </oc-drop>
     <oc-button
-      class="link-modal-cancel oc-ml-s"
+      class="link-modal-cancel oc-modal-body-actions-cancel oc-ml-s"
       appearance="outline"
       variation="passive"
       @click="cancel"
       >{{ $gettext('Cancel') }}</oc-button
     >
     <oc-button
-      class="link-modal-confirm oc-ml-s"
+      class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
       appearance="filled"
       variation="primary"
       @click="confirm"
@@ -154,18 +154,20 @@ import {
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicPasswordEnforcedFor,
-  useClientService,
   useLoadingService,
   usePasswordPolicyService,
   useStore,
   useEmbedMode,
-  useExpirationRules
+  useExpirationRules,
+  useDefaultLinkPermissions,
+  useCreateLink
 } from '../composables'
-import { formatRelativeDateFromDateTime, getDefaultLinkPermissions } from '../helpers'
+import { formatRelativeDateFromDateTime } from '../helpers'
 import {
   LinkShareRoles,
   Share,
   ShareRole,
+  SpaceResource,
   linkRoleContributorFolder,
   linkRoleEditorFolder,
   linkRoleInternalFolder,
@@ -177,17 +179,24 @@ import { Resource } from '@ownclouders/web-client'
 export default defineComponent({
   name: 'CreatePublicLinksModal',
   props: {
-    resources: { type: Array as PropType<Resource[]>, required: true }
+    resources: { type: Array as PropType<Resource[]>, required: true },
+    space: { type: Object as PropType<SpaceResource>, default: undefined },
+    isQuickLink: { type: Boolean, default: false },
+    callbackFn: {
+      type: Function as PropType<(result: PromiseSettledResult<Share>[]) => Promise<void> | void>,
+      default: undefined
+    }
   },
-  setup(props, { expose }) {
+  setup(props) {
     const store = useStore()
     const { $gettext, current: currentLanguage } = useGettext()
-    const clientService = useClientService()
     const loadingService = useLoadingService()
     const ability = useAbility()
     const passwordPolicyService = usePasswordPolicyService()
     const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
     const { expirationRules } = useExpirationRules()
+    const { defaultLinkPermissions } = useDefaultLinkPermissions()
+    const { createLink } = useCreateLink()
 
     const hasPublicLinkEditing = useCapabilityFilesSharingPublicCanEdit()
     const hasPublicLinkContribute = useCapabilityFilesSharingPublicCanContribute()
@@ -202,7 +211,7 @@ export default defineComponent({
 
     const password = reactive({ value: '', error: undefined })
     const selectedRole = ref<ShareRole>(
-      LinkShareRoles.getByBitmask(getDefaultLinkPermissions({ ability, store }), unref(isFolder))
+      LinkShareRoles.getByBitmask(unref(defaultLinkPermissions), unref(isFolder))
     ) as Ref<ShareRole>
     const selectedExpiry = ref<DateTime>()
 
@@ -261,73 +270,49 @@ export default defineComponent({
     const createLinks = () => {
       return loadingService.addTask(() =>
         Promise.allSettled<Share>(
-          props.resources.map((resource) => {
-            const params = {
-              name: $gettext('Link'),
-              expireDate: unref(selectedExpiry),
-              password: unref(password).value,
+          props.resources.map((resource) =>
+            createLink({
+              resource,
+              space: props.space,
+              quicklink: props.isQuickLink,
               permissions: unref(selectedRole).bitmask(false),
-              spaceRef: resource.fileId,
-              storageId: resource.fileId || resource.id
-            }
-
-            let path = resource.path
-            // sharing a share root from the share jail -> use resource name as path
-            if (resource.isReceivedShare() && path === '/') {
-              path = `/${resource.name}`
-            }
-
-            return store.dispatch('Files/addLink', {
-              path: resource.path,
-              client: clientService.owncloudSdk,
-              params,
-              storageId: resource.fileId || resource.id
+              password: unref(password).value,
+              expireDate: unref(selectedExpiry)
             })
-          })
+          )
         )
       )
     }
 
     const confirm = async () => {
-      if (unref(passwordEnforced) && !unref(password).value) {
-        password.error = $gettext('Password must not be empty')
-        return
-      }
+      if (!unref(selectedRoleIsInternal)) {
+        if (unref(passwordEnforced) && !unref(password).value) {
+          password.error = $gettext('Password must not be empty')
+          return
+        }
 
-      if (!passwordPolicy.check(unref(password).value)) {
-        return
+        if (!passwordPolicy.check(unref(password).value)) {
+          return
+        }
       }
 
       const result = await createLinks()
 
-      const succeeded = result.filter(
-        (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
-      )
-      if (succeeded.length) {
-        store.dispatch('showMessage', {
-          title:
-            succeeded.length > 1
-              ? $gettext('Links have been created successfully')
-              : $gettext('Link has been created successfully')
-        })
-
-        if (unref(isEmbedEnabled)) {
-          postMessage<string[]>(
-            'owncloud-embed:share',
-            succeeded.map(({ value }) => value.url)
-          )
-        }
+      const succeeded = result.filter(({ status }) => status === 'fulfilled')
+      if (succeeded.length && unref(isEmbedEnabled)) {
+        postMessage<string[]>(
+          'owncloud-embed:share',
+          (succeeded as PromiseFulfilledResult<Share>[]).map(({ value }) => value.url)
+        )
       }
 
       const failed = result.filter(({ status }) => status === 'rejected')
       if (failed.length) {
-        failed.forEach((error) => {
-          console.error(error)
-          store.dispatch('showErrorMessage', {
-            title: $gettext('Some links could not be created'),
-            error
-          })
-        })
+        ;(failed as PromiseRejectedResult[]).map(({ reason }) => reason).forEach(console.error)
+      }
+
+      if (props.callbackFn) {
+        props.callbackFn(result)
       }
 
       return store.dispatch('hideModal')
