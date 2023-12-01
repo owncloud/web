@@ -23,14 +23,17 @@ interface GeneratePasswordRules {
 }
 
 export class PasswordPolicyService {
-  private readonly capability: PasswordPolicyCapability
   private readonly language: Language
+  private capability: PasswordPolicyCapability
   private policy: PasswordPolicy
   private generatePasswordRules: GeneratePasswordRules
 
-  constructor({ store, language }: { store: Store<unknown>; language: Language }) {
-    this.capability = get(store, 'getters.capabilities.password_policy', {})
+  constructor({ language }: { language: Language }) {
     this.language = language
+  }
+
+  public initialize(store: Store<unknown>) {
+    this.capability = get(store, 'getters.capabilities.password_policy', {})
     this.buildGeneratePasswordRules()
     this.buildPolicy()
   }

@@ -397,7 +397,6 @@ export default defineComponent({
         query['mediatype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
         updateFilter(mediaTypeFilter)
       }
-
       return (
         // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
         // different or identical keys are part of the query.
@@ -420,6 +419,7 @@ export default defineComponent({
 
             return acc
           }, [])
+          .sort((a, b) => a.startsWith('scope:') - b.startsWith('scope:'))
           .join(' AND ')
       )
     }

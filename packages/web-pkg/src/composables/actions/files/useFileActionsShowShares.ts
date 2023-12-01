@@ -1,4 +1,3 @@
-import quickActions, { canShare } from '../../../quickActions'
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { eventBus } from '../../../services'
@@ -10,14 +9,14 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from '../types'
-import { useAbility } from '../../ability'
+import { useCanShare } from '../../shares'
 
 export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const ability = useAbility()
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
+  const { canShare } = useCanShare()
 
   const handler = ({ resources }: FileActionOptions) => {
     store.commit('Files/SET_FILE_SELECTION', resources)
@@ -27,8 +26,7 @@ export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {})
   const actions = computed((): FileAction[] => [
     {
       name: 'show-shares',
-      icon: quickActions.collaborators.icon,
-      iconFillType: quickActions.collaborators.iconFillType,
+      icon: 'user-add',
       label: () => $gettext('Share'),
       handler,
       isEnabled: ({ resources }) => {
@@ -48,7 +46,7 @@ export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {})
             return false
           }
         }
-        return canShare(resources[0], store, ability)
+        return canShare(resources[0])
       },
       componentType: 'button',
       class: 'oc-files-actions-show-shares-trigger'

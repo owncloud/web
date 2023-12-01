@@ -2,15 +2,13 @@
   <div v-if="!isEmbedModeEnabled" class="oc-flex">
     <oc-button
       v-for="action in filteredActions"
-      :key="action.label($gettext)"
-      v-oc-tooltip="action.label($gettext)"
-      :aria-label="action.label($gettext)"
+      :key="action.label()"
+      v-oc-tooltip="action.label()"
+      :aria-label="action.label()"
       appearance="raw"
       class="oc-mr-xs quick-action-button oc-p-xs"
-      :class="`files-quick-action-${action.id}`"
-      @click="
-        action.handler({ ability, clientService, passwordPolicyService, item, language, store })
-      "
+      :class="`files-quick-action-${action.name}`"
+      @click="action.handler({ space, resources: [item] })"
     >
       <oc-icon :name="action.icon" fill-type="line" />
     </oc-button>
@@ -18,48 +16,36 @@
 </template>
 
 <script lang="ts">
-import pickBy from 'lodash-es/pickBy'
-import { computed, defineComponent } from 'vue'
-import {
-  useAbility,
-  useClientService,
-  useEmbedMode,
-  usePasswordPolicyService,
-  useStore
-} from '@ownclouders/web-pkg'
-import { useGettext } from 'vue3-gettext'
+import { computed, defineComponent, PropType } from 'vue'
+import { ActionExtension, useEmbedMode, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { unref } from 'vue'
 
 export default defineComponent({
   name: 'QuickActions',
-
   props: {
-    actions: {
-      type: Object,
+    item: {
+      type: Object as PropType<Resource>,
       required: true
     },
-    item: {
-      type: Object,
-      required: true
+    space: {
+      type: Object as PropType<SpaceResource>,
+      default: undefined
     }
   },
   setup(props) {
-    const store = useStore()
-    const ability = useAbility()
-    const clientService = useClientService()
-    const passwordPolicyService = usePasswordPolicyService()
-    const language = useGettext()
+    const extensionRegistry = useExtensionRegistry()
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
-    const filteredActions = computed(() =>
-      pickBy(props.actions, (action) => action.displayed(props.item, store, ability) === true)
-    )
+    const filteredActions = computed(() => {
+      return unref(extensionRegistry)
+        .requestExtensions<ActionExtension>('action')
+        .filter(({ scopes }) => scopes.includes('files.quick-action'))
+        .map((e) => e.action)
+        .filter(({ isEnabled }) => isEnabled({ space: props.space, resources: [props.item] }))
+    })
 
     return {
-      ability,
-      clientService,
-      passwordPolicyService,
-      store,
-      language,
       filteredActions,
       isEmbedModeEnabled
     }

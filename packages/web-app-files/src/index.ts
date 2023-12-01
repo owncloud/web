@@ -8,7 +8,7 @@ import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
-import { defineWebApplication, quickActions } from '@ownclouders/web-pkg'
+import { defineWebApplication } from '@ownclouders/web-pkg'
 import store from './store'
 import { extensions } from './extensions'
 import fileSideBars from './fileSideBars'
@@ -151,7 +151,6 @@ export default defineWebApplication({
         }
       }),
       navItems,
-      quickActions,
       translations,
       extensions: extensions(args)
     }

@@ -4,8 +4,8 @@ const util = require('util')
 module.exports = {
   commands: {
     isQuickActionVisible: function (action) {
-      action = action.replace(/\s/, '-')
-      const actionSelector = util.format(this.elements.quickAction.selector, action)
+      const className = action === 'collaborators' ? 'show-shares' : 'create-quicklink'
+      const actionSelector = util.format(this.elements.quickAction.selector, className)
 
       this.useXpath().expect.element(actionSelector).to.be.visible
       this.useCss()

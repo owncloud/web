@@ -43,7 +43,8 @@ describe('PasswordPolicyService', () => {
           ]
         ]
       ])('capability "%s"', (capability: PasswordPolicyCapability, expected: Array<string>) => {
-        const { passwordPolicyService } = getWrapper(capability)
+        const { passwordPolicyService, store } = getWrapper(capability)
+        passwordPolicyService.initialize(store)
         expect(Object.keys((passwordPolicyService.getPolicy() as any).rules)).toEqual(expected)
       })
     })
@@ -100,7 +101,8 @@ describe('PasswordPolicyService', () => {
             passwords: Array<string>,
             expected: Array<boolean>
           ) => {
-            const { passwordPolicyService } = getWrapper(capability)
+            const { passwordPolicyService, store } = getWrapper(capability)
+            passwordPolicyService.initialize(store)
             const policy = passwordPolicyService.getPolicy()
             for (let i = 0; i < passwords.length; i++) {
               expect((policy as any).check(passwords[i])).toEqual(expected[i])
@@ -119,8 +121,8 @@ const getWrapper = (capability: PasswordPolicyCapability) => {
   })
   const store = createStore(storeOptions)
   return {
+    store,
     passwordPolicyService: new PasswordPolicyService({
-      store,
       language: { current: 'en' } as Language
     })
   }

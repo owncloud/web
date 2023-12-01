@@ -1,27 +1,32 @@
-import { useEmbedMode } from '@ownclouders/web-pkg'
+import { ActionExtension, useEmbedMode } from '@ownclouders/web-pkg'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
+import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  useEmbedMode: jest.fn()
+  useEmbedMode: jest.fn(),
+  useExtensionRegistry: jest.fn()
 }))
 
 const collaboratorAction = {
-  displayed: jest.fn(() => true),
+  isEnabled: jest.fn(() => true),
   handler: jest.fn(),
   icon: 'group-add',
   id: 'collaborators',
+  name: 'show-shares',
   label: () => 'Add people'
 }
 
 const quicklinkAction = {
-  displayed: jest.fn(() => false),
+  isEnabled: jest.fn(() => false),
   handler: jest.fn(),
   icon: 'link-add',
   id: 'quicklink',
+  name: 'create-quicklink',
   label: () => 'Create and copy quicklink'
 }
 
@@ -45,14 +50,14 @@ describe('QuickActions', () => {
       const iconEl = actionButton.find('oc-icon-stub')
 
       expect(actionButton.exists()).toBeTruthy()
-      expect(actionButton.attributes().class).toContain('files-quick-action-collaborators')
+      expect(actionButton.attributes().class).toContain('files-quick-action-show-shares')
       expect(iconEl.exists()).toBeTruthy()
       expect(iconEl.attributes().name).toBe('group-add')
       expect(actionButton.attributes('aria-label')).toBe('Add people')
     })
 
     it('should not display action buttons where "displayed" is set to false', () => {
-      const linkActionButton = wrapper.find('.files-quick-action-public-link')
+      const linkActionButton = wrapper.find('.files-quick-action-create-quicklink')
 
       expect(linkActionButton.exists()).toBeFalsy()
     })
@@ -66,9 +71,6 @@ describe('QuickActions', () => {
       const actionButton = wrapper.find('.oc-button')
       await actionButton.trigger('click')
       expect(handlerAction).toHaveBeenCalledTimes(1)
-      Object.keys(testItem).forEach((key) => {
-        expect(handlerAction.mock.calls[0][0].item[key]).toBe(testItem[key])
-      })
     })
   })
 
@@ -83,13 +85,19 @@ function getWrapper({ embedModeEnabled = false } = {}) {
     .mocked(useEmbedMode)
     .mockReturnValue(mock<ReturnType<typeof useEmbedMode>>({ isEnabled: ref(embedModeEnabled) }))
 
+  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+    useExtensionRegistryMock({
+      requestExtensions: () =>
+        [
+          mock<ActionExtension>({ scopes: ['files.quick-action'], action: collaboratorAction }),
+          mock<ActionExtension>({ scopes: ['files.quick-action'], action: quicklinkAction })
+        ] as any
+    })
+  )
+
   return {
     wrapper: shallowMount(QuickActions, {
       props: {
-        actions: {
-          collaborators: collaboratorAction,
-          publicLink: quicklinkAction
-        },
         item: testItem
       },
       global: {
