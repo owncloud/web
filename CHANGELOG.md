@@ -89,6 +89,7 @@ Summary
 * Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
 * Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
 * Enhancement - Add authentication delegation in the Embed mode: [#10082](https://github.com/owncloud/web/pull/10082)
+* Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
 
 Details
 -------
@@ -848,6 +849,17 @@ Details
 
    https://github.com/owncloud/web/issues/10072
    https://github.com/owncloud/web/pull/10082
+
+* Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
+
+   Quick actions can now registered as extension via our extension registry. They
+   need to be of type `action` and have the `files.quick-action` scope.
+
+   The old way of registering quick actions via the `quickaction` property of an
+   app is now officially deprecated.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/10102
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
