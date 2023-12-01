@@ -278,7 +278,6 @@ export default defineComponent({
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
     const isFilteringMandatory = ref(configurationManager.options.userListRequiresFilter)
-    console.log(configurationManager.options)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
@@ -335,7 +334,7 @@ export default defineComponent({
 
       const filter = Object.values(filters)
         .reduce((acc, f: any) => {
-          if (f.hasOwnProperty('value')) {
+          if ('value' in f) {
             if (unref(f.value)) {
               acc.push(format(f.query, unref(f.value)))
             }

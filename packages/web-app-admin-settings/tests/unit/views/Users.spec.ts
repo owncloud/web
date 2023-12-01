@@ -120,7 +120,7 @@ describe('Users view', () => {
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
     })
-    it.only('renders initially warning if filters are mandatory', async () => {
+    it('renders initially warning if filters are mandatory', async () => {
       const { wrapper } = getMountedWrapper({
         mountType: mount,
         configuration: {
