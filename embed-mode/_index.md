@@ -17,7 +17,7 @@ The ownCloud Web can be consumed by another application in a stripped down versi
 To integrate ownCloud Web into your application, add an iframe element pointing to your ownCloud Web deployed instance with additional query parameter `embed=true`.
 
 ```html
-<iframe src="<web-url>?mode=embed"></iframe>
+<iframe src="<web-url>?embed=true"></iframe>
 ```
 
 ## Communication
@@ -95,6 +95,10 @@ To allow authentication delegation, you need to set the config option `options.e
 #### Opening Embed mode
 
 As already mentioned, we're using the `postMessage` method to allow communication between the Embed mode and the parent application. When the Embed mode is opened for the first time, the user gets redirected to the `/web-oidc-callback` page where a message with payload `{ name: 'owncloud-embed:request-token', data: undefined }` is sent to request the `access_token` from the parent application. The parent application should set an event listener before opening the Embed mode and once received, it should send a message with payload `{ name: 'owncloud-embed:update-token', data: { access_token: '<bearer-token>' } }`. Once the Embed mode receives this message, it will save the token in the application state and will automatically authenticate the user.
+
+{{< hint info >}}
+When passing the token in the message payload, use only the token itself without `Bearer ` string as that will be added automatically in the Embed mode.
+{{< /hint >}}
 
 {{< hint info >}}
 To save unnecessary duplication of messages with only different names, the name in the message payload above is exactly the same for both the initial authentication and subsequent token updates after renewal.
