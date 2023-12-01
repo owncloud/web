@@ -74,6 +74,7 @@ const state = {
     imprintUrl: '',
     accessDeniedHelpUrl: '',
     disabledExtensions: [],
+    userListRequiresFilter: false,
     embed: {
       enabled: false,
       target: 'resources',

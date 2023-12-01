@@ -1,5 +1,10 @@
 import Users from '../../../src/views/Users.vue'
-import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
+import {
+  ConfigurationManager,
+  eventBus,
+  useAppDefaults,
+  useConfigurationManager
+} from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import {
@@ -24,7 +29,8 @@ jest.mock('mark.js', () => {
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   queryItemAsString: jest.fn(),
-  useAppDefaults: jest.fn()
+  useAppDefaults: jest.fn(),
+  useConfigurationManager: jest.fn()
 }))
 jest.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
 
@@ -108,6 +114,25 @@ const selectors = {
 }
 
 describe('Users view', () => {
+  describe('list view', () => {
+    it('renders list initially', async () => {
+      const { wrapper } = getMountedWrapper({ mountType: mount })
+      await wrapper.vm.loadResourcesTask.last
+      expect(wrapper.html()).toMatchSnapshot()
+    })
+    it.only('renders initially warning if filters are mandatory', async () => {
+      const { wrapper } = getMountedWrapper({
+        mountType: mount,
+        configuration: {
+          options: {
+            userListRequiresFilter: true
+          }
+        }
+      })
+      await wrapper.vm.loadResourcesTask.last
+      expect(wrapper.html()).toMatchSnapshot()
+    })
+  })
   describe('change password button', () => {
     it('should be displayed if not disabled via capability', () => {
       const { wrapper } = getMountedWrapper({
@@ -442,6 +467,22 @@ describe('Users view', () => {
         )
       })
     })
+    describe('displayName', () => {
+      it('does filter initially if displayName is given via query param', async () => {
+        const displayNameFilterQueryParam = 'Albert'
+        const clientService = getClientService()
+        const { wrapper } = getMountedWrapper({
+          mountType: mount,
+          clientService,
+          displayNameFilterQuery: displayNameFilterQueryParam
+        })
+        await wrapper.vm.loadResourcesTask.last
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
+          'displayName',
+          "contains(displayName,'Albert')"
+        )
+      })
+    })
   })
 })
 
@@ -451,14 +492,20 @@ function getMountedWrapper({
   displayNameFilterQuery = null,
   groupFilterQuery = null,
   roleFilterQuery = null,
-  capabilities = {}
+  capabilities = {},
+  configuration = {}
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
+  jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
+  jest
+    .mocked(useConfigurationManager)
+    .mockImplementation(() => mock<ConfigurationManager>(configuration))
   const mocks = {
     ...defaultComponentMocks()
   }
+
   mocks.$clientService = clientService
 
   const user = { id: '1', uuid: '1' }
@@ -481,7 +528,6 @@ function getMountedWrapper({
           ViewOptions: true,
           OcBreadcrumb: true,
           NoContentMessage: true,
-          OcTable: true,
           ItemFilter: true,
           BatchActions: true,
           LoginModal: true,

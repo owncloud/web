@@ -96,13 +96,13 @@
                   v-model.trim="filterTermDisplayName"
                   :label="$gettext('Search')"
                   autocomplete="off"
-                  @keypress.enter="filterUsers"
+                  @keypress.enter="filterDisplayName"
                 />
                 <oc-button
                   id="users-filter-confirm"
                   class="oc-ml-xs"
                   appearance="raw"
-                  @click="filterUsers"
+                  @click="filterDisplayName"
                 >
                   <oc-icon name="search" fill-type="line" />
                 </oc-button>
@@ -175,7 +175,7 @@ import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import { NoContentMessage, QuotaModal } from '@ownclouders/web-pkg'
+import { NoContentMessage, QuotaModal, useConfigurationManager } from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   useAccessToken,
@@ -220,7 +220,6 @@ import {
   useUserActionsEditLogin,
   useUserActionsEditQuota
 } from '../composables/actions/users'
-import { configurationManager } from '@ownclouders/web-pkg'
 import { Drive, Group, User } from '@ownclouders/web-client/src/generated'
 import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 
@@ -246,6 +245,7 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const loadingService = useLoadingService()
+    const configurationManager = useConfigurationManager()
     const createUsersDisabled = useCapabilityCreateUsersDisabled()
 
     const currentPageQuery = useRouteQuery('page', '1')
@@ -277,7 +277,8 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
-    const isFilteringMandatory = ref(false)
+    const isFilteringMandatory = ref(configurationManager.options.userListRequiresFilter)
+    console.log(configurationManager.options)
     const sideBarLoading = ref(false)
     const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
@@ -401,7 +402,7 @@ export default defineComponent({
       },
       displayName: {
         param: useRouteQuery('q_displayName'),
-        query: `contains(displayName, %s )`,
+        query: `contains(displayName,'%s')`,
         value: ref('')
       }
     }
@@ -427,7 +428,7 @@ export default defineComponent({
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
-    const filterUsers = async () => {
+    const filterDisplayName = async () => {
       await router.push({
         ...unref(route),
         query: {
@@ -861,7 +862,7 @@ export default defineComponent({
       batchActions,
       filterGroups,
       filterRoles,
-      filterUsers,
+      filterDisplayName,
       filterTermDisplayName,
       quotaModalIsOpen,
       quotaModalWarningMessage,
