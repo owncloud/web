@@ -5,13 +5,12 @@
     controls
     preload="preload"
     :autoplay="isAutoPlayEnabled"
-    @loadedmetadata="updateDimensions"
   >
     <source :src="file.url" :type="file.mimeType" />
   </video>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue'
 import { CachedFile } from '../../helpers/types'
 
 export default defineComponent({
@@ -26,21 +25,28 @@ export default defineComponent({
       default: true
     }
   },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.resizeVideoDimensions)
-  },
-  methods: {
-    updateDimensions() {
-      this.resizeVideoDimensions()
-      window.addEventListener('resize', this.resizeVideoDimensions)
-    },
-    resizeVideoDimensions() {
+  setup() {
+    const video = ref<Ref<HTMLVideoElement | null>>(null)
+    const resizeVideoDimensions = () => {
       const maxHeight = document.querySelector('.stage_media')?.offsetHeight - 10 ?? null
       const maxWidth = document.querySelector('.stage_media')?.offsetWidth - 10 ?? null
-      if (maxHeight && maxWidth && this.$refs.video) {
-        this.$refs.video.style.maxHeight = `${maxHeight}px`
-        this.$refs.video.style.maxWidth = `${maxWidth}px`
+      if (maxHeight && maxWidth && video.value) {
+        video.value.style.maxHeight = `${maxHeight}px`
+        video.value.style.maxWidth = `${maxWidth}px`
       }
+    }
+
+    onMounted(() => {
+      resizeVideoDimensions()
+      window.addEventListener('resize', resizeVideoDimensions)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', resizeVideoDimensions)
+    })
+
+    return {
+      video
     }
   }
 })
