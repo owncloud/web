@@ -29,7 +29,7 @@ export const defineConfig = (overrides = {}) => {
       readFileSync(join(searchForWorkspaceRoot(cwd()), 'package.json')).toString()
     )
 
-    const name = packageJson.name
+    const name = overrides.name || packageJson.name
 
     // take vite standard config and reuse it for rollup-plugin-serve config
     const { https = defaultHttps(), port = 9210, host = 'localhost' } = overrides?.server || {}
