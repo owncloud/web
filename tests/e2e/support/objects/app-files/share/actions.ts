@@ -8,7 +8,7 @@ import { config } from '../../../../config.js'
 import { createdLinkStore } from '../../../store'
 
 const quickShareButton =
-  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-collaborators")]'
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-show-shares")]'
 const noPermissionToShareLabel =
   '//*[@data-testid="files-collaborators-no-reshare-permissions-message"]'
 const actionMenuDropdownButton =

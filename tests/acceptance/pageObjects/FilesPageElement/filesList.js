@@ -199,10 +199,7 @@ module.exports = {
      * @return {Promise<module.exports.commands>}
      */
     isSharingButtonPresent: async function (resource, elementType = 'any') {
-      const sharingBtnSelector = util.format(
-        filesRow.elements.quickAction.selector,
-        'collaborators'
-      )
+      const sharingBtnSelector = util.format(filesRow.elements.quickAction.selector, 'show-shares')
       const resourceRowSelector = this.getFileRowSelectorByFileName(resource, elementType)
       let isPresent = true
 
@@ -622,8 +619,8 @@ module.exports = {
     },
 
     useQuickAction: async function (resource, action) {
-      action = action.replace(/\s/, '-')
-      const actionSelector = util.format(filesRow.elements.quickAction.selector, action)
+      const className = action === 'collaborators' ? 'show-shares' : 'create-quicklink'
+      const actionSelector = util.format(filesRow.elements.quickAction.selector, className)
       const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
 
       await this.waitForFileVisible(resource)

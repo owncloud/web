@@ -474,15 +474,9 @@ export const announceAuthService = ({
 /**
  * @param vue
  */
-export const announcePasswordPolicyService = ({
-  app,
-  store
-}: {
-  app: App
-  store: Store<any>
-}): void => {
+export const announcePasswordPolicyService = ({ app }: { app: App }): void => {
   const language = app.config.globalProperties.$language
-  const passwordPolicyService = new PasswordPolicyService({ store, language })
+  const passwordPolicyService = new PasswordPolicyService({ language })
   app.config.globalProperties.passwordPolicyService = passwordPolicyService
   app.provide('$passwordPolicyService', passwordPolicyService)
 }

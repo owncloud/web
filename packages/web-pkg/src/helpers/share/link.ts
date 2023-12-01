@@ -12,7 +12,6 @@ import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Resource } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
 import { unref } from 'vue'
-import { showQuickLinkPasswordModal } from '../../quickActions'
 import { getLocaleFromLanguage } from '../locale'
 import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 
@@ -28,6 +27,30 @@ export interface CreateQuicklink {
 
 export interface CopyQuickLink extends CreateQuicklink {
   passwordPolicyService: PasswordPolicyService
+}
+
+export function showQuickLinkPasswordModal({ $gettext, store, passwordPolicyService }, onConfirm) {
+  const modal = {
+    variation: 'passive',
+    title: $gettext('Set password'),
+    cancelText: $gettext('Cancel'),
+    confirmText: $gettext('Set'),
+    hasInput: true,
+    inputDescription: $gettext('Passwords for links are required.'),
+    inputPasswordPolicy: passwordPolicyService.getPolicy(),
+    inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
+    inputLabel: $gettext('Password'),
+    inputType: 'password',
+    onInput: () => store.dispatch('setModalInputErrorMessage', ''),
+    onPasswordChallengeCompleted: () => store.dispatch('setModalConfirmButtonDisabled', false),
+    onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
+    onCancel: () => store.dispatch('hideModal'),
+    onConfirm: async (password) => {
+      onConfirm(password)
+    }
+  }
+
+  return store.dispatch('createModal', modal)
 }
 
 // doCopy creates the requested link and copies the url to the clipboard,

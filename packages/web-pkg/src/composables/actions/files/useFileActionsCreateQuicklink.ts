@@ -1,4 +1,3 @@
-import quickActions, { canShare } from '../../../quickActions'
 import { copyQuicklink } from '../../../helpers/share'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 
@@ -12,6 +11,7 @@ import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from '../types'
 import { usePasswordPolicyService } from '../../passwordPolicyService'
+import { useCanShare } from '../../shares'
 
 export const useFileActionsCreateQuickLink = ({
   store
@@ -25,6 +25,7 @@ export const useFileActionsCreateQuickLink = ({
   const ability = useAbility()
   const clientService = useClientService()
   const passwordPolicyService = usePasswordPolicyService()
+  const { canShare } = useCanShare()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
@@ -43,8 +44,7 @@ export const useFileActionsCreateQuickLink = ({
   const actions = computed((): FileAction[] => [
     {
       name: 'create-quicklink',
-      icon: quickActions.quicklink.icon,
-      iconFillType: quickActions.quicklink.iconFillType,
+      icon: 'link',
       label: () => $gettext('Copy link'),
       handler,
       isEnabled: ({ resources }) => {
@@ -56,7 +56,7 @@ export const useFileActionsCreateQuickLink = ({
             return false
           }
         }
-        return canShare(resources[0], store, ability)
+        return canShare(resources[0])
       },
       componentType: 'button',
       class: 'oc-files-actions-create-quicklink-trigger'

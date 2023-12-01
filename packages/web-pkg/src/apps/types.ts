@@ -28,8 +28,7 @@ export interface AppNavigationItem {
 /**
  * ApplicationQuickAction describes an application action that is used in the runtime.
  *
- * @deprecated In the future quick actions should be registered just like any other extension. Fine
- * to use this interface for now, but it will be changed in the near future.
+ * @deprecated Quick actions should be registered as extension via the `files.quick-action` scope.
  */
 export interface ApplicationQuickAction {
   id?: string
@@ -43,8 +42,7 @@ export interface ApplicationQuickAction {
 /**
  * ApplicationQuickActions describes a map of application actions that are used in the runtime
  *
- * @deprecated In the future quick actions should be registered just like any other extension. Fine
- * to use this interface for now, but it will be changed in the near future.
+ * @deprecated Quick actions should be registered as extension via the `files.quick-action` scope.
  */
 export interface ApplicationQuickActions {
   [key: string]: ApplicationQuickAction
@@ -85,6 +83,7 @@ export interface ClassicApplicationScript {
   store?: Module<unknown, unknown>
   routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
+  /** @deprecated Quick actions should be registered as extension via the `files.quick-action` scope. */
   quickActions?: ApplicationQuickActions
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
