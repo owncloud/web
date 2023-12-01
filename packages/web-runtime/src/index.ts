@@ -90,6 +90,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
   announcePreviewService({ app, store, configurationManager })
+  announcePasswordPolicyService({ app })
   await announceClient(runtimeConfiguration)
 
   app.config.globalProperties.$wormhole = createWormhole()
@@ -165,9 +166,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         return
       }
 
-      announcePasswordPolicyService({ app, store })
-
       const clientService = app.config.globalProperties.$clientService
+      const passwordPolicyService = app.config.globalProperties.passwordPolicyService
+      passwordPolicyService.initialize(store)
 
       // Register SSE event listeners
       if (store.getters.capabilities?.core?.['support-sse']) {
