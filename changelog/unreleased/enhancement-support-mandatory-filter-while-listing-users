@@ -1,0 +1,9 @@
+Enhancement: Support mandatory filter while listing users
+
+We've added the configuration option `WEB_OPTION_USER_LIST_REQUIRES_FILTER`.
+If set to true, an active filter is necessary to list users, as well users won't be listed initially.
+This might be necessary for big instances with a lot of users, where the server response might take very long
+or time out while requesting users.
+
+https://github.com/owncloud/web/pull/10099
+https://github.com/owncloud/web/issues/10088

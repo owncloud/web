@@ -541,10 +541,6 @@ export default defineComponent({
       padding: 0 !important;
     }
 
-    .mark-highlight {
-      font-weight: 600;
-    }
-
     @media (max-width: 969px) {
       width: 300px;
     }
