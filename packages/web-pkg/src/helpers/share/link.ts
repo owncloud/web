@@ -80,7 +80,7 @@ export const copyQuicklink = async (args: CopyQuickLink) => {
 
   const linkSharesForResource = await clientService.owncloudSdk.shares.getShares(resource.path, {
     share_types: ShareTypes?.link?.value?.toString(),
-    spaceRef: `${resource.storageId}!${resource.nodeId}`,
+    spaceRef: resource.fileId,
     include_tags: false
   })
 
