@@ -161,10 +161,21 @@ export class AuthService {
         this.userManager.areEventHandlersRegistered = true
       }
 
+      // This is to prevent issues in embed mode when the expired token is still saved but already expired
+      // If the following code gets executed, it would toggle errorOccurred var which would then lead to redirect to the access denied screen
+      if (
+        this.configurationManager.options.embed?.enabled &&
+        this.configurationManager.options.embed.delegateAuthentication
+      ) {
+        return
+      }
+
       // relevant for page reload: token is already in userStore
       // no userLoaded event and no signInCallback gets triggered
       const accessToken = await this.userManager.getAccessToken()
       if (accessToken) {
+        console.info('[authService:initializeContext] - updating context with saved access_token')
+
         try {
           await this.userManager.updateContext(accessToken, fetchUserData)
         } catch (e) {
@@ -190,9 +201,11 @@ export class AuthService {
         this.configurationManager.options.embed.delegateAuthentication &&
         accessToken
       ) {
+        console.info('[authService:signInCallback] - setting access_token and fetching user')
         await this.userManager.updateContext(accessToken, true)
 
         // Setup a listener to handle token refresh
+        console.info('[authService:signInCallback] - adding listener to update-token event')
         window.addEventListener('message', this.handleDelegatedTokenUpdate)
       } else {
         await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
@@ -303,6 +316,7 @@ export class AuthService {
       return
     }
 
+    console.info('[authService:handleDelegatedTokenUpdate] - going to update the access_token')
     this.userManager.updateContext(event.data, false)
   }
 }

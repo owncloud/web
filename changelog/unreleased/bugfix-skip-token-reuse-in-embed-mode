@@ -1,0 +1,6 @@
+Bugfix: Skip reusing saved token in Embed mode with delegated authentication
+
+We've stopped reusing saved token in the AuthService when Web is included in Embed mode with delegated authentication.
+The parent application is responsible for handling the access_token.
+
+https://github.com/owncloud/web/pull/10113
