@@ -199,7 +199,6 @@ export const createQuickLink = async (args: createLinkArgs): Promise<string> => 
   const { page, resource, password } = args
   let url = ''
   const linkName = 'Link'
-  await page.pause()
 
   await clickActionInContextMenu({ page, resource }, 'create-quicklink')
   await page.locator(passwordInput).fill(password)
