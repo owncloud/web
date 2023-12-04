@@ -84,32 +84,25 @@ Feature: spaces public link
     And "David" logs out
 
 
-  Scenario: add banned password for public link
+  Scenario: Quick link
     Given "Admin" creates following users using API
       | id    |
       | Alice |
-    And "Alice" logs in
-    And "Alice" uploads the following resources
-      | resource  |
-      | lorem.txt |
-    And "Alice" creates a public link for the resource "lorem.txt" with password "%public%" using the sidebar panel
-    And "Alice" renames the most recently created public link of resource "lorem.txt" to "myPublicLink"
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "myPublicLink" of resource "lorem.txt"
-    Then "Alice" should see an error message
-      """
-      Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
-      """
-    And "Alice" closes the public link password dialog box
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "myPublicLink" of resource "lorem.txt"
-    Then "Alice" should see an error message
-      """
-      Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
-      """
-    And "Alice" reveals the password of the public link
-    And "Alice" hides the password of the public link
-    And "Alice" generates the password for the public link
-    And "Alice" copies the password of the public link
-    And "Alice" sets the password of the public link
-    And "Anonymous" opens the public link "myPublicLink"
-    And "Anonymous" unlocks the public link with password "%copied_password%"
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    When "Alice" logs in
+    And "Alice" creates the following project space using API
+      | name | id     |
+      | team | team.1 |
+    And "Alice" creates the following file in space "team" using API
+      | name     | content   |
+      | file.txt | some text |
+    And "Alice" navigates to the projects space page
+    And "Alice" navigates to the project space "team.1"
+    When "Alice" creates quick link of the resource "file.txt" with password "%public%" from the context menu
+    And "Anonymous" opens the public link "Link"
+    And "Anonymous" unlocks the public link with password "%public%"
+    Then "Anonymous" is in a text-editor
+    And "Anonymous" closes the file viewer
     And "Alice" logs out
