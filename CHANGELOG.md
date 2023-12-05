@@ -985,6 +985,7 @@ Summary
 * Enhancement - Allow local storage for auth token: [#9386](https://github.com/owncloud/web/pull/9386)
 * Enhancement - Button styling: [#9394](https://github.com/owncloud/web/pull/9394)
 * Enhancement - Add error log to upload dialog: [#9436](https://github.com/owncloud/web/pull/9436)
+* Enhancement - Error notifications include x-request-id: [#9482](https://github.com/owncloud/web/pull/9482)
 
 Details
 -------
@@ -1400,6 +1401,19 @@ Details
 
    https://github.com/owncloud/web/issues/9430
    https://github.com/owncloud/web/pull/9436
+   https://github.com/owncloud/web/pull/9426
+
+* Enhancement - Error notifications include x-request-id: [#9482](https://github.com/owncloud/web/pull/9482)
+
+   We've added a details box for the notifications, that pop up if an operation
+   (e.g upload, download, add a share) fails. This box contains the x-request-id
+   and may help to debug the error on the server side.
+
+   https://github.com/owncloud/web/issues/9449
+   https://github.com/owncloud/web/pull/9482
+   https://github.com/owncloud/web/pull/9474
+   https://github.com/owncloud/web/pull/9466
+   https://github.com/owncloud/web/pull/9448
    https://github.com/owncloud/web/pull/9426
 
 Changelog for ownCloud Web [7.0.2] (2023-06-14)
