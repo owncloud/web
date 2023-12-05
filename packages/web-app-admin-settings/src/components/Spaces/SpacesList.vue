@@ -280,7 +280,8 @@ export default defineComponent({
         name: 'name',
         title: $gettext('Name'),
         type: 'slot',
-        sortable: true
+        sortable: true,
+        tdClass: 'mark-element'
       },
       {
         name: 'manager',
@@ -385,7 +386,7 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(() => {
-        markInstance.value = new Mark('td.oc-table-data-cell-name')
+        markInstance.value = new Mark('.mark-element')
       })
     })
 
@@ -397,7 +398,7 @@ export default defineComponent({
       unref(markInstance)?.unmark()
       unref(markInstance)?.mark(unref(filterTerm), {
         element: 'span',
-        className: 'highlight-mark'
+        className: 'mark-highlight'
       })
     })
 
@@ -519,10 +520,6 @@ export default defineComponent({
 <style lang="scss">
 #spaces-filter {
   width: 16rem;
-}
-
-.highlight-mark {
-  font-weight: 600;
 }
 
 .spaces-table {

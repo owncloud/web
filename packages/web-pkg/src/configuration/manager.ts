@@ -62,6 +62,7 @@ export class ConfigurationManager {
   set customTranslations(customTranslations: Array<CustomTranslation>) {
     this.runtimeConfiguration.customTranslations = customTranslations || []
   }
+
   get customTranslations(): Array<CustomTranslation> {
     return this.runtimeConfiguration.customTranslations
   }
@@ -116,6 +117,11 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'loginUrl', get(options, 'loginUrl', ''))
     set(this.optionsConfiguration, 'disabledExtensions', get(options, 'disabledExtensions', []))
     set(this.optionsConfiguration, 'isRunningOnEos', get(options, 'isRunningOnEos', false))
+    set(
+      this.optionsConfiguration,
+      'userListRequiresFilter',
+      get(options, 'userListRequiresFilter', false)
+    )
 
     set(this.optionsConfiguration, 'ocm.openRemotely', get(options, 'ocm.openRemotely', false))
 

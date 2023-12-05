@@ -228,7 +228,7 @@ export default defineComponent({
       instance.unmark()
       instance.mark(unref(filterTerm), {
         element: 'span',
-        className: 'highlight-mark',
+        className: 'mark-highlight',
         exclude: ['th *', 'tfoot *']
       })
     })
@@ -261,9 +261,5 @@ export default defineComponent({
 <style lang="scss">
 #spaces-filter {
   width: 16rem;
-}
-
-.highlight-mark {
-  font-weight: 600;
 }
 </style>

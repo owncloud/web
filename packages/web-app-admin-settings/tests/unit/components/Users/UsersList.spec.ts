@@ -87,24 +87,6 @@ describe('UsersList', () => {
       ])
     })
   })
-
-  describe('method "filter"', () => {
-    it('should return a list containing record admin if search term is "ad"', () => {
-      const { wrapper } = getWrapper()
-
-      expect(wrapper.vm.filter([{ displayName: 'user' }, { displayName: 'admin' }], 'ad')).toEqual([
-        { displayName: 'admin' }
-      ])
-    })
-    it('should return an an empty list if search term does not match any entry', () => {
-      const { wrapper } = getWrapper()
-
-      expect(
-        wrapper.vm.filter([{ displayName: 'admin' }, { displayName: 'user' }], 'jana')
-      ).toEqual([])
-    })
-  })
-
   it('emits events on row click', () => {
     const users = getUserMocks()
     const { wrapper } = getWrapper({ props: { users } })

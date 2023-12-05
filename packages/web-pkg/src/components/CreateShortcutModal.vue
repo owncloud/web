@@ -378,7 +378,7 @@ export default defineComponent({
         markInstance.unmark()
         markInstance.mark(unref(inputUrl), {
           element: 'span',
-          className: 'highlight-mark',
+          className: 'mark-highlight',
           exclude: ['.selectable-item-url *', '.create-shortcut-modal-search-separator *']
         })
       },

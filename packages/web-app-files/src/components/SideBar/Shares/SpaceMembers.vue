@@ -133,7 +133,7 @@ export default defineComponent({
           this.markInstance.unmark()
           this.markInstance.mark(this.filterTerm, {
             element: 'span',
-            className: 'highlight-mark'
+            className: 'mark-highlight'
           })
         }
       })
@@ -222,9 +222,6 @@ export default defineComponent({
 </script>
 
 <style>
-.highlight-mark {
-  font-weight: 600;
-}
 .space-members-filter {
   max-width: 160px;
 }

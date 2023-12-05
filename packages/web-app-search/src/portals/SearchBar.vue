@@ -341,7 +341,7 @@ export default defineComponent({
             this.markInstance.unmark()
             this.markInstance.mark(this.term, {
               element: 'span',
-              className: 'highlight-mark',
+              className: 'mark-highlight',
               exclude: ['.provider-details *']
             })
           }
@@ -538,10 +538,6 @@ export default defineComponent({
 
     .oc-card {
       padding: 0 !important;
-    }
-
-    .highlight-mark {
-      font-weight: 600;
     }
 
     @media (max-width: 969px) {
