@@ -187,43 +187,39 @@ export default defineComponent({
         items: unref(selectedGroups)
       }
     })
-    const sideBarAvailablePanels = computed<SideBarPanel<any, Group>[]>(() => {
-      return (
-        [
-          {
-            name: 'DetailsPanel',
-            icon: 'group-2',
-            title: () => $gettext('Group details'),
-            component: DetailsPanel,
-            componentAttrs: () => ({ groups: unref(selectedGroups) }),
-            isRoot: () => true,
-            isEnabled: () => true
-          },
-          {
-            name: 'EditPanel',
-            icon: 'pencil',
-            title: () => $gettext('Edit group'),
-            component: EditPanel,
-            componentAttrs: ({ items }) => {
-              return {
-                group: items.length === 1 ? items[0] : null,
-                onConfirm: onEditGroup
-              }
-            },
-            isEnabled: ({ items }) => {
-              return items.length === 1 && !items[0].groupTypes?.includes('ReadOnly')
-            }
-          },
-          {
-            name: 'GroupMembers',
-            icon: 'group',
-            title: () => $gettext('Members'),
-            component: MembersPanel,
-            isEnabled: ({ items }) => items.length === 1
+    const sideBarAvailablePanels = [
+      {
+        name: 'DetailsPanel',
+        icon: 'group-2',
+        title: () => $gettext('Group details'),
+        component: DetailsPanel,
+        componentAttrs: () => ({ groups: unref(selectedGroups) }),
+        isRoot: () => true,
+        isEnabled: () => true
+      },
+      {
+        name: 'EditPanel',
+        icon: 'pencil',
+        title: () => $gettext('Edit group'),
+        component: EditPanel,
+        componentAttrs: ({ items }) => {
+          return {
+            group: items.length === 1 ? items[0] : null,
+            onConfirm: onEditGroup
           }
-        ] satisfies SideBarPanel<any, Group>[]
-      ).filter((p) => p.isEnabled(unref(sideBarPanelContext)))
-    })
+        },
+        isEnabled: ({ items }) => {
+          return items.length === 1 && !items[0].groupTypes?.includes('ReadOnly')
+        }
+      },
+      {
+        name: 'GroupMembers',
+        icon: 'group',
+        title: () => $gettext('Members'),
+        component: MembersPanel,
+        isEnabled: ({ items }) => items.length === 1
+      }
+    ] satisfies SideBarPanel<any, Group>[]
 
     onMounted(async () => {
       await loadResourcesTask.perform()

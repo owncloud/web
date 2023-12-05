@@ -165,7 +165,6 @@ export default defineComponent({
       extensionRegistry
         .requestExtensions<SidebarPanelExtension<Resource, Resource>>('sidebarPanel', 'resource')
         .map((e) => e.panel)
-        .filter((p) => p.isEnabled(unref(panelContext)))
     )
 
     watch(

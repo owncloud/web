@@ -10,10 +10,10 @@
     <oc-spinner v-if="loading" />
     <template v-else>
       <div
-        v-for="panel in availablePanels"
+        v-for="panel in panels"
         :id="`sidebar-panel-${panel.name}`"
         :key="`panel-${panel.name}`"
-        ref="panels"
+        ref="panelContainer"
         :data-testid="`sidebar-panel-${panel.name}`"
         :tabindex="activePanelName === panel.name ? -1 : null"
         class="sidebar-panel"
@@ -67,13 +67,11 @@
             </div>
 
             <div
-              v-if="panel.isRoot?.(panelContext) && availablePanels.length > 1"
+              v-if="panel.isRoot?.(panelContext) && subPanels.length > 0"
               class="sidebar-panel__navigation oc-mt-m"
             >
               <oc-button
-                v-for="panelSelect in availablePanels.filter(
-                  (p) => !p.isRoot?.(panelContext) && p.isEnabled(panelContext) !== false
-                )"
+                v-for="panelSelect in subPanels"
                 :id="`sidebar-panel-${panelSelect.name}-select`"
                 :key="`panel-select-${panelSelect.name}`"
                 :data-testid="`sidebar-panel-${panelSelect.name}-select`"
@@ -94,7 +92,7 @@
 
 <script lang="ts">
 import { VisibilityObserver } from '../../observer'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { SideBarPanel, SideBarPanelContext } from './types'
 
 let visibilityObserver: VisibilityObserver
@@ -130,6 +128,17 @@ export default defineComponent({
     }
   },
   emits: ['close', 'selectPanel'],
+  setup(props) {
+    const panels = computed(() =>
+      props.availablePanels.filter((p) => p.isEnabled(props.panelContext))
+    )
+    const subPanels = computed(() => unref(panels).filter((p) => !p.isRoot?.(props.panelContext)))
+
+    return {
+      panels,
+      subPanels
+    }
+  },
 
   data() {
     return {
@@ -145,7 +154,7 @@ export default defineComponent({
       if (!panelName) {
         return null
       }
-      if (!this.availablePanels.map((p) => p.name).includes(panelName)) {
+      if (!this.panels.map((p) => p.name).includes(panelName)) {
         return null
       }
       return panelName
@@ -154,7 +163,7 @@ export default defineComponent({
       return this.activeAvailablePanelName || this.rootPanel.name
     },
     rootPanel() {
-      return this.availablePanels.find((panel) => panel.isRoot?.(this.panelContext))
+      return this.panels.find((panel) => panel.isRoot?.(this.panelContext))
     },
     accessibleLabelBack() {
       return this.$gettext('Back to %{panel} panel', {
@@ -236,13 +245,13 @@ export default defineComponent({
         this.oldPanelName = null
       }
 
-      if (!this.$refs.panels) {
+      if (!this.$refs.panelContainer) {
         return
       }
 
       visibilityObserver.disconnect()
       hiddenObserver.disconnect()
-      ;(this.$refs.panels as HTMLElement[]).forEach((panel) => {
+      ;(this.$refs.panelContainer as HTMLElement[]).forEach((panel) => {
         visibilityObserver.observe(panel, {
           onEnter: doFocus,
           onExit: doFocus

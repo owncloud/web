@@ -221,8 +221,6 @@ export default defineComponent({
 
         space.value = unref(unref(currentFileContext).space)
         resource.value = yield getFileInfo(currentFileContext)
-        // FIXME: setter only writes ids => files need to be loaded into activeFiles array as well
-        // FIXME: currentFolder not null every time... needs some more thought
         store.commit('Files/LOAD_FILES', { currentFolder: null, files: [unref(resource)] })
         selectedResources.value = [unref(resource)]
 

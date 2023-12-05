@@ -971,38 +971,34 @@ export default defineComponent({
         items: unref(selectedUsers)
       }
     })
-    const sideBarAvailablePanels = computed<SideBarPanel<any, User>[]>(() => {
-      return (
-        [
-          {
-            name: 'DetailsPanel',
-            icon: 'user',
-            title: () => $gettext('User details'),
-            component: DetailsPanel,
-            componentAttrs: ({ items }) => ({
-              user: items.length === 1 ? items[0] : null,
-              users: items,
-              roles: unref(roles)
-            }),
-            isRoot: () => true,
-            isEnabled: () => true
-          },
-          {
-            name: 'EditPanel',
-            icon: 'pencil',
-            title: () => $gettext('Edit user'),
-            component: EditPanel,
-            isEnabled: ({ items }) => items.length === 1,
-            componentAttrs: ({ items }) => ({
-              user: items.length === 1 ? items[0] : null,
-              roles: unref(roles),
-              groups: unref(groups),
-              onConfirm: onEditUser
-            })
-          }
-        ] satisfies SideBarPanel<any, User>[]
-      ).filter((p) => p.isEnabled(unref(sideBarPanelContext)))
-    })
+    const sideBarAvailablePanels = [
+      {
+        name: 'DetailsPanel',
+        icon: 'user',
+        title: () => $gettext('User details'),
+        component: DetailsPanel,
+        componentAttrs: ({ items }) => ({
+          user: items.length === 1 ? items[0] : null,
+          users: items,
+          roles: unref(roles)
+        }),
+        isRoot: () => true,
+        isEnabled: () => true
+      },
+      {
+        name: 'EditPanel',
+        icon: 'pencil',
+        title: () => $gettext('Edit user'),
+        component: EditPanel,
+        isEnabled: ({ items }) => items.length === 1,
+        componentAttrs: ({ items }) => ({
+          user: items.length === 1 ? items[0] : null,
+          roles: unref(roles),
+          groups: unref(groups),
+          onConfirm: onEditUser
+        })
+      }
+    ] satisfies SideBarPanel<any, User>[]
 
     return {
       ...useSideBar(),

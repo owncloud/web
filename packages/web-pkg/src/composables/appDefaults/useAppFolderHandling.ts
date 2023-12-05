@@ -80,6 +80,7 @@ export function useAppFolderHandling({
 
       if (resource.type === 'file') {
         store.commit('Files/LOAD_FILES', {
+          // FIXME: currentFolder should be null?!
           currentFolder: resource,
           files: [resource]
         })

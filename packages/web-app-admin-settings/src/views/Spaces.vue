@@ -196,57 +196,53 @@ export default defineComponent({
         items: unref(selectedSpaces)
       }
     })
-    const sideBarAvailablePanels = computed<SideBarPanel<any, SpaceResource>[]>(() => {
-      return (
-        [
-          {
-            name: 'SpaceNoSelection',
-            icon: 'layout-grid',
-            title: () => $gettext('Details'),
-            component: SpaceNoSelection,
-            isRoot: () => true,
-            isEnabled: ({ items }) => items.length === 0
-          },
-          {
-            name: 'SpaceDetails',
-            icon: 'layout-grid',
-            title: () => $gettext('Details'),
-            component: SpaceDetails,
-            componentAttrs: () => ({
-              showSpaceImage: false,
-              showShareIndicators: false
-            }),
-            isRoot: () => true,
-            isEnabled: ({ items }) => items.length === 1
-          },
-          {
-            name: 'SpaceDetailsMultiple',
-            icon: 'layout-grid',
-            title: () => $gettext('Details'),
-            component: SpaceDetailsMultiple,
-            componentAttrs: ({ items }) => ({
-              selectedSpaces: items
-            }),
-            isRoot: () => true,
-            isEnabled: ({ items }) => items.length > 1
-          },
-          {
-            name: 'SpaceActions',
-            icon: 'slideshow-3',
-            title: () => $gettext('Actions'),
-            component: ActionsPanel,
-            isEnabled: ({ items }) => items.length === 1
-          },
-          {
-            name: 'SpaceMembers',
-            icon: 'group',
-            title: () => $gettext('Members'),
-            component: MembersPanel,
-            isEnabled: ({ items }) => items.length === 1
-          }
-        ] satisfies SideBarPanel<any, SpaceResource>[]
-      ).filter((p) => p.isEnabled(unref(sideBarPanelContext)))
-    })
+    const sideBarAvailablePanels = [
+      {
+        name: 'SpaceNoSelection',
+        icon: 'layout-grid',
+        title: () => $gettext('Details'),
+        component: SpaceNoSelection,
+        isRoot: () => true,
+        isEnabled: ({ items }) => items.length === 0
+      },
+      {
+        name: 'SpaceDetails',
+        icon: 'layout-grid',
+        title: () => $gettext('Details'),
+        component: SpaceDetails,
+        componentAttrs: () => ({
+          showSpaceImage: false,
+          showShareIndicators: false
+        }),
+        isRoot: () => true,
+        isEnabled: ({ items }) => items.length === 1
+      },
+      {
+        name: 'SpaceDetailsMultiple',
+        icon: 'layout-grid',
+        title: () => $gettext('Details'),
+        component: SpaceDetailsMultiple,
+        componentAttrs: ({ items }) => ({
+          selectedSpaces: items
+        }),
+        isRoot: () => true,
+        isEnabled: ({ items }) => items.length > 1
+      },
+      {
+        name: 'SpaceActions',
+        icon: 'slideshow-3',
+        title: () => $gettext('Actions'),
+        component: ActionsPanel,
+        isEnabled: ({ items }) => items.length === 1
+      },
+      {
+        name: 'SpaceMembers',
+        icon: 'group',
+        title: () => $gettext('Members'),
+        component: MembersPanel,
+        isEnabled: ({ items }) => items.length === 1
+      }
+    ] satisfies SideBarPanel<any, SpaceResource>[]
 
     onMounted(async () => {
       await loadResourcesTask.perform()
