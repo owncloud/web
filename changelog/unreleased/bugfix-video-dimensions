@@ -1,0 +1,7 @@
+Bugfix: Displaying full video in their dimensions
+
+Fixed bug which set video width and height to 100% of the screen size instead of the video size.
+This bug made unable to see full video in 1080x1920, while 1920x1080 might have been slightly copped.
+
+https://github.com/owncloud/web/issues/10010
+https://github.com/owncloud/web/pull/10101
