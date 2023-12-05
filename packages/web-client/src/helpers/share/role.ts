@@ -203,8 +203,8 @@ export const peopleRoleDenyFolder = new PeopleShareRole(
 export const linkRoleInternalFile = new LinkShareRole(
   'internal',
   false,
-  $gettext('Invited People'),
-  $gettext('invited People'),
+  $gettext('Invited people'),
+  $gettext('invited people'),
   'user',
   [SharePermissions.internal],
   $gettext('Only for invited people')

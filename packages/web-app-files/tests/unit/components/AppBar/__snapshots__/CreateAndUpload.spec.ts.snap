@@ -5,7 +5,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
 
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
-    <button aria-label="Create a new folder" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-folder-btn" type="button">
+    <button aria-label="New folder" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-folder-btn" type="button">
       <!--v-if-->
       <!-- @slot Content of the button -->
       <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="resource-type-folder" size="medium" type="span" variation="passive"></oc-icon-stub>

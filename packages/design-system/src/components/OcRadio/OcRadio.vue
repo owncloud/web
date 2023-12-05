@@ -52,6 +52,7 @@ export default defineComponent({
      **/
     // eslint-disable-next-line vue/require-prop-types
     modelValue: {
+      type: [String, Number, Boolean, Object],
       required: false,
       default: false
     },
@@ -127,7 +128,7 @@ export default defineComponent({
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  border: 1px solid var(--oc-color-input-border);
+  border: 1px solid var(--oc-color-swatch-brand-default);
   border-radius: 50%;
   box-sizing: border-box;
   background-color: var(--oc-color-input-bg);
@@ -148,7 +149,7 @@ export default defineComponent({
   }
 
   &:checked {
-    background-color: var(--oc-color-swatch-brand-default);
+    background-color: var(--oc-color-background-highlight);
   }
 
   &.oc-radio-s {

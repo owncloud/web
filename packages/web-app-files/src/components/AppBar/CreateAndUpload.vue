@@ -491,7 +491,7 @@ export default defineComponent({
         return tooltip
       }
       if (!this.createFileActionsAvailable) {
-        return this.$gettext('Create a new folder')
+        return this.$gettext('New folder')
       }
       return this.$gettext('Create new files or folders')
     },

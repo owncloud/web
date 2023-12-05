@@ -5,23 +5,14 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
-import { getDefaultLinkPermissions } from '@ownclouders/web-pkg'
-import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
-import { computed } from 'vue'
-
-const mockPostMessage = jest.fn()
-const mockUseEmbedMode = jest
-  .fn()
-  .mockReturnValue({ isLocationPicker: computed(() => false), postMessage: mockPostMessage })
+import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
+import { mock } from 'jest-mock-extended'
+import { ref } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  createQuicklink: jest.fn().mockImplementation(({ resource, password }) => ({
-    url: (password ? password + '-' : '') + 'link-' + resource.id
-  })),
-  showQuickLinkPasswordModal: jest.fn().mockImplementation((_options, cb) => cb('password')),
-  getDefaultLinkPermissions: jest.fn(),
-  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
+  useFileActionsCreateLink: jest.fn(),
+  useEmbedMode: jest.fn()
 }))
 
 const selectors = Object.freeze({
@@ -31,10 +22,6 @@ const selectors = Object.freeze({
 })
 
 describe('EmbedActions', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('select action', () => {
     it('should disable select action when no resources are selected', () => {
       const { wrapper } = getWrapper()
@@ -49,132 +36,71 @@ describe('EmbedActions', () => {
     })
 
     it('should emit select event when the select action is triggered', async () => {
-      const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
+      const { wrapper, mocks } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       await wrapper.find(selectors.btnSelect).trigger('click')
 
-      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:select', [{ id: 1 }])
+      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:select', [{ id: 1 }])
     })
 
     it('should enable select action when embedTarget is set to location', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => true),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper()
+      const { wrapper } = getWrapper({ isLocationPicker: true })
 
       expect(wrapper.find(selectors.btnSelect).attributes()).not.toHaveProperty('disabled')
     })
 
     it('should emit select event with currentFolder as selected resource when select action is triggered', async () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => true),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper({
-        currentFolder: { id: 1 }
+      const { wrapper, mocks } = getWrapper({
+        currentFolder: { id: 1 },
+        isLocationPicker: true
       })
 
       await wrapper.find(selectors.btnSelect).trigger('click')
 
-      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:select', [{ id: 1 }])
+      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:select', [{ id: 1 }])
     })
   })
 
   describe('cancel action', () => {
     it('should emit cancel event when the cancel action is triggered', async () => {
-      const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
+      const { wrapper, mocks } = getWrapper({ selectedFiles: [{ id: 1 }] })
 
       await wrapper.find(selectors.btnCancel).trigger('click')
 
-      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:cancel', null)
+      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:cancel', null)
     })
   })
 
   describe('share action', () => {
-    it('should disable share action when link creation is disabled', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => false),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
+    it('should disable share action when no resources are selected', () => {
+      const { wrapper } = getWrapper()
 
       expect(wrapper.find(selectors.btnShare).attributes()).toHaveProperty('disabled')
     })
 
-    it('should disable share action when no resources are selected', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => false),
-        postMessage: mockPostMessage
+    it('should disable share action when the "Create Link"-action is disabled', () => {
+      const { wrapper } = getWrapper({
+        selectedFiles: [{ id: 1 }],
+        createLinksActionEnabled: false
       })
-
-      const { wrapper } = getWrapper()
-
       expect(wrapper.find(selectors.btnShare).attributes()).toHaveProperty('disabled')
     })
 
     it('should enable share action when at least one resource is selected and link creation is enabled', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => false),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper({
-        selectedFiles: [{ id: 1 }],
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }]
-      })
-
+      const { wrapper } = getWrapper({ selectedFiles: [{ id: 1 }] })
       expect(wrapper.find(selectors.btnShare).attributes()).not.toHaveProperty('disabled')
     })
 
-    it('should emit share event when share action is triggered', async () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => false),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper({
-        selectedFiles: [{ id: 1 }],
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }]
-      })
-
-      await wrapper.find(selectors.btnShare).trigger('click')
-
-      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:share', ['link-1'])
-    })
-
-    it('should ask for password first when required when share action is triggered', async () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => false),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper({
-        selectedFiles: [{ id: 1 }],
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }],
-        defaultLinkPermissions: SharePermissionBit.Read,
-        capabilities: jest.fn().mockReturnValue({
-          files_sharing: { public: { password: { enforced_for: { read_only: true } } } }
-        })
-      })
-
-      await wrapper.find(selectors.btnShare).trigger('click')
-
-      expect(mockPostMessage).toHaveBeenCalledWith('owncloud-embed:share', ['password-link-1'])
-    })
-
     it('should hide share action when embedTarget is set to location', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isLocationPicker: computed(() => true),
-        postMessage: mockPostMessage
-      })
-
-      const { wrapper } = getWrapper()
+      const { wrapper } = getWrapper({ isLocationPicker: true })
 
       expect(wrapper.find(selectors.btnShare).exists()).toBe(false)
+    })
+
+    it('should call the handler of the "Create Link"-action', async () => {
+      const { wrapper, mocks } = getWrapper({ selectedFiles: [{ id: 1 }] })
+      await wrapper.find(selectors.btnShare).trigger('click')
+      expect(mocks.createLinkHandlerMock).toHaveBeenCalledTimes(1)
     })
   })
 })
@@ -182,17 +108,35 @@ describe('EmbedActions', () => {
 function getWrapper(
   {
     selectedFiles = [],
-    abilities = [],
     capabilities = jest.fn().mockReturnValue({}),
     currentFolder = {},
-    defaultLinkPermissions = SharePermissionBit.Internal
+    createLinksActionEnabled = true,
+    isLocationPicker = false
   } = {
     selectedFiles: [],
-    abilities: [],
     capabilities: jest.fn().mockReturnValue({})
   }
 ) {
-  jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
+  const postMessageMock = jest.fn()
+  jest.mocked(useEmbedMode).mockReturnValue(
+    mock<ReturnType<typeof useEmbedMode>>({
+      isLocationPicker: ref(isLocationPicker),
+      postMessage: postMessageMock
+    })
+  )
+
+  const createLinkHandlerMock = jest.fn()
+  jest.mocked(useFileActionsCreateLink).mockReturnValue(
+    mock<ReturnType<typeof useFileActionsCreateLink>>({
+      actions: ref([
+        mock<FileAction>({
+          isEnabled: () => createLinksActionEnabled,
+          handler: createLinkHandlerMock
+        })
+      ])
+    })
+  )
+
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
@@ -213,10 +157,11 @@ function getWrapper(
   }
 
   return {
+    mocks: { createLinkHandlerMock, postMessageMock },
     wrapper: shallowMount(EmbedActions, {
       global: {
         stubs: { OcButton: false },
-        plugins: [...defaultPlugins({ abilities }), createStore(storeOptions)]
+        plugins: [...defaultPlugins(), createStore(storeOptions)]
       }
     })
   }

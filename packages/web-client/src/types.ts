@@ -57,6 +57,7 @@ export type OwnCloudSdk = {
     getUnprotectedTokenInfo(...args): any
     shareFileWithGroup(...args): any
     shareFileWithUser(...args): any
+    shareFileWithLink(...args): any
     deleteShare(...args): any
     updateShare(...args): any
     notifyShare(...args): any
