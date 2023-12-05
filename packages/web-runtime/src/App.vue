@@ -245,4 +245,3 @@ iframe {
   border: 0;
 }
 </style>
-@ownclouders/web-pkg/src/composables/piniaStores/theme

@@ -104,13 +104,22 @@ export const useThemeStore = defineStore('theme', () => {
     const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, theme.name)
     currentLocalStorageThemeName.value = currentTheme.value.name
 
-    // TODO: Shouldn't we loop over all designTokens and set them?
-    for (const param in currentTheme.value.designTokens?.colorPalette) {
-      ;(document.querySelector(':root') as HTMLElement).style.setProperty(
-        `--oc-color-${param}`,
-        theme.designTokens.colorPalette[param]
-      )
-    }
+    const customizableDesignTokens = [
+      { name: 'breakpoints', prefix: 'breakpoint' },
+      { name: 'colorPalette', prefix: 'color' },
+      { name: 'fontSizes', prefix: 'font-size' },
+      { name: 'sizes', prefix: 'size' },
+      { name: 'spacing', prefix: 'spacing' }
+    ]
+
+    customizableDesignTokens.forEach((token) => {
+      for (const param in currentTheme.value.designTokens[token.name]) {
+        ;(document.querySelector(':root') as HTMLElement).style.setProperty(
+          `--oc-${token.prefix}-${param}`,
+          theme.designTokens[token.name][param]
+        )
+      }
+    })
   }
 
   // This should only be used with hasOnlyTwoThemesForLightDarkMode - we know there's exactly two themes, one with darkMode and one without
