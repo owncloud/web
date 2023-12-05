@@ -26,7 +26,7 @@
     </div>
     <template v-if="!isEmbedModeEnabled">
       <portal to="app.runtime.header.right" :order="50">
-        <theme-switcher v-if="!hasOnlyOneTheme" />
+        <theme-switcher />
         <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
       </portal>
       <portal to="app.runtime.header.right" :order="100">
@@ -39,6 +39,9 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
+import { computed, unref, PropType, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { mapGetters } from 'vuex'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
@@ -55,8 +58,6 @@ import {
   useThemeStore,
   useUserContext
 } from '@ownclouders/web-pkg'
-import { computed, unref, PropType, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
 
 export default {
   components: {
@@ -75,7 +76,9 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    const { currentTheme, hasOnlyOneTheme } = useThemeStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
     const notificationsSupport = useCapabilityNotifications()
     const isUserContext = useUserContext({ store })
     const language = useGettext()
@@ -184,7 +187,6 @@ export default {
       contentOnLeftPortal,
       currentTheme,
       updateLeftPortal,
-      hasOnlyOneTheme,
       isNotificationBellEnabled,
       userMenuItems,
       appMenuItems,

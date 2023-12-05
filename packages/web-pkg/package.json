@@ -29,6 +29,7 @@
     "@uppy/xhr-upload": "^3.0.1",
     "@vueuse/core": "^10.0.0",
     "axios": "1.6.2",
+    "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
     "filesize": "^9.0.11",
     "fuse.js": "6.6.2",

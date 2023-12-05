@@ -14,33 +14,33 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useRouter, useStore } from '@ownclouders/web-pkg'
+import { useRouter, useThemeStore } from '@ownclouders/web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'LogoutPage',
   setup() {
     const router = useRouter()
-    const store = useStore()
     const { $gettext } = useGettext()
+    const themeStore = useThemeStore()
+
+    const { currentTheme } = storeToRefs(themeStore)
 
     authService.logoutUser().then(() => {
       router.push({ name: 'login' })
     })
 
-    const logoImg = computed(() => {
-      return store.getters.configuration.currentTheme.logo.login
-    })
     const cardTitle = computed(() => {
       return $gettext('Logout in progress')
     })
     const cardHint = computed(() => {
       return $gettext("Please wait while you're being logged out.")
     })
-    const footerSlogan = computed(() => {
-      return store.getters.configuration.currentTheme.general.slogan
-    })
+
+    const footerSlogan = computed(() => currentTheme.value.common.slogan)
+    const logoImg = computed(() => currentTheme.value.logo.login)
 
     return {
       logoImg,

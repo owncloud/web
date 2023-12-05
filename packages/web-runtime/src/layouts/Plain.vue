@@ -10,22 +10,20 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useRouteMeta, useStore } from '@ownclouders/web-pkg'
+import { useRouteMeta, useThemeStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'PlainLayout',
   setup() {
-    const store = useStore()
     const { $gettext } = useGettext()
+    const { currentTheme } = useThemeStore()
     const title = useRouteMeta('title')
 
     const pageTitle = computed(() => {
       return $gettext(unref(title) || '')
     })
-    const backgroundImg = computed(() => {
-      return store.getters.configuration?.currentTheme?.loginPage?.backgroundImg
-    })
+    const backgroundImg = computed(() => currentTheme.loginPage.backgroundImg)
 
     return {
       pageTitle,

@@ -17,24 +17,23 @@
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
-import { useEmbedMode, useRoute, useStore } from '@ownclouders/web-pkg'
+import { useEmbedMode, useRoute, useThemeStore } from '@ownclouders/web-pkg'
 import { authService } from 'web-runtime/src/services/auth'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'OidcCallbackPage',
   setup() {
-    const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
     const { isDelegatingAuthentication, postMessage, verifyDelegatedAuthenticationOrigin } =
       useEmbedMode()
 
     const error = ref(false)
 
-    const logoImg = computed(() => {
-      return store.getters.configuration.currentTheme.logo.login
-    })
-    const footerSlogan = computed(() => {
-      return store.getters.configuration.currentTheme.general.slogan
-    })
+    const footerSlogan = computed(() => currentTheme.value.common.slogan)
+    const logoImg = computed(() => currentTheme.value.logo.login)
 
     const route = useRoute()
 

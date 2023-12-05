@@ -747,6 +747,9 @@ importers:
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
+      pinia:
+        specifier: 2.1.7
+        version: 2.1.7(typescript@5.0.3)(vue@3.3.8)
       qs:
         specifier: 6.11.2
         version: 6.11.2
@@ -1040,6 +1043,9 @@ importers:
       axios:
         specifier: 1.6.2
         version: 1.6.2
+      deepmerge:
+        specifier: ^4.2.2
+        version: 4.2.2
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -17396,7 +17402,7 @@ packages:
       '@vue/devtools-api': 6.5.0
       typescript: 5.0.3
       vue: 3.3.8(typescript@5.0.3)
-      vue-demi: 0.14.5(vue@3.3.8)
+      vue-demi: 0.14.6(vue@3.3.8)
     dev: false
 
   /pinkie-promise@2.0.1:

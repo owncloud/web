@@ -69,6 +69,7 @@ import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { useStore, useThemeStore } from '@ownclouders/web-pkg'
 import { RouteLocation } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -76,7 +77,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const { currentTheme } = useThemeStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
     const router = useRouter()
     useHead({ store })
 
@@ -216,7 +219,7 @@ export default defineComponent({
       const titleSegments = [routeTitle]
       return {
         shortDocumentTitle: titleSegments.join(glue),
-        fullDocumentTitle: [...titleSegments, this.currentTheme.general.name].join(glue)
+        fullDocumentTitle: [...titleSegments, this.currentTheme.common.name].join(glue)
       }
     }
   }

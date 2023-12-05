@@ -34,34 +34,29 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 import {
   queryItemAsString,
   useConfigurationManager,
   useRouteQuery,
-  useStore
+  useThemeStore
 } from '@ownclouders/web-pkg'
-import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'AccessDeniedPage',
   setup() {
-    const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
     const configurationManager = useConfigurationManager()
     const redirectUrlQuery = useRouteQuery('redirectUrl')
 
     const { $gettext } = useGettext()
 
-    const logoImg = computed(() => {
-      return store.getters.configuration?.currentTheme?.logo?.login
-    })
+    const accessDeniedHelpUrl = computed(() => currentTheme.value.common.urls.accessDeniedHelp)
+    const footerSlogan = computed(() => currentTheme.value.common.slogan)
+    const logoImg = computed(() => currentTheme.value.logo.login)
 
-    const accessDeniedHelpUrl = computed(() => {
-      return (
-        // TODO: Discuss if this can be reduced to config only?
-        store.getters.configuration?.commonTheme?.accessDeniedHelpUrl ||
-        store.getters.configuration?.options?.accessDeniedHelpUrl
-      )
-    })
     const cardTitle = computed(() => {
       return $gettext('Not logged in')
     })
@@ -69,9 +64,6 @@ export default defineComponent({
       return $gettext(
         'This could be because of a routine safety log out, or because your account is either inactive or not yet authorized for use. Please try logging in after a while or seek help from your Administrator.'
       )
-    })
-    const footerSlogan = computed(() => {
-      return store.getters.configuration?.currentTheme?.general?.slogan
     })
     const navigateToLoginText = computed(() => {
       return $gettext('Log in again')

@@ -71,6 +71,7 @@ import {
   useRouteQuery,
   useRouter,
   useStore,
+  useThemeStore,
   useUserContext
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
@@ -87,6 +88,7 @@ import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { dirname } from 'path'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'ResolvePublicLink',
@@ -99,6 +101,9 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
+    const themeStore = useThemeStore()
+
+    const { currentTheme } = storeToRefs(themeStore)
     const password = ref('')
 
     const isOcmLink = computed(() => {
@@ -316,7 +321,7 @@ export default defineComponent({
       }
     })
 
-    const footerSlogan = computed(() => store.getters.configuration.currentTheme.general.slogan)
+    const footerSlogan = computed(() => currentTheme.value.common.slogan)
     const passwordFieldLabel = computed(() => {
       return $gettext('Enter password for public link')
     })

@@ -42,9 +42,7 @@ const state = {
     openLinksWithDefaultApp: true,
     tokenStorageLocal: true,
     loginUrl: '',
-    privacyUrl: '',
-    imprintUrl: '',
-    accessDeniedHelpUrl: '',
+    logoutUrl: '', // Fixme: why was this missing before?
     disabledExtensions: [],
     userListRequiresFilter: false,
     embed: {

@@ -321,9 +321,9 @@ export const announceTheme = async ({
   const { initializeThemes } = themeStore
   const { currentTheme } = storeToRefs(themeStore)
 
-  const { web, common } = await loadTheme(runtimeConfiguration?.theme)
+  const webTheme = await loadTheme(runtimeConfiguration?.theme)
 
-  await initializeThemes([web], common)
+  await initializeThemes(webTheme)
 
   app.use(designSystem, {
     tokens: currentTheme.value.designTokens

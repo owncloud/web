@@ -1,56 +1,80 @@
+import merge from 'deepmerge'
 import { defineStore } from 'pinia'
 import { ref, computed, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 
-interface CommonTheme {
+interface AppBanner {
+  title: string
+  publisher: string
+  additionalInformation: string
+  ctaText: string
+  icon: string
+  appScheme: string
+}
+
+interface CommonSection {
   name: string
   slogan: string
   logo: string
-  accessDeniedHelpUrl: string
+  urls: {
+    accessDeniedHelp: string
+    imprint: string
+    privacy: string
+  }
+}
+
+interface DesignTokens {
+  breakpoints?: Record<string, string>
+  colorPalette?: Record<string, string>
+  fontSizes?: Record<string, string>
+  sizes?: Record<string, string>
+  spacing?: Record<string, string>
+}
+
+interface LoginPage {
+  autoRedirect: boolean
+  backgroundImg: string
+}
+
+interface Logo {
+  topbar: string
+  favicon: string
+  login: string
+  notFound: string
+}
+
+interface ThemeDefaults {
+  appBanner?: AppBanner
+  common: CommonSection
+  designTokens: DesignTokens
+  loginPage: LoginPage
+  logo: Logo
 }
 
 interface WebTheme {
-  general: {
-    name: string
-    slogan: string
-    privacyUrl: string
-    imprintUrl: string
-  }
-  appBanner: {
-    title: string
-    publisher: string
-    additionalInformation: string
-    ctaText: string
-    icon: string
-    appScheme: string
-  }
+  appBanner?: AppBanner
+  common?: CommonSection
+  designTokens: DesignTokens
+
   isDark: boolean
-  logo: {
-    topbar: string
-    favicon: string
-    login: string
-    notFound: string
-  }
-  loginPage: {
-    autoRedirect: boolean
-    backgroundImg: string
-  }
-  // TODO: Refine designTokens according to existing theme.json contents
-  designTokens: {
-    colorPalette: Record<string, string>
-  }
+  name: string
+  loginPage?: LoginPage
+  logo?: Logo
 }
 
-const themeNameLight = 'default'
-const themeNameDark = 'default-dark'
+interface WebThemeConfig {
+  defaults: ThemeDefaults
+  themes: WebTheme[]
+}
+
+const themeStorageKey = 'oc_currentThemeName'
 
 export const useThemeStore = defineStore('theme', () => {
-  const commonTheme = ref<CommonTheme | undefined>()
   const currentTheme = ref<WebTheme | undefined>()
 
   const availableThemes = ref<WebTheme[]>([])
 
-  const hasOnlyOneTheme = computed(() => availableThemes.value.length > 1)
+  const hasOnlyOneTheme = computed(() => availableThemes.value.length === 1)
 
   const hasOnlyTwoThemesForLightDarkMode = computed(
     () =>
@@ -59,26 +83,29 @@ export const useThemeStore = defineStore('theme', () => {
       availableThemes.value.some((t) => t.isDark !== true)
   )
 
-  const initializeThemes = (themes: WebTheme[], newCommonTheme: CommonTheme) => {
-    availableThemes.value = themes
-    commonTheme.value = newCommonTheme
+  const initializeThemes = (themeConfig: WebThemeConfig) => {
+    availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
 
-    const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
-    // Set default theme name as fallback
+    const currentThemeName = useLocalStorage(themeStorageKey, null) // null as default to make fallback possible
+
     if (unref(currentThemeName) === null) {
       const isDark = usePreferredDark()
-      currentThemeName.value = isDark.value ? themeNameDark : themeNameLight
+      currentThemeName.value = availableThemes.value.find((t) => t.isDark === isDark.value)
     }
 
-    // TODO: Fix this by passing full theme?
-    // TODO: Discuss handling (former) default scenario
-    setAndApplyTheme(availableThemes.value.find((t) => t.general.name === currentThemeName.value))
+    setAndApplyTheme(
+      availableThemes.value.find((t) => t.name === currentThemeName.value) ||
+        availableThemes.value[0]
+    )
   }
 
   const setAndApplyTheme = (theme: WebTheme) => {
     currentTheme.value = theme
+    const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, theme.name)
+    currentLocalStorageThemeName.value = currentTheme.value.name
 
-    for (const param in currentTheme.value.designTokens.colorPalette) {
+    // TODO: Shouldn't we loop over all designTokens and set them?
+    for (const param in currentTheme.value.designTokens?.colorPalette) {
       ;(document.querySelector(':root') as HTMLElement).style.setProperty(
         `--oc-color-${param}`,
         theme.designTokens.colorPalette[param]
