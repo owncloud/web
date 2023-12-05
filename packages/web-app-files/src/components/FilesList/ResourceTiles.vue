@@ -398,7 +398,7 @@ export default defineComponent({
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
 
