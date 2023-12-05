@@ -47,7 +47,7 @@ export default defineComponent({
         return
       }
 
-      console.info(
+      console.debug(
         '[page:oidcCallback:handleRequestedTokenEvent] - received delegated access_token'
       )
       authService.signInCallback(event.data.data.access_token)
@@ -63,9 +63,9 @@ export default defineComponent({
       }
 
       if (unref(isDelegatingAuthentication)) {
-        console.info('[page:oidcCallback:hook:mounted] - adding update-token event listener')
+        console.debug('[page:oidcCallback:hook:mounted] - adding update-token event listener')
         window.addEventListener('message', handleRequestedTokenEvent)
-        console.info('[page:oidcCallback:hook:mounted] - requesting delegated access_token')
+        console.debug('[page:oidcCallback:hook:mounted] - requesting delegated access_token')
         postMessage<void>('owncloud-embed:request-token')
 
         return
@@ -83,7 +83,7 @@ export default defineComponent({
         return
       }
 
-      console.info('[page:oidcCallback:hook:beforeUnmount] - removing update-token event listener')
+      console.debug('[page:oidcCallback:hook:beforeUnmount] - removing update-token event listener')
       window.removeEventListener('message', handleRequestedTokenEvent)
     })
 

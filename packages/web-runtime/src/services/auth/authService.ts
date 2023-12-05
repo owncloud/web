@@ -174,7 +174,7 @@ export class AuthService {
       // no userLoaded event and no signInCallback gets triggered
       const accessToken = await this.userManager.getAccessToken()
       if (accessToken) {
-        console.info('[authService:initializeContext] - updating context with saved access_token')
+        console.debug('[authService:initializeContext] - updating context with saved access_token')
 
         try {
           await this.userManager.updateContext(accessToken, fetchUserData)
@@ -201,11 +201,11 @@ export class AuthService {
         this.configurationManager.options.embed.delegateAuthentication &&
         accessToken
       ) {
-        console.info('[authService:signInCallback] - setting access_token and fetching user')
+        console.debug('[authService:signInCallback] - setting access_token and fetching user')
         await this.userManager.updateContext(accessToken, true)
 
         // Setup a listener to handle token refresh
-        console.info('[authService:signInCallback] - adding listener to update-token event')
+        console.debug('[authService:signInCallback] - adding listener to update-token event')
         window.addEventListener('message', this.handleDelegatedTokenUpdate)
       } else {
         await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
@@ -316,7 +316,7 @@ export class AuthService {
       return
     }
 
-    console.info('[authService:handleDelegatedTokenUpdate] - going to update the access_token')
+    console.debug('[authService:handleDelegatedTokenUpdate] - going to update the access_token')
     this.userManager.updateContext(event.data, false)
   }
 }
