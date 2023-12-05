@@ -1,7 +1,7 @@
 {
   "name": "@ownclouders/tsconfig",
   "private": false,
-  "version": "0.0.4",
+  "version": "0.0.5-alpha.1",
   "license": "AGPL-3.0",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "homepage": "https://github.com/owncloud/web/tree/master/packages/tsconfig",
