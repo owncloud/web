@@ -8,6 +8,13 @@ import { keycloakRealmRoles } from '../../store'
 import { state } from '../../../cucumber/environment/shared'
 import { getTokenFromLogin } from '../../utils/tokenHelper'
 
+const userRole: Record<string, string> = {
+  Admin: 'ocisAdmin',
+  'Space Admin': 'ocisSpaceAdmin',
+  User: 'ocisUser',
+  'User Light': 'ocisGuest'
+}
+
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   const fullName = user.displayName.split(' ')
   const body = JSON.stringify({
@@ -39,16 +46,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   const uuid = getUserIdFromResponse(creationRes)
 
   // assign realmRoles to user
-  const roleRes = await request({
-    method: 'POST',
-    path: join(realmBasePath, 'users', uuid, 'role-mappings', 'realm'),
-    body: JSON.stringify([
-      await getRealmRole('ocisUser', admin),
-      await getRealmRole('offline_access', admin)
-    ]),
-    user: admin,
-    header: { 'Content-Type': 'application/json' }
-  })
+  const roleRes = await assignRole({ admin, uuid, role: 'User' })
   checkResponseStatus(roleRes, 'Failed while assigning roles to user')
 
   const usersEnvironment = new UsersEnvironment()
@@ -58,6 +56,19 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   await initializeUser(user.id)
 
   return user
+}
+
+export const assignRole = async ({ admin, uuid, role }) => {
+  return await request({
+    method: 'POST',
+    path: join(realmBasePath, 'users', uuid, 'role-mappings', 'realm'),
+    body: JSON.stringify([
+      await getRealmRole(userRole[role], admin),
+      await getRealmRole('offline_access', admin)
+    ]),
+    user: admin,
+    header: { 'Content-Type': 'application/json' }
+  })
 }
 
 const initializeUser = async (username: string): Promise<void> => {
