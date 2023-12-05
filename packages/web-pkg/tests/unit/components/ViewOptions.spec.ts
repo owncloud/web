@@ -117,7 +117,7 @@ describe('ViewOptions component', () => {
       })
       const rootStyle = (document.querySelector(':root') as HTMLElement).style
       expect(rootStyle.getPropertyValue('--oc-size-tiles-resize-step')).toEqual(
-        `${tileSize * 12}rem`
+        `${tileSize * 10}rem`
       )
     })
   })
