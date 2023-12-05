@@ -874,7 +874,8 @@ export default defineComponent({
       loadResourcesTask,
       createUsersDisabled,
       isFilteringActive,
-      isFilteringMandatory
+      isFilteringMandatory,
+      configurationManager
     }
   },
   computed: {
@@ -1058,7 +1059,7 @@ export default defineComponent({
 
       for (const groupToAdd of groupsToAdd) {
         requests.push(
-          client.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
+          client.groups.addMember(groupToAdd.id, user.id, this.configurationManager.serverUrl)
         )
       }
       for (const groupToDelete of groupsToDelete) {
