@@ -12,7 +12,7 @@ export interface SideBarPanel<P, T extends Item> {
   icon: string
   iconFillType?: IconFillType
   title(context: SideBarPanelContext<P, T>): string
-  isEnabled(context: SideBarPanelContext<P, T>): boolean
+  isVisible(context: SideBarPanelContext<P, T>): boolean
   component: ReturnType<typeof defineComponent>
   componentAttrs?(context: SideBarPanelContext<P, T>): any
   /**

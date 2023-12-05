@@ -983,14 +983,14 @@ export default defineComponent({
           roles: unref(roles)
         }),
         isRoot: () => true,
-        isEnabled: () => true
+        isVisible: () => true
       },
       {
         name: 'EditPanel',
         icon: 'pencil',
         title: () => $gettext('Edit user'),
         component: EditPanel,
-        isEnabled: ({ items }) => items.length === 1,
+        isVisible: ({ items }) => items.length === 1,
         componentAttrs: ({ items }) => ({
           user: items.length === 1 ? items[0] : null,
           roles: unref(roles),

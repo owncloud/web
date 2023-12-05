@@ -53,7 +53,7 @@ export const sideBarPanels = () => {
             title: () => $gettext('Details'),
             component: NoSelection,
             isRoot: () => true,
-            isEnabled: ({ parent, items }) => {
+            isVisible: ({ parent, items }) => {
               if (isLocationSpacesActive(router, 'files-spaces-projects')) {
                 // project spaces overview has its own "no selection" panel
                 return false
@@ -79,7 +79,7 @@ export const sideBarPanels = () => {
               previewEnabled: unref(isFilesAppActive)
             }),
             isRoot: () => !isLocationTrashActive(router, 'files-trash-generic'),
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (isLocationTrashActive(router, 'files-trash-generic')) {
                 // details panel is not available in trash
                 return false
@@ -111,7 +111,7 @@ export const sideBarPanels = () => {
               }
             }),
             isRoot: () => true,
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (isLocationSpacesActive(router, 'files-spaces-projects')) {
                 // project spaces overview has its own "no selection" panel
                 return false
@@ -130,7 +130,7 @@ export const sideBarPanels = () => {
             title: () => $gettext('Actions'),
             component: FileActions,
             isRoot: () => isLocationTrashActive(router, 'files-trash-generic'),
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (items?.length !== 1) {
                 return false
               }
@@ -158,7 +158,7 @@ export const sideBarPanels = () => {
                 return false
               }
             }),
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (items?.length !== 1) {
                 return false
               }
@@ -188,7 +188,7 @@ export const sideBarPanels = () => {
             icon: 'git-branch',
             title: () => $gettext('Versions'),
             component: FileVersions,
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (items?.length !== 1) {
                 return false
               }
@@ -216,7 +216,7 @@ export const sideBarPanels = () => {
             title: () => $gettext('Details'),
             component: SpaceNoSelection,
             isRoot: () => true,
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (!isLocationSpacesActive(router, 'files-spaces-projects')) {
                 // only for project spaces overview
                 return false
@@ -235,7 +235,7 @@ export const sideBarPanels = () => {
             title: () => $gettext('Details'),
             component: SpaceDetails,
             isRoot: () => true,
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               return items?.length === 1 && isProjectSpaceResource(items[0])
             }
           }
@@ -253,7 +253,7 @@ export const sideBarPanels = () => {
               selectedSpaces: items
             }),
             isRoot: () => true,
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               return items?.length > 1 && isLocationSpacesActive(router, 'files-spaces-projects')
             }
           }
@@ -267,7 +267,7 @@ export const sideBarPanels = () => {
             icon: 'slideshow-3',
             title: () => $gettext('Actions'),
             component: SpaceActions,
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               if (items?.length !== 1) {
                 return false
               }
@@ -305,7 +305,7 @@ export const sideBarPanels = () => {
                 return false
               }
             }),
-            isEnabled: ({ items }) => {
+            isVisible: ({ items }) => {
               return items?.length === 1 && isProjectSpaceResource(items[0])
             }
           }

@@ -203,7 +203,7 @@ export default defineComponent({
         title: () => $gettext('Details'),
         component: SpaceNoSelection,
         isRoot: () => true,
-        isEnabled: ({ items }) => items.length === 0
+        isVisible: ({ items }) => items.length === 0
       },
       {
         name: 'SpaceDetails',
@@ -215,7 +215,7 @@ export default defineComponent({
           showShareIndicators: false
         }),
         isRoot: () => true,
-        isEnabled: ({ items }) => items.length === 1
+        isVisible: ({ items }) => items.length === 1
       },
       {
         name: 'SpaceDetailsMultiple',
@@ -226,21 +226,21 @@ export default defineComponent({
           selectedSpaces: items
         }),
         isRoot: () => true,
-        isEnabled: ({ items }) => items.length > 1
+        isVisible: ({ items }) => items.length > 1
       },
       {
         name: 'SpaceActions',
         icon: 'slideshow-3',
         title: () => $gettext('Actions'),
         component: ActionsPanel,
-        isEnabled: ({ items }) => items.length === 1
+        isVisible: ({ items }) => items.length === 1
       },
       {
         name: 'SpaceMembers',
         icon: 'group',
         title: () => $gettext('Members'),
         component: MembersPanel,
-        isEnabled: ({ items }) => items.length === 1
+        isVisible: ({ items }) => items.length === 1
       }
     ] satisfies SideBarPanel<any, SpaceResource>[]
 

@@ -24,67 +24,65 @@
           'compact-header': isHeaderCompact
         }"
       >
-        <template v-if="panel.isEnabled(panelContext) !== false">
+        <div
+          v-if="[activePanelName, oldPanelName].includes(panel.name)"
+          class="sidebar-panel__header header"
+        >
+          <oc-button
+            v-if="!panel.isRoot?.(panelContext)"
+            v-oc-tooltip="accessibleLabelBack"
+            class="header__back"
+            appearance="raw"
+            :aria-label="accessibleLabelBack"
+            @click="closePanel"
+          >
+            <oc-icon name="arrow-left-s" fill-type="line" />
+          </oc-button>
+
+          <h2 class="header__title oc-my-rm">
+            {{ panel.title(panelContext) }}
+          </h2>
+
+          <oc-button
+            appearance="raw"
+            class="header__close"
+            :aria-label="$gettext('Close file sidebar')"
+            @click="closeSidebar"
+          >
+            <oc-icon name="close" />
+          </oc-button>
+        </div>
+
+        <slot name="header" />
+        <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.name}`]">
+          <div class="sidebar-panel__body-content">
+            <slot name="body">
+              <component
+                :is="panel.component"
+                v-bind="panel.componentAttrs?.(panelContext) || {}"
+                @scroll-to-element="scrollToElement"
+              />
+            </slot>
+          </div>
+
           <div
-            v-if="[activePanelName, oldPanelName].includes(panel.name)"
-            class="sidebar-panel__header header"
+            v-if="panel.isRoot?.(panelContext) && subPanels.length > 0"
+            class="sidebar-panel__navigation oc-mt-m"
           >
             <oc-button
-              v-if="!panel.isRoot?.(panelContext)"
-              v-oc-tooltip="accessibleLabelBack"
-              class="header__back"
+              v-for="panelSelect in subPanels"
+              :id="`sidebar-panel-${panelSelect.name}-select`"
+              :key="`panel-select-${panelSelect.name}`"
+              :data-testid="`sidebar-panel-${panelSelect.name}-select`"
               appearance="raw"
-              :aria-label="accessibleLabelBack"
-              @click="closePanel"
+              @click="openPanel(panelSelect.name)"
             >
-              <oc-icon name="arrow-left-s" fill-type="line" />
-            </oc-button>
-
-            <h2 class="header__title oc-my-rm">
-              {{ panel.title(panelContext) }}
-            </h2>
-
-            <oc-button
-              appearance="raw"
-              class="header__close"
-              :aria-label="$gettext('Close file sidebar')"
-              @click="closeSidebar"
-            >
-              <oc-icon name="close" />
+              <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
+              {{ panelSelect.title(panelContext) }}
+              <oc-icon name="arrow-right-s" fill-type="line" />
             </oc-button>
           </div>
-
-          <slot name="header" />
-          <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.name}`]">
-            <div class="sidebar-panel__body-content">
-              <slot name="body">
-                <component
-                  :is="panel.component"
-                  v-bind="panel.componentAttrs?.(panelContext) || {}"
-                  @scroll-to-element="scrollToElement"
-                />
-              </slot>
-            </div>
-
-            <div
-              v-if="panel.isRoot?.(panelContext) && subPanels.length > 0"
-              class="sidebar-panel__navigation oc-mt-m"
-            >
-              <oc-button
-                v-for="panelSelect in subPanels"
-                :id="`sidebar-panel-${panelSelect.name}-select`"
-                :key="`panel-select-${panelSelect.name}`"
-                :data-testid="`sidebar-panel-${panelSelect.name}-select`"
-                appearance="raw"
-                @click="openPanel(panelSelect.name)"
-              >
-                <oc-icon :name="panelSelect.icon" :fill-type="panelSelect.iconFillType" />
-                {{ panelSelect.title(panelContext) }}
-                <oc-icon name="arrow-right-s" fill-type="line" />
-              </oc-button>
-            </div>
-          </div>
-        </template>
+        </div>
       </div>
     </template>
   </div>
@@ -130,7 +128,7 @@ export default defineComponent({
   emits: ['close', 'selectPanel'],
   setup(props) {
     const panels = computed(() =>
-      props.availablePanels.filter((p) => p.isEnabled(props.panelContext))
+      props.availablePanels.filter((p) => p.isVisible(props.panelContext))
     )
     const subPanels = computed(() => unref(panels).filter((p) => !p.isRoot?.(props.panelContext)))
 

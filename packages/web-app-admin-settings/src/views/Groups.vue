@@ -195,7 +195,7 @@ export default defineComponent({
         component: DetailsPanel,
         componentAttrs: () => ({ groups: unref(selectedGroups) }),
         isRoot: () => true,
-        isEnabled: () => true
+        isVisible: () => true
       },
       {
         name: 'EditPanel',
@@ -208,7 +208,7 @@ export default defineComponent({
             onConfirm: onEditGroup
           }
         },
-        isEnabled: ({ items }) => {
+        isVisible: ({ items }) => {
           return items.length === 1 && !items[0].groupTypes?.includes('ReadOnly')
         }
       },
@@ -217,7 +217,7 @@ export default defineComponent({
         icon: 'group',
         title: () => $gettext('Members'),
         component: MembersPanel,
-        isEnabled: ({ items }) => items.length === 1
+        isVisible: ({ items }) => items.length === 1
       }
     ] satisfies SideBarPanel<any, Group>[]
 
