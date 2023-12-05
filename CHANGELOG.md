@@ -89,6 +89,7 @@ Summary
 * Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
 * Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
 * Enhancement - Add authentication delegation in the Embed mode: [#10082](https://github.com/owncloud/web/pull/10082)
+* Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 * Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
 
 Details
@@ -849,6 +850,17 @@ Details
 
    https://github.com/owncloud/web/issues/10072
    https://github.com/owncloud/web/pull/10082
+
+* Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
+
+   We've added the configuration option `WEB_OPTION_USER_LIST_REQUIRES_FILTER`. If
+   set to true, an active filter is necessary to list users, as well users won't be
+   listed initially. This might be necessary for big instances with a lot of users,
+   where the server response might take very long or time out while requesting
+   users.
+
+   https://github.com/owncloud/web/issues/10088
+   https://github.com/owncloud/web/pull/10099
 
 * Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
 
