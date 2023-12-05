@@ -43,6 +43,7 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import { useRouter, useThemeStore } from '../composables'
 import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {},
@@ -57,9 +58,10 @@ export default defineComponent({
     const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
 
     const router = useRouter()
-    const { currentTheme } = useThemeStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
-    const appBannerSettings = currentTheme.appBanner
+    const appBannerSettings = currentTheme.value.appBanner
     const isAppBannerAvailable = computed(
       () => appBannerSettings && Object.keys(appBannerSettings).length != 0
     )
@@ -67,7 +69,7 @@ export default defineComponent({
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()
-        .replace('https', currentTheme.appBanner.appScheme)
+        .replace('https', currentTheme.value.appBanner?.appScheme)
     })
 
     const close = () => {

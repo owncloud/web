@@ -51,6 +51,7 @@ import {
 } from '../../composables/actions/general'
 import { supportedLogoMimeTypes } from '../../defaults'
 import { useStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'AppearanceSection',
@@ -59,7 +60,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const { currentTheme } = useThemeStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
     const logoInput: VNodeRef = ref(null)
 

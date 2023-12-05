@@ -10,12 +10,14 @@
 </template>
 <script lang="ts">
 import { useThemeStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoadingLayout',
   setup() {
-    const { currentTheme } = useThemeStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
     return {
       currentTheme

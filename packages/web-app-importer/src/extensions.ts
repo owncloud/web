@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia'
 import { useStore, usePublicLinkContext, useThemeStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
@@ -51,8 +52,9 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   })
 
   const handler = async () => {
-    const { currentTheme } = useThemeStore()
-    const renderDarkTheme = currentTheme.isDark
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+    const renderDarkTheme = currentTheme.value.isDark
 
     const modal = {
       variation: 'passive',

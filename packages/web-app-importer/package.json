@@ -16,6 +16,7 @@
   "peerDependencies": {
     "@ownclouders/design-system": "workspace:*",
     "@ownclouders/web-client": "workspace:*",
-    "@ownclouders/web-pkg": "workspace:*"
+    "@ownclouders/web-pkg": "workspace:*",
+    "pinia": "^2.1.7"
   }
 }

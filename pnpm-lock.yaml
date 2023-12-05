@@ -636,6 +636,9 @@ importers:
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
+      pinia:
+        specifier: 2.1.7
+        version: 2.1.7(typescript@5.0.3)(vue@3.3.8)
       uuid:
         specifier: 9.0.1
         version: 9.0.1
@@ -814,6 +817,9 @@ importers:
       '@uppy/webdav':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@3.3.0)'
+      pinia:
+        specifier: ^2.1.7
+        version: 2.1.7(typescript@5.0.3)(vue@3.3.8)
     devDependencies:
       web-test-helpers:
         specifier: workspace:*

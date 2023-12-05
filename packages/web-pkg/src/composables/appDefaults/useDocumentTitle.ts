@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia'
 import { watch, Ref, unref } from 'vue'
 import { useEventBus } from '../eventBus'
 import { useThemeStore } from '../piniaStores'
@@ -9,7 +10,8 @@ interface DocumentTitleOptions {
 }
 
 export function useDocumentTitle({ titleSegments, eventBus }: DocumentTitleOptions): void {
-  const { currentTheme } = useThemeStore()
+  const themeStore = useThemeStore()
+  const { currentTheme } = storeToRefs(themeStore)
 
   eventBus = eventBus || useEventBus()
 
@@ -21,7 +23,7 @@ export function useDocumentTitle({ titleSegments, eventBus }: DocumentTitleOptio
       const glue = ' - '
       const payload = {
         shortDocumentTitle: titleSegments.join(glue),
-        fullDocumentTitle: [...titleSegments, currentTheme.common.name].join(glue)
+        fullDocumentTitle: [...titleSegments, currentTheme.value.common.name].join(glue)
       }
 
       eventBus.publish('runtime.documentTitle.changed', payload)
