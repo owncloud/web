@@ -18,7 +18,8 @@ import {
   useCapabilityFilesSharingPublicEnabled,
   useRouter,
   useStore,
-  SidebarPanelExtension
+  SidebarPanelExtension,
+  useIsFilesAppActive
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -37,6 +38,7 @@ export const sideBarPanels = () => {
   const isSharingEnabled = useCapabilityFilesSharing(store)
   const isSharingApiEnabled = useCapabilityFilesSharingApiEnabled(store)
   const arePublicLinksEnabled = useCapabilityFilesSharingPublicEnabled(store)
+  const isFilesAppActive = useIsFilesAppActive()
 
   return computed(
     () =>
@@ -73,6 +75,9 @@ export const sideBarPanels = () => {
             icon: 'questionnaire-line',
             title: () => $gettext('Details'),
             component: FileDetails,
+            componentAttrs: () => ({
+              previewEnabled: unref(isFilesAppActive)
+            }),
             isRoot: () => !isLocationTrashActive(router, 'files-trash-generic'),
             isEnabled: ({ items }) => {
               if (isLocationTrashActive(router, 'files-trash-generic')) {

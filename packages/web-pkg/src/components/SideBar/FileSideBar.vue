@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, provide, ref, unref, watch } from 'vue'
+import { computed, defineComponent, PropType, provide, readonly, ref, unref, watch } from 'vue'
 import { SideBarPanelContext, SideBar as InnerSideBar } from '../SideBar'
 import { SpaceInfo } from './Spaces'
 import { FileInfo } from './Files'
@@ -228,10 +228,7 @@ export default defineComponent({
       { deep: true }
     )
 
-    provide(
-      'resource',
-      computed(() => unref(loadedResource))
-    )
+    provide('resource', readonly(loadedResource))
     provide(
       'space',
       computed(() => props.space)

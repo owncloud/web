@@ -64,7 +64,7 @@ import {
   isPersonalSpaceResource,
   isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { DavPermission, DavProperty } from '@ownclouders/web-client/src/webdav/constants'
+import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
 import { HttpError } from '@ownclouders/web-client/src/errors'
 import { dirname } from 'path'
 
@@ -220,9 +220,7 @@ export default defineComponent({
         }
 
         space.value = unref(unref(currentFileContext).space)
-        resource.value = yield getFileInfo(currentFileContext, {
-          davProperties: [DavProperty.FileId, DavProperty.Permissions, DavProperty.Name]
-        })
+        resource.value = yield getFileInfo(currentFileContext)
         // FIXME: setter only writes ids => files need to be loaded into activeFiles array as well
         // FIXME: currentFolder not null every time... needs some more thought
         store.commit('Files/LOAD_FILES', { currentFolder: null, files: [unref(resource)] })
