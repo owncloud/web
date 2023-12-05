@@ -28,7 +28,7 @@
       class="oc-position-center"
       :accessible-label="$gettext('Failed to load media file')"
     />
-    <template v-else>
+    <div v-else class="oc-flex oc-width-1-1 oc-height-1-1">
       <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
         <div v-show="activeMediaFileCached" class="stage_media">
           <media-image
@@ -64,14 +64,21 @@
           @toggle-next="next"
         />
       </div>
-    </template>
+      <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+    </div>
   </main>
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from '@ownclouders/web-client/src'
-import { AppTopBar, ProcessorType } from '@ownclouders/web-pkg'
+import {
+  AppTopBar,
+  FileSideBar,
+  ProcessorType,
+  useSelectedResources,
+  useSideBar
+} from '@ownclouders/web-pkg'
 import {
   queryItemAsString,
   sortHelper,
@@ -116,6 +123,7 @@ export default defineComponent({
   components: {
     AppBanner,
     AppTopBar,
+    FileSideBar,
     MediaControls,
     MediaAudio,
     MediaImage,
@@ -233,8 +241,14 @@ export default defineComponent({
     )
 
     const fileId = computed(() => unref(unref(currentFileContext).itemId))
+    const space = computed(() => unref(unref(currentFileContext).space))
+    const { selectedResources } = useSelectedResources({})
+    watch(activeFilteredFile, (file) => {
+      selectedResources.value = [file]
+    })
 
     return {
+      ...useSideBar(),
       ...appDefaults,
       activeFilteredFile,
       activeIndex,
@@ -246,7 +260,8 @@ export default defineComponent({
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory,
-      fileId: fileId
+      fileId,
+      space
     }
   },
   data() {
@@ -499,6 +514,7 @@ export default defineComponent({
 .stage {
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
   text-align: center;
 
