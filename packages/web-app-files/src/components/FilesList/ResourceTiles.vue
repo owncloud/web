@@ -398,12 +398,12 @@ export default defineComponent({
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(auto, var(--oc-size-tiles-default)));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
 
   &.resizableTiles {
-    grid-template-columns: repeat(auto-fill, minmax(auto, var(--oc-size-tiles-resize-step)));
+    grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-resize-step), 1fr));
   }
 
   @media only screen and (max-width: 640px) {
