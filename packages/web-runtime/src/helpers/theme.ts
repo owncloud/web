@@ -25,22 +25,23 @@ export const loadTheme = async (location = '') => {
       console.error(`Failed to load theme '${location}', invalid response. Using default theme.`)
       return defaultOwnCloudTheme
     }
+
     const theme = await response.json()
 
-    const parsedTheme = ThemingConfig.safeParse(theme)
+    try {
+      const parsedTheme = ThemingConfig.parse(theme)
 
-    if (parsedTheme.success === true) {
       return {
         defaults: {
-          ...parsedTheme.data.common,
-          ...parsedTheme.data.clients.web.defaults
+          ...parsedTheme.common,
+          ...parsedTheme.clients.web.defaults
         },
-        themes: parsedTheme.data.clients.web.themes
+        themes: parsedTheme.clients.web.themes
       }
-    } else {
+    } catch (error) {
       console.error(
         `Failed to load theme '${location}', invalid theme. Using default theme.`,
-        parsedTheme.error
+        error
       )
       return defaultOwnCloudTheme
     }
