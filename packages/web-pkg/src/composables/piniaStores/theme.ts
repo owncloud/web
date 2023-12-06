@@ -2,77 +2,80 @@ import merge from 'deepmerge'
 import { defineStore } from 'pinia'
 import { ref, computed, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
+import { z } from 'zod'
 
-interface AppBanner {
-  title: string
-  publisher: string
-  additionalInformation: string
-  ctaText: string
-  icon: string
-  appScheme: string
-}
+const AppBanner = z.object({
+  title: z.string(),
+  publisher: z.string(),
+  additionalInformation: z.string(),
+  ctaText: z.string(),
+  icon: z.string(),
+  appScheme: z.string()
+})
 
-interface CommonSection {
-  name: string
-  slogan: string
-  logo: string
-  urls: {
-    accessDeniedHelp: string
-    imprint: string
-    privacy: string
-  }
-}
+const CommonSection = z.object({
+  name: z.string(),
+  slogan: z.string(),
+  logo: z.string(),
+  urls: z.object({
+    accessDeniedHelp: z.string(),
+    imprint: z.string(),
+    privacy: z.string()
+  })
+})
 
-interface DesignTokens {
-  breakpoints?: Record<string, string>
-  colorPalette?: Record<string, string>
-  fontSizes?: Record<string, string>
-  sizes?: Record<string, string>
-  spacing?: Record<string, string>
-}
+const DesignTokens = z.object({
+  breakpoints: z.record(z.string()),
+  colorPalette: z.record(z.string()),
+  fontSizes: z.record(z.string()),
+  sizes: z.record(z.string()),
+  spacing: z.record(z.string())
+})
 
-interface LoginPage {
-  autoRedirect: boolean
-  backgroundImg: string
-}
+const LoginPage = z.object({
+  autoRedirect: z.boolean(),
+  backgroundImg: z.string()
+})
 
-interface Logo {
-  topbar: string
-  favicon: string
-  login: string
-  notFound: string
-}
+const Logo = z.object({
+  topbar: z.string(),
+  favicon: z.string(),
+  login: z.string(),
+  notFound: z.string()
+})
 
-interface ThemeDefaults {
-  appBanner?: AppBanner
-  common: CommonSection
-  designTokens: DesignTokens
-  loginPage: LoginPage
+const ThemeDefaults = z.object({
+  appBanner: AppBanner.optional(),
+  common: CommonSection,
+  designTokens: DesignTokens,
+  loginPage: LoginPage,
   logo: Logo
-}
+})
 
-interface WebTheme {
-  appBanner?: AppBanner
-  common?: CommonSection
-  designTokens: DesignTokens
+const WebTheme = z.object({
+  appBanner: AppBanner.optional(),
+  common: CommonSection.optional(),
+  designTokens: DesignTokens,
+  isDark: z.boolean(),
+  name: z.string(),
+  loginPage: LoginPage.optional(),
+  logo: Logo.optional()
+})
 
-  isDark: boolean
-  name: string
-  loginPage?: LoginPage
-  logo?: Logo
-}
+export const WebThemeConfig = z.object({
+  defaults: ThemeDefaults,
+  themes: z.array(WebTheme)
+})
 
-interface WebThemeConfig {
-  defaults: ThemeDefaults
-  themes: WebTheme[]
-}
+type WebThemeType = z.infer<typeof WebTheme>
+type WebThemeConfigType = z.infer<typeof WebThemeConfig>
 
 const themeStorageKey = 'oc_currentThemeName'
 
 export const useThemeStore = defineStore('theme', () => {
-  const currentTheme = ref<WebTheme | undefined>()
+  const currentTheme = ref<WebThemeType | undefined>()
 
-  const availableThemes = ref<WebTheme[]>([])
+  const availableThemes = ref<WebThemeType[]>([])
 
   const hasOnlyOneTheme = computed(() => availableThemes.value.length === 1)
 
@@ -83,14 +86,14 @@ export const useThemeStore = defineStore('theme', () => {
       availableThemes.value.some((t) => t.isDark !== true)
   )
 
-  const initializeThemes = (themeConfig: WebThemeConfig) => {
+  const initializeThemes = (themeConfig: WebThemeConfigType) => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
 
     const currentThemeName = useLocalStorage(themeStorageKey, null) // null as default to make fallback possible
 
     if (unref(currentThemeName) === null) {
       const isDark = usePreferredDark()
-      currentThemeName.value = availableThemes.value.find((t) => t.isDark === isDark.value)
+      currentThemeName.value = availableThemes.value.find((t) => t.isDark === isDark.value).name
     }
 
     setAndApplyTheme(
@@ -99,7 +102,7 @@ export const useThemeStore = defineStore('theme', () => {
     )
   }
 
-  const setAndApplyTheme = (theme: WebTheme) => {
+  const setAndApplyTheme = (theme: WebThemeType) => {
     currentTheme.value = theme
     const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, theme.name)
     currentLocalStorageThemeName.value = currentTheme.value.name

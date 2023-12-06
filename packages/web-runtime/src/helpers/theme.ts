@@ -1,6 +1,7 @@
 import { isEqual } from 'lodash-es'
 import defaultTheme from '../../themes/owncloud/theme.json'
 import { v4 as uuidV4 } from 'uuid'
+import { WebThemeConfigSchema } from '@ownclouders/web-pkg/src/composables/piniaStores/theme'
 
 export const loadTheme = async (location = '') => {
   const defaultOwnCloudTheme = {
@@ -21,11 +22,17 @@ export const loadTheme = async (location = '') => {
   try {
     const response = await fetch(location, { headers: { 'X-Request-ID': uuidV4() } })
     if (!response.ok) {
+      console.error(`Failed to load theme '${location}', invalid response. Using default theme.`)
       return defaultOwnCloudTheme
     }
     const theme = await response.json()
-    // Check if web key (with default and themes) is in the loaded theme, else log error and use default theme?
-    return theme.clients.web || {}
+
+    if (WebThemeConfigSchema.safeParse(theme).success) {
+      return theme.clients.web
+    } else {
+      console.error(`Failed to load theme '${location}', invalid theme. Using default theme.`)
+      return defaultOwnCloudTheme
+    }
   } catch (e) {
     console.error(`Failed to load theme '${location}', using default theme.`)
     return defaultOwnCloudTheme
