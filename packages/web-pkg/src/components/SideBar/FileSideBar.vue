@@ -85,7 +85,7 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
 
-    const loadedResource = ref()
+    const loadedResource = ref<Resource>()
     const isLoading = ref(false)
 
     const { selectedResources } = useSelectedResources({ store })
