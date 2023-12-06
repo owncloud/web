@@ -2,6 +2,7 @@ import { DavFileInfoResponse } from '@ownclouders/web-client/src/webdav/constant
 import { User } from '../user'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
 import { DAVResultResponseProps, FileStat } from 'webdav'
+import { Audio, GeoCoordinates } from '../../generated'
 
 export type AbilityActions =
   | 'create'
@@ -48,6 +49,8 @@ export interface Resource {
   readonly nodeId?: string
   name?: string
   tags?: string[]
+  audio?: Audio
+  location?: GeoCoordinates
   disabled?: boolean
   path: string
   webDavPath?: string
