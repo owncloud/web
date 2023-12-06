@@ -45,7 +45,7 @@ export const sideBarPanels = () => {
     () =>
       [
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.no-selection',
+          id: 'com.github.owncloud.web.files.sidebar-panel.no-selection',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -68,7 +68,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.details-single-selection',
+          id: 'com.github.owncloud.web.files.sidebar-panel.details-single-selection',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -94,7 +94,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.details-multi-selection',
+          id: 'com.github.owncloud.web.files.sidebar-panel.details-multi-selection',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -122,7 +122,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.actions',
+          id: 'com.github.owncloud.web.files.sidebar-panel.actions',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -141,7 +141,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.sharing',
+          id: 'com.github.owncloud.web.files.sidebar-panel.sharing',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -181,7 +181,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.versions',
+          id: 'com.github.owncloud.web.files.sidebar-panel.versions',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -208,7 +208,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.projects.no-selection',
+          id: 'com.github.owncloud.web.files.sidebar-panel.projects.no-selection',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -227,7 +227,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.projects.details-single-selection',
+          id: 'com.github.owncloud.web.files.sidebar-panel.projects.details-single-selection',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -242,7 +242,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.projects.details-multi-selection',
+          id: 'com.github.owncloud.web.files.sidebar-panel.projects.details-multi-selection',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -260,7 +260,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.projects.actions',
+          id: 'com.github.owncloud.web.files.sidebar-panel.projects.actions',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
@@ -289,7 +289,7 @@ export const sideBarPanels = () => {
           }
         },
         {
-          id: 'com.github.owncloud.web.files.sidebarPanels.projects.sharing',
+          id: 'com.github.owncloud.web.files.sidebar-panel.projects.sharing',
           type: 'sidebarPanel',
           scopes: ['resource'],
           panel: {
