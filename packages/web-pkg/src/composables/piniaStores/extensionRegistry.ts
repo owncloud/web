@@ -60,14 +60,14 @@ export const useExtensionRegistry = ({
     getters: {
       requestExtensions:
         (state) =>
-        <ExtensionType extends Extension>(type: string, scope?: string) => {
+        <ExtensionType extends Extension>(type: string, scopes?: string[]) => {
           return state.extensions
             .map((e) =>
               unref(e).filter(
                 (e) =>
                   e.type === type &&
                   !options.disabledExtensions.includes(e.id) &&
-                  (!scope || e.scopes?.includes(scope))
+                  (!scopes || e.scopes?.some((s) => scopes.includes(s)))
               )
             )
             .flat() as ExtensionType[]

@@ -30,13 +30,13 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.collaborator',
-          scopes: ['files', 'files.quick-action'],
+          scopes: ['resource', 'resource.quick-action'],
           type: 'action',
           action: unref(showSharesActions)[0]
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.quicklink',
-          scopes: ['files', 'files.quick-action'],
+          scopes: ['resource', 'resource.quick-action'],
           type: 'action',
           action: unref(quickLinkActions)[0]
         }

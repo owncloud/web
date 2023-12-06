@@ -163,7 +163,7 @@ export default defineComponent({
 
     const availablePanels = computed(() =>
       extensionRegistry
-        .requestExtensions<SidebarPanelExtension<Resource, Resource>>('sidebarPanel', 'resource')
+        .requestExtensions<SidebarPanelExtension<Resource, Resource>>('sidebarPanel', ['resource'])
         .map((e) => e.panel)
     )
 
