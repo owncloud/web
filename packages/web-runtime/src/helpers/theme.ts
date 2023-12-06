@@ -29,7 +29,7 @@ export const loadTheme = async (location = '') => {
 
     const parsedTheme = ThemingConfig.safeParse(theme)
 
-    if (parsedTheme.success) {
+    if (parsedTheme.success === true) {
       return {
         defaults: {
           ...parsedTheme.data.common,
@@ -38,7 +38,10 @@ export const loadTheme = async (location = '') => {
         themes: parsedTheme.data.clients.web.themes
       }
     } else {
-      console.error(`Failed to load theme '${location}', invalid theme. Using default theme.`)
+      console.error(
+        `Failed to load theme '${location}', invalid theme. Using default theme.`,
+        parsedTheme.error
+      )
       return defaultOwnCloudTheme
     }
   } catch (e) {
