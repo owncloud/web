@@ -1,3 +1,5 @@
+import { Audio, GeoCoordinates } from '../../generated'
+
 export abstract class DavPermission {
   static readonly Shared: string = 'S'
   static readonly Shareable: string = 'R'
@@ -50,6 +52,14 @@ const DavPropertyMapping = {
   ContentSize: defNumber('size' as const),
   LastModifiedDate: defString('getlastmodified' as const),
   Tags: defString('tags' as const),
+  Audio: {
+    value: 'audio',
+    type: null as Audio
+  },
+  Location: {
+    value: 'location',
+    type: null as GeoCoordinates
+  },
   ETag: defString('getetag' as const),
   MimeType: defString('getcontenttype' as const),
   ResourceType: defStringArray('resourcetype' as const),
@@ -116,7 +126,9 @@ export abstract class DavProperties {
     DavProperty.MimeType,
     DavProperty.ResourceType,
     DavProperty.DownloadURL,
-    DavProperty.Tags
+    DavProperty.Tags,
+    DavProperty.Audio,
+    DavProperty.Location
   ]
 
   static readonly PublicLink: DavPropertyValue[] = DavProperties.Default.concat([

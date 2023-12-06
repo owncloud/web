@@ -143,6 +143,8 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     ownerId: resource.props[DavProperty.OwnerId],
     ownerDisplayName: resource.props[DavProperty.OwnerDisplayName],
     tags: (resource.props[DavProperty.Tags] || '').split(',').filter(Boolean),
+    audio: resource.props[DavProperty.Audio],
+    location: resource.props[DavProperty.Location],
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
