@@ -28,12 +28,9 @@ export default defineComponent({
   setup() {
     const video = ref(null)
     const resizeVideoDimensions = () => {
-      const maxHeight = document.querySelector('.stage_media')?.offsetHeight - 10 ?? null
-      const maxWidth = document.querySelector('.stage_media')?.offsetWidth - 10 ?? null
-      if (maxHeight && maxWidth && video.value) {
-        video.value.style.maxHeight = `${maxHeight}px`
-        video.value.style.maxWidth = `${maxWidth}px`
-      }
+      const stageMedia: HTMLElement = document.querySelector('.stage_media')
+      video.value.style.maxHeight = `${stageMedia.offsetHeight - 10}px`
+      video.value.style.maxWidth = `${stageMedia.offsetWidth - 10}px`
     }
 
     onMounted(() => {
