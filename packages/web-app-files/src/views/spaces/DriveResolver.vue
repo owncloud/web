@@ -2,11 +2,7 @@
   <app-loading-spinner v-if="isLoading" />
   <template v-else>
     <app-banner :file-id="fileId"></app-banner>
-    <drive-redirect
-      v-if="!space"
-      :drive-alias-and-item="driveAliasAndItem"
-      :append-home-folder="isSpaceRoute"
-    />
+    <drive-redirect v-if="!space" :drive-alias-and-item="driveAliasAndItem" />
     <generic-trash v-else-if="isTrashRoute" :space="space" :item-id="itemId" />
     <generic-space v-else :space="space" :item="item" :item-id="itemId" />
   </template>
@@ -31,11 +27,7 @@ import {
   useUserContext
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
-import {
-  createLocationSpaces,
-  isLocationSpacesActive,
-  isLocationTrashActive
-} from '@ownclouders/web-pkg'
+import { createLocationSpaces, isLocationTrashActive } from '@ownclouders/web-pkg'
 import {
   isPublicSpaceResource,
   PublicSpaceResource,
@@ -62,7 +54,6 @@ export default defineComponent({
     const clientService = useClientService()
     const router = useRouter()
     const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-    const isSpaceRoute = useActiveLocation(isLocationSpacesActive, 'files-spaces-generic')
     const isTrashRoute = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
     const resolvedDrive = useDriveResolver({ store, driveAliasAndItem })
     const { getInternalSpace } = useGetMatchingSpace()
@@ -171,7 +162,6 @@ export default defineComponent({
     return {
       ...resolvedDrive,
       driveAliasAndItem,
-      isSpaceRoute,
       isTrashRoute,
       isLoading,
       fileId

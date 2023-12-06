@@ -18,7 +18,7 @@ import { isUndefined } from 'lodash-es'
  */
 export const createFileRouteOptions = (
   space: SpaceResource,
-  target: { path?: string; fileId?: string | number },
+  target: { path?: string; fileId?: string | number } = {},
   options?: { configurationManager?: ConfigurationManager }
 ): { params: RouteParams; query: LocationQuery } => {
   const config = options?.configurationManager || configurationManager
