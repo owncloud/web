@@ -23,6 +23,7 @@ import {
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
+  SpaceResource,
   spaceRoleEditor,
   spaceRoleManager
 } from '@ownclouders/web-client/src/helpers'
@@ -310,6 +311,6 @@ export const sideBarPanels = () => {
             }
           }
         }
-      ] satisfies SidebarPanelExtension<Resource, Resource>[]
+      ] satisfies SidebarPanelExtension<SpaceResource, Resource, Resource>[]
   )
 }

@@ -181,7 +181,7 @@ export default defineComponent({
       }
     }
 
-    const sideBarPanelContext = computed<SideBarPanelContext<any, Group>>(() => {
+    const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, Group>>(() => {
       return {
         parent: null,
         items: unref(selectedGroups)
@@ -219,7 +219,7 @@ export default defineComponent({
         component: MembersPanel,
         isVisible: ({ items }) => items.length === 1
       }
-    ] satisfies SideBarPanel<any, Group>[]
+    ] satisfies SideBarPanel<unknown, unknown, Group>[]
 
     onMounted(async () => {
       await loadResourcesTask.perform()

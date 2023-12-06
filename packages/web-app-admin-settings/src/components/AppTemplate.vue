@@ -108,11 +108,11 @@ export default defineComponent({
     },
     sideBarAvailablePanels: {
       required: false,
-      type: Array as PropType<SideBarPanel<any, any>[]>,
+      type: Array as PropType<SideBarPanel<unknown, unknown, unknown>[]>,
       default: () => []
     },
     sideBarPanelContext: {
-      type: Object as PropType<SideBarPanelContext<any, any>>,
+      type: Object as PropType<SideBarPanelContext<unknown, unknown, unknown>>,
       required: true
     },
     sideBarActivePanel: {

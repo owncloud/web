@@ -190,12 +190,14 @@ export default defineComponent({
       ].filter((item) => item.isEnabled({ resources: unref(selectedSpaces) }))
     })
 
-    const sideBarPanelContext = computed<SideBarPanelContext<any, SpaceResource>>(() => {
-      return {
-        parent: null,
-        items: unref(selectedSpaces)
+    const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, SpaceResource>>(
+      () => {
+        return {
+          parent: null,
+          items: unref(selectedSpaces)
+        }
       }
-    })
+    )
     const sideBarAvailablePanels = [
       {
         name: 'SpaceNoSelection',
@@ -242,7 +244,7 @@ export default defineComponent({
         component: MembersPanel,
         isVisible: ({ items }) => items.length === 1
       }
-    ] satisfies SideBarPanel<any, SpaceResource>[]
+    ] satisfies SideBarPanel<unknown, unknown, SpaceResource>[]
 
     onMounted(async () => {
       await loadResourcesTask.perform()

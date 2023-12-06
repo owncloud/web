@@ -965,7 +965,7 @@ export default defineComponent({
       return Promise.all(requests)
     }
 
-    const sideBarPanelContext = computed<SideBarPanelContext<any, User>>(() => {
+    const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, User>>(() => {
       return {
         parent: null,
         items: unref(selectedUsers)
@@ -998,7 +998,7 @@ export default defineComponent({
           onConfirm: onEditUser
         })
       }
-    ] satisfies SideBarPanel<any, User>[]
+    ] satisfies SideBarPanel<unknown, unknown, User>[]
 
     return {
       ...useSideBar(),

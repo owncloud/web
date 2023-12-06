@@ -92,14 +92,16 @@ export default defineComponent({
     const currentFolder = computed(() => {
       return store.getters['Files/currentFolder']
     })
-    const panelContext = computed<SideBarPanelContext<Resource, Resource>>(() => {
+    const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
         return {
+          root: props.space,
           parent: null,
           items: [unref(currentFolder)]
         }
       }
       return {
+        root: props.space,
         parent: unref(currentFolder),
         items: unref(selectedResources)
       }
@@ -163,7 +165,10 @@ export default defineComponent({
 
     const availablePanels = computed(() =>
       extensionRegistry
-        .requestExtensions<SidebarPanelExtension<Resource, Resource>>('sidebarPanel', ['resource'])
+        .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>(
+          'sidebarPanel',
+          ['resource']
+        )
         .map((e) => e.panel)
     )
 

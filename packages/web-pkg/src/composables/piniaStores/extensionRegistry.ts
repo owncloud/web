@@ -30,16 +30,16 @@ export interface SidebarNavExtension extends BaseExtension {
   navItem: AppNavigationItem
 }
 
-export interface SidebarPanelExtension<P, T extends Item> extends BaseExtension {
+export interface SidebarPanelExtension<R, P, T extends Item> extends BaseExtension {
   type: 'sidebarPanel'
-  panel: SideBarPanel<P, T>
+  panel: SideBarPanel<R, P, T>
 }
 
 export type Extension =
   | ActionExtension
   | SearchExtension
   | SidebarNavExtension
-  | SidebarPanelExtension<any, any>
+  | SidebarPanelExtension<unknown, unknown, unknown>
 
 export const useExtensionRegistry = ({
   configurationManager
