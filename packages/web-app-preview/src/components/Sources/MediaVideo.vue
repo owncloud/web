@@ -10,7 +10,7 @@
   </video>
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
 import { CachedFile } from '../../helpers/types'
 
 export default defineComponent({
@@ -26,7 +26,7 @@ export default defineComponent({
     }
   },
   setup() {
-    const video = ref<HTMLVideoElement | null>(null)
+    const video = ref(null)
     const resizeVideoDimensions = () => {
       const maxHeight = document.querySelector('.stage_media')?.offsetHeight - 10 ?? null
       const maxWidth = document.querySelector('.stage_media')?.offsetWidth - 10 ?? null
