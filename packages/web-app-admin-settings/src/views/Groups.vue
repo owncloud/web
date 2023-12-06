@@ -7,7 +7,7 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-panel-context="sideBarPanelContext"
-      :side-bar-open="sideBarOpen"
+      :is-side-bar-open="isSideBarOpen"
       :show-batch-actions="!!selectedGroups.length"
       :batch-actions="batchActions"
       :batch-action-items="selectedGroups"

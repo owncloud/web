@@ -26,7 +26,7 @@ export const useResourcesViewDefaultsMock = (
     selectedResourcesIds: ref([]),
     selectedResourceSpace: ref(mock<SpaceResource>()),
     isResourceInSelection: jest.fn(() => false),
-    sideBarOpen: ref(false),
+    isSideBarOpen: ref(false),
     sideBarActivePanel: ref(''),
     scrollToResource: jest.fn(),
     scrollToResourceFromRoute: jest.fn(),

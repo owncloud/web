@@ -12,7 +12,7 @@ exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no 
       <!--v-if-->
       <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
-        <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+        <sidebar-toggle-stub issidebaropen="false"></sidebar-toggle-stub>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
@@ -37,7 +37,7 @@ exports[`AppBar component renders if given, with content in the actions slot 1`]
       <!--v-if-->
       <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
-        <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+        <sidebar-toggle-stub issidebaropen="false"></sidebar-toggle-stub>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">
@@ -62,7 +62,7 @@ exports[`AppBar component renders if given, with content in the content slot 1`]
       <!--v-if-->
       <div class="oc-flex" id="files-app-bar-controls-right">
         <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
-        <sidebar-toggle-stub sidebaropen="false"></sidebar-toggle-stub>
+        <sidebar-toggle-stub issidebaropen="false"></sidebar-toggle-stub>
       </div>
     </div>
     <div class="files-app-bar-actions oc-mt-xs">

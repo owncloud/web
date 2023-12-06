@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': sideBarOpen }">
+  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': isSideBarOpen }">
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -51,7 +51,7 @@
             per-page-storage-prefix="files"
             :view-mode-default="viewModeDefault"
           />
-          <sidebar-toggle v-if="hasSidebarToggle" :side-bar-open="sideBarOpen" />
+          <sidebar-toggle v-if="hasSidebarToggle" :is-side-bar-open="isSideBarOpen" />
         </div>
       </div>
       <div class="files-app-bar-actions oc-mt-xs">
@@ -157,7 +157,7 @@ export default defineComponent({
     hasFileExtensions: { type: Boolean, default: true },
     hasPagination: { type: Boolean, default: true },
     showActionsOnSelection: { type: Boolean, default: false },
-    sideBarOpen: { type: Boolean, default: false },
+    isSideBarOpen: { type: Boolean, default: false },
     space: {
       type: Object as PropType<SpaceResource>,
       required: false,
@@ -344,7 +344,7 @@ export default defineComponent({
 
       this.breadcrumbMaxWidth =
         totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth
-      this.limitedScreenSpace = this.sideBarOpen
+      this.limitedScreenSpace = this.isSideBarOpen
         ? window.innerWidth <= 1280
         : window.innerWidth <= 1000
     }

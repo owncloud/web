@@ -4,7 +4,7 @@ exports[`Projects view different files view states lists all available project s
 <div class="oc-flex oc-width-1-1">
   <div class="files-view-wrapper oc-width-expand">
     <div id="files-view">
-      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" sidebaropen="false" viewmodedefault="resource-tiles" viewmodes="[object Object],[object Object]"></app-bar-stub>
+      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hassidebartoggle="true" hasviewoptions="true" showactionsonselection="true" issidebaropen="false" viewmodedefault="resource-tiles" viewmodes="[object Object],[object Object]"></app-bar-stub>
       <div class="spaces-list oc-mt-l">
         <div class="spaces-list-filters oc-flex oc-flex-right oc-px-m oc-mb-m">
           <div class="">
@@ -23,6 +23,6 @@ exports[`Projects view different files view states lists all available project s
     </div>
   </div>
   <!--v-if-->
-  <side-bar-stub open="false"></side-bar-stub>
+  <side-bar-stub is-open="false"></side-bar-stub>
 </div>
 `;

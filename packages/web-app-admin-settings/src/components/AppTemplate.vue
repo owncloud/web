@@ -51,12 +51,12 @@
         <slot name="mainContent" />
       </div>
       <side-bar
-        v-if="sideBarOpen"
+        v-if="isSideBarOpen"
         :active-panel="sideBarActivePanel"
         :available-panels="sideBarAvailablePanels"
         :panel-context="sideBarPanelContext"
         :loading="sideBarLoading"
-        :open="sideBarOpen"
+        :is-open="isSideBarOpen"
         :is-header-compact="isSideBarHeaderCompact"
         @select-panel="selectPanel"
         @close="closeSideBar"
@@ -101,7 +101,7 @@ export default defineComponent({
       required: true,
       type: Array as PropType<BreadcrumbItem[]>
     },
-    sideBarOpen: {
+    isSideBarOpen: {
       required: false,
       type: Boolean,
       default: false
@@ -165,7 +165,7 @@ export default defineComponent({
     const appBarRef = ref<VNodeRef>()
     const limitedScreenSpace = ref(false)
     const onResize = () => {
-      limitedScreenSpace.value = props.sideBarOpen
+      limitedScreenSpace.value = props.isSideBarOpen
         ? window.innerWidth <= 1600
         : window.innerWidth <= 1200
     }
@@ -213,12 +213,12 @@ export default defineComponent({
   },
   computed: {
     toggleSidebarButtonLabel() {
-      return this.sideBarOpen
+      return this.isSideBarOpen
         ? this.$gettext('Close sidebar to hide details')
         : this.$gettext('Open sidebar to view details')
     },
     toggleSidebarButtonIconFillType() {
-      return this.sideBarOpen ? 'fill' : 'line'
+      return this.isSideBarOpen ? 'fill' : 'line'
     }
   }
 })

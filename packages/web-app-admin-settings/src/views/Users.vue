@@ -6,7 +6,7 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-panel-context="sideBarPanelContext"
-      :side-bar-open="sideBarOpen"
+      :is-side-bar-open="isSideBarOpen"
       :side-bar-loading="sideBarLoading"
       :show-batch-actions="!!selectedUsers.length"
       :batch-actions="batchActions"
@@ -34,7 +34,7 @@
           <UsersList
             :users="users"
             :roles="roles"
-            :class="{ 'users-table-squashed': sideBarOpen }"
+            :class="{ 'users-table-squashed': isSideBarOpen }"
             :selected-users="selectedUsers"
             @toggle-select-user="toggleSelectUser"
             @select-users="selectUsers"

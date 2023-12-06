@@ -15,8 +15,8 @@ const selectors = {
 describe('SidebarToggle component', () => {
   it.each([true, false])(
     'should show the "Toggle sidebar"-button with sidebar opened and closed',
-    (sideBarOpen) => {
-      const { wrapper } = getWrapper({ sideBarOpen })
+    (isSideBarOpen) => {
+      const { wrapper } = getWrapper({ isSideBarOpen })
       expect(wrapper.find(selectors.toggleSidebarBtn).exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
     }
@@ -29,7 +29,7 @@ describe('SidebarToggle component', () => {
   })
 })
 
-function getWrapper({ sideBarOpen = false } = {}) {
+function getWrapper({ isSideBarOpen = false } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
@@ -37,7 +37,7 @@ function getWrapper({ sideBarOpen = false } = {}) {
     storeOptions,
     mocks,
     wrapper: mount(SidebarToggle, {
-      props: { sideBarOpen },
+      props: { isSideBarOpen },
       global: {
         mocks,
         plugins: [...defaultPlugins(), store]

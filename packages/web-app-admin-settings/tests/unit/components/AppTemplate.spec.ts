@@ -58,11 +58,11 @@ describe('AppTemplate', () => {
   })
   describe('sideBar', () => {
     it('should show when opened', () => {
-      const { wrapper } = getWrapper({ props: { sideBarOpen: true } })
+      const { wrapper } = getWrapper({ props: { isSideBarOpen: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
     it('should not show when closed', () => {
-      const { wrapper } = getWrapper({ props: { sideBarOpen: false } })
+      const { wrapper } = getWrapper({ props: { isSideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
     it('can be toggled', async () => {
@@ -129,7 +129,7 @@ function getWrapper({ props = {}, isMobileWidth = false } = {}) {
       props: {
         loading: false,
         breadcrumbs: [],
-        sideBarOpen: true,
+        isSideBarOpen: true,
         sideBarAvailablePanels: [],
         sideBarActivePanel: '',
         ...props

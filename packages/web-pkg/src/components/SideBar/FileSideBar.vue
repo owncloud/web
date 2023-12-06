@@ -1,10 +1,10 @@
 <template>
   <InnerSideBar
-    v-if="open"
+    v-if="isOpen"
     ref="sidebar"
     class="files-side-bar"
     tabindex="-1"
-    :open="open"
+    :is-open="isOpen"
     :active-panel="activePanel"
     :available-panels="availablePanels"
     :panel-context="panelContext"
@@ -63,7 +63,7 @@ export default defineComponent({
   name: 'FileSideBar',
   components: { FileInfo, SpaceInfo, InnerSideBar },
   props: {
-    open: {
+    isOpen: {
       type: Boolean,
       required: true
     },
@@ -168,9 +168,9 @@ export default defineComponent({
     )
 
     watch(
-      () => [...unref(panelContext).items, props.open],
+      () => [...unref(panelContext).items, props.isOpen],
       async () => {
-        if (!props.open) {
+        if (!props.isOpen) {
           return
         }
         if (unref(panelContext).items?.length !== 1) {

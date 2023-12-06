@@ -98,7 +98,7 @@ let hiddenObserver: VisibilityObserver
 
 export default defineComponent({
   props: {
-    open: {
+    isOpen: {
       type: Boolean,
       required: true
     },
@@ -178,9 +178,9 @@ export default defineComponent({
       },
       immediate: true
     },
-    open: {
-      handler: function (open) {
-        if (!open) {
+    isOpen: {
+      handler: function (isOpen) {
+        if (!isOpen) {
           return
         }
         this.$nextTick(() => {

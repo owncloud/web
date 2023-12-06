@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :side-bar-open="sideBarOpen">
+      <app-bar :is-side-bar-open="isSideBarOpen">
         <template #navigation>
           <SharesNavigation />
         </template>
@@ -45,7 +45,7 @@
           id="files-shared-with-others-table"
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': sideBarOpen }"
+          :class="{ 'files-table-squashed': isSideBarOpen }"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
@@ -77,7 +77,7 @@
       </template>
     </files-view-wrapper>
     <file-side-bar
-      :open="sideBarOpen"
+      :is-open="isSideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
     />

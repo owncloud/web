@@ -4,7 +4,7 @@
       <app-bar
         :breadcrumbs="breadcrumbs"
         :has-bulk-actions="true"
-        :side-bar-open="sideBarOpen"
+        :is-side-bar-open="isSideBarOpen"
         :space="space"
       />
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -25,7 +25,7 @@
           id="files-trashbin-table"
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': sideBarOpen }"
+          :class="{ 'files-table-squashed': isSideBarOpen }"
           :fields-displayed="['name', 'ddate']"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="false"
@@ -56,7 +56,7 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+    <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 

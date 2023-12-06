@@ -18,21 +18,21 @@ import { SideBarEventTopics } from '../../composables/sideBar'
 
 export default defineComponent({
   props: {
-    sideBarOpen: {
+    isSideBarOpen: {
       type: Boolean,
       default: false
     }
   },
   computed: {
     toggleSidebarButtonLabel() {
-      if (this.sideBarOpen) {
+      if (this.isSideBarOpen) {
         return this.$gettext('Close sidebar to hide details')
       }
       return this.$gettext('Open sidebar to view details')
     },
 
     toggleSidebarButtonIconFillType() {
-      return this.sideBarOpen ? 'fill' : 'line'
+      return this.isSideBarOpen ? 'fill' : 'line'
     }
   },
   methods: {

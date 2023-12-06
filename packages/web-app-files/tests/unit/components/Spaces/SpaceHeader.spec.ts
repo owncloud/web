@@ -14,7 +14,7 @@ describe('SpaceHeader', () => {
   it('should add the "squashed"-class when the sidebar is opened', () => {
     const wrapper = getWrapper({
       space: buildSpace({ id: '1' } as unknown as Drive),
-      sideBarOpen: true
+      isSideBarOpen: true
     })
     expect(wrapper.find('.space-header-squashed').exists()).toBeTruthy()
     expect(wrapper.html()).toMatchSnapshot()
@@ -46,13 +46,13 @@ describe('SpaceHeader', () => {
   })
 })
 
-function getWrapper({ space = {}, sideBarOpen = false, isMobileWidth = false }) {
+function getWrapper({ space = {}, isSideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
   const store = createStore(defaultStoreMockOptions)
   return mount(SpaceHeader, {
     props: {
       space,
-      sideBarOpen
+      isSideBarOpen
     },
     global: {
       mocks,

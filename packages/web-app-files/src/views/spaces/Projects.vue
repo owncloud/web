@@ -9,7 +9,7 @@
         :has-hidden-files="false"
         :has-file-extensions="false"
         :has-pagination="false"
-        :side-bar-open="sideBarOpen"
+        :is-side-bar-open="isSideBarOpen"
         :view-modes="viewModes"
         :view-mode-default="ViewModeConstants.tilesView.name"
       >
@@ -92,7 +92,7 @@
             v-model:selectedIds="selectedResourcesIds"
             :resources="paginatedItems"
             class="spaces-table"
-            :class="{ 'spaces-table-squashed': sideBarOpen }"
+            :class="{ 'spaces-table-squashed': isSideBarOpen }"
             :sticky="false"
             :fields-displayed="tableDisplayFields"
             :are-thumbnails-displayed="true"
@@ -151,7 +151,11 @@
         </div>
       </template>
     </files-view-wrapper>
-    <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="selectedSpace" />
+    <file-side-bar
+      :is-open="isSideBarOpen"
+      :active-panel="sideBarActivePanel"
+      :space="selectedSpace"
+    />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper class="oc-flex-column">
-      <app-bar :has-bulk-actions="true" :side-bar-open="sideBarOpen">
+      <app-bar :has-bulk-actions="true" :is-side-bar-open="isSideBarOpen">
         <template #navigation>
           <SharesNavigation />
         </template>
@@ -72,7 +72,7 @@
           :display-thumbnails="displayThumbnails"
           :file-list-header-y="fileListHeaderY"
           :items="items"
-          :side-bar-open="sideBarOpen"
+          :is-side-bar-open="isSideBarOpen"
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :sort-handler="handleSort"
@@ -85,7 +85,7 @@
       </template>
     </files-view-wrapper>
     <file-side-bar
-      :open="sideBarOpen"
+      :is-open="isSideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedShareSpace"
     />
@@ -97,7 +97,12 @@ import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { useResourcesViewDefaults } from '../../composables'
 
-import { AppLoadingSpinner, FileSideBar, InlineFilterOption, ItemFilter } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  FileSideBar,
+  InlineFilterOption,
+  ItemFilter
+} from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
@@ -135,7 +140,7 @@ export default defineComponent({
       selectedResources,
       selectedResourcesIds,
       sideBarActivePanel,
-      sideBarOpen,
+      isSideBarOpen,
       storeItems,
       scrollToResourceFromRoute
     } = useResourcesViewDefaults<Resource, any, any[]>()
@@ -260,7 +265,7 @@ export default defineComponent({
       selectedResources,
       selectedResourcesIds,
       fileListHeaderY,
-      sideBarOpen,
+      isSideBarOpen,
       sideBarActivePanel,
       selectedShareSpace,
 

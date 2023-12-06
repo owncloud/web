@@ -11,7 +11,7 @@
     <error-screen v-else-if="loadingError" :message="loadingError.message" />
     <div v-else class="oc-flex oc-width-1-1 oc-height-1-1">
       <slot v-bind="slotAttrs" />
-      <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+      <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
   </main>
 </template>

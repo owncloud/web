@@ -74,7 +74,7 @@
         </div>
       </span>
       <oc-button @click="toggleSideBar">
-        {{ sideBarOpen }}
+        {{ isSideBarOpen }}
         <oc-icon name="side-bar-right" />
       </oc-button>
     </div>
@@ -152,7 +152,7 @@ export default defineComponent({
     const toggleSideBar = () => {
       eventBus.publish(SideBarEventTopics.toggle)
     }
-    const { sideBarOpen } = useSideBar()
+    const { isSideBarOpen } = useSideBar()
 
     return {
       pathPrefix,
@@ -161,7 +161,7 @@ export default defineComponent({
       closeButtonLabel,
       parentFolderName,
       parentFolderLinkIconAdditionalAttributes,
-      sideBarOpen,
+      isSideBarOpen,
       toggleSideBar
     }
   }

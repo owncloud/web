@@ -64,7 +64,7 @@
           @toggle-next="next"
         />
       </div>
-      <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+      <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
   </main>
 </template>

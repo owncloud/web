@@ -7,7 +7,7 @@
       :side-bar-active-panel="sideBarActivePanel"
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-panel-context="sideBarPanelContext"
-      :side-bar-open="sideBarOpen"
+      :is-side-bar-open="isSideBarOpen"
       :is-side-bar-header-compact="selectedSpaces.length === 1"
       :show-batch-actions="!!selectedSpaces.length"
       :batch-actions="batchActions"
@@ -41,7 +41,7 @@
         <div v-else>
           <SpacesList
             :spaces="spaces"
-            :class="{ 'spaces-table-squashed': sideBarOpen }"
+            :class="{ 'spaces-table-squashed': isSideBarOpen }"
             :selected-spaces="selectedSpaces"
             @toggle-select-space="toggleSelectSpace"
             @select-spaces="selectSpaces"
@@ -113,7 +113,7 @@ export default defineComponent({
     const spaces = ref([])
     const clientService = useClientService()
     const { $gettext } = useGettext()
-    const { sideBarOpen, sideBarActivePanel } = useSideBar()
+    const { isSideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken
@@ -281,7 +281,7 @@ export default defineComponent({
 
     return {
       maxQuota: useCapabilitySpacesMaxQuota(),
-      sideBarOpen,
+      isSideBarOpen,
       sideBarActivePanel,
       spaces,
       loadResourcesTask,

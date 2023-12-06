@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :view-modes="viewModes" :side-bar-open="sideBarOpen" />
+      <app-bar :view-modes="viewModes" :is-side-bar-open="isSideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -19,7 +19,7 @@
           id="files-favorites-table"
           v-model:selectedIds="selectedResourcesIds"
           class="files-table"
-          :class="{ 'files-table-squashed': sideBarOpen }"
+          :class="{ 'files-table-squashed': isSideBarOpen }"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
@@ -53,7 +53,7 @@
       </template>
     </files-view-wrapper>
     <file-side-bar
-      :open="sideBarOpen"
+      :is-open="isSideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
     />

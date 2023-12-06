@@ -1,7 +1,7 @@
 <template>
   <div
     class="space-header oc-p-m"
-    :class="{ 'oc-flex': !imageExpanded && !isMobileWidth, 'space-header-squashed': sideBarOpen }"
+    :class="{ 'oc-flex': !imageExpanded && !isMobileWidth, 'space-header-squashed': isSideBarOpen }"
   >
     <div
       class="space-header-image"
@@ -106,7 +106,7 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: true
     },
-    sideBarOpen: { type: Boolean, default: false }
+    isSideBarOpen: { type: Boolean, default: false }
   },
   setup(props) {
     const language = useGettext()

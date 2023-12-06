@@ -9,7 +9,7 @@
         :show-actions-on-selection="displayFullAppBar"
         :has-sidebar-toggle="displayFullAppBar"
         :has-view-options="displayFullAppBar"
-        :side-bar-open="sideBarOpen"
+        :is-side-bar-open="isSideBarOpen"
         :space="space"
         :view-modes="viewModes"
         @item-dropped="fileDropped"
@@ -48,7 +48,7 @@
           <space-header
             v-if="hasSpaceHeader"
             :space="space"
-            :side-bar-open="sideBarOpen"
+            :is-side-bar-open="isSideBarOpen"
             class="oc-px-m oc-mt-m"
           />
           <no-content-message
@@ -107,7 +107,7 @@
             id="files-space-table"
             v-model:selectedIds="selectedResourcesIds"
             class="files-table"
-            :class="{ 'files-table-squashed': sideBarOpen }"
+            :class="{ 'files-table-squashed': isSideBarOpen }"
             :view-mode="viewMode"
             :are-thumbnails-displayed="displayThumbnails"
             :resources="paginatedResources"
@@ -150,7 +150,7 @@
         </template>
       </template>
     </files-view-wrapper>
-    <file-side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
+    <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
   </div>
 </template>
 

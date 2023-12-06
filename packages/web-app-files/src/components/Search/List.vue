@@ -1,7 +1,11 @@
 <template>
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
-      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
+      <app-bar
+        :breadcrumbs="breadcrumbs"
+        :has-bulk-actions="true"
+        :is-side-bar-open="isSideBarOpen"
+      />
       <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
@@ -139,7 +143,7 @@
       </template>
     </files-view-wrapper>
     <file-side-bar
-      :open="sideBarOpen"
+      :is-open="isSideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
     />
