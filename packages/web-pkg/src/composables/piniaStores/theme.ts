@@ -62,9 +62,16 @@ const WebTheme = z.object({
   logo: Logo.optional()
 })
 
-export const WebThemeConfig = z.object({
+const WebThemeConfig = z.object({
   defaults: ThemeDefaults,
   themes: z.array(WebTheme)
+})
+
+export const ThemingConfig = z.object({
+  common: CommonSection.optional(),
+  clients: z.object({
+    web: WebThemeConfig
+  })
 })
 
 type WebThemeType = z.infer<typeof WebTheme>
