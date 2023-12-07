@@ -1,0 +1,5 @@
+Enhancement: Create link modal
+
+When creating a link while passwords are enfoced, Web will now display a modal that lets the user not only set a password, but also the role and an optional expiration date.
+
+https://github.com/owncloud/web/pull/10104

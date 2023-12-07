@@ -24,7 +24,7 @@ const acceptButton = '.oc-files-actions-accept-share-trigger'
 const pendingShareItem =
   '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
 const passwordInput = '.oc-modal-body input.oc-text-input'
-const passwordSetButton = '.oc-modal-body-actions-confirm'
+const createLinkButton = '.oc-modal-body-actions-confirm'
 
 export interface ShareArgs {
   page: Page
@@ -124,7 +124,7 @@ export const clickActionInContextMenu = async (
         page.locator(util.format(actionsTriggerButton, resource, action)).click()
       ])
       break
-    case 'create-quicklink':
+    case 'copy-quicklink':
       await page.locator(util.format(actionsTriggerButton, resource, action)).click()
       break
     case 'decline-share':
@@ -200,7 +200,7 @@ export const createQuickLink = async (args: createLinkArgs): Promise<string> => 
   let url = ''
   const linkName = 'Link'
 
-  await clickActionInContextMenu({ page, resource }, 'create-quicklink')
+  await clickActionInContextMenu({ page, resource }, 'copy-quicklink')
   await page.locator(passwordInput).fill(password)
 
   await Promise.all([
@@ -210,7 +210,7 @@ export const createQuickLink = async (args: createLinkArgs): Promise<string> => 
         res.request().method() === 'POST' &&
         res.status() === 200
     ),
-    page.locator(passwordSetButton).click()
+    page.locator(createLinkButton).click()
   ])
   if (config.backendUrl.startsWith('https')) {
     // here is flaky https://github.com/owncloud/web/issues/9941

@@ -15,7 +15,7 @@
       <create-quick-link
         v-else-if="canCreateLinks"
         :expiration-rules="expirationRules"
-        @create-public-link="checkLinkToCreate"
+        @create-public-link="addNewLink"
       />
       <details-and-edit
         v-if="quicklink"
@@ -124,8 +124,11 @@ import {
   useCapabilityFilesSharingPublicPasswordEnforcedFor,
   useAbility,
   usePasswordPolicyService,
-  getDefaultLinkPermissions,
-  useExpirationRules
+  useExpirationRules,
+  useDefaultLinkPermissions,
+  useFileActionsCreateLink,
+  FileAction,
+  useClientService
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -137,7 +140,6 @@ import {
   Share,
   SharePermissions
 } from '@ownclouders/web-client/src/helpers/share'
-import { showQuickLinkPasswordModal } from '@ownclouders/web-pkg'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
@@ -151,6 +153,7 @@ import {
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -161,11 +164,23 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { $gettext } = useGettext()
     const ability = useAbility()
+    const clientService = useClientService()
     const { can } = ability
     const { expirationRules } = useExpirationRules()
     const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
+    const hasShareJail = useCapabilityShareJailEnabled()
+    const { defaultLinkPermissions } = useDefaultLinkPermissions()
+
+    const { actions: createLinkActions } = useFileActionsCreateLink({ store })
+    const createLinkAction = computed<FileAction>(() =>
+      unref(createLinkActions).find(({ name }) => name === 'create-links')
+    )
+    const createQuicklinkAction = computed<FileAction>(() =>
+      unref(createLinkActions).find(({ name }) => name === 'create-quick-links')
+    )
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
@@ -221,6 +236,63 @@ export default defineComponent({
       )
     }
 
+    const addNewLink = ({ link }) => {
+      const handlerArgs = { space: unref(space), resources: [unref(resource)] }
+      if (link?.quicklink) {
+        return unref(createQuicklinkAction)?.handler(handlerArgs)
+      }
+
+      return unref(createLinkAction)?.handler(handlerArgs)
+    }
+
+    const updatePublicLink = async ({ params }) => {
+      try {
+        await store.dispatch('Files/updateLink', {
+          id: params.id,
+          client: clientService.owncloudSdk,
+          params
+        })
+        store.dispatch('hideModal')
+        store.dispatch('showMessage', {
+          title: $gettext('Link was updated successfully')
+        })
+      } catch (e) {
+        // Human-readable error message is provided, for example when password is on banned list
+        if (e.statusCode === 400) {
+          return store.dispatch('setModalInputErrorMessage', $gettext(e.message))
+        }
+
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to update link'),
+          error: e
+        })
+      }
+    }
+
+    const showQuickLinkPasswordModal = (params) => {
+      const modal = {
+        variation: 'passive',
+        title: $gettext('Set password'),
+        cancelText: $gettext('Cancel'),
+        confirmText: $gettext('Set'),
+        hasInput: true,
+        inputDescription: $gettext('Passwords for links are required.'),
+        inputPasswordPolicy: passwordPolicyService.getPolicy(),
+        inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
+        inputLabel: $gettext('Password'),
+        inputType: 'password',
+        onInput: () => store.dispatch('setModalInputErrorMessage', ''),
+        onPasswordChallengeCompleted: () => store.dispatch('setModalConfirmButtonDisabled', false),
+        onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
+        onCancel: () => store.dispatch('hideModal'),
+        onConfirm: (newPassword: string) => {
+          return updatePublicLink({ params: { ...params, password: newPassword } })
+        }
+      }
+
+      return store.dispatch('createModal', modal)
+    }
+
     return {
       $store: store,
       ability,
@@ -228,7 +300,7 @@ export default defineComponent({
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
       hasSpaces: useCapabilitySpacesEnabled(),
-      hasShareJail: useCapabilityShareJailEnabled(),
+      hasShareJail,
       hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
       hasPublicLinkContribute: useCapabilityFilesSharingPublicCanContribute(),
       hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
@@ -241,10 +313,13 @@ export default defineComponent({
       canCreatePublicLinks,
       canDeleteReadOnlyPublicLinkPassword,
       configurationManager,
-      passwordPolicyService,
       canCreateLinks,
       canEditLink,
-      expirationRules
+      expirationRules,
+      updatePublicLink,
+      showQuickLinkPasswordModal,
+      defaultLinkPermissions,
+      addNewLink
     }
   },
   computed: {
@@ -380,39 +455,6 @@ export default defineComponent({
       )
     },
 
-    addNewLink() {
-      this.checkLinkToCreate({
-        link: {
-          name: this.$gettext('Link'),
-          permissions: getDefaultLinkPermissions({
-            ability: this.ability,
-            store: this.$store
-          }).toString(),
-          expiration: this.expirationRules.default,
-          password: false
-        }
-      })
-    },
-
-    checkLinkToCreate({ link }) {
-      const paramsToCreate = this.getParamsForLink(link)
-
-      if (this.isPasswordEnforcedFor(link)) {
-        showQuickLinkPasswordModal(
-          {
-            ...this.$language,
-            store: this.$store,
-            passwordPolicyService: this.passwordPolicyService
-          },
-          (newPassword) => {
-            this.createLink({ params: { ...paramsToCreate, password: newPassword } })
-          }
-        )
-      } else {
-        this.createLink({ params: paramsToCreate })
-      }
-    },
-
     checkLinkToUpdate({ link }) {
       let params = this.getParamsForLink(link)
       if (link.permissions === 0) {
@@ -424,16 +466,7 @@ export default defineComponent({
       }
 
       if (!link.password && !this.canDeletePublicLinkPassword(link)) {
-        showQuickLinkPasswordModal(
-          {
-            ...this.$language,
-            store: this.$store,
-            passwordPolicyService: this.passwordPolicyService
-          },
-          (newPassword) => {
-            this.updatePublicLink({ params: { ...params, password: newPassword } })
-          }
-        )
+        this.showQuickLinkPasswordModal(params)
       } else {
         this.updatePublicLink({ params })
       }
@@ -486,62 +519,6 @@ export default defineComponent({
         notifyUploadsExtraRecipients: link.notifyUploadsExtraRecipients,
         ...(this.currentStorageId && {
           storageId: this.currentStorageId
-        })
-      }
-    },
-
-    async createLink({ params }) {
-      let path = this.resource.path
-      // sharing a share root from the share jail -> use resource name as path
-      if (this.hasShareJail && path === '/') {
-        path = `/${this.resource.name}`
-      }
-      try {
-        await this.addLink({
-          path,
-          client: this.$client,
-          storageId: this.resource.fileId || this.resource.id,
-          params
-        })
-        this.hideModal()
-        this.showMessage({
-          title: this.$gettext('Link was created successfully')
-        })
-      } catch (e) {
-        console.error(e)
-
-        // Human-readable error message is provided, for example when password is on banned list
-        if (e.statusCode === 400) {
-          return this.setModalInputErrorMessage(this.$gettext(e.message))
-        }
-
-        this.showErrorMessage({
-          title: this.$gettext('Failed to create link'),
-          error: e
-        })
-      }
-    },
-
-    async updatePublicLink({ params }) {
-      try {
-        await this.updateLink({
-          id: params.id,
-          client: this.$client,
-          params
-        })
-        this.hideModal()
-        this.showMessage({
-          title: this.$gettext('Link was updated successfully')
-        })
-      } catch (e) {
-        // Human-readable error message is provided, for example when password is on banned list
-        if (e.statusCode === 400) {
-          return this.setModalInputErrorMessage(this.$gettext(e.message))
-        }
-
-        this.showErrorMessage({
-          title: this.$gettext('Failed to update link'),
-          error: e
         })
       }
     },

@@ -12,7 +12,7 @@ import ContextActions from '../../../../src/components/FilesList/ContextActions.
 
 import {
   useFileActionsAcceptShare,
-  useFileActionsCreateQuickLink,
+  useFileActionsCopyQuickLink,
   useFileActionsRename,
   useFileActionsCopy
 } from '../../../../src/composables'
@@ -47,7 +47,7 @@ describe.skip('ContextActions', () => {
     it('render enabled actions', () => {
       const enabledComposables = [
         useFileActionsAcceptShare,
-        useFileActionsCreateQuickLink,
+        useFileActionsCopyQuickLink,
         useFileActionsRename,
         useFileActionsCopy
       ]

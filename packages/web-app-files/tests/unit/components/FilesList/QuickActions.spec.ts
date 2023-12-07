@@ -26,7 +26,7 @@ const quicklinkAction = {
   handler: jest.fn(),
   icon: 'link-add',
   id: 'quicklink',
-  name: 'create-quicklink',
+  name: 'copy-quicklink',
   label: () => 'Create and copy quicklink'
 }
 
@@ -57,7 +57,7 @@ describe('QuickActions', () => {
     })
 
     it('should not display action buttons where "displayed" is set to false', () => {
-      const linkActionButton = wrapper.find('.files-quick-action-create-quicklink')
+      const linkActionButton = wrapper.find('.files-quick-action-copy-quicklink')
 
       expect(linkActionButton.exists()).toBeFalsy()
     })

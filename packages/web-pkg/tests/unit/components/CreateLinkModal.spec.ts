@@ -146,12 +146,13 @@ describe('CreateLinkModal', () => {
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [share.url])
     })
     it('shows error messages for links that failed to be created', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const consoleMock = jest.fn(() => undefined)
+      jest.spyOn(console, 'error').mockImplementation(consoleMock)
       const resources = [mock<Resource>({ isFolder: false })]
       const { wrapper, storeOptions } = getWrapper({ resources })
       storeOptions.modules.Files.actions.addLink.mockRejectedValue(new Error(''))
       await wrapper.find(selectors.confirmBtn).trigger('click')
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+      expect(consoleMock).toHaveBeenCalledTimes(1)
     })
   })
   describe('method "cancel"', () => {
