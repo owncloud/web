@@ -97,7 +97,7 @@ export default defineComponent({
         return {
           root: props.space,
           parent: null,
-          items: [unref(currentFolder)]
+          items: unref(currentFolder) ? [unref(currentFolder)] : []
         }
       }
       return {
