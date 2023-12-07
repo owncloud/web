@@ -34,6 +34,8 @@ Summary
 * Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+* Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
+* Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -51,27 +53,25 @@ Summary
 * Enhancement - Moving share's "set expiration date" function: [#9584](https://github.com/owncloud/web/pull/9584)
 * Enhancement - Add keyboard navigation to spaces overview: [#9625](https://github.com/owncloud/web/pull/9625)
 * Enhancement - Add batch actions to spaces: [#9627](https://github.com/owncloud/web/pull/9627)
-* Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
 * Enhancement - Add password policy compatibility: [#9682](https://github.com/owncloud/web/pull/9682)
 * Enhancement - Password generator for public links: [#9691](https://github.com/owncloud/web/pull/9691)
 * Enhancement - Added app banner for mobile devices: [#9696](https://github.com/owncloud/web/pull/9696)
 * Enhancement - Unify sharing expiration date menu items: [#9706](https://github.com/owncloud/web/pull/9706)
+* Enhancement - New WebDAV implementation in web-client: [#9709](https://github.com/owncloud/web/issues/9709)
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
+* Enhancement - Embed mode: [#9768](https://github.com/owncloud/web/issues/9768)
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
+* Enhancement - Registering search providers as extension: [#9794](https://github.com/owncloud/web/pull/9794)
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 * Enhancement - Add editors to the application menu: [#9809](https://github.com/owncloud/web/pull/9809)
 * Enhancement - Registering nav items as extension: [#9814](https://github.com/owncloud/web/pull/9814)
 * Enhancement - Add new portal into runtime to include footer: [#9815](https://github.com/owncloud/web/pull/9815)
-* Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
-* Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
 * Enhancement - Provide vendor neutral file icons: [#9847](https://github.com/owncloud/web/issues/9847)
-* Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
 * Enhancement - Search query term linking: [#9854](https://github.com/owncloud/web/pull/9854)
 * Enhancement - Add permission to delete link passwords when password is enforced: [#9857](https://github.com/owncloud/web/pull/9857)
 * Enhancement - Remove settings icon from searchbar: [#9858](https://github.com/owncloud/web/pull/9858)
-* Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 * Enhancement - Enable dark theme on importer: [#9884](https://github.com/owncloud/web/pull/9884)
 * Enhancement - Create shortcuts: [#9890](https://github.com/owncloud/web/pull/9890)
@@ -88,7 +88,6 @@ Summary
 * Enhancement - Add explaining contextual helper to spaces overview: [#10047](https://github.com/owncloud/web/pull/10047)
 * Enhancement - Folder tree creation during upload: [#10057](https://github.com/owncloud/web/pull/10057)
 * Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
-* Enhancement - Add authentication delegation in the Embed mode: [#10072](https://github.com/owncloud/web/issues/10072)
 * Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 * Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
 
@@ -308,6 +307,52 @@ Details
    https://github.com/owncloud/web/issues/7338
    https://github.com/owncloud/web/pull/9959
 
+* Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
+
+   We've introduced
+   [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference)
+   as our default query language. Previously we used our own simple language for
+   queries which is now replaced by kql.
+
+   `sample.tx* Tags:important Tags:report Content:annual*`
+
+   Becomes
+
+   `name:"sample.tx*" AND tag:important AND tag:report AND content:"annual*"`
+
+   By default KQL uses `AND` as property restriction and the query described above
+   can also be formulated as follows
+
+   `name:"sample.tx*" tag:important tag:report content:"annual*"`
+
+   More advanced syntax like grouping combined with boolean property restriction is
+   supported too
+
+   `(name:"sample*" name:"*txt") tag:important OR tag:report content:"annual*"`
+
+   BREAKING CHANGE for developers: the term which will be passed to the `search`
+   method of search providers is now wrapped inside `name:"..."`. If you don't want
+   that behaviour you need to strip it out, e.g. via simple regex: `const rawTerm =
+   term.match(new RegExp('name:"\\*(.*?)\\*"'))`.
+
+   https://github.com/owncloud/web/issues/9636
+   https://github.com/owncloud/web/issues/9646
+   https://github.com/owncloud/web/pull/9653
+
+* Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
+
+   The `DavProperties` coming from the `web-client` package don't include their
+   namespace anymore. E.g. `{http://owncloud.org/ns}fileid` has now become
+   `fileid`. This change was part of moving away from the WebDAV implementation of
+   the ownCloudSDK in favor of a new implementation in `web-client`.
+
+   There is a new subset `DavProperties.DavNamespace` to identify all properties
+   living under the default namespace `{DAV:}`. All other properties live under the
+   owncloud namespace `{http://owncloud.org/ns}`.
+
+   https://github.com/owncloud/web/issues/9709
+   https://github.com/owncloud/web/pull/9764
+
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
    We've added a new configuration option loginUrl to web, this is helpful if you
@@ -470,33 +515,6 @@ Details
    https://github.com/owncloud/web/issues/9626
    https://github.com/owncloud/web/pull/9627
 
-* Enhancement - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
-
-   We've introduced
-   [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference)
-   as our default query language. Previously we used our own simple language for
-   queries which is now replaced by kql.
-
-   `sample.tx* Tags:important Tags:report Content:annual*`
-
-   Becomes
-
-   `name:"sample.tx*" AND tag:important AND tag:report AND content:"annual*"`
-
-   By default KQL uses `AND` as property restriction and the query described above
-   can also be formulated as follows
-
-   `name:"sample.tx*" tag:important tag:report content:"annual*"`
-
-   More advanced syntax like grouping combined with boolean property restriction is
-   supported too
-
-   `(name:"sample*" name:"*txt") tag:important OR tag:report content:"annual*"`
-
-   https://github.com/owncloud/web/issues/9636
-   https://github.com/owncloud/web/issues/9646
-   https://github.com/owncloud/web/pull/9653
-
 * Enhancement - OcModal set buttons to same width: [#9671](https://github.com/owncloud/web/pull/9671)
 
    We've adjusted the button widths for every modal so the options look more equal.
@@ -547,6 +565,17 @@ Details
    https://github.com/owncloud/web/issues/9705
    https://github.com/owncloud/web/pull/9706
 
+* Enhancement - New WebDAV implementation in web-client: [#9709](https://github.com/owncloud/web/issues/9709)
+
+   The WebDAV implementation of the ownCloudSDK has been deprecated in favor of a
+   new implementation in the `web-client` package. For developers this means that
+   every WebDAV request should be made using the WebDAV factory provided by the
+   `ClientService`. E.g. to retrieve files: `const files = await
+   clientService.webdav.listFiles(space)`.
+
+   https://github.com/owncloud/web/issues/9709
+   https://github.com/owncloud/web/pull/9764
+
 * Enhancement - Show error if password is on a banned password list: [#9727](https://github.com/owncloud/web/pull/9727)
 
    We now show a meaningful error if the user tries to set a public link password,
@@ -554,6 +583,25 @@ Details
 
    https://github.com/owncloud/web/issues/9726
    https://github.com/owncloud/web/pull/9727
+
+* Enhancement - Embed mode: [#9768](https://github.com/owncloud/web/issues/9768)
+
+   We've introduced a so called "Embed Mode" that allows Web to be consumed by
+   another application in a stripped down version. This mode is supposed to be used
+   in the context of selecting or sharing resources.
+
+   Please see our documentation for more information and a guide on how to set it
+   up.
+
+   https://github.com/owncloud/web/issues/9768
+   https://github.com/owncloud/web/pull/9841
+   https://github.com/owncloud/web/pull/9853
+   https://github.com/owncloud/web/pull/9863
+   https://github.com/owncloud/web/pull/9981
+   https://github.com/owncloud/web/pull/10113
+   https://github.com/owncloud/web/pull/10071
+   https://github.com/owncloud/web/pull/10076
+   https://github.com/owncloud/web/pull/10082
 
 * Enhancement - Handle postprocessing state via Server Sent Events: [#9771](https://github.com/owncloud/web/pull/9771)
 
@@ -563,6 +611,16 @@ Details
 
    https://github.com/owncloud/web/issues/9769
    https://github.com/owncloud/web/pull/9771
+
+* Enhancement - Registering search providers as extension: [#9794](https://github.com/owncloud/web/pull/9794)
+
+   Search providers can now be registered as an extension via our extension
+   registry. They need to be of type `search`.
+
+   The old way of registering and requesting search providers via the event bus has
+   been removed.
+
+   https://github.com/owncloud/web/pull/9794
 
 * Enhancement - Preview image presentation: [#9806](https://github.com/owncloud/web/pull/9806)
 
@@ -606,16 +664,6 @@ Details
 
    https://github.com/owncloud/web/pull/9815
 
-* Enhancement - Add `mode` config option: [#9818](https://github.com/owncloud/web/pull/9818)
-
-   We've added a new config option called `mode`. This option can be set via
-   config.json in the options object or query parameter. This config option asserts
-   different modes of the UI. Currently, it will be used in the embed mode to hide
-   certain parts of the UI.
-
-   https://github.com/owncloud/web/issues/9768
-   https://github.com/owncloud/web/pull/9818
-
 * Enhancement - Last modified filter chips: [#9831](https://github.com/owncloud/web/pull/9831)
 
    We've added a "last modified" filter chip in search to narrow down results based
@@ -623,17 +671,6 @@ Details
 
    https://github.com/owncloud/web/issues/9779
    https://github.com/owncloud/web/pull/9831
-
-* Enhancement - Add embed mode actions: [#9841](https://github.com/owncloud/web/pull/9841)
-
-   We've added three new actions available in the embed mode. These actions are
-   "Share", "Select" and "Share". They are emitting events with an optional
-   payload. For more information, check the documentation.
-
-   https://github.com/owncloud/web/issues/9768
-   https://github.com/owncloud/web/pull/9841
-   https://github.com/owncloud/web/pull/9981
-   https://github.com/owncloud/web/pull/10071
 
 * Enhancement - Provide vendor neutral file icons: [#9847](https://github.com/owncloud/web/issues/9847)
 
@@ -643,16 +680,6 @@ Details
    https://github.com/owncloud/web/issues/9847
    https://github.com/owncloud/web/pull/9911
    https://github.com/owncloud/web/pull/10037
-
-* Enhancement - Show only create folder button in embed mode: [#9853](https://github.com/owncloud/web/pull/9853)
-
-   We've changed the actions in the AppBar in Files app to show only create folder
-   button instead of create and upload actions. In embed mode, it is possible to
-   only create a new folder so it does not make sense to hide this action inside of
-   a dropdown.
-
-   https://github.com/owncloud/web/issues/9768
-   https://github.com/owncloud/web/pull/9853
 
 * Enhancement - Search query term linking: [#9854](https://github.com/owncloud/web/pull/9854)
 
@@ -689,17 +716,6 @@ Details
 
    https://github.com/owncloud/web/issues/9664
    https://github.com/owncloud/web/pull/9858
-
-* Enhancement - Location picker in embed mode: [#9863](https://github.com/owncloud/web/pull/9863)
-
-   We've added a new query param called `embed-target` which can have value
-   `location`. This value is then saved in the `configuration.options` object as
-   `embedTarget`. When the value is set to `location`, it allows selecting the
-   `currentFolder` as location instead of selecting resources.
-
-   https://github.com/owncloud/web/issues/9768
-   https://github.com/owncloud/web/pull/9863
-   https://github.com/owncloud/web/pull/9981
 
 * Enhancement - Search tags filter chips style aligned: [#9864](https://github.com/owncloud/web/pull/9864)
 
@@ -841,16 +857,6 @@ Details
 
    https://github.com/owncloud/web/issues/9714
    https://github.com/owncloud/web/pull/10062
-
-* Enhancement - Add authentication delegation in the Embed mode: [#10072](https://github.com/owncloud/web/issues/10072)
-
-   We've added authentication delegation so that the user does not need to
-   reauthenticate when the parent application already holds a valid access token
-   for the user.
-
-   https://github.com/owncloud/web/issues/10072
-   https://github.com/owncloud/web/pull/10082
-   https://github.com/owncloud/web/pull/10113
 
 * Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 
