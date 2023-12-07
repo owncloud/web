@@ -26,7 +26,7 @@ export const useFileActionsCopyQuickLink = ({ store }: { store?: Store<any> } = 
   const { canShare } = useCanShare()
   const { copyToClipboard } = useClipboard()
 
-  const callback = async (result: PromiseSettledResult<Share>[]) => {
+  const onLinkCreatedCallback = async (result: PromiseSettledResult<Share>[]) => {
     const link = result.find(
       (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
     )
@@ -37,7 +37,7 @@ export const useFileActionsCopyQuickLink = ({ store }: { store?: Store<any> } = 
 
   const { actions: createLinkActions } = useFileActionsCreateLink({
     store,
-    callback,
+    onLinkCreatedCallback,
     showMessages: false
   })
   const createQuicklinkAction = computed<FileAction>(() =>

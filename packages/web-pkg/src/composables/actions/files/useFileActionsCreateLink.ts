@@ -17,12 +17,12 @@ export const useFileActionsCreateLink = ({
   store,
   enforceModal = false,
   showMessages = true,
-  callback = undefined
+  onLinkCreatedCallback = undefined
 }: {
   store?: Store<any>
   enforceModal?: boolean
   showMessages?: boolean
-  callback?: (result: PromiseSettledResult<Share>[]) => Promise<void> | void
+  onLinkCreatedCallback?: (result: PromiseSettledResult<Share>[]) => Promise<void> | void
 } = {}) => {
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
@@ -53,8 +53,8 @@ export const useFileActionsCreateLink = ({
       })
     }
 
-    if (callback) {
-      callback(result)
+    if (onLinkCreatedCallback) {
+      onLinkCreatedCallback(result)
     }
   }
 
