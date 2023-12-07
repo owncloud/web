@@ -90,6 +90,7 @@ Summary
 * Enhancement - Show webdav information in details view: [#10062](https://github.com/owncloud/web/pull/10062)
 * Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 * Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
+* Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
 
 Details
 -------
@@ -879,6 +880,14 @@ Details
 
    https://github.com/owncloud/web/issues/7338
    https://github.com/owncloud/web/pull/10102
+
+* Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
+
+   When creating a link while passwords are enfoced, Web will now display a modal
+   that lets the user not only set a password, but also the role and an optional
+   expiration date.
+
+   https://github.com/owncloud/web/pull/10104
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
