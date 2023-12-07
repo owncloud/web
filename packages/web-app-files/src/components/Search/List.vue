@@ -102,6 +102,7 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           :fields-displayed="['name', 'size', 'tags', 'mdate']"
+          :resource-dom-selector="resourceDomSelector"
           @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
@@ -203,6 +204,7 @@ import {
   useKeyboardTableMouseActions,
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { extractDomSelector } from '@ownclouders/web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -434,6 +436,14 @@ export default defineComponent({
       ]
     })
 
+    const resourceDomSelector = ({ id, shareId }: Resource) => {
+      let selectorStr = id.toString()
+      if (shareId) {
+        selectorStr += shareId
+      }
+      return extractDomSelector(selectorStr)
+    }
+
     onMounted(async () => {
       // Store resources are shared across table views, therefore
       // the store state needs a reset to prevent the old list of resources
@@ -492,7 +502,8 @@ export default defineComponent({
       lastModifiedFilter,
       mediaTypeFilter,
       availableMediaTypeValues,
-      getFakeResourceForIcon
+      getFakeResourceForIcon,
+      resourceDomSelector
     }
   },
   computed: {
