@@ -1,0 +1,8 @@
+Change: DavProperties without namespace
+
+The `DavProperties` coming from the `web-client` package don't include their namespace anymore. E.g. `{http://owncloud.org/ns}fileid` has now become `fileid`. This change was part of moving away from the WebDAV implementation of the ownCloudSDK in favor of a new implementation in `web-client`.
+
+There is a new subset `DavProperties.DavNamespace` to identify all properties living under the default namespace `{DAV:}`. All other properties live under the owncloud namespace `{http://owncloud.org/ns}`.
+
+https://github.com/owncloud/web/issues/9709
+https://github.com/owncloud/web/pull/9764
