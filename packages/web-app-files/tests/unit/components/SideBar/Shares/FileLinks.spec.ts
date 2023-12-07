@@ -6,11 +6,15 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
-import { getDefaultLinkPermissions, useFileActionsCreateLink } from '@ownclouders/web-pkg'
+import {
+  FileAction,
+  getDefaultLinkPermissions,
+  useFileActionsCreateLink
+} from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
 const defaultLinksList = [
@@ -90,8 +94,7 @@ describe('FileLinks', () => {
     })
 
     describe('when the add-new-link button is clicked', () => {
-      // TODO: fix and add tests
-      it.skip('should call createLink', async () => {
+      it('should call createLink', async () => {
         const { wrapper, mocks } = getWrapper({ abilities: [] })
         await wrapper.find(selectors.linkAddButton).trigger('click')
         expect(mocks.createLinkMock).toHaveBeenCalledTimes(1)
@@ -167,7 +170,9 @@ function getWrapper({
 } = {}) {
   const createLinkMock = jest.fn()
   jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
-  jest.mocked(useFileActionsCreateLink).mockReturnValue({ actions: computed(() => []) })
+  jest.mocked(useFileActionsCreateLink).mockReturnValue({
+    actions: computed(() => [mock<FileAction>({ name: 'create-links', handler: createLinkMock })])
+  })
 
   const storeOptions = {
     ...defaultStoreMockOptions,
