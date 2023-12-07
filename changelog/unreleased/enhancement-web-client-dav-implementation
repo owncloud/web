@@ -1,0 +1,6 @@
+Enhancement: New WebDAV implementation in web-client
+
+The WebDAV implementation of the ownCloudSDK has been deprecated in favor of a new implementation in the `web-client` package. For developers this means that every WebDAV request should be made using the WebDAV factory provided by the `ClientService`. E.g. to retrieve files: `const files = await clientService.webdav.listFiles(space)`.
+
+https://github.com/owncloud/web/issues/9709
+https://github.com/owncloud/web/pull/9764
