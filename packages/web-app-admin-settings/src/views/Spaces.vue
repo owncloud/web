@@ -8,7 +8,6 @@
       :side-bar-available-panels="sideBarAvailablePanels"
       :side-bar-panel-context="sideBarPanelContext"
       :is-side-bar-open="isSideBarOpen"
-      :is-side-bar-header-compact="selectedSpaces.length === 1"
       :show-batch-actions="!!selectedSpaces.length"
       :batch-actions="batchActions"
       :batch-action-items="selectedSpaces"

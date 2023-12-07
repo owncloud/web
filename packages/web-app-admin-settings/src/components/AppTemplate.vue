@@ -57,7 +57,6 @@
         :panel-context="sideBarPanelContext"
         :loading="sideBarLoading"
         :is-open="isSideBarOpen"
-        :is-header-compact="isSideBarHeaderCompact"
         @select-panel="selectPanel"
         @close="closeSideBar"
       >
@@ -126,11 +125,6 @@ export default defineComponent({
       default: false
     },
     sideBarLoading: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
-    isSideBarHeaderCompact: {
       required: false,
       type: Boolean,
       default: false

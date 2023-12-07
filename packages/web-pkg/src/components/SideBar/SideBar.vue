@@ -20,8 +20,7 @@
         :class="{
           'is-active-sub-panel': activeAvailablePanelName === panel.name,
           'is-active-default-panel': panel.isRoot?.(panelContext) && activePanelName === panel.name,
-          'sidebar-panel-default': panel.isRoot?.(panelContext),
-          'compact-header': isHeaderCompact
+          'sidebar-panel-default': panel.isRoot?.(panelContext)
         }"
       >
         <div
@@ -53,9 +52,11 @@
           </oc-button>
         </div>
 
-        <slot name="header" />
+        <div>
+          <slot name="header" />
+        </div>
         <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.name}`]">
-          <div class="sidebar-panel__body-content">
+          <div :class="{ 'sidebar-panel__body-content-stretch': !panel.isRoot?.(panelContext) }">
             <slot name="body">
               <component
                 :is="panel.component"
@@ -118,11 +119,6 @@ export default defineComponent({
       type: String,
       required: false,
       default: ''
-    },
-    isHeaderCompact: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   emits: ['close', 'selectPanel'],
@@ -303,7 +299,7 @@ export default defineComponent({
   height: 100%;
   max-height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   background-color: var(--oc-color-background-default);
   top: 0;
   position: absolute;
@@ -321,10 +317,6 @@ export default defineComponent({
 
   @media screen and (prefers-reduced-motion: reduce), (update: slow) {
     transition-duration: 0.001ms !important;
-  }
-
-  &.compact-header {
-    grid-template-rows: auto auto 1fr;
   }
 
   &.sidebar-panel-default {
@@ -371,6 +363,12 @@ export default defineComponent({
     overflow-y: auto;
     overflow-x: hidden;
     padding: var(--oc-space-small);
+    display: flex;
+    flex-direction: column;
+
+    &-content-stretch {
+      flex: 1;
+    }
   }
 
   &__navigation {

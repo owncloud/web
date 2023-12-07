@@ -2,6 +2,6 @@
 
 exports[`General view renders component 1`] = `
 <div>
-  <app-template-stub batchactionitems="" batchactions="" breadcrumbs="[object Object],[object Object]" issidebarheadercompact="false" loading="false" showappbar="false" showbatchactions="false" showviewoptions="false" sidebaravailablepanels="" sidebarloading="false" issidebaropen="false"></app-template-stub>
+  <app-template-stub batchactionitems="" batchactions="" breadcrumbs="[object Object],[object Object]" loading="false" showappbar="false" showbatchactions="false" showviewoptions="false" sidebaravailablepanels="" sidebarloading="false" issidebaropen="false"></app-template-stub>
 </div>
 `;

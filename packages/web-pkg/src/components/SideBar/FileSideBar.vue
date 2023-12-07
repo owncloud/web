@@ -9,7 +9,6 @@
     :available-panels="availablePanels"
     :panel-context="panelContext"
     :loading="isLoading"
-    :is-header-compact="!!loadedResource"
     v-bind="$attrs"
     data-custom-key-bindings-disabled="true"
     @before-unmount="destroySideBar"
