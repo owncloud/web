@@ -1,0 +1,7 @@
+Enhancement: Registering search providers as extension
+
+Search providers can now be registered as an extension via our extension registry. They need to be of type `search`.
+
+The old way of registering and requesting search providers via the event bus has been removed.
+
+https://github.com/owncloud/web/pull/9794

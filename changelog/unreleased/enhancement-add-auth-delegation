@@ -1,8 +1,0 @@
-Enhancement: Add authentication delegation in the Embed mode
-
-We've added authentication delegation so that the user does not need to reauthenticate when the parent application already holds a
-valid access token for the user.
-
-https://github.com/owncloud/web/issues/10072
-https://github.com/owncloud/web/pull/10082
-https://github.com/owncloud/web/pull/10113

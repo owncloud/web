@@ -1,4 +1,4 @@
-Enhancement: Keyword Query Language (KQL) search syntax
+Change: Keyword Query Language (KQL) search syntax
 
 We've introduced [KQL](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/keyword-query-language-kql-syntax-reference) as our default query language.
 Previously we used our own simple language for queries which is now replaced by kql.
@@ -16,6 +16,8 @@ by default KQL uses `AND` as property restriction and the query described above 
 More advanced syntax like grouping combined with boolean property restriction is supported too
 
 `(name:"sample*" name:"*txt") tag:important OR tag:report content:"annual*"`
+
+BREAKING CHANGE for developers: the term which will be passed to the `search` method of search providers is now wrapped inside `name:"..."`. If you don't want that behaviour you need to strip it out, e.g. via simple regex: `const rawTerm = term.match(new RegExp('name:"\\*(.*?)\\*"'))`.
 
 https://github.com/owncloud/web/pull/9653
 https://github.com/owncloud/web/issues/9636
