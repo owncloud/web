@@ -5,6 +5,7 @@ import { SideBarEventTopics } from './eventTopics'
 interface SideBarResult {
   isSideBarOpen: Ref<boolean>
   sideBarActivePanel: Ref<string>
+  onPanelActive: (name: string, callback: (string: any) => void) => void
 }
 
 interface SideBarOptions {
@@ -47,8 +48,21 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
     eventBus.unsubscribe(SideBarEventTopics.setActivePanel, setActiveSideBarPanelToken)
   })
 
+  const onPanelActive = (name: string, callback: (string) => void) => {
+    eventBus.subscribe(SideBarEventTopics.setActivePanel, (panelName: string) => {
+      if (name !== panelName) {
+        return
+      }
+      // acount for threshold
+      setTimeout(() => {
+        callback(panelName)
+      }, 100)
+    })
+  }
+
   return {
     isSideBarOpen: readonly(isSideBarOpen),
-    sideBarActivePanel: readonly(sideBarActivePanel)
+    sideBarActivePanel: readonly(sideBarActivePanel),
+    onPanelActive
   }
 }
