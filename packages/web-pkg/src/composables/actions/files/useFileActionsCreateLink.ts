@@ -37,10 +37,11 @@ export const useFileActionsCreateLink = ({
     )
     if (succeeded.length && showMessages) {
       store.dispatch('showMessage', {
-        title:
-          succeeded.length > 1
-            ? $gettext('Links have been created successfully')
-            : $gettext('Link has been created successfully')
+        title: $ngettext(
+          'Link has been created successfully',
+          'Links have been created successfully',
+          succeeded.length
+        )
       })
     }
 
@@ -48,10 +49,7 @@ export const useFileActionsCreateLink = ({
     if (failed.length && showMessages) {
       store.dispatch('showErrorMessage', {
         errors: (failed as PromiseRejectedResult[]).map(({ reason }) => new Error(reason)),
-        title:
-          succeeded.length > 1
-            ? $gettext('Failed to create links')
-            : $gettext('Failed to create link')
+        title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })
     }
 
