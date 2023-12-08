@@ -1,5 +1,4 @@
 <template>
-  <app-banner :file-id="fileId"></app-banner>
   <main
     id="preview"
     ref="preview"
@@ -70,8 +69,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import { Resource } from '@ownclouders/web-client/src'
-import { AppTopBar, ProcessorType } from '@ownclouders/web-pkg'
+import { Resource } from 'web-client/src'
+import AppTopBar from 'web-pkg/src/components/AppTopBar.vue'
 import {
   queryItemAsString,
   sortHelper,
@@ -79,16 +78,15 @@ import {
   useRoute,
   useRouteQuery,
   useRouter
-} from '@ownclouders/web-pkg'
-import { Action, ActionOptions } from '@ownclouders/web-pkg'
-import { useDownloadFile } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
+} from 'web-pkg/src/composables'
+import { Action, ActionOptions } from 'web-pkg/src/composables/actions/types'
+import { useDownloadFile } from 'web-pkg/src/composables/download/useDownloadFile'
+import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
-import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
 
@@ -114,7 +112,6 @@ export const mimeTypes = () => {
 export default defineComponent({
   name: 'Preview',
   components: {
-    AppBanner,
     AppTopBar,
     MediaControls,
     MediaAudio,
@@ -442,8 +439,7 @@ export default defineComponent({
       return this.$previewService.loadPreview({
         space: unref(this.currentFileContext.space),
         resource: file,
-        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number],
-        processor: ProcessorType.enum.fit
+        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number]
       })
     },
     preloadImages() {
