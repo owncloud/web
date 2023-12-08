@@ -805,12 +805,6 @@ importers:
 
   packages/web-app-preview:
     dependencies:
-      '@ownclouders/web-client':
-        specifier: workspace:*
-        version: link:../web-client
-      '@ownclouders/web-pkg':
-        specifier: workspace:*
-        version: link:../web-pkg
       '@vueuse/core':
         specifier: ^10.3.0
         version: 10.7.0(vue@3.3.4)
@@ -820,6 +814,12 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
+      web-client:
+        specifier: workspace:@ownclouders/web-client@*
+        version: link:../web-client
+      web-pkg:
+        specifier: workspace:@ownclouders/web-pkg@*
+        version: link:../web-pkg
     devDependencies:
       '@panzoom/panzoom':
         specifier: ^4.5.1
