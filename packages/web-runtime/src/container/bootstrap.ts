@@ -622,6 +622,10 @@ const onSSEProcessingFinishedEvent = ({
   try {
     const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
     const currentFolder = store.getters['Files/currentFolder']
+    if (!currentFolder) {
+      return
+    }
+
     // UPDATE_RESOURCE_FIELD only handles files in the currentFolder, so we can shortcut here for now
     if (!extractNodeId(currentFolder.id)) {
       // if we don't have a nodeId here, we have a space (root) as current folder and can only check against the storageId
