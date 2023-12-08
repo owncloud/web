@@ -11,6 +11,8 @@ import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { resolveFileNameDuplicate } from '../../../helpers'
 import PQueue from 'p-queue'
+import { useRouter } from '../../router'
+import { isLocationSpacesActive } from '../../../router'
 
 export const useSpaceActionsDuplicate = ({
   store
@@ -18,10 +20,13 @@ export const useSpaceActionsDuplicate = ({
   store?: Store<any>
 } = {}) => {
   store = store || useStore()
+  const router = useRouter()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+
+  const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
 
   const duplicateSpace = async (existingSpace: SpaceResource) => {
     const projectSpaces: SpaceResource[] = store.getters['runtime/spaces/spaces'].filter(
@@ -96,6 +101,10 @@ export const useSpaceActionsDuplicate = ({
       }
 
       store.commit('runtime/spaces/UPSERT_SPACE', duplicatedSpace)
+      if (isProjectsLocation) {
+        store.commit('Files/UPSERT_RESOURCE', duplicatedSpace)
+      }
+
       store.dispatch('showMessage', {
         title: $gettext('Space "%{space}" was duplicated successfully', {
           space: existingSpace.name

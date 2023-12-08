@@ -1,5 +1,5 @@
 import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { AbilityRule, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -24,14 +24,14 @@ const spaces = [
 describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
     })
     it('should be false when the space is disabled', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -47,7 +47,7 @@ describe('restore', () => {
       })
     })
     it('should be false when the space is no project space', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -63,7 +63,7 @@ describe('restore', () => {
       })
     })
     it('should be false when the current user can not create spaces', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         abilities: [],
         setup: ({ actions }, { storeOptions }) => {
           expect(
@@ -75,7 +75,7 @@ describe('restore', () => {
       })
     })
     it('should be true when the current user can create spaces', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -90,9 +90,9 @@ describe('restore', () => {
     })
   })
   describe('method "duplicateSpace"', () => {
-    it('should show error message on error', async () => {
+    it('should show error message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockRejectedValue(new Error())
           await duplicateSpace(spaces[0])
@@ -100,9 +100,8 @@ describe('restore', () => {
         }
       })
     })
-    it('should show message on success', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+    it('should show message on success', () => {
+      getWrapper({
         setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
             mockAxiosResolve({
@@ -127,12 +126,30 @@ describe('restore', () => {
         }
       })
     })
+    it('should upsert a space as resource on the projects page', () => {
+      getWrapper({
+        currentRouteName: 'files-spaces-projects',
+        setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
+          clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
+            mockAxiosResolve({
+              id: '1',
+              name: 'Moon (1)',
+              special: []
+            })
+          )
+          clientService.webdav.listFiles.mockResolvedValue({ children: [] } as ListFilesResult)
+          await duplicateSpace(spaces[0])
+          expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
+        }
+      })
+    })
   })
 })
 
 function getWrapper({
   setup,
-  abilities = [{ action: 'create-all', subject: 'Drive' }]
+  abilities = [{ action: 'create-all', subject: 'Drive' }],
+  currentRouteName = 'files-spaces-generic'
 }: {
   setup: (
     instance: ReturnType<typeof useSpaceActionsDuplicate>,
@@ -144,7 +161,8 @@ function getWrapper({
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
-  abilities?
+  abilities?: AbilityRule[]
+  currentRouteName?: string
 }) {
   const storeOptions = {
     ...defaultStoreMockOptions
@@ -152,7 +170,7 @@ function getWrapper({
   storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
-    currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
+    currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
   return {
     mocks,
