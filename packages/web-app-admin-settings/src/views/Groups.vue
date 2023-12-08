@@ -81,7 +81,7 @@ import {
   useSideBar,
   useStore
 } from '@ownclouders/web-pkg'
-import { Group } from '@ownclouders/web-client/src/helpers'
+import { Group } from '@ownclouders/web-client/src/generated'
 import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'

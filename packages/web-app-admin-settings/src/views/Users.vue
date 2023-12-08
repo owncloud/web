@@ -184,8 +184,8 @@ import {
   useUserActionsEditQuota
 } from '../composables'
 import { SpaceResource } from '@ownclouders/web-client'
-import { Drive } from '@ownclouders/web-client/src/generated'
-import { isPersonalSpaceResource, User, Group } from '@ownclouders/web-client/src/helpers'
+import { Drive, User, Group } from '@ownclouders/web-client/src/generated'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   AppLoadingSpinner,
   ItemFilter,

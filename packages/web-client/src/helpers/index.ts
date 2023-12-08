@@ -1,4 +1,3 @@
-export * from './group'
 export * from './item'
 export * from './publicLink'
 export * from './resource'
