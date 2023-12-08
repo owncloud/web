@@ -758,7 +758,10 @@ Details
    click an additional context menu action.
 
    https://github.com/owncloud/web/issues/9783
+   https://github.com/owncloud/web/issues/10115
+   https://github.com/owncloud/web/issues/10114
    https://github.com/owncloud/web/pull/9905
+   https://github.com/owncloud/web/pull/10138
 
 * Enhancement - Reorganize "New" menu: [#9906](https://github.com/owncloud/web/pull/9906)
 
