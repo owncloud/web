@@ -18,7 +18,8 @@ const spaces = [
     description: 'To the moon',
     type: 'project',
     spaceImageData: null,
-    spaceReadmeData: null
+    spaceReadmeData: null,
+    spaceQuota: { total: Math.pow(10, 9) }
   })
 ]
 describe('restore', () => {
@@ -115,7 +116,10 @@ describe('restore', () => {
           expect(clientService.graphAuthenticated.drives.createDrive).toHaveBeenCalledWith(
             {
               description: 'To the moon',
-              name: 'Moon (1)'
+              name: 'Moon (1)',
+              quota: {
+                total: Math.pow(10, 9)
+              }
             },
             expect.anything()
           )
