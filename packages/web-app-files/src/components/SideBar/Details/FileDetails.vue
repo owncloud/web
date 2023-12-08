@@ -159,6 +159,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
+    },
+    tagsEnabled: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   setup(props) {
@@ -250,12 +255,17 @@ export default defineComponent({
       data: tagsHelper({ configurationManager: configurationManager })
     } as ContextualHelper
 
+    const capabilityFilesTags = useCapabilityFilesTags()
+    const hasTags = computed(() => {
+      return props.tagsEnabled && unref(capabilityFilesTags)
+    })
+
     return {
       preview,
       isPublicLinkContext,
       space,
       resource,
-      hasTags: useCapabilityFilesTags(),
+      hasTags,
       isPreviewLoading,
       ancestorMetaData,
       sharedAncestor,

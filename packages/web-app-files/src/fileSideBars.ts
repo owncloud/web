@@ -19,7 +19,8 @@ import {
   useRouter,
   useStore,
   SidebarPanelExtension,
-  useIsFilesAppActive
+  useIsFilesAppActive,
+  useGetMatchingSpace
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -40,6 +41,7 @@ export const sideBarPanels = () => {
   const isSharingApiEnabled = useCapabilityFilesSharingApiEnabled(store)
   const arePublicLinksEnabled = useCapabilityFilesSharingPublicEnabled(store)
   const isFilesAppActive = useIsFilesAppActive()
+  const { isPersonalSpaceRoot } = useGetMatchingSpace()
 
   return computed(
     () =>
@@ -76,8 +78,9 @@ export const sideBarPanels = () => {
             icon: 'questionnaire-line',
             title: () => $gettext('Details'),
             component: FileDetails,
-            componentAttrs: () => ({
-              previewEnabled: unref(isFilesAppActive)
+            componentAttrs: ({ items }) => ({
+              previewEnabled: unref(isFilesAppActive),
+              tagsEnabled: !isPersonalSpaceRoot(items[0])
             }),
             isRoot: () => !isLocationTrashActive(router, 'files-trash-generic'),
             isVisible: ({ items }) => {
@@ -135,6 +138,10 @@ export const sideBarPanels = () => {
               if (items?.length !== 1) {
                 return false
               }
+              if (isPersonalSpaceRoot(items[0])) {
+                // actions panel is not available on the personal space root for now ;-)
+                return false
+              }
               // project spaces have their own "actions" panel
               return !isProjectSpaceResource(items[0])
             }
@@ -165,6 +172,10 @@ export const sideBarPanels = () => {
               }
               if (isProjectSpaceResource(items[0])) {
                 // project space roots have their own "sharing" panel (= space members)
+                return false
+              }
+              if (isPersonalSpaceRoot(items[0])) {
+                // sharing panel is not available on the personal space root
                 return false
               }
               if (
