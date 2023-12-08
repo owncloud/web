@@ -38,7 +38,8 @@ export const useSpaceActionsDuplicate = ({
       const { data: createdSpace } = await clientService.graphAuthenticated.drives.createDrive(
         {
           name: duplicatedSpaceName,
-          description: existingSpace.description
+          description: existingSpace.description,
+          quota: { total: existingSpace.spaceQuota.total }
         },
         {}
       )
