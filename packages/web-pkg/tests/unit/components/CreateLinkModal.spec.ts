@@ -27,6 +27,7 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
+import { useCreateLink } from '../../../src/composables/links'
 import { ref } from 'vue'
 
 jest.mock('../../../src/composables/embedMode')
@@ -34,6 +35,10 @@ jest.mock('../../../src/composables/passwordPolicyService')
 jest.mock('../../../src/helpers/share/link', () => ({
   ...jest.requireActual('../../../src/helpers/share/link'),
   getDefaultLinkPermissions: jest.fn()
+}))
+jest.mock('../../../src/composables/links', () => ({
+  ...jest.requireActual('../../../src/composables/links'),
+  useCreateLink: jest.fn()
 }))
 
 const selectors = {
@@ -132,16 +137,16 @@ describe('CreateLinkModal', () => {
     })
     it('creates links for all resources', async () => {
       const resources = [mock<Resource>({ isFolder: false }), mock<Resource>({ isFolder: false })]
-      const { wrapper, storeOptions } = getWrapper({ resources })
+      const { wrapper, storeOptions, mocks } = getWrapper({ resources })
       await wrapper.find(selectors.confirmBtn).trigger('click')
-      expect(storeOptions.modules.Files.actions.addLink).toHaveBeenCalledTimes(resources.length)
+      expect(mocks.createLinkMock).toHaveBeenCalledTimes(resources.length)
       expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
     })
     it('emits event in embed mode including the created links', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
-      const { wrapper, storeOptions, mocks } = getWrapper({ resources, embedModeEnabled: true })
+      const { wrapper, mocks } = getWrapper({ resources, embedModeEnabled: true })
       const share = mock<Share>({ url: 'someurl' })
-      storeOptions.modules.Files.actions.addLink.mockResolvedValue(share)
+      mocks.createLinkMock.mockResolvedValue(share)
       await wrapper.find(selectors.confirmBtn).trigger('click')
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [share.url])
     })
@@ -149,11 +154,29 @@ describe('CreateLinkModal', () => {
       const consoleMock = jest.fn(() => undefined)
       jest.spyOn(console, 'error').mockImplementation(consoleMock)
       const resources = [mock<Resource>({ isFolder: false })]
-      const { wrapper, storeOptions } = getWrapper({ resources })
-      storeOptions.modules.Files.actions.addLink.mockRejectedValue(new Error(''))
+      const { wrapper, mocks } = getWrapper({ resources })
+      mocks.createLinkMock.mockRejectedValue(new Error(''))
       await wrapper.find(selectors.confirmBtn).trigger('click')
       expect(consoleMock).toHaveBeenCalledTimes(1)
     })
+    it('calls the callback at the end if given', async () => {
+      const resources = [mock<Resource>({ isFolder: false })]
+      const callbackFn = jest.fn()
+      const { wrapper } = getWrapper({ resources, callbackFn })
+      await wrapper.find(selectors.confirmBtn).trigger('click')
+      expect(callbackFn).toHaveBeenCalledTimes(1)
+    })
+    it.each([true, false])(
+      'correctly passes the quicklink property to createLink',
+      async (isQuickLink) => {
+        const resources = [mock<Resource>({ isFolder: false })]
+        const { wrapper, mocks } = getWrapper({ resources, isQuickLink })
+        await wrapper.find(selectors.confirmBtn).trigger('click')
+        expect(mocks.createLinkMock).toHaveBeenCalledWith(
+          expect.objectContaining({ quicklink: isQuickLink })
+        )
+      }
+    )
   })
   describe('method "cancel"', () => {
     it('hides the modal', async () => {
@@ -170,7 +193,9 @@ function getWrapper({
   userCanCreatePublicLinks = true,
   passwordEnforced = false,
   passwordPolicyFulfilled = true,
-  embedModeEnabled = false
+  embedModeEnabled = false,
+  callbackFn = undefined,
+  isQuickLink = false
 } = {}) {
   jest.mocked(usePasswordPolicyService).mockReturnValue(
     mock<PasswordPolicyService>({
@@ -178,6 +203,8 @@ function getWrapper({
     })
   )
   jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
+  const createLinkMock = jest.fn()
+  jest.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
 
   const postMessageMock = jest.fn()
   jest.mocked(useEmbedMode).mockReturnValue(
@@ -187,7 +214,7 @@ function getWrapper({
     })
   )
 
-  const mocks = { ...defaultComponentMocks(), postMessageMock }
+  const mocks = { ...defaultComponentMocks(), postMessageMock, createLinkMock }
 
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockReturnValue({
@@ -213,7 +240,9 @@ function getWrapper({
     mocks,
     wrapper: mount(CreateLinkModal, {
       props: {
-        resources
+        resources,
+        isQuickLink,
+        callbackFn
       },
       global: {
         plugins: [...defaultPlugins({ abilities }), store],
