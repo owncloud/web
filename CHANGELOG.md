@@ -28,6 +28,7 @@ Summary
 * Bugfix - Prevent rendering of old/wrong set of resources in search list: [#9881](https://github.com/owncloud/web/pull/9881)
 * Bugfix - Keep both folders conflict in same-named folders: [#9915](https://github.com/owncloud/web/pull/9915)
 * Bugfix - Enabling "invite people" for password-protected folder/file: [#9931](https://github.com/owncloud/web/pull/9931)
+* Bugfix - Displaying full video in their dimensions: [#10010](https://github.com/owncloud/web/issues/10010)
 * Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
 * Bugfix - Logout page after token expiry: [#10065](https://github.com/owncloud/web/pull/10065)
 * Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
@@ -256,6 +257,15 @@ Details
 
    https://github.com/owncloud/web/issues/9922
    https://github.com/owncloud/web/pull/9931
+
+* Bugfix - Displaying full video in their dimensions: [#10010](https://github.com/owncloud/web/issues/10010)
+
+   We've fixed a bug which set the video width and height to 100% of the screen
+   size instead of the actual video size. This bug made it impossible to see the
+   full video in 1080x1920, while 1920x1080 might have been slightly cropped.
+
+   https://github.com/owncloud/web/issues/10010
+   https://github.com/owncloud/web/pull/10101
 
 * Bugfix - Icon extension mapping: [#10031](https://github.com/owncloud/web/issues/10031)
 
