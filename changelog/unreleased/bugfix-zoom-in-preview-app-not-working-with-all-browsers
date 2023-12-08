@@ -1,0 +1,5 @@
+Bugfix: Zoom in preview app not working with all browsers
+
+We fixed a bug where zoom in and zoom out not working in preview app with all browsers, for example in Firefox.
+
+https://github.com/owncloud/web/pull/10137
