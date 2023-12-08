@@ -42,7 +42,7 @@ const state = {
     openLinksWithDefaultApp: true,
     tokenStorageLocal: true,
     loginUrl: '',
-    logoutUrl: '', // Fixme: why was this missing before?
+    logoutUrl: '',
     disabledExtensions: [],
     userListRequiresFilter: false,
     embed: {

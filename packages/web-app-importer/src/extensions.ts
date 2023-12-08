@@ -18,6 +18,8 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { $gettext } = useGettext()
   const uppyService = useService<UppyService>('$uppyService')
   const publicLinkContext = usePublicLinkContext({ store })
+  const themeStore = useThemeStore()
+  const { currentTheme } = storeToRefs(themeStore)
 
   const { companionUrl, webdavCloudType } = applicationConfig
   let { supportedClouds } = applicationConfig
@@ -52,8 +54,6 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   })
 
   const handler = async () => {
-    const themeStore = useThemeStore()
-    const { currentTheme } = storeToRefs(themeStore)
     const renderDarkTheme = currentTheme.value.isDark
 
     const modal = {

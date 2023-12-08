@@ -6,10 +6,11 @@ import { useThemeStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 
 export const useHead = ({ store }: { store: Store<any> }) => {
+  const themeStore = useThemeStore()
+  const { currentTheme } = storeToRefs(themeStore)
+
   _useHead(
     computed(() => {
-      const themeStore = useThemeStore()
-      const { currentTheme } = storeToRefs(themeStore)
       const favicon = computed(() => currentTheme.value.logo.favicon)
 
       return {
