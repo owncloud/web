@@ -70,7 +70,7 @@ const createFile = async ({
     path: join('remote.php', 'dav', webDavEndPathToRoot, pathToFile),
     body: content,
     user: user,
-    header: (mtime === 'yesterday') ? { 'X-OC-Mtime': today.getTime() / 1000 - 86400 } : {}
+    header: mtime === 'yesterday' ? { 'X-OC-Mtime': today.getTime() / 1000 - 86400 } : {}
   })
 
   checkResponseStatus(response, `Failed while uploading file '${pathToFile}' in personal space`)
