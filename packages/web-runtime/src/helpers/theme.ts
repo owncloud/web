@@ -33,7 +33,7 @@ export const loadTheme = async (location = '') => {
 
       return {
         defaults: {
-          ...parsedTheme.common,
+          common: parsedTheme.common,
           ...parsedTheme.clients.web.defaults
         },
         themes: parsedTheme.clients.web.themes

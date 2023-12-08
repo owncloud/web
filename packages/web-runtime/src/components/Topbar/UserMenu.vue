@@ -125,7 +125,6 @@ import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
 import { useCapabilitySpacesEnabled, useRoute, useThemeStore } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
-import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   props: {
@@ -138,7 +137,6 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const themeStore = useThemeStore()
-    const { currentTheme } = storeToRefs(themeStore)
 
     const loginLink = computed(() => {
       return {
@@ -147,8 +145,8 @@ export default defineComponent({
       }
     })
 
-    const imprintUrl = computed(() => currentTheme.value.common.urls.imprint)
-    const privacyUrl = computed(() => currentTheme.value.common.urls.privacy)
+    const imprintUrl = computed(() => themeStore.currentTheme.common.urls.imprint)
+    const privacyUrl = computed(() => themeStore.currentTheme.common.urls.privacy)
 
     return {
       hasSpaces: useCapabilitySpacesEnabled(),

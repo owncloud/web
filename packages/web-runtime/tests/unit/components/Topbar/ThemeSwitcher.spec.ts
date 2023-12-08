@@ -1,29 +1,16 @@
+import { useThemeStore } from '@ownclouders/web-pkg'
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
-import {
-  createStore,
-  defaultPlugins,
-  defaultStubs,
-  mount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
+import { defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
+import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
-const lightTheme = {
-  designTokens: {
-    colorPalette: {
-      'background-accentuate': 'lime'
-    }
-  }
+const defaultOwnCloudTheme = {
+  defaults: {
+    ...defaultTheme.clients.web.defaults,
+    common: defaultTheme.common
+  },
+  themes: defaultTheme.clients.web.themes
 }
-
-const darkTheme = {
-  designTokens: {
-    colorPalette: {
-      'background-accentuate': 'gold'
-    }
-  }
-}
-
-const spyToggleTheme = jest.spyOn((ThemeSwitcher as any).methods, 'toggleTheme')
 
 describe('ThemeSwitcher component', () => {
   describe('visually', () => {
@@ -34,47 +21,56 @@ describe('ThemeSwitcher component', () => {
       jest.clearAllMocks()
     })
 
-    it('renders a button, initially in light mode per default', async () => {
-      const { wrapper } = getWrapper()
+    it('does not render anything if only one theme is available', async () => {
+      const { wrapper } = getWrapper({ hasOnlyOneTheme: true })
       await wrapper.vm.$nextTick()
       expect(wrapper.html()).toMatchSnapshot()
     })
 
-    it('renders a button, initially in dark mode if user prefers dark color scheme', async () => {
-      mockDarkModePreferred(true)
-      const { wrapper } = getWrapper()
-      await wrapper.vm.$nextTick()
-      expect(wrapper.html()).toMatchSnapshot()
+    describe('if there is exactly two themes, one dark and one light', () => {
+      it('renders a button, initially in light mode per default', async () => {
+        const { wrapper } = getWrapper()
+        await wrapper.vm.$nextTick()
+        expect(wrapper.html()).toMatchSnapshot()
+      })
+
+      it('renders a button, initially in dark mode if user prefers dark color scheme', async () => {
+        mockDarkModePreferred(true)
+        const { wrapper } = getWrapper()
+        await wrapper.vm.$nextTick()
+        expect(wrapper.html()).toMatchSnapshot()
+      })
+
+      it('toggles between themes upon click', async () => {
+        const { wrapper } = getWrapper()
+        await wrapper.find('.themeswitcher-btn').trigger('click')
+        await wrapper.vm.$nextTick()
+        expect(wrapper.html()).toMatchSnapshot()
+        await wrapper.find('.themeswitcher-btn').trigger('click')
+        await wrapper.vm.$nextTick()
+        expect(wrapper.html()).toMatchSnapshot()
+      })
     })
 
-    it('toggles between themes upon click', async () => {
-      const { wrapper } = getWrapper()
-      expect(spyToggleTheme).toHaveBeenCalledTimes(0)
-
-      await wrapper.find('.themeswitcher-btn').trigger('click')
-      await wrapper.vm.$nextTick()
-
-      expect(wrapper.html()).toMatchSnapshot()
-      expect(spyToggleTheme).toHaveBeenCalledTimes(1)
-
-      await wrapper.find('.themeswitcher-btn').trigger('click')
-      await wrapper.vm.$nextTick()
-
-      expect(wrapper.html()).toMatchSnapshot()
-      expect(spyToggleTheme).toHaveBeenCalledTimes(2)
+    describe('if there are more than two themes', () => {
+      it.todo('renders a button, with a dropdown menu')
     })
   })
 
   describe('restores', () => {
     it('light theme if light theme is saved in localstorage', async () => {
-      window.localStorage.setItem('oc_currentThemeName', 'themeNameLight')
-      const { wrapper } = getWrapper()
+      const themeStore = useThemeStore()
+      window.localStorage.setItem('oc_currentThemeName', 'Light Theme')
+      const { wrapper } = getWrapper({ hasOnlyOneTheme: false })
+      themeStore.initializeThemes(defaultOwnCloudTheme)
       await wrapper.vm.$nextTick()
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('dark theme if dark theme is saved in localstorage', async () => {
-      window.localStorage.setItem('oc_currentThemeName', 'themeNameDark')
+      const themeStore = useThemeStore()
+      window.localStorage.setItem('oc_currentThemeName', 'Dark Theme')
       const { wrapper } = getWrapper()
+      themeStore.initializeThemes(defaultOwnCloudTheme)
       await wrapper.vm.$nextTick()
       expect(wrapper.html()).toMatchSnapshot()
     })
@@ -98,20 +94,16 @@ function mockDarkModePreferred(enabled = false) {
   })
 }
 
-function getWrapper() {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.configuration.mockImplementation(() => ({
-    themes: {
-      default: lightTheme,
-      'default-dark': darkTheme
-    },
-    currentTheme: lightTheme
-  }))
-  const store = createStore(storeOptions)
+function getWrapper({ hasOnlyOneTheme = false } = {}) {
   return {
     wrapper: mount(ThemeSwitcher, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins(),
+          createMockThemeStore({
+            hasOnlyOneTheme
+          })
+        ],
         stubs: { ...defaultStubs, 'oc-icon': true }
       }
     })

@@ -1,14 +1,9 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import AppBanner from '../../../src/components/AppBanner.vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { useSessionStorage } from '@vueuse/core'
 import { ref } from 'vue'
+import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 jest.mock('@vueuse/core')
 
@@ -22,7 +17,6 @@ describe('AppBanner', () => {
 
     const { wrapper } = getWrapper({
       fileId: '1337',
-      appScheme: 'owncloud',
       sessionStorageReturnValue: null
     })
     expect(wrapper.find('.app-banner-cta').attributes().href).toBe('owncloud://localhost/f/1337')
@@ -30,7 +24,6 @@ describe('AppBanner', () => {
   it('does not show when banner was closed', () => {
     const { wrapper } = getWrapper({
       fileId: '1337',
-      appScheme: 'owncloud',
       sessionStorageReturnValue: '1'
     })
     expect(wrapper.find('.app-banner').attributes().hidden).toBe('')
@@ -39,31 +32,13 @@ describe('AppBanner', () => {
   it('shows when banner was not yet closed', () => {
     const { wrapper } = getWrapper({
       fileId: '1337',
-      appScheme: 'owncloud',
       sessionStorageReturnValue: null
     })
     expect(wrapper.find('.app-banner').attributes().hidden).toBe(undefined)
   })
 })
 
-function getWrapper({ fileId, appScheme, sessionStorageReturnValue }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  storeOptions.getters.configuration.mockReturnValue({
-    currentTheme: {
-      appBanner: {
-        title: 'ownCloud',
-        publisher: 'ownCloud GmbH',
-        additionalInformation: 'FREE',
-        ctaText: 'VIEW',
-        icon: 'themes/owncloud/assets/owncloud-app-icon.png',
-        appScheme
-      }
-    }
-  })
-
+function getWrapper({ fileId, sessionStorageReturnValue }) {
   const router = createRouter({
     routes: [
       {
@@ -79,7 +54,6 @@ function getWrapper({ fileId, appScheme, sessionStorageReturnValue }) {
   })
 
   const mocks = { ...defaultComponentMocks(), $router: router }
-  const store = createStore(storeOptions)
 
   return {
     wrapper: shallowMount(AppBanner, {
@@ -87,7 +61,7 @@ function getWrapper({ fileId, appScheme, sessionStorageReturnValue }) {
         fileId
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins(), createMockThemeStore()],
         mocks,
         provide: mocks
       }

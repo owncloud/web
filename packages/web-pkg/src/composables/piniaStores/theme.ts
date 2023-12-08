@@ -25,11 +25,11 @@ const CommonSection = z.object({
 })
 
 const DesignTokens = z.object({
-  breakpoints: z.record(z.string()),
-  colorPalette: z.record(z.string()),
-  fontSizes: z.record(z.string()),
-  sizes: z.record(z.string()),
-  spacing: z.record(z.string())
+  breakpoints: z.record(z.string()).optional(),
+  colorPalette: z.record(z.string()).optional(),
+  fontSizes: z.record(z.string()).optional(),
+  sizes: z.record(z.string()).optional(),
+  spacing: z.record(z.string()).optional()
 })
 
 const LoginPage = z.object({
@@ -41,12 +41,12 @@ const Logo = z.object({
   topbar: z.string(),
   favicon: z.string(),
   login: z.string(),
-  notFound: z.string()
+  notFound: z.string().optional()
 })
 
 const ThemeDefaults = z.object({
   appBanner: AppBanner.optional(),
-  common: CommonSection,
+  common: CommonSection.optional(),
   designTokens: DesignTokens,
   loginPage: LoginPage,
   logo: Logo
@@ -55,14 +55,14 @@ const ThemeDefaults = z.object({
 const WebTheme = z.object({
   appBanner: AppBanner.optional(),
   common: CommonSection.optional(),
-  designTokens: DesignTokens,
+  designTokens: DesignTokens.optional(),
   isDark: z.boolean(),
   name: z.string(),
   loginPage: LoginPage.optional(),
   logo: Logo.optional()
 })
 
-const WebThemeConfig = z.object({
+export const WebThemeConfig = z.object({
   defaults: ThemeDefaults,
   themes: z.array(WebTheme)
 })
