@@ -26,6 +26,7 @@ export const useAppDefaultsMock = (
     activeFiles: ref([]),
     loadFolderForFileContext: jest.fn(),
     makeRequest: jest.fn().mockResolvedValue({ status: 200 }),
+    closed: ref(false),
     ...options
   }
 }
