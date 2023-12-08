@@ -1,5 +1,6 @@
 <template>
   <oc-select
+    class="tags-select"
     ref="tagSelect"
     v-model="selectedTags"
     :multiple="true"
@@ -10,11 +11,10 @@
     :create-option="createOption"
     :selectable="isOptionSelectable"
     :map-keydown="keydownMethods"
-    data-test-id="tags-select"
     @update:model-value="save"
   >
     <template #selected-option-container="{ option, deselect }">
-      <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+      <oc-tag class="tags-select-tag oc-ml-xs" :rounded="true" size="small">
         <component
           :is="type"
           v-bind="getAdditionalAttributes(option.label)"
@@ -44,13 +44,16 @@
     <template #option="{ label, error }">
       <div class="oc-flex test">
         <span class="oc-flex oc-flex-center">
-          <oc-tag class="tags-control-tag oc-ml-xs" :rounded="true" size="small">
+          <oc-tag class="tags-select-tag oc-ml-xs" :rounded="true" size="small">
             <oc-icon name="price-tag-3" size="small" />
             <span class="oc-text-truncate">{{ label }}</span>
           </oc-tag>
         </span>
       </div>
       <div v-if="error" class="oc-text-input-danger">{{ error }}</div>
+    </template>
+    <template #no-options
+      ><span class="oc-text-small oc-text-muted" v-text="$gettext('Enter text to create a Tag')" />
     </template>
   </oc-select>
 </template>
@@ -293,15 +296,19 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="scss">
-.oc-tag {
-  height: 1.5rem;
-}
+<style lang="scss">
+.tags-select {
+  .vs__actions {
+    display: none !important;
+  }
 
-.tags-control-tag {
-  &-link {
-    color: var(--oc-color-swatch-passive-default);
-    pointer-events: visible;
+  &-tag {
+    height: 1.5rem;
+
+    &-link {
+      color: var(--oc-color-swatch-passive-default);
+      pointer-events: visible;
+    }
   }
 }
 </style>
