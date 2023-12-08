@@ -829,8 +829,10 @@ Details
    name, subtitle, description, and image but not metadata like tags or members.
 
    https://github.com/owncloud/web/issues/10016
+   https://github.com/owncloud/web/issues/10123
    https://github.com/owncloud/web/pull/10024
    https://github.com/owncloud/web/pull/10132
+   https://github.com/owncloud/web/pull/10139
 
 * Enhancement - Default link permission: [#10037](https://github.com/owncloud/web/pull/10037)
 
