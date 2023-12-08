@@ -149,7 +149,7 @@ export default defineComponent({
   }
 
   &:checked {
-    background-color: var(--oc-color-background-highlight);
+    background-color: var(--oc-color-background-highlight) !important;
   }
 
   &.oc-radio-s {
