@@ -20,7 +20,7 @@ describe('Tag Select', () => {
   it('show tags input form if loaded successfully', () => {
     const resource = mockDeep<Resource>({ tags: [] })
     const { wrapper } = createWrapper(resource)
-    expect(wrapper.find('[data-test-id="tags-select"]').exists()).toBeTruthy()
+    expect(wrapper.find('.tags-select').exists()).toBeTruthy()
   })
 
   it('all available tags are selectable', async () => {
