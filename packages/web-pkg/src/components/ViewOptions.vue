@@ -170,8 +170,10 @@ export default defineComponent({
       const rootStyle = (document.querySelector(':root') as HTMLElement).style
       const currentSize = rootStyle.getPropertyValue('--oc-size-tiles-resize-step')
       const newSize = `${(unref(viewSizeQuery) as any) * 10}rem`
+      const newSize2 = `${((unref(viewSizeQuery) as any) * 1) / 10}fr`
       if (!currentSize || currentSize !== newSize) {
         rootStyle.setProperty(`--oc-size-tiles-resize-step`, newSize)
+        rootStyle.setProperty(`--oc-size-tiles-resize-step2`, newSize2)
       }
     }
 
