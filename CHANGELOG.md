@@ -827,6 +827,7 @@ Details
 
    https://github.com/owncloud/web/issues/10016
    https://github.com/owncloud/web/pull/10024
+   https://github.com/owncloud/web/pull/10132
 
 * Enhancement - Default link permission: [#10037](https://github.com/owncloud/web/pull/10037)
 
