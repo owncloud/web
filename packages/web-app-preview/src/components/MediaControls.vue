@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="oc-position-medium oc-position-bottom-center preview-details"
-    :class="{ lightbox: isFullScreenModeActivated }"
-  >
+  <div class="preview-details" :class="{ lightbox: isFullScreenModeActivated }">
     <div
       class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
     >
@@ -60,7 +57,7 @@
             :aria-label="imageShrinkDescription"
             @click="imageShrink"
           >
-            <oc-icon fill-type="line" name="checkbox-indeterminate" variation="inherit" />
+            <oc-icon fill-type="line" name="zoom-out" variation="inherit" />
           </oc-button>
           <oc-button
             v-oc-tooltip="imageOriginalSizeDescription"
@@ -80,7 +77,7 @@
             :aria-label="imageZoomDescription"
             @click="imageZoom"
           >
-            <oc-icon fill-type="line" name="add-box" variation="inherit" />
+            <oc-icon fill-type="line" name="zoom-in" variation="inherit" />
           </oc-button>
         </div>
         <div class="oc-ml-m">
@@ -112,7 +109,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from 'web-client/src'
+import { Resource } from '@ownclouders/web-client/src'
 
 export default defineComponent({
   name: 'MediaControls',
@@ -205,7 +202,7 @@ export default defineComponent({
   }
 })
 </script>
-  
+
 <style lang="scss" scoped>
 .preview-details.lightbox {
   z-index: 1000;
@@ -220,4 +217,3 @@ export default defineComponent({
   width: 42px;
 }
 </style>
-  
