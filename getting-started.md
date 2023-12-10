@@ -73,16 +73,9 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
-- `options.editor.openAsPreview` Specifies if non-personal files i.e. files in shares, spaces or public links are being opened in read only mode so the user needs to manually switch to edit mode. Can be set to `true`, `false` or an array of web app/editor names.
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
 - `options.openLinksWithDefaultApp` Specifies whether single file link shares should be opened with default app or not.
 - `options.tokenStorageLocal` Specifies whether the access token will be stored in the local storage when set to `true` or in the session storage when set to `false`. If stored in the local storage, login state will be persisted across multiple browser tabs, means no additional logins are required. Defaults to `true`.
-- `options.loginUrl` Specifies the target URL to the login page. This is helpful when an external IdP is used. This option is disabled by default. Example URL like: 'https://www.myidp.com/login'.
-- `options.logoutUrl` Adds a link to the user's profile page to point him to an external page, where he can manage his session and devices. This is helpful when an external IdP is used. This option is disabled by default.
-- `options.imprintUrl` Specifies the target URL for the imprint link valid for the ocis instance in the account menu.
-- `options.privacyUrl` Specifies the target URL for the privacy link valid for the ocis instance in the account menu.
-- `options.ocm.openRemotely` Specifies whether opening files in remote shares in their original ocm instance should be enabled. Defaults to `false`.
-- `options.userListRequiresFilter` Defines whether one or more filters must be set in order to list users in the Web admin settings. Set this option to 'true' if running in an environment with a lot of users and listing all users could slow down performance. Defaults to `false`.
 
 #### Scripts and Styles
 
