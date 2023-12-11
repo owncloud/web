@@ -37,13 +37,8 @@
         </oc-breadcrumb>
         <portal-target v-if="showMobileNav" name="app.runtime.mobile.nav" />
         <slot v-if="hasSharesNavigation" name="navigation" />
-        <div
-          v-if="hasViewOptions || hasSidebarToggle"
-          id="files-app-bar-controls-right"
-          class="oc-flex"
-        >
+        <div v-if="hasViewOptions" id="files-app-bar-controls-right" class="oc-flex">
           <view-options
-            v-if="hasViewOptions"
             :view-modes="viewModes"
             :has-hidden-files="hasHiddenFiles"
             :has-file-extensions="hasFileExtensions"
@@ -51,7 +46,6 @@
             per-page-storage-prefix="files"
             :view-mode-default="viewModeDefault"
           />
-          <sidebar-toggle v-if="hasSidebarToggle" :is-side-bar-open="isSideBarOpen" />
         </div>
       </div>
       <div class="files-app-bar-actions oc-mt-xs">
@@ -84,9 +78,10 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import BatchActions from '../BatchActions.vue'
-import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import ContextActions from '../FilesList/ContextActions.vue'
-import SidebarToggle from './SidebarToggle.vue'
+import QuotaModal from '../Spaces/QuotaModal.vue'
+import ViewOptions from '../ViewOptions.vue'
+import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import { ViewMode } from '../../ui/types'
 import {
   useFileActionsAcceptShare,
@@ -111,7 +106,6 @@ import {
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from '../../composables'
 import { helpers } from 'design-system'
-import ViewOptions from '../ViewOptions.vue'
 import { useGettext } from 'vue3-gettext'
 import {
   FileAction,
@@ -120,7 +114,6 @@ import {
   useSpaceActionsEditQuota,
   useSpaceActionsRestore
 } from '../../composables'
-import QuotaModal from '../Spaces/QuotaModal.vue'
 
 const { EVENT_ITEM_DROPPED } = helpers
 
@@ -128,7 +121,6 @@ export default defineComponent({
   components: {
     BatchActions,
     ContextActions,
-    SidebarToggle,
     ViewOptions,
     QuotaModal
   },
@@ -151,7 +143,6 @@ export default defineComponent({
       default: () => []
     },
     hasBulkActions: { type: Boolean, default: false },
-    hasSidebarToggle: { type: Boolean, default: true },
     hasViewOptions: { type: Boolean, default: true },
     hasHiddenFiles: { type: Boolean, default: true },
     hasFileExtensions: { type: Boolean, default: true },

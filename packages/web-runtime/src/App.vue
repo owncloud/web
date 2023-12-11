@@ -59,15 +59,11 @@
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
-import LayoutApplication from './layouts/Application.vue'
-import LayoutLoading from './layouts/Loading.vue'
-import LayoutPlain from './layouts/Plain.vue'
+import { useLayout } from './composables/layout'
 import { computed, defineComponent, ref, unref, watch, VNodeRef } from 'vue'
-import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
-import { eventBus, useRouter } from '@ownclouders/web-pkg'
+import { eventBus, useRouter, useStore, useThemeStore } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
-import { useStore, useThemeStore } from '@ownclouders/web-pkg'
 import { RouteLocation } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
@@ -84,6 +80,8 @@ export default defineComponent({
     useHead({ store })
 
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
+
+    const { layout } = useLayout({ store, router })
 
     const modalComponent = ref<VNodeRef>()
     const onModalConfirm = (...args) => {
@@ -137,6 +135,7 @@ export default defineComponent({
     )
 
     return {
+      layout,
       currentTheme,
       modalComponent,
       onModalConfirm,
@@ -153,28 +152,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['modal']),
-    ...mapGetters(['configuration']),
-    ...mapGetters('runtime/auth', ['isUserContextReady', 'isPublicLinkContextReady']),
-    layout() {
-      const plainLayoutRoutes = [
-        'login',
-        'logout',
-        'oidcCallback',
-        'oidcSilentRedirect',
-        'resolvePublicLink',
-        'accessDenied'
-      ]
-      if (!this.$route.name || plainLayoutRoutes.includes(this.$route.name as string)) {
-        return LayoutPlain
-      }
-      if (isPublicLinkContext(this.$router, this.$route)) {
-        return this.isPublicLinkContextReady ? LayoutApplication : LayoutLoading
-      }
-      if (isUserContext(this.$router, this.$route)) {
-        return this.isUserContextReady ? LayoutApplication : LayoutLoading
-      }
-      return LayoutApplication
-    }
+    ...mapGetters(['configuration'])
   },
   watch: {
     $route: {

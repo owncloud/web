@@ -104,25 +104,14 @@ describe('AppBar component', () => {
         expect(wrapper.find(selectors.mobileNavPortal).exists()).toBe(shows)
       })
     })
-    describe('viewoptions and sidebartoggle', () => {
-      it('only viewoptions if sidebartoggle is disabled', () => {
-        const { wrapper } = getShallowWrapper([], {}, { hasSidebarToggle: false })
+    describe('viewoptions', () => {
+      it('show if options are available', () => {
+        const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: true })
         expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.sidebarToggleStub).exists()).toBeFalsy()
       })
-      it('only sidebartoggle if viewoptions is disabled', () => {
+      it('hide if options are not available', () => {
         const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: false })
         expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.sidebarToggleStub).exists()).toBeTruthy()
-      })
-      it('neither if both are disabled', () => {
-        const { wrapper } = getShallowWrapper(
-          [],
-          {},
-          { hasSidebarToggle: false, hasViewOptions: false }
-        )
-        expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.sidebarToggleStub).exists()).toBeFalsy()
       })
       it('passes viewModes array to ViewOptions', () => {
         const viewModes = [ViewModeConstants.tilesView]

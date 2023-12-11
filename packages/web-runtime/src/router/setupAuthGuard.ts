@@ -1,4 +1,9 @@
-import { extractPublicLinkToken, isIdpContext, isPublicLinkContext, isUserContext } from './index'
+import {
+  extractPublicLinkToken,
+  isIdpContextRequired,
+  isPublicLinkContextRequired,
+  isUserContextRequired
+} from './index'
 import { Router, RouteLocation } from 'vue-router'
 import { contextRouteNameKey, queryItemAsString, useEmbedMode } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth/authService'
@@ -23,7 +28,7 @@ export const setupAuthGuard = (router: Router) => {
       return to.name === 'accessDenied' || { name: 'accessDenied' }
     }
 
-    if (isPublicLinkContext(router, to)) {
+    if (isPublicLinkContextRequired(router, to)) {
       if (!store.getters['runtime/auth/isPublicLinkContextReady']) {
         const publicLinkToken = extractPublicLinkToken(to)
         return {
@@ -35,7 +40,7 @@ export const setupAuthGuard = (router: Router) => {
       return true
     }
 
-    if (isUserContext(router, to)) {
+    if (isUserContextRequired(router, to)) {
       if (!store.getters['runtime/auth/isUserContextReady']) {
         if (unref(isDelegatingAuthentication)) {
           return { path: '/web-oidc-callback' }
@@ -46,7 +51,7 @@ export const setupAuthGuard = (router: Router) => {
       return true
     }
 
-    if (isIdpContext(router, to)) {
+    if (isIdpContextRequired(router, to)) {
       if (!store.getters['runtime/auth/isIdpContextReady']) {
         if (unref(isDelegatingAuthentication)) {
           return { path: '/web-oidc-callback' }

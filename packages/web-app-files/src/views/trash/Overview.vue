@@ -3,7 +3,6 @@
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
-        :has-sidebar-toggle="false"
         :has-view-options="false"
         :has-hidden-files="false"
         :has-file-extensions="false"

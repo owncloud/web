@@ -7,7 +7,6 @@
         :breadcrumbs-context-actions-items="[currentFolder]"
         :has-bulk-actions="displayFullAppBar"
         :show-actions-on-selection="displayFullAppBar"
-        :has-sidebar-toggle="displayFullAppBar"
         :has-view-options="displayFullAppBar"
         :is-side-bar-open="isSideBarOpen"
         :space="space"

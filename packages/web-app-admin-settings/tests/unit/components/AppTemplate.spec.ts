@@ -65,12 +65,6 @@ describe('AppTemplate', () => {
       const { wrapper } = getWrapper({ props: { isSideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
-    it('can be toggled', async () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
-      const { wrapper } = getWrapper({ props: { sideBarAvailablePanels: [jest.fn()] } })
-      await wrapper.find(stubSelectors.sideBarToggleButton).trigger('click')
-      expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.toggle)
-    })
     it('can be closed', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       const { wrapper } = getWrapper()

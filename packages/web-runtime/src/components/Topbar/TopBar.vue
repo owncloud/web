@@ -31,6 +31,7 @@
       </portal>
       <portal to="app.runtime.header.right" :order="100">
         <notifications v-if="isNotificationBellEnabled" />
+        <side-bar-toggle v-if="isSideBarToggleVisible" :disabled="isSideBarToggleDisabled" />
         <user-menu :applications-list="userMenuItems" />
       </portal>
     </template>
@@ -48,22 +49,26 @@ import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
+import SideBarToggle from './SideBarToggle.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useAbility,
   useCapabilityNotifications,
   useEmbedMode,
+  usePublicLinkContext,
   useRouter,
   useStore,
   useThemeStore,
   useUserContext
 } from '@ownclouders/web-pkg'
+import { isRuntimeRoute } from '../../router'
 
 export default {
   components: {
     ApplicationsMenu,
     FeedbackLink,
     Notifications,
+    SideBarToggle,
     ThemeSwitcher,
     UserMenu
   },
@@ -81,6 +86,7 @@ export default {
 
     const notificationsSupport = useCapabilityNotifications()
     const isUserContext = useUserContext({ store })
+    const isPublicLinkContext = usePublicLinkContext({ store })
     const language = useGettext()
     const router = useRouter()
     const ability = useAbility()
@@ -89,6 +95,13 @@ export default {
     const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
       return unref(isUserContext) && unref(notificationsSupport).includes('list')
+    })
+
+    const isSideBarToggleVisible = computed(() => {
+      return unref(isUserContext) || unref(isPublicLinkContext)
+    })
+    const isSideBarToggleDisabled = computed(() => {
+      return isRuntimeRoute(unref(router.currentRoute))
     })
 
     const isNavItemPermitted = (permittedMenus, navItem) => {
@@ -191,7 +204,9 @@ export default {
       userMenuItems,
       appMenuItems,
       logoWidth,
-      isEmbedModeEnabled
+      isEmbedModeEnabled,
+      isSideBarToggleVisible,
+      isSideBarToggleDisabled
     }
   },
   computed: {

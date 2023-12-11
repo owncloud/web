@@ -73,10 +73,6 @@
           </oc-button>
         </div>
       </span>
-      <oc-button @click="toggleSideBar">
-        {{ isSideBarOpen }}
-        <oc-icon name="side-bar-right" />
-      </oc-button>
     </div>
   </portal>
 </template>
@@ -85,14 +81,7 @@
 import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
-import {
-  Action,
-  SideBarEventTopics,
-  useEventBus,
-  useFolderLink,
-  useGetMatchingSpace,
-  useSideBar
-} from '../composables'
+import { Action, useEventBus, useFolderLink, useGetMatchingSpace } from '../composables'
 import {
   Resource,
   isPublicSpaceResource,
@@ -149,20 +138,13 @@ export default defineComponent({
       return props.resource ? getParentFolderLinkIconAdditionalAttributes(props.resource) : null
     })
 
-    const toggleSideBar = () => {
-      eventBus.publish(SideBarEventTopics.toggle)
-    }
-    const { isSideBarOpen } = useSideBar()
-
     return {
       pathPrefix,
       isPathDisplayed,
       contextMenuLabel,
       closeButtonLabel,
       parentFolderName,
-      parentFolderLinkIconAdditionalAttributes,
-      isSideBarOpen,
-      toggleSideBar
+      parentFolderLinkIconAdditionalAttributes
     }
   }
 })

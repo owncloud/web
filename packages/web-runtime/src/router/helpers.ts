@@ -14,7 +14,7 @@ import {
  * @param to {Route}
  * @returns {boolean}
  */
-export const isUserContext = (router: Router, to: RouteLocation): boolean => {
+export const isUserContextRequired = (router: Router, to: RouteLocation): boolean => {
   const meta = getRouteMeta(to)
   if (meta.authContext === 'user') {
     return true
@@ -37,7 +37,7 @@ export const isUserContext = (router: Router, to: RouteLocation): boolean => {
  * @param to {Route}
  * @returns {boolean}
  */
-export const isIdpContext = (router: Router, to: RouteLocation): boolean => {
+export const isIdpContextRequired = (router: Router, to: RouteLocation): boolean => {
   const meta = getRouteMeta(to)
   if (meta.authContext === 'idp') {
     return true
@@ -56,7 +56,7 @@ export const isIdpContext = (router: Router, to: RouteLocation): boolean => {
  * @param to {Route}
  * @returns {boolean}
  */
-export const isPublicLinkContext = (router: Router, to: RouteLocation): boolean => {
+export const isPublicLinkContextRequired = (router: Router, to: RouteLocation): boolean => {
   if (
     (to.params.driveAliasAndItem as string)?.startsWith('public/') ||
     (to.params.driveAliasAndItem as string)?.startsWith('ocm/')

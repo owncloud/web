@@ -22,17 +22,6 @@
                 :per-page-default="perPageDefault"
                 per-page-storage-prefix="admin-settings"
               />
-              <oc-button
-                v-if="sideBarAvailablePanels.length"
-                id="files-toggle-sidebar"
-                v-oc-tooltip="toggleSidebarButtonLabel"
-                :aria-label="toggleSidebarButtonLabel"
-                appearance="raw"
-                class="oc-my-s oc-p-xs"
-                @click.stop="toggleSideBar"
-              >
-                <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
-              </oc-button>
             </div>
           </div>
           <div
@@ -169,9 +158,6 @@ export default defineComponent({
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
     }
-    const toggleSideBar = () => {
-      eventBus.publish(SideBarEventTopics.toggle)
-    }
     const selectPanel = (panel) => {
       eventBus.publish(SideBarEventTopics.setActivePanel, panel)
     }
@@ -197,23 +183,12 @@ export default defineComponent({
       appBarRef,
       limitedScreenSpace,
       closeSideBar,
-      toggleSideBar,
       selectPanel,
       ...useAppDefaults({
         applicationId: 'admin-settings'
       }),
       perPageDefault,
       paginationOptions
-    }
-  },
-  computed: {
-    toggleSidebarButtonLabel() {
-      return this.isSideBarOpen
-        ? this.$gettext('Close sidebar to hide details')
-        : this.$gettext('Open sidebar to view details')
-    },
-    toggleSidebarButtonIconFillType() {
-      return this.isSideBarOpen ? 'fill' : 'line'
     }
   }
 })
@@ -232,15 +207,6 @@ export default defineComponent({
   position: sticky;
   padding: 0 var(--oc-space-medium);
   top: 0;
-}
-
-#files-toggle-sidebar {
-  vertical-align: middle;
-  border: 3px solid transparent;
-  &:hover {
-    background-color: var(--oc-color-background-hover);
-    border-radius: 3px;
-  }
 }
 
 .admin-settings-app-bar-controls {

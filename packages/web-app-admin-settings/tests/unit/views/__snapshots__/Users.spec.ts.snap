@@ -10,7 +10,6 @@ exports[`Users view list view renders initially warning if filters are mandatory
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div class="oc-flex">
             <view-options-stub hasfileextensions="false" hashiddenfiles="false" haspagination="true" paginationoptions="20,50,100,250" perpagedefault="50" perpagequeryname="items-per-page" perpagestorageprefix="admin-settings" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
-            <oc-button-stub appearance="raw" arialabel="Open sidebar to view details" class="oc-my-s oc-p-xs" disabled="false" gapsize="medium" id="files-toggle-sidebar" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
           </div>
         </div>
         <div class="admin-settings-app-bar-actions oc-flex oc-flex-middle oc-mt-xs">
@@ -71,7 +70,6 @@ exports[`Users view list view renders list initially 1`] = `
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div class="oc-flex">
             <view-options-stub hasfileextensions="false" hashiddenfiles="false" haspagination="true" paginationoptions="20,50,100,250" perpagedefault="50" perpagequeryname="items-per-page" perpagestorageprefix="admin-settings" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
-            <oc-button-stub appearance="raw" arialabel="Open sidebar to view details" class="oc-my-s oc-p-xs" disabled="false" gapsize="medium" id="files-toggle-sidebar" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
           </div>
         </div>
         <div class="admin-settings-app-bar-actions oc-flex oc-flex-middle oc-mt-xs">
