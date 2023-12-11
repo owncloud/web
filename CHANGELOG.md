@@ -34,6 +34,7 @@ Summary
 * Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
 * Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
+* Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
@@ -308,6 +309,27 @@ Details
 
    https://github.com/owncloud/web/issues/10084
    https://github.com/owncloud/web/pull/10096
+
+* Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
+
+   The handling of themes has been throughoutly reworked. Themes now feature a
+   human-readable title, can specify whether they are suitable as light or dark
+   mode themes. If only one theme is provided, this theme will be set. If two
+   themes are provided and one is a dark and one is a light mode one, there is a
+   light/dark mode switch button in the AppBar. If more than two themes are
+   provided or the two provided themes are not a dark and a light mode one
+   respectively, the UI features a theme-switch button featuring a dropdown of the
+   human-readable names of the available themes
+
+   https://github.com/owncloud/web/issues/2404
+   https://github.com/owncloud/web/issues/8424
+   https://github.com/owncloud/web/issues/9403
+   https://github.com/owncloud/web/issues/9885
+   https://github.com/owncloud/web/issues/9939
+   https://github.com/owncloud/web/pull/8855
+   https://github.com/owncloud/web/pull/9396
+   https://github.com/owncloud/web/pull/9401
+   https://github.com/owncloud/web/pull/9698
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
