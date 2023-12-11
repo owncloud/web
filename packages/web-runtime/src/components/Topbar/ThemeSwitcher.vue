@@ -22,7 +22,7 @@
         appearance="raw-inverse"
         variation="brand"
       >
-        <oc-icon name="paint" />
+        <oc-icon name="palette" />
       </oc-button>
       <oc-drop
         drop-id="theme-picker-options-drop"
