@@ -9,10 +9,10 @@ export const useHead = ({ store }: { store: Store<any> }) => {
   const themeStore = useThemeStore()
   const { currentTheme } = storeToRefs(themeStore)
 
+  const favicon = computed(() => currentTheme.value.logo.favicon)
+
   _useHead(
     computed(() => {
-      const favicon = computed(() => currentTheme.value.logo.favicon)
-
       return {
         meta: [
           {
@@ -20,7 +20,7 @@ export const useHead = ({ store }: { store: Store<any> }) => {
             content: [getWebVersion(), getBackendVersion({ store })].filter(Boolean).join(', ')
           }
         ],
-        ...(unref(favicon) && { link: [{ rel: 'icon', href: favicon }] })
+        ...(unref(favicon) && { link: [{ rel: 'icon', href: unref(favicon) }] })
       }
     })
   )
