@@ -113,7 +113,7 @@ export default defineComponent({
     sideBarPanelContext: {
       required: false,
       type: Object as PropType<SideBarPanelContext<unknown, unknown, unknown>>,
-      default: () => {}
+      default: () => ({})
     },
     sideBarActivePanel: {
       required: false,

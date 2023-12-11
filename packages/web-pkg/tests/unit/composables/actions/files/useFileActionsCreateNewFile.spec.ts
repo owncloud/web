@@ -108,7 +108,7 @@ function getWrapper({
   mocks.$clientService.webdav.putFileContents.mockImplementation(() => {
     if (resolveCreateFile) {
       return Promise.resolve({
-        id: 1,
+        id: '1',
         type: 'folder',
         path: '/',
         isReceivedShare: jest.fn()
