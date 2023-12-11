@@ -1,8 +1,8 @@
 <template>
   <oc-select
-    class="tags-select"
     ref="tagSelect"
     v-model="selectedTags"
+    class="tags-select"
     :multiple="true"
     :disabled="readonly"
     :options="availableTags"
