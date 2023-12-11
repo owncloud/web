@@ -1,0 +1,18 @@
+Change: Theme handling
+
+The handling of themes has been throughoutly reworked.
+Themes now feature a human-readable title, can specify whether they are suitable as light or dark mode themes.
+If only one theme is provided, this theme will be set.
+If two themes are provided and one is a dark and one is a light mode one, there is a light/dark mode switch button in the AppBar.
+If more than two themes are provided or the two provided themes are not a dark and a light mode one respectively,
+the UI features a theme-switch button featuring a dropdown of the human-readable names of the available themes
+
+https://github.com/owncloud/web/issues/2404
+https://github.com/owncloud/web/issues/8424
+https://github.com/owncloud/web/issues/9403
+https://github.com/owncloud/web/issues/9885
+https://github.com/owncloud/web/issues/9939
+https://github.com/owncloud/web/pull/8855
+https://github.com/owncloud/web/pull/9396
+https://github.com/owncloud/web/pull/9401
+https://github.com/owncloud/web/pull/9698

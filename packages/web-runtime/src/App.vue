@@ -67,8 +67,9 @@ import { isPublicLinkContext, isUserContext } from './router'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import { eventBus, useRouter } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
-import { useStore } from '@ownclouders/web-pkg'
+import { useStore, useThemeStore } from '@ownclouders/web-pkg'
 import { RouteLocation } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -76,6 +77,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
     const router = useRouter()
     useHead({ store })
 
@@ -133,6 +137,7 @@ export default defineComponent({
     )
 
     return {
+      currentTheme,
       modalComponent,
       onModalConfirm,
       onModalCancel,
@@ -212,10 +217,9 @@ export default defineComponent({
       }
       const glue = ' - '
       const titleSegments = [routeTitle]
-      const generalName = this.configuration.currentTheme.general.name
       return {
         shortDocumentTitle: titleSegments.join(glue),
-        fullDocumentTitle: [...titleSegments, generalName].join(glue)
+        fullDocumentTitle: [...titleSegments, this.currentTheme.common.name].join(glue)
       }
     }
   }

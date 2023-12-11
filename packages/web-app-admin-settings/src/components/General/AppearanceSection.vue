@@ -26,7 +26,7 @@
       </div>
       <div>
         <div class="logo-wrapper">
-          <img alt="" :src="logo" class="oc-p-xs" />
+          <img alt="" :src="currentTheme.logo.topbar" class="oc-p-xs" />
         </div>
         <input
           id="logo-upload-input"
@@ -44,13 +44,14 @@
 
 <script lang="ts">
 import { defineComponent, computed, unref, VNodeRef, ref } from 'vue'
-import { ContextActionMenu } from '@ownclouders/web-pkg'
+import { ContextActionMenu, useThemeStore } from '@ownclouders/web-pkg'
 import {
   useGeneralActionsResetLogo,
   useGeneralActionsUploadLogo
 } from '../../composables/actions/general'
 import { supportedLogoMimeTypes } from '../../defaults'
 import { useStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'AppearanceSection',
@@ -59,6 +60,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
     const logoInput: VNodeRef = ref(null)
 
@@ -75,7 +78,6 @@ export default defineComponent({
       resources: unref(menuItems)
     }))
 
-    const logo = computed(() => store.getters.configuration.currentTheme.logo.topbar)
     const menuSections = computed(() => [
       {
         name: 'primaryActions',
@@ -87,7 +89,7 @@ export default defineComponent({
 
     return {
       actionOptions,
-      logo,
+      currentTheme,
       menuItems,
       menuSections,
       supportedLogoMimeTypesAcceptValue,

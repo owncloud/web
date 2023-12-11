@@ -9,23 +9,24 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed, defineComponent, unref } from 'vue'
-import { useRouteMeta, useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { useRouteMeta, useThemeStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'PlainLayout',
   setup() {
-    const store = useStore()
     const { $gettext } = useGettext()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
     const title = useRouteMeta('title')
 
     const pageTitle = computed(() => {
       return $gettext(unref(title) || '')
     })
-    const backgroundImg = computed(() => {
-      return store.getters.configuration?.currentTheme?.loginPage?.backgroundImg
-    })
+    const backgroundImg = computed(() => currentTheme.value.loginPage.backgroundImg)
 
     return {
       pageTitle,

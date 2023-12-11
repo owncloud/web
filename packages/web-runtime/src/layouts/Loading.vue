@@ -2,20 +2,26 @@
   <div
     class="loading-overlay oc-flex oc-flex-middle oc-flex-center"
     :style="{
-      backgroundImage: 'url(' + configuration.currentTheme.loginPage.backgroundImg + ')'
+      backgroundImage: 'url(' + currentTheme.loginPage.backgroundImg + ')'
     }"
   >
     <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" />
   </div>
 </template>
 <script lang="ts">
+import { useThemeStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'LoadingLayout',
-  computed: {
-    ...mapGetters(['configuration'])
+  setup() {
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
+    return {
+      currentTheme
+    }
   }
 })
 </script>

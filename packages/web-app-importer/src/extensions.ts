@@ -1,4 +1,5 @@
-import { useStore, usePublicLinkContext } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
+import { useStore, usePublicLinkContext, useThemeStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
@@ -17,6 +18,8 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { $gettext } = useGettext()
   const uppyService = useService<UppyService>('$uppyService')
   const publicLinkContext = usePublicLinkContext({ store })
+  const themeStore = useThemeStore()
+  const { currentTheme } = storeToRefs(themeStore)
 
   const { companionUrl, webdavCloudType } = applicationConfig
   let { supportedClouds } = applicationConfig
@@ -51,8 +54,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   })
 
   const handler = async () => {
-    const currentThemeName = window.localStorage.getItem('oc_currentThemeName')
-    const renderDarkTheme = currentThemeName === 'default-dark'
+    const renderDarkTheme = currentTheme.value.isDark
 
     const modal = {
       variation: 'passive',

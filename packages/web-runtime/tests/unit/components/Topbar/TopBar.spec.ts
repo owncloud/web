@@ -7,6 +7,7 @@ import {
   shallowMount,
   defaultStoreMockOptions
 } from 'web-test-helpers'
+import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
@@ -87,16 +88,7 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
     }
   }
   storeOptions.getters.configuration.mockImplementation(() => ({
-    options: { disableFeedbackLink: false },
-    themes: {
-      default: {},
-      'default-dark': {}
-    },
-    currentTheme: {
-      logo: {
-        topbar: 'example-logo.svg'
-      }
-    }
+    options: { disableFeedbackLink: false }
   }))
   storeOptions.getters.user.mockImplementation(() => ({ id: 'einstein' }))
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
@@ -109,7 +101,7 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
         applicationsList: ['testApp']
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins(), store, createMockThemeStore()],
         stubs: { 'router-link': true, 'portal-target': true, notifications: true },
         mocks,
         provide: mocks

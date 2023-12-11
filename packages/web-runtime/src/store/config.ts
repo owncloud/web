@@ -14,34 +14,6 @@ const state = {
   openIdConnect: {
     authority: ''
   },
-  themes: [],
-  commonTheme: {
-    name: '',
-    solgan: '',
-    logo: '',
-    accessDeniedHelpUrl: ''
-  },
-  currentTheme: {
-    general: {
-      name: '',
-      slogan: '',
-      privacyUrl: '',
-      imprintUrl: ''
-    },
-    logo: {
-      topbar: '',
-      favicon: '',
-      login: '',
-      notFound: ''
-    },
-    loginPage: {
-      autoRedirect: true,
-      backgroundImg: ''
-    },
-    designTokens: {
-      colorPalette: {}
-    }
-  },
   options: {
     contextHelpers: true,
     defaultExtension: 'files',
@@ -70,9 +42,7 @@ const state = {
     openLinksWithDefaultApp: true,
     tokenStorageLocal: true,
     loginUrl: '',
-    privacyUrl: '',
-    imprintUrl: '',
-    accessDeniedHelpUrl: '',
+    logoutUrl: '',
     disabledExtensions: [],
     userListRequiresFilter: false,
     embed: {
@@ -100,13 +70,6 @@ const actions = {
         }
       })
     }
-  },
-  loadTheme(context, { theme }) {
-    context.commit('LOAD_THEME', theme)
-  },
-  loadThemes(context, { theme, common }) {
-    context.commit('LOAD_THEMES', theme)
-    context.commit('LOAD_COMMON', common)
   }
 }
 
@@ -124,15 +87,6 @@ const mutations = {
     if (config.corrupted) {
       state.corrupted = config.corrupted
     }
-  },
-  LOAD_THEME(state, theme) {
-    state.currentTheme = theme
-  },
-  LOAD_THEMES(state, theme) {
-    state.themes = theme
-  },
-  LOAD_COMMON(state, common) {
-    state.commonTheme = common
   }
 }
 
@@ -157,9 +111,6 @@ const getters = {
       return '/'
     }
     return parsed
-  },
-  theme: (state) => {
-    return state.currentTheme
   }
 }
 

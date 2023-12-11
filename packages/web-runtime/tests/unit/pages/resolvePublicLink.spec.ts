@@ -10,6 +10,7 @@ import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
+import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 jest.mock('web-runtime/src/services/auth')
 const selectors = {
@@ -82,14 +83,11 @@ function getWrapper({ passwordRequired = false } = {}) {
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files_sharing: { federation: { incoming: true, outgoing: true } }
   }))
-  storeOptions.getters.configuration.mockReturnValue({
-    currentTheme: { general: { slogan: 'Public link slogan' } }
-  })
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(ResolvePublicLink, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins(), store, createMockThemeStore()],
         mocks,
         provide: mocks
       }

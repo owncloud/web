@@ -123,7 +123,7 @@ import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled, useRoute, useStore } from '@ownclouders/web-pkg'
+import { useCapabilitySpacesEnabled, useRoute, useThemeStore } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -136,25 +136,18 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()
+    const themeStore = useThemeStore()
+
     const loginLink = computed(() => {
       return {
         name: 'login',
         query: { redirectUrl: unref(route).fullPath }
       }
     })
-    const store = useStore()
-    const imprintUrl = computed(() => {
-      return (
-        store.getters.configuration.currentTheme.general?.imprintUrl ||
-        store.getters.configuration.options.imprintUrl
-      )
-    })
-    const privacyUrl = computed(() => {
-      return (
-        store.getters.configuration.currentTheme.general?.privacyUrl ||
-        store.getters.configuration.options.privacyUrl
-      )
-    })
+
+    const imprintUrl = computed(() => themeStore.currentTheme.common.urls.imprint)
+    const privacyUrl = computed(() => themeStore.currentTheme.common.urls.privacy)
+
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
       loginLink,

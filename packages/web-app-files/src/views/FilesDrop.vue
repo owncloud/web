@@ -28,15 +28,16 @@
       </div>
 
       <div class="oc-text-center oc-mt-xxl">
-        <p v-text="configuration.currentTheme.general.slogan" />
+        <p v-text="themeSlogan" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import { mapGetters } from 'vuex'
-import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
+import { createLocationPublic, createLocationSpaces, useThemeStore } from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
   computed,
@@ -78,6 +79,7 @@ export default defineComponent({
   setup() {
     const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
+    const themeStore = useThemeStore()
     const router = useRouter()
     const route = useRoute()
     const language = useGettext()
@@ -88,6 +90,9 @@ export default defineComponent({
     const isUserContext = useUserContext({ store })
     const { getInternalSpace } = useGetMatchingSpace()
     useUpload({ uppyService })
+
+    const { currentTheme } = storeToRefs(themeStore)
+    const themeSlogan = computed(() => currentTheme.value.common.slogan)
 
     const fileIdQueryItem = useRouteQuery('fileId')
     const fileId = computed(() => {
@@ -207,7 +212,8 @@ export default defineComponent({
       dragareaEnabled,
       loading,
       errorMessage,
-      share
+      share,
+      themeSlogan
     }
   },
   computed: {

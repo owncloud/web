@@ -12,14 +12,17 @@
       </oc-button>
       <div
         class="app-banner-icon"
-        :style="{ 'background-image': `url('${appBannerSettings.icon}')` }"
+        :style="{ 'background-image': `url('${currentTheme.appBanner.icon}')` }"
       ></div>
       <div class="info-container">
         <div>
-          <div class="app-title">{{ appBannerSettings.title }}</div>
-          <div class="app-publisher">{{ appBannerSettings.publisher }}</div>
-          <div v-if="appBannerSettings.additionalInformation !== ''" class="app-additional-info">
-            {{ $gettext(appBannerSettings.additionalInformation) }}
+          <div class="app-title">{{ currentTheme.appBanner.title }}</div>
+          <div class="app-publisher">{{ currentTheme.appBanner.publisher }}</div>
+          <div
+            v-if="currentTheme.appBanner.additionalInformation !== ''"
+            class="app-additional-info"
+          >
+            {{ $gettext(currentTheme.appBanner.additionalInformation) }}
           </div>
         </div>
       </div>
@@ -28,8 +31,8 @@
         target="_blank"
         class="app-banner-cta"
         rel="noopener"
-        aria-label="{{ $gettext(appBannerSettings.ctaText) }}"
-        >{{ $gettext(appBannerSettings.ctaText) }}</a
+        aria-label="{{ $gettext(currentTheme.appBanner.ctaText) }}"
+        >{{ $gettext(currentTheme.appBanner.ctaText) }}</a
       >
     </div>
   </portal>
@@ -37,9 +40,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
-import { useRouter, useStore } from '../composables'
+import { useRouter, useThemeStore } from '../composables'
 import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {},
@@ -52,16 +56,20 @@ export default defineComponent({
   setup(props) {
     const appBannerWasClosed = useSessionStorage('app_banner_closed', null)
     const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
-    const store = useStore()
+
     const router = useRouter()
-    const appBannerSettings = unref(store.getters.configuration.currentTheme.appBanner)
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
+    const appBannerSettings = currentTheme.value.appBanner
     const isAppBannerAvailable = computed(
       () => appBannerSettings && Object.keys(appBannerSettings).length != 0
     )
+
     const appUrl = computed(() => {
       return buildUrl(router, `/f/${props.fileId}`)
         .toString()
-        .replace('https', appBannerSettings.appScheme)
+        .replace('https', currentTheme.value.appBanner?.appScheme)
     })
 
     const close = () => {
@@ -72,9 +80,9 @@ export default defineComponent({
     return {
       appUrl,
       close,
-      isVisible,
-      appBannerSettings,
-      isAppBannerAvailable
+      currentTheme,
+      isAppBannerAvailable,
+      isVisible
     }
   }
 })

@@ -1,61 +1,94 @@
 <template>
-  <oc-button
-    v-oc-tooltip="buttonLabel"
-    class="themeswitcher-btn"
-    :aria-label="buttonLabel"
-    appearance="raw-inverse"
-    variation="brand"
-    @click="toggleTheme"
-  >
-    <span class="oc-visible@s" :aria-label="switchLabel" />
-    <oc-icon :name="switchIcon" fill-type="line" variation="inherit" />
-  </oc-button>
+  <div v-if="!hasOnlyOneTheme">
+    <oc-button
+      v-if="hasOnlyTwoThemesForLightDarkMode"
+      v-oc-tooltip="buttonLabel"
+      class="themeswitcher-btn"
+      :aria-label="buttonLabel"
+      appearance="raw-inverse"
+      variation="brand"
+      @click="toggleTheme"
+    >
+      <span class="oc-visible@s" :aria-label="switchLabel" />
+      <oc-icon :name="switchIcon" fill-type="line" variation="inherit" />
+    </oc-button>
+    <template v-else>
+      <oc-button
+        id="theme-picker-options-btn"
+        key="theme-picker-options-btn"
+        v-oc-tooltip="buttonLabel"
+        data-testid="theme-picker-options-btn"
+        :aria-label="buttonLabel"
+        appearance="raw-inverse"
+        variation="brand"
+      >
+        <oc-icon name="palette" />
+      </oc-button>
+      <oc-drop
+        drop-id="theme-picker-options-drop"
+        toggle="#theme-picker-options-btn"
+        mode="click"
+        padding-size="small"
+        close-on-click
+      >
+        <oc-list class="oc-tiles-sort-list">
+          <li v-for="(theme, index) in availableThemes" :key="index" class="oc-my-xs">
+            <oc-button
+              :aria-label="buttonLabel"
+              justify-content="space-between"
+              class="theme-picker-options-list-item oc-p-s oc-width-1-1"
+              :class="{
+                'oc-background-primary-gradient': isThemeCurrentlyActive(theme),
+                selected: isThemeCurrentlyActive(theme)
+              }"
+              :appearance="isThemeCurrentlyActive(theme) ? 'raw-inverse' : 'raw'"
+              :variation="isThemeCurrentlyActive(theme) ? 'primary' : 'passive'"
+              @click="setAndApplyTheme(theme)"
+            >
+              <span>{{ theme.name }}</span>
+              <oc-icon v-if="isThemeCurrentlyActive(theme)" name="check" variation="inherit" />
+            </oc-button>
+          </li>
+        </oc-list>
+      </oc-drop>
+    </template>
+  </div>
 </template>
 <script lang="ts">
-import { computed, unref, watch, defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
-import { useStore, useLocalStorage } from '@ownclouders/web-pkg'
-import { themeNameDark, themeNameLight, useDefaultThemeName } from '../../composables'
+import { computed, defineComponent, unref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useThemeStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   setup() {
-    const store = useStore()
-    const currentThemeName = useLocalStorage('oc_currentThemeName', useDefaultThemeName())
-    const currentTheme = computed(() => store.getters.configuration.themes[unref(currentThemeName)])
-    const applyTheme = (theme) => {
-      for (const param in theme.designTokens.colorPalette) {
-        ;(document.querySelector(':root') as HTMLElement).style.setProperty(
-          `--oc-color-${param}`,
-          theme.designTokens.colorPalette[param]
-        )
-      }
+    const { $gettext } = useGettext()
+    const themeStore = useThemeStore()
+
+    const { setAndApplyTheme, toggleTheme } = themeStore
+
+    const { availableThemes, currentTheme, hasOnlyOneTheme, hasOnlyTwoThemesForLightDarkMode } =
+      storeToRefs(themeStore)
+
+    const buttonLabel = computed(() => $gettext('Click to switch theme'))
+    const switchLabel = computed(() => $gettext('Currently used theme'))
+    const switchIcon = computed(() => (currentTheme.value.isDark === false ? 'sun' : 'moon-clear'))
+
+    const isThemeCurrentlyActive = (theme) => {
+      return unref(currentTheme) === theme
     }
 
-    watch(currentThemeName, async () => {
-      await store.dispatch('loadTheme', { theme: unref(currentTheme) })
-      applyTheme(unref(currentTheme))
-    })
-
-    return { currentThemeName, currentTheme }
-  },
-  computed: {
-    ...mapGetters(['configuration']),
-    isLightTheme() {
-      return [null, themeNameLight].includes(this.currentThemeName)
-    },
-    buttonLabel() {
-      return this.$gettext('Click to switch theme')
-    },
-    switchIcon() {
-      return this.isLightTheme ? 'sun' : 'moon-clear'
-    },
-    switchLabel() {
-      return this.$gettext('Currently used theme')
-    }
-  },
-  methods: {
-    toggleTheme() {
-      this.currentThemeName = this.isLightTheme ? themeNameDark : themeNameLight
+    return {
+      availableThemes,
+      buttonLabel,
+      currentTheme,
+      hasOnlyOneTheme,
+      hasOnlyTwoThemesForLightDarkMode,
+      isThemeCurrentlyActive,
+      setAndApplyTheme,
+      switchIcon,
+      switchLabel,
+      toggleTheme
     }
   }
 })

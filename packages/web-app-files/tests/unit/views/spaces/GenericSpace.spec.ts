@@ -15,6 +15,7 @@ import {
 } from 'web-test-helpers'
 import { ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
+import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 const mockCreateFolder = jest.fn()
 const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
@@ -306,7 +307,6 @@ function getMountedWrapper({
       ...defaultStoreMockOptions.getters,
       configuration: function () {
         return {
-          currentTheme: { general: { slogan: 'Public link slogan' } },
           options: {
             runningOnEos
           }
@@ -332,7 +332,7 @@ function getMountedWrapper({
     wrapper: mount(GenericSpace, {
       props: propsData,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins(), store, createMockThemeStore()],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: { ...defaultStubs, 'resource-details': true, portal: true, ...stubs }

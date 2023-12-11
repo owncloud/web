@@ -19,6 +19,7 @@
     "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
+    "pinia": "2.1.7",
     "uuid": "9.0.1",
     "vue-concurrency": "4.0.1",
     "vuex": "4.1.0",

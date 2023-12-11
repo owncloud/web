@@ -22,20 +22,19 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { useStore } from '@ownclouders/web-pkg'
+import { useStore, useThemeStore } from '@ownclouders/web-pkg'
 import { useHead } from '../composables/head'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'MissingConfigPage',
   setup() {
     const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
-    const logoImg = computed(() => {
-      return store.getters.configuration?.currentTheme?.logo?.login
-    })
-    const footerSlogan = computed(() => {
-      return store.getters.configuration?.currentTheme?.general?.slogan
-    })
+    const logoImg = computed(() => currentTheme.value.logo.login)
+    const footerSlogan = computed(() => currentTheme.value.common.slogan)
 
     useHead({ store })
 

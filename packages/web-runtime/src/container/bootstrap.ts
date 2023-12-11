@@ -3,13 +3,12 @@ import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { App, computed, unref } from 'vue'
+import { App, computed } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { useLocalStorage } from '@ownclouders/web-pkg'
-import { useDefaultThemeName } from '../composables'
+import { useThemeStore } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
   ClientService,
@@ -35,6 +34,7 @@ import { z } from 'zod'
 import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -309,26 +309,24 @@ const rewriteDeprecatedAppNames = (
  * @param designSystem
  */
 export const announceTheme = async ({
-  store,
   app,
   designSystem,
   runtimeConfiguration
 }: {
-  store: Store<unknown>
   app: App
   designSystem: any
   runtimeConfiguration?: RuntimeConfiguration
 }): Promise<void> => {
-  const { web, common } = await loadTheme(runtimeConfiguration?.theme)
-  await store.dispatch('loadThemes', { theme: web, common })
-  const currentThemeName = useLocalStorage('oc_currentThemeName', null) // note: use null as default so that we can fall back to system preferences
-  if (unref(currentThemeName) === null) {
-    currentThemeName.value = useDefaultThemeName()
-  }
-  await store.dispatch('loadTheme', { theme: web[unref(currentThemeName)] || web.default })
+  const themeStore = useThemeStore()
+  const { initializeThemes } = themeStore
+  const { currentTheme } = storeToRefs(themeStore)
+
+  const webTheme = await loadTheme(runtimeConfiguration?.theme)
+
+  await initializeThemes(webTheme)
 
   app.use(designSystem, {
-    tokens: store.getters.theme.designTokens
+    tokens: currentTheme.value.designTokens
   })
 }
 

@@ -15,7 +15,7 @@
         to="/"
         class="oc-width-1-1"
       >
-        <oc-img :src="logoImage" :alt="sidebarLogoAlt" class="oc-logo-image" />
+        <oc-img :src="currentTheme.logo.topbar" :alt="sidebarLogoAlt" class="oc-logo-image" />
       </router-link>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
@@ -26,7 +26,7 @@
     </div>
     <template v-if="!isEmbedModeEnabled">
       <portal to="app.runtime.header.right" :order="50">
-        <theme-switcher v-if="darkThemeAvailable" />
+        <theme-switcher />
         <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
       </portal>
       <portal to="app.runtime.header.right" :order="100">
@@ -39,6 +39,9 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
+import { computed, unref, PropType, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { mapGetters } from 'vuex'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
@@ -52,10 +55,9 @@ import {
   useEmbedMode,
   useRouter,
   useStore,
+  useThemeStore,
   useUserContext
 } from '@ownclouders/web-pkg'
-import { computed, unref, PropType, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
 
 export default {
   components: {
@@ -74,6 +76,9 @@ export default {
   },
   setup(props) {
     const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
+
     const notificationsSupport = useCapabilityNotifications()
     const isUserContext = useUserContext({ store })
     const language = useGettext()
@@ -180,6 +185,7 @@ export default {
 
     return {
       contentOnLeftPortal,
+      currentTheme,
       updateLeftPortal,
       isNotificationBellEnabled,
       userMenuItems,
@@ -191,16 +197,8 @@ export default {
   computed: {
     ...mapGetters(['configuration', 'user']),
 
-    darkThemeAvailable() {
-      return this.configuration.themes.default && this.configuration.themes['default-dark']
-    },
-
     sidebarLogoAlt() {
       return this.$gettext('Navigate to personal files page')
-    },
-
-    logoImage() {
-      return this.configuration.currentTheme.logo.topbar
     },
 
     isFeedbackLinkEnabled() {
@@ -229,7 +227,7 @@ export default {
           width: image.width
         })
       }
-      image.src = this.configuration.currentTheme.logo.topbar
+      image.src = this.currentTheme.logo.topbar
     })) as { height: number; width: number }
     // max-height of logo is 38px, so we calculate the width based on the ratio of the image
     // and add 70px to account for the width of the left side of the topbar

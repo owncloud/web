@@ -11,7 +11,6 @@ export const defaultStoreMockOptions = {
     capabilities: jest.fn().mockImplementation(() => ({})),
     user: jest.fn().mockImplementation(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
-      currentTheme: { general: { slogan: '' } },
       options: {
         editor: {
           autosaveEnabled: false,
@@ -46,7 +45,6 @@ export const defaultStoreMockOptions = {
     showMessage: jest.fn(),
     showErrorMessage: jest.fn(),
     deleteNotification: jest.fn(),
-    loadTheme: jest.fn(),
     setModalInputErrorMessage: jest.fn(),
     openNavigation: jest.fn(),
     closeNavigation: jest.fn()

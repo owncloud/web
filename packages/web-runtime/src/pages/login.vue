@@ -32,9 +32,10 @@
 
 <script lang="ts">
 import { authService } from '../services/auth'
-import { queryItemAsString, useRouteQuery, useStore } from '@ownclouders/web-pkg'
+import { queryItemAsString, useRouteQuery, useThemeStore } from '@ownclouders/web-pkg'
 import { computed, defineComponent, unref } from 'vue'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'LoginPage',
@@ -42,28 +43,21 @@ export default defineComponent({
     AppLoadingSpinner
   },
   setup() {
-    const store = useStore()
+    const themeStore = useThemeStore()
+    const { currentTheme } = storeToRefs(themeStore)
 
     const redirectUrl = useRouteQuery('redirectUrl')
     const performLogin = () => {
       authService.loginUser(queryItemAsString(unref(redirectUrl)))
     }
-    const autoRedirect = computed(() => {
-      return store.getters.configuration.currentTheme.loginPage.autoRedirect
-    })
+    const autoRedirect = computed(() => currentTheme.value.loginPage.autoRedirect)
     if (unref(autoRedirect)) {
       performLogin()
     }
 
-    const productName = computed(() => {
-      return store.getters.configuration.currentTheme.general.name
-    })
-    const logoImg = computed(() => {
-      return store.getters.configuration.currentTheme.logo.login
-    })
-    const footerSlogan = computed(() => {
-      return store.getters.configuration.currentTheme.general.slogan
-    })
+    const productName = computed(() => currentTheme.value.common.name)
+    const logoImg = computed(() => currentTheme.value.logo.login)
+    const footerSlogan = computed(() => currentTheme.value.common.slogan)
 
     return {
       autoRedirect,
