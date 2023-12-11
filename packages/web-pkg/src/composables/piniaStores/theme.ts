@@ -5,12 +5,12 @@ import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
 
 const AppBanner = z.object({
-  title: z.string(),
-  publisher: z.string(),
-  additionalInformation: z.string(),
-  ctaText: z.string(),
-  icon: z.string(),
-  appScheme: z.string()
+  title: z.string().optional(),
+  publisher: z.string().optional(),
+  additionalInformation: z.string().optional(),
+  ctaText: z.string().optional(),
+  icon: z.string().optional(),
+  appScheme: z.string().optional()
 })
 
 const CommonSection = z.object({
