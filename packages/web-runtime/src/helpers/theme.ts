@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash-es'
 import defaultTheme from '../../themes/owncloud/theme.json'
 import { v4 as uuidV4 } from 'uuid'
-import { ThemingConfig } from '@ownclouders/web-pkg/src/composables/piniaStores/theme'
+import { ThemingConfig } from '@ownclouders/web-pkg'
 
 export const loadTheme = async (location = '') => {
   const defaultOwnCloudTheme = {

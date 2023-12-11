@@ -6,7 +6,7 @@ exports[`ThemeSwitcher component restores dark theme if dark theme is saved in l
     <!--v-if-->
     <!-- @slot Content of the button -->
     <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="moon-clear" variation="inherit"></oc-icon-stub>
+    <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
   </button>
 </div>
 `;

@@ -2,10 +2,18 @@ import { loadTheme } from 'web-runtime/src/helpers/theme'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 import merge from 'lodash-es/merge'
 import fetchMock from 'jest-fetch-mock'
-import {
-  ThemingConfig,
-  WebThemeConfig
-} from '@ownclouders/web-pkg/src/composables/piniaStores/theme'
+import { ThemingConfig, WebThemeConfig } from '@ownclouders/web-pkg'
+
+jest.mock('@ownclouders/web-pkg', () => {
+  const actual = jest.requireActual('@ownclouders/web-pkg')
+  return {
+    ...actual,
+    ThemingConfig: {
+      parse: jest.fn((arg) => arg),
+      safeParse: (arg) => actual.ThemingConfig.safeParse(arg)
+    }
+  }
+})
 
 jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
@@ -61,6 +69,18 @@ describe('theme loading and error reporting', () => {
     const customTheme = merge({}, defaultOwnCloudTheme, {
       defaults: { logo: { login: 'custom.svg' } }
     })
+
+    fetchMock.mockResponse(
+      JSON.stringify({
+        common: defaultTheme.common,
+        clients: {
+          web: {
+            defaults: customTheme.defaults,
+            themes: customTheme.themes
+          }
+        }
+      })
+    )
 
     const theme1 = await loadTheme('http://www.owncloud.com/custom.json')
     const theme2 = await loadTheme('/custom.json')
