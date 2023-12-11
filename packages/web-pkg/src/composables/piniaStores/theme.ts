@@ -80,39 +80,40 @@ type WebThemeConfigType = z.infer<typeof WebThemeConfig>
 const themeStorageKey = 'oc_currentThemeName'
 
 export const useThemeStore = defineStore('theme', () => {
+  const currentThemeName = useLocalStorage(themeStorageKey, null) // null as default to make fallback possible
+  const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, null)
+
+  const isDark = usePreferredDark()
+
   const currentTheme = ref<WebThemeType | undefined>()
 
   const availableThemes = ref<WebThemeType[]>([])
 
-  const hasOnlyOneTheme = computed(() => availableThemes.value.length === 1)
+  const hasOnlyOneTheme = computed(() => unref(availableThemes).length === 1)
 
   const hasOnlyTwoThemesForLightDarkMode = computed(
     () =>
-      availableThemes.value.length === 2 &&
-      availableThemes.value.some((t) => t.isDark === true) &&
-      availableThemes.value.some((t) => t.isDark !== true)
+      unref(availableThemes).length === 2 &&
+      unref(availableThemes).some((t) => t.isDark === true) &&
+      unref(availableThemes).some((t) => t.isDark !== true)
   )
 
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
 
-    const currentThemeName = useLocalStorage(themeStorageKey, null) // null as default to make fallback possible
-
     if (unref(currentThemeName) === null) {
-      const isDark = usePreferredDark()
-      currentThemeName.value = availableThemes.value.find((t) => t.isDark === isDark.value).name
+      currentThemeName.value = unref(availableThemes).find((t) => t.isDark === unref(isDark)).name
     }
 
     setAndApplyTheme(
-      availableThemes.value.find((t) => t.name === currentThemeName.value) ||
+      unref(availableThemes).find((t) => t.name === unref(currentThemeName)) ||
         availableThemes.value[0]
     )
   }
 
   const setAndApplyTheme = (theme: WebThemeType) => {
     currentTheme.value = theme
-    const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, theme.name)
-    currentLocalStorageThemeName.value = currentTheme.value.name
+    currentLocalStorageThemeName.value = unref(currentTheme).name
 
     const customizableDesignTokens = [
       { name: 'breakpoints', prefix: 'breakpoint' },
@@ -123,7 +124,7 @@ export const useThemeStore = defineStore('theme', () => {
     ]
 
     customizableDesignTokens.forEach((token) => {
-      for (const param in currentTheme.value.designTokens[token.name]) {
+      for (const param in unref(currentTheme).designTokens[token.name]) {
         ;(document.querySelector(':root') as HTMLElement).style.setProperty(
           `--oc-${token.prefix}-${param}`,
           theme.designTokens[token.name][param]
@@ -134,7 +135,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   // This should only be used with hasOnlyTwoThemesForLightDarkMode - we know there's exactly two themes, one with darkMode and one without
   const toggleTheme = () => {
-    setAndApplyTheme(availableThemes.value.find((t) => t.isDark !== currentTheme.value.isDark))
+    setAndApplyTheme(unref(availableThemes).find((t) => t.isDark !== unref(currentTheme).isDark))
   }
 
   return {
