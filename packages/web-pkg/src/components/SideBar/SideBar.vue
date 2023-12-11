@@ -56,7 +56,10 @@
           <slot name="header" />
         </div>
         <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.name}`]">
-          <div :class="{ 'sidebar-panel__body-content-stretch': !panel.isRoot?.(panelContext) }">
+          <div
+            class="sidebar-panel__body-content"
+            :class="{ 'sidebar-panel__body-content-stretch': !panel.isRoot?.(panelContext) }"
+          >
             <slot name="body">
               <component
                 :is="panel.component"
