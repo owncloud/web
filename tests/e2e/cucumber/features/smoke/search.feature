@@ -172,36 +172,90 @@ Feature: Search
       | exampleInsideThePersonalSpace.txt |
     And "Alice" logs out
 
+
   Scenario: Search using mediaType filter
     Given "Admin" creates following users using API
       | id    |
       | Alice |
     And "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name      |
+      | mediaTest |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                     | to            |
+      | filesForUpload/testavatar.jpg | mediaTest.jpg |
     And "Alice" creates the following files into personal space using API
       | pathToFile    | content        |
       | mediaTest.txt | I'm a Document |
       | mediaTest.pdf | I'm a PDF      |
       | mediaTest.mp3 | I'm a Audio    |
       | mediaTest.zip | I'm a Archive  |
-    And "Alice" opens the "files" app
+    When "Alice" opens the "files" app
     And "Alice" searches "mediaTest" using the global search and the "everywhere" filter and presses enter
     And "Alice" selects mediaType "Document" from the search result filter chip
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.txt |
     And "Alice" clears mediaType filter
-    And "Alice" selects mediaType "PDF" from the search result filter chip
+    When "Alice" selects mediaType "PDF" from the search result filter chip
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.pdf |
     And "Alice" clears mediaType filter
-    And "Alice" selects mediaType "Audio" from the search result filter chip
+    When "Alice" selects mediaType "Audio" from the search result filter chip
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.mp3 |
     And "Alice" clears mediaType filter
-    And "Alice" selects mediaType "Archive" from the search result filter chip
+    When "Alice" selects mediaType "Archive" from the search result filter chip
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.zip |
+    And "Alice" clears mediaType filter
+    # multiple choose
+    When "Alice" selects mediaType "Folder" from the search result filter chip
+    And "Alice" selects mediaType "Image" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest     |
+      | mediaTest.jpg |
+    But following resources should not be displayed in the files list for user "Alice"
+      | resource      |
+      | mediaTest.txt |
+      | mediaTest.pdf |
+      | mediaTest.mp3 |
+      | mediaTest.zip |
+    And "Alice" logs out
+
+
+  Scenario: Search using lastModified filter
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name       |
+      | mainFolder |
+    And "Alice" creates the following files with mtime into personal space using API
+      | pathToFile               | content             | mtime     |
+      | mainFolder/mediaTest.txt | yesterday's content | yesterday |
+      | mainFolder/mediaTest.md  | I'm a Document      |           |
+    And "Alice" opens the "files" app
+    When "Alice" opens folder "mainFolder"
+    And "Alice" searches "mediaTest" using the global search and the "in here" filter and presses enter
+    And "Alice" selects lastModified "yesterday" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource                 |
+      | mainFolder/mediaTest.txt |
+    But following resources should not be displayed in the files list for user "Alice"
+      | resource                |
+      | mainFolder/mediaTest.md |
+    When "Alice" selects lastModified "today" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource                |
+      | mainFolder/mediaTest.md |
+    But following resources should not be displayed in the files list for user "Alice"
+      | resource                 |
+      | mainFolder/mediaTest.txt |
+    And "Alice" clears lastModified filter
     And "Alice" logs out

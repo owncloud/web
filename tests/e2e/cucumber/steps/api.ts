@@ -113,6 +113,21 @@ Given(
 )
 
 Given(
+  '{string} creates the following file(s) with mtime into personal space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.dav.uploadFileInPersonalSpace({
+        user,
+        pathToFile: info.pathToFile,
+        content: info.content,
+        mtime: info.mtime
+      })
+    }
+  }
+)
+
+Given(
   '{string} creates {int} file(s) in personal space using API',
   async function (this: World, stepUser: string, numberOfFiles: number): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })

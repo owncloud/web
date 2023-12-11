@@ -22,12 +22,6 @@ When(
   }
 )
 
-When('{string} clears tag filter', async function (this: World, stepUser: string): Promise<void> {
-  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-  const searchObject = new objects.applicationFiles.Search({ page })
-  await searchObject.clearTagFilter()
-})
-
 When(
   /^"([^"]*)" (enable|disable)s the option to search in file content?$/,
   async function (this: World, stepUser: string, enableOrDisable: string): Promise<void> {
@@ -45,10 +39,20 @@ When(
   }
 )
 When(
-  '{string} clears mediaType filter',
-  async function (this: World, stepUser: string): Promise<void> {
+  '{string} selects lastModified {string} from the search result filter chip',
+  async function (this: World, stepUser: string, lastModified: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
-    await searchObject.clearMediaTypeFilter()
+    await searchObject.selectlastModifiedFilter({ lastModified })
+  }
+)
+When(
+  /^"([^"].*)" clears (mediaType|tags|lastModified|fullText) filter$/,
+  async function (this: World, stepUser: string, filter: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const searchObject = new objects.applicationFiles.Search({ page })
+    await searchObject.clearFilter({
+      filter: filter as 'mediaType' | 'tags' | 'lastModified' | 'fullText'
+    })
   }
 )

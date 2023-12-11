@@ -56,7 +56,7 @@ Feature: Search
       | resource        |
       | fileToShare.txt |
 
-    When "Brian" clears tag filter
+    When "Brian" clears tags filter
     And "Brian" selects tag "tag 1" from the search result filter chip
     Then following resources should be displayed in the files list for user "Brian"
       | resource        |
@@ -68,7 +68,7 @@ Feature: Search
       | resource        |
       | fileWithTag.txt |
 
-    When "Brian" clears tag filter
+    When "Brian" clears tags filter
     Then following resources should be displayed in the files list for user "Brian"
       | resource                      |
       | textfile.txt                  |

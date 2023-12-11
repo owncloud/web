@@ -20,12 +20,12 @@ export class Search {
     await po.selectMediaTypeFilter({ mediaType: string, page: this.#page })
   }
 
-  async clearTagFilter(): Promise<void> {
-    await po.clearTagFilter({ page: this.#page })
+  async selectlastModifiedFilter({ lastModified: string }): Promise<void> {
+    await po.selectLastModifiedFilter({ lastModified: string, page: this.#page })
   }
 
-  async clearMediaTypeFilter(): Promise<void> {
-    await po.clearMediaTypeFilter({ page: this.#page })
+  async clearFilter({ filter: string }): Promise<void> {
+    await po.clearFilter({ page: this.#page, filter: string })
   }
 
   async toggleSearchInFileContent({ enableOrDisable: string }): Promise<void> {
