@@ -61,7 +61,19 @@ function getWrapper({ fileId, sessionStorageReturnValue }) {
         fileId
       },
       global: {
-        plugins: [...defaultPlugins(), createMockThemeStore()],
+        plugins: [
+          ...defaultPlugins(),
+          createMockThemeStore({
+            appBanner: {
+              title: 'ownCloud',
+              publisher: 'ownCloud GmbH',
+              additionalInformation: '',
+              ctaText: 'OPEN',
+              icon: 'themes/owncloud/assets/owncloud-app-icon.png',
+              appScheme: 'owncloud'
+            }
+          })
+        ],
         mocks,
         provide: mocks
       }
