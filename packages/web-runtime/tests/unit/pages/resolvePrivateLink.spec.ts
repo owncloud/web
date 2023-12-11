@@ -18,8 +18,8 @@ import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  useRouteQuery: jest.fn(),
-  useRouteParam: jest.fn(),
+  useRouteQuery: jest.fn((str) => str),
+  useRouteParam: jest.fn((str) => str),
   queryItemAsString: jest.fn(),
   useGetResourceContext: jest.fn(),
   useConfigurationManager: jest.fn()
@@ -130,9 +130,18 @@ function getWrapper({
   openWithDefaultAppQuery = 'true',
   openLinksWithDefaultApp = true
 } = {}) {
-  jest.mocked(queryItemAsString).mockReturnValueOnce(fileId)
-  jest.mocked(queryItemAsString).mockReturnValueOnce(openWithDefaultAppQuery)
-  jest.mocked(queryItemAsString).mockReturnValueOnce(details)
+  jest.mocked(queryItemAsString).mockImplementation((str: string) => {
+    if (str === 'fileId') {
+      return fileId
+    }
+    if (str === 'openWithDefaultApp') {
+      return openWithDefaultAppQuery
+    }
+    if (str === 'details') {
+      return details
+    }
+    return str
+  })
 
   jest.mocked(useGetResourceContext).mockReturnValue({
     getResourceContext: jest.fn().mockResolvedValue({ space, resource, path })
