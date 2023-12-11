@@ -122,15 +122,15 @@
       appearance="outline"
       variation="passive"
       @click="cancel"
-      >{{ $gettext('Cancel') }}</oc-button
-    >
+      >{{ $gettext('Cancel') }}
+    </oc-button>
     <oc-button
       class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
       appearance="filled"
       variation="primary"
       @click="confirm"
-      >{{ $gettext('Share') }}</oc-button
-    >
+      >{{ $gettext('Share') }}
+    </oc-button>
   </div>
 </template>
 
@@ -306,13 +306,27 @@ export default defineComponent({
         )
       }
 
+      let userFacingErrors = []
       const failed = result.filter(({ status }) => status === 'rejected')
       if (failed.length) {
-        ;(failed as PromiseRejectedResult[]).map(({ reason }) => reason).forEach(console.error)
+        ;(failed as PromiseRejectedResult[])
+          .map(({ reason }) => reason)
+          .forEach((e) => {
+            console.error(e)
+            // Human-readable error message is provided, for example when password is on banned list
+            if (e.statusCode === 400) {
+              userFacingErrors.push(e)
+            }
+          })
       }
 
       if (props.callbackFn) {
         props.callbackFn(result)
+      }
+
+      if (userFacingErrors.length) {
+        password.error = $gettext(userFacingErrors[0].message)
+        return
       }
 
       return store.dispatch('hideModal')
