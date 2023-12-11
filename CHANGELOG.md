@@ -904,6 +904,7 @@ Details
    expiration date.
 
    https://github.com/owncloud/web/pull/10104
+   https://github.com/owncloud/web/pull/10145
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
