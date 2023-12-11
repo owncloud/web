@@ -1,4 +1,4 @@
-import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
+import { useStore, useFileActionsDeleteResources } from '../../../../../src'
 import { mockDeep } from 'jest-mock-extended'
 import { FolderResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -7,11 +7,10 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from '../../../../../src/composables'
 import { nextTick } from 'vue'
 
 const currentFolder = {
-  id: 1,
+  id: '1',
   path: '/folder'
 }
 
@@ -21,7 +20,7 @@ describe('deleteResources', () => {
       const { wrapper } = getWrapper({
         currentFolder,
         setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
-          await filesList_delete([{ id: 2, path: '/folder/fileToDelete.txt' }])
+          await filesList_delete([{ id: '2', path: '/folder/fileToDelete.txt' }])
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(0)
         }

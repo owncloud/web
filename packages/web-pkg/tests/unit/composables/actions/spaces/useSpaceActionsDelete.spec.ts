@@ -1,4 +1,4 @@
-import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
+import { useSpaceActionsDelete } from '../../../../../src'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
@@ -76,7 +76,7 @@ describe('delete', () => {
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
-              mock<SpaceResource>({ id: 1, canBeDeleted: () => true, driveType: 'project' })
+              mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
             ]
           })
 
@@ -89,7 +89,7 @@ describe('delete', () => {
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
-              mock<SpaceResource>({ id: 1, canBeDeleted: () => false, driveType: 'project' })
+              mock<SpaceResource>({ id: '1', canBeDeleted: () => false, driveType: 'project' })
             ]
           })
 
@@ -106,7 +106,7 @@ describe('delete', () => {
           clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
 
           await deleteSpaces([
-            mock<SpaceResource>({ id: 1, canBeDeleted: () => true, driveType: 'project' })
+            mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
           ])
 
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
@@ -121,7 +121,7 @@ describe('delete', () => {
         setup: async ({ actions, deleteSpaces }, { clientService, storeOptions }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
           await deleteSpaces([
-            mock<SpaceResource>({ id: 1, canBeDeleted: () => true, driveType: 'project' })
+            mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
           ])
 
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)

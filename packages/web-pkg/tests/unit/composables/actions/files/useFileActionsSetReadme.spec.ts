@@ -1,4 +1,4 @@
-import { useFileActionsSetReadme } from '../../../../../src/composables/actions'
+import { useFileActionsSetReadme } from '../../../../../src'
 import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 
@@ -40,7 +40,7 @@ describe('setReadme', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'image/png' }] as SpaceResource[]
+              resources: [{ id: '1', mimeType: 'image/png' }] as SpaceResource[]
             })
           ).toBe(false)
         }
@@ -63,7 +63,7 @@ describe('setReadme', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'text/plain' }] as SpaceResource[]
+              resources: [{ id: '1', mimeType: 'text/plain' }] as SpaceResource[]
             })
           ).toBe(false)
         }
@@ -86,7 +86,7 @@ describe('setReadme', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'text' }] as SpaceResource[]
+              resources: [{ id: '1', mimeType: 'text' }] as SpaceResource[]
             })
           ).toBe(false)
         }

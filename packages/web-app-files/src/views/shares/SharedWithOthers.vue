@@ -90,7 +90,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { queryItemAsString, useFileActions, useRouteQuery } from '@ownclouders/web-pkg'
 import { VisibilityObserver, ItemFilter } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
-import { debounce, find, uniq } from 'lodash-es'
+import { debounce, uniq } from 'lodash-es'
 
 import { FileSideBar, ResourceTable } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
@@ -153,12 +153,14 @@ export default defineComponent({
         if (selectedResourcesIds.value.length !== 1) return
         const id = selectedResourcesIds.value[0]
 
-        const match = find(paginatedResources.value, { id })
+        const match = unref(paginatedResources).find((r) => {
+          return r.id === id
+        })
         if (!match) return
 
         await loadResourcesTask.perform()
 
-        const matchedNewResource = find(paginatedResources.value, { fileId: match.fileId })
+        const matchedNewResource = unref(paginatedResources).find((r) => r.fileId === match.fileId)
         if (!matchedNewResource) return
 
         selectedResourcesIds.value = [matchedNewResource.id]

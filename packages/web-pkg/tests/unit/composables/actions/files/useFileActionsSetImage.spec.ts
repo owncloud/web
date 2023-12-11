@@ -1,4 +1,4 @@
-import { useFileActionsSetImage } from '../../../../../src/composables/actions'
+import { useFileActionsSetImage } from '../../../../../src'
 import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {
@@ -47,7 +47,7 @@ describe('setImage', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'text/plain' }] as Resource[]
+              resources: [{ id: '1', mimeType: 'text/plain' }] as Resource[]
             })
           ).toBe(false)
         },
@@ -70,7 +70,7 @@ describe('setImage', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'image/png' }] as Resource[]
+              resources: [{ id: '1', mimeType: 'image/png' }] as Resource[]
             })
           ).toBe(true)
         }
@@ -92,7 +92,7 @@ describe('setImage', () => {
           expect(
             unref(actions)[0].isEnabled({
               space,
-              resources: [{ id: 1, mimeType: 'image/png' }] as Resource[]
+              resources: [{ id: '1', mimeType: 'image/png' }] as Resource[]
             })
           ).toBe(false)
         }
@@ -104,7 +104,7 @@ describe('setImage', () => {
     it('should show message on success', () => {
       const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
 
-      const space = mock<SpaceResource>({ id: 1 })
+      const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         setup: async ({ actions }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
@@ -126,7 +126,7 @@ describe('setImage', () => {
 
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const space = mock<SpaceResource>({ id: 1 })
+      const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({

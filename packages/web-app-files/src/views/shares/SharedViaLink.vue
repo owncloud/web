@@ -69,7 +69,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { FileSideBar, useFileActions } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
-import { debounce, find } from 'lodash-es'
+import { debounce } from 'lodash-es'
 
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -81,7 +81,7 @@ import { ResourceTable } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent } from 'vue'
+import { defineComponent, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import {
   useCapabilityProjectSpacesEnabled,
@@ -117,12 +117,14 @@ export default defineComponent({
         if (selectedResourcesIds.value.length !== 1) return
         const id = selectedResourcesIds.value[0]
 
-        const match = find(paginatedResources.value, { id })
+        const match = unref(paginatedResources).find((r) => {
+          return r.id === id
+        })
         if (!match) return
 
         await loadResourcesTask.perform()
 
-        const matchedNewResource = find(paginatedResources.value, { fileId: match.fileId })
+        const matchedNewResource = unref(paginatedResources).find((r) => r.fileId === match.fileId)
         if (!matchedNewResource) return
 
         selectedResourcesIds.value = [matchedNewResource.id]

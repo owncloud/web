@@ -1,6 +1,9 @@
-import { useFileActionsShowDetails } from '../../../../../src/composables/actions'
-import { eventBus } from '../../../../../src/services/eventBus'
-import { SideBarEventTopics } from '../../../../../src/composables/sideBar'
+import {
+  SideBarEventTopics,
+  eventBus,
+  useFileActionsShowDetails,
+  useStore
+} from '../../../../../src'
 import {
   createStore,
   defaultStoreMockOptions,
@@ -9,7 +12,6 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { useStore } from '../../../../../src/composables/store'
 
 describe('showDetails', () => {
   describe('handler', () => {
@@ -21,7 +23,7 @@ describe('showDetails', () => {
           const { actions } = useFileActionsShowDetails({ store })
 
           const busStub = jest.spyOn(eventBus, 'publish')
-          const resources = [{ id: 1, path: '/folder' }] as Resource[]
+          const resources = [{ id: '1', path: '/folder' }] as Resource[]
           unref(actions)[0].handler({ space: null, resources })
           expect(busStub).toHaveBeenCalledWith(SideBarEventTopics.open)
         },

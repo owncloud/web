@@ -1,4 +1,4 @@
-import { useSpaceActionsDisable } from '../../../../../src/composables/actions'
+import { useSpaceActionsDisable } from '../../../../../src'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
@@ -74,7 +74,7 @@ describe('disable', () => {
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
-              mock<SpaceResource>({ id: 1, canDisable: () => true, driveType: 'project' })
+              mock<SpaceResource>({ id: '1', canDisable: () => true, driveType: 'project' })
             ]
           })
 
@@ -87,7 +87,7 @@ describe('disable', () => {
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
-              mock<SpaceResource>({ id: 1, canDisable: () => false, driveType: 'project' })
+              mock<SpaceResource>({ id: '1', canDisable: () => false, driveType: 'project' })
             ]
           })
 
@@ -103,7 +103,7 @@ describe('disable', () => {
         setup: async ({ disableSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.disableDrive.mockResolvedValue(mockAxiosResolve())
           await disableSpaces([
-            mock<SpaceResource>({ id: 1, canDisable: () => true, driveType: 'project' })
+            mock<SpaceResource>({ id: '1', canDisable: () => true, driveType: 'project' })
           ])
 
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
@@ -117,7 +117,7 @@ describe('disable', () => {
         setup: async ({ actions, disableSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.disableDrive.mockRejectedValue(new Error())
           await disableSpaces([
-            mock<SpaceResource>({ id: 1, canDisable: () => true, driveType: 'project' })
+            mock<SpaceResource>({ id: '1', canDisable: () => true, driveType: 'project' })
           ])
 
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
