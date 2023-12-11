@@ -14,6 +14,7 @@ import {
   useGetResourceContext
 } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
@@ -48,21 +49,33 @@ describe('resolvePrivateLink', () => {
       })
     )
   })
-  it('resolves to "files-shares-with-me" for received single file shares', async () => {
-    const fileId = '1'
-    const driveAliasAndItem = 'shares/someShare'
-    const space = mock<SpaceResource>({
-      driveType: 'share',
-      getDriveAliasAndItem: () => driveAliasAndItem
+  describe('resolves to "files-shares-with-me"', () => {
+    it('resolves for single file shares', async () => {
+      const fileId = '1'
+      const driveAliasAndItem = 'shares/someShare'
+      const space = mock<SpaceResource>({
+        driveType: 'share',
+        getDriveAliasAndItem: () => driveAliasAndItem
+      })
+      const resource = mock<Resource>({ fileId, type: 'file' })
+      const { wrapper, mocks } = getWrapper({ space, resource, fileId, path: '/' })
+      await wrapper.vm.resolvePrivateLinkTask.last
+      expect(mocks.$router.push).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'files-shares-with-me' })
+      )
     })
-    const resource = mock<Resource>({ fileId, type: 'file' })
-    const { wrapper, mocks } = getWrapper({ space, resource, fileId, path: '/' })
-    await wrapper.vm.resolvePrivateLinkTask.last
-    expect(mocks.$router.push).toHaveBeenCalledWith(
-      expect.objectContaining({ name: 'files-shares-with-me' })
-    )
+    it.each([
+      `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}`,
+      `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`
+    ])('resolves for the share jail id', async (fileId) => {
+      const { wrapper, mocks } = getWrapper({ fileId })
+      await wrapper.vm.resolvePrivateLinkTask.last
+      expect(mocks.$router.push).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'files-shares-with-me' })
+      )
+    })
   })
-  it('passes the details query paramif given via query', async () => {
+  it('passes the details query param if given via query', async () => {
     const details = 'sharing'
     const { wrapper, mocks } = getWrapper({ details })
     await wrapper.vm.resolvePrivateLinkTask.last
