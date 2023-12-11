@@ -37,7 +37,7 @@ describe('SharedWithMe view', () => {
   })
   it('sideBar always present', () => {
     const { wrapper } = getMountedWrapper()
-    expect(wrapper.find('side-bar-stub').exists()).toBeTruthy()
+    expect(wrapper.find('file-side-bar-stub').exists()).toBeTruthy()
   })
   describe('different files view states', () => {
     it('shows the loading spinner during loading', () => {

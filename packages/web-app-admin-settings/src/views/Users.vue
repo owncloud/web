@@ -1040,7 +1040,8 @@ export default defineComponent({
       sideBarPanelContext,
       sideBarAvailablePanels,
       onToggleCreateUserModal,
-      onCreateUser
+      onCreateUser,
+      onEditUser
     }
   },
   computed: {

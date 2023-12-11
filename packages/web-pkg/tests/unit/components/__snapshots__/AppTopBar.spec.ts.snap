@@ -14,6 +14,7 @@ exports[`AppTopBar if a resource is present renders a resource and dropdownActio
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
+    <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
 </portal>
 `;
@@ -32,6 +33,7 @@ exports[`AppTopBar if a resource is present renders a resource and dropdownActio
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
+    <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
 </portal>
 `;
@@ -49,6 +51,7 @@ exports[`AppTopBar if a resource is present renders a resource and mainActions (
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
+    <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
 </portal>
 `;
@@ -66,6 +69,7 @@ exports[`AppTopBar if a resource is present renders a resource and no actions (i
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
+    <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
 </portal>
 `;
@@ -83,6 +87,7 @@ exports[`AppTopBar if no resource is present renders only a close button 1`] = `
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
+    <oc-button-stub appearance="outline" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
   </div>
 </portal>
 `;

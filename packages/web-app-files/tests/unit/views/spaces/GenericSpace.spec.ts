@@ -51,7 +51,7 @@ describe('GenericSpace view', () => {
   })
   it('sideBar always present', () => {
     const { wrapper } = getMountedWrapper()
-    expect(wrapper.find('side-bar-stub').exists()).toBeTruthy()
+    expect(wrapper.find('file-side-bar-stub').exists()).toBeTruthy()
   })
   describe('space header', () => {
     it('does not render the space header in the personal space', () => {

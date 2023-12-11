@@ -25,7 +25,7 @@ describe('GenericTrash view', () => {
   })
   it('sideBar always present', () => {
     const { wrapper } = getMountedWrapper()
-    expect(wrapper.find('side-bar-stub').exists()).toBeTruthy()
+    expect(wrapper.find('file-side-bar-stub').exists()).toBeTruthy()
   })
   it('shows the personal space breadcrumb', () => {
     const { wrapper } = getMountedWrapper()
