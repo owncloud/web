@@ -1,0 +1,6 @@
+Bugfix: Spaces files list previews cropped
+
+We've fixed a bug where the files list previews in spaces were cropped.
+
+https://github.com/owncloud/web/pull/10149
+https://github.com/owncloud/web/issues/10133

@@ -1,0 +1,6 @@
+Bugfix: Spaces overview tile previews zoomed
+
+We've fixed a bug where the tile previews in the spaces overview were zoomed in.
+
+https://github.com/owncloud/web/pull/10149
+https://github.com/owncloud/web/issues/9328
