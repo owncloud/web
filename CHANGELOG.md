@@ -34,6 +34,8 @@ Summary
 * Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
 * Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
+* Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
+* Bugfix - Spaces overview tile previews zoomed: [#10149](https://github.com/owncloud/web/pull/10149)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -311,6 +313,20 @@ Details
 
    https://github.com/owncloud/web/issues/10084
    https://github.com/owncloud/web/pull/10096
+
+* Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
+
+   We've fixed a bug where the files list previews in spaces were cropped.
+
+   https://github.com/owncloud/web/issues/10133
+   https://github.com/owncloud/web/pull/10149
+
+* Bugfix - Spaces overview tile previews zoomed: [#10149](https://github.com/owncloud/web/pull/10149)
+
+   We've fixed a bug where the tile previews in the spaces overview were zoomed in.
+
+   https://github.com/owncloud/web/issues/9328
+   https://github.com/owncloud/web/pull/10149
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
