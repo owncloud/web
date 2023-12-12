@@ -9,7 +9,7 @@
   />
 </template>
 <script lang="ts">
-import { defineComponent, PropType, onMounted, ref, watch } from 'vue'
+import { defineComponent, nextTick, PropType, onMounted, ref, watch } from 'vue'
 import { CachedFile } from '../../helpers/types'
 import type { PanzoomObject } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
@@ -34,7 +34,8 @@ export default defineComponent({
     const img = ref()
     let panzoom: PanzoomObject
 
-    onMounted(() => {
+    onMounted(async () => {
+      await nextTick()
       panzoom = Panzoom(img.value, {
         animate: true,
         duration: 300,
