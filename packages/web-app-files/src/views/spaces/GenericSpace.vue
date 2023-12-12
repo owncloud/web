@@ -170,7 +170,6 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 
 import {
-  ImageDimension,
   ProcessorType,
   useEmbedMode,
   useFileActions,

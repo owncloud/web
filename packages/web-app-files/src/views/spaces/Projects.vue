@@ -181,7 +181,6 @@ import {
   useRouter,
   useRoute
 } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
@@ -213,6 +212,8 @@ import {
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
+
+const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
@@ -395,8 +396,12 @@ export default defineComponent({
 
     const displayThumbnails = computed(() => configurationManager.options.displayThumbnails)
 
-    const rowMounted = async (space, component, dimensions) => {
-      if (!unref(displayThumbnails)) {
+    const rowMounted = (space, _, dimensions) => {
+      loadPreview(space, dimensions)
+    }
+
+    const loadPreview = async (space, dimensions) => {
+      if (!unref(displayThumbnails) || !space.spaceImageData) {
         return
       }
 
