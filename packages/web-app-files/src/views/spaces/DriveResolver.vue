@@ -129,6 +129,18 @@ export default defineComponent({
     }
 
     onMounted(async () => {
+      if (!unref(driveAliasAndItem) && unref(fileId)) {
+        return router.push({
+          name: 'resolvePrivateLink',
+          params: { fileId: unref(fileId) },
+          query: {
+            ...(configurationManager.options.openLinksWithDefaultApp && {
+              openWithDefaultApp: 'true'
+            })
+          }
+        })
+      }
+
       const space = unref(resolvedDrive.space)
       if (space && isPublicSpaceResource(space)) {
         const isRunningOnEos = store.getters.configuration?.options?.runningOnEos
