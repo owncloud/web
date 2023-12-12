@@ -85,18 +85,9 @@
           </template>
         </oc-tile>
       </li>
-      <template v-if="8 - viewSize - data.length > 0">
-        <li style="display: list-item" v-for="index in 8 - viewSize - data.length" :key="index">
-          <div
-            style="
-              opacity: 0;
-              box-shadow: none;
-              height: 100%;
-              display: flex;
-              flex-flow: column;
-              outline: 1px solid var(--oc-color-border);
-            "
-          >
+      <template v-if="renderGhostTiles">
+        <li class="ghost-tile" v-for="index in ghostTileCount" :key="index">
+          <div>
             {{ viewSize }}
           </div>
         </li>
@@ -378,6 +369,14 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
+    const ghostTileCount = computed(() => {
+      return 8 - props.viewSize - props.data.length
+    })
+    const renderGhostTiles = computed(() => {
+      const count = unref(ghostTileCount)
+      return count > 0
+    })
+
     return {
       areFileExtensionsShown,
       emitTileClick,
@@ -398,7 +397,9 @@ export default defineComponent({
       dragStart,
       dragSelection,
       fileDropped,
-      setDropStyling
+      setDropStyling,
+      ghostTileCount,
+      renderGhostTiles
     }
   },
   data() {
@@ -454,6 +455,17 @@ export default defineComponent({
         text-decoration: none;
       }
     }
+  }
+}
+.ghost-tile {
+  display: list-item;
+  div {
+    opacity: 0;
+    box-shadow: none;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    outline: 1px solid var(--oc-color-border);
   }
 }
 </style>
