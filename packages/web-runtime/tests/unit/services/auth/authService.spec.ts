@@ -6,6 +6,7 @@ import { UserManager } from 'web-runtime/src/services/auth/userManager'
 import { RouteLocation, createRouter } from 'web-test-helpers/src'
 
 const mockUpdateContext = jest.fn()
+console.debug = jest.fn()
 
 describe('AuthService', () => {
   describe('signInCallback', () => {

@@ -12,6 +12,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useCreateSpace } from '@ownclouders/web-pkg'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 
 export const useSpaceActionsUploadImage = ({
   store,
@@ -108,7 +109,7 @@ export const useSpaceActionsUploadImage = ({
         await store.dispatch('showMessage', {
           title: $gettext('Space image was uploaded successfully')
         })
-        eventBus.publish('app.files.list.load')
+        eventBus.publish('app.files.spaces.uploaded-image', buildSpace(data))
       } catch (error) {
         console.error(error)
         await store.dispatch('showErrorMessage', {

@@ -54,6 +54,7 @@
             :sort-by="sortBy"
             :sort-dir="sortDir"
             @sort="handleSort"
+            @row-mounted="rowMounted"
           >
             <template #image="{ resource }">
               <img
@@ -99,6 +100,7 @@
             :sort-by="sortBy"
             :sort-dir="sortDir"
             @sort="handleSort"
+            @row-mounted="rowMounted"
           >
             <template #contextMenu="{ resource }">
               <space-context-actions
@@ -159,13 +161,24 @@
 </template>
 
 <script lang="ts">
-import { onMounted, computed, defineComponent, unref, ref, watch, nextTick } from 'vue'
+import {
+  onMounted,
+  computed,
+  defineComponent,
+  unref,
+  ref,
+  watch,
+  nextTick,
+  onBeforeUnmount
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import { AppBar, AppLoadingSpinner, FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+
+import { AppBar } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
@@ -177,10 +190,15 @@ import {
   useRouteName,
   usePagination,
   useRouter,
-  useRoute
+  useRoute,
+  Pagination,
+  FileSideBar,
+  configurationManager,
+  ImageDimension,
+  NoContentMessage,
+  ProcessorType,
+  usePreviewService
 } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
-import { Pagination } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
   isProjectSpaceResource,
@@ -235,6 +253,9 @@ export default defineComponent({
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
     const markInstance = ref(undefined)
+    const imageContentObject = ref({})
+    const previewService = usePreviewService()
+    let loadPreviewToken = null
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -372,10 +393,21 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
+
+      loadPreviewToken = eventBus.subscribe(
+        'app.files.spaces.uploaded-image',
+        (space: SpaceResource) => {
+          loadPreview(space)
+        }
+      )
       scrollToResourceFromRoute(unref(spaces), 'files-app-bar')
       nextTick(() => {
         markInstance.value = new Mark('.spaces-table')
       })
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('app.files.spaces.uploaded-image', loadPreviewToken)
     })
 
     const footerTextTotal = computed(() => {
@@ -388,6 +420,44 @@ export default defineComponent({
         spaceCount: unref(items).length.toString()
       })
     })
+
+    const displayThumbnails = computed(() => configurationManager.options.displayThumbnails)
+
+    const rowMounted = (space) => {
+      loadPreview(space)
+    }
+
+    const loadPreview = async (space) => {
+      if (!unref(displayThumbnails) || !space.spaceImageData) {
+        return
+      }
+
+      const resource = await (clientService.webdav as WebDAV).getFileInfo(space, {
+        path: `.space/${space.spaceImageData.name}`
+      })
+
+      const processor =
+        unref(viewMode) === ViewModeConstants.tilesView.name
+          ? ProcessorType.enum.fit
+          : ProcessorType.enum.thumbnail
+
+      const dimensions =
+        unref(viewMode) === ViewModeConstants.tilesView.name
+          ? ImageDimension.Tile
+          : ImageDimension.Thumbnail
+
+      const thumbnail = await previewService.loadPreview({
+        space,
+        resource,
+        dimensions,
+        processor
+      })
+
+      imageContentObject.value[space.id] = {
+        fileId: space.spaceImageData.id,
+        data: thumbnail
+      }
+    }
 
     return {
       ...useSideBar(),
@@ -417,12 +487,9 @@ export default defineComponent({
       currentPage,
       footerTextTotal,
       footerTextFilter,
-      items
-    }
-  },
-  data: function () {
-    return {
-      imageContentObject: {}
+      items,
+      imageContentObject,
+      rowMounted
     }
   },
   computed: {
@@ -437,47 +504,6 @@ export default defineComponent({
     },
     showSpaceMemberLabel() {
       return this.$gettext('Show members')
-    }
-  },
-  watch: {
-    spaces: {
-      handler: async function (val) {
-        if (!val) {
-          return
-        }
-
-        for (const space of this.spaces as SpaceResource[]) {
-          if (!space.spaceImageData) {
-            continue
-          }
-
-          if (this.imageContentObject[space.id]?.fileId === space.spaceImageData?.id) {
-            continue
-          }
-
-          const decodedUri = decodeURI(space.spaceImageData.webDavUrl)
-          const webDavPathComponents = decodedUri.split('/')
-          const idComponent = webDavPathComponents.find((c) => c.startsWith(`${space.id}`))
-          if (!idComponent) {
-            return
-          }
-          const path = webDavPathComponents
-            .slice(webDavPathComponents.indexOf(idComponent) + 1)
-            .join('/')
-
-          const resource = await (this.$clientService.webdav as WebDAV).getFileInfo(space, { path })
-          this.$previewService
-            .loadPreview({ space, resource, dimensions: ImageDimension.Tile })
-            .then((imageBlob) => {
-              this.imageContentObject[space.id] = {
-                fileId: space.spaceImageData.id,
-                data: imageBlob
-              }
-            })
-        }
-      },
-      deep: true,
-      immediate: true
     }
   },
   methods: {

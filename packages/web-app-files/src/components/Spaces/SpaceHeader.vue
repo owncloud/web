@@ -8,7 +8,7 @@
       :class="{ 'space-header-image-expanded': imageExpanded || isMobileWidth }"
     >
       <img
-        v-if="hasImage"
+        v-if="imageContent"
         class="oc-cursor-pointer"
         alt=""
         :src="imageContent"
@@ -83,7 +83,7 @@ import {
   watch
 } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useClientService, useStore, usePreviewService } from '@ownclouders/web-pkg'
+import { useClientService, useStore, usePreviewService, ProcessorType } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { marked } from 'marked'
@@ -92,6 +92,7 @@ import SpaceContextActions from './SpaceContextActions.vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
@@ -172,18 +173,9 @@ export default defineComponent({
         if (!data) {
           return
         }
-        const decodedUri = decodeURI(data.webDavUrl)
-        const webDavPathComponents = decodedUri.split('/')
-        const idComponent = webDavPathComponents.find((c) => c.startsWith(props.space.id as string))
-        if (!idComponent) {
-          return
-        }
-        const path = webDavPathComponents
-          .slice(webDavPathComponents.indexOf(idComponent) + 1)
-          .join('/')
 
         const fileContentsResponse = await getFileContents(props.space, {
-          path: decodeURIComponent(path)
+          path: `.space/${props.space.spaceReadmeData.name}`
         })
 
         unobserveMarkdownContainerResize()
@@ -203,36 +195,29 @@ export default defineComponent({
     const toggleImageExpanded = () => {
       imageExpanded.value = !unref(imageExpanded)
     }
+
+    const loadPreviewTask = useTask(function* (signal) {
+      const resource = yield getFileInfo(props.space, {
+        path: `.space/${props.space.spaceImageData.name}`
+      })
+      imageContent.value = yield previewService.loadPreview({
+        space: props.space,
+        resource,
+        dimensions: ImageDimension.Tile,
+        processor: ProcessorType.enum.fit
+      })
+    })
+
     watch(
       computed(() => props.space.spaceImageData),
       async (data) => {
         if (!data) {
           return
         }
-        const decodedUri = decodeURI(props.space.spaceImageData.webDavUrl)
-        const webDavPathComponents = decodedUri.split('/')
-        const idComponent = webDavPathComponents.find((c) => c.startsWith(props.space.id as string))
-        if (!idComponent) {
-          return
-        }
-        const path = webDavPathComponents
-          .slice(webDavPathComponents.indexOf(idComponent) + 1)
-          .join('/')
-
-        const resource = await getFileInfo(props.space, {
-          path: decodeURIComponent(path)
-        })
-        imageContent.value = await previewService.loadPreview({
-          space: props.space,
-          resource,
-          dimensions: ImageDimension.Preview
-        })
+        await loadPreviewTask.perform()
       },
       { deep: true, immediate: true }
     )
-    const hasImage = computed(() => {
-      return props.space?.spaceImageData
-    })
 
     const memberCount = computed(() => {
       return store.getters['runtime/spaces/spaceMembers'].length
@@ -260,10 +245,10 @@ export default defineComponent({
       imageContent,
       imageExpanded,
       toggleImageExpanded,
-      hasImage,
       memberCount,
       memberCountString,
-      openSideBarSharePanel
+      openSideBarSharePanel,
+      loadPreviewTask
     }
   }
 })
@@ -285,17 +270,20 @@ export default defineComponent({
     aspect-ratio: 16 / 9;
     margin-right: var(--oc-space-large);
     max-height: 158px;
+
     &-default {
       background-color: var(--oc-color-background-highlight);
       height: 100%;
       border-radius: 10px;
     }
+
     &-expanded {
       width: 100%;
       margin: 0;
       max-height: 100%;
       max-width: 100%;
     }
+
     img {
       border-radius: 10px;
       height: 100%;
@@ -307,6 +295,7 @@ export default defineComponent({
 
   &-infos {
     flex: 1;
+
     &-heading {
       max-width: 100%;
     }

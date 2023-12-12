@@ -169,7 +169,12 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 
-import { useEmbedMode, useFileActions, useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
+import {
+  ProcessorType,
+  useEmbedMode,
+  useFileActions,
+  useFileActionsCreateNewFolder
+} from '@ownclouders/web-pkg'
 
 import {
   AppBar,
@@ -668,11 +673,16 @@ export default defineComponent({
 
       const debounced = debounce(({ unobserve }) => {
         unobserve()
+        const processor =
+          this.viewMode === ViewModeConstants.tilesView.name
+            ? ProcessorType.enum.fit
+            : ProcessorType.enum.thumbnail
         this.loadPreview({
           previewService: this.$previewService,
           space: this.space,
           resource,
           dimensions,
+          processor,
           type: ImageType.Thumbnail
         })
       }, 250)
