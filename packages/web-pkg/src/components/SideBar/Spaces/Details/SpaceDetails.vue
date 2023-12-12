@@ -259,6 +259,8 @@ export default defineComponent({
 .oc-space-details-sidebar {
   &-image img {
     max-height: 150px;
+    object-fit: cover;
+    width: 100%;
   }
 }
 

@@ -108,7 +108,7 @@ export const useSpaceActionsUploadImage = ({
         await store.dispatch('showMessage', {
           title: $gettext('Space image was uploaded successfully')
         })
-        eventBus.publish('app.files.list.load')
+        eventBus.publish('app.files.spaces.uploaded-image', selectedSpace)
       } catch (error) {
         console.error(error)
         await store.dispatch('showErrorMessage', {

@@ -161,13 +161,32 @@
 </template>
 
 <script lang="ts">
-import { onMounted, computed, defineComponent, unref, ref, watch, nextTick } from 'vue'
+import {
+  onMounted,
+  computed,
+  defineComponent,
+  unref,
+  ref,
+  watch,
+  nextTick,
+  onBeforeUnmount
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import { AppBar, AppLoadingSpinner, FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
+import {
+  configurationManager,
+  ImageDimension,
+  NoContentMessage,
+  ProcessorType,
+  usePreviewService,
+  VisibilityObserver
+} from '@ownclouders/web-pkg'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+
+import { AppBar } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
@@ -179,9 +198,9 @@ import {
   useRouteName,
   usePagination,
   useRouter,
-  useRoute
+  useRoute,
+  Pagination
 } from '@ownclouders/web-pkg'
-import { Pagination } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
   isProjectSpaceResource,
@@ -240,6 +259,7 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const imageContentObject = ref({})
     const previewService = usePreviewService()
+    let loadPreviewToken
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -377,10 +397,21 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
+
+      loadPreviewToken = eventBus.subscribe(
+        'app.files.spaces.uploaded-image',
+        (space: SpaceResource) => {
+          loadPreview(space)
+        }
+      )
       scrollToResourceFromRoute(unref(spaces), 'files-app-bar')
       nextTick(() => {
         markInstance.value = new Mark('.spaces-table')
       })
+    })
+
+    onBeforeUnmount(() => {
+      eventBus.unsubscribe('app.files.spaces.uploaded-image', loadPreviewToken)
     })
 
     const footerTextTotal = computed(() => {
@@ -396,11 +427,11 @@ export default defineComponent({
 
     const displayThumbnails = computed(() => configurationManager.options.displayThumbnails)
 
-    const rowMounted = (space, _, dimensions) => {
-      loadPreview(space, dimensions)
+    const rowMounted = (space) => {
+      loadPreview(space)
     }
 
-    const loadPreview = async (space, dimensions) => {
+    const loadPreview = async (space) => {
       if (!unref(displayThumbnails) || !space.spaceImageData) {
         return
       }
@@ -413,6 +444,11 @@ export default defineComponent({
         unref(viewMode) === ViewModeConstants.tilesView.name
           ? ProcessorType.enum.fit
           : ProcessorType.enum.thumbnail
+
+      const dimensions =
+        unref(viewMode) === ViewModeConstants.tilesView.name
+          ? ImageDimension.Tile
+          : ImageDimension.Thumbnail
 
       const thumbnail = await previewService.loadPreview({
         space,
