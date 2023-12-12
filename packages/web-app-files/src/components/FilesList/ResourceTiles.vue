@@ -85,6 +85,22 @@
           </template>
         </oc-tile>
       </li>
+      <template v-if="7 - viewSize - data.length > 0">
+        <li style="display: list-item" v-for="index in 8 - viewSize - data.length" :key="index">
+          <div
+            style="
+              opacity: 0;
+              box-shadow: none;
+              height: 100%;
+              display: flex;
+              flex-flow: column;
+              outline: 1px solid var(--oc-color-border);
+            "
+          >
+            {{ viewSize }}
+          </div>
+        </li>
+      </template>
     </oc-list>
     <Teleport v-if="dragItem" to="body">
       <oc-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
@@ -308,7 +324,6 @@ export default defineComponent({
       }
       return sizeMap[props.viewSize] ?? 'xlarge'
     })
-
     onBeforeUpdate(() => {
       tileRefs.value = {
         tiles: [],
@@ -404,9 +419,6 @@ export default defineComponent({
 
   &.resizableTiles {
     grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-resize-step), 1fr));
-    .oc-tiles-item {
-      max-width: calc(var(--oc-size-tiles-resize-step) * 2);
-    }
   }
 
   @media only screen and (max-width: 640px) {
