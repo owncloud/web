@@ -310,6 +310,7 @@ export default defineComponent({
         })
         serverContent.value = newContent
         currentETag.value = putFileContentsResponse.etag
+        store.commit('Files/UPSERT_RESOURCE', putFileContentsResponse)
       } catch (e) {
         switch (e.statusCode) {
           case 401:
