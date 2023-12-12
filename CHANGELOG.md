@@ -93,6 +93,8 @@ Summary
 * Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 * Enhancement - Registering quick actions as extension: [#10102](https://github.com/owncloud/web/pull/10102)
 * Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
+* Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
+* Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
 
 Details
 -------
@@ -927,6 +929,23 @@ Details
 
    https://github.com/owncloud/web/pull/10104
    https://github.com/owncloud/web/pull/10145
+
+* Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
+
+   Right sidebar panels can now be registered as extensions via our extension
+   registry. They need to be of type `sidebarPanel`. The benefit of this is that
+   any app can register additional panels to be shown in the right sidebar while
+   previously the available panels were hardcoded.
+
+   https://github.com/owncloud/web/pull/10111
+
+* Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
+
+   Viewer and editor apps now have the same right sidebar available like the
+   `files` app. This makes in place viewing file details, tagging, sharing, and
+   much more possible.
+
+   https://github.com/owncloud/web/pull/10111
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
