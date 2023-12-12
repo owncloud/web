@@ -16,7 +16,7 @@ describe('editDescription', () => {
     it('should trigger the editDescription modal window with one resource', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          await unref(actions)[0].handler({ resources: [{ id: 1 } as SpaceResource] })
+          await unref(actions)[0].handler({ resources: [{ id: '1' } as SpaceResource] })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
         }

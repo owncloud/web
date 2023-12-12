@@ -39,8 +39,7 @@ export default defineComponent({
 
     const filteredActions = computed(() => {
       return unref(extensionRegistry)
-        .requestExtensions<ActionExtension>('action')
-        .filter(({ scopes }) => scopes.includes('files.quick-action'))
+        .requestExtensions<ActionExtension>('action', ['resource.quick-action'])
         .map((e) => e.action)
         .filter(({ isEnabled }) => isEnabled({ space: props.space, resources: [props.item] }))
     })

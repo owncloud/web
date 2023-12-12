@@ -12,13 +12,13 @@ export interface UppyResource {
     name?: string
     mtime?: number
     // current space & folder
-    spaceId: string | number
+    spaceId: string
     spaceName: string
     driveAlias: string
     driveType: string
     currentFolder: string // current folder path during upload initiation
-    currentFolderId?: string | number
-    fileId?: string | number
+    currentFolderId?: string
+    fileId?: string
     // upload data
     uppyId?: string
     relativeFolder: string

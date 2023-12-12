@@ -294,7 +294,6 @@ export default defineComponent({
     }
 
     return {
-      $store: store,
       ability,
       space,
       resource,

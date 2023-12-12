@@ -1,3 +1,4 @@
+export * from './item'
 export * from './publicLink'
 export * from './resource'
 export * from './share'

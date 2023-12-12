@@ -90,6 +90,14 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     return unref(spaces).find((s) => isPersonalSpaceResource(s) && s.isOwner(unref(user)))
   }
 
+  const isPersonalSpaceRoot = (resource: Resource) => {
+    return (
+      resource?.storageId &&
+      resource?.storageId === getPersonalSpace()?.storageId &&
+      resource?.path === '/'
+    )
+  }
+
   const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
     if (!configurationManager.options.routing.fullShareOwnerPaths) {
       return true
@@ -108,6 +116,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     getInternalSpace,
     getMatchingSpace,
     getPersonalSpace,
+    isPersonalSpaceRoot,
     isResourceAccessible
   }
 }

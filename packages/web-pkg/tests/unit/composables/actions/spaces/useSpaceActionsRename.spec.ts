@@ -1,4 +1,4 @@
-import { useSpaceActionsRename } from '../../../../../src/composables/actions'
+import { useSpaceActionsRename } from '../../../../../src'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -17,7 +17,7 @@ describe('rename', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [{ id: 1, name: 'renamed space' } as SpaceResource]
+            resources: [{ id: '1', name: 'renamed space' } as SpaceResource]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)

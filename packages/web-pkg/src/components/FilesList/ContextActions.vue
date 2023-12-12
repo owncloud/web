@@ -80,8 +80,7 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const extensionContextActions = computed(() => {
       return extensionRegistry
-        .requestExtensions<ActionExtension>('action')
-        .filter(({ scopes }) => scopes.includes('files.context-menu'))
+        .requestExtensions<ActionExtension>('action', ['resource.context-menu'])
         .map((e) => e.action)
     })
 

@@ -10,13 +10,6 @@ exports[`Spaces view loading states should render spaces list after loading has 
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div class="oc-flex">
             <view-options-stub hasfileextensions="false" hashiddenfiles="false" haspagination="true" paginationoptions="20,50,100,250" perpagedefault="50" perpagequeryname="items-per-page" perpagestorageprefix="admin-settings" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
-            <button aria-label="Open sidebar to view details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-my-s oc-p-xs" id="files-toggle-sidebar" type="button">
-              <!--v-if-->
-              <!-- @slot Content of the button -->
-              <span class="oc-icon oc-icon-m oc-icon-passive">
-                <!---->
-              </span>
-            </button>
           </div>
         </div>
         <div class="admin-settings-app-bar-actions oc-flex oc-flex-middle oc-mt-xs">

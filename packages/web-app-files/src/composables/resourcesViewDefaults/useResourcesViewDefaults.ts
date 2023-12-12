@@ -48,7 +48,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   selectedResourcesIds: Ref<(string | number)[]>
   isResourceInSelection(resource: Resource): boolean
 
-  sideBarOpen: Ref<boolean>
+  isSideBarOpen: Ref<boolean>
   sideBarActivePanel: Ref<string>
 } & SelectedResourcesResult &
   ScrollToResult

@@ -1,6 +1,6 @@
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useSpaceActionsShowMembers } from '../../../../../src/composables/actions'
+import { useSpaceActionsShowMembers } from '../../../../../src'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 
 describe('showMembers', () => {
@@ -15,7 +15,7 @@ describe('showMembers', () => {
     it('should be true when a resource is given', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [{ id: 1 } as SpaceResource] })).toBe(
+          expect(unref(actions)[0].isEnabled({ resources: [{ id: '1' } as SpaceResource] })).toBe(
             true
           )
         }

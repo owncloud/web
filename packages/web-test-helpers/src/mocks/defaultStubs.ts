@@ -16,7 +16,7 @@ export const defaultStubs = {
   'resource-upload': true,
   'router-link': true,
   'shared-with-me-section': true,
-  'side-bar': true,
+  'file-side-bar': true,
   'space-header': true,
   'whitespace-context-menu': true,
   translate: true

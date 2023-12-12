@@ -25,15 +25,14 @@ jest.mock('@ownclouders/web-pkg', () => ({
 }))
 
 describe('Groups view', () => {
-  describe('method "createGroup"', () => {
+  describe('method "onCreateGroup"', () => {
     it('should hide the modal and show message on success', async () => {
-      const { wrapper } = getWrapper()
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
-      await wrapper.vm.createGroup({ displayName: 'admins' })
+      const { wrapper, storeOptions } = getWrapper()
+      expect(wrapper.vm.createGroupModalOpen).toBeFalsy()
+      await wrapper.vm.onCreateGroup({ displayName: 'admins' })
 
-      expect(showMessageStub).toHaveBeenCalled()
-      expect(toggleCreateGroupModalStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      expect(wrapper.vm.createGroupModalOpen).toBeTruthy()
     })
 
     it('should show message on error', async () => {
@@ -42,17 +41,14 @@ describe('Groups view', () => {
       clientService.graphAuthenticated.groups.createGroup.mockImplementation(() =>
         mockAxiosReject()
       )
-      const { wrapper } = getWrapper({ clientService })
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
-      const toggleCreateGroupModalStub = jest.spyOn(wrapper.vm, 'toggleCreateGroupModal')
-      await wrapper.vm.createGroup({ displayName: 'admins' })
+      const { wrapper, storeOptions } = getWrapper({ clientService })
+      await wrapper.vm.onCreateGroup({ displayName: 'admins' })
 
-      expect(showErrorMessageStub).toHaveBeenCalled()
-      expect(toggleCreateGroupModalStub).toHaveBeenCalledTimes(0)
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 
-  describe('method "editGroup"', () => {
+  describe('method "onEditGroup"', () => {
     it('should emit event on success', async () => {
       const clientService = getClientServiceMock()
       clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosResolve())
@@ -69,7 +65,7 @@ describe('Groups view', () => {
       const busStub = jest.spyOn(eventBus, 'publish')
       await wrapper.vm.loadResourcesTask.last
 
-      const updatedGroup = await wrapper.vm.editGroup(editGroup)
+      const updatedGroup = await wrapper.vm.onEditGroup(editGroup)
 
       expect(updatedGroup.id).toEqual('1')
       expect(updatedGroup.displayName).toEqual('administrators')
@@ -80,11 +76,10 @@ describe('Groups view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientServiceMock()
       clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getWrapper({ clientService })
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
-      await wrapper.vm.editGroup({})
+      const { wrapper, storeOptions } = getWrapper({ clientService })
+      await wrapper.vm.onEditGroup({})
 
-      expect(showErrorMessageStub).toHaveBeenCalled()
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 
@@ -92,23 +87,26 @@ describe('Groups view', () => {
     describe('EditPanel', () => {
       it('should be available when one group is selected', () => {
         const { wrapper } = getWrapper()
-        wrapper.vm.selectedGroups = [{ id: '1' }]
         expect(
-          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+          wrapper.vm.sideBarAvailablePanels
+            .find(({ name }) => name === 'EditPanel')
+            .isVisible({ items: [{ id: '1' }] })
         ).toBeTruthy()
       })
       it('should not be available when multiple groups are selected', () => {
         const { wrapper } = getWrapper()
-        wrapper.vm.selectedGroups = [{ id: '1' }, { id: '2' }]
         expect(
-          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+          wrapper.vm.sideBarAvailablePanels
+            .find(({ name }) => name === 'EditPanel')
+            .isVisible({ items: [{ id: '1' }, { id: '2' }] })
         ).toBeFalsy()
       })
       it('should not be available when one read-only group is selected', () => {
         const { wrapper } = getWrapper()
-        wrapper.vm.selectedGroups = [{ id: '1', groupTypes: ['ReadOnly'] }]
         expect(
-          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+          wrapper.vm.sideBarAvailablePanels
+            .find(({ name }) => name === 'EditPanel')
+            .isVisible({ items: [{ id: '1', groupTypes: ['ReadOnly'] }] })
         ).toBeFalsy()
       })
     })
@@ -116,7 +114,9 @@ describe('Groups view', () => {
       it('should contain DetailsPanel when no group is selected', () => {
         const { wrapper } = getWrapper()
         expect(
-          wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel')
+          wrapper.vm.sideBarAvailablePanels
+            .find(({ name }) => name === 'DetailsPanel')
+            .isVisible({ items: [] })
         ).toBeTruthy()
       })
     })
@@ -150,6 +150,7 @@ function getWrapper({ clientService = getClientServiceMock() } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   return {
+    storeOptions,
     wrapper: mount(Groups, {
       global: {
         plugins: [...defaultPlugins(), store],

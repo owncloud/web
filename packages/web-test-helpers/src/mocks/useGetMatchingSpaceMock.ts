@@ -19,6 +19,9 @@ export const useGetMatchingSpaceMock = (
     isResourceAccessible({ space, path }) {
       return false
     },
+    isPersonalSpaceRoot(resource: Resource) {
+      return false
+    },
     ...options
   }
 }

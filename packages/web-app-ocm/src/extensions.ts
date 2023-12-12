@@ -55,7 +55,7 @@ export const extensions = (options: ApplicationSetupOptions) => {
         {
           id: 'com.github.owncloud.web.open-file-remote',
           type: 'action',
-          scopes: ['files', 'files.context-menu'],
+          scopes: ['resource', 'resource.context-menu'],
           action: {
             name: 'open-file-remote',
             icon: 'remote-control',

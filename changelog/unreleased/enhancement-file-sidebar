@@ -1,0 +1,6 @@
+Enhancement: File sidebar in viewer and editor apps
+
+Viewer and editor apps now have the same right sidebar available like the `files` app.
+This makes in place viewing file details, tagging, sharing, and much more possible.
+
+https://github.com/owncloud/web/pull/10111

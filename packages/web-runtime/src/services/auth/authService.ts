@@ -7,9 +7,9 @@ import { RouteLocation, Router } from 'vue-router'
 import {
   extractPublicLinkToken,
   isAnonymousContext,
-  isIdpContext,
-  isPublicLinkContext,
-  isUserContext
+  isIdpContextRequired,
+  isPublicLinkContextRequired,
+  isUserContextRequired
 } from '../../router'
 import { unref } from 'vue'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
@@ -65,7 +65,7 @@ export class AuthService {
       })
     }
 
-    if (isPublicLinkContext(this.router, to)) {
+    if (isPublicLinkContextRequired(this.router, to)) {
       const publicLinkToken = extractPublicLinkToken(to)
       if (publicLinkToken) {
         await this.publicLinkManager.updateContext(publicLinkToken)
@@ -85,7 +85,7 @@ export class AuthService {
     }
 
     if (!isAnonymousContext(this.router, to)) {
-      const fetchUserData = !isIdpContext(this.router, to)
+      const fetchUserData = !isIdpContextRequired(this.router, to)
 
       if (!this.userManager.areEventHandlersRegistered) {
         this.userManager.events.addAccessTokenExpired((...args): void => {
@@ -242,7 +242,7 @@ export class AuthService {
   }
 
   public async handleAuthError(route: RouteLocation) {
-    if (isPublicLinkContext(this.router, route)) {
+    if (isPublicLinkContextRequired(this.router, route)) {
       const token = extractPublicLinkToken(route)
       this.publicLinkManager.clear(token)
       return this.router.push({
@@ -251,7 +251,7 @@ export class AuthService {
         query: { redirectUrl: route.fullPath }
       })
     }
-    if (isUserContext(this.router, route) || isIdpContext(this.router, route)) {
+    if (isUserContextRequired(this.router, route) || isIdpContextRequired(this.router, route)) {
       // defines a number of seconds after a token expired.
       // if that threshold surpasses we assume a regular token expiry instead of an auth error.
       // as a result, the user will be logged out.

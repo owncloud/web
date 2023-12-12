@@ -42,7 +42,7 @@ export interface SpaceRole {
 
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
 export interface Resource {
-  id: number | string
+  id: string
   fileId?: string
   parentFolderId?: string
   storageId?: string

@@ -83,7 +83,10 @@ export default defineComponent({
 
     const extensionNavItems = computed(() =>
       extensionRegistry
-        .requestExtensions<SidebarNavExtension>('sidebarNav', unref(activeApp))
+        .requestExtensions<SidebarNavExtension>('sidebarNav', [
+          unref(activeApp),
+          `app.${unref(activeApp)}`
+        ])
         .map(({ navItem }) => navItem)
         .filter((n) => n.enabled(store.getters.capabilities))
     )

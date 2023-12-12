@@ -1,4 +1,4 @@
-import { useFileActionsRename } from '../../../../../src/composables/actions'
+import { ConfigurationManager, useFileActionsRename, useStore } from '../../../../../src'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -7,9 +7,7 @@ import {
   defaultComponentMocks,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useStore } from '../../../../../src/composables'
 import { nextTick, unref } from 'vue'
-import { ConfigurationManager } from '../../../../../src/configuration'
 
 jest.mock('../../../../../src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
@@ -23,7 +21,7 @@ jest.mock('../../../../../src/composables/configuration/useConfigurationManager'
 }))
 
 const currentFolder = {
-  id: 1,
+  id: '1',
   path: '/folder'
 }
 
@@ -137,7 +135,7 @@ describe('rename', () => {
     it('should call the rename action on a resource in the file list', async () => {
       const { wrapper } = getWrapper({
         setup: async ({ renameResource }, { space, storeOptions }) => {
-          const resource = { id: 2, path: '/folder', webDavPath: '/files/admin/folder' }
+          const resource = { id: '2', path: '/folder', webDavPath: '/files/admin/folder' }
           renameResource(space, resource, 'new name')
           await nextTick()
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)

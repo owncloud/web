@@ -1,10 +1,11 @@
-import { onBeforeUnmount, ref, Ref, unref } from 'vue'
+import { onBeforeUnmount, readonly, ref, Ref, unref } from 'vue'
 import { EventBus, eventBus as defaultEventBus } from '../../services/eventBus'
 import { SideBarEventTopics } from './eventTopics'
 
 interface SideBarResult {
-  sideBarOpen: Ref<boolean>
+  isSideBarOpen: Ref<boolean>
   sideBarActivePanel: Ref<string>
+  onPanelActive: (name: string, callback: (string: any) => void) => void
 }
 
 interface SideBarOptions {
@@ -13,23 +14,23 @@ interface SideBarOptions {
 
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const eventBus = options?.bus || defaultEventBus
-  const sideBarOpen = ref(false)
+  const isSideBarOpen = ref(false)
   const sideBarActivePanel = ref(null)
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
-    sideBarOpen.value = !unref(sideBarOpen)
+    isSideBarOpen.value = !unref(isSideBarOpen)
   })
   const closeSideBarToken = eventBus.subscribe(SideBarEventTopics.close, () => {
-    sideBarOpen.value = false
+    isSideBarOpen.value = false
     sideBarActivePanel.value = null
   })
   const openSideBarToken = eventBus.subscribe(SideBarEventTopics.open, () => {
-    sideBarOpen.value = true
+    isSideBarOpen.value = true
     sideBarActivePanel.value = null
   })
   const openSideBarWithPanelToken = eventBus.subscribe(
     SideBarEventTopics.openWithPanel,
     (panelName: string) => {
-      sideBarOpen.value = true
+      isSideBarOpen.value = true
       sideBarActivePanel.value = panelName
     }
   )
@@ -47,8 +48,21 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
     eventBus.unsubscribe(SideBarEventTopics.setActivePanel, setActiveSideBarPanelToken)
   })
 
+  const onPanelActive = (name: string, callback: (string) => void) => {
+    eventBus.subscribe(SideBarEventTopics.setActivePanel, (panelName: string) => {
+      if (name !== panelName) {
+        return
+      }
+      // acount for threshold
+      setTimeout(() => {
+        callback(panelName)
+      }, 100)
+    })
+  }
+
   return {
-    sideBarOpen,
-    sideBarActivePanel
+    isSideBarOpen: readonly(isSideBarOpen),
+    sideBarActivePanel: readonly(sideBarActivePanel),
+    onPanelActive
   }
 }

@@ -22,17 +22,6 @@
                 :per-page-default="perPageDefault"
                 per-page-storage-prefix="admin-settings"
               />
-              <oc-button
-                v-if="sideBarAvailablePanels.length"
-                id="files-toggle-sidebar"
-                v-oc-tooltip="toggleSidebarButtonLabel"
-                :aria-label="toggleSidebarButtonLabel"
-                appearance="raw"
-                class="oc-my-s oc-p-xs"
-                @click.stop="toggleSideBar"
-              >
-                <oc-icon name="side-bar-right" :fill-type="toggleSidebarButtonIconFillType" />
-              </oc-button>
             </div>
           </div>
           <div
@@ -51,12 +40,12 @@
         <slot name="mainContent" />
       </div>
       <side-bar
-        v-if="sideBarOpen"
+        v-if="isSideBarOpen"
         :active-panel="sideBarActivePanel"
         :available-panels="sideBarAvailablePanels"
+        :panel-context="sideBarPanelContext"
         :loading="sideBarLoading"
-        :open="sideBarOpen"
-        :is-header-compact="isSideBarHeaderCompact"
+        :is-open="isSideBarOpen"
         @select-panel="selectPanel"
         @close="closeSideBar"
       >
@@ -70,7 +59,7 @@
 
 <script lang="ts">
 import { perPageDefault, paginationOptions } from 'web-app-admin-settings/src/defaults'
-import { AppLoadingSpinner, SideBar, BatchActions } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, SideBar, BatchActions, SideBarPanelContext } from '@ownclouders/web-pkg'
 import {
   defineComponent,
   inject,
@@ -84,7 +73,7 @@ import {
 } from 'vue'
 import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { Panel } from '@ownclouders/web-pkg'
+import { SideBarPanel } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { ViewOptions } from '@ownclouders/web-pkg'
 
@@ -100,15 +89,20 @@ export default defineComponent({
       required: true,
       type: Array as PropType<BreadcrumbItem[]>
     },
-    sideBarOpen: {
+    isSideBarOpen: {
       required: false,
       type: Boolean,
       default: false
     },
     sideBarAvailablePanels: {
       required: false,
-      type: Array as PropType<Panel[]>,
+      type: Array as PropType<SideBarPanel<unknown, unknown, unknown>[]>,
       default: () => []
+    },
+    sideBarPanelContext: {
+      required: false,
+      type: Object as PropType<SideBarPanelContext<unknown, unknown, unknown>>,
+      default: () => ({})
     },
     sideBarActivePanel: {
       required: false,
@@ -121,11 +115,6 @@ export default defineComponent({
       default: false
     },
     sideBarLoading: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
-    isSideBarHeaderCompact: {
       required: false,
       type: Boolean,
       default: false
@@ -160,7 +149,7 @@ export default defineComponent({
     const appBarRef = ref<VNodeRef>()
     const limitedScreenSpace = ref(false)
     const onResize = () => {
-      limitedScreenSpace.value = props.sideBarOpen
+      limitedScreenSpace.value = props.isSideBarOpen
         ? window.innerWidth <= 1600
         : window.innerWidth <= 1200
     }
@@ -168,9 +157,6 @@ export default defineComponent({
 
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
-    }
-    const toggleSideBar = () => {
-      eventBus.publish(SideBarEventTopics.toggle)
     }
     const selectPanel = (panel) => {
       eventBus.publish(SideBarEventTopics.setActivePanel, panel)
@@ -197,23 +183,12 @@ export default defineComponent({
       appBarRef,
       limitedScreenSpace,
       closeSideBar,
-      toggleSideBar,
       selectPanel,
       ...useAppDefaults({
         applicationId: 'admin-settings'
       }),
       perPageDefault,
       paginationOptions
-    }
-  },
-  computed: {
-    toggleSidebarButtonLabel() {
-      return this.sideBarOpen
-        ? this.$gettext('Close sidebar to hide details')
-        : this.$gettext('Open sidebar to view details')
-    },
-    toggleSidebarButtonIconFillType() {
-      return this.sideBarOpen ? 'fill' : 'line'
     }
   }
 })
@@ -232,15 +207,6 @@ export default defineComponent({
   position: sticky;
   padding: 0 var(--oc-space-medium);
   top: 0;
-}
-
-#files-toggle-sidebar {
-  vertical-align: middle;
-  border: 3px solid transparent;
-  &:hover {
-    background-color: var(--oc-color-background-hover);
-    border-radius: 3px;
-  }
 }
 
 .admin-settings-app-bar-controls {

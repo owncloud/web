@@ -3,7 +3,12 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { useCapabilityFilesSharingResharing } from '@ownclouders/web-pkg'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  isPersonalSpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
@@ -54,7 +59,7 @@ export class FolderLoaderSpace implements FolderLoader {
         }
 
         if (path === '/') {
-          if (space.driveType === 'share') {
+          if (isShareSpaceResource(space)) {
             const parentShare = yield client.shares.getShare(space.shareId)
             const aggregatedShares = aggregateResourceShares({
               shares: [parentShare.shareInfo],
@@ -65,7 +70,7 @@ export class FolderLoaderSpace implements FolderLoader {
               fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
             })
             currentFolder = aggregatedShares[0]
-          } else if (!['personal', 'public'].includes(space.driveType)) {
+          } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
             // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
             currentFolder = space
           }

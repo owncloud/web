@@ -19,7 +19,7 @@
       v-model:selectedIds="selectedResourcesIds"
       :data-test-share-status="shareStatus"
       class="files-table"
-      :class="{ 'files-table-squashed': sideBarOpen }"
+      :class="{ 'files-table-squashed': isSideBarOpen }"
       :fields-displayed="displayedFields"
       sidebar-closed
       :are-thumbnails-displayed="displayThumbnails"
@@ -171,7 +171,7 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    sideBarOpen: {
+    isSideBarOpen: {
       type: Boolean,
       default: false
     },

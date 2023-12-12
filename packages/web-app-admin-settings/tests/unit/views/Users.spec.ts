@@ -151,7 +151,7 @@ describe('Users view', () => {
       expect(createUserButton.exists()).toBeFalsy()
     })
   })
-  describe('method "createUser"', () => {
+  describe('method "onCreateUser"', () => {
     it('should hide the modal and show message on success', async () => {
       const clientService = getClientService()
       clientService.graphAuthenticated.users.createUser.mockImplementation(() =>
@@ -185,30 +185,26 @@ describe('Users view', () => {
           surname: 'bene'
         })
       )
-      const { wrapper } = getMountedWrapper({ clientService })
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
-      await wrapper.vm.createUser({ displayName: 'jan' })
+      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
+      expect(wrapper.vm.createUserModalOpen).toBeFalsy()
+      await wrapper.vm.onCreateUser({ displayName: 'jan' })
 
-      expect(showMessageStub).toHaveBeenCalled()
-      expect(toggleCreateUserModalStub).toHaveBeenCalledTimes(1)
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      expect(wrapper.vm.createUserModalOpen).toBeTruthy()
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientService()
       clientService.graphAuthenticated.users.createUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ clientService })
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
-      const toggleCreateUserModalStub = jest.spyOn(wrapper.vm, 'toggleCreateUserModal')
-      await wrapper.vm.createUser({ displayName: 'jana' })
+      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
+      await wrapper.vm.onCreateUser({ displayName: 'jana' })
 
-      expect(showErrorMessageStub).toHaveBeenCalled()
-      expect(toggleCreateUserModalStub).toHaveBeenCalledTimes(0)
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 
-  describe('method "editUser"', () => {
+  describe('method "onEditUser"', () => {
     it('should emit event on success', async () => {
       const editUser = {
         appRoleAssignments: [
@@ -283,23 +279,14 @@ describe('Users view', () => {
         })
       )
 
-      const { wrapper } = getMountedWrapper({
-        clientService
-      })
+      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
 
       const busStub = jest.spyOn(eventBus, 'publish')
-      const updateSpaceFieldStub = jest.spyOn(wrapper.vm, 'UPDATE_SPACE_FIELD')
-      const updateUserDriveStub = jest.spyOn(wrapper.vm, 'updateUserDrive')
-      const updateUserGroupAssignmentsStub = jest.spyOn(wrapper.vm, 'updateUserGroupAssignments')
-      const updateUserAppRoleAssignmentsStub = jest.spyOn(
-        wrapper.vm,
-        'updateUserAppRoleAssignments'
-      )
 
       await wrapper.vm.loadResourcesTask.last
 
       const userToUpDate = wrapper.vm.users.find((user) => user.id === '1')
-      const updatedUser = await wrapper.vm.editUser({ user: userToUpDate, editUser })
+      const updatedUser = await wrapper.vm.onEditUser({ user: userToUpDate, editUser })
 
       expect(updatedUser.id).toEqual('1')
       expect(updatedUser.displayName).toEqual('administrator')
@@ -309,48 +296,49 @@ describe('Users view', () => {
       expect(updatedUser.memberOf[0].id).toEqual('1')
 
       expect(busStub).toHaveBeenCalled()
-      expect(updateUserDriveStub).toHaveBeenCalled()
-      expect(updateSpaceFieldStub).toHaveBeenCalled()
-      expect(updateUserGroupAssignmentsStub).toHaveBeenCalled()
-      expect(updateUserAppRoleAssignmentsStub).toHaveBeenCalled()
+      expect(
+        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
+      ).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientService()
       clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ clientService })
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
+      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
 
       await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.editUser({
+      await wrapper.vm.onEditUser({
         editUser: {}
       })
 
-      expect(showErrorMessageStub).toHaveBeenCalled()
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 
   describe('computed method "sideBarAvailablePanels"', () => {
     it('should contain EditPanel when one user is selected', () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.vm.selectedUsers = [{ id: '1' }]
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel').enabled
+        wrapper.vm.sideBarAvailablePanels
+          .find(({ name }) => name === 'EditPanel')
+          .isVisible({ items: [{ id: '1' }] })
       ).toBeTruthy()
     })
     it('should contain DetailsPanel no user is selected', () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.vm.selectedUsers = []
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'DetailsPanel').enabled
+        wrapper.vm.sideBarAvailablePanels
+          .find(({ name }) => name === 'DetailsPanel')
+          .isVisible({ items: [] })
       ).toBeTruthy()
     })
     it('should not contain EditPanel when multiple users are selected', () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.vm.selectedUsers = [{ id: '1' }, { id: '2' }]
       expect(
-        wrapper.vm.sideBarAvailablePanels.find((panel) => panel.app === 'EditPanel')
+        wrapper.vm.sideBarAvailablePanels
+          .find(({ name }) => name === 'EditPanel')
+          .isVisible({ items: [{ id: '1' }, { id: '2' }] })
       ).toBeFalsy()
     })
   })
@@ -517,6 +505,7 @@ function getMountedWrapper({
 
   return {
     mocks,
+    storeOptions,
     wrapper: mountType(Users, {
       global: {
         plugins: [...defaultPlugins(), store],

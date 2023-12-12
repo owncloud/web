@@ -89,8 +89,8 @@ function getWrapper({ embedModeEnabled = false } = {}) {
     useExtensionRegistryMock({
       requestExtensions: () =>
         [
-          mock<ActionExtension>({ scopes: ['files.quick-action'], action: collaboratorAction }),
-          mock<ActionExtension>({ scopes: ['files.quick-action'], action: quicklinkAction })
+          mock<ActionExtension>({ scopes: ['resource.quick-action'], action: collaboratorAction }),
+          mock<ActionExtension>({ scopes: ['resource.quick-action'], action: quicklinkAction })
         ] as any
     })
   )

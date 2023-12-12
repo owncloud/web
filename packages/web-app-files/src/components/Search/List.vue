@@ -1,7 +1,11 @@
 <template>
   <div class="files-search-result oc-flex">
     <files-view-wrapper>
-      <app-bar :breadcrumbs="breadcrumbs" :has-bulk-actions="true" :side-bar-open="sideBarOpen" />
+      <app-bar
+        :breadcrumbs="breadcrumbs"
+        :has-bulk-actions="true"
+        :is-side-bar-open="isSideBarOpen"
+      />
       <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
@@ -138,8 +142,8 @@
         </resource-table>
       </template>
     </files-view-wrapper>
-    <side-bar
-      :open="sideBarOpen"
+    <file-side-bar
+      :is-open="isSideBarOpen"
       :active-panel="sideBarActivePanel"
       :space="selectedResourceSpace"
     />
@@ -157,7 +161,7 @@ import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
-import { ContextActions } from '@ownclouders/web-pkg'
+import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
 import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -179,7 +183,6 @@ import { useFileActions } from '@ownclouders/web-pkg'
 import { searchLimit } from '../../search/sdk/list'
 import { Resource } from '@ownclouders/web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import {
   queryItemAsString,
   useCapabilityFilesTags,
@@ -225,7 +228,7 @@ type LastModifiedKeyword = {
 export default defineComponent({
   components: {
     AppBar,
-    SideBar,
+    FileSideBar,
     AppLoadingSpinner,
     ContextActions,
     ListInfo,

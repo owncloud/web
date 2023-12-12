@@ -58,18 +58,12 @@ describe('AppTemplate', () => {
   })
   describe('sideBar', () => {
     it('should show when opened', () => {
-      const { wrapper } = getWrapper({ props: { sideBarOpen: true } })
+      const { wrapper } = getWrapper({ props: { isSideBarOpen: true } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeTruthy()
     })
     it('should not show when closed', () => {
-      const { wrapper } = getWrapper({ props: { sideBarOpen: false } })
+      const { wrapper } = getWrapper({ props: { isSideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
-    })
-    it('can be toggled', async () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
-      const { wrapper } = getWrapper({ props: { sideBarAvailablePanels: [jest.fn()] } })
-      await wrapper.find(stubSelectors.sideBarToggleButton).trigger('click')
-      expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.toggle)
     })
     it('can be closed', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
@@ -129,7 +123,7 @@ function getWrapper({ props = {}, isMobileWidth = false } = {}) {
       props: {
         loading: false,
         breadcrumbs: [],
-        sideBarOpen: true,
+        isSideBarOpen: true,
         sideBarAvailablePanels: [],
         sideBarActivePanel: '',
         ...props

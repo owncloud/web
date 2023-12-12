@@ -154,7 +154,19 @@ import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDet
 export default defineComponent({
   name: 'FileDetails',
   components: { TagsSelect, WebDavDetails },
-  setup() {
+  props: {
+    previewEnabled: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    tagsEnabled: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
+  },
+  setup(props) {
     const configurationManager = useConfigurationManager()
     const store = useStore()
     const clientService = useClientService()
@@ -180,11 +192,14 @@ export default defineComponent({
       await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
-    const isFolder = computed(() => {
-      return unref(resource).isFolder
+    const isPreviewEnabled = computed(() => {
+      if (unref(resource).isFolder) {
+        return false
+      }
+      return props.previewEnabled
     })
     const loadPreviewTask = useTask(function* (signal, resource) {
-      if (unref(isFolder)) {
+      if (!unref(isPreviewEnabled)) {
         preview.value = undefined
         return
       }
@@ -195,7 +210,7 @@ export default defineComponent({
       })
     }).restartable()
     const isPreviewLoading = computed(() => {
-      if (unref(isFolder)) {
+      if (!unref(isPreviewEnabled)) {
         return false
       }
       return loadPreviewTask.isRunning || !loadPreviewTask.last
@@ -240,12 +255,17 @@ export default defineComponent({
       data: tagsHelper({ configurationManager: configurationManager })
     } as ContextualHelper
 
+    const capabilityFilesTags = useCapabilityFilesTags()
+    const hasTags = computed(() => {
+      return props.tagsEnabled && unref(capabilityFilesTags)
+    })
+
     return {
       preview,
       isPublicLinkContext,
       space,
       resource,
-      hasTags: useCapabilityFilesTags(),
+      hasTags,
       isPreviewLoading,
       ancestorMetaData,
       sharedAncestor,

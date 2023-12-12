@@ -1,0 +1,7 @@
+Enhancement: Registering right sidebar panels as extension
+
+Right sidebar panels can now be registered as extensions via our extension registry. They need to be of type `sidebarPanel`.
+The benefit of this is that any app can register additional panels to be shown in the right sidebar while previously the
+available panels were hardcoded.
+
+https://github.com/owncloud/web/pull/10111

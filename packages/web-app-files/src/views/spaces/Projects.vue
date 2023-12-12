@@ -3,13 +3,12 @@
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
-        :has-sidebar-toggle="true"
         :show-actions-on-selection="true"
         :has-bulk-actions="true"
         :has-hidden-files="false"
         :has-file-extensions="false"
         :has-pagination="false"
-        :side-bar-open="sideBarOpen"
+        :is-side-bar-open="isSideBarOpen"
         :view-modes="viewModes"
         :view-mode-default="ViewModeConstants.tilesView.name"
       >
@@ -92,7 +91,7 @@
             v-model:selectedIds="selectedResourcesIds"
             :resources="paginatedItems"
             class="spaces-table"
-            :class="{ 'spaces-table-squashed': sideBarOpen }"
+            :class="{ 'spaces-table-squashed': isSideBarOpen }"
             :sticky="false"
             :fields-displayed="tableDisplayFields"
             :are-thumbnails-displayed="true"
@@ -151,21 +150,22 @@
         </div>
       </template>
     </files-view-wrapper>
-    <side-bar :open="sideBarOpen" :active-panel="sideBarActivePanel" :space="highlightedFile" />
+    <file-side-bar
+      :is-open="isSideBarOpen"
+      :active-panel="sideBarActivePanel"
+      :space="selectedSpace"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { onMounted, computed, defineComponent, unref, ref, watch, nextTick } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import { NoContentMessage } from '@ownclouders/web-pkg'
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
-
-import { AppBar } from '@ownclouders/web-pkg'
+import { AppBar, AppLoadingSpinner, FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
@@ -184,10 +184,10 @@ import { Pagination } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
   isProjectSpaceResource,
+  ProjectSpaceResource,
   Resource,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import SideBar from '../../components/SideBar/SideBar.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
@@ -217,12 +217,12 @@ export default defineComponent({
     AppBar,
     AppLoadingSpinner,
     CreateSpace,
+    FileSideBar,
     FilesViewWrapper,
     NoContentMessage,
     Pagination,
     ResourceTiles,
     ResourceTable,
-    SideBar,
     SpaceContextActions
   },
   setup() {
@@ -230,7 +230,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const clientService = useClientService()
-    const { selectedResourcesIds } = useSelectedResources({ store })
+    const { selectedResourcesIds, selectedResources } = useSelectedResources({ store })
     const { can } = useAbility()
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
@@ -238,6 +238,12 @@ export default defineComponent({
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
+    })
+    const selectedSpace = computed(() => {
+      if (unref(selectedResources).length === 1) {
+        return unref(selectedResources)[0] as ProjectSpaceResource
+      }
+      return null
     })
 
     const tableDisplayFields = [
@@ -390,6 +396,7 @@ export default defineComponent({
       loadResourcesTask,
       areResourcesLoading,
       selectedResourcesIds,
+      selectedSpace,
       handleSort,
       sortBy,
       sortDir,
@@ -419,7 +426,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile']),
     breadcrumbs() {
       return [
         {

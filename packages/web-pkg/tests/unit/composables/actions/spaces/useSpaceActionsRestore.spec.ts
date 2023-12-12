@@ -1,4 +1,4 @@
-import { useSpaceActionsRestore } from '../../../../../src/composables/actions'
+import { useSpaceActionsRestore } from '../../../../../src'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
@@ -76,7 +76,7 @@ describe('restore', () => {
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
-              mock<SpaceResource>({ id: 1, canRestore: () => true, driveType: 'project' })
+              mock<SpaceResource>({ id: '1', canRestore: () => true, driveType: 'project' })
             ]
           })
 
@@ -88,7 +88,7 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
-            resources: [mock<SpaceResource>({ id: 1, canRestore: () => false })]
+            resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]
           })
 
           expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
@@ -102,7 +102,7 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
-          await restoreSpaces([mock<SpaceResource>({ id: 1, canRestore: () => true })])
+          await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
           expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
         }
@@ -114,7 +114,7 @@ describe('restore', () => {
       const { wrapper } = getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
-          await restoreSpaces([mock<SpaceResource>({ id: 1, canRestore: () => true })])
+          await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
           expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
         }

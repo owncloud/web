@@ -1,15 +1,18 @@
 import { Action } from '../actions'
-import { SearchProvider } from '../../components/Search'
+import { SearchProvider, SideBarPanel } from '../../components'
 import { defineStore } from 'pinia'
 import { Ref, hasInjectionContext, unref } from 'vue'
 import { useConfigurationManager } from '../configuration'
 import { ConfigurationManager } from '../../configuration'
 import { AppNavigationItem } from '../../apps'
+import { Item } from '@ownclouders/web-client/src/helpers'
+
+export type ExtensionScope = 'resource' | 'user' | 'group' | string
 
 export type BaseExtension = {
   id: string
   type: string
-  scopes?: string[]
+  scopes?: ExtensionScope[]
 }
 
 export interface ActionExtension extends BaseExtension {
@@ -27,7 +30,17 @@ export interface SidebarNavExtension extends BaseExtension {
   navItem: AppNavigationItem
 }
 
-export type Extension = ActionExtension | SearchExtension | SidebarNavExtension
+export interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item>
+  extends BaseExtension {
+  type: 'sidebarPanel'
+  panel: SideBarPanel<R, P, T>
+}
+
+export type Extension =
+  | ActionExtension
+  | SearchExtension
+  | SidebarNavExtension
+  | SidebarPanelExtension<Item, Item, Item>
 
 export const useExtensionRegistry = ({
   configurationManager
@@ -48,14 +61,14 @@ export const useExtensionRegistry = ({
     getters: {
       requestExtensions:
         (state) =>
-        <ExtensionType extends Extension>(type: string, scope?: string) => {
+        <ExtensionType extends Extension>(type: string, scopes?: string[]) => {
           return state.extensions
             .map((e) =>
               unref(e).filter(
                 (e) =>
                   e.type === type &&
                   !options.disabledExtensions.includes(e.id) &&
-                  (!scope || e.scopes?.includes(scope))
+                  (!scopes || e.scopes?.some((s) => scopes.includes(s)))
               )
             )
             .flat() as ExtensionType[]
