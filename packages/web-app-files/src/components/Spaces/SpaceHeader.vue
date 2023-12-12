@@ -8,7 +8,7 @@
       :class="{ 'space-header-image-expanded': imageExpanded || isMobileWidth }"
     >
       <img
-        v-if="hasImage"
+        v-if="imageContent"
         class="oc-cursor-pointer"
         alt=""
         :src="imageContent"
@@ -212,9 +212,6 @@ export default defineComponent({
       },
       { deep: true, immediate: true }
     )
-    const hasImage = computed(() => {
-      return props.space?.spaceImageData
-    })
 
     const memberCount = computed(() => {
       return store.getters['runtime/spaces/spaceMembers'].length
@@ -242,7 +239,6 @@ export default defineComponent({
       imageContent,
       imageExpanded,
       toggleImageExpanded,
-      hasImage,
       memberCount,
       memberCountString,
       openSideBarSharePanel
