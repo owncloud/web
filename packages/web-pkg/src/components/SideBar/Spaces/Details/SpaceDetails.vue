@@ -91,6 +91,7 @@ import { formatDateFromISO } from '../../../../helpers'
 import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
 import { ImageDimension } from '../../../../constants'
+import { ProcessorType } from '../../../../services'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -127,7 +128,8 @@ export default defineComponent({
       spaceImage.value = yield previewService.loadPreview({
         space: unref(resource),
         resource: imageResource,
-        dimensions: ImageDimension.Preview
+        dimensions: ImageDimension.Tile,
+        processor: ProcessorType.enum.fit
       })
     })
 
@@ -257,8 +259,6 @@ export default defineComponent({
 .oc-space-details-sidebar {
   &-image img {
     max-height: 150px;
-    object-fit: cover;
-    width: 100%;
   }
 }
 
