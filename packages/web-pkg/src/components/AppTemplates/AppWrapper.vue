@@ -9,7 +9,11 @@
     />
     <loading-screen v-if="loading" />
     <error-screen v-else-if="loadingError" :message="loadingError.message" />
-    <div v-else class="oc-flex oc-width-1-1 oc-height-1-1">
+    <div
+      v-else
+      class="oc-flex oc-width-1-1 oc-height-1-1"
+      :class="{ 'app-sidebar-open': isSideBarOpen }"
+    >
       <slot v-bind="slotAttrs" />
       <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
@@ -466,3 +470,10 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+@media (max-width: $oc-breakpoint-medium-default) {
+  .app-sidebar-open > *:not(:last-child) {
+    display: none;
+  }
+}
+</style>

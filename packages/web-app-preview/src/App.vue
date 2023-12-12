@@ -18,7 +18,11 @@
     />
 
     <div class="oc-flex oc-width-1-1 oc-height-1-1">
-      <div v-if="isFolderLoading || isFileContentLoading" class="oc-width-1-1">
+      <div
+        v-if="isFolderLoading || isFileContentLoading"
+        class="oc-width-1-1"
+        :class="{ 'preview-sidebar-open': isSideBarOpen }"
+      >
         <div class="oc-position-center">
           <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
         </div>
@@ -29,9 +33,14 @@
         variation="danger"
         size="xlarge"
         class="oc-position-center"
+        :class="{ 'preview-sidebar-open': isSideBarOpen }"
         :accessible-label="$gettext('Failed to load media file')"
       />
-      <div v-else class="oc-flex oc-width-1-1 oc-height-1-1">
+      <div
+        v-else
+        class="oc-flex oc-width-1-1 oc-height-1-1"
+        :class="{ 'preview-sidebar-open': isSideBarOpen }"
+      >
         <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
           <div v-show="activeMediaFileCached" class="stage_media">
             <media-image
@@ -545,6 +554,11 @@ export default defineComponent({
   &_controls {
     height: auto;
     margin: 10px auto;
+  }
+}
+@media (max-width: $oc-breakpoint-medium-default) {
+  .preview-sidebar-open {
+    display: none;
   }
 }
 </style>
