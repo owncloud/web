@@ -938,6 +938,7 @@ Details
    previously the available panels were hardcoded.
 
    https://github.com/owncloud/web/pull/10111
+   https://github.com/owncloud/web/pull/10152
 
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
 
@@ -946,6 +947,7 @@ Details
    much more possible.
 
    https://github.com/owncloud/web/pull/10111
+   https://github.com/owncloud/web/pull/10152
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
