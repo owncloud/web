@@ -36,6 +36,7 @@ Summary
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
 * Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
 * Bugfix - Spaces overview tile previews zoomed: [#10149](https://github.com/owncloud/web/pull/10149)
+* Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -327,6 +328,14 @@ Details
 
    https://github.com/owncloud/web/issues/9328
    https://github.com/owncloud/web/pull/10149
+
+* Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
+
+   Resolving links without a drive alias has been fixed in case a fileId is given
+   via query param.
+
+   https://github.com/owncloud/web/issues/9269
+   https://github.com/owncloud/web/pull/10154
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
