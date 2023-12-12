@@ -91,7 +91,12 @@ export default defineComponent({
 
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
       try {
-        if (id === `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`) {
+        if (
+          [
+            `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`,
+            `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}`
+          ].includes(id)
+        ) {
           return router.push(createLocationShares('files-shares-with-me'))
         }
 
