@@ -521,7 +521,7 @@ export default defineComponent({
   height: 75vh;
 }
 
-F .table-preview {
+.table-preview {
   border-radius: 3px;
 }
 
