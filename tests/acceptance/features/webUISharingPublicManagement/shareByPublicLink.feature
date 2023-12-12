@@ -10,8 +10,8 @@ Feature: Public link share management
 
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "#Passw0rd" in the server
+    When the public uses the webUI to access the last public link created by user "Alice" with password "#Passw0rd" in a new session
     Then the user should be redirected to the files-drop page
 
 

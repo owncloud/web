@@ -66,9 +66,9 @@ Feature: Edit public link shares
       | path        | simple-folder |
       | name        | Public-link   |
       | permissions | read          |
-      | password    | pass123       |
+      | password    | #Passw0rd     |
     When the user renames the public link named "Public-link" of folder "simple-folder" to "simple-folder Share"
-    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    And the public uses the webUI to access the last public link created by user "Alice" with password "#Passw0rd" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
 
@@ -79,24 +79,24 @@ Feature: Edit public link shares
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
-      | password    | pass123                      |
+      | password    | #Passw0rd                    |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "qwertyui"
-    And the public uses the webUI to access the last public link created by user "Alice" with password "qwertyui" in a new session
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "#Passw0rd123"
+    And the public uses the webUI to access the last public link created by user "Alice" with password "#Passw0rd123" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
   @issue-3830
   Scenario: user edits the password of an already existing public link and tries to access with old password
     Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "#Passw0rd" in the server
     And user "Alice" has created a public link with following settings in the server
       | path        | simple-folder                |
       | name        | Public-link                  |
       | permissions | read, update, create, delete |
-      | password    | pass123                      |
+      | password    | #Passw0rd                    |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "qwertyui"
-    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the password to "#Passw0rd123"
+    And the public uses the webUI to access the last public link created by user "Alice" with password "#Passw0rd" in a new session
     Then the public should not get access to the publicly shared file
 
   @issue-ocis-reva-292

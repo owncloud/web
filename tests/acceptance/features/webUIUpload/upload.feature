@@ -135,8 +135,8 @@ Feature: File Upload
 
   @issue-ocis-2258 @disablePreviews
   Scenario: upload overwriting a file into a public share
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "#Passw0rd" in the server
+    When the public uses the webUI to access the last public link created by user "Alice" with password "#Passw0rd" in a new session
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" in the server should be the same as the content of local file "lorem.txt"
