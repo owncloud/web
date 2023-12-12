@@ -1,0 +1,6 @@
+Bugfix: Resolving links without drive alias
+
+Resolving links without a drive alias has been fixed in case a fileId is given via query param.
+
+https://github.com/owncloud/web/pull/10154
+https://github.com/owncloud/web/issues/9269

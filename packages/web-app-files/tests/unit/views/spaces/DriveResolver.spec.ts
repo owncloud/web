@@ -1,5 +1,5 @@
 import DriveResolver from '../../../../src/views/spaces/DriveResolver.vue'
-import { useDriveResolver } from '@ownclouders/web-pkg'
+import { queryItemAsString, useDriveResolver, useRouteParam } from '@ownclouders/web-pkg'
 import { computed, ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
@@ -21,7 +21,9 @@ import {
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useGetMatchingSpace: jest.fn(),
-  useDriveResolver: jest.fn()
+  useDriveResolver: jest.fn(),
+  useRouteParam: jest.fn(),
+  queryItemAsString: jest.fn()
 }))
 
 describe('DriveResolver view', () => {
@@ -102,6 +104,16 @@ describe('DriveResolver view', () => {
       })
     )
   })
+  it('redirects to private link if no drive alias but a fileId is given', async () => {
+    const { wrapper, mocks } = getMountedWrapper({ driveAliasAndItem: '' })
+    await wrapper.vm.$nextTick()
+
+    expect(mocks.$router.push).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'resolvePrivateLink'
+      })
+    )
+  })
 })
 
 function getMountedWrapper({
@@ -109,8 +121,12 @@ function getMountedWrapper({
   space = undefined,
   internalSpace = undefined,
   currentRouteName = 'files-spaces-generic',
-  isUserContextReady = false
+  isUserContextReady = false,
+  driveAliasAndItem = 'personal/einstein/file',
+  fileId = '1'
 } = {}) {
+  jest.mocked(useRouteParam).mockReturnValue(ref(driveAliasAndItem))
+  jest.mocked(queryItemAsString).mockReturnValue(fileId)
   jest.mocked(useDriveResolver).mockImplementation(() => ({
     space,
     item: ref('/'),
