@@ -83,7 +83,7 @@ import {
   watch
 } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useClientService, useStore, usePreviewService } from '@ownclouders/web-pkg'
+import { useClientService, useStore, usePreviewService, ProcessorType } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { marked } from 'marked'
@@ -207,7 +207,8 @@ export default defineComponent({
         imageContent.value = await previewService.loadPreview({
           space: props.space,
           resource,
-          dimensions: ImageDimension.Preview
+          dimensions: ImageDimension.Tile,
+          processor: ProcessorType.enum.fit
         })
       },
       { deep: true, immediate: true }
