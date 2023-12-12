@@ -22,8 +22,7 @@ Given(
     const admin = this.usersEnvironment.getUser({ key: stepUser })
     for await (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
-      const id = await api.graph.getUserId({ user, admin })
-      await api.graph.assignRole(admin, id, info.role)
+      await api.provision.assignRole({ admin, user, role: info.role })
     }
   }
 )
