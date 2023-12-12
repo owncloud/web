@@ -79,7 +79,7 @@ exports[`SpaceHeader space image should show the default image if no other image
 exports[`SpaceHeader space image should show the set image 1`] = `
 <div class="space-header oc-p-m oc-flex">
   <div class="space-header-image">
-    <img alt="" class="oc-cursor-pointer">
+    <img alt="" class="oc-cursor-pointer" src="blob:image">
   </div>
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">

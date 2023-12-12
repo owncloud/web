@@ -176,14 +176,6 @@ import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import {
-  configurationManager,
-  ImageDimension,
-  NoContentMessage,
-  ProcessorType,
-  usePreviewService,
-  VisibilityObserver
-} from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
@@ -199,7 +191,13 @@ import {
   usePagination,
   useRouter,
   useRoute,
-  Pagination
+  Pagination,
+  FileSideBar,
+  configurationManager,
+  ImageDimension,
+  NoContentMessage,
+  ProcessorType,
+  usePreviewService
 } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
@@ -232,8 +230,6 @@ import {
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
 
-const visibilityObserver = new VisibilityObserver()
-
 export default defineComponent({
   components: {
     AppBar,
@@ -259,7 +255,7 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const imageContentObject = ref({})
     const previewService = usePreviewService()
-    let loadPreviewToken
+    let loadPreviewToken = null
 
     const runtimeSpaces = computed((): SpaceResource[] => {
       return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
@@ -525,7 +521,7 @@ export default defineComponent({
   height: 75vh;
 }
 
-.table-preview {
+F .table-preview {
   border-radius: 3px;
 }
 

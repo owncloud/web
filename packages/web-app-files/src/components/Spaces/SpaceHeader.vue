@@ -92,6 +92,7 @@ import SpaceContextActions from './SpaceContextActions.vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { useTask } from 'vue-concurrency'
 
 const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
@@ -194,22 +195,26 @@ export default defineComponent({
     const toggleImageExpanded = () => {
       imageExpanded.value = !unref(imageExpanded)
     }
+
+    const loadPreviewTask = useTask(function* (signal) {
+      const resource = yield getFileInfo(props.space, {
+        path: `.space/${props.space.spaceImageData.name}`
+      })
+      imageContent.value = yield previewService.loadPreview({
+        space: props.space,
+        resource,
+        dimensions: ImageDimension.Tile,
+        processor: ProcessorType.enum.fit
+      })
+    })
+
     watch(
       computed(() => props.space.spaceImageData),
       async (data) => {
         if (!data) {
           return
         }
-
-        const resource = await getFileInfo(props.space, {
-          path: `.space/${props.space.spaceImageData.name}`
-        })
-        imageContent.value = await previewService.loadPreview({
-          space: props.space,
-          resource,
-          dimensions: ImageDimension.Tile,
-          processor: ProcessorType.enum.fit
-        })
+        await loadPreviewTask.perform()
       },
       { deep: true, immediate: true }
     )
@@ -242,7 +247,8 @@ export default defineComponent({
       toggleImageExpanded,
       memberCount,
       memberCountString,
-      openSideBarSharePanel
+      openSideBarSharePanel,
+      loadPreviewTask
     }
   }
 })

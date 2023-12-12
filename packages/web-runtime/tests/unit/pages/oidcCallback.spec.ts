@@ -21,6 +21,7 @@ jest.mock('@ownclouders/web-pkg', () => ({
 }))
 
 const postMessageMock = jest.fn()
+console.debug = jest.fn()
 
 describe('oidcCallback page', () => {
   describe('delegated authentication', () => {

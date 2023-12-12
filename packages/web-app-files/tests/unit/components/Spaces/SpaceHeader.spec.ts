@@ -25,11 +25,12 @@ describe('SpaceHeader', () => {
       expect(wrapper.find('.space-header-image-default').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
     })
-    it('should show the set image', () => {
+    it('should show the set image', async () => {
       const spaceMock = { spaceImageData: { webDavUrl: '/' } }
       const wrapper = getWrapper({
         space: { ...buildSpace({ id: '1' } as unknown as Drive), ...spaceMock }
       })
+      await wrapper.vm.loadPreviewTask.last
       expect(wrapper.find('.space-header-image-default').exists()).toBeFalsy()
       expect(wrapper.find('.space-header-image img').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
@@ -48,6 +49,7 @@ describe('SpaceHeader', () => {
 
 function getWrapper({ space = {}, isSideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
+  mocks.$previewService.loadPreview.mockResolvedValue('blob:image')
   const store = createStore(defaultStoreMockOptions)
   return mount(SpaceHeader, {
     props: {

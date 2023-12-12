@@ -9,7 +9,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
-import { useStore } from '@ownclouders/web-pkg'
+import { eventBus, useStore } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -18,6 +18,7 @@ describe('uploadImage', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
+          const busStub = jest.spyOn(eventBus, 'publish')
           const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
             mockAxiosResolve(driveMock)
@@ -42,6 +43,7 @@ describe('uploadImage', () => {
             }
           })
 
+          expect(busStub).toHaveBeenCalledWith('app.files.spaces.uploaded-image', expect.anything())
           expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
         }
       })
