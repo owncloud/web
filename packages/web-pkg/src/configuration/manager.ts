@@ -97,6 +97,7 @@ export class ConfigurationManager {
     )
     set(this.optionsConfiguration, 'contextHelpers', get(options, 'contextHelpers', true))
     set(this.optionsConfiguration, 'openAppsInTab', get(options, 'openAppsInTab', false))
+    set(this.optionsConfiguration, 'displayThumbnails', get(options, 'displayThumbnails', true))
     set(
       this.optionsConfiguration,
       'openLinksWithDefaultApp',

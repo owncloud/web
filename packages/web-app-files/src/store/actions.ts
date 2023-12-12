@@ -562,8 +562,11 @@ export default {
     })
   },
 
-  async loadPreview({ commit }, { previewService, space, resource, dimensions, type }) {
-    const preview = await previewService.loadPreview({ space, resource, dimensions }, true)
+  async loadPreview({ commit }, { previewService, space, resource, dimensions, type, processor }) {
+    const preview = await previewService.loadPreview(
+      { space, resource, dimensions, processor },
+      true
+    )
     if (preview) {
       commit('UPDATE_RESOURCE_FIELD', { id: resource.id, field: type, value: preview })
     }

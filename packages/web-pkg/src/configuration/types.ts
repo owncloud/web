@@ -26,6 +26,7 @@ export interface OptionsConfiguration {
   openAppsInTab?: boolean
   openLinksWithDefaultApp?: boolean
   tokenStorageLocal?: boolean
+  displayThumbnails?: boolean
   disabledExtensions?: string[]
   isRunningOnEos?: boolean
   userListRequiresFilter?: boolean
