@@ -85,7 +85,7 @@
           </template>
         </oc-tile>
       </li>
-      <template v-if="7 - viewSize - data.length > 0">
+      <template v-if="8 - viewSize - data.length > 0">
         <li style="display: list-item" v-for="index in 8 - viewSize - data.length" :key="index">
           <div
             style="
