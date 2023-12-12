@@ -281,11 +281,13 @@ export default defineComponent({
   border-left: 1px solid var(--oc-color-border);
   position: relative;
   overflow: hidden;
+  min-width: 440px;
   width: 440px;
 }
 
 @media only screen and (max-width: 960px) {
   #app-sidebar {
+    min-width: 100%;
     width: 100%;
   }
 
