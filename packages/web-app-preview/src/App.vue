@@ -263,10 +263,6 @@ export default defineComponent({
     const space = computed(() => unref(unref(currentFileContext).space))
     const { selectedResources } = useSelectedResources({})
     watch(activeFilteredFile, (file) => {
-      if (!file) {
-        return
-      }
-
       selectedResources.value = [file]
     })
 
@@ -390,23 +386,15 @@ export default defineComponent({
       }
     },
     loadMedium() {
-      this.isFileContentLoading = true
-
-      // Don't bother loading if file is already loaded and cached
       if (this.activeMediaFileCached) {
-        setTimeout(
-          () => {
-            this.isFileContentLoading = false
-          },
-          // Delay to animate
-          50
-        )
         return
       }
 
       this.loadActiveFileIntoCache()
     },
     async loadActiveFileIntoCache() {
+      this.isFileContentLoading = true
+
       try {
         const loadRawFile = !this.isActiveFileTypeImage
         let mediaUrl
