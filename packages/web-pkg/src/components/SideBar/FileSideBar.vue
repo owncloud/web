@@ -85,7 +85,7 @@ export default defineComponent({
     const eventBus = useEventBus()
 
     const loadedResource = ref<Resource>()
-    const isLoading = ref(true)
+    const isLoading = ref(false)
 
     const { selectedResources } = useSelectedResources({ store })
     const currentFolder = computed(() => {
