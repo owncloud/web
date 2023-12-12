@@ -1,4 +1,5 @@
 export * from './Spaces'
+export * from './Files'
 export * from './types'
 
 export { default as CompareSaveDialog } from './CompareSaveDialog.vue'

@@ -1,4 +1,4 @@
-import FileInfo from 'web-app-files/src/components/SideBar/FileInfo.vue'
+import FileInfo from '../../../../../src/components/SideBar/Files/FileInfo.vue'
 import {
   createStore,
   defaultComponentMocks,

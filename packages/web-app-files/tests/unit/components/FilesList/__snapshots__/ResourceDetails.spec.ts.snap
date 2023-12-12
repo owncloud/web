@@ -20,7 +20,6 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
           </h3>
         </div>
       </div>
-      <!--v-if-->
     </div>
     <div class="oc-mb" id="oc-file-details-sidebar">
       <div>

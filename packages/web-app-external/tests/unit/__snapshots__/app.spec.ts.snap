@@ -9,7 +9,7 @@ exports[`The app provider extension should be able to load an iFrame via get 1`]
 exports[`The app provider extension should be able to load an iFrame via post 1`] = `
 <!--v-if-->
 
-<div class="oc-height-1-1">
+<div class="oc-height-1-1 oc-width-1-1">
   <form action="https://example.test/d12ab86/loe009157-MzBw" method="post" target="app-iframe">
     <input class="oc-hidden" type="submit" value="[object Object]">
     <div>

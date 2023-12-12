@@ -17,52 +17,65 @@
       @close="closeApp"
     />
 
-    <div v-if="isFolderLoading || isFileContentLoading" class="oc-position-center">
-      <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
-    </div>
-    <oc-icon
-      v-else-if="isFileContentError"
-      name="file-damage"
-      variation="danger"
-      size="xlarge"
-      class="oc-position-center"
-      :accessible-label="$gettext('Failed to load media file')"
-    />
-    <div v-else class="oc-flex oc-width-1-1 oc-height-1-1">
-      <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
-        <div v-show="activeMediaFileCached" class="stage_media">
-          <media-image
-            v-if="activeMediaFileCached.isImage"
-            :file="activeMediaFileCached"
+    <div class="oc-flex oc-width-1-1 oc-height-1-1">
+      <div
+        v-if="isFolderLoading || isFileContentLoading"
+        class="oc-width-1-1"
+        :class="{ 'preview-sidebar-open': isSideBarOpen }"
+      >
+        <div class="oc-position-center">
+          <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
+        </div>
+      </div>
+      <oc-icon
+        v-else-if="isFileContentError"
+        name="file-damage"
+        variation="danger"
+        size="xlarge"
+        class="oc-position-center"
+        :class="{ 'preview-sidebar-open': isSideBarOpen }"
+        :accessible-label="$gettext('Failed to load media file')"
+      />
+      <div
+        v-else
+        class="oc-flex oc-width-1-1 oc-height-1-1"
+        :class="{ 'preview-sidebar-open': isSideBarOpen }"
+      >
+        <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
+          <div v-show="activeMediaFileCached" class="stage_media">
+            <media-image
+              v-if="activeMediaFileCached.isImage"
+              :file="activeMediaFileCached"
+              :current-image-rotation="currentImageRotation"
+              :current-image-zoom="currentImageZoom"
+            />
+            <media-video
+              v-else-if="activeMediaFileCached.isVideo"
+              :file="activeMediaFileCached"
+              :is-auto-play-enabled="isAutoPlayEnabled"
+            />
+            <media-audio
+              v-else-if="activeMediaFileCached.isAudio"
+              :file="activeMediaFileCached"
+              :is-auto-play-enabled="isAutoPlayEnabled"
+            />
+          </div>
+          <media-controls
+            class="stage_controls"
+            :files="filteredFiles"
+            :active-index="activeIndex"
+            :is-full-screen-mode-activated="isFullScreenModeActivated"
+            :is-folder-loading="isFolderLoading"
+            :is-image="activeMediaFileCached?.isImage"
             :current-image-rotation="currentImageRotation"
             :current-image-zoom="currentImageZoom"
-          />
-          <media-video
-            v-else-if="activeMediaFileCached.isVideo"
-            :file="activeMediaFileCached"
-            :is-auto-play-enabled="isAutoPlayEnabled"
-          />
-          <media-audio
-            v-else-if="activeMediaFileCached.isAudio"
-            :file="activeMediaFileCached"
-            :is-auto-play-enabled="isAutoPlayEnabled"
+            @set-rotation="currentImageRotation = $event"
+            @set-zoom="currentImageZoom = $event"
+            @toggle-full-screen="toggleFullscreenMode"
+            @toggle-previous="prev"
+            @toggle-next="next"
           />
         </div>
-        <media-controls
-          class="stage_controls"
-          :files="filteredFiles"
-          :active-index="activeIndex"
-          :is-full-screen-mode-activated="isFullScreenModeActivated"
-          :is-folder-loading="isFolderLoading"
-          :is-image="activeMediaFileCached?.isImage"
-          :current-image-rotation="currentImageRotation"
-          :current-image-zoom="currentImageZoom"
-          @set-rotation="currentImageRotation = $event"
-          @set-zoom="currentImageZoom = $event"
-          @toggle-full-screen="toggleFullscreenMode"
-          @toggle-previous="prev"
-          @toggle-next="next"
-        />
       </div>
       <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
@@ -138,6 +151,7 @@ export default defineComponent({
 
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
+    const folderLoaded = ref(false)
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -234,7 +248,12 @@ export default defineComponent({
         if (!unref(currentFileContext) || unref(closed)) {
           return
         }
-        await appDefaults.loadFolderForFileContext(unref(currentFileContext))
+
+        if (!unref(folderLoaded)) {
+          await appDefaults.loadFolderForFileContext(unref(currentFileContext))
+          folderLoaded.value = true
+        }
+
         instance.proxy.setActiveFile(unref(unref(currentFileContext).driveAliasAndItem))
       },
       { immediate: true }
@@ -367,23 +386,15 @@ export default defineComponent({
       }
     },
     loadMedium() {
-      this.isFileContentLoading = true
-
-      // Don't bother loading if file is already loaded and cached
       if (this.activeMediaFileCached) {
-        setTimeout(
-          () => {
-            this.isFileContentLoading = false
-          },
-          // Delay to animate
-          50
-        )
         return
       }
 
       this.loadActiveFileIntoCache()
     },
     async loadActiveFileIntoCache() {
+      this.isFileContentLoading = true
+
       try {
         const loadRawFile = !this.isActiveFileTypeImage
         let mediaUrl
@@ -531,6 +542,11 @@ export default defineComponent({
   &_controls {
     height: auto;
     margin: 10px auto;
+  }
+}
+@media (max-width: $oc-breakpoint-medium-default) {
+  .preview-sidebar-open {
+    display: none;
   }
 }
 </style>

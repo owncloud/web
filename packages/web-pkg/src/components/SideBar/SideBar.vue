@@ -94,8 +94,9 @@
 
 <script lang="ts">
 import { VisibilityObserver } from '../../observer'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, onBeforeUnmount, unref } from 'vue'
 import { SideBarPanel, SideBarPanelContext } from './types'
+import { SideBarEventTopics, useEventBus } from '../../composables'
 
 let visibilityObserver: VisibilityObserver
 let hiddenObserver: VisibilityObserver
@@ -126,10 +127,15 @@ export default defineComponent({
   },
   emits: ['close', 'selectPanel'],
   setup(props) {
+    const eventBus = useEventBus()
     const panels = computed(() =>
       props.availablePanels.filter((p) => p.isVisible(props.panelContext))
     )
     const subPanels = computed(() => unref(panels).filter((p) => !p.isRoot?.(props.panelContext)))
+
+    onBeforeUnmount(() => {
+      eventBus.publish(SideBarEventTopics.close)
+    })
 
     return {
       panels,

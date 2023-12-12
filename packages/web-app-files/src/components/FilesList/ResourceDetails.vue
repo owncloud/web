@@ -14,8 +14,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 import FileActions from '../SideBar/Actions/FileActions.vue'
 import FileDetails from '../SideBar/Details/FileDetails.vue'
-import FileInfo from '../SideBar/FileInfo.vue'
-import { useFileActions } from '@ownclouders/web-pkg'
+import { useFileActions, FileInfo } from '@ownclouders/web-pkg'
 import { useRouteQuery } from '@ownclouders/web-pkg'
 
 export default defineComponent({

@@ -4,3 +4,4 @@ Viewer and editor apps now have the same right sidebar available like the `files
 This makes in place viewing file details, tagging, sharing, and much more possible.
 
 https://github.com/owncloud/web/pull/10111
+https://github.com/owncloud/web/pull/10152
