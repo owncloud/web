@@ -1,7 +1,7 @@
 x-ocis-server: &ocis-service
   image: ${OCIS_IMAGE:-owncloud/ocis:latest}
   entrypoint: /bin/sh
-  command: ['-c', 'ocis init || true && ocis server']
+  command: [ '-c', 'ocis init || true && ocis server' ]
   environment: &ocis-environment
     OCIS_INSECURE: '${OCIS_INSECURE:-true}'
     OCIS_LOG_LEVEL: '${OCIS_LOG_LEVEL:-error}'
@@ -17,6 +17,11 @@ x-ocis-server: &ocis-service
     FRONTEND_SEARCH_MIN_LENGTH: '2'
     FRONTEND_OCS_ENABLE_DENIALS: 'true'
     FRONTEND_FULL_TEXT_SEARCH_ENABLED: 'true'
+    FRONTEND_PASSWORD_POLICY_MIN_CHARACTERS: '3'
+    FRONTEND_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS: '0'
+    FRONTEND_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS: '0'
+    FRONTEND_PASSWORD_POLICY_MIN_DIGITS: '0'
+    FRONTEND_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS: '0'
     FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
 
     # IDM
