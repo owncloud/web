@@ -11,7 +11,7 @@
       >
         <div class="oc-modal-title">
           <oc-icon v-if="iconName !== ''" :name="iconName" :variation="variation" />
-          <h2 id="oc-modal-title" v-text="title" />
+          <h2 id="oc-modal-title" class="oc-text-truncate" v-text="title" />
         </div>
         <div class="oc-modal-body">
           <div v-if="$slots.content" key="modal-slot-content" class="oc-modal-body-message">
