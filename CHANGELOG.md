@@ -38,6 +38,7 @@ Summary
 * Bugfix - Spaces overview tile previews zoomed: [#10149](https://github.com/owncloud/web/pull/10149)
 * Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
 * Bugfix - Uploading the same files parallel: [#10156](https://github.com/owncloud/web/pull/10156)
+* Bugfix - GDPR export polling: [#10158](https://github.com/owncloud/web/pull/10158)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -345,6 +346,14 @@ Details
 
    https://github.com/owncloud/web/issues/9220
    https://github.com/owncloud/web/pull/10156
+
+* Bugfix - GDPR export polling: [#10158](https://github.com/owncloud/web/pull/10158)
+
+   Periodically checking for a processed GDPR export in the account menu has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/8862
+   https://github.com/owncloud/web/pull/10158
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
