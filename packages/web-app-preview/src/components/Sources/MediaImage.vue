@@ -9,8 +9,8 @@
   />
 </template>
 <script lang="ts">
-import { defineComponent, PropType, onMounted, ref, watch } from 'vue'
 import { CachedFile } from '../../helpers/types'
+import { defineComponent, PropType, onMounted, ref, VNodeRef, watch, unref, nextTick } from 'vue'
 import type { PanzoomObject } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
 
@@ -31,11 +31,18 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const img = ref()
-    let panzoom: PanzoomObject
+    const img = ref<VNodeRef>()
+    const panzoom = ref<PanzoomObject>()
 
-    onMounted(() => {
-      panzoom = Panzoom(img.value, {
+    const initPanzoom = async () => {
+      if (unref(panzoom)) {
+        unref(panzoom)?.destroy()
+      }
+
+      // wait for next tick until image is rendered
+      await nextTick()
+
+      panzoom.value = Panzoom(unref(img) as any, {
         animate: true,
         duration: 300,
         overflow: 'auto',
@@ -65,16 +72,19 @@ export default defineComponent({
               v = y
           }
 
-          panzoom.setStyle(
+          unref(panzoom).setStyle(
             'transform',
             `rotate(${props.currentImageRotation}deg) scale(${scale}) translate(${h}px, ${v}px)`
           )
         }
       })
-    })
+    }
+
+    watch(img, initPanzoom)
+    onMounted(initPanzoom)
 
     watch([() => props.currentImageZoom, () => props.currentImageRotation], () => {
-      panzoom.zoom(props.currentImageZoom)
+      unref(panzoom).zoom(props.currentImageZoom)
     })
 
     return {
