@@ -80,7 +80,8 @@ export class AuthService {
         configurationManager: this.configurationManager,
         store: this.store,
         ability: this.ability,
-        language: this.language
+        language: this.language,
+        redirectUrl: to.path
       })
     }
 

@@ -27,6 +27,7 @@ export interface UserManagerOptions {
   store: Store<any>
   ability: Ability
   language: Language
+  redirectUrl: string
 }
 
 export class UserManager extends OidcUserManager {
@@ -106,6 +107,7 @@ export class UserManager extends OidcUserManager {
     this.store = options.store
     this.ability = options.ability
     this.language = options.language
+    this.setPostLoginRedirectUrl(options.redirectUrl)
   }
 
   /**
@@ -134,6 +136,11 @@ export class UserManager extends OidcUserManager {
   }
 
   setPostLoginRedirectUrl(url?: string): void {
+    const denyRoutes = ['/web-oidc-silent-redirect', '/web-oidc-callback']
+    const existingRedirectUrl = this.browserStorage.getItem(postLoginRedirectUrlKey)
+    if ((url === '/files/spaces/personal' && existingRedirectUrl) || denyRoutes.includes(url)) {
+      return
+    }
     if (url) {
       this.browserStorage.setItem(postLoginRedirectUrlKey, url)
     } else {
