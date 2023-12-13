@@ -4,6 +4,10 @@
   "private": true,
   "description": "ownCloud Web Preview",
   "license": "AGPL-3.0",
+  "devDependencies": {
+    "@panzoom/panzoom": "^4.5.1",
+    "web-test-helpers": "workspace:*"
+  },
   "peerDependencies": {
     "vue3-gettext": "^2.3.3",
     "vuex": "4.1.0",

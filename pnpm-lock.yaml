@@ -807,7 +807,7 @@ importers:
     dependencies:
       vue3-gettext:
         specifier: ^2.3.3
-        version: 2.3.4(@vue/compiler-sfc@3.3.4)(vue@3.3.4)
+        version: 2.4.0(@vue/compiler-sfc@3.3.4)(vue@3.3.4)
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.4)
@@ -817,6 +817,13 @@ importers:
       web-pkg:
         specifier: workspace:@ownclouders/web-pkg@*
         version: link:../web-pkg
+    devDependencies:
+      '@panzoom/panzoom':
+        specifier: ^4.5.1
+        version: 4.5.1
+      web-test-helpers:
+        specifier: workspace:*
+        version: link:../web-test-helpers
 
   packages/web-app-search:
     dependencies:
@@ -5884,6 +5891,10 @@ packages:
     dependencies:
       mkdirp: 1.0.4
       rimraf: 3.0.2
+    dev: true
+
+  /@panzoom/panzoom@4.5.1:
+    resolution: {integrity: sha512-QOr/t7314XTwgAUDazR+RDcTAWSbkpjDnZJddd9f56jSUA8ptUsyDblAb+sp/O5O1o5Fiu9KpWxVHKuhGUgp5w==}
     dev: true
 
   /@playwright/test@1.39.0:
@@ -20825,6 +20836,27 @@ packages:
       pofile: 1.1.4
       tslib: 2.4.1
       vue: 3.3.4
+
+  /vue3-gettext@2.4.0(@vue/compiler-sfc@3.3.4)(vue@3.3.4):
+    resolution: {integrity: sha512-xnCndk88nzC+EiUJpNKykUulvPhivM1AQuT6oa72PA4DUOFPjJvpy5hZ/GbxLUJiqvYJebMDMTWywCJwIw+biA==}
+    engines: {node: '>= 12.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@vue/compiler-sfc': '>=3.0.0'
+      vue: '>=3.0.0'
+    dependencies:
+      '@vue/compiler-sfc': 3.3.4
+      chalk: 4.1.2
+      command-line-args: 5.2.1
+      cosmiconfig: 7.1.0
+      gettext-extractor: 3.6.1
+      glob: 7.2.0
+      parse5: 6.0.1
+      parse5-htmlparser2-tree-adapter: 6.0.1
+      pofile: 1.1.4
+      tslib: 2.5.0
+      vue: 3.3.4
+    dev: false
 
   /vue3-gettext@2.5.0-alpha.1(@vue/compiler-sfc@3.3.4)(vue@3.3.4):
     resolution: {integrity: sha512-hHTzUBsCISRes58f2b47pEVsQQg0yZMiTsNtDHaJTmQlwRhsxsLbuacSdv82qtw+jW1jPUHnnvQ+9xXzbYBmfg==}
