@@ -961,8 +961,10 @@ Details
    that lets the user not only set a password, but also the role and an optional
    expiration date.
 
+   https://github.com/owncloud/web/issues/10157
    https://github.com/owncloud/web/pull/10104
    https://github.com/owncloud/web/pull/10145
+   https://github.com/owncloud/web/pull/10159
 
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 
