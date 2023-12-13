@@ -11,14 +11,14 @@ Feature: Access public link shares by public
 
   Scenario: public should be able to access a public link with correct password
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "#Passw0rd" in the server
+    When the public uses the webUI to access the last public link created by user "Alice" with password "#Passw0rd" in a new session
     Then file "lorem.txt" should be listed on the webUI
 
 
   Scenario: public should not be able to access a public link with wrong password
-    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123" in the server
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass12" in a new session
+    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "#Passw0rd" in the server
+    When the public uses the webUI to access the last public link created by user "Alice" with password "#Passwrd" in a new session
     Then the public should not get access to the publicly shared file
 
 
