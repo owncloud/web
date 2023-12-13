@@ -1,0 +1,6 @@
+Bugfix: GDPR export polling
+
+Periodically checking for a processed GDPR export in the account menu has been fixed.
+
+https://github.com/owncloud/web/pull/10158
+https://github.com/owncloud/web/issues/8862

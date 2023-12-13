@@ -52,7 +52,7 @@ export default defineComponent({
     const { downloadFile } = useDownloadFile()
 
     const loading = ref(true)
-    const checkInterval = ref()
+    const checkInterval = ref<ReturnType<typeof setInterval>>()
     const exportFile = ref<Resource>()
     const exportInProgress = ref(false)
 
@@ -80,6 +80,7 @@ export default defineComponent({
         exportInProgress.value = false
         if (unref(checkInterval)) {
           clearInterval(unref(checkInterval))
+          checkInterval.value = undefined
         }
       } catch (e) {
         if (e.statusCode !== 404) {
