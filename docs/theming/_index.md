@@ -49,7 +49,7 @@ The general top-level structure of a valid `theme.json` is outlined below:
 
 The `common` section provides a set of information that is designed to be available for all clients. It gets merged "down" to the final themes and aims to reduce duplication, but can be overwritten by more specific information inside both the clients' defaults and actual themes.
 
-The structure of a valid `comon` section is outlined below:
+The structure of a valid `common` section is outlined below:
 
 ```json
 "common": {
@@ -64,12 +64,13 @@ The structure of a valid `comon` section is outlined below:
 }
 ```
 
-- `name` specifies the publicly visible name for this oCIS instance
-- `slogan` specifies the publicly visible slogan for this oCIS instance
+All of the below parameters are required:
+- `name` specifies the publicly visible name
+- `slogan` specifies the publicly visible slogan
 - `logo` specifies the logo in e.g. the top bar within the web UI
-- `accessDeniedHelp` specifies the target URL for the access denied help link valid for this oCIS instance
-- `imprintUrl` specifies the target URL for the imprint link valid for this oCIS instance
-- `privacyUrl` specifies the target URL for the privacy link valid for this oCIS instance
+- `accessDeniedHelp` specifies the target URL for the access denied help link
+- `imprintUrl` specifies the target URL for the imprint link
+- `privacyUrl` specifies the target URL for the privacy link
 
 ### Web Theme
 
