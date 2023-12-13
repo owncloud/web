@@ -1,0 +1,6 @@
+Bugfix: Uploading the same files parallel
+
+An issue where uploading the same files parallel would cause the upload to fail has been fixed.
+
+https://github.com/owncloud/web/pull/10156
+https://github.com/owncloud/web/issues/9220
