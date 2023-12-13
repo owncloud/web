@@ -40,6 +40,7 @@
   <div>
     <oc-text-input
       v-if="!onlyInternalLinksAllowed"
+      :key="passwordInputKey"
       :model-value="password.value"
       type="password"
       :password-policy="passwordPolicy"
@@ -136,6 +137,7 @@
 
 <script lang="ts">
 import { DateTime } from 'luxon'
+import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
 import {
   computed,
@@ -207,6 +209,7 @@ export default defineComponent({
 
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
 
+    const passwordInputKey = ref(uuidV4())
     const roleRefs = ref<Record<string, ComponentPublicInstance>>({})
 
     const password = reactive({ value: '', error: undefined })
@@ -348,7 +351,11 @@ export default defineComponent({
       selectedRole.value = role
       if (unref(selectedRoleIsInternal)) {
         password.value = ''
+        password.error = ''
         selectedExpiry.value = undefined
+
+        // re-render password because it's the only way to remove policy messages
+        passwordInputKey.value = uuidV4()
       }
     }
 
@@ -369,6 +376,7 @@ export default defineComponent({
       passwordEnforced,
       passwordPolicy,
       generatePasswordMethod: () => passwordPolicyService.generatePassword(),
+      passwordInputKey,
       selectedExpiry,
       expirationDateTooltip,
       expirationRules,
