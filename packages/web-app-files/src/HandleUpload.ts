@@ -370,6 +370,10 @@ export class HandleUpload extends BasePlugin {
    * Eventually triggers to upload in Uppy.
    */
   async handleUpload(files: UppyFile[]) {
+    if (!files.length) {
+      return
+    }
+
     let filesToUpload = this.prepareFiles(files)
 
     // quota check
