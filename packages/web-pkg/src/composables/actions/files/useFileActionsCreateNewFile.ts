@@ -206,14 +206,17 @@ export const useFileActionsCreateNewFile = ({
       ),
       inputSelectionRange,
       onCancel: () => store.dispatch('hideModal'),
-      onConfirm: !openAction
-        ? addAppProviderFileFunc
-        : (fileName) => {
-            if (!areFileExtensionsShown.value) {
-              fileName = `${fileName}.${extension}`
-            }
-            addNewFile(fileName, openAction)
-          },
+      onConfirm: (fileName: string) => {
+        if (!areFileExtensionsShown.value) {
+          fileName = `${fileName}.${extension}`
+        }
+
+        if (!openAction) {
+          return addAppProviderFileFunc(fileName)
+        }
+
+        return addNewFile(fileName, openAction)
+      },
       onInput: checkInputValue
     }
 
