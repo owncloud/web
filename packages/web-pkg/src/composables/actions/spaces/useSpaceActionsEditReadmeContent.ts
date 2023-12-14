@@ -16,7 +16,7 @@ export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any>
         name: resources[0].name
       }),
       customComponent: ReadmeContentModal,
-      customComponentAttrs: { space: resources[0] }
+      customComponentAttrs: () => ({ space: resources[0] })
     })
   }
 

@@ -22,9 +22,9 @@ export const useUserActionsEditLogin = () => {
       ),
       hideActions: true,
       customComponent: LoginModal,
-      customComponentAttrs: {
-        users: [...resources]
-      }
+      customComponentAttrs: () => ({
+        users: resources
+      })
     })
   }
 

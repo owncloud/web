@@ -76,12 +76,12 @@ export const useFileActionsCreateLink = ({
           { resourceName: resources[0].name }
         ),
         customComponent: CreateLinkModal,
-        customComponentAttrs: {
+        customComponentAttrs: () => ({
           space,
           resources,
           isQuickLink,
           callbackFn: proceedResult
-        },
+        }),
         hideActions: true
       })
     }

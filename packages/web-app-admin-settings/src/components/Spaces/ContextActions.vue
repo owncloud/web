@@ -1,20 +1,14 @@
 <template>
   <div>
     <context-action-menu :menu-sections="menuSections" :action-options="{ resources: items }" />
-    <quota-modal
-      v-if="quotaModalIsOpen"
-      :cancel="closeQuotaModal"
-      :spaces="items"
-      :max-quota="maxQuota"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
-import { ContextActionMenu, QuotaModal } from '@ownclouders/web-pkg'
-import { useCapabilitySpacesMaxQuota, useStore } from '@ownclouders/web-pkg'
+import { ContextActionMenu } from '@ownclouders/web-pkg'
+import { useStore } from '@ownclouders/web-pkg'
 
 import {
   useSpaceActionsDelete,
@@ -28,7 +22,7 @@ import {
 
 export default defineComponent({
   name: 'ContextActions',
-  components: { ContextActionMenu, QuotaModal },
+  components: { ContextActionMenu },
   props: {
     items: {
       type: Array as PropType<SpaceResource[]>,
@@ -41,11 +35,7 @@ export default defineComponent({
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
-    const {
-      actions: editQuotaActions,
-      modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    const { actions: editQuotaActions } = useSpaceActionsEditQuota({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
@@ -93,10 +83,7 @@ export default defineComponent({
     })
 
     return {
-      maxQuota: useCapabilitySpacesMaxQuota(),
-      menuSections,
-      quotaModalIsOpen,
-      closeQuotaModal
+      menuSections
     }
   }
 })

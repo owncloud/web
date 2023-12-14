@@ -1,22 +1,39 @@
 import { Store } from 'vuex'
-import { computed, ref } from 'vue'
-import { SpaceAction } from '../types'
+import { computed } from 'vue'
+import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useStore } from '../../store'
+import { QuotaModal } from '../../../components'
 
 export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
+  store = store || useStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
 
-  const modalOpen = ref(false)
-
-  const closeModal = () => {
-    modalOpen.value = false
+  const getModalTitle = ({ resources }: { resources: SpaceResource[] }) => {
+    if (resources.length === 1) {
+      return $gettext('Change quota for Space "%{name}"', {
+        name: resources[0].name
+      })
+    }
+    return $gettext('Change quota for %{count} Spaces', {
+      count: resources.length.toString()
+    })
   }
 
-  const handler = () => {
-    modalOpen.value = true
+  const handler = ({ resources }: SpaceActionOptions) => {
+    return store.dispatch('createModal', {
+      variation: 'passive',
+      title: getModalTitle({ resources }),
+      customComponent: QuotaModal,
+      customComponentAttrs: () => ({
+        spaces: resources,
+        resourceType: 'space'
+      }),
+      hideActions: true
+    })
   }
 
   const actions = computed((): SpaceAction[] => [
@@ -42,8 +59,6 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
   ])
 
   return {
-    modalOpen,
-    closeModal,
     actions
   }
 }

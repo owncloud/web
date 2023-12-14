@@ -1,21 +1,78 @@
-import { computed, ref, unref } from 'vue'
+import { computed, unref, toRaw } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useAbility, useCapabilityReadOnlyUserAttributes } from '@ownclouders/web-pkg'
-import { UserAction } from '@ownclouders/web-pkg'
+import {
+  QuotaModal,
+  useAbility,
+  useCapabilityReadOnlyUserAttributes,
+  useStore,
+  UserAction,
+  UserActionOptions
+} from '@ownclouders/web-pkg'
+import { SpaceResource } from '@ownclouders/web-client'
+import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { User } from '@ownclouders/web-client/src/generated'
 
 export const useUserActionsEditQuota = () => {
+  const store = useStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
 
-  const modalOpen = ref(false)
-
-  const closeModal = () => {
-    modalOpen.value = false
+  const getModalTitle = ({ resources }: { resources: User[] }) => {
+    if (resources.length === 1) {
+      return $gettext('Change quota for user "%{name}"', {
+        name: resources[0].displayName
+      })
+    }
+    return $gettext('Change quota for %{count} users', {
+      count: resources.length.toString()
+    })
   }
 
-  const handler = () => {
-    modalOpen.value = true
+  const getUserDrives = ({ resources }: { resources: User[] }) => {
+    const selectedPersonalDrives: SpaceResource[] = []
+    resources.forEach((user) => {
+      const drive = toRaw(user.drive)
+      if (drive === undefined || drive.id === undefined) {
+        return
+      }
+      const spaceResource = {
+        id: drive.id,
+        name: user.displayName,
+        spaceQuota: drive.quota
+      } as SpaceResource
+      selectedPersonalDrives.push(spaceResource)
+    })
+    return selectedPersonalDrives
+  }
+
+  const handler = ({ resources }: UserActionOptions) => {
+    const usersWithoutDrive = resources.filter(
+      ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
+    )
+
+    return store.dispatch('createModal', {
+      variation: 'passive',
+      title: getModalTitle({ resources }),
+      customComponent: QuotaModal,
+      customComponentAttrs: () => ({
+        spaces: getUserDrives({ resources }),
+        resourceType: 'user',
+        warningMessage: usersWithoutDrive.length
+          ? $gettext('Quota will only be applied to users who logged in at least once.')
+          : '',
+        warningMessageContextualHelperData: usersWithoutDrive.length
+          ? {
+              title: $gettext('Unaffected users'),
+              text: [...usersWithoutDrive]
+                .sort((u1, u2) => u1.displayName.localeCompare(u2.displayName))
+                .map((user) => user.displayName)
+                .join(', ')
+            }
+          : {}
+      }),
+      hideActions: true
+    })
   }
 
   const actions = computed((): UserAction[] => [
@@ -47,8 +104,6 @@ export const useUserActionsEditQuota = () => {
   ])
 
   return {
-    modalOpen,
-    closeModal,
     actions
   }
 }
