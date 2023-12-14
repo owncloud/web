@@ -3,7 +3,11 @@
     v-bind="$attrs"
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
-      { condensed: viewMode === ViewModeConstants.condensedTable.name }
+      'files-table',
+      {
+        condensed: viewMode === ViewModeConstants.condensedTable.name,
+        'files-table-squashed': isSideBarOpen
+      }
     ]"
     :data="resources"
     :fields="fields"
@@ -358,6 +362,14 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
+    },
+    /**
+     * TODO
+     */
+    isSideBarOpen: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     /**
      * Sets the padding size for x axis

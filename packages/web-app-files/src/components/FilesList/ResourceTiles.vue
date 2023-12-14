@@ -1,5 +1,5 @@
 <template>
-  <div id="tiles-view">
+  <div id="tiles-view" class="oc-px-m oc-pt-l">
     <div v-if="sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
       <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
       <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
