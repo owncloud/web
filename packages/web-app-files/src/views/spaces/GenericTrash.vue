@@ -24,7 +24,7 @@
           v-else
           id="files-trashbin-table"
           v-model:selectedIds="selectedResourcesIds"
-          resource-type="file"
+          :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'ddate']"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="false"

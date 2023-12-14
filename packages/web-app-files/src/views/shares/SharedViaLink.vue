@@ -22,7 +22,7 @@
           v-else
           id="files-shared-via-link-table"
           v-model:selectedIds="selectedResourcesIds"
-          resource-type="file"
+          :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"

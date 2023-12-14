@@ -94,7 +94,7 @@
         <resource-table
           v-else
           v-model:selectedIds="selectedResourcesIds"
-          resource-type="file"
+          :is-side-bar-open="isSideBarOpen"
           :header-position="fileListHeaderY"
           :resources="paginatedResources"
           :are-paths-displayed="true"

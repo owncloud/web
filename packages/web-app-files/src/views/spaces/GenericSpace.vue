@@ -84,7 +84,6 @@
               :header-position="fileListHeaderY /* table */"
               :sort-fields="sortFields /* tiles */"
               :view-size="viewSize /* tiles */"
-              resource-type="file"
               @file-dropped="fileDropped"
               @file-click="triggerDefaultAction"
               @row-mounted="rowMounted"
