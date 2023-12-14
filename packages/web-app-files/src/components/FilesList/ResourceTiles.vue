@@ -35,8 +35,12 @@
       </oc-drop>
     </div>
     <oc-list class="oc-tiles oc-flex">
-      <li v-for="resource in data" :key="resource.id" class="oc-tiles-item has-item-context-menu">
-        <resource-tile
+      <li
+        v-for="resource in resources"
+        :key="resource.id"
+        class="oc-tiles-item has-item-context-menu"
+      >
+        <oc-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
@@ -148,7 +152,7 @@ export default defineComponent({
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles
      */
-    data: {
+    resources: {
       type: Array as PropType<Resource[]>,
       default: () => []
     },
