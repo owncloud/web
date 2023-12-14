@@ -2,13 +2,12 @@ import { computed } from 'vue'
 import { SpaceAction } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useRouter } from '../../router'
-import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client'
 import { createLocationTrash } from '../../../router'
 import { createFileRouteOptions } from '../../../helpers'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
-export const useSpaceActionsNavigateToTrash = ({ store }: { store?: Store<any> } = {}) => {
+export const useSpaceActionsNavigateToTrash = () => {
   const router = useRouter()
   const { $gettext } = useGettext()
 
