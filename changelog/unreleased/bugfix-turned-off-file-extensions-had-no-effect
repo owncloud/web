@@ -1,0 +1,6 @@
+Bugfix: Turned off file extensions had no effect
+
+We've fixed a bug where file extensions where shown in different views,
+like Search and AppTopBar even if the user turned them off via setting.
+
+https://github.com/owncloud/web/pull/10176
