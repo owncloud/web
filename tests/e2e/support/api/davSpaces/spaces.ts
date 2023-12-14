@@ -7,6 +7,8 @@ import convert from 'xml-js'
 import _ from 'lodash/object'
 import { createShare } from '../share'
 import { createTagsForResource } from '../graph/utils'
+import {forEach} from "lodash-es";
+import {data} from "autoprefixer";
 
 export const folderExists = async ({
   user,
@@ -181,7 +183,7 @@ export const getDataOfFileInsideSpace = async ({
   })
   checkResponseStatus(response, `Failed while getting information of file ${pathToFileName}`)
   const fileData = JSON.parse(convert.xml2json(await response.text(), { compact: true }))
-  return _.get(fileData, '[d:multistatus][d:response][d:propstat]')
+  return _.get(fileData, '[d:multistatus][d:response]')
 }
 
 export const getIdOfFileInsideSpace = async ({
@@ -194,15 +196,19 @@ export const getIdOfFileInsideSpace = async ({
   pathToFileName: string
   spaceType: string
   spaceName: string
-}): Promise<string> => {
+}): Promise<any> => {
   const fileDataResponse = await getDataOfFileInsideSpace({
     user,
     pathToFileName,
     spaceType,
     spaceName
   })
-  // extract file id form the response
-  return _.get(fileDataResponse, '[0][d:prop][oc:fileid]')._text
+    for (let key in fileDataResponse){
+            if(fileDataResponse[key]['d:propstat'][0]['d:prop']['oc:name']._text === pathToFileName){
+                return _.get(fileDataResponse[key], '[d:propstat][0][d:prop][oc:fileid]')._text
+            }
+    }
+    return Error(`Cannot find the file id for resource ${pathToFileName}`)
 }
 
 export const addMembersToTheProjectSpace = async ({

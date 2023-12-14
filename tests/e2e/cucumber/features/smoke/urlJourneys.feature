@@ -11,6 +11,9 @@ Feature: web can be navigated through urls
       | name   |
       | FOLDER |
     And "Alice" creates the following files into personal space using API
+      | pathToFile                    | content      |
+      | FOLDER/file_inside_folder.txt | example text |
+    And "Alice" creates the following files into personal space using API
       | pathToFile | content      |
       | lorem.txt  | some content |
     And "Alice" creates the following files into personal space using API
@@ -24,4 +27,13 @@ Feature: web can be navigated through urls
     And "Alice" shares the following resource using the direct url navigation
       | resource  | recipient | type | role     | resourceType |
       | lorem.txt | Brian     | user | Can view | file         |
+    When "Alice" opens the file "lorem.txt" directly in the browser
+    And "Alice" enters the text "Hello world" in editor "TextEditor"
+    And "Alice" saves the file viewer
+    And "Alice" closes the file viewer
+    When "Alice" opens the folder "FOLDER" directly in the browser
+    And "Alice" opens the following file in texteditor
+      | resource     |
+      | file_inside_folder.txt |
+    And "Alice" closes the file viewer
     And "Alice" logs out
