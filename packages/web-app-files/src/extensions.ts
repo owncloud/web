@@ -19,10 +19,12 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { actions: showSharesActions } = useFileActionsShowShares()
   const { actions: quickLinkActions } = useFileActionsCopyQuickLink()
 
+  const panels = sideBarPanels()
+
   return computed(
     () =>
       [
-        ...unref(sideBarPanels()),
+        ...unref(panels),
         {
           id: 'com.github.owncloud.web.files.search',
           type: 'search',
