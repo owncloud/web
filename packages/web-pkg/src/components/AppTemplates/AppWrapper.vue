@@ -14,7 +14,7 @@
       class="oc-flex oc-width-1-1 oc-height-1-1"
       :class="{ 'app-sidebar-open': isSideBarOpen }"
     >
-      <slot v-bind="slotAttrs" />
+      <slot class="oc-height-1-1 oc-width-1-1" v-bind="slotAttrs" />
       <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
   </main>
