@@ -6,11 +6,11 @@ import * as directives from './directives'
 
 const initializeCustomProps = (tokens = [], prefix) => {
   for (const param in tokens) {
-    initializeCustomProp(prefix + param, tokens[param])
+    applyCustomProp(prefix + param, tokens[param])
   }
 }
 
-const initializeCustomProp = (key: string, value: string | undefined) => {
+export const applyCustomProp = (key: string, value: string | undefined) => {
   if (value === undefined) {
     return
   }
@@ -25,7 +25,7 @@ export default {
     initializeCustomProps(themeOptions?.fontSizes, 'font-size-')
     initializeCustomProps(themeOptions?.sizes, 'size-')
     initializeCustomProps(themeOptions?.spacing, 'space-')
-    initializeCustomProp('font-family', themeOptions?.fontFamily)
+    applyCustomProp('font-family', themeOptions?.fontFamily)
 
     Object.values(components).forEach((c) => app.component(c.name, c))
     Object.values(directives).forEach((d) => app.directive(d.name, d))
