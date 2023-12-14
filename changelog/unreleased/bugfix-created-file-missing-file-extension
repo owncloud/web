@@ -1,0 +1,8 @@
+Bugfix: Created file missing extension when file extensions not shown is active
+
+We've fixed a bug where the file extension was missing,
+when the user set the file extensions not shown configuration option.
+This affected files that are handled via external applications, for example Microsoft Excel.
+
+https://github.com/owncloud/web/issues/10170
+https://github.com/owncloud/web/pull/10169
