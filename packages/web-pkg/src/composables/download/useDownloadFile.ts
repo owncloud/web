@@ -5,12 +5,19 @@ import { useStore } from '../store'
 import { triggerDownloadWithFilename } from '../../../src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
+import { Store } from 'vuex'
+import { ClientService } from '../../services'
 
-export const useDownloadFile = () => {
-  const store = useStore()
+export interface DownloadFileOptions {
+  store?: Store<any>
+  clientService?: ClientService
+}
+
+export const useDownloadFile = (options?: DownloadFileOptions) => {
+  const store = options?.store || useStore()
   const isPublicLinkContext = usePublicLinkContext({ store })
   const isUrlSigningEnabled = useCapabilityCoreSupportUrlSigning()
-  const clientService = useClientService()
+  const clientService = options?.clientService || useClientService()
   const { $gettext } = useGettext()
 
   const downloadFile = async (file, version = null) => {

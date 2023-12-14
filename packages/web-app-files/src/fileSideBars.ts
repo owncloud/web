@@ -200,6 +200,9 @@ export const sideBarPanels = () => {
             icon: 'git-branch',
             title: () => $gettext('Versions'),
             component: FileVersions,
+            componentAttrs: () => ({
+              isReadOnly: !unref(isFilesAppActive)
+            }),
             isVisible: ({ items }) => {
               if (items?.length !== 1) {
                 return false

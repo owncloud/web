@@ -1,7 +1,7 @@
 <template>
   <div id="oc-file-versions-sidebar" class="-oc-mt-s">
-    <oc-loader v-if="loading" />
-    <ul v-if="!loading && hasVersion" class="oc-m-rm oc-position-relative">
+    <oc-loader v-if="areVersionsLoading" />
+    <ul v-else-if="versions.length" class="oc-m-rm oc-position-relative">
       <li class="spacer oc-pb-l" aria-hidden="true"></li>
       <li
         v-for="(item, index) in versions"
@@ -21,13 +21,13 @@
           }}</span>
         </div>
         <oc-list id="oc-file-versions-sidebar-actions" class="oc-pt-xs">
-          <li v-if="isRevertable">
+          <li v-if="isRevertible">
             <oc-button
               data-testid="file-versions-revert-button"
               appearance="raw"
               :aria-label="$gettext('Restore')"
               class="version-action-item oc-width-1-1 oc-rounded oc-button-justify-content-left oc-button-gap-m oc-py-s oc-px-m oc-display-block"
-              @click="revertVersion(item)"
+              @click="revertToVersion(item)"
             >
               <oc-icon name="history" class="oc-icon-m oc-mr-s -oc-mt-xs" fill-type="line" />
               {{ $gettext('Restore') }}
@@ -54,93 +54,126 @@
   </div>
 </template>
 <script lang="ts">
-import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
-import { formatRelativeDateFromHTTP, formatFileSize } from '@ownclouders/web-pkg'
-import { defineComponent, inject, ref, Ref } from 'vue'
+import {
+  formatRelativeDateFromHTTP,
+  formatDateFromJSDate,
+  formatFileSize,
+  useClientService,
+  useDownloadFile,
+  useStore
+} from '@ownclouders/web-pkg'
+import { computed, defineComponent, inject, Ref, unref, watch } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
-import { useClientService } from '@ownclouders/web-pkg/src/composables'
-import { formatDateFromJSDate } from '@ownclouders/web-pkg'
-import { useDownloadFile } from '@ownclouders/web-pkg'
+import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'FileVersions',
-  setup() {
-    const clientService = useClientService()
-    const loading = ref(false)
-
-    return {
-      ...useDownloadFile(),
-      space: inject<Ref<SpaceResource>>('space'),
-      resource: inject<Ref<Resource>>('resource'),
-      clientService,
-      loading
+  props: {
+    isReadOnly: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
-  computed: {
-    ...mapGetters('Files', ['versions']),
-    hasVersion() {
-      return this.versions.length > 0
-    },
-    isRevertable() {
-      if ((this.space && isShareSpaceResource(this.space)) || this.resource.isReceivedShare()) {
-        if (this.resource.permissions !== undefined) {
-          return this.resource.permissions.includes(DavPermission.Updateable)
-        }
+  setup(props) {
+    const store = useStore()
+    const clientService = useClientService()
+    const { current: currentLanguage } = useGettext()
+    const { downloadFile } = useDownloadFile({ store, clientService })
 
-        if (this.resource.share?.role) {
-          return this.resource.share.role.hasPermission(SharePermissions.update)
+    const space = inject<Ref<SpaceResource>>('space')
+    const resource = inject<Ref<Resource>>('resource')
+
+    const versions = computed(() => {
+      return store.getters['Files/versions']
+    })
+
+    const fetchVersionsTask = useTask(function* () {
+      yield store.dispatch('Files/loadVersions', {
+        client: clientService.webdav,
+        fileId: unref(resource).fileId
+      })
+    })
+    const areVersionsLoading = computed(() => {
+      return !fetchVersionsTask.last || fetchVersionsTask.isRunning
+    })
+    watch(
+      [() => unref(resource)?.id, () => unref(resource)?.etag],
+      ([id, etag]) => {
+        if (!id || !etag) {
+          return
+        }
+        fetchVersionsTask.perform()
+      },
+      {
+        immediate: true
+      }
+    )
+
+    const isRevertible = computed(() => {
+      if (props.isReadOnly) {
+        return false
+      }
+
+      if (isShareSpaceResource(unref(space)) || unref(resource).isReceivedShare()) {
+        if (unref(resource).permissions !== undefined) {
+          return unref(resource).permissions.includes(DavPermission.Updateable)
+        }
+        if (unref(resource).share?.role) {
+          return unref(resource).share.role.hasPermission(SharePermissions.update)
         }
       }
 
       return true
-    }
-  },
-  watch: {
-    resource() {
-      if (this.resource) {
-        this.fetchFileVersions()
-      }
-    }
-  },
-  mounted() {
-    this.fetchFileVersions()
-  },
-  methods: {
-    ...mapActions('Files', ['loadVersions']),
-    ...mapMutations('Files', ['UPDATE_RESOURCE_FIELD']),
+    })
 
-    async fetchFileVersions() {
-      this.loading = true
-      await this.loadVersions({ client: this.clientService.webdav, fileId: this.resource.fileId })
-      this.loading = false
-    },
-    async revertVersion(file: Resource) {
-      const { id } = this.resource
-      await this.clientService.webdav.restoreFileVersion(this.space, this.resource, file.name)
-      const resource = await this.clientService.webdav.getFileInfo(this.space, this.resource)
+    const revertToVersion = async (version: Resource) => {
+      await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name)
+      const restoredResource = await clientService.webdav.getFileInfo(unref(space), unref(resource))
 
       const fieldsToUpdate = ['size', 'mdate']
       for (const field of fieldsToUpdate) {
-        if (this.resource[field]) {
-          this.UPDATE_RESOURCE_FIELD({ id, field, value: resource[field] })
+        if (Object.prototype.hasOwnProperty.call(unref(resource), field)) {
+          store.commit('Files/UPDATE_RESOURCE_FIELD', {
+            id: unref(resource).id,
+            field,
+            value: restoredResource[field]
+          })
         }
       }
 
-      this.fetchFileVersions()
-    },
-    downloadVersion(file: Resource) {
-      return this.downloadFile(this.resource, file.name)
-    },
-    formatVersionDateRelative(file: Resource) {
-      return formatRelativeDateFromHTTP(file.mdate, this.$language.current)
-    },
-    formatVersionDate(file: Resource) {
-      return formatDateFromJSDate(new Date(file.mdate), this.$language.current)
-    },
-    formatVersionFileSize(file: Resource) {
-      return formatFileSize(file.size, this.$language.current)
+      fetchVersionsTask.perform()
+    }
+    const downloadVersion = (version: Resource) => {
+      return downloadFile(unref(resource), version.name)
+    }
+    const formatVersionDateRelative = (version: Resource) => {
+      return formatRelativeDateFromHTTP(version.mdate, currentLanguage)
+    }
+    const formatVersionDate = (version: Resource) => {
+      return formatDateFromJSDate(new Date(version.mdate), currentLanguage)
+    }
+    const formatVersionFileSize = (version: Resource) => {
+      return formatFileSize(version.size, currentLanguage)
+    }
+
+    return {
+      space,
+      resource,
+      versions,
+      areVersionsLoading,
+      isRevertible,
+      revertToVersion,
+      downloadVersion,
+      formatVersionDateRelative,
+      formatVersionDate,
+      formatVersionFileSize,
+
+      // HACK: exported for unit tests
+      fetchVersionsTask
     }
   }
 })
