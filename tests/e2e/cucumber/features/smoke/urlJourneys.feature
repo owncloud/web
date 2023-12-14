@@ -1,7 +1,7 @@
 Feature: web can be navigated through urls
 
 
-  Scenario: Alice can share this weeks meal plan with all parents
+  Scenario: navigate web directly through urls
     Given "Admin" creates following user using API
       | id    |
       | Alice |

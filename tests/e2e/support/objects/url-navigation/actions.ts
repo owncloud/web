@@ -20,6 +20,6 @@ export const navigateToDetailsPanelOfResource = async (
     spaceType: 'personal',
     spaceName: user.displayName
   })
-  const fullUrl = config.backendUrl + '/f/' + fileId + `?details=${detailsPanel}`
+  const fullUrl = `${config.backendUrl}/f/${fileId}?details=${detailsPanel}`
   await page.goto(fullUrl)
 }
