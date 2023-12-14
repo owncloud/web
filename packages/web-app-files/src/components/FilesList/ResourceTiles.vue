@@ -124,6 +124,7 @@ import {
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
@@ -139,7 +140,7 @@ import {
   useMessages,
   useResourceRouteResolver,
   useTileSize,
-  ViewModeConstants,
+  FolderViewModeConstants,
   ResourceGhostElement,
   ResourceTile,
   useResourcesStore
@@ -192,7 +193,7 @@ export default defineComponent({
     viewSize: {
       type: Number,
       required: false,
-      default: () => ViewModeConstants.tilesSizeDefault
+      default: () => FolderViewModeConstants.tilesSizeDefault
     },
     dragDrop: {
       type: Boolean,

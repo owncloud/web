@@ -74,7 +74,7 @@ import BatchActions from '../BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
 import ViewOptions from '../ViewOptions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
-import { ViewMode } from '../../ui/types'
+import { FolderView } from '../../ui/types'
 import {
   useFileActionsAcceptShare,
   useFileActionsCopy,
@@ -93,7 +93,7 @@ import {
   useResourcesStore,
   useRouteMeta,
   useSpacesStore,
-  ViewModeConstants
+  FolderViewModeConstants
 } from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from '../../composables'
@@ -120,7 +120,7 @@ export default defineComponent({
     viewModeDefault: {
       type: String,
       required: false,
-      default: () => ViewModeConstants.default.name
+      default: () => FolderViewModeConstants.name.table
     },
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
@@ -131,7 +131,7 @@ export default defineComponent({
       default: () => []
     },
     viewModes: {
-      type: Array as PropType<ViewMode[]>,
+      type: Array as PropType<FolderView[]>,
       default: () => []
     },
     hasBulkActions: { type: Boolean, default: false },
@@ -315,8 +315,9 @@ export default defineComponent({
       const rightSidebarWidth =
         document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
 
-      const rightControlsWidth = document.getElementById('files-app-bar-controls-right')
-        ?.clientWidth
+      const rightControlsWidth = document.getElementById(
+        'files-app-bar-controls-right'
+      )?.clientWidth
 
       this.breadcrumbMaxWidth =
         totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth

@@ -10,7 +10,7 @@
         :has-pagination="false"
         :is-side-bar-open="isSideBarOpen"
         :view-modes="viewModes"
-        :view-mode-default="ViewModeConstants.tilesView.name"
+        :view-mode-default="FolderViewModeConstants.name.tiles"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" class="oc-mr-s" />
@@ -58,7 +58,7 @@
             @row-mounted="rowMounted"
           >
             <template #image="{ resource }">
-              <template v-if="viewMode === ViewModeConstants.tilesView.name">
+              <template v-if="viewMode === FolderViewModeConstants.name.tiles">
                 <img
                   v-if="imageContentObject[resource.id]"
                   class="tile-preview"
@@ -155,7 +155,8 @@ import {
   AppLoadingSpinner,
   useConfigStore,
   useResourcesStore,
-  useSpacesStore
+  useSpacesStore,
+  FolderViewExtension
 } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
@@ -163,7 +164,7 @@ import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
   useClientService,
-  ViewModeConstants,
+  FolderViewModeConstants,
   useRouteQueryPersisted,
   useSort,
   useRouteName,
@@ -320,13 +321,21 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-    const viewModes = computed(() => [ViewModeConstants.default, ViewModeConstants.tilesView])
+
+    const extensionRegistry = useExtensionRegistry()
+    const viewModes = computed(() => {
+      return [
+        ...extensionRegistry
+          .requestExtensions<FolderViewExtension>('folderView', ['space'])
+          .map((e) => e.folderView)
+      ]
+    })
 
     const routeName = useRouteName()
 
     const viewMode = useRouteQueryPersisted({
-      name: `${unref(routeName)}-${ViewModeConstants.queryName}`,
-      defaultValue: ViewModeConstants.tilesView.name
+      name: `${unref(routeName)}-${FolderViewModeConstants.queryName}`,
+      defaultValue: FolderViewModeConstants.name.tiles
     })
 
     const keyActions = useKeyboardActions()
@@ -417,12 +426,12 @@ export default defineComponent({
       })
 
       const processor =
-        unref(viewMode) === ViewModeConstants.tilesView.name
+        unref(viewMode) === FolderViewModeConstants.name.tiles
           ? ProcessorType.enum.fit
           : ProcessorType.enum.thumbnail
 
       const dimensions =
-        unref(viewMode) === ViewModeConstants.tilesView.name
+        unref(viewMode) === FolderViewModeConstants.name.tiles
           ? ImageDimension.Tile
           : ImageDimension.Thumbnail
 
@@ -440,13 +449,7 @@ export default defineComponent({
     }
 
     const folderView = computed(() => {
-      if (unref(viewMode) === ViewModeConstants.tilesView.name) {
-        return { component: 'resource-tiles' }
-      } else if (unref(viewMode) === ViewModeConstants.default.name) {
-        return { component: 'resource-table' }
-      } else {
-        throw new Error('unsupported viewMode')
-      }
+      return unref(viewModes).find((v) => v.name === unref(viewMode))
     })
 
     return {
@@ -466,7 +469,7 @@ export default defineComponent({
       viewMode,
       folderView,
       tableDisplayFields,
-      ViewModeConstants,
+      FolderViewModeConstants,
       getManagerNames,
       getTotalQuota,
       getUsedQuota,

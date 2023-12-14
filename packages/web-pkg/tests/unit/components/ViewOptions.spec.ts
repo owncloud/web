@@ -3,7 +3,7 @@ import { defaultPlugins, defaultComponentMocks, mount, RouteLocation } from 'web
 import { mock } from 'jest-mock-extended'
 import ViewOptions from '../../../src/components/ViewOptions.vue'
 import {
-  ViewModeConstants,
+  FolderViewModeConstants,
   useResourcesStore,
   useRouteQuery,
   useRouteQueryPersisted
@@ -96,7 +96,9 @@ describe('ViewOptions component', () => {
     })
     it('shows if more than one viewModes are passed', () => {
       const { wrapper } = getWrapper({
-        props: { viewModes: [ViewModeConstants.condensedTable, ViewModeConstants.default] }
+        props: {
+          viewModes: [FolderViewModeConstants.condensedTable, FolderViewModeConstants.default]
+        }
       })
       expect(wrapper.find(selectors.viewModeSwitchBtns).exists()).toBeTruthy()
     })
@@ -108,14 +110,14 @@ describe('ViewOptions component', () => {
     })
     it('shows if the viewModes include "resource-tiles"', () => {
       const { wrapper } = getWrapper({
-        props: { viewModes: [ViewModeConstants.tilesView] }
+        props: { viewModes: [FolderViewModeConstants.tilesView] }
       })
       expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeTruthy()
     })
     it.each([1, 2, 3, 4, 5, 6])('applies the correct size step', (tileSize) => {
       const { mocks } = getWrapper({
         tileSize: tileSize.toString(),
-        props: { viewModes: [ViewModeConstants.tilesView] }
+        props: { viewModes: [FolderViewModeConstants.tilesView] }
       })
       expect(unref(mocks.tileSizeQueryMock)).toBe(tileSize.toString())
     })
@@ -124,7 +126,7 @@ describe('ViewOptions component', () => {
 
 function getWrapper({
   perPage = '100',
-  viewMode = ViewModeConstants.default.name,
+  viewMode = FolderViewModeConstants.name.table,
   tileSize = '1',
   props = {},
   currentPage = '1'

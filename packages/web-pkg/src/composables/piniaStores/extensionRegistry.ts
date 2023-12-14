@@ -5,6 +5,7 @@ import { Ref, unref } from 'vue'
 import { AppNavigationItem } from '../../apps'
 import { Item } from '@ownclouders/web-client/src/helpers'
 import { useConfigStore } from './config'
+import { FolderView } from '../../ui'
 
 export type ExtensionScope = 'resource' | 'user' | 'group' | string
 
@@ -35,11 +36,17 @@ export interface SidebarPanelExtension<R extends Item, P extends Item, T extends
   panel: SideBarPanel<R, P, T>
 }
 
+export interface FolderViewExtension extends BaseExtension {
+  type: 'folderView'
+  folderView: FolderView
+}
+
 export type Extension =
   | ActionExtension
   | SearchExtension
   | SidebarNavExtension
   | SidebarPanelExtension<Item, Item, Item>
+  | FolderViewExtension
 
 export const useExtensionRegistry = () => {
   const configStore = useConfigStore()

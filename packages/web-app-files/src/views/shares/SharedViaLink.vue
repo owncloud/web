@@ -20,7 +20,6 @@
         </no-content-message>
         <resource-table
           v-else
-          id="files-shared-via-link-table"
           v-model:selectedIds="selectedResourcesIds"
           :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'sharedWith', 'sdate']"

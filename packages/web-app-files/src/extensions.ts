@@ -8,7 +8,8 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
-import { sideBarPanels } from './fileSideBars'
+import { useSideBarPanels } from './composables/extensions/useFileSideBars'
+import { useFolderViews } from './composables/extensions/useFolderViews'
 
 export const extensions = () => {
   const capabilityStore = useCapabilityStore()
@@ -18,11 +19,13 @@ export const extensions = () => {
   const { actions: showSharesActions } = useFileActionsShowShares()
   const { actions: quickLinkActions } = useFileActionsCopyQuickLink()
 
-  const panels = sideBarPanels()
+  const panels = useSideBarPanels()
+  const folderViews = useFolderViews()
 
   return computed(
     () =>
       [
+        ...unref(folderViews),
         ...unref(panels),
         {
           id: 'com.github.owncloud.web.files.search',
