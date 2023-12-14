@@ -371,10 +371,12 @@ Details
    https://github.com/owncloud/web/issues/9403
    https://github.com/owncloud/web/issues/9885
    https://github.com/owncloud/web/issues/9939
+   https://github.com/owncloud/web/issues/10146
    https://github.com/owncloud/web/pull/8855
    https://github.com/owncloud/web/pull/9396
    https://github.com/owncloud/web/pull/9401
    https://github.com/owncloud/web/pull/9698
+   https://github.com/owncloud/web/pull/10151
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
