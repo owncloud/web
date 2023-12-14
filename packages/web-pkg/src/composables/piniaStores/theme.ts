@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { ref, computed, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
+import { applyCustomProp } from 'design-system/src/'
 
 const AppBanner = z.object({
   title: z.string().optional(),
@@ -27,6 +28,7 @@ const CommonSection = z.object({
 const DesignTokens = z.object({
   breakpoints: z.record(z.string()).optional(),
   colorPalette: z.record(z.string()).optional(),
+  fontFamily: z.string().optional(),
   fontSizes: z.record(z.string()).optional(),
   sizes: z.record(z.string()).optional(),
   spacing: z.record(z.string()).optional()
@@ -123,11 +125,13 @@ export const useThemeStore = defineStore('theme', () => {
       { name: 'spacing', prefix: 'spacing' }
     ]
 
+    applyCustomProp('font-family', unref(currentTheme).designTokens.fontFamily)
+
     customizableDesignTokens.forEach((token) => {
       for (const param in unref(currentTheme).designTokens[token.name]) {
-        ;(document.querySelector(':root') as HTMLElement).style.setProperty(
-          `--oc-${token.prefix}-${param}`,
-          theme.designTokens[token.name][param]
+        applyCustomProp(
+          `${token.prefix}-${param}`,
+          unref(currentTheme).designTokens[token.name][param]
         )
       }
     })
