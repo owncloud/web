@@ -255,9 +255,16 @@ export default defineConfig(async ({ mode, command }) => {
           configureServer(server: ViteDevServer) {
             server.middlewares.use(async (request, response, next) => {
               if (request.url === '/config.json') {
-                response.statusCode = 200
-                response.setHeader('Content-Type', 'application/json')
-                response.end(JSON.stringify(await getConfigJson(configUrl, config)))
+                try {
+                  const configJson = await getConfigJson(configUrl, config)
+                  response.statusCode = 200
+                  response.setHeader('Content-Type', 'application/json')
+                  response.end(JSON.stringify(configJson))
+                } catch (e) {
+                  response.statusCode = 502
+                  response.setHeader('Content-Type', 'application/json')
+                  response.end(JSON.stringify(e))
+                }
                 return
               }
               next()
