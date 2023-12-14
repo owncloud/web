@@ -51,7 +51,7 @@
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
-          @contextmenu="showContextMenu($event, resource.id, tileRefs.tiles[resource.id])"
+          @contextmenu="showContextMenu($event, resource, tileRefs.tiles[resource.id])"
           @click="emitTileClick(resource)"
           @dragstart="dragStart(resource, $event)"
           @dragenter.prevent="setDropStyling(resource, false, $event)"
@@ -83,7 +83,7 @@
               @quick-action-clicked="showContextMenuOnBtnClick($event, resource, resource.id)"
             >
               <template #contextMenu>
-                <slot name="contextMenuActions" :resource="resource" />
+                <slot name="contextMenu" :resource="resource" />
               </template>
             </context-menu-quick-action>
           </template>
@@ -204,6 +204,7 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
+    const { emit } = context
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
@@ -265,20 +266,27 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
     }
 
-    const showContextMenu = (event, index, reference) => {
+    const isResourceSelected = (resource) => {
+      return props.selectedIds.includes(resource.id)
+    }
+
+    const emitSelect = (selectedIds) => {
+      emit('update:selectedIds', selectedIds)
+    }
+
+    const showContextMenu = (event, item: Resource, reference) => {
       event.preventDefault()
-      const drop = unref(tileRefs).tiles[index]?.$el.getElementsByClassName(
+      const drop = unref(tileRefs).tiles[item.id]?.$el.getElementsByClassName(
         'resource-tiles-btn-action-dropdown'
       )[0]
 
       if (drop === undefined) {
         return
       }
+      if (!isResourceSelected(item)) {
+        emitSelect([item.id])
+      }
       displayPositionedDropdown(drop._tippy, event, reference)
-    }
-
-    const isResourceSelected = (resource) => {
-      return props.selectedIds.includes(resource.id)
     }
 
     const toggleTile = (data) => {

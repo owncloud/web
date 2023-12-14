@@ -77,7 +77,7 @@
               :view-mode="viewMode"
               :target-route-callback="resourceTargetRouteCallback"
               :space="space"
-              :are-thumbnails-displayed="displayThumbnails /*table*/"
+              :are-thumbnails-displayed="displayThumbnails"
               :drag-drop="true"
               :sort-by="sortBy"
               :sort-dir="sortDir"
@@ -90,10 +90,6 @@
                   v-if="isResourceInSelection(resource)"
                   :action-options="{ space, resources: selectedResources }"
                 />
-              </template>
-
-              <template #contextMenuActions="{ resource }">
-                <context-actions :action-options="{ space, resources: [resource] }" />
               </template>
 
               <template #footer>

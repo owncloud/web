@@ -73,7 +73,7 @@
                 <oc-icon name="group" fill-type="line" />
               </oc-button>
             </template>
-            <template #contextMenuActions="{ resource }">
+            <template #contextMenu="{ resource }">
               <space-context-actions
                 :action-options="{ resources: [resource] as SpaceResource[] }"
               />
