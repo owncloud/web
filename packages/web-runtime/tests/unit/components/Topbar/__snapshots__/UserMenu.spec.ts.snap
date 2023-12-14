@@ -22,13 +22,13 @@ exports[`User Menu component when no quota and email is set the user menu does n
           <span>Settings</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
           <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
           <span>Log out</span>
         </oc-button-stub>
       </li>
-      <!--v-if-->
     </oc-list-stub>
     <!--v-if-->
   </oc-drop-stub>
@@ -57,13 +57,13 @@ exports[`User Menu component when no quota and no email is set the user menu doe
           <span>Settings</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
           <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
           <span>Log out</span>
         </oc-button-stub>
       </li>
-      <!--v-if-->
     </oc-list-stub>
     <!--v-if-->
   </oc-drop-stub>
@@ -92,12 +92,6 @@ exports[`User Menu component when quota and no email is set renders a navigation
           <span>Settings</span>
         </oc-button-stub>
       </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
         <div class="storage-wrapper-text oc-width-1-1">
@@ -107,6 +101,12 @@ exports[`User Menu component when quota and no email is set renders a navigation
           </p>
           <oc-progress-stub max="100" size="small" value="30" variation="primary"></oc-progress-stub>
         </div>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+          <span>Log out</span>
+        </oc-button-stub>
       </li>
     </oc-list-stub>
     <!--v-if-->
@@ -136,12 +136,6 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
           <span>Settings</span>
         </oc-button-stub>
       </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
         <div class="storage-wrapper-text oc-width-1-1">
@@ -151,6 +145,12 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
           </p>
           <oc-progress-stub max="100" size="small" value="81" variation="warning"></oc-progress-stub>
         </div>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+          <span>Log out</span>
+        </oc-button-stub>
       </li>
     </oc-list-stub>
     <!--v-if-->
@@ -180,12 +180,6 @@ exports[`User Menu component when quota is above 90% renders a danger quota prog
           <span>Settings</span>
         </oc-button-stub>
       </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
         <div class="storage-wrapper-text oc-width-1-1">
@@ -195,6 +189,12 @@ exports[`User Menu component when quota is above 90% renders a danger quota prog
           </p>
           <oc-progress-stub max="100" size="small" value="91" variation="danger"></oc-progress-stub>
         </div>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+          <span>Log out</span>
+        </oc-button-stub>
       </li>
     </oc-list-stub>
     <!--v-if-->
@@ -224,12 +224,6 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
           <span>Settings</span>
         </oc-button-stub>
       </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
         <div class="storage-wrapper-text oc-width-1-1">
@@ -239,6 +233,12 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
           </p>
           <oc-progress-stub max="100" size="small" value="30" variation="primary"></oc-progress-stub>
         </div>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+          <span>Log out</span>
+        </oc-button-stub>
       </li>
     </oc-list-stub>
     <!--v-if-->
@@ -268,12 +268,6 @@ exports[`User Menu component when quota is not defined renders no percentag of t
           <span>Settings</span>
         </oc-button-stub>
       </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
         <div class="storage-wrapper-text oc-width-1-1">
@@ -283,6 +277,12 @@ exports[`User Menu component when quota is not defined renders no percentag of t
           </p>
           <!--v-if-->
         </div>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+          <span>Log out</span>
+        </oc-button-stub>
       </li>
     </oc-list-stub>
     <!--v-if-->
@@ -312,12 +312,6 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
           <span>Settings</span>
         </oc-button-stub>
       </li>
-      <li>
-        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
-          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
-          <span>Log out</span>
-        </oc-button-stub>
-      </li>
       <li class="storage-wrapper oc-pl-s">
         <oc-icon-stub class="oc-p-xs" fill-type="line" name="cloud"></oc-icon-stub>
         <div class="storage-wrapper-text oc-width-1-1">
@@ -327,6 +321,12 @@ exports[`User Menu component when quota is unlimited renders no percentag of tot
           </p>
           <!--v-if-->
         </div>
+      </li>
+      <li>
+        <oc-button-stub appearance="raw" id="oc-topbar-account-logout">
+          <oc-icon-stub class="oc-p-xs" fill-type="line" name="logout-box-r"></oc-icon-stub>
+          <span>Log out</span>
+        </oc-button-stub>
       </li>
     </oc-list-stub>
     <!--v-if-->

@@ -80,12 +80,6 @@
               <span v-text="$gettext(app.title)" />
             </oc-button>
           </li>
-          <li>
-            <oc-button id="oc-topbar-account-logout" appearance="raw" @click="logout">
-              <oc-icon name="logout-box-r" fill-type="line" class="oc-p-xs" />
-              <span v-text="$gettext('Log out')" />
-            </oc-button>
-          </li>
           <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">
             <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
             <div class="storage-wrapper-text oc-width-1-1">
@@ -101,6 +95,12 @@
                 :variation="quotaProgressVariant"
               />
             </div>
+          </li>
+          <li>
+            <oc-button id="oc-topbar-account-logout" appearance="raw" @click="logout">
+              <oc-icon name="logout-box-r" fill-type="line" class="oc-p-xs" />
+              <span v-text="$gettext('Log out')" />
+            </oc-button>
           </li>
         </template>
       </oc-list>
@@ -243,6 +243,7 @@ export default defineComponent({
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -284,6 +285,7 @@ export default defineComponent({
   margin-left: calc(var(--oc-space-small) * -1);
   width: calc(100% + var(--oc-space-small) * 2);
   margin-bottom: calc(var(--oc-space-small) * -1) !important;
+
   a {
     font-size: var(--oc-font-size-medium) !important;
     color: var(--oc-color-text-default);
