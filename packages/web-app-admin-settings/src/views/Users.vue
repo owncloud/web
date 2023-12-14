@@ -16,15 +16,15 @@
       <template #topbarActions>
         <div>
           <oc-button
-            v-if="!createUsersDisabled"
+            v-if="createUserAction.isEnabled()"
             id="create-user-btn"
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
-            @click="onToggleCreateUserModal"
+            @click="createUserAction.handler()"
           >
-            <oc-icon name="add" />
-            <span v-text="$gettext('New user')" />
+            <oc-icon :name="createUserAction.icon" />
+            <span v-text="createUserAction.label()" />
           </oc-button>
         </div>
       </template>
@@ -150,11 +150,6 @@
       @cancel="() => (editLoginModalIsOpen = false)"
       @confirm="editLoginForUsers"
     />
-    <create-user-modal
-      v-if="createUserModalOpen"
-      @cancel="onToggleCreateUserModal"
-      @confirm="onCreateUser"
-    />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -170,7 +165,6 @@
 <script lang="ts">
 import AppTemplate from '../components/AppTemplate.vue'
 import UsersList from '../components/Users/UsersList.vue'
-import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
@@ -181,7 +175,8 @@ import {
   useUserActionsRemoveFromGroups,
   useUserActionsAddToGroups,
   useUserActionsEditLogin,
-  useUserActionsEditQuota
+  useUserActionsEditQuota,
+  useUserActionsCreateUser
 } from '../composables'
 import { SpaceResource } from '@ownclouders/web-client'
 import { Drive, User, Group } from '@ownclouders/web-client/src/generated'
@@ -194,7 +189,6 @@ import {
   eventBus,
   queryItemAsString,
   useAccessToken,
-  useCapabilityCreateUsersDisabled,
   useCapabilitySpacesMaxQuota,
   useClientService,
   useConfigurationManager,
@@ -232,7 +226,6 @@ export default defineComponent({
     AppLoadingSpinner,
     AppTemplate,
     UsersList,
-    CreateUserModal,
     ContextActions,
     ItemFilter,
     QuotaModal,
@@ -248,7 +241,6 @@ export default defineComponent({
     const clientService = useClientService()
     const loadingService = useLoadingService()
     const configurationManager = useConfigurationManager()
-    const createUsersDisabled = useCapabilityCreateUsersDisabled()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -259,6 +251,9 @@ export default defineComponent({
     const itemsPerPage = computed(() => {
       return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
     })
+
+    const { actions: createUserActions } = useUserActionsCreateUser()
+    const createUserAction = computed(() => unref(createUserActions)[0])
 
     const { actions: deleteActions } = useUserActionsDelete({ store })
     const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups()
@@ -281,7 +276,6 @@ export default defineComponent({
     )
     const isFilteringMandatory = ref(configurationManager.options.userListRequiresFilter)
     const sideBarLoading = ref(false)
-    const createUserModalOpen = ref(false)
     const addToGroupsModalIsOpen = ref(false)
     const removeFromGroupsModalIsOpen = ref(false)
     const editLoginModalIsOpen = ref(false)
@@ -289,11 +283,14 @@ export default defineComponent({
     const displayNameQuery = useRouteQuery('q_displayName')
     const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
     const markInstance = ref(null)
-    let loadResourcesEventToken
-    let addToGroupsActionEventToken
-    let removeFromGroupsActionEventToken
-    let editLoginActionEventToken
-    let editQuotaActionEventToken
+
+    let loadResourcesEventToken: string
+    let addToGroupsActionEventToken: string
+    let removeFromGroupsActionEventToken: string
+    let editLoginActionEventToken: string
+    let editQuotaActionEventToken: string
+    let addUserEventToken: string
+
     const addToGroupsModalTitle = computed(() => {
       return $ngettext(
         'Add user "%{user}" to groups',
@@ -562,6 +559,10 @@ export default defineComponent({
         }
       )
 
+      addUserEventToken = eventBus.subscribe('app.admin-settings.users.add', (user) => {
+        users.value.push(user)
+      })
+
       addToGroupsActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.actions.add-to-groups',
         () => {
@@ -588,6 +589,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.admin-settings.users.add', addUserEventToken)
       eventBus.unsubscribe(
         'app.admin-settings.users.actions.add-to-groups',
         addToGroupsActionEventToken
@@ -844,28 +846,6 @@ export default defineComponent({
       return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
     })
 
-    const onToggleCreateUserModal = () => {
-      createUserModalOpen.value = !unref(createUserModalOpen)
-    }
-    const onCreateUser = async (user) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const { id: createdUserId } = (await client.users.createUser(user))?.data
-        const { data: createdUser } = await client.users.getUser(createdUserId)
-        users.value.push(createdUser)
-
-        onToggleCreateUserModal()
-        store.dispatch('showMessage', {
-          title: $gettext('User was created successfully')
-        })
-      } catch (error) {
-        console.error(error)
-        store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to create user'),
-          error
-        })
-      }
-    }
     const onEditUser = async ({ user, editUser }) => {
       try {
         const client = clientService.graphAuthenticated
@@ -1014,7 +994,6 @@ export default defineComponent({
       loadAdditionalUserDataTask,
       clientService,
       accessToken,
-      createUserModalOpen,
       addToGroupsModalTitle,
       addToGroupsModalIsOpen,
       removeFromGroupsModalTitle,
@@ -1036,12 +1015,10 @@ export default defineComponent({
       writableGroups,
       isFilteringActive,
       isFilteringMandatory,
-      createUsersDisabled,
       sideBarPanelContext,
       sideBarAvailablePanels,
-      onToggleCreateUserModal,
-      onCreateUser,
-      onEditUser
+      onEditUser,
+      createUserAction
     }
   },
   computed: {

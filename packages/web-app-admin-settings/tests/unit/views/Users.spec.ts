@@ -1,6 +1,7 @@
 import Users from '../../../src/views/Users.vue'
 import {
   ConfigurationManager,
+  UserAction,
   eventBus,
   useAppDefaults,
   useConfigurationManager
@@ -19,6 +20,8 @@ import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/src/generated'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
+import { useUserActionsCreateUser } from '../../../src/composables/actions/users/useUserActionsCreateUser'
+import { ref } from 'vue'
 
 jest.mock('mark.js', () => {
   return jest.fn().mockImplementation(() => ({
@@ -32,6 +35,7 @@ jest.mock('@ownclouders/web-pkg', () => ({
   useAppDefaults: jest.fn(),
   useConfigurationManager: jest.fn()
 }))
+jest.mock('../../../src/composables/actions/users/useUserActionsCreateUser')
 jest.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
 
 const getDefaultUser = () => {
@@ -133,74 +137,22 @@ describe('Users view', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
-  describe('change password button', () => {
-    it('should be displayed if not disabled via capability', () => {
+  describe('create user button', () => {
+    it('should be displayed if action enabled', () => {
       const { wrapper } = getMountedWrapper({
         mountType: mount,
-        capabilities: { graph: { users: { create_disabled: false } } }
+        createUserActionEnabled: true
       })
       const createUserButton = wrapper.find(selectors.createUserButton)
       expect(createUserButton.exists()).toBeTruthy()
     })
-    it('should not be displayed if disabled via capability', () => {
+    it('should not be displayed if action disabled', () => {
       const { wrapper } = getMountedWrapper({
         mountType: mount,
-        capabilities: { graph: { users: { create_disabled: true } } }
+        createUserActionEnabled: false
       })
       const createUserButton = wrapper.find(selectors.createUserButton)
       expect(createUserButton.exists()).toBeFalsy()
-    })
-  })
-  describe('method "onCreateUser"', () => {
-    it('should hide the modal and show message on success', async () => {
-      const clientService = getClientService()
-      clientService.graphAuthenticated.users.createUser.mockImplementation(() =>
-        mockAxiosResolve({
-          displayName: 'benedikt coolman',
-          givenName: '',
-          id: '2',
-          mail: 'benedikt@example.org',
-          onPremisesSamAccountName: 'bene',
-          surname: 'bene'
-        })
-      )
-      clientService.graphAuthenticated.users.getUser.mockImplementation(() =>
-        mockAxiosResolve({
-          appRoleAssignments: [
-            {
-              appRoleId: '1',
-              id: '1',
-              principalId: '2',
-              principalType: 'User',
-              resourceDisplayName: 'ownCloud Infinite Scale',
-              resourceId: 'some-graph-app-id'
-            }
-          ],
-          displayName: 'benedikt coolman',
-          givenName: '',
-          id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5',
-          mail: 'benedikt@example.org',
-          memberOf: [],
-          onPremisesSamAccountName: 'bene',
-          surname: 'bene'
-        })
-      )
-      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
-      expect(wrapper.vm.createUserModalOpen).toBeFalsy()
-      await wrapper.vm.onCreateUser({ displayName: 'jan' })
-
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
-      expect(wrapper.vm.createUserModalOpen).toBeTruthy()
-    })
-
-    it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const clientService = getClientService()
-      clientService.graphAuthenticated.users.createUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
-      await wrapper.vm.onCreateUser({ displayName: 'jana' })
-
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
 
@@ -480,8 +432,8 @@ function getMountedWrapper({
   displayNameFilterQuery = null,
   groupFilterQuery = null,
   roleFilterQuery = null,
-  capabilities = {},
-  configuration = {}
+  configuration = {},
+  createUserActionEnabled = true
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
@@ -490,6 +442,12 @@ function getMountedWrapper({
   jest
     .mocked(useConfigurationManager)
     .mockImplementation(() => mock<ConfigurationManager>(configuration))
+  jest.mocked(useUserActionsCreateUser).mockReturnValue(
+    mock<ReturnType<typeof useUserActionsCreateUser>>({
+      actions: ref([mock<UserAction>({ isEnabled: () => createUserActionEnabled })])
+    })
+  )
+
   const mocks = {
     ...defaultComponentMocks()
   }
@@ -498,7 +456,6 @@ function getMountedWrapper({
 
   const user = { id: '1', uuid: '1' }
   const storeOptions = { ...defaultStoreMockOptions, state: { user } }
-  storeOptions.getters.capabilities.mockReturnValue(capabilities)
   storeOptions.getters.user.mockReturnValue(user)
 
   const store = createStore(storeOptions)
@@ -512,7 +469,6 @@ function getMountedWrapper({
         mocks,
         provide: mocks,
         stubs: {
-          CreateUserModal: true,
           AppLoadingSpinner: true,
           ViewOptions: true,
           OcBreadcrumb: true,
