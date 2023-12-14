@@ -44,11 +44,13 @@
               autocomplete="off"
             />
           </div>
-          <resource-tiles
-            v-if="viewMode === ViewModeConstants.tilesView.name"
+          <component
+            :is="folderView.component"
             v-model:selectedIds="selectedResourcesIds"
-            class="oc-px-m"
+            resource-type="space"
+            :are-thumbnails-displayed="true"
             :resources="paginatedItems"
+            :fields-displayed="tableDisplayFields"
             :sort-fields="sortFields"
             :sort-by="sortBy"
             :sort-dir="sortDir"
@@ -56,12 +58,25 @@
             @row-mounted="rowMounted"
           >
             <template #image="{ resource }">
-              <img
-                v-if="imageContentObject[resource.id]"
-                class="tile-preview"
-                :src="imageContentObject[resource.id]['data']"
-                alt=""
-              />
+              <template v-if="viewMode === ViewModeConstants.tilesView.name">
+                <img
+                  v-if="imageContentObject[resource.id]"
+                  class="tile-preview"
+                  :src="imageContentObject[resource.id]['data']"
+                  alt=""
+                />
+              </template>
+              <template v-else>
+                <img
+                  v-if="imageContentObject[resource.id]"
+                  class="table-preview oc-mr-s"
+                  :src="imageContentObject[resource.id]['data']"
+                  alt=""
+                  width="33"
+                  height="33"
+                />
+                <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
+              </template>
             </template>
             <template #actions="{ resource }">
               <oc-button
@@ -85,27 +100,7 @@
                 <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
               </div>
             </template>
-          </resource-tiles>
-          <resource-table
-            v-else
-            v-model:selectedIds="selectedResourcesIds"
-            :resources="paginatedItems"
-            class="spaces-table"
-            :class="{ 'spaces-table-squashed': isSideBarOpen }"
-            :sticky="false"
-            :fields-displayed="tableDisplayFields"
-            :are-thumbnails-displayed="true"
-            :sort-fields="sortFields"
-            :sort-by="sortBy"
-            :sort-dir="sortDir"
-            @sort="handleSort"
-            @row-mounted="rowMounted"
-          >
-            <template #contextMenu="{ resource }">
-              <space-context-actions
-                :action-options="{ resources: [resource] as SpaceResource[] }"
-              />
-            </template>
+            <!--- table -->
             <template #status="{ resource }">
               <span v-if="resource.disabled" class="oc-flex oc-flex-middle">
                 <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
@@ -129,25 +124,7 @@
             </template>
             <template #usedQuota="{ resource }"> {{ getUsedQuota(resource) }}</template>
             <template #remainingQuota="{ resource }"> {{ getRemainingQuota(resource) }}</template>
-            <template #image="{ resource }">
-              <img
-                v-if="imageContentObject[resource.id]"
-                class="table-preview oc-mr-s"
-                :src="imageContentObject[resource.id]['data']"
-                alt=""
-                width="33"
-                height="33"
-              />
-              <resource-icon v-else class="oc-mr-s" :resource="resource" />
-            </template>
-            <template #footer>
-              <pagination :pages="totalPages" :current-page="currentPage" />
-              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-                <p class="oc-text-muted">{{ footerTextTotal }}</p>
-                <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
-              </div>
-            </template>
-          </resource-table>
+          </component>
         </div>
       </template>
     </files-view-wrapper>
@@ -462,6 +439,16 @@ export default defineComponent({
       }
     }
 
+    const folderView = computed(() => {
+      if (unref(viewMode) === ViewModeConstants.tilesView.name) {
+        return { component: 'resource-tiles' }
+      } else if (unref(viewMode) === ViewModeConstants.default.name) {
+        return { component: 'resource-table' }
+      } else {
+        throw new Error('unsupported viewMode')
+      }
+    })
+
     return {
       ...useSideBar(),
       spaces,
@@ -477,6 +464,7 @@ export default defineComponent({
       hasCreatePermission,
       viewModes,
       viewMode,
+      folderView,
       tableDisplayFields,
       ViewModeConstants,
       getManagerNames,

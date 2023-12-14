@@ -18,8 +18,7 @@
           v-else
           id="files-favorites-table"
           v-model:selectedIds="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': isSideBarOpen }"
+          resource-type="file"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"

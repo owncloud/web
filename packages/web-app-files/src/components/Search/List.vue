@@ -94,8 +94,7 @@
         <resource-table
           v-else
           v-model:selectedIds="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': false }"
+          resource-type="file"
           :header-position="fileListHeaderY"
           :resources="paginatedResources"
           :are-paths-displayed="true"
