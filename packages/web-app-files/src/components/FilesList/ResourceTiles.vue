@@ -411,7 +411,7 @@ export default defineComponent({
         : 0
     })
     const ghostTilesCount = computed(() => {
-      const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
+      const remainder = unref(maxTiles) ? props.resources.length % unref(maxTiles) : 0
       if (!remainder) {
         return 0
       }

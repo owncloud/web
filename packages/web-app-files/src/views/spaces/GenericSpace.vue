@@ -75,7 +75,6 @@
               v-model:selectedIds="selectedResourcesIds"
               :resources="paginatedResources"
               :view-mode="viewMode"
-              :resizable="true /* tiles */"
               :target-route-callback="resourceTargetRouteCallback"
               :space="space"
               :are-thumbnails-displayed="displayThumbnails /*table*/"
