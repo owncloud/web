@@ -84,6 +84,10 @@
               :header-position="fileListHeaderY /* table */"
               :sort-fields="sortFields /* tiles */"
               :view-size="viewSize /* tiles */"
+              @file-dropped="fileDropped"
+              @file-click="triggerDefaultAction"
+              @row-mounted="rowMounted"
+              @sort="handleSort"
             >
               <template #contextMenu="{ resource }">
                 <context-actions
