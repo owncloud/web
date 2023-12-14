@@ -4,6 +4,7 @@
     :path-prefix="pathPrefix"
     :is-path-displayed="true"
     :folder-link="folderLink"
+    :is-extension-displayed="areFileExtensionsShown"
     :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
     :parent-folder-name="parentFolderName"
     :is-thumbnail-displayed="displayThumbnails"
@@ -17,7 +18,7 @@ import { VisibilityObserver } from '../../observer'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { mapGetters } from 'vuex'
-import { useGetMatchingSpace, useFileActions, useFolderLink } from '../../composables'
+import { useGetMatchingSpace, useFileActions, useFolderLink, useStore } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { SearchResultValue } from './types'
@@ -47,7 +48,10 @@ export default defineComponent({
       getParentFolderLinkIconAdditionalAttributes,
       getFolderLink
     } = useFolderLink()
+    const store = useStore()
     const previewData = ref()
+
+    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
 
     const resource = computed((): Resource => {
       return {
@@ -98,7 +102,8 @@ export default defineComponent({
       parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(
         unref(resource)
       ),
-      additionalAttrs
+      additionalAttrs,
+      areFileExtensionsShown
     }
   },
   computed: {
