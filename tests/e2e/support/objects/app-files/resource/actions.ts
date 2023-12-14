@@ -941,12 +941,12 @@ export interface resourceVersionArgs {
   page: Page
   files: File[]
   folder?: string
-  isDirectUrlNavigation?: boolean
+  openDetailsPanel?: boolean
 }
 
 export const restoreResourceVersion = async (args: resourceVersionArgs) => {
-  const { page, files, folder, isDirectUrlNavigation } = args
-  if (!isDirectUrlNavigation) {
+  const { page, files, folder, openDetailsPanel } = args
+  if (openDetailsPanel) {
     const fileName = files.map((file) => path.basename(file.name))
     await clickResource({ page, path: folder })
     await sidebar.open({ page, resource: fileName[0] })

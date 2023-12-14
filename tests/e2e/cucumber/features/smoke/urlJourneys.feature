@@ -18,10 +18,9 @@ Feature: web can be navigated through urls
       | lorem.txt  | new content |
     When "Alice" navigates to "versions" details panel of file "lorem.txt" through the URL
     And "Alice" restores following resources
-      | resource  | to | version | isDirectUrlNavigation |
-      | lorem.txt | /  | 1       | true                  |
+      | resource  | to | version | openDetailsPanel |
+      | lorem.txt | /  | 1       | false            |
     When "Alice" navigates to "sharing" details panel of file "lorem.txt" through the URL
     And "Alice" shares the following resource using the direct url navigation
       | resource  | recipient | type | role     | resourceType |
       | lorem.txt | Brian     | user | Can view | file         |
-
