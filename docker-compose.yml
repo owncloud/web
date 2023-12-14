@@ -56,7 +56,11 @@ x-ocis-server: &ocis-service
     SEARCH_EXTRACTOR_TYPE: 'tika'
     SEARCH_EXTRACTOR_TIKA_TIKA_URL: 'http://host.docker.internal:9998'
     SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: 'true'
+
+    # App Provider
     GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
+    NATS_NATS_HOST: 0.0.0.0
+    NATS_NATS_PORT: 9233
 
     # OCM
     OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE: '/etc/ocis/ocmproviders.json'
@@ -84,9 +88,9 @@ services:
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
       OCIS_CORS_ALLOW_ORIGINS: 'https://host.docker.internal:9201'
       OCM_WEBAPP_TEMPLATE: https://host.docker.internal:9201/o/{{.Token}}/{relative-path-to-shared-resource}
-
       # make the registry available to the app provider containers
-      MICRO_REGISTRY: 'mdns'
+      MICRO_REGISTRY: 'natsjs'
+      MICRO_REGISTRY_ADDRESS: 0.0.0.0:9233
     labels:
       traefik.enable: true
       traefik.http.routers.ocis.tls: true
@@ -211,7 +215,8 @@ services:
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
       # share the registry with the ocis container
-      MICRO_REGISTRY: 'mdns'
+      MICRO_REGISTRY: 'natsjs'
+      MICRO_REGISTRY_ADDRESS: http://ocis:9233
     volumes:
       - ocis-config:/etc/ocis
     extra_hosts:
@@ -241,7 +246,8 @@ services:
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
       # share the registry with the ocis container
-      MICRO_REGISTRY: 'mdns'
+      MICRO_REGISTRY: 'natsjs'
+      MICRO_REGISTRY_ADDRESS: http://ocis:9233
     volumes:
       - ./dev/docker/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
       - ocis-config:/etc/ocis
