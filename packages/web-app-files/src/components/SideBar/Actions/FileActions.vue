@@ -22,7 +22,7 @@ export default defineComponent({
     ActionMenuItem
   },
   setup() {
-    const resource = inject<Resource>('resource')
+    const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
     const resources = computed(() => {
       return [unref(resource)]

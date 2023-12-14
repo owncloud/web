@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref, unref, VNodeRef } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref, VNodeRef } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { QuotaModal } from '@ownclouders/web-pkg'
@@ -58,7 +58,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const previewService = usePreviewService()
-    const resource = inject<SpaceResource>('resource')
+    const resource = inject<Ref<SpaceResource>>('resource')
     const actionOptions = computed(() => ({
       resources: [unref(resource)]
     }))
