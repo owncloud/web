@@ -1,27 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoginModal renders the input including two options 1`] = `
-<div aria-labelledby="oc-modal-title" class="oc-modal-background">
-  <focus-trap-stub active="true" allowoutsideclick="true" clickoutsidedeactivates="false" delayinitialfocus="true" escapedeactivates="true" initialfocus="[Function]" preventscroll="false" returnfocusondeactivate="true" setreturnfocus="false">
-    <div aria-modal="true" class="oc-modal oc-modal-passive" role="dialog" tabindex="0">
-      <div class="oc-modal-title">
-        <!--v-if-->
-        <h2 class="oc-text-truncate" id="oc-modal-title">Edit login for "function () {
-          return fn.apply(this, arguments);
-          }"</h2>
-      </div>
-      <div class="oc-modal-body">
-        <div class="oc-modal-body-message">
-          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-1" label="Login" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." readonly="false" searchable="true" warningmessage=""></oc-select-stub>
-        </div>
-        <!--v-if-->
-      </div>
-      <div class="oc-modal-body-actions oc-flex oc-flex-right">
-        <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" style="min-width: 0px;" submit="button" type="button" variation="passive">Cancel</oc-button-stub>
-        <!--v-if-->
-        <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="true" gapsize="medium" justifycontent="center" showspinner="false" size="medium" style="min-width: 0px;" submit="button" type="button" variation="primary">Confirm</oc-button-stub>
-      </div>
-    </div>
-  </focus-trap-stub>
+<oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-1" label="Login" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object]" placeholder="Select..." readonly="false" searchable="true" warningmessage=""></oc-select-stub>
+
+<div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
+  <oc-button-stub appearance="outline" class="oc-modal-body-actions-cancel oc-ml-s" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+  <oc-button-stub appearance="filled" class="oc-modal-body-actions-confirm oc-ml-s" disabled="true" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="primary"></oc-button-stub>
 </div>
 `;

@@ -315,29 +315,6 @@ describe('Users view', () => {
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
-    describe('edit login', () => {
-      it('does display the login modal when opened', async () => {
-        const { wrapper } = getMountedWrapper({ mountType: mount })
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.editLoginModalIsOpen = true
-        await wrapper.vm.$nextTick()
-        expect(wrapper.find('login-modal-stub ').exists()).toBeTruthy()
-      })
-      it('updates the login for all given users', async () => {
-        const { wrapper, mocks } = getMountedWrapper({ mountType: mount })
-        const users = [mock<User>(), mock<User>()]
-        await wrapper.vm.editLoginForUsers({ users, value: true })
-        expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(
-          users.length
-        )
-      })
-      it('omits the currently logged in user', async () => {
-        const { wrapper, mocks } = getMountedWrapper({ mountType: mount })
-        const users = [mock<User>({ id: '1' }), mock<User>()]
-        await wrapper.vm.editLoginForUsers({ users, value: true })
-        expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(1)
-      })
-    })
   })
 
   describe('filter', () => {
@@ -475,7 +452,6 @@ function getMountedWrapper({
           NoContentMessage: true,
           ItemFilter: true,
           BatchActions: true,
-          LoginModal: true,
           OcButton: true
         }
       }

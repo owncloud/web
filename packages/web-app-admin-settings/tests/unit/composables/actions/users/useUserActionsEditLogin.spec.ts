@@ -2,7 +2,6 @@ import { useUserActionsEditLogin } from '../../../../../src/composables/actions/
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 
 describe('useUserActionsEditLogin', () => {
@@ -33,12 +32,11 @@ describe('useUserActionsEditLogin', () => {
     })
   })
   describe('method "handler"', () => {
-    it('emits an event', () => {
+    it('creates a modal', () => {
       getWrapper({
-        setup: ({ actions }) => {
-          const eventSpy = jest.spyOn(eventBus, 'publish')
-          unref(actions)[0].handler()
-          expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.users.actions.edit-login')
+        setup: async ({ actions }, { storeOptions }) => {
+          await unref(actions)[0].handler({ resources: [mock<User>()] })
+          expect(storeOptions.actions.createModal).toHaveBeenCalled()
         }
       })
     })

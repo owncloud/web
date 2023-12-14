@@ -144,12 +144,6 @@
       @cancel="() => (removeFromGroupsModalIsOpen = false)"
       @confirm="removeUsersFromGroups"
     />
-    <login-modal
-      v-if="editLoginModalIsOpen"
-      :users="selectedUsers"
-      @cancel="() => (editLoginModalIsOpen = false)"
-      @confirm="editLoginForUsers"
-    />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -169,7 +163,6 @@ import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
 import GroupsModal from '../components/Users/GroupsModal.vue'
-import LoginModal from '../components/Users/LoginModal.vue'
 import {
   useUserActionsDelete,
   useUserActionsRemoveFromGroups,
@@ -229,8 +222,7 @@ export default defineComponent({
     ContextActions,
     ItemFilter,
     QuotaModal,
-    GroupsModal,
-    LoginModal
+    GroupsModal
   },
   setup() {
     const { $gettext, $ngettext } = useGettext()
@@ -278,7 +270,6 @@ export default defineComponent({
     const sideBarLoading = ref(false)
     const addToGroupsModalIsOpen = ref(false)
     const removeFromGroupsModalIsOpen = ref(false)
-    const editLoginModalIsOpen = ref(false)
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
     const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
@@ -287,9 +278,9 @@ export default defineComponent({
     let loadResourcesEventToken: string
     let addToGroupsActionEventToken: string
     let removeFromGroupsActionEventToken: string
-    let editLoginActionEventToken: string
     let editQuotaActionEventToken: string
     let addUserEventToken: string
+    let updateUsersEventToken: string
 
     const addToGroupsModalTitle = computed(() => {
       return $ngettext(
@@ -562,6 +553,10 @@ export default defineComponent({
       addUserEventToken = eventBus.subscribe('app.admin-settings.users.add', (user) => {
         users.value.push(user)
       })
+      updateUsersEventToken = eventBus.subscribe(
+        'app.admin-settings.users.update',
+        updateLocalUsers
+      )
 
       addToGroupsActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.actions.add-to-groups',
@@ -575,12 +570,6 @@ export default defineComponent({
           removeFromGroupsModalIsOpen.value = true
         }
       )
-      editLoginActionEventToken = eventBus.subscribe(
-        'app.admin-settings.users.actions.edit-login',
-        () => {
-          editLoginModalIsOpen.value = true
-        }
-      )
       editQuotaActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.quota.updated',
         updateSpaceQuota
@@ -590,6 +579,7 @@ export default defineComponent({
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
       eventBus.unsubscribe('app.admin-settings.users.add', addUserEventToken)
+      eventBus.unsubscribe('app.admin-settings.users.update', updateUsersEventToken)
       eventBus.unsubscribe(
         'app.admin-settings.users.actions.add-to-groups',
         addToGroupsActionEventToken
@@ -598,7 +588,6 @@ export default defineComponent({
         'app.admin-settings.users.actions.remove-from-groups',
         removeFromGroupsActionEventToken
       )
-      eventBus.unsubscribe('app.admin-settings.users.actions.edit-login', editLoginActionEventToken)
       eventBus.unsubscribe('app.admin-settings.users.user.quota.updated', editQuotaActionEventToken)
     })
 
@@ -608,8 +597,7 @@ export default defineComponent({
         unref(users)[userIndex] = _user
         const selectedUserIndex = unref(selectedUsers).findIndex((user) => user.id === _user.id)
         if (selectedUserIndex >= 0) {
-          // FIXME: why do we need to update selectedUsers?
-          unref(selectedUsers)[selectedUserIndex] = _user
+          selectedUsers.value = [...unref(selectedUsers).filter(({ id }) => id !== _user.id), _user]
         }
       }
     }
@@ -775,73 +763,6 @@ export default defineComponent({
       }
     }
 
-    const editLoginForUsers = async ({
-      users: affectedUsers,
-      value
-    }: {
-      users: User[]
-      value: boolean
-    }) => {
-      affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
-      const client = clientService.graphAuthenticated
-      const promises = affectedUsers.map((u) =>
-        client.users.editUser(u.id, { accountEnabled: value })
-      )
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled(promises)
-      })
-
-      const succeeded = results.filter((r) => r.status === 'fulfilled') as any
-      if (succeeded.length) {
-        const title =
-          succeeded.length === 1 && affectedUsers.length === 1
-            ? $gettext('Login for user "%{user}" was edited successfully', {
-                user: affectedUsers[0].displayName
-              })
-            : $ngettext(
-                '%{userCount} user login was edited successfully',
-                '%{userCount} users logins edited successfully',
-                succeeded.length,
-                { userCount: succeeded.length.toString() },
-                true
-              )
-        store.dispatch('showMessage', { title })
-      }
-
-      const failed = results.filter((r) => r.status === 'rejected')
-      if (failed.length) {
-        failed.forEach(console.error)
-
-        const title =
-          failed.length === 1 && affectedUsers.length === 1
-            ? $gettext('Failed edit login for user "%{user}"', {
-                user: affectedUsers[0].displayName
-              })
-            : $ngettext(
-                'Failed to edit %{userCount} user login',
-                'Failed to edit %{userCount} user logins',
-                failed.length,
-                { userCount: failed.length.toString() },
-                true
-              )
-        store.dispatch('showErrorMessage', {
-          title,
-          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
-        })
-      }
-
-      editLoginModalIsOpen.value = false
-
-      try {
-        const usersResponse = await loadingService.addTask(async () => {
-          return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
     const writableGroups = computed<Group[]>(() => {
       return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
     })
@@ -998,8 +919,6 @@ export default defineComponent({
       addToGroupsModalIsOpen,
       removeFromGroupsModalTitle,
       removeFromGroupsModalIsOpen,
-      editLoginModalIsOpen,
-      editLoginForUsers,
       batchActions,
       filterGroups,
       filterRoles,
