@@ -237,25 +237,34 @@ Feature: Search
       | name       |
       | mainFolder |
     And "Alice" creates the following files with mtime into personal space using API
-      | pathToFile               | content             | mtime     |
-      | mainFolder/mediaTest.txt | yesterday's content | yesterday |
-      | mainFolder/mediaTest.md  | I'm a Document      |           |
+      | pathToFile               | content             | mtimeDeltaDays |
+      | mainFolder/mediaTest.pdf | created 29 days ago | -29 days       |
+      | mainFolder/mediaTest.txt | created 5 days ago  | -5 days        |
+      | mainFolder/mediaTest.md  | created today       |                |
     And "Alice" opens the "files" app
     When "Alice" opens folder "mainFolder"
     And "Alice" searches "mediaTest" using the global search and the "in here" filter and presses enter
-    And "Alice" selects lastModified "yesterday" from the search result filter chip
+    And "Alice" selects lastModified "last 30 days" from the search result filter chip
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource                 |
+      | mainFolder/mediaTest.pdf |
+      | mainFolder/mediaTest.txt |
+      | mainFolder/mediaTest.md  |
+    When "Alice" selects lastModified "last 7 days" from the search result filter chip
     Then following resources should be displayed in the files list for user "Alice"
       | resource                 |
       | mainFolder/mediaTest.txt |
+      | mainFolder/mediaTest.md  |
     But following resources should not be displayed in the files list for user "Alice"
-      | resource                |
-      | mainFolder/mediaTest.md |
+      | resource                 |
+      | mainFolder/mediaTest.pdf |
     When "Alice" selects lastModified "today" from the search result filter chip
     Then following resources should be displayed in the files list for user "Alice"
       | resource                |
       | mainFolder/mediaTest.md |
     But following resources should not be displayed in the files list for user "Alice"
       | resource                 |
+      | mainFolder/mediaTest.pdf |
       | mainFolder/mediaTest.txt |
     And "Alice" clears lastModified filter
     And "Alice" logs out
