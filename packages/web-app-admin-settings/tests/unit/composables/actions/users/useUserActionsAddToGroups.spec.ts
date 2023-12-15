@@ -1,10 +1,10 @@
-import { useUserActionsEditLogin } from '../../../../../src/composables/actions/users/useUserActionsEditLogin'
+import { useUserActionsAddToGroups } from '../../../../../src/composables/actions/users/useUserActionsAddToGroups'
 import { mock } from 'jest-mock-extended'
-import { unref } from 'vue'
+import { ref, unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 
-describe('useUserActionsEditLogin', () => {
+describe('useUserActionsAddToGroups', () => {
   describe('method "isEnabled"', () => {
     it.each([
       { resources: [], isEnabled: false },
@@ -14,19 +14,6 @@ describe('useUserActionsEditLogin', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
-        }
-      })
-    })
-    it('returns false if included in capability readOnlyUserAttributes list', () => {
-      getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
-          storeOptions.getters.capabilities.mockReturnValue({
-            graph: {
-              users: { read_only_attributes: ['user.accountEnabled'] }
-            }
-          })
-
-          expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
         }
       })
     })
@@ -47,7 +34,7 @@ function getWrapper({
   setup
 }: {
   setup: (
-    instance: ReturnType<typeof useUserActionsEditLogin>,
+    instance: ReturnType<typeof useUserActionsAddToGroups>,
     {
       storeOptions
     }: {
@@ -60,7 +47,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useUserActionsEditLogin()
+        const instance = useUserActionsAddToGroups({ groups: ref([]) })
         setup(instance, { storeOptions })
       },
       { store }

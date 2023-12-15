@@ -16,15 +16,15 @@
       <template #topbarActions>
         <div>
           <oc-button
-            v-if="!createUsersDisabled"
+            v-if="createUserAction.isEnabled()"
             id="create-user-btn"
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
-            @click="onToggleCreateUserModal"
+            @click="createUserAction.handler()"
           >
-            <oc-icon name="add" />
-            <span v-text="$gettext('New user')" />
+            <oc-icon :name="createUserAction.icon" />
+            <span v-text="createUserAction.label()" />
           </oc-button>
         </div>
       </template>
@@ -128,33 +128,6 @@
         </div>
       </template>
     </app-template>
-    <groups-modal
-      v-if="addToGroupsModalIsOpen"
-      :title="addToGroupsModalTitle"
-      :groups="writableGroups"
-      :users="selectedUsers"
-      @cancel="() => (addToGroupsModalIsOpen = false)"
-      @confirm="addUsersToGroups"
-    />
-    <groups-modal
-      v-if="removeFromGroupsModalIsOpen"
-      :title="removeFromGroupsModalTitle"
-      :groups="writableGroups"
-      :users="selectedUsers"
-      @cancel="() => (removeFromGroupsModalIsOpen = false)"
-      @confirm="removeUsersFromGroups"
-    />
-    <login-modal
-      v-if="editLoginModalIsOpen"
-      :users="selectedUsers"
-      @cancel="() => (editLoginModalIsOpen = false)"
-      @confirm="editLoginForUsers"
-    />
-    <create-user-modal
-      v-if="createUserModalOpen"
-      @cancel="onToggleCreateUserModal"
-      @confirm="onCreateUser"
-    />
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -170,18 +143,16 @@
 <script lang="ts">
 import AppTemplate from '../components/AppTemplate.vue'
 import UsersList from '../components/Users/UsersList.vue'
-import CreateUserModal from '../components/Users/CreateUserModal.vue'
 import ContextActions from '../components/Users/ContextActions.vue'
 import DetailsPanel from '../components/Users/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Users/SideBar/EditPanel.vue'
-import GroupsModal from '../components/Users/GroupsModal.vue'
-import LoginModal from '../components/Users/LoginModal.vue'
 import {
   useUserActionsDelete,
   useUserActionsRemoveFromGroups,
   useUserActionsAddToGroups,
   useUserActionsEditLogin,
-  useUserActionsEditQuota
+  useUserActionsEditQuota,
+  useUserActionsCreateUser
 } from '../composables'
 import { SpaceResource } from '@ownclouders/web-client'
 import { Drive, User, Group } from '@ownclouders/web-client/src/generated'
@@ -194,7 +165,6 @@ import {
   eventBus,
   queryItemAsString,
   useAccessToken,
-  useCapabilityCreateUsersDisabled,
   useCapabilitySpacesMaxQuota,
   useClientService,
   useConfigurationManager,
@@ -232,12 +202,9 @@ export default defineComponent({
     AppLoadingSpinner,
     AppTemplate,
     UsersList,
-    CreateUserModal,
     ContextActions,
     ItemFilter,
-    QuotaModal,
-    GroupsModal,
-    LoginModal
+    QuotaModal
   },
   setup() {
     const { $gettext, $ngettext } = useGettext()
@@ -248,7 +215,6 @@ export default defineComponent({
     const clientService = useClientService()
     const loadingService = useLoadingService()
     const configurationManager = useConfigurationManager()
-    const createUsersDisabled = useCapabilityCreateUsersDisabled()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -260,9 +226,20 @@ export default defineComponent({
       return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
     })
 
+    const writableGroups = computed<Group[]>(() => {
+      return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
+    })
+
+    const { actions: createUserActions } = useUserActionsCreateUser()
+    const createUserAction = computed(() => unref(createUserActions)[0])
+
     const { actions: deleteActions } = useUserActionsDelete({ store })
-    const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups()
-    const { actions: addToGroupsActions } = useUserActionsAddToGroups()
+    const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups({
+      groups: writableGroups
+    })
+    const { actions: addToGroupsActions } = useUserActionsAddToGroups({
+      groups: writableGroups
+    })
     const { actions: editLoginActions } = useUserActionsEditLogin()
     const {
       actions: editQuotaActions,
@@ -281,41 +258,15 @@ export default defineComponent({
     )
     const isFilteringMandatory = ref(configurationManager.options.userListRequiresFilter)
     const sideBarLoading = ref(false)
-    const createUserModalOpen = ref(false)
-    const addToGroupsModalIsOpen = ref(false)
-    const removeFromGroupsModalIsOpen = ref(false)
-    const editLoginModalIsOpen = ref(false)
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
     const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
     const markInstance = ref(null)
-    let loadResourcesEventToken
-    let addToGroupsActionEventToken
-    let removeFromGroupsActionEventToken
-    let editLoginActionEventToken
-    let editQuotaActionEventToken
-    const addToGroupsModalTitle = computed(() => {
-      return $ngettext(
-        'Add user "%{user}" to groups',
-        'Add %{userCount} users to groups ',
-        unref(selectedUsers).length,
-        {
-          user: unref(selectedUsers)[0].displayName,
-          userCount: unref(selectedUsers).length.toString()
-        }
-      )
-    })
-    const removeFromGroupsModalTitle = computed(() => {
-      return $ngettext(
-        'Remove user "%{user}" from groups',
-        'Remove %{userCount} users from groups ',
-        unref(selectedUsers).length,
-        {
-          user: unref(selectedUsers)[0].displayName,
-          userCount: unref(selectedUsers).length.toString()
-        }
-      )
-    })
+
+    let loadResourcesEventToken: string
+    let editQuotaActionEventToken: string
+    let addUserEventToken: string
+    let updateUsersEventToken: string
 
     const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups('displayName')
@@ -562,24 +513,14 @@ export default defineComponent({
         }
       )
 
-      addToGroupsActionEventToken = eventBus.subscribe(
-        'app.admin-settings.users.actions.add-to-groups',
-        () => {
-          addToGroupsModalIsOpen.value = true
-        }
+      addUserEventToken = eventBus.subscribe('app.admin-settings.users.add', (user) => {
+        users.value.push(user)
+      })
+      updateUsersEventToken = eventBus.subscribe(
+        'app.admin-settings.users.update',
+        updateLocalUsers
       )
-      removeFromGroupsActionEventToken = eventBus.subscribe(
-        'app.admin-settings.users.actions.remove-from-groups',
-        () => {
-          removeFromGroupsModalIsOpen.value = true
-        }
-      )
-      editLoginActionEventToken = eventBus.subscribe(
-        'app.admin-settings.users.actions.edit-login',
-        () => {
-          editLoginModalIsOpen.value = true
-        }
-      )
+
       editQuotaActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.quota.updated',
         updateSpaceQuota
@@ -588,15 +529,9 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-      eventBus.unsubscribe(
-        'app.admin-settings.users.actions.add-to-groups',
-        addToGroupsActionEventToken
-      )
-      eventBus.unsubscribe(
-        'app.admin-settings.users.actions.remove-from-groups',
-        removeFromGroupsActionEventToken
-      )
-      eventBus.unsubscribe('app.admin-settings.users.actions.edit-login', editLoginActionEventToken)
+      eventBus.unsubscribe('app.admin-settings.users.add', addUserEventToken)
+      eventBus.unsubscribe('app.admin-settings.users.update', updateUsersEventToken)
+
       eventBus.unsubscribe('app.admin-settings.users.user.quota.updated', editQuotaActionEventToken)
     })
 
@@ -606,266 +541,11 @@ export default defineComponent({
         unref(users)[userIndex] = _user
         const selectedUserIndex = unref(selectedUsers).findIndex((user) => user.id === _user.id)
         if (selectedUserIndex >= 0) {
-          // FIXME: why do we need to update selectedUsers?
-          unref(selectedUsers)[selectedUserIndex] = _user
+          selectedUsers.value = [...unref(selectedUsers).filter(({ id }) => id !== _user.id), _user]
         }
       }
     }
 
-    const addUsersToGroups = async ({ users: affectedUsers, groups: groupsToAdd }) => {
-      const client = clientService.graphAuthenticated
-      const usersToFetch = []
-      const promises = groupsToAdd.reduce((acc, group) => {
-        for (const user of affectedUsers) {
-          if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-            acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
-            if (!usersToFetch.includes(user.id)) {
-              usersToFetch.push(user.id)
-            }
-          }
-        }
-        return acc
-      }, [])
-      if (!promises.length) {
-        const title = $ngettext(
-          'Group assignment already added',
-          'Group assignments already added',
-          affectedUsers.length * groupsToAdd.length
-        )
-        store.dispatch('showMessage', { title })
-        addToGroupsModalIsOpen.value = false
-        return
-      }
-
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled(promises)
-      })
-
-      const succeeded = results.filter((r) => r.status === 'fulfilled')
-      if (succeeded.length) {
-        const title =
-          succeeded.length === 1 && groupsToAdd.length === 1 && affectedUsers.length === 1
-            ? $gettext('Group assignment "%{group}" was added successfully', {
-                group: groupsToAdd[0].displayName
-              })
-            : $ngettext(
-                '%{groupAssignmentCount} group assignment was added successfully',
-                '%{groupAssignmentCount} group assignments were added successfully',
-                succeeded.length,
-                { groupAssignmentCount: succeeded.length.toString() },
-                true
-              )
-        store.dispatch('showMessage', { title })
-      }
-
-      const failed = results.filter((r) => r.status === 'rejected')
-      if (failed.length) {
-        failed.forEach(console.error)
-
-        const title =
-          failed.length === 1 && groupsToAdd.length === 1 && affectedUsers.length === 1
-            ? $gettext('Failed to add group assignment "%{group}"', {
-                group: groupsToAdd[0].displayName
-              })
-            : $ngettext(
-                'Failed to add %{groupAssignmentCount} group assignment',
-                'Failed to add %{groupAssignmentCount} group assignments',
-                failed.length,
-                { groupAssignmentCount: failed.length.toString() },
-                true
-              )
-        store.dispatch('showErrorMessage', {
-          title,
-          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
-        })
-      }
-
-      addToGroupsModalIsOpen.value = false
-
-      try {
-        const usersResponse = await Promise.all(
-          usersToFetch.map((userId) => client.users.getUser(userId))
-        )
-        updateLocalUsers(usersResponse.map((r) => r.data))
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    const removeUsersFromGroups = async ({ users: affectedUsers, groups: groupsToRemove }) => {
-      const client = clientService.graphAuthenticated
-      const usersToFetch = []
-      const promises = groupsToRemove.reduce((acc, group) => {
-        for (const user of affectedUsers) {
-          if (user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-            acc.push(client.groups.deleteMember(group.id, user.id))
-            if (!usersToFetch.includes(user.id)) {
-              usersToFetch.push(user.id)
-            }
-          }
-        }
-        return acc
-      }, [])
-
-      if (!promises.length) {
-        const title = $ngettext(
-          'Group assignment already removed',
-          'Group assignments already removed',
-          affectedUsers.length * groupsToRemove.length
-        )
-        store.dispatch('showMessage', { title })
-        removeFromGroupsModalIsOpen.value = false
-        return
-      }
-
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled(promises)
-      })
-
-      const succeeded = results.filter((r) => r.status === 'fulfilled')
-      if (succeeded.length) {
-        const title =
-          succeeded.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
-            ? $gettext('Group assignment "%{group}" was deleted successfully', {
-                group: groupsToRemove[0].displayName
-              })
-            : $ngettext(
-                '%{groupAssignmentCount} group assignment was deleted successfully',
-                '%{groupAssignmentCount} group assignments were deleted successfully',
-                succeeded.length,
-                { groupAssignmentCount: succeeded.length.toString() },
-                true
-              )
-        store.dispatch('showMessage', { title })
-      }
-
-      const failed = results.filter((r) => r.status === 'rejected')
-      if (failed.length) {
-        failed.forEach(console.error)
-
-        const title =
-          failed.length === 1 && groupsToRemove.length === 1 && affectedUsers.length === 1
-            ? $gettext('Failed to delete group assignment "%{group}"', {
-                group: groupsToRemove[0].displayName
-              })
-            : $ngettext(
-                'Failed to delete %{groupAssignmentCount} group assignment',
-                'Failed to delete %{groupAssignmentCount} group assignments',
-                failed.length,
-                { groupAssignmentCount: failed.length.toString() },
-                true
-              )
-        store.dispatch('showErrorMessage', {
-          title,
-          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
-        })
-      }
-
-      removeFromGroupsModalIsOpen.value = false
-
-      try {
-        const usersResponse = await Promise.all(
-          usersToFetch.map((userId) => client.users.getUser(userId))
-        )
-        updateLocalUsers(usersResponse.map((r) => r.data))
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    const editLoginForUsers = async ({
-      users: affectedUsers,
-      value
-    }: {
-      users: User[]
-      value: boolean
-    }) => {
-      affectedUsers = affectedUsers.filter(({ id }) => store.getters.user.uuid !== id)
-      const client = clientService.graphAuthenticated
-      const promises = affectedUsers.map((u) =>
-        client.users.editUser(u.id, { accountEnabled: value })
-      )
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled(promises)
-      })
-
-      const succeeded = results.filter((r) => r.status === 'fulfilled') as any
-      if (succeeded.length) {
-        const title =
-          succeeded.length === 1 && affectedUsers.length === 1
-            ? $gettext('Login for user "%{user}" was edited successfully', {
-                user: affectedUsers[0].displayName
-              })
-            : $ngettext(
-                '%{userCount} user login was edited successfully',
-                '%{userCount} users logins edited successfully',
-                succeeded.length,
-                { userCount: succeeded.length.toString() },
-                true
-              )
-        store.dispatch('showMessage', { title })
-      }
-
-      const failed = results.filter((r) => r.status === 'rejected')
-      if (failed.length) {
-        failed.forEach(console.error)
-
-        const title =
-          failed.length === 1 && affectedUsers.length === 1
-            ? $gettext('Failed edit login for user "%{user}"', {
-                user: affectedUsers[0].displayName
-              })
-            : $ngettext(
-                'Failed to edit %{userCount} user login',
-                'Failed to edit %{userCount} user logins',
-                failed.length,
-                { userCount: failed.length.toString() },
-                true
-              )
-        store.dispatch('showErrorMessage', {
-          title,
-          errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
-        })
-      }
-
-      editLoginModalIsOpen.value = false
-
-      try {
-        const usersResponse = await loadingService.addTask(async () => {
-          return Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
-        })
-        updateLocalUsers(usersResponse.map((r) => r.data))
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    const writableGroups = computed<Group[]>(() => {
-      return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
-    })
-
-    const onToggleCreateUserModal = () => {
-      createUserModalOpen.value = !unref(createUserModalOpen)
-    }
-    const onCreateUser = async (user) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const { id: createdUserId } = (await client.users.createUser(user))?.data
-        const { data: createdUser } = await client.users.getUser(createdUserId)
-        users.value.push(createdUser)
-
-        onToggleCreateUserModal()
-        store.dispatch('showMessage', {
-          title: $gettext('User was created successfully')
-        })
-      } catch (error) {
-        console.error(error)
-        store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to create user'),
-          error
-        })
-      }
-    }
     const onEditUser = async ({ user, editUser }) => {
       try {
         const client = clientService.graphAuthenticated
@@ -1014,13 +694,6 @@ export default defineComponent({
       loadAdditionalUserDataTask,
       clientService,
       accessToken,
-      createUserModalOpen,
-      addToGroupsModalTitle,
-      addToGroupsModalIsOpen,
-      removeFromGroupsModalTitle,
-      removeFromGroupsModalIsOpen,
-      editLoginModalIsOpen,
-      editLoginForUsers,
       batchActions,
       filterGroups,
       filterRoles,
@@ -1031,17 +704,13 @@ export default defineComponent({
       quotaWarningMessageContextualHelperData,
       closeQuotaModal,
       selectedPersonalDrives,
-      addUsersToGroups,
-      removeUsersFromGroups,
       writableGroups,
       isFilteringActive,
       isFilteringMandatory,
-      createUsersDisabled,
       sideBarPanelContext,
       sideBarAvailablePanels,
-      onToggleCreateUserModal,
-      onCreateUser,
-      onEditUser
+      onEditUser,
+      createUserAction
     }
   },
   computed: {

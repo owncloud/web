@@ -1,70 +1,79 @@
 <template>
-  <oc-modal
-    :title="$gettext('Create user')"
-    :button-cancel-text="$gettext('Cancel')"
-    :button-confirm-text="$gettext('Create')"
-    :button-confirm-disabled="isFormInvalid"
-    focus-trap-initial="#create-user-input-display-name"
-    @cancel="$emit('cancel')"
-    @confirm="$emit('confirm', user)"
-  >
-    <template #content>
-      <form autocomplete="off" @submit.prevent="onFormSubmit">
-        <oc-text-input
-          id="create-user-input-user-name"
-          v-model="user.onPremisesSamAccountName"
-          class="oc-mb-s"
-          :label="$gettext('User name') + '*'"
-          :error-message="formData.userName.errorMessage"
-          :fix-message-line="true"
-          @update:model-value="validateUserName"
-        />
-        <oc-text-input
-          id="create-user-input-display-name"
-          v-model="user.displayName"
-          class="oc-mb-s"
-          :label="$gettext('First and last name') + '*'"
-          :error-message="formData.displayName.errorMessage"
-          :fix-message-line="true"
-          @update:model-value="validateDisplayName"
-        />
-        <oc-text-input
-          id="create-user-input-email"
-          v-model="user.mail"
-          class="oc-mb-s"
-          :label="$gettext('Email') + '*'"
-          :error-message="formData.email.errorMessage"
-          type="email"
-          :fix-message-line="true"
-          @update:model-value="onInputEmail"
-          @change="validateEmail"
-        />
-        <oc-text-input
-          id="create-user-input-password"
-          v-model="user.passwordProfile.password"
-          class="oc-mb-s"
-          :label="$gettext('Password') + '*'"
-          :error-message="formData.password.errorMessage"
-          type="password"
-          :fix-message-line="true"
-          @update:model-value="validatePassword"
-        />
-        <input type="submit" class="oc-hidden" />
-      </form>
-    </template>
-  </oc-modal>
+  <form autocomplete="off" @submit.prevent="onConfirm">
+    <oc-text-input
+      id="create-user-input-user-name"
+      v-model="user.onPremisesSamAccountName"
+      class="oc-mb-s"
+      :label="$gettext('User name') + '*'"
+      :error-message="formData.userName.errorMessage"
+      :fix-message-line="true"
+      @update:model-value="validateUserName"
+    />
+    <oc-text-input
+      id="create-user-input-display-name"
+      v-model="user.displayName"
+      class="oc-mb-s"
+      :label="$gettext('First and last name') + '*'"
+      :error-message="formData.displayName.errorMessage"
+      :fix-message-line="true"
+      @update:model-value="validateDisplayName"
+    />
+    <oc-text-input
+      id="create-user-input-email"
+      v-model="user.mail"
+      class="oc-mb-s"
+      :label="$gettext('Email') + '*'"
+      :error-message="formData.email.errorMessage"
+      type="email"
+      :fix-message-line="true"
+      @update:model-value="onInputEmail"
+      @change="validateEmail"
+    />
+    <oc-text-input
+      id="create-user-input-password"
+      v-model="user.passwordProfile.password"
+      class="oc-mb-s"
+      :label="$gettext('Password') + '*'"
+      :error-message="formData.password.errorMessage"
+      type="password"
+      :fix-message-line="true"
+      @update:model-value="validatePassword"
+    />
+    <input type="submit" class="oc-hidden" />
+    <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
+      <oc-button
+        class="oc-modal-body-actions-cancel oc-ml-s"
+        appearance="outline"
+        variation="passive"
+        @click="onCancel"
+        >{{ $gettext('Cancel') }}
+      </oc-button>
+      <oc-button
+        class="oc-modal-body-actions-confirm oc-ml-s"
+        appearance="filled"
+        variation="primary"
+        :disabled="isFormInvalid"
+        @click="onConfirm"
+        >{{ $gettext('Confirm') }}
+      </oc-button>
+    </div>
+  </form>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { computed, defineComponent, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
-import { useClientService } from '@ownclouders/web-pkg'
+import { useClientService, useEventBus, useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateUserModal',
-  emits: ['cancel', 'confirm'],
-  setup() {
+  setup(props, { expose }) {
+    const store = useStore()
+    const eventBus = useEventBus()
     const clientService = useClientService()
+    const { $gettext } = useGettext()
+
     const formData = ref({
       userName: {
         errorMessage: '',
@@ -83,28 +92,60 @@ export default defineComponent({
         valid: false
       }
     })
-    return {
-      clientService,
-      formData
-    }
-  },
-  data: function () {
-    return {
-      user: {
-        onPremisesSamAccountName: '',
-        displayName: '',
-        mail: '',
-        passwordProfile: {
-          password: ''
-        }
+
+    const user = ref({
+      onPremisesSamAccountName: '',
+      displayName: '',
+      mail: '',
+      passwordProfile: {
+        password: ''
+      }
+    })
+
+    const isFormInvalid = computed(() => {
+      return Object.keys(unref(formData))
+        .map((k) => !!unref(formData)[k].valid)
+        .includes(false)
+    })
+
+    const onConfirm = async () => {
+      if (unref(isFormInvalid)) {
+        return
+      }
+
+      try {
+        const client = clientService.graphAuthenticated
+        const { data } = await client.users.createUser(unref(user))
+        const { id: createdUserId } = data
+        const { data: createdUser } = await client.users.getUser(createdUserId)
+        store.dispatch('showMessage', {
+          title: $gettext('User was created successfully')
+        })
+        eventBus.publish('app.admin-settings.users.add', createdUser)
+      } catch (error) {
+        console.error(error)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Failed to create user'),
+          error
+        })
+      } finally {
+        store.dispatch('hideModal')
       }
     }
-  },
-  computed: {
-    isFormInvalid() {
-      return Object.keys(this.formData)
-        .map((k) => !!this.formData[k].valid)
-        .includes(false)
+
+    const onCancel = () => {
+      store.dispatch('hideModal')
+    }
+
+    expose({ onConfirm, onCancel })
+
+    return {
+      clientService,
+      formData,
+      user,
+      isFormInvalid,
+      onConfirm,
+      onCancel
     }
   },
   methods: {
@@ -215,12 +256,6 @@ export default defineComponent({
       this.formData.password.errorMessage = ''
       this.formData.password.valid = true
       return true
-    },
-    onFormSubmit() {
-      if (this.isFormInvalid) {
-        return
-      }
-      this.$emit('confirm', this.user)
     }
   }
 })

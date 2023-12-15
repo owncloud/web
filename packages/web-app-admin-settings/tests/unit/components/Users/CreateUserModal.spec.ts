@@ -5,10 +5,12 @@ import {
   defaultPlugins,
   defaultStoreMockOptions,
   mockAxiosReject,
+  mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
+import { eventBus } from '@ownclouders/web-pkg'
 
 describe('CreateUserModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -112,6 +114,75 @@ describe('CreateUserModal', () => {
       expect(wrapper.vm.validatePassword()).toBeTruthy()
     })
   })
+  describe('method "onConfirm"', () => {
+    it('should not create user if form is invalid', async () => {
+      const { wrapper, storeOptions } = getWrapper()
+
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.onConfirm()
+
+      expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
+      expect(eventSpy).not.toHaveBeenCalled()
+    })
+    it('should create user on success', async () => {
+      const { wrapper, mocks, storeOptions } = getWrapper()
+      mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValueOnce(new Error(''))
+
+      wrapper.vm.user.onPremisesSamAccountName = 'foo'
+      wrapper.vm.validateUserName()
+      wrapper.vm.user.displayName = 'foo bar'
+      await wrapper.vm.validateDisplayName()
+      wrapper.vm.user.mail = 'foo@bar.com'
+      wrapper.vm.validateEmail()
+      wrapper.vm.user.passwordProfile.password = 'asecret'
+      wrapper.vm.validatePassword()
+
+      mocks.$clientService.graphAuthenticated.users.createUser.mockImplementation(() =>
+        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+      )
+      mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValueOnce(
+        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+      )
+
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.onConfirm()
+
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      expect(eventSpy).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+
+      const { wrapper, mocks, storeOptions } = getWrapper()
+      mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
+
+      wrapper.vm.user.onPremisesSamAccountName = 'foo'
+      wrapper.vm.validateUserName()
+      wrapper.vm.user.displayName = 'foo bar'
+      await wrapper.vm.validateDisplayName()
+      wrapper.vm.user.mail = 'foo@bar.com'
+      wrapper.vm.validateEmail()
+      wrapper.vm.user.passwordProfile.password = 'asecret'
+      wrapper.vm.validatePassword()
+
+      mocks.$clientService.graphAuthenticated.users.createUser.mockImplementation(() =>
+        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+      )
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.onConfirm()
+
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      expect(eventSpy).not.toHaveBeenCalled()
+    })
+  })
+  describe('method "onCancel"', () => {
+    it('hides the modal', async () => {
+      const { wrapper, storeOptions } = getWrapper()
+      await wrapper.vm.onCancel()
+      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
+    })
+  })
 })
 
 function getWrapper() {
@@ -121,11 +192,8 @@ function getWrapper() {
 
   return {
     mocks,
+    storeOptions,
     wrapper: shallowMount(CreateUserModal, {
-      props: {
-        cancel: jest.fn(),
-        confirm: jest.fn()
-      },
       global: {
         mocks,
         provide: mocks,
