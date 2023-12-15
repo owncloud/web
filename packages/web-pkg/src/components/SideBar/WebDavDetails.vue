@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV path'" />
+    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('WebDAV path')" />
     <td class="oc-flex oc-flex-middle">
       <div
         v-oc-tooltip="resource.webDavPath"
@@ -20,7 +20,7 @@
     </td>
   </tr>
   <tr>
-    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV URL'" />
+    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('WebDAV URL')" />
     <td class="oc-flex oc-flex-middle">
       <div v-oc-tooltip="webDavUrl" class="oc-text-truncate" v-text="webDavUrl" />
       <oc-button
