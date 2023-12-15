@@ -1,0 +1,6 @@
+Bugfix: Space navigate to trash missing
+
+We've fixed the bug that it was not possible to directly navigate into a space-specific trash,
+from within the space root.
+
+https://github.com/owncloud/web/pull/10179

@@ -94,7 +94,7 @@ export default defineComponent({
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
-    const { actions: navigateToTrashActions } = useSpaceActionsNavigateToTrash({ store })
+    const { actions: navigateToTrashActions } = useSpaceActionsNavigateToTrash()
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
