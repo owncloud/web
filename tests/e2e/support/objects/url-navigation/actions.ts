@@ -11,9 +11,9 @@ export interface navigateToDetailsPanelOfResourceArgs {
 }
 
 export interface openResourceDirectlyInTheBrowserArgs {
-    page: Page
-    resource: string
-    user: User
+  page: Page
+  resource: string
+  user: User
 }
 
 export const navigateToDetailsPanelOfResource = async (
@@ -30,16 +30,16 @@ export const navigateToDetailsPanelOfResource = async (
   await page.goto(fullUrl)
 }
 
-export const openResourceDirectlyInTheBrowser = async ( args:openResourceDirectlyInTheBrowserArgs )=> {
-    const { page, resource, user } = args
-    const fileId = await getIdOfFileInsideSpace({
-        user,
-        pathToFileName: resource,
-        spaceType: 'personal',
-        spaceName: user.displayName
-    })
-    console.log(fileId)
-    const fullUrl = `${config.backendUrl}/f/${fileId}`
-    await page.goto(fullUrl)
-    await page.pause()
+export const openResourceDirectlyInTheBrowser = async (
+  args: openResourceDirectlyInTheBrowserArgs
+) => {
+  const { page, resource, user } = args
+  const fileId = await getIdOfFileInsideSpace({
+    user,
+    pathToFileName: resource,
+    spaceType: 'personal',
+    spaceName: user.displayName
+  })
+  const fullUrl = `${config.backendUrl}/f/${fileId}`
+  await page.goto(fullUrl)
 }

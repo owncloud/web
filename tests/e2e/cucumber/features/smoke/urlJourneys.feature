@@ -33,7 +33,9 @@ Feature: web can be navigated through urls
     And "Alice" closes the file viewer
     When "Alice" opens the folder "FOLDER" directly in the browser
     And "Alice" opens the following file in texteditor
-      | resource     |
+      | resource               |
       | file_inside_folder.txt |
+    And "Alice" enters the text "Hello everyone" in editor "TextEditor"
+    And "Alice" saves the file viewer
     And "Alice" closes the file viewer
     And "Alice" logs out
