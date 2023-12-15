@@ -1,0 +1,6 @@
+Bugfix: Turned off file extensions not always respected
+
+We've fixed a bug where file extensions were shown in different places,
+like Search and Top bar file info even if the user turned them off via setting.
+
+https://github.com/owncloud/web/pull/10176

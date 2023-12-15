@@ -7,6 +7,7 @@
             v-if="resource"
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
+            :is-extension-displayed="areFileExtensionsShown"
             :path-prefix="pathPrefix"
             :resource="resource"
             :parent-folder-name="parentFolderName"
@@ -81,7 +82,7 @@
 import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
-import { Action, useEventBus, useFolderLink, useGetMatchingSpace } from '../composables'
+import { Action, useFolderLink, useGetMatchingSpace, useStore } from '../composables'
 import {
   Resource,
   isPublicSpaceResource,
@@ -110,9 +111,10 @@ export default defineComponent({
   emits: ['close'],
   setup(props) {
     const { $gettext } = useGettext()
-    const eventBus = useEventBus()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const store = useStore()
 
+    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
 
@@ -144,7 +146,8 @@ export default defineComponent({
       contextMenuLabel,
       closeButtonLabel,
       parentFolderName,
-      parentFolderLinkIconAdditionalAttributes
+      parentFolderLinkIconAdditionalAttributes,
+      areFileExtensionsShown
     }
   }
 })

@@ -15,6 +15,10 @@ jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
   useGetMatchingSpace: jest.fn()
 }))
 
+const selectors = {
+  ocResourceStub: 'oc-resource-stub'
+}
+
 describe('Preview component', () => {
   const driveAliasAndItem = '1'
   jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
@@ -28,6 +32,20 @@ describe('Preview component', () => {
       })
     })
     expect(wrapper.html()).toMatchSnapshot()
+  })
+  it('should render resource component without file extension when areFileExtensionsShown is set to false', () => {
+    const { wrapper } = getWrapper({
+      areFileExtensionsShown: false,
+      space: mock<SpaceResource>({
+        id: '1',
+        driveType: 'project',
+        name: 'New space',
+        getDriveAliasAndItem: () => driveAliasAndItem
+      })
+    })
+    expect(
+      wrapper.findComponent<any>(selectors.ocResourceStub).attributes().isextensiondisplayed
+    ).toBe('false')
   })
 })
 
@@ -47,13 +65,15 @@ function getWrapper({
       shareRoot: ''
     }
   },
-  user = { id: 'test' }
+  user = { id: 'test' },
+  areFileExtensionsShown = true
 }: {
   route?: any
   hasShareJail?: boolean
   space?: SpaceResource
   searchResult?: any
   user?: any
+  areFileExtensionsShown?: boolean
 } = {}) {
   jest.mocked(useGetMatchingSpace).mockImplementation(() =>
     useGetMatchingSpaceMock({
@@ -65,9 +85,15 @@ function getWrapper({
       }
     })
   )
-
   const storeOptions = {
     ...defaultStoreMockOptions,
+    modules: {
+      Files: {
+        state: {
+          areFileExtensionsShown
+        }
+      }
+    },
     getters: {
       ...defaultStoreMockOptions.getters,
       configuration: () => ({
