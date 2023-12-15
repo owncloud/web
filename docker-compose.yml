@@ -12,7 +12,7 @@ x-ocis-server: &ocis-service
     OCIS_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS: '0'
     OCIS_PASSWORD_POLICY_MIN_DIGITS: '0'
     OCIS_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS: '0'
-    OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt':q
+    OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
 
     # WEB
     WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
