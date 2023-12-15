@@ -10,5 +10,5 @@ export type FolderView = {
   }
   isScrollable?: boolean
   component: ReturnType<typeof defineComponent>
-  componentAttrs: () => Record<string, unknown>
+  componentAttrs?: () => Record<string, unknown>
 }

@@ -40,7 +40,7 @@
         :key="resource.id"
         class="oc-tiles-item has-item-context-menu"
       >
-        <oc-tile
+        <resource-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
@@ -142,13 +142,12 @@ import {
   useTileSize,
   FolderViewModeConstants,
   ResourceGhostElement,
-  ResourceTile,
   useResourcesStore
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
-  components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
+  components: { ContextMenuQuickAction, ResourceGhostElement },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles

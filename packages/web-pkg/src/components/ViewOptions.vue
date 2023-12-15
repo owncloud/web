@@ -104,7 +104,6 @@ import {
 import { FolderView } from '../ui/types'
 import { storeToRefs } from 'pinia'
 
-
 export default defineComponent({
   props: {
     hasHiddenFiles: { type: Boolean, default: true },

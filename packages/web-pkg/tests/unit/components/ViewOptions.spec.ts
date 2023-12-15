@@ -8,6 +8,7 @@ import {
   useRouteQuery,
   useRouteQueryPersisted
 } from '../../../src/composables'
+import { FolderView } from '../../../src'
 
 jest.mock('../../../src/composables/router', () => ({
   ...jest.requireActual('../../../src/composables/router'),
@@ -97,7 +98,10 @@ describe('ViewOptions component', () => {
     it('shows if more than one viewModes are passed', () => {
       const { wrapper } = getWrapper({
         props: {
-          viewModes: [FolderViewModeConstants.condensedTable, FolderViewModeConstants.default]
+          viewModes: [
+            mock<FolderView>({ name: '1', label: '' }),
+            mock<FolderView>({ name: '2', label: '' })
+          ]
         }
       })
       expect(wrapper.find(selectors.viewModeSwitchBtns).exists()).toBeTruthy()
@@ -110,14 +114,14 @@ describe('ViewOptions component', () => {
     })
     it('shows if the viewModes include "resource-tiles"', () => {
       const { wrapper } = getWrapper({
-        props: { viewModes: [FolderViewModeConstants.tilesView] }
+        props: { viewModes: [mock<FolderView>({ name: FolderViewModeConstants.name.tiles })] }
       })
       expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeTruthy()
     })
     it.each([1, 2, 3, 4, 5, 6])('applies the correct size step', (tileSize) => {
       const { mocks } = getWrapper({
         tileSize: tileSize.toString(),
-        props: { viewModes: [FolderViewModeConstants.tilesView] }
+        props: { viewModes: [mock<FolderView>({ name: FolderViewModeConstants.name.tiles })] }
       })
       expect(unref(mocks.tileSizeQueryMock)).toBe(tileSize.toString())
     })

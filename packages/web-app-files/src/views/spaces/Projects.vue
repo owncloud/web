@@ -157,7 +157,8 @@ import {
   useConfigStore,
   useResourcesStore,
   useSpacesStore,
-  FolderViewExtension
+  FolderViewExtension,
+  useExtensionRegistry
 } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'

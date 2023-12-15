@@ -231,14 +231,7 @@ import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/sha
 
 import {
   SortDir,
-<<<<<<< HEAD
-  ViewModeConstants,
-=======
-  useStore,
-  useUserContext,
   FolderViewModeConstants,
-  useConfigurationManager,
->>>>>>> 72ba7ea97 (feat: move FolderView implementations to extensions)
   useGetMatchingSpace,
   useFolderLink,
   useEmbedMode,
@@ -404,9 +397,16 @@ export default defineComponent({
      * The active view mode.
      */
     viewMode: {
-      type: String as PropType<typeof FolderViewModeConstants.name.condensedTable | typeof FolderViewModeConstants.name.table>,
+      type: String as PropType<
+        | typeof FolderViewModeConstants.name.condensedTable
+        | typeof FolderViewModeConstants.name.table
+      >,
       default: () => FolderViewModeConstants.defaultModeName,
-      validator: (value: typeof FolderViewModeConstants.name.condensedTable | typeof FolderViewModeConstants.name.table) =>
+      validator: (
+        value:
+          | typeof FolderViewModeConstants.name.condensedTable
+          | typeof FolderViewModeConstants.name.table
+      ) =>
         [FolderViewModeConstants.name.condensedTable, FolderViewModeConstants.name.table].includes(
           value
         )

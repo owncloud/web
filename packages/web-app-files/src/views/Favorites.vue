@@ -66,8 +66,14 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { debounce } from 'lodash-es'
 
 import { Resource } from '@ownclouders/web-client'
-import { FolderViewExtension, VisibilityObserver, useExtensionRegistry, useConfigStore, useResourcesStore } from '@ownclouders/web-pkg'
-import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
+import {
+  FolderViewExtension,
+  VisibilityObserver,
+  useExtensionRegistry,
+  useConfigStore,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg'
 
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'

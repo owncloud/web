@@ -128,16 +128,7 @@
 <script lang="ts">
 import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
-import {
-  computed,
-  defineComponent,
-  PropType,
-  onBeforeUnmount,
-  onMounted,
-  unref,
-  ref,
-  watch
-} from 'vue'
+import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref, ref } from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
