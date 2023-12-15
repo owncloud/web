@@ -25,7 +25,17 @@ export class FolderLoaderFavorites implements FolderLoader {
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
 
-      let resources = yield client.files.getFavoriteFiles(DavProperties.Default)
+      // favorite implementation is going to change soon, so we are not implementing it
+      // as a proper factory in our new WebDAV client for now
+      const legacyPropertyNames = DavProperties.Default.map((propertyName) => {
+        const prefix = DavProperties.DavNamespace.includes(propertyName)
+          ? '{DAV:}'
+          : '{http://owncloud.org/ns}'
+
+        return `${prefix}${propertyName}`
+      })
+
+      let resources = yield client.files.getFavoriteFiles(legacyPropertyNames)
       resources = resources.map((f) => {
         const resource = buildResource(f)
         // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.

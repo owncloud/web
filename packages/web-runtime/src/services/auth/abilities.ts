@@ -11,10 +11,10 @@ export const getAbilities = (
       { action: 'read-all', subject: 'Account' },
       { action: 'update-all', subject: 'Account' }
     ],
-    'Favorites.List.all': [{ action: 'read-all', subject: 'Favorite' }],
-    'Favorites.Write.all': [
-      { action: 'create-all', subject: 'Favorite' },
-      { action: 'update-all', subject: 'Favorite' }
+    'Favorites.List.own': [{ action: 'read', subject: 'Favorite' }],
+    'Favorites.Write.own': [
+      { action: 'create', subject: 'Favorite' },
+      { action: 'update', subject: 'Favorite' }
     ],
     'Groups.ReadWrite.all': [
       { action: 'create-all', subject: 'Group' },

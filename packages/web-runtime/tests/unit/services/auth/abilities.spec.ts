@@ -17,8 +17,8 @@ describe('getAbilities', () => {
   })
   it.each([
     { permissions: [''], expectedActions: [] },
-    { permissions: ['Favorites.List.all'], expectedActions: ['read-all'] },
-    { permissions: ['Favorites.Write.all'], expectedActions: ['create-all', 'update-all'] }
+    { permissions: ['Favorites.List.own'], expectedActions: ['read'] },
+    { permissions: ['Favorites.Write.own'], expectedActions: ['create', 'update'] }
   ])('gets correct abilities for subject "Favorites"', function (data) {
     const abilities = getAbilities(data.permissions)
     const expectedResult = data.expectedActions.map((action) => ({ action, subject: 'Favorite' }))
