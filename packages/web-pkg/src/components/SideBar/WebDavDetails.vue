@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV path'" />
+    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('WebDAV path')" />
     <td class="oc-flex oc-flex-middle">
       <div
         v-oc-tooltip="resource.webDavPath"
@@ -20,7 +20,7 @@
     </td>
   </tr>
   <tr>
-    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV URL'" />
+    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('WebDAV URL')" />
     <td class="oc-flex oc-flex-middle">
       <div v-oc-tooltip="webDavUrl" class="oc-text-truncate" v-text="webDavUrl" />
       <oc-button
@@ -42,9 +42,11 @@ import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { Resource } from '@ownclouders/web-client'
 import { useConfigurationManager } from '../../composables'
+import {$gettext} from "../../router/utils";
 
 export default defineComponent({
   name: 'WebDavDetails',
+  methods: {$gettext},
   setup() {
     const configurationManager = useConfigurationManager()
     const resource = inject<Ref<Resource>>('resource')
