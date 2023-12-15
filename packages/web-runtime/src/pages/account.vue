@@ -132,7 +132,7 @@
             <oc-checkbox
               :model-value="viewOptionWebDavDetailsValue"
               size="large"
-              :label="$gettext('Show WebDav information in file details')"
+              :label="$gettext('Show WebDAV information in file details')"
               data-testid="account-page-webdav-details-checkbox"
               @update:model-value="updateViewOptionsWebDavDetails"
             />
