@@ -54,6 +54,7 @@
             :sort-fields="sortFields"
             :sort-by="sortBy"
             :sort-dir="sortDir"
+            v-bind="folderView.componentAttrs?.()"
             @sort="handleSort"
             @row-mounted="rowMounted"
           >

@@ -8,5 +8,7 @@ export type FolderView = {
     name: string
     fillType: IconFillType
   }
+  isScrollable?: boolean
   component: ReturnType<typeof defineComponent>
+  componentAttrs: () => Record<string, unknown>
 }
