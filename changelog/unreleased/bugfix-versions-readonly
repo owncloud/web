@@ -1,0 +1,5 @@
+Bugfix: Make versions panel readonly in viewers and editors
+
+We've made the versions right sidebar panel readonly when opening the right sidebar from within a viewer or editor.
+
+https://github.com/owncloud/web/pull/10182

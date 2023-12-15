@@ -173,7 +173,7 @@ export default defineComponent({
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
 
-    const resource = inject<Resource>('resource')
+    const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
     const isPublicLinkContext = usePublicLinkContext({ store })
     const previewService = usePreviewService()
