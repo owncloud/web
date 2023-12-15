@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav path'" />
+    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV path'" />
     <td class="oc-flex oc-flex-middle">
       <div
         v-oc-tooltip="resource.webDavPath"
@@ -20,15 +20,15 @@
     </td>
   </tr>
   <tr>
-    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDav url'" />
+    <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV URL'" />
     <td class="oc-flex oc-flex-middle">
       <div v-oc-tooltip="webDavUrl" class="oc-text-truncate" v-text="webDavUrl" />
       <oc-button
-        v-oc-tooltip="$gettext('Copy WebDAV url')"
+        v-oc-tooltip="$gettext('Copy WebDAV URL')"
         class="oc-ml-s"
         appearance="raw"
         size="small"
-        :aria-label="$gettext('Copy WebDAV url to clipboard')"
+        :aria-label="$gettext('Copy WebDAV URL to clipboard')"
         @click="copyWebDAVUrlToClipboard"
       >
         <oc-icon :name="copyWebDAVUrlIcon" />
