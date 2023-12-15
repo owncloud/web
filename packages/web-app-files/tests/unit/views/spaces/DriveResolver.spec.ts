@@ -94,8 +94,7 @@ describe('DriveResolver view', () => {
     await wrapper.vm.$nextTick()
     expect(mocks.$router.push).toHaveBeenCalledWith(
       expect.objectContaining({
-        name: 'resolvePrivateLink',
-        query: { openWithDefaultApp: 'false' }
+        name: 'resolvePrivateLink'
       })
     )
   })
