@@ -27,7 +27,7 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
 }
 
 When(
-  /^"([^"]*)" shares the following resource(?:s)? using the (sidebar panel|quick action)$/,
+  /^"([^"]*)" shares the following resource(?:s)? using the (sidebar panel|quick action|direct url navigation)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
@@ -37,7 +37,12 @@ When(
       await shareObject.create({
         resource,
         recipients: shareInfo[resource],
-        via: actionType === 'quick action' ? 'QUICK_ACTION' : 'SIDEBAR_PANEL'
+        via:
+          actionType === 'quick action'
+            ? 'QUICK_ACTION'
+            : 'sidebar panel'
+              ? 'SIDEBAR_PANEL'
+              : 'URL_NAVIGATION'
       })
     }
   }

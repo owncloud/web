@@ -167,7 +167,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const fileInfo = stepTable.hashes().reduce((acc, stepRow) => {
-      const { to, resource, version } = stepRow
+      const { to, resource, version, openDetailsPanel } = stepRow
 
       if (!acc[to]) {
         acc[to] = []
@@ -178,12 +178,16 @@ When(
       if (version !== '1') {
         throw new Error('restoring is only supported for the most recent version')
       }
+      acc[to]['openDetailsPanel'] = openDetailsPanel === 'true'
 
       return acc
     }, [])
-
     for (const folder of Object.keys(fileInfo)) {
-      await resourceObject.restoreVersion({ folder, files: fileInfo[folder] })
+      await resourceObject.restoreVersion({
+        folder,
+        files: fileInfo[folder],
+        openDetailsPanel: fileInfo[folder]['openDetailsPanel']
+      })
     }
   }
 )

@@ -59,13 +59,15 @@ export const openSharingPanel = async function (
 /**/
 
 export interface createShareArgs extends ShareArgs {
-  via?: 'SIDEBAR_PANEL' | 'QUICK_ACTION'
+  via?: 'SIDEBAR_PANEL' | 'QUICK_ACTION' | 'URL_NAVIGATION'
 }
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
   const { page, resource, recipients, via } = args
+  if (via !== 'URL_NAVIGATION') {
+    await openSharingPanel(page, resource, via)
+  }
 
-  await openSharingPanel(page, resource, via)
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
 
   await sidebar.close({ page })

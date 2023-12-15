@@ -167,6 +167,6 @@ Feature: spaces.personal
       | resource     | to     |
       | textfile.txt | parent |
     And "Brian" restores following resources
-      | resource     | to     | version |
-      | textfile.txt | parent | 1       |
+      | resource     | to     | version | openDetailsPanel |
+      | textfile.txt | parent | 1       |true              |
     And "Brian" logs out
