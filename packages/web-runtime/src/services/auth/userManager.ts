@@ -72,7 +72,10 @@ export class UserManager extends OidcUserManager {
       Object.assign(openIdConfig, {
         scope: 'openid profile',
         loadUserInfo: false,
-        ...options.configurationManager.oidc
+        ...options.configurationManager.oidc,
+        ...(options.configurationManager.oidc.metadata_url && {
+          metadataUrl: options.configurationManager.oidc.metadata_url
+        })
       })
     } else if (options.configurationManager.isOAuth2) {
       const oAuth2 = options.configurationManager.oAuth2
