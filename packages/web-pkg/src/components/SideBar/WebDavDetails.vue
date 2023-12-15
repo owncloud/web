@@ -42,11 +42,9 @@ import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { Resource } from '@ownclouders/web-client'
 import { useConfigurationManager } from '../../composables'
-import {$gettext} from "../../router/utils";
 
 export default defineComponent({
   name: 'WebDavDetails',
-  methods: {$gettext},
   setup() {
     const configurationManager = useConfigurationManager()
     const resource = inject<Ref<Resource>>('resource')
