@@ -44,7 +44,7 @@ describe('Preview component', () => {
       })
     })
     expect(
-      wrapper.findComponent<any>(selectors.ocResourceStub).attributes().isthumbnaildisplayed
+      wrapper.findComponent<any>(selectors.ocResourceStub).attributes().isextensiondisplayed
     ).toBe('false')
   })
 })
