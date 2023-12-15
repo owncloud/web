@@ -1001,6 +1001,7 @@ Details
    https://github.com/owncloud/web/pull/10145
    https://github.com/owncloud/web/pull/10159
    https://github.com/owncloud/web/pull/10187
+   https://github.com/owncloud/web/pull/10194
 
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 
