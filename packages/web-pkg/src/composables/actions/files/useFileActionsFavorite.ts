@@ -61,7 +61,7 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
           return false
         }
 
-        return unref(hasFavorites) && ability.can('create-all', 'Favorite')
+        return unref(hasFavorites) && ability.can('create', 'Favorite')
       },
       componentType: 'button',
       class: 'oc-files-actions-favorite-trigger'
