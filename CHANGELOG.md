@@ -39,6 +39,7 @@ Summary
 * Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
 * Bugfix - Uploading the same files parallel: [#10156](https://github.com/owncloud/web/pull/10156)
 * Bugfix - GDPR export polling: [#10158](https://github.com/owncloud/web/pull/10158)
+* Bugfix - Turned off file extensions not always respected: [#10176](https://github.com/owncloud/web/pull/10176)
 * Bugfix - Space navigate to trash missing: [#10179](https://github.com/owncloud/web/pull/10179)
 * Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
@@ -356,6 +357,13 @@ Details
 
    https://github.com/owncloud/web/issues/8862
    https://github.com/owncloud/web/pull/10158
+
+* Bugfix - Turned off file extensions not always respected: [#10176](https://github.com/owncloud/web/pull/10176)
+
+   We've fixed a bug where file extensions were shown in different places, like
+   Search and Top bar file info even if the user turned them off via setting.
+
+   https://github.com/owncloud/web/pull/10176
 
 * Bugfix - Space navigate to trash missing: [#10179](https://github.com/owncloud/web/pull/10179)
 
