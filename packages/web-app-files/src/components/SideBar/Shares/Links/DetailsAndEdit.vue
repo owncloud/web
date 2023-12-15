@@ -154,7 +154,8 @@ import * as EmailValidator from 'email-validator'
 import {
   createLocationSpaces,
   useConfigurationManager,
-  LinkRoleDropdown
+  LinkRoleDropdown,
+  useStore
 } from '@ownclouders/web-pkg'
 import {
   linkRoleInternalFile,
@@ -170,6 +171,7 @@ import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 import { usePasswordPolicyService, ExpirationRules } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -210,7 +212,8 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup(props, { emit }) {
-    const { current } = useGettext()
+    const store = useStore()
+    const { $gettext, current } = useGettext()
     const configurationManager = useConfigurationManager()
     const passwordPolicyService = usePasswordPolicyService()
 
@@ -236,6 +239,16 @@ export default defineComponent({
       })
     }
 
+    const showPasswordModal = () => {
+      return store.dispatch('createModal', {
+        variation: 'passive',
+        title: props.link.password ? $gettext('Edit password') : $gettext('Add password'),
+        hideActions: true,
+        customComponent: SetLinkPasswordModal,
+        customComponentAttrs: { link: props.link }
+      })
+    }
+
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
@@ -244,7 +257,8 @@ export default defineComponent({
       updateLink,
       updateSelectedRole,
       currentLinkRole,
-      isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos)
+      isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos),
+      showPasswordModal
     }
   },
   data() {
@@ -500,38 +514,6 @@ export default defineComponent({
           })
       }
 
-      this.createModal(modal)
-    },
-
-    showPasswordModal() {
-      const modal = {
-        variation: 'passive',
-        title: this.link.password ? this.$gettext('Edit password') : this.$gettext('Add password'),
-        cancelText: this.$gettext('Cancel'),
-        confirmText: this.link.password ? this.$gettext('Apply') : this.$gettext('Set'),
-        hasInput: true,
-        confirmDisabled: true,
-        inputLabel: this.$gettext('Password'),
-        inputPasswordPolicy: this.passwordPolicyService.getPolicy(),
-        inputGeneratePasswordMethod: () => this.passwordPolicyService.generatePassword(),
-        inputPlaceholder: this.link.password ? '●●●●●●●●' : null,
-        inputType: 'password',
-        onCancel: this.hideModal,
-        onInput: () => this.setModalInputErrorMessage(''),
-        onPasswordChallengeCompleted: () => this.setModalConfirmButtonDisabled(false),
-        onPasswordChallengeFailed: () => this.setModalConfirmButtonDisabled(true),
-        onConfirm: (password) => {
-          this.updateLink({
-            link: {
-              ...this.link,
-              password
-            },
-            onSuccess: () => {
-              this.hideModal()
-            }
-          })
-        }
-      }
       this.createModal(modal)
     },
 
