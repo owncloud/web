@@ -8,7 +8,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { useFileActionsCreateNewShortcut } from '../../../../../src'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('createNewShortcut', () => {
   describe('computed property "actions"', () => {
@@ -32,11 +32,11 @@ describe('createNewShortcut', () => {
       })
     })
     describe('method "handler"', () => {
-      it('sets property "modalOpen" to true', () => {
+      it('creates a modal', () => {
         getWrapper({
-          setup: ({ actions, modalOpen }) => {
-            unref(actions)[0].handler()
-            expect(unref(modalOpen)).toBe(true)
+          setup: async ({ actions }, { storeOptions }) => {
+            await unref(actions)[0].handler()
+            expect(storeOptions.actions.createModal).toHaveBeenCalled()
           }
         })
       })
@@ -72,7 +72,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewShortcut({ store })
+        const instance = useFileActionsCreateNewShortcut({ space: mock<SpaceResource>() })
         setup(instance, { storeOptions })
       },
       {

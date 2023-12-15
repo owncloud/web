@@ -1,98 +1,97 @@
 <template>
-  <portal to="app.runtime.modal">
-    <oc-modal
-      :title="$gettext('Create a Shortcut')"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Create')"
-      :button-confirm-disabled="confirmButtonDisabled"
-      @cancel="cancel"
-      @confirm="createShortcut(inputUrl, inputFilename)"
-      @keydown.enter="onKeyEnter"
-    >
-      <template #content>
-        <oc-text-input
-          id="create-shortcut-modal-url-input"
-          v-model="inputUrl"
-          :label="$gettext('Shortcut to a webpage or file')"
-          @keydown.up="onKeyUpDrop"
-          @keydown.down="onKeyDownDrop"
-          @keydown.esc="onKeyEscDrop"
-          @keydown.enter="onKeyEnterDrop"
-          @input="onInputUrlInput"
-          @click="onClickUrlInput"
-        />
-        <oc-drop
-          ref="dropRef"
-          class="oc-pt-s"
-          padding-size="remove"
-          drop-id="create-shortcut-modal-contextmenu"
-          mode="manual"
-          position="bottom-start"
-          :close-on-click="true"
-          @hide-drop="onHideDrop"
-          @show-drop="onShowDrop"
+  <oc-text-input
+    id="create-shortcut-modal-url-input"
+    v-model="inputUrl"
+    :label="$gettext('Shortcut to a webpage or file')"
+    @keydown.up="onKeyUpDrop"
+    @keydown.down="onKeyDownDrop"
+    @keydown.esc="onKeyEscDrop"
+    @keydown.enter="onKeyEnterDrop"
+    @input="onInputUrlInput"
+    @click="onClickUrlInput"
+  />
+  <oc-drop
+    ref="dropRef"
+    class="oc-pt-s"
+    padding-size="remove"
+    drop-id="create-shortcut-modal-contextmenu"
+    mode="manual"
+    position="bottom-start"
+    :close-on-click="true"
+    @hide-drop="onHideDrop"
+    @show-drop="onShowDrop"
+  >
+    <oc-list>
+      <li
+        class="oc-p-xs selectable-item selectable-item-url"
+        :class="{
+          active: isDropItemActive(0)
+        }"
+      >
+        <oc-button
+          class="oc-width-1-1"
+          appearance="raw"
+          justify-content="left"
+          @click="dropItemUrlClicked"
         >
-          <oc-list>
-            <li
-              class="oc-p-xs selectable-item selectable-item-url"
-              :class="{
-                active: isDropItemActive(0)
-              }"
-            >
-              <oc-button
-                class="oc-width-1-1"
-                appearance="raw"
-                justify-content="left"
-                @click="dropItemUrlClicked"
-              >
-                <oc-icon name="external-link" />
-                <span v-text="dropItemUrl" />
-              </oc-button>
-            </li>
-            <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
-              <oc-spinner />
-            </li>
-            <template v-if="searchResult?.values?.length">
-              <li
-                class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs"
-              >
-                <span v-text="$gettext('Link to a file')" />
-              </li>
-              <li
-                v-for="(value, index) in searchResult.values"
-                :key="index"
-                class="oc-p-xs selectable-item"
-                :class="{
-                  active: isDropItemActive(index + 1)
-                }"
-              >
-                <oc-button
-                  class="oc-width-1-1"
-                  appearance="raw"
-                  justify-content="left"
-                  @click="dropItemResourceClicked(value)"
-                >
-                  <resource-preview :search-result="value" :is-clickable="false" />
-                </oc-button>
-              </li>
-            </template>
-          </oc-list>
-        </oc-drop>
-        <div class="oc-flex oc-width-1-1 oc-mt-m">
-          <oc-text-input
-            v-model="inputFilename"
+          <oc-icon name="external-link" />
+          <span v-text="dropItemUrl" />
+        </oc-button>
+      </li>
+      <li v-if="searchTask.isRunning" class="oc-p-xs oc-flex oc-flex-center">
+        <oc-spinner />
+      </li>
+      <template v-if="searchResult?.values?.length">
+        <li class="create-shortcut-modal-search-separator oc-text-muted oc-text-small oc-pl-xs">
+          <span v-text="$gettext('Link to a file')" />
+        </li>
+        <li
+          v-for="(value, index) in searchResult.values"
+          :key="index"
+          class="oc-p-xs selectable-item"
+          :class="{
+            active: isDropItemActive(index + 1)
+          }"
+        >
+          <oc-button
             class="oc-width-1-1"
-            :label="$gettext('Shortcut name')"
-            :error-message="inputFileNameErrorMessage"
-            :fix-message-line="true"
-          />
-          <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension"
-            >.url</span
+            appearance="raw"
+            justify-content="left"
+            @click="dropItemResourceClicked(value)"
           >
-        </div>
+            <resource-preview :search-result="value" :is-clickable="false" />
+          </oc-button>
+        </li>
       </template>
-    </oc-modal>
-  </portal>
+    </oc-list>
+  </oc-drop>
+  <div class="oc-flex oc-width-1-1 oc-mt-m">
+    <oc-text-input
+      v-model="inputFilename"
+      class="oc-width-1-1"
+      :label="$gettext('Shortcut name')"
+      :error-message="inputFileNameErrorMessage"
+      :fix-message-line="true"
+    />
+    <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension">.url</span>
+  </div>
+  <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
+    <oc-button
+      class="oc-modal-body-actions-cancel oc-ml-s"
+      appearance="outline"
+      variation="passive"
+      @click="onCancel"
+      >{{ $gettext('Cancel') }}
+    </oc-button>
+    <oc-button
+      class="oc-modal-body-actions-confirm oc-ml-s"
+      appearance="filled"
+      variation="primary"
+      :disabled="confirmButtonDisabled"
+      @click="onConfirm"
+      >{{ $gettext('Create') }}
+    </oc-button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -131,13 +130,9 @@ export default defineComponent({
     space: {
       type: Object as PropType<SpaceResource>,
       required: true
-    },
-    cancel: {
-      type: Function as PropType<(...args: any) => unknown>,
-      required: true
     }
   },
-  setup(props) {
+  setup(props, { expose }) {
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
@@ -232,12 +227,6 @@ export default defineComponent({
       }
 
       inputFilename.value = filename
-    }
-
-    const onKeyEnter = () => {
-      if (!unref(confirmButtonDisabled)) {
-        createShortcut(unref(inputUrl), unref(inputFilename))
-      }
     }
 
     const isDropItemActive = (index) => {
@@ -335,21 +324,19 @@ export default defineComponent({
       }
     }
 
-    const createShortcut = async (url: string, filename: string) => {
-      // Closes the modal
-      props.cancel()
-
+    const onConfirm = async () => {
       try {
         // Omit possible xss code
-        const sanitizedUrl = DOMPurify.sanitize(url, { USE_PROFILES: { html: true } })
+        const sanitizedUrl = DOMPurify.sanitize(unref(inputUrl), { USE_PROFILES: { html: true } })
 
         const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
-        const path = urlJoin(unref(currentFolder).path, `${filename}.url`)
+        const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
         const resource = await clientService.webdav.putFileContents(props.space, {
           path,
           content
         })
         store.commit('Files/UPSERT_RESOURCE', resource)
+        store.dispatch('hideModal')
         store.dispatch('showMessage', {
           title: $gettext('Shortcut was created successfully')
         })
@@ -360,6 +347,10 @@ export default defineComponent({
           error: e
         })
       }
+    }
+
+    const onCancel = () => {
+      store.dispatch('hideModal')
     }
 
     onMounted(async () => {
@@ -401,6 +392,8 @@ export default defineComponent({
       )
     })
 
+    expose({ onConfirm, onCancel })
+
     return {
       inputUrl,
       inputFilename,
@@ -410,8 +403,8 @@ export default defineComponent({
       confirmButtonDisabled,
       inputFileNameErrorMessage,
       searchTask,
-      createShortcut,
-      onKeyEnter,
+      onConfirm,
+      onCancel,
       dropItemUrlClicked,
       dropItemResourceClicked,
       getPathPrefix,
