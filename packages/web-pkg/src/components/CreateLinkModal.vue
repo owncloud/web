@@ -323,13 +323,13 @@ export default defineComponent({
           })
       }
 
-      if (props.callbackFn) {
-        props.callbackFn(result)
-      }
-
       if (userFacingErrors.length) {
         password.error = $gettext(userFacingErrors[0].message)
         return
+      }
+
+      if (props.callbackFn) {
+        props.callbackFn(result)
       }
 
       return store.dispatch('hideModal')
