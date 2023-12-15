@@ -7,11 +7,6 @@
       :spaces="_actionOptions.resources"
       :max-quota="maxQuota"
     />
-    <readme-content-modal
-      v-if="readmeContentModalIsOpen"
-      :cancel="closeReadmeContentModal"
-      :space="_actionOptions.resources[0]"
-    />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
@@ -28,7 +23,6 @@
 <script lang="ts">
 import { ContextActionMenu, useSpaceActionsNavigateToTrash } from '@ownclouders/web-pkg'
 import { QuotaModal } from '@ownclouders/web-pkg'
-import { ReadmeContentModal } from '@ownclouders/web-pkg'
 
 import { useFileActionsShowDetails } from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
@@ -56,7 +50,7 @@ import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceContextActions',
-  components: { ContextActionMenu, QuotaModal, ReadmeContentModal },
+  components: { ContextActionMenu, QuotaModal },
 
   props: {
     actionOptions: {
@@ -84,11 +78,7 @@ export default defineComponent({
       closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
-    const {
-      actions: editReadmeContentActions,
-      modalOpen: readmeContentModalIsOpen,
-      closeModal: closeReadmeContentModal
-    } = useSpaceActionsEditReadmeContent({ store })
+    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
@@ -181,9 +171,6 @@ export default defineComponent({
       uploadImageSpace,
 
       supportedSpaceImageMimeTypes,
-
-      readmeContentModalIsOpen,
-      closeReadmeContentModal,
 
       quotaModalIsOpen,
       closeQuotaModal
