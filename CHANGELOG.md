@@ -967,6 +967,8 @@ Details
 
    https://github.com/owncloud/web/issues/9714
    https://github.com/owncloud/web/pull/10062
+   https://github.com/owncloud/web/pull/10190
+   https://github.com/owncloud/web/pull/10196
 
 * Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 
