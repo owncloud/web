@@ -5,10 +5,12 @@ import {
   defaultPlugins,
   defaultStoreMockOptions,
   mockAxiosReject,
+  mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
+import { eventBus } from '@ownclouders/web-pkg'
 
 describe('CreateGroupModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -55,6 +57,60 @@ describe('CreateGroupModal', () => {
       expect(getGroupSub).toHaveBeenCalled()
     })
   })
+  describe('method "onConfirm"', () => {
+    it('should not create group if form is invalid', async () => {
+      const { wrapper, storeOptions } = getWrapper()
+
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.onConfirm()
+
+      expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
+      expect(eventSpy).not.toHaveBeenCalled()
+    })
+    it('should create group on success', async () => {
+      const { wrapper, mocks, storeOptions } = getWrapper()
+      mocks.$clientService.graphAuthenticated.groups.getGroup.mockRejectedValueOnce(new Error(''))
+
+      wrapper.vm.group.displayName = 'foo bar'
+      await wrapper.vm.validateDisplayName()
+
+      mocks.$clientService.graphAuthenticated.groups.createGroup.mockResolvedValueOnce(
+        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+      )
+
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.onConfirm()
+
+      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      expect(eventSpy).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+
+      const { wrapper, mocks, storeOptions } = getWrapper()
+      mocks.$clientService.graphAuthenticated.groups.getGroup.mockRejectedValue(new Error(''))
+
+      wrapper.vm.group.displayName = 'foo bar'
+      await wrapper.vm.validateDisplayName()
+
+      mocks.$clientService.graphAuthenticated.groups.createGroup.mockRejectedValue(
+        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+      )
+      const eventSpy = jest.spyOn(eventBus, 'publish')
+      await wrapper.vm.onConfirm()
+
+      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      expect(eventSpy).not.toHaveBeenCalled()
+    })
+  })
+  describe('method "onCancel"', () => {
+    it('hides the modal', async () => {
+      const { wrapper, storeOptions } = getWrapper()
+      await wrapper.vm.onCancel()
+      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
+    })
+  })
 })
 
 function getWrapper() {
@@ -64,6 +120,7 @@ function getWrapper() {
 
   return {
     mocks,
+    storeOptions,
     wrapper: shallowMount(CreateGroupModal, {
       props: {
         cancel: jest.fn(),
