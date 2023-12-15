@@ -61,20 +61,33 @@ describe('AppTopBar', () => {
       )
       expect(wrapper.html()).toMatchSnapshot()
     })
+    it('renders a resource without file extension if areFileExtensionsShown is set to false', () => {
+      const { wrapper } = getWrapper(
+        mock<Resource>({ path: '/test.txt', shareRoot: '/test' }),
+        [mock<Action>()],
+        [mock<Action>()],
+        false
+      )
+
+      expect(wrapper.html()).toMatchSnapshot()
+    })
   })
 })
 
 function getWrapper(
   resource: Resource = null,
   dropDownActions: Action[] = [],
-  mainActions: Action[] = []
+  mainActions: Action[] = [],
+  areFileExtensionsShown = true
 ) {
   const storeOptions = { ...defaultStoreMockOptions }
+  storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'admin-settings-general' })
   })
   return {
+    storeOptions,
     wrapper: shallowMount(AppTopBar, {
       props: {
         dropDownActions,
