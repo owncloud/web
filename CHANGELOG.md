@@ -39,6 +39,7 @@ Summary
 * Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
 * Bugfix - Uploading the same files parallel: [#10156](https://github.com/owncloud/web/pull/10156)
 * Bugfix - GDPR export polling: [#10158](https://github.com/owncloud/web/pull/10158)
+* Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -354,6 +355,13 @@ Details
 
    https://github.com/owncloud/web/issues/8862
    https://github.com/owncloud/web/pull/10158
+
+* Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
+
+   We've made the versions right sidebar panel readonly when opening the right
+   sidebar from within a viewer or editor.
+
+   https://github.com/owncloud/web/pull/10182
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
