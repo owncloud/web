@@ -111,7 +111,9 @@ import {
   computed,
   ref,
   unref,
-  onMounted
+  onMounted,
+  onBeforeUnmount,
+  watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -195,6 +197,9 @@ export default defineComponent({
 
     const dragItem = ref()
     const ghostElementRef = ref()
+    const maxRowCount = ref(0)
+    const tileSize = ref('')
+
     const tileRefs = ref({
       tiles: [],
       dropBtns: []
@@ -378,8 +383,6 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
-    const maxRowCount = ref(0)
-
     const getCssVariableValue = (variableName) => {
       var style = getComputedStyle(document.documentElement)
       return style.getPropertyValue(variableName).trim()
@@ -397,19 +400,34 @@ export default defineComponent({
       var paddingRight = parseInt(style.getPropertyValue('padding-right'), 10)
       var maxWidthWithoutPadding = element.clientWidth - paddingLeft - paddingRight
 
-      var cssVariableValue = getCssVariableValue('--oc-size-tiles-resize-step') // CSS variable name
-      var remValue = parseFloat(cssVariableValue) // Convert the value to a number
+      var cssVariableValue = getCssVariableValue('--oc-size-tiles-resize-step')
+      var remValue = parseFloat(cssVariableValue)
       var pixels = remToPixels(remValue)
       var tileCount = Math.floor(maxWidthWithoutPadding / pixels)
       maxRowCount.value = tileCount
     }
 
+    const updateTileSize = () => {
+      tileSize.value = getComputedStyle(document.documentElement)
+        .getPropertyValue('--oc-size-tiles-resize-step')
+        .trim()
+    }
+
     onMounted(() => {
-      window.addEventListener('resize', () => {
-        calculateGhostTileCount()
-      })
+      window.addEventListener('resize', calculateGhostTileCount)
       calculateGhostTileCount()
+
+      updateTileSize()
+      const observer = new MutationObserver(updateTileSize)
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
+
+      onBeforeUnmount(() => {
+        observer.disconnect()
+        window.removeEventListener('resize', calculateGhostTileCount)
+      })
     })
+
+    watch(tileSize, calculateGhostTileCount)
 
     const ghostTileCount = computed(() => {
       return unref(maxRowCount) - props.data.length
