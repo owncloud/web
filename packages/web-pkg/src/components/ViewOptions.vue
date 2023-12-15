@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { mapMutations, mapState } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import {

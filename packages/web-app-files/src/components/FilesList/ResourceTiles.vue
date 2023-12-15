@@ -103,7 +103,16 @@
 </template>
 
 <script lang="ts">
-import { onBeforeUpdate, defineComponent, nextTick, PropType, computed, ref, unref } from 'vue'
+import {
+  onBeforeUpdate,
+  defineComponent,
+  nextTick,
+  PropType,
+  computed,
+  ref,
+  unref,
+  onMounted
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useStore, SortDir, SortField, ViewModeConstants } from '@ownclouders/web-pkg'
@@ -369,8 +378,41 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
+    const maxRowCount = ref(0)
+
+    const getCssVariableValue = (variableName) => {
+      var style = getComputedStyle(document.documentElement)
+      return style.getPropertyValue(variableName).trim()
+    }
+
+    const remToPixels = (rem) => {
+      var fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
+      return rem * fontSize
+    }
+
+    const calculateGhostTileCount = () => {
+      var element = document.getElementById('tiles-view')
+      var style = window.getComputedStyle(element)
+      var paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10)
+      var paddingRight = parseInt(style.getPropertyValue('padding-right'), 10)
+      var maxWidthWithoutPadding = element.clientWidth - paddingLeft - paddingRight
+
+      var cssVariableValue = getCssVariableValue('--oc-size-tiles-resize-step') // CSS variable name
+      var remValue = parseFloat(cssVariableValue) // Convert the value to a number
+      var pixels = remToPixels(remValue)
+      var tileCount = Math.floor(maxWidthWithoutPadding / pixels)
+      maxRowCount.value = tileCount
+    }
+
+    onMounted(() => {
+      window.addEventListener('resize', () => {
+        calculateGhostTileCount()
+      })
+      calculateGhostTileCount()
+    })
+
     const ghostTileCount = computed(() => {
-      return 8 - props.viewSize - props.data.length
+      return unref(maxRowCount) - props.data.length
     })
     const renderGhostTiles = computed(() => {
       const count = unref(ghostTileCount)
