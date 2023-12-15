@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { ContextActionMenu } from '@ownclouders/web-pkg'
+import { ContextActionMenu, useSpaceActionsNavigateToTrash } from '@ownclouders/web-pkg'
 import { QuotaModal } from '@ownclouders/web-pkg'
 import { ReadmeContentModal } from '@ownclouders/web-pkg'
 
@@ -94,6 +94,7 @@ export default defineComponent({
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: navigateToTrashActions } = useSpaceActionsNavigateToTrash()
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
@@ -126,6 +127,7 @@ export default defineComponent({
         ...unref(editQuotaActions),
         ...unref(disableActions),
         ...unref(restoreActions),
+        ...unref(navigateToTrashActions),
         ...unref(deleteActions)
       ]
 
