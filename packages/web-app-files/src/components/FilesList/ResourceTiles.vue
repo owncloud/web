@@ -197,7 +197,7 @@ export default defineComponent({
 
     const dragItem = ref()
     const ghostElementRef = ref()
-    const maxRowCount = ref(0)
+    const maxTileCount = ref(0)
     const tileSize = ref('')
 
     const tileRefs = ref({
@@ -404,7 +404,7 @@ export default defineComponent({
       var remValue = parseFloat(cssVariableValue)
       var pixels = remToPixels(remValue)
       var tileCount = Math.floor(maxWidthWithoutPadding / pixels)
-      maxRowCount.value = tileCount
+      maxTileCount.value = tileCount
     }
 
     const updateTileSize = () => {
@@ -430,7 +430,7 @@ export default defineComponent({
     watch(tileSize, calculateGhostTileCount)
 
     const ghostTileCount = computed(() => {
-      return unref(maxRowCount) - props.data.length
+      return unref(maxTileCount) - props.data.length
     })
     const renderGhostTiles = computed(() => {
       const count = unref(ghostTileCount)
