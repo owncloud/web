@@ -72,8 +72,6 @@ const mutations = {
     state.onConfirm = modal.onConfirm
     state.hasInput = modal.hasInput || false
     state.inputValue = modal.inputValue || null
-    state.inputPasswordPolicy = modal.inputPasswordPolicy || {}
-    state.inputGeneratePasswordMethod = modal.inputGeneratePasswordMethod || null
     state.inputSelectionRange = modal.inputSelectionRange
     state.inputDescription = modal.inputDescription || null
     state.inputPlaceholder = modal.inputPlaceholder || null
@@ -89,8 +87,6 @@ const mutations = {
     state.customComponent = modal.customComponent
     state.customComponentAttrs = modal.customComponentAttrs
     state.customContent = modal.customContent || ''
-    state.onPasswordChallengeCompleted = modal.onPasswordChallengeCompleted
-    state.onPasswordChallengeFailed = modal.onPasswordChallengeFailed
     state.hideActions = modal.hideActions || false
   },
 
