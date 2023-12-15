@@ -46,9 +46,9 @@ export const useFileActionsCreateLink = ({
     }
 
     const failed = result.filter(({ status }) => status === 'rejected')
-    if (failed.length && showMessages) {
+    if (failed.length) {
       store.dispatch('showErrorMessage', {
-        errors: (failed as PromiseRejectedResult[]).map(({ reason }) => new Error(reason)),
+        errors: (failed as PromiseRejectedResult[]).map(({ reason }) => reason),
         title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })
     }
