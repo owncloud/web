@@ -85,8 +85,8 @@
           </template>
         </oc-tile>
       </li>
-      <template v-if="renderGhostTiles">
-        <li class="ghost-tile" v-for="index in ghostTileCount" :key="index">
+      <template v-if="ghostTilesCount">
+        <li v-for="index in ghostTilesCount" :key="index" class="ghost-tile">
           <div>
             {{ viewSize }}
           </div>
@@ -104,31 +104,35 @@
 
 <script lang="ts">
 import {
-  onBeforeUpdate,
+  computed,
   defineComponent,
   nextTick,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
   PropType,
-  computed,
   ref,
   unref,
-  onMounted,
-  onBeforeUnmount,
   watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useStore, SortDir, SortField, ViewModeConstants } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { displayPositionedDropdown } from '@ownclouders/web-pkg'
-import { createLocationSpaces } from '@ownclouders/web-pkg'
-import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
-
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
-import { useResourceRouteResolver } from '@ownclouders/web-pkg'
-import { eventBus } from '@ownclouders/web-pkg'
+import {
+  ContextMenuQuickAction,
+  createFileRouteOptions,
+  createLocationSpaces,
+  displayPositionedDropdown,
+  eventBus,
+  ImageDimension,
+  SortDir,
+  SortField,
+  useResourceRouteResolver,
+  useStore,
+  ViewModeConstants
+} from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -383,28 +387,31 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
+    const ghostTilesCount = computed(() => {
+      return Math.max(0, unref(maxTileCount) - props.data.length)
+    })
+
     const getCssVariableValue = (variableName) => {
-      var style = getComputedStyle(document.documentElement)
+      const style = getComputedStyle(document.documentElement)
       return style.getPropertyValue(variableName).trim()
     }
 
     const remToPixels = (rem) => {
-      var fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
+      const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
       return rem * fontSize
     }
 
     const calculateGhostTileCount = () => {
-      var element = document.getElementById('tiles-view')
-      var style = window.getComputedStyle(element)
-      var paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10)
-      var paddingRight = parseInt(style.getPropertyValue('padding-right'), 10)
-      var maxWidthWithoutPadding = element.clientWidth - paddingLeft - paddingRight
+      const element = document.getElementById('tiles-view')
+      const style = window.getComputedStyle(element)
+      const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10)
+      const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10)
+      const maxWidthWithoutPadding = element.clientWidth - paddingLeft - paddingRight
 
-      var cssVariableValue = getCssVariableValue('--oc-size-tiles-resize-step')
-      var remValue = parseFloat(cssVariableValue)
-      var pixels = remToPixels(remValue)
-      var tileCount = Math.floor(maxWidthWithoutPadding / pixels)
-      maxTileCount.value = tileCount
+      const cssVariableValue = getCssVariableValue('--oc-size-tiles-resize-step')
+      const remValue = parseFloat(cssVariableValue)
+      const pixels = remToPixels(remValue)
+      maxTileCount.value = Math.floor(maxWidthWithoutPadding / pixels)
     }
 
     const updateTileSize = () => {
@@ -429,14 +436,6 @@ export default defineComponent({
 
     watch(tileSize, calculateGhostTileCount)
 
-    const ghostTileCount = computed(() => {
-      return unref(maxTileCount) - props.data.length
-    })
-    const renderGhostTiles = computed(() => {
-      const count = unref(ghostTileCount)
-      return count > 0
-    })
-
     return {
       areFileExtensionsShown,
       emitTileClick,
@@ -458,8 +457,7 @@ export default defineComponent({
       dragSelection,
       fileDropped,
       setDropStyling,
-      ghostTileCount,
-      renderGhostTiles
+      ghostTilesCount
     }
   },
   data() {
@@ -517,8 +515,10 @@ export default defineComponent({
     }
   }
 }
+
 .ghost-tile {
   display: list-item;
+
   div {
     opacity: 0;
     box-shadow: none;
