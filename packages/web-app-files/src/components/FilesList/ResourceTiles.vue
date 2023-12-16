@@ -86,7 +86,7 @@
         </oc-tile>
       </li>
       <template v-if="ghostTilesCount">
-        <li v-for="index in ghostTilesCount" :key="index" class="ghost-tile">
+        <li v-for="index in ghostTilesCount" :key="index" class="ghost-tile" aria-hidden="true">
           <div>
             {{ viewSize }}
           </div>
