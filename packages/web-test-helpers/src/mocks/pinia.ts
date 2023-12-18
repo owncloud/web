@@ -1,32 +1,43 @@
-import { createTestingPinia as createCustomThemeStore } from '@pinia/testing'
+import { createTestingPinia } from '@pinia/testing'
 import defaultTheme from '../../../web-runtime/themes/owncloud/theme.json'
+import { Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
 
-export { createCustomThemeStore }
+export type PiniaMockOptions = {
+  stubActions?: boolean
+  themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
+  modalsState?: { modals?: Modal[] }
+}
 
-export function createMockThemeStore({ hasOnlyOneTheme = false, appBanner = undefined } = {}) {
+export function createMockStore({
+  stubActions = true,
+  themeState = {},
+  modalsState = {}
+}: PiniaMockOptions = {}) {
   const defaultOwnCloudTheme = {
     defaults: {
       ...defaultTheme.clients.web.defaults,
       common: {
         ...defaultTheme.common,
         urls: ['https://imprint.url.theme', 'https://privacy.url.theme']
-      },
-      ...(appBanner && { appBanner })
+      }
     },
     themes: defaultTheme.clients.web.themes
   }
 
-  return createCustomThemeStore({
-    stubActions: false,
+  return createTestingPinia({
+    stubActions,
     initialState: {
+      modals: {
+        modals: [],
+        ...modalsState
+      },
       theme: {
         currentTheme: {
           ...defaultOwnCloudTheme.defaults,
           ...defaultOwnCloudTheme.themes[0]
         },
-        availableThemes: hasOnlyOneTheme
-          ? [defaultOwnCloudTheme.themes[0]]
-          : defaultOwnCloudTheme.themes
+        availableThemes: defaultOwnCloudTheme.themes,
+        ...themeState
       }
     }
   })

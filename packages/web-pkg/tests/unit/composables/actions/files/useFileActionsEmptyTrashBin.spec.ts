@@ -1,4 +1,5 @@
 import { useFileActionsEmptyTrashBin } from '../../../../../src/composables/actions'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'jest-mock-extended'
 import {
@@ -18,7 +19,7 @@ describe('emptyTrashBin', () => {
 
   describe('isEnabled property', () => {
     it('should be false when location is invalid', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         invalidLocation: true,
         setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [] })).toBe(false)
@@ -26,7 +27,7 @@ describe('emptyTrashBin', () => {
       })
     })
     it('should be false in a space trash bin with insufficient permissions', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         driveType: 'project',
         setup: ({ actions }, { space }) => {
           expect(
@@ -41,33 +42,33 @@ describe('emptyTrashBin', () => {
   })
 
   describe('empty trashbin action', () => {
-    it('should trigger the empty trash bin modal window', async () => {
-      const { wrapper } = getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+    it('should trigger the empty trash bin modal window', () => {
+      getWrapper({
+        setup: async ({ actions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler(mock<FileActionOptions>())
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(registerModal).toHaveBeenCalledTimes(1)
         }
       })
     })
   })
 
   describe('method "emptyTrashBin"', () => {
-    it('should hide the modal and show message on success', async () => {
-      const { wrapper } = getWrapper({
+    it('should show message on success', () => {
+      getWrapper({
         setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
           await emptyTrashBin({ space })
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
           expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper } = getWrapper({
+      getWrapper({
         resolveClearTrashBin: false,
         setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
           await emptyTrashBin({ space })

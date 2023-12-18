@@ -4,16 +4,16 @@ import {
   QuotaModal,
   useAbility,
   useCapabilityReadOnlyUserAttributes,
-  useStore,
   UserAction,
-  UserActionOptions
+  UserActionOptions,
+  useModals
 } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
 import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { User } from '@ownclouders/web-client/src/generated'
 
 export const useUserActionsEditQuota = () => {
-  const store = useStore()
+  const { registerModal } = useModals()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
@@ -51,8 +51,7 @@ export const useUserActionsEditQuota = () => {
       ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
     )
 
-    return store.dispatch('createModal', {
-      variation: 'passive',
+    registerModal({
       title: getModalTitle({ resources }),
       customComponent: QuotaModal,
       customComponentAttrs: () => ({
@@ -70,8 +69,7 @@ export const useUserActionsEditQuota = () => {
                 .join(', ')
             }
           : {}
-      }),
-      hideActions: true
+      })
     })
   }
 

@@ -1,5 +1,5 @@
 import { storeToRefs } from 'pinia'
-import { useStore, usePublicLinkContext, useThemeStore } from '@ownclouders/web-pkg'
+import { useStore, usePublicLinkContext, useThemeStore, useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
@@ -20,6 +20,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const publicLinkContext = usePublicLinkContext({ store })
   const themeStore = useThemeStore()
   const { currentTheme } = storeToRefs(themeStore)
+  const { registerModal, removeModal, activeModal } = useModals()
 
   const { companionUrl, webdavCloudType } = applicationConfig
   let { supportedClouds } = applicationConfig
@@ -46,27 +47,26 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   }
 
   uppyService.subscribe('addedForUpload', () => {
-    store.dispatch('hideModal')
+    if (unref(activeModal)) {
+      removeModal(unref(activeModal).id)
+    }
   })
 
   uppyService.subscribe('uploadCompleted', () => {
     removeUppyPlugins()
   })
 
-  const handler = async () => {
+  const handler = () => {
     const renderDarkTheme = currentTheme.value.isDark
 
-    const modal = {
-      variation: 'passive',
+    registerModal({
       title: $gettext('Import files'),
-      cancelText: $gettext('Cancel'),
-      withoutButtonConfirm: true,
+      hideConfirmButton: true,
       onCancel: () => {
         removeUppyPlugins()
-        return store.dispatch('hideModal')
       }
-    }
-    await store.dispatch('createModal', modal)
+    })
+
     uppyService.addPlugin(Dashboard, {
       uppyService,
       inline: true,

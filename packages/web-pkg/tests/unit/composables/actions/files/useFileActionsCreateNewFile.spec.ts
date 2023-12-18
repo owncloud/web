@@ -1,6 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
@@ -20,12 +21,12 @@ describe('useFileActionsCreateNewFile', () => {
       { input: '.', output: 'File name cannot be equal to "."' },
       { input: '..', output: 'File name cannot be equal to ".."' },
       { input: 'myfile.txt', output: null }
-    ])('should validate file name %s', async (data) => {
+    ])('should validate file name %s', (data) => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ checkNewFileName }) => {
-          const result = checkNewFileName(data.input)
+        setup: ({ getNameErrorMsg }) => {
+          const result = getNameErrorMsg(data.input)
           expect(result).toBe(data.output)
         }
       })
@@ -33,7 +34,7 @@ describe('useFileActionsCreateNewFile', () => {
   })
 
   describe('addNewFile', () => {
-    it('create new file', async () => {
+    it('create new file', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
@@ -41,7 +42,6 @@ describe('useFileActionsCreateNewFile', () => {
           await addNewFile('myfile.txt', null)
           await nextTick()
           expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-          expect(storeOptions.actions.hideModal).toHaveBeenCalled()
           expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
@@ -51,7 +51,7 @@ describe('useFileActionsCreateNewFile', () => {
         }
       })
     })
-    it('show error message if createFile fails', async () => {
+    it('show error message if createFile fails', () => {
       const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
@@ -72,15 +72,16 @@ describe('useFileActionsCreateNewFile', () => {
     })
   })
   describe('createNewFileModal', () => {
-    it('should show modal', async () => {
+    it('should show modal', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { registerModal } = useModals()
           const fileActionOptions: FileActionOptions = { space, resources: [] } as FileActionOptions
           unref(actions)[0].handler(fileActionOptions)
           await nextTick()
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(registerModal).toHaveBeenCalled()
         }
       })
     })

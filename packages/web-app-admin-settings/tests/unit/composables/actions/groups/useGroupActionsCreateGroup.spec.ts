@@ -1,14 +1,16 @@
+import { useModals } from '@ownclouders/web-pkg'
 import { useGroupActionsCreateGroup } from '../../../../../src/composables/actions/groups/useGroupActionsCreateGroup'
 import { unref } from 'vue'
-import { defaultStoreMockOptions, getComposableWrapper, createStore } from 'web-test-helpers'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useGroupActionsCreateGroup', () => {
   describe('method "handler"', () => {
     it('creates a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler()
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(registerModal).toHaveBeenCalled()
         }
       })
     })
@@ -18,18 +20,12 @@ describe('useGroupActionsCreateGroup', () => {
 function getWrapper({
   setup
 }: {
-  setup: (instance: ReturnType<typeof useGroupActionsCreateGroup>, { storeOptions }) => void
+  setup: (instance: ReturnType<typeof useGroupActionsCreateGroup>) => void
 }) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   return {
-    wrapper: getComposableWrapper(
-      () => {
-        const instance = useGroupActionsCreateGroup()
-        setup(instance, { storeOptions })
-      },
-      { store }
-    )
+    wrapper: getComposableWrapper(() => {
+      const instance = useGroupActionsCreateGroup()
+      setup(instance)
+    })
   }
 }

@@ -7,6 +7,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
+import { useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditQuota', () => {
   describe('isEnabled property', () => {
@@ -70,9 +71,10 @@ describe('useUserActionsEditQuota', () => {
   describe('handler', () => {
     it('should create a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(registerModal).toHaveBeenCalled()
         }
       })
     })

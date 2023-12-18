@@ -1,4 +1,5 @@
 import { useSpaceActionsEditQuota } from '../../../../../src/composables/actions'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
@@ -57,9 +58,10 @@ describe('editQuota', () => {
   describe('handler', () => {
     it('should create a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(registerModal).toHaveBeenCalled()
         }
       })
     })
@@ -91,7 +93,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsEditQuota({ store })
+        const instance = useSpaceActionsEditQuota()
         setup(instance, { storeOptions })
       },
       {

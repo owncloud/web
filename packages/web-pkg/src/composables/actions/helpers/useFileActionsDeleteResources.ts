@@ -17,6 +17,7 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
+import { useModals } from '../../piniaStores'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
@@ -28,6 +29,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { owncloudSdk } = clientService
+  const { registerModal } = useModals()
 
   const queue = new PQueue({ concurrency: 4 })
   const deleteOps = []
@@ -137,7 +139,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       })
   }
 
-  const trashbin_delete = (space: SpaceResource) => {
+  const trashbin_delete = async (space: SpaceResource) => {
     // TODO: use clear all if all files are selected
     // FIXME: Implement proper batch delete and add loading indicator
     for (const file of unref(resources)) {
@@ -147,10 +149,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       deleteOps.push(p)
     }
 
-    Promise.all(deleteOps).then(() => {
-      store.dispatch('hideModal')
-      store.dispatch('toggleModalConfirmButton')
-    })
+    await Promise.all(deleteOps)
   }
 
   const filesList_delete = (resources: Resource[]) => {
@@ -237,21 +236,13 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const displayDialog = (space: SpaceResource, resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
-    const modal = {
+    registerModal({
       variation: 'danger',
       title: unref(dialogTitle),
       message: unref(dialogMessage),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
-      onCancel: () => {
-        store.dispatch('hideModal')
-      },
-      onConfirm: () => {
-        trashbin_delete(space)
-      }
-    }
-
-    store.dispatch('createModal', modal)
+      onConfirm: () => trashbin_delete(space)
+    })
   }
 
   return {

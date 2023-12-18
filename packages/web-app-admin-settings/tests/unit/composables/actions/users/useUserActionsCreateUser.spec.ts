@@ -1,7 +1,7 @@
-import { useCapabilityCreateUsersDisabled } from '@ownclouders/web-pkg'
+import { useCapabilityCreateUsersDisabled, useModals } from '@ownclouders/web-pkg'
 import { useUserActionsCreateUser } from '../../../../../src/composables/actions/users/useUserActionsCreateUser'
 import { computed, unref } from 'vue'
-import { defaultStoreMockOptions, getComposableWrapper, createStore } from 'web-test-helpers'
+import { getComposableWrapper } from 'web-test-helpers'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
@@ -25,9 +25,10 @@ describe('useUserActionsCreateUser', () => {
   describe('method "handler"', () => {
     it('creates a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler()
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(registerModal).toHaveBeenCalled()
         }
       })
     })
@@ -38,23 +39,17 @@ function getWrapper({
   setup,
   capabilityCreateUsersDisabled = false
 }: {
-  setup: (instance: ReturnType<typeof useUserActionsCreateUser>, { storeOptions }) => void
+  setup: (instance: ReturnType<typeof useUserActionsCreateUser>) => void
   capabilityCreateUsersDisabled?: boolean
 }) {
   jest
     .mocked(useCapabilityCreateUsersDisabled)
     .mockReturnValue(computed(() => capabilityCreateUsersDisabled))
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   return {
-    wrapper: getComposableWrapper(
-      () => {
-        const instance = useUserActionsCreateUser()
-        setup(instance, { storeOptions })
-      },
-      { store }
-    )
+    wrapper: getComposableWrapper(() => {
+      const instance = useUserActionsCreateUser()
+      setup(instance)
+    })
   }
 }

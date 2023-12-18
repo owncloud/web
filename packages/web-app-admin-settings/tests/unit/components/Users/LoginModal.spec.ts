@@ -9,7 +9,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus } from '@ownclouders/web-pkg'
 
 describe('LoginModal', () => {
   it('renders the input including two options', () => {
@@ -65,13 +65,6 @@ describe('LoginModal', () => {
       expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
   })
-  describe('method "onCancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.onCancel()
-      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
-    })
-  })
 })
 
 function getWrapper(users = [mock<User>()]) {
@@ -85,6 +78,7 @@ function getWrapper(users = [mock<User>()]) {
     storeOptions,
     wrapper: shallowMount(LoginModal, {
       props: {
+        modal: mock<Modal>(),
         users
       },
       global: {

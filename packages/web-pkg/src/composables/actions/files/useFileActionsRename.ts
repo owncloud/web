@@ -14,53 +14,44 @@ import { renameResource as _renameResource } from '../../../helpers/resource'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useConfigurationManager } from '../../configuration'
-import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { useCapabilityFilesSharingCanRename } from '../../capability'
+import { useModals } from '../../piniaStores'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const canRename = useCapabilityFilesSharingCanRename()
   const configurationManager = useConfigurationManager()
+  const { registerModal } = useModals()
 
-  const checkNewName = (resource, newName, parentResources = undefined) => {
+  const getNameErrorMsg = (resource: Resource, newName: string, parentResources = undefined) => {
     const newPath =
       resource.path.substring(0, resource.path.length - resource.name.length) + newName
 
     if (!newName) {
-      return store.dispatch('setModalInputErrorMessage', $gettext('The name cannot be empty'))
+      return $gettext('The name cannot be empty')
     }
 
     if (/[/]/.test(newName)) {
-      return store.dispatch('setModalInputErrorMessage', $gettext('The name cannot contain "/"'))
+      return $gettext('The name cannot contain "/"')
     }
 
     if (newName === '.') {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('The name cannot be equal to "."')
-      )
+      return $gettext('The name cannot be equal to "."')
     }
 
     if (newName === '..') {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('The name cannot be equal to ".."')
-      )
+      return $gettext('The name cannot be equal to ".."')
     }
 
     if (/\s+$/.test(newName)) {
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext('The name cannot end with whitespace')
-      )
+      return $gettext('The name cannot end with whitespace')
     }
 
     const exists = store.getters['Files/files'].find(
@@ -68,10 +59,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
     )
     if (exists) {
       const translated = $gettext('The name "%{name}" is already taken')
-      return store.dispatch(
-        'setModalInputErrorMessage',
-        $gettext(translated, { name: newName }, true)
-      )
+      return $gettext(translated, { name: newName }, true)
     }
 
     if (parentResources) {
@@ -81,19 +69,14 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
 
       if (exists) {
         const translated = $gettext('The name "%{name}" is already taken')
-
-        return store.dispatch(
-          'setModalInputErrorMessage',
-          $gettext(translated, { name: newName }, true)
-        )
+        return $gettext(translated, { name: newName }, true)
       }
     }
 
-    store.dispatch('setModalInputErrorMessage', null)
+    return null
   }
 
   const renameResource = async (space: SpaceResource, resource: Resource, newName: string) => {
-    store.dispatch('toggleModalConfirmButton')
     let currentFolder = store.getters['Files/currentFolder']
 
     try {
@@ -101,7 +84,6 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       await (clientService.webdav as WebDAV).moveFiles(space, resource, space, {
         path: newPath
       })
-      store.dispatch('hideModal')
 
       const isCurrentFolder = isSameResource(resource, currentFolder)
 
@@ -142,7 +124,6 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       store.commit('Files/UPSERT_RESOURCE', fileResource)
     } catch (error) {
       console.error(error)
-      store.dispatch('toggleModalConfirmButton')
       let title = $gettext(
         'Failed to rename "%{file}" to "%{newName}"',
         { file: resource.name, newName },
@@ -175,18 +156,20 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
     }
 
     const areFileExtensionsShown = store.state.Files.areFileExtensionsShown
-    const confirmAction = (newName) => {
+    const onConfirm = async (newName: string) => {
       if (!areFileExtensionsShown) {
         newName = `${newName}.${resources[0].extension}`
       }
 
-      return renameResource(space, resources[0], newName)
+      await renameResource(space, resources[0], newName)
     }
-    const checkName = (newName) => {
+    const checkName = (newName: string, setError: (error: string) => void) => {
       if (!areFileExtensionsShown) {
         newName = `${newName}.${resources[0].extension}`
       }
-      checkNewName(resources[0], newName, parentResources)
+
+      const error = getNameErrorMsg(resources[0], newName, parentResources)
+      setError(error)
     }
     const nameWithoutExtension = extractNameWithoutExtension(resources[0])
     const modalTitle =
@@ -200,23 +183,21 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       !resources[0].isFolder && !areFileExtensionsShown ? nameWithoutExtension : resources[0].name
 
     const inputSelectionRange =
-      resources[0].isFolder || !areFileExtensionsShown ? null : [0, nameWithoutExtension.length]
+      resources[0].isFolder || !areFileExtensionsShown
+        ? null
+        : ([0, nameWithoutExtension.length] as [number, number])
 
-    const modal = {
+    registerModal({
       variation: 'passive',
       title,
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Rename'),
       hasInput: true,
       inputValue,
       inputSelectionRange,
       inputLabel: resources[0].isFolder ? $gettext('Folder name') : $gettext('File name'),
-      onCancel: () => store.dispatch('hideModal'),
-      onConfirm: (args) => loadingService.addTask(() => confirmAction(args)),
+      onConfirm,
       onInput: checkName
-    }
-
-    store.dispatch('createModal', modal)
+    })
   }
 
   const actions = computed((): FileAction[] => [
@@ -264,7 +245,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   return {
     actions,
     // HACK: exported for unit tests:
-    checkNewName,
+    getNameErrorMsg,
     renameResource
   }
 }

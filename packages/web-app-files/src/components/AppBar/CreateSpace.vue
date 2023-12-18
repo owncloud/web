@@ -14,65 +14,48 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
-import { useClientService, useLoadingService } from '@ownclouders/web-pkg'
-import { useCreateSpace } from '@ownclouders/web-pkg'
-import { useSpaceHelpers } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
+import { useModals, useCreateSpace, useSpaceHelpers, useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   setup() {
-    const clientService = useClientService()
+    const store = useStore()
+    const { $gettext } = useGettext()
     const { createSpace } = useCreateSpace()
     const { checkSpaceNameModalInput } = useSpaceHelpers()
-    const loadingService = useLoadingService()
-    return { clientService, createSpace, checkSpaceNameModalInput, loadingService }
-  },
-  methods: {
-    ...mapActions([
-      'showMessage',
-      'showErrorMessage',
-      'createModal',
-      'hideModal',
-      'setModalInputErrorMessage'
-    ]),
-    ...mapMutations('runtime/spaces', ['UPSERT_SPACE']),
-    ...mapMutations('Files', ['UPSERT_RESOURCE', 'UPDATE_RESOURCE_FIELD']),
+    const { registerModal } = useModals()
 
-    showCreateSpaceModal() {
-      const modal = {
-        variation: 'passive',
-        title: this.$gettext('Create a new space'),
-        cancelText: this.$gettext('Cancel'),
-        confirmText: this.$gettext('Create'),
-        hasInput: true,
-        inputLabel: this.$gettext('Space name'),
-        inputValue: this.$gettext('New space'),
-        onCancel: this.hideModal,
-        onConfirm: (name) => this.loadingService.addTask(() => this.addNewSpace(name)),
-        onInput: this.checkSpaceNameModalInput
-      }
-
-      this.createModal(modal)
-    },
-
-    async addNewSpace(name) {
+    const addNewSpace = async (name: string) => {
       try {
-        this.hideModal()
-        const createdSpace = await this.createSpace(name)
-        this.UPSERT_RESOURCE(createdSpace)
-        this.UPSERT_SPACE(createdSpace)
-        this.showMessage({
-          title: this.$gettext('Space was created successfully')
+        const createdSpace = await createSpace(name)
+        store.commit('Files/UPSERT_RESOURCE', createdSpace)
+        store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
+        store.dispatch('showMessage', {
+          title: $gettext('Space was created successfully')
         })
       } catch (error) {
         console.error(error)
-        this.showErrorMessage({
-          title: this.$gettext('Creating space failed…'),
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Creating space failed…'),
           error
         })
       }
     }
+
+    const showCreateSpaceModal = () => {
+      registerModal({
+        title: $gettext('Create a new space'),
+        confirmText: $gettext('Create'),
+        hasInput: true,
+        inputLabel: $gettext('Space name'),
+        inputValue: $gettext('New space'),
+        onConfirm: (name: string) => addNewSpace(name),
+        onInput: checkSpaceNameModalInput
+      })
+    }
+
+    return { showCreateSpaceModal }
   }
 })
 </script>

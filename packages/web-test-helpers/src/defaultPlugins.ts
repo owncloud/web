@@ -4,20 +4,22 @@ import { h } from 'vue'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
 import { AbilityRule } from '../../web-client/src/helpers/resource/types'
-import { createPinia } from 'pinia'
+import { PiniaMockOptions, createMockStore } from './mocks'
 
 export interface DefaultPluginsOptions {
   abilities?: AbilityRule[]
   designSystem?: boolean
   gettext?: boolean
   pinia?: boolean
+  piniaOptions?: PiniaMockOptions
 }
 
 export const defaultPlugins = ({
   abilities = [],
   designSystem = true,
   gettext = true,
-  pinia = true
+  pinia = true,
+  piniaOptions = {}
 }: DefaultPluginsOptions = {}) => {
   const plugins = []
 
@@ -45,8 +47,7 @@ export const defaultPlugins = ({
   }
 
   if (pinia) {
-    const pinia = createPinia()
-    plugins.push(pinia)
+    plugins.push(createMockStore(piniaOptions))
   }
 
   plugins.push({

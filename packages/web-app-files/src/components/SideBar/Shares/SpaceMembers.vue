@@ -66,7 +66,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
-import { createLocationSpaces, isLocationSpacesActive } from '@ownclouders/web-pkg'
+import { createLocationSpaces, isLocationSpacesActive, useModals } from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -83,10 +83,13 @@ export default defineComponent({
   },
   setup() {
     const clientService = useClientService()
+    const { registerModal } = useModals()
+
     return {
       clientService,
       configurationManager,
-      resource: inject<Ref<ProjectSpaceResource>>('resource')
+      resource: inject<Ref<ProjectSpaceResource>>('resource'),
+      registerModal
     }
   },
   data: () => {
@@ -141,7 +144,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('runtime/spaces', ['deleteSpaceMember']),
-    ...mapActions(['createModal', 'hideModal', 'showMessage', 'showErrorMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
 
     filter(collection, term) {
       if (!(term || '').trim()) {
@@ -174,18 +177,14 @@ export default defineComponent({
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
-      const modal = {
+      this.registerModal({
         variation: 'danger',
         title: this.$gettext('Remove member'),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Remove'),
         message: this.$gettext('Are you sure you want to remove this member?'),
         hasInput: false,
-        onCancel: this.hideModal,
         onConfirm: () => this.$_ocCollaborators_deleteShare(share)
-      }
-
-      this.createModal(modal)
+      })
     },
 
     async $_ocCollaborators_deleteShare(share) {
@@ -203,9 +202,10 @@ export default defineComponent({
 
         if (currentUserRemoved) {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            return this.$router.go(0)
+            await this.$router.go(0)
+            return
           }
-          return this.$router.push(createLocationSpaces('files-spaces-projects'))
+          await this.$router.push(createLocationSpaces('files-spaces-projects'))
         }
       } catch (error) {
         console.error(error)
@@ -213,8 +213,6 @@ export default defineComponent({
           title: this.$gettext('Failed to remove share'),
           error
         })
-      } finally {
-        this.hideModal()
       }
     }
   }

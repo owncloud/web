@@ -1,5 +1,6 @@
 import { computed, unref } from 'vue'
 import { useFileActionsCreateLink } from '../../../../../src/composables/actions/files/useFileActionsCreateLink'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import {
   createStore,
   defaultComponentMocks,
@@ -85,10 +86,11 @@ describe('useFileActionsCreateLink', () => {
     it('shows a modal if enforced', () => {
       getWrapper({
         enforceModal: true,
-        setup: ({ actions }, { mocks, storeOptions }) => {
+        setup: ({ actions }, { mocks }) => {
+          const { registerModal } = useModals()
           unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(registerModal).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -96,10 +98,11 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         passwordEnforced: true,
         defaultLinkPermissions: SharePermissionBit.Read,
-        setup: ({ actions }, { mocks, storeOptions }) => {
+        setup: ({ actions }, { mocks }) => {
+          const { registerModal } = useModals()
           unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(registerModal).toHaveBeenCalledTimes(1)
         }
       })
     })

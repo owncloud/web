@@ -1,14 +1,13 @@
-import { Store } from 'vuex'
 import { computed } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
 import { SpaceResource, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useStore } from '../../store'
 import { QuotaModal } from '../../../components'
+import { useModals } from '../../piniaStores'
 
-export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useSpaceActionsEditQuota = () => {
+  const { registerModal } = useModals()
   const { $gettext } = useGettext()
   const ability = useAbility()
 
@@ -24,15 +23,13 @@ export const useSpaceActionsEditQuota = ({ store }: { store?: Store<any> } = {})
   }
 
   const handler = ({ resources }: SpaceActionOptions) => {
-    return store.dispatch('createModal', {
-      variation: 'passive',
+    registerModal({
       title: getModalTitle({ resources }),
       customComponent: QuotaModal,
       customComponentAttrs: () => ({
         spaces: resources,
         resourceType: 'space'
-      }),
-      hideActions: true
+      })
     })
   }
 

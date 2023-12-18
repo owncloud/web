@@ -1,16 +1,15 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction, useCapabilityReadOnlyUserAttributes, useStore } from '@ownclouders/web-pkg'
+import { UserAction, useCapabilityReadOnlyUserAttributes, useModals } from '@ownclouders/web-pkg'
 import LoginModal from '../../../components/Users/LoginModal.vue'
 
 export const useUserActionsEditLogin = () => {
-  const store = useStore()
+  const { registerModal } = useModals()
   const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
-    return store.dispatch('createModal', {
-      variation: 'passive',
+    registerModal({
       title: $ngettext(
         'Edit login for "%{user}"',
         'Edit login for %{userCount} users',
@@ -20,7 +19,6 @@ export const useUserActionsEditLogin = () => {
           userCount: resources.length.toString()
         }
       ),
-      hideActions: true,
       customComponent: LoginModal,
       customComponentAttrs: () => ({
         users: resources

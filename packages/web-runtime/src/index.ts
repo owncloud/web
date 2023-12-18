@@ -15,6 +15,7 @@ import {
   announceClientService,
   announceStore,
   announceTheme,
+  announcePiniaStores,
   announceCustomStyles,
   announceTranslations,
   announceVersions,
@@ -92,6 +93,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announcePreviewService({ app, store, configurationManager })
   announcePasswordPolicyService({ app })
   await announceClient(runtimeConfiguration)
+  announcePiniaStores()
 
   app.config.globalProperties.$wormhole = createWormhole()
   app.use(PortalVue, {

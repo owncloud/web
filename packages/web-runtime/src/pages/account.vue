@@ -4,11 +4,6 @@
     <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
       <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
       <div>
-        <edit-password-modal
-          v-if="editPasswordModalOpen"
-          @cancel="closeEditPasswordModal"
-          @confirm="editPassword"
-        ></edit-password-modal>
         <oc-button
           v-if="!isChangePasswordDisabled"
           variation="primary"
@@ -144,7 +139,6 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'vuex'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
@@ -154,6 +148,7 @@ import {
   useCapabilityGraphPersonalDataExport,
   useClientService,
   useGetMatchingSpace,
+  useModals,
   useStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
@@ -170,7 +165,6 @@ export default defineComponent({
   name: 'AccountPage',
   components: {
     AppLoadingSpinner,
-    EditPasswordModal,
     GdprExport
   },
   setup() {
@@ -187,6 +181,7 @@ export default defineComponent({
     const disableEmailNotificationsValue = ref<boolean>()
     const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
     const sseEnabled = useCapabilityCoreSSE()
+    const { registerModal } = useModals()
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
@@ -415,6 +410,13 @@ export default defineComponent({
         : true
     })
 
+    const showEditPasswordModal = () => {
+      registerModal({
+        title: $gettext('Change password'),
+        customComponent: EditPasswordModal
+      })
+    }
+
     return {
       clientService,
       languageOptions,
@@ -434,43 +436,13 @@ export default defineComponent({
       viewOptionWebDavDetailsValue,
       loadAccountBundleTask,
       loadGraphUserTask,
-      loadValuesListTask
-    }
-  },
-  data() {
-    return {
-      editPasswordModalOpen: false
+      loadValuesListTask,
+      showEditPasswordModal
     }
   },
   computed: {
     pageTitle() {
       return this.$gettext(this.$route.meta.title as string)
-    }
-  },
-  methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
-    showEditPasswordModal() {
-      this.editPasswordModalOpen = true
-    },
-    closeEditPasswordModal() {
-      this.editPasswordModalOpen = false
-    },
-    editPassword(currentPassword, newPassword) {
-      return this.clientService.graphAuthenticated.users
-        .changeOwnPassword(currentPassword.trim(), newPassword.trim())
-        .then(() => {
-          this.closeEditPasswordModal()
-          this.showMessage({
-            title: this.$gettext('Password was changed successfully')
-          })
-        })
-        .catch((error) => {
-          console.error(error)
-          this.showErrorMessage({
-            title: this.$gettext('Failed to change password'),
-            error
-          })
-        })
     }
   }
 })

@@ -9,7 +9,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus } from '@ownclouders/web-pkg'
 
 describe('AddToGroupsModal', () => {
   it('renders the input', () => {
@@ -52,13 +52,6 @@ describe('AddToGroupsModal', () => {
       expect(eventSpy).not.toHaveBeenCalled()
     })
   })
-  describe('method "onCancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.onCancel()
-      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
-    })
-  })
 })
 
 function getWrapper({ users = [mock<User>()], groups = [mock<Group>()] } = {}) {
@@ -72,6 +65,7 @@ function getWrapper({ users = [mock<User>()], groups = [mock<Group>()] } = {}) {
     storeOptions,
     wrapper: shallowMount(AddToGroupsModal, {
       props: {
+        modal: mock<Modal>(),
         users,
         groups
       },

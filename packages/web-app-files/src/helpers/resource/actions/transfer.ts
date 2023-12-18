@@ -20,8 +20,6 @@ export class ResourceTransfer extends ConflictDialog {
     private targetFolder: Resource,
     private clientService: ClientService,
     private loadingService: LoadingService,
-    createModal: (modal: object) => void,
-    hideModal: () => void,
     showMessage: (data: object) => void,
     showErrorMessage: (data: object) => void,
     $gettext: (
@@ -41,7 +39,7 @@ export class ResourceTransfer extends ConflictDialog {
       disableHtmlEscaping?: boolean
     ) => string
   ) {
-    super(createModal, hideModal, showMessage, showErrorMessage, $gettext, $ngettext)
+    super(showMessage, showErrorMessage, $gettext, $ngettext)
   }
 
   hasRecursion(): boolean {

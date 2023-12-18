@@ -126,28 +126,38 @@ describe('CreateLinkModal', () => {
   })
   describe('method "confirm"', () => {
     it('shows an error if a password is enforced but empty', async () => {
+      jest.spyOn(console, 'error').mockImplementation(undefined)
       const { wrapper } = getWrapper({ passwordEnforced: true })
-      await wrapper.find(selectors.confirmBtn).trigger('click')
+      try {
+        await wrapper.vm.onConfirm()
+      } catch (error) {}
+
       expect(wrapper.vm.password.error).toBeDefined()
     })
     it('does not create links when the password policy is not fulfilled', async () => {
-      const { wrapper, storeOptions } = getWrapper({ passwordPolicyFulfilled: false })
-      await wrapper.find(selectors.confirmBtn).trigger('click')
-      expect(storeOptions.actions.hideModal).not.toHaveBeenCalled()
+      jest.spyOn(console, 'error').mockImplementation(undefined)
+      const callbackFn = jest.fn()
+      const { wrapper } = getWrapper({ passwordPolicyFulfilled: false, callbackFn })
+      try {
+        await wrapper.vm.onConfirm()
+      } catch (error) {}
+
+      expect(callbackFn).not.toHaveBeenCalled()
     })
     it('creates links for all resources', async () => {
+      const callbackFn = jest.fn()
       const resources = [mock<Resource>({ isFolder: false }), mock<Resource>({ isFolder: false })]
-      const { wrapper, storeOptions, mocks } = getWrapper({ resources })
-      await wrapper.find(selectors.confirmBtn).trigger('click')
+      const { wrapper, mocks } = getWrapper({ resources, callbackFn })
+      await wrapper.vm.onConfirm()
       expect(mocks.createLinkMock).toHaveBeenCalledTimes(resources.length)
-      expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
+      expect(callbackFn).toHaveBeenCalledTimes(1)
     })
     it('emits event in embed mode including the created links', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
       const { wrapper, mocks } = getWrapper({ resources, embedModeEnabled: true })
       const share = mock<Share>({ url: 'someurl' })
       mocks.createLinkMock.mockResolvedValue(share)
-      await wrapper.find(selectors.confirmBtn).trigger('click')
+      await wrapper.vm.onConfirm()
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [share.url])
     })
     it('shows error messages for links that failed to be created', async () => {
@@ -156,14 +166,14 @@ describe('CreateLinkModal', () => {
       const resources = [mock<Resource>({ isFolder: false })]
       const { wrapper, mocks } = getWrapper({ resources })
       mocks.createLinkMock.mockRejectedValue(new Error(''))
-      await wrapper.find(selectors.confirmBtn).trigger('click')
+      await wrapper.vm.onConfirm()
       expect(consoleMock).toHaveBeenCalledTimes(1)
     })
     it('calls the callback at the end if given', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
       const callbackFn = jest.fn()
       const { wrapper } = getWrapper({ resources, callbackFn })
-      await wrapper.find(selectors.confirmBtn).trigger('click')
+      await wrapper.vm.onConfirm()
       expect(callbackFn).toHaveBeenCalledTimes(1)
     })
     it.each([true, false])(
@@ -171,19 +181,12 @@ describe('CreateLinkModal', () => {
       async (isQuickLink) => {
         const resources = [mock<Resource>({ isFolder: false })]
         const { wrapper, mocks } = getWrapper({ resources, isQuickLink })
-        await wrapper.find(selectors.confirmBtn).trigger('click')
+        await wrapper.vm.onConfirm()
         expect(mocks.createLinkMock).toHaveBeenCalledWith(
           expect.objectContaining({ quicklink: isQuickLink })
         )
       }
     )
-  })
-  describe('method "cancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.find(selectors.cancelBtn).trigger('click')
-      expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
-    })
   })
 })
 

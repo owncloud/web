@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
-import { eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus } from '@ownclouders/web-pkg'
 
 describe('CreateGroupModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -59,10 +59,13 @@ describe('CreateGroupModal', () => {
   })
   describe('method "onConfirm"', () => {
     it('should not create group if form is invalid', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, storeOptions } = getWrapper()
 
       const eventSpy = jest.spyOn(eventBus, 'publish')
-      await wrapper.vm.onConfirm()
+      try {
+        await wrapper.vm.onConfirm()
+      } catch (error) {}
 
       expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
       expect(eventSpy).not.toHaveBeenCalled()
@@ -104,13 +107,6 @@ describe('CreateGroupModal', () => {
       expect(eventSpy).not.toHaveBeenCalled()
     })
   })
-  describe('method "onCancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.onCancel()
-      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
-    })
-  })
 })
 
 function getWrapper() {
@@ -123,8 +119,7 @@ function getWrapper() {
     storeOptions,
     wrapper: shallowMount(CreateGroupModal, {
       props: {
-        cancel: jest.fn(),
-        confirm: jest.fn()
+        modal: mock<Modal>()
       },
       global: {
         mocks,

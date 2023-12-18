@@ -1,0 +1,8 @@
+Change: Creating modals
+
+BREAKING CHANGE for developers: The way how to work with modals has been reworked. Modals can now be registered via the `registerModal` method provided by the `useModals` composable, instead of calling `createModal` or `hideModal` from the store.
+
+For more details on how to use the modal please see the linked PR down below.
+
+https://github.com/owncloud/web/pull/10212
+https://github.com/owncloud/web/issues/10095

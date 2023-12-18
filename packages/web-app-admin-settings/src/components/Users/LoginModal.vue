@@ -1,38 +1,23 @@
 <template>
-  <oc-select
-    :model-value="selectedOption"
-    :label="$gettext('Login')"
-    :options="options"
-    :placeholder="$gettext('Select...')"
-    :warning-message="
-      currentUserSelected ? $gettext('Your own login status will remain unchanged.') : ''
-    "
-    @update:model-value="changeSelectedOption"
-  />
-  <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
-    <oc-button
-      class="oc-modal-body-actions-cancel oc-ml-s"
-      appearance="outline"
-      variation="passive"
-      @click="onCancel"
-      >{{ $gettext('Cancel') }}
-    </oc-button>
-    <oc-button
-      class="oc-modal-body-actions-confirm oc-ml-s"
-      appearance="filled"
-      variation="primary"
-      :disabled="!selectedOption"
-      @click="onConfirm"
-      >{{ $gettext('Confirm') }}
-    </oc-button>
+  <div>
+    <oc-select
+      :model-value="selectedOption"
+      :label="$gettext('Login')"
+      :options="options"
+      :placeholder="$gettext('Select...')"
+      :warning-message="
+        currentUserSelected ? $gettext('Your own login status will remain unchanged.') : ''
+      "
+      @update:model-value="changeSelectedOption"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
+import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { User } from '@ownclouders/web-client/src/generated'
-import { useClientService, useLoadingService, useStore, useEventBus } from '@ownclouders/web-pkg'
+import { useClientService, useStore, useEventBus, Modal } from '@ownclouders/web-pkg'
 
 type LoginOption = {
   label: string
@@ -42,23 +27,32 @@ type LoginOption = {
 export default defineComponent({
   name: 'LoginModal',
   props: {
+    modal: { type: Object as PropType<Modal>, required: true },
     users: {
       type: Array as PropType<User[]>,
       required: true
     }
   },
-  setup(props, { expose }) {
+  emits: ['update:confirmDisabled'],
+  setup(props, { emit, expose }) {
     const store = useStore()
     const clientService = useClientService()
-    const loadingService = useLoadingService()
     const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
 
-    const selectedOption = ref()
+    const selectedOption = ref<LoginOption>()
     const options = ref([
       { label: $gettext('Allowed'), value: true },
       { label: $gettext('Forbidden'), value: false }
     ])
+
+    watch(
+      selectedOption,
+      () => {
+        emit('update:confirmDisabled', !unref(selectedOption))
+      },
+      { immediate: true }
+    )
 
     const changeSelectedOption = (option: LoginOption) => {
       selectedOption.value = option
@@ -82,7 +76,7 @@ export default defineComponent({
       const promises = affectedUsers.map(({ id }) =>
         client.users.editUser(id, { accountEnabled: unref(selectedOption).value })
       )
-      const results = await loadingService.addTask(() => Promise.allSettled(promises))
+      const results = await Promise.allSettled(promises)
 
       const succeeded = results.filter((r) => r.status === 'fulfilled') as any
       if (succeeded.length) {
@@ -124,8 +118,8 @@ export default defineComponent({
       }
 
       try {
-        const usersResponse = await loadingService.addTask(() =>
-          Promise.all(succeeded.map(({ value }) => client.users.getUser(value.data.id)))
+        const usersResponse = await Promise.all(
+          succeeded.map(({ value }) => client.users.getUser(value.data.id))
         )
 
         eventBus.publish(
@@ -134,24 +128,19 @@ export default defineComponent({
         )
       } catch (e) {
         console.error(e)
-      } finally {
-        store.dispatch('hideModal')
       }
     }
 
-    const onCancel = () => {
-      store.dispatch('hideModal')
-    }
-
-    expose({ onConfirm, onCancel })
+    expose({ onConfirm })
 
     return {
       selectedOption,
       options,
       changeSelectedOption,
       currentUserSelected,
-      onConfirm,
-      onCancel
+
+      // unit tests
+      onConfirm
     }
   }
 })

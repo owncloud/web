@@ -1,7 +1,8 @@
 import { join } from 'path'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveConflict, ResolveStrategy } from '.'
-import { ResourceConflictModal } from '../../../components'
+import { useModals } from '../../../composables'
+import { SpaceMoveInfoModal, ResourceConflictModal } from '../../../components'
 
 export interface FileConflict {
   resource: Resource
@@ -11,8 +12,6 @@ export interface FileConflict {
 export class ConflictDialog {
   /* eslint-disable no-useless-constructor */
   constructor(
-    protected createModal: (modal: object) => void,
-    protected hideModal: () => void,
     protected showMessage: (data: object) => void,
     protected showErrorMessage: (data: object) => void,
     protected $gettext: (
@@ -82,8 +81,10 @@ export class ConflictDialog {
     suggestMerge = false,
     separateSkipHandling = false // separate skip-handling between files and folders
   ): Promise<ResolveConflict> {
+    const { registerModal } = useModals()
+
     return new Promise<ResolveConflict>((resolve) => {
-      this.createModal({
+      registerModal({
         variation: 'danger',
         title: resource.isFolder
           ? this.$gettext('Folder already exists')
@@ -104,27 +105,19 @@ export class ConflictDialog {
   }
 
   resolveDoCopyInsteadOfMoveForSpaces(): Promise<boolean> {
+    const { registerModal } = useModals()
+
     return new Promise<boolean>((resolve) => {
-      const modal = {
+      registerModal({
         variation: 'danger',
         title: this.$gettext('Copy here?'),
-        customContent: `<p>${this.$gettext(
-          'Moving files from one space to another is not possible. Do you want to copy instead?'
-        )}</p><p>${this.$gettext(
-          'Note: Links and shares of the original file are not copied.'
-        )}</p>`,
-        cancelText: this.$gettext('Cancel'),
+        customComponent: SpaceMoveInfoModal,
         confirmText: this.$gettext('Copy here'),
         onCancel: () => {
-          this.hideModal()
           resolve(false)
         },
-        onConfirm: () => {
-          this.hideModal()
-          resolve(true)
-        }
-      }
-      this.createModal(modal)
+        onConfirm: () => Promise.resolve(resolve(true))
+      })
     })
   }
 }

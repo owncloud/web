@@ -8,7 +8,7 @@ import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { useThemeStore } from '@ownclouders/web-pkg'
+import { useModals, useThemeStore } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
   ClientService,
@@ -328,6 +328,10 @@ export const announceTheme = async ({
   app.use(designSystem, {
     tokens: currentTheme.value.designTokens
   })
+}
+
+export const announcePiniaStores = () => {
+  useModals()
 }
 
 /**

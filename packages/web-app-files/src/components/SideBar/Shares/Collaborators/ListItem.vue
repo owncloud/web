@@ -138,6 +138,7 @@ import {
   queryItemAsString,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
+  useModals,
   useStore
 } from '@ownclouders/web-pkg'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
@@ -186,6 +187,7 @@ export default defineComponent({
     const store = useStore()
     const clientService = useClientService()
     const { $gettext } = useGettext()
+    const { registerModal } = useModals()
 
     const sharedParentDir = computed(() => {
       return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
@@ -198,18 +200,14 @@ export default defineComponent({
     }
 
     const showNotifyShareModal = () => {
-      const modal = {
+      registerModal({
         variation: 'warning',
         icon: 'mail-send',
         title: $gettext('Send a reminder'),
-        cancelText: $gettext('Cancel'),
         confirmText: $gettext('Send'),
         message: $gettext('Are you sure you want to send a reminder about this share?'),
-        hasInput: false,
-        onCancel: () => store.dispatch('hideModal'),
-        onConfirm: () => notifyShare()
-      }
-      store.dispatch('createModal', modal)
+        onConfirm: notifyShare
+      })
     }
     const notifyShare = async () => {
       try {
@@ -226,8 +224,6 @@ export default defineComponent({
           desc: $gettext('Email notification could not be sent'),
           error
         })
-      } finally {
-        store.dispatch('hideModal')
       }
     }
 

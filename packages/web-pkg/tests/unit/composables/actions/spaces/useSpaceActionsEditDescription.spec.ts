@@ -1,4 +1,5 @@
 import { useSpaceActionsEditDescription } from '../../../../../src/composables/actions'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import {
   createStore,
   defaultComponentMocks,
@@ -13,41 +14,43 @@ import { SpaceResource } from '@ownclouders/web-client/src'
 
 describe('editDescription', () => {
   describe('handler', () => {
-    it('should trigger the editDescription modal window with one resource', async () => {
-      const { wrapper } = getWrapper({
+    it('should trigger the editDescription modal window with one resource', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler({ resources: [{ id: '1' } as SpaceResource] })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(registerModal).toHaveBeenCalledTimes(1)
         }
       })
     })
-    it('should not trigger the editDescription modal window with no resource', async () => {
-      const { wrapper } = getWrapper({
+    it('should not trigger the editDescription modal window with no resource', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
+          expect(registerModal).toHaveBeenCalledTimes(0)
         }
       })
     })
   })
 
   describe('method "editDescriptionSpace"', () => {
-    it('should hide the modal on success', async () => {
-      const { wrapper, mocks } = getWrapper({
+    it('should show message on success', () => {
+      getWrapper({
         setup: async ({ actions, editDescriptionSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks } = getWrapper({
+      getWrapper({
         setup: async ({ actions, editDescriptionSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')

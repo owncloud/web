@@ -1,4 +1,4 @@
-import { useSpaceActionsRestore } from '../../../../../src'
+import { useSpaceActionsRestore } from '../../../../../src/composables/actions/spaces'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
@@ -11,11 +11,12 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { useModals } from '../../../../../src/composables/piniaStores'
 
 describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
@@ -30,7 +31,7 @@ describe('restore', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
@@ -46,7 +47,7 @@ describe('restore', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
@@ -62,7 +63,7 @@ describe('restore', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
@@ -71,47 +72,49 @@ describe('restore', () => {
   })
 
   describe('handler', () => {
-    it('should trigger the restore modal window', async () => {
-      const { wrapper } = getWrapper({
+    it('should trigger the restore modal window', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canRestore: () => true, driveType: 'project' })
             ]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(registerModal).toHaveBeenCalledTimes(1)
         }
       })
     })
-    it('should not trigger the restore modal window without any resource', async () => {
-      const { wrapper } = getWrapper({
+    it('should not trigger the restore modal window without any resource', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { registerModal } = useModals()
           await unref(actions)[0].handler({
             resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
+          expect(registerModal).toHaveBeenCalledTimes(0)
         }
       })
     })
   })
 
   describe('method "restoreSpace"', () => {
-    it('should hide the modal on success', async () => {
-      const { wrapper } = getWrapper({
+    it('should show message on success', () => {
+      getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
+          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])

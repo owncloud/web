@@ -24,6 +24,7 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
+import { useModals } from '../../piniaStores'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -31,6 +32,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const { registerModal } = useModals()
 
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
 
@@ -92,8 +94,6 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
       }
       const remainingConflictCount = allConflictsCount - count
       const conflictDialog = new ConflictDialog(
-        (...args) => store.dispatch('createModal', ...args),
-        (...args) => store.dispatch('hideModal', ...args),
         (...args) => store.dispatch('showMessage', ...args),
         (...args) => store.dispatch('showErrorMessage', ...args),
         $gettext,

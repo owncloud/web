@@ -12,6 +12,7 @@ import {
 import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../capability'
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
+import { useModals } from '../../piniaStores'
 
 export const useFileActionsCreateLink = ({
   store,
@@ -30,6 +31,7 @@ export const useFileActionsCreateLink = ({
   const passwordEnforcedCapabilities = useCapabilityFilesSharingPublicPasswordEnforcedFor()
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { createLink } = useCreateLink()
+  const { registerModal } = useModals()
 
   const proceedResult = (result: PromiseSettledResult<Share>[]) => {
     const succeeded = result.filter(
@@ -67,8 +69,7 @@ export const useFileActionsCreateLink = ({
       enforceModal ||
       (passwordEnforced && unref(defaultLinkPermissions) > SharePermissionBit.Internal)
     ) {
-      return store.dispatch('createModal', {
-        variation: 'passive',
+      registerModal({
         title: $ngettext(
           'Create link for "%{resourceName}"',
           'Create links for the selected items',
@@ -84,6 +85,7 @@ export const useFileActionsCreateLink = ({
         }),
         hideActions: true
       })
+      return
     }
 
     const promises = resources.map((resource) =>
