@@ -24,6 +24,33 @@ const spacesResources = [
 ]
 
 describe('ResourceTiles component', () => {
+  const originalGetElementById = document.getElementById
+  beforeEach(() => {
+    const mockElement = {
+      clientWidth: 800
+    }
+    ;(document as any).getElementById = jest.fn((id) => {
+      if (id === 'tiles-view') {
+        return mockElement
+      }
+      return originalGetElementById.call(document, id)
+    })
+    window.getComputedStyle = jest.fn().mockImplementation(() => {
+      return {
+        getPropertyValue: (propName) => {
+          switch (propName) {
+            case '--oc-size-tiles-default':
+              return '16px'
+            case '--oc-size-tiles-resize-step':
+              return '4px'
+            default:
+              return ''
+          }
+        },
+        fontSize: '14px'
+      }
+    })
+  })
   it('renders an array of spaces correctly', () => {
     const { wrapper } = getWrapper({ data: spacesResources })
     expect(wrapper.html()).toMatchSnapshot()
