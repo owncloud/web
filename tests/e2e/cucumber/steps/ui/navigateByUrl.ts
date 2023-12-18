@@ -19,7 +19,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" opens the (?:resource|file|folder)? "([^"]*)" of space "([^"]*)" directly in the browser$/,
+  /^"([^"]*)" opens the (?:resource|file|folder)? "([^"]*)" of space "([^"]*)" through the URL$/,
   async function (this: World, stepUser: string, resource: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
@@ -29,11 +29,11 @@ When(
 )
 
 When(
-  '{string} opens space {string} directly in the browser',
+  '{string} opens space {string} through the URL',
   async function (this: World, stepUser: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
     const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
-    await urlNavObject.openSpaceDirectlyInTheBrowser({ user, space })
+    await urlNavObject.openSpaceViaUrl({ user, space })
   }
 )
