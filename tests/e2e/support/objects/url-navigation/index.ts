@@ -13,4 +13,8 @@ export class URLNavigation {
   ): Promise<void> {
     await po.navigateToDetailsPanelOfResource({ ...args, page: this.#page })
   }
+
+  async openResourceViaUrl(args: Omit<po.openResourceViaUrlArgs, 'page'>): Promise<void> {
+    await po.openResourceViaUrl({ ...args, page: this.#page })
+  }
 }
