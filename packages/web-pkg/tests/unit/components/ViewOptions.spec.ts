@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 import {
   createStore,
   defaultPlugins,
@@ -110,15 +110,12 @@ describe('ViewOptions component', () => {
       })
       expect(wrapper.find(selectors.tileSizeSlider).exists()).toBeTruthy()
     })
-    it.each([1, 2, 3, 4, 5, 6])('applies the correct rem size via css', (tileSize) => {
-      getWrapper({
+    it.each([1, 2, 3, 4, 5, 6])('applies the correct size step', (tileSize) => {
+      const { mocks } = getWrapper({
         tileSize: tileSize.toString(),
         props: { viewModes: [ViewModeConstants.tilesView] }
       })
-      const rootStyle = (document.querySelector(':root') as HTMLElement).style
-      expect(rootStyle.getPropertyValue('--oc-size-tiles-resize-step')).toEqual(
-        `${tileSize * 9}rem`
-      )
+      expect(unref(mocks.tileSizeQueryMock)).toBe(tileSize.toString())
     })
   })
 })
@@ -132,13 +129,15 @@ function getWrapper({
 } = {}) {
   jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(perPage))
   jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(viewMode))
-  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(tileSize))
+  const tileSizeQueryMock = ref(tileSize)
+  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => tileSizeQueryMock)
   jest.mocked(useRouteQuery).mockImplementationOnce(() => ref(currentPage))
 
   const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   const mocks = {
-    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) }),
+    tileSizeQueryMock
   }
   return {
     storeOptions,
