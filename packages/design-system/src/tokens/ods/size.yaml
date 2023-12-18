@@ -26,4 +26,4 @@ size:
     resize-step:
       value: 9rem
     default:
-      value: 12rem
+      value: 9rem

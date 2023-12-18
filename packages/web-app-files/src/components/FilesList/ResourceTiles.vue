@@ -85,13 +85,16 @@
           </template>
         </oc-tile>
       </li>
-      <template>
-        <li v-for="index in ghostTilesCount" :key="index" class="ghost-tile" aria-hidden="true">
-          <div>
-            {{ viewSize }}
-          </div>
-        </li>
-      </template>
+      <li
+        v-for="index in ghostTilesCount"
+        :key="`ghost-tile-${index}`"
+        class="ghost-tile"
+        :aria-hidden="true"
+      >
+        <div>
+          {{ viewSize }}
+        </div>
+      </li>
     </oc-list>
     <Teleport v-if="dragItem" to="body">
       <oc-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
@@ -391,26 +394,29 @@ export default defineComponent({
       viewWidth.value = element.clientWidth - paddingLeft - paddingRight
     }
     const { tileSizePixels: tileSizePixelsBase } = useTileSize()
+    const gapSizePixels = computed(() => {
+      return parseFloat(getComputedStyle(document.documentElement).fontSize)
+    })
     const maxTiles = computed(() => {
       return unref(tileSizePixelsBase)
-        ? Math.floor(unref(viewWidth) / unref(tileSizePixelsBase))
+        ? Math.floor(unref(viewWidth) / (unref(tileSizePixelsBase) + unref(gapSizePixels)))
         : 0
     })
     const ghostTilesCount = computed(() => {
-      return unref(maxTiles) - (unref(maxTiles) ? props.data.length % unref(maxTiles) : 0)
+      const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
+      if (remainder) {
+        return unref(maxTiles) - remainder
+      }
+      return 0
     })
 
     const tileSizePixels = computed(() => {
-      console.log('viewWidth', unref(viewWidth))
-      console.log('maxTiles', unref(maxTiles))
-      return unref(viewWidth) / unref(maxTiles)
+      return unref(viewWidth) / unref(maxTiles) - unref(gapSizePixels)
     })
     watch(
       tileSizePixels,
       (px: number) => {
-        console.log('updating --oc-size-tiles-actual to', `${px}px`)
-        const rootStyle = (document.querySelector(':root') as HTMLElement).style
-        rootStyle.setProperty(`--oc-size-tiles-actual`, `${px}px`)
+        document.documentElement.style.setProperty(`--oc-size-tiles-actual`, `${px}px`)
       },
       { immediate: true }
     )
@@ -462,12 +468,6 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-actual), 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
-
-  @media only screen and (max-width: 640px) {
-    grid-template-columns: 80%;
-    justify-content: center;
-    padding: var(--oc-space-medium) 0;
-  }
 
   &-item-drop-highlight {
     background-color: var(--oc-color-input-border) !important;

@@ -1,5 +1,5 @@
 import { useViewSize } from './useViewMode'
-import { computed, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import { computed, onMounted, ref, unref } from 'vue'
 
 export const useTileSize = () => {
   const viewSize = useViewSize(null)
