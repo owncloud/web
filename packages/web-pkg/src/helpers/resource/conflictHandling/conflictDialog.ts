@@ -1,6 +1,7 @@
 import { join } from 'path'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveConflict, ResolveStrategy } from '.'
+import { ResourceConflictModal } from '../../../components'
 
 export interface FileConflict {
   resource: Resource
@@ -60,11 +61,7 @@ export class ConflictDialog {
 
       // Resolve next conflict
       const conflictsLeft = allConflicts.length - count
-      const result: ResolveConflict = await this.resolveFileExists(
-        conflict.resource,
-        conflictsLeft,
-        conflictsLeft === 1
-      )
+      const result: ResolveConflict = await this.resolveFileExists(conflict.resource, conflictsLeft)
       conflict.strategy = result.strategy
       resolvedConflicts.push(conflict)
       count += 1
@@ -82,72 +79,27 @@ export class ConflictDialog {
   resolveFileExists(
     resource: Resource,
     conflictCount: number,
-    isSingleConflict: boolean,
     suggestMerge = false,
     separateSkipHandling = false // separate skip-handling between files and folders
   ): Promise<ResolveConflict> {
-    let translatedSkipLabel
-
-    if (!separateSkipHandling) {
-      translatedSkipLabel = this.$gettext(
-        'Apply to all %{count} conflicts',
-        { count: conflictCount.toString() },
-        true
-      )
-    } else if (resource.isFolder) {
-      translatedSkipLabel = this.$gettext(
-        'Apply to all %{count} folders',
-        { count: conflictCount.toString() },
-        true
-      )
-    } else {
-      translatedSkipLabel = this.$gettext(
-        'Apply to all %{count} files',
-        { count: conflictCount.toString() },
-        true
-      )
-    }
-
     return new Promise<ResolveConflict>((resolve) => {
-      let doForAllConflicts = false
-      const modal = {
+      this.createModal({
         variation: 'danger',
         title: resource.isFolder
           ? this.$gettext('Folder already exists')
           : this.$gettext('File already exists'),
-        message: resource.isFolder
-          ? this.$gettext(
-              'Folder with name "%{name}" already exists.',
-              { name: resource.name },
-              true
-            )
-          : this.$gettext(
-              'File with name "%{name}" already exists.',
-              { name: resource.name },
-              true
-            ),
-        cancelText: this.$gettext('Skip'),
-        confirmText: this.$gettext('Keep both'),
-        buttonSecondaryText: suggestMerge ? this.$gettext('Merge') : this.$gettext('Replace'),
-        checkboxLabel: isSingleConflict ? '' : translatedSkipLabel,
-        onCheckboxValueChanged: (value) => {
-          doForAllConflicts = value
-        },
-        onCancel: () => {
-          this.hideModal()
-          resolve({ strategy: ResolveStrategy.SKIP, doForAllConflicts } as ResolveConflict)
-        },
-        onConfirmSecondary: () => {
-          this.hideModal()
-          const strategy = suggestMerge ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
-          resolve({ strategy, doForAllConflicts } as ResolveConflict)
-        },
-        onConfirm: () => {
-          this.hideModal()
-          resolve({ strategy: ResolveStrategy.KEEP_BOTH, doForAllConflicts } as ResolveConflict)
-        }
-      }
-      this.createModal(modal)
+        hideActions: true,
+        customComponent: ResourceConflictModal,
+        customComponentAttrs: () => ({
+          resource,
+          conflictCount,
+          suggestMerge,
+          separateSkipHandling,
+          callbackFn: (conflict: ResolveConflict) => {
+            resolve(conflict)
+          }
+        })
+      })
     })
   }
 

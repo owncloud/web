@@ -1,4 +1,4 @@
-import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions'
+import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions/spaces'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
