@@ -14,9 +14,7 @@ export class URLNavigation {
     await po.navigateToDetailsPanelOfResource({ ...args, page: this.#page })
   }
 
-  async openResourceDirectlyInTheBrowser(
-    args: Omit<po.openResourceDirectlyInTheBrowserArgs, 'page'>
-  ): Promise<void> {
-    await po.openResourceDirectlyInTheBrowser({ ...args, page: this.#page })
+  async openResourceViaUrl(args: Omit<po.openResourceViaUrlArgs, 'page'>): Promise<void> {
+    await po.openResourceViaUrl({ ...args, page: this.#page })
   }
 }
