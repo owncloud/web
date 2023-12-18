@@ -183,7 +183,7 @@ export const getDataOfFileInsideSpace = async ({
   })
   checkResponseStatus(response, `Failed while getting information of file ${pathToFileName}`)
   const fileData = JSON.parse(convert.xml2json(await response.text(), { compact: true }))
-  return _.get(fileData, '[d:multistatus][d:response][d:propstat]')
+  return _.get(fileData, '[d:multistatus][d:response]')
 }
 
 export const getIdOfFileInsideSpace = async ({
@@ -203,8 +203,18 @@ export const getIdOfFileInsideSpace = async ({
     spaceType,
     spaceName
   })
-  // extract file id form the response
-  return _.get(fileDataResponse, '[0][d:prop][oc:fileid]')._text
+  // when there is a file inside the folder response comes as
+  // [ [Object], [Object] ], so handel this case
+  if (fileDataResponse.constructor.name === 'Array') {
+    for (const key in fileDataResponse) {
+      if (fileDataResponse[key]['d:propstat'][0]['d:prop']['oc:name']._text === pathToFileName) {
+        return _.get(fileDataResponse[key], '[d:propstat][0][d:prop][oc:fileid]')._text
+      }
+    }
+  } else {
+    // extract file id form the response
+    return _.get(fileDataResponse, '[d:propstat][0][d:prop][oc:fileid]')._text
+  }
 }
 
 export const addMembersToTheProjectSpace = async ({
