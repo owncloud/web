@@ -35,7 +35,7 @@ export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
   await page.goto(fullUrl)
 }
 
-export const openSpaceDirectlyInTheBrowser = async (args: openResourceViaUrlArgs) => {
+export const openSpaceViaUrl = async (args: openResourceViaUrlArgs) => {
   const { page, user, space } = args
   let spaceName = null
   let spaceType = null

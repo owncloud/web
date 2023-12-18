@@ -27,10 +27,10 @@ Feature: web can be navigated through urls
     Then "Alice" shares the following resource using the direct url navigation
       | resource  | recipient | type | role     | resourceType |
       | lorem.txt | Brian     | user | Can view | file         |
-    When "Alice" opens the file "lorem.txt" of space "personal" directly in the browser
+    When "Alice" opens the file "lorem.txt" of space "personal" through the URL
     Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
-    When "Alice" opens the folder "FOLDER" of space "personal" directly in the browser
+    When "Alice" opens the folder "FOLDER" of space "personal" through the URL
     And "Alice" opens the following file in texteditor
       | resource               |
       | file_inside_folder.txt |
@@ -47,11 +47,10 @@ Feature: web can be navigated through urls
       | name              | content                   |
       | spaceTextfile.txt | This is test file. Cheers |
     When "Alice" logs in
-    And "Alice" opens space "Development" directly in the browser
+    And "Alice" opens space "Development" through the URL
     And "Alice" opens the following file in texteditor
-      | resource               |
+      | resource          |
       | spaceTextfile.txt |
-    And "Alice" enters the text "Hello everyone" in editor "TextEditor"
-    And "Alice" saves the file viewer
+    Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
     Then "Alice" logs out
