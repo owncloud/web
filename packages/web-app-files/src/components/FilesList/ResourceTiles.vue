@@ -34,7 +34,7 @@
         </oc-list>
       </oc-drop>
     </div>
-    <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizableTiles' : ''">
+    <oc-list class="oc-tiles oc-flex">
       <li v-for="resource in data" :key="resource.id" class="oc-tiles-item has-item-context-menu">
         <oc-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
@@ -85,7 +85,7 @@
           </template>
         </oc-tile>
       </li>
-      <template v-if="ghostTilesCount">
+      <template>
         <li v-for="index in ghostTilesCount" :key="index" class="ghost-tile" aria-hidden="true">
           <div>
             {{ viewSize }}
@@ -131,6 +131,7 @@ import {
   SortField,
   useResourceRouteResolver,
   useStore,
+  useTileSize,
   ViewModeConstants
 } from '@ownclouders/web-pkg'
 
@@ -144,10 +145,6 @@ export default defineComponent({
     data: {
       type: Array as PropType<Resource[]>,
       default: () => []
-    },
-    resizable: {
-      type: Boolean,
-      default: false
     },
     selectedIds: {
       type: Array,
@@ -201,8 +198,6 @@ export default defineComponent({
 
     const dragItem = ref()
     const ghostElementRef = ref()
-    const maxTileCount = ref(0)
-    const tileSize = ref('')
 
     const tileRefs = ref({
       tiles: [],
@@ -387,54 +382,46 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
-    const ghostTilesCount = computed(() => {
-      return Math.max(0, unref(maxTileCount) - props.data.length)
-    })
-
-    const getCssVariableValue = (variableName) => {
-      const style = getComputedStyle(document.documentElement)
-      return style.getPropertyValue(variableName).trim()
-    }
-
-    const remToPixels = (rem) => {
-      const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
-      return rem * fontSize
-    }
-
-    const calculateGhostTileCount = () => {
+    const viewWidth = ref<number>(0)
+    const updateViewWidth = () => {
       const element = document.getElementById('tiles-view')
       const style = window.getComputedStyle(element)
       const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10)
       const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10)
-      const maxWidthWithoutPadding = element.clientWidth - paddingLeft - paddingRight
-
-      const cssVariableValue = getCssVariableValue('--oc-size-tiles-resize-step')
-      const remValue = parseFloat(cssVariableValue)
-      const pixels = remToPixels(remValue)
-      maxTileCount.value = Math.floor(maxWidthWithoutPadding / pixels)
+      viewWidth.value = element.clientWidth - paddingLeft - paddingRight
     }
-
-    const updateTileSize = () => {
-      tileSize.value = getComputedStyle(document.documentElement)
-        .getPropertyValue('--oc-size-tiles-resize-step')
-        .trim()
-    }
-
-    onMounted(() => {
-      window.addEventListener('resize', calculateGhostTileCount)
-      calculateGhostTileCount()
-
-      updateTileSize()
-      const observer = new MutationObserver(updateTileSize)
-      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
-
-      onBeforeUnmount(() => {
-        observer.disconnect()
-        window.removeEventListener('resize', calculateGhostTileCount)
-      })
+    const { tileSizePixels: tileSizePixelsBase } = useTileSize()
+    const maxTiles = computed(() => {
+      return unref(tileSizePixelsBase)
+        ? Math.floor(unref(viewWidth) / unref(tileSizePixelsBase))
+        : 0
+    })
+    const ghostTilesCount = computed(() => {
+      return unref(maxTiles) - (unref(maxTiles) ? props.data.length % unref(maxTiles) : 0)
     })
 
-    watch(tileSize, calculateGhostTileCount)
+    const tileSizePixels = computed(() => {
+      console.log('viewWidth', unref(viewWidth))
+      console.log('maxTiles', unref(maxTiles))
+      return unref(viewWidth) / unref(maxTiles)
+    })
+    watch(
+      tileSizePixels,
+      (px: number) => {
+        console.log('updating --oc-size-tiles-actual to', `${px}px`)
+        const rootStyle = (document.querySelector(':root') as HTMLElement).style
+        rootStyle.setProperty(`--oc-size-tiles-actual`, `${px}px`)
+      },
+      { immediate: true }
+    )
+
+    onMounted(() => {
+      window.addEventListener('resize', updateViewWidth)
+      updateViewWidth()
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', updateViewWidth)
+    })
 
     return {
       areFileExtensionsShown,
@@ -472,22 +459,14 @@ export default defineComponent({
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-actual), 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
-
-  &.resizableTiles {
-    grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-resize-step), 1fr));
-  }
 
   @media only screen and (max-width: 640px) {
     grid-template-columns: 80%;
     justify-content: center;
     padding: var(--oc-space-medium) 0;
-
-    &.resizableTiles {
-      grid-template-columns: 80%;
-    }
   }
 
   &-item-drop-highlight {

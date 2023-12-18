@@ -24,6 +24,6 @@ size:
     value: 14px
   tiles:
     resize-step:
-      value: 12rem
+      value: 9rem
     default:
-      value: 14rem
+      value: 12rem
