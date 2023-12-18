@@ -10,7 +10,7 @@ export interface navigateToDetailsPanelOfResourceArgs {
   user: User
 }
 
-export interface openResourceDirectlyInTheBrowserArgs {
+export interface openResourceViaUrlArgs {
   page: Page
   resource: string
   user: User
@@ -30,9 +30,7 @@ export const navigateToDetailsPanelOfResource = async (
   await page.goto(fullUrl)
 }
 
-export const openResourceDirectlyInTheBrowser = async (
-  args: openResourceDirectlyInTheBrowserArgs
-) => {
+export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
   const { page, resource, user } = args
   const fileId = await getIdOfFileInsideSpace({
     user,

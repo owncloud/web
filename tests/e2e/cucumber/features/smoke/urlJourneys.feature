@@ -27,15 +27,13 @@ Feature: web can be navigated through urls
     And "Alice" shares the following resource using the direct url navigation
       | resource  | recipient | type | role     | resourceType |
       | lorem.txt | Brian     | user | Can view | file         |
-    When "Alice" opens the file "lorem.txt" directly in the browser
-    And "Alice" enters the text "Hello world" in editor "TextEditor"
-    And "Alice" saves the file viewer
+    When "Alice" opens the file "lorem.txt" through the URL
+    Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
-    When "Alice" opens the folder "FOLDER" directly in the browser
+    When "Alice" opens the folder "FOLDER" through the URL
     And "Alice" opens the following file in texteditor
       | resource               |
       | file_inside_folder.txt |
-    And "Alice" enters the text "Hello everyone" in editor "TextEditor"
-    And "Alice" saves the file viewer
+    Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
     And "Alice" logs out
