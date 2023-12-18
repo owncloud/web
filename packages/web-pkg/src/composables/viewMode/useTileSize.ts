@@ -19,23 +19,14 @@ export const useTileSize = () => {
   const baseSizePixels = ref<number>(0)
   const stepSizePixels = ref<number>(0)
   const updateThemeVars = () => {
-    // FIXME: css root vars are undefined o_O
-    const rootStyle = (document.querySelector(':root') as HTMLElement).style
-    baseSizePixels.value = themeVarToPixels(
-      rootStyle.getPropertyValue('--oc-size-tiles-resize-default')
-    )
-    stepSizePixels.value = themeVarToPixels(
-      rootStyle.getPropertyValue('--oc-size-tiles-resize-step')
-    )
+    const element = document.documentElement
+    const styles = getComputedStyle(element)
+    baseSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-default'))
+    stepSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-resize-step'))
   }
-  const observer = new MutationObserver(updateThemeVars)
   onMounted(() => {
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] })
+    updateThemeVars()
   })
-  onBeforeUnmount(() => {
-    observer?.disconnect()
-  })
-
   const tileSizePixels = computed(() => {
     return unref(baseSizePixels) + (unref(viewSize) - 1) * unref(stepSizePixels)
   })
