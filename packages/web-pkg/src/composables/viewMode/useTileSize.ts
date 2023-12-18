@@ -18,14 +18,10 @@ export const useTileSize = () => {
 
   const baseSizePixels = ref<number>(0)
   const stepSizePixels = ref<number>(0)
-  const updateThemeVars = () => {
-    const element = document.documentElement
-    const styles = getComputedStyle(element)
+  onMounted(() => {
+    const styles = getComputedStyle(document.documentElement)
     baseSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-default'))
     stepSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-resize-step'))
-  }
-  onMounted(() => {
-    updateThemeVars()
   })
   const tileSizePixels = computed(() => {
     return unref(baseSizePixels) + (unref(viewSize) - 1) * unref(stepSizePixels)
