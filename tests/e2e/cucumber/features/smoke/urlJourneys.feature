@@ -24,3 +24,4 @@ Feature: web can be navigated through urls
     And "Alice" shares the following resource using the direct url navigation
       | resource  | recipient | type | role     | resourceType |
       | lorem.txt | Brian     | user | Can view | file         |
+    And "Alice" logs out
