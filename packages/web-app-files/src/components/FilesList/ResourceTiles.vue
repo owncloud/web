@@ -388,9 +388,9 @@ export default defineComponent({
     const viewWidth = ref<number>(0)
     const updateViewWidth = () => {
       const element = document.getElementById('tiles-view')
-      const style = window.getComputedStyle(element)
-      const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10)
-      const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10)
+      const style = getComputedStyle(element)
+      const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10) | 0
+      const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10) | 0
       viewWidth.value = element.clientWidth - paddingLeft - paddingRight
     }
     const { tileSizePixels: tileSizePixelsBase } = useTileSize()
@@ -403,8 +403,11 @@ export default defineComponent({
         : 0
     })
     const ghostTilesCount = computed(() => {
+      console.log('maxTiles', maxTiles.value)
+      console.log('proplength', props.data.length)
       const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
       if (remainder) {
+        console.log('ghostTileCount', unref(maxTiles) - remainder)
         return unref(maxTiles) - remainder
       }
       return 0
