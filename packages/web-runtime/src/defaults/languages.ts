@@ -10,5 +10,6 @@ export const supportedLanguages = {
   ko: '한국어 - Korean',
   sq: 'Shqipja - Albanian',
   sv: 'Svenska - Swedish',
-  tr: 'Türkçe - Turkish'
+  tr: 'Türkçe - Turkish',
+  zh: '汉语 - Chinese'
 }
