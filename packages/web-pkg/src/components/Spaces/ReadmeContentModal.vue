@@ -1,31 +1,14 @@
 <template>
-  <portal to="app.runtime.modal">
-    <oc-modal
-      focus-trap-initial="#description-input-area"
-      :title="modalTitle"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Confirm')"
-      @confirm="editReadme"
-      @cancel="cancel"
-    >
-      <template #content>
-        <label
-          class="oc-label"
-          for="description-input-area"
-          v-text="$gettext('Space description')"
-        />
-        <textarea
-          id="description-input-area"
-          v-model="readmeContent"
-          class="oc-width-1-1 oc-height-1-1 oc-input oc-text-input"
-        ></textarea>
-      </template>
-    </oc-modal>
-  </portal>
+  <label class="oc-label" for="description-input-area" v-text="$gettext('Space description')" />
+  <textarea
+    id="description-input-area"
+    v-model="readmeContent"
+    class="oc-width-1-1 oc-height-1-1 oc-input oc-text-input"
+  ></textarea>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, onMounted, ref, unref } from 'vue'
+import { defineComponent, PropType, onMounted, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
@@ -37,32 +20,23 @@ export default defineComponent({
     space: {
       type: Object as PropType<SpaceResource>,
       required: true
-    },
-    cancel: {
-      type: Function as PropType<(...args: any) => unknown>,
-      required: true
     }
   },
-  setup(props) {
+  setup(props, { expose }) {
     const store = useStore()
     const { $gettext } = useGettext()
     const clientService = useClientService()
 
     const readmeContent = ref<string>()
-    const modalTitle = computed(() =>
-      $gettext('Edit description for space %{name}', {
-        name: props.space.name
-      })
-    )
 
-    const editReadme = async () => {
+    const onConfirm = async () => {
       try {
         const readmeMetaData = await clientService.webdav.putFileContents(props.space, {
           path: getRelativeSpecialFolderSpacePath(props.space, 'readme'),
           content: unref(readmeContent)
         })
 
-        props.cancel()
+        store.dispatch('hideModal')
         store.commit('Files/UPDATE_RESOURCE_FIELD', {
           id: props.space.id,
           field: 'spaceReadmeData',
@@ -80,6 +54,12 @@ export default defineComponent({
       }
     }
 
+    const onCancel = () => {
+      store.dispatch('hideModal')
+    }
+
+    expose({ onConfirm, onCancel })
+
     onMounted(async () => {
       readmeContent.value = (
         await clientService.webdav.getFileContents(props.space, {
@@ -88,7 +68,7 @@ export default defineComponent({
       ).body
     })
 
-    return { readmeContent, modalTitle, editReadme }
+    return { readmeContent, onConfirm, onCancel }
   }
 })
 </script>

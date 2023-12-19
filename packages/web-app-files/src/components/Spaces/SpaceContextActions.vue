@@ -1,17 +1,6 @@
 <template>
   <div>
     <context-action-menu :menu-sections="menuSections" :action-options="_actionOptions" />
-    <quota-modal
-      v-if="quotaModalIsOpen"
-      :cancel="closeQuotaModal"
-      :spaces="_actionOptions.resources"
-      :max-quota="maxQuota"
-    />
-    <readme-content-modal
-      v-if="readmeContentModalIsOpen"
-      :cancel="closeReadmeContentModal"
-      :space="_actionOptions.resources[0]"
-    />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
@@ -27,9 +16,6 @@
 
 <script lang="ts">
 import { ContextActionMenu, useSpaceActionsNavigateToTrash } from '@ownclouders/web-pkg'
-import { QuotaModal } from '@ownclouders/web-pkg'
-import { ReadmeContentModal } from '@ownclouders/web-pkg'
-
 import { useFileActionsShowDetails } from '@ownclouders/web-pkg'
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
 import {
@@ -45,19 +31,13 @@ import {
 } from '@ownclouders/web-pkg'
 import { isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
-import {
-  useCapabilitySpacesMaxQuota,
-  useRouter,
-  useStore,
-  usePreviewService
-} from '@ownclouders/web-pkg'
+import { useRouter, useStore, usePreviewService } from '@ownclouders/web-pkg'
 import { FileActionOptions, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceContextActions',
-  components: { ContextActionMenu, QuotaModal, ReadmeContentModal },
-
+  components: { ContextActionMenu },
   props: {
     actionOptions: {
       type: Object as PropType<SpaceActionOptions>,
@@ -78,17 +58,9 @@ export default defineComponent({
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
     const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
-    const {
-      actions: editQuotaActions,
-      modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    const { actions: editQuotaActions } = useSpaceActionsEditQuota({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
-    const {
-      actions: editReadmeContentActions,
-      modalOpen: readmeContentModalIsOpen,
-      closeModal: closeReadmeContentModal
-    } = useSpaceActionsEditReadmeContent({ store })
+    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
@@ -175,18 +147,11 @@ export default defineComponent({
     return {
       _actionOptions: actionOptions,
       menuSections,
-      maxQuota: useCapabilitySpacesMaxQuota(),
       spaceImageInput,
       uploadImageActions,
       uploadImageSpace,
 
-      supportedSpaceImageMimeTypes,
-
-      readmeContentModalIsOpen,
-      closeReadmeContentModal,
-
-      quotaModalIsOpen,
-      closeQuotaModal
+      supportedSpaceImageMimeTypes
     }
   }
 })

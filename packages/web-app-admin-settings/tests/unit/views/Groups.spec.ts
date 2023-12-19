@@ -25,29 +25,6 @@ jest.mock('@ownclouders/web-pkg', () => ({
 }))
 
 describe('Groups view', () => {
-  describe('method "onCreateGroup"', () => {
-    it('should hide the modal and show message on success', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      expect(wrapper.vm.createGroupModalOpen).toBeFalsy()
-      await wrapper.vm.onCreateGroup({ displayName: 'admins' })
-
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
-      expect(wrapper.vm.createGroupModalOpen).toBeTruthy()
-    })
-
-    it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const clientService = getClientServiceMock()
-      clientService.graphAuthenticated.groups.createGroup.mockImplementation(() =>
-        mockAxiosReject()
-      )
-      const { wrapper, storeOptions } = getWrapper({ clientService })
-      await wrapper.vm.onCreateGroup({ displayName: 'admins' })
-
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
-    })
-  })
-
   describe('method "onEditGroup"', () => {
     it('should emit event on success', async () => {
       const clientService = getClientServiceMock()
@@ -157,7 +134,6 @@ function getWrapper({ clientService = getClientServiceMock() } = {}) {
         mocks,
         provide: mocks,
         stubs: {
-          CreateGroupModal: true,
           AppLoadingSpinner: true,
           NoContentMessage: true,
           GroupsList: true,

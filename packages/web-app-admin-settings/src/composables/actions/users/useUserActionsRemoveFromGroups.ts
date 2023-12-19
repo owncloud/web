@@ -22,10 +22,10 @@ export const useUserActionsRemoveFromGroups = ({ groups }: { groups: Ref<Group[]
       ),
       hideActions: true,
       customComponent: RemoveFromGroupsModal,
-      customComponentAttrs: {
-        users: [...resources],
+      customComponentAttrs: () => ({
+        users: resources,
         groups: unref(groups)
-      }
+      })
     })
   }
 

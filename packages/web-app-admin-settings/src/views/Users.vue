@@ -128,15 +128,6 @@
         </div>
       </template>
     </app-template>
-    <quota-modal
-      v-if="quotaModalIsOpen"
-      :cancel="closeQuotaModal"
-      :spaces="selectedPersonalDrives"
-      :max-quota="maxQuota"
-      :warning-message="quotaModalWarningMessage"
-      :warning-message-contextual-helper-data="quotaWarningMessageContextualHelperData"
-      resource-type="user"
-    />
   </div>
 </template>
 
@@ -154,21 +145,17 @@ import {
   useUserActionsEditQuota,
   useUserActionsCreateUser
 } from '../composables'
-import { SpaceResource } from '@ownclouders/web-client'
 import { Drive, User, Group } from '@ownclouders/web-client/src/generated'
-import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   AppLoadingSpinner,
   ItemFilter,
   NoContentMessage,
-  QuotaModal,
   eventBus,
   queryItemAsString,
   useAccessToken,
   useCapabilitySpacesMaxQuota,
   useClientService,
   useConfigurationManager,
-  useLoadingService,
   useRoute,
   useRouteQuery,
   useRouter,
@@ -183,7 +170,6 @@ import {
   ref,
   onBeforeUnmount,
   onMounted,
-  toRaw,
   unref,
   watch,
   nextTick
@@ -203,17 +189,15 @@ export default defineComponent({
     AppTemplate,
     UsersList,
     ContextActions,
-    ItemFilter,
-    QuotaModal
+    ItemFilter
   },
   setup() {
-    const { $gettext, $ngettext } = useGettext()
+    const { $gettext } = useGettext()
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
-    const loadingService = useLoadingService()
     const configurationManager = useConfigurationManager()
 
     const currentPageQuery = useRouteQuery('page', '1')
@@ -241,11 +225,7 @@ export default defineComponent({
       groups: writableGroups
     })
     const { actions: editLoginActions } = useUserActionsEditLogin()
-    const {
-      actions: editQuotaActions,
-      modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal
-    } = useUserActionsEditQuota()
+    const { actions: editQuotaActions } = useUserActionsEditQuota()
 
     const users = ref([])
     const groups = ref([])
@@ -399,33 +379,11 @@ export default defineComponent({
       return resetPagination()
     }
 
-    const selectedPersonalDrives = ref([])
     watch(selectedUserIds, async () => {
       sideBarLoading.value = true
-      // Load additional user data
-      const requests = unref(selectedUsers).map((user) => loadAdditionalUserDataTask.perform(user))
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled<Array<unknown>>(requests)
-      })
-      const failedRequests = results.filter((result) => result.status === 'rejected')
-      if (failedRequests.length > 0) {
-        console.debug('Failed to load additional user data', failedRequests)
-      }
-
-      selectedPersonalDrives.value.splice(0, unref(selectedPersonalDrives).length)
-      unref(selectedUsers).forEach((user) => {
-        const drive = toRaw(user.drive)
-        if (drive === undefined || drive.id === undefined) {
-          return
-        }
-        const spaceResource = {
-          id: drive.id,
-          name: user.displayName,
-          spaceQuota: drive.quota
-        } as SpaceResource
-        selectedPersonalDrives.value.push(spaceResource)
-      })
-
+      await Promise.all(
+        unref(selectedUsers).map((user) => loadAdditionalUserDataTask.perform(user))
+      )
       sideBarLoading.value = false
     })
 
@@ -441,39 +399,15 @@ export default defineComponent({
 
     const updateSpaceQuota = ({ spaceId, quota }) => {
       const userIndex = unref(users).findIndex((u) => u.drive?.id === spaceId)
-      if (userIndex) {
+      if (userIndex >= 0) {
         unref(users)[userIndex].drive.quota = quota
       }
 
       const selectedIndex = unref(selectedUsers).findIndex((u) => u.drive?.id === spaceId)
-      if (selectedIndex) {
+      if (selectedIndex >= 0) {
         unref(selectedUsers)[selectedIndex].drive.quota = quota
       }
     }
-
-    const usersWithoutDrive = computed(() => {
-      return unref(selectedUsers).filter(
-        ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
-      )
-    })
-
-    const quotaModalWarningMessage = computed(() => {
-      return usersWithoutDrive.value.length
-        ? $gettext('Quota will only be applied to users who logged in at least once.')
-        : ''
-    })
-
-    const quotaWarningMessageContextualHelperData = computed(() => {
-      return usersWithoutDrive.value.length
-        ? {
-            title: $gettext('Unaffected users'),
-            text: [...usersWithoutDrive.value]
-              .sort((u1, u2) => u1.displayName.localeCompare(u2.displayName))
-              .map((user) => user.displayName)
-              .join(', ')
-          }
-        : {}
-    })
 
     onMounted(async () => {
       for (const f in filters) {
@@ -699,11 +633,6 @@ export default defineComponent({
       filterRoles,
       filterDisplayName,
       filterTermDisplayName,
-      quotaModalIsOpen,
-      quotaModalWarningMessage,
-      quotaWarningMessageContextualHelperData,
-      closeQuotaModal,
-      selectedPersonalDrives,
       writableGroups,
       isFilteringActive,
       isFilteringMandatory,

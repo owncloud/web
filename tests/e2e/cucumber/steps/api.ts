@@ -120,7 +120,7 @@ Given(
         user,
         pathToFile: info.pathToFile,
         content: info.content,
-        mtime: info.mtime
+        mtimeDeltaDays: info.mtimeDeltaDays
       })
     }
   }

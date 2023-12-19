@@ -1,23 +1,22 @@
-import { Resource } from '@ownclouders/web-client/src/helpers'
-import { Store } from 'vuex'
-import { computed, unref, ref } from 'vue'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { computed, unref } from 'vue'
 import { useStore } from '../../store'
-import { FileAction } from '../../../'
+import { FileAction } from '../../../composables'
+import { CreateShortcutModal } from '../../../components'
 import { useGettext } from 'vue3-gettext'
 
-export const useFileActionsCreateNewShortcut = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResource }) => {
+  const store = useStore()
   const { $gettext } = useGettext()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
 
-  const modalOpen = ref(false)
-
-  const closeModal = () => {
-    modalOpen.value = false
-  }
-
   const handler = () => {
-    modalOpen.value = true
+    return store.dispatch('createModal', {
+      title: $gettext('Create a Shortcut'),
+      hideActions: true,
+      customComponent: CreateShortcutModal,
+      customComponentAttrs: () => ({ space })
+    })
   }
 
   const actions = computed((): FileAction[] => {
@@ -39,8 +38,6 @@ export const useFileActionsCreateNewShortcut = ({ store }: { store?: Store<any> 
   })
 
   return {
-    actions,
-    modalOpen,
-    closeModal
+    actions
   }
 }

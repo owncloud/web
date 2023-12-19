@@ -13,7 +13,7 @@ import { Drive } from '@ownclouders/web-client/src/generated'
 describe('editQuota', () => {
   describe('isEnabled property', () => {
     it('should be false when not resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
@@ -29,7 +29,7 @@ describe('editQuota', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         canEditSpaceQuota: true,
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
@@ -46,10 +46,20 @@ describe('editQuota', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         canEditSpaceQuota: false,
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
+        }
+      })
+    })
+  })
+  describe('handler', () => {
+    it('should create a modal', () => {
+      getWrapper({
+        setup: async ({ actions }, { storeOptions }) => {
+          await unref(actions)[0].handler({ resources: [] })
+          expect(storeOptions.actions.createModal).toHaveBeenCalled()
         }
       })
     })

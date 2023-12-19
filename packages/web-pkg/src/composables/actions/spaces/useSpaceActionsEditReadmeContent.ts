@@ -1,21 +1,23 @@
 import { Store } from 'vuex'
 import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { ReadmeContentModal } from '../../../components'
 
 export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const { $gettext } = useGettext()
 
-  const modalOpen = ref(false)
-
-  const closeModal = () => {
-    modalOpen.value = false
-  }
-
-  const handler = ({}: SpaceActionOptions) => {
-    modalOpen.value = true
+  const handler = ({ resources }: SpaceActionOptions) => {
+    return store.dispatch('createModal', {
+      variation: 'passive',
+      title: $gettext('Edit description for space %{name}', {
+        name: resources[0].name
+      }),
+      customComponent: ReadmeContentModal,
+      customComponentAttrs: () => ({ space: resources[0] })
+    })
   }
 
   const actions = computed((): SpaceAction[] => [
@@ -43,8 +45,6 @@ export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any>
   ])
 
   return {
-    modalOpen,
-    closeModal,
     actions
   }
 }

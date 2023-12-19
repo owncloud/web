@@ -102,7 +102,6 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
       const resolvedConflict: ResolveConflict = await conflictDialog.resolveFileExists(
         { name: conflict.name, isFolder } as Resource,
         remainingConflictCount,
-        remainingConflictCount <= 1,
         false
       )
       count++

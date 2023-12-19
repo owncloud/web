@@ -25,7 +25,7 @@ describe('QuotaModal', () => {
           }
         })
       )
-      await wrapper.vm.editQuota()
+      await wrapper.vm.onConfirm()
 
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
@@ -37,7 +37,7 @@ describe('QuotaModal', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks, storeOptions } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
-      await wrapper.vm.editQuota()
+      await wrapper.vm.onConfirm()
 
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
@@ -56,7 +56,6 @@ function getWrapper() {
     storeOptions,
     wrapper: mount(QuotaModal, {
       props: {
-        cancel: jest.fn(),
         spaces: [
           {
             id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
@@ -70,7 +69,7 @@ function getWrapper() {
         ]
       },
       global: {
-        stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
+        stubs: { ...defaultStubs },
         mocks,
         provide: mocks,
         plugins: [...defaultPlugins(), store]

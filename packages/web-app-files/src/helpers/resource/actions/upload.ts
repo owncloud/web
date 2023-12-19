@@ -100,7 +100,6 @@ export class ResourceConflict extends ConflictDialog {
       const resolvedConflict: ResolveConflict = await this.resolveFileExists(
         { name: conflict.name, isFolder } as Resource,
         conflictsLeft,
-        conflictsLeft === 1,
         isFolder,
         true
       )

@@ -245,7 +245,7 @@ export default defineComponent({
         title: props.link.password ? $gettext('Edit password') : $gettext('Add password'),
         hideActions: true,
         customComponent: SetLinkPasswordModal,
-        customComponentAttrs: { link: props.link }
+        customComponentAttrs: () => ({ link: props.link })
       })
     }
 

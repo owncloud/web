@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CreateAndUpload component action buttons should show and be enabled if file creation is possible 1`] = `
-<!--v-if-->
-
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
     <button aria-label="New folder" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-folder-btn" type="button">
@@ -36,8 +34,6 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
 `;
 
 exports[`CreateAndUpload component file handlers should show additional handlers 1`] = `
-<!--v-if-->
-
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
     <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button">
@@ -120,8 +116,6 @@ exports[`CreateAndUpload component file handlers should show additional handlers
 `;
 
 exports[`CreateAndUpload component file handlers should show file extension if file extensions are enabled 1`] = `
-<!--v-if-->
-
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
     <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button">
