@@ -43,14 +43,10 @@
               :placeholder="inputPlaceholder"
               :label="inputLabel"
               :type="inputType"
-              :password-policy="inputPasswordPolicy"
-              :generate-password-method="inputGeneratePasswordMethod"
               :description-message="inputDescription"
               :disabled="inputDisabled"
               :fix-message-line="true"
               :selection-range="inputSelectionRange"
-              @password-challenge-completed="$emit('passwordChallengeCompleted')"
-              @password-challenge-failed="$emit('passwordChallengeFailed')"
               @update:model-value="inputOnInput"
               @keydown.enter.prevent="confirm"
             />
@@ -107,7 +103,6 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
-import { PasswordPolicy } from '../../helpers'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -365,22 +360,6 @@ export default defineComponent({
       default: false
     },
     /**
-     * Password policy for the input
-     */
-    inputPasswordPolicy: {
-      type: Object as PropType<PasswordPolicy>,
-      required: false,
-      default: () => ({})
-    },
-    /**
-     * Method to generate random password for the input
-     */
-    inputGeneratePasswordMethod: {
-      type: Function as PropType<(...args: unknown[]) => string>,
-      required: false,
-      default: null
-    },
-    /**
      * Overwrite default focused element
      * Can be `#id, .class`.
      */
@@ -397,15 +376,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: [
-    'cancel',
-    'confirm',
-    'confirm-secondary',
-    'input',
-    'checkbox-changed',
-    'passwordChallengeCompleted',
-    'passwordChallengeFailed'
-  ],
+  emits: ['cancel', 'confirm', 'confirm-secondary', 'input', 'checkbox-changed'],
   setup() {
     const primaryButton = ref(null)
     const secondaryButton = ref(null)

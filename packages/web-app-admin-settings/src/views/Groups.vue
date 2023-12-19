@@ -20,10 +20,10 @@
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
-            @click="onToggleCreateGroupModal"
+            @click="createGroupAction.handler()"
           >
-            <oc-icon name="add" />
-            <span v-text="$gettext('New group')" />
+            <oc-icon :name="createGroupAction.icon" />
+            <span v-text="createGroupAction.label()" />
           </oc-button>
         </div>
       </template>
@@ -53,23 +53,17 @@
         </div>
       </template>
     </app-template>
-    <create-group-modal
-      v-if="createGroupModalOpen"
-      @cancel="onToggleCreateGroupModal"
-      @confirm="onCreateGroup"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import AppTemplate from '../components/AppTemplate.vue'
-import CreateGroupModal from '../components/Groups/CreateGroupModal.vue'
 import ContextActions from '../components/Groups/ContextActions.vue'
 import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 import GroupsList from '../components/Groups/GroupsList.vue'
 import MembersPanel from '../components/Groups/SideBar/MembersPanel.vue'
-import { useGroupActionsDelete } from '../composables'
+import { useGroupActionsDelete, useGroupActionsCreateGroup } from '../composables'
 import {
   NoContentMessage,
   SideBarPanel,
@@ -91,7 +85,6 @@ export default defineComponent({
     AppTemplate,
     GroupsList,
     NoContentMessage,
-    CreateGroupModal,
     ContextActions
   },
   provide() {
@@ -102,12 +95,16 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const groups = ref([])
-    let loadResourcesEventToken
     const template = ref()
     const selectedGroups = ref([])
-    const createGroupModalOpen = ref(false)
     const clientService = useClientService()
     const { $gettext } = useGettext()
+
+    let loadResourcesEventToken: string
+    let addGroupEventToken: string
+
+    const { actions: createGroupActions } = useGroupActionsCreateGroup()
+    const createGroupAction = computed(() => unref(createGroupActions)[0])
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -134,26 +131,6 @@ export default defineComponent({
       )
     })
 
-    const onToggleCreateGroupModal = () => {
-      createGroupModalOpen.value = !unref(createGroupModalOpen)
-    }
-    const onCreateGroup = async (group: Group) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const response = await client.groups.createGroup(group)
-        onToggleCreateGroupModal()
-        store.dispatch('showMessage', {
-          title: $gettext('Group was created successfully')
-        })
-        groups.value.push({ ...response?.data, members: [] })
-      } catch (error) {
-        console.error(error)
-        store.dispatch('showErrorMessage', {
-          title: $gettext('Failed to create group'),
-          error
-        })
-      }
-    }
     const onEditGroup = async (editGroup: Group) => {
       try {
         const client = clientService.graphAuthenticated
@@ -233,26 +210,29 @@ export default defineComponent({
           currentPageQuery.value = pageCount.toString()
         }
       })
+
+      addGroupEventToken = eventBus.subscribe('app.admin-settings.groups.add', (group: Group) => {
+        groups.value.push(group)
+      })
     })
 
     onBeforeUnmount(() => {
       eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
+      eventBus.unsubscribe('app.admin-settings.groups.add', addGroupEventToken)
     })
 
     return {
       ...useSideBar(),
       groups,
       selectedGroups,
-      createGroupModalOpen,
       template,
       loadResourcesTask,
       clientService,
       batchActions,
       sideBarAvailablePanels,
       sideBarPanelContext,
-      onCreateGroup,
-      onEditGroup,
-      onToggleCreateGroupModal
+      createGroupAction,
+      onEditGroup
     }
   },
   computed: {

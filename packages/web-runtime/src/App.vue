@@ -16,8 +16,6 @@
       :has-input="modal.hasInput"
       :input-description="modal.inputDescription"
       :input-placeholder="modal.inputPlaceholder"
-      :input-password-policy="modal.inputPasswordPolicy"
-      :input-generate-password-method="modal.inputGeneratePasswordMethod"
       :input-disabled="modal.inputDisabled"
       :input-error="modal.inputError"
       :input-label="modal.inputLabel"
@@ -38,8 +36,6 @@
       @input="modal.onInput"
       @checkbox-changed="modal.onCheckboxValueChanged"
       @confirm-secondary="onModalConfirmSecondary"
-      @passwordChallengeCompleted="modal.onPasswordChallengeCompleted"
-      @passwordChallengeFailed="modal.onPasswordChallengeFailed"
       @mounted="focusModal"
       @before-unmount="focusModal"
     >

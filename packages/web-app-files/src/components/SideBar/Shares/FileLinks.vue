@@ -123,7 +123,6 @@ import {
   useCapabilityFilesSharingPublicAlias,
   useCapabilityFilesSharingPublicPasswordEnforcedFor,
   useAbility,
-  usePasswordPolicyService,
   useExpirationRules,
   useDefaultLinkPermissions,
   useFileActionsCreateLink,
@@ -143,6 +142,7 @@ import {
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
+import SetLinkPasswordModal from '../../Modals/SetLinkPasswordModal.vue'
 import { getLocaleFromLanguage } from '@ownclouders/web-pkg'
 import {
   Resource,
@@ -169,7 +169,6 @@ export default defineComponent({
     const clientService = useClientService()
     const { can } = ability
     const { expirationRules } = useExpirationRules()
-    const passwordPolicyService = usePasswordPolicyService()
     const hasResharing = useCapabilityFilesSharingResharing()
     const hasShareJail = useCapabilityShareJailEnabled()
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
@@ -269,28 +268,14 @@ export default defineComponent({
       }
     }
 
-    const showQuickLinkPasswordModal = (params) => {
-      const modal = {
+    const showPasswordModal = (params) => {
+      return store.dispatch('createModal', {
         variation: 'passive',
         title: $gettext('Set password'),
-        cancelText: $gettext('Cancel'),
-        confirmText: $gettext('Set'),
-        hasInput: true,
-        inputDescription: $gettext('Passwords for links are required.'),
-        inputPasswordPolicy: passwordPolicyService.getPolicy(),
-        inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
-        inputLabel: $gettext('Password'),
-        inputType: 'password',
-        onInput: () => store.dispatch('setModalInputErrorMessage', ''),
-        onPasswordChallengeCompleted: () => store.dispatch('setModalConfirmButtonDisabled', false),
-        onPasswordChallengeFailed: () => store.dispatch('setModalConfirmButtonDisabled', true),
-        onCancel: () => store.dispatch('hideModal'),
-        onConfirm: (newPassword: string) => {
-          return updatePublicLink({ params: { ...params, password: newPassword } })
-        }
-      }
-
-      return store.dispatch('createModal', modal)
+        hideActions: true,
+        customComponent: SetLinkPasswordModal,
+        customComponentAttrs: { link: params }
+      })
     }
 
     return {
@@ -316,7 +301,7 @@ export default defineComponent({
       canEditLink,
       expirationRules,
       updatePublicLink,
-      showQuickLinkPasswordModal,
+      showPasswordModal,
       defaultLinkPermissions,
       addNewLink
     }
@@ -465,7 +450,7 @@ export default defineComponent({
       }
 
       if (!link.password && !this.canDeletePublicLinkPassword(link)) {
-        this.showQuickLinkPasswordModal(params)
+        this.showPasswordModal(params)
       } else {
         this.updatePublicLink({ params })
       }
