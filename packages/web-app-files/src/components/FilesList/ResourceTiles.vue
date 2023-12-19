@@ -403,11 +403,8 @@ export default defineComponent({
         : 0
     })
     const ghostTilesCount = computed(() => {
-      console.log('maxTiles', maxTiles.value)
-      console.log('proplength', props.data.length)
       const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
       if (remainder) {
-        console.log('ghostTileCount', unref(maxTiles) - remainder)
         return unref(maxTiles) - remainder
       }
       return 0
