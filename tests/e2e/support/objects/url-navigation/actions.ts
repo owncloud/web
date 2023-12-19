@@ -39,9 +39,9 @@ export const openSpaceViaUrl = async (args: openResourceViaUrlArgs) => {
   const { page, user, space } = args
   let spaceName = null
   let spaceType = null
-  if (space === 'personal') {
+  if (space.toLowerCase() === 'personal') {
     spaceName = user.displayName
-    spaceType = space
+    spaceType = space.toLowerCase()
   } else {
     spaceName = space
     spaceType = 'project'
@@ -58,9 +58,9 @@ const getTheFileIdOfSpaceFile = async (
 ): Promise<string> => {
   let spaceName = null
   let spaceType = null
-  if (space === 'personal') {
+  if (space.toLowerCase() === 'personal') {
     spaceName = user.displayName
-    spaceType = space
+    spaceType = space.toLowerCase()
   } else {
     spaceName = space
     spaceType = 'project'

@@ -19,7 +19,7 @@ When(
 )
 
 When(
-  /^"([^"]*)" opens the (?:resource|file|folder)? "([^"]*)" of space "([^"]*)" through the URL$/,
+  /^"([^"]*)" opens the (?:resource|file|folder) "([^"]*)" of space "([^"]*)" through the URL$/,
   async function (this: World, stepUser: string, resource: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
