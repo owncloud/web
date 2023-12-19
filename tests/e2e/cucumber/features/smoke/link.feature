@@ -109,9 +109,9 @@ Feature: link
       | resource  |
       | lorem.txt |
     When "Brian" opens the public link "textLink"
-    Then for "Brian" file "shareToBrian.txt" should be selected
+     And "Brian" closes the file viewer
     When "Brian" opens the public link "markdownLink"
-    Then for "Brian" file "shareToBrian.md" should be selected
+     And "Brian" closes the file viewer
     When "Brian" opens the public link "pdfLink"
     Then for "Brian" file "simple.pdf" should be selected
     When "Brian" opens the public link "imageLink"

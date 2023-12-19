@@ -36,6 +36,7 @@ import { linkRoleUploaderFolder } from 'web-client/src/helpers/share'
 import { createFileRouteOptions } from 'web-pkg/src/helpers/router'
 import AppLoadingSpinner from 'web-pkg/src/components/AppLoadingSpinner.vue'
 import { dirname } from 'path'
+import { configurationManager } from 'web-pkg/src/configuration'
 
 export default defineComponent({
   components: {
@@ -98,7 +99,11 @@ export default defineComponent({
       return router.push({
         name: 'resolvePrivateLink',
         params: { fileId: unref(fileId) },
-        query: { openWithDefaultApp: 'false' }
+        query: {
+          ...(configurationManager.options.openLinksWithDefaultApp && {
+            openWithDefaultApp: 'true'
+          })
+        }
       })
     }
 

@@ -14,6 +14,7 @@ module.exports = {
   rootDir,
   modulePaths: ['<rootDir>'],
   moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
+  maxWorkers: '50%',
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
     '^.+\\.js$': 'babel-jest',

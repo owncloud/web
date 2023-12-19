@@ -41,10 +41,6 @@ export interface HandleUploadOptions {
  * 5. start upload
  */
 export class HandleUpload extends BasePlugin {
-  id: string
-  type: string
-  uppy: Uppy
-
   clientService: ClientService
   hasSpaces: Ref<boolean>
   language: Language
@@ -58,10 +54,8 @@ export class HandleUpload extends BasePlugin {
 
   constructor(uppy: Uppy, opts: HandleUploadOptions) {
     super(uppy, opts)
-    this.id = opts.id || 'HandleUpload'
-    this.type = 'modifier'
-    this.uppy = uppy
-
+    ;(this as any).id = opts.id || 'HandleUpload'
+    ;(this as any).type = 'modifier'
     this.clientService = opts.clientService
     this.hasSpaces = opts.hasSpaces
     this.language = opts.language
@@ -75,6 +69,10 @@ export class HandleUpload extends BasePlugin {
     this.conflictHandlingEnabled = opts.conflictHandlingEnabled ?? true
 
     this.handleUpload = this.handleUpload.bind(this)
+  }
+
+  get _uppy(): Uppy {
+    return (this as any).uppy
   }
 
   get currentFolder(): Resource {
@@ -91,45 +89,49 @@ export class HandleUpload extends BasePlugin {
 
   removeFilesFromUpload(filesToUpload: UppyResource[]) {
     for (const file of filesToUpload) {
-      this.uppy.removeFile(file.id)
+      this._uppy.removeFile(file.id)
     }
   }
 
-  getUploadPluginName() {
-    return this.uppy.getPlugin('Tus') ? 'tus' : 'xhrUpload'
+  /**
+   * Sets the endpoint url for a given file.
+   */
+  setEndpointUrl(fileId: string, endpoint: string) {
+    if (this._uppy.getPlugin('Tus')) {
+      this._uppy.setFileState(fileId, { tus: { endpoint } })
+      return
+    }
+    this._uppy.setFileState(fileId, { xhrUpload: { endpoint } })
   }
 
   /**
    * Converts the input files type UppyResources and updates the uppy upload queue
    */
   prepareFiles(files: UppyFile[]): UppyResource[] {
-    const filesToUpload: Record<string, UppyResource> = {}
+    const filesToUpload = []
 
     if (!this.currentFolder && unref(this.route)?.params?.token) {
       // public file drop
       const publicLinkToken = unref(this.route).params.token
       let endpoint = this.clientService.owncloudSdk.publicFiles.getFileUrl(publicLinkToken) + '/'
       for (const file of files) {
-        if (!this.uppy.getPlugin('Tus')) {
+        if (!this._uppy.getPlugin('Tus')) {
           endpoint = urlJoin(endpoint, encodeURIComponent(file.name))
         }
-
-        file[this.getUploadPluginName()] = { endpoint }
-        file.meta = {
-          ...file.meta,
+        this.setEndpointUrl(file.id, endpoint)
+        this._uppy.setFileMeta(file.id, {
           tusEndpoint: endpoint,
           uploadId: uuid.v4()
-        }
+        })
 
-        filesToUpload[file.id] = file as unknown as UppyResource
+        filesToUpload.push(this._uppy.getFile(file.id))
       }
-      this.uppy.setState({ files: { ...this.uppy.getState().files, ...filesToUpload } })
-      return Object.values(filesToUpload)
+      return filesToUpload
     }
     const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
 
     const { name, params, query } = unref(this.route)
-    const topLevelFolderIds: Record<string, string> = {}
+    const topLevelFolderIds = {}
 
     for (const file of files) {
       const relativeFilePath = file.meta.relativePath as string
@@ -137,7 +139,7 @@ export class HandleUpload extends BasePlugin {
       const directory =
         !relativeFilePath || dirname(relativeFilePath) === '.' ? '' : dirname(relativeFilePath)
 
-      let topLevelFolderId: string
+      let topLevelFolderId
       if (relativeFilePath) {
         const topLevelDirectory = relativeFilePath.split('/').filter(Boolean)[0]
         if (!topLevelFolderIds[topLevelDirectory]) {
@@ -151,13 +153,12 @@ export class HandleUpload extends BasePlugin {
       })
 
       let endpoint = urlJoin(webDavUrl, directory.split('/').map(encodeURIComponent).join('/'))
-      if (!this.uppy.getPlugin('Tus')) {
+      if (!this._uppy.getPlugin('Tus')) {
         endpoint = urlJoin(endpoint, encodeURIComponent(file.name))
       }
 
-      file[this.getUploadPluginName()] = { endpoint }
-      file.meta = {
-        ...file.meta,
+      this.setEndpointUrl(file.id, endpoint)
+      this._uppy.setFileMeta(file.id, {
         // file data
         name: file.name,
         mtime: (file.data as any).lastModified / 1000,
@@ -178,20 +179,19 @@ export class HandleUpload extends BasePlugin {
         routeName: name as string,
         routeDriveAliasAndItem: (params as any)?.driveAliasAndItem || '',
         routeShareId: (query as any)?.shareId || ''
-      }
+      })
 
-      filesToUpload[file.id] = file as unknown as UppyResource
+      filesToUpload.push(this._uppy.getFile(file.id))
     }
 
-    this.uppy.setState({ files: { ...this.uppy.getState().files, ...filesToUpload } })
-    return Object.values(filesToUpload)
+    return filesToUpload
   }
 
   checkQuotaExceeded(filesToUpload: UppyResource[]): boolean {
     let quotaExceeded = false
 
     const uploadSizeSpaceMapping = filesToUpload.reduce((acc, uppyResource) => {
-      let targetUploadSpace: SpaceResource
+      let targetUploadSpace
 
       if (uppyResource.meta.routeName === locationPublicLink.name) {
         return acc
@@ -338,14 +338,14 @@ export class HandleUpload extends BasePlugin {
       }
     }
 
-    let filesToRemove: string[] = []
+    let filesToRemove = []
     if (failedFolders.length) {
-      // remove files of folders that could not be created
+      // remove file of folders that could not be created
       filesToRemove = filesToUpload
         .filter((f) => failedFolders.some((r) => f.meta.relativeFolder.startsWith(r)))
         .map(({ id }) => id)
       for (const fileId of filesToRemove) {
-        this.uppy.removeFile(fileId)
+        this._uppy.removeFile(fileId)
       }
     }
 
@@ -370,26 +370,37 @@ export class HandleUpload extends BasePlugin {
 
     // name conflict handling
     if (this.conflictHandlingEnabled) {
-      const conflictHandler = new ResourceConflict(this.store, this.language)
-      const conflicts = conflictHandler.getConflicts(filesToUpload)
+      const confictHandler = new ResourceConflict(this.store, this.language)
+      const conflicts = confictHandler.getConflicts(filesToUpload)
       if (conflicts.length) {
         const dashboard = document.getElementsByClassName('uppy-Dashboard')
         if (dashboard.length) {
           ;(dashboard[0] as HTMLElement).style.display = 'none'
         }
 
-        const result = await conflictHandler.displayOverwriteDialog(filesToUpload, conflicts)
+        const result = await confictHandler.displayOverwriteDialog(filesToUpload, conflicts)
         if (result.length === 0) {
           this.removeFilesFromUpload(filesToUpload)
           return this.uppyService.clearInputs()
         }
 
+        for (const file of filesToUpload) {
+          const conflictResult = result.find(({ id }) => id === file.id)
+          if (!conflictResult) {
+            this._uppy.removeFile(file.id)
+            continue
+          }
+          this._uppy.setFileMeta(file.id, conflictResult.meta)
+          this._uppy.setFileState(file.id, { name: conflictResult.name })
+          this.setEndpointUrl(
+            file.id,
+            !!this._uppy.getPlugin('Tus')
+              ? conflictResult.meta.tusEndpoint
+              : conflictResult.xhrUpload.endpoint
+          )
+        }
+
         filesToUpload = result
-        const conflictMap = result.reduce<Record<string, UppyResource>>((acc, file) => {
-          acc[file.id] = file
-          return acc
-        }, {})
-        this.uppy.setState({ files: { ...this.uppy.getState().files, ...conflictMap } })
       }
     }
 
@@ -408,10 +419,10 @@ export class HandleUpload extends BasePlugin {
   }
 
   install() {
-    this.uppy.on('files-added', this.handleUpload)
+    this._uppy.on('files-added', this.handleUpload)
   }
 
   uninstall() {
-    this.uppy.off('files-added', this.handleUpload)
+    this._uppy.off('files-added', this.handleUpload)
   }
 }
