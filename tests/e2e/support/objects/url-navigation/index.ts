@@ -17,4 +17,8 @@ export class URLNavigation {
   async openResourceViaUrl(args: Omit<po.openResourceViaUrlArgs, 'page'>): Promise<void> {
     await po.openResourceViaUrl({ ...args, page: this.#page })
   }
+
+  async openSpaceViaUrl(args: Omit<po.openResourceViaUrlArgs, 'page'>): Promise<void> {
+    await po.openSpaceViaUrl({ ...args, page: this.#page })
+  }
 }
