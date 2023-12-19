@@ -1,11 +1,5 @@
 <template>
   <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': isSideBarOpen }">
-    <quota-modal
-      v-if="quotaModalIsOpen"
-      :cancel="closeQuotaModal"
-      :spaces="selectedFiles"
-      :max-quota="maxQuota"
-    />
     <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
 
     <div class="files-topbar oc-py-s">
@@ -79,7 +73,6 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import BatchActions from '../BatchActions.vue'
 import ContextActions from '../FilesList/ContextActions.vue'
-import QuotaModal from '../Spaces/QuotaModal.vue'
 import ViewOptions from '../ViewOptions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import { ViewMode } from '../../ui/types'
@@ -97,7 +90,6 @@ import {
 } from '../../composables/actions'
 import {
   useAbility,
-  useCapabilitySpacesMaxQuota,
   useFileActionsToggleHideShare,
   useRouteMeta,
   useStore,
@@ -121,8 +113,7 @@ export default defineComponent({
   components: {
     BatchActions,
     ContextActions,
-    ViewOptions,
-    QuotaModal
+    ViewOptions
   },
   props: {
     viewModeDefault: {
@@ -173,11 +164,7 @@ export default defineComponent({
     const { actions: restoreActions } = useFileActionsRestore({ store })
     const { actions: deleteSpaceActions } = useSpaceActionsDelete({ store })
     const { actions: disableSpaceActions } = useSpaceActionsDisable({ store })
-    const {
-      actions: editSpaceQuotaActions,
-      modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota({ store })
     const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
 
     const breadcrumbMaxWidth = ref<number>(0)
@@ -273,10 +260,7 @@ export default defineComponent({
       breadcrumbMaxWidth,
       breadcrumbTruncationOffset,
       fileDroppedBreadcrumb,
-      pageTitle,
-      quotaModalIsOpen,
-      closeQuotaModal,
-      maxQuota: useCapabilitySpacesMaxQuota()
+      pageTitle
     }
   },
   data: function () {

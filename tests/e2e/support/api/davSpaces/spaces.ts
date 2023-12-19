@@ -56,13 +56,13 @@ const createFile = async ({
   pathToFile,
   content,
   webDavEndPathToRoot, // the root of the WebDAV path. This is `spaces/<space-id>` for ocis or `files/<user>` for oC10
-  mtime
+  mtimeDeltaDays
 }: {
   user: User
   pathToFile: string
   content?: string
   webDavEndPathToRoot: string
-  mtime?: string
+  mtimeDeltaDays?: string
 }): Promise<void> => {
   const today = new Date()
   const response = await request({
@@ -70,7 +70,9 @@ const createFile = async ({
     path: join('remote.php', 'dav', webDavEndPathToRoot, pathToFile),
     body: content,
     user: user,
-    header: mtime === 'yesterday' ? { 'X-OC-Mtime': today.getTime() / 1000 - 86400 } : {}
+    header: mtimeDeltaDays
+      ? { 'X-OC-Mtime': today.getTime() / 1000 + parseInt(mtimeDeltaDays) * 86400 }
+      : {}
   })
 
   checkResponseStatus(response, `Failed while uploading file '${pathToFile}' in personal space`)
@@ -80,15 +82,15 @@ export const uploadFileInPersonalSpace = async ({
   user,
   pathToFile,
   content,
-  mtime
+  mtimeDeltaDays
 }: {
   user: User
   pathToFile: string
   content: string
-  mtime?: string
+  mtimeDeltaDays?: string
 }): Promise<void> => {
   const webDavEndPathToRoot = 'spaces/' + (await getPersonalSpaceId({ user }))
-  await createFile({ user, pathToFile, content, webDavEndPathToRoot, mtime })
+  await createFile({ user, pathToFile, content, webDavEndPathToRoot, mtimeDeltaDays })
 }
 
 export const createFolderInsideSpaceBySpaceName = async ({

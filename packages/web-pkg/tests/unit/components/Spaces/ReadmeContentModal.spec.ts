@@ -13,17 +13,17 @@ import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
 
 describe('ReadmeContentModal', () => {
-  describe('method "editReadme"', () => {
+  describe('method "onConfirm"', () => {
     it('should show message on success', async () => {
       const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.editReadme()
+      await wrapper.vm.onConfirm()
       expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, storeOptions } = getWrapper(false)
-      await wrapper.vm.editReadme()
+      await wrapper.vm.onConfirm()
       expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
     })
   })

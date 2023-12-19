@@ -26,17 +26,17 @@ jest.mock('../../../src/composables/configuration/useConfigurationManager', () =
 }))
 
 describe('CreateShortcutModal', () => {
-  describe('method "createShortcut"', () => {
+  describe('method "onConfirm"', () => {
     it('should show message on success', async () => {
       const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.createShortcut('https://owncloud.com', 'owncloud.url')
+      await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
       expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
       expect(storeOptions.actions.showMessage).toHaveBeenCalled()
     })
     it('should show error message on fail', async () => {
       console.error = jest.fn()
       const { wrapper, storeOptions } = getWrapper({ rejectPutFileContents: true })
-      await wrapper.vm.createShortcut('https://owncloud.com', 'owncloud.url')
+      await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
       expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).not.toHaveBeenCalled()
       expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
     })
@@ -95,9 +95,7 @@ function getWrapper({ rejectPutFileContents = false, rejectSearch = false } = {}
     storeOptions,
     wrapper: shallowMount(CreateShortcutModal, {
       props: {
-        cancel: jest.fn(),
-        space: mock<SpaceResource>(),
-        title: 'Personal quota'
+        space: mock<SpaceResource>()
       },
       global: {
         plugins: [...defaultPlugins(), store],

@@ -22,10 +22,10 @@ export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) 
       ),
       hideActions: true,
       customComponent: AddToGroupsModal,
-      customComponentAttrs: {
-        users: [...resources],
+      customComponentAttrs: () => ({
+        users: resources,
         groups: unref(groups)
-      }
+      })
     })
   }
 

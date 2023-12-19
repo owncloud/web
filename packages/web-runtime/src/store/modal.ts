@@ -9,7 +9,6 @@ const state = {
   cancelText: '',
   confirmText: '',
   withoutButtonConfirm: false,
-  buttonSecondaryText: '',
   // Input values
   confirmDisabled: false,
   hasInput: false,
@@ -19,14 +18,11 @@ const state = {
   inputPlaceholder: '',
   inputLabel: '',
   inputError: '',
-  checkboxLabel: '',
   inputType: 'text',
   // Events
   onCancel: emptyReturn,
   onConfirm: emptyReturn,
   onInput: emptyReturn,
-  onCheckboxValueChanged: emptyReturn,
-  onConfirmSecondary: emptyReturn,
   contextualHelperLabel: '',
   contextualHelperData: {},
   customContent: '',
@@ -62,9 +58,7 @@ const mutations = {
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
-    state.buttonSecondaryText = modal.buttonSecondaryText
     state.withoutButtonConfirm = modal.withoutButtonConfirm || false
-    state.checkboxLabel = modal.checkboxLabel || ''
     state.cancelText = modal.cancelText || 'Cancel'
     state.confirmText = modal.confirmText || 'Confirm'
     state.confirmDisabled = modal.confirmDisabled || false
@@ -80,8 +74,6 @@ const mutations = {
     state.inputDisabled = modal.inputDisabled || false
     state.inputType = modal.inputType || 'text'
     state.onInput = modal.onInput || emptyReturn
-    state.onCheckboxValueChanged = modal.onCheckboxValueChanged || emptyReturn
-    state.onConfirmSecondary = modal.onConfirmSecondary || emptyReturn
     state.contextualHelperLabel = modal.contextualHelperLabel
     state.contextualHelperData = modal.contextualHelperData
     state.customComponent = modal.customComponent

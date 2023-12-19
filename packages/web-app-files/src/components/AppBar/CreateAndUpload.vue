@@ -1,9 +1,4 @@
 <template>
-  <create-shortcut-modal
-    v-if="isCreateNewShortcutModalOpen"
-    :space="space"
-    :cancel="closeCreateNewShortcutModal"
-  />
   <div v-if="showActions" class="create-and-upload-actions oc-flex-inline oc-mr-s">
     <template v-if="createFileActionsAvailable">
       <span v-oc-tooltip="newButtonTooltip">
@@ -212,7 +207,6 @@ import {
 } from '@ownclouders/web-pkg'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-import CreateShortcutModal from '@ownclouders/web-pkg/src/components/CreateShortcutModal.vue'
 
 import {
   computed,
@@ -236,8 +230,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   components: {
-    ResourceUpload,
-    CreateShortcutModal
+    ResourceUpload
   },
   props: {
     space: {
@@ -294,11 +287,7 @@ export default defineComponent({
     })
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
-    const {
-      actions: createNewShortcut,
-      modalOpen: isCreateNewShortcutModalOpen,
-      closeModal: closeCreateNewShortcutModal
-    } = useFileActionsCreateNewShortcut({ store })
+    const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space: props.space })
 
     const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
@@ -450,8 +439,6 @@ export default defineComponent({
       isActionDisabled,
       actionKeySuffix,
       showDrop,
-      isCreateNewShortcutModalOpen,
-      closeCreateNewShortcutModal,
       areFileExtensionsShown,
 
       // HACK: exported for unit tests:

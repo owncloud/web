@@ -1,5 +1,5 @@
 import { useSpaceActionsEditReadmeContent } from '../../../../../src/composables/actions'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock } from 'jest-mock-extended'
@@ -16,7 +16,7 @@ describe('editReadmeContent', () => {
         special: [{ specialFolder: { name: 'readme' } }]
       })
 
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -27,7 +27,7 @@ describe('editReadmeContent', () => {
       })
     })
     it('should be false when not resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
@@ -42,7 +42,7 @@ describe('editReadmeContent', () => {
         special: null
       })
 
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -61,13 +61,23 @@ describe('editReadmeContent', () => {
         special: null
       })
 
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               resources: [buildSpace(spaceMock)]
             })
           ).toBe(false)
+        }
+      })
+    })
+  })
+  describe('method "handler"', () => {
+    it('creates a modal', () => {
+      getWrapper({
+        setup: async ({ actions }, { storeOptions }) => {
+          await unref(actions)[0].handler({ resources: [mock<SpaceResource>()] })
+          expect(storeOptions.actions.createModal).toHaveBeenCalled()
         }
       })
     })

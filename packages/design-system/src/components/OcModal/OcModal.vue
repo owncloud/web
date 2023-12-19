@@ -51,14 +51,6 @@
               @keydown.enter.prevent="confirm"
             />
           </template>
-          <div v-if="checkboxLabel" class="oc-modal-body-actions oc-flex oc-flex-left">
-            <oc-checkbox
-              v-model="checkboxValue"
-              size="medium"
-              :label="checkboxLabel"
-              :aria-label="checkboxLabel"
-            />
-          </div>
         </div>
 
         <div v-if="!hideActions" class="oc-modal-body-actions oc-flex oc-flex-right">
@@ -69,15 +61,6 @@
             :appearance="buttonCancelAppearance"
             @click="cancelModalAction"
             v-text="buttonCancelText"
-          />
-          <oc-button
-            v-if="buttonSecondaryText"
-            ref="secondaryButton"
-            class="oc-modal-body-actions-secondary oc-ml-s"
-            :variation="buttonSecondaryVariation"
-            :appearance="buttonSecondaryAppearance"
-            @click="secondaryModalAction"
-            v-text="buttonSecondaryText"
           />
           <oc-button
             v-if="!withoutButtonConfirm"
@@ -98,7 +81,6 @@
 <script lang="ts">
 import { defineComponent, PropType, ComponentPublicInstance, ref, onMounted, unref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
-import OcCheckbox from '../OcCheckbox/OcCheckbox.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
@@ -126,7 +108,6 @@ export default defineComponent({
 
   components: {
     OcButton,
-    OcCheckbox,
     OcIcon,
     OcTextInput,
     FocusTrap
@@ -170,14 +151,6 @@ export default defineComponent({
       default: null
     },
     /**
-     * Modal checkbox label
-     */
-    checkboxLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
      * Contextual helper label
      */
     contextualHelperLabel: {
@@ -216,36 +189,6 @@ export default defineComponent({
      * Appearance of the cancel button
      */
     buttonCancelAppearance: {
-      type: String,
-      required: false,
-      default: 'outline',
-      validator: (value: string) => {
-        return ['outline', 'filled', 'raw'].includes(value)
-      }
-    },
-    /**
-     * Text of the secondary button
-     */
-    buttonSecondaryText: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Variation type of the secondary button
-     */
-    buttonSecondaryVariation: {
-      type: String,
-      required: false,
-      default: 'passive',
-      validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
-      }
-    },
-    /**
-     * Appearance of the secondary button
-     */
-    buttonSecondaryAppearance: {
       type: String,
       required: false,
       default: 'outline',
@@ -376,27 +319,21 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['cancel', 'confirm', 'confirm-secondary', 'input', 'checkbox-changed'],
+  emits: ['cancel', 'confirm', 'input'],
   setup() {
     const primaryButton = ref(null)
-    const secondaryButton = ref(null)
     const cancelButton = ref(null)
 
     const setButtonsEqualWidth = () => {
       const _primaryButton = unref(primaryButton)
-      const _secondaryButton = unref(secondaryButton)
       const _cancelButton = unref(cancelButton)
 
       const primaryWidth = _primaryButton?.$el?.offsetWidth || 0
-      const secondaryWidth = _secondaryButton?.$el?.offsetWidth || 0
       const cancelWidth = _cancelButton?.$el?.offsetWidth || 0
-      const maxWidth = Math.max(primaryWidth, secondaryWidth, cancelWidth)
+      const maxWidth = Math.max(primaryWidth, cancelWidth)
 
       if (_primaryButton?.$el) {
         _primaryButton.$el.style.minWidth = `${maxWidth}px`
-      }
-      if (_secondaryButton?.$el) {
-        _secondaryButton.$el.style.minWidth = `${maxWidth}px`
       }
       if (_cancelButton?.$el) {
         _cancelButton.$el.style.minWidth = `${maxWidth}px`
@@ -408,14 +345,12 @@ export default defineComponent({
 
     return {
       primaryButton,
-      secondaryButton,
       cancelButton
     }
   },
   data() {
     return {
-      userInputValue: null,
-      checkboxValue: false
+      userInputValue: null
     }
   },
   computed: {
@@ -456,10 +391,6 @@ export default defineComponent({
     inputValue: {
       handler: 'inputAssignPropAsValue',
       immediate: true
-    },
-    checkboxValue: {
-      handler: 'checkboxValueChanged',
-      immediate: true
     }
   },
   methods: {
@@ -468,9 +399,6 @@ export default defineComponent({
        * The user clicked on the cancel button or hit the escape key
        */
       this.$emit('cancel')
-    },
-    secondaryModalAction() {
-      this.$emit('confirm-secondary')
     },
     confirm() {
       if (this.buttonConfirmDisabled || this.inputError) {
@@ -493,9 +421,6 @@ export default defineComponent({
     },
     inputAssignPropAsValue(value) {
       this.userInputValue = value
-    },
-    checkboxValueChanged(value) {
-      this.$emit('checkbox-changed', value)
     }
   }
 })
@@ -694,7 +619,6 @@ export default defineComponent({
     message="Do you accept our terms of use?"
     button-cancel-text="Decline"
     button-confirm-text="Accept"
-    checkbox-label="I accept the terms of use"
     class="oc-mb-l oc-position-relative"
   />
 </div>
@@ -708,7 +632,6 @@ export default defineComponent({
     message="Do you accept our terms of use?"
     button-cancel-text="Decline"
     button-confirm-text="Accept"
-    button-secondary-text="Accept some"
     class="oc-mb-l oc-position-relative"
   />
 </div>
