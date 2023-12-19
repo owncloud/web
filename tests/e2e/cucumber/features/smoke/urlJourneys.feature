@@ -19,6 +19,15 @@ Feature: web can be navigated through urls
     And "Alice" creates the following files into personal space using API
       | pathToFile | content     |
       | lorem.txt  | new content |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    And "Alice" creates the following project space using API
+      | name        | id     |
+      | Development | team.1 |
+    And "Alice" creates the following file in space "Development" using API
+      | name              | content                   |
+      | spaceTextfile.txt | This is test file. Cheers |
     When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
     Then "Alice" restores following resources
       | resource  | to | version | openDetailsPanel |
@@ -36,21 +45,10 @@ Feature: web can be navigated through urls
       | file_inside_folder.txt |
     Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
-    Then "Alice" logs out
-    When "Admin" assigns following roles to the users using API
-      | id    | role        |
-      | Alice | Space Admin |
-    And "Alice" creates the following project space using API
-      | name        | id     |
-      | Development | team.1 |
-    And "Alice" creates the following file in space "Development" using API
-      | name              | content                   |
-      | spaceTextfile.txt | This is test file. Cheers |
-    When "Alice" logs in
-    And "Alice" opens space "Development" through the URL
+    When "Alice" opens space "Development" through the URL
     And "Alice" opens the following file in texteditor
       | resource          |
       | spaceTextfile.txt |
     Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
-    Then "Alice" logs out
+    And "Alice" logs out
