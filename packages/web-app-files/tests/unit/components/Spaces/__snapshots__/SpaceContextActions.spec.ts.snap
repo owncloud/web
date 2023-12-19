@@ -59,7 +59,6 @@ exports[`SpaceContextActions action handlers renders actions that are always ava
     </ul>
   </div>
   <!--v-if-->
-  <!--v-if-->
   <input accept="" id="space-image-upload-input" multiple="" name="file" tabindex="-1" type="file">
 </div>
 `;

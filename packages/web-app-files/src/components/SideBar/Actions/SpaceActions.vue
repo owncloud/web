@@ -1,10 +1,5 @@
 <template>
   <div>
-    <readme-content-modal
-      v-if="readmeContentModalIsOpen"
-      :cancel="closeReadmeContentModal"
-      :space="actionOptions.resources[0]"
-    ></readme-content-modal>
     <quota-modal
       v-if="quotaModalIsOpen"
       :cancel="closeQuotaModal"
@@ -37,7 +32,6 @@ import { computed, defineComponent, inject, Ref, ref, unref, VNodeRef } from 'vu
 import { SpaceResource } from '@ownclouders/web-client'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { QuotaModal } from '@ownclouders/web-pkg'
-import { ReadmeContentModal } from '@ownclouders/web-pkg'
 import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
@@ -54,7 +48,7 @@ import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceActions',
-  components: { ActionMenuItem, QuotaModal, ReadmeContentModal },
+  components: { ActionMenuItem, QuotaModal },
   setup() {
     const store = useStore()
     const previewService = usePreviewService()
@@ -77,11 +71,7 @@ export default defineComponent({
       modalOpen: quotaModalIsOpen,
       closeModal: closeQuotaModal
     } = useSpaceActionsEditQuota({ store })
-    const {
-      actions: editReadmeContentActions,
-      modalOpen: readmeContentModalIsOpen,
-      closeModal: closeReadmeContentModal
-    } = useSpaceActionsEditReadmeContent({ store })
+    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
@@ -114,9 +104,6 @@ export default defineComponent({
 
       uploadImageActions,
       uploadImageSpace,
-
-      readmeContentModalIsOpen,
-      closeReadmeContentModal,
 
       quotaModalIsOpen,
       closeQuotaModal
