@@ -22,20 +22,16 @@
       :input-selection-range="modal.inputSelectionRange"
       :input-type="modal.inputType"
       :input-value="modal.inputValue"
-      :button-secondary-text="modal.buttonSecondaryText"
       :without-button-confirm="modal.withoutButtonConfirm"
       :button-cancel-text="modal.cancelText"
       :button-confirm-text="modal.confirmText"
       :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
-      :checkbox-label="modal.checkboxLabel"
       :contextual-helper-label="modal.contextualHelperLabel"
       :contextual-helper-data="modal.contextualHelperData"
       :hide-actions="modal.hideActions"
       @cancel="onModalCancel"
       @confirm="onModalConfirm"
       @input="modal.onInput"
-      @checkbox-changed="modal.onCheckboxValueChanged"
-      @confirm-secondary="onModalConfirmSecondary"
       @mounted="focusModal"
       @before-unmount="focusModal"
     >
@@ -88,14 +84,7 @@ export default defineComponent({
         return (unref(modalComponent) as any)?.onConfirm()
       }
     }
-    const onModalConfirmSecondary = (...args) => {
-      if (store.state.modal.onConfirmSecondary) {
-        return store.state.modal.onConfirmSecondary(...args, { component: modalComponent })
-      }
-      if ((unref(modalComponent) as any)?.onConfirmSecondary) {
-        return (unref(modalComponent) as any)?.onConfirmSecondary()
-      }
-    }
+
     const onModalCancel = (...args) => {
       if (store.state.modal.onCancel) {
         return store.state.modal.onCancel(...args, { component: modalComponent })
@@ -135,8 +124,7 @@ export default defineComponent({
       currentTheme,
       modalComponent,
       onModalConfirm,
-      onModalCancel,
-      onModalConfirmSecondary
+      onModalCancel
     }
   },
   data() {
