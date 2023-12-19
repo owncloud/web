@@ -274,7 +274,7 @@ export default defineComponent({
         title: $gettext('Set password'),
         hideActions: true,
         customComponent: SetLinkPasswordModal,
-        customComponentAttrs: { link: params }
+        customComponentAttrs: () => ({ link: params })
       })
     }
 

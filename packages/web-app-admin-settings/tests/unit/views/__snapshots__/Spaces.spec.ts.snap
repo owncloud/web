@@ -16,7 +16,6 @@ exports[`Spaces view loading states should render spaces list after loading has 
           <!--v-if-->
         </div>
       </div>
-      <!--v-if-->
       <div>
         <spaces-list-stub class="" selectedspaces="" spaces="[object Object]"></spaces-list-stub>
       </div>

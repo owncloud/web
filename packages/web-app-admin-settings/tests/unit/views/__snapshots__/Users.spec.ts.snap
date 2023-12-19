@@ -52,7 +52,6 @@ exports[`Users view list view renders initially warning if filters are mandatory
     </div>
     <!--v-if-->
   </main>
-  <!--v-if-->
 </div>
 `;
 
@@ -194,6 +193,5 @@ exports[`Users view list view renders list initially 1`] = `
     </div>
     <!--v-if-->
   </main>
-  <!--v-if-->
 </div>
 `;

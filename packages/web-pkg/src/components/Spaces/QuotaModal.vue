@@ -1,32 +1,37 @@
 <template>
-  <portal to="app.runtime.modal">
-    <oc-modal
-      :title="modalTitle"
-      :button-cancel-text="$gettext('Cancel')"
-      :button-confirm-text="$gettext('Confirm')"
-      :button-confirm-disabled="confirmButtonDisabled"
-      @confirm="editQuota"
-      @cancel="cancel"
-    >
-      <template #content>
-        <quota-select
-          id="quota-select-batch-action-form"
-          :label="$gettext('Quota')"
-          :total-quota="selectedOption"
-          :max-quota="maxQuota"
-          @selected-option-change="changeSelectedQuotaOption"
-        />
-        <div v-if="warningMessage" class="oc-mt-s">
-          <span class="oc-text-input-warning" v-text="warningMessage" />
-          <oc-contextual-helper
-            v-if="warningMessageContextualHelperData"
-            class="oc-pl-xs"
-            v-bind="warningMessageContextualHelperData"
-          />
-        </div>
-      </template>
-    </oc-modal>
-  </portal>
+  <quota-select
+    id="quota-select-batch-action-form"
+    :label="$gettext('Quota')"
+    :total-quota="selectedOption"
+    :max-quota="maxQuota"
+    @selected-option-change="changeSelectedQuotaOption"
+  />
+  <div v-if="warningMessage" class="oc-mt-s">
+    <span class="oc-text-input-warning" v-text="warningMessage" />
+    <oc-contextual-helper
+      v-if="warningMessageContextualHelperData"
+      class="oc-pl-xs"
+      v-bind="warningMessageContextualHelperData"
+    />
+  </div>
+
+  <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
+    <oc-button
+      class="oc-modal-body-actions-cancel oc-ml-s"
+      appearance="outline"
+      variation="passive"
+      @click="onCancel"
+      >{{ $gettext('Cancel') }}
+    </oc-button>
+    <oc-button
+      class="oc-modal-body-actions-confirm oc-ml-s"
+      appearance="filled"
+      variation="primary"
+      :disabled="confirmButtonDisabled"
+      @click="onConfirm"
+      >{{ $gettext('Confirm') }}
+    </oc-button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,7 +39,7 @@ import { computed, defineComponent, unref, PropType, ref, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import QuotaSelect from '../QuotaSelect.vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useClientService } from '../../composables'
+import { useCapabilitySpacesMaxQuota, useClientService } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
 import { useStore, useLoadingService } from '../../composables'
@@ -49,14 +54,6 @@ export default defineComponent({
     spaces: {
       type: Array as PropType<SpaceResource[]>,
       required: true
-    },
-    cancel: {
-      type: Function as PropType<(...args: any) => unknown>,
-      required: true
-    },
-    maxQuota: {
-      type: Number,
-      default: 0
     },
     warningMessage: {
       type: String,
@@ -75,37 +72,16 @@ export default defineComponent({
       }
     }
   },
-  setup(props) {
+  setup(props, { expose }) {
     const store = useStore()
     const { $gettext, $ngettext } = useGettext()
     const clientService = useClientService()
     const loadingService = useLoadingService()
     const router = useRouter()
+    const maxQuota = useCapabilitySpacesMaxQuota()
+
     const selectedOption = ref(0)
 
-    const modalTitle = computed(() => {
-      if (props.resourceType === 'space') {
-        if (props.spaces.length === 1) {
-          return $gettext('Change quota for Space "%{name}"', {
-            name: props.spaces[0].name
-          })
-        }
-        return $gettext('Change quota for %{count} Spaces', {
-          count: props.spaces.length.toString()
-        })
-      }
-      if (props.resourceType === 'user') {
-        if (props.spaces.length === 1) {
-          return $gettext('Change quota for user "%{name}"', {
-            name: props.spaces[0].name
-          })
-        }
-        return $gettext('Change quota for %{count} users', {
-          count: props.spaces.length.toString()
-        })
-      }
-      return $gettext('Change quota')
-    })
     const getSuccessMessage = (count: number) => {
       if (props.resourceType === 'space') {
         return $ngettext(
@@ -153,7 +129,7 @@ export default defineComponent({
       selectedOption.value = option.value
     }
 
-    const editQuota = async (): Promise<void> => {
+    const onConfirm = async () => {
       const client = clientService.graphAuthenticated
       const requests = props.spaces.map(async (space): Promise<void> => {
         const { data: driveData } = await client.drives.updateDrive(
@@ -193,6 +169,7 @@ export default defineComponent({
       }
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
+        console.error(errors)
         errors.forEach(console.error)
         store.dispatch('showErrorMessage', {
           title: getErrorMessage(errors.length),
@@ -200,8 +177,14 @@ export default defineComponent({
         })
       }
 
-      props.cancel()
+      store.dispatch('hideModal')
     }
+
+    const onCancel = () => {
+      store.dispatch('hideModal')
+    }
+
+    expose({ onConfirm, onCancel })
 
     onMounted(() => {
       selectedOption.value = props.spaces[0]?.spaceQuota?.total || 0
@@ -209,10 +192,11 @@ export default defineComponent({
 
     return {
       selectedOption,
-      modalTitle,
       confirmButtonDisabled,
       changeSelectedQuotaOption,
-      editQuota
+      onConfirm,
+      onCancel,
+      maxQuota
     }
   }
 })

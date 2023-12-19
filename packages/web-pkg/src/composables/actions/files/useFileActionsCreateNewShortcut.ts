@@ -15,7 +15,7 @@ export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResourc
       title: $gettext('Create a Shortcut'),
       hideActions: true,
       customComponent: CreateShortcutModal,
-      customComponentAttrs: { space }
+      customComponentAttrs: () => ({ space })
     })
   }
 

@@ -11,7 +11,7 @@ import { unref } from 'vue'
 describe('useUserActionsEditQuota', () => {
   describe('isEnabled property', () => {
     it('should be false when not resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
@@ -25,7 +25,7 @@ describe('useUserActionsEditQuota', () => {
           quota: {}
         }
       }
-      const { wrapper } = getWrapper({
+      getWrapper({
         canEditSpaceQuota: true,
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toBe(true)
@@ -40,7 +40,7 @@ describe('useUserActionsEditQuota', () => {
           quota: {}
         }
       }
-      const { wrapper } = getWrapper({
+      getWrapper({
         canEditSpaceQuota: false,
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toBe(false)
@@ -63,6 +63,16 @@ describe('useUserActionsEditQuota', () => {
             }
           })
           expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toEqual(false)
+        }
+      })
+    })
+  })
+  describe('handler', () => {
+    it('should create a modal', () => {
+      getWrapper({
+        setup: async ({ actions }, { storeOptions }) => {
+          await unref(actions)[0].handler({ resources: [] })
+          expect(storeOptions.actions.createModal).toHaveBeenCalled()
         }
       })
     })

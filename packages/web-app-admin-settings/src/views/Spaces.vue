@@ -21,12 +21,6 @@
         />
       </template>
       <template #mainContent>
-        <quota-modal
-          v-if="quotaModalIsOpen"
-          :cancel="closeQuotaModal"
-          :spaces="selectedSpaces"
-          :max-quota="maxQuota"
-        />
         <no-content-message
           v-if="!spaces.length"
           id="admin-settings-spaces-empty"
@@ -64,7 +58,6 @@ import MembersPanel from '../components/Spaces/SideBar/MembersPanel.vue'
 import ActionsPanel from '../components/Spaces/SideBar/ActionsPanel.vue'
 import {
   NoContentMessage,
-  QuotaModal,
   SideBarPanel,
   SideBarPanelContext,
   SpaceAction,
@@ -76,7 +69,6 @@ import {
   configurationManager,
   queryItemAsString,
   useAccessToken,
-  useCapabilitySpacesMaxQuota,
   useClientService,
   useRouteQuery,
   useSideBar,
@@ -98,8 +90,7 @@ export default defineComponent({
     AppTemplate,
     NoContentMessage,
     ContextActions,
-    SpaceInfo,
-    QuotaModal
+    SpaceInfo
   },
   provide() {
     return {
@@ -115,7 +106,7 @@ export default defineComponent({
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
 
     const loadResourcesEventToken = ref(null)
-    let updateQuotaForSpaceEventToken
+    let updateQuotaForSpaceEventToken: string
     const template = ref(null)
     const selectedSpaces = ref([])
 
@@ -173,11 +164,7 @@ export default defineComponent({
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
-    const {
-      actions: editQuotaActions,
-      modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    const { actions: editQuotaActions } = useSpaceActionsEditQuota({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
 
     const batchActions = computed((): SpaceAction[] => {
@@ -281,7 +268,6 @@ export default defineComponent({
     })
 
     return {
-      maxQuota: useCapabilitySpacesMaxQuota(),
       isSideBarOpen,
       sideBarActivePanel,
       spaces,
@@ -295,9 +281,7 @@ export default defineComponent({
       template,
       selectSpaces,
       toggleSelectSpace,
-      unselectAllSpaces,
-      quotaModalIsOpen,
-      closeQuotaModal
+      unselectAllSpaces
     }
   }
 })

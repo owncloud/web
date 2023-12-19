@@ -1,11 +1,5 @@
 <template>
   <div>
-    <quota-modal
-      v-if="quotaModalIsOpen"
-      :cancel="closeQuotaModal"
-      :spaces="[actionOptions.resources[0]]"
-      :max-quota="maxQuota"
-    />
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"
@@ -31,8 +25,7 @@
 import { computed, defineComponent, inject, Ref, ref, unref, VNodeRef } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
-import { QuotaModal } from '@ownclouders/web-pkg'
-import { useCapabilitySpacesMaxQuota, useStore, usePreviewService } from '@ownclouders/web-pkg'
+import { useStore, usePreviewService } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,
@@ -48,7 +41,7 @@ import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceActions',
-  components: { ActionMenuItem, QuotaModal },
+  components: { ActionMenuItem },
   setup() {
     const store = useStore()
     const previewService = usePreviewService()
@@ -66,11 +59,7 @@ export default defineComponent({
     const { actions: disableActions } = useSpaceActionsDisable({ store })
     const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
-    const {
-      actions: editQuotaActions,
-      modalOpen: quotaModalIsOpen,
-      closeModal: closeQuotaModal
-    } = useSpaceActionsEditQuota({ store })
+    const { actions: editQuotaActions } = useSpaceActionsEditQuota({ store })
     const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
@@ -96,17 +85,13 @@ export default defineComponent({
     )
 
     return {
-      maxQuota: useCapabilitySpacesMaxQuota(),
       actions,
       actionOptions,
       spaceImageInput,
       supportedSpaceImageMimeTypes,
 
       uploadImageActions,
-      uploadImageSpace,
-
-      quotaModalIsOpen,
-      closeQuotaModal
+      uploadImageSpace
     }
   }
 })

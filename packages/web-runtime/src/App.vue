@@ -46,7 +46,7 @@
           v-else
           ref="modalComponent"
           :modal="modal"
-          v-bind="modal.customComponentAttrs"
+          v-bind="modal.customComponentAttrs?.() || {}"
         />
       </template>
     </oc-modal>
