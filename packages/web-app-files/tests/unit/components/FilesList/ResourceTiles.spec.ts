@@ -6,7 +6,7 @@ import { mock } from 'jest-mock-extended'
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useTileSize: jest.fn().mockReturnValue({
-    tileSizePixels: 10
+    tileSizePixels: 100
   })
 }))
 
