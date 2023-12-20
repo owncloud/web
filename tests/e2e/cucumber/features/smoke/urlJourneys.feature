@@ -16,6 +16,7 @@ Feature: web can be navigated through urls
     And "Alice" creates the following files into personal space using API
       | pathToFile | content      |
       | lorem.txt  | some content |
+      | test.odt   | some content |
     And "Alice" creates the following files into personal space using API
       | pathToFile | content     |
       | lorem.txt  | new content |
@@ -36,9 +37,17 @@ Feature: web can be navigated through urls
     Then "Alice" shares the following resource using the direct url navigation
       | resource  | recipient | type | role     | resourceType |
       | lorem.txt | Brian     | user | Can view | file         |
+    # file that has respective editor will open in the respective editor
     When "Alice" opens the file "lorem.txt" of space "personal" through the URL
     Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
+    # file without the respective editor will show the file in the file list
+    When "Alice" opens the file "test.odt" of space "personal" through the URL
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource  |
+      | FOLDER    |
+      | lorem.txt |
+      | test.odt  |
     When "Alice" opens the folder "FOLDER" of space "personal" through the URL
     And "Alice" opens the following file in texteditor
       | resource               |
