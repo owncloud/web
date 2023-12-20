@@ -17,7 +17,7 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   const router = useRouter()
 
   const language = useGettext()
-  const { $pgettext } = language
+  const { $gettext } = language
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -27,9 +27,9 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
 
   const copyShortcutString = computed(() => {
     if (unref(isMacOs)) {
-      return $pgettext('Keyboard shortcut for macOS for copying files', '⌘ + C')
+      return $gettext('⌘ + C')
     }
-    return $pgettext('Keyboard shortcut for non-macOS systems for copying files', 'Ctrl + C')
+    return $gettext('Ctrl + C')
   })
 
   const handler = ({ space, resources }: FileActionOptions) => {
@@ -47,8 +47,7 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
         icon: 'file-copy-2',
         handler,
         shortcut: unref(copyShortcutString),
-        label: () =>
-          $pgettext('Action in the files list row to initiate copying resources', 'Copy'),
+        label: () => $gettext('Copy'),
         isEnabled: ({ resources }) => {
           if (
             !isLocationSpacesActive(router, 'files-spaces-generic') &&
