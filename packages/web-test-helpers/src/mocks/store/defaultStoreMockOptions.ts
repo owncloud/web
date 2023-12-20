@@ -26,9 +26,6 @@ export const defaultStoreMockOptions = {
       state: {
         fileEditors: [],
         meta: {}
-      },
-      getters: {
-        fileSideBars: jest.fn(() => [])
       }
     },
     External: {

@@ -55,7 +55,6 @@ export interface ApplicationInformation {
   isFileEditor?: boolean
   extensions?: any[]
   defaultExtension?: string
-  fileSideBars?: any[]
   applicationMenu?: ApplicationMenuItem
 }
 
