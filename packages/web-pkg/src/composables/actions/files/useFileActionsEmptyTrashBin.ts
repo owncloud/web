@@ -15,7 +15,7 @@ import { useLoadingService } from '../../loadingService'
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $gettext, $pgettext } = useGettext()
+  const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
@@ -32,10 +32,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       .catch((error) => {
         console.error(error)
         store.dispatch('showErrorMessage', {
-          title: $pgettext(
-            'Error message in case emptying trash bin fails',
-            'Failed to empty trash bin'
-          ),
+          title: $gettext('Failed to empty trash bin'),
           error
         })
       })
