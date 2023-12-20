@@ -1,0 +1,6 @@
+Enhancement: Harmonize AppSwitcher icon colors
+
+We've adjusted the AppSwitcher icon colors to be more inline with the design.
+
+https://github.com/owncloud/web/pull/10224
+https://github.com/owncloud/web/issues/10121
