@@ -385,7 +385,7 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
-    const viewWidth = ref<number>(0)
+    const viewWidth = ref(0)
     const updateViewWidth = () => {
       const element = document.getElementById('tiles-view')
       const style = getComputedStyle(element)
@@ -404,10 +404,10 @@ export default defineComponent({
     })
     const ghostTilesCount = computed(() => {
       const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
-      if (remainder) {
-        return unref(maxTiles) - remainder
+      if (!remainder) {
+        return 0
       }
-      return 0
+      return unref(maxTiles) - remainder
     })
 
     const tileSizePixels = computed(() => {

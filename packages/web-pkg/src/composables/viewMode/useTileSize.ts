@@ -16,8 +16,8 @@ export const useTileSize = () => {
     return parseInt(value.replace('px', '').trim())
   }
 
-  const baseSizePixels = ref<number>(0)
-  const stepSizePixels = ref<number>(0)
+  const baseSizePixels = ref(0)
+  const stepSizePixels = ref(0)
   onMounted(() => {
     const styles = getComputedStyle(document.documentElement)
     baseSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-default'))
