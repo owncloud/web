@@ -3,6 +3,12 @@ import ResourceTiles from 'web-app-files/src/components/FilesList/ResourceTiles.
 import { sortFields } from 'web-app-files/src/helpers/ui/resourceTiles'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'jest-mock-extended'
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useTileSize: jest.fn().mockReturnValue({
+    tileSizePixels: 100
+  })
+}))
 
 const spacesResources = [
   {
@@ -24,8 +30,37 @@ const spacesResources = [
 ]
 
 describe('ResourceTiles component', () => {
-  it('renders an array of spaces correctly', () => {
+  const originalGetElementById = document.getElementById
+  const originalGetComputedStyle = window.getComputedStyle
+  beforeEach(() => {
+    const mockElement = {
+      clientWidth: 800
+    }
+    ;(document as any).getElementById = jest.fn((id) => {
+      if (id === 'tiles-view') {
+        return mockElement
+      }
+      return originalGetElementById.call(document, id)
+    })
+    window.getComputedStyle = jest.fn().mockImplementation(() => {
+      return {
+        getPropertyValue: (propName) => {
+          switch (propName) {
+            case '--oc-size-tiles-default':
+              return '9rem'
+            case '--oc-size-tiles-resize-step':
+              return '9rem'
+            default:
+              return originalGetComputedStyle(document.documentElement).getPropertyValue(propName)
+          }
+        },
+        fontSize: '14px'
+      }
+    })
+  })
+  it('renders an array of spaces correctly', async () => {
     const { wrapper } = getWrapper({ data: spacesResources })
+    await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
 

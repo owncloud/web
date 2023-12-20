@@ -1,0 +1,8 @@
+Bugfix: Tilesview has whitespace
+
+We've fixed a bug that caused the tiles-view to have whitespace
+on the right side of the screen which is not optimal for efficiant
+space management.
+
+https://github.com/owncloud/web/pull/10118
+https://github.com/owncloud/web/issues/10040
