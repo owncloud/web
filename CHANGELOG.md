@@ -3,20 +3,15 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.1.2...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.1.3...master
 
 Summary
 -------
 
 * Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
-* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
-* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
-* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
-* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
-* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
 * Bugfix - Link resolving into default app: [#9799](https://github.com/owncloud/web/issues/9799)
@@ -116,21 +111,6 @@ Details
    https://github.com/owncloud/web/issues/9257
    https://github.com/owncloud/web/pull/9504
 
-* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
-
-   Loading PDF files with Safari has been fixed.
-
-   https://github.com/owncloud/web/issues/9483
-   https://github.com/owncloud/web/pull/9565
-
-* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
-
-   We've fixed a bug where setting or removing an expiration on a group share
-   wasn't possible.
-
-   https://github.com/owncloud/web/issues/8419
-   https://github.com/owncloud/web/pull/9513
-
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
 
    Adjusted offset of alignment of label for shared with action menu option in
@@ -138,22 +118,6 @@ Details
 
    https://github.com/owncloud/web/issues/9323
    https://github.com/owncloud/web/pull/9529
-
-* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
-
-   An issue where internally resolved public links instantly triggered the default
-   file action has been fixed.
-
-   https://github.com/owncloud/web/issues/9578
-   https://github.com/owncloud/web/pull/9587
-
-* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
-
-   Loading audio and video on the Shared with me page with the preview app has been
-   fixed.
-
-   https://github.com/owncloud/web/issues/9593
-   https://github.com/owncloud/web/pull/9595
 
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 
@@ -169,13 +133,6 @@ Details
 
    https://github.com/owncloud/web/issues/9630
    https://github.com/owncloud/web/pull/9663
-
-* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
-
-   Navigating via tab and enter in the tiles view has been fixed.
-
-   https://github.com/owncloud/web/issues/9633
-   https://github.com/owncloud/web/pull/9670
 
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 
@@ -1024,6 +981,81 @@ Details
 
    https://github.com/owncloud/web/pull/10111
    https://github.com/owncloud/web/pull/10152
+
+Changelog for ownCloud Web [7.1.3] (2023-12-15)
+=======================================
+The following sections list the changes in ownCloud web 7.1.3 relevant to
+ownCloud admins and users.
+
+[7.1.3]: https://github.com/owncloud/web/compare/v7.1.2...v7.1.3
+
+Summary
+-------
+
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
+* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
+* Bugfix - Zoom in preview app not working with all browsers: [#10137](https://github.com/owncloud/web/pull/10137)
+* Bugfix - Created file missing extension when file extensions not shown is active: [#10170](https://github.com/owncloud/web/issues/10170)
+
+Details
+-------
+
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+
+   Loading PDF files with Safari has been fixed.
+
+   https://github.com/owncloud/web/issues/9483
+   https://github.com/owncloud/web/pull/9565
+
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+
+   We've fixed a bug where setting or removing an expiration on a group share
+   wasn't possible.
+
+   https://github.com/owncloud/web/issues/8419
+   https://github.com/owncloud/web/pull/9513
+
+* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
+
+   An issue where internally resolved public links instantly triggered the default
+   file action has been fixed.
+
+   https://github.com/owncloud/web/issues/9578
+   https://github.com/owncloud/web/pull/9587
+
+* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+
+   Loading audio and video on the Shared with me page with the preview app has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/9593
+   https://github.com/owncloud/web/pull/9595
+
+* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
+
+   Navigating via tab and enter in the tiles view has been fixed.
+
+   https://github.com/owncloud/web/issues/9633
+   https://github.com/owncloud/web/pull/9670
+
+* Bugfix - Zoom in preview app not working with all browsers: [#10137](https://github.com/owncloud/web/pull/10137)
+
+   We fixed a bug where zoom in and zoom out not working in preview app with all
+   browsers, for example in Firefox.
+
+   https://github.com/owncloud/web/pull/10137
+
+* Bugfix - Created file missing extension when file extensions not shown is active: [#10170](https://github.com/owncloud/web/issues/10170)
+
+   We've fixed a bug where the file extension was missing, when the user set the
+   file extensions not shown configuration option. This affected files that are
+   handled via external applications, for example Microsoft Excel.
+
+   https://github.com/owncloud/web/issues/10170
+   https://github.com/owncloud/web/pull/10169
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================
