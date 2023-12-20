@@ -49,7 +49,6 @@
             v-model:selectedIds="selectedResourcesIds"
             class="oc-px-m"
             :data="paginatedItems"
-            :resizable="true"
             :sort-fields="sortFields"
             :sort-by="sortBy"
             :sort-dir="sortDir"

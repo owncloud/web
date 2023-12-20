@@ -80,7 +80,6 @@
             max="6"
             class="oc-range"
             data-testid="files-tiles-size-slider"
-            @input="setTilesViewSize"
           />
         </li>
       </oc-list>
@@ -166,15 +165,6 @@ export default defineComponent({
       defaultValue: ViewModeConstants.tilesSizeDefault.toString()
     })
 
-    const setTilesViewSize = () => {
-      const rootStyle = (document.querySelector(':root') as HTMLElement).style
-      const currentSize = rootStyle.getPropertyValue('--oc-size-tiles-resize-step')
-      const newSize = `${(unref(viewSizeQuery) as any) * 12}rem`
-      if (!currentSize || currentSize !== newSize) {
-        rootStyle.setProperty(`--oc-size-tiles-resize-step`, newSize)
-      }
-    }
-
     const setItemsPerPage = (itemsPerPage: string) => {
       return router.replace({
         query: {
@@ -197,16 +187,6 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    watch(
-      viewSizeQuery,
-      (size) => {
-        if (size) {
-          setTilesViewSize()
-        }
-      },
-      { immediate: true }
-    )
-
     return {
       ViewModeConstants,
       viewModeCurrent: viewModeQuery,
@@ -214,7 +194,6 @@ export default defineComponent({
       itemsPerPageCurrent: itemsPerPageQuery,
       queryParamsLoading,
       queryItemAsString,
-      setTilesViewSize,
       setItemsPerPage,
       setViewMode,
       viewOptionsButtonLabel: $gettext('Display customization options of the files list')

@@ -48,7 +48,9 @@
             "icon-default": "",
             "max-height-logo": "",
             "max-width-logo": "",
-            "width-medium": ""
+            "width-medium": "",
+            "tiles-default": "",
+            "tiles-resize-step": ""
           },
           "spacing": {
             "xsmall": "",

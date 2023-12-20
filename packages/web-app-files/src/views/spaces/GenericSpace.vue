@@ -69,7 +69,6 @@
             v-model:selectedIds="selectedResourcesIds"
             :data="paginatedResources"
             class="oc-px-m oc-pt-l"
-            :resizable="true"
             :target-route-callback="resourceTargetRouteCallback"
             :space="space"
             :drag-drop="true"
