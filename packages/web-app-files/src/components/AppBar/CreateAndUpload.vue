@@ -508,7 +508,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
+    ...mapActions('Files', ['clearClipboardFiles']),
     ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
     getIconResource(fileHandler) {
