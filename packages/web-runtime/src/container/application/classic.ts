@@ -25,7 +25,7 @@ class ClassicApplication extends NextApplication {
   }
 
   initialize(): Promise<void> {
-    const { routes, navItems, translations, quickActions, store } = this.applicationScript
+    const { routes, navItems, translations, store } = this.applicationScript
     const { globalProperties } = this.app.config
     const _routes = typeof routes === 'function' ? routes(globalProperties) : routes
     const _navItems = typeof navItems === 'function' ? navItems(globalProperties) : navItems
@@ -33,7 +33,6 @@ class ClassicApplication extends NextApplication {
     routes && this.runtimeApi.announceRoutes(_routes)
     navItems && this.runtimeApi.announceNavigationItems(_navItems)
     translations && this.runtimeApi.announceTranslations(translations)
-    quickActions && this.runtimeApi.announceQuickActions(quickActions)
     store && this.runtimeApi.announceStore(store)
 
     return Promise.resolve(undefined)

@@ -1,6 +1,5 @@
 const state = {
-  messages: [],
-  quickActions: {}
+  messages: []
 }
 
 const actions = {
@@ -58,9 +57,6 @@ const mutations = {
   },
   REMOVE_MESSAGE(state, item) {
     state.messages.splice(state.messages.indexOf(item), 1)
-  },
-  ADD_QUICK_ACTIONS(state, quickActions) {
-    state.quickActions = Object.assign(state.quickActions, quickActions)
   }
 }
 
