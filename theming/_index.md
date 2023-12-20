@@ -307,9 +307,7 @@ Size variables get prepended with `--oc-size-`, so e.g. _"icon-default"_ creates
     "icon-default": "",
     "max-height-logo": "",
     "max-width-logo": "",
-    "width-medium": "",
-    "tiles-default": "",
-    "tiles-resize-step": ""
+    "width-medium": ""
   }
 }
 ```
@@ -428,9 +426,7 @@ A full template for your custom theme is provided below, and you can use the ins
             "icon-default": "",
             "max-height-logo": "",
             "max-width-logo": "",
-            "width-medium": "",
-            "tiles-default": "",
-            "tiles-resize-step": ""
+            "width-medium": ""
           },
           "spacing": {
             "xsmall": "",
