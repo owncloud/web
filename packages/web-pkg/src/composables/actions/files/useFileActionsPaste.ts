@@ -20,7 +20,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
-  const { $gettext, $pgettext, $ngettext } = useGettext()
+  const { $gettext, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -28,9 +28,9 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
 
   const pasteShortcutString = computed(() => {
     if (unref(isMacOs)) {
-      return $pgettext('Keyboard shortcut for macOS for pasting files', '⌘ + V')
+      return $gettext('⌘ + V')
     }
-    return $pgettext('Keyboard shortcut for non-macOS systems for pasting files', 'Ctrl + V')
+    return $gettext('Ctrl + V')
   })
 
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
@@ -78,7 +78,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
       name: 'paste',
       icon: 'clipboard',
       handler,
-      label: () => $pgettext('Action in the files list row to initiate pasting resources', 'Paste'),
+      label: () => $gettext('Paste'),
       shortcut: unref(pasteShortcutString),
       isEnabled: ({ resources }) => {
         if (store.getters['Files/clipboardResources'].length === 0) {

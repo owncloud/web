@@ -21,7 +21,7 @@ import { FileAction } from '../types'
 export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { $pgettext } = useGettext()
+  const { $gettext } = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
 
   const getSpace = (space: SpaceResource, resource: Resource) => {
@@ -40,7 +40,7 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
     {
       name: 'navigate',
       icon: 'folder-open',
-      label: () => $pgettext('Action in the files list row to open a folder', 'Open folder'),
+      label: () => $gettext('Open folder'),
       isEnabled: ({ resources }) => {
         if (isLocationTrashActive(router, 'files-trash-generic')) {
           return false

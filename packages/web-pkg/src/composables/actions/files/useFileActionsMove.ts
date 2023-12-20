@@ -15,7 +15,7 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const language = useGettext()
-  const { $pgettext } = language
+  const { $gettext } = language
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -23,9 +23,9 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
 
   const cutShortcutString = computed(() => {
     if (unref(isMacOs)) {
-      return $pgettext('Keyboard shortcut for macOS for cutting files', '⌘ + X')
+      return $gettext('⌘ + X')
     }
-    return $pgettext('Keyboard shortcut for non-macOS systems for cutting files', 'Ctrl + X')
+    return $gettext('Ctrl + X')
   })
 
   const handler = ({ space, resources }: ActionOptions) => {
@@ -37,7 +37,7 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
       icon: 'scissors',
       handler,
       shortcut: unref(cutShortcutString),
-      label: () => $pgettext('Action in the files list row to initiate cutting resources', 'Cut'),
+      label: () => $gettext('Cut'),
       isEnabled: ({ resources }) => {
         if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
