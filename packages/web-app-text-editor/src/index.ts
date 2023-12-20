@@ -93,7 +93,7 @@ const appInfo = {
   name: $gettext('Text Editor'),
   id: appId,
   icon: 'file-text',
-  color: '#7b27b6',
+  color: '#0D856F',
   isFileEditor: true,
   applicationMenu: {
     enabled: (store: Store<unknown>) => {
