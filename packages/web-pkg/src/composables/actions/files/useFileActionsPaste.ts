@@ -52,18 +52,16 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
       }, {})
     const promises = Object.values(resourceSpaceMapping).map(
       ({ space: sourceSpace, resources: resourcesToCopy }) => {
-        return loadingService.addTask(() => {
-          return store.dispatch('Files/pasteSelectedFiles', {
-            targetSpace,
-            sourceSpace: sourceSpace,
-            resources: resourcesToCopy,
-            clientService,
-            loadingService,
-            showMessage: (...args) => store.dispatch('showMessage', ...args),
-            showErrorMessage: (...args) => store.dispatch('showErrorMessage', ...args),
-            $gettext,
-            $ngettext
-          })
+        return store.dispatch('Files/pasteSelectedFiles', {
+          targetSpace,
+          sourceSpace: sourceSpace,
+          resources: resourcesToCopy,
+          clientService,
+          loadingService,
+          showMessage: (...args) => store.dispatch('showMessage', ...args),
+          showErrorMessage: (...args) => store.dispatch('showErrorMessage', ...args),
+          $gettext,
+          $ngettext
         })
       }
     )
