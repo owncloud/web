@@ -41,6 +41,7 @@ Summary
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -413,6 +414,16 @@ Details
 
    https://github.com/owncloud/web/issues/9709
    https://github.com/owncloud/web/pull/9764
+
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+
+   BREAKING CHANGE for developers: The old way of registering quick actions via the
+   `quickaction` property of an app has been removed. Quick actions should be
+   registered as extension via our extension registry. They need to be of type
+   `action` and have the `files.quick-action` scope.
+
+   https://github.com/owncloud/web/pull/10102
+   https://github.com/owncloud/web/pull/10223
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
