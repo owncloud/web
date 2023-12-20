@@ -9,7 +9,6 @@ export const defaultStoreMockOptions = {
     apps: jest.fn(() => ({})),
     quota: jest.fn(() => ({})),
     capabilities: jest.fn().mockImplementation(() => ({})),
-    user: jest.fn().mockImplementation(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
       options: {
         editor: {

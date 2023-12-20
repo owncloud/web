@@ -1,4 +1,4 @@
-import { User } from '../user'
+import { User } from '../../generated'
 import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
 import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import {
@@ -147,16 +147,16 @@ export function buildSpace(
             id: info[kind].id,
             displayName: info[kind].displayName,
             expirationDate: permission.expirationDateTime,
-            isMember(u?: any): boolean {
+            isMember(u?: User): boolean {
               if (!u) {
                 return false
               }
 
               switch (this.kind) {
                 case 'user':
-                  return this.id == u.uuid
+                  return this.id == u.id
                 case 'group':
-                  return u.groups.map((g) => g.id).includes(this.id)
+                  return u.memberOf.map((g) => g.id).includes(this.id)
                 default:
                   return false
               }
@@ -291,8 +291,8 @@ export function buildSpace(
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)
     },
-    isOwner({ uuid }: User): boolean {
-      return uuid === this.ownerId
+    isOwner({ id }: User): boolean {
+      return id === this.ownerId
     }
   }
   Object.defineProperty(s, 'nodeId', {

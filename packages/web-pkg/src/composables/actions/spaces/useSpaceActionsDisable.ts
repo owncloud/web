@@ -8,10 +8,11 @@ import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { Store } from 'vuex'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -21,7 +22,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
 
   const filterResourcesToDisable = (resources: SpaceResource[]): SpaceResource[] => {
     return resources.filter(
-      (r) => isProjectSpaceResource(r) && r.canDisable({ user: store.getters.user, ability })
+      (r) => isProjectSpaceResource(r) && r.canDisable({ user: userStore.user, ability })
     )
   }
 

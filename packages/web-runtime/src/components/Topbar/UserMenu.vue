@@ -9,11 +9,11 @@
       :aria-label="$gettext('My Account')"
     >
       <avatar-image
-        v-if="userId"
+        v-if="onPremisesSamAccountName"
         class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         :width="32"
-        :userid="userId"
-        :user-name="user.displayname"
+        :userid="onPremisesSamAccountName"
+        :user-name="user.displayName"
       />
       <oc-avatar-item
         v-else
@@ -36,7 +36,7 @@
       class="oc-overflow-hidden"
     >
       <oc-list class="user-menu-list">
-        <template v-if="!userId">
+        <template v-if="!onPremisesSamAccountName">
           <li>
             <oc-button
               id="oc-topbar-account-login"
@@ -57,10 +57,14 @@
               :to="{ path: '/account' }"
               appearance="raw"
             >
-              <avatar-image :width="32" :userid="userId" :user-name="user.displayname" />
-              <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.email }">
-                <span class="oc-display-block" v-text="user.displayname" />
-                <span v-if="user.email" class="oc-text-small" v-text="user.email" />
+              <avatar-image
+                :width="32"
+                :userid="onPremisesSamAccountName"
+                :user-name="user.displayName"
+              />
+              <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.mail }">
+                <span class="oc-display-block" v-text="user.displayName" />
+                <span v-if="user.mail" class="oc-text-small" v-text="user.mail" />
               </span>
             </oc-button>
           </li>
@@ -118,12 +122,18 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import filesize from 'filesize'
 import isNil from 'lodash-es/isNil'
 import { authService } from '../../services/auth'
-import { useCapabilitySpacesEnabled, useRoute, useThemeStore } from '@ownclouders/web-pkg'
+import {
+  useCapabilitySpacesEnabled,
+  useRoute,
+  useThemeStore,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -136,7 +146,10 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()
+    const userStore = useUserStore()
     const themeStore = useThemeStore()
+
+    const { user } = storeToRefs(userStore)
 
     const loginLink = computed(() => {
       return {
@@ -150,13 +163,14 @@ export default defineComponent({
 
     return {
       hasSpaces: useCapabilitySpacesEnabled(),
+      user,
       loginLink,
       imprintUrl,
       privacyUrl
     }
   },
   computed: {
-    ...mapGetters(['quota', 'user']),
+    ...mapGetters(['quota']),
     ...mapGetters({ legacyQuota: 'quota' }),
     ...mapState('runtime/spaces', ['spaces']),
 
@@ -169,8 +183,8 @@ export default defineComponent({
       return !this.hasSpaces
     },
 
-    userId() {
-      return this.user.username || this.user.id
+    onPremisesSamAccountName() {
+      return this.user?.onPremisesSamAccountName
     },
     personalStorageLabel() {
       if (!this.limitedPersonalStorage) {

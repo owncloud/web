@@ -24,15 +24,15 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
-import { useModals } from '../../piniaStores'
+import { useUserStore } from '../../piniaStores'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { dispatchModal } = useModals()
 
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
 
@@ -223,7 +223,9 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         value: driveResponse.data.quota
       })
     } else {
-      const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
+      const user = await clientService.owncloudSdk.users.getUser(
+        userStore.user.onPremisesSamAccountName
+      )
       store.commit('SET_QUOTA', user.quota)
     }
   }
@@ -286,8 +288,8 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
 
         if (
           isProjectSpaceResource(space) &&
-          !space.isEditor(store.getters.user) &&
-          !space.isManager(store.getters.user)
+          !space.isEditor(userStore.user) &&
+          !space.isManager(userStore.user)
         ) {
           return false
         }

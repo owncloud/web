@@ -162,7 +162,8 @@ import {
   useSideBar,
   useStore,
   SideBarPanel,
-  SideBarPanelContext
+  SideBarPanelContext,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -199,6 +200,7 @@ export default defineComponent({
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
+    const userStore = useUserStore()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -315,10 +317,6 @@ export default defineComponent({
       unref(additionalUserDataLoadedForUserIds).push(user.id)
 
       Object.assign(user, data)
-    })
-
-    const currentUser = computed(() => {
-      return store.state.user
     })
 
     const resetPagination = () => {
@@ -540,7 +538,7 @@ export default defineComponent({
         {}
       )
 
-      if (editUser.id === unref(currentUser).uuid) {
+      if (editUser.id === userStore.user.id) {
         // Load current user quota
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: editUser.drive.id,

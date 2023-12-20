@@ -40,7 +40,7 @@ describe('AuthService', () => {
           options: { embed: { enabled: false } }
         })
 
-        authService.initialize(configurationManager, null, null, router, null, null)
+        authService.initialize(configurationManager, null, null, router, null, null, null)
 
         await authService.signInCallback()
 
@@ -70,7 +70,15 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: false } }
       })
-      authService.initialize(configurationManager, null, mock<Store<any>>({}), null, null, null)
+      authService.initialize(
+        configurationManager,
+        null,
+        mock<Store<any>>({}),
+        null,
+        null,
+        null,
+        null
+      )
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -94,7 +102,15 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: false } }
       })
-      authService.initialize(configurationManager, null, mock<Store<any>>({}), null, null, null)
+      authService.initialize(
+        configurationManager,
+        null,
+        mock<Store<any>>({}),
+        null,
+        null,
+        null,
+        null
+      )
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -118,7 +134,15 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: true, delegateAuthentication: false } }
       })
-      authService.initialize(configurationManager, null, mock<Store<any>>({}), null, null, null)
+      authService.initialize(
+        configurationManager,
+        null,
+        mock<Store<any>>({}),
+        null,
+        null,
+        null,
+        null
+      )
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -142,7 +166,15 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: true, delegateAuthentication: true } }
       })
-      authService.initialize(configurationManager, null, mock<Store<any>>({}), null, null, null)
+      authService.initialize(
+        configurationManager,
+        null,
+        mock<Store<any>>({}),
+        null,
+        null,
+        null,
+        null
+      )
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -166,7 +198,15 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: false, delegateAuthentication: true } }
       })
-      authService.initialize(configurationManager, null, mock<Store<any>>({}), null, null, null)
+      authService.initialize(
+        configurationManager,
+        null,
+        mock<Store<any>>({}),
+        null,
+        null,
+        null,
+        null
+      )
 
       await authService.initializeContext(mock<RouteLocation>({}))
 

@@ -69,7 +69,13 @@ import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { defaultFuseOptions, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
+import {
+  defaultFuseOptions,
+  useClientService,
+  useRouter,
+  useStore,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import { createLocationTrash } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { AppBar } from '@ownclouders/web-pkg'
@@ -89,6 +95,7 @@ export default defineComponent({
   components: { FilesViewWrapper, AppBar, AppLoadingSpinner, NoContentMessage },
   setup() {
     const store = useStore()
+    const userStore = useUserStore()
     const router = useRouter()
     const { $gettext } = useGettext()
     const clientService = useClientService()
@@ -102,7 +109,7 @@ export default defineComponent({
     const spaces = computed<SpaceResource[]>(() =>
       store.getters['runtime/spaces/spaces'].filter(
         (s: SpaceResource) =>
-          (isPersonalSpaceResource(s) && s.isOwner(store.getters.user)) || isProjectSpaceResource(s)
+          (isPersonalSpaceResource(s) && s.isOwner(userStore.user)) || isProjectSpaceResource(s)
       )
     )
 

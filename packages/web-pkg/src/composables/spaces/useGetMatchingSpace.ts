@@ -7,7 +7,6 @@ import {
   MountPointSpaceResource,
   PersonalSpaceResource,
   ProjectSpaceResource,
-  User,
   buildShareSpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
@@ -18,6 +17,7 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
+import { useUserStore } from '../piniaStores'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
@@ -25,9 +25,9 @@ type GetMatchingSpaceOptions = {
 
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
+  const userStore = useUserStore()
   const configurationManager = useConfigurationManager()
   const spaces = computed<ProjectSpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
-  const user = computed<User>(() => store.getters.user)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
@@ -87,7 +87,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     )
 
   const getPersonalSpace = (): PersonalSpaceResource => {
-    return unref(spaces).find((s) => isPersonalSpaceResource(s) && s.isOwner(unref(user)))
+    return unref(spaces).find((s) => isPersonalSpaceResource(s) && s.isOwner(userStore.user))
   }
 
   const isPersonalSpaceRoot = (resource: Resource) => {
@@ -104,7 +104,8 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     }
 
     const projectSpace = unref(spaces).find((s) => isProjectSpaceResource(s) && s.id === space.id)
-    const fullyAccessibleSpace = space.isOwner(unref(user)) || projectSpace?.isMember(unref(user))
+    const fullyAccessibleSpace =
+      space.isOwner(userStore.user) || projectSpace?.isMember(userStore.user)
 
     return (
       fullyAccessibleSpace ||

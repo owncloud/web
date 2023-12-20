@@ -8,18 +8,17 @@ import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capa
 // TODO: move to useDefaultLinkPermissions composable
 export const getDefaultLinkPermissions = ({
   ability,
-  store
+  defaultPermissionsCapability
 }: {
   ability: Ability
-  store: Store<any>
+  defaultPermissionsCapability: number
 }) => {
   const canCreatePublicLink = ability.can('create-all', 'PublicLink')
   if (!canCreatePublicLink) {
     return SharePermissionBit.Internal
   }
 
-  let defaultPermissions: number =
-    store.state.user.capabilities.files_sharing?.public?.default_permissions
+  let defaultPermissions = defaultPermissionsCapability
   if (defaultPermissions === undefined) {
     defaultPermissions = SharePermissionBit.Read
   }

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
-import { useRoute, useRouter, useStore } from '@ownclouders/web-pkg'
+import { useRoute, useRouter, useStore, useUserStore } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
@@ -35,6 +35,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const userStore = useUserStore()
     const router = useRouter()
     const route = useRoute()
 
@@ -52,7 +53,7 @@ export default defineComponent({
       if (item !== '/') {
         return item
       }
-      return store.getters.homeFolder
+      return store.getters.homeFolder(userStore.user)
     })
 
     if (!unref(personalSpace)) {

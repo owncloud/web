@@ -1,6 +1,11 @@
+import { createPinia, setActivePinia } from 'pinia'
 import { navItems } from '../../src/index'
 
 describe('Web app files', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
   describe('navItems', () => {
     describe('Personal', () => {
       it('should be enabled if user has a personal space', () => {

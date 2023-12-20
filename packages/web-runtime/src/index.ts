@@ -54,6 +54,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
   app.use(pinia)
 
+  const { userStore } = announcePiniaStores()
+
   app.provide('$router', router)
 
   const runtimeConfiguration = await announceConfiguration(configurationPath)
@@ -72,7 +74,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceUppyService({ app })
 
-  announceClientService({ app, runtimeConfiguration, configurationManager, store })
+  announceClientService({ app, runtimeConfiguration, configurationManager, store, userStore })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
@@ -90,10 +92,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
-  announcePreviewService({ app, store, configurationManager })
+  announcePreviewService({ app, store, configurationManager, userStore })
   announcePasswordPolicyService({ app })
   await announceClient(runtimeConfiguration)
-  announcePiniaStores()
 
   app.config.globalProperties.$wormhole = createWormhole()
   app.use(PortalVue, {
@@ -123,7 +124,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
 
-  announceAuthService({ app, configurationManager, store, router })
+  announceAuthService({ app, configurationManager, store, router, userStore })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
   announceDefaults({ store, router })
@@ -198,14 +199,16 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       }
 
       // Spaces feature not available. Create a virtual personal space
-      const user = store.getters.user
+      const user = userStore.user
+
+      // TODO: remove legacy code
       const space = buildSpace({
-        id: user.id,
-        driveAlias: `personal/${user.id}`,
+        id: user.onPremisesSamAccountName,
+        driveAlias: `personal/${user.onPremisesSamAccountName}`,
         driveType: 'personal',
         name: app.config.globalProperties.$gettext('All files'),
-        webDavPath: `/files/${user.id}`,
-        webDavTrashPath: `/trash-bin/${user.id}`,
+        webDavPath: `/files/${user.onPremisesSamAccountName}`,
+        webDavTrashPath: `/trash-bin/${user.onPremisesSamAccountName}`,
         serverUrl: configurationManager.serverUrl
       })
       const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(

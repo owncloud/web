@@ -21,7 +21,7 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsCreateNewFile = ({
   store,
@@ -35,6 +35,7 @@ export const useFileActionsCreateNewFile = ({
   mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const { makeRequest } = useRequest()
@@ -219,7 +220,7 @@ export const useFileActionsCreateNewFile = ({
         handler: (args) => handler(args, newFileHandler.ext, openAction),
         label: () => newFileHandler.menuTitle($gettext),
         isEnabled: () => {
-          return unref(currentFolder)?.canUpload({ user: store.getters.user })
+          return unref(currentFolder)?.canUpload({ user: userStore.user })
         },
         componentType: 'button',
         class: 'oc-files-actions-create-new-file',
@@ -234,7 +235,7 @@ export const useFileActionsCreateNewFile = ({
         handler: (args) => handler(args, mimeType.ext, openAction),
         label: () => mimeType.name,
         isEnabled: () => {
-          return unref(currentFolder)?.canUpload({ user: store.getters.user })
+          return unref(currentFolder)?.canUpload({ user: userStore.user })
         },
         componentType: 'button',
         class: 'oc-files-actions-create-new-file',

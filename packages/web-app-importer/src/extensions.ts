@@ -1,5 +1,11 @@
 import { storeToRefs } from 'pinia'
-import { useStore, usePublicLinkContext, useThemeStore, useModals } from '@ownclouders/web-pkg'
+import {
+  useStore,
+  usePublicLinkContext,
+  useThemeStore,
+  useModals,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
 import { computed, nextTick, unref } from 'vue'
@@ -15,6 +21,7 @@ import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const store = useStore()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const uppyService = useService<UppyService>('$uppyService')
   const publicLinkContext = usePublicLinkContext({ store })
@@ -30,7 +37,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
     return store.getters['Files/currentFolder']
   })
   const canUpload = computed(() => {
-    return unref(currentFolder)?.canUpload({ user: store.getters.user })
+    return unref(currentFolder)?.canUpload({ user: userStore.user })
   })
 
   const removeUppyPlugins = () => {

@@ -22,7 +22,7 @@ export const ClearTrashBinFactory = (
       const hasShareJail = unref(capabilities)?.spaces?.share_jail === true
       let path = hasShareJail
         ? buildWebDavSpacesTrashPath(space.id.toString())
-        : buildWebDavFilesTrashPath(unref(user).id)
+        : buildWebDavFilesTrashPath(unref(user).onPremisesSamAccountName)
 
       if (id) {
         path = urlJoin(path, id)

@@ -8,10 +8,11 @@ import { useRoute } from '../../router'
 import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { SpaceResource } from '@ownclouders/web-client'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -74,7 +75,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
           return false
         }
 
-        return resources[0].canRename({ user: store.getters.user, ability })
+        return resources[0].canRename({ user: userStore.user, ability })
       },
       componentType: 'button',
       class: 'oc-files-actions-rename-trigger'

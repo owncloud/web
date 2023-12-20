@@ -137,7 +137,7 @@ export default defineComponent({
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
-    ...mapGetters(['user', 'configuration']),
+    ...mapGetters(['configuration']),
 
     isEmpty() {
       return this.paginatedResources.length < 1

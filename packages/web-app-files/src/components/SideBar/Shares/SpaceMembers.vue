@@ -62,11 +62,17 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { mapGetters, mapActions } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
-import { createLocationSpaces, isLocationSpacesActive, useModals } from '@ownclouders/web-pkg'
+import {
+  createLocationSpaces,
+  isLocationSpacesActive,
+  useModals,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -82,10 +88,14 @@ export default defineComponent({
     InviteCollaboratorForm
   },
   setup() {
+    const userStore = useUserStore()
     const clientService = useClientService()
     const { dispatchModal } = useModals()
 
+    const { user } = storeToRefs(userStore)
+
     return {
+      user,
       clientService,
       configurationManager,
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
@@ -102,7 +112,6 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
-    ...mapState(['user']),
 
     filteredSpaceMembers() {
       return this.filter(this.spaceMembers, this.filterTerm)
@@ -189,7 +198,7 @@ export default defineComponent({
 
     async $_ocCollaborators_deleteShare(share) {
       try {
-        const currentUserRemoved = share.collaborator.name === this.user.id
+        const currentUserRemoved = share.collaborator.name === this.user.onPremisesSamAccountName
         await this.deleteSpaceMember({
           client: this.$client,
           graphClient: this.clientService.graphAuthenticated,

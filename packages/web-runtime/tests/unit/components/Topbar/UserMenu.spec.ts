@@ -140,7 +140,7 @@ describe('User Menu component', () => {
   })
 })
 
-const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = false) => {
+const getMountedWrapper = (quota, userEmail: string, noUser = false, areThemeUrlsSet = false) => {
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ path: '/files', fullPath: '/files' })
@@ -149,16 +149,6 @@ const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = f
   const storeOptions = defaultStoreMockOptions
 
   storeOptions.getters.quota.mockImplementation(() => quota)
-  storeOptions.getters.user.mockImplementation(() => {
-    return noUser
-      ? {}
-      : {
-          id: 'einstein',
-          username: 'einstein',
-          userDisplayName: 'Albert Einstein',
-          userEmail
-        }
-  })
   const store = createStore(storeOptions)
   return mount(UserMenu, {
     props: {
@@ -185,6 +175,16 @@ const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = f
                   }
                 }
               }
+            },
+            userState: {
+              user: noUser
+                ? {}
+                : {
+                    id: '1',
+                    onPremisesSamAccountName: 'einstein',
+                    displayName: 'Albert Einstein',
+                    mail: userEmail || ''
+                  }
             }
           }
         }),

@@ -1,12 +1,11 @@
 import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
 import { mock } from 'jest-mock-extended'
-import { User } from '@ownclouders/web-client/src'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive, User } from '@ownclouders/web-client/src/generated'
 
 describe('buildSpace', () => {
-  const uuid = '1'
+  const id = '1'
 
   describe('isViewer', () => {
     it.each([
@@ -18,11 +17,11 @@ describe('buildSpace', () => {
         mock<Drive>({
           special: null,
           root: {
-            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
           }
         })
       ) as ProjectSpaceResource
-      expect(space.isViewer(mock<User>({ uuid }))).toBe(data.expectedResult)
+      expect(space.isViewer(mock<User>({ id }))).toBe(data.expectedResult)
     })
   })
 
@@ -36,11 +35,11 @@ describe('buildSpace', () => {
         mock<Drive>({
           special: null,
           root: {
-            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
           }
         })
       ) as ProjectSpaceResource
-      expect(space.isEditor(mock<User>({ uuid }))).toBe(data.expectedResult)
+      expect(space.isEditor(mock<User>({ id }))).toBe(data.expectedResult)
     })
   })
 
@@ -54,11 +53,11 @@ describe('buildSpace', () => {
         mock<Drive>({
           special: null,
           root: {
-            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
           }
         })
       ) as ProjectSpaceResource
-      expect(space.isManager(mock<User>({ uuid }))).toBe(data.expectedResult)
+      expect(space.isManager(mock<User>({ id }))).toBe(data.expectedResult)
     })
   })
 
@@ -71,11 +70,11 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canUpload({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canUpload({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -115,12 +114,12 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
+          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }],
           ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canBeDeleted({ user: mock<User>({ uuid }), ability })).toBe(data.expectedResult)
+    expect(space.canBeDeleted({ user: mock<User>({ id }), ability })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -132,11 +131,11 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }]
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canRename({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canRename({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -148,11 +147,11 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }]
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canEditDescription({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canEditDescription({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -176,12 +175,12 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
+          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }],
           ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canRestore({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canRestore({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -221,12 +220,12 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id: uuid } }] }],
+          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }],
           ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canDisable({ user: mock<User>({ uuid }), ability })).toBe(data.expectedResult)
+    expect(space.canDisable({ user: mock<User>({ id }), ability })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -238,11 +237,11 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canShare({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canShare({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -254,11 +253,11 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canEditImage({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canEditImage({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 
   it.each([
@@ -270,10 +269,10 @@ describe('buildSpace', () => {
       mock<Drive>({
         special: null,
         root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id: uuid } }] }]
+          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
         }
       })
     ) as ProjectSpaceResource
-    expect(space.canEditReadme({ user: mock<User>({ uuid }) })).toBe(data.expectedResult)
+    expect(space.canEditReadme({ user: mock<User>({ id }) })).toBe(data.expectedResult)
   })
 })

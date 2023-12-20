@@ -62,8 +62,9 @@
 
 <script lang="ts">
 import { mapGetters, mapState } from 'vuex'
+import { storeToRefs } from 'pinia'
 
-import { AppBar, ContextActions, FileSideBar } from '@ownclouders/web-pkg'
+import { AppBar, ContextActions, FileSideBar, useUserStore } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
@@ -111,7 +112,11 @@ export default defineComponent({
 
   setup(props) {
     const { $gettext } = useGettext()
-    let loadResourcesEventToken
+    const userStore = useUserStore()
+
+    const { user } = storeToRefs(userStore)
+
+    let loadResourcesEventToken: string
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
         ? $gettext('You have no deleted files')
@@ -152,6 +157,7 @@ export default defineComponent({
     return {
       ...resourcesViewDefaults,
       hasShareJail: useCapabilityShareJailEnabled(),
+      user,
       noContentMessage
     }
   },
@@ -159,7 +165,6 @@ export default defineComponent({
   computed: {
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['totalFilesCount']),
-    ...mapGetters(['user']),
 
     isEmpty() {
       return this.paginatedResources.length < 1

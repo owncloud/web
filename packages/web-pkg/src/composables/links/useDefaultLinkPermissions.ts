@@ -1,13 +1,18 @@
-import { computed } from 'vue'
-import { useStore } from '../store'
+import { computed, unref } from 'vue'
 import { useAbility } from '../ability'
 import { getDefaultLinkPermissions } from '../../helpers/share/link'
+import { useCapabilityFilesSharingPublicDefaultPermissions } from '../capability'
 
 export const useDefaultLinkPermissions = () => {
-  const store = useStore()
   const ability = useAbility()
+  const defaultPermissionsCapability = useCapabilityFilesSharingPublicDefaultPermissions()
 
-  const defaultLinkPermissions = computed(() => getDefaultLinkPermissions({ store, ability }))
+  const defaultLinkPermissions = computed(() =>
+    getDefaultLinkPermissions({
+      ability,
+      defaultPermissionsCapability: unref(defaultPermissionsCapability)
+    })
+  )
 
   return { defaultLinkPermissions }
 }

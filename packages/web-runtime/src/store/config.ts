@@ -1,3 +1,5 @@
+import { User } from '@ownclouders/web-client/src/generated'
+import { User as LegacyUser } from '@ownclouders/web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
 
 const state = {
@@ -100,11 +102,12 @@ const getters = {
       .filter(Boolean)
       .map((ext) => ext.toLowerCase())
   },
-  homeFolder: (state, rootGetters) => {
+  /** @deprecated */
+  homeFolder: (state) => (user: User) => {
     if (isEmpty(state.options.homeFolder)) {
       return '/'
     }
-    const parsed = parseHomeFolder(state.options.homeFolder, rootGetters.user)
+    const parsed = parseHomeFolder(state.options.homeFolder, user)
     if (parsed.indexOf('//') > -1) {
       // if there are parts of the template that cannot be filled given the current user, we fall back to '/'
       // because we assume that the path would be broken anyway.
@@ -133,7 +136,15 @@ export default {
  * @param user The user object from the store.
  * @returns string
  */
-function parseHomeFolder(tpl, user) {
+function parseHomeFolder(tpl, user: User) {
+  const legacyUser = {
+    id: user.onPremisesSamAccountName,
+    uuid: user.id,
+    username: user.id,
+    displayname: user.displayName,
+    email: user.mail
+  }
+
   const regex = /{{(.*?)}}/g
   const parts = tpl.match(regex)
   if (parts) {
@@ -144,7 +155,7 @@ function parseHomeFolder(tpl, user) {
       if (!isEmpty(substringMatches) && substringMatches.length >= 4) {
         const start = parseInt(substringMatches[1], 10)
         const length = parseInt(substringMatches[2], 10)
-        const userValue = getUserValue(substringMatches[3], user)
+        const userValue = getUserValue(substringMatches[3], legacyUser)
         tpl = tpl.replace(part, userValue.substring(start, start + length))
         return
       }
@@ -153,13 +164,13 @@ function parseHomeFolder(tpl, user) {
       const plainRegex = /{{\.(.*)}}/
       const plainMatches = part.match(plainRegex)
       if (!isEmpty(plainMatches) && plainMatches.length >= 2) {
-        tpl = tpl.replace(part, getUserValue(plainMatches[1], user))
+        tpl = tpl.replace(part, getUserValue(plainMatches[1], legacyUser))
       }
     })
   }
   return tpl
 }
 
-function getUserValue(key, user) {
+function getUserValue(key: string, user: LegacyUser) {
   return user[key.toLowerCase()] || ''
 }

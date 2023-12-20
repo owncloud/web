@@ -7,7 +7,7 @@ import {
   Share
 } from '@ownclouders/web-client/src/helpers/share'
 import { mock } from 'jest-mock-extended'
-import { ProjectSpaceResource, SpaceResource, User } from '@ownclouders/web-client/src/helpers'
+import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
   defaultPlugins,
@@ -17,6 +17,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
+import { User } from '@ownclouders/web-client/src/generated'
 
 const memberMocks = {
   [spaceRoleManager.name]: {
@@ -127,14 +128,14 @@ describe('SpaceMembers', () => {
       expect(showErrorMessageSpy).toHaveBeenCalled()
     })
     it('redirects to the "files-spaces-projects"-page when the current user has been removed', async () => {
-      const user = mock<User>({ id: memberMocks.manager.collaborator.name })
+      const user = mock<User>({ onPremisesSamAccountName: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
       jest.spyOn(wrapper.vm, 'deleteSpaceMember')
       await wrapper.vm.$_ocCollaborators_deleteShare(memberMocks.manager)
       expect(wrapper.vm.$router.push).toHaveBeenCalled()
     })
     it('refreshes the page when the current user has been removed on the "files-spaces-projects"-page', async () => {
-      const user = mock<User>({ id: memberMocks.manager.collaborator.name })
+      const user = mock<User>({ onPremisesSamAccountName: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user, currentRouteName: 'files-spaces-projects' })
       jest.spyOn(wrapper.vm, 'deleteSpaceMember')
       await wrapper.vm.$_ocCollaborators_deleteShare(memberMocks.manager)
@@ -163,10 +164,8 @@ function getWrapper({
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
-    state: { user },
     getters: {
       ...defaultStoreMockOptions.getters,
-      user: () => user,
       configuration: jest.fn(() => ({
         options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
       }))
@@ -181,7 +180,7 @@ function getWrapper({
   })
   return mountType(SpaceMembers, {
     global: {
-      plugins: [...defaultPlugins(), store],
+      plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
       mocks,
       provide: {
         ...mocks,

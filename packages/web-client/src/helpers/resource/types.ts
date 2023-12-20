@@ -1,5 +1,6 @@
 import { DavFileInfoResponse } from '@ownclouders/web-client/src/webdav/constants'
-import { User } from '../user'
+import { User } from '../../generated'
+import { User as LegacyUser } from '../user'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
 import { DAVResultResponseProps, FileStat } from 'webdav'
 import { Audio, GeoCoordinates } from '../../generated'
@@ -113,8 +114,8 @@ export interface Resource {
   getDomSelector?(): string
   matchingSpace?: any
 
-  resourceOwner?: User
-  owner?: User[]
+  resourceOwner?: LegacyUser
+  owner?: LegacyUser[]
   ownerDisplayName?: string
   ownerId?: string
   sharedWith?: string

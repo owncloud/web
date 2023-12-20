@@ -70,7 +70,6 @@ describe('LoginModal', () => {
 function getWrapper(users = [mock<User>()]) {
   const mocks = defaultComponentMocks()
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockReturnValue({ uuid: '1' })
   const store = createStore(storeOptions)
 
   return {

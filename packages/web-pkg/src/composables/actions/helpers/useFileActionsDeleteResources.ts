@@ -17,11 +17,12 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
@@ -205,7 +206,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                       value: driveResponse.data.quota
                     })
                   } else {
-                    const user = await owncloudSdk.users.getUser(store.getters.user.id)
+                    const user = await owncloudSdk.users.getUser(
+                      userStore.user.onPremisesSamAccountName
+                    )
                     store.commit('SET_QUOTA', user.quota)
                   }
                 }
