@@ -20,7 +20,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
-  const { $gettext } = useGettext()
+  const { $gettext, $ngettext } = useGettext()
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
