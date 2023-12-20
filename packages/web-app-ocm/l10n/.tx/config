@@ -2,7 +2,6 @@
 host = https://www.transifex.com
 
 [o:owncloud-org:p:owncloud-web:r:ocm]
-lang_map = zh-Hans: zh
 file_filter = locale/<lang>/LC_MESSAGES/app.po
 minimum_perc = 0
 source_file = template.pot
