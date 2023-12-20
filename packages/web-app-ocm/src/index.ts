@@ -31,6 +31,7 @@ export default defineWebApplication({
     const appInfo = {
       name: $gettext('ScienceMesh'),
       id: 'ocm',
+      color: '#AE291D',
       icon: 'contacts-book',
       isFileEditor: false
     }
