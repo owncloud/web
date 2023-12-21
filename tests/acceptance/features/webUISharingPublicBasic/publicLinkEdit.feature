@@ -167,7 +167,7 @@ Feature: Edit public link shares
       | path | lorem.txt   |
       | name | Public-link |
     And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "lorem.txt" adding a password "pass123"
-    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123" in a new session
+    When the user tries to edit the public link named "Public-link" of folder "lorem.txt" adding a password "#Password123"
+    And the public uses the webUI to access the last public link created by user "Alice" with password "#Password123" in a new session
     And the user closes the text editor using the webUI
     Then file "lorem.txt" should be listed on the webUI as single share
