@@ -9,6 +9,11 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useFileActions: jest.fn(() => ({ openEditor: jest.fn() }))
+}))
+
 const menuLinks = [
   {
     icon: 'folder',

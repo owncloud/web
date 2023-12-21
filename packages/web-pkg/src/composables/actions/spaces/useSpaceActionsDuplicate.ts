@@ -13,6 +13,7 @@ import { resolveFileNameDuplicate } from '../../../helpers'
 import PQueue from 'p-queue'
 import { useRouter } from '../../router'
 import { isLocationSpacesActive } from '../../../router'
+import { useConfigurationManager } from '../../configuration'
 
 export const useSpaceActionsDuplicate = ({
   store
@@ -25,6 +26,7 @@ export const useSpaceActionsDuplicate = ({
   const ability = useAbility()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const configurationManager = useConfigurationManager()
 
   const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
 
@@ -48,7 +50,9 @@ export const useSpaceActionsDuplicate = ({
       const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
 
       if (existingSpaceFiles.children.length) {
-        const queue = new PQueue({ concurrency: 4 })
+        const queue = new PQueue({
+          concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+        })
         const copyOps = []
 
         for (const file of existingSpaceFiles.children) {

@@ -20,7 +20,8 @@ jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useSort: jest.fn().mockImplementation(() => useSortMock()),
   queryItemAsString: jest.fn(),
-  useRouteQuery: jest.fn()
+  useRouteQuery: jest.fn(),
+  useFileActions: jest.fn()
 }))
 
 describe('SharedWithOthers view', () => {

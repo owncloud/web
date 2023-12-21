@@ -11,7 +11,11 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
-import { ViewModeConstants } from '../../../../src/composables'
+import { ViewModeConstants, useFileActionsDelete } from '../../../../src/composables'
+
+jest.mock('../../../../src/composables/actions/files/useFileActionsDelete', () => ({
+  useFileActionsDelete: jest.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
+}))
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',
