@@ -35,7 +35,9 @@ jest.mock('@ownclouders/web-pkg', () => ({
   useFileActionsCreateNewFolder: () => ({
     actions: [{ handler: mockCreateFolder }]
   }),
-  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
+  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode()),
+  useFileActions: jest.fn(() => ({})),
+  useOpenWithDefaultApp: jest.fn(() => ({}))
 }))
 
 const selectors = Object.freeze({

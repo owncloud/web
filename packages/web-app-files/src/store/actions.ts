@@ -345,7 +345,7 @@ export default {
       context.commit('LOAD_INDICATORS', path)
     }
   },
-  async loadShares(context, { client, path, storageId, useCached = true }) {
+  async loadShares(context, { client, configurationManager, path, storageId, useCached = true }) {
     if (context.state.sharesLoading) {
       await context.state.sharesLoading
     }
@@ -362,7 +362,9 @@ export default {
     const currentlyLoadedShares = [...context.state.outgoingShares, ...context.state.incomingShares]
     const shares = []
 
-    const shareQueriesQueue = new PQueue({ concurrency: 2 })
+    const shareQueriesQueue = new PQueue({
+      concurrency: configurationManager.options.concurrentRequests.shares.list
+    })
     const shareQueriesPromises = []
     const { highlightedFile } = context.getters
 

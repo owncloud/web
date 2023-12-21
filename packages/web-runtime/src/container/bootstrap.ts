@@ -667,12 +667,16 @@ const onSSEProcessingFinishedEvent = ({
 
 export const registerSSEEventListeners = ({
   store,
-  clientService
+  clientService,
+  configurationManager
 }: {
   store: Store<unknown>
   clientService: ClientService
+  configurationManager: ConfigurationManager
 }): void => {
-  const resourceQueue = new PQueue({ concurrency: 4 })
+  const resourceQueue = new PQueue({
+    concurrency: configurationManager.options.concurrentRequests.sse
+  })
   store.watch(
     (state, getters) => getters['Files/currentFolder'],
     () => {

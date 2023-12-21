@@ -9,6 +9,12 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
+import { ConfigurationManager, useConfigurationManager } from '@ownclouders/web-pkg'
+
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useConfigurationManager: jest.fn()
+}))
 
 const folderMock = {
   type: 'folder',
@@ -79,6 +85,12 @@ function getWrapper({
   storageId = 'fake-storage-id',
   resource = folderMock
 } = {}) {
+  jest
+    .mocked(useConfigurationManager)
+    .mockReturnValue(
+      mock<ConfigurationManager>({ options: { concurrentRequests: { shares: { create: 1 } } } })
+    )
+
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files_sharing: { federation: { incoming: true, outgoing: true } }

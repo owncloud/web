@@ -23,7 +23,8 @@ jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   queryItemAsString: jest.fn(),
   useAppDefaults: jest.fn(),
-  useCapabilitySearchModifiedDate: jest.fn()
+  useCapabilitySearchModifiedDate: jest.fn(),
+  useFileActions: jest.fn()
 }))
 
 const selectors = {

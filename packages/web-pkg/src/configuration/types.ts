@@ -43,6 +43,14 @@ export interface OptionsConfiguration {
     delegateAuthentication?: boolean
     delegateAuthenticationOrigin?: string | null
   }
+  concurrentRequests?: {
+    resourceBatchActions?: number
+    sse?: number
+    shares?: {
+      create?: number
+      list?: number
+    }
+  }
 }
 
 export interface OAuth2Configuration {

@@ -174,7 +174,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       // Register SSE event listeners
       if (store.getters.capabilities?.core?.['support-sse']) {
-        registerSSEEventListeners({ store, clientService })
+        registerSSEEventListeners({ store, clientService, configurationManager })
       }
 
       // Load spaces to make them available across the application

@@ -2,7 +2,7 @@ import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { useRequest } from '@ownclouders/web-pkg'
+import { FileAction, useFileActionsCreateNewFile, useRequest } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
   createStore,
@@ -14,12 +14,15 @@ import {
 import { RouteLocation } from 'vue-router'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
+import { ref } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useAccessToken: jest.fn(),
   useExtensionRegistry: jest.fn(),
-  useRequest: jest.fn()
+  useRequest: jest.fn(),
+  useFileActionsCreateNewFile: jest.fn(),
+  useFileActions: jest.fn()
 }))
 
 const elSelector = {
@@ -189,6 +192,16 @@ function getWrapper({
     makeRequest: jest.fn().mockResolvedValue({ status: 200 })
   }))
   jest.mocked(useExtensionRegistry).mockImplementation(() => useExtensionRegistryMock())
+
+  jest.mocked(useFileActionsCreateNewFile).mockReturnValue(
+    mock<ReturnType<typeof useFileActionsCreateNewFile>>({
+      actions: ref([
+        mock<FileAction>({ label: () => 'Plain text file', ext: 'txt' }),
+        mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
+        mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
+      ])
+    })
+  )
 
   const storeOptions = {
     ...defaultStoreMockOptions,

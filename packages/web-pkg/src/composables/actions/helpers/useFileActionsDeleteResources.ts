@@ -18,6 +18,7 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
 import { useModals } from '../../piniaStores'
+import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
@@ -30,8 +31,11 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const loadingService = useLoadingService()
   const { owncloudSdk } = clientService
   const { dispatchModal } = useModals()
+  const configurationManager = useConfigurationManager()
 
-  const queue = new PQueue({ concurrency: 4 })
+  const queue = new PQueue({
+    concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+  })
   const deleteOps = []
   const resourcesToDelete = ref([])
 

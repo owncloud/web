@@ -5,6 +5,7 @@ import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
+import { useFileActions } from '../../../../../src/composables/actions/files/useFileActions'
 import {
   RouteLocation,
   createStore,
@@ -12,6 +13,10 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers/src'
+
+jest.mock('../../../../../src/composables/actions/files/useFileActions', () => ({
+  useFileActions: jest.fn(() => mock<ReturnType<typeof useFileActions>>())
+}))
 
 describe('useFileActionsCreateNewFile', () => {
   describe('checkFileName', () => {
