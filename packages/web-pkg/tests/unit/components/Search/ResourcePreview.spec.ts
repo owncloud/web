@@ -10,9 +10,14 @@ import {
   defaultStoreMockOptions,
   useGetMatchingSpaceMock
 } from 'web-test-helpers'
+import { useFileActions } from '../../../../src/composables/actions'
 
 jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
   useGetMatchingSpace: jest.fn()
+}))
+
+jest.mock('../../../../src/composables/actions', () => ({
+  useFileActions: jest.fn()
 }))
 
 const selectors = {
@@ -85,6 +90,8 @@ function getWrapper({
       }
     })
   )
+  jest.mocked(useFileActions).mockReturnValue(mock<ReturnType<typeof useFileActions>>())
+
   const storeOptions = {
     ...defaultStoreMockOptions,
     modules: {
