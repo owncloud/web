@@ -190,7 +190,9 @@ export default defineComponent({
     const { dispatchModal } = useModals()
 
     const sharedParentDir = computed(() => {
-      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
+      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
+        .split('/')
+        .pop()
     })
 
     const setDenyShare = (value) => {

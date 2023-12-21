@@ -368,12 +368,15 @@ export default defineComponent({
       }
       const editorOptions = store.getters.configuration.options.editor
       if (editorOptions.autosaveEnabled) {
-        autosaveIntervalId = setInterval(async () => {
-          if (isDirty.value) {
-            await save()
-            autosavePopup()
-          }
-        }, (editorOptions.autosaveInterval || 120) * 1000)
+        autosaveIntervalId = setInterval(
+          async () => {
+            if (isDirty.value) {
+              await save()
+              autosavePopup()
+            }
+          },
+          (editorOptions.autosaveInterval || 120) * 1000
+        )
       }
     })
     onBeforeUnmount(() => {
