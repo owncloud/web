@@ -21,7 +21,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const clientService = useClientService()
   const router = useRouter()
   const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
@@ -57,7 +57,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
     }
   }
   const handler = ({ resources, space }: FileActionOptions) => {
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Create Space from "%{resourceName}"',
         'Create Space from selection',

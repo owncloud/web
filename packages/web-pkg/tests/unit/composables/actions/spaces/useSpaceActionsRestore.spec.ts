@@ -75,26 +75,26 @@ describe('restore', () => {
     it('should trigger the restore modal window', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canRestore: () => true, driveType: 'project' })
             ]
           })
 
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the restore modal window without any resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]
           })
 
-          expect(registerModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })

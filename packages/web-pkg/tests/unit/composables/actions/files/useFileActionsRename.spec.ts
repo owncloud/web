@@ -55,10 +55,10 @@ describe('rename', () => {
     it('should trigger the rename modal window', () => {
       getWrapper({
         setup: async ({ actions }, { space }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           const resources = [currentFolder]
           await unref(actions)[0].handler({ space, resources })
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })

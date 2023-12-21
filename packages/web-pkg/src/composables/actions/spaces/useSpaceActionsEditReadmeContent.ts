@@ -8,11 +8,11 @@ import { useModals } from '../../piniaStores'
 
 export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
 
   const handler = ({ resources }: SpaceActionOptions) => {
-    registerModal({
+    dispatchModal({
       title: $gettext('Edit description for space %{name}', {
         name: resources[0].name
       }),

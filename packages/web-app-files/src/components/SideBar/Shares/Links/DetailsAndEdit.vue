@@ -212,7 +212,7 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup(props, { emit }) {
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
     const { $gettext, current } = useGettext()
     const configurationManager = useConfigurationManager()
     const passwordPolicyService = usePasswordPolicyService()
@@ -240,7 +240,7 @@ export default defineComponent({
     }
 
     const showPasswordModal = () => {
-      registerModal({
+      dispatchModal({
         title: props.link.password ? $gettext('Edit password') : $gettext('Add password'),
         customComponent: SetLinkPasswordModal,
         customComponentAttrs: () => ({ link: props.link })
@@ -257,7 +257,7 @@ export default defineComponent({
       currentLinkRole,
       isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos),
       showPasswordModal,
-      registerModal
+      dispatchModal
     }
   },
   data() {
@@ -479,7 +479,7 @@ export default defineComponent({
       ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
     },
     showRenameModal() {
-      this.registerModal({
+      this.dispatchModal({
         title: this.$gettext('Edit name'),
         confirmText: this.$gettext('Save'),
         hasInput: true,
@@ -520,7 +520,7 @@ export default defineComponent({
       )
     },
     showNotifyUploadsExtraRecipientsModal() {
-      this.registerModal({
+      this.dispatchModal({
         icon: 'mail-add',
         title: this.$gettext('Notify a third party about uploads'),
         confirmText: this.$gettext('Apply'),

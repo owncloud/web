@@ -16,7 +16,7 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
   const ability = useAbility()
   const clientService = useClientService()
   const route = useRoute()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const editDescriptionSpace = (space: SpaceResource, description: string) => {
     const graphClient = clientService.graphAuthenticated
@@ -49,7 +49,7 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
       return
     }
 
-    registerModal({
+    dispatchModal({
       title: $gettext('Change subtitle for space') + ' ' + resources[0].name,
       confirmText: $gettext('Confirm'),
       hasInput: true,

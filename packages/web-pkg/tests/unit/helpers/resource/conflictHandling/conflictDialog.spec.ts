@@ -35,10 +35,10 @@ describe('conflict dialog', () => {
   describe('method "resolveFileExists"', () => {
     it('should create the modal in the end', () => {
       setActivePinia(createMockStore())
-      const { registerModal } = useModals()
+      const { dispatchModal } = useModals()
       const conflictDialog = getConflictDialogInstance()
       conflictDialog.resolveFileExists(mockDeep<Resource>(), 2, true)
-      expect(registerModal).toHaveBeenCalledTimes(1)
+      expect(dispatchModal).toHaveBeenCalledTimes(1)
     })
   })
 })

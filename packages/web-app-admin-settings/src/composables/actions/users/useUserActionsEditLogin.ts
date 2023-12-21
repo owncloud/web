@@ -4,12 +4,12 @@ import { UserAction, useCapabilityReadOnlyUserAttributes, useModals } from '@own
 import LoginModal from '../../../components/Users/LoginModal.vue'
 
 export const useUserActionsEditLogin = () => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Edit login for "%{user}"',
         'Edit login for %{userCount} users',

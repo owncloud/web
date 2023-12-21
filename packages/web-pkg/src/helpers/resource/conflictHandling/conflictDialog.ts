@@ -81,10 +81,10 @@ export class ConflictDialog {
     suggestMerge = false,
     separateSkipHandling = false // separate skip-handling between files and folders
   ): Promise<ResolveConflict> {
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     return new Promise<ResolveConflict>((resolve) => {
-      registerModal({
+      dispatchModal({
         variation: 'danger',
         title: resource.isFolder
           ? this.$gettext('Folder already exists')
@@ -105,10 +105,10 @@ export class ConflictDialog {
   }
 
   resolveDoCopyInsteadOfMoveForSpaces(): Promise<boolean> {
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     return new Promise<boolean>((resolve) => {
-      registerModal({
+      dispatchModal({
         variation: 'danger',
         title: this.$gettext('Copy here?'),
         customComponent: SpaceMoveInfoModal,

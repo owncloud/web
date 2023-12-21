@@ -24,9 +24,9 @@ describe('CreateSpace component', () => {
   })
   it('should show a modal when clicking the "New Space" button', async () => {
     const { wrapper } = getWrapper()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
     await wrapper.find(selectors.newSpaceBtn).trigger('click')
-    expect(registerModal).toHaveBeenCalledTimes(1)
+    expect(dispatchModal).toHaveBeenCalledTimes(1)
   })
   describe('method "addNewSpace"', () => {
     it('creates the space and updates the readme data after creation', async () => {

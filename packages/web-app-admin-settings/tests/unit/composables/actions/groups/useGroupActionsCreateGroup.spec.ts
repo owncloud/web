@@ -8,9 +8,9 @@ describe('useGroupActionsCreateGroup', () => {
     it('creates a modal', () => {
       getWrapper({
         setup: async ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler()
-          expect(registerModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

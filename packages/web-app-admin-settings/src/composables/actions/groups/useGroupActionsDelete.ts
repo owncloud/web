@@ -10,7 +10,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const deleteGroups = async (groups: Group[]) => {
     const graphClient = clientService.graphAuthenticated
@@ -60,7 +60,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
       return
     }
 
-    registerModal({
+    dispatchModal({
       variation: 'danger',
       title: $ngettext(
         'Delete group "%{group}"?',

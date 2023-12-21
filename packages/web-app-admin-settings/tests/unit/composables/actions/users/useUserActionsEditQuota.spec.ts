@@ -72,9 +72,9 @@ describe('useUserActionsEditQuota', () => {
     it('should create a modal', () => {
       getWrapper({
         setup: async ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
-          expect(registerModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

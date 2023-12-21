@@ -57,7 +57,7 @@ export const useModals = defineStore('modals', () => {
     return unref(modals).find((modal) => modal.id === id)
   }
 
-  const registerModal = (
+  const dispatchModal = (
     data: Omit<Modal, 'id' | 'active'>,
     { isActive = true }: { isActive?: boolean } = {}
   ) => {
@@ -98,5 +98,5 @@ export const useModals = defineStore('modals', () => {
     modal.active = true
   }
 
-  return { modals, activeModal, registerModal, updateModal, removeModal, setModalActive }
+  return { modals, activeModal, dispatchModal, updateModal, removeModal, setModalActive }
 })

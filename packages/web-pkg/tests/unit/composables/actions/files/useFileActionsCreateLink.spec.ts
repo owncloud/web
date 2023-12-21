@@ -87,10 +87,10 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         enforceModal: true,
         setup: ({ actions }, { mocks }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -99,10 +99,10 @@ describe('useFileActionsCreateLink', () => {
         passwordEnforced: true,
         defaultLinkPermissions: SharePermissionBit.Read,
         setup: ({ actions }, { mocks }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })

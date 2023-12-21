@@ -32,7 +32,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
 

@@ -17,7 +17,7 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   const ability = useAbility()
   const clientService = useClientService()
   const route = useRoute()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
     return resources.filter(
@@ -88,7 +88,7 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
       { count: allowedResources.length.toString() }
     )
 
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Delete Space "%{space}"?',
         'Delete %{spaceCount} Spaces?',

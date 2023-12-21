@@ -109,7 +109,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { getResourceContext } = useGetResourceContext()
     const { selectedResources } = useSelectedResources({ store })
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -368,15 +368,12 @@ export default defineComponent({
       }
       const editorOptions = store.getters.configuration.options.editor
       if (editorOptions.autosaveEnabled) {
-        autosaveIntervalId = setInterval(
-          async () => {
-            if (isDirty.value) {
-              await save()
-              autosavePopup()
-            }
-          },
-          (editorOptions.autosaveInterval || 120) * 1000
-        )
+        autosaveIntervalId = setInterval(async () => {
+          if (isDirty.value) {
+            await save()
+            autosavePopup()
+          }
+        }, (editorOptions.autosaveInterval || 120) * 1000)
       }
     })
     onBeforeUnmount(() => {
@@ -414,7 +411,7 @@ export default defineComponent({
 
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
-        registerModal({
+        dispatchModal({
           variation: 'danger',
           icon: 'warning',
           title: $gettext('Unsaved changes'),

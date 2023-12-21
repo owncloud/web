@@ -31,7 +31,7 @@ export const useFileActionsCreateLink = ({
   const passwordEnforcedCapabilities = useCapabilityFilesSharingPublicPasswordEnforcedFor()
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { createLink } = useCreateLink()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const proceedResult = (result: PromiseSettledResult<Share>[]) => {
     const succeeded = result.filter(
@@ -69,7 +69,7 @@ export const useFileActionsCreateLink = ({
       enforceModal ||
       (passwordEnforced && unref(defaultLinkPermissions) > SharePermissionBit.Internal)
     ) {
-      registerModal({
+      dispatchModal({
         title: $ngettext(
           'Create link for "%{resourceName}"',
           'Create links for the selected items',

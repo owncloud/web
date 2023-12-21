@@ -187,12 +187,10 @@ export default defineComponent({
     const store = useStore()
     const clientService = useClientService()
     const { $gettext } = useGettext()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     const sharedParentDir = computed(() => {
-      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
-        .split('/')
-        .pop()
+      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
     })
 
     const setDenyShare = (value) => {
@@ -200,7 +198,7 @@ export default defineComponent({
     }
 
     const showNotifyShareModal = () => {
-      registerModal({
+      dispatchModal({
         variation: 'warning',
         icon: 'mail-send',
         title: $gettext('Send a reminder'),

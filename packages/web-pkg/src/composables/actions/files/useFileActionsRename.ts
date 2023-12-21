@@ -28,7 +28,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   const clientService = useClientService()
   const canRename = useCapabilityFilesSharingCanRename()
   const configurationManager = useConfigurationManager()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const getNameErrorMsg = (resource: Resource, newName: string, parentResources = undefined) => {
     const newPath =
@@ -187,7 +187,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
         ? null
         : ([0, nameWithoutExtension.length] as [number, number])
 
-    registerModal({
+    dispatchModal({
       variation: 'passive',
       title,
       confirmText: $gettext('Rename'),

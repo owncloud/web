@@ -29,7 +29,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { owncloudSdk } = clientService
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const queue = new PQueue({ concurrency: 4 })
   const deleteOps = []
@@ -236,7 +236,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const displayDialog = (space: SpaceResource, resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
-    registerModal({
+    dispatchModal({
       variation: 'danger',
       title: unref(dialogTitle),
       message: unref(dialogMessage),

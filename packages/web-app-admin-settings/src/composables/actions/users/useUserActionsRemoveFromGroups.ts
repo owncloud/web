@@ -5,11 +5,11 @@ import { Group } from '@ownclouders/web-client/src/generated'
 import RemoveFromGroupsModal from '../../../components/Users/RemoveFromGroupsModal.vue'
 
 export const useUserActionsRemoveFromGroups = ({ groups }: { groups: Ref<Group[]> }) => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Remove user "%{user}" from groups',
         'Remove %{userCount} users from groups ',

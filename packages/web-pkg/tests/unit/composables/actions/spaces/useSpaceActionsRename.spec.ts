@@ -17,22 +17,22 @@ describe('rename', () => {
     it('should trigger the rename modal window', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [{ id: '1', name: 'renamed space' } as SpaceResource]
           })
 
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the rename modal window without any resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 
-          expect(registerModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })

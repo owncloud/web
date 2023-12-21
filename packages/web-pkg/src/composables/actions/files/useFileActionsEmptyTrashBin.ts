@@ -18,7 +18,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   const { $gettext, $pgettext } = useGettext()
   const clientService = useClientService()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
     return clientService.webdav
@@ -42,7 +42,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
   }
 
   const handler = ({ space }: FileActionOptions) => {
-    registerModal({
+    dispatchModal({
       variation: 'danger',
       title: $gettext('Empty trash bin'),
       confirmText: $gettext('Delete'),

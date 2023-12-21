@@ -7,7 +7,7 @@ import { QuotaModal } from '../../../components'
 import { useModals } from '../../piniaStores'
 
 export const useSpaceActionsEditQuota = () => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const ability = useAbility()
 
@@ -23,7 +23,7 @@ export const useSpaceActionsEditQuota = () => {
   }
 
   const handler = ({ resources }: SpaceActionOptions) => {
-    registerModal({
+    dispatchModal({
       title: getModalTitle({ resources }),
       customComponent: QuotaModal,
       customComponentAttrs: () => ({

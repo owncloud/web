@@ -13,7 +13,7 @@ import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { User } from '@ownclouders/web-client/src/generated'
 
 export const useUserActionsEditQuota = () => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
@@ -51,7 +51,7 @@ export const useUserActionsEditQuota = () => {
       ({ drive }) => !isPersonalSpaceResource(drive as SpaceResource)
     )
 
-    registerModal({
+    dispatchModal({
       title: getModalTitle({ resources }),
       customComponent: QuotaModal,
       customComponentAttrs: () => ({

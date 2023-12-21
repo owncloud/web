@@ -5,11 +5,11 @@ import { Group } from '@ownclouders/web-client/src/generated'
 import AddToGroupsModal from '../../../components/Users/AddToGroupsModal.vue'
 
 export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Add user "%{user}" to groups',
         'Add %{userCount} users to groups ',

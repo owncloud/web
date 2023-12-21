@@ -38,7 +38,7 @@ export const useFileActionsCreateNewFile = ({
   const router = useRouter()
   const { $gettext } = useGettext()
   const { makeRequest } = useRequest()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const { openEditor, triggerDefaultAction } = useFileActions()
   const clientService = useClientService()
@@ -186,7 +186,7 @@ export const useFileActionsCreateNewFile = ({
       ? null
       : ([0, defaultName.length - (extension.length + 1)] as [number, number])
 
-    registerModal({
+    dispatchModal({
       title: $gettext('Create a new file'),
       confirmText: $gettext('Create'),
       hasInput: true,

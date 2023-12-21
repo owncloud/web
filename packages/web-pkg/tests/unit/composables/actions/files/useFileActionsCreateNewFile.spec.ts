@@ -77,11 +77,11 @@ describe('useFileActionsCreateNewFile', () => {
       getWrapper({
         space,
         setup: async ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           const fileActionOptions: FileActionOptions = { space, resources: [] } as FileActionOptions
           unref(actions)[0].handler(fileActionOptions)
           await nextTick()
-          expect(registerModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

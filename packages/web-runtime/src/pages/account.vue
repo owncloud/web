@@ -181,7 +181,7 @@ export default defineComponent({
     const disableEmailNotificationsValue = ref<boolean>()
     const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
     const sseEnabled = useCapabilityCoreSSE()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
@@ -411,7 +411,7 @@ export default defineComponent({
     })
 
     const showEditPasswordModal = () => {
-      registerModal({
+      dispatchModal({
         title: $gettext('Change password'),
         customComponent: EditPasswordModal
       })

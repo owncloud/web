@@ -17,7 +17,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
   const route = useRoute()
   const router = useRouter()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const filterResourcesToDisable = (resources: SpaceResource[]): SpaceResource[] => {
     return resources.filter(
@@ -97,7 +97,7 @@ export const useSpaceActionsDisable = ({ store }: { store?: Store<any> } = {}) =
     )
     const confirmText = $gettext('Disable')
 
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Disable Space "%{space}"?',
         'Disable %{spaceCount} Spaces?',

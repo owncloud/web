@@ -82,10 +82,10 @@ describe('useFileActionsCreateNewFolder', () => {
       getWrapper({
         space,
         setup: ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           unref(actions)[0].handler()
 
-          expect(registerModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

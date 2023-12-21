@@ -6,7 +6,7 @@ import { useCapabilityCreateUsersDisabled } from '@ownclouders/web-pkg'
 import CreateUserModal from '../../../components/Users/CreateUserModal.vue'
 
 export const useUserActionsCreateUser = () => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const createUsersDisabled = useCapabilityCreateUsersDisabled()
   const { $gettext } = useGettext()
 
@@ -19,7 +19,7 @@ export const useUserActionsCreateUser = () => {
       label: () => $gettext('New user'),
       isEnabled: () => !unref(createUsersDisabled),
       handler: () => {
-        registerModal({
+        dispatchModal({
           title: $gettext('Create user'),
           customComponent: CreateUserModal
         })

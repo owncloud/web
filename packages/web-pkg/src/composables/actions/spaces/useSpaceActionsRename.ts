@@ -17,7 +17,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
   const clientService = useClientService()
   const route = useRoute()
   const { checkSpaceNameModalInput } = useSpaceHelpers()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const renameSpace = (space: SpaceResource, name: string) => {
     const graphClient = clientService.graphAuthenticated
@@ -50,7 +50,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
       return
     }
 
-    registerModal({
+    dispatchModal({
       title: $gettext('Rename space') + ' ' + resources[0].name,
       confirmText: $gettext('Rename'),
       hasInput: true,

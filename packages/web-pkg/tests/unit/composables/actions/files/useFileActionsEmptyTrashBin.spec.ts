@@ -45,10 +45,10 @@ describe('emptyTrashBin', () => {
     it('should trigger the empty trash bin modal window', () => {
       getWrapper({
         setup: async ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler(mock<FileActionOptions>())
 
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })

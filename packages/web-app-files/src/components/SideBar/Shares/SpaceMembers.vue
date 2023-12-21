@@ -83,13 +83,13 @@ export default defineComponent({
   },
   setup() {
     const clientService = useClientService()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     return {
       clientService,
       configurationManager,
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
-      registerModal
+      dispatchModal
     }
   },
   data: () => {
@@ -177,7 +177,7 @@ export default defineComponent({
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
-      this.registerModal({
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Remove member'),
         confirmText: this.$gettext('Remove'),

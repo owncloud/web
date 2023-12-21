@@ -4,7 +4,7 @@ import { useGettext } from 'vue3-gettext'
 import CreateGroupModal from '../../../components/Groups/CreateGroupModal.vue'
 
 export const useGroupActionsCreateGroup = () => {
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
 
   const actions = computed((): UserAction[] => [
@@ -16,7 +16,7 @@ export const useGroupActionsCreateGroup = () => {
       label: () => $gettext('New group'),
       isEnabled: () => true,
       handler: () => {
-        registerModal({
+        dispatchModal({
           title: $gettext('Create group'),
           customComponent: CreateGroupModal
         })

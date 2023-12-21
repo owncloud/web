@@ -21,7 +21,7 @@ export const useFileActionsCreateNewFolder = ({
 }: { store?: Store<any>; space?: SpaceResource } = {}) => {
   store = store || useStore()
   const router = useRouter()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const { scrollToResource } = useScrollTo()
 
@@ -99,7 +99,7 @@ export const useFileActionsCreateNewFolder = ({
       defaultName = resolveFileNameDuplicate(defaultName, '', unref(files))
     }
 
-    registerModal({
+    dispatchModal({
       title: $gettext('Create a new folder'),
       confirmText: $gettext('Create'),
       hasInput: true,

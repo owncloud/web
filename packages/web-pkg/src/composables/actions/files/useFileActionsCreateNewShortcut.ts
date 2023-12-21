@@ -7,7 +7,7 @@ import { useGettext } from 'vue3-gettext'
 
 export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResource }) => {
   const store = useStore()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
 
@@ -17,7 +17,7 @@ export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResourc
         name: 'create-shortcut',
         icon: 'external-link',
         handler: () => {
-          registerModal({
+          dispatchModal({
             title: $gettext('Create a Shortcut'),
             confirmText: $gettext('Create'),
             customComponent: CreateShortcutModal,

@@ -173,7 +173,7 @@ export default defineComponent({
     const hasResharing = useCapabilityFilesSharingResharing()
     const hasShareJail = useCapabilityShareJailEnabled()
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     const { actions: createLinkActions } = useFileActionsCreateLink({ store })
     const createLinkAction = computed<FileAction>(() =>
@@ -265,7 +265,7 @@ export default defineComponent({
     }
 
     const showPasswordModal = (params) => {
-      registerModal({
+      dispatchModal({
         title: $gettext('Set password'),
         customComponent: SetLinkPasswordModal,
         customComponentAttrs: () => ({ link: params })
@@ -298,7 +298,7 @@ export default defineComponent({
       showPasswordModal,
       defaultLinkPermissions,
       addNewLink,
-      registerModal
+      dispatchModal
     }
   },
   computed: {
@@ -497,7 +497,7 @@ export default defineComponent({
     },
 
     deleteLinkConfirmation({ link }) {
-      this.registerModal({
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Delete link'),
         message: this.$gettext(

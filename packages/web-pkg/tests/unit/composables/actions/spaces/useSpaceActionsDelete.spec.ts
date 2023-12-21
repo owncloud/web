@@ -75,28 +75,28 @@ describe('delete', () => {
     it('should trigger the delete modal window', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
             ]
           })
 
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the delete modal window without any resource to delete', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canBeDeleted: () => false, driveType: 'project' })
             ]
           })
 
-          expect(registerModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })

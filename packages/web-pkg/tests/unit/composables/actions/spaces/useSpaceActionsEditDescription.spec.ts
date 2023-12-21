@@ -17,20 +17,20 @@ describe('editDescription', () => {
     it('should trigger the editDescription modal window with one resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [{ id: '1' } as SpaceResource] })
 
-          expect(registerModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the editDescription modal window with no resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 
-          expect(registerModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })

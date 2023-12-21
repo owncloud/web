@@ -10,7 +10,7 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const deleteUsers = async (users: User[]) => {
     const graphClient = clientService.graphAuthenticated
@@ -60,7 +60,7 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
       return
     }
 
-    registerModal({
+    dispatchModal({
       variation: 'danger',
       title: $ngettext('Delete user "%{user}"?', 'Delete %{userCount} users?', resources.length, {
         user: resources[0].displayName,

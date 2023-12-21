@@ -129,7 +129,7 @@ export default defineComponent({
     const store = useStore()
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     const resource = inject<Ref<Resource>>('resource')
 
@@ -183,7 +183,7 @@ export default defineComponent({
       hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
       getSharedAncestor,
       configurationManager,
-      registerModal
+      dispatchModal
     }
   },
   computed: {
@@ -434,7 +434,7 @@ export default defineComponent({
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
-      this.registerModal({
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Remove share'),
         confirmText: this.$gettext('Remove'),

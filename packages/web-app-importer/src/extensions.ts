@@ -20,7 +20,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const publicLinkContext = usePublicLinkContext({ store })
   const themeStore = useThemeStore()
   const { currentTheme } = storeToRefs(themeStore)
-  const { registerModal, removeModal, activeModal } = useModals()
+  const { dispatchModal, removeModal, activeModal } = useModals()
 
   const { companionUrl, webdavCloudType } = applicationConfig
   let { supportedClouds } = applicationConfig
@@ -59,7 +59,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const handler = () => {
     const renderDarkTheme = currentTheme.value.isDark
 
-    registerModal({
+    dispatchModal({
       title: $gettext('Import files'),
       hideConfirmButton: true,
       onCancel: () => {

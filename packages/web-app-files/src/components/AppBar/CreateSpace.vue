@@ -24,7 +24,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { createSpace } = useCreateSpace()
     const { checkSpaceNameModalInput } = useSpaceHelpers()
-    const { registerModal } = useModals()
+    const { dispatchModal } = useModals()
 
     const addNewSpace = async (name: string) => {
       try {
@@ -44,7 +44,7 @@ export default defineComponent({
     }
 
     const showCreateSpaceModal = () => {
-      registerModal({
+      dispatchModal({
         title: $gettext('Create a new space'),
         confirmText: $gettext('Create'),
         hasInput: true,

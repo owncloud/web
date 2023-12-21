@@ -23,9 +23,9 @@ describe('useUserActionsRemoveFromGroups', () => {
     it('creates a modal', () => {
       getWrapper({
         setup: async ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [mock<User>()] })
-          expect(registerModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

@@ -77,9 +77,9 @@ describe('editReadmeContent', () => {
     it('creates a modal', () => {
       getWrapper({
         setup: async ({ actions }) => {
-          const { registerModal } = useModals()
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [mock<SpaceResource>()] })
-          expect(registerModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

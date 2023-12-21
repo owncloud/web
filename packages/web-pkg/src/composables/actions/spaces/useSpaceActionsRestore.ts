@@ -18,7 +18,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const route = useRoute()
-  const { registerModal } = useModals()
+  const { dispatchModal } = useModals()
 
   const filterResourcesToRestore = (resources): SpaceResource[] => {
     return resources.filter(
@@ -104,7 +104,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
     )
     const confirmText = $gettext('Enable')
 
-    registerModal({
+    dispatchModal({
       title: $ngettext(
         'Enable Space "%{space}"?',
         'Enable %{spaceCount} Spaces?',
