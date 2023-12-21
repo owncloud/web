@@ -143,6 +143,27 @@ export class ConfigurationManager {
       'embed.delegateAuthenticationOrigin',
       get(options, 'embed.delegateAuthenticationOrigin', null)
     )
+
+    set(
+      this.optionsConfiguration,
+      'concurrentRequests.resourceBatchActions',
+      get(options, 'concurrentRequests.resourceBatchActions', 4)
+    )
+    set(
+      this.optionsConfiguration,
+      'concurrentRequests.sse',
+      get(options, 'concurrentRequests.sse', 4)
+    )
+    set(
+      this.optionsConfiguration,
+      'concurrentRequests.shares.create',
+      get(options, 'concurrentRequests.shares.create', 4)
+    )
+    set(
+      this.optionsConfiguration,
+      'concurrentRequests.shares.list',
+      get(options, 'concurrentRequests.shares.list', 2)
+    )
   }
 
   get options(): OptionsConfiguration {

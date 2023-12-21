@@ -1,0 +1,6 @@
+Bugfix: Configurable concurrent requests
+
+In order to ease the load on the backend we've introduced config options to limit the number of concurrent requests in certain areas.
+
+https://github.com/owncloud/web/issues/10227
+https://github.com/owncloud/web/pull/10230

@@ -12,6 +12,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
+import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
   const { can } = useAbility()
@@ -22,11 +23,14 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const clientService = useClientService()
   const router = useRouter()
   const hasCreatePermission = computed(() => can('create-all', 'Drive'))
+  const configurationManager = useConfigurationManager()
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
     store.dispatch('hideModal')
-    const queue = new PQueue({ concurrency: 4 })
+    const queue = new PQueue({
+      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+    })
     const copyOps = []
 
     try {
