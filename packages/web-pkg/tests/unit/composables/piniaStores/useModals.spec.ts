@@ -8,36 +8,15 @@ describe('useModals', () => {
   })
 
   describe('method "dispatchModal"', () => {
-    it('registers a modal and adds id and active state', () => {
+    it('adds a modal to the stack of modals', () => {
       getWrapper({
         setup: (instance) => {
           const data = { title: 'test' }
           const modal = instance.dispatchModal(data)
 
           expect(modal.id).toBeDefined()
-          expect(modal.active).toBeTruthy()
           expect(modal.title).toEqual(data.title)
-
-          expect(instance.modals[0]).toEqual(modal)
-        }
-      })
-    })
-    it('deactivates existing modal if a new active modal is being registered', () => {
-      getWrapper({
-        setup: (instance) => {
-          instance.dispatchModal({ title: 'test' })
-          expect(instance.modals[0].active).toBeTruthy()
-
-          instance.dispatchModal({ title: 'test2' })
-          expect(instance.modals[0].active).toBeFalsy()
-        }
-      })
-    })
-    it('can register a modal in an inactive state', () => {
-      getWrapper({
-        setup: (instance) => {
-          instance.dispatchModal({ title: 'test' }, { isActive: false })
-          expect(instance.modals[0].active).toBeFalsy()
+          expect(instance.activeModal).toEqual(modal)
         }
       })
     })
@@ -49,7 +28,7 @@ describe('useModals', () => {
           const modal = instance.dispatchModal({ title: 'test' })
           const newTitle = 'new title'
           instance.updateModal(modal.id, 'title', newTitle)
-          expect(instance.modals[0].title).toEqual(newTitle)
+          expect(instance.activeModal.title).toEqual(newTitle)
         }
       })
     })
@@ -65,30 +44,16 @@ describe('useModals', () => {
       })
     })
   })
-  it('activates another inactive modal after removing the current active one', () => {
-    getWrapper({
-      setup: (instance) => {
-        const modal = instance.dispatchModal({ title: 'test' })
-        instance.dispatchModal({ title: 'test2' })
-        expect(instance.modals[0].active).toBeFalsy()
-        instance.removeModal(modal.id)
-        expect(instance.modals[0].active).toBeTruthy()
-      }
-    })
-  })
   describe('method "setModalActive"', () => {
-    it('activates a modal and deactivates another active modal if present', () => {
+    it('moves a modal to the first position of the modal stack, making it active', () => {
       getWrapper({
         setup: (instance) => {
           const modal = instance.dispatchModal({ title: 'test' })
-          instance.dispatchModal({ title: 'test2' })
-          expect(instance.modals[0].active).toBeFalsy()
-          expect(instance.modals[1].active).toBeTruthy()
+          const modal2 = instance.dispatchModal({ title: 'test2' })
 
+          expect(instance.activeModal.id).toEqual(modal2.id)
           instance.setModalActive(modal.id)
-
-          expect(instance.modals[0].active).toBeTruthy()
-          expect(instance.modals[1].active).toBeFalsy()
+          expect(instance.activeModal.id).toEqual(modal.id)
         }
       })
     })

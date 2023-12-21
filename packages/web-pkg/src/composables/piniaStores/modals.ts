@@ -22,7 +22,6 @@ export type CustomModalComponentInstance = ComponentPublicInstance<
 
 export type Modal = {
   id: string
-  active: boolean
   title: string
   variation?: string
   icon?: string
@@ -51,22 +50,14 @@ export type Modal = {
 
 export const useModals = defineStore('modals', () => {
   const modals = ref<Modal[]>([])
-  const activeModal = computed(() => unref(modals).find(({ active }) => active === true))
+  const activeModal = computed(() => unref(modals).at(-1))
 
   const getModal = (id: Modal['id']) => {
     return unref(modals).find((modal) => modal.id === id)
   }
 
-  const dispatchModal = (
-    data: Omit<Modal, 'id' | 'active'>,
-    { isActive = true }: { isActive?: boolean } = {}
-  ) => {
-    const modal = { ...data, id: uuidV4() as string, active: isActive }
-
-    if (isActive && unref(activeModal)) {
-      unref(activeModal).active = false
-    }
-
+  const dispatchModal = (data: Omit<Modal, 'id'>) => {
+    const modal = { ...data, id: uuidV4() as string }
     modals.value.push(modal)
     return modal
   }
@@ -82,20 +73,17 @@ export const useModals = defineStore('modals', () => {
 
   const removeModal = (id: Modal['id']) => {
     modals.value = unref(modals).filter((modal) => modal.id !== id)
-
-    if (unref(modals).length && !unref(activeModal)) {
-      // set next modal active
-      unref(modals)[0].active = true
-    }
   }
 
   const setModalActive = (id: Modal['id']) => {
-    if (unref(activeModal)) {
-      activeModal.value.active = false
+    const foundIdx = unref(modals).findIndex((modal) => modal.id === id)
+    if (foundIdx < 0) {
+      return
     }
 
     const modal = getModal(id)
-    modal.active = true
+    unref(modals).splice(foundIdx, 1)
+    modals.value.push(modal)
   }
 
   return { modals, activeModal, dispatchModal, updateModal, removeModal, setModalActive }
