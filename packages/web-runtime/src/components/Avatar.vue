@@ -18,6 +18,7 @@
 import { defineComponent } from 'vue'
 
 import { mapGetters } from 'vuex'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'Avatar',
@@ -50,6 +51,13 @@ export default defineComponent({
       default: 42
     }
   },
+  setup() {
+    const capabilityStore = useCapabilityStore()
+
+    return {
+      userProfilePicture: capabilityStore.sharingUserProfilePicture
+    }
+  },
   data() {
     return {
       /**
@@ -63,7 +71,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration'])
+    ...mapGetters(['configuration'])
   },
   watch: {
     userid: function (userid) {
@@ -84,7 +92,7 @@ export default defineComponent({
     setUser(userid) {
       this.loading = true
       this.avatarSource = ''
-      if (!this.capabilities.files_sharing.user.profile_picture || userid === '') {
+      if (!this.userProfilePicture || userid === '') {
         this.loading = false
         return
       }

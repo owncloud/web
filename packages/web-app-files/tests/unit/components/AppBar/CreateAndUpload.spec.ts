@@ -6,7 +6,8 @@ import {
   FileAction,
   useFileActionsCreateNewFile,
   useRequest,
-  useSpacesStore
+  useSpacesStore,
+  CapabilityStore
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
@@ -211,11 +212,7 @@ function getWrapper({
     getters: {
       ...defaultStoreMockOptions.getters,
       newFileHandlers: () => newFileHandlers,
-      user: () => ({ id: '1' }),
-      capabilities: () => ({
-        spaces: { enabled: true },
-        files: { app_providers: [{ new_url: '/' }] }
-      })
+      user: () => ({ id: '1' })
     }
   }
   storeOptions.getters.apps.mockImplementation(() => ({
@@ -229,6 +226,11 @@ function getWrapper({
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) })
   }
+  const capabilities = {
+    spaces: { enabled: true },
+    files: { app_providers: [{ new_url: '/' }] }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     storeOptions,
     mocks,
@@ -241,7 +243,12 @@ function getWrapper({
         mocks,
         provide: mocks,
         plugins: [
-          ...defaultPlugins({ piniaOptions: { spacesState: { spaces: spaces as any } } }),
+          ...defaultPlugins({
+            piniaOptions: {
+              spacesState: { spaces: spaces as any },
+              capabilityState: { capabilities }
+            }
+          }),
           store
         ]
       }

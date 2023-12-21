@@ -90,7 +90,12 @@
 </template>
 
 <script lang="ts">
-import { ResourceTable, useFileActions, useFileActionsToggleHideShare } from '@ownclouders/web-pkg'
+import {
+  ResourceTable,
+  useCapabilityStore,
+  useFileActions,
+  useFileActionsToggleHideShare
+} from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
@@ -190,6 +195,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const { triggerDefaultAction } = useFileActions()
@@ -208,6 +214,7 @@ export default defineComponent({
     }
 
     return {
+      capabilityStore,
       triggerDefaultAction,
       hideShareAction,
       resourceTargetRouteCallback,
@@ -253,7 +260,11 @@ export default defineComponent({
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadAvatars({ resource, clientService: this.$clientService })
+        this.loadAvatars({
+          resource,
+          clientService: this.$clientService,
+          capabilityStore: this.capabilityStore
+        })
 
         if (!this.displayThumbnails) {
           return

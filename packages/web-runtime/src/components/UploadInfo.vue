@@ -161,8 +161,7 @@ import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager } from '@ownclouders/web-pkg'
-import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
+import { configurationManager, useCapabilityStore } from '@ownclouders/web-pkg'
 import {
   formatFileSize,
   UppyResource,
@@ -175,8 +174,10 @@ import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
 export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
   setup() {
+    const capabilityStore = useCapabilityStore()
+
     return {
-      hasShareJail: useCapabilityShareJailEnabled()
+      hasShareJail: capabilityStore.spacesShareJail
     }
   },
   data: () => ({

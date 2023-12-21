@@ -49,7 +49,7 @@
 <script lang="ts">
 import { DateTime } from 'luxon'
 import { computed, watch, defineComponent, customRef } from 'vue'
-import { useStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -66,10 +66,10 @@ export default defineComponent({
   emits: ['optionChange'],
   setup(props, { emit }) {
     const language = useGettext()
-    const store = useStore()
-    const capabilities = computed(() => store.getters.capabilities)
-    const optionsUser = computed(() => capabilities.value.files_sharing.user?.expire_date)
-    const optionsGroup = computed(() => capabilities.value.files_sharing.group?.expire_date)
+    const capabilityStore = useCapabilityStore()
+
+    const optionsUser = computed(() => capabilityStore.sharingUserExpireDate)
+    const optionsGroup = computed(() => capabilityStore.sharingGroupExpireDate)
     const enforced = computed(() => optionsUser.value?.enforced || optionsGroup.value?.enforced)
     const dateMin = DateTime.now().setLocale(language.current).toJSDate()
     const dateDefault = computed(() => {

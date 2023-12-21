@@ -1,7 +1,6 @@
-import { AuthStore, ClientService } from '@ownclouders/web-pkg'
+import { AuthStore, CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
-import isEmpty from 'lodash-es/isEmpty'
 import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export interface PublicLinkManagerOptions {
@@ -9,6 +8,7 @@ export interface PublicLinkManagerOptions {
   configurationManager: ConfigurationManager
   store: Store<any>
   authStore: AuthStore
+  capabilityStore: CapabilityStore
 }
 
 export class PublicLinkManager {
@@ -16,12 +16,14 @@ export class PublicLinkManager {
   private configurationManager: ConfigurationManager
   private store: Store<any>
   private authStore: AuthStore
+  private capabilityStore: CapabilityStore
 
   constructor(options: PublicLinkManagerOptions) {
     this.clientService = options.clientService
     this.configurationManager = options.configurationManager
     this.store = options.store
     this.authStore = options.authStore
+    this.capabilityStore = options.capabilityStore
   }
 
   private static buildStorageKey(token: string, suffix: string): string {
@@ -121,11 +123,11 @@ export class PublicLinkManager {
   }
 
   private async fetchCapabilities({ password = '' }): Promise<void> {
-    if (!isEmpty(this.store.getters.capabilities)) {
+    if (this.capabilityStore.isInitialized) {
       return
     }
     const client = this.clientService.ocsPublicLinkContext(password)
     const response = await client.getCapabilities()
-    this.store.commit('SET_CAPABILITIES', response)
+    this.capabilityStore.setCapabilities(response)
   }
 }

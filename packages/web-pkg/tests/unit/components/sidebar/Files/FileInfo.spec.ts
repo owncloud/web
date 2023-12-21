@@ -29,8 +29,8 @@ function createWrapper() {
     extension: ''
   })
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
   const store = createStore(storeOptions)
+
   return {
     wrapper: shallowMount(FileInfo, {
       global: {

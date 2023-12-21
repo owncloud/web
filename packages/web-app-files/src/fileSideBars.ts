@@ -13,15 +13,12 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive,
   isLocationSharesActive,
-  useCapabilityFilesSharing,
-  useCapabilityFilesSharingApiEnabled,
-  useCapabilityFilesSharingPublicEnabled,
   useRouter,
-  useStore,
   SidebarPanelExtension,
   useIsFilesAppActive,
   useGetMatchingSpace,
-  useUserStore
+  useUserStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -35,11 +32,8 @@ import { computed, unref } from 'vue'
 
 export const sideBarPanels = () => {
   const router = useRouter()
-  const store = useStore()
+  const capabilityStore = useCapabilityStore()
   const { $gettext } = useGettext()
-  const isSharingEnabled = useCapabilityFilesSharing(store)
-  const isSharingApiEnabled = useCapabilityFilesSharingApiEnabled(store)
-  const arePublicLinksEnabled = useCapabilityFilesSharingPublicEnabled(store)
   const isFilesAppActive = useIsFilesAppActive()
   const { isPersonalSpaceRoot } = useGetMatchingSpace()
   const userStore = useUserStore()
@@ -161,10 +155,7 @@ export const sideBarPanels = () => {
             componentAttrs: () => ({
               showSpaceMembers: false,
               get showLinks() {
-                if (unref(isSharingEnabled)) {
-                  return unref(arePublicLinksEnabled)
-                }
-                return false
+                return capabilityStore.sharingPublicEnabled
               }
             }),
             isVisible: ({ items }) => {
@@ -185,10 +176,7 @@ export const sideBarPanels = () => {
               ) {
                 return false
               }
-              if (unref(isSharingEnabled)) {
-                return unref(isSharingApiEnabled)
-              }
-              return false
+              return capabilityStore.sharingApiEnabled
             }
           }
         },
@@ -315,10 +303,7 @@ export const sideBarPanels = () => {
             componentAttrs: () => ({
               showSpaceMembers: true,
               get showLinks() {
-                if (unref(isSharingEnabled)) {
-                  return unref(arePublicLinksEnabled)
-                }
-                return false
+                return capabilityStore.sharingPublicEnabled
               }
             }),
             isVisible: ({ items }) => {

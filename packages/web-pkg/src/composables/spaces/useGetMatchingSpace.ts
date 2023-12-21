@@ -1,5 +1,3 @@
-import { useCapabilitySpacesEnabled } from '../capability'
-import { useStore } from '../store'
 import { useConfigurationManager } from '../configuration'
 import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -15,26 +13,25 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
-import { useSpacesStore, useUserStore } from '../piniaStores'
+import { useSpacesStore, useUserStore, useCapabilityStore } from '../piniaStores'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
 }
 
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
-  const store = useStore()
   const userStore = useUserStore()
   const spacesStore = useSpacesStore()
+  const capabilityStore = useCapabilityStore()
   const configurationManager = useConfigurationManager()
   const spaces = computed(() => spacesStore.spaces)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-  const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const getInternalSpace = (storageId: string): SpaceResource => {
     return (
       unref(options?.space) ||
       unref(spaces).find((space) => space.id === storageId) ||
-      (!unref(hasSpaces) && unref(spaces).find((s) => isPersonalSpaceResource(s)))
+      (!capabilityStore.spacesEnabled && unref(spaces).find((s) => isPersonalSpaceResource(s)))
     )
   }
 

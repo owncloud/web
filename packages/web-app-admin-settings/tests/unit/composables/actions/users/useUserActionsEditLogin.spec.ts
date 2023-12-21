@@ -2,8 +2,13 @@ import { useUserActionsEditLogin } from '../../../../../src/composables/actions/
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
-import { useModals } from '@ownclouders/web-pkg'
+import {
+  createStore,
+  defaultStoreMockOptions,
+  getComposableWrapper,
+  writable
+} from 'web-test-helpers'
+import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditLogin', () => {
   describe('method "isEnabled"', () => {
@@ -20,12 +25,9 @@ describe('useUserActionsEditLogin', () => {
     })
     it('returns false if included in capability readOnlyUserAttributes list', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
-          storeOptions.getters.capabilities.mockReturnValue({
-            graph: {
-              users: { read_only_attributes: ['user.accountEnabled'] }
-            }
-          })
+        setup: ({ actions }) => {
+          const capabilityStore = useCapabilityStore()
+          writable(capabilityStore).graphUsersReadOnlyAttributes = ['user.accountEnabled']
 
           expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
         }

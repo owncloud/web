@@ -5,26 +5,23 @@ import {
   OCM_PROVIDER_ID
 } from '@ownclouders/web-client/src/helpers'
 import { computed, unref } from 'vue'
-import { useStore } from '../store'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useConfigurationManager } from '../configuration'
 import { useLoadFileInfoById } from './useLoadFileInfoById'
-import { useCapabilitySpacesEnabled } from '../capability'
-import { useSpacesStore } from '../piniaStores'
+import { useSpacesStore, useCapabilityStore } from '../piniaStores'
 
 export const useGetResourceContext = () => {
-  const store = useStore()
+  const capabilityStore = useCapabilityStore()
   const clientService = useClientService()
   const configurationManager = useConfigurationManager()
   const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
   const spacesStore = useSpacesStore()
 
-  const hasSpaces = useCapabilitySpacesEnabled(store)
   const spaces = computed(() => spacesStore.spaces)
 
   const getMatchingSpaceByFileId = (id: Resource['id']) => {
-    if (!unref(hasSpaces)) {
+    if (!capabilityStore.spacesEnabled) {
       return spacesStore.personalSpace
     }
     return unref(spaces).find((space) => id.toString().startsWith(space.id.toString()))

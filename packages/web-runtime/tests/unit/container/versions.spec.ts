@@ -1,5 +1,6 @@
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 import { getBackendVersion, getWebVersion } from '../../../src/container/versions'
-import { getStoreInstance } from 'web-test-helpers'
+import { createTestingPinia } from 'web-test-helpers'
 
 describe('collect version information', () => {
   describe('web version', () => {
@@ -12,53 +13,46 @@ describe('collect version information', () => {
   })
   describe('backend version', () => {
     it('returns undefined when the backend version object is not available', () => {
-      const store = versionStore(undefined)
-      expect(getBackendVersion({ store })).toBeUndefined()
+      const capabilityStore = versionStore(undefined)
+      expect(getBackendVersion({ capabilityStore })).toBeUndefined()
     })
     it('returns undefined when the backend version object has no "string" field', () => {
-      const store = versionStore({
+      const capabilityStore = versionStore({
         product: 'ownCloud',
         versionstring: undefined
       })
-      expect(getBackendVersion({ store })).toBeUndefined()
+      expect(getBackendVersion({ capabilityStore })).toBeUndefined()
     })
     it('falls back to "ownCloud" as a product when none is defined', () => {
-      const store = versionStore({
+      const capabilityStore = versionStore({
         versionstring: '10.8.0',
         edition: 'Community'
       })
-      expect(getBackendVersion({ store })).toBe('ownCloud 10.8.0 Community')
+      expect(getBackendVersion({ capabilityStore })).toBe('ownCloud 10.8.0 Community')
     })
     it('provides the backend version as concatenation of product, version and edition', () => {
-      const store = versionStore({
+      const capabilityStore = versionStore({
         product: 'oCIS',
         versionstring: '1.16.0',
         edition: 'Reva'
       })
-      expect(getBackendVersion({ store })).toBe('oCIS 1.16.0 Reva')
+      expect(getBackendVersion({ capabilityStore })).toBe('oCIS 1.16.0 Reva')
     })
     it('prefers the productversion over versionstring field if both are provided', () => {
-      const store = versionStore({
+      const capabilityStore = versionStore({
         product: 'oCIS',
         versionstring: '10.8.0',
         productversion: '2.0.0',
         edition: 'Community'
       })
-      expect(getBackendVersion({ store })).toBe('oCIS 2.0.0 Community')
+      expect(getBackendVersion({ capabilityStore })).toBe('oCIS 2.0.0 Community')
     })
   })
 })
 
 const versionStore = (version: any) => {
-  return getStoreInstance({
-    getters: {
-      capabilities: jest.fn(() => ({
-        core: {
-          status: {
-            ...version
-          }
-        }
-      }))
-    }
-  })
+  createTestingPinia()
+  const capabilityStore = useCapabilityStore()
+  capabilityStore.capabilities.core.status = version
+  return capabilityStore
 }

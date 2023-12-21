@@ -66,7 +66,7 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { FileSideBar, useFileActions } from '@ownclouders/web-pkg'
+import { FileSideBar, useCapabilityStore, useFileActions } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
@@ -83,11 +83,7 @@ import { Pagination } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { defineComponent, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import {
-  useCapabilityProjectSpacesEnabled,
-  useGetMatchingSpace,
-  useMutationSubscription
-} from '@ownclouders/web-pkg'
+import { useGetMatchingSpace, useMutationSubscription } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 
 const visibilityObserver = new VisibilityObserver()
@@ -107,6 +103,7 @@ export default defineComponent({
   },
 
   setup() {
+    const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
@@ -135,7 +132,7 @@ export default defineComponent({
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getMatchingSpace,
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled()
+      hasProjectSpaces: capabilityStore.spacesProjects
     }
   },
 

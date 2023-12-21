@@ -33,11 +33,11 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import {
   isSameResource,
   queryItemAsString,
+  useCapabilityStore,
   useConfigurationManager,
   useMessages,
   useRequest,
-  useRouteQuery,
-  useStore
+  useRouteQuery
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -55,8 +55,8 @@ export default defineComponent({
   emits: ['update:applicationName'],
   setup(props, { emit }) {
     const language = useGettext()
-    const store = useStore()
     const { showErrorMessage } = useMessages()
+    const capabilityStore = useCapabilityStore()
     const configurationManager = useConfigurationManager()
 
     const { $gettext } = language
@@ -68,7 +68,6 @@ export default defineComponent({
     const method = ref()
     const subm: VNodeRef = ref()
 
-    const capabilities = computed(() => store.getters['capabilities'])
     const applicationName = computed(() => {
       const appName = queryItemAsString(unref(appNameQuery))
       emit('update:applicationName', appName)
@@ -99,7 +98,7 @@ export default defineComponent({
         const fileId = props.resource.fileId
         const baseUrl = urlJoin(
           configurationManager.serverUrl,
-          unref(capabilities).files.app_providers[0].open_url
+          capabilityStore.filesAppProviders[0].open_url
         )
 
         const query = stringify({

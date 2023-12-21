@@ -1,7 +1,5 @@
 import { computed, unref } from 'vue'
 import { Store } from 'vuex'
-import { useCapabilityFilesFavorites } from '../../capability'
-
 import { isLocationCommonActive, isLocationSpacesActive } from '../../../router'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions, useIsFilesAppActive } from '../../actions'
@@ -9,15 +7,15 @@ import { useStore } from '../../store'
 import { useRouter } from '../../router'
 import { useClientService } from '../../clientService'
 import { useAbility } from '../../ability'
-import { useMessages } from '../../piniaStores'
+import { useMessages, useCapabilityStore } from '../../piniaStores'
 
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const { showErrorMessage } = useMessages()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const hasFavorites = useCapabilityFilesFavorites()
   const isFilesAppActive = useIsFilesAppActive()
   const ability = useAbility()
 
@@ -60,7 +58,7 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
           return false
         }
 
-        return unref(hasFavorites) && ability.can('create', 'Favorite')
+        return capabilityStore.filesFavorites && ability.can('create', 'Favorite')
       },
       componentType: 'button',
       class: 'oc-files-actions-favorite-trigger'

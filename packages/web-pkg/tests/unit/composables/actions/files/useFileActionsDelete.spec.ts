@@ -14,6 +14,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
+import { CapabilityStore } from '../../../../../types'
 
 jest.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')
 
@@ -160,13 +161,17 @@ function getWrapper({
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({ spaces: { enabled: true } }))
   const store = createStore(storeOptions)
+  const capabilities = {
+    spaces: { enabled: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: getComposableWrapper(setup, {
       mocks,
       provide: mocks,
-      store
+      store,
+      pluginOptions: { piniaOptions: { capabilityState: { capabilities } } }
     })
   }
 }

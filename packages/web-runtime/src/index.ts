@@ -44,14 +44,13 @@ import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
-import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { authStore, spacesStore, userStore } = announcePiniaStores()
+  const { authStore, capabilityStore, spacesStore, userStore } = announcePiniaStores()
 
   app.provide('$router', router)
 
@@ -77,26 +76,35 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     configurationManager,
     store,
     userStore,
-    authStore
+    authStore,
+    capabilityStore
   })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
     store.getters.configuration.server || window.location.origin,
-    computed(() =>
-      get(store, 'getters.capabilities.files.archivers', [
-        {
-          enabled: true,
-          version: '1.0.0',
-          formats: ['tar', 'zip'],
-          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
-        }
-      ])
+    computed(
+      () =>
+        capabilityStore.filesArchivers || [
+          {
+            enabled: true,
+            version: '1.0.0',
+            formats: ['tar', 'zip'],
+            archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
+          }
+        ]
     )
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
-  announcePreviewService({ app, store, configurationManager, userStore, authStore })
+  announcePreviewService({
+    app,
+    store,
+    configurationManager,
+    userStore,
+    authStore,
+    capabilityStore
+  })
   announcePasswordPolicyService({ app })
   await announceClient(runtimeConfiguration)
 
@@ -128,7 +136,15 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
 
-  announceAuthService({ app, configurationManager, store, router, userStore, authStore })
+  announceAuthService({
+    app,
+    configurationManager,
+    store,
+    router,
+    userStore,
+    authStore,
+    capabilityStore
+  })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
   announceDefaults({ store, router })
@@ -154,7 +170,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       if (!newValue || newValue === oldValue) {
         return
       }
-      announceVersions({ store })
+      announceVersions({ capabilityStore })
       await announceApplicationsReady({ app, store, applications })
     },
     {
@@ -173,10 +189,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       const clientService = app.config.globalProperties.$clientService
       const passwordPolicyService = app.config.globalProperties.passwordPolicyService
-      passwordPolicyService.initialize(store)
+      passwordPolicyService.initialize(capabilityStore)
 
       // Register SSE event listeners
-      if (store.getters.capabilities?.core?.['support-sse']) {
+      if (capabilityStore.supportSSE) {
         registerSSEEventListeners({ store, clientService, configurationManager })
       }
 
@@ -247,7 +263,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   const store = await announceStore({ runtimeConfiguration: {} })
-  announceVersions({ store })
+  const { capabilityStore } = announcePiniaStores()
+  announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
   await announceTheme({ app, designSystem })
   console.error(err)

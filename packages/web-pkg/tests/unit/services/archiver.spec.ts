@@ -1,9 +1,10 @@
-import { ArchiverCapability, ArchiverService } from '../../../src/services'
+import { ArchiverService } from '../../../src/services'
 import { RuntimeError } from '../../../src/errors'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '../../../src/services'
 import { unref, ref, Ref } from 'vue'
 import { AxiosResponse } from 'axios'
+import { ArchiverCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 
 const serverUrl = 'https://demo.owncloud.com'
 const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => {

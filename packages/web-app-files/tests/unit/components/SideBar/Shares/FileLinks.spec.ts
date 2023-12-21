@@ -11,6 +11,7 @@ import { Resource } from '@ownclouders/web-client'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
 import {
+  CapabilityStore,
   FileAction,
   getDefaultLinkPermissions,
   useFileActionsCreateLink
@@ -180,37 +181,33 @@ function getWrapper({
       ...defaultStoreMockOptions.getters,
       configuration: jest.fn(() => ({
         options: { sidebar: { shares: { showAllOnLoad: true } } }
-      })),
-      capabilities: jest.fn(() => {
-        return {
-          files_sharing: {
-            public: {
-              defaultPublicLinkShareName: 'public link name default',
-              expire_date: new Date(),
-              alias: true,
-              password: {
-                enforced_for: {
-                  read_only: false,
-                  upload_only: false,
-                  read_write: false
-                }
-              }
-            }
-          }
-        }
-      })
+      }))
     }
   }
   defaultStoreMockOptions.modules.Files.getters.outgoingLinks.mockReturnValue(links)
   const store = createStore(storeOptions)
-
   const mocks = defaultComponentMocks()
+  const capabilities = {
+    files_sharing: {
+      public: {
+        expire_date: {},
+        alias: true,
+        password: {
+          enforced_for: { read_only: false, upload_only: false, read_write: false }
+        }
+      }
+    }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     mocks: { ...mocks, createLinkMock },
     storeOptions,
     wrapper: shallowMount(FileLinks, {
       global: {
-        plugins: [...defaultPlugins({ abilities }), store],
+        plugins: [
+          ...defaultPlugins({ abilities, piniaOptions: { capabilityState: { capabilities } } }),
+          store
+        ],
         renderStubDefaultSlot: true,
         stubs: { OcButton: false },
         mocks,

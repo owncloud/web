@@ -1,4 +1,5 @@
 export * from './auth'
+export * from './capabilities'
 export * from './extensionRegistry'
 export * from './messages'
 export * from './modals'

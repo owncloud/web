@@ -21,7 +21,7 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore, useCapabilityStore } from '../../piniaStores'
 
 export const useFileActionsCreateNewFile = ({
   store,
@@ -37,6 +37,7 @@ export const useFileActionsCreateNewFile = ({
   store = store || useStore()
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const { makeRequest } = useRequest()
@@ -50,8 +51,6 @@ export const useFileActionsCreateNewFile = ({
     () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
   )
   const areFileExtensionsShown = computed((): boolean => store.state.Files.areFileExtensionsShown)
-
-  const capabilities = computed(() => store.getters['capabilities'])
 
   const getNameErrorMsg = (fileName: string) => {
     if (fileName === '') {
@@ -91,7 +90,7 @@ export const useFileActionsCreateNewFile = ({
     try {
       const baseUrl = urlJoin(
         configurationManager.serverUrl,
-        unref(capabilities).files.app_providers[0].new_url
+        capabilityStore.filesAppProviders[0].new_url
       )
       const query = stringify({
         parent_container_id: unref(currentFolder).fileId,

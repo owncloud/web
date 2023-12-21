@@ -32,7 +32,7 @@ const getters = {
    * @param getters
    * @returns {function(*): *[]}
    */
-  getNavItemsByExtension: (state, getters) => (extension) => {
+  getNavItemsByExtension: (state) => (extension) => {
     const staticNavItems = state.staticNavItems[extension] || []
     return staticNavItems.filter((navItem) => {
       if (!navItem.enabled) {
@@ -40,7 +40,7 @@ const getters = {
         return true
       }
       try {
-        return navItem.enabled(getters.capabilities || {})
+        return navItem.enabled()
       } catch (e) {
         console.error('`enabled` callback on navItem ' + navItem.name + ' threw an error', e)
         return false

@@ -169,6 +169,7 @@ import {
 
 import {
   ProcessorType,
+  useCapabilityStore,
   useEmbedMode,
   useFileActions,
   useFileActionsCreateNewFolder,
@@ -192,7 +193,6 @@ import {
   createLocationSpaces,
   displayPositionedDropdown,
   useBreadcrumbsFromPath,
-  useCapabilityShareJailEnabled,
   useClientService,
   useDocumentTitle,
   useOpenWithDefaultApp,
@@ -265,10 +265,10 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
     const { $gettext, $ngettext } = useGettext()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
-    const hasShareJail = useCapabilityShareJailEnabled()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
     const { openWithDefaultApp } = useOpenWithDefaultApp()
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
@@ -535,7 +535,7 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail,
+      hasShareJail: capabilityStore.spacesShareJail,
       createNewFolderAction,
       isEmbedModeEnabled
     }

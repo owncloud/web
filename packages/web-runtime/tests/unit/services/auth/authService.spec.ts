@@ -20,7 +20,8 @@ const initAuthService = ({ authService, configurationManager, router = null }) =
     null,
     null,
     null,
-    authStore
+    authStore,
+    null
   )
 }
 

@@ -148,11 +148,7 @@ import {
 import {
   // FederatedConnection,
   FederatedUser,
-  useCapabilityFilesSharingAllowCustomPermissions,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingResharingDefault,
-  useCapabilityFilesSharingSearchMinLength,
-  useCapabilityShareJailEnabled,
+  useCapabilityStore,
   useClientService,
   useConfigurationManager,
   useStore,
@@ -201,6 +197,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
     const { addSpaceMember } = spacesStore
@@ -265,11 +262,11 @@ export default defineComponent({
 
     return {
       resource: inject<Resource>('resource'),
-      hasResharing: useCapabilityFilesSharingResharing(store),
-      resharingDefault: useCapabilityFilesSharingResharingDefault(store),
-      hasShareJail: useCapabilityShareJailEnabled(store),
-      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
-      minSearchLength: useCapabilityFilesSharingSearchMinLength(store),
+      hasResharing: capabilityStore.sharingResharing,
+      resharingDefault: capabilityStore.sharingResharingDefault,
+      hasShareJail: capabilityStore.spacesShareJail,
+      hasRoleCustomPermissions: capabilityStore.sharingAllowCustom,
+      minSearchLength: capabilityStore.sharingSearchMinLength,
       isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
       spaceMembers,
       addSpaceMember,

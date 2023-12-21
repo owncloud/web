@@ -14,6 +14,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { CapabilityStore } from '@ownclouders/web-pkg'
 
 const getCollaborator = () => ({
   shareType: 0,
@@ -208,9 +209,6 @@ function getWrapper({
     ...defaultStoreMockOptions,
     getters: {
       ...defaultStoreMockOptions.getters,
-      capabilities: jest.fn(() => ({
-        files_sharing: { resharing: hasReSharing }
-      })),
       configuration: jest.fn(() => ({
         options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
       }))
@@ -221,12 +219,20 @@ function getWrapper({
   )
   storeOptions.modules.Files.getters.outgoingCollaborators.mockReturnValue(collaborators)
   const store = createStore(storeOptions)
+  const capabilities = {
+    files_sharing: { resharing: hasReSharing, deny_access: false }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: mountType(FileShares, {
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { userState: { user }, spacesState: { spaceMembers } }
+            piniaOptions: {
+              userState: { user },
+              spacesState: { spaceMembers },
+              capabilityState: { capabilities }
+            }
           }),
           store
         ],

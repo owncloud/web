@@ -91,15 +91,12 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   useAbility,
   useStore,
-  useCapabilityProjectSpacesEnabled,
-  useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingCanDenyAccess,
   useGetMatchingSpace,
   useModals,
   useUserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -131,6 +128,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { dispatchModal } = useModals()
@@ -184,10 +182,10 @@ export default defineComponent({
       memberListCollapsed,
       toggleMemberListCollapsed,
       currentUserIsMemberOfSpace,
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      hasShareJail: useCapabilityShareJailEnabled(),
-      hasResharing: useCapabilityFilesSharingResharing(),
-      hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
+      hasProjectSpaces: capabilityStore.spacesProjects,
+      hasShareJail: capabilityStore.spacesShareJail,
+      hasResharing: capabilityStore.sharingResharing,
+      hasShareCanDenyAccess: capabilityStore.sharingDenyAccess,
       getSharedAncestor,
       configurationManager,
       dispatchModal,

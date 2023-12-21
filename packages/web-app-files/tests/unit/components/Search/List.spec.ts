@@ -13,17 +13,17 @@ import {
   defaultStoreMockOptions,
   mockAxiosResolve
 } from 'web-test-helpers/src'
-import { queryItemAsString, useCapabilitySearchModifiedDate } from '@ownclouders/web-pkg'
-import { computed, ref } from 'vue'
+import { queryItemAsString } from '@ownclouders/web-pkg'
+import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
+import { Capabilities } from '@ownclouders/web-client/src/ocs'
 
 jest.mock('web-app-files/src/composables')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   queryItemAsString: jest.fn(),
   useAppDefaults: jest.fn(),
-  useCapabilitySearchModifiedDate: jest.fn(),
   useFileActions: jest.fn()
 }))
 
@@ -220,9 +220,6 @@ function getWrapper({
   jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => lastModifiedFilterQuery)
-  jest
-    .mocked(useCapabilitySearchModifiedDate)
-    .mockReturnValue(computed(() => availableLastModifiedValues as any))
 
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(resources)
@@ -237,10 +234,19 @@ function getWrapper({
     mockAxiosResolve({ value: availableTags })
   )
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockReturnValue({
-    files: { tags: true, full_text_search: fullTextSearchEnabled }
-  })
   const store = createStore(storeOptions)
+
+  const capabilities = {
+    files: { tags: true },
+    search: {
+      property: {
+        mtime: availableLastModifiedValues,
+        content: { enabled: fullTextSearchEnabled },
+        tags: { enabled: true }
+      }
+    }
+  } satisfies Partial<Capabilities['capabilities']>
+
   return {
     storeOptions,
     mocks: localMocks,
@@ -251,7 +257,7 @@ function getWrapper({
         stubs: {
           FilesViewWrapper: false
         },
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
       }
     })
   }

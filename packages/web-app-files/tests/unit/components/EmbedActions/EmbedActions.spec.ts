@@ -108,13 +108,11 @@ describe('EmbedActions', () => {
 function getWrapper(
   {
     selectedFiles = [],
-    capabilities = jest.fn().mockReturnValue({}),
     currentFolder = {},
     createLinksActionEnabled = true,
     isLocationPicker = false
   } = {
-    selectedFiles: [],
-    capabilities: jest.fn().mockReturnValue({})
+    selectedFiles: []
   }
 ) {
   const postMessageMock = jest.fn()
@@ -139,10 +137,6 @@ function getWrapper(
 
   const storeOptions = {
     ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      capabilities
-    },
     modules: {
       ...defaultStoreMockOptions.modules,
       Files: {

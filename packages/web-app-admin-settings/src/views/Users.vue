@@ -152,19 +152,18 @@ import {
   NoContentMessage,
   eventBus,
   queryItemAsString,
-  useCapabilitySpacesMaxQuota,
   useClientService,
   useConfigurationManager,
   useRoute,
   useRouteQuery,
   useRouter,
   useSideBar,
-  useStore,
   SideBarPanel,
   SideBarPanelContext,
   useUserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -197,8 +196,8 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const router = useRouter()
     const route = useRoute()
-    const store = useStore()
     const { showErrorMessage } = useMessages()
+    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const userStore = useUserStore()
@@ -616,7 +615,7 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
-      maxQuota: useCapabilitySpacesMaxQuota(),
+      maxQuota: capabilityStore.spacesMaxQuota,
       template,
       selectedUsers,
       sideBarLoading,

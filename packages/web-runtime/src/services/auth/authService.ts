@@ -1,7 +1,7 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
-import { AuthStore, ClientService, UserStore } from '@ownclouders/web-pkg'
+import { AuthStore, ClientService, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -27,6 +27,7 @@ export class AuthService {
   private language: Language
   private userStore: UserStore
   private authStore: AuthStore
+  private capabilityStore: CapabilityStore
 
   public hasAuthErrorOccurred: boolean
 
@@ -38,7 +39,8 @@ export class AuthService {
     ability: Ability,
     language: Language,
     userStore: UserStore,
-    authStore: AuthStore
+    authStore: AuthStore,
+    capabilityStore: CapabilityStore
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
@@ -49,6 +51,7 @@ export class AuthService {
     this.language = language
     this.userStore = userStore
     this.authStore = authStore
+    this.capabilityStore = capabilityStore
   }
 
   /**
@@ -68,7 +71,8 @@ export class AuthService {
         clientService: this.clientService,
         configurationManager: this.configurationManager,
         store: this.store,
-        authStore: this.authStore
+        authStore: this.authStore,
+        capabilityStore: this.capabilityStore
       })
     }
 
@@ -89,7 +93,8 @@ export class AuthService {
         ability: this.ability,
         language: this.language,
         userStore: this.userStore,
-        authStore: this.authStore
+        authStore: this.authStore,
+        capabilityStore: this.capabilityStore
       })
     }
 

@@ -223,16 +223,14 @@ import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/h
 import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 import {
-  useCapabilityFilesTags,
-  useCapabilityProjectSpacesEnabled,
-  useCapabilityShareJailEnabled,
   SortDir,
   ViewModeConstants,
   useConfigurationManager,
   useGetMatchingSpace,
   useFolderLink,
   useEmbedMode,
-  useAuthStore
+  useAuthStore,
+  useCapabilityStore
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -451,6 +449,7 @@ export default defineComponent({
     'update:modelValue'
   ],
   setup(props, context) {
+    const capabilityStore = useCapabilityStore()
     const configurationManager = useConfigurationManager()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { isLocationPicker } = useEmbedMode()
@@ -463,7 +462,7 @@ export default defineComponent({
 
     const { width } = useWindowSize()
     const hasTags = computed(
-      () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
+      () => capabilityStore.filesTags && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
 
     const { actions: renameActions } = useFileActionsRename()
@@ -494,8 +493,8 @@ export default defineComponent({
       hasTags,
       disabledResources,
       isResourceDisabled,
-      hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
+      hasShareJail: capabilityStore.spacesShareJail,
+      hasProjectSpaces: capabilityStore.spacesEnabled,
       userContextReady,
       getMatchingSpace,
       ...useResourceRouteResolver(

@@ -1,12 +1,12 @@
 import { computed, unref } from 'vue'
-import { Store } from 'vuex'
 import { useHead as _useHead } from '@vueuse/head'
 import { getBackendVersion, getWebVersion } from 'web-runtime/src/container/versions'
-import { useThemeStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useThemeStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 
-export const useHead = ({ store }: { store: Store<any> }) => {
+export const useHead = () => {
   const themeStore = useThemeStore()
+  const capabilityStore = useCapabilityStore()
   const { currentTheme } = storeToRefs(themeStore)
 
   const favicon = computed(() => currentTheme.value.logo.favicon)
@@ -17,7 +17,9 @@ export const useHead = ({ store }: { store: Store<any> }) => {
         meta: [
           {
             name: 'generator',
-            content: [getWebVersion(), getBackendVersion({ store })].filter(Boolean).join(', ')
+            content: [getWebVersion(), getBackendVersion({ capabilityStore })]
+              .filter(Boolean)
+              .join(', ')
           }
         ],
         ...(unref(favicon) && { link: [{ rel: 'icon', href: unref(favicon) }] })

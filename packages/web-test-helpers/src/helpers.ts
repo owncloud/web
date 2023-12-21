@@ -44,10 +44,6 @@ export const getComposableWrapper = <T>(
   )
 }
 
-export const getStoreInstance = <T>(storeOptions: StoreOptions<T>) => {
-  return _createStore(storeOptions)
-}
-
 export type { RouteLocation } from 'vue-router'
 export { RouterLinkStub } from '@vue/test-utils'
 export const createRouter = (options?: Partial<RouterOptions>) =>
@@ -57,3 +53,7 @@ export const createRouter = (options?: Partial<RouterOptions>) =>
     strict: false,
     ...options
   })
+
+export const writable = <T>(value: Readonly<T>): T => {
+  return value as T
+}

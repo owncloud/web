@@ -1,4 +1,3 @@
-import get from 'lodash-es/get'
 import isEqual from 'lodash-es/isEqual'
 import { stringify } from 'qs'
 import { Store } from 'vuex'
@@ -7,8 +6,8 @@ import { ClientService } from '../client'
 import { ConfigurationManager } from '../../configuration'
 import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
-import { AuthStore, UserStore } from '../../composables'
+import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
+import { AuthStore, UserStore, CapabilityStore } from '../../composables'
 
 export class PreviewService {
   store: Store<unknown>
@@ -16,21 +15,24 @@ export class PreviewService {
   configurationManager: ConfigurationManager
   userStore: UserStore
   authStore: AuthStore
+  capabilityStore: CapabilityStore
 
-  capability?: PreviewCapability
+  capability?: CapabilityStore['capabilities']['files']['thumbnail']
 
   constructor({
     store,
     clientService,
     configurationManager,
     userStore,
-    authStore
+    authStore,
+    capabilityStore
   }: {
     store: Store<unknown>
     clientService: ClientService
     configurationManager: ConfigurationManager
     userStore: UserStore
     authStore: AuthStore
+    capabilityStore: CapabilityStore
   }) {
     this.store = store
     this.clientService = clientService
@@ -38,11 +40,11 @@ export class PreviewService {
     this.userStore = userStore
     this.authStore = authStore
 
-    this.capability = get(store, 'getters.capabilities.files.thumbnail', {
+    this.capability = capabilityStore.filesThumbnail || {
       enabled: true,
       version: 'v0.1',
       supportedMimeTypes: store.getters.configuration?.options?.previewFileMimeTypes || []
-    })
+    }
   }
 
   private get available(): boolean {

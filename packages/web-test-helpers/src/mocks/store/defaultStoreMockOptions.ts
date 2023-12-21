@@ -7,7 +7,6 @@ export const defaultStoreMockOptions = {
     newFileHandlers: jest.fn(() => []),
     getNavItemsByExtension: jest.fn(),
     apps: jest.fn(() => ({})),
-    capabilities: jest.fn().mockImplementation(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
       options: {
         editor: {

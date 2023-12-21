@@ -87,7 +87,12 @@
 <script lang="ts">
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { queryItemAsString, useFileActions, useRouteQuery } from '@ownclouders/web-pkg'
+import {
+  queryItemAsString,
+  useCapabilityStore,
+  useFileActions,
+  useRouteQuery
+} from '@ownclouders/web-pkg'
 import { VisibilityObserver, ItemFilter } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { debounce, uniq } from 'lodash-es'
@@ -127,6 +132,7 @@ export default defineComponent({
   },
 
   setup() {
+    const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
@@ -170,6 +176,7 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
+      capabilityStore,
       filteredItems,
       shareTypes,
       getMatchingSpace,
@@ -209,7 +216,11 @@ export default defineComponent({
     rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadAvatars({ resource, clientService: this.$clientService })
+        this.loadAvatars({
+          resource,
+          clientService: this.$clientService,
+          capabilityStore: this.capabilityStore
+        })
 
         if (!this.displayThumbnails) {
           return

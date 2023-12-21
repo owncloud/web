@@ -4,10 +4,11 @@ import {
   createStore,
   defaultComponentMocks,
   defaultStoreMockOptions,
-  getComposableWrapper
+  getComposableWrapper,
+  writable
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { useModals } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditQuota', () => {
   describe('isEnabled property', () => {
@@ -50,7 +51,7 @@ describe('useUserActionsEditQuota', () => {
     })
     it('should false if included in capability readOnlyUserAttributes list', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           const userMock = {
             id: '1',
             drive: {
@@ -58,11 +59,10 @@ describe('useUserActionsEditQuota', () => {
               quota: {}
             }
           }
-          storeOptions.getters.capabilities.mockReturnValue({
-            graph: {
-              read_only_user_attributes: ['drive.quota']
-            }
-          })
+
+          const capabilityStore = useCapabilityStore()
+          writable(capabilityStore).graphUsersReadOnlyAttributes = ['drive.quota']
+
           expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toEqual(false)
         }
       })

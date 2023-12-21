@@ -25,18 +25,19 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'InfoSection',
   setup() {
-    const store = useStore()
+    const capabilityStore = useCapabilityStore()
+
     let backendProductName = ''
     let backendVersion = ''
     let backendEdition = ''
     let webClientVersion = ''
 
-    const backendStatus = store.getters.capabilities?.core?.status
+    const backendStatus = capabilityStore.status
 
     if (backendStatus && backendStatus.versionstring) {
       backendProductName = backendStatus.product || 'ownCloud'

@@ -7,7 +7,7 @@ import {
   defaultStoreMockOptions
 } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
-import { ClientService } from '@ownclouders/web-pkg'
+import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
 
@@ -79,14 +79,18 @@ function getWrapper({ passwordRequired = false } = {}) {
   const mocks = { ...defaultComponentMocks(), $clientService }
 
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({
-    files_sharing: { federation: { incoming: true, outgoing: true } }
-  }))
   const store = createStore(storeOptions)
+  const capabilities = {
+    files_sharing: { federation: { incoming: true, outgoing: true } }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: shallowMount(ResolvePublicLink, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
+          store
+        ],
         mocks,
         provide: mocks
       }

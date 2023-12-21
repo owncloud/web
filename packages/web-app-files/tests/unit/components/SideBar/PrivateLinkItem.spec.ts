@@ -46,10 +46,12 @@ describe('PrivateLinkItem', () => {
 })
 
 function getWrapper() {
+  const capabilities = { files: { privateLinks: true } }
+
   return {
     wrapper: mount(PrivateLinkItem, {
       global: {
-        plugins: [...defaultPlugins()],
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })],
         provide: {
           resource: folder
         }

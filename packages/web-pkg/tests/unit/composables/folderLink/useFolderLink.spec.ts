@@ -5,7 +5,7 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useFolderLink } from '../../../../src/composables'
+import { CapabilityStore, useFolderLink } from '../../../../src/composables'
 import { ConfigurationManager } from '../../../../src/configuration'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -129,9 +129,6 @@ describe('useFolderLink', () => {
 
 const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {}) => {
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({
-    spaces: { projects: true, share_jail: hasShareJail }
-  }))
 
   const spaces = [
     {
@@ -150,6 +147,10 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
 
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({})
+  const capabilities = {
+    spaces: { projects: true, share_jail: hasShareJail }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return getComposableWrapper(
     () => {
       const {
@@ -170,7 +171,9 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
       mocks,
       provide: mocks,
       store,
-      pluginOptions: { piniaOptions: { spacesState: { spaces } } }
+      pluginOptions: {
+        piniaOptions: { spacesState: { spaces }, capabilityState: { capabilities } }
+      }
     }
   )
 }

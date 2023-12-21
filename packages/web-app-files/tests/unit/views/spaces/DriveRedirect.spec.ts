@@ -24,7 +24,6 @@ function getMountedWrapper({ currentRouteName = 'files-spaces-generic' } = {}) {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) })
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({ spaces: { enabled: true } }))
   const store = createStore(storeOptions)
   return {
     storeOptions,

@@ -153,11 +153,7 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import {
-  AppLoadingSpinner,
-  useCapabilitySearchMediaType,
-  useCapabilitySearchModifiedDate
-} from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useCapabilityStore } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -186,11 +182,9 @@ import { Resource } from '@ownclouders/web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import {
   queryItemAsString,
-  useCapabilityFilesTags,
   useClientService,
   useFileListHeaderPosition,
   useGetMatchingSpace,
-  useCapabilityFilesFullTextSearch,
   useRoute,
   useRouteQuery,
   useRouter,
@@ -256,15 +250,12 @@ export default defineComponent({
   emits: ['search'],
   setup(props, { emit }) {
     const store = useStore()
+    const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const route = useRoute()
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
-    const hasTags = useCapabilityFilesTags()
-    const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
-    const modifiedDateCapability = useCapabilitySearchModifiedDate()
-    const mediaTypeCapability = useCapabilitySearchMediaType()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const searchTermQuery = useRouteQuery('term')
@@ -291,9 +282,9 @@ export default defineComponent({
 
     const displayFilter = computed(() => {
       return (
-        unref(fullTextSearchEnabled) ||
+        capabilityStore.searchContent?.enabled ||
         unref(availableTags).length ||
-        (unref(modifiedDateCapability) && unref(modifiedDateCapability).enabled)
+        capabilityStore.searchLastMofifiedDate?.enabled
       )
     })
 
@@ -324,7 +315,7 @@ export default defineComponent({
 
     const lastModifiedFilter = ref<VNodeRef>()
     const availableLastModifiedValues = ref<LastModifiedKeyword[]>(
-      unref(modifiedDateCapability).keywords?.map((k: string) => ({
+      capabilityStore.searchLastMofifiedDate.keywords?.map((k: string) => ({
         id: k,
         label: lastModifiedTranslations[k]
       })) || []
@@ -342,15 +333,11 @@ export default defineComponent({
       audio: { label: $gettext('Audio'), icon: 'mp3' },
       archive: { label: $gettext('Archive'), icon: 'zip' }
     }
-    const availableMediaTypeValues: FileCategoryKeyword[] = []
-    unref(mediaTypeCapability).keywords?.forEach((key: string) => {
-      if (!mediaTypeMapping[key]) {
-        return
-      }
-      availableMediaTypeValues.push({
-        id: key,
-        ...mediaTypeMapping[key]
-      })
+
+    const availableMediaTypeValues = computed(() => {
+      return (
+        capabilityStore.searchMediaType.keywords?.filter((key) => mediaTypeMapping[key]) || []
+      ).map((key) => ({ id: key, ...mediaTypeMapping[key] }))
     })
 
     const getFakeResourceForIcon = (item) => {
@@ -455,7 +442,7 @@ export default defineComponent({
       // from being rendered while the request retrieves the new resources from the server.
       store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
 
-      if (unref(hasTags)) {
+      if (capabilityStore.filesTags) {
         await loadAvailableTagsTask.perform()
       }
       emit('search', buildSearchTerm())
@@ -497,7 +484,7 @@ export default defineComponent({
       ...resourcesView,
       loadAvailableTagsTask,
       fileListHeaderY,
-      fullTextSearchEnabled,
+      fullTextSearchEnabled: capabilityStore.searchContent?.enabled,
       getMatchingSpace,
       availableTags,
       tagFilter,

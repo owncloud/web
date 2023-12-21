@@ -2,24 +2,23 @@ import { Store } from 'vuex'
 import { isLocationTrashActive } from '../../../router'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { computed, unref } from 'vue'
-import { useCapabilityFilesPermanentDeletion } from '../../capability'
+import { computed } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore, useCapabilityStore } from '../../piniaStores'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
   const { dispatchModal } = useModals()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
@@ -61,7 +60,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
-        if (!unref(hasPermanentDeletion)) {
+        if (!capabilityStore.filesPermanentDeletion) {
           return false
         }
 

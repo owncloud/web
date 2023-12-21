@@ -11,23 +11,22 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '../../../helpers/router'
 import { renameResource as _renameResource } from '../../../helpers/resource'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useClientService } from '../../clientService'
 import { useConfigurationManager } from '../../configuration'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useCapabilityFilesSharingCanRename } from '../../capability'
-import { useMessages, useModals } from '../../piniaStores'
+import { useMessages, useModals, useCapabilityStore } from '../../piniaStores'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const { showErrorMessage } = useMessages()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const canRename = useCapabilityFilesSharingCanRename()
   const configurationManager = useConfigurationManager()
   const { dispatchModal } = useModals()
 
@@ -210,7 +209,10 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
         if (isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
-        if (isLocationSharesActive(router, 'files-shares-with-me') && !unref(canRename)) {
+        if (
+          isLocationSharesActive(router, 'files-shares-with-me') &&
+          !capabilityStore.sharingCanRename
+        ) {
           return false
         }
         if (resources.length !== 1) {

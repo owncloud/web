@@ -20,9 +20,3 @@ export interface LoadPreviewOptions {
   dimensions?: [number, number]
   processor?: ProcessorType
 }
-
-export interface PreviewCapability {
-  enabled: boolean
-  version: string // version is just a major version, e.g. `v2`
-  supportedMimeTypes: string[]
-}

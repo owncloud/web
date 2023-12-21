@@ -4,11 +4,6 @@ import { useTask } from 'vue-concurrency'
 import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
-import {
-  useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled
-} from '@ownclouders/web-pkg'
-import { unref } from 'vue'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,10 +16,8 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, spacesStore, clientService, configurationManager } = context
-
-    const hasResharing = useCapabilityFilesSharingResharing(store)
-    const hasShareJail = useCapabilityShareJailEnabled(store)
+    const { store, userStore, spacesStore, clientService, configurationManager, capabilityStore } =
+      context
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
@@ -49,8 +42,8 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
           shares: resources,
           spaces: spacesStore.spaces,
           incomingShares: true,
-          allowSharePermission: unref(hasResharing),
-          hasShareJail: unref(hasShareJail),
+          allowSharePermission: capabilityStore.sharingResharing,
+          hasShareJail: capabilityStore.spacesShareJail,
           fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
         }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.

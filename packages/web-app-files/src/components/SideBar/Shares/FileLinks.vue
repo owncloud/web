@@ -115,13 +115,6 @@ import { DateTime } from 'luxon'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   useStore,
-  useCapabilitySpacesEnabled,
-  useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingPublicCanEdit,
-  useCapabilityFilesSharingPublicCanContribute,
-  useCapabilityFilesSharingPublicAlias,
-  useCapabilityFilesSharingPublicPasswordEnforcedFor,
   useAbility,
   useExpirationRules,
   useDefaultLinkPermissions,
@@ -130,7 +123,8 @@ import {
   useClientService,
   useModals,
   useUserStore,
-  useMessages
+  useMessages,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -174,8 +168,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { can } = ability
     const { expirationRules } = useExpirationRules()
-    const hasResharing = useCapabilityFilesSharingResharing()
-    const hasShareJail = useCapabilityShareJailEnabled()
+    const capabilityStore = useCapabilityStore()
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
 
@@ -218,12 +211,12 @@ export default defineComponent({
     )
 
     const canCreateLinks = computed(() => {
-      if (unref(resource).isReceivedShare() && !unref(hasResharing)) {
+      if (unref(resource).isReceivedShare() && !capabilityStore.sharingResharing) {
         return false
       }
 
       const isShareJail = isShareSpaceResource(unref(space))
-      if (isShareJail && !unref(hasResharing)) {
+      if (isShareJail && !capabilityStore.sharingResharing) {
         return false
       }
 
@@ -279,12 +272,12 @@ export default defineComponent({
       space,
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasSpaces: useCapabilitySpacesEnabled(),
-      hasShareJail,
-      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
-      hasPublicLinkContribute: useCapabilityFilesSharingPublicCanContribute(),
-      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
-      passwordEnforced: useCapabilityFilesSharingPublicPasswordEnforcedFor(),
+      hasSpaces: capabilityStore.spacesEnabled,
+      hasShareJail: capabilityStore.spacesShareJail,
+      hasPublicLinkEditing: capabilityStore.sharingPublicCanEdit,
+      hasPublicLinkContribute: capabilityStore.sharingPublicCanContribute,
+      hasPublicLinkAliasSupport: capabilityStore.sharingPublicAlias,
+      passwordEnforced: capabilityStore.sharingPublicPasswordEnforcedFor,
       indirectLinkListCollapsed,
       linkListCollapsed,
       outgoingLinks,
@@ -306,7 +299,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration']),
+    ...mapGetters(['configuration']),
 
     collapseButtonTitle() {
       return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')

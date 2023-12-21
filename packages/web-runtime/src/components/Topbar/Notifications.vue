@@ -89,7 +89,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { eventBus, useCapabilityCoreSSE, useSpacesStore } from '@ownclouders/web-pkg'
+import { eventBus, useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
@@ -114,6 +114,7 @@ export default {
   setup() {
     const store = useStore()
     const spacesStore = useSpacesStore()
+    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
@@ -122,7 +123,6 @@ export default {
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
-    const sseEnabled = useCapabilityCoreSSE()
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -308,7 +308,7 @@ export default {
 
     onMounted(() => {
       fetchNotificationsTask.perform()
-      if (unref(sseEnabled)) {
+      if (unref(capabilityStore.supportSSE)) {
         clientService.sseAuthenticated.addEventListener(
           MESSAGE_TYPE.NOTIFICATION,
           onSSENotificationEvent
@@ -321,7 +321,7 @@ export default {
     })
 
     onUnmounted(() => {
-      if (unref(sseEnabled)) {
+      if (unref(capabilityStore.supportSSE)) {
         clientService.sseAuthenticated.removeEventListener(
           MESSAGE_TYPE.NOTIFICATION,
           onSSENotificationEvent

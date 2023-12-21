@@ -6,10 +6,9 @@ import { useRouteQuery } from '../router'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { useCapabilitySpacesEnabled } from '../capability'
 import { useClientService } from '../clientService'
 import { useConfigurationManager } from '../configuration'
-import { useSpacesStore } from '../piniaStores'
+import { useSpacesStore, useCapabilityStore } from '../piniaStores'
 
 interface DriveResolverOptions {
   store?: Store<any>
@@ -26,13 +25,13 @@ interface DriveResolverResult {
 export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResolverResult => {
   const store = options.store || useStore()
   const spacesStore = useSpacesStore()
+  const capabilityStore = useCapabilityStore()
   const { areSpacesLoading } = useSpacesLoading()
   const shareId = useRouteQuery('shareId')
   const fileIdQueryItem = useRouteQuery('fileId')
   const fileId = computed(() => {
     return queryItemAsString(unref(fileIdQueryItem))
   })
-  const hasSpaces = useCapabilitySpacesEnabled(store)
   const configurationManager = useConfigurationManager()
 
   const clientService = useClientService()
@@ -103,7 +102,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         })
         path = item.join('/')
       } else {
-        if (unref(hasSpaces) && unref(fileId)) {
+        if (capabilityStore.spacesEnabled && unref(fileId)) {
           matchingSpace = unref(spaces).find((s) => {
             return unref(fileId).startsWith(`${s.fileId}`)
           })

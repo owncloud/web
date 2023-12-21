@@ -1,10 +1,5 @@
-import { computed, unref } from 'vue'
-import {
-  eventBus,
-  useCapabilityDeleteUsersDisabled,
-  useMessages,
-  useModals
-} from '@ownclouders/web-pkg'
+import { computed } from 'vue'
+import { eventBus, useCapabilityStore, useMessages, useModals } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
 import { UserAction, UserActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -12,6 +7,7 @@ import { User } from '@ownclouders/web-client/src/generated'
 
 export const useUserActionsDelete = () => {
   const { showMessage, showErrorMessage } = useMessages()
+  const capabilityStore = useCapabilityStore()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const { dispatchModal } = useModals()
@@ -93,7 +89,7 @@ export const useUserActionsDelete = () => {
       },
       handler,
       isEnabled: ({ resources }) => {
-        return !!resources.length && !unref(useCapabilityDeleteUsersDisabled())
+        return !!resources.length && !capabilityStore.graphUsersDeleteDisabled
       },
       componentType: 'button',
       class: 'oc-users-actions-delete-trigger'

@@ -11,6 +11,7 @@ import {
   useGetMatchingSpaceMock
 } from 'web-test-helpers'
 import { useFileActions } from '../../../../src/composables/actions'
+import { CapabilityStore } from '../../../../types'
 
 jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
   useGetMatchingSpace: jest.fn()
@@ -107,18 +108,15 @@ function getWrapper({
         options: {
           disablePreviews: true
         }
-      }),
-      capabilities: () => ({
-        spaces: {
-          share_jail: hasShareJail,
-          projects: { enabled: true }
-        }
-      }),
-      user: () => user
+      })
     }
   }
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({ currentRoute: route })
+  const capabilities = {
+    spaces: { share_jail: hasShareJail, projects: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: shallowMount(ResourcePreview, {
       props: {
@@ -128,7 +126,7 @@ function getWrapper({
         provide: mocks,
         renderStubDefaultSlot: true,
         mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
       }
     })
   }

@@ -8,10 +8,9 @@ import {
 } from 'oidc-client-ts'
 import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
-import { AuthStore, ConfigurationManager, UserStore } from '@ownclouders/web-pkg'
+import { AuthStore, ConfigurationManager, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
-import isEmpty from 'lodash-es/isEmpty'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
@@ -30,6 +29,7 @@ export interface UserManagerOptions {
   language: Language
   userStore: UserStore
   authStore: AuthStore
+  capabilityStore: CapabilityStore
 }
 
 export class UserManager extends OidcUserManager {
@@ -39,6 +39,7 @@ export class UserManager extends OidcUserManager {
   private store: Store<any>
   private userStore: UserStore
   private authStore: AuthStore
+  private capabilityStore: CapabilityStore
   private updateAccessTokenPromise: Promise<void> | null
   private _unloadReason: UnloadReason
   private ability: Ability
@@ -116,6 +117,7 @@ export class UserManager extends OidcUserManager {
     this.language = options.language
     this.userStore = options.userStore
     this.authStore = options.authStore
+    this.capabilityStore = options.capabilityStore
   }
 
   /**
@@ -168,7 +170,7 @@ export class UserManager extends OidcUserManager {
 
       this.initializeOwnCloudSdk(accessToken)
 
-      if (this.store.getters.capabilities?.core?.['support-sse']) {
+      if (this.capabilityStore.supportSSE) {
         ;(this.clientService.sseAuthenticated as SSEAdapter).updateAccessToken(accessToken)
       }
 
@@ -252,13 +254,13 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchCapabilities(): Promise<void> {
-    if (!isEmpty(this.store.getters.capabilities)) {
+    if (this.capabilityStore.isInitialized) {
       return
     }
 
     const capabilities = await this.clientService.ocsUserContext.getCapabilities()
 
-    this.store.commit('SET_CAPABILITIES', capabilities)
+    this.capabilityStore.setCapabilities(capabilities)
   }
 
   // copied from upstream oidc-client-ts UserManager with CERN customization

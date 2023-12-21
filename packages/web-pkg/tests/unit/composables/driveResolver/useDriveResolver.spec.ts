@@ -1,6 +1,5 @@
-import { useCapabilitySpacesEnabled } from '../../../../src/composables/capability'
 import { useDriveResolver } from '../../../../src/composables/driveResolver'
-import { computed, ref, unref } from 'vue'
+import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -8,14 +7,11 @@ import {
   getComposableWrapper,
   defaultStoreMockOptions,
   defaultComponentMocks,
-  RouteLocation
+  RouteLocation,
+  writable
 } from 'web-test-helpers'
 import { ConfigurationManager } from '../../../../src/configuration'
-import { useSpacesStore } from '../../../../src/composables/piniaStores'
-
-jest.mock('../../../../src/composables/capability', () => ({
-  useCapabilitySpacesEnabled: jest.fn()
-}))
+import { useSpacesStore, useCapabilityStore } from '../../../../src/composables/piniaStores'
 
 jest.mock('../../../../src/composables/configuration', () => ({
   ...jest.requireActual('../../../../src/composables/configuration'),
@@ -101,10 +97,12 @@ describe('useDriveResolver', () => {
         query: { fileId }
       })
     })
-    jest.mocked(useCapabilitySpacesEnabled).mockImplementation(() => computed(() => hasSpaces))
 
     getComposableWrapper(
       () => {
+        const capabilityStore = useCapabilityStore()
+        writable(capabilityStore).spacesEnabled = hasSpaces
+
         const { space, item, itemId } = useDriveResolver({
           driveAliasAndItem: ref(`/personal${resourcePath}`)
         })
@@ -134,10 +132,12 @@ describe('useDriveResolver', () => {
         query: { fileId: undefined }
       })
     })
-    jest.mocked(useCapabilitySpacesEnabled).mockImplementation(() => computed(() => hasSpaces))
 
     getComposableWrapper(
       () => {
+        const capabilityStore = useCapabilityStore()
+        writable(capabilityStore).spacesEnabled = hasSpaces
+
         const { space, item } = useDriveResolver({
           driveAliasAndItem: ref(`${driveAlias}${resourcePath}`)
         })

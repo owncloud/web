@@ -38,10 +38,6 @@ describe('Top Bar component', () => {
       })
       expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
     })
-    it('should not display if capability is missing', () => {
-      const { wrapper } = getWrapper()
-      expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
-    })
     it('should not display if endpoint list is missing', () => {
       const { wrapper } = getWrapper({
         capabilities: { notifications: { 'ocs-endpoints': [] } }
@@ -82,8 +78,7 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
   const storeOptions = {
     ...defaultStoreMockOptions,
     getters: {
-      ...defaultStoreMockOptions.getters,
-      capabilities: () => capabilities
+      ...defaultStoreMockOptions.getters
     }
   }
   storeOptions.getters.configuration.mockImplementation(() => ({
@@ -99,7 +94,10 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+            piniaOptions: {
+              authState: { userContextReady: isUserContextReady },
+              capabilityState: { capabilities }
+            }
           }),
           store
         ],

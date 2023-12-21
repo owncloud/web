@@ -1,14 +1,9 @@
 import { useStore } from '../store'
-import {
-  useCapabilityFilesTusExtension,
-  useCapabilityFilesTusSupportHttpMethodOverride,
-  useCapabilityFilesTusSupportMaxChunkSize
-} from '../capability'
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { useAuthStore } from '../piniaStores'
+import { useAuthStore, useCapabilityStore } from '../piniaStores'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -16,12 +11,9 @@ interface UploadOptions {
 
 export function useUpload(options: UploadOptions) {
   const store = useStore()
+  const capabilityStore = useCapabilityStore()
   const { current: currentLanguage } = useGettext()
   const authStore = useAuthStore()
-
-  const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
-  const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
-  const tusExtension = useCapabilityFilesTusExtension()
 
   const headers = computed((): { [key: string]: string } => {
     const headers = { 'Accept-Language': currentLanguage }
@@ -43,7 +35,7 @@ export function useUpload(options: UploadOptions) {
   })
 
   const uppyOptions = computed(() => {
-    const isTusSupported = unref(tusMaxChunkSize) > 0
+    const isTusSupported = capabilityStore.tusMaxChunkSize > 0
 
     return {
       isTusSupported,
@@ -61,9 +53,9 @@ export function useUpload(options: UploadOptions) {
             }
           : {},
       ...(isTusSupported && {
-        tusMaxChunkSize: unref(tusMaxChunkSize),
-        tusHttpMethodOverride: unref(tusHttpMethodOverride),
-        tusExtension: unref(tusExtension)
+        tusMaxChunkSize: capabilityStore.tusMaxChunkSize,
+        tusHttpMethodOverride: capabilityStore.tusHttpMethodOverride,
+        tusExtension: capabilityStore.tusExtension
       }),
       ...(!isTusSupported && {
         xhrTimeout: store.getters.configuration?.options?.upload?.xhr?.timeout || 60000
