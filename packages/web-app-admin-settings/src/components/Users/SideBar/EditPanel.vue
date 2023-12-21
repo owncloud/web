@@ -206,7 +206,7 @@ export default defineComponent({
     selectedLoginValue() {
       return this.loginOptions.find((option) =>
         !('accountEnabled' in this.editUser)
-          ? option.value === false
+          ? option.value === true
           : this.editUser.accountEnabled === option.value
       )
     },
