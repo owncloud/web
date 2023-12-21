@@ -129,6 +129,7 @@ export default defineComponent({
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
+    const loadFromRoute = ref(false)
     const searchResults = ref([])
     const loading = ref(false)
     const currentFolderAvailable = ref(false)
@@ -283,6 +284,7 @@ export default defineComponent({
       optionsDropRef,
       activePreviewIndex,
       term,
+      loadFromRoute,
       onKeyUpEnter,
       searchResults,
       loading,
@@ -326,6 +328,10 @@ export default defineComponent({
 
   watch: {
     term() {
+      if (this.loadFromRoute) {
+        this.loadFromRoute = false
+        return
+      }
       this.debouncedSearch(this)
     },
     searchResults: {
@@ -368,6 +374,7 @@ export default defineComponent({
           if (!input || !routeTerm) {
             return
           }
+          this.loadFromRoute = true
           this.term = routeTerm
           input.value = routeTerm
         })
