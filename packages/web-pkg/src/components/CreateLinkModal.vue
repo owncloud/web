@@ -288,11 +288,11 @@ export default defineComponent({
       if (!unref(selectedRoleIsInternal)) {
         if (unref(passwordEnforced) && !unref(password).value) {
           password.error = $gettext('Password must not be empty')
-          return Promise.reject(new Promise((reject) => reject('')))
+          return Promise.reject()
         }
 
         if (!passwordPolicy.check(unref(password).value)) {
-          return Promise.reject(new Promise((reject) => reject('')))
+          return Promise.reject()
         }
       }
 
@@ -322,7 +322,7 @@ export default defineComponent({
 
       if (userFacingErrors.length) {
         password.error = $gettext(userFacingErrors[0].message)
-        return Promise.reject(new Promise((reject) => reject('')))
+        return Promise.reject()
       }
 
       if (props.callbackFn) {
