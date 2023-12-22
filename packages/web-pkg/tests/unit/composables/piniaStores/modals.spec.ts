@@ -8,7 +8,7 @@ describe('useModals', () => {
   })
 
   describe('method "dispatchModal"', () => {
-    it('adds a modal to the stack of modals', () => {
+    it('adds a modal to the stack of modals and sets it active', () => {
       getWrapper({
         setup: (instance) => {
           const data = { title: 'test' }
@@ -17,6 +17,9 @@ describe('useModals', () => {
           expect(modal.id).toBeDefined()
           expect(modal.title).toEqual(data.title)
           expect(instance.activeModal).toEqual(modal)
+
+          const modal2 = instance.dispatchModal(data)
+          expect(instance.activeModal).toEqual(modal2)
         }
       })
     })
@@ -34,12 +37,18 @@ describe('useModals', () => {
     })
   })
   describe('method "removeModal"', () => {
-    it('removes an existing modal', () => {
+    it('removes an existing modal and sets another existing modal active', () => {
       getWrapper({
         setup: (instance) => {
           const modal = instance.dispatchModal({ title: 'test' })
-          instance.removeModal(modal.id)
-          expect(instance.modals.length).toBe(0)
+          const modal2 = instance.dispatchModal({ title: 'test2' })
+
+          expect(instance.modals.length).toBe(2)
+          expect(instance.activeModal).toEqual(modal2)
+
+          instance.removeModal(modal2.id)
+          expect(instance.modals.length).toBe(1)
+          expect(instance.activeModal).toEqual(modal)
         }
       })
     })
