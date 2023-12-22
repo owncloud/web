@@ -264,6 +264,7 @@ export default defineComponent({
     }
 
     const updateTerm = (input) => {
+      loadFromRoute.value = false
       term.value = input
       if (!unref(term)) {
         return unref(optionsDrop).hide()
