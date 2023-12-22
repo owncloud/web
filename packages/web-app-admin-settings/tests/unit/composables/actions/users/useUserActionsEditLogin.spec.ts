@@ -3,6 +3,7 @@ import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
+import { useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditLogin', () => {
   describe('method "isEnabled"', () => {
@@ -34,9 +35,10 @@ describe('useUserActionsEditLogin', () => {
   describe('method "handler"', () => {
     it('creates a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [mock<User>()] })
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })
@@ -57,6 +59,7 @@ function getWrapper({
 }) {
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
+
   return {
     wrapper: getComposableWrapper(
       () => {

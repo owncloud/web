@@ -10,15 +10,15 @@ import { useStore } from '../../store'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useLoadingService } from '../../loadingService'
+import { useModals } from '../../piniaStores'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
+  const { dispatchModal } = useModals()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
     return clientService.webdav
@@ -36,26 +36,19 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
           error
         })
       })
-      .finally(() => {
-        store.dispatch('hideModal')
-      })
   }
 
   const handler = ({ space }: FileActionOptions) => {
-    const modal = {
+    dispatchModal({
       variation: 'danger',
       title: $gettext('Empty trash bin'),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
       message: $gettext(
         'Are you sure you want to permanently delete the listed items? You can’t undo this action.'
       ),
       hasInput: false,
-      onCancel: () => store.dispatch('hideModal'),
-      onConfirm: () => loadingService.addTask(() => emptyTrashBin({ space }))
-    }
-
-    store.dispatch('createModal', modal)
+      onConfirm: () => emptyTrashBin({ space })
+    })
   }
 
   const actions = computed((): FileAction[] => [
@@ -64,7 +57,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       icon: 'delete-bin-5',
       label: () => $gettext('Empty trash bin'),
       handler,
-      isEnabled: ({ space, resources }) => {
+      isEnabled: ({ space }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

@@ -1,3 +1,4 @@
+import { mock } from 'jest-mock-extended'
 import SetLinkPasswordModal from '../../../../src/components/Modals/SetLinkPasswordModal.vue'
 import {
   createStore,
@@ -6,6 +7,7 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
+import { Modal } from '@ownclouders/web-pkg'
 
 describe('SetLinkPasswordModal', () => {
   it('should render a text input field for the password', () => {
@@ -42,6 +44,7 @@ function getWrapper({ link = {} } = {}) {
     storeOptions,
     wrapper: shallowMount(SetLinkPasswordModal, {
       props: {
+        modal: mock<Modal>(),
         link
       },
       global: {

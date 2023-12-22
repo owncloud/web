@@ -8,6 +8,7 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
+import { useModals } from '../../piniaStores'
 
 export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -15,13 +16,13 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
   const ability = useAbility()
   const clientService = useClientService()
   const route = useRoute()
+  const { dispatchModal } = useModals()
 
   const editDescriptionSpace = (space: SpaceResource, description: string) => {
     const graphClient = clientService.graphAuthenticated
     return graphClient.drives
       .updateDrive(space.id as string, { description } as Drive, {})
       .then(() => {
-        store.dispatch('hideModal')
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: space.id,
           field: 'description',
@@ -48,19 +49,14 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
       return
     }
 
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Change subtitle for space') + ' ' + resources[0].name,
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Confirm'),
       hasInput: true,
       inputLabel: $gettext('Space subtitle'),
       inputValue: resources[0].description,
-      onCancel: () => store.dispatch('hideModal'),
-      onConfirm: (description) => editDescriptionSpace(resources[0], description)
-    }
-
-    store.dispatch('createModal', modal)
+      onConfirm: (description: string) => editDescriptionSpace(resources[0], description)
+    })
   }
 
   const actions = computed((): SpaceAction[] => [

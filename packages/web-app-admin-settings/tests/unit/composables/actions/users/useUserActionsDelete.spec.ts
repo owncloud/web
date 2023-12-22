@@ -35,11 +35,10 @@ describe('useUserActionsDelete', () => {
     it('should successfully delete all given users and reload the users list', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       getWrapper({
-        setup: async ({ deleteUsers }, { storeOptions, clientService }) => {
+        setup: async ({ deleteUsers }, { clientService }) => {
           const user = mock<User>({ id: '1' })
           await deleteUsers([user])
           expect(clientService.graphAuthenticated.users.deleteUser).toHaveBeenCalledWith(user.id)
-          expect(storeOptions.actions.hideModal).toHaveBeenCalled()
           expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
         }
       })
@@ -48,12 +47,11 @@ describe('useUserActionsDelete', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const eventSpy = jest.spyOn(eventBus, 'publish')
       getWrapper({
-        setup: async ({ deleteUsers }, { storeOptions, clientService }) => {
+        setup: async ({ deleteUsers }, { clientService }) => {
           clientService.graphAuthenticated.users.deleteUser.mockRejectedValue({})
           const user = mock<User>({ id: '1' })
           await deleteUsers([user])
           expect(clientService.graphAuthenticated.users.deleteUser).toHaveBeenCalledWith(user.id)
-          expect(storeOptions.actions.hideModal).toHaveBeenCalled()
           expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
         }
       })

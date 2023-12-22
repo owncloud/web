@@ -1,9 +1,12 @@
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ConflictDialog, ResolveConflict } from '../../../../../src/helpers/resource'
+import { useModals } from '../../../../../src/composables/piniaStores'
+import { setActivePinia } from 'pinia'
+import { createMockStore } from 'web-test-helpers'
 
-const getConflictDialogInstance = ({ createModal = jest.fn() } = {}) => {
-  return new ConflictDialog(createModal, jest.fn(), jest.fn(), jest.fn(), jest.fn(), jest.fn())
+const getConflictDialogInstance = () => {
+  return new ConflictDialog(jest.fn(), jest.fn(), jest.fn(), jest.fn())
 }
 
 describe('conflict dialog', () => {
@@ -31,10 +34,11 @@ describe('conflict dialog', () => {
   })
   describe('method "resolveFileExists"', () => {
     it('should create the modal in the end', () => {
-      const createModal = jest.fn()
-      const conflictDialog = getConflictDialogInstance({ createModal })
+      setActivePinia(createMockStore())
+      const { dispatchModal } = useModals()
+      const conflictDialog = getConflictDialogInstance()
       conflictDialog.resolveFileExists(mockDeep<Resource>(), 2, true)
-      expect(createModal).toHaveBeenCalledTimes(1)
+      expect(dispatchModal).toHaveBeenCalledTimes(1)
     })
   })
 })

@@ -1,16 +1,15 @@
 import { computed, Ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction, useStore } from '@ownclouders/web-pkg'
+import { UserAction, useModals } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/src/generated'
 import RemoveFromGroupsModal from '../../../components/Users/RemoveFromGroupsModal.vue'
 
 export const useUserActionsRemoveFromGroups = ({ groups }: { groups: Ref<Group[]> }) => {
-  const store = useStore()
+  const { dispatchModal } = useModals()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
-    return store.dispatch('createModal', {
-      variation: 'passive',
+    dispatchModal({
       title: $ngettext(
         'Remove user "%{user}" from groups',
         'Remove %{userCount} users from groups ',
@@ -20,7 +19,6 @@ export const useUserActionsRemoveFromGroups = ({ groups }: { groups: Ref<Group[]
           userCount: resources.length.toString()
         }
       ),
-      hideActions: true,
       customComponent: RemoveFromGroupsModal,
       customComponentAttrs: () => ({
         users: resources,

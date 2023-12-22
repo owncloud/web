@@ -362,7 +362,6 @@ export default defineComponent({
           return
         }
 
-        store.dispatch('hideModal')
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
         if (unref(hasSpaces)) {
           const spaces = store.getters['runtime/spaces/spaces']
@@ -508,8 +507,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['clearClipboardFiles', 'pasteSelectedFiles']),
-    ...mapActions(['showMessage', 'createModal', 'hideModal']),
+    ...mapActions('Files', ['clearClipboardFiles']),
 
     getIconResource(fileHandler) {
       return { type: 'file', extension: fileHandler.ext } as Resource

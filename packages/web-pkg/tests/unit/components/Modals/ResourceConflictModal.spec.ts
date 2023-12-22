@@ -9,6 +9,7 @@ import {
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveStrategy } from '../../../../src/helpers/resource'
+import { Modal } from '../../../../src/composables/piniaStores'
 
 describe('ResourceConflictModal', () => {
   describe('checkbox', () => {
@@ -28,7 +29,7 @@ describe('ResourceConflictModal', () => {
       await wrapper.vm.onConfirm()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.KEEP_BOTH,
-        doForAllConflicts: undefined
+        doForAllConflicts: false
       })
     })
   })
@@ -39,7 +40,7 @@ describe('ResourceConflictModal', () => {
       await wrapper.vm.onConfirmSecondary()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.MERGE,
-        doForAllConflicts: undefined
+        doForAllConflicts: false
       })
     })
     it('should call the callback with replace strategy if merge not suggested', async () => {
@@ -48,7 +49,7 @@ describe('ResourceConflictModal', () => {
       await wrapper.vm.onConfirmSecondary()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.REPLACE,
-        doForAllConflicts: undefined
+        doForAllConflicts: false
       })
     })
   })
@@ -59,7 +60,7 @@ describe('ResourceConflictModal', () => {
       await wrapper.vm.onCancel()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.SKIP,
-        doForAllConflicts: undefined
+        doForAllConflicts: false
       })
     })
   })
@@ -74,6 +75,7 @@ function getWrapper({ props = {} } = {}) {
     mocks,
     wrapper: shallowMount(ResourceConflictModal, {
       props: {
+        modal: mock<Modal>(),
         resource: mock<Resource>,
         conflictCount: 1,
         callbackFn: () => ({}),

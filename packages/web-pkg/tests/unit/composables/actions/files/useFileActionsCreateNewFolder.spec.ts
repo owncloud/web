@@ -1,6 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { FolderResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -23,13 +24,14 @@ describe('useFileActionsCreateNewFolder', () => {
       { input: '.', output: 'Folder name cannot be equal to "."' },
       { input: '..', output: 'Folder name cannot be equal to ".."' },
       { input: 'myfolder', output: null }
-    ])('should validate folder name %s', async (data) => {
+    ])('should validate folder name %s', (data) => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ checkNewFolderName }) => {
-          const result = checkNewFolderName(data.input)
-          expect(result).toBe(data.output)
+        setup: ({ checkNewFolderName }) => {
+          checkNewFolderName(data.input, (str: string) => {
+            expect(str).toBe(data.output)
+          })
         }
       })
     })
@@ -43,7 +45,6 @@ describe('useFileActionsCreateNewFolder', () => {
           await addNewFolder('myfolder')
           await nextTick()
           expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-          expect(storeOptions.actions.hideModal).toHaveBeenCalled()
           expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
@@ -76,14 +77,15 @@ describe('useFileActionsCreateNewFolder', () => {
     })
   })
   describe('createNewFolderModal', () => {
-    it('should show modal', async () => {
+    it('should show modal', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
+          const { dispatchModal } = useModals()
           unref(actions)[0].handler()
-          await nextTick()
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

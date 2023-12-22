@@ -1,16 +1,15 @@
 import { computed, Ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction, useStore } from '@ownclouders/web-pkg'
+import { UserAction, useModals } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/src/generated'
 import AddToGroupsModal from '../../../components/Users/AddToGroupsModal.vue'
 
 export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) => {
-  const store = useStore()
+  const { dispatchModal } = useModals()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
-    return store.dispatch('createModal', {
-      variation: 'passive',
+    dispatchModal({
       title: $ngettext(
         'Add user "%{user}" to groups',
         'Add %{userCount} users to groups ',
@@ -20,7 +19,6 @@ export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) 
           userCount: resources.length.toString()
         }
       ),
-      hideActions: true,
       customComponent: AddToGroupsModal,
       customComponentAttrs: () => ({
         users: resources,

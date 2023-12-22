@@ -298,10 +298,7 @@ export class AuthService {
     // TODO: create UserUnloadTask interface and allow registering unload-tasks in the authService
     await this.store.dispatch('runtime/auth/clearUserContext')
     await this.store.dispatch('resetUserState')
-    await Promise.all([
-      this.store.dispatch('clearDynamicNavItems'),
-      this.store.dispatch('hideModal')
-    ])
+    await this.store.dispatch('clearDynamicNavItems')
   }
 
   private handleDelegatedTokenUpdate(event: MessageEvent): void {

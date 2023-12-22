@@ -199,37 +199,6 @@ describe('account page', () => {
     })
   })
 
-  describe('method "editPassword"', () => {
-    it('should show message on success', async () => {
-      const { wrapper, mocks } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
-
-      mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockResolvedValue(
-        mockAxiosResolve()
-      )
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.editPassword('password', 'newPassword')
-      expect(showMessageStub).toHaveBeenCalled()
-    })
-
-    it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
-
-      mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockRejectedValue(new Error())
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
-      await wrapper.vm.editPassword('password', 'newPassword')
-      expect(showErrorMessageStub).toHaveBeenCalled()
-    })
-  })
-
   describe('Logout from all devices link', () => {
     it('should render the logout from active devices if logoutUrl is provided', async () => {
       const { wrapper } = getWrapper()

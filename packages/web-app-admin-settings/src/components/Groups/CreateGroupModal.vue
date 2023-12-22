@@ -1,5 +1,5 @@
 <template>
-  <form autocomplete="off" @submit.prevent="onConfirm">
+  <form autocomplete="off" @submit.prevent="$emit('confirm')">
     <oc-text-input
       id="create-group-input-display-name"
       v-model="group.displayName"
@@ -10,35 +10,22 @@
       @update:model-value="validateDisplayName"
     />
     <input type="submit" class="oc-hidden" />
-    <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
-      <oc-button
-        class="oc-modal-body-actions-cancel oc-ml-s"
-        appearance="outline"
-        variation="passive"
-        @click="onCancel"
-        >{{ $gettext('Cancel') }}
-      </oc-button>
-      <oc-button
-        class="oc-modal-body-actions-confirm oc-ml-s"
-        appearance="filled"
-        variation="primary"
-        :disabled="isFormInvalid"
-        @click="onConfirm"
-        >{{ $gettext('Confirm') }}
-      </oc-button>
-    </div>
   </form>
 </template>
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, PropType, unref, watch } from 'vue'
 import { Group } from '@ownclouders/web-client/src/generated'
-import { MaybeRef, useClientService, useEventBus, useStore } from '@ownclouders/web-pkg'
+import { MaybeRef, Modal, useClientService, useEventBus, useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateGroupModal',
-  setup(props, { expose }) {
+  props: {
+    modal: { type: Object as PropType<Modal>, required: true }
+  },
+  emits: ['confirm', 'update:confirmDisabled'],
+  setup(props, { emit, expose }) {
     const { $gettext } = useGettext()
     const store = useStore()
     const eventBus = useEventBus()
@@ -58,9 +45,17 @@ export default defineComponent({
         .includes(false)
     })
 
+    watch(
+      isFormInvalid,
+      () => {
+        emit('update:confirmDisabled', unref(isFormInvalid))
+      },
+      { immediate: true }
+    )
+
     const onConfirm = async () => {
       if (unref(isFormInvalid)) {
-        return
+        return Promise.reject(new Promise((reject) => reject('')))
       }
 
       try {
@@ -76,32 +71,26 @@ export default defineComponent({
           title: $gettext('Failed to create group'),
           error
         })
-      } finally {
-        store.dispatch('hideModal')
       }
     }
 
-    const onCancel = () => {
-      store.dispatch('hideModal')
-    }
-
-    expose({ onConfirm, onCancel })
+    expose({ onConfirm })
 
     return {
       clientService,
       group,
       formData,
       isFormInvalid,
-      onConfirm,
-      onCancel
+
+      // unit tests
+      onConfirm
     }
   },
   methods: {
     async validateDisplayName() {
-      this.formData.displayName.valid = false
-
       if (this.group.displayName.trim() === '') {
         this.formData.displayName.errorMessage = this.$gettext('Group name cannot be empty')
+        this.formData.displayName.valid = false
         return false
       }
 
@@ -109,6 +98,7 @@ export default defineComponent({
         this.formData.displayName.errorMessage = this.$gettext(
           'Group name cannot exceed 255 characters'
         )
+        this.formData.displayName.valid = false
         return false
       }
 
@@ -121,6 +111,7 @@ export default defineComponent({
             groupName: this.group.displayName
           }
         )
+        this.formData.displayName.valid = false
         return false
       } catch (e) {}
 

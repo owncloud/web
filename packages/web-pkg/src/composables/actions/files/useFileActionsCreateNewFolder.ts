@@ -13,6 +13,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useScrollTo } from '../../scrollTo'
 import { AncestorMetaData } from '../../../types'
+import { useModals } from '../../../composables/piniaStores'
 
 export const useFileActionsCreateNewFolder = ({
   store,
@@ -20,6 +21,7 @@ export const useFileActionsCreateNewFolder = ({
 }: { store?: Store<any>; space?: SpaceResource } = {}) => {
   store = store || useStore()
   const router = useRouter()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const { scrollToResource } = useScrollTo()
 
@@ -30,37 +32,37 @@ export const useFileActionsCreateNewFolder = ({
     () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
   )
 
-  const checkNewFolderName = (folderName) => {
+  const checkNewFolderName = (folderName: string, setError: (error: string) => void) => {
     if (folderName.trim() === '') {
-      return $gettext('Folder name cannot be empty')
+      return setError($gettext('Folder name cannot be empty'))
     }
 
     if (/[/]/.test(folderName)) {
-      return $gettext('Folder name cannot contain "/"')
+      return setError($gettext('Folder name cannot contain "/"'))
     }
 
     if (folderName === '.') {
-      return $gettext('Folder name cannot be equal to "."')
+      return setError($gettext('Folder name cannot be equal to "."'))
     }
 
     if (folderName === '..') {
-      return $gettext('Folder name cannot be equal to ".."')
+      return setError($gettext('Folder name cannot be equal to ".."'))
     }
 
     const exists = unref(files).find((file) => file.name === folderName)
 
     if (exists) {
-      return $gettext('%{name} already exists', { name: folderName }, true)
+      return setError($gettext('%{name} already exists', { name: folderName }, true))
     }
 
-    return null
+    return setError(null)
   }
 
   const loadIndicatorsForNewFile = computed(() => {
     return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
   })
 
-  const addNewFolder = async (folderName) => {
+  const addNewFolder = async (folderName: string) => {
     folderName = folderName.trimEnd()
 
     try {
@@ -74,7 +76,6 @@ export const useFileActionsCreateNewFolder = ({
       }
 
       store.commit('Files/UPSERT_RESOURCE', resource)
-      store.dispatch('hideModal')
 
       store.dispatch('showMessage', {
         title: $gettext('"%{folderName}" was created successfully', { folderName })
@@ -92,33 +93,21 @@ export const useFileActionsCreateNewFolder = ({
   }
 
   const handler = () => {
-    const checkInputValue = (value) => {
-      store.dispatch('setModalInputErrorMessage', checkNewFolderName(value))
-    }
     let defaultName = $gettext('New folder')
 
     if (unref(files).some((f) => f.name === defaultName)) {
       defaultName = resolveFileNameDuplicate(defaultName, '', unref(files))
     }
 
-    const inputSelectionRange = null
-
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Create a new folder'),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Create'),
       hasInput: true,
       inputValue: defaultName,
       inputLabel: $gettext('Folder name'),
-      inputError: checkNewFolderName(defaultName),
-      inputSelectionRange,
-      onCancel: () => store.dispatch('hideModal'),
       onConfirm: addNewFolder,
-      onInput: checkInputValue
-    }
-
-    store.dispatch('createModal', modal)
+      onInput: checkNewFolderName
+    })
   }
 
   const actions = computed((): FileAction[] => {

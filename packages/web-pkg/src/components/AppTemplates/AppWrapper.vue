@@ -51,7 +51,8 @@ import {
   useRouteQuery,
   useStore,
   useSelectedResources,
-  useSideBar
+  useSideBar,
+  useModals
 } from '../../composables'
 import {
   Action,
@@ -108,6 +109,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { getResourceContext } = useGetResourceContext()
     const { selectedResources } = useSelectedResources({ store })
+    const { dispatchModal } = useModals()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -412,7 +414,7 @@ export default defineComponent({
 
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
-        const modal = {
+        dispatchModal({
           variation: 'danger',
           icon: 'warning',
           title: $gettext('Unsaved changes'),
@@ -420,16 +422,13 @@ export default defineComponent({
           cancelText: $gettext("Don't Save"),
           confirmText: $gettext('Save'),
           onCancel() {
-            store.dispatch('hideModal')
             next()
           },
           async onConfirm() {
             await save()
-            store.dispatch('hideModal')
             next()
           }
-        }
-        store.dispatch('createModal', modal)
+        })
       } else {
         next()
       }

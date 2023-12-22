@@ -9,7 +9,6 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { createCustomThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -175,11 +174,9 @@ const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = f
       provide: mocks,
       renderStubDefaultSlot: true,
       plugins: [
-        ...defaultPlugins(),
-        store,
-        createCustomThemeStore({
-          initialState: {
-            theme: {
+        ...defaultPlugins({
+          piniaOptions: {
+            themeState: {
               currentTheme: {
                 common: {
                   urls: {
@@ -190,7 +187,8 @@ const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = f
               }
             }
           }
-        })
+        }),
+        store
       ],
       stubs: {
         ...defaultStubs,

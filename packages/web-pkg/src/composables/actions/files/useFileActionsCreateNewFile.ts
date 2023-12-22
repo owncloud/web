@@ -21,6 +21,7 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'
+import { useModals } from '../../piniaStores'
 
 export const useFileActionsCreateNewFile = ({
   store,
@@ -37,6 +38,7 @@ export const useFileActionsCreateNewFile = ({
   const router = useRouter()
   const { $gettext } = useGettext()
   const { makeRequest } = useRequest()
+  const { dispatchModal } = useModals()
 
   const { openEditor, triggerDefaultAction } = useFileActions()
   const clientService = useClientService()
@@ -49,7 +51,7 @@ export const useFileActionsCreateNewFile = ({
 
   const capabilities = computed(() => store.getters['capabilities'])
 
-  const checkNewFileName = (fileName) => {
+  const getNameErrorMsg = (fileName: string) => {
     if (fileName === '') {
       return $gettext('File name cannot be empty')
     }
@@ -79,7 +81,7 @@ export const useFileActionsCreateNewFile = ({
     return null
   }
 
-  const addAppProviderFileFunc = async (fileName) => {
+  const addAppProviderFileFunc = async (fileName: string) => {
     // FIXME: this belongs in web-app-external, but the app provider handles file creation differently than other editor extensions. Needs more refactoring.
     if (fileName === '') {
       return
@@ -107,7 +109,6 @@ export const useFileActionsCreateNewFile = ({
       }
       triggerDefaultAction({ space: space, resources: [resource] })
       store.commit('Files/UPSERT_RESOURCE', resource)
-      store.dispatch('hideModal')
       store.dispatch('showMessage', {
         title: $gettext('"%{fileName}" was created successfully', { fileName })
       })
@@ -150,12 +151,10 @@ export const useFileActionsCreateNewFile = ({
           EDITOR_MODE_CREATE,
           space.shareId
         )
-        store.dispatch('hideModal')
 
         return
       }
 
-      store.dispatch('hideModal')
       store.dispatch('showMessage', {
         title: $gettext('"%{fileName}" was created successfully', { fileName })
       })
@@ -173,12 +172,6 @@ export const useFileActionsCreateNewFile = ({
     extension: string,
     openAction: any // FIXME: type?
   ) => {
-    const checkInputValue = (value) => {
-      store.dispatch(
-        'setModalInputErrorMessage',
-        checkNewFileName(areFileExtensionsShown.value ? value : `${value}.${extension}`)
-      )
-    }
     let defaultName = $gettext('New file') + `.${extension}`
 
     if (unref(files).some((f) => f.name === defaultName)) {
@@ -191,21 +184,15 @@ export const useFileActionsCreateNewFile = ({
 
     const inputSelectionRange = !areFileExtensionsShown.value
       ? null
-      : [0, defaultName.length - (extension.length + 1)]
+      : ([0, defaultName.length - (extension.length + 1)] as [number, number])
 
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Create a new file'),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Create'),
       hasInput: true,
       inputValue: defaultName,
       inputLabel: $gettext('File name'),
-      inputError: checkNewFileName(
-        areFileExtensionsShown.value ? defaultName : `${defaultName}.${extension}`
-      ),
       inputSelectionRange,
-      onCancel: () => store.dispatch('hideModal'),
       onConfirm: (fileName: string) => {
         if (!areFileExtensionsShown.value) {
           fileName = `${fileName}.${extension}`
@@ -217,10 +204,9 @@ export const useFileActionsCreateNewFile = ({
 
         return addNewFile(fileName, openAction)
       },
-      onInput: checkInputValue
-    }
-
-    store.dispatch('createModal', modal)
+      onInput: (name, setError) =>
+        setError(getNameErrorMsg(areFileExtensionsShown.value ? name : `${name}.${extension}`))
+    })
   }
 
   const actions = computed((): FileAction[] => {
@@ -261,7 +247,7 @@ export const useFileActionsCreateNewFile = ({
 
   return {
     actions,
-    checkNewFileName,
+    getNameErrorMsg,
     addNewFile
   }
 }

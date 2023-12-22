@@ -1,4 +1,5 @@
 import { useSpaceActionsEditReadmeContent } from '../../../../../src/composables/actions'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
 import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
@@ -75,9 +76,10 @@ describe('editReadmeContent', () => {
   describe('method "handler"', () => {
     it('creates a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [mock<SpaceResource>()] })
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

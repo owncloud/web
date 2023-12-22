@@ -95,7 +95,8 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingCanDenyAccess,
-  useGetMatchingSpace
+  useGetMatchingSpace,
+  useModals
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -128,6 +129,7 @@ export default defineComponent({
     const store = useStore()
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { dispatchModal } = useModals()
 
     const resource = inject<Ref<Resource>>('resource')
 
@@ -180,7 +182,8 @@ export default defineComponent({
       hasResharing: useCapabilityFilesSharingResharing(),
       hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
       getSharedAncestor,
-      configurationManager
+      configurationManager,
+      dispatchModal
     }
   },
   computed: {
@@ -296,7 +299,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['deleteShare', 'addShare']),
-    ...mapActions(['createModal', 'hideModal', 'showMessage', 'showErrorMessage']),
+    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     getDeniedShare(collaborator: Share): Share {
@@ -431,18 +434,14 @@ export default defineComponent({
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
-      const modal = {
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Remove share'),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Remove'),
         message: this.$gettext('Are you sure you want to remove this share?'),
         hasInput: false,
-        onCancel: this.hideModal,
         onConfirm: () => this.$_ocCollaborators_deleteShare(share)
-      }
-
-      this.createModal(modal)
+      })
     },
 
     async $_ocCollaborators_deleteShare(share) {
@@ -464,7 +463,6 @@ export default defineComponent({
           loadIndicators
         })
 
-        this.hideModal()
         this.showMessage({
           title: this.$gettext('Share was removed successfully')
         })

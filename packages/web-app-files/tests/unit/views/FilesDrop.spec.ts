@@ -10,7 +10,6 @@ import {
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 describe('FilesDrop view', () => {
   describe('different files view states', () => {
@@ -45,7 +44,7 @@ function getMountedWrapper() {
     storeOptions,
     wrapper: mount(FilesDrop, {
       global: {
-        plugins: [...defaultPlugins(), store, createMockThemeStore()],
+        plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: defaultStubs
