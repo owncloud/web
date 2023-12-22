@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia'
 import { useStore, usePublicLinkContext, useThemeStore, useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
-import { computed, unref } from 'vue'
+import { computed, nextTick, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import type { UppyService } from '@ownclouders/web-pkg'
 import '@uppy/dashboard/dist/style.min.css'
@@ -56,7 +56,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
     removeUppyPlugins()
   })
 
-  const handler = () => {
+  const handler = async () => {
     const renderDarkTheme = currentTheme.value.isDark
 
     dispatchModal({
@@ -66,6 +66,8 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
         removeUppyPlugins()
       }
     })
+
+    await nextTick()
 
     uppyService.addPlugin(Dashboard, {
       uppyService,
