@@ -42,6 +42,7 @@ Summary
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -424,6 +425,18 @@ Details
 
    https://github.com/owncloud/web/pull/10102
    https://github.com/owncloud/web/pull/10223
+
+* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+
+   BREAKING CHANGE for developers: The way how to work with modals has been
+   reworked. Modals can now be registered via the `dispatchModal` method provided
+   by the `useModals` composable, instead of calling `createModal` or `hideModal`
+   from the store.
+
+   For more details on how to use the modal please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10095
+   https://github.com/owncloud/web/pull/10212
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
