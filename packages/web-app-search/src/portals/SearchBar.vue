@@ -358,29 +358,9 @@ export default defineComponent({
     },
     $route: {
       handler(r) {
-        const currentFolderAvailable =
-          (isLocationSpacesActive(this.$router, 'files-spaces-generic') ||
-            !!this.scopeQueryValue) &&
-          !isLocationSpacesActive(this.$router, 'files-spaces-projects')
-        if (this.currentFolderAvailable !== currentFolderAvailable) {
-          this.currentFolderAvailable = currentFolderAvailable
-        }
-
-        this.$nextTick(() => {
-          if (!this.availableProviders.length) {
-            return
-          }
-          const routeTerm = r?.query?.term
-          const input = this.$el.getElementsByTagName('input')[0]
-          if (!input || !routeTerm) {
-            return
-          }
-          this.loadFromRoute = true
-          this.term = routeTerm
-          input.value = routeTerm
-        })
+        this.parseRouteQuery(r)
       },
-      immediate: true
+      immediate: false
     }
   },
   created() {
@@ -389,6 +369,7 @@ export default defineComponent({
     this.clearTermEvent = eventBus.subscribe('app.search.term.clear', () => {
       this.term = ''
     })
+    this.parseRouteQuery(this.$route, true)
   },
 
   beforeUnmount() {
@@ -447,6 +428,28 @@ export default defineComponent({
 
       return createLocationCommon('files-common-search', {
         query: { ...(currentQuery && { ...currentQuery }), term: this.term, provider: provider.id }
+      })
+    },
+    parseRouteQuery(route, initialLoad = false) {
+      const currentFolderAvailable =
+        (isLocationSpacesActive(this.$router, 'files-spaces-generic') || !!this.scopeQueryValue) &&
+        !isLocationSpacesActive(this.$router, 'files-spaces-projects')
+      if (this.currentFolderAvailable !== currentFolderAvailable) {
+        this.currentFolderAvailable = currentFolderAvailable
+      }
+
+      this.$nextTick(() => {
+        if (!this.availableProviders.length) {
+          return
+        }
+        const routeTerm = route?.query?.term
+        const input = this.$el.getElementsByTagName('input')[0]
+        if (!input || !routeTerm) {
+          return
+        }
+        this.loadFromRoute = initialLoad
+        this.term = routeTerm
+        input.value = routeTerm
       })
     },
     getMoreResultsDetailsTextForProvider(provider) {
