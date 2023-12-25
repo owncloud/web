@@ -14,7 +14,7 @@ geekdocCollapseSection: true
 
 By providing your own theme, you can customize the user experience for your own ownCloud installation. This is being achieved by providing a `json` file that contains text snippets (like brand name and slogan), paths to images (e.g. logos or favicon) and design tokens for various color, sizing and spacing parameters.
 
-This page documents the setup and configuration options, and provides a template for you to get started.
+This page documents the setup and configuration options, and provides an empty template for you to get started.
 
 ## Ways of providing a theme
 
@@ -25,137 +25,60 @@ To reference your theme, you have two options:
 - Using a URL, e.g. `"theme": "https://externalurl.example.com/theme-name/theme.json",`. To avoid CORS issues, please make sure that you host the URL on the same URL as your ownCloud web hosting.
 - For development and testing purposes, you can store your `theme.json` inside `packages/web-runtime/themes/{theme-name}/` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS or the `web` app in OC10.
 
-**Hint:** If no theme is provided, the loading of your custom theme fails or the theme can't be parsed correctly, the standard ownCloud theme will be loaded as a fallback and an error with further information will be logged on the browser console.
+**Hint:** If no theme is provided or the loading of your custom theme fails, the standard ownCloud theme will be loaded as a fallback. However, this doesn't stop you from correctly loading a theme that is wrongly formatted, so please read the instructions below carefully.
 
 ## Configuring a theme
 
-Inside your `theme.json`, there is a `common` key, which is explained in the next section, and a `clients` key: Here, you can find the available ownCloud clients - please note that the documentation below focuses on `web` and check the respective documentation for other clients for details on their themability.
+Inside your `theme.json`, you can provide multiple themes as first-level objects. Currently, only the one called `"default"` gets applied when the frontend application is started. In the future, we'll provide functionality to dynamically switch between those themes.
 
-The general top-level structure of a valid `theme.json` is outlined below:
-
-```json
-{
-  "common": {},
-  "clients": {
-    "android": {},
-    "desktop": {},
-    "ios": {},
-    "web": {}
-  }
-}
-```
-
-### Common section
-
-The `common` section provides a set of information that is designed to be available for all clients. It gets merged "down" to the final themes and aims to reduce duplication, but can be overwritten by more specific information inside both the clients' defaults and actual themes.
-
-The structure of a valid `common` section is outlined below:
-
-```json
-"common": {
-  "name": "ownCloud",
-  "slogan": "ownCloud – A safe home for all your data",
-  "logo": "themes/owncloud/assets/logo.svg",
-  "urls": {
-    "accessDeniedHelp": "",
-    "imprint": "",
-    "privacy": ""
-  }
-}
-```
-
-All of the below parameters are required:
-- `name` specifies the publicly visible name
-- `slogan` specifies the publicly visible slogan
-- `logo` specifies the logo in e.g. the top bar within the web UI
-- `accessDeniedHelp` specifies the target URL for the access denied help link
-- `imprintUrl` specifies the target URL for the imprint link
-- `privacyUrl` specifies the target URL for the privacy link
-
-### Web Theme
-
-The structure of a valid `web` client section is outlined below:
+You can use the snippet below as a base for writing your own theme by replacing the strings and image file paths accordingly. Also, make sure to delete the comments from the file.
 
 ```json
 {
+  "common": {
+    "name": "ownCloud",
+    "slogan": "ownCloud – A safe home for all your data",
+    "logo": "themes/owncloud/assets/logo.svg"
+  },
+  "ios": {},
   "web": {
-    "defaults": {
-      "appBanner": {
-        // Please see below for details
-      },
-      "common": {
-        // Please see top level "common" section for details
+    "default": {
+      "general": {
+        "name": "ownCloud",
+        "slogan": "ownCloud – A safe home for all your data"
       },
       "logo": {
-        // Please see below for details
+        "topbar": "https://externalurl.example.com/url/for/remote/theme/assets/logo.svg",
+        "favicon": "https://externalurl.example.com/url/for/remote/theme/assets/favicon.jpg",
+        "login": "relative/path/for/local/theme/logo.svg"
       },
       "loginPage": {
-        // Please see below for details
+        "autoRedirect": true,
+        "backgroundImg": "relative/path/for/local/theme/background.jpg"
       },
-      "designTokens": {
-        // Please see below for details
-      }
+      "designTokens": {}
     },
-    "themes": [
-      // Your custom web themes go here, see below for details
-    ]
+    "alternative": {},
+    "dark": {}
   }
 }
 ```
 
-#### The "defaults"
+See below for the meaning of all the first-level objects inside a single theme and recommendations on how to make best use of them:
 
-Similar to the top level `common` section, this object contains information that shall be shared among the available themes and can/should be defined only once. The top level `common` section first gets merged into the `defaults`, which then get merged into the individual themes.
+## The "general" options
 
-##### The "appBanner" options
+Here, you can specify a `"name"` and a `"slogan"` string. The name gets used in the HTML page `<title>`, and both of them are shown on various screens (e.g. login, loading, error and public share pages).
 
-Configures a app banner that gets shown on mobile devices and suggests downloading the native client from the respective app store. Omitting the key disables the banner.
+## The "logo" options
 
-Example structure:
+Here, you can specify the images to be used in the `"topbar"`, for the `"favicon"` and on the `"login"` page. Various formats are supported and it's up to you to decide which one fits best to your use case.
 
-```json 
-{
-  "appBanner": {
-    "title": "ownCloud",
-    "publisher": "ownCloud GmbH",
-    "additionalInformation": "",
-    "ctaText": "OPEN",
-    "icon": "themes/owncloud/assets/owncloud-app-icon.png",
-    "appScheme": "owncloud"
-  }
-}
-```
-
-- `title` is usually your app's name as shown in the App Store or Google Play. `publisher` is the app developer's name.
-- `additionalInformation` can be used to specify pricing information, such as "FREE" or a catchphrase like "Don't miss out on our awesome app!".
-- `ctaText` refers to the text in the call to action button on the right side. The `icon` directive may be used to specify your own app icon.
-- `icon` links the icon to be displayed as a preview for the final app icon within the app banner
-- `appScheme` is the first part of the URL that is used to tell the mobile OS which app to open, so using `ownCloud` will generate links such as `owncloud://yourdomain.com/f/2b61b822...`.
-
-##### The "logo" options
-
-Here, you can specify the images to be used in the `"topbar"`, for the `"favicon"` and on the `"login"` page. Various formats are supported and it's up to you to decide which one fits your use case best.
-
-```json
-"logo": {
-  "topbar": "themes/owncloud/assets/logo.svg",
-  "favicon": "themes/owncloud/assets/favicon.jpg",
-  "login": "themes/owncloud/assets/logo.svg"
-},
-```
-
-##### The "loginPage" options
+## The "loadingPage" options
 
 Using the `"autoRedirect"` boolean, you can specify whether the user is shown a login page before possible getting redirected to your LDAP/OIDC/OAuth provider. If it is set to true, you can set the background image for said login page by providing an image file in the `"backgroundImg"` option.
 
-```json
-"loginPage": {
-  "autoRedirect": true,
-  "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
-},
-```
-
-##### The "designTokens" options
+## Design Tokens
 
 To further customize your ownCloud instance, you can provide your own styles. To give you an idea of how a working design system looks like, feel free to head over to the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) for inspiration.
 
@@ -164,27 +87,32 @@ To further customize your ownCloud instance, you can provide your own styles. To
 In general, the theme loader looks for a `designTokens` key inside your theme configuration. Inside the `designTokens`, it expects to find a `colorPalette`, `fontSizes` and `spacing` collection. The structure is outlined below:
 
 ```json
-"designTokens": {
-  "breakpoints": {
-    // Please see below for details
-  },
-  "colorPalette": {
-    // Please see below for details
-  },
-  "fontFamily": "", // Please see below for details
-  "fontSizes": {
-    // Please see below for details
-  },
-  "sizes": {
-    // Please see below for details
-  },
-  "spacing": {
-    // Please see below for details
+{
+  "common": {},
+  "ios": {},
+  "web": {
+    "default": {
+      "general": {},
+      "designTokens": {
+        "breakpoints": {},
+        "colorPalette": {},
+        "fontFamily": "",
+        "fontSizes": {},
+        "sizes": {},
+        "spacing": {}
+      }
+    }
   }
 }
 ```
 
-###### Breakpoints
+Please follow this structure to make sure your theming configuration can be loaded correctly.
+
+### Extendability
+
+If you define different key-value pairs inside any of the objects in `"designTokens"`, they will get loaded and initialized as CSS custom properties but don't take any effect in the user interface. This gives you an opportunity to, for example, customize extensions from within the theme in the web runtime (and not the extension itself).
+
+### Breakpoints
 
 If you'd like to set different breakpoints than the default ones in the ownCloud design system, you can set them using theming variables.
 
@@ -205,7 +133,7 @@ Breakpoint variables get prepended with `--oc-breakpoint-`, so e.g. _"large-defa
 }
 ```
 
-###### Colors
+### Colors
 
 For the color values, you can use any valid CSS color format, e.g. **hex** (#fff), **rgb** (rgb(255,255,255)) or **color names** (white).
 
@@ -263,7 +191,7 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
 }
 ```
 
-###### Font sizes
+### Font sizes
 
 You can change the `default`, `large` and `medium` font sizes according to your needs. If you need more customization options regarding font sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
@@ -279,7 +207,7 @@ Font size variables get prepended with `--oc-font-size-`, so e.g. _"default"_ cr
 }
 ```
 
-###### Font family
+### Font family
 
 You can change the font family according to your needs. The font family gets written into the `--oc-font-family` CSS variable.
 
@@ -291,7 +219,7 @@ You can change the font family according to your needs. The font family gets wri
 
 Please note that you also need to make the font available as a `font-face` via CSS.
 
-###### Sizes
+### Sizes
 
 Use sizing variables to change various UI elements, such as icon and logo appearance, table row or checkbox sizes, according to your needs.
 If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
@@ -312,7 +240,7 @@ Size variables get prepended with `--oc-size-`, so e.g. _"icon-default"_ creates
 }
 ```
 
-###### Spacing
+### Spacing
 
 Use the six spacing options (`xsmall | small | medium | large | xlarge | xxlarge`) to create a more (or less) condensed version of the user interface. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
@@ -331,243 +259,110 @@ Spacing variables get prepended with `--oc-space-`, so e.g. _"xlarge"_ creates t
 }
 ```
 
-#### Actual Themes
-
-Apart from the `defaults`, you need to provide one or more themes in the `themes` key within the `web`-`clients` in your `theme.json`. As a reminder, the general structure should be:
-
-```json
-{
-  "common": { ... },
-  "clients": {
-    ...,
-    "web": {
-      "defaults": {
-        ...
-      },
-      "themes": [
-        {
-          "isDark": false,
-          "name": "Light Theme",
-        }
-      ]
-    }
-  }
-}
-```
-
-Again, both the global `common` section as well as the `defaults` will get merged into your themes, but locally provided information takes precedence.
-
-Required information
-- `name` for the visible name in the theme switcher and to save the current theme to localStorage
-- `isDark` to provide the user agent with additional information
-
-Optional information
-- `appBanner` see section above
-- `common` see section above
-- `designTokens` see section above
-- `logo` see section above
-- `loginPage` see section above
-
-## Extendability
-
-If you define different key-value pairs inside any of the objects (`breakpoints`, `colorPalette`, `fontSizes`, `sizes`, `spacing`) in `"designTokens"`, they will get loaded and initialized as CSS custom properties but don't necessarily take any effect in the user interface. This gives you an opportunity to, for example, customize extensions from within the theme in the web runtime (and not the extension itself).
-
 ## Example theme
 
-A full template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs:
+An empty template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs. Please note that since changing themes at runtime is not yet supported it only consists of a `default` theme.
 
 ```json
 {
   "common": {
-    "name": "ownCloud",
-    "slogan": "ownCloud – A safe home for all your data",
-    "logo": "themes/owncloud/assets/logo.svg",
-    "urls": {
-      "accessDeniedHelp": "",
-      "imprint": "",
-      "privacy": ""
-    }
+    "name": "",
+    "slogan": "",
+    "logo": ""
   },
-  "clients": {
-    "android": {},
-    "desktop": {},
-    "ios": {},
-    "web": {
-      "defaults": {
-        "logo": {
-          "topbar": "themes/owncloud/assets/logo.svg",
-          "favicon": "themes/owncloud/assets/favicon.jpg",
-          "login": "themes/owncloud/assets/logo.svg"
-        },
-        "loginPage": {
-          "autoRedirect": true,
-          "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
-        },
-        "designTokens": {
-          "breakpoints": {
-            "xsmall-max": "",
-            "small-default": "",
-            "small-max": "",
-            "medium-default": "",
-            "medium-max": "",
-            "large-default": "",
-            "large-max": "",
-            "xlarge": ""
-          },
-          "fontSizes": {
-            "default": "",
-            "large": "",
-            "medium": ""
-          },
-          "sizes": {
-            "form-check-default": "",
-            "height-small": "",
-            "height-table-row": "",
-            "icon-default": "",
-            "max-height-logo": "",
-            "max-width-logo": "",
-            "width-medium": ""
-          },
-          "spacing": {
-            "xsmall": "",
-            "small": "",
-            "medium": "",
-            "large": "",
-            "xlarge": "",
-            "xxlarge": ""
-          }
-        }
+  "ios": {},
+  "web": {
+    "default": {
+      "general": {
+        "name": "",
+        "slogan": ""
       },
-      "themes": [
-        {
-          "isDark": false,
-          "name": "Light Theme",
-          "designTokens": {
-            "colorPalette": {
-              "background-accentuate": "rgba(255, 255, 5, 0.1)",
-              "background-default": "#ffffff",
-              "background-highlight": "#edf3fa",
-              "background-muted": "#f8f8f8",
-              "background-secondary": "#ffffff",
-              "background-hover": "rgb(236, 236, 236)",
-              "color-components-apptopbar-background": "transparent",
-              "color-components-apptopbar-border": "#ceddee",
-              "border": "#ecebee",
-              "input-bg": "#ffffff",
-              "input-border": "#ceddee",
-              "input-text-default": "#041e42",
-              "input-text-muted": "#4c5f79",
-              "swatch-brand-default": "#041e42",
-              "swatch-brand-hover": "#223959",
-              "swatch-brand-contrast": "#ffffff",
-              "swatch-danger-contrast": "#ffffff",
-              "swatch-danger-default": "rgb(197, 48, 48)",
-              "swatch-danger-hover": "#b12b2b",
-              "swatch-danger-muted": "rgb(204, 117, 117)",
-              "swatch-inverse-default": "#ffffff",
-              "swatch-inverse-hover": "#ffffff",
-              "swatch-inverse-muted": "#bfbfbf",
-              "swatch-passive-default": "#4c5f79",
-              "swatch-passive-hover": "#43536b",
-              "swatch-passive-hover-outline": "#f7fafd",
-              "swatch-passive-muted": "#283e5d",
-              "swatch-passive-contrast": "#ffffff",
-              "swatch-primary-default": "#4a76ac",
-              "swatch-primary-hover": "#80a7d7",
-              "swatch-primary-muted": "#2c588e",
-              "swatch-primary-muted-hover": "rgb(36, 75, 119)",
-              "swatch-primary-gradient": "#4e85c8",
-              "swatch-primary-gradient-hover": "rgb(59, 118, 194)",
-              "swatch-primary-contrast": "#ffffff",
-              "swatch-success-default": "rgb(3, 84, 63)",
-              "swatch-success-hover": "#023b2c",
-              "swatch-success-muted": "rgb(83, 150, 10)",
-              "swatch-success-contrast": "#ffffff",
-              "swatch-warning-default": "rgb(183, 76, 27)",
-              "swatch-warning-hover": "#a04318",
-              "swatch-warning-muted": "rgba(183, 76, 27, .5)",
-              "swatch-warning-contrast": "#ffffff",
-              "text-default": "#041e42",
-              "text-inverse": "#ffffff",
-              "text-muted": "#4c5f79",
-              "icon-folder": "#4d7eaf",
-              "icon-archive": "#fbbe54",
-              "icon-image": "#ee6b3b",
-              "icon-spreadsheet": "#15c286",
-              "icon-document": "#3b44a6",
-              "icon-video": "#045459",
-              "icon-audio": "#700460",
-              "icon-presentation": "#ee6b3b",
-              "icon-pdf": "#ec0d47"
-            }
-          }
+      "logo": {
+        "topbar": "",
+        "favicon": "",
+        "login": ""
+      },
+      "loginPage": {
+        "autoRedirect": true,
+        "backgroundImg": ""
+      },
+      "designTokens": {
+        "breakpoints": {
+          "xsmall-max": "",
+          "small-default": "",
+          "small-max": "",
+          "medium-default": "",
+          "medium-max": "",
+          "large-default": "",
+          "large-max": "",
+          "xlarge": ""
         },
-        {
-          "isDark": true,
-          "name": "Dark Theme",
-          "designTokens": {
-            "colorPalette": {
-              "background-accentuate": "#696969",
-              "background-default": "#292929",
-              "background-highlight": "#383838",
-              "background-muted": "#383838",
-              "background-secondary": "#4f4f4f",
-              "background-hover": "#383838",
-              "color-components-apptopbar-background": "transparent",
-              "color-components-apptopbar-border": "#ceddee",
-              "border": "#383838",
-              "input-bg": "#4f4f4f",
-              "input-border": "#696969",
-              "input-text-default": "#dadcdf",
-              "input-text-muted": "#bdbfc3",
-              "swatch-brand-default": "#212121",
-              "swatch-brand-hover": "#ffffff",
-              "swatch-brand-contrast": "#dadcdf",
-              "swatch-inverse-default": "",
-              "swatch-inverse-hover": "",
-              "swatch-inverse-muted": "#696969",
-              "swatch-passive-default": "#c2c2c2",
-              "swatch-passive-hover": "",
-              "swatch-passive-hover-outline": "#3B3B3B",
-              "swatch-passive-muted": "#bdbfc3",
-              "swatch-passive-contrast": "#000000",
-              "swatch-primary-default": "#73b0f2",
-              "swatch-primary-hover": "#7bafef",
-              "swatch-primary-muted": "",
-              "swatch-primary-muted-hover": "#2282f7",
-              "swatch-primary-gradient": "#4e85c8",
-              "swatch-primary-gradient-hover": "#76a1d5",
-              "swatch-primary-contrast": "#dadcdf",
-              "swatch-success-background": "rgba(0, 188, 140, 0)",
-              "swatch-success-default": "rgb(0, 188, 140)",
-              "swatch-success-hover": "#00f0b4",
-              "swatch-success-muted": "rgba(0, 188, 140, .5)",
-              "swatch-success-contrast": "#000000",
-              "swatch-warning-background": "rgba(0,0,0,0)",
-              "swatch-warning-default": "rgb(232, 191, 73)",
-              "swatch-warning-hover": "#eed077",
-              "swatch-warning-muted": "rgba(232, 178, 19, .5)",
-              "swatch-danger-default": "rgb(255, 72, 53)",
-              "swatch-danger-hover": "#ff7566",
-              "swatch-danger-muted": "rgba(255, 72, 53, .5)",
-              "swatch-danger-contrast": "#dadcdf",
-              "swatch-warning-contrast": "#000000",
-              "text-default": "#dadcdf",
-              "text-inverse": "#000000",
-              "text-muted": "#c2c2c2",
-              "icon-folder": "rgb(44, 101, 255)",
-              "icon-archive": "rgb(255, 207, 1)",
-              "icon-image": "rgb(255, 111, 0)",
-              "icon-spreadsheet": "rgb(0, 182, 87)",
-              "icon-document": "rgb(44, 101, 255)",
-              "icon-video": "rgb(0, 187, 219)",
-              "icon-audio": "rgb(208, 67, 236)",
-              "icon-presentation": "rgb(255, 64, 6)",
-              "icon-pdf": "rgb(225, 5, 14)"
-            }
-          }
+        "colorPalette": {
+          "background-accentuate": "",
+          "background-default": "",
+          "background-highlight": "",
+          "background-muted": "",
+          "border": "",
+          "input-bg": "",
+          "input-border": "",
+          "input-text-default": "",
+          "input-text-muted": "",
+          "swatch-brand-default": "",
+          "swatch-brand-hover": "",
+          "swatch-brand-muted": "",
+          "swatch-brand-contrast": "",
+          "swatch-danger-default": "",
+          "swatch-danger-hover": "",
+          "swatch-danger-muted": "",
+          "swatch-danger-contrast": "",
+          "swatch-inverse-default": "",
+          "swatch-inverse-hover": "",
+          "swatch-inverse-muted": "",
+          "swatch-passive-default": "",
+          "swatch-passive-hover": "",
+          "swatch-passive-muted": "",
+          "swatch-passive-contrast": "",
+          "swatch-primary-default": "",
+          "swatch-primary-hover": "",
+          "swatch-primary-muted": "",
+          "swatch-primary-gradient": "",
+          "swatch-primary-contrast": "",
+          "swatch-success-default": "",
+          "swatch-success-hover": "",
+          "swatch-success-muted": "",
+          "swatch-success-contrast": "",
+          "swatch-warning-default": "",
+          "swatch-warning-hover": "",
+          "swatch-warning-muted": "",
+          "swatch-warning-contrast": "",
+          "text-default": "",
+          "text-inverse": "",
+          "text-muted": ""
+        },
+        "fontSizes": {
+          "default": "",
+          "large": "",
+          "medium": ""
+        },
+        "fontFamily": "",
+        "sizes": {
+          "form-check-default": "",
+          "height-small": "",
+          "height-table-row": "",
+          "icon-default": "",
+          "max-height-logo": "",
+          "max-width-logo": "",
+          "width-medium": ""
+        },
+        "spacing": {
+          "xsmall": "",
+          "small": "",
+          "medium": "",
+          "large": "",
+          "xlarge": "",
+          "xxlarge": ""
         }
-      ]
+      }
     }
   }
 }
