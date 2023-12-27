@@ -1,6 +1,5 @@
 const path = require('path')
 const baseConfig = require('../build/webpack.base.conf.js')
-const { merge } = require('webpack-merge')
 const packageConfig = require('../package.json')
 const chalk = require('chalk')
 
@@ -9,6 +8,8 @@ module.exports = {
    * Name of your design system. Changes both page title and sidebar logo.
    */
   title: 'ownCloud Design System',
+  require: [path.join(__dirname, '../docs/docs.styles.scss')],
+  webpackConfig: baseConfig,
   /**
    * Most of the styles are defined in /docs/docs.styles.scss
    */
@@ -21,7 +22,6 @@ module.exports = {
       monospace: ['Consolas', "'Liberation Mono'", 'Menlo', 'monospace']
     }
   },
-  renderRootJsx: path.join(__dirname, '../docs/components/Preview.js'),
   /**
    * Define a custom code highlighting theme.
    */
@@ -40,10 +40,10 @@ module.exports = {
   /**
    * We’re defining below JS and SCSS requires for the documentation.
    */
-  require: [
-    path.join(__dirname, '../docs/docs.helper.js'),
-    path.join(__dirname, '../docs/docs.styles.scss')
-  ],
+  // require: [
+  // path.join(__dirname, '../docs/docs.helper.js'),
+
+  // ],
   /**
    * Enabling the following option splits sections into separate views.
    */
@@ -52,12 +52,10 @@ module.exports = {
     {
       name: 'Getting Started',
       content: '../docs/getting-started.md',
-      // Needs to be loaded in somewhere as this is also shown in
-      // components overviews.
-      components: '../docs/components/status/**/[A-Z]*.vue',
       sectionDepth: 1,
       exampleMode: 'hide',
-      usageMode: 'hide'
+      usageMode: 'hide',
+      components: ['../docs/components/status/ComponentsList.vue']
     },
     {
       name: 'Design Principles',
@@ -209,34 +207,6 @@ module.exports = {
     '**/*.spec.js',
     '**/*.spec.jsx'
   ],
-  webpackConfig: merge(baseConfig, {
-    module: {
-      rules: [
-        {
-          test: /\.(css?|scss|sass)(\?.*)?$/,
-          use: [
-            'style-loader',
-            'css-loader',
-            'postcss-loader',
-            'sass-loader',
-            {
-              loader: 'sass-resources-loader',
-              options: {
-                resources: [
-                  path.join(__dirname, '../src/assets/tokens/docs.scss'),
-                  path.join(__dirname, '../src/assets/tokens/ods.scss'),
-                  path.join(__dirname, '../docs/docs.mixins.scss'),
-                  path.join(__dirname, '../docs/docs.functions.scss'),
-                  path.join(__dirname, '../docs/docs.spacing.scss'),
-                  path.join(__dirname, '../src/styles/styles.scss')
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
-  }),
   styleguideDir: '../dist/docs',
   printServerInstructions() {},
   printBuildInstructions(config) {

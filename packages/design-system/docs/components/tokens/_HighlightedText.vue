@@ -1,11 +1,13 @@
 <template>
   <component :is="tag">
     <template v-for="(fragments, lineIndex) in lines">
-      <template v-for="(fragment, fragmentIndex) in fragments">
+      <span
+        v-for="(fragment, fragmentIndex) in fragments"
+        :key="'line-' + lineIndex + '-fragment-' + fragmentIndex"
+      >
         <!-- eslint-disable vue/no-v-for-template-key-on-child -->
         <component
           :is="fragment.tag"
-          :key="'line-' + lineIndex + '-fragment-' + fragmentIndex"
           :style="{
             display:
               fragment.value.startsWith(' ') || fragment.value.endsWith(' ')
@@ -16,7 +18,7 @@
         >
           {{ fragment.value }}
         </component>
-      </template>
+      </span>
       <br v-if="lineIndex < lines.length - 1" :key="'line-' + lineIndex + '-br'" />
     </template>
   </component>

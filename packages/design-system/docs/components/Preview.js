@@ -1,4 +1,4 @@
-import CodeMirror from 'codemirror'
+import * as CodeMirror from 'codemirror'
 import CodeTabs from '../utils/tabs.js'
 
 function format(node, level) {
