@@ -81,12 +81,6 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.logoutUrl` Adds a link to the user's profile page to point him to an external page, where he can manage his session and devices. This is helpful when an external IdP is used. This option is disabled by default.
 - `options.ocm.openRemotely` Specifies whether opening files in remote shares in their original ocm instance should be enabled. Defaults to `false`.
 - `options.userListRequiresFilter` Defines whether one or more filters must be set in order to list users in the Web admin settings. Set this option to 'true' if running in an environment with a lot of users and listing all users could slow down performance. Defaults to `false`.
-- `options.concurrentRequests` This accepts an object with the following optional fields to customize the maximum number of concurrent requests in code paths where we limit concurrent requests 
-    - `resourceBatchActions` Concurrent number of file/folder/space batch actions like e.g. accepting shares. Defaults to 4.
-    - `sse` Concurrent number of SSE event handlers. Defaults to 4.
-    - `shares` Accepts an object regarding the following sharing related options:
-        - `create` Concurrent number of share invites. Defaults to 4. 
-        - `list` Concurrent number of individually loaded shares. Defaults to 2.
 
 #### Scripts and Styles
 
