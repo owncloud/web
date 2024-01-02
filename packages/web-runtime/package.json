@@ -23,7 +23,7 @@
     "focus-trap-vue": "^4.0.1",
     "fuse.js": "6.6.2",
     "lodash-es": "^4.17.21",
-    "luxon": "3.0.1",
+    "luxon": "3.2.1",
     "marked": "^4.0.12",
     "oidc-client-ts": "^2.1.0",
     "owncloud-sdk": "3.1.0-alpha.10",

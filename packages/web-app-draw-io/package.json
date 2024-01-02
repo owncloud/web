@@ -10,7 +10,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "luxon": "3.0.1",
+    "luxon": "3.2.1",
     "vuex": "4.1.0"
   }
 }

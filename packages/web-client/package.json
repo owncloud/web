@@ -21,7 +21,7 @@
     "axios": "1.6.2",
     "fast-xml-parser": "4.3.2",
     "lodash-es": "^4.17.21",
-    "luxon": "3.0.1",
+    "luxon": "3.2.1",
     "@microsoft/fetch-event-source": "^2.0.1",
     "webdav": "5.3.0",
     "zod": "3.22.4"
