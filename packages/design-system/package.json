@@ -71,7 +71,7 @@
     "jest-axe": "^6.0.0",
     "jest-environment-jsdom": "^29.0.0",
     "jest-serializer-vue": "^2.0.2",
-    "luxon": "3.0.1",
+    "luxon": "3.2.1",
     "mini-css-extract-plugin": "^1.3.1",
     "node-notifier": "^10.0.0",
     "npm": "^8.0.0",

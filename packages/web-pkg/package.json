@@ -36,7 +36,7 @@
     "fuse.js": "6.6.2",
     "js-generate-password": "^0.1.9",
     "lodash-es": "^4.17.21",
-    "luxon": "3.0.1",
+    "luxon": "3.2.1",
     "mark.js": "^8.11.1",
     "p-queue": "^6.6.2",
     "password-sheriff": "^1.1.1",
