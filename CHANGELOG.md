@@ -29,6 +29,7 @@ Summary
 * Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
 * Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
+* Bugfix - Tilesview has whitespace: [#10118](https://github.com/owncloud/web/pull/10118)
 * Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
 * Bugfix - Spaces overview tile previews zoomed: [#10149](https://github.com/owncloud/web/pull/10149)
 * Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
@@ -37,6 +38,8 @@ Summary
 * Bugfix - Turned off file extensions not always respected: [#10176](https://github.com/owncloud/web/pull/10176)
 * Bugfix - Space navigate to trash missing: [#10179](https://github.com/owncloud/web/pull/10179)
 * Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
+* Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
+* Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -100,6 +103,7 @@ Summary
 * Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
+* Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 
 Details
 -------
@@ -279,6 +283,14 @@ Details
    https://github.com/owncloud/web/issues/10084
    https://github.com/owncloud/web/pull/10096
 
+* Bugfix - Tilesview has whitespace: [#10118](https://github.com/owncloud/web/pull/10118)
+
+   We've fixed a bug that caused the tiles-view to have whitespace on the right
+   side of the screen which is not optimal for efficiant space management.
+
+   https://github.com/owncloud/web/issues/10040
+   https://github.com/owncloud/web/pull/10118
+
 * Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
 
    We've fixed a bug where the files list previews in spaces were cropped.
@@ -337,6 +349,22 @@ Details
    sidebar from within a viewer or editor.
 
    https://github.com/owncloud/web/pull/10182
+
+* Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
+
+   An issue where the loading indicator was showing before taking action in the
+   resource conflict dialog has been fixed.
+
+   https://github.com/owncloud/web/issues/10215
+   https://github.com/owncloud/web/pull/10220
+
+* Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
+
+   In order to ease the load on the backend we've introduced config options to
+   limit the number of concurrent requests in certain areas.
+
+   https://github.com/owncloud/web/issues/10227
+   https://github.com/owncloud/web/pull/10230
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
@@ -1005,6 +1033,13 @@ Details
 
    https://github.com/owncloud/web/pull/10111
    https://github.com/owncloud/web/pull/10152
+
+* Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
+
+   We've adjusted the AppSwitcher icon colors to be more inline with the design.
+
+   https://github.com/owncloud/web/issues/10121
+   https://github.com/owncloud/web/pull/10224
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
