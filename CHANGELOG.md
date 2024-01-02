@@ -465,6 +465,7 @@ Details
 
    https://github.com/owncloud/web/issues/10095
    https://github.com/owncloud/web/pull/10212
+   https://github.com/owncloud/web/pull/10239
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
