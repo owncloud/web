@@ -1177,8 +1177,8 @@ importers:
         specifier: ^4.0.12
         version: 4.0.12
       oidc-client-ts:
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.4.0
+        version: 2.4.0
       owncloud-sdk:
         specifier: 3.1.0-alpha.10
         version: 3.1.0-alpha.10(axios@1.6.2)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.0)(xml-js@1.6.11)
@@ -10032,8 +10032,8 @@ packages:
       randomfill: 1.0.4
     dev: true
 
-  /crypto-js@4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
     dev: false
 
   /css-declaration-sorter@6.3.1(postcss@8.4.20):
@@ -16878,11 +16878,11 @@ packages:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
     dev: true
 
-  /oidc-client-ts@2.1.0:
-    resolution: {integrity: sha512-Rmfl/10g7tTLy8cXezn0Ek+Wa3bKwNnW7oRzLB/hU5EK/DC1D/W1d0GCjGf23WYd6b4Ifa8ud/NzgsMOnbNp8Q==}
+  /oidc-client-ts@2.4.0:
+    resolution: {integrity: sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==}
     engines: {node: '>=12.13.0'}
     dependencies:
-      crypto-js: 4.1.1
+      crypto-js: 4.2.0
       jwt-decode: 3.1.2
     dev: false
 
