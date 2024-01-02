@@ -25,7 +25,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "3.0.1",
     "marked": "^4.0.12",
-    "oidc-client-ts": "^2.1.0",
+    "oidc-client-ts": "^2.3.0",
     "owncloud-sdk": "3.1.0-alpha.10",
     "p-queue": "^6.6.2",
     "pinia": "2.1.7",

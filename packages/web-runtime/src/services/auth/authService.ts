@@ -259,7 +259,7 @@ export class AuthService {
 
       const user = await this.userManager.getUser()
       if (user?.expires_in && user.expires_in < -TOKEN_EXPIRY_THRESHOLD) {
-        return this.logoutUser()
+        this.userManager.signoutSilent({ id_token_hint: user.id_token })
       }
 
       await this.userManager.removeUser('authError')
