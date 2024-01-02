@@ -31,7 +31,9 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
-    const triggerQueue = new PQueue({ concurrency: 4 })
+    const triggerQueue = new PQueue({
+      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+    })
     resources.forEach((resource) => {
       triggerPromises.push(
         triggerQueue.add(async () => {

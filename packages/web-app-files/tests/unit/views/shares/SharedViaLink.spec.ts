@@ -15,6 +15,10 @@ import {
 } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/composables')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useFileActions: jest.fn()
+}))
 
 describe('SharedViaLink view', () => {
   it('appBar always present', () => {

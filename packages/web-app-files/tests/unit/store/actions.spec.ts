@@ -8,6 +8,7 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
+import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 jest.mock('@ownclouders/web-client/src/helpers/share/functions', () => {
   return {
@@ -151,10 +152,13 @@ describe('vuex store actions', () => {
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 3 } }])
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 2 } }])
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 4 } }])
+      const configurationManagerMock = mock<ConfigurationManager>()
+      configurationManagerMock.options.concurrentRequests = { shares: { list: 4 } }
       await actions.loadShares(
         { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
+          configurationManager: configurationManagerMock,
           path: '/someFolder/someFile.txt',
           storageId: '1',
           useCached: false
@@ -175,10 +179,13 @@ describe('vuex store actions', () => {
       const loadedShare = { id: 1, outgoing: true, indirect: true, path: '/someFile.txt' }
       stateMock.outgoingShares = [loadedShare]
       const clientMock = mockDeep<OwnCloudSdk>()
+      const configurationManagerMock = mock<ConfigurationManager>()
+      configurationManagerMock.options.concurrentRequests = { shares: { list: 4 } }
       await actions.loadShares(
         { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
+          configurationManager: configurationManagerMock,
           path: '/someFile.txt',
           storageId: '1',
           useCached: true

@@ -152,6 +152,7 @@ import {
   useCapabilityFilesSharingResharingDefault,
   useCapabilityShareJailEnabled,
   useClientService,
+  useConfigurationManager,
   useStore
 } from '@ownclouders/web-pkg'
 
@@ -198,6 +199,7 @@ export default defineComponent({
     const saving = ref(false)
     const savingDelayed = ref(false)
     const notifyEnabled = ref(false)
+    const configurationManager = useConfigurationManager()
 
     watch(saving, (newValue) => {
       if (!newValue) {
@@ -245,6 +247,10 @@ export default defineComponent({
       { prefix: 'sm:', description: 'federated' }
     ]
 
+    const createSharesConcurrentRequests = computed(() => {
+      return configurationManager.options.concurrentRequests.shares.create
+    })
+
     return {
       resource: inject<Resource>('resource'),
       hasResharing: useCapabilityFilesSharingResharing(store),
@@ -260,6 +266,7 @@ export default defineComponent({
       contextMenuButtonRef,
       notifyEnabled,
       federatedUsers,
+      createSharesConcurrentRequests,
 
       // CERN
       accountType,
@@ -476,7 +483,9 @@ export default defineComponent({
       this.saving = true
       const errors = []
 
-      const saveQueue = new PQueue({ concurrency: 4 })
+      const saveQueue = new PQueue({
+        concurrency: this.createSharesConcurrentRequests
+      })
       const savePromises = []
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(

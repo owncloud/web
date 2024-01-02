@@ -1,0 +1,6 @@
+Bugfix: Loading indicator during conflict dialog
+
+An issue where the loading indicator was showing before taking action in the resource conflict dialog has been fixed.
+
+https://github.com/owncloud/web/pull/10220
+https://github.com/owncloud/web/issues/10215

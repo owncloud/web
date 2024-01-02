@@ -34,7 +34,7 @@
         </oc-list>
       </oc-drop>
     </div>
-    <oc-list class="oc-tiles oc-flex" :class="resizable ? 'resizableTiles' : ''">
+    <oc-list class="oc-tiles oc-flex">
       <li v-for="resource in data" :key="resource.id" class="oc-tiles-item has-item-context-menu">
         <oc-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
@@ -85,6 +85,16 @@
           </template>
         </oc-tile>
       </li>
+      <li
+        v-for="index in ghostTilesCount"
+        :key="`ghost-tile-${index}`"
+        class="ghost-tile"
+        :aria-hidden="true"
+      >
+        <div>
+          {{ viewSize }}
+        </div>
+      </li>
     </oc-list>
     <Teleport v-if="dragItem" to="body">
       <oc-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
@@ -96,21 +106,37 @@
 </template>
 
 <script lang="ts">
-import { onBeforeUpdate, defineComponent, nextTick, PropType, computed, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  PropType,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useStore, SortDir, SortField, ViewModeConstants } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { displayPositionedDropdown } from '@ownclouders/web-pkg'
-import { createLocationSpaces } from '@ownclouders/web-pkg'
-import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
-
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
-import { useResourceRouteResolver } from '@ownclouders/web-pkg'
-import { eventBus } from '@ownclouders/web-pkg'
+import {
+  ContextMenuQuickAction,
+  createFileRouteOptions,
+  createLocationSpaces,
+  displayPositionedDropdown,
+  eventBus,
+  ImageDimension,
+  SortDir,
+  SortField,
+  useResourceRouteResolver,
+  useStore,
+  useTileSize,
+  ViewModeConstants
+} from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -122,10 +148,6 @@ export default defineComponent({
     data: {
       type: Array as PropType<Resource[]>,
       default: () => []
-    },
-    resizable: {
-      type: Boolean,
-      default: false
     },
     selectedIds: {
       type: Array,
@@ -179,6 +201,7 @@ export default defineComponent({
 
     const dragItem = ref()
     const ghostElementRef = ref()
+
     const tileRefs = ref({
       tiles: [],
       dropBtns: []
@@ -308,7 +331,6 @@ export default defineComponent({
       }
       return sizeMap[props.viewSize] ?? 'xlarge'
     })
-
     onBeforeUpdate(() => {
       tileRefs.value = {
         tiles: [],
@@ -363,6 +385,50 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
+    const viewWidth = ref(0)
+    const updateViewWidth = () => {
+      const element = document.getElementById('tiles-view')
+      const style = getComputedStyle(element)
+      const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10) | 0
+      const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10) | 0
+      viewWidth.value = element.clientWidth - paddingLeft - paddingRight
+    }
+    const { tileSizePixels: tileSizePixelsBase } = useTileSize()
+    const gapSizePixels = computed(() => {
+      return parseFloat(getComputedStyle(document.documentElement).fontSize)
+    })
+    const maxTiles = computed(() => {
+      return unref(tileSizePixelsBase)
+        ? Math.floor(unref(viewWidth) / (unref(tileSizePixelsBase) + unref(gapSizePixels)))
+        : 0
+    })
+    const ghostTilesCount = computed(() => {
+      const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
+      if (!remainder) {
+        return 0
+      }
+      return unref(maxTiles) - remainder
+    })
+
+    const tileSizePixels = computed(() => {
+      return unref(viewWidth) / unref(maxTiles) - unref(gapSizePixels)
+    })
+    watch(
+      tileSizePixels,
+      (px: number) => {
+        document.documentElement.style.setProperty(`--oc-size-tiles-actual`, `${px}px`)
+      },
+      { immediate: true }
+    )
+
+    onMounted(() => {
+      window.addEventListener('resize', updateViewWidth)
+      updateViewWidth()
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', updateViewWidth)
+    })
+
     return {
       areFileExtensionsShown,
       emitTileClick,
@@ -383,7 +449,8 @@ export default defineComponent({
       dragStart,
       dragSelection,
       fileDropped,
-      setDropStyling
+      setDropStyling,
+      ghostTilesCount
     }
   },
   data() {
@@ -398,23 +465,9 @@ export default defineComponent({
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(auto, var(--oc-size-tiles-default)));
+  grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-actual), 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
-
-  &.resizableTiles {
-    grid-template-columns: repeat(auto-fill, minmax(auto, var(--oc-size-tiles-resize-step)));
-  }
-
-  @media only screen and (max-width: 640px) {
-    grid-template-columns: 80%;
-    justify-content: center;
-    padding: var(--oc-space-medium) 0;
-
-    &.resizableTiles {
-      grid-template-columns: 80%;
-    }
-  }
 
   &-item-drop-highlight {
     background-color: var(--oc-color-input-border) !important;
@@ -439,6 +492,19 @@ export default defineComponent({
         text-decoration: none;
       }
     }
+  }
+}
+
+.ghost-tile {
+  display: list-item;
+
+  div {
+    opacity: 0;
+    box-shadow: none;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    outline: 1px solid var(--oc-color-border);
   }
 }
 </style>

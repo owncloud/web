@@ -15,6 +15,10 @@ import {
 import { RouteLocation } from 'vue-router'
 
 jest.mock('web-app-files/src/composables')
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useFileActions: jest.fn()
+}))
 
 describe('Favorites view', () => {
   it('appBar always present', () => {
