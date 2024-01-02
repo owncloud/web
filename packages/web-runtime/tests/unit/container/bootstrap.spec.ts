@@ -2,7 +2,6 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { createApp, defineComponent, App } from 'vue'
 import { createStore } from 'vuex'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
-import fetchMock from 'jest-fetch-mock'
 import {
   initializeApplications,
   announceApplicationsReady,
@@ -118,18 +117,21 @@ describe('announceCustomStyles', () => {
 })
 
 describe('announceConfiguration', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   it('should not enable embed mode when it is not set', async () => {
-    fetchMock.mockResponseOnce('{}')
+    jest
+      .spyOn(global, 'fetch')
+      .mockResolvedValue(mock<Response>({ status: 200, json: () => Promise.resolve({}) }))
     const config = await announceConfiguration('/config.json')
     expect(config.options.embed.enabled).toStrictEqual(false)
   })
 
   it('should embed mode when it is set in config.json', async () => {
-    fetchMock.mockResponseOnce('{ "options": { "embed": { "enabled": true } } }')
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ options: { embed: { enabled: true } } })
+      })
+    )
     const config = await announceConfiguration('/config.json')
     expect(config.options.embed.enabled).toStrictEqual(true)
   })
@@ -141,7 +143,9 @@ describe('announceConfiguration', () => {
       },
       writable: true
     })
-    fetchMock.mockResponseOnce('{}')
+    jest
+      .spyOn(global, 'fetch')
+      .mockResolvedValue(mock<Response>({ status: 200, json: () => Promise.resolve({}) }))
     const config = await announceConfiguration('/config.json')
     expect(config.options.embed.enabled).toStrictEqual(true)
   })
@@ -153,7 +157,12 @@ describe('announceConfiguration', () => {
       },
       writable: true
     })
-    fetchMock.mockResponseOnce('{ "options": { "embed": { "enabled": false } } }')
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ options: { embed: { enabled: false } } })
+      })
+    )
     const config = await announceConfiguration('/config.json')
     expect(config.options.embed.enabled).toStrictEqual(false)
   })

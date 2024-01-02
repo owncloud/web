@@ -1,4 +1,3 @@
-import fetchMock from 'jest-fetch-mock'
 ;(window as any).define = jest.fn()
 ;(window as any).IntersectionObserver = jest.fn(() => ({
   observe: jest.fn(),
@@ -11,4 +10,4 @@ import fetchMock from 'jest-fetch-mock'
     observe: jest.fn(),
     unobserve: jest.fn()
   }))
-fetchMock.enableMocks()
+global.fetchMock = global.fetch = jest.fn()

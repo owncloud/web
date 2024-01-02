@@ -195,9 +195,6 @@ importers:
       jest-environment-jsdom:
         specifier: 29.7.0
         version: 29.7.0
-      jest-fetch-mock:
-        specifier: 3.0.3
-        version: 3.0.3
       jest-mock-axios:
         specifier: 4.7.2
         version: 4.7.2(@types/node@16.18.30)(ts-node@10.9.1)
@@ -9992,6 +9989,7 @@ packages:
     resolution: {integrity: sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==}
     dependencies:
       node-fetch: 2.6.1
+    dev: false
 
   /cross-spawn@6.0.5:
     resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==}
@@ -14329,13 +14327,6 @@ packages:
       jest-util: 29.7.0
     dev: true
 
-  /jest-fetch-mock@3.0.3:
-    resolution: {integrity: sha512-Ux1nWprtLrdrH4XwE7O7InRY6psIi3GOsqNESJgMJ+M5cv4A8Lh7SN9d2V2kKRZ8ebAfcd1LNyZguAOb6JiDqw==}
-    dependencies:
-      cross-fetch: 3.1.4
-      promise-polyfill: 8.2.0
-    dev: true
-
   /jest-get-type@27.5.1:
     resolution: {integrity: sha512-2KY95ksYSaK7DMBWQn6dQz3kqAf3BB64y2udeG+hv4KfSOb9qwcYQstTJc1KCbsix+wLZWZYN8t7nwX3GOBLRw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -16499,6 +16490,7 @@ packages:
   /node-fetch@2.6.1:
     resolution: {integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==}
     engines: {node: 4.x || >=6.0.0}
+    dev: false
 
   /node-fetch@2.6.11:
     resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
@@ -18173,10 +18165,6 @@ packages:
         optional: true
     dependencies:
       bluebird: 3.7.2
-    dev: true
-
-  /promise-polyfill@8.2.0:
-    resolution: {integrity: sha512-k/TC0mIcPVF6yHhUvwAp7cvL6I2fFV7TzF1DuGPI8mBh4QQazf36xCKEHKTZKRysEoTQoQdKyP25J8MPJp7j5g==}
     dev: true
 
   /promise@7.3.1:
