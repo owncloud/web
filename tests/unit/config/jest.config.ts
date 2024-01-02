@@ -21,7 +21,6 @@ export default {
   maxConcurrency: 5,
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
-    '^.+\\.js$': 'babel-jest',
     '^.+\\.vue$': '@vue/vue3-jest'
   },
   moduleNameMapper: {

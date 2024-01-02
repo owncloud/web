@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import FontSize from './FontSize.vue'
 
-const Constructor = Vue.extend(FontSize)
+const Constructor = (Vue as any).extend(FontSize)
 const vm = new Constructor().$mount()
 
 describe('FontSize.vue', () => {

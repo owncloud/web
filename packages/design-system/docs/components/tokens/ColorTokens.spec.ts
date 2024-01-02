@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import ColorTokens from './ColorTokens.vue'
 
-const Constructor = Vue.extend(ColorTokens)
+const Constructor = (Vue as any).extend(ColorTokens)
 const vm = new Constructor().$mount()
 
 describe('ColorTokens.vue', () => {

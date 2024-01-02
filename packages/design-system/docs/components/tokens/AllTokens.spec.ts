@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import AllTokens from './AllTokens.vue'
 
-const Constructor = Vue.extend(AllTokens)
+const Constructor = (Vue as any).extend(AllTokens)
 const vm = new Constructor().$mount()
 
 describe('AllTokens.vue', () => {

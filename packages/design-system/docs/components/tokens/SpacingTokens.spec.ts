@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import SpacingTokens from './SpacingTokens.vue'
 
-const Constructor = Vue.extend(SpacingTokens)
+const Constructor = (Vue as any).extend(SpacingTokens)
 const vm = new Constructor().$mount()
 
 describe('SpacingTokens.vue', () => {
