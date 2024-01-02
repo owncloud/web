@@ -55,7 +55,7 @@ export default defineComponent({
 
     const onConfirm = async () => {
       if (unref(isFormInvalid)) {
-        return Promise.reject(new Promise((reject) => reject('')))
+        return Promise.reject()
       }
 
       try {

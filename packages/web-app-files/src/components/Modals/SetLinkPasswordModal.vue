@@ -57,7 +57,7 @@ export default defineComponent({
         // Human-readable error message is provided, for example when password is on banned list
         if (e.statusCode === 400) {
           errorMessage.value = $gettext(e.message)
-          return Promise.reject(new Promise((reject) => reject('')))
+          return Promise.reject()
         }
 
         store.dispatch('showErrorMessage', {
