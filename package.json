@@ -119,7 +119,7 @@
   },
   "packageManager": "pnpm@8.10.5",
   "volta": {
-    "node": "18.18.2"
+    "node": "18.19.0"
   },
   "pnpm": {
     "overrides": {
