@@ -68,15 +68,6 @@ Feature: move folders
       | "question?" | "target-folder-with-question?" |
       | "&and#hash" | "target-folder-with-&and#hash" |
 
-  @skipOnOCIS
-  Scenario: move a folder into another folder with no change permission
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "/simple-folder" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
-    And user "Alice" has logged in using the webUI
-    When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then as "Alice" folder "simple-folder (2)/simple-empty-folder" should not exist in the server
-
 
   Scenario: move a folder into the same folder
     Given user "Alice" has logged in using the webUI

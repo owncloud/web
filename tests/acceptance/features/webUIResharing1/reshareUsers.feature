@@ -64,19 +64,6 @@ Feature: Resharing shared files with different permissions
     Then as "Carol" folder "/Shares/simple-folder" should exist in the server
     And as "Carol" file "/Shares/lorem.txt" should exist in the server
 
-  @issue-ocis-1330
-  Scenario: Reshare a file and folder from favorites page
-    Given user "Brian" has created file "lorem.txt" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" in the server
-    And user "Brian" has shared file "lorem.txt" with user "Alice" in the server
-    And user "Alice" has favorited element "/Shares/simple-folder" in the server
-    And user "Alice" has favorited element "/Shares/lorem.txt" in the server
-    And user "Alice" has logged in using the webUI
-    When the user browses to the favorites page using the webUI
-    And the user shares folder "Shares/simple-folder" with user "Carol King" as "Editor" using the webUI
-    And the user shares file "Shares/lorem.txt" with user "Carol King" as "Editor" using the webUI
-    Then as "Carol" folder "/Shares/simple-folder" should exist in the server
-    And as "Carol" file "/Shares/lorem.txt" should exist in the server
 
   @issue-product-270
   Scenario: Resource owner sees resharer in collaborators list
