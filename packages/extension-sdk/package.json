@@ -14,7 +14,7 @@
     "directory": "packages/extension-sdk"
   },
   "dependencies": {
-    "@vitejs/plugin-vue": "4.5.0",
+    "@vitejs/plugin-vue": "4.6.2",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-serve": "^2.0.2"
   },
