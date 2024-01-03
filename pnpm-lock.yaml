@@ -190,8 +190,8 @@ importers:
         specifier: 4.7.3
         version: 4.7.3(@types/node@16.18.30)(ts-node@10.9.2)
       jest-mock-extended:
-        specifier: 3.0.4
-        version: 3.0.4(jest@29.7.0)(typescript@5.3.3)
+        specifier: 3.0.5
+        version: 3.0.5(jest@29.7.0)(typescript@5.3.3)
       jest-serializer-vue-tjw:
         specifier: ^3.19.0
         version: 3.19.0(patch_hash=n3ezndisi6xx2kbxcsk5pv4dxy)
@@ -11290,8 +11290,8 @@ packages:
       - ts-node
     dev: true
 
-  /jest-mock-extended@3.0.4(jest@29.7.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-2ynEZ7IEJNrhrgshklDMhrOdnmW4Nt+PhkyRqZxRgpwMo7JjmFWMzyp0+eSyk+H9KK1QjXI5xTZIw6x7cVDcRg==}
+  /jest-mock-extended@3.0.5(jest@29.7.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-/eHdaNPUAXe7f65gHH5urc8SbRVWjYxBqmCgax2uqOBJy8UUcCBMN1upj1eZ8y/i+IqpyEm4Kq0VKss/GCCTdw==}
     peerDependencies:
       jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0
       typescript: ^3.0.0 || ^4.0.0 || ^5.0.0
