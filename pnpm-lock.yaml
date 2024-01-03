@@ -335,8 +335,8 @@ importers:
         specifier: ^6.3.2
         version: 6.4.1(webpack@4.46.0)
       css-loader:
-        specifier: ^5.0.1
-        version: 5.2.7(webpack@4.46.0)
+        specifier: 6.8.1
+        version: 6.8.1(webpack@4.46.0)
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
@@ -480,7 +480,7 @@ importers:
         version: 3.1.2(vue@3.3.8)
       vue-loader:
         specifier: ^15.9.0
-        version: 15.10.1(@vue/compiler-sfc@3.3.8)(babel-core@7.0.0-bridge.0)(css-loader@5.2.7)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0)
+        version: 15.10.1(@vue/compiler-sfc@3.3.8)(babel-core@7.0.0-bridge.0)(css-loader@6.8.1)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0)
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.3.8)
@@ -7784,22 +7784,20 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /css-loader@5.2.7(webpack@4.46.0):
-    resolution: {integrity: sha512-Q7mOvpBNBG7YrVGMxRxcBJZFL75o+cH2abNASdibkj/fffYD8qWbInZrD0S9ccI6vZclF3DsHE7njGlLtaHbhg==}
-    engines: {node: '>= 10.13.0'}
+  /css-loader@6.8.1(webpack@4.46.0):
+    resolution: {integrity: sha512-xDAXtEVGlD0gJ07iclwWVkLoZOpEvAWaSyf6W18S2pOC//K8+qUDIx8IIT3D+HjnmkJPQeesOPv5aiUaJsCM2g==}
+    engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: ^4.27.0 || ^5.0.0
+      webpack: ^5.0.0
     dependencies:
-      icss-utils: 5.1.0(postcss@8.4.20)
-      loader-utils: 2.0.4
-      postcss: 8.4.20
-      postcss-modules-extract-imports: 3.0.0(postcss@8.4.20)
-      postcss-modules-local-by-default: 4.0.0(postcss@8.4.20)
-      postcss-modules-scope: 3.0.0(postcss@8.4.20)
-      postcss-modules-values: 4.0.0(postcss@8.4.20)
+      icss-utils: 5.1.0(postcss@8.4.32)
+      postcss: 8.4.32
+      postcss-modules-extract-imports: 3.0.0(postcss@8.4.32)
+      postcss-modules-local-by-default: 4.0.3(postcss@8.4.32)
+      postcss-modules-scope: 3.0.0(postcss@8.4.32)
+      postcss-modules-values: 4.0.0(postcss@8.4.32)
       postcss-value-parser: 4.2.0
-      schema-utils: 3.1.1
-      semver: 7.3.8
+      semver: 7.5.4
       webpack: 4.46.0
     dev: true
 
@@ -10975,13 +10973,13 @@ packages:
       postcss: 7.0.36
     dev: true
 
-  /icss-utils@5.1.0(postcss@8.4.20):
+  /icss-utils@5.1.0(postcss@8.4.32):
     resolution: {integrity: sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.4.20
+      postcss: 8.4.32
     dev: true
 
   /ieee754@1.2.1:
@@ -15299,7 +15297,7 @@ packages:
       postcss: ^8.2.2
     dependencies:
       postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -15426,7 +15424,7 @@ packages:
       caniuse-api: 3.0.0
       cssnano-utils: 3.1.0(postcss@8.4.20)
       postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
     dev: true
 
   /postcss-minify-font-values@5.1.0(postcss@8.4.20):
@@ -15470,7 +15468,7 @@ packages:
       postcss: ^8.2.15
     dependencies:
       postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
     dev: true
 
   /postcss-modules-extract-imports@2.0.0:
@@ -15480,13 +15478,13 @@ packages:
       postcss: 7.0.36
     dev: true
 
-  /postcss-modules-extract-imports@3.0.0(postcss@8.4.20):
+  /postcss-modules-extract-imports@3.0.0(postcss@8.4.32):
     resolution: {integrity: sha512-bdHleFnP3kZ4NYDhuGlVK+CMrQ/pqUm8bx/oGL93K6gVwiclvX5x0n76fYMKuIGKzlABOy13zsvqjb0f92TEXw==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.4.20
+      postcss: 8.4.32
     dev: true
 
   /postcss-modules-local-by-default@2.0.6:
@@ -15494,19 +15492,19 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       postcss: 7.0.36
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
       postcss-value-parser: 3.3.1
     dev: true
 
-  /postcss-modules-local-by-default@4.0.0(postcss@8.4.20):
-    resolution: {integrity: sha512-sT7ihtmGSF9yhm6ggikHdV0hlziDTX7oFoXtuVWeDd3hHObNkcHRo9V3yg7vCAY7cONyxJC/XXCmmiHHcvX7bQ==}
+  /postcss-modules-local-by-default@4.0.3(postcss@8.4.32):
+    resolution: {integrity: sha512-2/u2zraspoACtrbFRnTijMiQtb4GW4BvatjaG/bCjYQo8kLTdevCUlwuBHx2sCnSyrI3x3qj4ZK1j5LQBgzmwA==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      icss-utils: 5.1.0(postcss@8.4.20)
-      postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      icss-utils: 5.1.0(postcss@8.4.32)
+      postcss: 8.4.32
+      postcss-selector-parser: 6.0.15
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -15515,17 +15513,17 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       postcss: 7.0.36
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
     dev: true
 
-  /postcss-modules-scope@3.0.0(postcss@8.4.20):
+  /postcss-modules-scope@3.0.0(postcss@8.4.32):
     resolution: {integrity: sha512-hncihwFA2yPath8oZ15PZqvWGkWf+XUfQgUGamS4LqoP1anQLOsOJw0vr7J7IwLpoY9fatA2qiGUGmuZL0Iqlg==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      postcss: 8.4.32
+      postcss-selector-parser: 6.0.15
     dev: true
 
   /postcss-modules-values@2.0.0:
@@ -15535,14 +15533,14 @@ packages:
       postcss: 7.0.36
     dev: true
 
-  /postcss-modules-values@4.0.0(postcss@8.4.20):
+  /postcss-modules-values@4.0.0(postcss@8.4.32):
     resolution: {integrity: sha512-RDxHkAiEGI78gS2ofyvCsu7iycRv7oqw5xMWn9iMoR0N/7mf9D50ecQqUo5BZ9Zh2vH4bCUR/ktCqbB9m8vJjQ==}
     engines: {node: ^10 || ^12 || >= 14}
     peerDependencies:
       postcss: ^8.1.0
     dependencies:
-      icss-utils: 5.1.0(postcss@8.4.20)
-      postcss: 8.4.20
+      icss-utils: 5.1.0(postcss@8.4.32)
+      postcss: 8.4.32
     dev: true
 
   /postcss-normalize-charset@5.1.0(postcss@8.4.20):
@@ -15741,7 +15739,7 @@ packages:
       postcss: ^8.2.15
     dependencies:
       postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
     dev: true
 
   /postcss-url@10.1.3(postcss@8.4.32):
@@ -18125,7 +18123,7 @@ packages:
     dependencies:
       browserslist: 4.22.1
       postcss: 8.4.20
-      postcss-selector-parser: 6.0.11
+      postcss-selector-parser: 6.0.15
     dev: true
 
   /stylelint-config-recommended@13.0.0(stylelint@15.11.0):
@@ -19466,7 +19464,7 @@ packages:
     dependencies:
       vue: 3.3.8(typescript@5.0.3)
 
-  /vue-loader@15.10.1(@vue/compiler-sfc@3.3.8)(babel-core@7.0.0-bridge.0)(css-loader@5.2.7)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0):
+  /vue-loader@15.10.1(@vue/compiler-sfc@3.3.8)(babel-core@7.0.0-bridge.0)(css-loader@6.8.1)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0):
     resolution: {integrity: sha512-SaPHK1A01VrNthlix6h1hq4uJu7S/z0kdLUb6klubo738NeQoLbS6V9/d8Pv19tU0XdQKju3D1HSKuI8wJ5wMA==}
     peerDependencies:
       '@vue/compiler-sfc': ^3.0.8
@@ -19484,7 +19482,7 @@ packages:
     dependencies:
       '@vue/compiler-sfc': 3.3.8
       '@vue/component-compiler-utils': 3.2.2(babel-core@7.0.0-bridge.0)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)
-      css-loader: 5.2.7(webpack@4.46.0)
+      css-loader: 6.8.1(webpack@4.46.0)
       hash-sum: 1.0.2
       loader-utils: 1.4.0
       vue-hot-reload-api: 2.3.4
@@ -19644,7 +19642,7 @@ packages:
       vue-docgen-api: 4.56.0(vue@3.3.8)
       vue-inbrowser-compiler: 4.55.0(@vue/compiler-sfc@3.3.8)(vue@3.3.8)
       vue-inbrowser-compiler-utils: 4.55.0(@vue/compiler-sfc@3.3.8)(vue@3.3.8)
-      vue-loader: 15.10.1(@vue/compiler-sfc@3.3.8)(babel-core@7.0.0-bridge.0)(css-loader@5.2.7)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0)
+      vue-loader: 15.10.1(@vue/compiler-sfc@3.3.8)(babel-core@7.0.0-bridge.0)(css-loader@6.8.1)(ejs@3.1.9)(lodash@4.17.21)(react-dom@18.2.0)(react@18.2.0)(webpack@4.46.0)
       webpack: 4.46.0
       webpack-dev-server: 3.11.3(webpack@4.46.0)
       webpack-filter-warnings-plugin: 1.2.1(webpack@4.46.0)
