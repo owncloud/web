@@ -29,7 +29,6 @@ describe('HttpClient', () => {
     // delete
     {
       const { data: untypedResponse } = await client.delete('/foo')
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.delete<Schema>('/foo')
@@ -55,7 +54,6 @@ describe('HttpClient', () => {
     // head
     {
       const { data: untypedResponse } = await client.head('/foo')
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.head<Schema>('/foo')
@@ -68,7 +66,6 @@ describe('HttpClient', () => {
     // options
     {
       const { data: untypedResponse } = await client.options('/foo')
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.options<Schema>('/foo')
@@ -81,7 +78,6 @@ describe('HttpClient', () => {
     // patch
     {
       const { data: untypedResponse } = await client.patch('/foo')
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.patch<Schema>('/foo')
@@ -94,7 +90,6 @@ describe('HttpClient', () => {
     // post
     {
       const { data: untypedResponse } = await client.post('/foo')
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.post<Schema>('/foo')
@@ -107,7 +102,6 @@ describe('HttpClient', () => {
     // put
     {
       const { data: untypedResponse } = await client.put('/foo')
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.put<Schema>('/foo')
@@ -120,7 +114,6 @@ describe('HttpClient', () => {
     // request
     {
       const { data: untypedResponse } = await client.request({ url: '/foo' })
-      // @ts-expect-error untypedResponse is unknown, so we cannot access a property without casting
       untypedResponse.property
 
       const { data: typedResponse } = await client.request<Schema>({ url: '/foo' })
