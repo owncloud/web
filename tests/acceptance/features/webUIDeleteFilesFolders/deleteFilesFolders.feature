@@ -6,37 +6,37 @@ Feature: deleting files and folders
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-  # @smokeTest @ocisSmokeTest @disablePreviews
-  # Scenario: Delete files & folders one by one and check its existence after page reload
-  #   Given user "Alice" has created folder "simple-empty-folder" in the server
-  #   And user "Alice" has created folder "simple-folder" in the server
-  #   And user "Alice" has created file "lorem.txt" in the server
-  #   And user "Alice" has created file "lorem-big.txt" in the server
-  #   And user "Alice" has created folder "strängé नेपाली folder" in the server
-  #   And user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
-  #   And user "Alice" has created file "sample,1.txt" in the server
-  #   And user "Alice" has created folder "Sample,Folder,With,Comma" in the server
-  #   And user "Alice" has logged in using the webUI
-  #   When the user deletes the following elements using the webUI
-  #     | name                                  |
-  #     | simple-folder                         |
-  #     | lorem.txt                             |
-  #     | strängé नेपाली folder                 |
-  #     | strängé filename (duplicate #2 &).txt |
-  #     | sample,1.txt                          |
-  #     | Sample,Folder,With,Comma              |
-  #   Then as "Alice" folder "simple-folder" should not exist in the server
-  #   And as "Alice" file "lorem.txt" should not exist in the server
-  #   And as "Alice" folder "strängé नेपाली folder" should not exist in the server
-  #   And as "Alice" file "strängé filename (duplicate #2 &).txt" should not exist in the server
-  #   And as "Alice" file "sample,1.txt" should not exist in the server
-  #   And as "Alice" folder "Sample,Folder,With,Comma" should not exist in the server
-  #   And no message should be displayed on the webUI
-  #   And the deleted elements should not be listed on the webUI
-  #   But folder "simple-empty-folder" should be listed on the webUI
-  #   And file "lorem-big.txt" should be listed on the webUI
-  #   And file "strängé नेपाली folder" should not be listed on the webUI
-  #   But the deleted elements should not be listed on the webUI after a page reload
+  @smokeTest @ocisSmokeTest @disablePreviews
+  Scenario: Delete files & folders one by one and check its existence after page reload
+    Given user "Alice" has created folder "simple-empty-folder" in the server
+    And user "Alice" has created folder "simple-folder" in the server
+    And user "Alice" has created file "lorem.txt" in the server
+    And user "Alice" has created file "lorem-big.txt" in the server
+    And user "Alice" has created folder "strängé नेपाली folder" in the server
+    And user "Alice" has created file "strängé filename (duplicate #2 &).txt" in the server
+    And user "Alice" has created file "sample,1.txt" in the server
+    And user "Alice" has created folder "Sample,Folder,With,Comma" in the server
+    And user "Alice" has logged in using the webUI
+    When the user deletes the following elements using the webUI
+      | name                                  |
+      | simple-folder                         |
+      | lorem.txt                             |
+      | strängé नेपाली folder                 |
+      | strängé filename (duplicate #2 &).txt |
+      | sample,1.txt                          |
+      | Sample,Folder,With,Comma              |
+    Then as "Alice" folder "simple-folder" should not exist in the server
+    And as "Alice" file "lorem.txt" should not exist in the server
+    And as "Alice" folder "strängé नेपाली folder" should not exist in the server
+    And as "Alice" file "strängé filename (duplicate #2 &).txt" should not exist in the server
+    And as "Alice" file "sample,1.txt" should not exist in the server
+    And as "Alice" folder "Sample,Folder,With,Comma" should not exist in the server
+    And no message should be displayed on the webUI
+    And the deleted elements should not be listed on the webUI
+    But folder "simple-empty-folder" should be listed on the webUI
+    And file "lorem-big.txt" should be listed on the webUI
+    And file "strängé नेपाली folder" should not be listed on the webUI
+    But the deleted elements should not be listed on the webUI after a page reload
 
 
   Scenario Outline: Delete a file with problematic characters
