@@ -129,7 +129,7 @@ export default defineComponent({
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
-    const loadFromRoute = ref(false)
+    const restoreSearchFromRoute = ref(false)
     const searchResults = ref([])
     const loading = ref(false)
     const currentFolderAvailable = ref(false)
@@ -264,7 +264,7 @@ export default defineComponent({
     }
 
     const updateTerm = (input) => {
-      loadFromRoute.value = false
+      restoreSearchFromRoute.value = false
       term.value = input
       if (!unref(term)) {
         return unref(optionsDrop).hide()
@@ -285,7 +285,7 @@ export default defineComponent({
       optionsDropRef,
       activePreviewIndex,
       term,
-      loadFromRoute,
+      restoreSearchFromRoute,
       onKeyUpEnter,
       searchResults,
       loading,
@@ -329,8 +329,8 @@ export default defineComponent({
 
   watch: {
     term() {
-      if (this.loadFromRoute) {
-        this.loadFromRoute = false
+      if (this.restoreSearchFromRoute) {
+        this.restoreSearchFromRoute = false
         return
       }
       this.debouncedSearch(this)
@@ -447,7 +447,7 @@ export default defineComponent({
         if (!input || !routeTerm) {
           return
         }
-        this.loadFromRoute = initialLoad
+        this.restoreSearchFromRoute = initialLoad
         this.term = routeTerm
         input.value = routeTerm
       })
