@@ -1,6 +1,5 @@
 const tinyColor = require('tinycolor2')
 const { getPropType, sortProps, getPropCategory } = require('./utils')
-const formatWriter = require('./format')
 
 module.exports = {
   name: 'format/ods/json',
@@ -34,6 +33,6 @@ module.exports = {
       '}'
     ].join('\n')
 
-    return formatWriter({ data, dictionary })
+    return data
   }
 }

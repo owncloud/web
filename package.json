@@ -142,14 +142,6 @@
       "@uppy/xhr-upload": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz"
     },
     "packageExtensions": {
-      "@adobe/leonardo-contrast-colors": {
-        "dependencies": {
-          "d3": "^5.12.0",
-          "d3-cam02": "^0.1.5",
-          "d3-hsluv": "^0.1.2",
-          "d3-hsv": "^0.1.0"
-        }
-      },
       "jest-serializer-vue-tjw": {
         "dependencies": {
           "@vue/compiler-sfc": "2.7.14"
@@ -157,7 +149,6 @@
       }
     },
     "patchedDependencies": {
-      "@adobe/leonardo-contrast-colors@1.0.0-alpha.16": "patches/@adobe__leonardo-contrast-colors@1.0.0-alpha.16.patch",
       "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch"
     }
   },
