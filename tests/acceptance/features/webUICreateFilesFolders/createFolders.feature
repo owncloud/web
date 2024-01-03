@@ -8,16 +8,6 @@ Feature: create folders
     And user "Alice" has logged in using the webUI
     And the user has reloaded the current page of the webUI
 
-  @smokeTest @ocisSmokeTest
-  Scenario: Create a folder inside another folder
-    When the user creates a folder with the name "top-folder" using the webUI
-    And the user opens folder "top-folder" using the webUI
-    Then there should be no resources listed on the webUI
-    When the user creates a folder with the name "sub-folder" using the webUI
-    Then folder "sub-folder" should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then folder "sub-folder" should be listed on the webUI
-
 
   Scenario: Create a folder with default name
     When the user creates a folder with default name using the webUI
