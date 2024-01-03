@@ -200,36 +200,20 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchUserInfo(accessToken: string): Promise<void> {
-    const [login] = await Promise.all([
-      this.clientService.owncloudSdk.getCurrentUser(),
-      this.fetchCapabilities()
-    ])
+    await this.fetchCapabilities()
 
-    let role, graphUser, legacyUserGroups, legacyUser
+    const graphClient = this.clientService.graphAuthenticated
+    const [graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
+    const role = await this.fetchRole({ graphUser, roles })
 
-    if (this.store.getters.capabilities.spaces?.enabled) {
-      const graphClient = this.clientService.graphAuthenticated
-      let roles: AppRoleAssignment[]
-      ;[graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
-
-      role = await this.fetchRole({ graphUser, roles })
-    } else {
-      ;[legacyUser, legacyUserGroups] = await Promise.all([
-        this.clientService.owncloudSdk.users.getUser(login.id),
-        this.clientService.owncloudSdk.users.getUserGroups(login.id)
-      ])
-    }
-
-    // TODO: remove legacy fallbacks and use graphUser directly
     this.userStore.setUser({
-      id: graphUser?.data?.id || login.username || login.id,
-      onPremisesSamAccountName:
-        graphUser?.data?.onPremisesSamAccountName || login.username || login.id,
-      displayName: graphUser?.data?.displayName || legacyUser.displayname || login['display-name'],
-      mail: graphUser?.data?.mail || login?.email || legacyUser?.email || '',
-      memberOf: graphUser?.data?.memberOf || legacyUserGroups || [],
+      id: graphUser.data.id,
+      onPremisesSamAccountName: graphUser.data.onPremisesSamAccountName,
+      displayName: graphUser.data.displayName,
+      mail: graphUser.data.mail,
+      memberOf: graphUser.data.memberOf,
       appRoleAssignments: role ? [role] : [],
-      preferredLanguage: graphUser?.data?.preferredLanguage || ''
+      preferredLanguage: graphUser.data.preferredLanguage || ''
     })
 
     if (graphUser?.data?.preferredLanguage) {
