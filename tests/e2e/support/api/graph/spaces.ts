@@ -8,6 +8,10 @@ import {
   uploadFileInsideSpaceBySpaceName
 } from '../davSpaces'
 
+interface DrivesResponse {
+  value: Space[]
+}
+
 export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<string> => {
   const response = await request({
     method: 'GET',
@@ -17,8 +21,8 @@ export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<stri
 
   checkResponseStatus(response, 'Failed while geting personal space')
 
-  const result = await response.json()
-  return result.value[0].id
+  const resBody = (await response.json()) as DrivesResponse
+  return resBody.value[0].id
 }
 
 export const getSpaceIdBySpaceName = async ({
@@ -37,8 +41,8 @@ export const getSpaceIdBySpaceName = async ({
   })
   checkResponseStatus(response, 'Failed while fetching spaces')
   // search for the space with the space name
-  const result = await response.json()
-  for (const spaceProject of result.value) {
+  const resBody = (await response.json()) as DrivesResponse
+  for (const spaceProject of resBody.value) {
     if (spaceProject.name === spaceName) {
       return spaceProject.id
     }
@@ -70,8 +74,8 @@ export const createSpace = async ({
 
   checkResponseStatus(response, 'Failed while creating a space project')
 
-  const result = await response.json()
-  const spaceName = result.name
+  const resBody = (await response.json()) as Space
+  const spaceName = resBody.name
   // API call to make a hidden file when the space creation is successful
   await createFolderInsideSpaceBySpaceName({ user, folder: '.space', spaceName })
   // Again make an api call to create a readme.md file so that the description is shown in the web UI
@@ -86,12 +90,12 @@ export const createSpace = async ({
   // After getting file id make a patch request to update space special section
   await updateSpaceSpecialSection({
     user,
-    spaceId: result.id,
+    spaceId: resBody.id,
     type: 'description',
     fileId: fileId
   })
 
-  return result.id
+  return resBody.id
 }
 
 export const updateSpaceSpecialSection = async ({

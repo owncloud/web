@@ -55,3 +55,14 @@ export interface KeycloakRealmRole {
   id: string
   name: string
 }
+
+export interface ApplicationEntity {
+  appRoles: AppRole[]
+  displayName: string
+  id: string
+}
+
+export interface AppRole {
+  displayName: string
+  id: string
+}
