@@ -324,7 +324,7 @@ services:
       - traefik
 
   traefik:
-    image: traefik:2.10.5
+    image: traefik:2.10.7
     restart: unless-stopped
     entrypoint:
       [
