@@ -99,20 +99,6 @@ Feature: rename folders
       | a normal folder       |
       | another normal folder |
 
-  # these are invalid file names on oc10
-  @notToImplementOnOCIS
-  Scenario Outline: Rename a folder using forbidden characters
-    Given user "Alice" has logged in using the webUI
-    When the user tries to rename folder <from_name> to <to_name> using the webUI
-    Then the "error" message with header '<alert_message>' should be displayed on the webUI
-    And the user clears all error message from the webUI
-    And folder "simple-folder" should be listed on the webUI
-    Examples:
-      | from_name       | to_name           | alert_message                                         |
-      | "simple-folder" | "simple\folder"   | Failed to rename "simple-folder" to "simple\folder"   |
-      | "simple-folder" | "\\simple-folder" | Failed to rename "simple-folder" to "\\simple-folder" |
-      | "simple-folder" | ".htaccess"       | Failed to rename "simple-folder" to ".htaccess"       |
-
 
   Scenario: Rename a folder putting a name of a file which already exists
     Given user "Alice" has logged in using the webUI
@@ -131,14 +117,7 @@ Feature: rename folders
     When the user tries to rename folder "simple-folder" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
-  @notToImplementOnOCIS
-  # This is valid file name for ocis
-  Scenario: Rename a folder to .part (on oc10)
-    Given user "Alice" has logged in using the webUI
-    When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
-    Then the "error" message with header 'Failed to rename "simple-folder" to "simple.part"' should be displayed on the webUI
-
-  @skipOnOC10
+  
   Scenario: Rename a folder to .part (on ocis)
     Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to "simple.part" using the webUI
