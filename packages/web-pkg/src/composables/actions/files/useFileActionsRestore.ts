@@ -222,11 +222,6 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         field: 'spaceQuota',
         value: driveResponse.data.quota
       })
-    } else {
-      const user = await clientService.owncloudSdk.users.getUser(
-        userStore.user.onPremisesSamAccountName
-      )
-      store.commit('SET_QUOTA', user.quota)
     }
   }
 

@@ -17,7 +17,7 @@ import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import { router } from 'web-runtime/src/router'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
-import { AppRoleAssignment, User as OcUser } from '@ownclouders/web-client/src/generated'
+import { User as OcUser } from '@ownclouders/web-client/src/generated'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -222,10 +222,6 @@ export class UserManager extends OidcUserManager {
         languageSetting: graphUser.data.preferredLanguage
       })
       this.initializeOwnCloudSdk(accessToken)
-    }
-
-    if (!this.store.getters.capabilities.spaces?.enabled && legacyUser?.quota) {
-      this.store.commit('SET_QUOTA', legacyUser.quota)
     }
   }
 

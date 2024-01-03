@@ -371,24 +371,17 @@ export default defineComponent({
         }
 
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (!isPublicSpaceResource(props.space)) {
-          if (unref(hasSpaces)) {
-            const spaces = store.getters['runtime/spaces/spaces']
-            const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(userStore.user)
-            if (driveType === 'project' || isOwnSpace) {
-              const client = clientService.graphAuthenticated
-              const driveResponse = await client.drives.getDrive(spaceId.toString())
-              store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-                id: driveResponse.data.id,
-                field: 'spaceQuota',
-                value: driveResponse.data.quota
-              })
-            }
-          } else {
-            const user = await clientService.owncloudSdk.users.getUser(
-              userStore.user.onPremisesSamAccountName
-            )
-            store.commit('SET_QUOTA', user.quota)
+        if (unref(hasSpaces) && !isPublicSpaceResource(props.space)) {
+          const spaces = store.getters['runtime/spaces/spaces']
+          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(userStore.user)
+          if (driveType === 'project' || isOwnSpace) {
+            const client = clientService.graphAuthenticated
+            const driveResponse = await client.drives.getDrive(spaceId.toString())
+            store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+              id: driveResponse.data.id,
+              field: 'spaceQuota',
+              value: driveResponse.data.quota
+            })
           }
         }
 

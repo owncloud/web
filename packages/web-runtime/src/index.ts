@@ -33,14 +33,11 @@ import {
 import { applicationStore } from './container/store'
 import {
   buildPublicSpaceResource,
-  buildSpace,
   isPersonalSpaceResource,
   isPublicSpaceResource,
   Resource
 } from '@ownclouders/web-client/src/helpers'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { computed, createApp } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
@@ -179,48 +176,21 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       }
 
       // Load spaces to make them available across the application
-      if (store.getters.capabilities?.spaces?.enabled) {
-        const graphClient = clientService.graphAuthenticated
-        await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-        const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
-          isPersonalSpaceResource(space)
-        )
+      const graphClient = clientService.graphAuthenticated
+      await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
+      const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
+        isPersonalSpaceResource(space)
+      )
 
-        if (!personalSpace) {
-          return
-        }
-
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-          id: personalSpace.id,
-          field: 'name',
-          value: app.config.globalProperties.$gettext('Personal')
-        })
+      if (!personalSpace) {
         return
       }
 
-      // Spaces feature not available. Create a virtual personal space
-      const user = userStore.user
-
-      // TODO: remove legacy code
-      const space = buildSpace({
-        id: user.onPremisesSamAccountName,
-        driveAlias: `personal/${user.onPremisesSamAccountName}`,
-        driveType: 'personal',
-        name: app.config.globalProperties.$gettext('All files'),
-        webDavPath: `/files/${user.onPremisesSamAccountName}`,
-        webDavTrashPath: `/trash-bin/${user.onPremisesSamAccountName}`,
-        serverUrl: configurationManager.serverUrl
+      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+        id: personalSpace.id,
+        field: 'name',
+        value: app.config.globalProperties.$gettext('Personal')
       })
-      const personalHomeInfo = await (clientService.webdav as WebDAV).getFileInfo(
-        space,
-        {
-          path: ''
-        },
-        { davProperties: [DavProperty.FileId] }
-      )
-      space.fileId = personalHomeInfo.fileId
-      store.commit('runtime/spaces/ADD_SPACES', [space])
-      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
     },
     {
       immediate: true

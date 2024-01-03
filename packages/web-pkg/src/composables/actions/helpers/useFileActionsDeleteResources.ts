@@ -205,11 +205,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                       field: 'spaceQuota',
                       value: driveResponse.data.quota
                     })
-                  } else {
-                    const user = await owncloudSdk.users.getUser(
-                      userStore.user.onPremisesSamAccountName
-                    )
-                    store.commit('SET_QUOTA', user.quota)
                   }
                 }
 
