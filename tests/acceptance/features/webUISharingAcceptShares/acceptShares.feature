@@ -26,6 +26,23 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI
 
+  @issue-2512 @issue-4102 @issue-6896 @skipOnOCIS
+  Scenario: reshare a share that you received to a group that you are member of
+    Given these groups have been created in the server:
+      | groupname |
+      | grp1      |
+    And user "Alice" has created folder "/simple-folder" in the server
+    And user "Brian" has been added to group "grp1" in the server
+    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
+    And the user has browsed to the personal page
+    And the user opens folder "Shares" using the webUI
+    When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    And the user browses to the shared-with-me page in declined shares view
+    Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
+    And folder "simple-folder" shared by "Brian Murphy" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+
 
   Scenario: User receives files when auto accept share is disabled - oCIS behavior
     Given user "Alice" has created file "toshare.txt" in the server
