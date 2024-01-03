@@ -108,7 +108,7 @@
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
     "tslib": "2.5.0",
-    "typescript": "5.0.3",
+    "typescript": "5.3.3",
     "url-search-params-polyfill": "8.1.1",
     "vite": "5.0.5",
     "vite-plugin-environment": "^1.1.3",

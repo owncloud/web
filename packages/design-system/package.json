@@ -100,7 +100,7 @@
     "stylelint-config-standard": "^34.0.0",
     "tinycolor2": "^1.4.2",
     "tippy.js": "^6.3.7",
-    "typescript": "5.0.3",
+    "typescript": "5.3.3",
     "url-loader": "^4.1.1",
     "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
     "vue": "3.3.8",
