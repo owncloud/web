@@ -262,8 +262,8 @@ importers:
         specifier: 1.8.10
         version: 1.8.10(typescript@5.3.3)
       vue3-gettext:
-        specifier: 2.3.3
-        version: 2.3.3(@vue/compiler-sfc@3.3.8)(vue@3.3.8)
+        specifier: 2.4.0
+        version: 2.4.0(@vue/compiler-sfc@3.3.8)(vue@3.3.8)
       wait-for-expect:
         specifier: 3.0.2
         version: 3.0.2
@@ -482,8 +482,8 @@ importers:
         specifier: ^4.44.2
         version: 4.54.3(@vue/compiler-sfc@3.3.8)(eslint@8.43.0)(vue-loader@15.10.1)(vue@3.3.8)(webpack@4.46.0)
       vue3-gettext:
-        specifier: 2.3.3
-        version: 2.3.3(@vue/compiler-sfc@3.3.8)(vue@3.3.8)
+        specifier: 2.4.0
+        version: 2.4.0(@vue/compiler-sfc@3.3.8)(vue@3.3.8)
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -18275,27 +18275,6 @@ packages:
       typescript: 5.3.3
     dev: true
 
-  /vue3-gettext@2.3.3(@vue/compiler-sfc@3.3.8)(vue@3.3.8):
-    resolution: {integrity: sha512-8dAiy135s+ppmY0OpliuLNbNVUielFS8Zk2jFmAfx7IaKbuGZ30PGaeDG5bZ6aioBCsU75URbYiezTcQg+BNhg==}
-    engines: {node: '>= 12.0.0'}
-    hasBin: true
-    peerDependencies:
-      '@vue/compiler-sfc': '>=3.0.0'
-      vue: '>=3.0.0'
-    dependencies:
-      '@vue/compiler-sfc': 3.3.8
-      chalk: 4.1.2
-      command-line-args: 5.2.1
-      cosmiconfig: 7.1.0
-      gettext-extractor: 3.6.1
-      glob: 7.2.0
-      parse5: 6.0.1
-      parse5-htmlparser2-tree-adapter: 6.0.1
-      pofile: 1.1.4
-      tslib: 2.5.0
-      vue: 3.3.8(typescript@5.3.3)
-    dev: true
-
   /vue3-gettext@2.4.0(@vue/compiler-sfc@3.3.8)(vue@3.3.8):
     resolution: {integrity: sha512-xnCndk88nzC+EiUJpNKykUulvPhivM1AQuT6oa72PA4DUOFPjJvpy5hZ/GbxLUJiqvYJebMDMTWywCJwIw+biA==}
     engines: {node: '>= 12.0.0'}
@@ -18315,7 +18294,6 @@ packages:
       pofile: 1.1.4
       tslib: 2.5.0
       vue: 3.3.8(typescript@5.3.3)
-    dev: false
 
   /vue@3.3.8(typescript@5.3.3):
     resolution: {integrity: sha512-5VSX/3DabBikOXMsxzlW8JyfeLKlG9mzqnWgLQLty88vdZL7ZJgrdgBOmrArwxiLtmS+lNNpPcBYqrhE6TQW5w==}
