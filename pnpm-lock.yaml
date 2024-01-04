@@ -589,8 +589,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -691,8 +691,8 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@3.3.0)'
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -807,8 +807,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -969,8 +969,8 @@ importers:
         specifier: workspace:*
         version: 'link:'
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       fast-xml-parser:
         specifier: 4.3.2
         version: 4.3.2
@@ -1020,8 +1020,8 @@ importers:
         specifier: ^10.0.0
         version: 10.3.0(vue@3.3.8)
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
@@ -1120,8 +1120,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.3.8)
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -1154,7 +1154,7 @@ importers:
         version: 2.4.0
       owncloud-sdk:
         specifier: 3.1.0-alpha.10
-        version: 3.1.0-alpha.10(axios@1.6.3)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11)
+        version: 3.1.0-alpha.10(axios@1.6.4)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11)
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -1250,8 +1250,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(@casl/ability@6.3.3)(vue@3.3.8)
       axios:
-        specifier: 1.6.3
-        version: 1.6.3
+        specifier: 1.6.4
+        version: 1.6.4
       pinia:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.3.3)(vue@3.3.8)
@@ -5537,10 +5537,10 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios@1.6.3:
-    resolution: {integrity: sha512-fWyNdeawGam70jXSVlKl+SUNVcL6j6W79CuSIPfi6HnDUmSCH6gyUys/HrqHeA/wU0Az41rRgean494d0Jb+ww==}
+  /axios@1.6.4:
+    resolution: {integrity: sha512-heJnIs6N4aa1eSthhN9M5ioILu8Wi8vmQW9iHQ9NUvfkJb0lEEDUiIdQNAuBtfUt3FxReaKdpQA5DbmMOqzF/A==}
     dependencies:
-      follow-redirects: 1.15.1(debug@4.3.4)
+      follow-redirects: 1.15.4
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -6460,7 +6460,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@testim/chrome-version': 1.1.4
-      axios: 1.6.3
+      axios: 1.6.4
       compare-versions: 6.1.0
       extract-zip: 2.0.1
       https-proxy-agent: 5.0.1
@@ -7663,6 +7663,7 @@ packages:
     dependencies:
       ms: 2.1.2
       supports-color: 6.1.0
+    dev: true
 
   /debug@4.3.4(supports-color@8.1.1):
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -9371,6 +9372,16 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4(supports-color@6.1.0)
+    dev: true
+
+  /follow-redirects@1.15.4:
+    resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
 
   /for-in@1.0.2:
     resolution: {integrity: sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ==}
@@ -13603,7 +13614,7 @@ packages:
     resolution: {integrity: sha512-gjcpUc3clBf9+210TRaDWbf+rZZZEshZ+DlXMRCeAjp0xhTrnQsKHypIy1J3d5hKdUzj69t708EHtU8P6bUn0A==}
     dev: true
 
-  /owncloud-sdk@3.1.0-alpha.10(axios@1.6.3)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11):
+  /owncloud-sdk@3.1.0-alpha.10(axios@1.6.4)(cross-fetch@3.1.4)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11):
     resolution: {integrity: sha512-cAq6BKkyDvm5MpcksicpBsfkr4ZEB+nm1Yl74FH3Qtm/wbI4uWwaTjqQmzYF5prAQDBDbi9F6nADp83zqfmPTA==}
     peerDependencies:
       axios: ^0.27.2
@@ -13615,7 +13626,7 @@ packages:
       webdav: 4.10.0
       xml-js: ^1.6.11
     dependencies:
-      axios: 1.6.3
+      axios: 1.6.4
       cross-fetch: 3.1.4
       promise: 8.1.0
       qs: 6.11.2
