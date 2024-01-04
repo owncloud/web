@@ -296,7 +296,7 @@ importers:
         specifier: 7.23.7
         version: 7.23.7
       '@popperjs/core':
-        specifier: ^2.4.0
+        specifier: ^2.11.5
         version: 2.11.5
       autoprefixer:
         specifier: 10.4.16
