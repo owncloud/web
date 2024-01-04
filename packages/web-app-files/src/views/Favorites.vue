@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, defineComponent, onBeforeUnmount, onMounted } from 'vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { debounce } from 'lodash-es'
 
@@ -109,10 +109,10 @@ export default defineComponent({
       ViewModeConstants.tilesView
     ])
 
-    const loadResourcesEventToken = ref(null)
+    let loadResourcesEventToken: string
 
     onMounted(() => {
-      loadResourcesEventToken.value = eventBus.subscribe(
+      loadResourcesEventToken = eventBus.subscribe(
         'app.files.list.removeFromFavorites',
         (resourceId: string) => {
           store.commit('Files/REMOVE_FILES', [{ id: resourceId }])
