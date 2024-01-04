@@ -1,6 +1,6 @@
 Change: Remove ocs user
 
-BREAKING CHANGE for developers: The user from the ocs api has been removed in favor of the graph user.
+BREAKING CHANGE for developers: The user from the ocs api has been removed in favor of the graph user. That means the user that can be retrieved from the store looks slightly different than the OCS user (though it still holds the same information).
 
 For more details please see the linked PR down below.
 

@@ -137,6 +137,8 @@ export default {
  * @returns string
  */
 function parseHomeFolder(tpl, user: User) {
+  // the home folder is deperacted and will be removed soon, hence we simply
+  // keep the legacy user for now instead of properly refactoring it to the graph user.
   const legacyUser = {
     id: user.onPremisesSamAccountName,
     uuid: user.id,
