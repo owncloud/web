@@ -32,10 +32,10 @@
         <div class="account-page-info-username oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
           <dd>
-            {{ user.username || user.id }}
+            {{ user.onPremisesSamAccountName }}
           </dd>
         </div>
-        <div v-if="user.username && user.id" class="account-page-info-userid">
+        <div v-if="user.onPremisesSamAccountName && user.id" class="account-page-info-userid">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
           <dd>
             {{ user.id }}
@@ -44,13 +44,13 @@
         <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
           <dd>
-            {{ user.displayname }}
+            {{ user.displayName }}
           </dd>
         </div>
         <div class="account-page-info-email oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
           <dd>
-            <template v-if="user.email">{{ user.email }}</template>
+            <template v-if="user.mail">{{ user.mail }}</template>
             <span v-else v-text="$gettext('No email has been set up')" />
           </dd>
         </div>
@@ -139,6 +139,7 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
@@ -149,7 +150,8 @@ import {
   useClientService,
   useGetMatchingSpace,
   useModals,
-  useStore
+  useStore,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
@@ -169,6 +171,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const userStore = useUserStore()
     const language = useGettext()
     const { $gettext } = language
     const clientService = useClientService()
@@ -191,9 +194,7 @@ export default defineComponent({
     const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
 
-    const user = computed(() => {
-      return store.getters.user
-    })
+    const { user } = storeToRefs(userStore)
 
     const personalSpace = computed(() => getPersonalSpace())
     const showGdprExport = computed(() => {
@@ -274,7 +275,7 @@ export default defineComponent({
 
     const groupNames = computed(() => {
       return unref(user)
-        .groups.map((group) => group.displayName)
+        .memberOf.map((group) => group.displayName)
         .join(', ')
     })
 

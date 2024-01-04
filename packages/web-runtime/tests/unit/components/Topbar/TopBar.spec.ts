@@ -89,7 +89,6 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
   storeOptions.getters.configuration.mockImplementation(() => ({
     options: { disableFeedbackLink: false }
   }))
-  storeOptions.getters.user.mockImplementation(() => ({ id: 'einstein' }))
   storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
     isUserContextReady
   )

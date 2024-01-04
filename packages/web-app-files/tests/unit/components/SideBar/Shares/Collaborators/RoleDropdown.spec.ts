@@ -129,7 +129,6 @@ function getWrapper({
   incomingParentShare = null
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockReturnValue({ id: 'name' })
   const store = createStore(storeOptions)
   return {
     wrapper: mountType(RoleDropdown, {
@@ -138,7 +137,12 @@ function getWrapper({
         allowSharePermission: true
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { userState: { user: { onPremisesSamAccountName: 'name' } } }
+          }),
+          store
+        ],
         renderStubDefaultSlot: true,
         provide: {
           resource: mock<Resource>({

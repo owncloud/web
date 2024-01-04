@@ -147,6 +147,10 @@ export const useCapabilityFilesSharingPublicDefaultPermissions = createCapabilit
   'files_sharing.public.default_permissions',
   SharePermissionBit.Read
 )
+export const useCapabilityFilesSharingSearchMinLength = createCapabilityComposable(
+  'files_sharing.search_min_length',
+  2
+)
 export const useCapabilityNotifications = createCapabilityComposable(
   'notifications.ocs-endpoints',
   []

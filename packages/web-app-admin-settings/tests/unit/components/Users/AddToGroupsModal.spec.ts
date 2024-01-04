@@ -57,7 +57,6 @@ describe('AddToGroupsModal', () => {
 function getWrapper({ users = [mock<User>()], groups = [mock<Group>()] } = {}) {
   const mocks = defaultComponentMocks()
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockReturnValue({ uuid: '1' })
   const store = createStore(storeOptions)
 
   return {

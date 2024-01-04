@@ -120,9 +120,10 @@
   </div>
 </template>
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
-import { ImageDimension, useConfigurationManager } from '@ownclouders/web-pkg'
+import { ImageDimension, useConfigurationManager, useUserStore } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
@@ -169,9 +170,12 @@ export default defineComponent({
   setup(props) {
     const configurationManager = useConfigurationManager()
     const store = useStore()
+    const userStore = useUserStore()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
+
+    const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
@@ -261,6 +265,7 @@ export default defineComponent({
     })
 
     return {
+      user,
       preview,
       isPublicLinkContext,
       space,
@@ -277,7 +282,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['versions']),
-    ...mapGetters(['user', 'configuration']),
+    ...mapGetters(['configuration']),
 
     hasContent() {
       return (
@@ -354,9 +359,9 @@ export default defineComponent({
     },
     ownedByCurrentUser() {
       return (
-        this.resource.ownerId === this.user.id ||
-        this.resource.owner?.[0].username === this.user.id ||
-        this.resource.shareOwner === this.user.id
+        this.resource.ownerId === this.user.onPremisesSamAccountName ||
+        this.resource.owner?.[0].username === this.user.onPremisesSamAccountName ||
+        this.resource.shareOwner === this.user.onPremisesSamAccountName
       )
     },
     shareIndicators() {

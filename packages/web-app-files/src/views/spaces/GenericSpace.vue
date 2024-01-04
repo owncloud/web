@@ -172,7 +172,8 @@ import {
   ProcessorType,
   useEmbedMode,
   useFileActions,
-  useFileActionsCreateNewFolder
+  useFileActionsCreateNewFolder,
+  useUserStore
 } from '@ownclouders/web-pkg'
 
 import {
@@ -264,6 +265,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore()
+    const userStore = useUserStore()
     const { $gettext, $ngettext } = useGettext()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
@@ -279,7 +281,7 @@ export default defineComponent({
     let loadResourcesEventToken: string
 
     const canUpload = computed(() => {
-      return store.getters['Files/currentFolder']?.canUpload({ user: store.getters.user })
+      return store.getters['Files/currentFolder']?.canUpload({ user: userStore.user })
     })
 
     const viewModes = computed(() => [
@@ -355,7 +357,7 @@ export default defineComponent({
         spaceBreadcrumbItem = {
           id: uuidv4(),
           text: space.name,
-          ...(space.isOwner(store.getters.user) && {
+          ...(space.isOwner(userStore.user) && {
             to: createLocationSpaces('files-spaces-generic', {
               params,
               query
@@ -544,7 +546,7 @@ export default defineComponent({
     ...mapState(['app']),
     ...mapState('Files', ['files']),
     ...mapGetters('Files', ['currentFolder', 'totalFilesCount', 'totalFilesSize']),
-    ...mapGetters(['user', 'configuration']),
+    ...mapGetters(['configuration']),
 
     isRunningOnEos() {
       return !!this.configuration?.options?.runningOnEos

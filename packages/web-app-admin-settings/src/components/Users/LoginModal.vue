@@ -17,7 +17,7 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { User } from '@ownclouders/web-client/src/generated'
-import { useClientService, useStore, useEventBus, Modal } from '@ownclouders/web-pkg'
+import { useClientService, useStore, useEventBus, useUserStore, Modal } from '@ownclouders/web-pkg'
 
 type LoginOption = {
   label: string
@@ -39,6 +39,7 @@ export default defineComponent({
     const clientService = useClientService()
     const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
+    const userStore = useUserStore()
 
     const selectedOption = ref<LoginOption>()
     const options = ref([
@@ -59,7 +60,7 @@ export default defineComponent({
     }
 
     const currentUserSelected = computed(() => {
-      return props.users.some((u) => u.id === store.getters.user.uuid)
+      return props.users.some((u) => u.id === userStore.user.id)
     })
 
     onMounted(() => {
@@ -71,7 +72,7 @@ export default defineComponent({
     })
 
     const onConfirm = async () => {
-      const affectedUsers = props.users.filter(({ id }) => store.getters.user.uuid !== id)
+      const affectedUsers = props.users.filter(({ id }) => userStore.user.id !== id)
       const client = clientService.graphAuthenticated
       const promises = affectedUsers.map(({ id }) =>
         client.users.editUser(id, { accountEnabled: unref(selectedOption).value })

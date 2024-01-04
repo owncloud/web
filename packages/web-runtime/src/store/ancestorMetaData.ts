@@ -33,7 +33,7 @@ const mutations = {
 }
 
 const actions = {
-  loadAncestorMetaData({ commit, state, rootGetters }, { folder, space, client }) {
+  loadAncestorMetaData({ commit, state, rootGetters }, { folder, space, client, userStore }) {
     const ancestorMetaData: AncestorMetaData = {
       [folder.path]: {
         id: folder.fileId,
@@ -58,8 +58,7 @@ const actions = {
     if (configurationManager.options.routing.fullShareOwnerPaths) {
       // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
       const projectSpace = spaces.find((s) => isProjectSpaceResource(s) && s.id === space.id)
-      fullyAccessibleSpace =
-        space.isOwner(rootGetters.user) || projectSpace?.isMember(rootGetters.user)
+      fullyAccessibleSpace = space.isOwner(userStore.user) || projectSpace?.isMember(userStore.user)
     }
 
     for (const path of parentPaths) {

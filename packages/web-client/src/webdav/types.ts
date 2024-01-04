@@ -16,9 +16,9 @@ import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { Capabilities } from '../ocs'
-import { User } from '../helpers'
 import { Ref } from 'vue'
 import { ListFilesByIdFactory } from './listFilesById'
+import { User } from '../generated'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk

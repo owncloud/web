@@ -13,6 +13,7 @@ import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
+import { User } from '@ownclouders/web-client/src/generated'
 
 const $route = {
   meta: {
@@ -112,13 +113,12 @@ describe('account page', () => {
   describe('account information', () => {
     it('displays basic user information', async () => {
       const { wrapper } = getWrapper({
-        user: {
-          user: {
-            username: 'some-username',
-            displayname: 'some-displayname',
-            email: 'some-email'
-          }
-        }
+        user: mock<User>({
+          onPremisesSamAccountName: 'some-username',
+          displayName: 'some-displayname',
+          mail: 'some-email',
+          memberOf: []
+        })
       })
 
       await wrapper.vm.loadAccountBundleTask.last
@@ -131,7 +131,7 @@ describe('account page', () => {
 
     describe('group membership', () => {
       it('displays message if not member of any groups', async () => {
-        const { wrapper } = getWrapper({ user: { groups: [] } })
+        const { wrapper } = getWrapper()
 
         await wrapper.vm.loadAccountBundleTask.last
         await wrapper.vm.loadValuesListTask.last
@@ -142,9 +142,9 @@ describe('account page', () => {
       })
       it('displays group names', async () => {
         const { wrapper } = getWrapper({
-          user: {
-            groups: [{ displayName: 'one' }, { displayName: 'two' }, { displayName: 'three' }]
-          }
+          user: mock<User>({
+            memberOf: [{ displayName: 'one' }, { displayName: 'two' }, { displayName: 'three' }]
+          })
         })
 
         await wrapper.vm.loadAccountBundleTask.last
@@ -307,14 +307,13 @@ describe('account page', () => {
 })
 
 function getWrapper({
-  user = {},
+  user = mock<User>({ memberOf: [] }),
   capabilities = {},
   accountEditLink = undefined,
   spaces = []
 } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
-  storeOptions.getters.user.mockReturnValue({ groups: [], ...user })
   storeOptions.getters.capabilities.mockReturnValue(capabilities)
   storeOptions.getters.configuration.mockReturnValue({
     server: 'http://server/address/',
@@ -349,7 +348,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(account, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
         mocks,
         provide: mocks,
         stubs: {

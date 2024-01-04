@@ -998,6 +998,9 @@ importers:
       '@ownclouders/web-client':
         specifier: workspace:*
         version: link:../web-client
+      '@sentry/vue':
+        specifier: 7.91.0
+        version: 7.91.0(vue@3.3.8)
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz'

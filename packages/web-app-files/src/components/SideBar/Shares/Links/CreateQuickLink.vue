@@ -26,12 +26,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, unref } from 'vue'
 import {
   useAbility,
   getDefaultLinkPermissions,
-  useStore,
-  ExpirationRules
+  ExpirationRules,
+  useCapabilityFilesSharingPublicDefaultPermissions
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
@@ -45,15 +45,18 @@ export default defineComponent({
   },
   emits: ['createPublicLink'],
   setup(props, { emit }) {
-    const store = useStore()
     const ability = useAbility()
     const { $gettext } = useGettext()
+    const defaultPermissionsCapability = useCapabilityFilesSharingPublicDefaultPermissions()
 
     const createQuickLink = () => {
       const emitData = {
         link: {
           name: $gettext('Link'),
-          permissions: getDefaultLinkPermissions({ ability, store }).toString(),
+          permissions: getDefaultLinkPermissions({
+            ability,
+            defaultPermissionsCapability: unref(defaultPermissionsCapability)
+          }).toString(),
           expiration: props.expirationRules.enforced ? props.expirationRules.default : null,
           quicklink: true,
           password: false

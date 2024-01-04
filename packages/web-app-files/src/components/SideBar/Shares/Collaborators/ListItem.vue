@@ -128,7 +128,8 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { mapActions } from 'vuex'
 import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
@@ -139,7 +140,8 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
   useModals,
-  useStore
+  useStore,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
@@ -185,9 +187,12 @@ export default defineComponent({
   emits: ['onDelete', 'onSetDeny'],
   setup(props, { emit }) {
     const store = useStore()
+    const userStore = useUserStore()
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { dispatchModal } = useModals()
+
+    const { user } = storeToRefs(userStore)
 
     const sharedParentDir = computed(() => {
       return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
@@ -230,6 +235,7 @@ export default defineComponent({
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
+      user,
       clientService,
       sharedParentDir,
       setDenyShare,
@@ -237,8 +243,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['user']),
-
     shareType() {
       return ShareTypes.getByValue(this.share.shareType)
     },
@@ -282,7 +286,7 @@ export default defineComponent({
     },
 
     shareDisplayName() {
-      if (this.user.id === this.share.collaborator.name) {
+      if (this.user.onPremisesSamAccountName === this.share.collaborator.name) {
         return this.$gettext('%{collaboratorName} (me)', {
           collaboratorName: this.share.collaborator.displayName
         })

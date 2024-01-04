@@ -67,10 +67,12 @@ export type OwnCloudSdk = {
     addResourceTag(...args): any
     removeResourceTag(...args): any
   }
+  /** @deprecated */
   users: {
     getUser(...args): any
     getUserGroups(...args): any
   }
+  /** @deprecated */
   getCurrentUser(...args): any
   init(...args): any
   signUrl(...args): any

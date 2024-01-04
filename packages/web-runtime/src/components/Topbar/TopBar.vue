@@ -210,7 +210,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'user']),
+    ...mapGetters(['configuration']),
 
     sidebarLogoAlt() {
       return this.$gettext('Navigate to personal files page')

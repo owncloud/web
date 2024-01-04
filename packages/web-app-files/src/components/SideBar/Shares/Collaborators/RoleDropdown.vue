@@ -111,6 +111,7 @@
 
 <script lang="ts">
 import get from 'lodash-es/get'
+import { storeToRefs } from 'pinia'
 import RoleItem from '../Shared/RoleItem.vue'
 import {
   PeopleShareRoles,
@@ -125,11 +126,11 @@ import {
   useAbility,
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharingDefault,
-  useStore
+  useStore,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { OcDrop } from 'design-system/src/components'
-import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -168,8 +169,13 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const ability = useAbility()
+    const userStore = useUserStore()
+
+    const { user } = storeToRefs(userStore)
+
     return {
       ability,
+      user,
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Share>('incomingParentShare'),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
@@ -214,7 +220,7 @@ export default defineComponent({
 
       if (
         this.incomingParentShare &&
-        this.incomingParentShare?.fileOwner?.name !== this.user.id &&
+        this.incomingParentShare?.fileOwner?.name !== this.user.onPremisesSamAccountName &&
         this.resourceIsSharable
       ) {
         return PeopleShareRoles.filterByBitmask(
@@ -238,8 +244,7 @@ export default defineComponent({
     },
     defaultCustomPermissions() {
       return [...this.selectedRole.permissions(this.allowSharePermission && this.resharingDefault)]
-    },
-    ...mapGetters(['user'])
+    }
   },
 
   created() {

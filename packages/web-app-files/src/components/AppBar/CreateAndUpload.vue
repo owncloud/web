@@ -191,7 +191,8 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive,
   useFileActions,
-  useFileActionsCreateNewShortcut
+  useFileActionsCreateNewShortcut,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import {
@@ -219,7 +220,12 @@ import {
   ref
 } from 'vue'
 import { eventBus } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  Resource,
+  SpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { useService, useUpload, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
@@ -257,6 +263,7 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
+    const userStore = useUserStore()
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
@@ -272,6 +279,7 @@ export default defineComponent({
         route,
         space: props.space,
         store,
+        userStore,
         uppyService
       })
     }
@@ -322,11 +330,11 @@ export default defineComponent({
       ].filter((e) => e.isEnabled())
     })
 
-    const currentFolder = computed(() => {
+    const currentFolder = computed<Resource>(() => {
       return store.getters['Files/currentFolder']
     })
     const canUpload = computed(() => {
-      return unref(currentFolder)?.canUpload({ user: store.getters.user })
+      return unref(currentFolder)?.canUpload({ user: userStore.user })
     })
 
     const actionKeySuffix = ref(uuidv4())
@@ -363,10 +371,9 @@ export default defineComponent({
         }
 
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (unref(hasSpaces)) {
+        if (unref(hasSpaces) && !isPublicSpaceResource(props.space)) {
           const spaces = store.getters['runtime/spaces/spaces']
-          const user = store.getters['user']
-          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(user)
+          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(userStore.user)
           if (driveType === 'project' || isOwnSpace) {
             const client = clientService.graphAuthenticated
             const driveResponse = await client.drives.getDrive(spaceId.toString())
@@ -376,9 +383,6 @@ export default defineComponent({
               value: driveResponse.data.quota
             })
           }
-        } else {
-          const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
-          store.commit('SET_QUOTA', user.quota)
         }
 
         const sameFolder =
@@ -445,7 +449,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
+    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers']),
     ...mapGetters('Files', ['files', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/ancestorMetaData', ['ancestorMetaData']),
     ...mapGetters('runtime/spaces', ['spaces']),

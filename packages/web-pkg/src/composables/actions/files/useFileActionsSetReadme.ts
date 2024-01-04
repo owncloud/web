@@ -7,9 +7,11 @@ import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
@@ -85,7 +87,7 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
           return false
         }
 
-        return space.canEditReadme({ user: store.getters.user })
+        return space.canEditReadme({ user: userStore.user })
       },
       componentType: 'button',
       class: 'oc-files-actions-set-space-readme-trigger'

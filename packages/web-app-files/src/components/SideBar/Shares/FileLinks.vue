@@ -128,7 +128,8 @@ import {
   useFileActionsCreateLink,
   FileAction,
   useClientService,
-  useModals
+  useModals,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -165,6 +166,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const userStore = useUserStore()
     const { $gettext } = useGettext()
     const ability = useAbility()
     const clientService = useClientService()
@@ -227,7 +229,7 @@ export default defineComponent({
         return false
       }
 
-      return unref(resource).canShare({ user: store.getters.user, ability })
+      return unref(resource).canShare({ user: userStore.user, ability })
     })
 
     const canEditLink = ({ permissions }: Share) => {

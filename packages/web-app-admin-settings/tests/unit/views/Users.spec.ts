@@ -432,9 +432,7 @@ function getMountedWrapper({
   mocks.$clientService = clientService
 
   const user = { id: '1', uuid: '1' }
-  const storeOptions = { ...defaultStoreMockOptions, state: { user } }
-  storeOptions.getters.user.mockReturnValue(user)
-
+  const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
 
   return {
@@ -442,7 +440,7 @@ function getMountedWrapper({
     storeOptions,
     wrapper: mountType(Users, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
         mocks,
         provide: mocks,
         stubs: {

@@ -1,4 +1,4 @@
-import index from '../../src/index'
+import { navItems, routes } from '../../src/index'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { mock } from 'jest-mock-extended'
 
@@ -9,8 +9,7 @@ describe('admin settings index', () => {
     describe('general', () => {
       it.each([true, false])('should be enabled according to the permissions', (enabled) => {
         expect(
-          index
-            .navItems({ $ability: getAbilityMock(enabled) })
+          navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'General')
             .enabled()
         ).toBe(enabled)
@@ -19,8 +18,7 @@ describe('admin settings index', () => {
     describe('user management', () => {
       it.each([true, false])('should be enabled according to the permissions', (enabled) => {
         expect(
-          index
-            .navItems({ $ability: getAbilityMock(enabled) })
+          navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'Users')
             .enabled()
         ).toBe(enabled)
@@ -29,8 +27,7 @@ describe('admin settings index', () => {
     describe('group management', () => {
       it.each([true, false])('should be enabled according to the permissions', (enabled) => {
         expect(
-          index
-            .navItems({ $ability: getAbilityMock(enabled) })
+          navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'Groups')
             .enabled()
         ).toBe(enabled)
@@ -39,8 +36,7 @@ describe('admin settings index', () => {
     describe('space management', () => {
       it.each([true, false])('should be enabled according to the permissions', (enabled) => {
         expect(
-          index
-            .navItems({ $ability: getAbilityMock(enabled) })
+          navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'Spaces')
             .enabled()
         ).toBe(enabled)
@@ -53,8 +49,7 @@ describe('admin settings index', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValueOnce(true)
         expect(
-          index
-            .routes({ $ability: ability })
+          routes({ $ability: ability })
             .find((n) => n.path === '/')
             .redirect().name
         ).toEqual('admin-settings-general')
@@ -64,8 +59,7 @@ describe('admin settings index', () => {
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
         expect(
-          index
-            .routes({ $ability: ability })
+          routes({ $ability: ability })
             .find((n) => n.path === '/')
             .redirect().name
         ).toEqual('admin-settings-users')
@@ -76,8 +70,7 @@ describe('admin settings index', () => {
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
         expect(
-          index
-            .routes({ $ability: ability })
+          routes({ $ability: ability })
             .find((n) => n.path === '/')
             .redirect().name
         ).toEqual('admin-settings-groups')
@@ -89,8 +82,7 @@ describe('admin settings index', () => {
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
         expect(
-          index
-            .routes({ $ability: ability })
+          routes({ $ability: ability })
             .find((n) => n.path === '/')
             .redirect().name
         ).toEqual('admin-settings-spaces')
@@ -98,7 +90,7 @@ describe('admin settings index', () => {
       it('should throw an error if permissions are insufficient', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValue(false)
-        expect(index.routes({ $ability: ability }).find((n) => n.path === '/').redirect).toThrow()
+        expect(routes({ $ability: ability }).find((n) => n.path === '/').redirect).toThrow()
       })
     })
     it.each([
@@ -106,7 +98,7 @@ describe('admin settings index', () => {
       { can: false, redirect: { path: '/' } }
     ])('redirects "/general" with sufficient permissions', ({ can, redirect }) => {
       const ability = mock<Ability>({ can: jest.fn(() => can) })
-      const route = index.routes({ $ability: ability }).find((n) => n.path === '/general')
+      const route = routes({ $ability: ability }).find((n) => n.path === '/general')
       const nextMock = jest.fn()
       route.beforeEnter({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
@@ -117,7 +109,7 @@ describe('admin settings index', () => {
       { can: false, redirect: { path: '/' } }
     ])('redirects "/users" with sufficient permissions', ({ can, redirect }) => {
       const ability = mock<Ability>({ can: jest.fn(() => can) })
-      const route = index.routes({ $ability: ability }).find((n) => n.path === '/users')
+      const route = routes({ $ability: ability }).find((n) => n.path === '/users')
       const nextMock = jest.fn()
       route.beforeEnter({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
@@ -128,7 +120,7 @@ describe('admin settings index', () => {
       { can: false, redirect: { path: '/' } }
     ])('redirects "/groups" with sufficient permissions', ({ can, redirect }) => {
       const ability = mock<Ability>({ can: jest.fn(() => can) })
-      const route = index.routes({ $ability: ability }).find((n) => n.path === '/groups')
+      const route = routes({ $ability: ability }).find((n) => n.path === '/groups')
       const nextMock = jest.fn()
       route.beforeEnter({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
@@ -139,7 +131,7 @@ describe('admin settings index', () => {
       { can: false, redirect: { path: '/' } }
     ])('redirects "/spaces" with sufficient permissions', ({ can, redirect }) => {
       const ability = mock<Ability>({ can: jest.fn(() => can) })
-      const route = index.routes({ $ability: ability }).find((n) => n.path === '/spaces')
+      const route = routes({ $ability: ability }).find((n) => n.path === '/spaces')
       const nextMock = jest.fn()
       route.beforeEnter({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]

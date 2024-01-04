@@ -56,9 +56,6 @@ export default {
     })
   },
   sharesLoading: (state) => state.sharesLoading,
-  quota: (state) => {
-    return state.quota
-  },
   highlightedFile: (state, getters) => {
     if (getters.selectedFiles.length > 0) {
       return getters.selectedFiles[0]

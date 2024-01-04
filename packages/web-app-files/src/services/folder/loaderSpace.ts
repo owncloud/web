@@ -33,7 +33,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, router, clientService, configurationManager } = context
+    const { store, userStore, router, clientService, configurationManager } = context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
     const hasResharing = useCapabilityFilesSharingResharing(store)
@@ -79,7 +79,8 @@ export class FolderLoaderSpace implements FolderLoader {
         yield store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
           folder: currentFolder,
           space,
-          client: webdav
+          client: webdav,
+          userStore
         })
 
         if (options.loadShares) {

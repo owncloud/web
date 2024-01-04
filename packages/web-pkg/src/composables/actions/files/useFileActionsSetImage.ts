@@ -10,9 +10,11 @@ import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
@@ -104,7 +106,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
           return false
         }
 
-        return space.canEditImage({ user: store.getters.user })
+        return space.canEditImage({ user: userStore.user })
       },
       componentType: 'button',
       class: 'oc-files-actions-set-space-image-trigger'

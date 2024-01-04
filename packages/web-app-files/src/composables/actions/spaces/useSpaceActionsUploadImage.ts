@@ -6,7 +6,8 @@ import {
   useClientService,
   useLoadingService,
   useStore,
-  usePreviewService
+  usePreviewService,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -22,6 +23,7 @@ export const useSpaceActionsUploadImage = ({
   spaceImageInput: VNodeRef
 }) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
@@ -133,7 +135,7 @@ export const useSpaceActionsUploadImage = ({
           return false
         }
 
-        return resources[0].canEditImage({ user: store.getters.user })
+        return resources[0].canEditImage({ user: userStore.user })
       },
       componentType: 'button',
       class: 'oc-files-actions-upload-space-image-trigger'

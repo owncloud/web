@@ -8,10 +8,11 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -73,7 +74,7 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
           return false
         }
 
-        return resources[0].canEditDescription({ user: store.getters.user, ability })
+        return resources[0].canEditDescription({ user: userStore.user, ability })
       },
       componentType: 'button',
       class: 'oc-files-actions-edit-description-trigger'

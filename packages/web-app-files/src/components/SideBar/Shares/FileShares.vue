@@ -87,7 +87,8 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   useAbility,
   useStore,
@@ -96,7 +97,8 @@ import {
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingCanDenyAccess,
   useGetMatchingSpace,
-  useModals
+  useModals,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -127,9 +129,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const userStore = useUserStore()
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { dispatchModal } = useModals()
+
+    const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
 
@@ -146,12 +151,12 @@ export default defineComponent({
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
     const currentUserIsMemberOfSpace = computed(() => {
-      const userId = store.getters.user?.id
-      if (!userId) {
+      const username = unref(user).onPremisesSamAccountName
+      if (!username) {
         return false
       }
       return store.getters['runtime/spaces/spaceMembers'].some(
-        (member) => member.collaborator?.name === userId
+        (member) => member.collaborator?.name === username
       )
     })
 
@@ -168,6 +173,7 @@ export default defineComponent({
 
     return {
       ...useShares(),
+      user,
       ability,
       resource,
       space: inject<Ref<SpaceResource>>('space'),
@@ -189,7 +195,6 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers', 'spaces']),
-    ...mapState(['user']),
 
     inviteCollaboratorHelp() {
       const cernFeatures = !!this.configuration?.options?.cernFeatures
@@ -234,7 +239,7 @@ export default defineComponent({
         collaborator.key = 'collaborator-' + collaborator.id
         if (
           collaborator.owner.name !== collaborator.fileOwner.name &&
-          collaborator.owner.name !== this.user.id
+          collaborator.owner.name !== this.user.onPremisesSamAccountName
         ) {
           collaborator.resharers = [collaborator.owner]
         }
@@ -499,7 +504,7 @@ export default defineComponent({
         this.resource.isFolder &&
         !(
           collaborator.shareType === ShareTypes.spaceUser.value &&
-          collaborator.collaborator.name === this.user.id
+          collaborator.collaborator.name === this.user.onPremisesSamAccountName
         ) &&
         (!!this.getDeniedSpaceMember(collaborator) || !this.isSpaceMemberDenied(collaborator))
       )

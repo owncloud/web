@@ -143,7 +143,6 @@ function getWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  storeOptions.getters.user.mockReturnValue({ id: 'alice', uuid: 1 })
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
@@ -158,7 +157,10 @@ function getWrapper({
       {
         mocks,
         provide: mocks,
-        store
+        store,
+        pluginOptions: {
+          piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
+        }
       }
     )
   }

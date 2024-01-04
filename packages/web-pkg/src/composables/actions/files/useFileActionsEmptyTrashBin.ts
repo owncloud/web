@@ -10,10 +10,11 @@ import { useStore } from '../../store'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
@@ -67,7 +68,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
 
         if (
           isProjectSpaceResource(space) &&
-          !space.canRemoveFromTrashbin({ user: store.getters.user })
+          !space.canRemoveFromTrashbin({ user: userStore.user })
         ) {
           return false
         }

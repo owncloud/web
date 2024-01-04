@@ -41,7 +41,6 @@ describe('InviteCollaborator RecipientContainer', () => {
 
 function getMountedWrapper(recipient, avatarsEnabled = false) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockImplementation(() => ({ id: 1 }))
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files_sharing: {
       user: {

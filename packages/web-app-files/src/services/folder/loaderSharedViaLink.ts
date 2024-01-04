@@ -22,7 +22,7 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, clientService, configurationManager } = context
+    const { store, userStore, clientService, configurationManager } = context
     const { owncloudSdk: client } = clientService
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
@@ -57,7 +57,7 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
         }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
           if (!resource.storageId) {
-            resource.storageId = store.getters.user.id
+            resource.storageId = userStore.user.onPremisesSamAccountName
           }
           return resource
         })

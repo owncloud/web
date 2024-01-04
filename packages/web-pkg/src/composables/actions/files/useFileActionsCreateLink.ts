@@ -12,7 +12,7 @@ import {
 import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../capability'
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsCreateLink = ({
   store,
@@ -25,6 +25,7 @@ export const useFileActionsCreateLink = ({
   showMessages?: boolean
   onLinkCreatedCallback?: (result: PromiseSettledResult<Share>[]) => Promise<void> | void
 } = {}) => {
+  const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const loadingService = useLoadingService()
@@ -102,7 +103,7 @@ export const useFileActionsCreateLink = ({
     }
 
     for (const resource of resources) {
-      if (!resource.canShare({ user: store.getters.user, ability })) {
+      if (!resource.canShare({ user: userStore.user, ability })) {
         return false
       }
 

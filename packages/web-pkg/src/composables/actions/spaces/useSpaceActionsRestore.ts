@@ -9,10 +9,11 @@ import { useLoadingService } from '../../loadingService'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -22,7 +23,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
 
   const filterResourcesToRestore = (resources): SpaceResource[] => {
     return resources.filter(
-      (r) => isProjectSpaceResource(r) && r.canRestore({ user: store.getters.user, ability })
+      (r) => isProjectSpaceResource(r) && r.canRestore({ user: userStore.user, ability })
     )
   }
 

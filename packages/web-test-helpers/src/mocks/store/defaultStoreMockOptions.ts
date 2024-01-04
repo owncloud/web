@@ -7,9 +7,7 @@ export const defaultStoreMockOptions = {
     newFileHandlers: jest.fn(() => []),
     getNavItemsByExtension: jest.fn(),
     apps: jest.fn(() => ({})),
-    quota: jest.fn(() => ({})),
     capabilities: jest.fn().mockImplementation(() => ({})),
-    user: jest.fn().mockImplementation(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
       options: {
         editor: {
@@ -40,9 +38,6 @@ export const defaultStoreMockOptions = {
     deleteNotification: jest.fn(),
     openNavigation: jest.fn(),
     closeNavigation: jest.fn()
-  },
-  mutations: {
-    SET_QUOTA: () => jest.fn()
   },
   state: {
     navigation: {

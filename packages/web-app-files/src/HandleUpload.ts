@@ -10,7 +10,7 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { ResourceConflict } from './helpers/resource'
-import { locationPublicLink } from '@ownclouders/web-pkg'
+import { UserStore, locationPublicLink } from '@ownclouders/web-pkg'
 import { locationSpacesGeneric, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
@@ -21,6 +21,7 @@ export interface HandleUploadOptions {
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
   store: Store<any>
+  userStore: UserStore
   uppyService: UppyService
   id?: string
   space?: SpaceResource
@@ -49,6 +50,7 @@ export class HandleUpload extends BasePlugin {
   route: Ref<RouteLocationNormalizedLoaded>
   space: SpaceResource
   store: Store<any>
+  userStore: UserStore
   uppyService: UppyService
   quotaCheckEnabled: boolean
   directoryTreeCreateEnabled: boolean
@@ -66,6 +68,7 @@ export class HandleUpload extends BasePlugin {
     this.route = opts.route
     this.space = opts.space
     this.store = opts.store
+    this.userStore = opts.userStore
     this.uppyService = opts.uppyService
 
     this.quotaCheckEnabled = opts.quotaCheckEnabled ?? true
@@ -207,7 +210,7 @@ export class HandleUpload extends BasePlugin {
         !targetUploadSpace ||
         isShareSpaceResource(targetUploadSpace) ||
         (isPersonalSpaceResource(targetUploadSpace) &&
-          !targetUploadSpace.isOwner(this.store.getters.user))
+          !targetUploadSpace.isOwner(this.userStore.user))
       ) {
         return acc
       }

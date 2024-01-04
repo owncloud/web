@@ -9,10 +9,11 @@ import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { Store } from 'vuex'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useModals } from '../../piniaStores'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -21,7 +22,7 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
     return resources.filter(
-      (r) => isProjectSpaceResource(r) && r.canBeDeleted({ user: store.getters.user, ability })
+      (r) => isProjectSpaceResource(r) && r.canBeDeleted({ user: userStore.user, ability })
     )
   }
 

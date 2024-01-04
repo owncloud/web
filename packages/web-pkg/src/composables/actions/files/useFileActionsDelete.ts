@@ -13,9 +13,11 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { computed, unref } from 'vue'
+import { useUserStore } from '../../piniaStores'
 
 export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const hasSpaces = useCapabilitySpacesEnabled()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
@@ -106,7 +108,7 @@ export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => 
 
         if (
           isProjectSpaceResource(space) &&
-          !space.canRemoveFromTrashbin({ user: store.getters.user })
+          !space.canRemoveFromTrashbin({ user: userStore.user })
         ) {
           return false
         }
