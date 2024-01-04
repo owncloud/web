@@ -125,7 +125,6 @@ config = {
                     "webUISharingInternalUsers",
                     "webUISharingInternalUsersBlacklisted",
                     "webUISharingInternalUsersCollaborator",
-                    "webUISharingExpirationDate",
                 ],
                 "oCISSharingInternal3": [
                     "webUISharingInternalGroupsSharingIndicator",
@@ -221,7 +220,6 @@ basicTestSuites = [
     "webUIResharing2",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
-    "webUISharingExpirationDate",
     "webUISharingFilePermissionMultipleUsers",
     "webUISharingFilePermissionsGroups",
     "webUISharingFolderAdvancedPermissionMultipleUsers",

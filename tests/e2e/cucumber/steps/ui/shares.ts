@@ -6,7 +6,7 @@ import { ICollaborator } from '../../../support/objects/app-files/share/collabor
 
 const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
   return stepTable.hashes().reduce((acc, stepRow) => {
-    const { resource, recipient, type, role, resourceType } = stepRow
+    const { resource, recipient, type, role, resourceType, expirationDate } = stepRow
 
     if (!acc[resource]) {
       acc[resource] = []
@@ -19,7 +19,8 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
           : usersEnvironment.getUser({ key: recipient }),
       role,
       type,
-      resourceType
+      resourceType,
+      expirationDate
     })
 
     return acc
@@ -277,5 +278,32 @@ When(
         } as ICollaborator
       })
     }
+  }
+)
+
+When(
+  /^"([^"]*)" sets the expiration date of the (folder|file) "([^"]*)" of the (group|user) "([^"]*)" to "([^"]*)"?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    _: unknown,
+    resource: string,
+    collaboratorType: 'user' | 'group',
+    collaboratorName: string,
+    expirationDate: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    await shareObject.addExpirationDate({
+      resource,
+      collaborator: {
+        collaborator:
+          collaboratorType === 'group'
+            ? this.usersEnvironment.getGroup({ key: collaboratorName })
+            : this.usersEnvironment.getUser({ key: collaboratorName }),
+        type: collaboratorType
+      } as ICollaborator,
+      expirationDate
+    })
   }
 )

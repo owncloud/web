@@ -93,7 +93,7 @@ Feature: share
       | testavatar.jpeg  | Brian     | user | Can view                             | file         |
       | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
       | sharedFile.txt   | Brian     | user | Can edit                             | file         |
-    
+
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     Then "Brian" should not see a sync status for the file "shareToBrian.txt"
@@ -132,4 +132,40 @@ Feature: share
       | resource         | owner        |
       | shareToBrian.txt | Alice Hansen |
       | shareToBrian.md  | Alice Hansen |
+    And "Brian" logs out
+
+
+  Scenario: share with expiration date
+    Given "Admin" creates following group using API
+      | id    |
+      | sales |
+    And "Admin" adds user to the group using API
+      | user  | group |
+      | Brian | sales |
+    And  "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
+      | name       |
+      | myfolder   |
+      | mainFolder |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile | content      |
+      | new.txt    | some content |
+    And "Alice" opens the "files" app
+    When "Alice" shares the following resource using the sidebar panel
+      | resource   | recipient | type  | role     | resourceType | expirationDate |
+      | new.txt    | Brian     | user  | Can edit | file         | +5 days        |
+      | myfolder   | sales     | group | Can view | folder       | +10 days       |
+      | mainFolder | Brian     | user  | Can edit | folder       |                |
+
+    # set expirationDate to existing share
+    And "Alice" sets the expiration date of the folder "mainFolder" of the user "Brian" to "+5 days"
+    And "Alice" sets the expiration date of the folder "myfolder" of the group "sales" to "+3 days"
+    And  "Alice" logs out
+
+    And "Brian" navigates to the shared with me page
+    And "Brian" accepts the following share
+      | name       |
+      | new.txt    |
+      | myfolder   |
+      | mainFolder |
     And "Brian" logs out
