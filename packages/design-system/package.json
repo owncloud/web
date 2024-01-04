@@ -123,7 +123,7 @@
     "filesize": "^9.0.11",
     "focus-trap": "^7.2.0",
     "focus-trap-vue": "^4.0.1",
-    "postcss-import": "^12.0.1",
+    "postcss-import": "^16.0.0",
     "postcss-url": "10.1.3",
     "tippy.js": "^6.3.7",
     "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",

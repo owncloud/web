@@ -1165,8 +1165,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0(vue@3.3.8)
       postcss-import:
-        specifier: ^12.0.1
-        version: 12.0.1
+        specifier: 16.0.0
+        version: 16.0.0(postcss@8.4.32)
       postcss-url:
         specifier: 10.1.3
         version: 10.1.3(postcss@8.4.32)
@@ -14009,16 +14009,6 @@ packages:
       postcss: 8.4.20
     dev: true
 
-  /postcss-import@12.0.1:
-    resolution: {integrity: sha512-3Gti33dmCjyKBgimqGxL3vcV8w9+bsHwO5UrBawp796+jdardbcFl4RP5w/76BwNL7aGzpKstIfF9I+kdE8pTw==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      postcss: 7.0.36
-      postcss-value-parser: 3.3.1
-      read-cache: 1.0.0
-      resolve: 1.22.0
-    dev: false
-
   /postcss-import@16.0.0(postcss@8.4.32):
     resolution: {integrity: sha512-e77lhVvrD1I2y7dYmBv0k9ULTdArgEYZt97T4w6sFIU5uxIHvDFQlKgUUyY7v7Barj0Yf/zm5A4OquZN7jKm5Q==}
     engines: {node: '>=18.0.0'}
@@ -14028,8 +14018,7 @@ packages:
       postcss: 8.4.32
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.1
-    dev: true
+      resolve: 1.22.8
 
   /postcss-loader@7.3.4(postcss@8.4.32)(typescript@5.3.3)(webpack@4.46.0):
     resolution: {integrity: sha512-iW5WTTBSC5BfsBJ9daFMPVrLT36MrNiC6fqOZTTaHjBNX6Pfd5p+hSBqe/fEeNd7pc13QiAyGt7VdGMw4eRC4A==}
@@ -14404,10 +14393,10 @@ packages:
 
   /postcss-value-parser@3.3.1:
     resolution: {integrity: sha512-pISE66AbVkp4fDQ7VHBwRNXzAAKJjw4Vw7nWI/+Q3vuly7SNfgYXvm6i5IgFylHGK5sP/xHAbB7N49OS4gWNyQ==}
+    dev: true
 
   /postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
-    dev: true
 
   /postcss@7.0.36:
     resolution: {integrity: sha512-BebJSIUMwJHRH0HAQoxN4u1CN86glsrwsW0q7T+/m44eXOUAxSNdHRkNZPYz5vVUbg17hFgOQDE7fZk7li3pZw==}
@@ -14416,6 +14405,7 @@ packages:
       chalk: 2.4.2
       source-map: 0.6.1
       supports-color: 6.1.0
+    dev: true
 
   /postcss@8.4.20:
     resolution: {integrity: sha512-6Q04AXR1212bXr5fh03u8aAwbLxAQNGQ/Q1LNa0VfOI06ZAlhPHtQvE4OIdpj4kLThXilalPnmDSOD65DcHt+g==}
@@ -16272,6 +16262,7 @@ packages:
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+    dev: true
 
   /source-map@0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
