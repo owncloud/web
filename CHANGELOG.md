@@ -46,6 +46,7 @@ Summary
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
 * Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -466,6 +467,18 @@ Details
    https://github.com/owncloud/web/issues/10095
    https://github.com/owncloud/web/pull/10212
    https://github.com/owncloud/web/pull/10239
+
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+
+   BREAKING CHANGE for developers: The user from the ocs api has been removed in
+   favor of the graph user. That means the user that can be retrieved from the
+   store looks slightly different than the OCS user (though it still holds the same
+   information).
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10240
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
