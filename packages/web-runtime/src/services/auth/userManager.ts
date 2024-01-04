@@ -99,7 +99,7 @@ export class UserManager extends OidcUserManager {
     }
 
     Log.setLogger(console)
-    Log.setLevel(Log.INFO)
+    Log.setLevel(Log.WARN)
 
     super(openIdConfig)
     this.storePrefix = storePrefix
