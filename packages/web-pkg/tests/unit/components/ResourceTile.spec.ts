@@ -1,5 +1,5 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import OcTile from './OcTile.vue'
+import ResourceTile from '../../../src/components/ResourceTile.vue'
 
 const getSpaceMock = (disabled = false) => ({
   name: 'Space 1',
@@ -27,12 +27,12 @@ describe('OcTile component', () => {
     'renders resource icon size correctly',
     (resourceIconSize) => {
       const wrapper = getWrapper({ resource: getSpaceMock(), resourceIconSize })
-      expect(wrapper.find('oc-resource-icon-stub').attributes().size).toEqual(resourceIconSize)
+      expect(wrapper.find('resource-icon-stub').attributes().size).toEqual(resourceIconSize)
     }
   )
 
   function getWrapper(props = {}) {
-    return shallowMount(OcTile, {
+    return shallowMount(ResourceTile, {
       props,
       global: { plugins: [...defaultPlugins()], renderStubDefaultSlot: true }
     })

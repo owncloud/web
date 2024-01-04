@@ -203,7 +203,9 @@ describe('UploadInfo component', () => {
 
       const info = wrapper.find(selectors.info.items)
       expect(info.exists()).toBeTruthy()
-      const resourceStub = wrapper.findComponent<any>(`${selectors.info.item} oc-resource-stub`)
+      const resourceStub = wrapper.findComponent<any>(
+        `${selectors.info.item} resource-list-item-stub`
+      )
       expect(resourceStub.props().isResourceClickable).toBeTruthy()
     })
   })

@@ -21,7 +21,7 @@ jest.mock('../../../../src/composables/actions', () => ({
 }))
 
 const selectors = {
-  ocResourceStub: 'oc-resource-stub'
+  resourceListItemStub: 'resource-list-item-stub'
 }
 
 describe('Preview component', () => {
@@ -49,7 +49,7 @@ describe('Preview component', () => {
       })
     })
     expect(
-      wrapper.findComponent<any>(selectors.ocResourceStub).attributes().isextensiondisplayed
+      wrapper.findComponent<any>(selectors.resourceListItemStub).attributes().isextensiondisplayed
     ).toBe('false')
   })
 })

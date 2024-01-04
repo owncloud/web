@@ -36,7 +36,7 @@
     </div>
     <oc-list class="oc-tiles oc-flex">
       <li v-for="resource in data" :key="resource.id" class="oc-tiles-item has-item-context-menu">
-        <oc-tile
+        <resource-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
@@ -83,7 +83,7 @@
               </template>
             </context-menu-quick-action>
           </template>
-        </oc-tile>
+        </resource-tile>
       </li>
       <li
         v-for="index in ghostTilesCount"
@@ -97,7 +97,7 @@
       </li>
     </oc-list>
     <Teleport v-if="dragItem" to="body">
-      <oc-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
+      <drag-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
     </Teleport>
     <div class="oc-tiles-footer">
       <slot name="footer" />
@@ -135,12 +135,14 @@ import {
   useResourceRouteResolver,
   useStore,
   useTileSize,
-  ViewModeConstants
+  ViewModeConstants,
+  DragGhostElement,
+  ResourceTile
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, DragGhostElement, ResourceTile },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles

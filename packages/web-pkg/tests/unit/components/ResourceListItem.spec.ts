@@ -1,7 +1,7 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-import Resource from './OcResource.vue'
-import OcButton from '../OcButton/OcButton.vue'
+import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import ResourceListItem from '../../../src/components/ResourceListItem.vue'
 
 const stubs = {
   'oc-button': OcButton
@@ -30,7 +30,7 @@ const fileResourceWithoutParentFoldername = {
 
 describe('OcResource', () => {
   it("doesn't emit a click if the resource is a folder", () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: folderResource,
         targetRoute: {
@@ -49,7 +49,7 @@ describe('OcResource', () => {
   })
 
   it("doesn't emit a click if the resource is not clickable", () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: fileResource,
         isResourceClickable: false
@@ -66,7 +66,7 @@ describe('OcResource', () => {
   })
 
   it('emits a click', async () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: fileResource
       },
@@ -82,7 +82,7 @@ describe('OcResource', () => {
   })
 
   it('parent folder component type is link if parent folder given', () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: fileResource,
         isPathDisplayed: true,
@@ -100,13 +100,15 @@ describe('OcResource', () => {
   })
 
   it('parent folder component type is span if parent folder not given', () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: fileResource,
         isPathDisplayed: true
       },
       global: {
-        stubs
+        stubs: { RouterLink: true, ...stubs },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 
@@ -115,14 +117,16 @@ describe('OcResource', () => {
   })
 
   it('displays parent folder name default if calculated name is empty', () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: fileResourceWithoutParentFoldername,
         isPathDisplayed: true,
         parentFolderName: 'Example parent folder name'
       },
       global: {
-        stubs
+        stubs: { RouterLink: true, ...stubs },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 
@@ -130,14 +134,16 @@ describe('OcResource', () => {
   })
 
   it('can be used without icon/thumbnail', () => {
-    const wrapper = mount(Resource, {
+    const wrapper = mount(ResourceListItem, {
       props: {
         resource: fileResourceWithoutParentFoldername,
         isIconDisplayed: false,
         parentFolderName: 'Example parent folder name'
       },
       global: {
-        stubs
+        stubs: { RouterLink: true, ...stubs },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
       }
     })
 

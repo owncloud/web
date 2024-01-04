@@ -22,12 +22,12 @@ import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
+import { merge } from 'lodash-es'
 import {
+  AppConfigObject,
   ocResourceIconMappingInjectionKey,
   OcResourceIconMapping
-} from 'design-system/src/components/OcResourceIcon/types'
-import { merge } from 'lodash-es'
-import { AppConfigObject } from '@ownclouders/web-pkg'
+} from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
 import { z } from 'zod'

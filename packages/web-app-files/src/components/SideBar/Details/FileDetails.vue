@@ -16,7 +16,7 @@
         v-else
         class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb"
       >
-        <oc-resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
+        <resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
       </div>
       <div
         v-if="!isPublicLinkContext && shareIndicators.length"
@@ -146,7 +146,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
-import { AncestorMetaData } from '@ownclouders/web-pkg'
+import { AncestorMetaData, ResourceIcon } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
@@ -154,7 +154,7 @@ import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDet
 
 export default defineComponent({
   name: 'FileDetails',
-  components: { TagsSelect, WebDavDetails },
+  components: { ResourceIcon, TagsSelect, WebDavDetails },
   props: {
     previewEnabled: {
       type: Boolean,

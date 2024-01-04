@@ -186,7 +186,6 @@ exports[`Users view list view renders list initially 1`] = `
                 </td>
               </tr>
             </tfoot>
-            <!--v-if-->
           </table>
         </div>
       </div>

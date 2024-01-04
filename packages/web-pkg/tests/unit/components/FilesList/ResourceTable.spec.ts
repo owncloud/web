@@ -386,12 +386,12 @@ describe('ResourceTable', () => {
   describe('hover effect', () => {
     it('is disabled by default', () => {
       const { wrapper } = getMountedWrapper({ props: { hover: false } })
-      expect(wrapper.classes()).not.toContain('oc-table-hover')
+      expect(wrapper.find('table').classes()).not.toContain('oc-table-hover')
     })
 
     it('can be enabled', () => {
       const { wrapper } = getMountedWrapper({ props: { hover: true } })
-      expect(wrapper.classes()).toContain('oc-table-hover')
+      expect(wrapper.find('table').classes()).toContain('oc-table-hover')
     })
   })
 

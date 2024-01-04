@@ -26,7 +26,7 @@
         <oc-list id="create-list" :class="areFileExtensionsShown ? 'expanded-list' : null">
           <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
-              <oc-resource-icon :resource="folderIconResource" size="medium" />
+              <resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
@@ -37,7 +37,7 @@
               class="create-list-file oc-menu-item-hover"
             >
               <oc-button appearance="raw" @click="mimeTypeAction.handler">
-                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
+                <resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
                 <span
                   class="create-list-file-item-text"
                   v-text="$gettext(mimeTypeAction.label())"
@@ -64,7 +64,7 @@
               :class="['new-file-btn-' + fileAction.ext]"
               @click="fileAction.handler"
             >
-              <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
+              <resource-icon :resource="getIconResource(fileAction)" size="medium" />
               <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
               <span
                 v-if="areFileExtensionsShown && fileAction.ext"
@@ -231,11 +231,12 @@ import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
-import { Action } from '@ownclouders/web-pkg'
+import { Action, ResourceIcon } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   components: {
+    ResourceIcon,
     ResourceUpload
   },
   props: {

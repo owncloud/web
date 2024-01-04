@@ -113,7 +113,7 @@
             <oc-icon v-else-if="item.status === 'cancelled'" name="close" size="small" />
             <oc-icon v-else-if="uploadsPaused" name="pause" size="small" />
             <div v-else class="oc-flex"><oc-spinner size="small" /></div>
-            <oc-resource
+            <resource-list-item
               v-if="displayFileAsResource(item)"
               :key="item.path"
               class="oc-ml-s"
@@ -126,7 +126,7 @@
               :parent-folder-link="parentFolderLink(item)"
             />
             <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
-              <oc-resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
+              <resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
               <oc-resource-name
                 :name="item.name"
                 :extension="item.extension"
@@ -162,10 +162,11 @@ import getSpeed from '@uppy/utils/lib/getSpeed'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '@ownclouders/web-pkg'
 import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
-import { formatFileSize, UppyResource } from '@ownclouders/web-pkg'
+import { formatFileSize, UppyResource, ResourceListItem, ResourceIcon } from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
+  components: { ResourceListItem, ResourceIcon },
   setup() {
     return {
       hasShareJail: useCapabilityShareJailEnabled()

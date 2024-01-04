@@ -11,7 +11,7 @@ export const defaultStubs = {
   'oc-spinner': true,
   'oc-textarea': true,
   'oc-tiles': false,
-  'oc-tile': true,
+  'resource-tile': true,
   'resource-table': true,
   'resource-upload': true,
   'router-link': true,

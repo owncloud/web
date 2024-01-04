@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue'
-import { IconFillType } from 'design-system/src/helpers'
+import { IconFillType } from '../../helpers/resource'
 import { Item } from '@ownclouders/web-client/src/helpers'
 
 export interface SideBarPanelContext<R, P, T extends Item> {

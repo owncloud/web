@@ -7,13 +7,13 @@ exports[`OcTile component renders default space correctly 1`] = `
     <!--v-if-->
     <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
       <div class="oc-tile-card-hover"></div>
-      <oc-resource-icon-stub class="tile-default-image oc-pt-xs" resource="[object Object]" size="xlarge"></oc-resource-icon-stub>
+      <resource-icon-stub class="tile-default-image oc-pt-xs" resource="[object Object]" size="xlarge"></resource-icon-stub>
     </div>
   </oc-resource-link-stub>
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-        <oc-resource-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldername="" pathprefix="" resource="[object Object]"></oc-resource-stub>
+        <resource-list-item-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldername="" pathprefix="" resource="[object Object]"></resource-list-item-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
         <!-- Slot for individual actions -->
@@ -34,13 +34,13 @@ exports[`OcTile component renders disabled space correctly 1`] = `
     </oc-tag-stub>
     <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
       <div class="oc-tile-card-hover"></div>
-      <oc-resource-icon-stub class="tile-default-image oc-pt-xs" resource="[object Object]" size="xlarge"></oc-resource-icon-stub>
+      <resource-icon-stub class="tile-default-image oc-pt-xs" resource="[object Object]" size="xlarge"></resource-icon-stub>
     </div>
   </oc-resource-link-stub>
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-        <oc-resource-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldername="" pathprefix="" resource="[object Object]"></oc-resource-stub>
+        <resource-list-item-stub isextensiondisplayed="true" isicondisplayed="false" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="true" parentfoldername="" pathprefix="" resource="[object Object]"></resource-list-item-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
         <!-- Slot for individual actions -->

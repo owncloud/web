@@ -54,7 +54,6 @@ jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   displayPositionedDropdown: jest.fn(),
   queryItemAsString: jest.fn()
-  // useAppDefaults: jest.fn()
 }))
 
 describe('SpacesList', () => {

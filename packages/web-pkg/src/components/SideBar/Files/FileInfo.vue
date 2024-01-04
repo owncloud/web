@@ -1,7 +1,7 @@
 <template>
   <div class="file_info oc-flex oc-flex-between oc-p-s">
     <div class="oc-flex oc-flex-middle">
-      <oc-resource-icon
+      <resource-icon
         v-if="isSubPanelActive"
         :resource="resource"
         size="large"
@@ -28,9 +28,11 @@
 import { computed, defineComponent, inject } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useStore } from '../../../composables'
+import ResourceIcon from '../../ResourceIcon.vue'
 
 export default defineComponent({
   name: 'FileInfo',
+  components: { ResourceIcon },
   props: {
     isSubPanelActive: {
       type: Boolean,

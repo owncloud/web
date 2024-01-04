@@ -27,7 +27,7 @@
               class="file-category-option-wrapper oc-flex oc-flex-middle"
               :data-test-id="`media-type-${item.id.toLowerCase()}`"
             >
-              <oc-resource-icon :resource="getFakeResourceForIcon(item)" />
+              <resource-icon :resource="getFakeResourceForIcon(item)" />
               <span class="oc-ml-s">{{ item.label }}</span>
             </div>
           </template>
@@ -200,7 +200,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { ItemFilter } from '@ownclouders/web-pkg'
 import { isLocationCommonActive } from '@ownclouders/web-pkg'
 import { ItemFilterToggle } from '@ownclouders/web-pkg'
-import { useKeyboardActions } from '@ownclouders/web-pkg'
+import { useKeyboardActions, ResourceIcon } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableNavigation,
   useKeyboardTableMouseActions,
@@ -233,6 +233,7 @@ export default defineComponent({
     ListInfo,
     Pagination,
     NoContentMessage,
+    ResourceIcon,
     ResourceTable,
     FilesViewWrapper,
     ItemFilter,

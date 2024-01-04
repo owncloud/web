@@ -18,11 +18,13 @@
 <script lang="ts">
 import { computed, defineComponent, inject, PropType, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-
-import OcIcon from '../OcIcon/OcIcon.vue'
-import { AVAILABLE_SIZES, IconType, createDefaultFileIconMapping } from '../../helpers'
-
-import { OcResourceIconMapping, ocResourceIconMappingInjectionKey } from './types'
+import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
+import {
+  IconType,
+  createDefaultFileIconMapping,
+  OcResourceIconMapping,
+  ocResourceIconMappingInjectionKey
+} from '../helpers/resource/icon'
 
 const defaultFolderIcon: IconType = {
   name: 'resource-type-folder',
@@ -41,10 +43,7 @@ const defaultFallbackIcon: IconType = {
 const defaultFileIconMapping = createDefaultFileIconMapping()
 
 export default defineComponent({
-  name: 'OcResourceIcon',
-  status: 'ready',
-  release: '12.0.0',
-  components: { OcIcon },
+  name: 'ResourceIcon',
   props: {
     /**
      * The resource to be displayed

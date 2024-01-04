@@ -71,14 +71,14 @@ describe('ResourceTiles component', () => {
 
   it('emits fileClick event upon click on tile', async () => {
     const { wrapper } = getWrapper({ data: spacesResources })
-    await wrapper.find('oc-tile').trigger('click')
+    await wrapper.find('resource-tile-stub').trigger('click')
     expect(wrapper.emitted('click')).toBeTruthy()
   })
 
   it('emits update:selectedIds event on resource selection and sets the selection', () => {
     const { wrapper } = getWrapper({ data: spacesResources, selectedIds: [spacesResources[0].id] })
     wrapper.vm.toggleSelection(spacesResources[0])
-    expect(wrapper.find('oc-tile').attributes()['is-resource-selected']).toEqual('true')
+    expect(wrapper.find('resource-tile-stub').attributes('isresourceselected')).toEqual('true')
     expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
   })
 
@@ -132,7 +132,7 @@ describe('ResourceTiles component', () => {
     { viewSize: 6, expected: 'xxxlarge' }
   ])('passes the "viewSize" to the OcTile component', (data) => {
     const { wrapper } = getWrapper({ data: spacesResources, viewSize: data.viewSize })
-    expect(wrapper.find('oc-tile').attributes()['resource-icon-size']).toEqual(data.expected)
+    expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(data.expected)
   })
 
   function getWrapper(props = {}, slots = {}) {
@@ -148,7 +148,8 @@ describe('ResourceTiles component', () => {
           ...slots
         },
         global: {
-          plugins: [...defaultPlugins({ designSystem: false }), store]
+          plugins: [...defaultPlugins({ designSystem: false }), store],
+          stubs: { ResourceTile: true }
         }
       })
     }

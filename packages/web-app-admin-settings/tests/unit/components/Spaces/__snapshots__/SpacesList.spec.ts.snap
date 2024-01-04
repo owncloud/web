@@ -171,7 +171,6 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         </td>
       </tr>
     </tfoot>
-    <!--v-if-->
   </table>
 </div>
 `;
