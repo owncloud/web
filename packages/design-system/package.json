@@ -102,7 +102,7 @@
     "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
     "vue": "3.4.4",
     "vue-inline-svg": "3.1.2",
-    "vue-loader": "^15.9.0",
+    "vue-loader": "^17.4.0",
     "vue-router": "4.2.5",
     "vue-select": "4.0.0-beta.6",
     "vue-style-loader": "^4.1.2",
