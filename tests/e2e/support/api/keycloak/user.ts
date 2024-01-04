@@ -101,7 +101,7 @@ export const getRealmRole = async (role: string, admin: User): Promise<KeycloakR
     user: admin
   })
   checkResponseStatus(response, 'Failed while fetching realm roles')
-  const roles = await response.json()
+  const roles = (await response.json()) as KeycloakRealmRole[]
 
   roles.forEach((role: KeycloakRealmRole) => {
     keycloakRealmRoles.set(role.name, role)

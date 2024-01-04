@@ -69,21 +69,16 @@ const getJson = async (url: string) => {
   ).json()
 }
 
+type ConfigJsonResponseBody = {
+  options: Record<string, any>
+}
+
 const getConfigJson = async (url: string, config: UserConfig) => {
-  const configJson = await getJson(url)
+  const configJson = (await getJson(url)) as ConfigJsonResponseBody
 
   // enable previews and enable lazy resources, which are disabled for fast tests
   configJson.options.disablePreviews = false
   configJson.options.displayResourcesLazy = true
-
-  // oC 10
-  if (configJson.auth) {
-    configJson.auth.clientId =
-      process.env.OWNCLOUD_WEB_CLIENT_ID ||
-      'AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC'
-
-    configJson.auth.clientSecret = process.env.OWNCLOUD_WEB_CLIENT_SECRET || undefined
-  }
 
   return configJson
 }
