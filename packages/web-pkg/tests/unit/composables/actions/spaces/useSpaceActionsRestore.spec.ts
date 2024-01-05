@@ -15,8 +15,8 @@ import { Drive } from '@ownclouders/web-client/src/generated'
 describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+      getWrapper({
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
@@ -30,8 +30,8 @@ describe('restore', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+      getWrapper({
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -46,8 +46,8 @@ describe('restore', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+      getWrapper({
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
@@ -62,8 +62,8 @@ describe('restore', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+      getWrapper({
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -71,8 +71,8 @@ describe('restore', () => {
   })
 
   describe('handler', () => {
-    it('should trigger the restore modal window', async () => {
-      const { wrapper } = getWrapper({
+    it('should trigger the restore modal window', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
@@ -84,8 +84,8 @@ describe('restore', () => {
         }
       })
     })
-    it('should not trigger the restore modal window without any resource', async () => {
-      const { wrapper } = getWrapper({
+    it('should not trigger the restore modal window without any resource', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]
@@ -98,8 +98,8 @@ describe('restore', () => {
   })
 
   describe('method "restoreSpace"', () => {
-    it('should hide the modal on success', async () => {
-      const { wrapper } = getWrapper({
+    it('should hide the modal on success', () => {
+      getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
@@ -109,9 +109,9 @@ describe('restore', () => {
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])

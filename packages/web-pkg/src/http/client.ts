@@ -22,7 +22,7 @@ export class HttpClient {
     url: string,
     config?: RequestConfig<D, S>
   ) {
-    return this.internalRequest('delete', url, config)
+    return await this.internalRequest('delete', url, config)
   }
 
   public get<T = unknown, D = any, S extends z.Schema | T = T>(

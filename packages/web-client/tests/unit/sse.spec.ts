@@ -58,6 +58,7 @@ describe('SSEAdapter', () => {
 
   test('it should handle onclose events and throw RetriableError', () => {
     const fetchOptions = { method: 'GET' }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sseAdapter = new SSEAdapter(url, fetchOptions)
 
     expect(() => {

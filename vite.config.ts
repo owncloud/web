@@ -108,10 +108,8 @@ export const historyModePlugins = () =>
     }
   ] as const
 
-export default defineConfig(async ({ mode, command }) => {
+export default defineConfig(({ mode, command }) => {
   const production = mode === 'production'
-  let config: UserConfig
-
   /**
     When setting `OWNCLOUD_WEB_CONFIG_URL` make sure to configure the oauth/oidc client
 
@@ -129,7 +127,7 @@ export default defineConfig(async ({ mode, command }) => {
   const configUrl =
     process.env.OWNCLOUD_WEB_CONFIG_URL || 'https://host.docker.internal:9200/config.json'
 
-  config = {
+  const config: UserConfig = {
     ...(!production && {
       server: {
         port: 9201,

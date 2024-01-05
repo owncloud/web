@@ -28,10 +28,10 @@ const currentFolder = {
 
 describe('deleteResources', () => {
   describe('method "filesList_delete"', () => {
-    it('should call the delete action on a resource in the file list', async () => {
-      const { wrapper } = getWrapper({
+    it('should call the delete action on a resource in the file list', () => {
+      getWrapper({
         currentFolder,
-        setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
+        setup: async ({ filesList_delete }, { router }) => {
           await filesList_delete([{ id: '2', path: '/folder/fileToDelete.txt' }])
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(0)
@@ -39,11 +39,11 @@ describe('deleteResources', () => {
       })
     })
 
-    it('should call the delete action on the current folder', async () => {
+    it('should call the delete action on the current folder', () => {
       const resourcesToDelete = [currentFolder]
-      const { wrapper } = getWrapper({
+      getWrapper({
         currentFolder,
-        setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
+        setup: async ({ filesList_delete }, { router }) => {
           await filesList_delete(resourcesToDelete)
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(1)

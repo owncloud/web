@@ -240,7 +240,7 @@ export default defineComponent({
         ? 3
         : 2
     })
-    const fileDroppedBreadcrumb = async (data) => {
+    const fileDroppedBreadcrumb = (data) => {
       emit(EVENT_ITEM_DROPPED, data)
     }
 

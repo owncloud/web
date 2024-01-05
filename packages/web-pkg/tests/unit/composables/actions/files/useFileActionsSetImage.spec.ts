@@ -66,7 +66,7 @@ describe('setImage', () => {
         })
       )
       getWrapper({
-        setup: async ({ actions }) => {
+        setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,

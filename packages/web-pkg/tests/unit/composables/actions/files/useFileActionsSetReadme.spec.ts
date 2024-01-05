@@ -17,7 +17,7 @@ import { Drive } from '@ownclouders/web-client/src/generated'
 describe('setReadme', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ space: null, resources: [] })).toBe(false)
         }
@@ -33,7 +33,7 @@ describe('setReadme', () => {
           special: [{ specialFolder: { name: 'readme' } }]
         })
       )
-      const { wrapper } = getWrapper({
+      getWrapper({
         resolveGetFileContents: true,
         space,
         setup: ({ actions }) => {
@@ -56,7 +56,7 @@ describe('setReadme', () => {
           special: [{ specialFolder: { name: 'readme' } }]
         })
       )
-      const { wrapper } = getWrapper({
+      getWrapper({
         resolveGetFileContents: true,
         space,
         setup: ({ actions }) => {
@@ -79,7 +79,7 @@ describe('setReadme', () => {
           special: [{ specialFolder: { name: 'readme' } }]
         })
       )
-      const { wrapper } = getWrapper({
+      getWrapper({
         resolveGetFileContents: true,
         space,
         setup: ({ actions }) => {
@@ -94,9 +94,9 @@ describe('setReadme', () => {
     })
   })
   describe('handler', () => {
-    it('should show message on success', async () => {
+    it('should show message on success', () => {
       const space = mock<SpaceResource>({ id: '1' })
-      const { wrapper } = getWrapper({
+      getWrapper({
         resolveGetFileContents: true,
         space,
         setup: async ({ actions }, { storeOptions }) => {
@@ -123,11 +123,11 @@ describe('setReadme', () => {
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const space = mock<SpaceResource>({ id: '1' })
-      const { wrapper } = getWrapper({
+      getWrapper({
         resolveGetFileContents: false,
         space,
         setup: async ({ actions }, { storeOptions }) => {

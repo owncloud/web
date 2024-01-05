@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers/src'
 
 describe('NotificationBell', () => {
-  it('should match snapshot', async () => {
+  it('should match snapshot', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
   })

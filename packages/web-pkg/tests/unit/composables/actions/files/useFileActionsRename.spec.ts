@@ -40,7 +40,7 @@ describe('rename', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({
+        getWrapper({
           setup: ({ actions }, { space }) => {
             const resources = inputData.resources
             expect(unref(actions)[0].isEnabled({ space, resources })).toBe(inputData.expectedStatus)
@@ -51,8 +51,8 @@ describe('rename', () => {
   })
 
   describe('rename action handler', () => {
-    it('should trigger the rename modal window', async () => {
-      const { wrapper } = getWrapper({
+    it('should trigger the rename modal window', () => {
+      getWrapper({
         setup: async ({ actions }, { space, storeOptions }) => {
           const resources = [currentFolder]
           await unref(actions)[0].handler({ space, resources })
@@ -64,7 +64,7 @@ describe('rename', () => {
 
   describe('method "checkNewName"', () => {
     it('should not show an error if new name not taken', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ checkNewName }, { storeOptions }) => {
           storeOptions.modules.Files.getters.files.mockReturnValue([
             { name: 'file1', path: '/file1' }
@@ -79,7 +79,7 @@ describe('rename', () => {
     })
 
     it('should not show an error if new name already exists but in different folder', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ checkNewName }, { storeOptions }) => {
           storeOptions.modules.Files.getters.files.mockReturnValue([
             { name: 'file1', path: '/file1' }
@@ -115,7 +115,7 @@ describe('rename', () => {
         message: 'The name "newname" is already taken'
       }
     ])('should detect name errors and display error messages accordingly', (inputData) => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ checkNewName }, { storeOptions }) => {
           checkNewName(
             { name: inputData.currentName, path: `/${inputData.currentName}` },
@@ -132,8 +132,8 @@ describe('rename', () => {
   })
 
   describe('method "renameResource"', () => {
-    it('should call the rename action on a resource in the file list', async () => {
-      const { wrapper } = getWrapper({
+    it('should call the rename action on a resource in the file list', () => {
+      getWrapper({
         setup: async ({ renameResource }, { space, storeOptions }) => {
           const resource = { id: '2', path: '/folder', webDavPath: '/files/admin/folder' }
           renameResource(space, resource, 'new name')
@@ -143,8 +143,8 @@ describe('rename', () => {
       })
     })
 
-    it('should call the rename action on the current folder', async () => {
-      const { wrapper } = getWrapper({
+    it('should call the rename action on the current folder', () => {
+      getWrapper({
         setup: async ({ renameResource }, { space, storeOptions }) => {
           renameResource(space, currentFolder, 'new name')
           await nextTick()
@@ -153,10 +153,10 @@ describe('rename', () => {
       })
     })
 
-    it('should handle errors properly', async () => {
+    it('should handle errors properly', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ renameResource }, { space, storeOptions, clientService }) => {
           clientService.webdav.moveFiles.mockRejectedValueOnce(new Error())
 

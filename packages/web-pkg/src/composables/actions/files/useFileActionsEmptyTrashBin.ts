@@ -64,7 +64,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
       icon: 'delete-bin-5',
       label: () => $gettext('Empty trash bin'),
       handler,
-      isEnabled: ({ space, resources }) => {
+      isEnabled: ({ space }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

@@ -38,7 +38,7 @@ describe('downloadArchive', () => {
           }
         ])('should filter non downloadable resources', ({ resources, downloadableResourceIds }) => {
           const triggerDownloadMock = jest.fn().mockResolvedValue(true)
-          const { wrapper } = getWrapper({
+          getWrapper({
             searchLocation: true,
             triggerDownloadMock,
             setup: () => {

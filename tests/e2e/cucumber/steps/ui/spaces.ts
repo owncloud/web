@@ -222,7 +222,7 @@ When(
 
 When(
   '{string} downloads the space {string}',
-  async function (this: World, stepUser: string, space: string): Promise<void> {
+  async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const downloadedResource = await spacesObject.downloadSpace()

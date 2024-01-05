@@ -23,11 +23,11 @@ describe('useFileActionsCreateNewFolder', () => {
       { input: '.', output: 'Folder name cannot be equal to "."' },
       { input: '..', output: 'Folder name cannot be equal to ".."' },
       { input: 'myfolder', output: null }
-    ])('should validate folder name %s', async (data) => {
+    ])('should validate folder name %s', (data) => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ checkNewFolderName }) => {
+        setup: ({ checkNewFolderName }) => {
           const result = checkNewFolderName(data.input)
           expect(result).toBe(data.output)
         }
@@ -35,7 +35,7 @@ describe('useFileActionsCreateNewFolder', () => {
     })
   })
   describe('addNewFolder', () => {
-    it('create new folder', async () => {
+    it('create new folder', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
@@ -55,7 +55,7 @@ describe('useFileActionsCreateNewFolder', () => {
         }
       })
     })
-    it('show error message if createFolder fails', async () => {
+    it('show error message if createFolder fails', () => {
       const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
@@ -76,7 +76,7 @@ describe('useFileActionsCreateNewFolder', () => {
     })
   })
   describe('createNewFolderModal', () => {
-    it('should show modal', async () => {
+    it('should show modal', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,

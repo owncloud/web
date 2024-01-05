@@ -15,7 +15,7 @@ import { Drive } from '@ownclouders/web-client/src/generated'
 describe('disable', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
@@ -30,7 +30,7 @@ describe('disable', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
@@ -45,7 +45,7 @@ describe('disable', () => {
         },
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
@@ -60,7 +60,7 @@ describe('disable', () => {
         driveType: 'project',
         special: null
       })
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
@@ -69,8 +69,8 @@ describe('disable', () => {
   })
 
   describe('handler', () => {
-    it('should trigger the disable modal window', async () => {
-      const { wrapper } = getWrapper({
+    it('should trigger the disable modal window', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
@@ -82,8 +82,8 @@ describe('disable', () => {
         }
       })
     })
-    it('should not trigger the disable modal window without any resource', async () => {
-      const { wrapper } = getWrapper({
+    it('should not trigger the disable modal window without any resource', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [
@@ -98,8 +98,8 @@ describe('disable', () => {
   })
 
   describe('method "disableSpace"', () => {
-    it('should hide the modal on success', async () => {
-      const { wrapper, mocks } = getWrapper({
+    it('should hide the modal on success', () => {
+      getWrapper({
         setup: async ({ disableSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.disableDrive.mockResolvedValue(mockAxiosResolve())
           await disableSpaces([
@@ -111,10 +111,10 @@ describe('disable', () => {
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
-        setup: async ({ actions, disableSpaces }, { storeOptions, clientService }) => {
+      getWrapper({
+        setup: async ({ disableSpaces }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.disableDrive.mockRejectedValue(new Error())
           await disableSpaces([
             mock<SpaceResource>({ id: '1', canDisable: () => true, driveType: 'project' })

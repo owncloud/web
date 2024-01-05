@@ -25,11 +25,11 @@ describe('useFileActionsCreateNewFile', () => {
       { input: '.', output: 'File name cannot be equal to "."' },
       { input: '..', output: 'File name cannot be equal to ".."' },
       { input: 'myfile.txt', output: null }
-    ])('should validate file name %s', async (data) => {
+    ])('should validate file name %s', (data) => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ checkNewFileName }) => {
+        setup: ({ checkNewFileName }) => {
           const result = checkNewFileName(data.input)
           expect(result).toBe(data.output)
         }
@@ -38,7 +38,7 @@ describe('useFileActionsCreateNewFile', () => {
   })
 
   describe('addNewFile', () => {
-    it('create new file', async () => {
+    it('create new file', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
@@ -56,7 +56,7 @@ describe('useFileActionsCreateNewFile', () => {
         }
       })
     })
-    it('show error message if createFile fails', async () => {
+    it('show error message if createFile fails', () => {
       const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
@@ -77,7 +77,7 @@ describe('useFileActionsCreateNewFile', () => {
     })
   })
   describe('createNewFileModal', () => {
-    it('should show modal', async () => {
+    it('should show modal', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,

@@ -26,7 +26,7 @@ describe('move', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({
+        getWrapper({
           setup: () => {
             const store = useStore()
             const { actions } = useFileActionsMove({ store })

@@ -13,8 +13,8 @@ import { SpaceResource } from '@ownclouders/web-client/src'
 
 describe('rename', () => {
   describe('handler', () => {
-    it('should trigger the rename modal window', async () => {
-      const { wrapper } = getWrapper({
+    it('should trigger the rename modal window', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({
             resources: [{ id: '1', name: 'renamed space' } as SpaceResource]
@@ -24,8 +24,8 @@ describe('rename', () => {
         }
       })
     })
-    it('should not trigger the rename modal window without any resource', async () => {
-      const { wrapper } = getWrapper({
+    it('should not trigger the rename modal window without any resource', () => {
+      getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
           await unref(actions)[0].handler({ resources: [] })
 
@@ -35,8 +35,8 @@ describe('rename', () => {
     })
   })
   describe('method "renameSpace"', () => {
-    it('should hide the modal and show message on success', async () => {
-      const { wrapper, mocks } = getWrapper({
+    it('should hide the modal and show message on success', () => {
+      getWrapper({
         setup: async ({ renameSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await renameSpace(1, 'renamed space')
@@ -47,9 +47,9 @@ describe('rename', () => {
       })
     })
 
-    it('should show message on error', async () => {
+    it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ renameSpace }, { storeOptions, clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await renameSpace(1, 'renamed space')

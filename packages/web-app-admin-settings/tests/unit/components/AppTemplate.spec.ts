@@ -65,13 +65,13 @@ describe('AppTemplate', () => {
       const { wrapper } = getWrapper({ props: { isSideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
-    it('can be closed', async () => {
+    it('can be closed', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       const { wrapper } = getWrapper()
       ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('close')
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.close)
     })
-    it('panel can be selected', async () => {
+    it('panel can be selected', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       const panelName = 'SomePanel'
       const { wrapper } = getWrapper()

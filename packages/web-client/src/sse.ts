@@ -42,6 +42,7 @@ export class SSEAdapter implements EventSource {
       openWhenHidden: true,
       signal: this.abortController.signal,
       fetch: this.fetchProvider.bind(this),
+      // eslint-disable-next-line require-await
       onopen: async () => {
         const event = new Event('open')
         this.onopen?.bind(this)(event)

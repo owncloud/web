@@ -19,7 +19,7 @@ describe('restore', () => {
 
   describe('isEnabled property', () => {
     it('should be false when no resource is given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -31,7 +31,7 @@ describe('restore', () => {
       })
     })
     it('should be true when permission is sufficient', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -43,7 +43,7 @@ describe('restore', () => {
       })
     })
     it('should be false when permission is not sufficient', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -55,7 +55,7 @@ describe('restore', () => {
       })
     })
     it('should be false when location is invalid', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         invalidLocation: true,
         setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [{}] as Resource[] })).toBe(false)
@@ -63,7 +63,7 @@ describe('restore', () => {
       })
     })
     it('should be false in a space trash bin with insufficient permissions', () => {
-      const { wrapper, mocks } = getWrapper({
+      getWrapper({
         driveType: 'project',
         setup: ({ actions }, { space }) => {
           expect(
@@ -79,7 +79,7 @@ describe('restore', () => {
 
   describe('method "restoreResources"', () => {
     it('should show message on success', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: async ({ restoreResources }, { space, storeOptions }) => {
           await restoreResources(
             space,
@@ -96,12 +96,13 @@ describe('restore', () => {
       })
     })
 
-    it.skip('should show message on error', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper } = getWrapper({
         resolveClearTrashBin: false,
-        setup: async ({ actions }) => {
+        setup: async () => {
           const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
           const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
           await wrapper.vm.$_restore_restoreResources([{ id: '1', path: '/1' }], [])
@@ -111,9 +112,10 @@ describe('restore', () => {
         }
       })
     })
-    it.skip('should request parent folder on collecting restore conflicts', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should request parent folder on collecting restore conflicts', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
+        setup: async () => {
           await wrapper.vm.$_restore_collectConflicts([{ id: '1', path: '1', name: '1' }])
 
           expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(
@@ -125,9 +127,10 @@ describe('restore', () => {
         }
       })
     })
-    it.skip('should find conflict within resources', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should find conflict within resources', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
+        setup: async () => {
           const resourceOne = { id: '1', path: '1', name: '1' }
           const resourceTwo = { id: '2', path: '1', name: '1' }
           const { conflicts } = await wrapper.vm.$_restore_collectConflicts([
@@ -139,9 +142,10 @@ describe('restore', () => {
         }
       })
     })
-    it.skip('should add files without conflict to resolved resources', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should add files without conflict to resolved resources', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
+        setup: async () => {
           const resource = { id: '1', path: '1', name: '1' }
           const { resolvedResources } = await wrapper.vm.$_restore_collectConflicts([resource])
 

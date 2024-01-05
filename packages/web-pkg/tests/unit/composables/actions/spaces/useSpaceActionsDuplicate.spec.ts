@@ -26,14 +26,14 @@ describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
     })
     it('should be false when the space is disabled', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               resources: [
@@ -49,7 +49,7 @@ describe('restore', () => {
     })
     it('should be false when the space is no project space', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               resources: [
@@ -66,7 +66,7 @@ describe('restore', () => {
     it('should be false when the current user can not create spaces', () => {
       getWrapper({
         abilities: [],
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               resources: [mock<SpaceResource>({ disabled: false, driveType: 'project' })]
@@ -77,7 +77,7 @@ describe('restore', () => {
     })
     it('should be true when the current user can create spaces', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               resources: [
