@@ -20,13 +20,15 @@ Feature: reshare
     And "Alice" shares the following resource using API
       | resource         | recipient | type | role     |
       | folder_to_shared | Brian     | user | Can edit |
-    
+
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
+
+    # re-share with expiration date
     And "Brian" reshares the following resource
-      | resource         | recipient | type  | role     | resourceType |
-      | folder_to_shared | sales     | group | Can view | folder       |
+      | resource         | recipient | type  | role     | resourceType | expirationDate |
+      | folder_to_shared | sales     | group | Can view | folder       | +5 days        |
 
     And "Carol" logs in
     And "Carol" opens the "files" app

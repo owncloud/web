@@ -26,14 +26,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Share additional info](https://github.com/owncloud/ocis/issues/1253)
 -   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:126](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L126)
 
-### [Expiration date set is not implemented in user share](https://github.com/owncloud/ocis/issues/1250)
--   [webUISharingInternalGroups/shareWithGroups.feature:228](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L228)
-
 ### [Different path for shares inside folder](https://github.com/owncloud/ocis/issues/1231)
-
-### [Implement expiration date for shares](https://github.com/owncloud/ocis/issues/1250)
-- [webUISharingInternalGroups/shareWithGroups.feature:208](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalGroups/shareWithGroups.feature#L208)
-- [webUISharingExpirationDate/shareWithExpirationDate.feature:21](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingExpirationDate/shareWithExpirationDate.feature#L21)
 
 ### [Listing shares via ocs API does not show path for parent folders](https://github.com/owncloud/ocis/issues/1231)
 -   [webUISharingPublicManagement/shareByPublicLink.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L111)
