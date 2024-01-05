@@ -158,8 +158,8 @@ Feature: share
       | mainFolder | Brian     | user  | Can edit | folder       |                |
 
     # set expirationDate to existing share
-    And "Alice" sets the expiration date of the folder "mainFolder" of the user "Brian" to "+5 days"
-    And "Alice" sets the expiration date of the folder "myfolder" of the group "sales" to "+3 days"
+    And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
+    And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And  "Alice" logs out
 
     And "Brian" navigates to the shared with me page

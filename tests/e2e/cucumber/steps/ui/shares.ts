@@ -282,11 +282,10 @@ When(
 )
 
 When(
-  /^"([^"]*)" sets the expiration date of the (folder|file) "([^"]*)" of the (group|user) "([^"]*)" to "([^"]*)"?$/,
+  /^"([^"]*)" sets the expiration date of share "([^"]*)" of (group|user) "([^"]*)" to "([^"]*)"?$/,
   async function (
     this: World,
     stepUser: string,
-    _: unknown,
     resource: string,
     collaboratorType: 'user' | 'group',
     collaboratorName: string,
