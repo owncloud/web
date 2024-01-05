@@ -9,6 +9,7 @@ export interface ICollaborator {
   role?: string
   type?: CollaboratorType
   resourceType?: string
+  expirationDate?: string
 }
 
 export interface InviteCollaboratorsArgs {
@@ -311,6 +312,10 @@ export default class Collaborator {
       .locator(util.format(Collaborator.setExpirationDateCollaboratorButton, collaboratorRow))
       .click()
 
+    await Collaborator.setExpirationDate(page, expirationDate)
+  }
+
+  static async setExpirationDate(page: Page, expirationDate: any): Promise<void> {
     const newExpiryDate = getActualExpiryDate(
       expirationDate.toLowerCase().match(/[dayrmonthwek]+/)[0],
       expirationDate
