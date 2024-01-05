@@ -1,0 +1,10 @@
+Change: Remove color tooling from build chain
+
+We've decided to remove color tooling from the build chain of the design system. Previously it was possible to
+- define color contrast rules for the tokens in the colors.yaml file
+- define transformations on colors in the colors.yaml file (e.g. lighten, darken, ...)
+Since the dependencies we used are not well maintained and designers most likely bring their own tools, we've
+decided that the colors.yaml file is supposed to only contain the resulting color values, not any transformations
+or rules anymore.
+
+https://github.com/owncloud/web/pull/10264

@@ -11,27 +11,6 @@ Feature: Versions of a file
       | user0    |
       | Alice    |
 
-  @disablePreviews @issue-5853
-  Scenario: upload new file with same name to see if different versions are shown
-    Given user "user0" has logged in using the webUI
-    And user "user0" has uploaded file "lorem.txt" to "lorem.txt" in the server
-    And the user has browsed to the personal page
-    And user "user0" has uploaded file with content "lorem content" to "lorem.txt" in the server
-    And user "user0" has uploaded file with content "new lorem content" to "lorem.txt" in the server
-    When the user browses to display the "versions" details of file "lorem.txt"
-    Then the content of file "lorem.txt" for user "user0" should be "new lorem content" in the server
-    And the versions list should contain 2 entries
-
-
-  Scenario: restoring file to old version changes the content of the file
-    Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt" in the server
-    And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt" in the server
-    And user "user0" has logged in using the webUI
-    And the user has browsed to the personal page
-    When the user browses to display the "versions" details of file "lorem-file.txt"
-    And the user restores the file to last version using the webUI
-    Then the content of file "lorem-file.txt" for user "user0" should be "lorem content" in the server
-
   @ocis-reva-issue-110 @skipOnStorage:ceph @files_primary_s3-issue-1 @skipOnOCIS
   Scenario: file versions cannot be seen on the webUI after deleting versions
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt" in the server

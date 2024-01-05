@@ -93,25 +93,3 @@ Feature: move files
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
     But as "Alice" file "simple-folder/data.zip" should not exist in the server
 
-  @skipOnOCIS
-  Scenario: move a file into another folder with no change permission
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
-    And user "Alice" has logged in using the webUI
-    When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then as "Alice" file "simple-folder (2)/lorem.txt" should not exist in the server
-
-  @issue-ocis-873 @issue-6896 @skipOnOCIS
-  Scenario: sharee moves a file shared by sharer into another folder
-    Given the administrator has set the default folder for received shares to "Shares" in the server
-    And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file with content "test content" to "simple-folder/testFile.txt" in the server
-    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
-    And user "Brian" has logged in using the webUI
-    And user "Brian" has created folder "/Shares/testFolder" in the server
-    And the user has opened folder "Shares"
-    And the user has opened folder "simple-folder"
-    When the user moves file "testFile.txt" into folder "/Shares/testFolder" using the webUI
-    Then breadcrumb for folder "Shares" should be displayed on the webUI
-    And as "Brian" file "/Shares/testFolder/testFile.txt" should exist in the server

@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "luxon": "3.0.1"
+    "luxon": "3.2.1"
   },
   "devDependencies": {
     "xml-js": "^1.6.11"

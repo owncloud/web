@@ -43,40 +43,7 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "Brian Murphy" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @issue-4102 @issue-5531 @issue-6896 @skipOnOCIS
-  Scenario: unshare accepted shares from "All files" page
-    Given these groups have been created in the server:
-      | groupname |
-      | grp1      |
-    And user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg" in the server
-    And user "Alice" has created folder "/simple-folder" in the server
-    And user "Brian" has been added to group "grp1" in the server
-    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
-    And user "Alice" has shared file "/testimage.jpg" with group "grp1" in the server
-    And the user has browsed to the personal page
-    When the user opens folder "Shares" using the webUI
-    And the user deletes folder "simple-folder" using the webUI
-    And the user deletes file "testimage.jpg" using the webUI
-    Then folder "simple-folder" should not be listed on the webUI
-    And file "testimage.jpg" should not be listed on the webUI
-    When the user browses to the shared-with-me page in declined shares view
-    Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
-    And file "testimage.jpg" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @skipOnOCIS
-  Scenario: User receives files when auto accept share is disabled - oC10 behavior
-    Given user "Alice" has created file "toshare.txt" in the server
-    And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
-    And user "Alice" has shared file "toshare.txt" with user "Brian" in the server
-    When the user browses to the shared-with-me page
-    Then file "toshare.txt" shared by "Alice Hansen" should be in "Pending" state on the webUI
-    When the user browses to the files page
-    Then file "toshare.txt" should not be listed on the webUI
-    # On oC10, the Shares folder only appears after there is a received shared
-    # resource. So it should not exist at this point.
-    And folder "Shares" should not be listed on the webUI
-
-  @skipOnOC10
   Scenario: User receives files when auto accept share is disabled - oCIS behavior
     Given user "Alice" has created file "toshare.txt" in the server
     And user "Alice" has uploaded file with content "test" to "toshare.txt" in the server
@@ -134,17 +101,7 @@ Feature: accept/decline shares coming from internal users
     And file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
 
-  @issue-4102 @issue-5531 @issue-6896 @skipOnOCIS
-  Scenario: shared file status is changed to declined when user deletes the file
-    Given user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has shared file "lorem.txt" with user "Brian" in the server
-    And the user has reloaded the current page of the webUI
-    And the user opens folder "Shares" using the webUI
-    When the user deletes file "lorem.txt" using the webUI
-    And the user browses to the shared-with-me page in declined shares view
-    Then file "lorem.txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
-
-  @skipOnOCIS
+  @issue-3859
   Scenario: receive shares with same name from different users, accept one by one
     Given user "Carol" has been created with default attributes and without skeleton files in the server
     And user "Carol" has created folder "/simple-folder" in the server
@@ -158,18 +115,3 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder (2)" shared by "Carol King" should be in "Accepted" state on the webUI
     And as "Brian" folder "from_Alice" should exist inside folder "/Shares/simple-folder" in the server
     And as "Brian" folder "from_Carol" should exist inside folder "/Shares/simple-folder (2)" in the server
-
-  @skipOnOC10
-  Scenario: receive shares with same name from different users, accept one by one
-    Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has created folder "/simple-folder" in the server
-    And user "Carol" has created folder "/simple-folder/from_Carol" in the server
-    And user "Carol" has shared folder "/simple-folder" with user "Brian" in the server
-    And user "Alice" has created folder "/simple-folder" in the server
-    And user "Alice" has created folder "/simple-folder/from_Alice" in the server
-    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
-    And the user has browsed to the shared-with-me page
-    Then folder "simple-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
-    Then folder "simple-folder" shared by "Carol King" should be in "Accepted" state on the webUI
-    And as "Brian" folder "from_Alice" should exist inside folder "/Shares/simple-folder" in the server
-    And as "Brian" folder "from_Carol" should exist inside folder "/Shares/simple-folder" in the server

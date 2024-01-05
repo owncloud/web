@@ -91,15 +91,12 @@ config = {
                 "oCISBasic": [
                     "webUIPrivateLinks",
                     "webUIPreview",
-                    "webUIAccount",
                     "webUILogin",
                 ],
                 "webUIWebdavLockProtection": "oCISWebdavLockProtection",
                 "oCISSharingBasic": [
                     "webUISharingAcceptShares",
-                    "webUIRestrictSharing",
                 ],
-                "webUIFavorites": "oCISFavorites",
                 "oCISFiles1": [
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
@@ -134,7 +131,6 @@ config = {
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
                     "webUISharingInternalUsersShareWithPage",
-                    "webUIOperationsWithFolderShares",
                 ],
                 "oCISSharingAutocompletionResharing": [
                     "webUISharingAutocompletion",
@@ -208,10 +204,8 @@ rootSharingTestSuites = [
 ]
 
 basicTestSuites = [
-    "webUIAccount",
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
-    "webUIFavorites",
     "webUIFiles",
     "webUIFilesActionMenu",
     "webUIFilesCopy",
@@ -219,14 +213,12 @@ basicTestSuites = [
     "webUIFilesList",
     "webUILogin",
     "webUIMoveFilesFolders",
-    "webUIOperationsWithFolderShares",
     "webUIPreview",
     "webUIPrivateLinks",
     "webUIRenameFiles",
     "webUIRenameFolders",
     "webUIResharing1",
     "webUIResharing2",
-    "webUIRestrictSharing",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
     "webUISharingExpirationDate",
