@@ -129,6 +129,7 @@ export default defineComponent({
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
+    const restoreSearchFromRoute = ref(false)
     const searchResults = ref([])
     const loading = ref(false)
     const currentFolderAvailable = ref(false)
@@ -263,6 +264,7 @@ export default defineComponent({
     }
 
     const updateTerm = (input) => {
+      restoreSearchFromRoute.value = false
       term.value = input
       if (!unref(term)) {
         return unref(optionsDrop).hide()
@@ -283,6 +285,7 @@ export default defineComponent({
       optionsDropRef,
       activePreviewIndex,
       term,
+      restoreSearchFromRoute,
       onKeyUpEnter,
       searchResults,
       loading,
@@ -326,6 +329,10 @@ export default defineComponent({
 
   watch: {
     term() {
+      if (this.restoreSearchFromRoute) {
+        this.restoreSearchFromRoute = false
+        return
+      }
       this.debouncedSearch(this)
     },
     searchResults: {
@@ -351,28 +358,9 @@ export default defineComponent({
     },
     $route: {
       handler(r) {
-        const currentFolderAvailable =
-          (isLocationSpacesActive(this.$router, 'files-spaces-generic') ||
-            !!this.scopeQueryValue) &&
-          !isLocationSpacesActive(this.$router, 'files-spaces-projects')
-        if (this.currentFolderAvailable !== currentFolderAvailable) {
-          this.currentFolderAvailable = currentFolderAvailable
-        }
-
-        this.$nextTick(() => {
-          if (!this.availableProviders.length) {
-            return
-          }
-          const routeTerm = r?.query?.term
-          const input = this.$el.getElementsByTagName('input')[0]
-          if (!input || !routeTerm) {
-            return
-          }
-          this.term = routeTerm
-          input.value = routeTerm
-        })
+        this.parseRouteQuery(r)
       },
-      immediate: true
+      immediate: false
     }
   },
   created() {
@@ -381,6 +369,7 @@ export default defineComponent({
     this.clearTermEvent = eventBus.subscribe('app.search.term.clear', () => {
       this.term = ''
     })
+    this.parseRouteQuery(this.$route, true)
   },
 
   beforeUnmount() {
@@ -439,6 +428,28 @@ export default defineComponent({
 
       return createLocationCommon('files-common-search', {
         query: { ...(currentQuery && { ...currentQuery }), term: this.term, provider: provider.id }
+      })
+    },
+    parseRouteQuery(route, initialLoad = false) {
+      const currentFolderAvailable =
+        (isLocationSpacesActive(this.$router, 'files-spaces-generic') || !!this.scopeQueryValue) &&
+        !isLocationSpacesActive(this.$router, 'files-spaces-projects')
+      if (this.currentFolderAvailable !== currentFolderAvailable) {
+        this.currentFolderAvailable = currentFolderAvailable
+      }
+
+      this.$nextTick(() => {
+        if (!this.availableProviders.length) {
+          return
+        }
+        const routeTerm = route?.query?.term
+        const input = this.$el.getElementsByTagName('input')[0]
+        if (!input || !routeTerm) {
+          return
+        }
+        this.restoreSearchFromRoute = initialLoad
+        this.term = routeTerm
+        input.value = routeTerm
       })
     },
     getMoreResultsDetailsTextForProvider(provider) {
