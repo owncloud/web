@@ -45,6 +45,7 @@ Summary
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
 * Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
@@ -454,6 +455,13 @@ Details
 
    https://github.com/owncloud/web/pull/10102
    https://github.com/owncloud/web/pull/10223
+
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+
+   We have removed the `homeFolder` option as it was originally implemented and
+   used by CERN but isn't needed anymore.
+
+   https://github.com/owncloud/web/pull/10122
 
 * Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
 
