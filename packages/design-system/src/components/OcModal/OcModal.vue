@@ -60,8 +60,9 @@
             :variation="buttonCancelVariation"
             :appearance="buttonCancelAppearance"
             @click="cancelModalAction"
-            v-text="buttonCancelText"
-          />
+          >
+            {{ buttonCancelText }}
+          </oc-button>
           <oc-button
             v-if="!withoutButtonConfirm"
             ref="primaryButton"
@@ -70,8 +71,9 @@
             :appearance="buttonConfirmAppearance"
             :disabled="buttonConfirmDisabled || !!inputError"
             @click="confirm"
-            v-text="buttonConfirmText"
-          />
+          >
+            {{ buttonConfirmText }}
+          </oc-button>
         </div>
       </div>
     </focus-trap>

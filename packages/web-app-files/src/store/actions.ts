@@ -74,7 +74,7 @@ export default {
   clearClipboardFiles(context) {
     context.commit('CLEAR_CLIPBOARD')
   },
-  async pasteSelectedFiles(
+  pasteSelectedFiles(
     context,
     {
       targetSpace,
@@ -272,7 +272,7 @@ export default {
     }
   },
   async changeShare(
-    { commit, dispatch, getters, rootGetters },
+    { commit, getters, rootGetters },
     { client, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {

@@ -47,8 +47,9 @@
                 class="oc-display-block"
                 appearance="raw"
                 v-bind="getSpaceAttributes(item)"
-                v-text="getSpaceName(item)"
-              />
+              >
+                {{ getSpaceName(item) }}
+              </oc-button>
             </template>
             <template #footer>
               <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">

@@ -18,6 +18,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
+// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {

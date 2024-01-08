@@ -102,7 +102,6 @@ export class PublicLinkManager {
 
     try {
       await this.fetchCapabilities({
-        token,
         password
       })
     } catch (e) {
@@ -123,7 +122,7 @@ export class PublicLinkManager {
     })
   }
 
-  private async fetchCapabilities({ token = '', password = '' }): Promise<void> {
+  private async fetchCapabilities({ password = '' }): Promise<void> {
     if (!isEmpty(this.store.getters.capabilities)) {
       return
     }

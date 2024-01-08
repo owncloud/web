@@ -41,8 +41,9 @@
           appearance="raw"
           class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
-          v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
-        ></oc-button>
+        >
+          {{ infoExpanded ? $gettext('Hide details') : $gettext('Show details') }}
+        </oc-button>
         <oc-button
           v-if="!runningUploads && Object.keys(errors).length && !disableActions"
           v-oc-tooltip="$gettext('Retry all failed uploads')"

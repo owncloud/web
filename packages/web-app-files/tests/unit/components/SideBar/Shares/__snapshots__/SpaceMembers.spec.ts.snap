@@ -30,7 +30,10 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
                 <dd>Members with the Manager role are able to edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.</dd>
               </dl>
               <!--v-if-->
-              <a class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link" href="https://doc.owncloud.com/go?to=webui-users-sharing" target="_blank">Read more</a>
+              <a class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link" href="https://doc.owncloud.com/go?to=webui-users-sharing" target="_blank">
+                <!--v-if-->
+                <!-- @slot Content of the button --> Read more
+              </a>
             </div>
           </div>
         </div>

@@ -19,8 +19,9 @@
         variation="primary"
         appearance="filled"
         @click="copyContentToClipboard"
-        v-text="$gettext('Copy')"
-      />
+      >
+        {{ $gettext('Copy') }}
+      </oc-button>
     </div>
   </div>
 </template>

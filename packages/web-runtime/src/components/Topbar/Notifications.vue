@@ -305,7 +305,7 @@ export default {
       setAdditionalData()
     }
 
-    onMounted(async () => {
+    onMounted(() => {
       fetchNotificationsTask.perform()
       if (unref(sseEnabled)) {
         clientService.sseAuthenticated.addEventListener(

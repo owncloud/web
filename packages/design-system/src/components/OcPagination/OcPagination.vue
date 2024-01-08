@@ -11,12 +11,9 @@
         </router-link>
       </li>
       <li v-for="(page, index) in displayedPages" :key="index" class="oc-pagination-list-item">
-        <component
-          :is="pageComponent(page)"
-          :class="pageClass(page)"
-          v-bind="bindPageProps(page)"
-          v-text="page"
-        />
+        <component :is="pageComponent(page)" :class="pageClass(page)" v-bind="bindPageProps(page)">
+          {{ page }}
+        </component>
       </li>
       <li v-if="isNextPageAvailable" class="oc-pagination-list-item">
         <router-link

@@ -42,8 +42,9 @@
               appearance="raw"
               :aria-label="seeVersionsLabel"
               @click="expandVersionsPanel"
-              v-text="capitalizedTimestamp"
-            />
+            >
+              {{ capitalizedTimestamp }}
+            </oc-button>
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
@@ -92,8 +93,9 @@
               appearance="raw"
               :aria-label="seeVersionsLabel"
               @click="expandVersionsPanel"
-              v-text="versions.length"
-            />
+            >
+              {{ versions.length }}
+            </oc-button>
           </td>
         </tr>
         <portal-target
