@@ -29,25 +29,18 @@ describe('NotificationBell', () => {
   })
   it('displays a tooltip with the notifications label', () => {
     const { wrapper } = getWrapper({
-      mountType: mount,
-      props: {
-        notificationCount: 0
-      }
+      mountType: mount
     })
     expect(wrapper.find('#oc-notifications-bell').attributes('aria-label')).toEqual('Notifications')
   })
   it('animates when notification count changes', async () => {
-    const { wrapper } = getWrapper({
-      props: {
-        notificationCount: 5
-      }
-    })
+    const { wrapper } = getWrapper()
     wrapper.setProps({ notificationCount: 10 })
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.shake').exists()).toBe(true)
   })
 })
-function getWrapper({ mountType = mount, mocks = {}, props = {} } = {}) {
+function getWrapper({ mountType = mount, mocks = {} } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
   const storeOptions = {
     ...defaultStoreMockOptions

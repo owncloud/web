@@ -2,19 +2,16 @@ import {
   FileActionOptions,
   useClientService,
   useConfigurationManager,
-  useRouter,
   useStore,
   useWindowOpen
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { Extension } from '@ownclouders/web-pkg'
-import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 import { OCM_PROVIDER_ID } from '@ownclouders/web-client/src/helpers'
 
-export const extensions = (options: ApplicationSetupOptions) => {
+export const extensions = () => {
   const store = useStore()
-  const router = useRouter()
   const clientService = useClientService()
   const configurationManager = useConfigurationManager()
   const { $gettext } = useGettext()

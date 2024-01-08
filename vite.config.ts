@@ -69,7 +69,7 @@ const getJson = async (url: string) => {
   ).json()
 }
 
-const getConfigJson = async (url: string, config: UserConfig) => {
+const getConfigJson = async (url: string) => {
   const configJson = await getJson(url)
 
   // enable previews and enable lazy resources, which are disabled for fast tests
@@ -254,7 +254,7 @@ export default defineConfig(({ mode, command }) => {
             server.middlewares.use(async (request, response, next) => {
               if (request.url === '/config.json') {
                 try {
-                  const configJson = await getConfigJson(configUrl, config)
+                  const configJson = await getConfigJson(configUrl)
                   response.statusCode = 200
                   response.setHeader('Content-Type', 'application/json')
                   response.end(JSON.stringify(configJson))

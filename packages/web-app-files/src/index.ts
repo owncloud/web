@@ -126,7 +126,7 @@ export const navItems = (context): AppNavigationItem[] => {
 }
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     return {
       appInfo,
       store,
@@ -150,7 +150,7 @@ export default defineWebApplication({
       }),
       navItems,
       translations,
-      extensions: extensions(args)
+      extensions: extensions()
     }
   }
 })

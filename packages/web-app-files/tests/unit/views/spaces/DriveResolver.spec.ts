@@ -135,7 +135,7 @@ function getMountedWrapper({
   }))
   jest.mocked(useGetMatchingSpace).mockImplementation(() =>
     useGetMatchingSpaceMock({
-      getInternalSpace: (storageId: string) => internalSpace
+      getInternalSpace: () => internalSpace
     })
   )
 

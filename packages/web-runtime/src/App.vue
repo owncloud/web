@@ -36,7 +36,9 @@
       @before-unmount="focusModal"
     >
       <template v-if="modal.customContent || modal.customComponent" #content>
+        <!-- eslint-disable vue/no-v-html -->
         <div v-if="modal.customContent" v-html="modal.customContent" />
+        <!--eslint-enable-->
         <component
           :is="modal.customComponent"
           v-else

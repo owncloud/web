@@ -45,7 +45,8 @@ export default defineComponent({
      */
     popperOptions: {
       type: Object,
-      required: false
+      required: false,
+      default: () => {}
     },
     /**
      * CSS selector for the element to be used as toggle. By default, the preceding element is used.
