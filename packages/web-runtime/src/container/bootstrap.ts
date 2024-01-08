@@ -22,12 +22,12 @@ import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
-import {
-  ocResourceIconMappingInjectionKey,
-  OcResourceIconMapping
-} from 'design-system/src/components/OcResourceIcon/types'
 import { merge } from 'lodash-es'
-import { AppConfigObject } from '@ownclouders/web-pkg'
+import {
+  AppConfigObject,
+  resourceIconMappingInjectionKey,
+  ResourceIconMapping
+} from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
 import { z } from 'zod'
@@ -242,7 +242,7 @@ export const announceApplicationsReady = async ({
   await Promise.all(applications.map((application) => application.ready()))
   const apps = store.state.apps
 
-  const mapping: OcResourceIconMapping = {
+  const mapping: ResourceIconMapping = {
     mimeType: {},
     extension: {}
   }
@@ -271,7 +271,7 @@ export const announceApplicationsReady = async ({
     }
   })
 
-  app.provide(ocResourceIconMappingInjectionKey, mapping)
+  app.provide(resourceIconMappingInjectionKey, mapping)
 }
 
 /**

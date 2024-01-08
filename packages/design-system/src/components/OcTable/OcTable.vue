@@ -78,12 +78,6 @@
         </td>
       </tr>
     </tfoot>
-    <Teleport v-if="dragItem" to="body">
-      <oc-ghost-element
-        ref="ghostElement"
-        :preview-items="[dragItem, ...dragSelection]"
-      ></oc-ghost-element>
-    </Teleport>
   </table>
 </template>
 <script lang="ts">
@@ -92,10 +86,9 @@ import OcTbody from '../_OcTableBody/_OcTableBody.vue'
 import OcTr from '../_OcTableRow/_OcTableRow.vue'
 import OcTh from '../_OcTableCellHead/_OcTableCellHead.vue'
 import OcTd from '../_OcTableCellData/_OcTableCellData.vue'
-import OcGhostElement from '../_OcGhostElement/_OcGhostElement.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { getSizeClass } from '../../utils/sizeClasses'
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import {
   EVENT_THEAD_CLICKED,
@@ -138,8 +131,7 @@ export default defineComponent({
     OcTr,
     OcTh,
     OcTd,
-    OcButton,
-    OcGhostElement
+    OcButton
   },
   props: {
     /**
@@ -302,18 +294,17 @@ export default defineComponent({
     EVENT_TROW_CLICKED,
     EVENT_TROW_MOUNTED,
     EVENT_TROW_CONTEXTMENU,
-    EVENT_SORT
+    EVENT_SORT,
+    'dropRowStyling'
   ],
   setup() {
-    const ghostElement = ref()
-    const dragItem = ref()
     const constants = {
       EVENT_THEAD_CLICKED,
       EVENT_TROW_CLICKED,
       EVENT_TROW_MOUNTED,
       EVENT_TROW_CONTEXTMENU
     }
-    return { ghostElement, dragItem, constants }
+    return { constants }
   },
   computed: {
     isSortable() {
@@ -335,56 +326,20 @@ export default defineComponent({
 
     fullColspan() {
       return this.fields.length
-    },
-    dragSelection() {
-      const selection = [...this.selection]
-      selection.splice(
-        selection.findIndex((i) => i.id === this.dragItem.id),
-        1
-      )
-      return selection
     }
   },
   methods: {
     dragOver(event) {
       event.preventDefault()
     },
-    async setDragItem(item, event) {
-      this.dragItem = item
-      await this.$nextTick()
-      this.ghostElement.$el.ariaHidden = 'true'
-      this.ghostElement.$el.style.left = '-99999px'
-      this.ghostElement.$el.style.top = '-99999px'
-      event.dataTransfer.setDragImage(this.ghostElement.$el, 0, 0)
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.effectAllowed = 'move'
-    },
-    async dragStart(item, event) {
-      if (!this.dragDrop) return
-      await this.setDragItem(item, event)
-      this.$emit(EVENT_ITEM_DRAGGED, item)
+    dragStart(item, event) {
+      this.$emit(EVENT_ITEM_DRAGGED, item, event)
     },
     dropRowEvent(selector, event) {
-      if (!this.dragDrop) return
-      const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
-      if (hasFilePayload) return
-      this.dragItem = null
-      const dropTarget = event.target
-      const dropTargetTr = dropTarget.closest('tr')
-      const dropItemId = dropTargetTr.dataset.itemId
-      this.dropRowStyling(selector, true, event)
-      this.$emit(EVENT_ITEM_DROPPED, dropItemId)
+      this.$emit(EVENT_ITEM_DROPPED, selector, event)
     },
     dropRowStyling(selector, leaving, event) {
-      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
-      if (hasFilePayload) return
-      if (event.currentTarget?.contains(event.relatedTarget)) {
-        return
-      }
-
-      const classList = document.getElementsByClassName(`oc-tbody-tr-${selector}`)[0].classList
-      const className = 'highlightedDropTarget'
-      leaving ? classList.remove(className) : classList.add(className)
+      this.$emit('dropRowStyling', selector, leaving, event)
     },
     isFieldTypeSlot(field) {
       return field.type === 'slot'

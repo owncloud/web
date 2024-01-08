@@ -279,9 +279,6 @@ importers:
 
   packages/design-system:
     dependencies:
-      '@ownclouders/web-client':
-        specifier: workspace:*
-        version: link:../web-client
       portal-vue:
         specifier: '*'
         version: 3.0.0(vue@3.3.8)

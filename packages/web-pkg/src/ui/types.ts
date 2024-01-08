@@ -1,4 +1,4 @@
-import { IconFillType } from 'design-system/src/helpers'
+import { IconFillType } from '../helpers/resource'
 
 export type ViewMode = {
   name: string

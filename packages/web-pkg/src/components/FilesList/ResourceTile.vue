@@ -9,7 +9,7 @@
     }"
     @contextmenu="$emit('contextmenu', $event)"
   >
-    <oc-resource-link
+    <resource-link
       class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm"
       :resource="resource"
       :folder-link="resourceRoute"
@@ -34,7 +34,7 @@
         <div class="oc-tile-card-hover"></div>
         <slot name="imageField" :item="resource">
           <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
-          <oc-resource-icon
+          <resource-icon
             v-else
             :resource="resource"
             :size="resourceIconSize"
@@ -43,14 +43,14 @@
             <template v-if="showStatusIcon" #status>
               <oc-icon v-bind="statusIconAttrs" size="xsmall" />
             </template>
-          </oc-resource-icon>
+          </resource-icon>
         </slot>
       </div>
-    </oc-resource-link>
+    </resource-link>
     <div class="oc-card-body oc-p-s">
       <div class="oc-flex oc-flex-between oc-flex-middle">
         <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-          <oc-resource
+          <resource-list-item
             :resource="resource"
             :is-icon-displayed="false"
             :is-extension-displayed="isExtensionDisplayed"
@@ -74,26 +74,15 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
+import ResourceIcon from './ResourceIcon.vue'
+import ResourceListItem from './ResourceListItem.vue'
+import ResourceLink from './ResourceLink.vue'
 import { Resource } from '@ownclouders/web-client'
-
-import OcImg from '../OcImage/OcImage.vue'
-import OcResource from '../OcResource/OcResource.vue'
-import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
-import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
-import OcTag from '../OcTag/OcTag.vue'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
-  name: 'OcTile',
-  status: 'prototype',
-  release: 'unreleased',
-  components: {
-    OcImg,
-    OcResource,
-    OcResourceIcon,
-    OcResourceLink,
-    OcTag
-  },
+  name: 'ResourceTile',
+  components: { ResourceListItem, ResourceIcon, ResourceLink },
   props: {
     /**
      * Resource to be displayed within the tile

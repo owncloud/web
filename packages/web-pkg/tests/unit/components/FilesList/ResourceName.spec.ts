@@ -1,6 +1,6 @@
 import { shallowMount } from 'web-test-helpers'
 
-import Name from './OcResourceName.vue'
+import Name from '../../../../src/components/FilesList/ResourceName.vue'
 
 const fullPath = 'images/nature/forest.jpg'
 const name = 'forest.jpg'

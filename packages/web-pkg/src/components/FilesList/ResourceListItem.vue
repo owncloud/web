@@ -1,6 +1,6 @@
 <template>
   <div class="oc-resource oc-text-overflow">
-    <oc-resource-link
+    <resource-link
       v-if="isIconDisplayed"
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
@@ -18,7 +18,7 @@
         height="40"
         :aria-label="tooltipLabelIcon"
       />
-      <oc-resource-icon
+      <resource-icon
         v-else
         v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
@@ -27,13 +27,13 @@
         <template v-if="showStatusIcon" #status>
           <oc-icon v-bind="statusIconAttrs" size="xsmall" />
         </template>
-      </oc-resource-icon>
+      </resource-icon>
       <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
         <oc-icon v-bind="statusIconAttrs" size="xsmall" />
       </span>
-    </oc-resource-link>
+    </resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
-      <oc-resource-link
+      <resource-link
         v-slot="{ opensInNewWindowDescriptionId }"
         :resource="resource"
         :is-resource-clickable="isResourceClickable"
@@ -47,7 +47,7 @@
           class="oc-invisible-sr"
           v-text="$gettext('Opens in a new window')"
         />
-        <oc-resource-name
+        <resource-name
           :key="resource.name"
           :name="resource.name"
           :path-prefix="pathPrefix"
@@ -57,7 +57,7 @@
           :is-path-displayed="isPathDisplayed"
           :is-extension-displayed="isExtensionDisplayed"
         />
-      </oc-resource-link>
+      </resource-link>
       <div class="oc-resource-indicators">
         <component
           :is="parentFolderComponentType"
@@ -76,30 +76,17 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-
-import OcButton from '../OcButton/OcButton.vue'
-import OcImg from '../OcImage/OcImage.vue'
-import OcIcon from '../OcIcon/OcIcon.vue'
-import OcResourceName from '../OcResourceName/OcResourceName.vue'
-import OcResourceIcon from '../OcResourceIcon/OcResourceIcon.vue'
-import OcResourceLink from '../OcResourceLink/OcResourceLink.vue'
 import { Resource } from '@ownclouders/web-client/src'
+import ResourceIcon from './ResourceIcon.vue'
+import ResourceLink from './ResourceLink.vue'
+import ResourceName from './ResourceName.vue'
 
 /**
  * Displays a resource together with the resource type icon or thumbnail
  */
 export default defineComponent({
-  name: 'OcResource',
-  status: 'ready',
-  release: '2.1.0',
-  components: {
-    OcButton,
-    OcImg,
-    OcIcon,
-    OcResourceName,
-    OcResourceIcon,
-    OcResourceLink
-  },
+  name: 'ResourceListItem',
+  components: { ResourceIcon, ResourceLink, ResourceName },
   props: {
     /**
      * The resource to be displayed
@@ -347,96 +334,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<template>
-  <div>
-    <oc-resource :resource="documents" parent-folder-link="parentFolderLink" class="oc-mb"/>
-    <oc-resource :resource="notes" is-path-displayed="true" class="oc-mb"/>
-    <oc-resource :resource="notes" is-resource-clickable="false" class="oc-mb"/>
-    <oc-resource :resource="notes" :is-extension-displayed="false" class="oc-mb"/>
-    <oc-resource :resource="forest" is-path-displayed="true"/>
-    <oc-resource :resource="something" is-path-displayed="true" parent-folder-name="Example parent folder"/>
-  </div>
-</template>
-<script>
-  export default {
-    computed: {
-      documents() {
-        return {
-          name: "Documents",
-          path: "/Documents",
-          indicators: [],
-          type: "folder",
-          isFolder: true
-        }
-      },
-      notes() {
-        return {
-          name: "notes.txt",
-          extension: "txt",
-          path: "Documents/notes.txt",
-          indicators: this.indicators,
-          type: "file",
-          isFolder: false
-        }
-      },
-      forest() {
-        return {
-          name: "forest-image-with-filename-with-a-lot-of-characters.jpg",
-          extension: "jpg",
-          path: "images/nature/forest-image-with-filename-with-a-lot-of-characters.jpg",
-          thumbnail: "https://picsum.photos/200/300",
-          indicators: [],
-          type: "file",
-          isFolder: false,
-          opensInNewWindow: true,
-        }
-      },
-      something() {
-        return {
-          name: "another-image.jpg",
-          extension: "jpg",
-          path: "another-image.jpg",
-          thumbnail: "https://picsum.photos/200/300",
-          indicators: [],
-          type: "file",
-          isFolder: false,
-          opensInNewWindow: true,
-        }
-      },
-      indicators() {
-        return [
-          {
-            id: 'files-sharing',
-            label: "Shared with other people",
-            visible: true,
-            icon: 'group',
-            handler: (resource, indicatorId) => alert(`Resource: ${resource.name}, indicator: ${indicatorId}`)
-          },
-          {
-            id: 'file-link',
-            label: "Shared via link",
-            visible: true,
-            icon: 'link',
-          }
-        ]
-      },
-      parentFolderLink() {
-        return {
-          name: "home",
-          params: {
-            action: "copy",
-            item: 'Documents',
-          },
-          query: {
-            resource: "notes"
-          }
-        }
-      }
-    },
-  }
-</script>
-```
-</docs>

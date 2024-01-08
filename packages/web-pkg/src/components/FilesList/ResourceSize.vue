@@ -10,9 +10,7 @@ import filesize from 'filesize'
  * Displays a formatted resource size
  */
 export default defineComponent({
-  name: 'OcResourceSize',
-  status: 'ready',
-  release: '2.1.0',
+  name: 'ResourceSize',
   props: {
     /**
      * Number of bytes to display as a reasonable resource size string.
@@ -45,22 +43,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<docs>
-```js
-<section>
-  <h3 class="oc-heading-divider">
-    A resource size passed as a number
-  </h3>
-  <oc-resource-size :size="234897" />
-</section>
-```
-```js
-<section>
-  <h3 class="oc-heading-divider">
-    A resource size passed as a string
-  </h3>
-  <oc-resource-size size="96001380" />
-</section>
-```
-</docs>

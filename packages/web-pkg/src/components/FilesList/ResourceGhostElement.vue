@@ -1,7 +1,7 @@
 <template>
   <div id="ghost-element" class="ghost-element">
     <div class="ghost-element-layer1 oc-rounded">
-      <oc-resource-icon class="oc-p-xs" :resource="previewItems[0]" />
+      <resource-icon class="oc-p-xs" :resource="previewItems[0]" />
       <div v-if="showSecondLayer" class="ghost-element-layer2 oc-rounded" />
       <div v-if="showThirdLayer" class="ghost-element-layer3 oc-rounded" />
     </div>
@@ -12,14 +12,14 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
+import ResourceIcon from './ResourceIcon.vue'
 
 /**
  * Please head to the ownCloud web ResourceTable component (https://github.com/owncloud/web/blob/master/packages/web-app-files/src/components/FilesList/ResourceTable.vue) for a demo of the Ghost Element.
  */
 export default defineComponent({
-  name: 'OcGhostElement',
-  status: 'ready',
-  release: '11.2.0',
+  name: 'ResourceGhostElement',
+  components: { ResourceIcon },
   props: {
     previewItems: {
       type: Array as PropType<Resource[]>,

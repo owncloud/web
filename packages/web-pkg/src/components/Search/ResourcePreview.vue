@@ -1,5 +1,5 @@
 <template>
-  <oc-resource
+  <resource-list-item
     :resource="resource"
     :path-prefix="pathPrefix"
     :is-path-displayed="true"
@@ -21,11 +21,13 @@ import { mapGetters } from 'vuex'
 import { useGetMatchingSpace, useFileActions, useFolderLink, useStore } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
+import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'
 
 const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
+  components: { ResourceListItem },
   props: {
     searchResult: {
       type: Object as PropType<SearchResultValue>,

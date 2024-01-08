@@ -138,7 +138,7 @@
                 width="33"
                 height="33"
               />
-              <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
+              <resource-icon v-else class="oc-mr-s" :resource="resource" />
             </template>
             <template #footer>
               <pagination :pages="totalPages" :current-page="currentPage" />
@@ -214,7 +214,7 @@ import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
 import { sortFields as availableSortFields } from '../../helpers/ui/resourceTiles'
-import { defaultFuseOptions, formatFileSize } from '@ownclouders/web-pkg'
+import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import {
   spaceRoleEditor,
@@ -238,6 +238,7 @@ export default defineComponent({
     FilesViewWrapper,
     NoContentMessage,
     Pagination,
+    ResourceIcon,
     ResourceTiles,
     ResourceTable,
     SpaceContextActions

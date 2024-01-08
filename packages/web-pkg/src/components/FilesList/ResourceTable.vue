@@ -1,5 +1,6 @@
 <template>
   <oc-table
+    v-bind="$attrs"
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
       { condensed: viewMode === ViewModeConstants.condensedTable.name }
@@ -24,6 +25,7 @@
     @contextmenu-clicked="showContextMenu"
     @item-dropped="fileDropped"
     @item-dragged="fileDragged"
+    @drop-row-styling="dropRowStyling"
     @sort="sort"
     @update:model-value="$emit('update:modelValue', $event)"
   >
@@ -57,7 +59,7 @@
         :class="[{ 'resource-table-resource-wrapper-limit-max-width': hasRenameAction(item) }]"
       >
         <slot name="image" :resource="item" />
-        <oc-resource
+        <resource-list-item
           :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :path-prefix="getPathPrefix(item)"
@@ -91,7 +93,7 @@
       <slot name="status" :resource="item" />
     </template>
     <template #size="{ item }">
-      <oc-resource-size :size="item.size || Number.NaN" />
+      <resource-size :size="item.size || Number.NaN" />
     </template>
     <template #tags="{ item }">
       <component
@@ -207,6 +209,9 @@
       <slot name="footer" />
     </template>
   </oc-table>
+  <Teleport v-if="dragItem" to="body">
+    <resource-ghost-element ref="ghostElement" :preview-items="[dragItem, ...dragSelection]" />
+  </Teleport>
 </template>
 
 <script lang="ts">
@@ -230,6 +235,9 @@ import {
   useFolderLink,
   useEmbedMode
 } from '../../composables'
+import ResourceListItem from './ResourceListItem.vue'
+import ResourceGhostElement from './ResourceGhostElement.vue'
+import ResourceSize from './ResourceSize.vue'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
 import {
@@ -255,7 +263,13 @@ import { useGettext } from 'vue3-gettext'
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction, OcTable },
+  components: {
+    ContextMenuQuickAction,
+    ResourceGhostElement,
+    OcTable,
+    ResourceListItem,
+    ResourceSize
+  },
   props: {
     /**
      * Resources to be displayed in the table.
@@ -444,6 +458,9 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { isLocationPicker } = useEmbedMode()
 
+    const dragItem = ref<Resource>()
+    const ghostElement = ref()
+
     const { width } = useWindowSize()
     const hasTags = computed(
       () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
@@ -468,6 +485,8 @@ export default defineComponent({
 
     return {
       configurationManager,
+      dragItem,
+      ghostElement,
       getTagToolTip,
       renameActions,
       renameHandler,
@@ -713,6 +732,14 @@ export default defineComponent({
     },
     hoverableQuickActions() {
       return this.configuration?.options?.hoverableQuickActions
+    },
+    dragSelection() {
+      const selection = [...this.selectedResources]
+      selection.splice(
+        selection.findIndex((i) => i.id === this.dragItem.id),
+        1
+      )
+      return selection
     }
   },
   methods: {
@@ -773,11 +800,53 @@ export default defineComponent({
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
-    fileDragged(file) {
+    async fileDragged(file: Resource, event) {
+      if (!this.dragDrop) {
+        return
+      }
+
+      await this.setDragItem(file, event)
+
       this.addSelectedResource(file)
     },
-    fileDropped(fileId) {
-      this.$emit(EVENT_FILE_DROPPED, fileId)
+    fileDropped(selector: HTMLElement, event) {
+      if (!this.dragDrop) {
+        return
+      }
+      const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
+      if (hasFilePayload) {
+        return
+      }
+      this.dragItem = null
+      const dropTarget = event.target
+      const dropTargetTr = dropTarget.closest('tr')
+      const dropItemId = dropTargetTr.dataset.itemId
+      this.dropRowStyling(selector, true, event)
+
+      this.$emit(EVENT_FILE_DROPPED, dropItemId)
+    },
+    async setDragItem(item: Resource, event) {
+      this.dragItem = item
+      await this.$nextTick()
+      this.ghostElement.$el.ariaHidden = 'true'
+      this.ghostElement.$el.style.left = '-99999px'
+      this.ghostElement.$el.style.top = '-99999px'
+      event.dataTransfer.setDragImage(this.ghostElement.$el, 0, 0)
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.effectAllowed = 'move'
+    },
+    dropRowStyling(selector: HTMLElement, leaving: boolean, event) {
+      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
+      if (hasFilePayload) {
+        return
+      }
+      if (event.currentTarget?.contains(event.relatedTarget)) {
+        return
+      }
+
+      const classList = document.getElementsByClassName(`oc-tbody-tr-${selector}`)[0].classList
+      const className = 'highlightedDropTarget'
+      leaving ? classList.remove(className) : classList.add(className)
     },
     sort(opts) {
       this.$emit('sort', opts)

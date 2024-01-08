@@ -1,0 +1,15 @@
+Change: Remove opinionated components
+
+BREAKING CHANGE for developers: We've removed the following opinionated components from the ODS and moved them to `web-pkg` instead:
+
+- `OcResource` (now `ResourceListItem`)
+- `OcTile` (now `ResourceTile`)
+- `OcResourceIcon` (now `ResourceIcon`)
+- `OcGhostElement` (now `ResourceGhostElement`)
+- `OcResourceLink` (now `ResourceLink`)
+- `OcResourceName` (now `ResourceName`)
+- `OcResourceSize` (now `ResourceSize`)
+
+Those components hold logic about resources, which is something that is not supposed to live in the ODS. The ODS should only contain design- and layout-specific components.
+
+https://github.com/owncloud/web/pull/10293

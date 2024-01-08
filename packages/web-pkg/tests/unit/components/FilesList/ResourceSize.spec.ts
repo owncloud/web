@@ -1,6 +1,6 @@
 import { shallowMount } from 'web-test-helpers'
 
-import Size from './OcResourceSize.vue'
+import Size from '../../../../src/components/FilesList/ResourceSize.vue'
 
 describe('OcResourceSize', () => {
   it('shows a question mark for non-numeric values', () => {

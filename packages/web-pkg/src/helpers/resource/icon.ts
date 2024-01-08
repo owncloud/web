@@ -1,4 +1,12 @@
-import { IconType } from './types'
+export type IconFillType = 'fill' | 'line' | 'none'
+export type IconType = {
+  name: string
+  color?: string
+  fillType?: IconFillType
+}
+
+export type ResourceIconMapping = Record<'mimeType' | 'extension', Record<string, IconType>>
+export const resourceIconMappingInjectionKey = 'oc-resource-icon-mapping'
 
 const fileIcon = {
   archive: {
