@@ -899,19 +899,6 @@ importers:
         specifier: workspace:*
         version: link:../web-test-helpers
 
-  packages/web-app-skeleton:
-    dependencies:
-      '@ownclouders/web-pkg':
-        specifier: workspace:*
-        version: link:../web-pkg
-      web-app-search:
-        specifier: workspace:*
-        version: link:../web-app-search
-    devDependencies:
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
-
   packages/web-app-text-editor:
     dependencies:
       '@ownclouders/web-client':

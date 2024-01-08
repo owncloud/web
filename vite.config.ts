@@ -19,9 +19,6 @@ import browserslistToEsbuild from 'browserslist-to-esbuild'
 import fetch from 'node-fetch'
 import { Agent } from 'https'
 
-// ignoredPackages specifies which packages should be explicitly ignored and thus not be transpiled
-const ignoredPackages = ['web-app-skeleton']
-
 const buildConfig = {
   requirejs: {},
   cdn: process.env.CDN === 'true',
@@ -40,7 +37,7 @@ const stripScssMarker = '/* STYLES STRIP IMPORTS MARKER */'
 // determine inputs
 const input = readdirSync('packages').reduce(
   (acc, i) => {
-    if (!i.startsWith('web-app') || ignoredPackages.includes(i)) {
+    if (!i.startsWith('web-app')) {
       return acc
     }
     for (const extension of ['js', 'ts']) {
