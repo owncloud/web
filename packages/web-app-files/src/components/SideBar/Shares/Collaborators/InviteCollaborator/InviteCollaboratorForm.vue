@@ -554,6 +554,7 @@ export default defineComponent({
         })
       })
 
+      this.expirationDate = null
       this.selectedCollaborators = []
       this.saving = false
     },
