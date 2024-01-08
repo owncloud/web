@@ -21,7 +21,7 @@ import { mapGetters } from 'vuex'
 import { useGetMatchingSpace, useFileActions, useFolderLink, useStore } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
-import ResourceListItem from '../../components/ResourceListItem.vue'
+import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'
 
 const visibilityObserver = new VisibilityObserver()

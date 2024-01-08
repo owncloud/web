@@ -1,7 +1,7 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
-import ResourceListItem from '../../../src/components/ResourceListItem.vue'
+import ResourceListItem from '../../../../src/components/FilesList/ResourceListItem.vue'
 
 const stubs = {
   'oc-button': OcButton

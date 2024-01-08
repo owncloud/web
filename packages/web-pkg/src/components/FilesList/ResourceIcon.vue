@@ -22,9 +22,9 @@ import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
 import {
   IconType,
   createDefaultFileIconMapping,
-  OcResourceIconMapping,
-  ocResourceIconMappingInjectionKey
-} from '../helpers/resource/icon'
+  ResourceIconMapping,
+  resourceIconMappingInjectionKey
+} from '../../helpers/resource/icon'
 
 const defaultFolderIcon: IconType = {
   name: 'resource-type-folder',
@@ -65,7 +65,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const iconMappingInjection = inject<OcResourceIconMapping>(ocResourceIconMappingInjectionKey)
+    const iconMappingInjection = inject<ResourceIconMapping>(resourceIconMappingInjectionKey)
 
     const isFolder = computed(() => {
       // fallback is necessary since

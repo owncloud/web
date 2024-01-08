@@ -83,7 +83,7 @@ import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
 import { Action, useFolderLink, useGetMatchingSpace, useStore } from '../composables'
-import ResourceListItem from './ResourceListItem.vue'
+import ResourceListItem from './FilesList/ResourceListItem.vue'
 import {
   Resource,
   isPublicSpaceResource,

@@ -9,7 +9,7 @@
     }"
     @contextmenu="$emit('contextmenu', $event)"
   >
-    <oc-resource-link
+    <resource-link
       class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm"
       :resource="resource"
       :folder-link="resourceRoute"
@@ -46,7 +46,7 @@
           </resource-icon>
         </slot>
       </div>
-    </oc-resource-link>
+    </resource-link>
     <div class="oc-card-body oc-p-s">
       <div class="oc-flex oc-flex-between oc-flex-middle">
         <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
@@ -76,12 +76,13 @@
 import { computed, defineComponent, PropType } from 'vue'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceListItem from './ResourceListItem.vue'
+import ResourceLink from './ResourceLink.vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'ResourceTile',
-  components: { ResourceListItem, ResourceIcon },
+  components: { ResourceListItem, ResourceIcon, ResourceLink },
   props: {
     /**
      * Resource to be displayed within the tile

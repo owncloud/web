@@ -1,13 +1,13 @@
 import { shallowMount } from 'web-test-helpers'
 import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
-import ResourceIcon from '../../../src/components/ResourceIcon.vue'
+import ResourceIcon from '../../../../src/components/FilesList/ResourceIcon.vue'
 import {
-  OcResourceIconMapping,
-  ocResourceIconMappingInjectionKey
-} from '../../../src/helpers/resource'
+  ResourceIconMapping,
+  resourceIconMappingInjectionKey
+} from '../../../../src/helpers/resource'
 import { Resource } from '@ownclouders/web-client'
 
-const resourceIconMapping: OcResourceIconMapping = {
+const resourceIconMapping: ResourceIconMapping = {
   extension: {
     'not-a-real-extension': {
       name: 'resource-type-madeup-extension',
@@ -62,7 +62,7 @@ function getWrapper({ resource, size }: { resource: Partial<Resource>; size: str
     wrapper: shallowMount(ResourceIcon as any, {
       global: {
         provide: {
-          [ocResourceIconMappingInjectionKey]: resourceIconMapping
+          [resourceIconMappingInjectionKey]: resourceIconMapping
         }
       },
       props: {

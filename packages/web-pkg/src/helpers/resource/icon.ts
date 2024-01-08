@@ -5,8 +5,8 @@ export type IconType = {
   fillType?: IconFillType
 }
 
-export type OcResourceIconMapping = Record<'mimeType' | 'extension', Record<string, IconType>>
-export const ocResourceIconMappingInjectionKey = 'oc-resource-icon-mapping'
+export type ResourceIconMapping = Record<'mimeType' | 'extension', Record<string, IconType>>
+export const resourceIconMappingInjectionKey = 'oc-resource-icon-mapping'
 
 const fileIcon = {
   archive: {

@@ -1,6 +1,6 @@
 <template>
   <div class="oc-resource oc-text-overflow">
-    <oc-resource-link
+    <resource-link
       v-if="isIconDisplayed"
       :resource="resource"
       :is-resource-clickable="isResourceClickable"
@@ -31,9 +31,9 @@
       <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
         <oc-icon v-bind="statusIconAttrs" size="xsmall" />
       </span>
-    </oc-resource-link>
+    </resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
-      <oc-resource-link
+      <resource-link
         v-slot="{ opensInNewWindowDescriptionId }"
         :resource="resource"
         :is-resource-clickable="isResourceClickable"
@@ -47,7 +47,7 @@
           class="oc-invisible-sr"
           v-text="$gettext('Opens in a new window')"
         />
-        <oc-resource-name
+        <resource-name
           :key="resource.name"
           :name="resource.name"
           :path-prefix="pathPrefix"
@@ -57,7 +57,7 @@
           :is-path-displayed="isPathDisplayed"
           :is-extension-displayed="isExtensionDisplayed"
         />
-      </oc-resource-link>
+      </resource-link>
       <div class="oc-resource-indicators">
         <component
           :is="parentFolderComponentType"
@@ -78,13 +78,15 @@
 import { defineComponent, PropType } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import ResourceIcon from './ResourceIcon.vue'
+import ResourceLink from './ResourceLink.vue'
+import ResourceName from './ResourceName.vue'
 
 /**
  * Displays a resource together with the resource type icon or thumbnail
  */
 export default defineComponent({
   name: 'ResourceListItem',
-  components: { ResourceIcon },
+  components: { ResourceIcon, ResourceLink, ResourceName },
   props: {
     /**
      * The resource to be displayed

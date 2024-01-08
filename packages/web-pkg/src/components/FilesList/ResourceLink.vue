@@ -17,15 +17,13 @@
 </template>
 
 <script lang="ts">
-import uniqueId from '../../utils/uniqueId'
+import uniqueId from 'design-system/src/utils/uniqueId'
 
 /**
  * Wraps content in a resource link
  */
 export default {
-  name: 'OcResourceLink',
-  status: 'prototype',
-  release: 'unreleased',
+  name: 'ResourceLink',
   props: {
     /**
      * The resource folder link

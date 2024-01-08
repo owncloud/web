@@ -25,8 +25,8 @@ import { v4 as uuidV4 } from 'uuid'
 import { merge } from 'lodash-es'
 import {
   AppConfigObject,
-  ocResourceIconMappingInjectionKey,
-  OcResourceIconMapping
+  resourceIconMappingInjectionKey,
+  ResourceIconMapping
 } from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
@@ -242,7 +242,7 @@ export const announceApplicationsReady = async ({
   await Promise.all(applications.map((application) => application.ready()))
   const apps = store.state.apps
 
-  const mapping: OcResourceIconMapping = {
+  const mapping: ResourceIconMapping = {
     mimeType: {},
     extension: {}
   }
@@ -271,7 +271,7 @@ export const announceApplicationsReady = async ({
     }
   })
 
-  app.provide(ocResourceIconMappingInjectionKey, mapping)
+  app.provide(resourceIconMappingInjectionKey, mapping)
 }
 
 /**

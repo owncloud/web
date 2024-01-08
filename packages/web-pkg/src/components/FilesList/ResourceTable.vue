@@ -93,7 +93,7 @@
       <slot name="status" :resource="item" />
     </template>
     <template #size="{ item }">
-      <oc-resource-size :size="item.size || Number.NaN" />
+      <resource-size :size="item.size || Number.NaN" />
     </template>
     <template #tags="{ item }">
       <component
@@ -235,8 +235,9 @@ import {
   useFolderLink,
   useEmbedMode
 } from '../../composables'
-import ResourceListItem from '../ResourceListItem.vue'
-import DragGhostElement from '../DragGhostElement.vue'
+import ResourceListItem from './ResourceListItem.vue'
+import DragGhostElement from './DragGhostElement.vue'
+import ResourceSize from './ResourceSize.vue'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
 import {
@@ -262,7 +263,7 @@ import { useGettext } from 'vue3-gettext'
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction, DragGhostElement, OcTable, ResourceListItem },
+  components: { ContextMenuQuickAction, DragGhostElement, OcTable, ResourceListItem, ResourceSize },
   props: {
     /**
      * Resources to be displayed in the table.

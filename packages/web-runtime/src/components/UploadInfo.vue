@@ -127,7 +127,7 @@
             />
             <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
               <resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
-              <oc-resource-name
+              <resource-name
                 :name="item.name"
                 :extension="item.extension"
                 :type="item.type"
@@ -162,11 +162,17 @@ import getSpeed from '@uppy/utils/lib/getSpeed'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '@ownclouders/web-pkg'
 import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
-import { formatFileSize, UppyResource, ResourceListItem, ResourceIcon } from '@ownclouders/web-pkg'
+import {
+  formatFileSize,
+  UppyResource,
+  ResourceListItem,
+  ResourceIcon,
+  ResourceName
+} from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
-  components: { ResourceListItem, ResourceIcon },
+  components: { ResourceListItem, ResourceIcon, ResourceName },
   setup() {
     return {
       hasShareJail: useCapabilityShareJailEnabled()

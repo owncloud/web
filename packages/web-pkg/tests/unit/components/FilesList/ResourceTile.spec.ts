@@ -1,5 +1,5 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import ResourceTile from '../../../src/components/ResourceTile.vue'
+import ResourceTile from '../../../../src/components/FilesList/ResourceTile.vue'
 
 const getSpaceMock = (disabled = false) => ({
   name: 'Space 1',

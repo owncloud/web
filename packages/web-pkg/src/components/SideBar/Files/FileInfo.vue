@@ -9,7 +9,7 @@
       />
       <div class="file_info__body oc-text-overflow">
         <h3 data-testid="files-info-name" class="oc-font-semibold">
-          <oc-resource-name
+          <resource-name
             :name="resource.name"
             :extension="resource.extension"
             :type="resource.type"
@@ -28,11 +28,12 @@
 import { computed, defineComponent, inject } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useStore } from '../../../composables'
-import ResourceIcon from '../../ResourceIcon.vue'
+import ResourceIcon from '../../FilesList/ResourceIcon.vue'
+import ResourceName from '../../FilesList/ResourceName.vue'
 
 export default defineComponent({
   name: 'FileInfo',
-  components: { ResourceIcon },
+  components: { ResourceIcon, ResourceName },
   props: {
     isSubPanelActive: {
       type: Boolean,
