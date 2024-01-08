@@ -210,7 +210,7 @@
     </template>
   </oc-table>
   <Teleport v-if="dragItem" to="body">
-    <drag-ghost-element ref="ghostElement" :preview-items="[dragItem, ...dragSelection]" />
+    <resource-ghost-element ref="ghostElement" :preview-items="[dragItem, ...dragSelection]" />
   </Teleport>
 </template>
 
@@ -236,7 +236,7 @@ import {
   useEmbedMode
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
-import DragGhostElement from './DragGhostElement.vue'
+import ResourceGhostElement from './ResourceGhostElement.vue'
 import ResourceSize from './ResourceSize.vue'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
@@ -263,7 +263,13 @@ import { useGettext } from 'vue3-gettext'
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
 export default defineComponent({
-  components: { ContextMenuQuickAction, DragGhostElement, OcTable, ResourceListItem, ResourceSize },
+  components: {
+    ContextMenuQuickAction,
+    ResourceGhostElement,
+    OcTable,
+    ResourceListItem,
+    ResourceSize
+  },
   props: {
     /**
      * Resources to be displayed in the table.

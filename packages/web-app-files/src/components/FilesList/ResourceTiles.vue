@@ -97,7 +97,7 @@
       </li>
     </oc-list>
     <Teleport v-if="dragItem" to="body">
-      <drag-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
+      <resource-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
     </Teleport>
     <div class="oc-tiles-footer">
       <slot name="footer" />
@@ -136,13 +136,13 @@ import {
   useStore,
   useTileSize,
   ViewModeConstants,
-  DragGhostElement,
+  ResourceGhostElement,
   ResourceTile
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
-  components: { ContextMenuQuickAction, DragGhostElement, ResourceTile },
+  components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles

@@ -18,7 +18,7 @@ import ResourceIcon from './ResourceIcon.vue'
  * Please head to the ownCloud web ResourceTable component (https://github.com/owncloud/web/blob/master/packages/web-app-files/src/components/FilesList/ResourceTable.vue) for a demo of the Ghost Element.
  */
 export default defineComponent({
-  name: 'DragGhostElement',
+  name: 'ResourceGhostElement',
   components: { ResourceIcon },
   props: {
     previewItems: {

@@ -1,5 +1,5 @@
 export { default as ContextActions } from './ContextActions.vue'
-export { default as DragGhostElement } from './DragGhostElement.vue'
+export { default as ResourceGhostElement } from './ResourceGhostElement.vue'
 export { default as ResourceTable } from './ResourceTable.vue'
 export { default as ResourceListItem } from './ResourceListItem.vue'
 export { default as ResourceIcon } from './ResourceIcon.vue'

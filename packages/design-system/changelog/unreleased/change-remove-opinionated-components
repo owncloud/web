@@ -5,7 +5,7 @@ BREAKING CHANGE for developers: We've removed the following opinionated componen
 - `OcResource` (now `ResourceListItem`)
 - `OcTile` (now `ResourceTile`)
 - `OcResourceIcon` (now `ResourceIcon`)
-- `OcGhostElement` (now `DragGhostElement`)
+- `OcGhostElement` (now `ResourceGhostElement`)
 - `OcResourceLink` (now `ResourceLink`)
 - `OcResourceName` (now `ResourceName`)
 - `OcResourceSize` (now `ResourceSize`)
