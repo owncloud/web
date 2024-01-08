@@ -10,7 +10,7 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { ResourceConflict } from './helpers/resource'
-import { UserStore, locationPublicLink } from '@ownclouders/web-pkg'
+import { MessageStore, UserStore, locationPublicLink } from '@ownclouders/web-pkg'
 import { locationSpacesGeneric, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
@@ -22,6 +22,7 @@ export interface HandleUploadOptions {
   route: Ref<RouteLocationNormalizedLoaded>
   store: Store<any>
   userStore: UserStore
+  messageStore: MessageStore
   uppyService: UppyService
   id?: string
   space?: SpaceResource
@@ -51,6 +52,7 @@ export class HandleUpload extends BasePlugin {
   space: SpaceResource
   store: Store<any>
   userStore: UserStore
+  messageStore: MessageStore
   uppyService: UppyService
   quotaCheckEnabled: boolean
   directoryTreeCreateEnabled: boolean
@@ -69,6 +71,7 @@ export class HandleUpload extends BasePlugin {
     this.space = opts.space
     this.store = opts.store
     this.userStore = opts.userStore
+    this.messageStore = opts.messageStore
     this.uppyService = opts.uppyService
 
     this.quotaCheckEnabled = opts.quotaCheckEnabled ?? true
@@ -246,7 +249,7 @@ export class HandleUpload extends BasePlugin {
           spaceName = $gettext('Personal')
         }
 
-        this.store.dispatch('showErrorMessage', {
+        this.messageStore.showErrorMessage({
           title: $gettext('Not enough quota'),
           desc: $gettext(
             'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files',

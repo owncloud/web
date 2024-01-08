@@ -9,7 +9,7 @@ import {
 import TagsSelect from 'web-app-files/src/components/SideBar/Details/TagsSelect.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { ClientService, eventBus } from '@ownclouders/web-pkg'
+import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
@@ -121,12 +121,13 @@ describe('Tag Select', () => {
       .mockRejectedValue(new Error())
     const resource = mockDeep<Resource>({ tags: ['a'] })
     const eventStub = jest.spyOn(eventBus, 'publish')
-    const { wrapper, storeOptions } = createWrapper(resource, clientService)
+    const { wrapper } = createWrapper(resource, clientService)
     wrapper.vm.selectedTags.push('b')
     await wrapper.vm.save(wrapper.vm.selectedTags)
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
-    expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+    const { showErrorMessage } = useMessages()
+    expect(showErrorMessage).toHaveBeenCalledTimes(1)
   })
 
   it('does not accept tags consisting of blanks only', () => {

@@ -1,5 +1,5 @@
 import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
@@ -74,7 +74,7 @@ describe('delete', () => {
   describe('handler', () => {
     it('should trigger the delete modal window', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
@@ -88,7 +88,7 @@ describe('delete', () => {
     })
     it('should not trigger the delete modal window without any resource to delete', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
@@ -105,14 +105,15 @@ describe('delete', () => {
   describe('method "deleteSpace"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ deleteSpaces }, { storeOptions, clientService }) => {
+        setup: async ({ deleteSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
 
           await deleteSpaces([
             mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
           ])
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -120,13 +121,14 @@ describe('delete', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ deleteSpaces }, { clientService, storeOptions }) => {
+        setup: async ({ deleteSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
           await deleteSpaces([
             mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
           ])
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

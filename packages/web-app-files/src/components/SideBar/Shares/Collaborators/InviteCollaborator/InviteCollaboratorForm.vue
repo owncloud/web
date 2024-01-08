@@ -156,7 +156,8 @@ import {
   useClientService,
   useConfigurationManager,
   useStore,
-  useUserStore
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
@@ -276,6 +277,7 @@ export default defineComponent({
       notifyEnabled,
       federatedUsers,
       createSharesConcurrentRequests,
+      ...useMessages(),
 
       // CERN
       accountType,
@@ -351,7 +353,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['addShare']),
     ...mapActions('runtime/spaces', ['addSpaceMember']),
 
@@ -550,7 +551,7 @@ export default defineComponent({
           title: this.$gettext('Failed to add share for "%{displayName}"', {
             displayName: e.displayName
           }),
-          error: e.error
+          errors: [e.error]
         })
       })
 

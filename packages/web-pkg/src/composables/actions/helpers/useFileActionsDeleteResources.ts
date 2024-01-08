@@ -17,12 +17,13 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
-  const userStore = useUserStore()
+  const messageStore = useMessages()
+  const { showMessage, showErrorMessage } = messageStore
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
@@ -30,7 +31,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { owncloudSdk } = clientService
   const { dispatchModal } = useModals()
   const configurationManager = useConfigurationManager()
 
@@ -121,9 +121,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
           { file: resource.name },
           true
         )
-        store.dispatch('showMessage', {
-          title: translated
-        })
+        showMessage({ title: translated })
       })
       .catch((error) => {
         if (error.statusCode === 423) {
@@ -137,9 +135,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
         console.error(error)
         const translated = $gettext('Failed to delete "%{file}"', { file: resource.name }, true)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: translated,
-          error
+          errors: [error]
         })
       })
   }
@@ -187,7 +185,8 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 space: spaceForDeletion,
                 files: resourcesForDeletion,
                 clientService,
-                loadingCallbackArgs
+                loadingCallbackArgs,
+                messageStore
               })
               .then(async () => {
                 // Load quota

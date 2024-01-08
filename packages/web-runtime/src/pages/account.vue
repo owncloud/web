@@ -149,6 +149,7 @@ import {
   useCapabilityGraphPersonalDataExport,
   useClientService,
   useGetMatchingSpace,
+  useMessages,
   useModals,
   useStore,
   useUserStore
@@ -171,6 +172,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const language = useGettext()
     const { $gettext } = language
@@ -215,9 +217,9 @@ export default defineComponent({
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to load account data…'),
-          error: e
+          errors: [e]
         })
         valuesList.value = []
       }
@@ -235,9 +237,9 @@ export default defineComponent({
         accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to load account data…'),
-          error: e
+          errors: [e]
         })
         accountBundle.value = undefined
       }
@@ -249,9 +251,9 @@ export default defineComponent({
         graphUser.value = data
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to load account data…'),
-          error: e
+          errors: [e]
         })
         graphUser.value = undefined
       }
@@ -345,14 +347,12 @@ export default defineComponent({
           })
         }
 
-        store.dispatch('showMessage', {
-          title: $gettext('Preference saved.')
-        })
+        showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to save preference…'),
-          error: e
+          errors: [e]
         })
       }
     }
@@ -364,14 +364,12 @@ export default defineComponent({
           valueOptions: { boolValue: !option }
         })
         disableEmailNotificationsValue.value = option
-        store.dispatch('showMessage', {
-          title: $gettext('Preference saved.')
-        })
+        showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to save preference…'),
-          error: e
+          errors: [e]
         })
       }
     }
@@ -380,14 +378,12 @@ export default defineComponent({
       try {
         store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', option)
         viewOptionWebDavDetailsValue.value = option
-        store.dispatch('showMessage', {
-          title: $gettext('Preference saved.')
-        })
+        showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to save preference…'),
-          error: e
+          errors: [e]
         })
       }
     }

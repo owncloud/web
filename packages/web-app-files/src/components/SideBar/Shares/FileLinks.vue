@@ -129,7 +129,8 @@ import {
   FileAction,
   useClientService,
   useModals,
-  useUserStore
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -166,6 +167,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const { $gettext } = useGettext()
     const ability = useAbility()
@@ -177,7 +179,7 @@ export default defineComponent({
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
 
-    const { actions: createLinkActions } = useFileActionsCreateLink({ store })
+    const { actions: createLinkActions } = useFileActionsCreateLink()
     const createLinkAction = computed<FileAction>(() =>
       unref(createLinkActions).find(({ name }) => name === 'create-links')
     )
@@ -255,13 +257,11 @@ export default defineComponent({
           client: clientService.owncloudSdk,
           params
         })
-        store.dispatch('showMessage', {
-          title: $gettext('Link was updated successfully')
-        })
+        showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to update link'),
-          error: e
+          errors: [e]
         })
       }
     }
@@ -300,7 +300,9 @@ export default defineComponent({
       showPasswordModal,
       defaultLinkPermissions,
       addNewLink,
-      dispatchModal
+      dispatchModal,
+      showMessage,
+      showErrorMessage
     }
   },
   computed: {
@@ -382,7 +384,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
-    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
@@ -542,7 +543,7 @@ export default defineComponent({
         console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to delete link'),
-          error: e
+          errors: [e]
         })
       }
     },

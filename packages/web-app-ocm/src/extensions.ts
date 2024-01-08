@@ -2,8 +2,7 @@ import {
   FileActionOptions,
   useClientService,
   useConfigurationManager,
-  useRouter,
-  useStore,
+  useMessages,
   useWindowOpen
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -13,8 +12,7 @@ import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 import { OCM_PROVIDER_ID } from '@ownclouders/web-client/src/helpers'
 
 export const extensions = (options: ApplicationSetupOptions) => {
-  const store = useStore()
-  const router = useRouter()
+  const { showErrorMessage } = useMessages()
   const clientService = useClientService()
   const configurationManager = useConfigurationManager()
   const { $gettext } = useGettext()
@@ -34,17 +32,17 @@ export const extensions = (options: ApplicationSetupOptions) => {
       if (data.app_url) {
         openUrl(data.app_url)
       } else {
-        return store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('An error occurred'),
           desc: $gettext("Couldn't open remotely")
         })
       }
     } catch (error) {
       console.log(error)
-      return store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('An error occurred'),
         desc: $gettext("Couldn't open remotely"),
-        error
+        errors: [error]
       })
     }
   }

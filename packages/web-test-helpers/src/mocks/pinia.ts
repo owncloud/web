@@ -1,7 +1,7 @@
 import { createTestingPinia } from '@pinia/testing'
 import defaultTheme from '../../../web-runtime/themes/owncloud/theme.json'
 import { User } from '../../../web-client/src/generated'
-import { Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
+import { Message, Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
 import { mock } from 'jest-mock-extended'
 
 export { createTestingPinia }
@@ -9,6 +9,7 @@ export { createTestingPinia }
 export type PiniaMockOptions = {
   stubActions?: boolean
   themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
+  messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
   userState?: { user?: User }
 }
@@ -16,6 +17,7 @@ export type PiniaMockOptions = {
 export function createMockStore({
   stubActions = true,
   themeState = {},
+  messagesState = {},
   modalsState = {},
   userState = {}
 }: PiniaMockOptions = {}) {
@@ -33,6 +35,7 @@ export function createMockStore({
   return createTestingPinia({
     stubActions,
     initialState: {
+      messages: { messages: [], ...messagesState },
       modals: {
         modals: [],
         ...modalsState

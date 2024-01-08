@@ -11,7 +11,7 @@ import {
 import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, useMessages } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
 
@@ -233,7 +233,7 @@ describe('account page', () => {
 
   describe('Method "updateDisableEmailNotifications', () => {
     it('should show a message on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -241,12 +241,13 @@ describe('account page', () => {
 
       mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
       await wrapper.vm.updateDisableEmailNotifications(true)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -254,13 +255,14 @@ describe('account page', () => {
 
       mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
       await wrapper.vm.updateDisableEmailNotifications(true)
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 
   describe('Method "updateSelectedLanguage', () => {
     it('should show a message on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper({})
+      const { wrapper, mocks } = getWrapper({})
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -270,12 +272,13 @@ describe('account page', () => {
         mockAxiosResolve({})
       )
       await wrapper.vm.updateSelectedLanguage('en')
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper, mocks, storeOptions } = getWrapper({})
+      const { wrapper, mocks } = getWrapper({})
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -285,7 +288,8 @@ describe('account page', () => {
         mockAxiosReject('err')
       )
       await wrapper.vm.updateSelectedLanguage('en')
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 
@@ -298,7 +302,8 @@ describe('account page', () => {
       await wrapper.vm.loadGraphUserTask.last
 
       await wrapper.vm.updateViewOptionsWebDavDetails(true)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
       expect(
         storeOptions.modules.Files.mutations.SET_FILE_WEB_DAV_DETAILS_VISIBILITY
       ).toHaveBeenCalled()

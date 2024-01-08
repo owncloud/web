@@ -120,6 +120,11 @@ export class ConfigurationManager {
     set(this.optionsConfiguration, 'isRunningOnEos', get(options, 'isRunningOnEos', false))
     set(
       this.optionsConfiguration,
+      'topCenterNotifications',
+      get(options, 'topCenterNotifications', false)
+    )
+    set(
+      this.optionsConfiguration,
       'userListRequiresFilter',
       get(options, 'userListRequiresFilter', false)
     )

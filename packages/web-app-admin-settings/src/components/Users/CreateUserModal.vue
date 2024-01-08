@@ -47,14 +47,14 @@
 import { useGettext } from 'vue3-gettext'
 import { computed, defineComponent, ref, unref, PropType, watch } from 'vue'
 import * as EmailValidator from 'email-validator'
-import { Modal, useClientService, useEventBus, useStore } from '@ownclouders/web-pkg'
+import { Modal, useClientService, useEventBus, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateUserModal',
   props: { modal: { type: Object as PropType<Modal>, required: true } },
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { emit, expose }) {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const eventBus = useEventBus()
     const clientService = useClientService()
     const { $gettext } = useGettext()
@@ -111,15 +111,13 @@ export default defineComponent({
         const { data } = await client.users.createUser(unref(user))
         const { id: createdUserId } = data
         const { data: createdUser } = await client.users.getUser(createdUserId)
-        store.dispatch('showMessage', {
-          title: $gettext('User was created successfully')
-        })
+        showMessage({ title: $gettext('User was created successfully') })
         eventBus.publish('app.admin-settings.users.add', createdUser)
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to create user'),
-          error
+          errors: [error]
         })
       }
     }

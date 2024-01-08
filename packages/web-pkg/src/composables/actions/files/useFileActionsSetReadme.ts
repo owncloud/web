@@ -7,10 +7,11 @@ import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import { useUserStore } from '../../piniaStores'
+import { useMessages, useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -52,14 +53,12 @@ export const useFileActionsSetReadme = ({ store }: { store?: Store<any> } = {}) 
         field: 'spaceReadmeData',
         value: buildSpace(updatedDriveData).spaceReadmeData
       })
-      store.dispatch('showMessage', {
-        title: $gettext('Space description was set successfully')
-      })
+      showMessage({ title: $gettext('Space description was set successfully') })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to set space description'),
-        error
+        errors: [error]
       })
     }
   }

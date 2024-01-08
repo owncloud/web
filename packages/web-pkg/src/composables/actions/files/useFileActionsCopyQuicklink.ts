@@ -8,17 +8,16 @@ import { isLocationSharesActive } from '../../../router'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
-import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from '../types'
 import { useCanShare } from '../../shares'
 import { useClipboard } from '../../clipboard'
 import { Resource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
+import { useMessages } from '../../piniaStores'
 
-export const useFileActionsCopyQuickLink = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsCopyQuickLink = () => {
+  const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const language = useGettext()
   const { $gettext } = language
@@ -36,7 +35,6 @@ export const useFileActionsCopyQuickLink = ({ store }: { store?: Store<any> } = 
   }
 
   const { actions: createLinkActions } = useFileActionsCreateLink({
-    store,
     onLinkCreatedCallback,
     showMessages: false
   })
@@ -47,14 +45,12 @@ export const useFileActionsCopyQuickLink = ({ store }: { store?: Store<any> } = 
   const copyQuickLinkToClipboard = async (url: string) => {
     try {
       await copyToClipboard(url)
-      return store.dispatch('showMessage', {
-        title: $gettext('The link has been copied to your clipboard.')
-      })
+      showMessage({ title: $gettext('The link has been copied to your clipboard.') })
     } catch (e) {
       console.error(e)
-      return store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Copy link failed'),
-        error: e
+        errors: [e]
       })
     }
   }

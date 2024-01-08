@@ -7,6 +7,7 @@ import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { Store } from 'vuex'
 import { ClientService } from '../../services'
+import { useMessages } from '../piniaStores'
 
 export interface DownloadFileOptions {
   store?: Store<any>
@@ -15,6 +16,7 @@ export interface DownloadFileOptions {
 
 export const useDownloadFile = (options?: DownloadFileOptions) => {
   const store = options?.store || useStore()
+  const { showErrorMessage } = useMessages()
   const isPublicLinkContext = usePublicLinkContext({ store })
   const isUrlSigningEnabled = useCapabilityCoreSupportUrlSigning()
   const clientService = options?.clientService || useClientService()
@@ -48,10 +50,10 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
         }
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Download failed'),
           desc: $gettext('File could not be located'),
-          error: e
+          errors: [e]
         })
       }
       return

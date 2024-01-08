@@ -1,4 +1,5 @@
 import { useFileActionsSetImage } from '../../../../../src'
+import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {
@@ -106,7 +107,7 @@ describe('setImage', () => {
 
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
-        setup: async ({ actions }, { storeOptions, clientService }) => {
+        setup: async ({ actions }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
             mockAxiosResolve(driveMock)
           )
@@ -119,7 +120,8 @@ describe('setImage', () => {
               }
             ] as Resource[]
           })
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -128,7 +130,7 @@ describe('setImage', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           await unref(actions)[0].handler({
             space,
             resources: [
@@ -138,7 +140,8 @@ describe('setImage', () => {
               }
             ] as Resource[]
           })
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

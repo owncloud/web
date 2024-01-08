@@ -1,15 +1,15 @@
 import { useGettext } from 'vue3-gettext'
-import { useStore } from '../store'
+import { useMessages } from '../piniaStores'
 
 export const useWindowOpen = () => {
   const { $gettext } = useGettext()
-  const store = useStore()
+  const { showMessage } = useMessages()
 
   const openUrl = (url: string, target?: string, shouldFocus?: boolean) => {
     const win = window.open(url, target)
 
     if (!win) {
-      store.dispatch('showMessage', {
+      showMessage({
         title: $gettext('Pop-up and redirect block detected'),
         timeout: 20,
         status: 'warning',

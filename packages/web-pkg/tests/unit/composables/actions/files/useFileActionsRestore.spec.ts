@@ -8,7 +8,7 @@ import {
   getComposableWrapper,
   RouteLocation
 } from 'web-test-helpers'
-import { useStore } from '../../../../../src/composables'
+import { useMessages, useStore } from '../../../../../src/composables'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -88,7 +88,8 @@ describe('restore', () => {
             mock<LoadingTaskCallbackArguments>()
           )
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
           expect(storeOptions.modules.Files.actions.removeFilesFromTrashbin).toHaveBeenCalledTimes(
             1
           )

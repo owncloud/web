@@ -12,8 +12,6 @@ export interface FileConflict {
 export class ConflictDialog {
   /* eslint-disable no-useless-constructor */
   constructor(
-    protected showMessage: (data: object) => void,
-    protected showErrorMessage: (data: object) => void,
     protected $gettext: (
       msgid: string,
       parameters?: {

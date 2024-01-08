@@ -1,5 +1,4 @@
 import ancestorMetaData from './ancestorMetaData'
-import app from './app'
 import apps from './apps'
 import auth from './auth'
 import config from './config'
@@ -20,7 +19,6 @@ const runtime = {
 
 export default {
   modules: {
-    app,
     apps,
     user,
     config,

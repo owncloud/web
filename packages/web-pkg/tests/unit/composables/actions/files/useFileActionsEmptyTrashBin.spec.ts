@@ -1,5 +1,5 @@
 import { useFileActionsEmptyTrashBin } from '../../../../../src/composables/actions'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'jest-mock-extended'
 import {
@@ -15,8 +15,6 @@ import { ProjectSpaceResource, Resource } from '@ownclouders/web-client/src/help
 import { FileActionOptions } from '../../../../../src/composables/actions'
 
 describe('emptyTrashBin', () => {
-  afterEach(() => jest.clearAllMocks())
-
   describe('isEnabled property', () => {
     it('should be false when location is invalid', () => {
       getWrapper({
@@ -57,10 +55,11 @@ describe('emptyTrashBin', () => {
   describe('method "emptyTrashBin"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
+        setup: async ({ emptyTrashBin }, { space }) => {
           await emptyTrashBin({ space })
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -70,10 +69,11 @@ describe('emptyTrashBin', () => {
 
       getWrapper({
         resolveClearTrashBin: false,
-        setup: async ({ emptyTrashBin }, { space, storeOptions }) => {
+        setup: async ({ emptyTrashBin }, { space }) => {
           await emptyTrashBin({ space })
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -117,13 +117,7 @@ function getWrapper({
     mocks.$clientService.webdav.clearTrashBin.mockRejectedValue(new Error(''))
   }
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: {
-      ...defaultStoreMockOptions.modules,
-      user: { state: { uuid: 1 } }
-    }
-  }
+  const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(

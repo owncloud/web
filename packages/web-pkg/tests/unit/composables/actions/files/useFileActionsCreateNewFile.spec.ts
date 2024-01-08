@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
@@ -47,12 +47,10 @@ describe('useFileActionsCreateNewFile', () => {
           await addNewFile('myfile.txt', null)
           await nextTick()
           expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-              title: '"myfile.txt" was created successfully'
-            })
-          )
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledWith({
+            title: '"myfile.txt" was created successfully'
+          })
         }
       })
     })
@@ -62,15 +60,15 @@ describe('useFileActionsCreateNewFile', () => {
       getWrapper({
         resolveCreateFile: false,
         space,
-        setup: async ({ addNewFile }, { storeOptions }) => {
+        setup: async ({ addNewFile }) => {
           await addNewFile('myfolder', null)
           await nextTick()
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-              title: 'Failed to create file'
-            })
+
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledWith(
+            expect.objectContaining({ title: 'Failed to create file' })
           )
+
           consoleErrorMock.mockRestore()
         }
       })

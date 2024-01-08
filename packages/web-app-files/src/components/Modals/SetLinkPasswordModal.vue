@@ -19,7 +19,13 @@
 <script lang="ts">
 import { defineComponent, ref, unref, PropType } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Modal, useClientService, usePasswordPolicyService, useStore } from '@ownclouders/web-pkg'
+import {
+  Modal,
+  useClientService,
+  useMessages,
+  usePasswordPolicyService,
+  useStore
+} from '@ownclouders/web-pkg'
 import { Share } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
@@ -31,6 +37,7 @@ export default defineComponent({
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { expose }) {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const passwordPolicyService = usePasswordPolicyService()
     const { $gettext } = useGettext()
@@ -50,9 +57,7 @@ export default defineComponent({
           client: clientService.owncloudSdk,
           params: { ...props.link, password: unref(password) }
         })
-        store.dispatch('showMessage', {
-          title: $gettext('Link was updated successfully')
-        })
+        showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
         // Human-readable error message is provided, for example when password is on banned list
         if (e.statusCode === 400) {
@@ -60,9 +65,9 @@ export default defineComponent({
           return Promise.reject()
         }
 
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to update link'),
-          error: e
+          errors: [e]
         })
       }
     }

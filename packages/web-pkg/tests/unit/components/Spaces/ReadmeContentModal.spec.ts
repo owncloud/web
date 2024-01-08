@@ -11,20 +11,23 @@ import {
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
+import { useMessages } from '../../../../src/composables/piniaStores'
 
 describe('ReadmeContentModal', () => {
   describe('method "onConfirm"', () => {
     it('should show message on success', async () => {
-      const { wrapper, storeOptions } = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, storeOptions } = getWrapper(false)
+      const { wrapper } = getWrapper(false)
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalledTimes(1)
     })
   })
 })

@@ -1,7 +1,7 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ClientService, eventBus } from '@ownclouders/web-pkg'
+import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
@@ -53,10 +53,11 @@ describe('Groups view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientServiceMock()
       clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
-      const { wrapper, storeOptions } = getWrapper({ clientService })
+      const { wrapper } = getWrapper({ clientService })
       await wrapper.vm.onEditGroup({})
 
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 

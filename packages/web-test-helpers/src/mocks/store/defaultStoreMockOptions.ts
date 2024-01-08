@@ -33,9 +33,6 @@ export const defaultStoreMockOptions = {
     }
   },
   actions: {
-    showMessage: jest.fn(),
-    showErrorMessage: jest.fn(),
-    deleteNotification: jest.fn(),
     openNavigation: jest.fn(),
     closeNavigation: jest.fn()
   },

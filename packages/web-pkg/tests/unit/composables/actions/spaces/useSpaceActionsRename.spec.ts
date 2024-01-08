@@ -1,5 +1,5 @@
 import { useSpaceActionsRename } from '../../../../../src/composables/actions/spaces'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -40,11 +40,12 @@ describe('rename', () => {
   describe('method "renameSpace"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ renameSpace }, { storeOptions, clientService }) => {
+        setup: async ({ renameSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await renameSpace(mock<SpaceResource>({ id: '1' }), 'renamed space')
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -52,11 +53,12 @@ describe('rename', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ renameSpace }, { storeOptions, clientService }) => {
+        setup: async ({ renameSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await renameSpace(mock<SpaceResource>({ id: '1' }), 'renamed space')
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

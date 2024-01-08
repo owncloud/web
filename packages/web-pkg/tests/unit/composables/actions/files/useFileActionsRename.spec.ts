@@ -1,5 +1,5 @@
 import { ConfigurationManager, useFileActionsRename, useStore } from '../../../../../src'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -156,13 +156,14 @@ describe('rename', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       getWrapper({
-        setup: async ({ renameResource }, { space, storeOptions, clientService }) => {
+        setup: async ({ renameResource }, { space, clientService }) => {
           clientService.webdav.moveFiles.mockRejectedValueOnce(new Error())
 
           renameResource(space, currentFolder, 'new name')
           await nextTick()
           await nextTick()
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

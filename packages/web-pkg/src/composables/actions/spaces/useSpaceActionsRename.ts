@@ -8,10 +8,11 @@ import { useRoute } from '../../router'
 import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { SpaceResource } from '@ownclouders/web-client'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
@@ -33,15 +34,13 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
           field: 'name',
           value: name
         })
-        store.dispatch('showMessage', {
-          title: $gettext('Space name was changed successfully')
-        })
+        showMessage({ title: $gettext('Space name was changed successfully') })
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to rename space'),
-          error
+          errors: [error]
         })
       })
   }

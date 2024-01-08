@@ -1,4 +1,5 @@
 import { useFileActionsSetReadme } from '../../../../../src'
+import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 
@@ -99,7 +100,7 @@ describe('setReadme', () => {
       const { wrapper } = getWrapper({
         resolveGetFileContents: true,
         space,
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           unref(actions)[0].handler({
             space,
             resources: [
@@ -115,8 +116,8 @@ describe('setReadme', () => {
           await nextTick()
           await nextTick()
           await nextTick()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-            expect.anything(),
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledWith(
             expect.not.objectContaining({ status: 'danger' })
           )
         }
@@ -130,7 +131,7 @@ describe('setReadme', () => {
       const { wrapper } = getWrapper({
         resolveGetFileContents: false,
         space,
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           unref(actions)[0].handler({
             space,
             resources: [
@@ -142,7 +143,8 @@ describe('setReadme', () => {
           })
 
           await nextTick()
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalled()
         }
       })
     })

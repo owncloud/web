@@ -23,9 +23,11 @@ import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useArchiverService } from '../../archiverService'
 import { formatFileSize } from '../../../helpers/filesize'
+import { useMessages } from '../../piniaStores'
 
 export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showErrorMessage } = useMessages()
   const router = useRouter()
   const loadingService = useLoadingService()
   const archiverService = useArchiverService()
@@ -59,13 +61,13 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
       })
       .catch((e) => {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $ngettext(
             'Failed to download the selected folder.', // on single selection only available for folders
             'Failed to download the selected files.', // on multi selection available for files+folders
             resources.length
           ),
-          error: e
+          errors: [e]
         })
       })
   }

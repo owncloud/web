@@ -40,6 +40,7 @@ import { mapGetters } from 'vuex'
 import {
   createLocationPublic,
   createLocationSpaces,
+  useMessages,
   useThemeStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -85,6 +86,7 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
     const userStore = useUserStore()
+    const messageStore = useMessages()
     const themeStore = useThemeStore()
     const router = useRouter()
     const route = useRoute()
@@ -113,6 +115,7 @@ export default defineComponent({
         route,
         store,
         userStore,
+        messageStore,
         uppyService,
         quotaCheckEnabled: false,
         directoryTreeCreateEnabled: false,

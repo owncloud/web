@@ -19,10 +19,11 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { useCapabilityFilesSharingCanRename } from '../../capability'
-import { useModals } from '../../piniaStores'
+import { useMessages, useModals } from '../../piniaStores'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
@@ -136,10 +137,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
           true
         )
       }
-      store.dispatch('showErrorMessage', {
-        title,
-        error
-      })
+      showErrorMessage({ title, errors: [error] })
     }
   }
 

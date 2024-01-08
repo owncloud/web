@@ -10,10 +10,11 @@ import { useStore } from '../../store'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -25,16 +26,14 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
     return clientService.webdav
       .clearTrashBin(space)
       .then(() => {
-        store.dispatch('showMessage', {
-          title: $gettext('All deleted files were removed')
-        })
+        showMessage({ title: $gettext('All deleted files were removed') })
         store.dispatch('Files/clearTrashBin')
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to empty trash bin'),
-          error
+          errors: [error]
         })
       })
   }

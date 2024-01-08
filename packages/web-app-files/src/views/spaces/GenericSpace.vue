@@ -608,7 +608,6 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
 
     async fileDropped(fileTarget) {
@@ -653,8 +652,6 @@ export default defineComponent({
         targetFolder,
         this.$clientService,
         this.$loadingService,
-        this.showMessage,
-        this.showErrorMessage,
         this.$gettext,
         this.$ngettext
       )

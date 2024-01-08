@@ -10,10 +10,11 @@ import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import { useUserStore } from '../../piniaStores'
+import { useMessages, useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -68,14 +69,12 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
         value: buildSpace(updatedDriveData).spaceImageData
       })
 
-      store.dispatch('showMessage', {
-        title: $gettext('Space image was set successfully')
-      })
+      showMessage({ title: $gettext('Space image was set successfully') })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to set space image'),
-        error
+        errors: [error]
       })
     }
   }

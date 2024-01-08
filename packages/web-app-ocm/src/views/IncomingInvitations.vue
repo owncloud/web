@@ -66,7 +66,8 @@ import {
   useClientService,
   useRoute,
   useRouter,
-  useConfigurationManager
+  useConfigurationManager,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
@@ -77,6 +78,7 @@ export default defineComponent({
   emits: ['highlightNewConnections'],
   setup(props, { emit }) {
     const store = useStore()
+    const { showErrorMessage } = useMessages()
     const router = useRouter()
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
@@ -103,10 +105,10 @@ export default defineComponent({
 
     const errorPopup = (error: Error) => {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Error'),
         desc: $gettext('An error occurred'),
-        error
+        errors: [error]
       })
     }
     const acceptInvite = async () => {

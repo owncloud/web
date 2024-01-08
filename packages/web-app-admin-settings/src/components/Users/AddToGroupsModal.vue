@@ -12,11 +12,11 @@ import { useGettext } from 'vue3-gettext'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import GroupSelect from './GroupSelect.vue'
 import {
-  useStore,
   useEventBus,
   useClientService,
   useConfigurationManager,
-  Modal
+  Modal,
+  useMessages
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -35,7 +35,7 @@ export default defineComponent({
   },
   emits: ['update:confirmDisabled'],
   setup(props, { emit, expose }) {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const eventBus = useEventBus()
@@ -75,7 +75,7 @@ export default defineComponent({
           'Group assignments already added',
           props.users.length * unref(selectedOptions).length
         )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
         return
       }
 
@@ -95,7 +95,7 @@ export default defineComponent({
                 { groupAssignmentCount: succeeded.length.toString() },
                 true
               )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
       }
 
       const failed = results.filter((r) => r.status === 'rejected')
@@ -114,7 +114,7 @@ export default defineComponent({
                 { groupAssignmentCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title,
           errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
         })

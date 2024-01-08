@@ -11,7 +11,7 @@ import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import GroupSelect from './GroupSelect.vue'
-import { useStore, useEventBus, useClientService, Modal } from '@ownclouders/web-pkg'
+import { useEventBus, useClientService, Modal, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'RemoveFromGroupsModal',
@@ -29,7 +29,7 @@ export default defineComponent({
   },
   emits: ['update:confirmDisabled'],
   setup(props, { emit, expose }) {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
@@ -68,7 +68,7 @@ export default defineComponent({
           'Group assignments already removed',
           props.users.length * unref(selectedOptions).length
         )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
         return
       }
 
@@ -88,7 +88,7 @@ export default defineComponent({
                 { groupAssignmentCount: succeeded.length.toString() },
                 true
               )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
       }
 
       const failed = results.filter((r) => r.status === 'rejected')
@@ -107,7 +107,7 @@ export default defineComponent({
                 { groupAssignmentCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title,
           errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
         })
