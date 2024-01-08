@@ -179,7 +179,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['apps', 'activeMessages', 'configuration', 'getExtensionsWithNavItems']),
+    ...mapGetters(['apps', 'activeMessages', 'configuration']),
     isIE11() {
       return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },
