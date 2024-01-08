@@ -1,0 +1,5 @@
+Change: Remove homeFolder option
+
+We have removed the `homeFolder` option as it was originally implemented and used by CERN but isn't needed anymore.
+
+https://github.com/owncloud/web/pull/10122
