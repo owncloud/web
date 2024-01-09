@@ -8,7 +8,13 @@ import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
-import { useThemeStore } from '@ownclouders/web-pkg'
+import {
+  useModals,
+  useThemeStore,
+  useUserStore,
+  UserStore,
+  useMessages
+} from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
   ClientService,
@@ -22,12 +28,12 @@ import { init as sentryInit } from '@sentry/vue'
 import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
-import {
-  ocResourceIconMappingInjectionKey,
-  OcResourceIconMapping
-} from 'design-system/src/components/OcResourceIcon/types'
 import { merge } from 'lodash-es'
-import { AppConfigObject } from '@ownclouders/web-pkg'
+import {
+  AppConfigObject,
+  resourceIconMappingInjectionKey,
+  ResourceIconMapping
+} from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
 import { z } from 'zod'
@@ -242,7 +248,7 @@ export const announceApplicationsReady = async ({
   await Promise.all(applications.map((application) => application.ready()))
   const apps = store.state.apps
 
-  const mapping: OcResourceIconMapping = {
+  const mapping: ResourceIconMapping = {
     mimeType: {},
     extension: {}
   }
@@ -271,7 +277,7 @@ export const announceApplicationsReady = async ({
     }
   })
 
-  app.provide(ocResourceIconMappingInjectionKey, mapping)
+  app.provide(resourceIconMappingInjectionKey, mapping)
 }
 
 /**
@@ -330,6 +336,13 @@ export const announceTheme = async ({
   })
 }
 
+export const announcePiniaStores = () => {
+  const messagesStore = useMessages()
+  const modalStore = useModals()
+  const userStore = useUserStore()
+  return { messagesStore, modalStore, userStore }
+}
+
 /**
  * announce runtime translations by injecting them into the getTextPlugin
  *
@@ -370,12 +383,14 @@ export const announceClientService = ({
   app,
   runtimeConfiguration,
   configurationManager,
-  store
+  store,
+  userStore
 }: {
   app: App
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
   store: Store<any>
+  userStore: UserStore
 }): void => {
   const sdk = new OwnCloud()
   sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
@@ -394,7 +409,7 @@ export const announceClientService = ({
     capabilities: computed(() => store.getters.capabilities),
     clientService: app.config.globalProperties.$clientService,
     language: computed(() => app.config.globalProperties.$language.current),
-    user: computed(() => store.getters.user)
+    user: computed(() => userStore.user)
   })
 
   app.provide('$client', sdk)
@@ -430,14 +445,21 @@ export const announceUppyService = ({ app }: { app: App }): void => {
 export const announcePreviewService = ({
   app,
   store,
-  configurationManager
+  configurationManager,
+  userStore
 }: {
   app: App
   store: Store<any>
   configurationManager: ConfigurationManager
+  userStore: UserStore
 }): void => {
   const clientService = app.config.globalProperties.$clientService
-  const previewService = new PreviewService({ store, clientService, configurationManager })
+  const previewService = new PreviewService({
+    store,
+    clientService,
+    configurationManager,
+    userStore
+  })
   app.config.globalProperties.$previewService = previewService
   app.provide('$previewService', previewService)
 }
@@ -454,17 +476,27 @@ export const announceAuthService = ({
   app,
   configurationManager,
   store,
-  router
+  router,
+  userStore
 }: {
   app: App
   configurationManager: ConfigurationManager
   store: Store<any>
   router: Router
+  userStore: UserStore
 }): void => {
   const ability = app.config.globalProperties.$ability
   const language = app.config.globalProperties.$language
   const clientService = app.config.globalProperties.$clientService
-  authService.initialize(configurationManager, clientService, store, router, ability, language)
+  authService.initialize(
+    configurationManager,
+    clientService,
+    store,
+    router,
+    ability,
+    language,
+    userStore
+  )
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)
 }

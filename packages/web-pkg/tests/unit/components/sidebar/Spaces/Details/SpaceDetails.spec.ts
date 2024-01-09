@@ -60,7 +60,6 @@ describe('Details SideBar Panel', () => {
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockImplementation(() => ({ id: 'marie', uuid: '1' }))
   storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
     spaceShare
   ])
@@ -70,7 +69,12 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
     wrapper: shallowMount(SpaceDetails, {
       props: { ...props },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } } }
+          }),
+          store
+        ],
         provide: { resource: spaceResource }
       }
     })

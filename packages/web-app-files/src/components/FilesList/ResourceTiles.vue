@@ -36,7 +36,7 @@
     </div>
     <oc-list class="oc-tiles oc-flex">
       <li v-for="resource in data" :key="resource.id" class="oc-tiles-item has-item-context-menu">
-        <oc-tile
+        <resource-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
           :resource-route="getRoute(resource)"
@@ -83,7 +83,7 @@
               </template>
             </context-menu-quick-action>
           </template>
-        </oc-tile>
+        </resource-tile>
       </li>
       <li
         v-for="index in ghostTilesCount"
@@ -97,7 +97,7 @@
       </li>
     </oc-list>
     <Teleport v-if="dragItem" to="body">
-      <oc-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
+      <resource-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
     </Teleport>
     <div class="oc-tiles-footer">
       <slot name="footer" />
@@ -132,15 +132,18 @@ import {
   ImageDimension,
   SortDir,
   SortField,
+  useMessages,
   useResourceRouteResolver,
   useStore,
   useTileSize,
-  ViewModeConstants
+  ViewModeConstants,
+  ResourceGhostElement,
+  ResourceTile
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
-  components: { ContextMenuQuickAction },
+  components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles
@@ -195,6 +198,7 @@ export default defineComponent({
   emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
     const store = useStore()
+    const { showMessage } = useMessages()
     const { $gettext } = useGettext()
 
     const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
@@ -239,7 +243,7 @@ export default defineComponent({
 
     const emitTileClick = (resource) => {
       if (resource.disabled && resource.type === 'space') {
-        store.dispatch('showMessage', {
+        showMessage({
           title: $gettext('Disabled spaces cannot be entered'),
           status: 'warning'
         })

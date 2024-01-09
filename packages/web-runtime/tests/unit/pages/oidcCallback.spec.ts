@@ -10,7 +10,6 @@ import oidcCallback from '../../../src/pages/oidcCallback.vue'
 import { authService } from 'web-runtime/src/services/auth'
 import { mock } from 'jest-mock-extended'
 import { computed } from 'vue'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 const mockUseEmbedMode = jest.fn()
 
@@ -143,7 +142,7 @@ function getWrapper() {
     storeOptions,
     wrapper: shallowMount(oidcCallback, {
       global: {
-        plugins: [...defaultPlugins(), store, createMockThemeStore()],
+        plugins: [...defaultPlugins(), store],
         mocks,
         provide: {}
       }

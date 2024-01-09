@@ -51,7 +51,9 @@ import {
   useRouteQuery,
   useStore,
   useSelectedResources,
-  useSideBar
+  useSideBar,
+  useModals,
+  useMessages
 } from '../../composables'
 import {
   Action,
@@ -103,11 +105,13 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const currentRoute = useRoute()
     const clientService = useClientService()
     const { getResourceContext } = useGetResourceContext()
     const { selectedResources } = useSelectedResources({ store })
+    const { dispatchModal } = useModals()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -288,17 +292,15 @@ export default defineComponent({
 
     const errorPopup = (error: HttpError) => {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('An error occurred'),
         desc: error.message,
-        error
+        errors: [error]
       })
     }
 
     const autosavePopup = () => {
-      store.dispatch('showMessage', {
-        title: $gettext('File autosaved')
-      })
+      showMessage({ title: $gettext('File autosaved') })
     }
 
     const saveFileTask = useTask(function* () {
@@ -412,7 +414,7 @@ export default defineComponent({
 
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
-        const modal = {
+        dispatchModal({
           variation: 'danger',
           icon: 'warning',
           title: $gettext('Unsaved changes'),
@@ -420,16 +422,13 @@ export default defineComponent({
           cancelText: $gettext("Don't Save"),
           confirmText: $gettext('Save'),
           onCancel() {
-            store.dispatch('hideModal')
             next()
           },
           async onConfirm() {
             await save()
-            store.dispatch('hideModal')
             next()
           }
-        }
-        store.dispatch('createModal', modal)
+        })
       } else {
         next()
       }

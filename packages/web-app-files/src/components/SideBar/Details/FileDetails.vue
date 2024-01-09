@@ -16,7 +16,7 @@
         v-else
         class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb"
       >
-        <oc-resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
+        <resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
       </div>
       <div
         v-if="!isPublicLinkContext && shareIndicators.length"
@@ -122,9 +122,10 @@
   </div>
 </template>
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
-import { ImageDimension, useConfigurationManager } from '@ownclouders/web-pkg'
+import { ImageDimension, useConfigurationManager, useUserStore } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
@@ -147,7 +148,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
-import { AncestorMetaData } from '@ownclouders/web-pkg'
+import { AncestorMetaData, ResourceIcon } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
@@ -155,7 +156,7 @@ import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDet
 
 export default defineComponent({
   name: 'FileDetails',
-  components: { TagsSelect, WebDavDetails },
+  components: { ResourceIcon, TagsSelect, WebDavDetails },
   props: {
     previewEnabled: {
       type: Boolean,
@@ -171,9 +172,12 @@ export default defineComponent({
   setup(props) {
     const configurationManager = useConfigurationManager()
     const store = useStore()
+    const userStore = useUserStore()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
+
+    const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
@@ -263,6 +267,7 @@ export default defineComponent({
     })
 
     return {
+      user,
       preview,
       isPublicLinkContext,
       space,
@@ -279,7 +284,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['versions']),
-    ...mapGetters(['user', 'configuration']),
+    ...mapGetters(['configuration']),
 
     hasContent() {
       return (
@@ -356,9 +361,9 @@ export default defineComponent({
     },
     ownedByCurrentUser() {
       return (
-        this.resource.ownerId === this.user.id ||
-        this.resource.owner?.[0].username === this.user.id ||
-        this.resource.shareOwner === this.user.id
+        this.resource.ownerId === this.user.onPremisesSamAccountName ||
+        this.resource.owner?.[0].username === this.user.onPremisesSamAccountName ||
+        this.resource.shareOwner === this.user.onPremisesSamAccountName
       )
     },
     shareIndicators() {

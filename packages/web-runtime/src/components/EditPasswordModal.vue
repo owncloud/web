@@ -1,65 +1,91 @@
 <template>
-  <oc-modal
-    :title="$gettext('Change password')"
-    :button-cancel-text="$gettext('Cancel')"
-    :button-confirm-text="$gettext('Confirm')"
-    :button-confirm-disabled="confirmButtonDisabled"
-    @confirm="editPassword"
-    @cancel="$emit('cancel')"
-  >
-    <template #content>
-      <oc-text-input
-        v-model="currentPassword"
-        :label="$gettext('Current password')"
-        type="password"
-        :fix-message-line="true"
-      />
-      <oc-text-input
-        v-model="newPassword"
-        :label="$gettext('New password')"
-        type="password"
-        :fix-message-line="true"
-        @change="validatePasswordConfirm"
-      />
-      <oc-text-input
-        v-model="newPasswordConfirm"
-        :label="$gettext('Repeat new password')"
-        type="password"
-        :fix-message-line="true"
-        :error-message="passwordConfirmErrorMessage"
-        @change="validatePasswordConfirm"
-      />
-    </template>
-  </oc-modal>
+  <oc-text-input
+    v-model="currentPassword"
+    :label="$gettext('Current password')"
+    type="password"
+    :fix-message-line="true"
+  />
+  <oc-text-input
+    v-model="newPassword"
+    :label="$gettext('New password')"
+    type="password"
+    :fix-message-line="true"
+    @change="validatePasswordConfirm"
+  />
+  <oc-text-input
+    v-model="newPasswordConfirm"
+    :label="$gettext('Repeat new password')"
+    type="password"
+    :fix-message-line="true"
+    :error-message="passwordConfirmErrorMessage"
+    @change="validatePasswordConfirm"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, ref, PropType, unref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { Modal, useClientService, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'EditPasswordModal',
-  emits: ['cancel', 'confirm'],
-  data: function () {
-    return {
-      currentPassword: '',
-      newPassword: '',
-      newPasswordConfirm: '',
-      passwordConfirmErrorMessage: ''
-    }
-  },
-  computed: {
-    confirmButtonDisabled() {
+  props: { modal: { type: Object as PropType<Modal>, required: true } },
+  emits: ['update:confirmDisabled'],
+  setup(props, { emit, expose }) {
+    const { showMessage, showErrorMessage } = useMessages()
+    const clientService = useClientService()
+    const { $gettext } = useGettext()
+
+    const currentPassword = ref('')
+    const newPassword = ref('')
+    const newPasswordConfirm = ref('')
+    const passwordConfirmErrorMessage = ref('')
+
+    const confirmButtonDisabled = computed(() => {
       return (
-        !this.currentPassword.trim().length ||
-        !this.newPassword.trim().length ||
-        this.newPassword !== this.newPasswordConfirm
+        !unref(currentPassword).trim().length ||
+        !unref(newPassword).trim().length ||
+        unref(newPassword) !== unref(newPasswordConfirm)
       )
+    })
+
+    watch(
+      confirmButtonDisabled,
+      () => {
+        emit('update:confirmDisabled', unref(confirmButtonDisabled))
+      },
+      { immediate: true }
+    )
+
+    const onConfirm = () => {
+      return clientService.graphAuthenticated.users
+        .changeOwnPassword(unref(currentPassword).trim(), unref(newPassword).trim())
+        .then(() => {
+          showMessage({ title: $gettext('Password was changed successfully') })
+        })
+        .catch((error) => {
+          console.error(error)
+          showErrorMessage({
+            title: $gettext('Failed to change password'),
+            errors: [error]
+          })
+        })
+    }
+
+    expose({ onConfirm })
+
+    return {
+      currentPassword,
+      newPassword,
+      newPasswordConfirm,
+      passwordConfirmErrorMessage,
+
+      // unit tests
+      confirmButtonDisabled
     }
   },
+
   methods: {
-    editPassword() {
-      this.$emit('confirm', this.currentPassword, this.newPassword)
-    },
     validatePasswordConfirm() {
       this.passwordConfirmErrorMessage = ''
 

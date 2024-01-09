@@ -1,10 +1,8 @@
 import ancestorMetaData from './ancestorMetaData'
-import app from './app'
 import apps from './apps'
 import auth from './auth'
 import config from './config'
 import user from './user'
-import modal from './modal'
 import navigation from './navigation'
 import spaces from './spaces'
 
@@ -21,11 +19,9 @@ const runtime = {
 
 export default {
   modules: {
-    app,
     apps,
     user,
     config,
-    modal,
     navigation,
     runtime
   },

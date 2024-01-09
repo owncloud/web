@@ -1,4 +1,5 @@
-import { useSpaceActionsRename } from '../../../../../src'
+import { useSpaceActionsRename } from '../../../../../src/composables/actions/spaces'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock } from 'jest-mock-extended'
 import {
   createStore,
@@ -16,33 +17,35 @@ describe('rename', () => {
     it('should trigger the rename modal window', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [{ id: '1', name: 'renamed space' } as SpaceResource]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the rename modal window without any resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })
   })
   describe('method "renameSpace"', () => {
-    it('should hide the modal and show message on success', () => {
+    it('should show message on success', () => {
       getWrapper({
-        setup: async ({ renameSpace }, { storeOptions, clientService }) => {
+        setup: async ({ renameSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
-          await renameSpace(1, 'renamed space')
+          await renameSpace(mock<SpaceResource>({ id: '1' }), 'renamed space')
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -50,11 +53,12 @@ describe('rename', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ renameSpace }, { storeOptions, clientService }) => {
+        setup: async ({ renameSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
-          await renameSpace(1, 'renamed space')
+          await renameSpace(mock<SpaceResource>({ id: '1' }), 'renamed space')
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

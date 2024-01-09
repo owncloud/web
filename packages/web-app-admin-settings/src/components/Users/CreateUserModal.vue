@@ -1,5 +1,5 @@
 <template>
-  <form autocomplete="off" @submit.prevent="onConfirm">
+  <form autocomplete="off" @submit.prevent="$emit('confirm')">
     <oc-text-input
       id="create-user-input-user-name"
       v-model="user.onPremisesSamAccountName"
@@ -40,36 +40,21 @@
       @update:model-value="validatePassword"
     />
     <input type="submit" class="oc-hidden" />
-    <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
-      <oc-button
-        class="oc-modal-body-actions-cancel oc-ml-s"
-        appearance="outline"
-        variation="passive"
-        @click="onCancel"
-        >{{ $gettext('Cancel') }}
-      </oc-button>
-      <oc-button
-        class="oc-modal-body-actions-confirm oc-ml-s"
-        appearance="filled"
-        variation="primary"
-        :disabled="isFormInvalid"
-        @click="onConfirm"
-        >{{ $gettext('Confirm') }}
-      </oc-button>
-    </div>
   </form>
 </template>
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, unref, PropType, watch } from 'vue'
 import * as EmailValidator from 'email-validator'
-import { useClientService, useEventBus, useStore } from '@ownclouders/web-pkg'
+import { Modal, useClientService, useEventBus, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateUserModal',
-  setup(props, { expose }) {
-    const store = useStore()
+  props: { modal: { type: Object as PropType<Modal>, required: true } },
+  emits: ['confirm', 'update:confirmDisabled'],
+  setup(props, { emit, expose }) {
+    const { showMessage, showErrorMessage } = useMessages()
     const eventBus = useEventBus()
     const clientService = useClientService()
     const { $gettext } = useGettext()
@@ -108,9 +93,17 @@ export default defineComponent({
         .includes(false)
     })
 
+    watch(
+      isFormInvalid,
+      () => {
+        emit('update:confirmDisabled', unref(isFormInvalid))
+      },
+      { immediate: true }
+    )
+
     const onConfirm = async () => {
       if (unref(isFormInvalid)) {
-        return
+        return Promise.reject()
       }
 
       try {
@@ -118,34 +111,27 @@ export default defineComponent({
         const { data } = await client.users.createUser(unref(user))
         const { id: createdUserId } = data
         const { data: createdUser } = await client.users.getUser(createdUserId)
-        store.dispatch('showMessage', {
-          title: $gettext('User was created successfully')
-        })
+        showMessage({ title: $gettext('User was created successfully') })
         eventBus.publish('app.admin-settings.users.add', createdUser)
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to create user'),
-          error
+          errors: [error]
         })
-      } finally {
-        store.dispatch('hideModal')
       }
     }
 
-    const onCancel = () => {
-      store.dispatch('hideModal')
-    }
-
-    expose({ onConfirm, onCancel })
+    expose({ onConfirm })
 
     return {
       clientService,
       formData,
       user,
       isFormInvalid,
-      onConfirm,
-      onCancel
+
+      // unit tests
+      onConfirm
     }
   },
   methods: {
@@ -158,15 +144,15 @@ export default defineComponent({
       this.formData.email.valid = true
     },
     async validateUserName() {
-      this.formData.userName.valid = false
-
       if (this.user.onPremisesSamAccountName.trim() === '') {
         this.formData.userName.errorMessage = this.$gettext('User name cannot be empty')
+        this.formData.userName.valid = false
         return false
       }
 
       if (this.user.onPremisesSamAccountName.includes(' ')) {
         this.formData.userName.errorMessage = this.$gettext('User name cannot contain white spaces')
+        this.formData.userName.valid = false
         return false
       }
 
@@ -174,6 +160,7 @@ export default defineComponent({
         this.formData.userName.errorMessage = this.$gettext(
           'User name cannot exceed 255 characters'
         )
+        this.formData.userName.valid = false
         return false
       }
 
@@ -187,6 +174,7 @@ export default defineComponent({
         this.formData.userName.errorMessage = this.$gettext(
           'User name cannot contain special characters'
         )
+        this.formData.userName.valid = false
         return false
       }
 
@@ -195,6 +183,7 @@ export default defineComponent({
         !isNaN(parseInt(this.user.onPremisesSamAccountName[0]))
       ) {
         this.formData.userName.errorMessage = this.$gettext('User name cannot start with a number')
+        this.formData.userName.valid = false
         return false
       }
 
@@ -205,6 +194,7 @@ export default defineComponent({
         this.formData.userName.errorMessage = this.$gettext('User "%{userName}" already exists', {
           userName: this.user.onPremisesSamAccountName
         })
+        this.formData.userName.valid = false
         return false
       } catch (e) {}
 

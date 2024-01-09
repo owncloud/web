@@ -7,9 +7,7 @@ export const defaultStoreMockOptions = {
     newFileHandlers: jest.fn(() => []),
     getNavItemsByExtension: jest.fn(),
     apps: jest.fn(() => ({})),
-    quota: jest.fn(() => ({})),
     capabilities: jest.fn().mockImplementation(() => ({})),
-    user: jest.fn().mockImplementation(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
       options: {
         editor: {
@@ -26,9 +24,6 @@ export const defaultStoreMockOptions = {
       state: {
         fileEditors: [],
         meta: {}
-      },
-      getters: {
-        fileSideBars: jest.fn(() => [])
       }
     },
     External: {
@@ -38,19 +33,8 @@ export const defaultStoreMockOptions = {
     }
   },
   actions: {
-    createModal: jest.fn(),
-    hideModal: jest.fn(),
-    toggleModalConfirmButton: jest.fn(),
-    setModalConfirmButtonDisabled: jest.fn(),
-    showMessage: jest.fn(),
-    showErrorMessage: jest.fn(),
-    deleteNotification: jest.fn(),
-    setModalInputErrorMessage: jest.fn(),
     openNavigation: jest.fn(),
     closeNavigation: jest.fn()
-  },
-  mutations: {
-    SET_QUOTA: () => jest.fn()
   },
   state: {
     navigation: {

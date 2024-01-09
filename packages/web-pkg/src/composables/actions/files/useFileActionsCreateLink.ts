@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
@@ -12,31 +11,33 @@ import {
 import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../capability'
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsCreateLink = ({
-  store,
   enforceModal = false,
   showMessages = true,
   onLinkCreatedCallback = undefined
 }: {
-  store?: Store<any>
   enforceModal?: boolean
   showMessages?: boolean
   onLinkCreatedCallback?: (result: PromiseSettledResult<Share>[]) => Promise<void> | void
 } = {}) => {
+  const userStore = useUserStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const loadingService = useLoadingService()
   const passwordEnforcedCapabilities = useCapabilityFilesSharingPublicPasswordEnforcedFor()
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { createLink } = useCreateLink()
+  const { dispatchModal } = useModals()
 
   const proceedResult = (result: PromiseSettledResult<Share>[]) => {
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
     )
     if (succeeded.length && showMessages) {
-      store.dispatch('showMessage', {
+      showMessage({
         title: $ngettext(
           'Link has been created successfully',
           'Links have been created successfully',
@@ -47,7 +48,7 @@ export const useFileActionsCreateLink = ({
 
     const failed = result.filter(({ status }) => status === 'rejected')
     if (failed.length) {
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         errors: (failed as PromiseRejectedResult[]).map(({ reason }) => reason),
         title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })
@@ -67,8 +68,7 @@ export const useFileActionsCreateLink = ({
       enforceModal ||
       (passwordEnforced && unref(defaultLinkPermissions) > SharePermissionBit.Internal)
     ) {
-      return store.dispatch('createModal', {
-        variation: 'passive',
+      dispatchModal({
         title: $ngettext(
           'Create link for "%{resourceName}"',
           'Create links for the selected items',
@@ -84,6 +84,7 @@ export const useFileActionsCreateLink = ({
         }),
         hideActions: true
       })
+      return
     }
 
     const promises = resources.map((resource) =>
@@ -100,7 +101,7 @@ export const useFileActionsCreateLink = ({
     }
 
     for (const resource of resources) {
-      if (!resource.canShare({ user: store.getters.user, ability })) {
+      if (!resource.canShare({ user: userStore.user, ability })) {
         return false
       }
 

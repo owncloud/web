@@ -37,7 +37,13 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { mapGetters } from 'vuex'
-import { createLocationPublic, createLocationSpaces, useThemeStore } from '@ownclouders/web-pkg'
+import {
+  createLocationPublic,
+  createLocationSpaces,
+  useMessages,
+  useThemeStore,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
   computed,
@@ -79,6 +85,8 @@ export default defineComponent({
   setup() {
     const uppyService = useService<UppyService>('$uppyService')
     const store = useStore()
+    const userStore = useUserStore()
+    const messageStore = useMessages()
     const themeStore = useThemeStore()
     const router = useRouter()
     const route = useRoute()
@@ -106,6 +114,8 @@ export default defineComponent({
         language,
         route,
         store,
+        userStore,
+        messageStore,
         uppyService,
         quotaCheckEnabled: false,
         directoryTreeCreateEnabled: false,

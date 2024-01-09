@@ -1,7 +1,12 @@
 import { Resource } from '@ownclouders/web-client'
 import { basename, join } from 'path'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { ClientService, LoadingService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
+import {
+  ClientService,
+  LoadingService,
+  LoadingTaskCallbackArguments,
+  useMessages
+} from '@ownclouders/web-pkg'
 import {
   ConflictDialog,
   ResolveStrategy,
@@ -20,10 +25,6 @@ export class ResourceTransfer extends ConflictDialog {
     private targetFolder: Resource,
     private clientService: ClientService,
     private loadingService: LoadingService,
-    createModal: (modal: object) => void,
-    hideModal: () => void,
-    showMessage: (data: object) => void,
-    showErrorMessage: (data: object) => void,
     $gettext: (
       msgid: string,
       parameters?: {
@@ -41,7 +42,7 @@ export class ResourceTransfer extends ConflictDialog {
       disableHtmlEscaping?: boolean
     ) => string
   ) {
-    super(createModal, hideModal, showMessage, showErrorMessage, $gettext, $ngettext)
+    super($gettext, $ngettext)
   }
 
   hasRecursion(): boolean {
@@ -60,7 +61,8 @@ export class ResourceTransfer extends ConflictDialog {
       "You can't paste the selected files at this location because you can't paste an item into itself.",
       count
     )
-    this.showErrorMessage({ title })
+    const messageStore = useMessages()
+    messageStore.showErrorMessage({ title })
   }
 
   showResultMessage(errors, movedResources: Array<Resource>, transferType: TransferType) {
@@ -85,10 +87,8 @@ export class ResourceTransfer extends ConflictDialog {
               { count: count.toString() },
               true
             )
-      this.showMessage({
-        title,
-        status: 'success'
-      })
+      const messageStore = useMessages()
+      messageStore.showMessage({ title, status: 'success' })
       return
     }
     let title =
@@ -101,10 +101,8 @@ export class ResourceTransfer extends ConflictDialog {
           ? this.$gettext('Failed to copy "%{name}"', { name: errors[0]?.resourceName }, true)
           : this.$gettext('Failed to move "%{name}"', { name: errors[0]?.resourceName }, true)
     }
-    this.showErrorMessage({
-      title,
-      errors
-    })
+    const messageStore = useMessages()
+    messageStore.showErrorMessage({ title, errors })
   }
 
   async perform(transferType: TransferType): Promise<Resource[]> {

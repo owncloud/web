@@ -2,7 +2,8 @@ import { useUserActionsAddToGroups } from '../../../../../src/composables/action
 import { mock } from 'jest-mock-extended'
 import { ref, unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from 'web-test-helpers'
+import { useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsAddToGroups', () => {
   describe('method "isEnabled"', () => {
@@ -21,9 +22,10 @@ describe('useUserActionsAddToGroups', () => {
   describe('method "handler"', () => {
     it('creates a modal', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [mock<User>()] })
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })
@@ -33,24 +35,12 @@ describe('useUserActionsAddToGroups', () => {
 function getWrapper({
   setup
 }: {
-  setup: (
-    instance: ReturnType<typeof useUserActionsAddToGroups>,
-    {
-      storeOptions
-    }: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useUserActionsAddToGroups>) => void
 }) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
-    wrapper: getComposableWrapper(
-      () => {
-        const instance = useUserActionsAddToGroups({ groups: ref([]) })
-        setup(instance, { storeOptions })
-      },
-      { store }
-    )
+    wrapper: getComposableWrapper(() => {
+      const instance = useUserActionsAddToGroups({ groups: ref([]) })
+      setup(instance)
+    })
   }
 }

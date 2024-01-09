@@ -9,7 +9,13 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { createCustomThemeStore } from 'web-test-helpers/src/mocks/pinia'
+import { useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { SpaceResource } from '@ownclouders/web-client'
+
+jest.mock('@ownclouders/web-pkg', () => ({
+  ...jest.requireActual('@ownclouders/web-pkg'),
+  useGetMatchingSpace: jest.fn()
+}))
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -98,6 +104,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: basicQuota,
+          total: 0,
           definition: 'default'
         },
         email
@@ -110,7 +117,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
-          total: totalQuota,
+          total: 0,
           relative: dangerRelativeQuota,
           definition: 'none'
         },
@@ -141,26 +148,22 @@ describe('User Menu component', () => {
   })
 })
 
-const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = false) => {
+const getMountedWrapper = (quota, userEmail: string, noUser = false, areThemeUrlsSet = false) => {
+  jest.mocked(useGetMatchingSpace).mockReturnValue(
+    mock<ReturnType<typeof useGetMatchingSpace>>({
+      getPersonalSpace: () => mock<SpaceResource>({ spaceQuota: quota })
+    })
+  )
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ path: '/files', fullPath: '/files' })
     })
   }
-  const storeOptions = defaultStoreMockOptions
 
-  storeOptions.getters.quota.mockImplementation(() => quota)
-  storeOptions.getters.user.mockImplementation(() => {
-    return noUser
-      ? {}
-      : {
-          id: 'einstein',
-          username: 'einstein',
-          userDisplayName: 'Albert Einstein',
-          userEmail
-        }
-  })
+  const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
+
   return mount(UserMenu, {
     props: {
       applicationsList: [
@@ -175,11 +178,9 @@ const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = f
       provide: mocks,
       renderStubDefaultSlot: true,
       plugins: [
-        ...defaultPlugins(),
-        store,
-        createCustomThemeStore({
-          initialState: {
-            theme: {
+        ...defaultPlugins({
+          piniaOptions: {
+            themeState: {
               currentTheme: {
                 common: {
                   urls: {
@@ -188,9 +189,20 @@ const getMountedWrapper = (quota, userEmail, noUser = false, areThemeUrlsSet = f
                   }
                 }
               }
+            },
+            userState: {
+              user: noUser
+                ? {}
+                : {
+                    id: '1',
+                    onPremisesSamAccountName: 'einstein',
+                    displayName: 'Albert Einstein',
+                    mail: userEmail || ''
+                  }
             }
           }
-        })
+        }),
+        store
       ],
       stubs: {
         ...defaultStubs,

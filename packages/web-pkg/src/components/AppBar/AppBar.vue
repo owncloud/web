@@ -164,7 +164,7 @@ export default defineComponent({
     const { actions: restoreActions } = useFileActionsRestore({ store })
     const { actions: deleteSpaceActions } = useSpaceActionsDelete({ store })
     const { actions: disableSpaceActions } = useSpaceActionsDisable({ store })
-    const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota({ store })
+    const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota()
     const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
 
     const breadcrumbMaxWidth = ref<number>(0)

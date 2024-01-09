@@ -1,3 +1,4 @@
+import { mock } from 'jest-mock-extended'
 import SetLinkPasswordModal from '../../../../src/components/Modals/SetLinkPasswordModal.vue'
 import {
   createStore,
@@ -6,6 +7,7 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
+import { Modal, useMessages } from '@ownclouders/web-pkg'
 
 describe('SetLinkPasswordModal', () => {
   it('should render a text input field for the password', () => {
@@ -19,14 +21,16 @@ describe('SetLinkPasswordModal', () => {
       await wrapper.vm.onConfirm()
 
       expect(storeOptions.modules.Files.actions.updateLink).toHaveBeenCalled()
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
     })
     it('shows an error message on error', async () => {
       const { wrapper, storeOptions } = getWrapper()
       storeOptions.modules.Files.actions.updateLink.mockRejectedValue(new Error(''))
       await wrapper.vm.onConfirm()
 
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 })
@@ -42,6 +46,7 @@ function getWrapper({ link = {} } = {}) {
     storeOptions,
     wrapper: shallowMount(SetLinkPasswordModal, {
       props: {
+        modal: mock<Modal>(),
         link
       },
       global: {

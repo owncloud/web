@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
-import { eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
 describe('CreateGroupModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -59,16 +59,20 @@ describe('CreateGroupModal', () => {
   })
   describe('method "onConfirm"', () => {
     it('should not create group if form is invalid', async () => {
-      const { wrapper, storeOptions } = getWrapper()
+      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper } = getWrapper()
 
       const eventSpy = jest.spyOn(eventBus, 'publish')
-      await wrapper.vm.onConfirm()
+      try {
+        await wrapper.vm.onConfirm()
+      } catch (error) {}
 
-      expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).not.toHaveBeenCalled()
       expect(eventSpy).not.toHaveBeenCalled()
     })
     it('should create group on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.groups.getGroup.mockRejectedValueOnce(new Error(''))
 
       wrapper.vm.group.displayName = 'foo bar'
@@ -81,14 +85,15 @@ describe('CreateGroupModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       await wrapper.vm.onConfirm()
 
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
       expect(eventSpy).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.groups.getGroup.mockRejectedValue(new Error(''))
 
       wrapper.vm.group.displayName = 'foo bar'
@@ -100,15 +105,9 @@ describe('CreateGroupModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       await wrapper.vm.onConfirm()
 
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
       expect(eventSpy).not.toHaveBeenCalled()
-    })
-  })
-  describe('method "onCancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.onCancel()
-      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
     })
   })
 })
@@ -123,8 +122,7 @@ function getWrapper() {
     storeOptions,
     wrapper: shallowMount(CreateGroupModal, {
       props: {
-        cancel: jest.fn(),
-        confirm: jest.fn()
+        modal: mock<Modal>()
       },
       global: {
         mocks,

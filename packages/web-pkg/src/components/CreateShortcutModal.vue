@@ -75,23 +75,6 @@
     />
     <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension">.url</span>
   </div>
-  <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
-    <oc-button
-      class="oc-modal-body-actions-cancel oc-ml-s"
-      appearance="outline"
-      variation="passive"
-      @click="onCancel"
-      >{{ $gettext('Cancel') }}
-    </oc-button>
-    <oc-button
-      class="oc-modal-body-actions-confirm oc-ml-s"
-      appearance="filled"
-      variation="primary"
-      :disabled="confirmButtonDisabled"
-      @click="onConfirm"
-      >{{ $gettext('Create') }}
-    </oc-button>
-  </div>
 </template>
 
 <script lang="ts">
@@ -107,7 +90,15 @@ import {
   onMounted
 } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useClientService, useFolderLink, useRouter, useSearch, useStore } from '../composables'
+import {
+  Modal,
+  useClientService,
+  useFolderLink,
+  useMessages,
+  useRouter,
+  useSearch,
+  useStore
+} from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
 import DOMPurify from 'dompurify'
@@ -127,15 +118,18 @@ export default defineComponent({
   name: 'CreateShortcutModal',
   components: { ResourcePreview },
   props: {
+    modal: { type: Object as PropType<Modal>, required: true },
     space: {
       type: Object as PropType<SpaceResource>,
       required: true
     }
   },
-  setup(props, { expose }) {
+  emits: ['update:confirmDisabled'],
+  setup(props, { emit, expose }) {
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const { search } = useSearch()
     const {
@@ -164,15 +158,22 @@ export default defineComponent({
       return `https://${url}`
     })
 
+    const currentFolder = computed<Resource>(() => store.getters['Files/currentFolder'])
+    const files = computed((): Array<Resource> => store.getters['Files/files'])
+    const fileAlreadyExists = computed(
+      () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+    )
+
     const confirmButtonDisabled = computed(
       () => unref(fileAlreadyExists) || !unref(inputFilename) || !unref(inputUrl)
     )
-    const currentFolder = computed(() => store.getters['Files/currentFolder'])
 
-    const files = computed((): Array<Resource> => store.getters['Files/files'])
-
-    const fileAlreadyExists = computed(
-      () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+    watch(
+      confirmButtonDisabled,
+      () => {
+        emit('update:confirmDisabled', unref(confirmButtonDisabled))
+      },
+      { immediate: true }
     )
 
     const inputFileNameErrorMessage = computed(() => {
@@ -336,21 +337,14 @@ export default defineComponent({
           content
         })
         store.commit('Files/UPSERT_RESOURCE', resource)
-        store.dispatch('hideModal')
-        store.dispatch('showMessage', {
-          title: $gettext('Shortcut was created successfully')
-        })
+        showMessage({ title: $gettext('Shortcut was created successfully') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to create shortcut'),
-          error: e
+          errors: [e]
         })
       }
-    }
-
-    const onCancel = () => {
-      store.dispatch('hideModal')
     }
 
     onMounted(async () => {
@@ -392,7 +386,7 @@ export default defineComponent({
       )
     })
 
-    expose({ onConfirm, onCancel })
+    expose({ onConfirm })
 
     return {
       inputUrl,
@@ -403,8 +397,6 @@ export default defineComponent({
       confirmButtonDisabled,
       inputFileNameErrorMessage,
       searchTask,
-      onConfirm,
-      onCancel,
       dropItemUrlClicked,
       dropItemResourceClicked,
       getPathPrefix,
@@ -420,7 +412,10 @@ export default defineComponent({
       onShowDrop,
       onInputUrlInput,
       onClickUrlInput,
-      isDropItemActive
+      isDropItemActive,
+
+      // unit tests
+      onConfirm
     }
   }
 })

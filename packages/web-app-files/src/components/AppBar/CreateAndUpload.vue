@@ -26,7 +26,7 @@
         <oc-list id="create-list" :class="areFileExtensionsShown ? 'expanded-list' : null">
           <li class="create-list-folder oc-menu-item-hover">
             <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
-              <oc-resource-icon :resource="folderIconResource" size="medium" />
+              <resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
@@ -37,7 +37,7 @@
               class="create-list-file oc-menu-item-hover"
             >
               <oc-button appearance="raw" @click="mimeTypeAction.handler">
-                <oc-resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
+                <resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
                 <span
                   class="create-list-file-item-text"
                   v-text="$gettext(mimeTypeAction.label())"
@@ -64,7 +64,7 @@
               :class="['new-file-btn-' + fileAction.ext]"
               @click="fileAction.handler"
             >
-              <oc-resource-icon :resource="getIconResource(fileAction)" size="medium" />
+              <resource-icon :resource="getIconResource(fileAction)" size="medium" />
               <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
               <span
                 v-if="areFileExtensionsShown && fileAction.ext"
@@ -191,7 +191,9 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive,
   useFileActions,
-  useFileActionsCreateNewShortcut
+  useFileActionsCreateNewShortcut,
+  useMessages,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import {
@@ -219,17 +221,23 @@ import {
   ref
 } from 'vue'
 import { eventBus } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  Resource,
+  SpaceResource,
+  isPublicSpaceResource,
+  isShareSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { useService, useUpload, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
-import { Action } from '@ownclouders/web-pkg'
+import { Action, ResourceIcon } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   components: {
+    ResourceIcon,
     ResourceUpload
   },
   props: {
@@ -257,6 +265,8 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
     const store = useStore()
+    const userStore = useUserStore()
+    const messageStore = useMessages()
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
@@ -272,6 +282,8 @@ export default defineComponent({
         route,
         space: props.space,
         store,
+        userStore,
+        messageStore,
         uppyService
       })
     }
@@ -322,11 +334,11 @@ export default defineComponent({
       ].filter((e) => e.isEnabled())
     })
 
-    const currentFolder = computed(() => {
+    const currentFolder = computed<Resource>(() => {
       return store.getters['Files/currentFolder']
     })
     const canUpload = computed(() => {
-      return unref(currentFolder)?.canUpload({ user: store.getters.user })
+      return unref(currentFolder)?.canUpload({ user: userStore.user })
     })
 
     const actionKeySuffix = ref(uuidv4())
@@ -362,12 +374,10 @@ export default defineComponent({
           return
         }
 
-        store.dispatch('hideModal')
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (unref(hasSpaces)) {
+        if (unref(hasSpaces) && !isPublicSpaceResource(props.space)) {
           const spaces = store.getters['runtime/spaces/spaces']
-          const user = store.getters['user']
-          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(user)
+          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(userStore.user)
           if (driveType === 'project' || isOwnSpace) {
             const client = clientService.graphAuthenticated
             const driveResponse = await client.drives.getDrive(spaceId.toString())
@@ -377,9 +387,6 @@ export default defineComponent({
               value: driveResponse.data.quota
             })
           }
-        } else {
-          const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
-          store.commit('SET_QUOTA', user.quota)
         }
 
         const sameFolder =
@@ -446,7 +453,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers', 'user']),
+    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers']),
     ...mapGetters('Files', ['files', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/ancestorMetaData', ['ancestorMetaData']),
     ...mapGetters('runtime/spaces', ['spaces']),
@@ -509,7 +516,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['clearClipboardFiles']),
-    ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
     getIconResource(fileHandler) {
       return { type: 'file', extension: fileHandler.ext } as Resource

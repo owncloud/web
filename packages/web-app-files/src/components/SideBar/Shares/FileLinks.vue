@@ -127,7 +127,10 @@ import {
   useDefaultLinkPermissions,
   useFileActionsCreateLink,
   FileAction,
-  useClientService
+  useClientService,
+  useModals,
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -164,6 +167,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
+    const userStore = useUserStore()
     const { $gettext } = useGettext()
     const ability = useAbility()
     const clientService = useClientService()
@@ -172,8 +177,9 @@ export default defineComponent({
     const hasResharing = useCapabilityFilesSharingResharing()
     const hasShareJail = useCapabilityShareJailEnabled()
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
+    const { dispatchModal } = useModals()
 
-    const { actions: createLinkActions } = useFileActionsCreateLink({ store })
+    const { actions: createLinkActions } = useFileActionsCreateLink()
     const createLinkAction = computed<FileAction>(() =>
       unref(createLinkActions).find(({ name }) => name === 'create-links')
     )
@@ -225,7 +231,7 @@ export default defineComponent({
         return false
       }
 
-      return unref(resource).canShare({ user: store.getters.user, ability })
+      return unref(resource).canShare({ user: userStore.user, ability })
     })
 
     const canEditLink = ({ permissions }: Share) => {
@@ -251,28 +257,18 @@ export default defineComponent({
           client: clientService.owncloudSdk,
           params
         })
-        store.dispatch('hideModal')
-        store.dispatch('showMessage', {
-          title: $gettext('Link was updated successfully')
-        })
+        showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
-        // Human-readable error message is provided, for example when password is on banned list
-        if (e.statusCode === 400) {
-          return store.dispatch('setModalInputErrorMessage', $gettext(e.message))
-        }
-
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to update link'),
-          error: e
+          errors: [e]
         })
       }
     }
 
     const showPasswordModal = (params) => {
-      return store.dispatch('createModal', {
-        variation: 'passive',
+      dispatchModal({
         title: $gettext('Set password'),
-        hideActions: true,
         customComponent: SetLinkPasswordModal,
         customComponentAttrs: () => ({ link: params })
       })
@@ -303,7 +299,10 @@ export default defineComponent({
       updatePublicLink,
       showPasswordModal,
       defaultLinkPermissions,
-      addNewLink
+      addNewLink,
+      dispatchModal,
+      showMessage,
+      showErrorMessage
     }
   },
   computed: {
@@ -385,13 +384,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
-    ...mapActions([
-      'showMessage',
-      'showErrorMessage',
-      'createModal',
-      'hideModal',
-      'setModalInputErrorMessage'
-    ]),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
@@ -508,27 +500,23 @@ export default defineComponent({
     },
 
     deleteLinkConfirmation({ link }) {
-      const modal = {
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Delete link'),
         message: this.$gettext(
           'Are you sure you want to delete this link? Recreating the same link again is not possible.'
         ),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Delete'),
-        onCancel: this.hideModal,
         onConfirm: () =>
           this.deleteLink({
             client: this.$client,
             share: link,
             resource: this.resource
           })
-      }
-      this.createModal(modal)
+      })
     },
 
     async deleteLink({ client, share, resource }) {
-      this.hideModal()
       let path = resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
@@ -555,7 +543,7 @@ export default defineComponent({
         console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to delete link'),
-          error: e
+          errors: [e]
         })
       }
     },

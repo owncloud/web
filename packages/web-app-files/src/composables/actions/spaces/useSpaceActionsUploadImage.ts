@@ -6,7 +6,9 @@ import {
   useClientService,
   useLoadingService,
   useStore,
-  usePreviewService
+  usePreviewService,
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -22,6 +24,8 @@ export const useSpaceActionsUploadImage = ({
   spaceImageInput: VNodeRef
 }) => {
   store = store || useStore()
+  const userStore = useUserStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
@@ -47,9 +51,7 @@ export const useSpaceActionsUploadImage = ({
     }
 
     if (!previewService.isMimetypeSupported(file.type, true)) {
-      return store.dispatch('showErrorMessage', {
-        title: $gettext('The file type is unsupported')
-      })
+      return showErrorMessage({ title: $gettext('The file type is unsupported') })
     }
 
     try {
@@ -106,15 +108,13 @@ export const useSpaceActionsUploadImage = ({
           field: 'spaceImageData',
           value: data.special.find((special) => special.specialFolder.name === 'image')
         })
-        await store.dispatch('showMessage', {
-          title: $gettext('Space image was uploaded successfully')
-        })
+        showMessage({ title: $gettext('Space image was uploaded successfully') })
         eventBus.publish('app.files.spaces.uploaded-image', buildSpace(data))
       } catch (error) {
         console.error(error)
-        await store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to upload space image'),
-          error
+          errors: [error]
         })
       }
     })
@@ -133,7 +133,7 @@ export const useSpaceActionsUploadImage = ({
           return false
         }
 
-        return resources[0].canEditImage({ user: store.getters.user })
+        return resources[0].canEditImage({ user: userStore.user })
       },
       componentType: 'button',
       class: 'oc-files-actions-upload-space-image-trigger'

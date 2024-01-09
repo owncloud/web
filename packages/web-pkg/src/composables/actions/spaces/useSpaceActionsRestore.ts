@@ -9,18 +9,22 @@ import { useLoadingService } from '../../loadingService'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
+  const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const route = useRoute()
+  const { dispatchModal } = useModals()
 
   const filterResourcesToRestore = (resources): SpaceResource[] => {
     return resources.filter(
-      (r) => isProjectSpaceResource(r) && r.canRestore({ user: store.getters.user, ability })
+      (r) => isProjectSpaceResource(r) && r.canRestore({ user: userStore.user, ability })
     )
   }
 
@@ -65,7 +69,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
               { spaceCount: succeeded.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title })
+      showMessage({ title })
     }
 
     const failed = results.filter((r) => r.status === 'rejected')
@@ -82,13 +86,11 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
               { spaceCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title,
         errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
       })
     }
-
-    store.dispatch('hideModal')
   }
 
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -104,8 +106,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
     )
     const confirmText = $gettext('Enable')
 
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $ngettext(
         'Enable Space "%{space}"?',
         'Enable %{spaceCount} Spaces?',
@@ -115,16 +116,12 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
           spaceCount: allowedResources.length.toString()
         }
       ),
-      cancelText: $gettext('Cancel'),
       confirmText,
       icon: 'alert',
       message,
       hasInput: false,
-      onCancel: () => store.dispatch('hideModal'),
       onConfirm: () => restoreSpaces(allowedResources)
-    }
-
-    store.dispatch('createModal', modal)
+    })
   }
 
   const actions = computed((): SpaceAction[] => [

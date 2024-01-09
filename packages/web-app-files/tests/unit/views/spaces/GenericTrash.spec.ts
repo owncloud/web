@@ -14,7 +14,6 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 jest.mock('web-app-files/src/composables')
 
@@ -83,7 +82,7 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
     wrapper: mount(GenericTrash, {
       props: propsData,
       global: {
-        plugins: [...defaultPlugins(), store, createMockThemeStore()],
+        plugins: [...defaultPlugins(), store],
         mocks: defaultMocks,
         stubs: { ...defaultStubs, portal: true }
       }

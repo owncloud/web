@@ -149,13 +149,13 @@
 <script lang="ts">
 import { basename } from 'path'
 import { DateTime } from 'luxon'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import * as EmailValidator from 'email-validator'
 import {
   createLocationSpaces,
   useConfigurationManager,
   LinkRoleDropdown,
-  useStore
+  useModals
 } from '@ownclouders/web-pkg'
 import {
   linkRoleInternalFile,
@@ -212,7 +212,7 @@ export default defineComponent({
   },
   emits: ['removePublicLink', 'updateLink'],
   setup(props, { emit }) {
-    const store = useStore()
+    const { dispatchModal } = useModals()
     const { $gettext, current } = useGettext()
     const configurationManager = useConfigurationManager()
     const passwordPolicyService = usePasswordPolicyService()
@@ -240,10 +240,8 @@ export default defineComponent({
     }
 
     const showPasswordModal = () => {
-      return store.dispatch('createModal', {
-        variation: 'passive',
+      dispatchModal({
         title: props.link.password ? $gettext('Edit password') : $gettext('Add password'),
-        hideActions: true,
         customComponent: SetLinkPasswordModal,
         customComponentAttrs: () => ({ link: props.link })
       })
@@ -258,7 +256,8 @@ export default defineComponent({
       updateSelectedRole,
       currentLinkRole,
       isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos),
-      showPasswordModal
+      showPasswordModal,
+      dispatchModal
     }
   },
   data() {
@@ -475,46 +474,33 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions([
-      'createModal',
-      'hideModal',
-      'setModalInputErrorMessage',
-      'setModalConfirmButtonDisabled'
-    ]),
-
     deleteLink() {
       this.$emit('removePublicLink', { link: this.link })
       ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
     },
-    checkInputValue(value) {
-      if (value.length > 255) {
-        return this.setModalInputErrorMessage(
-          this.$gettext('Link name cannot exceed 255 characters')
-        )
-      }
-      this.setModalInputErrorMessage(null)
-    },
     showRenameModal() {
-      const modal = {
-        variation: 'passive',
+      this.dispatchModal({
         title: this.$gettext('Edit name'),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Save'),
         hasInput: true,
         inputValue: this.link.name,
         inputLabel: this.$gettext('Link name'),
-        onCancel: this.hideModal,
-        onInput: this.checkInputValue,
-        onConfirm: (name) =>
-          this.updateLink({
-            link: {
-              ...this.link,
-              name
-            }
-          })
-      }
-
-      this.createModal(modal)
+        onInput: (name, setError) => {
+          if (name.length > 255) {
+            return setError(this.$gettext('Link name cannot exceed 255 characters'))
+          }
+          return setError(null)
+        },
+        onConfirm: (name: string) =>
+          Promise.resolve(
+            this.updateLink({
+              link: {
+                ...this.link,
+                name
+              }
+            })
+          )
+      })
     },
 
     toggleNotifyUploads() {
@@ -534,11 +520,9 @@ export default defineComponent({
       )
     },
     showNotifyUploadsExtraRecipientsModal() {
-      const modal = {
-        variation: 'passive',
+      this.dispatchModal({
         icon: 'mail-add',
         title: this.$gettext('Notify a third party about uploads'),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Apply'),
         hasInput: true,
         inputDescription: this.$gettext(
@@ -547,30 +531,26 @@ export default defineComponent({
         inputValue: this.currentLinkNotifyUploadsExtraRecipients,
         inputLabel: this.$gettext('Email address'),
         inputType: 'email',
-        onCancel: this.hideModal,
-        onInput: (value) => this.checkEmailValid(value),
-        onConfirm: (value) => {
-          this.updateLink({
-            link: {
-              ...this.link,
-              notifyUploadsExtraRecipients: value
-            },
-            onSuccess: () => {
-              this.hideModal()
-            }
-          })
-        }
-      }
-      this.createModal(modal)
+        onInput: (value, setError) => setError(this.getEmailValidationMsg(value)),
+        onConfirm: (value: string) =>
+          Promise.resolve(
+            this.updateLink({
+              link: {
+                ...this.link,
+                notifyUploadsExtraRecipients: value
+              }
+            })
+          )
+      })
     },
-    checkEmailValid(email) {
+    getEmailValidationMsg(email: string) {
       if (!EmailValidator.validate(email)) {
-        return this.setModalInputErrorMessage(this.$gettext('Email is invalid'))
+        return this.$gettext('Email is invalid')
       }
       if (email === '') {
-        return this.setModalInputErrorMessage(this.$gettext("Email can't be empty"))
+        return this.$gettext("Email can't be empty")
       }
-      return this.setModalInputErrorMessage(null)
+      return null
     }
   }
 })

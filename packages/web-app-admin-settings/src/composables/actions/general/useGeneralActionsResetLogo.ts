@@ -1,11 +1,10 @@
-import { Store } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
-import { useAbility, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
+import { useAbility, useClientService, useMessages, useRouter } from '@ownclouders/web-pkg'
 import { Action } from '@ownclouders/web-pkg'
 
-export const useGeneralActionsResetLogo = ({ store }: { store?: Store<any> }) => {
-  store = store || useStore()
+export const useGeneralActionsResetLogo = () => {
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -15,17 +14,15 @@ export const useGeneralActionsResetLogo = ({ store }: { store?: Store<any> }) =>
     try {
       const httpClient = clientService.httpAuthenticated
       await httpClient.delete('/branding/logo')
-      store.dispatch('showMessage', {
-        title: $gettext('Logo was reset successfully. Reloading page...')
-      })
+      showMessage({ title: $gettext('Logo was reset successfully. Reloading page...') })
       setTimeout(() => {
         router.go(0)
       }, 1000)
     } catch (e) {
       console.error(e)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to reset logo'),
-        error: e
+        errors: [e]
       })
     }
   }

@@ -10,7 +10,6 @@ import { mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 jest.mock('web-runtime/src/services/auth')
 const selectors = {
@@ -87,7 +86,7 @@ function getWrapper({ passwordRequired = false } = {}) {
   return {
     wrapper: shallowMount(ResolvePublicLink, {
       global: {
-        plugins: [...defaultPlugins(), store, createMockThemeStore()],
+        plugins: [...defaultPlugins(), store],
         mocks,
         provide: mocks
       }

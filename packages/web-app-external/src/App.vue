@@ -34,6 +34,7 @@ import {
   isSameResource,
   queryItemAsString,
   useConfigurationManager,
+  useMessages,
   useRequest,
   useRouteQuery,
   useStore
@@ -55,6 +56,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const language = useGettext()
     const store = useStore()
+    const { showErrorMessage } = useMessages()
     const configurationManager = useConfigurationManager()
 
     const { $gettext } = language
@@ -80,19 +82,17 @@ export default defineComponent({
     })
 
     const errorPopup = (error) => {
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('An error occurred'),
         desc: error,
-        error
+        errors: [error]
       })
     }
 
     const loadAppUrl = useTask(function* (signal, viewMode: string) {
       try {
         if (props.isReadOnly && viewMode === 'write') {
-          store.dispatch('showErrorMessage', {
-            title: $gettext('Cannot open file in edit mode as it is read-only')
-          })
+          showErrorMessage({ title: $gettext('Cannot open file in edit mode as it is read-only') })
           return
         }
 

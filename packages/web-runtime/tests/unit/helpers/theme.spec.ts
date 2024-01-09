@@ -1,8 +1,8 @@
 import { loadTheme } from 'web-runtime/src/helpers/theme'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 import merge from 'lodash-es/merge'
-import fetchMock from 'jest-fetch-mock'
 import { ThemingConfig, WebThemeConfig } from '@ownclouders/web-pkg'
+import { mock } from 'jest-mock-extended'
 
 jest.mock('@ownclouders/web-pkg', () => {
   const actual = jest.requireActual('@ownclouders/web-pkg')
@@ -47,20 +47,22 @@ describe('theme loading and error reporting', () => {
   })
 
   it('should load the default theme if location is not found', async () => {
-    fetchMock.mockResponse(new Error() as any, { status: 404 })
+    jest.spyOn(global, 'fetch').mockResolvedValue(mock<Response>({ status: 404 }))
     const theme = await loadTheme('http://www.owncloud.com/unknown.json')
     expect(theme).toMatchObject(defaultOwnCloudTheme)
   })
 
   it('should load the default theme if location is not a valid json file', async () => {
     const customTheme = merge({}, defaultTheme, { default: { logo: { login: 'custom.svg' } } })
-    fetchMock.mockResponse(JSON.stringify(customTheme) + '-invalid')
+    jest
+      .spyOn(global, 'fetch')
+      .mockResolvedValue(mock<Response>({ status: 404, json: () => Promise.resolve(customTheme) }))
     const theme = await loadTheme('http://www.owncloud.com/invalid.json')
     expect(theme).toMatchObject(defaultOwnCloudTheme)
   })
 
   it('should load the default theme if server errors', async () => {
-    fetchMock.mockReject(new Error())
+    jest.spyOn(global, 'fetch').mockRejectedValue(new Error())
     const theme = await loadTheme('http://www.owncloud.com')
     expect(theme).toMatchObject(defaultOwnCloudTheme)
   })
@@ -70,15 +72,19 @@ describe('theme loading and error reporting', () => {
       defaults: { logo: { login: 'custom.svg' } }
     })
 
-    fetchMock.mockResponse(
-      JSON.stringify({
-        common: defaultTheme.common,
-        clients: {
-          web: {
-            defaults: customTheme.defaults,
-            themes: customTheme.themes
-          }
-        }
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 404,
+        json: () =>
+          Promise.resolve({
+            common: defaultTheme.common,
+            clients: {
+              web: {
+                defaults: customTheme.defaults,
+                themes: customTheme.themes
+              }
+            }
+          })
       })
     )
 

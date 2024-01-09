@@ -3,7 +3,7 @@
     <div class="oc-app-top-bar oc-flex">
       <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
         <div class="open-file-bar oc-flex">
-          <oc-resource
+          <resource-list-item
             v-if="resource"
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
@@ -83,6 +83,7 @@ import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
 import { Action, useFolderLink, useGetMatchingSpace, useStore } from '../composables'
+import ResourceListItem from './FilesList/ResourceListItem.vue'
 import {
   Resource,
   isPublicSpaceResource,
@@ -92,7 +93,8 @@ import {
 export default defineComponent({
   name: 'AppTopBar',
   components: {
-    ContextActionMenu
+    ContextActionMenu,
+    ResourceListItem
   },
   props: {
     dropDownActions: {

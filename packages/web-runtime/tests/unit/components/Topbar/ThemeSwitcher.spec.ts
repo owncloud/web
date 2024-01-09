@@ -1,8 +1,8 @@
-import { useThemeStore } from '@ownclouders/web-pkg'
+import { WebThemeType, useThemeStore } from '@ownclouders/web-pkg'
+import { mock } from 'jest-mock-extended'
 import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 import { defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 const defaultOwnCloudTheme = {
   defaults: {
@@ -95,13 +95,25 @@ function mockDarkModePreferred(enabled = false) {
 }
 
 function getWrapper({ hasOnlyOneTheme = false } = {}) {
+  const availableThemes = hasOnlyOneTheme
+    ? [defaultTheme.clients.web.themes[0]]
+    : defaultTheme.clients.web.themes
+
   return {
     wrapper: mount(ThemeSwitcher, {
       global: {
         plugins: [
-          ...defaultPlugins(),
-          createMockThemeStore({
-            hasOnlyOneTheme
+          ...defaultPlugins({
+            piniaOptions: {
+              stubActions: false,
+              themeState: {
+                availableThemes,
+                currentTheme: mock<WebThemeType>({
+                  ...defaultOwnCloudTheme.defaults,
+                  ...defaultOwnCloudTheme.themes[0]
+                })
+              }
+            }
           })
         ],
         stubs: { ...defaultStubs, 'oc-icon': true }

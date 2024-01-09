@@ -7,13 +7,9 @@ For fixing potential security issues please see https://owncloud.org/security/
 
 To make it possible for us to get your change reviewed and merged please carefully fill out the requested information below.
 
-Please note that any kind of change needs first be submitted to the master branch which holds the next major version of ownCloud.
-
-We will carefully discuss if your change can or has to be backported to stable branches.
-
 Please set the following labels:
 
-- Set label "Status:Needs-Review" for review or "Status:In-Progress" in case the PR still has open tasks
+- Set label "Status:Needs-Review" for review or "Status:In-Progress" or save as draft PR in case the PR still has open tasks
 - Set label "Category:*" where it fits best
 - Assignment: assign to self
 - Reviewers: pick at least one
@@ -50,15 +46,10 @@ Please set the following labels:
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
 - [ ] Technical debt
 - [ ] Tests
-
-## Checklist:
-<!-- Tick the checkboxes when done. -->
-<!-- Raise documentation ticket in https://github.com/owncloud/documentation -->
-- [ ] Code changes
-- [ ] Unit tests added
-- [ ] Acceptance tests added
-- [ ] Documentation ticket raised: <link> 
+- [ ] Documentation
+- [ ] Maintenance (e.g. dependency updates or tooling)
 
 ## Open tasks:
 <!-- In case of incomplete PR, please list the open tasks here -->
+<!-- Please make sure to keep your PR in draft mode until it's ready for review -->
 - [ ] ...

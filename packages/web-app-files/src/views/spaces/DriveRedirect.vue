@@ -26,11 +26,6 @@ export default defineComponent({
       type: String,
       required: false,
       default: ''
-    },
-    appendHomeFolder: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   setup(props) {
@@ -43,16 +38,9 @@ export default defineComponent({
     })
 
     const itemPath = computed(() => {
-      if (!props.appendHomeFolder) {
-        return ''
-      }
-      const item = props.driveAliasAndItem.startsWith(fakePersonalDriveAlias)
+      return props.driveAliasAndItem.startsWith(fakePersonalDriveAlias)
         ? urlJoin(props.driveAliasAndItem.slice(fakePersonalDriveAlias.length))
         : '/'
-      if (item !== '/') {
-        return item
-      }
-      return store.getters.homeFolder
     })
 
     if (!unref(personalSpace)) {

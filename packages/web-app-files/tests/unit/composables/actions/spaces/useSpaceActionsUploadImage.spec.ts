@@ -9,7 +9,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
-import { eventBus, useStore } from '@ownclouders/web-pkg'
+import { eventBus, useMessages, useStore } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -17,7 +17,7 @@ describe('uploadImage', () => {
   describe('method "uploadImageSpace"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
+        setup: async ({ uploadImageSpace }, { clientService }) => {
           const busStub = jest.spyOn(eventBus, 'publish')
           const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
@@ -44,7 +44,8 @@ describe('uploadImage', () => {
           })
 
           expect(busStub).toHaveBeenCalledWith('app.files.spaces.uploaded-image', expect.anything())
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -52,7 +53,7 @@ describe('uploadImage', () => {
     it('should show showErrorMessage on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ uploadImageSpace }, { storeOptions, clientService }) => {
+        setup: async ({ uploadImageSpace }, { clientService }) => {
           clientService.webdav.putFileContents.mockRejectedValue(new Error(''))
 
           await uploadImageSpace({
@@ -68,7 +69,8 @@ describe('uploadImage', () => {
             }
           })
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

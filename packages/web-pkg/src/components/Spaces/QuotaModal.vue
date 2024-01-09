@@ -14,35 +14,22 @@
       v-bind="warningMessageContextualHelperData"
     />
   </div>
-
-  <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
-    <oc-button
-      class="oc-modal-body-actions-cancel oc-ml-s"
-      appearance="outline"
-      variation="passive"
-      @click="onCancel"
-      >{{ $gettext('Cancel') }}
-    </oc-button>
-    <oc-button
-      class="oc-modal-body-actions-confirm oc-ml-s"
-      appearance="filled"
-      variation="primary"
-      :disabled="confirmButtonDisabled"
-      @click="onConfirm"
-      >{{ $gettext('Confirm') }}
-    </oc-button>
-  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref, PropType, ref, onMounted } from 'vue'
+import { computed, defineComponent, unref, PropType, ref, onMounted, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import QuotaSelect from '../QuotaSelect.vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useCapabilitySpacesMaxQuota, useClientService } from '../../composables'
+import {
+  Modal,
+  useCapabilitySpacesMaxQuota,
+  useClientService,
+  useMessages
+} from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
-import { useStore, useLoadingService } from '../../composables'
+import { useStore } from '../../composables'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
@@ -51,6 +38,7 @@ export default defineComponent({
     QuotaSelect
   },
   props: {
+    modal: { type: Object as PropType<Modal>, required: true },
     spaces: {
       type: Array as PropType<SpaceResource[]>,
       required: true
@@ -72,11 +60,12 @@ export default defineComponent({
       }
     }
   },
-  setup(props, { expose }) {
+  emits: ['update:confirmDisabled'],
+  setup(props, { emit, expose }) {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const { $gettext, $ngettext } = useGettext()
     const clientService = useClientService()
-    const loadingService = useLoadingService()
     const router = useRouter()
     const maxQuota = useCapabilitySpacesMaxQuota()
 
@@ -125,6 +114,14 @@ export default defineComponent({
       return !props.spaces.some((space) => space.spaceQuota.total !== unref(selectedOption))
     })
 
+    watch(
+      confirmButtonDisabled,
+      () => {
+        emit('update:confirmDisabled', unref(confirmButtonDisabled))
+      },
+      { immediate: true }
+    )
+
     const changeSelectedQuotaOption = (option) => {
       selectedOption.value = option.value
     }
@@ -160,31 +157,23 @@ export default defineComponent({
           value: driveData.quota
         })
       })
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled<Array<unknown>>(requests)
-      })
+      const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
-        store.dispatch('showMessage', { title: getSuccessMessage(succeeded.length) })
+        showMessage({ title: getSuccessMessage(succeeded.length) })
       }
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         console.error(errors)
         errors.forEach(console.error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: getErrorMessage(errors.length),
           errors: (errors as PromiseRejectedResult[]).map((f) => f.reason)
         })
       }
-
-      store.dispatch('hideModal')
     }
 
-    const onCancel = () => {
-      store.dispatch('hideModal')
-    }
-
-    expose({ onConfirm, onCancel })
+    expose({ onConfirm })
 
     onMounted(() => {
       selectedOption.value = props.spaces[0]?.spaceQuota?.total || 0
@@ -194,9 +183,10 @@ export default defineComponent({
       selectedOption,
       confirmButtonDisabled,
       changeSelectedQuotaOption,
-      onConfirm,
-      onCancel,
-      maxQuota
+      maxQuota,
+
+      // unit tests
+      onConfirm
     }
   }
 })

@@ -160,7 +160,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsOpenShortcut({ store })
+        const instance = useFileActionsOpenShortcut()
         setup(instance, { storeOptions })
       },
       {

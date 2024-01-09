@@ -1,7 +1,7 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
-import { ClientService } from '@ownclouders/web-pkg'
+import { ClientService, UserStore } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -25,6 +25,7 @@ export class AuthService {
   private publicLinkManager: PublicLinkManager
   private ability: Ability
   private language: Language
+  private userStore: UserStore
 
   public hasAuthErrorOccurred: boolean
 
@@ -34,7 +35,8 @@ export class AuthService {
     store: Store<any>,
     router: Router,
     ability: Ability,
-    language: Language
+    language: Language,
+    userStore: UserStore
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
@@ -43,6 +45,7 @@ export class AuthService {
     this.hasAuthErrorOccurred = false
     this.ability = ability
     this.language = language
+    this.userStore = userStore
   }
 
   /**
@@ -80,7 +83,8 @@ export class AuthService {
         configurationManager: this.configurationManager,
         store: this.store,
         ability: this.ability,
-        language: this.language
+        language: this.language,
+        userStore: this.userStore
       })
     }
 
@@ -296,12 +300,9 @@ export class AuthService {
 
   private async resetStateAfterUserLogout() {
     // TODO: create UserUnloadTask interface and allow registering unload-tasks in the authService
+    this.userStore.$reset()
     await this.store.dispatch('runtime/auth/clearUserContext')
-    await this.store.dispatch('resetUserState')
-    await Promise.all([
-      this.store.dispatch('clearDynamicNavItems'),
-      this.store.dispatch('hideModal')
-    ])
+    await this.store.dispatch('clearDynamicNavItems')
   }
 
   private handleDelegatedTokenUpdate(event: MessageEvent): void {

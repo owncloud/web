@@ -11,7 +11,9 @@ export const RestoreFileVersionFactory = (dav: DAV, { accessToken, user }: WebDa
       const webDavPath = urlJoin(space.webDavPath, path)
       const headers = buildAuthHeader(unref(accessToken), space)
       const source = urlJoin('meta', id, 'v', versionId, { leadingSlash: true })
-      const target = urlJoin('files', unref(user).id, webDavPath, { leadingSlash: true })
+      const target = urlJoin('files', unref(user).onPremisesSamAccountName, webDavPath, {
+        leadingSlash: true
+      })
       return dav.copy(source, target, { headers })
     }
   }

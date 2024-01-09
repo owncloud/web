@@ -1,5 +1,6 @@
+import { useMessages } from '@ownclouders/web-pkg'
 import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameAndCopy.vue'
-import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 jest.useFakeTimers()
 
@@ -22,13 +23,14 @@ describe('NameAndCopy', () => {
       }
     })
 
-    const { wrapper, storeOptions } = getWrapper()
-    expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
+    const { wrapper } = getWrapper()
+    const { showMessage } = useMessages()
+    expect(showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(exampleLink.url)
     expect(wrapper.html()).toMatchSnapshot()
-    expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+    expect(showMessage).toHaveBeenCalledTimes(1)
 
     jest.advanceTimersByTime(550)
 
@@ -39,17 +41,13 @@ describe('NameAndCopy', () => {
 })
 
 function getWrapper() {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
-  const store = createStore(storeOptions)
   return {
-    storeOptions,
     wrapper: mount(NameAndCopy, {
       props: {
         link: exampleLink
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         directives: {
           'oc-tooltip': jest.fn()
         }

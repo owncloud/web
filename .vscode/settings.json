@@ -13,7 +13,6 @@
   },
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
-  "eslint.packageManager": "pnpm",
   "jest.autoRun": {
     "watch": false,
     "onStartup": true
@@ -27,5 +26,6 @@
   "cucumberautocomplete.steps": [
     "tests/e2e/cucumber/steps/**/*.ts"
   ],
-  "cucumberautocomplete.strictGherkinCompletion": true
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

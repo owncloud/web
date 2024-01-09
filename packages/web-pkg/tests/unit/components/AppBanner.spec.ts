@@ -3,7 +3,6 @@ import AppBanner from '../../../src/components/AppBanner.vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { useSessionStorage } from '@vueuse/core'
 import { ref } from 'vue'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 jest.mock('@vueuse/core')
 
@@ -62,15 +61,20 @@ function getWrapper({ fileId, sessionStorageReturnValue }) {
       },
       global: {
         plugins: [
-          ...defaultPlugins(),
-          createMockThemeStore({
-            appBanner: {
-              title: 'ownCloud',
-              publisher: 'ownCloud GmbH',
-              additionalInformation: '',
-              ctaText: 'OPEN',
-              icon: 'themes/owncloud/assets/owncloud-app-icon.png',
-              appScheme: 'owncloud'
+          ...defaultPlugins({
+            piniaOptions: {
+              themeState: {
+                currentTheme: {
+                  appBanner: {
+                    title: 'ownCloud',
+                    publisher: 'ownCloud GmbH',
+                    additionalInformation: '',
+                    ctaText: 'OPEN',
+                    icon: 'themes/owncloud/assets/owncloud-app-icon.png',
+                    appScheme: 'owncloud'
+                  }
+                }
+              }
             }
           })
         ],

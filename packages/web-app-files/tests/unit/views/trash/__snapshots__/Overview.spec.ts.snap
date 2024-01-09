@@ -79,7 +79,6 @@ exports[`TrashOverview view states should render spaces list 1`] = `
             </td>
           </tr>
         </tfoot>
-        <!--v-if-->
       </table>
     </div>
   </div>

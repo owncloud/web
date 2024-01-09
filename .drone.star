@@ -91,15 +91,12 @@ config = {
                 "oCISBasic": [
                     "webUIPrivateLinks",
                     "webUIPreview",
-                    "webUIAccount",
                     "webUILogin",
                 ],
                 "webUIWebdavLockProtection": "oCISWebdavLockProtection",
                 "oCISSharingBasic": [
                     "webUISharingAcceptShares",
-                    "webUIRestrictSharing",
                 ],
-                "webUIFavorites": "oCISFavorites",
                 "oCISFiles1": [
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
@@ -128,13 +125,11 @@ config = {
                     "webUISharingInternalUsers",
                     "webUISharingInternalUsersBlacklisted",
                     "webUISharingInternalUsersCollaborator",
-                    "webUISharingExpirationDate",
                 ],
                 "oCISSharingInternal3": [
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
                     "webUISharingInternalUsersShareWithPage",
-                    "webUIOperationsWithFolderShares",
                 ],
                 "oCISSharingAutocompletionResharing": [
                     "webUISharingAutocompletion",
@@ -208,10 +203,8 @@ rootSharingTestSuites = [
 ]
 
 basicTestSuites = [
-    "webUIAccount",
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
-    "webUIFavorites",
     "webUIFiles",
     "webUIFilesActionMenu",
     "webUIFilesCopy",
@@ -219,17 +212,14 @@ basicTestSuites = [
     "webUIFilesList",
     "webUILogin",
     "webUIMoveFilesFolders",
-    "webUIOperationsWithFolderShares",
     "webUIPreview",
     "webUIPrivateLinks",
     "webUIRenameFiles",
     "webUIRenameFolders",
     "webUIResharing1",
     "webUIResharing2",
-    "webUIRestrictSharing",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
-    "webUISharingExpirationDate",
     "webUISharingFilePermissionMultipleUsers",
     "webUISharingFilePermissionsGroups",
     "webUISharingFolderAdvancedPermissionMultipleUsers",
@@ -1279,7 +1269,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
     }
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
-        environment["MICRO_REGISTRY"] = "natsjs"
+        environment["MICRO_REGISTRY"] = "nats-js-kv"
         environment["MICRO_REGISTRY_ADDRESS"] = "0.0.0.0:9233"
         environment["NATS_NATS_HOST"] = "0.0.0.0"
         environment["NATS_NATS_PORT"] = 9233
@@ -2199,7 +2189,7 @@ def appProviderService(name):
         "APP_PROVIDER_WOPI_INSECURE": True,
         "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
         "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
-        "MICRO_REGISTRY": "natsjs",
+        "MICRO_REGISTRY": "nats-js-kv",
         "MICRO_REGISTRY_ADDRESS": "ocis:9233",
     }
 

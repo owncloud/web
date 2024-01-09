@@ -1,16 +1,9 @@
-import { User } from '../../types'
+import { ApplicationEntity, User } from '../../types'
 import { checkResponseStatus, request } from '../http'
 import join from 'join-path'
 
-interface ApplicationEntity {
-  appRoles: AppRole[]
-  displayName: string
-  id: string
-}
-
-interface AppRole {
-  displayName: string
-  id: string
+interface ApplicationsResponse {
+  value: ApplicationEntity[]
 }
 
 export const getApplicationEntity = async (admin: User): Promise<ApplicationEntity> => {
@@ -20,7 +13,9 @@ export const getApplicationEntity = async (admin: User): Promise<ApplicationEnti
     user: admin
   })
   checkResponseStatus(response, 'Failed while getting application id')
-  return (await response.json()).value[0]
+
+  const resBody = (await response.json()) as ApplicationsResponse
+  return resBody.value[0]
 }
 
 export const createTagsForResource = async ({

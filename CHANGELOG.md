@@ -3,20 +3,15 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.1.2...master
+[unreleased]: https://github.com/owncloud/web/compare/v7.1.3...master
 
 Summary
 -------
 
 * Bugfix - Filter out shares without display name: [#9257](https://github.com/owncloud/web/issues/9257)
-* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
-* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
-* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
-* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 * Bugfix - Respect the open-in-new-tab-config for external apps: [#9663](https://github.com/owncloud/web/pull/9663)
-* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 * Bugfix - Create .space folder if it does not exist: [#9788](https://github.com/owncloud/web/issues/9788)
 * Bugfix - Link resolving into default app: [#9799](https://github.com/owncloud/web/issues/9799)
@@ -34,6 +29,7 @@ Summary
 * Bugfix - Disable expiration date for alias link (internal): [#10083](https://github.com/owncloud/web/pull/10083)
 * Bugfix - Allow empty search query in "in-here" search: [#10092](https://github.com/owncloud/web/pull/10092)
 * Bugfix - Remove password buttons on input if disabled: [#10096](https://github.com/owncloud/web/pull/10096)
+* Bugfix - Tilesview has whitespace: [#10118](https://github.com/owncloud/web/pull/10118)
 * Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
 * Bugfix - Spaces overview tile previews zoomed: [#10149](https://github.com/owncloud/web/pull/10149)
 * Bugfix - Resolving links without drive alias: [#10154](https://github.com/owncloud/web/pull/10154)
@@ -42,10 +38,17 @@ Summary
 * Bugfix - Turned off file extensions not always respected: [#10176](https://github.com/owncloud/web/pull/10176)
 * Bugfix - Space navigate to trash missing: [#10179](https://github.com/owncloud/web/pull/10179)
 * Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
+* Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
+* Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+* Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -103,6 +106,7 @@ Summary
 * Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
+* Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 
 Details
 -------
@@ -116,21 +120,6 @@ Details
    https://github.com/owncloud/web/issues/9257
    https://github.com/owncloud/web/pull/9504
 
-* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
-
-   Loading PDF files with Safari has been fixed.
-
-   https://github.com/owncloud/web/issues/9483
-   https://github.com/owncloud/web/pull/9565
-
-* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
-
-   We've fixed a bug where setting or removing an expiration on a group share
-   wasn't possible.
-
-   https://github.com/owncloud/web/issues/8419
-   https://github.com/owncloud/web/pull/9513
-
 * Bugfix - Shared with action menu label alignment: [#9529](https://github.com/owncloud/web/pull/9529)
 
    Adjusted offset of alignment of label for shared with action menu option in
@@ -138,22 +127,6 @@ Details
 
    https://github.com/owncloud/web/issues/9323
    https://github.com/owncloud/web/pull/9529
-
-* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
-
-   An issue where internally resolved public links instantly triggered the default
-   file action has been fixed.
-
-   https://github.com/owncloud/web/issues/9578
-   https://github.com/owncloud/web/pull/9587
-
-* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
-
-   Loading audio and video on the Shared with me page with the preview app has been
-   fixed.
-
-   https://github.com/owncloud/web/issues/9593
-   https://github.com/owncloud/web/pull/9595
 
 * Bugfix - Add project space filter: [#9649](https://github.com/owncloud/web/pull/9649)
 
@@ -169,13 +142,6 @@ Details
 
    https://github.com/owncloud/web/issues/9630
    https://github.com/owncloud/web/pull/9663
-
-* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
-
-   Navigating via tab and enter in the tiles view has been fixed.
-
-   https://github.com/owncloud/web/issues/9633
-   https://github.com/owncloud/web/pull/9670
 
 * Bugfix - Special characters in username: [#9694](https://github.com/owncloud/web/issues/9694)
 
@@ -320,6 +286,14 @@ Details
    https://github.com/owncloud/web/issues/10084
    https://github.com/owncloud/web/pull/10096
 
+* Bugfix - Tilesview has whitespace: [#10118](https://github.com/owncloud/web/pull/10118)
+
+   We've fixed a bug that caused the tiles-view to have whitespace on the right
+   side of the screen which is not optimal for efficiant space management.
+
+   https://github.com/owncloud/web/issues/10040
+   https://github.com/owncloud/web/pull/10118
+
 * Bugfix - Spaces files list previews cropped: [#10149](https://github.com/owncloud/web/pull/10149)
 
    We've fixed a bug where the files list previews in spaces were cropped.
@@ -378,6 +352,22 @@ Details
    sidebar from within a viewer or editor.
 
    https://github.com/owncloud/web/pull/10182
+
+* Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
+
+   An issue where the loading indicator was showing before taking action in the
+   resource conflict dialog has been fixed.
+
+   https://github.com/owncloud/web/issues/10215
+   https://github.com/owncloud/web/pull/10220
+
+* Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
+
+   In order to ease the load on the backend we've introduced config options to
+   limit the number of concurrent requests in certain areas.
+
+   https://github.com/owncloud/web/issues/10227
+   https://github.com/owncloud/web/pull/10230
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
@@ -456,6 +446,59 @@ Details
 
    https://github.com/owncloud/web/issues/9709
    https://github.com/owncloud/web/pull/9764
+
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+
+   BREAKING CHANGE for developers: The old way of registering quick actions via the
+   `quickaction` property of an app has been removed. Quick actions should be
+   registered as extension via our extension registry. They need to be of type
+   `action` and have the `files.quick-action` scope.
+
+   https://github.com/owncloud/web/pull/10102
+   https://github.com/owncloud/web/pull/10223
+
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+
+   We have removed the `homeFolder` option as it was originally implemented and
+   used by CERN but isn't needed anymore.
+
+   https://github.com/owncloud/web/pull/10122
+
+* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+
+   BREAKING CHANGE for developers: The way how to work with modals has been
+   reworked. Modals can now be registered via the `dispatchModal` method provided
+   by the `useModals` composable, instead of calling `createModal` or `hideModal`
+   from the store.
+
+   For more details on how to use the modal please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10095
+   https://github.com/owncloud/web/pull/10212
+   https://github.com/owncloud/web/pull/10239
+
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+
+   BREAKING CHANGE for developers: The user from the ocs api has been removed in
+   favor of the graph user. That means the user that can be retrieved from the
+   store looks slightly different than the OCS user (though it still holds the same
+   information).
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10240
+
+* Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
+
+   BREAKING CHANGE for developers: Messages are no longer stored in a vuex store
+   but in pinia instead. This means to display a message in the UI, you need to use
+   the new `useMessages` composable.
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10309
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
@@ -967,6 +1010,8 @@ Details
 
    https://github.com/owncloud/web/issues/9714
    https://github.com/owncloud/web/pull/10062
+   https://github.com/owncloud/web/pull/10190
+   https://github.com/owncloud/web/pull/10196
 
 * Enhancement - Support mandatory filter while listing users: [#10099](https://github.com/owncloud/web/pull/10099)
 
@@ -1022,6 +1067,88 @@ Details
 
    https://github.com/owncloud/web/pull/10111
    https://github.com/owncloud/web/pull/10152
+
+* Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
+
+   We've adjusted the AppSwitcher icon colors to be more inline with the design.
+
+   https://github.com/owncloud/web/issues/10121
+   https://github.com/owncloud/web/pull/10224
+
+Changelog for ownCloud Web [7.1.3] (2023-12-15)
+=======================================
+The following sections list the changes in ownCloud web 7.1.3 relevant to
+ownCloud admins and users.
+
+[7.1.3]: https://github.com/owncloud/web/compare/v7.1.2...v7.1.3
+
+Summary
+-------
+
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
+* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
+* Bugfix - Zoom in preview app not working with all browsers: [#10137](https://github.com/owncloud/web/pull/10137)
+* Bugfix - Created file missing extension when file extensions not shown is active: [#10170](https://github.com/owncloud/web/issues/10170)
+
+Details
+-------
+
+* Bugfix - PDF loading Safari: [#9483](https://github.com/owncloud/web/issues/9483)
+
+   Loading PDF files with Safari has been fixed.
+
+   https://github.com/owncloud/web/issues/9483
+   https://github.com/owncloud/web/pull/9565
+
+* Bugfix - Set or remove expiration date on group share not possible: [#9513](https://github.com/owncloud/web/pull/9513)
+
+   We've fixed a bug where setting or removing an expiration on a group share
+   wasn't possible.
+
+   https://github.com/owncloud/web/issues/8419
+   https://github.com/owncloud/web/pull/9513
+
+* Bugfix - Internal public link resolving: [#9587](https://github.com/owncloud/web/pull/9587)
+
+   An issue where internally resolved public links instantly triggered the default
+   file action has been fixed.
+
+   https://github.com/owncloud/web/issues/9578
+   https://github.com/owncloud/web/pull/9587
+
+* Bugfix - Audio- & video-loading on Shared with me page: [#9593](https://github.com/owncloud/web/issues/9593)
+
+   Loading audio and video on the Shared with me page with the preview app has been
+   fixed.
+
+   https://github.com/owncloud/web/issues/9593
+   https://github.com/owncloud/web/pull/9595
+
+* Bugfix - Tiles view accessibility: [#9670](https://github.com/owncloud/web/pull/9670)
+
+   Navigating via tab and enter in the tiles view has been fixed.
+
+   https://github.com/owncloud/web/issues/9633
+   https://github.com/owncloud/web/pull/9670
+
+* Bugfix - Zoom in preview app not working with all browsers: [#10137](https://github.com/owncloud/web/pull/10137)
+
+   We fixed a bug where zoom in and zoom out not working in preview app with all
+   browsers, for example in Firefox.
+
+   https://github.com/owncloud/web/pull/10137
+
+* Bugfix - Created file missing extension when file extensions not shown is active: [#10170](https://github.com/owncloud/web/issues/10170)
+
+   We've fixed a bug where the file extension was missing, when the user set the
+   file extensions not shown configuration option. This affected files that are
+   handled via external applications, for example Microsoft Excel.
+
+   https://github.com/owncloud/web/issues/10170
+   https://github.com/owncloud/web/pull/10169
 
 Changelog for ownCloud Web [7.1.2] (2023-11-16)
 =======================================

@@ -13,6 +13,7 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { FileResource } from '@ownclouders/web-client/src/helpers'
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
 import { ConfigurationManager } from '../../../src'
+import { useMessages } from '../../../src/composables/piniaStores'
 
 jest.mock('../../../src/composables/configuration/useConfigurationManager', () => ({
   useConfigurationManager: () =>
@@ -31,14 +32,16 @@ describe('CreateShortcutModal', () => {
       const { wrapper, storeOptions } = getWrapper()
       await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
       expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
     })
     it('should show error message on fail', async () => {
       console.error = jest.fn()
       const { wrapper, storeOptions } = getWrapper({ rejectPutFileContents: true })
       await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
       expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).not.toHaveBeenCalled()
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
   describe('method "searchTask"', () => {

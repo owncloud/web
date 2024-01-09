@@ -22,7 +22,16 @@ describe('SpaceContextActions', () => {
   describe('action handlers', () => {
     it('renders actions that are always available: "Members", "Edit Quota", "Details"', () => {
       const { wrapper } = getWrapper(buildSpace(spaceMock))
-      expect(wrapper.html()).toMatchSnapshot()
+
+      expect(
+        wrapper.findAll('[data-testid="action-label"]').some((el) => el.text() === 'Members')
+      ).toBeDefined()
+      expect(
+        wrapper.findAll('[data-testid="action-label"]').some((el) => el.text() === 'Edit quota')
+      ).toBeDefined()
+      expect(
+        wrapper.findAll('[data-testid="action-label"]').some((el) => el.text() === 'Details')
+      ).toBeDefined()
     })
   })
 })

@@ -1,5 +1,7 @@
+import { Modal } from '@ownclouders/web-pkg'
 import EditPasswordModal from '../../../src/components/EditPasswordModal.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { mock } from 'jest-mock-extended'
 
 afterEach(() => jest.clearAllMocks())
 
@@ -39,13 +41,7 @@ function getWrapper() {
   return {
     wrapper: shallowMount(EditPasswordModal, {
       props: {
-        cancel: jest.fn(),
-        confirm: jest.fn(),
-        existingGroups: [
-          {
-            displayName: 'admins'
-          }
-        ]
+        modal: mock<Modal>()
       },
       global: {
         plugins: [...defaultPlugins()]

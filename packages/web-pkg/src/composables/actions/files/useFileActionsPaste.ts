@@ -58,10 +58,6 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
           resources: resourcesToCopy,
           clientService,
           loadingService,
-          createModal: (...args) => store.dispatch('createModal', ...args),
-          hideModal: (...args) => store.dispatch('hideModal', ...args),
-          showMessage: (...args) => store.dispatch('showMessage', ...args),
-          showErrorMessage: (...args) => store.dispatch('showErrorMessage', ...args),
           $gettext,
           $ngettext
         })

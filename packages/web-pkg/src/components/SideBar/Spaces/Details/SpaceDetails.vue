@@ -76,6 +76,7 @@
   </div>
 </template>
 <script lang="ts">
+import { storeToRefs } from 'pinia'
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
@@ -84,7 +85,12 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
-import { useStore, usePreviewService, useClientService } from '../../../../composables'
+import {
+  useStore,
+  usePreviewService,
+  useClientService,
+  useUserStore
+} from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
 import { formatDateFromISO } from '../../../../helpers'
@@ -110,10 +116,13 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const userStore = useUserStore()
     const previewService = usePreviewService()
     const clientService = useClientService()
     const resource = inject<Ref<SpaceResource>>('resource')
     const spaceImage = ref('')
+
+    const { user } = storeToRefs(userStore)
 
     const loadImageTask = useTask(function* (signal, ref) {
       if (!ref.resource?.spaceImageData || !props.showSpaceImage) {
@@ -146,12 +155,13 @@ export default defineComponent({
       spaceImage,
       resource,
       linkShareCount,
-      showWebDavDetails
+      showWebDavDetails,
+      user
     }
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaceMembers']),
-    ...mapGetters(['user']),
+
     hasShares() {
       return this.hasMemberShares || this.hasLinkShares
     },
@@ -204,7 +214,7 @@ export default defineComponent({
     ownerUsernames() {
       return this.resource.spaceRoles[spaceRoleManager.name]
         .map((share) => {
-          if (share.id === this.user?.uuid) {
+          if (share.id === this.user?.id) {
             return this.$gettext('%{displayName} (me)', { displayName: share.displayName })
           }
           return share.displayName

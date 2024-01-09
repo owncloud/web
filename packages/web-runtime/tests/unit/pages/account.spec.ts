@@ -11,8 +11,9 @@ import {
 import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, useMessages } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
+import { User } from '@ownclouders/web-client/src/generated'
 
 const $route = {
   meta: {
@@ -112,13 +113,12 @@ describe('account page', () => {
   describe('account information', () => {
     it('displays basic user information', async () => {
       const { wrapper } = getWrapper({
-        user: {
-          user: {
-            username: 'some-username',
-            displayname: 'some-displayname',
-            email: 'some-email'
-          }
-        }
+        user: mock<User>({
+          onPremisesSamAccountName: 'some-username',
+          displayName: 'some-displayname',
+          mail: 'some-email',
+          memberOf: []
+        })
       })
 
       await wrapper.vm.loadAccountBundleTask.last
@@ -131,7 +131,7 @@ describe('account page', () => {
 
     describe('group membership', () => {
       it('displays message if not member of any groups', async () => {
-        const { wrapper } = getWrapper({ user: { groups: [] } })
+        const { wrapper } = getWrapper()
 
         await wrapper.vm.loadAccountBundleTask.last
         await wrapper.vm.loadValuesListTask.last
@@ -142,9 +142,9 @@ describe('account page', () => {
       })
       it('displays group names', async () => {
         const { wrapper } = getWrapper({
-          user: {
-            groups: [{ displayName: 'one' }, { displayName: 'two' }, { displayName: 'three' }]
-          }
+          user: mock<User>({
+            memberOf: [{ displayName: 'one' }, { displayName: 'two' }, { displayName: 'three' }]
+          })
         })
 
         await wrapper.vm.loadAccountBundleTask.last
@@ -199,37 +199,6 @@ describe('account page', () => {
     })
   })
 
-  describe('method "editPassword"', () => {
-    it('should show message on success', async () => {
-      const { wrapper, mocks } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
-
-      mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockResolvedValue(
-        mockAxiosResolve()
-      )
-      const showMessageStub = jest.spyOn(wrapper.vm, 'showMessage')
-      await wrapper.vm.editPassword('password', 'newPassword')
-      expect(showMessageStub).toHaveBeenCalled()
-    })
-
-    it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
-
-      mocks.$clientService.graphAuthenticated.users.changeOwnPassword.mockRejectedValue(new Error())
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
-      await wrapper.vm.editPassword('password', 'newPassword')
-      expect(showErrorMessageStub).toHaveBeenCalled()
-    })
-  })
-
   describe('Logout from all devices link', () => {
     it('should render the logout from active devices if logoutUrl is provided', async () => {
       const { wrapper } = getWrapper()
@@ -264,7 +233,7 @@ describe('account page', () => {
 
   describe('Method "updateDisableEmailNotifications', () => {
     it('should show a message on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -272,12 +241,13 @@ describe('account page', () => {
 
       mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
       await wrapper.vm.updateDisableEmailNotifications(true)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -285,13 +255,14 @@ describe('account page', () => {
 
       mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
       await wrapper.vm.updateDisableEmailNotifications(true)
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 
   describe('Method "updateSelectedLanguage', () => {
     it('should show a message on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper({})
+      const { wrapper, mocks } = getWrapper({})
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -301,12 +272,13 @@ describe('account page', () => {
         mockAxiosResolve({})
       )
       await wrapper.vm.updateSelectedLanguage('en')
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
-      const { wrapper, mocks, storeOptions } = getWrapper({})
+      const { wrapper, mocks } = getWrapper({})
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -316,7 +288,8 @@ describe('account page', () => {
         mockAxiosReject('err')
       )
       await wrapper.vm.updateSelectedLanguage('en')
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 
@@ -329,7 +302,8 @@ describe('account page', () => {
       await wrapper.vm.loadGraphUserTask.last
 
       await wrapper.vm.updateViewOptionsWebDavDetails(true)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
       expect(
         storeOptions.modules.Files.mutations.SET_FILE_WEB_DAV_DETAILS_VISIBILITY
       ).toHaveBeenCalled()
@@ -338,14 +312,13 @@ describe('account page', () => {
 })
 
 function getWrapper({
-  user = {},
+  user = mock<User>({ memberOf: [] }),
   capabilities = {},
   accountEditLink = undefined,
   spaces = []
 } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
-  storeOptions.getters.user.mockReturnValue({ groups: [], ...user })
   storeOptions.getters.capabilities.mockReturnValue(capabilities)
   storeOptions.getters.configuration.mockReturnValue({
     server: 'http://server/address/',
@@ -380,7 +353,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(account, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
         mocks,
         provide: mocks,
         stubs: {

@@ -131,6 +131,7 @@
 <script lang="ts">
 import { debounce } from 'lodash-es'
 import PQueue from 'p-queue'
+import { storeToRefs } from 'pinia'
 
 import { mapActions, mapGetters } from 'vuex'
 
@@ -150,10 +151,13 @@ import {
   useCapabilityFilesSharingAllowCustomPermissions,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
+  useCapabilityFilesSharingSearchMinLength,
   useCapabilityShareJailEnabled,
   useClientService,
   useConfigurationManager,
-  useStore
+  useStore,
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
@@ -195,7 +199,11 @@ export default defineComponent({
 
   setup() {
     const store = useStore()
+    const userStore = useUserStore()
     const clientService = useClientService()
+
+    const { user } = storeToRefs(userStore)
+
     const saving = ref(false)
     const savingDelayed = ref(false)
     const notifyEnabled = ref(false)
@@ -257,7 +265,9 @@ export default defineComponent({
       resharingDefault: useCapabilityFilesSharingResharingDefault(store),
       hasShareJail: useCapabilityShareJailEnabled(store),
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
+      minSearchLength: useCapabilityFilesSharingSearchMinLength(store),
       isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
+      user,
       clientService,
       saving,
       savingDelayed,
@@ -267,6 +277,7 @@ export default defineComponent({
       notifyEnabled,
       federatedUsers,
       createSharesConcurrentRequests,
+      ...useMessages(),
 
       // CERN
       accountType,
@@ -288,7 +299,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('runtime/spaces', ['spaceMembers']),
-    ...mapGetters(['configuration', 'user', 'capabilities']),
+    ...mapGetters(['configuration']),
 
     $_announcementWhenCollaboratorAdded() {
       return this.$gettext('Person was added')
@@ -298,9 +309,6 @@ export default defineComponent({
       return this.selectedCollaborators.length > 0
     },
 
-    minSearchLength() {
-      return parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
-    },
     selectedCollaboratorsLabel() {
       return this.inviteLabel || this.$gettext('Search')
     },
@@ -345,7 +353,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['addShare']),
     ...mapActions('runtime/spaces', ['addSpaceMember']),
 
@@ -360,7 +367,7 @@ export default defineComponent({
 
         const users = recipients.exact.users
           .concat(recipients.users)
-          .filter((user) => user.value.shareWith !== this.user.id)
+          .filter((user) => user.value.shareWith !== this.user.onPremisesSamAccountName)
           .map((result) => {
             if (this.resourceIsSpace) {
               result.value.shareType = ShareTypes.spaceUser.value
@@ -544,10 +551,11 @@ export default defineComponent({
           title: this.$gettext('Failed to add share for "%{displayName}"', {
             displayName: e.displayName
           }),
-          error: e.error
+          errors: [e.error]
         })
       })
 
+      this.expirationDate = null
       this.selectedCollaborators = []
       this.saving = false
     },

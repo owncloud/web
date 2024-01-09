@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 
-import { getParentPaths } from '@ownclouders/web-pkg'
+import { MessageStore, getParentPaths } from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
@@ -45,50 +45,34 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(context, options: { resources: Resource[] } & Language) {
+  copySelectedFiles(
+    context,
+    options: { resources: Resource[]; messageStore: MessageStore } & Language
+  ) {
     const { $gettext } = options
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
-    context.dispatch(
-      'showMessage',
-      {
-        title: $gettext('Copied to clipboard!'),
-        status: 'success'
-      },
-      { root: true }
-    )
+    options.messageStore.showMessage({ title: $gettext('Copied to clipboard!'), status: 'success' })
   },
-  cutSelectedFiles(context, options: { space: SpaceResource; resources: Resource[] } & Language) {
+  cutSelectedFiles(
+    context,
+    options: {
+      space: SpaceResource
+      resources: Resource[]
+      messageStore: MessageStore
+    } & Language
+  ) {
     const { $gettext } = options
     context.commit('CLIPBOARD_SELECTED', options)
     context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
-    context.dispatch(
-      'showMessage',
-      {
-        title: $gettext('Cut to clipboard!'),
-        status: 'success'
-      },
-      { root: true }
-    )
+    options.messageStore.showMessage({ title: $gettext('Cut to clipboard!'), status: 'success' })
   },
   clearClipboardFiles(context) {
     context.commit('CLEAR_CLIPBOARD')
   },
   pasteSelectedFiles(
     context,
-    {
-      targetSpace,
-      clientService,
-      loadingService,
-      createModal,
-      hideModal,
-      showMessage,
-      showErrorMessage,
-      $gettext,
-      $ngettext,
-      sourceSpace,
-      resources
-    }
+    { targetSpace, clientService, loadingService, $gettext, $ngettext, sourceSpace, resources }
   ) {
     const copyMove = new ResourceTransfer(
       sourceSpace,
@@ -97,10 +81,6 @@ export default {
       context.state.currentFolder,
       clientService,
       loadingService,
-      createModal,
-      hideModal,
-      showMessage,
-      showErrorMessage,
       $gettext,
       $ngettext
     )
@@ -165,6 +145,7 @@ export default {
       clientService: ClientService
       loadingCallbackArgs: LoadingTaskCallbackArguments
       firstRun: boolean
+      messageStore: MessageStore
     } & Language
   ) {
     const {
@@ -200,14 +181,7 @@ export default {
 
             title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
           }
-          context.dispatch(
-            'showErrorMessage',
-            {
-              title,
-              error
-            },
-            { root: true }
-          )
+          options.messageStore.showErrorMessage({ title, errors: [error] })
         })
         .finally(() => {
           setProgress({ total: files.length, current: i + 1 })
@@ -231,7 +205,7 @@ export default {
                 { itemCount: removedFiles.length.toString() },
                 true
               )
-        context.dispatch('showMessage', { title }, { root: true })
+        options.messageStore.showMessage({ title })
       }
     })
   },

@@ -4,11 +4,6 @@
     <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
       <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
       <div>
-        <edit-password-modal
-          v-if="editPasswordModalOpen"
-          @cancel="closeEditPasswordModal"
-          @confirm="editPassword"
-        ></edit-password-modal>
         <oc-button
           v-if="!isChangePasswordDisabled"
           variation="primary"
@@ -37,10 +32,10 @@
         <div class="account-page-info-username oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
           <dd>
-            {{ user.username || user.id }}
+            {{ user.onPremisesSamAccountName }}
           </dd>
         </div>
-        <div v-if="user.username && user.id" class="account-page-info-userid">
+        <div v-if="user.onPremisesSamAccountName && user.id" class="account-page-info-userid">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
           <dd>
             {{ user.id }}
@@ -49,13 +44,13 @@
         <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
           <dd>
-            {{ user.displayname }}
+            {{ user.displayName }}
           </dd>
         </div>
         <div class="account-page-info-email oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
           <dd>
-            <template v-if="user.email">{{ user.email }}</template>
+            <template v-if="user.mail">{{ user.mail }}</template>
             <span v-else v-text="$gettext('No email has been set up')" />
           </dd>
         </div>
@@ -144,7 +139,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'vuex'
+import { storeToRefs } from 'pinia'
 import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
@@ -154,7 +149,10 @@ import {
   useCapabilityGraphPersonalDataExport,
   useClientService,
   useGetMatchingSpace,
-  useStore
+  useMessages,
+  useModals,
+  useStore,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
@@ -170,11 +168,12 @@ export default defineComponent({
   name: 'AccountPage',
   components: {
     AppLoadingSpinner,
-    EditPasswordModal,
     GdprExport
   },
   setup() {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
+    const userStore = useUserStore()
     const language = useGettext()
     const { $gettext } = language
     const clientService = useClientService()
@@ -187,6 +186,7 @@ export default defineComponent({
     const disableEmailNotificationsValue = ref<boolean>()
     const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
     const sseEnabled = useCapabilityCoreSSE()
+    const { dispatchModal } = useModals()
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
@@ -196,9 +196,7 @@ export default defineComponent({
     const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
     const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
 
-    const user = computed(() => {
-      return store.getters.user
-    })
+    const { user } = storeToRefs(userStore)
 
     const personalSpace = computed(() => getPersonalSpace())
     const showGdprExport = computed(() => {
@@ -219,9 +217,9 @@ export default defineComponent({
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to load account data…'),
-          error: e
+          errors: [e]
         })
         valuesList.value = []
       }
@@ -239,9 +237,9 @@ export default defineComponent({
         accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to load account data…'),
-          error: e
+          errors: [e]
         })
         accountBundle.value = undefined
       }
@@ -253,9 +251,9 @@ export default defineComponent({
         graphUser.value = data
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to load account data…'),
-          error: e
+          errors: [e]
         })
         graphUser.value = undefined
       }
@@ -279,7 +277,7 @@ export default defineComponent({
 
     const groupNames = computed(() => {
       return unref(user)
-        .groups.map((group) => group.displayName)
+        .memberOf.map((group) => group.displayName)
         .join(', ')
     })
 
@@ -349,14 +347,12 @@ export default defineComponent({
           })
         }
 
-        store.dispatch('showMessage', {
-          title: $gettext('Preference saved.')
-        })
+        showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to save preference…'),
-          error: e
+          errors: [e]
         })
       }
     }
@@ -368,14 +364,12 @@ export default defineComponent({
           valueOptions: { boolValue: !option }
         })
         disableEmailNotificationsValue.value = option
-        store.dispatch('showMessage', {
-          title: $gettext('Preference saved.')
-        })
+        showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to save preference…'),
-          error: e
+          errors: [e]
         })
       }
     }
@@ -384,14 +378,12 @@ export default defineComponent({
       try {
         store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', option)
         viewOptionWebDavDetailsValue.value = option
-        store.dispatch('showMessage', {
-          title: $gettext('Preference saved.')
-        })
+        showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Unable to save preference…'),
-          error: e
+          errors: [e]
         })
       }
     }
@@ -415,6 +407,13 @@ export default defineComponent({
         : true
     })
 
+    const showEditPasswordModal = () => {
+      dispatchModal({
+        title: $gettext('Change password'),
+        customComponent: EditPasswordModal
+      })
+    }
+
     return {
       clientService,
       languageOptions,
@@ -434,43 +433,13 @@ export default defineComponent({
       viewOptionWebDavDetailsValue,
       loadAccountBundleTask,
       loadGraphUserTask,
-      loadValuesListTask
-    }
-  },
-  data() {
-    return {
-      editPasswordModalOpen: false
+      loadValuesListTask,
+      showEditPasswordModal
     }
   },
   computed: {
     pageTitle() {
       return this.$gettext(this.$route.meta.title as string)
-    }
-  },
-  methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
-    showEditPasswordModal() {
-      this.editPasswordModalOpen = true
-    },
-    closeEditPasswordModal() {
-      this.editPasswordModalOpen = false
-    },
-    editPassword(currentPassword, newPassword) {
-      return this.clientService.graphAuthenticated.users
-        .changeOwnPassword(currentPassword.trim(), newPassword.trim())
-        .then(() => {
-          this.closeEditPasswordModal()
-          this.showMessage({
-            title: this.$gettext('Password was changed successfully')
-          })
-        })
-        .catch((error) => {
-          console.error(error)
-          this.showErrorMessage({
-            title: this.$gettext('Failed to change password'),
-            error
-          })
-        })
     }
   }
 })

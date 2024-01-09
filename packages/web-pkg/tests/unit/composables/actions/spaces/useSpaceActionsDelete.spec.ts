@@ -1,4 +1,5 @@
-import { useSpaceActionsDelete } from '../../../../../src'
+import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   createStore,
@@ -73,44 +74,46 @@ describe('delete', () => {
   describe('handler', () => {
     it('should trigger the delete modal window', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
             ]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the delete modal window without any resource to delete', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canBeDeleted: () => false, driveType: 'project' })
             ]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })
   })
 
   describe('method "deleteSpace"', () => {
-    it('should hide the modal and show message on success', () => {
+    it('should show message on success', () => {
       getWrapper({
-        setup: async ({ deleteSpaces }, { storeOptions, clientService }) => {
+        setup: async ({ deleteSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
 
           await deleteSpaces([
             mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
           ])
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -118,13 +121,14 @@ describe('delete', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ deleteSpaces }, { clientService, storeOptions }) => {
+        setup: async ({ deleteSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())
           await deleteSpaces([
             mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
           ])
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -148,7 +152,6 @@ function getWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  storeOptions.getters.user.mockReturnValue({ id: 'alice', uuid: 1 })
 
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
@@ -164,7 +167,10 @@ function getWrapper({
       {
         mocks,
         provide: mocks,
-        store
+        store,
+        pluginOptions: {
+          piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
+        }
       }
     )
   }

@@ -86,7 +86,8 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   useAbility,
   useStore,
@@ -94,7 +95,10 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingCanDenyAccess,
-  useGetMatchingSpace
+  useGetMatchingSpace,
+  useModals,
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -125,8 +129,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const userStore = useUserStore()
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { dispatchModal } = useModals()
+
+    const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
 
@@ -143,12 +151,12 @@ export default defineComponent({
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
     const currentUserIsMemberOfSpace = computed(() => {
-      const userId = store.getters.user?.id
-      if (!userId) {
+      const username = unref(user).onPremisesSamAccountName
+      if (!username) {
         return false
       }
       return store.getters['runtime/spaces/spaceMembers'].some(
-        (member) => member.collaborator?.name === userId
+        (member) => member.collaborator?.name === username
       )
     })
 
@@ -165,6 +173,7 @@ export default defineComponent({
 
     return {
       ...useShares(),
+      user,
       ability,
       resource,
       space: inject<Ref<SpaceResource>>('space'),
@@ -179,13 +188,14 @@ export default defineComponent({
       hasResharing: useCapabilityFilesSharingResharing(),
       hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
       getSharedAncestor,
-      configurationManager
+      configurationManager,
+      dispatchModal,
+      ...useMessages()
     }
   },
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers', 'spaces']),
-    ...mapState(['user']),
 
     inviteCollaboratorHelp() {
       const cernFeatures = !!this.configuration?.options?.cernFeatures
@@ -230,7 +240,7 @@ export default defineComponent({
         collaborator.key = 'collaborator-' + collaborator.id
         if (
           collaborator.owner.name !== collaborator.fileOwner.name &&
-          collaborator.owner.name !== this.user.id
+          collaborator.owner.name !== this.user.onPremisesSamAccountName
         ) {
           collaborator.resharers = [collaborator.owner]
         }
@@ -295,7 +305,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['deleteShare', 'addShare']),
-    ...mapActions(['createModal', 'hideModal', 'showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     getDeniedShare(collaborator: Share): Share {
@@ -401,7 +410,7 @@ export default defineComponent({
           console.error(e)
           this.showErrorMessage({
             title: this.$gettext('Failed to deny access'),
-            error: e
+            errors: [e]
           })
         }
       } else {
@@ -423,25 +432,21 @@ export default defineComponent({
           console.error(e)
           this.showErrorMessage({
             title: this.$gettext('Failed to grant access'),
-            error: e
+            errors: [e]
           })
         }
       }
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
-      const modal = {
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Remove share'),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Remove'),
         message: this.$gettext('Are you sure you want to remove this share?'),
         hasInput: false,
-        onCancel: this.hideModal,
         onConfirm: () => this.$_ocCollaborators_deleteShare(share)
-      }
-
-      this.createModal(modal)
+      })
     },
 
     async $_ocCollaborators_deleteShare(share) {
@@ -463,7 +468,6 @@ export default defineComponent({
           loadIndicators
         })
 
-        this.hideModal()
         this.showMessage({
           title: this.$gettext('Share was removed successfully')
         })
@@ -474,7 +478,7 @@ export default defineComponent({
         console.error(error)
         this.showErrorMessage({
           title: this.$gettext('Failed to remove share'),
-          error
+          errors: [error]
         })
       }
     },
@@ -500,7 +504,7 @@ export default defineComponent({
         this.resource.isFolder &&
         !(
           collaborator.shareType === ShareTypes.spaceUser.value &&
-          collaborator.collaborator.name === this.user.id
+          collaborator.collaborator.name === this.user.onPremisesSamAccountName
         ) &&
         (!!this.getDeniedSpaceMember(collaborator) || !this.isSpaceMemberDenied(collaborator))
       )

@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useStore } from '@ownclouders/web-pkg'
+import { useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 
@@ -44,7 +44,7 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
-    const store = useStore<any>()
+    const { showMessage } = useMessages()
 
     const {
       copy,
@@ -54,7 +54,7 @@ export default defineComponent({
 
     const copyLinkToClipboard = () => {
       copy(props.link.url)
-      store.dispatch('showMessage', {
+      showMessage({
         title: props.link.quicklink
           ? $gettext('The link has been copied to your clipboard.')
           : $gettext('The link "%{linkName}" has been copied to your clipboard.', {

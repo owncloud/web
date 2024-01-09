@@ -85,7 +85,7 @@ export class UsersEnvironment {
 
   storeCreatedGroup({ group }: { group: Group }): Group {
     if (createdGroupStore.has(group.id)) {
-      throw new Error(`user with key '${group.id}' already exists`)
+      throw new Error(`group with key '${group.id}' already exists`)
     }
     createdGroupStore.set(group.id, group)
 

@@ -1,15 +1,13 @@
 import AddToGroupsModal from '../../../../src/components/Users/AddToGroupsModal.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
 describe('AddToGroupsModal', () => {
   it('renders the input', () => {
@@ -21,7 +19,7 @@ describe('AddToGroupsModal', () => {
     it('adds all users to the given groups', async () => {
       const users = [mock<User>({ memberOf: [] }), mock<User>({ memberOf: [] })]
       const groups = [mock<Group>(), mock<Group>()]
-      const { wrapper, mocks, storeOptions } = getWrapper({ users, groups })
+      const { wrapper, mocks } = getWrapper({ users, groups })
       mocks.$clientService.graphAuthenticated.groups.addMember.mockResolvedValue(undefined)
       mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValue(
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
@@ -31,7 +29,8 @@ describe('AddToGroupsModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
       expect(eventSpy).toHaveBeenCalled()
     })
 
@@ -40,7 +39,7 @@ describe('AddToGroupsModal', () => {
 
       const users = [mock<User>({ memberOf: [] }), mock<User>({ memberOf: [] })]
       const groups = [mock<Group>(), mock<Group>()]
-      const { wrapper, mocks, storeOptions } = getWrapper({ users, groups })
+      const { wrapper, mocks } = getWrapper({ users, groups })
       mocks.$clientService.graphAuthenticated.groups.addMember.mockRejectedValue(new Error(''))
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
 
@@ -48,36 +47,27 @@ describe('AddToGroupsModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
       expect(eventSpy).not.toHaveBeenCalled()
-    })
-  })
-  describe('method "onCancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.onCancel()
-      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
     })
   })
 })
 
 function getWrapper({ users = [mock<User>()], groups = [mock<Group>()] } = {}) {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockReturnValue({ uuid: '1' })
-  const store = createStore(storeOptions)
 
   return {
     mocks,
-    storeOptions,
     wrapper: shallowMount(AddToGroupsModal, {
       props: {
+        modal: mock<Modal>(),
         users,
         groups
       },
       global: {
         provide: mocks,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: { GroupSelect: true }
       }
     })

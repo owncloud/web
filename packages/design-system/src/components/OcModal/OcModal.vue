@@ -40,11 +40,9 @@
               v-model="userInputValue"
               class="oc-modal-body-input"
               :error-message="inputError"
-              :placeholder="inputPlaceholder"
               :label="inputLabel"
               :type="inputType"
               :description-message="inputDescription"
-              :disabled="inputDisabled"
               :fix-message-line="true"
               :selection-range="inputSelectionRange"
               @update:model-value="inputOnInput"
@@ -54,26 +52,24 @@
         </div>
 
         <div v-if="!hideActions" class="oc-modal-body-actions oc-flex oc-flex-right">
-          <oc-button
-            ref="cancelButton"
-            class="oc-modal-body-actions-cancel"
-            :variation="buttonCancelVariation"
-            :appearance="buttonCancelAppearance"
-            @click="cancelModalAction"
-          >
-            {{ buttonCancelText }}
-          </oc-button>
-          <oc-button
-            v-if="!withoutButtonConfirm"
-            ref="primaryButton"
-            class="oc-modal-body-actions-confirm oc-ml-s"
-            variation="primary"
-            :appearance="buttonConfirmAppearance"
-            :disabled="buttonConfirmDisabled || !!inputError"
-            @click="confirm"
-          >
-            {{ buttonConfirmText }}
-          </oc-button>
+          <div class="oc-modal-body-actions-grid">
+            <oc-button
+              class="oc-modal-body-actions-cancel"
+              variation="passive"
+              appearance="outline"
+              @click="cancelModalAction"
+              >{{ buttonCancelText }}</oc-button
+            >
+            <oc-button
+              v-if="!hideConfirmButton"
+              class="oc-modal-body-actions-confirm oc-ml-s"
+              variation="primary"
+              appearance="filled"
+              :disabled="buttonConfirmDisabled || !!inputError"
+              @click="confirm"
+              >{{ buttonConfirmText }}</oc-button
+            >
+          </div>
         </div>
       </div>
     </focus-trap>
@@ -81,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, onMounted, unref } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
@@ -177,45 +173,12 @@ export default defineComponent({
       default: 'Cancel'
     },
     /**
-     * Variation type of the cancel button
-     */
-    buttonCancelVariation: {
-      type: String,
-      required: false,
-      default: 'passive',
-      validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning'].includes(value)
-      }
-    },
-    /**
-     * Appearance of the cancel button
-     */
-    buttonCancelAppearance: {
-      type: String,
-      required: false,
-      default: 'outline',
-      validator: (value: string) => {
-        return ['outline', 'filled', 'raw'].includes(value)
-      }
-    },
-    /**
      * Text of the confirm button
      */
     buttonConfirmText: {
       type: String,
       required: false,
       default: 'Confirm'
-    },
-    /**
-     * Appearance of the confirm button
-     */
-    buttonConfirmAppearance: {
-      type: String,
-      required: false,
-      default: 'filled',
-      validator: (value: string) => {
-        return ['outline', 'filled', 'raw'].includes(value)
-      }
     },
     /**
      * Asserts whether the confirm action is disabled
@@ -228,7 +191,7 @@ export default defineComponent({
     /**
      * Asserts whether the modal should render a confirm button
      */
-    withoutButtonConfirm: {
+    hideConfirmButton: {
       type: Boolean,
       required: false,
       default: false
@@ -273,14 +236,6 @@ export default defineComponent({
       default: null
     },
     /**
-     * Placeholder of the text input field
-     */
-    inputPlaceholder: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
      * Additional description message for the input field
      */
     inputDescription: {
@@ -295,14 +250,6 @@ export default defineComponent({
       type: String,
       required: false,
       default: null
-    },
-    /**
-     * Asserts whether the input is disabled
-     */
-    inputDisabled: {
-      type: Boolean,
-      required: false,
-      default: false
     },
     /**
      * Overwrite default focused element
@@ -322,34 +269,6 @@ export default defineComponent({
     }
   },
   emits: ['cancel', 'confirm', 'input'],
-  setup() {
-    const primaryButton = ref(null)
-    const cancelButton = ref(null)
-
-    const setButtonsEqualWidth = () => {
-      const _primaryButton = unref(primaryButton)
-      const _cancelButton = unref(cancelButton)
-
-      const primaryWidth = _primaryButton?.$el?.offsetWidth || 0
-      const cancelWidth = _cancelButton?.$el?.offsetWidth || 0
-      const maxWidth = Math.max(primaryWidth, cancelWidth)
-
-      if (_primaryButton?.$el) {
-        _primaryButton.$el.style.minWidth = `${maxWidth}px`
-      }
-      if (_cancelButton?.$el) {
-        _cancelButton.$el.style.minWidth = `${maxWidth}px`
-      }
-    }
-    onMounted(() => {
-      setButtonsEqualWidth()
-    })
-
-    return {
-      primaryButton,
-      cancelButton
-    }
-  },
   data() {
     return {
       userInputValue: null
@@ -539,6 +458,12 @@ export default defineComponent({
       .oc-button {
         border-radius: 4px;
       }
+
+      &-grid {
+        display: inline-grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+      }
     }
   }
 
@@ -572,8 +497,6 @@ export default defineComponent({
     message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
     button-cancel-text="Cancel"
     button-confirm-text="Delete"
-    button-confirm-appearance="filled"
-    button-confirm-variation="danger"
     class="oc-mb-l oc-position-relative"
   />
 </div>
@@ -599,7 +522,6 @@ export default defineComponent({
   <oc-modal
     title="Rename file lorem.txt"
     button-cancel-text="Cancel"
-    button-cancel-variation="warning"
     button-confirm-text="Rename"
     class="oc-position-relative"
   >

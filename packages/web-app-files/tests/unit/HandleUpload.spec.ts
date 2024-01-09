@@ -8,10 +8,13 @@ import {
   ClientService,
   UppyService,
   UppyResource,
-  locationSpacesGeneric
+  locationSpacesGeneric,
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
+import { createTestingPinia } from 'web-test-helpers'
 
 jest.mock('web-app-files/src/helpers/resource/actions')
 
@@ -280,6 +283,8 @@ const getWrapper = ({
     language: mock<Language>(),
     route: ref(route),
     store,
+    userStore: useUserStore(createTestingPinia()),
+    messageStore: useMessages(createTestingPinia()),
     space: mock<SpaceResource>(),
     uppyService: mock<UppyService>(),
     conflictHandlingEnabled,

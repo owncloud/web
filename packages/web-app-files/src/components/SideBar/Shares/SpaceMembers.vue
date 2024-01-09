@@ -62,11 +62,18 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { mapGetters, mapActions } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
-import { createLocationSpaces, isLocationSpacesActive } from '@ownclouders/web-pkg'
+import {
+  createLocationSpaces,
+  isLocationSpacesActive,
+  useMessages,
+  useModals,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -82,11 +89,19 @@ export default defineComponent({
     InviteCollaboratorForm
   },
   setup() {
+    const userStore = useUserStore()
     const clientService = useClientService()
+    const { dispatchModal } = useModals()
+
+    const { user } = storeToRefs(userStore)
+
     return {
+      user,
       clientService,
       configurationManager,
-      resource: inject<Ref<ProjectSpaceResource>>('resource')
+      resource: inject<Ref<ProjectSpaceResource>>('resource'),
+      dispatchModal,
+      ...useMessages()
     }
   },
   data: () => {
@@ -99,7 +114,6 @@ export default defineComponent({
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('runtime/spaces', ['spaceMembers']),
-    ...mapState(['user']),
 
     filteredSpaceMembers() {
       return this.filter(this.spaceMembers, this.filterTerm)
@@ -141,7 +155,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('runtime/spaces', ['deleteSpaceMember']),
-    ...mapActions(['createModal', 'hideModal', 'showMessage', 'showErrorMessage']),
 
     filter(collection, term) {
       if (!(term || '').trim()) {
@@ -174,23 +187,19 @@ export default defineComponent({
     },
 
     $_ocCollaborators_deleteShare_trigger(share) {
-      const modal = {
+      this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Remove member'),
-        cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Remove'),
         message: this.$gettext('Are you sure you want to remove this member?'),
         hasInput: false,
-        onCancel: this.hideModal,
         onConfirm: () => this.$_ocCollaborators_deleteShare(share)
-      }
-
-      this.createModal(modal)
+      })
     },
 
     async $_ocCollaborators_deleteShare(share) {
       try {
-        const currentUserRemoved = share.collaborator.name === this.user.id
+        const currentUserRemoved = share.collaborator.name === this.user.onPremisesSamAccountName
         await this.deleteSpaceMember({
           client: this.$client,
           graphClient: this.clientService.graphAuthenticated,
@@ -203,18 +212,17 @@ export default defineComponent({
 
         if (currentUserRemoved) {
           if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            return this.$router.go(0)
+            await this.$router.go(0)
+            return
           }
-          return this.$router.push(createLocationSpaces('files-spaces-projects'))
+          await this.$router.push(createLocationSpaces('files-spaces-projects'))
         }
       } catch (error) {
         console.error(error)
         this.showErrorMessage({
           title: this.$gettext('Failed to remove share'),
-          error
+          errors: [error]
         })
-      } finally {
-        this.hideModal()
       }
     }
   }

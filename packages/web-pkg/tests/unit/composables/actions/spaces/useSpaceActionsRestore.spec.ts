@@ -1,4 +1,4 @@
-import { useSpaceActionsRestore } from '../../../../../src'
+import { useSpaceActionsRestore } from '../../../../../src/composables/actions/spaces'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
@@ -11,12 +11,13 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 
 describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
-        setup: ({ actions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
@@ -31,7 +32,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -47,7 +48,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
@@ -63,7 +64,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }) => {
+        setup: ({ actions }, { storeOptions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -74,37 +75,40 @@ describe('restore', () => {
     it('should trigger the restore modal window', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
               mock<SpaceResource>({ id: '1', canRestore: () => true, driveType: 'project' })
             ]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the restore modal window without any resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]
           })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })
   })
 
   describe('method "restoreSpace"', () => {
-    it('should hide the modal on success', () => {
+    it('should show message on success', () => {
       getWrapper({
-        setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
+        setup: async ({ restoreSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -112,11 +116,12 @@ describe('restore', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
+        setup: async ({ restoreSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -140,7 +145,6 @@ function getWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  storeOptions.getters.user.mockReturnValue({ id: 'alice', uuid: 1 })
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
@@ -155,7 +159,10 @@ function getWrapper({
       {
         mocks,
         provide: mocks,
-        store
+        store,
+        pluginOptions: {
+          piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
+        }
       }
     )
   }

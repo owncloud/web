@@ -130,22 +130,31 @@ describe('FileShares', () => {
 
   describe('current space', () => {
     it('loads space members if a space is given and the current user is member', () => {
-      const user = { id: '1' }
+      const user = { onPremisesSamAccountName: '1' }
       const space = mock<SpaceResource>({ driveType: 'project' })
-      const spaceMembers = [{ collaborator: { name: user.id } }, { collaborator: { name: 2 } }]
+      const spaceMembers = [
+        { collaborator: { name: user.onPremisesSamAccountName } },
+        { collaborator: { name: 2 } }
+      ]
       const collaborator = getCollaborator()
-      collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
+      collaborator.collaborator = {
+        ...collaborator.collaborator,
+        name: user.onPremisesSamAccountName
+      }
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#files-collaborators-list').exists()).toBeTruthy()
       expect(wrapper.findAll('#files-collaborators-list li').length).toBe(1)
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('does not load space members if a space is given but the current user not a member', () => {
-      const user = { id: '1' }
+      const user = { onPremisesSamAccountName: '1' }
       const space = mock<SpaceResource>({ driveType: 'project' })
       const spaceMembers = [{ collaborator: { name: `${user}-2` } }]
       const collaborator = getCollaborator()
-      collaborator.collaborator = { ...collaborator.collaborator, name: user.id }
+      collaborator.collaborator = {
+        ...collaborator.collaborator,
+        name: user.onPremisesSamAccountName
+      }
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeFalsy()
     })
@@ -190,17 +199,15 @@ function getWrapper({
   space = mock<SpaceResource>(),
   collaborators = [],
   spaceMembers = [],
-  user = { id: '1' },
+  user = { onPremisesSamAccountName: '1' },
   showAllOnLoad = true,
   currentRouteName = 'files-spaces-generic',
   ancestorMetaData = {}
 } = {}) {
   const storeOptions = {
     ...defaultStoreMockOptions,
-    state: { user },
     getters: {
       ...defaultStoreMockOptions.getters,
-      user: () => user,
       capabilities: jest.fn(() => ({
         files_sharing: { resharing: hasReSharing }
       })),
@@ -220,7 +227,7 @@ function getWrapper({
   return {
     wrapper: mountType(FileShares, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ name: currentRouteName })
         }),

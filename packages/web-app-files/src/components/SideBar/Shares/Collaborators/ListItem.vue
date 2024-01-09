@@ -128,7 +128,8 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { mapActions } from 'vuex'
 import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
@@ -138,7 +139,9 @@ import {
   queryItemAsString,
   useCapabilityFilesSharingResharing,
   useCapabilityFilesSharingResharingDefault,
-  useStore
+  useMessages,
+  useModals,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
@@ -183,9 +186,13 @@ export default defineComponent({
   },
   emits: ['onDelete', 'onSetDeny'],
   setup(props, { emit }) {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
+    const userStore = useUserStore()
     const clientService = useClientService()
     const { $gettext } = useGettext()
+    const { dispatchModal } = useModals()
+
+    const { user } = storeToRefs(userStore)
 
     const sharedParentDir = computed(() => {
       return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
@@ -198,51 +205,46 @@ export default defineComponent({
     }
 
     const showNotifyShareModal = () => {
-      const modal = {
+      dispatchModal({
         variation: 'warning',
         icon: 'mail-send',
         title: $gettext('Send a reminder'),
-        cancelText: $gettext('Cancel'),
         confirmText: $gettext('Send'),
         message: $gettext('Are you sure you want to send a reminder about this share?'),
-        hasInput: false,
-        onCancel: () => store.dispatch('hideModal'),
-        onConfirm: () => notifyShare()
-      }
-      store.dispatch('createModal', modal)
+        onConfirm: notifyShare
+      })
     }
     const notifyShare = async () => {
       try {
         const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
-        store.dispatch('showMessage', {
+        showMessage({
           title: $gettext('Success'),
           desc: $gettext('Email reminder sent to %{ recipient }', { recipient: response[0] }),
           status: 'success'
         })
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('An error occurred'),
           desc: $gettext('Email notification could not be sent'),
-          error
+          errors: [error]
         })
-      } finally {
-        store.dispatch('hideModal')
       }
     }
 
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
+      user,
       clientService,
       sharedParentDir,
       setDenyShare,
-      showNotifyShareModal
+      showNotifyShareModal,
+      showMessage,
+      showErrorMessage
     }
   },
   computed: {
-    ...mapState(['user']),
-
     shareType() {
       return ShareTypes.getByValue(this.share.shareType)
     },
@@ -286,7 +288,7 @@ export default defineComponent({
     },
 
     shareDisplayName() {
-      if (this.user.id === this.share.collaborator.name) {
+      if (this.user.onPremisesSamAccountName === this.share.collaborator.name) {
         return this.$gettext('%{collaboratorName} (me)', {
           collaboratorName: this.share.collaborator.displayName
         })
@@ -415,7 +417,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapActions('Files', ['changeShare']),
     ...mapActions('runtime/spaces', ['changeSpaceMember']),
 
@@ -438,7 +439,7 @@ export default defineComponent({
         console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to apply new permissions'),
-          error: e
+          errors: [e]
         })
       }
     },
@@ -452,7 +453,7 @@ export default defineComponent({
         console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Failed to apply expiration date'),
-          error: e
+          errors: [e]
         })
       }
     },
@@ -481,7 +482,7 @@ export default defineComponent({
         console.error(e)
         this.showErrorMessage({
           title: this.$gettext('Error while editing the share.'),
-          error: e
+          errors: [e]
         })
       }
     }

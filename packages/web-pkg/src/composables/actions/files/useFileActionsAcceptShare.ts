@@ -13,9 +13,11 @@ import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
+import { useMessages } from '../../piniaStores'
 
 export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
 
@@ -60,7 +62,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
       store.dispatch('Files/resetFileSelection')
 
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
-        store.dispatch('showMessage', {
+        showMessage({
           title: $ngettext(
             'Sync for the selected share was enabled successfully',
             'Sync for the selected shares was enabled successfully',
@@ -72,7 +74,7 @@ export const useFileActionsAcceptShare = ({ store }: { store?: Store<any> } = {}
       return
     }
 
-    store.dispatch('showErrorMessage', {
+    showErrorMessage({
       title: $ngettext(
         'Failed to enable sync for the the selected share',
         'Failed to enable sync for the selected shares',

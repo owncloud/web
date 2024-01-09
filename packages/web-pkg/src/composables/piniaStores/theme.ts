@@ -76,8 +76,8 @@ export const ThemingConfig = z.object({
   })
 })
 
-type WebThemeType = z.infer<typeof WebTheme>
-type WebThemeConfigType = z.infer<typeof WebThemeConfig>
+export type WebThemeType = z.infer<typeof WebTheme>
+export type WebThemeConfigType = z.infer<typeof WebThemeConfig>
 
 const themeStorageKey = 'oc_currentThemeName'
 

@@ -3,16 +3,16 @@
 exports[`User Menu component when no quota and email is set the user menu does not contain a quota 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
-            <!--v-if-->
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
+          <span class="profile-info-wrapper">
+            <span class="oc-display-block">Albert Einstein</span>
+            <span class="oc-text-small">test@test.de</span>
           </span>
         </oc-button-stub>
       </li>
@@ -38,15 +38,15 @@ exports[`User Menu component when no quota and email is set the user menu does n
 exports[`User Menu component when no quota and no email is set the user menu does not contain a quota 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block">Albert Einstein</span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -73,15 +73,15 @@ exports[`User Menu component when no quota and no email is set the user menu doe
 exports[`User Menu component when quota and no email is set renders a navigation without email 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
           <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
+            <span class="oc-display-block">Albert Einstein</span>
             <!--v-if-->
           </span>
         </oc-button-stub>
@@ -117,16 +117,16 @@ exports[`User Menu component when quota and no email is set renders a navigation
 exports[`User Menu component when quota is above 80% and below 90% renders a warning quota progress bar 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
-            <!--v-if-->
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
+          <span class="profile-info-wrapper">
+            <span class="oc-display-block">Albert Einstein</span>
+            <span class="oc-text-small">test@test.de</span>
           </span>
         </oc-button-stub>
       </li>
@@ -161,16 +161,16 @@ exports[`User Menu component when quota is above 80% and below 90% renders a war
 exports[`User Menu component when quota is above 90% renders a danger quota progress bar 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
-            <!--v-if-->
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
+          <span class="profile-info-wrapper">
+            <span class="oc-display-block">Albert Einstein</span>
+            <span class="oc-text-small">test@test.de</span>
           </span>
         </oc-button-stub>
       </li>
@@ -205,16 +205,16 @@ exports[`User Menu component when quota is above 90% renders a danger quota prog
 exports[`User Menu component when quota is below 80% renders a primary quota progress bar 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
-            <!--v-if-->
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
+          <span class="profile-info-wrapper">
+            <span class="oc-display-block">Albert Einstein</span>
+            <span class="oc-text-small">test@test.de</span>
           </span>
         </oc-button-stub>
       </li>
@@ -249,16 +249,16 @@ exports[`User Menu component when quota is below 80% renders a primary quota pro
 exports[`User Menu component when quota is not defined renders no percentag of total and no progress bar 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
-            <!--v-if-->
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
+          <span class="profile-info-wrapper">
+            <span class="oc-display-block">Albert Einstein</span>
+            <span class="oc-text-small">test@test.de</span>
           </span>
         </oc-button-stub>
       </li>
@@ -293,16 +293,16 @@ exports[`User Menu component when quota is not defined renders no percentag of t
 exports[`User Menu component when quota is unlimited renders no percentag of total and no progress bar 1`] = `
 <nav aria-label="Account menu">
   <oc-button-stub appearance="raw" aria-label="My Account" class="oc-topbar-personal" id="_userMenuButton">
-    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" userid="einstein" width="32"></avatar-image-stub>
+    <avatar-image-stub class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle" user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
   </oc-button-stub>
   <oc-drop-stub class="oc-overflow-hidden" close-on-click="" drop-id="account-info-container" mode="click" padding-size="small" toggle="#_userMenuButton">
     <oc-list-stub class="user-menu-list">
       <li>
         <oc-button-stub appearance="raw" id="oc-topbar-account-manage" to="[object Object]" type="router-link">
-          <avatar-image-stub userid="einstein" width="32"></avatar-image-stub>
-          <span class="profile-info-wrapper oc-py-xs">
-            <span class="oc-display-block"></span>
-            <!--v-if-->
+          <avatar-image-stub user-name="Albert Einstein" userid="einstein" width="32"></avatar-image-stub>
+          <span class="profile-info-wrapper">
+            <span class="oc-display-block">Albert Einstein</span>
+            <span class="oc-text-small">test@test.de</span>
           </span>
         </oc-button-stub>
       </li>

@@ -8,20 +8,23 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
   const route = useRoute()
+  const { dispatchModal } = useModals()
 
   const editDescriptionSpace = (space: SpaceResource, description: string) => {
     const graphClient = clientService.graphAuthenticated
     return graphClient.drives
       .updateDrive(space.id as string, { description } as Drive, {})
       .then(() => {
-        store.dispatch('hideModal')
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: space.id,
           field: 'description',
@@ -30,15 +33,13 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
         if (unref(route).name === 'admin-settings-spaces') {
           space.description = description
         }
-        store.dispatch('showMessage', {
-          title: $gettext('Space subtitle was changed successfully')
-        })
+        showMessage({ title: $gettext('Space subtitle was changed successfully') })
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to change space subtitle'),
-          error
+          errors: [error]
         })
       })
   }
@@ -48,19 +49,14 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
       return
     }
 
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Change subtitle for space') + ' ' + resources[0].name,
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Confirm'),
       hasInput: true,
       inputLabel: $gettext('Space subtitle'),
       inputValue: resources[0].description,
-      onCancel: () => store.dispatch('hideModal'),
-      onConfirm: (description) => editDescriptionSpace(resources[0], description)
-    }
-
-    store.dispatch('createModal', modal)
+      onConfirm: (description: string) => editDescriptionSpace(resources[0], description)
+    })
   }
 
   const actions = computed((): SpaceAction[] => [
@@ -77,7 +73,7 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
           return false
         }
 
-        return resources[0].canEditDescription({ user: store.getters.user, ability })
+        return resources[0].canEditDescription({ user: userStore.user, ability })
       },
       componentType: 'button',
       class: 'oc-files-actions-edit-description-trigger'

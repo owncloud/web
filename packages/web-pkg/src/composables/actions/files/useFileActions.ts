@@ -67,7 +67,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: renameActions } = useFileActionsRename({ store })
   const { actions: restoreActions } = useFileActionsRestore({ store })
   const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource({ store })
-  const { actions: openShortcutActions } = useFileActionsOpenShortcut({ store })
+  const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
   const systemActions = computed((): Action[] => [
     ...unref(openShortcutActions),

@@ -8,26 +8,31 @@ import { ConfigurationManager } from '../../configuration'
 import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
+import { UserStore } from '../../composables'
 
 export class PreviewService {
   store: Store<unknown>
   clientService: ClientService
   configurationManager: ConfigurationManager
+  userStore: UserStore
 
   capability?: PreviewCapability
 
   constructor({
     store,
     clientService,
-    configurationManager
+    configurationManager,
+    userStore
   }: {
     store: Store<unknown>
     clientService: ClientService
     configurationManager: ConfigurationManager
+    userStore: UserStore
   }) {
     this.store = store
     this.clientService = clientService
     this.configurationManager = configurationManager
+    this.userStore = userStore
 
     this.capability = get(store, 'getters.capabilities.files.thumbnail', {
       enabled: true,
@@ -44,8 +49,8 @@ export class PreviewService {
     return this.capability?.supportedMimeTypes || []
   }
 
-  private get userId() {
-    return this.store.getters.user.id
+  private get user() {
+    return this.userStore.user
   }
 
   private get token() {
@@ -80,7 +85,7 @@ export class PreviewService {
     }
 
     const isPublic = isPublicSpaceResource(space)
-    if (!isPublic && (!this.serverUrl || !this.userId || !this.token)) {
+    if (!isPublic && (!this.serverUrl || !this.user.onPremisesSamAccountName || !this.token)) {
       return undefined
     }
 

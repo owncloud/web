@@ -3,18 +3,6 @@ color:
   #  sample:
   #    default:
   #      value: "{color.swatch.warning.hover.value}"
-  #      check:
-  #        contrast:
-  #          ratio: 3.5
-  #          background:
-  #            - "{color.background.default.value}"
-  #            - "{color.background.muted.value}"
-  #      transform:
-  #        darken: 23
-  #        lighten: 10
-  #        brighten: 10
-  #        desaturate: 10
-  #        saturate: 10
   swatch:
     brand:
       default:
@@ -28,9 +16,6 @@ color:
     primary:
       default:
         value: rgb(74, 118, 172)
-        check:
-          contrast:
-            ratio: 4.6
       hover:
         value: rgb(128, 167, 215)
       muted:
@@ -42,9 +27,6 @@ color:
     success:
       default:
         value: rgb(3, 84, 63)
-        check:
-          contrast:
-            ratio: 4.6
       hover:
         value: rgb(147, 224, 84)
       muted:
@@ -54,9 +36,6 @@ color:
     warning:
       default:
         value: rgb(183, 76, 27)
-        check:
-          contrast:
-            ratio: 4.6
       hover:
         value: rgb(183, 76, 27)
       muted:

@@ -24,7 +24,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const { actions: showDetailsActions } = useActionsShowDetails()
-    const { actions: deleteActions } = useGroupActionsDelete({ store })
+    const { actions: deleteActions } = useGroupActionsDelete()
     const { actions: editActions } = useGroupActionsEdit()
 
     const menuItemsPrimaryActions = computed(() =>

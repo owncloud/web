@@ -1,6 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
@@ -29,8 +30,8 @@ describe('useFileActionsCreateNewFile', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: ({ checkNewFileName }) => {
-          const result = checkNewFileName(data.input)
+        setup: ({ getNameErrorMsg }) => {
+          const result = getNameErrorMsg(data.input)
           expect(result).toBe(data.output)
         }
       })
@@ -46,13 +47,10 @@ describe('useFileActionsCreateNewFile', () => {
           await addNewFile('myfile.txt', null)
           await nextTick()
           expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-          expect(storeOptions.actions.hideModal).toHaveBeenCalled()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-              title: '"myfile.txt" was created successfully'
-            })
-          )
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledWith({
+            title: '"myfile.txt" was created successfully'
+          })
         }
       })
     })
@@ -62,15 +60,15 @@ describe('useFileActionsCreateNewFile', () => {
       getWrapper({
         resolveCreateFile: false,
         space,
-        setup: async ({ addNewFile }, { storeOptions }) => {
+        setup: async ({ addNewFile }) => {
           await addNewFile('myfolder', null)
           await nextTick()
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-              title: 'Failed to create file'
-            })
+
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledWith(
+            expect.objectContaining({ title: 'Failed to create file' })
           )
+
           consoleErrorMock.mockRestore()
         }
       })
@@ -81,11 +79,12 @@ describe('useFileActionsCreateNewFile', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
+          const { dispatchModal } = useModals()
           const fileActionOptions: FileActionOptions = { space, resources: [] } as FileActionOptions
           unref(actions)[0].handler(fileActionOptions)
           await nextTick()
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+          expect(dispatchModal).toHaveBeenCalled()
         }
       })
     })

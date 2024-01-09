@@ -35,21 +35,6 @@ describe('DetailsAndEdit component', () => {
     it.todo('test edit options, button clicks and event handling/propagation')
   })
 
-  describe('method "checkInputValue"', () => {
-    it('should not show an error if value is valid', () => {
-      const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
-      const setModalInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkInputValue('New link name')
-      expect(setModalInputErrorMessageStub).toHaveBeenCalledWith(null)
-    })
-    it('should show an error if value is longer than 255 characters', () => {
-      const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
-      const setModalInputErrorMessageStub = jest.spyOn(wrapper.vm, 'setModalInputErrorMessage')
-      wrapper.vm.checkInputValue('n'.repeat(256))
-      expect(setModalInputErrorMessageStub).toHaveBeenCalledWith(expect.anything())
-    })
-  })
-
   describe('editOptions computed property', () => {
     it('does not add "add-expiration" option if isAliasLink is true', () => {
       const exampleLinkInternal = {

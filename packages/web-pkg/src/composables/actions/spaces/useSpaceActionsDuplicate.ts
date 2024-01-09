@@ -14,6 +14,7 @@ import PQueue from 'p-queue'
 import { useRouter } from '../../router'
 import { isLocationSpacesActive } from '../../../router'
 import { useConfigurationManager } from '../../configuration'
+import { useMessages } from '../../piniaStores'
 
 export const useSpaceActionsDuplicate = ({
   store
@@ -21,6 +22,7 @@ export const useSpaceActionsDuplicate = ({
   store?: Store<any>
 } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
   const ability = useAbility()
@@ -110,16 +112,16 @@ export const useSpaceActionsDuplicate = ({
         store.commit('Files/UPSERT_RESOURCE', duplicatedSpace)
       }
 
-      store.dispatch('showMessage', {
+      showMessage({
         title: $gettext('Space "%{space}" was duplicated successfully', {
           space: existingSpace.name
         })
       })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to duplicate space "%{space}"', { space: existingSpace.name }),
-        error
+        errors: [error]
       })
     }
   }

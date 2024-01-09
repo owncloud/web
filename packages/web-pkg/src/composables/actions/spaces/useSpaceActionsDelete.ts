@@ -2,7 +2,6 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { useClientService } from '../../clientService'
-import { useLoadingService } from '../../loadingService'
 import { useRoute } from '../../router'
 import { eventBus } from '../../../services'
 import { useAbility } from '../../ability'
@@ -10,18 +9,21 @@ import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { Store } from 'vuex'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
+  const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const route = useRoute()
+  const { dispatchModal } = useModals()
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
     return resources.filter(
-      (r) => isProjectSpaceResource(r) && r.canBeDeleted({ user: store.getters.user, ability })
+      (r) => isProjectSpaceResource(r) && r.canBeDeleted({ user: userStore.user, ability })
     )
   }
 
@@ -34,9 +36,8 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
         return true
       })
     )
-    const results = await loadingService.addTask(() => {
-      return Promise.allSettled(promises)
-    })
+    const results = await Promise.allSettled(promises)
+
     const succeeded = results.filter((r) => r.status === 'fulfilled')
     if (succeeded.length) {
       const title =
@@ -49,7 +50,7 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
               { spaceCount: succeeded.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title })
+      showMessage({ title })
     }
 
     const failed = results.filter((r) => r.status === 'rejected')
@@ -66,13 +67,12 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
               { spaceCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title,
         errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
       })
     }
 
-    store.dispatch('hideModal')
     if (unref(route).name === 'admin-settings-spaces') {
       eventBus.publish('app.admin-settings.list.load')
     }
@@ -89,10 +89,8 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
       allowedResources.length,
       { count: allowedResources.length.toString() }
     )
-    const confirmText = $gettext('Delete')
 
-    const modal = {
-      variation: 'danger',
+    dispatchModal({
       title: $ngettext(
         'Delete Space "%{space}"?',
         'Delete %{spaceCount} Spaces?',
@@ -102,15 +100,11 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
           spaceCount: allowedResources.length.toString()
         }
       ),
-      cancelText: $gettext('Cancel'),
-      confirmText,
+      confirmText: $gettext('Delete'),
       message: message,
       hasInput: false,
-      onCancel: () => store.dispatch('hideModal'),
       onConfirm: () => deleteSpaces(allowedResources)
-    }
-
-    store.dispatch('createModal', modal)
+    })
   }
 
   const actions = computed((): SpaceAction[] => [

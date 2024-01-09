@@ -119,7 +119,10 @@ describe('Details SideBar Panel', () => {
     it('shows if the resource is a share from another user', () => {
       const share = { fileOwner: { displayName: 'Marie' } }
       const resource = getResourceMock({ shareTypes: [ShareTypes.user.value], share })
-      const { wrapper } = createWrapper({ resource, user: { id: 'einstein' } })
+      const { wrapper } = createWrapper({
+        resource,
+        user: { onPremisesSamAccountName: 'einstein' }
+      })
       expect(wrapper.find(selectors.sharedBy).exists()).toBeTruthy()
     })
   })
@@ -195,12 +198,11 @@ function createWrapper({
   resource = null,
   isPublicLinkContext = false,
   ancestorMetaData = {},
-  user = { id: 'marie' },
+  user = { onPremisesSamAccountName: 'marie' },
   versions = [],
   tagsEnabled = true
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockReturnValue(user)
   storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
   storeOptions.getters.capabilities.mockReturnValue({ files: { tags: tagsEnabled } })
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
@@ -218,13 +220,13 @@ function createWrapper({
   return {
     wrapper: mount(FileDetails, {
       global: {
-        stubs: { 'router-link': true, 'oc-resource-icon': true },
+        stubs: { 'router-link': true, 'resource-icon': true },
         provide: {
           ...mocks,
           resource,
           space: mockDeep<SpaceResource>()
         },
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
         mocks
       }
     })

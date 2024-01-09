@@ -16,9 +16,11 @@ import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
+import { useMessages } from '../../piniaStores'
 
 export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
 
@@ -61,7 +63,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
 
     if (errors.length === 0) {
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
-        store.dispatch('showMessage', {
+        showMessage({
           title: $ngettext(
             'Sync for the selected share was disabled successfully',
             'Sync for the selected shares was disabled successfully',
@@ -74,7 +76,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
       return
     }
 
-    store.dispatch('showErrorMessage', {
+    showErrorMessage({
       title: $ngettext(
         'Failed to disable sync for the the selected share',
         'Failed to disable sync for the selected shares',

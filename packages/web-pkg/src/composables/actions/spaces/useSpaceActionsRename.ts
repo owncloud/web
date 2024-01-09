@@ -7,21 +7,25 @@ import { useAbility } from '../../ability'
 import { useRoute } from '../../router'
 import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
+import { SpaceResource } from '@ownclouders/web-client'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
   const route = useRoute()
   const { checkSpaceNameModalInput } = useSpaceHelpers()
+  const { dispatchModal } = useModals()
 
-  const renameSpace = (space, name) => {
+  const renameSpace = (space: SpaceResource, name: string) => {
     const graphClient = clientService.graphAuthenticated
     return graphClient.drives
       .updateDrive(space.id, { name }, {})
       .then(() => {
-        store.dispatch('hideModal')
         if (unref(route).name === 'admin-settings-spaces') {
           space.name = name
         }
@@ -30,15 +34,13 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
           field: 'name',
           value: name
         })
-        store.dispatch('showMessage', {
-          title: $gettext('Space name was changed successfully')
-        })
+        showMessage({ title: $gettext('Space name was changed successfully') })
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to rename space'),
-          error
+          errors: [error]
         })
       })
   }
@@ -48,20 +50,15 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
       return
     }
 
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Rename space') + ' ' + resources[0].name,
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Rename'),
       hasInput: true,
       inputLabel: $gettext('Space name'),
       inputValue: resources[0].name,
-      onCancel: () => store.dispatch('hideModal'),
-      onConfirm: (name) => renameSpace(resources[0], name),
+      onConfirm: (name: string) => renameSpace(resources[0], name),
       onInput: checkSpaceNameModalInput
-    }
-
-    store.dispatch('createModal', modal)
+    })
   }
 
   const actions = computed((): SpaceAction[] => [
@@ -77,7 +74,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
           return false
         }
 
-        return resources[0].canRename({ user: store.getters.user, ability })
+        return resources[0].canRename({ user: userStore.user, ability })
       },
       componentType: 'button',
       class: 'oc-files-actions-rename-trigger'

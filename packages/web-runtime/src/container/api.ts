@@ -5,11 +5,7 @@ import { ApiError } from '@ownclouders/web-pkg'
 import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
 import { Module, Store } from 'vuex'
 import { App, Component, h } from 'vue'
-import {
-  ApplicationQuickActions,
-  ApplicationTranslations,
-  AppNavigationItem
-} from '@ownclouders/web-pkg'
+import { ApplicationTranslations, AppNavigationItem } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
 
 /**
@@ -119,23 +115,6 @@ const announceTranslations = (
       gettext.translations = merge(gettext.translations, { [lang]: appTranslations[lang] })
     }
   })
-}
-
-/**
- * inject application specific quickActions into runtime
- *
- * @param store
- * @param quickActions
- */
-const announceQuickActions = (
-  store: Store<unknown>,
-  quickActions: ApplicationQuickActions
-): void => {
-  if (!isObject(quickActions)) {
-    throw new ApiError("quickActions can't be blank")
-  }
-
-  store.commit('ADD_QUICK_ACTIONS', quickActions)
 }
 
 /**
@@ -258,8 +237,6 @@ export const buildRuntimeApi = ({
       announceNavigationItems(applicationId, store, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>
       announceTranslations(supportedLanguages, gettext, appTranslations),
-    announceQuickActions: (quickActions: ApplicationQuickActions): void =>
-      announceQuickActions(store, quickActions),
     announceStore: (applicationStore: Module<unknown, unknown>): void =>
       announceStore(applicationName, store, applicationStore),
     announceExtension: (extension: { [key: string]: unknown }): void =>

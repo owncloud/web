@@ -10,52 +10,45 @@ import { useStore } from '../../store'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useLoadingService } from '../../loadingService'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
+  const { dispatchModal } = useModals()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
     return clientService.webdav
       .clearTrashBin(space)
       .then(() => {
-        store.dispatch('showMessage', {
-          title: $gettext('All deleted files were removed')
-        })
+        showMessage({ title: $gettext('All deleted files were removed') })
         store.dispatch('Files/clearTrashBin')
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to empty trash bin'),
-          error
+          errors: [error]
         })
-      })
-      .finally(() => {
-        store.dispatch('hideModal')
       })
   }
 
   const handler = ({ space }: FileActionOptions) => {
-    const modal = {
+    dispatchModal({
       variation: 'danger',
       title: $gettext('Empty trash bin'),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
       message: $gettext(
         'Are you sure you want to permanently delete the listed items? You can’t undo this action.'
       ),
       hasInput: false,
-      onCancel: () => store.dispatch('hideModal'),
-      onConfirm: () => loadingService.addTask(() => emptyTrashBin({ space }))
-    }
-
-    store.dispatch('createModal', modal)
+      onConfirm: () => emptyTrashBin({ space })
+    })
   }
 
   const actions = computed((): FileAction[] => [
@@ -74,7 +67,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
 
         if (
           isProjectSpaceResource(space) &&
-          !space.canRemoveFromTrashbin({ user: store.getters.user })
+          !space.canRemoveFromTrashbin({ user: userStore.user })
         ) {
           return false
         }

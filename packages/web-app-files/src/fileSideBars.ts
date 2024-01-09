@@ -20,7 +20,8 @@ import {
   useStore,
   SidebarPanelExtension,
   useIsFilesAppActive,
-  useGetMatchingSpace
+  useGetMatchingSpace,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -35,13 +36,13 @@ import { computed, unref } from 'vue'
 export const sideBarPanels = () => {
   const router = useRouter()
   const store = useStore()
-  const user = computed(() => store.getters.user)
   const { $gettext } = useGettext()
   const isSharingEnabled = useCapabilityFilesSharing(store)
   const isSharingApiEnabled = useCapabilityFilesSharingApiEnabled(store)
   const arePublicLinksEnabled = useCapabilityFilesSharingPublicEnabled(store)
   const isFilesAppActive = useIsFilesAppActive()
   const { isPersonalSpaceRoot } = useGetMatchingSpace()
+  const userStore = useUserStore()
 
   return computed(
     () =>
@@ -298,7 +299,7 @@ export const sideBarPanels = () => {
               return [
                 ...items[0].spaceRoles[spaceRoleManager.name],
                 ...items[0].spaceRoles[spaceRoleEditor.name]
-              ].some((role) => role.id === unref(user).uuid)
+              ].some((role) => role.id === userStore.user.id)
             }
           }
         },

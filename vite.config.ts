@@ -69,21 +69,16 @@ const getJson = async (url: string) => {
   ).json()
 }
 
-const getConfigJson = async (url: string) => {
-  const configJson = await getJson(url)
+type ConfigJsonResponseBody = {
+  options: Record<string, any>
+}
+
+const getConfigJson = async (url: string, config: UserConfig) => {
+  const configJson = (await getJson(url)) as ConfigJsonResponseBody
 
   // enable previews and enable lazy resources, which are disabled for fast tests
   configJson.options.disablePreviews = false
   configJson.options.displayResourcesLazy = true
-
-  // oC 10
-  if (configJson.auth) {
-    configJson.auth.clientId =
-      process.env.OWNCLOUD_WEB_CLIENT_ID ||
-      'AWhZZsxb59ouGg97HsdR7GiN8pnzEYvk1cL6aVJgTQH1Gcdxly1gendLVTZ5zpYC'
-
-    configJson.auth.clientSecret = process.env.OWNCLOUD_WEB_CLIENT_SECRET || undefined
-  }
 
   return configJson
 }
@@ -108,8 +103,10 @@ export const historyModePlugins = () =>
     }
   ] as const
 
-export default defineConfig(({ mode, command }) => {
+export default defineConfig(async ({ mode, command }) => {
   const production = mode === 'production'
+  let config: UserConfig
+
   /**
     When setting `OWNCLOUD_WEB_CONFIG_URL` make sure to configure the oauth/oidc client
 
@@ -127,7 +124,7 @@ export default defineConfig(({ mode, command }) => {
   const configUrl =
     process.env.OWNCLOUD_WEB_CONFIG_URL || 'https://host.docker.internal:9200/config.json'
 
-  const config: UserConfig = {
+  config = {
     ...(!production && {
       server: {
         port: 9201,
@@ -254,7 +251,7 @@ export default defineConfig(({ mode, command }) => {
             server.middlewares.use(async (request, response, next) => {
               if (request.url === '/config.json') {
                 try {
-                  const configJson = await getConfigJson(configUrl)
+                  const configJson = await getConfigJson(configUrl, config)
                   response.statusCode = 200
                   response.setHeader('Content-Type', 'application/json')
                   response.end(JSON.stringify(configJson))

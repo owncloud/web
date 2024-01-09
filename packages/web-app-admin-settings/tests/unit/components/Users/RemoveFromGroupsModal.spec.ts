@@ -1,15 +1,13 @@
 import RemoveFromGroupsModal from '../../../../src/components/Users/RemoveFromGroupsModal.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
 describe('RemoveFromGroupsModal', () => {
   it('renders the input', () => {
@@ -24,7 +22,7 @@ describe('RemoveFromGroupsModal', () => {
         mock<User>({ memberOf: [{ id: '1' }] })
       ]
       const groups = [mock<Group>({ id: '1' })]
-      const { wrapper, mocks, storeOptions } = getWrapper({ users, groups })
+      const { wrapper, mocks } = getWrapper({ users, groups })
       mocks.$clientService.graphAuthenticated.groups.deleteMember.mockResolvedValue(undefined)
       mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValue(
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
@@ -34,7 +32,8 @@ describe('RemoveFromGroupsModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
       expect(eventSpy).toHaveBeenCalled()
     })
 
@@ -46,7 +45,7 @@ describe('RemoveFromGroupsModal', () => {
         mock<User>({ memberOf: [{ id: '1' }] })
       ]
       const groups = [mock<Group>({ id: '1' })]
-      const { wrapper, mocks, storeOptions } = getWrapper({ users, groups })
+      const { wrapper, mocks } = getWrapper({ users, groups })
       mocks.$clientService.graphAuthenticated.groups.deleteMember.mockRejectedValue(new Error(''))
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
 
@@ -54,36 +53,27 @@ describe('RemoveFromGroupsModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
       expect(eventSpy).not.toHaveBeenCalled()
-    })
-  })
-  describe('method "onCancel"', () => {
-    it('hides the modal', async () => {
-      const { wrapper, storeOptions } = getWrapper()
-      await wrapper.vm.onCancel()
-      expect(storeOptions.actions.hideModal).toHaveBeenCalled()
     })
   })
 })
 
 function getWrapper({ users = [mock<User>()], groups = [mock<Group>()] } = {}) {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.user.mockReturnValue({ uuid: '1' })
-  const store = createStore(storeOptions)
 
   return {
     mocks,
-    storeOptions,
     wrapper: shallowMount(RemoveFromGroupsModal, {
       props: {
+        modal: mock<Modal>(),
         users,
         groups
       },
       global: {
         provide: mocks,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: { GroupSelect: true }
       }
     })

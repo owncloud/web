@@ -1,4 +1,5 @@
 import { useSpaceActionsEditDescription } from '../../../../../src/composables/actions'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import {
   createStore,
   defaultComponentMocks,
@@ -16,31 +17,34 @@ describe('editDescription', () => {
     it('should trigger the editDescription modal window with one resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [{ id: '1' } as SpaceResource] })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(1)
+          expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
     })
     it('should not trigger the editDescription modal window with no resource', () => {
       getWrapper({
         setup: async ({ actions }, { storeOptions }) => {
+          const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 
-          expect(storeOptions.actions.createModal).toHaveBeenCalledTimes(0)
+          expect(dispatchModal).toHaveBeenCalledTimes(0)
         }
       })
     })
   })
 
   describe('method "editDescriptionSpace"', () => {
-    it('should hide the modal on success', () => {
+    it('should show message on success', () => {
       getWrapper({
-        setup: async ({ editDescriptionSpace }, { storeOptions, clientService }) => {
+        setup: async ({ editDescriptionSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
-          expect(storeOptions.actions.hideModal).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -48,11 +52,12 @@ describe('editDescription', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ editDescriptionSpace }, { storeOptions, clientService }) => {
+        setup: async ({ editDescriptionSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

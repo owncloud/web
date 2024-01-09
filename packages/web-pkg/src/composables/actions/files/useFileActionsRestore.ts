@@ -24,9 +24,12 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
+import { useMessages, useUserStore } from '../../piniaStores'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
+  const userStore = useUserStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
@@ -91,14 +94,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         continue
       }
       const remainingConflictCount = allConflictsCount - count
-      const conflictDialog = new ConflictDialog(
-        (...args) => store.dispatch('createModal', ...args),
-        (...args) => store.dispatch('hideModal', ...args),
-        (...args) => store.dispatch('showMessage', ...args),
-        (...args) => store.dispatch('showErrorMessage', ...args),
-        $gettext,
-        $ngettext
-      )
+      const conflictDialog = new ConflictDialog($gettext, $ngettext)
       const resolvedConflict: ResolveConflict = await conflictDialog.resolveFileExists(
         { name: conflict.name, isFolder } as Resource,
         remainingConflictCount,
@@ -191,9 +187,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
           resourceCount: restoredResources.length.toString()
         })
       }
-      store.dispatch('showMessage', {
-        title
-      })
+      showMessage({ title })
     }
 
     // failure handler (for partial and full failure)
@@ -207,10 +201,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         translateParams.resourceCount = failedResources.length
         translated = $gettext('Failed to restore %{resourceCount} files', translateParams, true)
       }
-      store.dispatch('showErrorMessage', {
-        title: translated,
-        errors
-      })
+      showErrorMessage({ title: translated, errors })
     }
 
     // Reload quota
@@ -222,9 +213,6 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
         field: 'spaceQuota',
         value: driveResponse.data.quota
       })
-    } else {
-      const user = await clientService.owncloudSdk.users.getUser(store.getters.user.id)
-      store.commit('SET_QUOTA', user.quota)
     }
   }
 
@@ -286,8 +274,8 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
 
         if (
           isProjectSpaceResource(space) &&
-          !space.isEditor(store.getters.user) &&
-          !space.isManager(store.getters.user)
+          !space.isEditor(userStore.user) &&
+          !space.isManager(userStore.user)
         ) {
           return false
         }

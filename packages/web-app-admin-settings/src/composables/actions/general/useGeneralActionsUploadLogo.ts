@@ -1,18 +1,11 @@
-import { Store } from 'vuex'
 import { supportedLogoMimeTypes } from '../../../defaults'
 import { computed, VNodeRef, unref } from 'vue'
-import { Action } from '@ownclouders/web-pkg'
-import { useAbility, useClientService, useRouter, useStore } from '@ownclouders/web-pkg'
+import { Action, useMessages } from '@ownclouders/web-pkg'
+import { useAbility, useClientService, useRouter } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
-export const useGeneralActionsUploadLogo = ({
-  store,
-  imageInput
-}: {
-  store?: Store<any>
-  imageInput: VNodeRef
-}) => {
-  store = store || useStore()
+export const useGeneralActionsUploadLogo = ({ imageInput }: { imageInput: VNodeRef }) => {
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext } = useGettext()
   const ability = useAbility()
   const clientService = useClientService()
@@ -26,9 +19,7 @@ export const useGeneralActionsUploadLogo = ({
     }
 
     if (!supportedLogoMimeTypes.includes(file.type)) {
-      return store.dispatch('showErrorMessage', {
-        title: $gettext('The file type is unsupported')
-      })
+      return showErrorMessage({ title: $gettext('The file type is unsupported') })
     }
 
     try {
@@ -40,17 +31,15 @@ export const useGeneralActionsUploadLogo = ({
           'Content-Type': 'multipart/form-data'
         }
       })
-      store.dispatch('showMessage', {
-        title: $gettext('Logo was uploaded successfully')
-      })
+      showMessage({ title: $gettext('Logo was uploaded successfully') })
       setTimeout(() => {
         router.go(0)
       }, 1000)
     } catch (e) {
       console.error(e)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to upload logo'),
-        error: e
+        errors: [e]
       })
     }
   }

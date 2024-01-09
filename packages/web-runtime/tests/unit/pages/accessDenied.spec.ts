@@ -13,7 +13,6 @@ const selectors = {
 }
 
 import { ConfigurationManager, useConfigurationManager } from '@ownclouders/web-pkg'
-import { createMockThemeStore } from 'web-test-helpers/src/mocks/pinia'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
@@ -61,7 +60,7 @@ function getWrapper({ loginUrl = '' } = {}) {
     mocks,
     wrapper: mount(accessDenied, {
       global: {
-        plugins: [...defaultPlugins(), store, createMockThemeStore()],
+        plugins: [...defaultPlugins(), store],
         mocks,
         provide: mocks
       }

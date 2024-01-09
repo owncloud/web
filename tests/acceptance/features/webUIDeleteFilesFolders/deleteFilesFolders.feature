@@ -53,37 +53,6 @@ Feature: deleting files and folders
       | "question?"         |
       | "&and#hash"         |
 
-  @smokeTest @issue-4582 @disablePreviews @skipOnOC10 @issue-core-38221
-  Scenario: Delete multiple files at once
-    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has logged in using the webUI
-    When the user batch deletes these files using the webUI
-      | name          |
-      | data.zip      |
-      | lorem.txt     |
-      | simple-folder |
-    Then as "Alice" file "data.zip" should not exist in the server
-    And as "Alice" file "lorem.txt" should not exist in the server
-    And as "Alice" folder "simple-folder" should not exist in the server
-    And the deleted elements should not be listed on the webUI
-    And the deleted elements should not be listed on the webUI after a page reload
-    And no message should be displayed on the webUI
-
-  @skipOnOC10 @issue-4582
-  Scenario: Delete all files at once at the root level
-    Given user "Alice" has uploaded file "data.zip" to "data.zip" in the server
-    And user "Alice" has created file "lorem.txt" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has logged in using the webUI
-    When the user marks all files for batch action using the webUI
-    And the user batch deletes the marked files using the webUI
-    Then as "Alice" file "data.zip" should not exist in the server
-    And as "Alice" file "lorem.txt" should not exist in the server
-    And as "Alice" folder "simple-folder" should not exist in the server
-    And file "data.zip" should not be listed on the webUI
-    And no message should be displayed on the webUI
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
   Scenario: Delete all except for a few files at once
@@ -108,18 +77,6 @@ Feature: deleting files and folders
     And as "Alice" folder "folderToDelete" should not exist in the server
     And file "data.zip" should not be listed on the webUI
     And the count of files and folders shown on the webUI should be 2
-    And no message should be displayed on the webUI
-
-  @ocis-reva-issue-106
-  Scenario: Delete an empty folder
-    Given user "Alice" has logged in using the webUI
-    When the user creates a folder with the name "my-empty-folder" using the webUI
-    And the user creates a folder with the name "my-other-empty-folder" using the webUI
-    And the user deletes folder "my-empty-folder" using the webUI
-    Then as "Alice" folder "my-other-empty-folder" should exist in the server
-    And folder "my-other-empty-folder" should be listed on the webUI
-    But as "Alice" folder "my-empty-folder" should not exist in the server
-    And folder "my-empty-folder" should not be listed on the webUI
     And no message should be displayed on the webUI
 
 

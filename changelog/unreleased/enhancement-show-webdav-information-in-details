@@ -6,4 +6,6 @@ this might be usefully when the user wants to add an external WebDav client.
 By default this view option is disabled but can be enabled via account->preferences view.
 
 https://github.com/owncloud/web/pull/10062
+https://github.com/owncloud/web/pull/10190
+https://github.com/owncloud/web/pull/10196
 https://github.com/owncloud/web/issues/9714

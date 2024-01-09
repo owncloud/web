@@ -1,0 +1,8 @@
+Change: Message handling to pinia
+
+BREAKING CHANGE for developers: Messages are no longer stored in a vuex store but in pinia instead. This means to display a message in the UI, you need to use the new `useMessages` composable.
+
+For more details please see the linked PR down below.
+
+https://github.com/owncloud/web/pull/10309
+https://github.com/owncloud/web/issues/10210

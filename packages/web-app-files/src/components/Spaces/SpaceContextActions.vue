@@ -58,7 +58,7 @@ export default defineComponent({
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
     const { actions: disableActions } = useSpaceActionsDisable({ store })
     const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
-    const { actions: editQuotaActions } = useSpaceActionsEditQuota({ store })
+    const { actions: editQuotaActions } = useSpaceActionsEditQuota()
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
     const { actions: renameActions } = useSpaceActionsRename({ store })

@@ -17,10 +17,13 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
+import { useMessages, useModals } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
+  const messageStore = useMessages()
+  const { showMessage, showErrorMessage } = messageStore
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
@@ -28,7 +31,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { owncloudSdk } = clientService
+  const { dispatchModal } = useModals()
   const configurationManager = useConfigurationManager()
 
   const queue = new PQueue({
@@ -118,9 +121,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
           { file: resource.name },
           true
         )
-        store.dispatch('showMessage', {
-          title: translated
-        })
+        showMessage({ title: translated })
       })
       .catch((error) => {
         if (error.statusCode === 423) {
@@ -134,14 +135,14 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
 
         console.error(error)
         const translated = $gettext('Failed to delete "%{file}"', { file: resource.name }, true)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: translated,
-          error
+          errors: [error]
         })
       })
   }
 
-  const trashbin_delete = (space: SpaceResource) => {
+  const trashbin_delete = async (space: SpaceResource) => {
     // TODO: use clear all if all files are selected
     // FIXME: Implement proper batch delete and add loading indicator
     for (const file of unref(resources)) {
@@ -151,10 +152,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       deleteOps.push(p)
     }
 
-    Promise.all(deleteOps).then(() => {
-      store.dispatch('hideModal')
-      store.dispatch('toggleModalConfirmButton')
-    })
+    await Promise.all(deleteOps)
   }
 
   const filesList_delete = (resources: Resource[]) => {
@@ -187,7 +185,8 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 space: spaceForDeletion,
                 files: resourcesForDeletion,
                 clientService,
-                loadingCallbackArgs
+                loadingCallbackArgs,
+                messageStore
               })
               .then(async () => {
                 // Load quota
@@ -205,9 +204,6 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                       field: 'spaceQuota',
                       value: driveResponse.data.quota
                     })
-                  } else {
-                    const user = await owncloudSdk.users.getUser(store.getters.user.id)
-                    store.commit('SET_QUOTA', user.quota)
                   }
                 }
 
@@ -241,21 +237,13 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const displayDialog = (space: SpaceResource, resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
-    const modal = {
+    dispatchModal({
       variation: 'danger',
       title: unref(dialogTitle),
       message: unref(dialogMessage),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
-      onCancel: () => {
-        store.dispatch('hideModal')
-      },
-      onConfirm: () => {
-        trashbin_delete(space)
-      }
-    }
-
-    store.dispatch('createModal', modal)
+      onConfirm: () => trashbin_delete(space)
+    })
   }
 
   return {

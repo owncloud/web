@@ -1,8 +1,14 @@
 import { storeToRefs } from 'pinia'
-import { useStore, usePublicLinkContext, useThemeStore } from '@ownclouders/web-pkg'
+import {
+  useStore,
+  usePublicLinkContext,
+  useThemeStore,
+  useModals,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
-import { computed, unref } from 'vue'
+import { computed, nextTick, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import type { UppyService } from '@ownclouders/web-pkg'
 import '@uppy/dashboard/dist/style.min.css'
@@ -15,11 +21,13 @@ import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const store = useStore()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const uppyService = useService<UppyService>('$uppyService')
   const publicLinkContext = usePublicLinkContext({ store })
   const themeStore = useThemeStore()
   const { currentTheme } = storeToRefs(themeStore)
+  const { dispatchModal, removeModal, activeModal } = useModals()
 
   const { companionUrl, webdavCloudType } = applicationConfig
   let { supportedClouds } = applicationConfig
@@ -29,7 +37,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
     return store.getters['Files/currentFolder']
   })
   const canUpload = computed(() => {
-    return unref(currentFolder)?.canUpload({ user: store.getters.user })
+    return unref(currentFolder)?.canUpload({ user: userStore.user })
   })
 
   const removeUppyPlugins = () => {
@@ -46,7 +54,9 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   }
 
   uppyService.subscribe('addedForUpload', () => {
-    store.dispatch('hideModal')
+    if (unref(activeModal)) {
+      removeModal(unref(activeModal).id)
+    }
   })
 
   uppyService.subscribe('uploadCompleted', () => {
@@ -56,17 +66,16 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const handler = async () => {
     const renderDarkTheme = currentTheme.value.isDark
 
-    const modal = {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Import files'),
-      cancelText: $gettext('Cancel'),
-      withoutButtonConfirm: true,
+      hideConfirmButton: true,
       onCancel: () => {
         removeUppyPlugins()
-        return store.dispatch('hideModal')
       }
-    }
-    await store.dispatch('createModal', modal)
+    })
+
+    await nextTick()
+
     uppyService.addPlugin(Dashboard, {
       uppyService,
       inline: true,

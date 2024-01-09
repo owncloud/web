@@ -7,7 +7,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useFileActionsCreateNewShortcut } from '../../../../../src'
+import { useFileActionsCreateNewShortcut, useModals } from '../../../../../src'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('createNewShortcut', () => {
@@ -34,9 +34,10 @@ describe('createNewShortcut', () => {
     describe('method "handler"', () => {
       it('creates a modal', () => {
         getWrapper({
-          setup: async ({ actions }, { storeOptions }) => {
+          setup: async ({ actions }) => {
+            const { dispatchModal } = useModals()
             await unref(actions)[0].handler()
-            expect(storeOptions.actions.createModal).toHaveBeenCalled()
+            expect(dispatchModal).toHaveBeenCalled()
           }
         })
       })

@@ -13,7 +13,7 @@ export const me = async ({ user }: { user: User }): Promise<Me> => {
     user
   })
 
-  return await response.json()
+  return (await response.json()) as Me
 }
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
@@ -34,7 +34,8 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   checkResponseStatus(response, 'Failed while creating user')
 
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.storeCreatedUser({ user: { ...user, uuid: (await response.json()).id } })
+  const resBody = (await response.json()) as User
+  usersEnvironment.storeCreatedUser({ user: { ...user, uuid: resBody.id } })
   return user
 }
 
@@ -59,7 +60,8 @@ export const getUserId = async ({ user, admin }: { user: User; admin: User }): P
     user: admin
   })
   if (response.ok) {
-    userId = (await response.json()).id
+    const resBody = (await response.json()) as User
+    userId = resBody.id
   }
   return userId
 }
@@ -85,7 +87,8 @@ export const createGroup = async ({
   checkResponseStatus(response, 'Failed while creating group')
 
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: (await response.json()).id } })
+  const resBody = (await response.json()) as Group
+  usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: resBody.id } })
   return group
 }
 
@@ -97,7 +100,8 @@ const getGroupId = async ({ group, admin }: { group: Group; admin: User }): Prom
     user: admin
   })
   if (response.ok) {
-    groupId = (await response.json()).id
+    const resBody = (await response.json()) as Group
+    groupId = resBody.id
   }
   return groupId
 }

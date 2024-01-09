@@ -5,6 +5,11 @@ import { User } from '../../types'
 import { TokenEnvironmentFactory } from '../../environment'
 import { config } from '../../../config'
 
+interface KeycloakToken {
+  access_token: string
+  refresh_token: string
+}
+
 export const realmBasePath = `admin/realms/${config.keycloakRealm}`
 
 export const request = async (args: {
@@ -38,7 +43,7 @@ export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
   })
   checkResponseStatus(response, 'Failed refresh access token')
 
-  const resBody = await response.json()
+  const resBody = (await response.json()) as KeycloakToken
 
   // update tokens
   tokenEnvironment.setToken({

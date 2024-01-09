@@ -1,21 +1,11 @@
-import { useStore } from '@ownclouders/web-pkg'
+import { useModals, UserAction } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction } from '@ownclouders/web-pkg'
 import CreateGroupModal from '../../../components/Groups/CreateGroupModal.vue'
 
 export const useGroupActionsCreateGroup = () => {
-  const store = useStore()
+  const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
-
-  const handler = () => {
-    return store.dispatch('createModal', {
-      variation: 'passive',
-      title: $gettext('Create group'),
-      hideActions: true,
-      customComponent: CreateGroupModal
-    })
-  }
 
   const actions = computed((): UserAction[] => [
     {
@@ -25,7 +15,12 @@ export const useGroupActionsCreateGroup = () => {
       class: 'oc-groups-actions-create-group',
       label: () => $gettext('New group'),
       isEnabled: () => true,
-      handler
+      handler: () => {
+        dispatchModal({
+          title: $gettext('Create group'),
+          customComponent: CreateGroupModal
+        })
+      }
     }
   ])
 

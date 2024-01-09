@@ -4,36 +4,20 @@
     :group-options="groups"
     @selected-option-change="changeSelectedGroupOption"
   />
-  <div class="oc-flex oc-flex-right oc-flex-middle oc-mt-m">
-    <oc-button
-      class="oc-modal-body-actions-cancel oc-ml-s"
-      appearance="outline"
-      variation="passive"
-      @click="onCancel"
-      >{{ $gettext('Cancel') }}
-    </oc-button>
-    <oc-button
-      class="oc-modal-body-actions-confirm oc-ml-s"
-      appearance="filled"
-      variation="primary"
-      :disabled="!selectedOptions.length"
-      @click="onConfirm"
-      >{{ $gettext('Confirm') }}
-    </oc-button>
-  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref } from 'vue'
+import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import GroupSelect from './GroupSelect.vue'
-import { useStore, useEventBus, useClientService, useLoadingService } from '@ownclouders/web-pkg'
+import { useEventBus, useClientService, Modal, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'RemoveFromGroupsModal',
   components: { GroupSelect },
   props: {
+    modal: { type: Object as PropType<Modal>, required: true },
     groups: {
       type: Array as PropType<Group[]>,
       required: true
@@ -43,10 +27,10 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props, { expose }) {
-    const store = useStore()
+  emits: ['update:confirmDisabled'],
+  setup(props, { emit, expose }) {
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const loadingService = useLoadingService()
     const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
 
@@ -54,6 +38,14 @@ export default defineComponent({
     const changeSelectedGroupOption = (options: Group[]) => {
       selectedOptions.value = options
     }
+
+    watch(
+      selectedOptions,
+      () => {
+        emit('update:confirmDisabled', !unref(selectedOptions).length)
+      },
+      { immediate: true }
+    )
 
     const onConfirm = async () => {
       const client = clientService.graphAuthenticated
@@ -76,13 +68,11 @@ export default defineComponent({
           'Group assignments already removed',
           props.users.length * unref(selectedOptions).length
         )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
         return
       }
 
-      const results = await loadingService.addTask(() => {
-        return Promise.allSettled(promises)
-      })
+      const results = await Promise.allSettled(promises)
 
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
@@ -98,7 +88,7 @@ export default defineComponent({
                 { groupAssignmentCount: succeeded.length.toString() },
                 true
               )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
       }
 
       const failed = results.filter((r) => r.status === 'rejected')
@@ -117,7 +107,7 @@ export default defineComponent({
                 { groupAssignmentCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title,
           errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
         })
@@ -133,22 +123,17 @@ export default defineComponent({
         )
       } catch (e) {
         console.error(e)
-      } finally {
-        store.dispatch('hideModal')
       }
     }
 
-    const onCancel = () => {
-      store.dispatch('hideModal')
-    }
-
-    expose({ onConfirm, onCancel })
+    expose({ onConfirm })
 
     return {
       selectedOptions,
       changeSelectedGroupOption,
-      onConfirm,
-      onCancel
+
+      // unit tests
+      onConfirm
     }
   }
 })

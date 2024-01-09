@@ -111,7 +111,7 @@
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
-import { CompareSaveDialog, QuotaSelect } from '@ownclouders/web-pkg'
+import { CompareSaveDialog, QuotaSelect, useUserStore } from '@ownclouders/web-pkg'
 import GroupSelect from '../GroupSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { AppRole, AppRoleAssignment, Group, User } from '@ownclouders/web-client/src/generated'
@@ -119,9 +119,8 @@ import {
   MaybeRef,
   useCapabilityReadOnlyUserAttributes,
   useClientService,
-  useStore
+  useCapabilitySpacesMaxQuota
 } from '@ownclouders/web-pkg'
-import { useCapabilitySpacesMaxQuota } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -148,9 +147,9 @@ export default defineComponent({
   },
   emits: ['confirm'],
   setup(props) {
-    const store = useStore()
     const clientService = useClientService()
-    const currentUser = store.getters.user
+    const userStore = useUserStore()
+
     const editUser: MaybeRef<User> = ref({})
     const formData = ref({
       displayName: {
@@ -172,7 +171,7 @@ export default defineComponent({
         (g) => !selectedGroups.some((s) => s.id === g.id) && !g.groupTypes?.includes('ReadOnly')
       )
     })
-    const isLoginInputDisabled = computed(() => currentUser.uuid === (props.user as User).id)
+    const isLoginInputDisabled = computed(() => userStore.user.id === (props.user as User).id)
     const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
     const isInputFieldReadOnly = (key) => {
       return unref(readOnlyUserAttributes).includes(key)

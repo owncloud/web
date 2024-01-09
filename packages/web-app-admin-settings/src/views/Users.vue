@@ -162,7 +162,9 @@ import {
   useSideBar,
   useStore,
   SideBarPanel,
-  SideBarPanelContext
+  SideBarPanelContext,
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -196,9 +198,11 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const { showErrorMessage } = useMessages()
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
+    const userStore = useUserStore()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -217,7 +221,7 @@ export default defineComponent({
     const { actions: createUserActions } = useUserActionsCreateUser()
     const createUserAction = computed(() => unref(createUserActions)[0])
 
-    const { actions: deleteActions } = useUserActionsDelete({ store })
+    const { actions: deleteActions } = useUserActionsDelete()
     const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups({
       groups: writableGroups
     })
@@ -315,10 +319,6 @@ export default defineComponent({
       unref(additionalUserDataLoadedForUserIds).push(user.id)
 
       Object.assign(user, data)
-    })
-
-    const currentUser = computed(() => {
-      return store.state.user
     })
 
     const resetPagination = () => {
@@ -525,9 +525,9 @@ export default defineComponent({
         return updatedUser
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to edit user'),
-          error
+          errors: [error]
         })
       }
     }
@@ -540,7 +540,7 @@ export default defineComponent({
         {}
       )
 
-      if (editUser.id === unref(currentUser).uuid) {
+      if (editUser.id === userStore.user.id) {
         // Load current user quota
         store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
           id: editUser.drive.id,

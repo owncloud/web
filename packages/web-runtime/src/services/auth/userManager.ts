@@ -8,7 +8,7 @@ import {
 } from 'oidc-client-ts'
 import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, UserStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
@@ -17,6 +17,7 @@ import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import { router } from 'web-runtime/src/router'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
+import { User as OcUser } from '@ownclouders/web-client/src/generated'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -27,6 +28,7 @@ export interface UserManagerOptions {
   store: Store<any>
   ability: Ability
   language: Language
+  userStore: UserStore
 }
 
 export class UserManager extends OidcUserManager {
@@ -34,6 +36,7 @@ export class UserManager extends OidcUserManager {
   private clientService: ClientService
   private configurationManager: ConfigurationManager
   private store: Store<any>
+  private userStore: UserStore
   private updateAccessTokenPromise: Promise<void> | null
   private _unloadReason: UnloadReason
   private ability: Ability
@@ -99,7 +102,7 @@ export class UserManager extends OidcUserManager {
     }
 
     Log.setLogger(console)
-    Log.setLevel(Log.INFO)
+    Log.setLevel(Log.WARN)
 
     super(openIdConfig)
     this.storePrefix = storePrefix
@@ -109,6 +112,7 @@ export class UserManager extends OidcUserManager {
     this.store = options.store
     this.ability = options.ability
     this.language = options.language
+    this.userStore = options.userStore
   }
 
   /**
@@ -145,7 +149,7 @@ export class UserManager extends OidcUserManager {
   }
 
   updateContext(accessToken: string, fetchUserData: boolean): Promise<void> {
-    const userKnown = !!this.store.getters.user.id
+    const userKnown = !!this.userStore.user
     const accessTokenChanged = this.store.getters['runtime/auth/accessToken'] !== accessToken
     if (!accessTokenChanged) {
       return this.updateAccessTokenPromise
@@ -167,7 +171,7 @@ export class UserManager extends OidcUserManager {
 
       if (!userKnown) {
         await this.fetchUserInfo(accessToken)
-        await this.updateUserAbilities(this.store.getters.user)
+        await this.updateUserAbilities(this.userStore.user)
         this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
       }
     })()
@@ -184,11 +188,11 @@ export class UserManager extends OidcUserManager {
         'Accept-Language': this.language.current
       }
     }
-    if (this.store.getters.user.id) {
+    if (this.userStore.user) {
       ;(options as any).userInfo = {
-        id: this.store.getters.user.id,
-        'display-name': this.store.getters.user.displayname,
-        email: this.store.getters.user.email
+        id: this.userStore.user.onPremisesSamAccountName,
+        'display-name': this.userStore.user.displayName,
+        email: this.userStore.user.mail
       }
     }
 
@@ -196,39 +200,20 @@ export class UserManager extends OidcUserManager {
   }
 
   private async fetchUserInfo(accessToken: string): Promise<void> {
-    const [login] = await Promise.all([
-      this.clientService.owncloudSdk.getCurrentUser(),
-      this.fetchCapabilities()
-    ])
+    await this.fetchCapabilities()
 
-    let role, graphUser, userGroups
+    const graphClient = this.clientService.graphAuthenticated
+    const [graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
+    const role = await this.fetchRole({ graphUser, roles })
 
-    // start the network request here and let it run in parallel to the next calls,
-    // until awaiting the promise execution further below
-    const userPromise = this.clientService.owncloudSdk.users.getUser(login.id)
-
-    if (this.store.getters.capabilities.spaces?.enabled) {
-      const graphClient = this.clientService.graphAuthenticated
-      let roles
-      ;[graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
-      this.store.commit('SET_ROLES', roles)
-
-      role = await this.fetchRole({ graphUser, roles })
-    } else {
-      userGroups = await this.clientService.owncloudSdk.users.getUserGroups(login.id)
-    }
-
-    const user = await userPromise
-
-    this.store.commit('SET_USER', {
-      id: login.id,
-      uuid: graphUser?.data?.id || '',
-      username: login.username || login.id,
-      displayname: user.displayname || login['display-name'],
-      email: login?.email || user?.email || '',
-      groups: graphUser?.data?.memberOf || userGroups || [],
-      role,
-      language: graphUser?.data?.preferredLanguage || ''
+    this.userStore.setUser({
+      id: graphUser.data.id,
+      onPremisesSamAccountName: graphUser.data.onPremisesSamAccountName,
+      displayName: graphUser.data.displayName,
+      mail: graphUser.data.mail,
+      memberOf: graphUser.data.memberOf,
+      appRoleAssignments: role ? [role] : [],
+      preferredLanguage: graphUser.data.preferredLanguage || ''
     })
 
     if (graphUser?.data?.preferredLanguage) {
@@ -237,10 +222,6 @@ export class UserManager extends OidcUserManager {
         languageSetting: graphUser.data.preferredLanguage
       })
       this.initializeOwnCloudSdk(accessToken)
-    }
-
-    if (!this.store.getters.capabilities.spaces?.enabled && user.quota) {
-      this.store.commit('SET_QUOTA', user.quota)
     }
   }
 
@@ -323,13 +304,13 @@ export class UserManager extends OidcUserManager {
     return user
   }
 
-  private async fetchPermissions({ user }): Promise<any> {
+  private async fetchPermissions({ user }: { user: OcUser }): Promise<any> {
     const httpClient = this.clientService.httpAuthenticated
     const oC10DefaultPermissions = ['PublicLink.Write.all']
     try {
       const {
         data: { permissions }
-      } = await httpClient.post('/api/v0/settings/permissions-list', { account_uuid: user.uuid })
+      } = await httpClient.post('/api/v0/settings/permissions-list', { account_uuid: user.id })
       return permissions || oC10DefaultPermissions
     } catch (e) {
       console.error(e)
@@ -337,7 +318,7 @@ export class UserManager extends OidcUserManager {
     }
   }
 
-  private async updateUserAbilities(user) {
+  private async updateUserAbilities(user: OcUser) {
     const permissions = await this.fetchPermissions({ user })
     const abilities = getAbilities(permissions)
     this.ability.update(abilities)

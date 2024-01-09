@@ -23,6 +23,7 @@ export interface OptionsConfiguration {
   loginUrl?: string
   contextHelpersReadMore?: boolean
   contextHelpers?: boolean
+  topCenterNotifications?: boolean
   openAppsInTab?: boolean
   openLinksWithDefaultApp?: boolean
   tokenStorageLocal?: boolean

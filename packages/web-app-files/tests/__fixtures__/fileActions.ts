@@ -56,19 +56,6 @@ export const editors = [
   }
 ]
 
-const sideBars = [
-  {
-    app: 'details',
-    enabled: jest.fn(),
-    icon: 'information'
-  },
-  {
-    app: 'actions',
-    enabled: jest.fn(),
-    icon: 'information'
-  }
-]
-
 export const apps = {
   customFileListIndicators: [],
   file: {
@@ -76,7 +63,6 @@ export const apps = {
     path: ''
   },
   fileEditors: editors,
-  fileSideBars: sideBars,
   newFileHandlers: editors,
   meta
 }

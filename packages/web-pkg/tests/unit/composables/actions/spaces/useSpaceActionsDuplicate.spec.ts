@@ -11,6 +11,7 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
+import { useMessages } from '../../../../../src/composables/piniaStores'
 
 const spaces = [
   mock<SpaceResource>({
@@ -94,10 +95,11 @@ describe('restore', () => {
     it('should show error message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
+        setup: async ({ duplicateSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockRejectedValue(new Error())
           await duplicateSpace(spaces[0])
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -126,7 +128,8 @@ describe('restore', () => {
           expect(
             storeOptions.modules.runtime.modules.spaces.mutations.UPSERT_SPACE
           ).toHaveBeenCalled()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalled()
         }
       })
     })

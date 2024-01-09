@@ -5,80 +5,20 @@ import { mock } from 'jest-mock-extended'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 
-jest.mock('@vueuse/core', () => ({
-  useClipboard: jest.fn().mockReturnValue({ copy: jest.fn() })
-}))
-
-const mockStore = {
-  getters: {
-    capabilities: {
-      files_sharing: {
-        public: {
-          default_permissions: 1,
-          password: {
-            enforced_for: {
-              read_only: false
-            }
-          }
-        }
-      }
-    }
-  },
-  state: {
-    user: {
-      capabilities: {
-        files_sharing: {
-          public: {
-            default_permissions: 1,
-            expire_date: {
-              enforced: true,
-              days: 5
-            },
-            password: {
-              enforced_for: {
-                read_only: false
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  dispatch: jest.fn(() => Promise.resolve({ url: '' }))
-}
-
-const returnBitmask = 1
-jest.mock('@ownclouders/web-client/src/helpers/share', () => ({
-  ...jest.requireActual('@ownclouders/web-client/src/helpers/share'),
-  LinkShareRoles: {
-    getByName: jest.fn().mockReturnValue({ bitmask: jest.fn(() => returnBitmask) })
-  },
-  linkRoleViewerFolder: { name: 'viewer' }
-}))
-
 describe('getDefaultLinkPermissions', () => {
   it('returns internal if user is not allowed to create public links', () => {
     const permissions = getDefaultLinkPermissions({
       ability: mock<Ability>({ can: () => false }),
-      store: mockStore as any
+      defaultPermissionsCapability: 1
     })
     expect(permissions).toBe(SharePermissionBit.Internal)
   })
   it.each([SharePermissionBit.Internal, SharePermissionBit.Read])(
     'returns the defined default permissions from the capabilities if user is allowed to create public links',
     (defaultPermissions) => {
-      const store = {
-        state: {
-          user: {
-            capabilities: {
-              files_sharing: { public: { default_permissions: defaultPermissions } }
-            }
-          }
-        }
-      }
       const permissions = getDefaultLinkPermissions({
         ability: mock<Ability>({ can: () => true }),
-        store: store as any
+        defaultPermissionsCapability: defaultPermissions
       })
       expect(permissions).toBe(defaultPermissions)
     }

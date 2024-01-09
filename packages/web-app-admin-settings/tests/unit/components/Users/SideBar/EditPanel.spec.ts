@@ -189,7 +189,7 @@ function getWrapper({
     wrapper: shallowMount(EditPanel, {
       props: {
         user: {
-          id: '1',
+          id: '2',
           displayName: 'jan',
           mail: 'jan@owncloud.com',
           passwordProfile: { password: '' },

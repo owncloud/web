@@ -71,6 +71,7 @@ import {
   eventBus,
   queryItemAsString,
   useClientService,
+  useMessages,
   useRouteQuery,
   useSideBar,
   useStore
@@ -94,6 +95,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const { showErrorMessage } = useMessages()
     const groups = ref([])
     const template = ref()
     const selectedGroups = ref([])
@@ -124,7 +126,7 @@ export default defineComponent({
       })
     })
 
-    const { actions: deleteActions } = useGroupActionsDelete({ store })
+    const { actions: deleteActions } = useGroupActionsDelete()
     const batchActions = computed(() => {
       return [...unref(deleteActions)].filter((item) =>
         item.isEnabled({ resources: unref(selectedGroups) })
@@ -151,9 +153,9 @@ export default defineComponent({
         return updatedGroup
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to edit group'),
-          error
+          errors: [error]
         })
       }
     }

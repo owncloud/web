@@ -1,3 +1,4 @@
+/** @deprecated */
 export interface User {
   id?: string
   uuid?: string

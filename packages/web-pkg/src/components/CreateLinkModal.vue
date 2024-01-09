@@ -122,14 +122,14 @@
       class="link-modal-cancel oc-modal-body-actions-cancel oc-ml-s"
       appearance="outline"
       variation="passive"
-      @click="cancel"
+      @click="$emit('cancel')"
       >{{ $gettext('Cancel') }}
     </oc-button>
     <oc-button
       class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
       appearance="filled"
       variation="primary"
-      @click="confirm"
+      @click="$emit('confirm')"
       >{{ $gettext('Share') }}
     </oc-button>
   </div>
@@ -156,13 +156,12 @@ import {
   useCapabilityFilesSharingPublicCanContribute,
   useCapabilityFilesSharingPublicCanEdit,
   useCapabilityFilesSharingPublicPasswordEnforcedFor,
-  useLoadingService,
   usePasswordPolicyService,
-  useStore,
   useEmbedMode,
   useExpirationRules,
   useDefaultLinkPermissions,
-  useCreateLink
+  useCreateLink,
+  Modal
 } from '../composables'
 import { formatRelativeDateFromDateTime } from '../helpers'
 import {
@@ -179,8 +178,9 @@ import {
 import { Resource } from '@ownclouders/web-client'
 
 export default defineComponent({
-  name: 'CreatePublicLinksModal',
+  name: 'CreateLinkModal',
   props: {
+    modal: { type: Object as PropType<Modal>, required: true },
     resources: { type: Array as PropType<Resource[]>, required: true },
     space: { type: Object as PropType<SpaceResource>, default: undefined },
     isQuickLink: { type: Boolean, default: false },
@@ -189,10 +189,9 @@ export default defineComponent({
       default: undefined
     }
   },
-  setup(props) {
-    const store = useStore()
+  emits: ['cancel', 'confirm'],
+  setup(props, { expose }) {
     const { $gettext, current: currentLanguage } = useGettext()
-    const loadingService = useLoadingService()
     const ability = useAbility()
     const passwordPolicyService = usePasswordPolicyService()
     const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
@@ -271,31 +270,29 @@ export default defineComponent({
     })
 
     const createLinks = () => {
-      return loadingService.addTask(() =>
-        Promise.allSettled<Share>(
-          props.resources.map((resource) =>
-            createLink({
-              resource,
-              space: props.space,
-              quicklink: props.isQuickLink,
-              permissions: unref(selectedRole).bitmask(false),
-              password: unref(password).value,
-              expireDate: unref(selectedExpiry)
-            })
-          )
+      return Promise.allSettled<Share>(
+        props.resources.map((resource) =>
+          createLink({
+            resource,
+            space: props.space,
+            quicklink: props.isQuickLink,
+            permissions: unref(selectedRole).bitmask(false),
+            password: unref(password).value,
+            expireDate: unref(selectedExpiry)
+          })
         )
       )
     }
 
-    const confirm = async () => {
+    const onConfirm = async () => {
       if (!unref(selectedRoleIsInternal)) {
         if (unref(passwordEnforced) && !unref(password).value) {
           password.error = $gettext('Password must not be empty')
-          return
+          return Promise.reject()
         }
 
         if (!passwordPolicy.check(unref(password).value)) {
-          return
+          return Promise.reject()
         }
       }
 
@@ -325,19 +322,15 @@ export default defineComponent({
 
       if (userFacingErrors.length) {
         password.error = $gettext(userFacingErrors[0].message)
-        return
+        return Promise.reject()
       }
 
       if (props.callbackFn) {
         props.callbackFn(result)
       }
-
-      return store.dispatch('hideModal')
     }
 
-    const cancel = () => {
-      return store.dispatch('hideModal')
-    }
+    expose({ onConfirm })
 
     const isSelectedRole = (role: ShareRole) => {
       return unref(selectedRole)?.bitmask(false) === role.bitmask(false)
@@ -387,8 +380,9 @@ export default defineComponent({
       isSelectedRole,
       updateSelectedRole,
       updatePassword,
-      confirm,
-      cancel
+
+      // unit tests
+      onConfirm
     }
   }
 })

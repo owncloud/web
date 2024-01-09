@@ -4,14 +4,16 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { ReadmeContentModal } from '../../../components'
+import { useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { dispatchModal } = useModals()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
 
   const handler = ({ resources }: SpaceActionOptions) => {
-    return store.dispatch('createModal', {
-      variation: 'passive',
+    dispatchModal({
       title: $gettext('Edit description for space %{name}', {
         name: resources[0].name
       }),
@@ -33,7 +35,7 @@ export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any>
           return false
         }
 
-        if (!resources[0].canEditReadme({ user: store.getters.user })) {
+        if (!resources[0].canEditReadme({ user: userStore.user })) {
           return false
         }
 

@@ -1,23 +1,20 @@
 import { computed } from 'vue'
-import { Store } from 'vuex'
-import { eventBus, useLoadingService } from '@ownclouders/web-pkg'
-import { useClientService, useStore } from '@ownclouders/web-pkg'
+import { eventBus, useMessages, useModals } from '@ownclouders/web-pkg'
+import { useClientService } from '@ownclouders/web-pkg'
 import { GroupAction, GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { Group } from '@ownclouders/web-client/src/generated'
 
-export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
-  store = store || useStore()
+export const useGroupActionsDelete = () => {
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
+  const { dispatchModal } = useModals()
 
-  const deleteGroups = async (groups) => {
+  const deleteGroups = async (groups: Group[]) => {
     const graphClient = clientService.graphAuthenticated
     const promises = groups.map((group) => graphClient.groups.deleteGroup(group.id))
-
-    const results = await loadingService.addTask(() => {
-      return Promise.allSettled(promises)
-    })
+    const results = await Promise.allSettled(promises)
 
     const succeeded = results.filter((r) => r.status === 'fulfilled')
     if (succeeded.length) {
@@ -31,7 +28,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: succeeded.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title })
+      showMessage({ title })
     }
 
     const failed = results.filter((r) => r.status === 'rejected')
@@ -48,13 +45,12 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title,
         errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
       })
     }
 
-    store.dispatch('hideModal')
     eventBus.publish('app.admin-settings.list.load')
   }
 
@@ -63,7 +59,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
       return
     }
 
-    const modal = {
+    dispatchModal({
       variation: 'danger',
       title: $ngettext(
         'Delete group "%{group}"?',
@@ -74,7 +70,6 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
           groupCount: resources.length.toString()
         }
       ),
-      cancelText: $gettext('Cancel'),
       confirmText: $gettext('Delete'),
       message: $ngettext(
         'Are you sure you want to delete this group?',
@@ -85,11 +80,8 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
         }
       ),
       hasInput: false,
-      onCancel: () => store.dispatch('hideModal'),
       onConfirm: () => deleteGroups(resources)
-    }
-
-    store.dispatch('createModal', modal)
+    })
   }
 
   const actions = computed((): GroupAction[] => [

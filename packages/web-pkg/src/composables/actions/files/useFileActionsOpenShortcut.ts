@@ -10,11 +10,12 @@ import { FileAction, FileActionOptions } from '../types'
 import { useIsSearchActive } from '../helpers'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Store } from 'vuex'
 import { useClientService } from '../../clientService'
 import DOMPurify from 'dompurify'
+import { useMessages } from '../../piniaStores'
 
-export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsOpenShortcut = () => {
+  const { showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
@@ -51,9 +52,9 @@ export const useFileActionsOpenShortcut = ({ store }: { store?: Store<any> } = {
       window.open(url)
     } catch (e) {
       console.error(e)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to open shortcut'),
-        error: e
+        errors: [e]
       })
     }
   }
