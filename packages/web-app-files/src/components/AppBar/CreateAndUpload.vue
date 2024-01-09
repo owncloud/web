@@ -193,6 +193,7 @@ import {
   useFileActions,
   useFileActionsCreateNewShortcut,
   useMessages,
+  useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
@@ -266,6 +267,7 @@ export default defineComponent({
     const clientService = useClientService()
     const store = useStore()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
     const messageStore = useMessages()
     const route = useRoute()
     const language = useGettext()
@@ -283,6 +285,7 @@ export default defineComponent({
         space: props.space,
         store,
         userStore,
+        spacesStore,
         messageStore,
         uppyService
       })
@@ -376,12 +379,14 @@ export default defineComponent({
 
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
         if (unref(hasSpaces) && !isPublicSpaceResource(props.space)) {
-          const spaces = store.getters['runtime/spaces/spaces']
-          const isOwnSpace = spaces.find((space) => space.id === spaceId)?.isOwner(userStore.user)
+          const isOwnSpace = spacesStore.spaces
+            .find(({ id }) => id === spaceId)
+            ?.isOwner(userStore.user)
+
           if (driveType === 'project' || isOwnSpace) {
             const client = clientService.graphAuthenticated
-            const driveResponse = await client.drives.getDrive(spaceId.toString())
-            store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+            const driveResponse = await client.drives.getDrive(spaceId)
+            spacesStore.updateSpaceField({
               id: driveResponse.data.id,
               field: 'spaceQuota',
               value: driveResponse.data.quota
@@ -456,7 +461,6 @@ export default defineComponent({
     ...mapGetters(['capabilities', 'configuration', 'newFileHandlers']),
     ...mapGetters('Files', ['files', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/ancestorMetaData', ['ancestorMetaData']),
-    ...mapGetters('runtime/spaces', ['spaces']),
 
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0

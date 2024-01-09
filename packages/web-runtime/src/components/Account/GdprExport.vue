@@ -35,10 +35,9 @@ import { computed, defineComponent, onMounted, onUnmounted, ref, unref } from 'v
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
-import { useClientService, useMessages, useStore, useUserStore } from '@ownclouders/web-pkg'
+import { useClientService, useMessages, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
 import { useDownloadFile } from '@ownclouders/web-pkg'
 import { formatDateFromJSDate } from '@ownclouders/web-pkg'
-import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 const GDPR_EXPORT_FILE_NAME = '.personal_data_export.json'
 const POLLING_INTERVAL = 30000
@@ -46,9 +45,9 @@ const POLLING_INTERVAL = 30000
 export default defineComponent({
   name: 'GdprExport',
   setup() {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
     const { $gettext, current: currentLanguage } = useGettext()
     const clientService = useClientService()
     const { downloadFile } = useDownloadFile()
@@ -58,13 +57,9 @@ export default defineComponent({
     const exportFile = ref<Resource>()
     const exportInProgress = ref(false)
 
-    const personalSpace = computed(() => {
-      return store.getters['runtime/spaces/spaces'].find((s) => isPersonalSpaceResource(s))
-    })
-
     const loadExportTask = useTask(function* () {
       try {
-        const resource = yield clientService.webdav.getFileInfo(unref(personalSpace), {
+        const resource = yield clientService.webdav.getFileInfo(spacesStore.personalSpace, {
           path: `/${GDPR_EXPORT_FILE_NAME}`
         })
 

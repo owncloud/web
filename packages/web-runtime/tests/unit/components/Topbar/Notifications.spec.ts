@@ -241,7 +241,6 @@ function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
   localMocks.$clientService.owncloudSdk = clientMock
 
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
   const store = createStore(storeOptions)
   return {
     mocks: localMocks,
@@ -249,7 +248,7 @@ function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
     wrapper: shallowMount(Notifications, {
       global: {
         renderStubDefaultSlot: true,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { spacesState: { spaces } } }), store],
         mocks: localMocks,
         provide: localMocks,
         stubs: { 'avatar-image': true, OcButton: false }

@@ -318,7 +318,6 @@ function getWrapper({
   spaces = []
 } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
   storeOptions.getters.capabilities.mockReturnValue(capabilities)
   storeOptions.getters.configuration.mockReturnValue({
     server: 'http://server/address/',
@@ -353,7 +352,10 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(account, {
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { userState: { user }, spacesState: { spaces } } }),
+          store
+        ],
         mocks,
         provide: mocks,
         stubs: {

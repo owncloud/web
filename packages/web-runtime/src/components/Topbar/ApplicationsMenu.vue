@@ -63,6 +63,7 @@ import {
   useClientService,
   useFileActions,
   useGetMatchingSpace,
+  useSpacesStore,
   useStore
 } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -85,7 +86,8 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const appIconKey = ref('')
-    const { getMatchingSpace, getPersonalSpace } = useGetMatchingSpace()
+    const { getMatchingSpace } = useGetMatchingSpace()
+    const spacesStore = useSpacesStore()
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -104,7 +106,7 @@ export default defineComponent({
       let filePath = unref(currentFolder)?.path
 
       if (!destinationSpace || !unref(currentFolder).canCreate()) {
-        destinationSpace = getPersonalSpace()
+        destinationSpace = spacesStore.personalSpace
         destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
         filePath = ''
       }

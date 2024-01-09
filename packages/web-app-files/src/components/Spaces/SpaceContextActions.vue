@@ -56,13 +56,13 @@ export default defineComponent({
     })
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
-    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: disableActions } = useSpaceActionsDisable()
     const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
     const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
-    const { actions: renameActions } = useSpaceActionsRename({ store })
-    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
+    const { actions: renameActions } = useSpaceActionsRename()
+    const { actions: restoreActions } = useSpaceActionsRestore()
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
@@ -70,7 +70,6 @@ export default defineComponent({
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
-      store,
       spaceImageInput
     })
 

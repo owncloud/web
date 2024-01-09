@@ -8,7 +8,7 @@ import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
-import { defineWebApplication, useUserStore } from '@ownclouders/web-pkg'
+import { defineWebApplication, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
 import store from './store'
 import { extensions } from './extensions'
 import { buildRoutes } from '@ownclouders/web-pkg'
@@ -16,11 +16,7 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import {
-  SpaceResource,
-  isPersonalSpaceResource,
-  isShareSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -40,6 +36,7 @@ const appInfo = {
   }
 }
 export const navItems = (context): AppNavigationItem[] => {
+  const spacesStores = useSpacesStore()
   const userStore = useUserStore()
 
   return [
@@ -52,16 +49,13 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/spaces/personal`
       },
       isActive: () => {
-        return (
-          !context.$store.getters['runtime/spaces/currentSpace'] ||
-          context.$store.getters['runtime/spaces/currentSpace']?.isOwner(userStore.user)
-        )
+        return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
       enabled(capabilities) {
         if (!capabilities.spaces?.enabled) {
           return true
         }
-        return !!context?.$store?.getters['runtime/spaces/spaces'].find(
+        return !!spacesStores.spaces.find(
           (drive) => isPersonalSpaceResource(drive) && drive.isOwner(userStore.user)
         )
       },
@@ -85,7 +79,7 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/shares`
       },
       isActive: () => {
-        const space = context.$store.getters['runtime/spaces/currentSpace'] as SpaceResource
+        const space = spacesStores.currentSpace
         // last check is when fullShareOwnerPaths is enabled
         return !space || isShareSpaceResource(space) || !space?.isOwner(userStore.user)
       },

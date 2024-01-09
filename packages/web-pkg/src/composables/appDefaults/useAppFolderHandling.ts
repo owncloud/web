@@ -10,6 +10,7 @@ import { useFileRouteReplace } from '../router/useFileRouteReplace'
 import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
 import { isMountPointSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useSpacesStore } from '../piniaStores'
 
 interface AppFolderHandlingOptions {
   store: Store<any>
@@ -37,6 +38,7 @@ export function useAppFolderHandling({
   const { replaceInvalidFileRoute } = useFileRouteReplace()
   const { getFileInfo } = useAppFileHandling({ clientService })
   const authService = useAuthService()
+  const spacesStore = useSpacesStore()
 
   const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
     if (store.getters.activeFile && store.getters.activeFile.path !== '') {
@@ -59,7 +61,7 @@ export function useAppFolderHandling({
         fileId: unref(context.itemId)
       })
 
-      const isSpaceRoot = store.getters['runtime/spaces/spaces'].some(
+      const isSpaceRoot = spacesStore.spaces.some(
         (s) => isMountPointSpaceResource(s) && s.root.remoteItem.id === pathResource.id
       )
 

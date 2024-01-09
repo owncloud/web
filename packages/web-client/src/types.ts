@@ -58,6 +58,7 @@ export type OwnCloudSdk = {
     shareFileWithGroup(...args): any
     shareFileWithUser(...args): any
     shareFileWithLink(...args): any
+    shareSpace(...args): any
     deleteShare(...args): any
     updateShare(...args): any
     notifyShare(...args): any

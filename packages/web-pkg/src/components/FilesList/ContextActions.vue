@@ -68,8 +68,8 @@ export default defineComponent({
     const { actions: pasteActions } = useFileActionsPaste({ store })
     const { actions: renameActions } = useFileActionsRename({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
-    const { actions: setSpaceImageActions } = useFileActionsSetImage({ store })
-    const { actions: setSpaceReadmeActions } = useFileActionsSetReadme({ store })
+    const { actions: setSpaceImageActions } = useFileActionsSetImage()
+    const { actions: setSpaceReadmeActions } = useFileActionsSetReadme()
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource({
       store

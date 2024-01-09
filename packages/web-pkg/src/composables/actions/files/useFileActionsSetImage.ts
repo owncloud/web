@@ -1,19 +1,16 @@
 import { isLocationSpacesActive } from '../../../router'
-import { Store } from 'vuex'
 import { usePreviewService } from '../../previewService'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import { useMessages, useUserStore } from '../../piniaStores'
+import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
 
-export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsSetImage = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
@@ -21,6 +18,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
+  const spacesStore = useSpacesStore()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const graphClient = clientService.graphAuthenticated
@@ -63,7 +61,7 @@ export const useFileActionsSetImage = ({ store }: { store?: Store<any> } = {}) =
         {}
       )
 
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+      spacesStore.updateSpaceField({
         id: storageId,
         field: 'spaceImageData',
         value: buildSpace(updatedDriveData).spaceImageData

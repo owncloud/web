@@ -1,17 +1,14 @@
 import { unref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Store } from 'vuex'
 import { useSpaceHelpers } from '../../spaces'
 import { useClientService } from '../../clientService'
 import { useAbility } from '../../ability'
 import { useRoute } from '../../router'
-import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { SpaceResource } from '@ownclouders/web-client'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 
-export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useSpaceActionsRename = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext } = useGettext()
@@ -20,6 +17,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
   const route = useRoute()
   const { checkSpaceNameModalInput } = useSpaceHelpers()
   const { dispatchModal } = useModals()
+  const spacesStore = useSpacesStore()
 
   const renameSpace = (space: SpaceResource, name: string) => {
     const graphClient = clientService.graphAuthenticated
@@ -29,11 +27,7 @@ export const useSpaceActionsRename = ({ store }: { store?: Store<any> } = {}) =>
         if (unref(route).name === 'admin-settings-spaces') {
           space.name = name
         }
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-          id: space.id,
-          field: 'name',
-          value: name
-        })
+        spacesStore.updateSpaceField({ id: space.id, field: 'name', value: name })
         showMessage({ title: $gettext('Space name was changed successfully') })
       })
       .catch((error) => {

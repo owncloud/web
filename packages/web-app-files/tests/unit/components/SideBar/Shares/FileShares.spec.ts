@@ -219,15 +219,17 @@ function getWrapper({
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
-  storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
-    () => spaceMembers
-  )
   storeOptions.modules.Files.getters.outgoingCollaborators.mockReturnValue(collaborators)
   const store = createStore(storeOptions)
   return {
     wrapper: mountType(FileShares, {
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { userState: { user }, spacesState: { spaceMembers } }
+          }),
+          store
+        ],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ name: currentRouteName })
         }),

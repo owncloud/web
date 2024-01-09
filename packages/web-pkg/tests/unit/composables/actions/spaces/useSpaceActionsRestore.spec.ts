@@ -2,10 +2,8 @@ import { useSpaceActionsRestore } from '../../../../../src/composables/actions/s
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultComponentMocks,
   mockAxiosResolve,
-  defaultStoreMockOptions,
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
@@ -134,18 +132,12 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useSpaceActionsRestore>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
   })
@@ -153,13 +145,12 @@ function getWrapper({
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsRestore({ store })
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        const instance = useSpaceActionsRestore()
+        setup(instance, { clientService: mocks.$clientService })
       },
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: {
           piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
         }

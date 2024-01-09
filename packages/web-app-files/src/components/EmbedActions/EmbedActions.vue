@@ -33,10 +33,12 @@ import {
   useAbility,
   useEmbedMode,
   useFileActionsCreateLink,
+  useSpacesStore,
   useStore
 } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default {
   setup() {
@@ -44,8 +46,9 @@ export default {
     const ability = useAbility()
     const language = useGettext()
     const { isLocationPicker, postMessage } = useEmbedMode()
+    const spacesStore = useSpacesStore()
+    const { currentSpace: space } = storeToRefs(spacesStore)
 
-    const space = computed<SpaceResource>(() => store.getters['runtime/spaces/currentSpace'])
     const selectedFiles = computed<Resource[]>(() => {
       if (isLocationPicker.value) {
         return [store.getters['Files/currentFolder']]

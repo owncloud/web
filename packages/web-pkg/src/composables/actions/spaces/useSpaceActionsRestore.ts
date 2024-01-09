@@ -1,18 +1,15 @@
 import { SpaceResource } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
-import { Store } from 'vuex'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 
-export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useSpaceActionsRestore = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
@@ -21,6 +18,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
   const loadingService = useLoadingService()
   const route = useRoute()
   const { dispatchModal } = useModals()
+  const spacesStore = useSpacesStore()
 
   const filterResourcesToRestore = (resources): SpaceResource[] => {
     return resources.filter(
@@ -46,11 +44,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
             space.disabled = false
             space.spaceQuota = updatedSpace.data.quota
           }
-          store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-            id: space.id,
-            field: 'disabled',
-            value: false
-          })
+          spacesStore.updateSpaceField({ id: space.id, field: 'disabled', value: false })
           return true
         })
     )

@@ -2,7 +2,12 @@ import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { FileAction, useFileActionsCreateNewFile, useRequest } from '@ownclouders/web-pkg'
+import {
+  FileAction,
+  useFileActionsCreateNewFile,
+  useRequest,
+  useSpacesStore
+} from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
   createStore,
@@ -140,13 +145,12 @@ describe('CreateAndUpload component', () => {
       const spaces = [
         mock<SpaceResource>({ id: file.meta.spaceId, isOwner: () => driveType === 'personal' })
       ]
-      const { wrapper, mocks, storeOptions } = getWrapper({ spaces })
+      const { wrapper, mocks } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
       await wrapper.vm.onUploadComplete({ successful: [file] })
-      expect(
-        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
-      ).toHaveBeenCalledTimes(updated)
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
     })
     it('reloads the file list if files were uploaded to the current path', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
@@ -221,7 +225,6 @@ function getWrapper({
   storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
   const store = createStore(storeOptions)
   const mocks = {
@@ -238,7 +241,10 @@ function getWrapper({
         renderStubDefaultSlot: true,
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { spacesState: { spaces: spaces as any } } }),
+          store
+        ]
       }
     })
   }

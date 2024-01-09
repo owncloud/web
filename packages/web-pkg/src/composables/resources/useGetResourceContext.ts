@@ -1,6 +1,5 @@
 import {
   Resource,
-  SpaceResource,
   buildShareSpaceResource,
   isMountPointSpaceResource,
   OCM_PROVIDER_ID
@@ -12,21 +11,21 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useConfigurationManager } from '../configuration'
 import { useLoadFileInfoById } from './useLoadFileInfoById'
 import { useCapabilitySpacesEnabled } from '../capability'
-import { useGetMatchingSpace } from '../spaces/useGetMatchingSpace'
+import { useSpacesStore } from '../piniaStores'
 
 export const useGetResourceContext = () => {
   const store = useStore()
   const clientService = useClientService()
   const configurationManager = useConfigurationManager()
   const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
-  const { getPersonalSpace } = useGetMatchingSpace()
+  const spacesStore = useSpacesStore()
 
   const hasSpaces = useCapabilitySpacesEnabled(store)
-  const spaces = computed<SpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
+  const spaces = computed(() => spacesStore.spaces)
 
   const getMatchingSpaceByFileId = (id: Resource['id']) => {
     if (!unref(hasSpaces)) {
-      return getPersonalSpace()
+      return spacesStore.personalSpace
     }
     return unref(spaces).find((space) => id.toString().startsWith(space.id.toString()))
   }
@@ -50,9 +49,7 @@ export const useGetResourceContext = () => {
 
     // no matching space found => the file doesn't lie in own spaces => it's a share.
     // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
-    await store.dispatch('runtime/spaces/loadMountPoints', {
-      graphClient: clientService.graphAuthenticated
-    })
+    await spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
 
     let mountPoint = getMatchingMountPoint(id)
     resource = await loadFileInfoByIdTask.perform(id)

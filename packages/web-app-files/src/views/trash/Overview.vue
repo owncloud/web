@@ -74,6 +74,7 @@ import {
   defaultFuseOptions,
   useClientService,
   useRouter,
+  useSpacesStore,
   useStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -97,6 +98,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
     const router = useRouter()
     const { $gettext } = useGettext()
     const clientService = useClientService()
@@ -107,8 +109,8 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
 
-    const spaces = computed<SpaceResource[]>(() =>
-      store.getters['runtime/spaces/spaces'].filter(
+    const spaces = computed(() =>
+      spacesStore.spaces.filter(
         (s: SpaceResource) =>
           (isPersonalSpaceResource(s) && s.isOwner(userStore.user)) || isProjectSpaceResource(s)
       )
@@ -117,9 +119,7 @@ export default defineComponent({
     const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-        graphClient: clientService.graphAuthenticated
-      })
+      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 

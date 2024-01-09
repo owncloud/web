@@ -11,7 +11,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
-import { useMessages, useModals } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
@@ -25,6 +25,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const hasCreatePermission = computed(() => can('create-all', 'Drive'))
   const { dispatchModal } = useModals()
   const configurationManager = useConfigurationManager()
+  const spacesStore = useSpacesStore()
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
@@ -35,7 +36,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
 
     try {
       const createdSpace = await createSpace(spaceName)
-      store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
+      spacesStore.upsertSpace(createdSpace)
 
       if (resources.length === 1 && resources[0].isFolder) {
         //If a single folder is selected we copy it's content to the Space's root folder

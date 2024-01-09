@@ -126,7 +126,7 @@ import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
 import filesize from 'filesize'
 import { authService } from '../../services/auth'
-import { useGetMatchingSpace, useRoute, useThemeStore, useUserStore } from '@ownclouders/web-pkg'
+import { useRoute, useSpacesStore, useThemeStore, useUserStore } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -141,7 +141,7 @@ export default defineComponent({
     const route = useRoute()
     const userStore = useUserStore()
     const themeStore = useThemeStore()
-    const { getPersonalSpace } = useGetMatchingSpace()
+    const spacesStore = useSpacesStore()
 
     const { user } = storeToRefs(userStore)
 
@@ -156,7 +156,7 @@ export default defineComponent({
     const privacyUrl = computed(() => themeStore.currentTheme.common.urls.privacy)
 
     const quota = computed(() => {
-      return getPersonalSpace()?.spaceQuota
+      return spacesStore.personalSpace?.spaceQuota
     })
 
     return {

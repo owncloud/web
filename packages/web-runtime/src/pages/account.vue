@@ -148,9 +148,9 @@ import {
   useCapabilityCoreSSE,
   useCapabilityGraphPersonalDataExport,
   useClientService,
-  useGetMatchingSpace,
   useMessages,
   useModals,
+  useSpacesStore,
   useStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -178,7 +178,6 @@ export default defineComponent({
     const { $gettext } = language
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
-    const { getPersonalSpace } = useGetMatchingSpace()
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref<User>()
     const accountBundle = ref<SettingsBundle>()
@@ -187,6 +186,7 @@ export default defineComponent({
     const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
     const sseEnabled = useCapabilityCoreSSE()
     const { dispatchModal } = useModals()
+    const spacesStore = useSpacesStore()
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
@@ -198,9 +198,8 @@ export default defineComponent({
 
     const { user } = storeToRefs(userStore)
 
-    const personalSpace = computed(() => getPersonalSpace())
     const showGdprExport = computed(() => {
-      return unref(isPersonalDataExportEnabled) && unref(personalSpace)
+      return unref(isPersonalDataExportEnabled) && spacesStore.personalSpace
     })
 
     const loadValuesListTask = useTask(function* () {
@@ -338,10 +337,10 @@ export default defineComponent({
         }
 
         store.commit('SET_LANGUAGE', language.current)
-        if (unref(personalSpace)) {
+        if (spacesStore.personalSpace) {
           // update personal space name with new translation
-          store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-            id: unref(personalSpace).id,
+          spacesStore.updateSpaceField({
+            id: spacesStore.personalSpace.id,
             field: 'name',
             value: $gettext('Personal')
           })

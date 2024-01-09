@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
@@ -72,6 +72,7 @@ import {
   isLocationSpacesActive,
   useMessages,
   useModals,
+  useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
@@ -92,6 +93,9 @@ export default defineComponent({
     const userStore = useUserStore()
     const clientService = useClientService()
     const { dispatchModal } = useModals()
+    const spacesStore = useSpacesStore()
+    const { deleteSpaceMember } = spacesStore
+    const { spaceMembers } = storeToRefs(spacesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -101,6 +105,8 @@ export default defineComponent({
       configurationManager,
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
       dispatchModal,
+      spaceMembers,
+      deleteSpaceMember,
       ...useMessages()
     }
   },
@@ -113,7 +119,6 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('runtime/spaces', ['spaceMembers']),
 
     filteredSpaceMembers() {
       return this.filter(this.spaceMembers, this.filterTerm)
@@ -154,8 +159,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('runtime/spaces', ['deleteSpaceMember']),
-
     filter(collection, term) {
       if (!(term || '').trim()) {
         return collection

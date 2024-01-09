@@ -9,7 +9,7 @@ import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { Store } from 'vuex'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -20,6 +20,7 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   const clientService = useClientService()
   const route = useRoute()
   const { dispatchModal } = useModals()
+  const spacesStore = useSpacesStore()
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
     return resources.filter(
@@ -32,7 +33,7 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
     const promises = spaces.map((space) =>
       client.drives.deleteDrive(space.id.toString()).then(() => {
         store.commit('Files/REMOVE_FILES', [{ id: space.id }])
-        store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
+        spacesStore.removeSpace(space)
         return true
       })
     )

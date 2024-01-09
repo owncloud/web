@@ -10,7 +10,7 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { ResourceConflict } from './helpers/resource'
-import { MessageStore, UserStore, locationPublicLink } from '@ownclouders/web-pkg'
+import { MessageStore, SpacesStore, UserStore, locationPublicLink } from '@ownclouders/web-pkg'
 import { locationSpacesGeneric, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
@@ -23,6 +23,7 @@ export interface HandleUploadOptions {
   store: Store<any>
   userStore: UserStore
   messageStore: MessageStore
+  spacesStore: SpacesStore
   uppyService: UppyService
   id?: string
   space?: SpaceResource
@@ -53,6 +54,7 @@ export class HandleUpload extends BasePlugin {
   store: Store<any>
   userStore: UserStore
   messageStore: MessageStore
+  spacesStore: SpacesStore
   uppyService: UppyService
   quotaCheckEnabled: boolean
   directoryTreeCreateEnabled: boolean
@@ -72,6 +74,7 @@ export class HandleUpload extends BasePlugin {
     this.store = opts.store
     this.userStore = opts.userStore
     this.messageStore = opts.messageStore
+    this.spacesStore = opts.spacesStore
     this.uppyService = opts.uppyService
 
     this.quotaCheckEnabled = opts.quotaCheckEnabled ?? true
@@ -87,10 +90,6 @@ export class HandleUpload extends BasePlugin {
 
   get files(): Resource[] {
     return this.store.getters['Files/files']
-  }
-
-  get spaces(): SpaceResource[] {
-    return this.store.getters['runtime/spaces/spaces']
   }
 
   removeFilesFromUpload(filesToUpload: UppyResource[]) {
@@ -206,7 +205,9 @@ export class HandleUpload extends BasePlugin {
       }
 
       if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
-        targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
+        targetUploadSpace = this.spacesStore.spaces.find(
+          ({ id }) => id === uppyResource.meta.spaceId
+        )
       }
 
       if (

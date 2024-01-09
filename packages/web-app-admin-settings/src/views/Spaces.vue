@@ -163,9 +163,9 @@ export default defineComponent({
     }
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
-    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: disableActions } = useSpaceActionsDisable()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: restoreActions } = useSpaceActionsRestore()
 
     const batchActions = computed((): SpaceAction[] => {
       return [

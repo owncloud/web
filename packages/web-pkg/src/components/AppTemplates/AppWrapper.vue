@@ -53,7 +53,8 @@ import {
   useSelectedResources,
   useSideBar,
   useModals,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '../../composables'
 import {
   Action,
@@ -112,6 +113,7 @@ export default defineComponent({
     const { getResourceContext } = useGetResourceContext()
     const { selectedResources } = useSelectedResources({ store })
     const { dispatchModal } = useModals()
+    const spacesStore = useSpacesStore()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -333,7 +335,7 @@ export default defineComponent({
             )
             break
           case 507:
-            const space = store.getters['runtime/spaces/spaces'].find(
+            const space = spacesStore.spaces.find(
               (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
             )
             if (space) {

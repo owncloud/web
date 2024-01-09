@@ -164,7 +164,8 @@ import {
   SideBarPanel,
   SideBarPanelContext,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -203,6 +204,7 @@ export default defineComponent({
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -542,7 +544,7 @@ export default defineComponent({
 
       if (editUser.id === userStore.user.id) {
         // Load current user quota
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+        spacesStore.updateSpaceField({
           id: editUser.drive.id,
           field: 'spaceQuota',
           value: updateDriveResponse.data.quota

@@ -50,7 +50,8 @@ import {
   useActiveLocation,
   useExtensionRegistry,
   useSelectedResources,
-  useConfigurationManager
+  useConfigurationManager,
+  useSpacesStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -85,6 +86,7 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
     const configurationManager = useConfigurationManager()
+    const spacesStore = useSpacesStore()
 
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
@@ -202,7 +204,7 @@ export default defineComponent({
         }
 
         if (isProjectSpaceResource(resource)) {
-          store.dispatch('runtime/spaces/loadSpaceMembers', {
+          spacesStore.loadSpaceMembers({
             graphClient: clientService.graphAuthenticated,
             space: resource
           })
