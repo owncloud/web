@@ -104,7 +104,7 @@
     "url": "^0.11.3",
     "url-loader": "^4.1.1",
     "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
-    "vue": "3.4.4",
+    "vue": "3.3.8",
     "vue-inline-svg": "3.1.2",
     "vue-loader": "^17.4.2",
     "vue-router": "4.2.5",
