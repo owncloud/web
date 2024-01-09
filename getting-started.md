@@ -46,10 +46,6 @@ Depending on the backend you are using, there are sample config files provided i
 
 #### Options
 
-- `options.homeFolder` You can specify a folder that is used when the user navigates `home`. Navigating home gets triggered by clicking on the `All files`
-  menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
-  variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a
-  substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
 - `options.openAppsInTab` Configures whether apps and extensions generally should open in a new tab. Defaults to false.
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
   by this is the trash bin, as that doesn't allow showing previews at all.
