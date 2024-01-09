@@ -484,7 +484,7 @@ export default defineComponent({
       ...resourcesView,
       loadAvailableTagsTask,
       fileListHeaderY,
-      fullTextSearchEnabled: capabilityStore.searchContent?.enabled,
+      fullTextSearchEnabled: computed(() => capabilityStore.searchContent?.enabled),
       getMatchingSpace,
       availableTags,
       tagFilter,

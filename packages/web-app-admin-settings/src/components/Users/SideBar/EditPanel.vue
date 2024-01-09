@@ -121,6 +121,7 @@ import GroupSelect from '../GroupSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { AppRole, AppRoleAssignment, Group, User } from '@ownclouders/web-client/src/generated'
 import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -148,6 +149,7 @@ export default defineComponent({
   emits: ['confirm'],
   setup(props) {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const userStore = useUserStore()
 
@@ -178,7 +180,7 @@ export default defineComponent({
     }
 
     return {
-      maxQuota: capabilityStore.spacesMaxQuota,
+      maxQuota: capabilityRefs.spacesMaxQuota,
       isInputFieldReadOnly,
       isLoginInputDisabled,
       editUser,

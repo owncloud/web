@@ -450,6 +450,7 @@ export default defineComponent({
   ],
   setup(props, context) {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const configurationManager = useConfigurationManager()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { isLocationPicker } = useEmbedMode()
@@ -493,8 +494,8 @@ export default defineComponent({
       hasTags,
       disabledResources,
       isResourceDisabled,
-      hasShareJail: capabilityStore.spacesShareJail,
-      hasProjectSpaces: capabilityStore.spacesEnabled,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasProjectSpaces: capabilityRefs.spacesEnabled,
       userContextReady,
       getMatchingSpace,
       ...useResourceRouteResolver(

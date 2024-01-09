@@ -189,6 +189,7 @@ export default defineComponent({
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { dispatchModal } = useModals()
@@ -197,9 +198,7 @@ export default defineComponent({
     const { user } = storeToRefs(userStore)
 
     const sharedParentDir = computed(() => {
-      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
-        .split('/')
-        .pop()
+      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
     })
 
     const setDenyShare = (value) => {
@@ -237,8 +236,8 @@ export default defineComponent({
     return {
       changeSpaceMember,
       user,
-      hasResharing: capabilityStore.sharingResharing,
-      resharingDefault: capabilityStore.sharingResharingDefault,
+      hasResharing: capabilityRefs.sharingResharing,
+      resharingDefault: capabilityRefs.sharingResharingDefault,
       clientService,
       sharedParentDir,
       setDenyShare,

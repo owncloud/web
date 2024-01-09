@@ -129,6 +129,7 @@ export default defineComponent({
     const store = useStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { dispatchModal } = useModals()
@@ -182,10 +183,10 @@ export default defineComponent({
       memberListCollapsed,
       toggleMemberListCollapsed,
       currentUserIsMemberOfSpace,
-      hasProjectSpaces: capabilityStore.spacesProjects,
-      hasShareJail: capabilityStore.spacesShareJail,
-      hasResharing: capabilityStore.sharingResharing,
-      hasShareCanDenyAccess: capabilityStore.sharingDenyAccess,
+      hasProjectSpaces: capabilityRefs.spacesProjects,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasResharing: capabilityRefs.sharingResharing,
+      hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
       getSharedAncestor,
       configurationManager,
       dispatchModal,

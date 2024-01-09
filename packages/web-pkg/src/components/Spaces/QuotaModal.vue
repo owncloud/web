@@ -32,6 +32,7 @@ import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
 import { useStore } from '../../composables'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
@@ -66,6 +67,7 @@ export default defineComponent({
     const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { $gettext, $ngettext } = useGettext()
     const clientService = useClientService()
     const router = useRouter()
@@ -181,7 +183,7 @@ export default defineComponent({
       selectedOption,
       confirmButtonDisabled,
       changeSelectedQuotaOption,
-      maxQuota: capabilityStore.spacesMaxQuota,
+      maxQuota: capabilityRefs.spacesMaxQuota,
 
       // unit tests
       onConfirm

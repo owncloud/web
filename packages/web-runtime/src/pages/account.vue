@@ -185,6 +185,7 @@ export default defineComponent({
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
@@ -327,7 +328,7 @@ export default defineComponent({
           languageSetting: option.value
         })
 
-        if (unref(capabilityStore.supportSSE)) {
+        if (capabilityStore.supportSSE) {
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
         }
 
@@ -416,7 +417,7 @@ export default defineComponent({
       updateDisableEmailNotifications,
       updateViewOptionsWebDavDetails,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
-      isChangePasswordDisabled: capabilityStore.graphUsersChangeSelfPasswordDisabled,
+      isChangePasswordDisabled: capabilityRefs.graphUsersChangeSelfPasswordDisabled,
       showGdprExport,
       isSettingsServiceSupported,
       groupNames,

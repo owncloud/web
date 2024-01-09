@@ -197,11 +197,12 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const userStore = useUserStore()
-    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
     const { addSpaceMember } = spacesStore
     const { spaceMembers } = storeToRefs(spacesStore)
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -262,11 +263,11 @@ export default defineComponent({
 
     return {
       resource: inject<Resource>('resource'),
-      hasResharing: capabilityStore.sharingResharing,
-      resharingDefault: capabilityStore.sharingResharingDefault,
-      hasShareJail: capabilityStore.spacesShareJail,
-      hasRoleCustomPermissions: capabilityStore.sharingAllowCustom,
-      minSearchLength: capabilityStore.sharingSearchMinLength,
+      hasResharing: capabilityRefs.sharingResharing,
+      resharingDefault: capabilityRefs.sharingResharingDefault,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
+      minSearchLength: capabilityRefs.sharingSearchMinLength,
       isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
       spaceMembers,
       addSpaceMember,

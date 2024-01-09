@@ -233,6 +233,7 @@ import { useGettext } from 'vue3-gettext'
 import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Action, ResourceIcon } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -268,6 +269,7 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const messageStore = useMessages()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const route = useRoute()
     const language = useGettext()
     const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
@@ -433,8 +435,8 @@ export default defineComponent({
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
-      hasShareJail: capabilityStore.spacesShareJail,
-      hasSpaces: capabilityStore.spacesEnabled,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasSpaces: capabilityRefs.spacesEnabled,
       canUpload,
       currentFolder,
       createNewFileActions,

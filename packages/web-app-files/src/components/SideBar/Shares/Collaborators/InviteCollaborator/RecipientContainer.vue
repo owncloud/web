@@ -24,6 +24,7 @@ import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defineComponent } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   props: {
@@ -39,9 +40,10 @@ export default defineComponent({
   },
   setup() {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     return {
-      userProfilePicture: capabilityStore.sharingUserProfilePicture
+      userProfilePicture: capabilityRefs.sharingUserProfilePicture
     }
   },
   data(): { formattedRecipient: Recipient } {

@@ -181,6 +181,7 @@ import { diff } from 'deep-object-diff'
 import Mark from 'mark.js'
 import { format } from 'util'
 import { isEqual, isEmpty, omit } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'UsersView',
@@ -198,6 +199,7 @@ export default defineComponent({
     const route = useRoute()
     const { showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const userStore = useUserStore()
@@ -615,7 +617,7 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
-      maxQuota: capabilityStore.spacesMaxQuota,
+      maxQuota: capabilityRefs.spacesMaxQuota,
       template,
       selectedUsers,
       sideBarLoading,

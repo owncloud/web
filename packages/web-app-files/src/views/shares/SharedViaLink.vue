@@ -85,6 +85,7 @@ import { defineComponent, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGetMatchingSpace, useMutationSubscription } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -104,6 +105,7 @@ export default defineComponent({
 
   setup() {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
@@ -132,7 +134,7 @@ export default defineComponent({
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       getMatchingSpace,
-      hasProjectSpaces: capabilityStore.spacesProjects
+      hasProjectSpaces: capabilityRefs.spacesProjects
     }
   },
 

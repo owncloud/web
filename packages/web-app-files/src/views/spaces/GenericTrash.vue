@@ -118,6 +118,7 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const userStore = useUserStore()
     const { user } = storeToRefs(userStore)
 
@@ -160,7 +161,7 @@ export default defineComponent({
 
     return {
       ...resourcesViewDefaults,
-      hasShareJail: capabilityStore.spacesShareJail,
+      hasShareJail: capabilityRefs.spacesShareJail,
       user,
       noContentMessage
     }

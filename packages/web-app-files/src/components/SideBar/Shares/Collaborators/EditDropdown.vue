@@ -94,6 +94,7 @@ import {
   useConfigurationManager
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -133,6 +134,7 @@ export default defineComponent({
   ],
   setup(props, { emit }) {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const language = useGettext()
     const configurationManager = useConfigurationManager()
 
@@ -152,8 +154,8 @@ export default defineComponent({
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
       dateExpire,
-      userExpirationDate: capabilityStore.sharingUserExpireDate,
-      groupExpirationDate: capabilityStore.sharingGroupExpireDate
+      userExpirationDate: capabilityRefs.sharingUserExpireDate,
+      groupExpirationDate: capabilityRefs.sharingGroupExpireDate
     }
   },
   data: function () {

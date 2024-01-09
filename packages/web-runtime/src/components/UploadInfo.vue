@@ -170,14 +170,16 @@ import {
   ResourceName
 } from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
   setup() {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     return {
-      hasShareJail: capabilityStore.spacesShareJail
+      hasShareJail: capabilityRefs.spacesShareJail
     }
   },
   data: () => ({

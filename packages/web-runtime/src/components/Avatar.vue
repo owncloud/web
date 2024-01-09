@@ -19,6 +19,7 @@ import { defineComponent } from 'vue'
 
 import { mapGetters } from 'vuex'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'Avatar',
@@ -53,9 +54,10 @@ export default defineComponent({
   },
   setup() {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     return {
-      userProfilePicture: capabilityStore.sharingUserProfilePicture
+      userProfilePicture: capabilityRefs.sharingUserProfilePicture
     }
   },
   data() {

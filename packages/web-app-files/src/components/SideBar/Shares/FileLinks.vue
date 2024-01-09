@@ -151,6 +151,7 @@ import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { useShares } from 'web-app-files/src/composables'
 import { configurationManager } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -169,6 +170,7 @@ export default defineComponent({
     const { can } = ability
     const { expirationRules } = useExpirationRules()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
 
@@ -272,12 +274,12 @@ export default defineComponent({
       space,
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasSpaces: capabilityStore.spacesEnabled,
-      hasShareJail: capabilityStore.spacesShareJail,
-      hasPublicLinkEditing: capabilityStore.sharingPublicCanEdit,
-      hasPublicLinkContribute: capabilityStore.sharingPublicCanContribute,
-      hasPublicLinkAliasSupport: capabilityStore.sharingPublicAlias,
-      passwordEnforced: capabilityStore.sharingPublicPasswordEnforcedFor,
+      hasSpaces: capabilityRefs.spacesEnabled,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasPublicLinkEditing: capabilityRefs.sharingPublicCanEdit,
+      hasPublicLinkContribute: capabilityRefs.sharingPublicCanContribute,
+      hasPublicLinkAliasSupport: capabilityRefs.sharingPublicAlias,
+      passwordEnforced: capabilityRefs.sharingPublicPasswordEnforcedFor,
       indirectLinkListCollapsed,
       linkListCollapsed,
       outgoingLinks,

@@ -220,6 +220,7 @@ import {
   useKeyboardTableNavigation,
   useKeyboardTableSpaceActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -266,6 +267,7 @@ export default defineComponent({
     const store = useStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { $gettext, $ngettext } = useGettext()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
@@ -535,7 +537,7 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail: capabilityStore.spacesShareJail,
+      hasShareJail: capabilityRefs.spacesShareJail,
       createNewFolderAction,
       isEmbedModeEnabled
     }

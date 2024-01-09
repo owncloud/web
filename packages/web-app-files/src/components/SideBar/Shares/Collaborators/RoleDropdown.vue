@@ -165,6 +165,7 @@ export default defineComponent({
   emits: ['optionChange'],
   setup() {
     const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const ability = useAbility()
     const userStore = useUserStore()
 
@@ -175,8 +176,8 @@ export default defineComponent({
       user,
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasRoleCustomPermissions: capabilityStore.sharingAllowCustom,
-      resharingDefault: capabilityStore.sharingResharingDefault
+      hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
+      resharingDefault: capabilityRefs.sharingResharingDefault
     }
   },
   data() {
