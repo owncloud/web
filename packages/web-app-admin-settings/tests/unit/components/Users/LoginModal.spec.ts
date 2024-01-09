@@ -1,15 +1,13 @@
 import LoginModal from '../../../../src/components/Users/LoginModal.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { User } from '@ownclouders/web-client/src/generated'
-import { Modal, eventBus } from '@ownclouders/web-pkg'
+import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
 describe('LoginModal', () => {
   it('renders the input including two options', () => {
@@ -23,7 +21,7 @@ describe('LoginModal', () => {
   describe('method "onConfirm"', () => {
     it('updates the login for all given users', async () => {
       const users = [mock<User>(), mock<User>()]
-      const { wrapper, mocks, storeOptions } = getWrapper(users)
+      const { wrapper, mocks } = getWrapper(users)
       mocks.$clientService.graphAuthenticated.users.editUser.mockResolvedValue(
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
@@ -34,7 +32,8 @@ describe('LoginModal', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showMessage).toHaveBeenCalled()
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
       expect(eventSpy).toHaveBeenCalled()
       expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(
         users.length
@@ -57,24 +56,22 @@ describe('LoginModal', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const users = [mock<User>(), mock<User>()]
-      const { wrapper, mocks, storeOptions } = getWrapper(users)
+      const { wrapper, mocks } = getWrapper(users)
       mocks.$clientService.graphAuthenticated.users.editUser.mockRejectedValue(new Error(''))
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
 
       await wrapper.vm.onConfirm()
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 })
 
 function getWrapper(users = [mock<User>()]) {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return {
     mocks,
-    storeOptions,
     wrapper: shallowMount(LoginModal, {
       props: {
         modal: mock<Modal>(),
@@ -82,7 +79,7 @@ function getWrapper(users = [mock<User>()]) {
       },
       global: {
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

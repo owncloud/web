@@ -12,9 +12,11 @@ import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
+import { useMessages } from '../../piniaStores'
 
 export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
 
@@ -61,7 +63,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
 
     if (errors.length === 0) {
       store.dispatch('Files/resetFileSelection')
-      store.dispatch('showMessage', {
+      showMessage({
         title: hidden
           ? $gettext('The share was hidden successfully')
           : $gettext('The share was unhidden successfully')
@@ -70,7 +72,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
       return
     }
 
-    store.dispatch('showErrorMessage', {
+    showErrorMessage({
       title: hidden
         ? $gettext('Failed to hide the share')
         : $gettext('Failed to unhide share share'),

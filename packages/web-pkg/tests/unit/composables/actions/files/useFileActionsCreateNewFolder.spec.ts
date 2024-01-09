@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { FolderResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -37,7 +37,7 @@ describe('useFileActionsCreateNewFolder', () => {
     })
   })
   describe('addNewFolder', () => {
-    it('create new folder', async () => {
+    it('create new folder', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
@@ -45,28 +45,24 @@ describe('useFileActionsCreateNewFolder', () => {
           await addNewFolder('myfolder')
           await nextTick()
           expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-              title: '"myfolder" was created successfully'
-            })
-          )
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledWith({ title: '"myfolder" was created successfully' })
 
           // expect scrolltoresource to have been called
         }
       })
     })
-    it('show error message if createFolder fails', async () => {
+    it('show error message if createFolder fails', () => {
       const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         resolveCreateFolder: false,
         space,
-        setup: async ({ addNewFolder }, { storeOptions }) => {
+        setup: async ({ addNewFolder }) => {
           await addNewFolder('myfolder')
           await nextTick()
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledWith(
-            expect.anything(),
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledWith(
             expect.objectContaining({
               title: 'Failed to create folder'
             })

@@ -11,7 +11,7 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 
 describe('restore', () => {
   describe('isEnabled property', () => {
@@ -103,11 +103,12 @@ describe('restore', () => {
   describe('method "restoreSpace"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
+        setup: async ({ restoreSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -115,11 +116,12 @@ describe('restore', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ restoreSpaces }, { storeOptions, clientService }) => {
+        setup: async ({ restoreSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

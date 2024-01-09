@@ -3,18 +3,14 @@ import {
   useFileActionsCopyQuickLink,
   useFileActionsCreateLink
 } from '../../../../../src/composables/actions/files'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { FileAction } from '../../../../../src/composables/actions'
 import { useCanShare } from '../../../../../src/composables/shares'
 import { Resource } from '@ownclouders/web-client'
 import { Share, buildShare } from '@ownclouders/web-client/src/helpers/share'
 import { useClipboard } from '../../../../../src/composables/clipboard'
+import { useMessages } from '../../../../../src/composables/piniaStores'
 
 jest.mock('../../../../../src/composables/shares', () => ({
   useCanShare: jest.fn()
@@ -70,10 +66,11 @@ describe('useFileActionsCopyQuickLink', () => {
     it('should not create a new link if quick link does already exist', () => {
       getWrapper({
         quickLinkExists: true,
-        setup: async ({ actions }, { mocks, storeOptions }) => {
+        setup: async ({ actions }, { mocks }) => {
           await unref(actions)[0].handler({ resources: [mock<Resource>()] })
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -94,20 +91,14 @@ function getWrapper({ setup, canShare = true, quickLinkExists = false }) {
   const mocks = { ...defaultComponentMocks(), createLinkMock }
   mocks.$clientService.owncloudSdk.shares.getShares.mockResolvedValue([{}])
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCopyQuickLink({
-          store
-        })
-        setup(instance, { storeOptions, mocks })
+        const instance = useFileActionsCopyQuickLink()
+        setup(instance, { mocks })
       },
       {
         mocks,
-        store,
         provide: mocks
       }
     )

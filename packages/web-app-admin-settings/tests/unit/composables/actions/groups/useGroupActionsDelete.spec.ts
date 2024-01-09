@@ -83,7 +83,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useGroupActionsDelete({ store })
+        const instance = useGroupActionsDelete()
         setup(instance, { storeOptions, clientService: mocks.$clientService })
       },
       { store, mocks, provide: mocks }

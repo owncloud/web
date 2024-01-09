@@ -56,7 +56,7 @@ export default defineComponent({
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
-    const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink({ store })
+    const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
@@ -75,7 +75,7 @@ export default defineComponent({
       store
     })
     const { actions: showSharesActions } = useFileActionsShowShares({ store })
-    const { actions: openShortcutActions } = useFileActionsOpenShortcut({ store })
+    const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
     const extensionRegistry = useExtensionRegistry()
     const extensionContextActions = computed(() => {

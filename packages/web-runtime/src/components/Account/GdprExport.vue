@@ -35,7 +35,7 @@ import { computed, defineComponent, onMounted, onUnmounted, ref, unref } from 'v
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
-import { useClientService, useStore, useUserStore } from '@ownclouders/web-pkg'
+import { useClientService, useMessages, useStore, useUserStore } from '@ownclouders/web-pkg'
 import { useDownloadFile } from '@ownclouders/web-pkg'
 import { formatDateFromJSDate } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -47,6 +47,7 @@ export default defineComponent({
   name: 'GdprExport',
   setup() {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const { $gettext, current: currentLanguage } = useGettext()
     const clientService = useClientService()
@@ -99,13 +100,11 @@ export default defineComponent({
           storageLocation: `/${GDPR_EXPORT_FILE_NAME}`
         })
         await loadExportTask.perform()
-        return store.dispatch('showMessage', {
-          title: $gettext('GDPR export has been requested')
-        })
+        showMessage({ title: $gettext('GDPR export has been requested') })
       } catch (e) {
-        return store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('GDPR export could not be requested. Please contact an administrator.'),
-          error: e
+          errors: [e]
         })
       }
     }

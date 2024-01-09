@@ -17,7 +17,13 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { User } from '@ownclouders/web-client/src/generated'
-import { useClientService, useStore, useEventBus, useUserStore, Modal } from '@ownclouders/web-pkg'
+import {
+  useClientService,
+  useEventBus,
+  useUserStore,
+  Modal,
+  useMessages
+} from '@ownclouders/web-pkg'
 
 type LoginOption = {
   label: string
@@ -35,7 +41,7 @@ export default defineComponent({
   },
   emits: ['update:confirmDisabled'],
   setup(props, { emit, expose }) {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
@@ -93,7 +99,7 @@ export default defineComponent({
                 { userCount: succeeded.length.toString() },
                 true
               )
-        store.dispatch('showMessage', { title })
+        showMessage({ title })
       }
 
       const failed = results.filter((r) => r.status === 'rejected')
@@ -112,7 +118,7 @@ export default defineComponent({
                 { userCount: failed.length.toString() },
                 true
               )
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title,
           errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
         })

@@ -98,7 +98,8 @@ import {
   useCapabilityFilesSharingCanDenyAccess,
   useGetMatchingSpace,
   useModals,
-  useUserStore
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -189,7 +190,8 @@ export default defineComponent({
       hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
       getSharedAncestor,
       configurationManager,
-      dispatchModal
+      dispatchModal,
+      ...useMessages()
     }
   },
   computed: {
@@ -304,7 +306,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['deleteShare', 'addShare']),
-    ...mapActions(['showMessage', 'showErrorMessage']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     getDeniedShare(collaborator: Share): Share {
@@ -410,7 +411,7 @@ export default defineComponent({
           console.error(e)
           this.showErrorMessage({
             title: this.$gettext('Failed to deny access'),
-            error: e
+            errors: [e]
           })
         }
       } else {
@@ -432,7 +433,7 @@ export default defineComponent({
           console.error(e)
           this.showErrorMessage({
             title: this.$gettext('Failed to grant access'),
-            error: e
+            errors: [e]
           })
         }
       }
@@ -478,7 +479,7 @@ export default defineComponent({
         console.error(error)
         this.showErrorMessage({
           title: this.$gettext('Failed to remove share'),
-          error
+          errors: [error]
         })
       }
     },

@@ -23,14 +23,14 @@
 import { computed, defineComponent, inject, unref } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
-import { useStore } from '@ownclouders/web-pkg'
+import { useMessages } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'PrivateLinkItem',
   setup() {
     const { $gettext } = useGettext()
-    const store = useStore<any>()
+    const { showMessage, showErrorMessage } = useMessages()
     const resource = inject<Resource>('resource')
     const privateLink = computed(() => unref(resource))
 
@@ -42,7 +42,7 @@ export default defineComponent({
 
     const copyLinkToClipboard = () => {
       copy(unref(privateLink).privateLink)
-      store.dispatch('showMessage', {
+      showMessage({
         title: $gettext('Private link copied'),
         desc: $gettext('The private link has been copied to your clipboard.')
       })

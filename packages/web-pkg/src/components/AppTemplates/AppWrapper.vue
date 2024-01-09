@@ -52,7 +52,8 @@ import {
   useStore,
   useSelectedResources,
   useSideBar,
-  useModals
+  useModals,
+  useMessages
 } from '../../composables'
 import {
   Action,
@@ -104,6 +105,7 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const currentRoute = useRoute()
     const clientService = useClientService()
@@ -290,17 +292,15 @@ export default defineComponent({
 
     const errorPopup = (error: HttpError) => {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('An error occurred'),
         desc: error.message,
-        error
+        errors: [error]
       })
     }
 
     const autosavePopup = () => {
-      store.dispatch('showMessage', {
-        title: $gettext('File autosaved')
-      })
+      showMessage({ title: $gettext('File autosaved') })
     }
 
     const saveFileTask = useTask(function* () {

@@ -54,7 +54,7 @@ export default {
       return store.getters['Files/selectedFiles']
     })
 
-    const { actions: createLinkActions } = useFileActionsCreateLink({ store, enforceModal: true })
+    const { actions: createLinkActions } = useFileActionsCreateLink({ enforceModal: true })
     const createLinkAction = computed<FileAction>(() => unref(createLinkActions)[0])
 
     const areSelectActionsDisabled = computed<boolean>(() => selectedFiles.value.length < 1)

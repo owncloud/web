@@ -20,12 +20,7 @@ export class ResourceConflict extends ConflictDialog {
 
   constructor(store: Store<any>, language: Language) {
     const { $gettext, $ngettext } = language
-    super(
-      (msg) => store.dispatch('showMessage', msg),
-      (msg) => store.dispatch('showErrorMessage', msg),
-      $gettext,
-      $ngettext
-    )
+    super($gettext, $ngettext)
 
     this.store = store
   }

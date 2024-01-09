@@ -94,6 +94,7 @@ import {
   Modal,
   useClientService,
   useFolderLink,
+  useMessages,
   useRouter,
   useSearch,
   useStore
@@ -128,6 +129,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const { search } = useSearch()
     const {
@@ -335,14 +337,12 @@ export default defineComponent({
           content
         })
         store.commit('Files/UPSERT_RESOURCE', resource)
-        store.dispatch('showMessage', {
-          title: $gettext('Shortcut was created successfully')
-        })
+        showMessage({ title: $gettext('Shortcut was created successfully') })
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to create shortcut'),
-          error: e
+          errors: [e]
         })
       }
     }

@@ -9,7 +9,7 @@ import {
   defaultStoreMockOptions,
   defaultComponentMocks
 } from 'web-test-helpers'
-import { useModals } from '@ownclouders/web-pkg'
+import { useMessages, useModals } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 
 const selectors = {
@@ -45,7 +45,7 @@ describe('CreateSpace component', () => {
     })
     it('shows a message when an error occurred', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
       const { modals } = useModals()
       await wrapper.find(selectors.newSpaceBtn).trigger('click')
 
@@ -53,7 +53,8 @@ describe('CreateSpace component', () => {
       graphMock.drives.createDrive.mockRejectedValue({})
       await unref(modals)[0].onConfirm('New Space')
 
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 })

@@ -1,13 +1,12 @@
 import { computed } from 'vue'
-import { Store } from 'vuex'
-import { eventBus, useModals } from '@ownclouders/web-pkg'
-import { useClientService, useStore } from '@ownclouders/web-pkg'
+import { eventBus, useMessages, useModals } from '@ownclouders/web-pkg'
+import { useClientService } from '@ownclouders/web-pkg'
 import { GroupAction, GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { Group } from '@ownclouders/web-client/src/generated'
 
-export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
-  store = store || useStore()
+export const useGroupActionsDelete = () => {
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const { dispatchModal } = useModals()
@@ -29,7 +28,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: succeeded.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title })
+      showMessage({ title })
     }
 
     const failed = results.filter((r) => r.status === 'rejected')
@@ -46,7 +45,7 @@ export const useGroupActionsDelete = ({ store }: { store?: Store<any> }) => {
               { groupCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title,
         errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
       })

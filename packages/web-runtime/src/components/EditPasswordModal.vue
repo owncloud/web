@@ -25,14 +25,14 @@
 <script lang="ts">
 import { computed, defineComponent, ref, PropType, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Modal, useClientService, useStore } from '@ownclouders/web-pkg'
+import { Modal, useClientService, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'EditPasswordModal',
   props: { modal: { type: Object as PropType<Modal>, required: true } },
   emits: ['update:confirmDisabled'],
   setup(props, { emit, expose }) {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const { $gettext } = useGettext()
 
@@ -61,15 +61,13 @@ export default defineComponent({
       return clientService.graphAuthenticated.users
         .changeOwnPassword(unref(currentPassword).trim(), unref(newPassword).trim())
         .then(() => {
-          store.dispatch('showMessage', {
-            title: $gettext('Password was changed successfully')
-          })
+          showMessage({ title: $gettext('Password was changed successfully') })
         })
         .catch((error) => {
           console.error(error)
-          store.dispatch('showErrorMessage', {
+          showErrorMessage({
             title: $gettext('Failed to change password'),
-            error
+            errors: [error]
           })
         })
     }

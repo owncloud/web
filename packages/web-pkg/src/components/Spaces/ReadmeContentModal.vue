@@ -12,7 +12,7 @@ import { defineComponent, PropType, onMounted, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
-import { Modal, useClientService, useStore } from '../../composables'
+import { Modal, useClientService, useMessages, useStore } from '../../composables'
 
 export default defineComponent({
   name: 'SpaceReadmeContentModal',
@@ -25,6 +25,7 @@ export default defineComponent({
   },
   setup(props, { expose }) {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
     const clientService = useClientService()
 
@@ -42,14 +43,12 @@ export default defineComponent({
           field: 'spaceReadmeData',
           value: { ...props.space.spaceReadmeData, ...{ etag: readmeMetaData.etag } }
         })
-        store.dispatch('showMessage', {
-          title: $gettext('Space description was edited successfully')
-        })
+        showMessage({ title: $gettext('Space description was edited successfully') })
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to edit space description'),
-          error
+          errors: [error]
         })
       }
     }

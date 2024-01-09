@@ -1,4 +1,4 @@
-import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
+import { Key, KeyboardActions, ModifierKey, useMessages } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -7,6 +7,7 @@ import { useFileActionsPaste } from '@ownclouders/web-pkg'
 
 export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space: SpaceResource) => {
   const store = useStore()
+  const messageStore = useMessages()
   const language = useGettext()
 
   const { actions: pasteFileActions } = useFileActionsPaste({ store })
@@ -16,7 +17,8 @@ export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space:
     store.dispatch('Files/copySelectedFiles', {
       ...language,
       space: space,
-      resources: store.getters['Files/selectedFiles']
+      resources: store.getters['Files/selectedFiles'],
+      messageStore
     })
   })
 
@@ -28,7 +30,8 @@ export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space:
     store.dispatch('Files/cutSelectedFiles', {
       ...language,
       space: space,
-      resources: store.getters['Files/selectedFiles']
+      resources: store.getters['Files/selectedFiles'],
+      messageStore
     })
   })
 }

@@ -8,6 +8,7 @@ import {
   mount,
   mockAxiosResolve
 } from 'web-test-helpers'
+import { useMessages } from '../../../../src/composables/piniaStores'
 
 describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
@@ -30,7 +31,8 @@ describe('QuotaModal', () => {
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
       ).toHaveBeenCalledTimes(1)
-      expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on server error', async () => {
@@ -42,7 +44,8 @@ describe('QuotaModal', () => {
       expect(
         storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
       ).toHaveBeenCalledTimes(0)
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalledTimes(1)
     })
   })
 })

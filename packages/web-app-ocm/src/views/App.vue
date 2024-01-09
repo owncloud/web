@@ -25,7 +25,12 @@ import { defineComponent, onMounted, onUnmounted, ref, unref, Ref } from 'vue'
 import ConnectionsPanel from './ConnectionsPanel.vue'
 import IncomingInvitations from './IncomingInvitations.vue'
 import OutgoingInvitations from './OutgoingInvitations.vue'
-import { useClientService, useScrollTo, useStore, FederatedConnection } from '@ownclouders/web-pkg'
+import {
+  useClientService,
+  useScrollTo,
+  FederatedConnection,
+  useMessages
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { buildConnection } from '../functions'
 
@@ -36,7 +41,7 @@ export default defineComponent({
     ConnectionsPanel
   },
   setup() {
-    const store = useStore()
+    const { showMessage } = useMessages()
     const { scrollToResource } = useScrollTo()
     const clientSerivce = useClientService()
     const { $gettext } = useGettext()
@@ -68,7 +73,7 @@ export default defineComponent({
         )
         if (unref(highlightedConnections).length === 1) {
           scrollToResource(unref(highlightedConnections)[0].id)
-          store.dispatch('showMessage', {
+          showMessage({
             title: $gettext('New federated connection'),
             status: 'success',
             desc: $gettext('You can share with and recieve shares from %{user} now', {
@@ -80,7 +85,7 @@ export default defineComponent({
             .map((c) => c.display_name)
             .join(', ')
 
-          store.dispatch('showMessage', {
+          showMessage({
             title: $gettext('New federated connections'),
             status: 'success',
             desc: $gettext('You can share with and receive shares from %{ connections } now', {

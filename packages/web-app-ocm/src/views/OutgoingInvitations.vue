@@ -110,7 +110,7 @@ import {
   NoContentMessage,
   AppLoadingSpinner,
   useClientService,
-  useStore
+  useMessages
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { inviteListSchema, inviteSchema } from '../schemas'
@@ -130,7 +130,7 @@ export default defineComponent({
     AppLoadingSpinner
   },
   setup() {
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const { $gettext } = useGettext()
 
@@ -224,7 +224,7 @@ export default defineComponent({
             }),
             ...(tokenInfo.description && { description: tokenInfo.description })
           })
-          store.dispatch('showMessage', {
+          showMessage({
             title: $gettext('Success'),
             status: 'success',
             desc: recipient
@@ -276,24 +276,24 @@ export default defineComponent({
 
     const copyLink = (rowData) => {
       navigator.clipboard.writeText(rowData.item.link)
-      store.dispatch('showMessage', {
+      showMessage({
         title: $gettext('Invition link copied'),
         desc: $gettext('Invitation link has been copied to your clipboard.')
       })
     }
     const copyToken = (rowData) => {
       navigator.clipboard.writeText(rowData.item.token)
-      store.dispatch('showMessage', {
+      showMessage({
         title: $gettext('Invite token copied'),
         desc: $gettext('Invite token has been copied to your clipboard.')
       })
     }
     const errorPopup = (error: Error) => {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Error'),
         desc: $gettext('An error occurred when generating the token'),
-        error
+        errors: [error]
       })
     }
 

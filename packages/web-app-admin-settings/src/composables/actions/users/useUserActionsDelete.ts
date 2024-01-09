@@ -1,13 +1,17 @@
 import { computed, unref } from 'vue'
-import { Store } from 'vuex'
-import { eventBus, useCapabilityDeleteUsersDisabled, useModals } from '@ownclouders/web-pkg'
-import { useClientService, useStore } from '@ownclouders/web-pkg'
+import {
+  eventBus,
+  useCapabilityDeleteUsersDisabled,
+  useMessages,
+  useModals
+} from '@ownclouders/web-pkg'
+import { useClientService } from '@ownclouders/web-pkg'
 import { UserAction, UserActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { User } from '@ownclouders/web-client/src/generated'
 
-export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
-  store = store || useStore()
+export const useUserActionsDelete = () => {
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const { dispatchModal } = useModals()
@@ -29,7 +33,7 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
               { userCount: succeeded.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title })
+      showMessage({ title })
     }
 
     const failed = results.filter((r) => r.status === 'rejected')
@@ -46,7 +50,7 @@ export const useUserActionsDelete = ({ store }: { store?: Store<any> }) => {
               { userCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title,
         errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
       })

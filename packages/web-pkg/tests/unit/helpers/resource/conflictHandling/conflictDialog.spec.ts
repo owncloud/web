@@ -6,7 +6,7 @@ import { setActivePinia } from 'pinia'
 import { createMockStore } from 'web-test-helpers'
 
 const getConflictDialogInstance = () => {
-  return new ConflictDialog(jest.fn(), jest.fn(), jest.fn(), jest.fn())
+  return new ConflictDialog(jest.fn(), jest.fn())
 }
 
 describe('conflict dialog', () => {

@@ -10,9 +10,11 @@ import { ActionOptions, FileAction } from '../types'
 import { computed, unref } from 'vue'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
+import { useMessages } from '../../piniaStores'
 
 export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const messageStore = useMessages()
   const router = useRouter()
   const language = useGettext()
   const { $gettext } = language
@@ -29,7 +31,7 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
   })
 
   const handler = ({ space, resources }: ActionOptions) => {
-    store.dispatch('Files/cutSelectedFiles', { ...language, space, resources })
+    store.dispatch('Files/cutSelectedFiles', { ...language, space, resources, messageStore })
   }
   const actions = computed((): FileAction[] => [
     {

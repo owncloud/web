@@ -5,6 +5,7 @@ import { mock, mockDeep, mockReset } from 'jest-mock-extended'
 import { buildSpace, Resource } from '@ownclouders/web-client/src/helpers'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { createTestingPinia } from 'web-test-helpers'
 
 const clientServiceMock = mockDeep<ClientService>()
 const loadingServiceMock = mock<LoadingService>({
@@ -19,6 +20,7 @@ let targetFolder
 
 describe('resourcesTransfer', () => {
   beforeEach(() => {
+    createTestingPinia()
     mockReset(clientServiceMock)
     resourcesToMove = [
       {
@@ -65,8 +67,6 @@ describe('resourcesTransfer', () => {
       clientServiceMock,
       loadingServiceMock,
       jest.fn(),
-      jest.fn(),
-      jest.fn(),
       jest.fn()
     )
     const result = await resourcesTransfer.perform(TransferType.COPY)
@@ -91,8 +91,6 @@ describe('resourcesTransfer', () => {
           targetFolder,
           clientServiceMock,
           loadingServiceMock,
-          jest.fn(),
-          jest.fn(),
           jest.fn(),
           jest.fn()
         )
@@ -130,8 +128,6 @@ describe('resourcesTransfer', () => {
       clientServiceMock,
       loadingServiceMock,
       jest.fn(),
-      jest.fn(),
-      jest.fn(),
       jest.fn()
     )
     resourcesTransfer.resolveFileExists = jest
@@ -157,8 +153,6 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       clientServiceMock,
       loadingServiceMock,
-      jest.fn(),
-      jest.fn(),
       jest.fn(),
       jest.fn()
     )

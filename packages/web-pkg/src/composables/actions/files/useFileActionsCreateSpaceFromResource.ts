@@ -11,10 +11,11 @@ import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
-import { useModals } from '../../piniaStores'
+import { useMessages, useModals } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
+  const { showMessage, showErrorMessage } = useMessages()
   const { can } = useAbility()
   const { $gettext, $ngettext } = useGettext()
   const { createSpace } = useCreateSpace()
@@ -49,14 +50,12 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
 
       await Promise.all(copyOps)
       store.dispatch('Files/resetFileSelection')
-      store.dispatch('showMessage', {
-        title: $gettext('Space was created successfully')
-      })
+      showMessage({ title: $gettext('Space was created successfully') })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Creating space failed…'),
-        error
+        errors: [error]
       })
     }
   }

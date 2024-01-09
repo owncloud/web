@@ -1,5 +1,5 @@
 import { useSpaceActionsEditDescription } from '../../../../../src/composables/actions'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import {
   createStore,
   defaultComponentMocks,
@@ -39,11 +39,12 @@ describe('editDescription', () => {
   describe('method "editDescriptionSpace"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ actions, editDescriptionSpace }, { storeOptions, clientService }) => {
+        setup: async ({ editDescriptionSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -51,11 +52,12 @@ describe('editDescription', () => {
     it('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
-        setup: async ({ actions, editDescriptionSpace }, { storeOptions, clientService }) => {
+        setup: async ({ editDescriptionSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
-          expect(storeOptions.actions.showErrorMessage).toHaveBeenCalledTimes(1)
+          const { showErrorMessage } = useMessages()
+          expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }
       })
     })

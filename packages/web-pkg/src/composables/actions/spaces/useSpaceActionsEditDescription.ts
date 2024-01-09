@@ -8,10 +8,11 @@ import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
@@ -32,15 +33,13 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
         if (unref(route).name === 'admin-settings-spaces') {
           space.description = description
         }
-        store.dispatch('showMessage', {
-          title: $gettext('Space subtitle was changed successfully')
-        })
+        showMessage({ title: $gettext('Space subtitle was changed successfully') })
       })
       .catch((error) => {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to change space subtitle'),
-          error
+          errors: [error]
         })
       })
   }

@@ -1,12 +1,7 @@
 import { computed, unref } from 'vue'
 import { useFileActionsCreateLink } from '../../../../../src/composables/actions/files/useFileActionsCreateLink'
-import { useModals } from '../../../../../src/composables/piniaStores'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { useCreateLink, useDefaultLinkPermissions } from '../../../../../src/composables/links'
@@ -66,13 +61,14 @@ describe('useFileActionsCreateLink', () => {
   describe('handler', () => {
     it('calls the createLink method and shows messages', () => {
       getWrapper({
-        setup: async ({ actions }, { mocks, storeOptions }) => {
+        setup: async ({ actions }, { mocks }) => {
           // link action
           await unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
           expect(mocks.createLinkMock).toHaveBeenCalledWith(
             expect.objectContaining({ quicklink: false })
           )
-          expect(storeOptions.actions.showMessage).toHaveBeenCalledTimes(1)
+          const { showMessage } = useMessages()
+          expect(showMessage).toHaveBeenCalledTimes(1)
 
           // quick link action
           await unref(actions)[1].handler({ resources: [mock<Resource>({ canShare: () => true })] })
@@ -119,9 +115,10 @@ describe('useFileActionsCreateLink', () => {
     it('does not show messages if disabled', () => {
       getWrapper({
         showMessages: false,
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           await unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
-          expect(storeOptions.actions.showMessage).not.toHaveBeenCalled()
+          const { showMessage } = useMessages()
+          expect(showMessage).not.toHaveBeenCalled()
         }
       })
     })
@@ -149,23 +146,18 @@ function getWrapper({
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useFileActionsCreateLink({
-          store,
           enforceModal,
           showMessages,
           onLinkCreatedCallback
         })
-        setup(instance, { storeOptions, mocks })
+        setup(instance, { mocks })
       },
       {
         mocks,
-        store,
         provide: mocks
       }
     )

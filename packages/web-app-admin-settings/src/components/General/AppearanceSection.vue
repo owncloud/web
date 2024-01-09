@@ -65,7 +65,7 @@ export default defineComponent({
 
     const logoInput: VNodeRef = ref(null)
 
-    const { actions: resetLogoActions } = useGeneralActionsResetLogo({ store })
+    const { actions: resetLogoActions } = useGeneralActionsResetLogo()
     const { actions: uploadLogoActions, uploadImage } = useGeneralActionsUploadLogo({
       imageInput: logoInput
     })

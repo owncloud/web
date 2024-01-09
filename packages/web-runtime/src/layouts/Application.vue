@@ -27,14 +27,14 @@
       <portal-target name="app.runtime.footer" />
     </div>
     <div class="snackbars">
-      <message-bar :active-messages="activeMessages" @delete-message="deleteMessage" />
+      <message-bar />
       <upload-info />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import orderBy from 'lodash-es/orderBy'
 import { AppLoadingSpinner, SidebarNavExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
@@ -179,7 +179,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['apps', 'activeMessages', 'configuration']),
+    ...mapGetters(['apps', 'configuration']),
     isIE11() {
       return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },
@@ -222,9 +222,6 @@ export default defineComponent({
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.onResize)
-  },
-  methods: {
-    ...mapActions(['deleteMessage'])
   }
 })
 </script>

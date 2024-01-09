@@ -21,7 +21,7 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsCreateNewFile = ({
   store,
@@ -35,6 +35,7 @@ export const useFileActionsCreateNewFile = ({
   mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -110,14 +111,12 @@ export const useFileActionsCreateNewFile = ({
       }
       triggerDefaultAction({ space: space, resources: [resource] })
       store.commit('Files/UPSERT_RESOURCE', resource)
-      store.dispatch('showMessage', {
-        title: $gettext('"%{fileName}" was created successfully', { fileName })
-      })
+      showMessage({ title: $gettext('"%{fileName}" was created successfully', { fileName }) })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to create file'),
-        error
+        errors: [error]
       })
     }
   }
@@ -156,14 +155,12 @@ export const useFileActionsCreateNewFile = ({
         return
       }
 
-      store.dispatch('showMessage', {
-        title: $gettext('"%{fileName}" was created successfully', { fileName })
-      })
+      showMessage({ title: $gettext('"%{fileName}" was created successfully', { fileName }) })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to create file'),
-        error
+        errors: [error]
       })
     }
   }

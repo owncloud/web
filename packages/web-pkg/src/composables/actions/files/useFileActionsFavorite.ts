@@ -9,9 +9,11 @@ import { useStore } from '../../store'
 import { useRouter } from '../../router'
 import { useClientService } from '../../clientService'
 import { useAbility } from '../../ability'
+import { useMessages } from '../../piniaStores'
 
 export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
@@ -31,10 +33,7 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
           { file: resources[0].name },
           true
         )
-        store.dispatch('showErrorMessage', {
-          title,
-          error
-        })
+        showErrorMessage({ title, errors: [error] })
       })
   }
 

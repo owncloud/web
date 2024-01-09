@@ -21,7 +21,12 @@ import { computed, defineComponent, unref, PropType, ref, onMounted, watch } fro
 import { useGettext } from 'vue3-gettext'
 import QuotaSelect from '../QuotaSelect.vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { Modal, useCapabilitySpacesMaxQuota, useClientService } from '../../composables'
+import {
+  Modal,
+  useCapabilitySpacesMaxQuota,
+  useClientService,
+  useMessages
+} from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
 import { useStore } from '../../composables'
@@ -58,6 +63,7 @@ export default defineComponent({
   emits: ['update:confirmDisabled'],
   setup(props, { emit, expose }) {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const { $gettext, $ngettext } = useGettext()
     const clientService = useClientService()
     const router = useRouter()
@@ -154,13 +160,13 @@ export default defineComponent({
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
-        store.dispatch('showMessage', { title: getSuccessMessage(succeeded.length) })
+        showMessage({ title: getSuccessMessage(succeeded.length) })
       }
       const errors = results.filter((r) => r.status === 'rejected')
       if (errors.length) {
         console.error(errors)
         errors.forEach(console.error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: getErrorMessage(errors.length),
           errors: (errors as PromiseRejectedResult[]).map((f) => f.reason)
         })

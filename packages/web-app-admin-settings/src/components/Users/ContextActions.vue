@@ -33,7 +33,7 @@ export default defineComponent({
     const { actions: showDetailsActions } = useActionsShowDetails()
     const { actions: editQuotaActions } = useUserActionsEditQuota()
     const { actions: userEditActions } = useUserActionsEdit()
-    const { actions: userDeleteActions } = useUserActionsDelete({ store })
+    const { actions: userDeleteActions } = useUserActionsDelete()
 
     const menuItemsPrimaryActions = computed(() =>
       [...unref(userEditActions), ...unref(userDeleteActions)].filter((item) =>

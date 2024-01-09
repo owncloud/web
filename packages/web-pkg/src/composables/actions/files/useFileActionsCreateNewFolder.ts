@@ -13,13 +13,14 @@ import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useScrollTo } from '../../scrollTo'
 import { AncestorMetaData } from '../../../types'
-import { useModals } from '../../../composables/piniaStores'
+import { useMessages, useModals } from '../../../composables/piniaStores'
 
 export const useFileActionsCreateNewFolder = ({
   store,
   space
 }: { store?: Store<any>; space?: SpaceResource } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
@@ -77,17 +78,15 @@ export const useFileActionsCreateNewFolder = ({
 
       store.commit('Files/UPSERT_RESOURCE', resource)
 
-      store.dispatch('showMessage', {
-        title: $gettext('"%{folderName}" was created successfully', { folderName })
-      })
+      showMessage({ title: $gettext('"%{folderName}" was created successfully', { folderName }) })
 
       await nextTick()
       scrollToResource(resource.id, { forceScroll: true, topbarElement: 'files-app-bar' })
     } catch (error) {
       console.error(error)
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title: $gettext('Failed to create folder'),
-        error
+        errors: [error]
       })
     }
   }

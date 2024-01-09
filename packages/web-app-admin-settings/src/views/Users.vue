@@ -163,7 +163,8 @@ import {
   useStore,
   SideBarPanel,
   SideBarPanelContext,
-  useUserStore
+  useUserStore,
+  useMessages
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -197,6 +198,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore()
+    const { showErrorMessage } = useMessages()
     const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
@@ -219,7 +221,7 @@ export default defineComponent({
     const { actions: createUserActions } = useUserActionsCreateUser()
     const createUserAction = computed(() => unref(createUserActions)[0])
 
-    const { actions: deleteActions } = useUserActionsDelete({ store })
+    const { actions: deleteActions } = useUserActionsDelete()
     const { actions: removeFromGroupsActions } = useUserActionsRemoveFromGroups({
       groups: writableGroups
     })
@@ -523,9 +525,9 @@ export default defineComponent({
         return updatedUser
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to edit user'),
-          error
+          errors: [error]
         })
       }
     }

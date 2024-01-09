@@ -76,6 +76,7 @@ import {
   isLocationPublicActive,
   SideBarEventTopics,
   useClientService,
+  useMessages,
   useRouter,
   useStore
 } from '@ownclouders/web-pkg'
@@ -112,6 +113,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const { showErrorMessage } = useMessages()
     const clientService = useClientService()
     const router = useRouter()
 
@@ -216,9 +218,9 @@ export default defineComponent({
         allTags.push(...tagsToAdd)
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to edit tags'),
-          error: e
+          errors: [e]
         })
       }
     }

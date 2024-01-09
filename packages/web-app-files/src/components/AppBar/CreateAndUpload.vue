@@ -192,6 +192,7 @@ import {
   isLocationSpacesActive,
   useFileActions,
   useFileActionsCreateNewShortcut,
+  useMessages,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
@@ -265,6 +266,7 @@ export default defineComponent({
     const clientService = useClientService()
     const store = useStore()
     const userStore = useUserStore()
+    const messageStore = useMessages()
     const route = useRoute()
     const language = useGettext()
     const hasSpaces = useCapabilitySpacesEnabled(store)
@@ -281,6 +283,7 @@ export default defineComponent({
         space: props.space,
         store,
         userStore,
+        messageStore,
         uppyService
       })
     }

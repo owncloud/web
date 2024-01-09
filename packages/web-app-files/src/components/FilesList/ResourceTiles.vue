@@ -132,6 +132,7 @@ import {
   ImageDimension,
   SortDir,
   SortField,
+  useMessages,
   useResourceRouteResolver,
   useStore,
   useTileSize,
@@ -197,6 +198,7 @@ export default defineComponent({
   emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
     const store = useStore()
+    const { showMessage } = useMessages()
     const { $gettext } = useGettext()
 
     const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
@@ -241,7 +243,7 @@ export default defineComponent({
 
     const emitTileClick = (resource) => {
       if (resource.disabled && resource.type === 'space') {
-        store.dispatch('showMessage', {
+        showMessage({
           title: $gettext('Disabled spaces cannot be entered'),
           status: 'warning'
         })

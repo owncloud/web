@@ -70,6 +70,7 @@ import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
+  useMessages,
   useModals,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -99,7 +100,8 @@ export default defineComponent({
       clientService,
       configurationManager,
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
-      dispatchModal
+      dispatchModal,
+      ...useMessages()
     }
   },
   data: () => {
@@ -153,7 +155,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('runtime/spaces', ['deleteSpaceMember']),
-    ...mapActions(['showMessage', 'showErrorMessage']),
 
     filter(collection, term) {
       if (!(term || '').trim()) {
@@ -220,7 +221,7 @@ export default defineComponent({
         console.error(error)
         this.showErrorMessage({
           title: this.$gettext('Failed to remove share'),
-          error
+          errors: [error]
         })
       }
     }

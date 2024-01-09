@@ -4,7 +4,8 @@ import {
   UserAction,
   eventBus,
   useAppDefaults,
-  useConfigurationManager
+  useConfigurationManager,
+  useMessages
 } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
@@ -257,14 +258,15 @@ describe('Users view', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientService()
       clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
+      const { wrapper } = getMountedWrapper({ clientService })
 
       await wrapper.vm.loadResourcesTask.last
       await wrapper.vm.onEditUser({
         editUser: {}
       })
 
-      expect(storeOptions.actions.showErrorMessage).toHaveBeenCalled()
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 

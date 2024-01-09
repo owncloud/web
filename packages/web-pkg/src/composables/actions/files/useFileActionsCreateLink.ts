@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
@@ -12,20 +11,19 @@ import {
 import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../capability'
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useFileActionsCreateLink = ({
-  store,
   enforceModal = false,
   showMessages = true,
   onLinkCreatedCallback = undefined
 }: {
-  store?: Store<any>
   enforceModal?: boolean
   showMessages?: boolean
   onLinkCreatedCallback?: (result: PromiseSettledResult<Share>[]) => Promise<void> | void
 } = {}) => {
   const userStore = useUserStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
   const loadingService = useLoadingService()
@@ -39,7 +37,7 @@ export const useFileActionsCreateLink = ({
       (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
     )
     if (succeeded.length && showMessages) {
-      store.dispatch('showMessage', {
+      showMessage({
         title: $ngettext(
           'Link has been created successfully',
           'Links have been created successfully',
@@ -50,7 +48,7 @@ export const useFileActionsCreateLink = ({
 
     const failed = result.filter(({ status }) => status === 'rejected')
     if (failed.length) {
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         errors: (failed as PromiseRejectedResult[]).map(({ reason }) => reason),
         title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })

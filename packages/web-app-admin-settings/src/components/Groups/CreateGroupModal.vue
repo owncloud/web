@@ -17,7 +17,7 @@
 import { useGettext } from 'vue3-gettext'
 import { computed, defineComponent, ref, PropType, unref, watch } from 'vue'
 import { Group } from '@ownclouders/web-client/src/generated'
-import { MaybeRef, Modal, useClientService, useEventBus, useStore } from '@ownclouders/web-pkg'
+import { MaybeRef, Modal, useClientService, useEventBus, useMessages } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'CreateGroupModal',
@@ -27,7 +27,7 @@ export default defineComponent({
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { emit, expose }) {
     const { $gettext } = useGettext()
-    const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const eventBus = useEventBus()
     const clientService = useClientService()
 
@@ -61,15 +61,13 @@ export default defineComponent({
       try {
         const client = clientService.graphAuthenticated
         const response = await client.groups.createGroup(unref(group))
-        store.dispatch('showMessage', {
-          title: $gettext('Group was created successfully')
-        })
+        showMessage({ title: $gettext('Group was created successfully') })
         eventBus.publish('app.admin-settings.groups.add', { ...response?.data, members: [] })
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Failed to create group'),
-          error
+          errors: [error]
         })
       }
     }

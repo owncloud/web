@@ -9,10 +9,11 @@ import { useLoadingService } from '../../loadingService'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
   const ability = useAbility()
@@ -68,7 +69,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
               { spaceCount: succeeded.length.toString() },
               true
             )
-      store.dispatch('showMessage', { title })
+      showMessage({ title })
     }
 
     const failed = results.filter((r) => r.status === 'rejected')
@@ -85,7 +86,7 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
               { spaceCount: failed.length.toString() },
               true
             )
-      store.dispatch('showErrorMessage', {
+      showErrorMessage({
         title,
         errors: (failed as PromiseRejectedResult[]).map((f) => f.reason)
       })

@@ -16,11 +16,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useModals, useCreateSpace, useSpaceHelpers, useStore } from '@ownclouders/web-pkg'
+import {
+  useModals,
+  useCreateSpace,
+  useSpaceHelpers,
+  useStore,
+  useMessages
+} from '@ownclouders/web-pkg'
 
 export default defineComponent({
   setup() {
     const store = useStore()
+    const { showMessage, showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
     const { createSpace } = useCreateSpace()
     const { checkSpaceNameModalInput } = useSpaceHelpers()
@@ -31,14 +38,12 @@ export default defineComponent({
         const createdSpace = await createSpace(name)
         store.commit('Files/UPSERT_RESOURCE', createdSpace)
         store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
-        store.dispatch('showMessage', {
-          title: $gettext('Space was created successfully')
-        })
+        showMessage({ title: $gettext('Space was created successfully') })
       } catch (error) {
         console.error(error)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Creating space failed…'),
-          error
+          errors: [error]
         })
       }
     }
