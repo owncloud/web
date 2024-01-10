@@ -22,7 +22,6 @@
     "pinia": "2.1.7",
     "uuid": "9.0.1",
     "vue-concurrency": "4.0.1",
-    "vuex": "4.1.0",
     "web-app-admin-settings": "workspace:*"
   }
 }

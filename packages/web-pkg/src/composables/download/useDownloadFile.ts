@@ -1,34 +1,28 @@
 import { unref } from 'vue'
-import { usePublicLinkContext } from '../authContext'
 import { useClientService } from '../clientService'
-import { useStore } from '../store'
 import { triggerDownloadWithFilename } from '../../../src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
-import { Store } from 'vuex'
 import { ClientService } from '../../services'
-import { useMessages } from '../piniaStores'
+import { useAuthStore, useMessages } from '../piniaStores'
 
 export interface DownloadFileOptions {
-  store?: Store<any>
   clientService?: ClientService
 }
 
 export const useDownloadFile = (options?: DownloadFileOptions) => {
-  const store = options?.store || useStore()
+  const authStore = useAuthStore()
   const { showErrorMessage } = useMessages()
-  const isPublicLinkContext = usePublicLinkContext({ store })
   const isUrlSigningEnabled = useCapabilityCoreSupportUrlSigning()
   const clientService = options?.clientService || useClientService()
   const { $gettext } = useGettext()
 
   const downloadFile = async (file, version = null) => {
     const { owncloudSdk: client } = clientService
-    const isUserContext = store.getters['runtime/auth/isUserContextReady']
 
     // construct the url and headers
     let url
-    if (unref(isPublicLinkContext)) {
+    if (authStore.publicLinkContextReady) {
       url = file.downloadURL
     } else {
       if (version === null) {
@@ -39,7 +33,7 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
     }
 
     // download with signing enabled
-    if (isUserContext && unref(isUrlSigningEnabled)) {
+    if (authStore.userContextReady && unref(isUrlSigningEnabled)) {
       const httpClient = clientService.httpAuthenticated
       try {
         const response = await httpClient.head(url)

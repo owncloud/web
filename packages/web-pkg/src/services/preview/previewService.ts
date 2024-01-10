@@ -8,13 +8,14 @@ import { ConfigurationManager } from '../../configuration'
 import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
-import { UserStore } from '../../composables'
+import { AuthStore, UserStore } from '../../composables'
 
 export class PreviewService {
   store: Store<unknown>
   clientService: ClientService
   configurationManager: ConfigurationManager
   userStore: UserStore
+  authStore: AuthStore
 
   capability?: PreviewCapability
 
@@ -22,17 +23,20 @@ export class PreviewService {
     store,
     clientService,
     configurationManager,
-    userStore
+    userStore,
+    authStore
   }: {
     store: Store<unknown>
     clientService: ClientService
     configurationManager: ConfigurationManager
     userStore: UserStore
+    authStore: AuthStore
   }) {
     this.store = store
     this.clientService = clientService
     this.configurationManager = configurationManager
     this.userStore = userStore
+    this.authStore = authStore
 
     this.capability = get(store, 'getters.capabilities.files.thumbnail', {
       enabled: true,
@@ -51,10 +55,6 @@ export class PreviewService {
 
   private get user() {
     return this.userStore.user
-  }
-
-  private get token() {
-    return this.store.getters['runtime/auth/accessToken']
   }
 
   private get serverUrl() {
@@ -85,7 +85,10 @@ export class PreviewService {
     }
 
     const isPublic = isPublicSpaceResource(space)
-    if (!isPublic && (!this.serverUrl || !this.user.onPremisesSamAccountName || !this.token)) {
+    if (
+      !isPublic &&
+      (!this.serverUrl || !this.user.onPremisesSamAccountName || !this.authStore.accessToken)
+    ) {
       return undefined
     }
 

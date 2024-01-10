@@ -10,6 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
+import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 
 describe('FilesDrop view', () => {
   describe('different files view states', () => {
@@ -29,7 +30,7 @@ describe('FilesDrop view', () => {
 
 function getMountedWrapper() {
   const $clientService = mockDeep<ClientService>()
-  $clientService.webdav.listFiles.mockReturnValue(undefined)
+  $clientService.webdav.listFiles.mockResolvedValue(mock<ListFilesResult>())
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-common-favorites' })

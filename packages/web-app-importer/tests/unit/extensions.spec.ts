@@ -143,7 +143,6 @@ function getWrapper({
   }
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  storeOptions.modules.runtime.modules.auth.getters.isPublicLinkContextReady.mockReturnValue(false)
   const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(setup, {

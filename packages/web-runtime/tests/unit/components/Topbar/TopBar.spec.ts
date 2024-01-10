@@ -89,9 +89,7 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
   storeOptions.getters.configuration.mockImplementation(() => ({
     options: { disableFeedbackLink: false }
   }))
-  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
-    isUserContextReady
-  )
+
   const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(TopBar, {
@@ -99,7 +97,12 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
         applicationsList: ['testApp']
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+          }),
+          store
+        ],
         stubs: { 'router-link': true, 'portal-target': true, notifications: true },
         mocks,
         provide: mocks

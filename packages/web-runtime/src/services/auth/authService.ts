@@ -1,7 +1,7 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
 import { Store } from 'vuex'
-import { ClientService, UserStore } from '@ownclouders/web-pkg'
+import { AuthStore, ClientService, UserStore } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -26,6 +26,7 @@ export class AuthService {
   private ability: Ability
   private language: Language
   private userStore: UserStore
+  private authStore: AuthStore
 
   public hasAuthErrorOccurred: boolean
 
@@ -36,7 +37,8 @@ export class AuthService {
     router: Router,
     ability: Ability,
     language: Language,
-    userStore: UserStore
+    userStore: UserStore,
+    authStore: AuthStore
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
@@ -46,6 +48,7 @@ export class AuthService {
     this.ability = ability
     this.language = language
     this.userStore = userStore
+    this.authStore = authStore
   }
 
   /**
@@ -64,7 +67,8 @@ export class AuthService {
       this.publicLinkManager = new PublicLinkManager({
         clientService: this.clientService,
         configurationManager: this.configurationManager,
-        store: this.store
+        store: this.store,
+        authStore: this.authStore
       })
     }
 
@@ -84,7 +88,8 @@ export class AuthService {
         store: this.store,
         ability: this.ability,
         language: this.language,
-        userStore: this.userStore
+        userStore: this.userStore,
+        authStore: this.authStore
       })
     }
 
@@ -298,11 +303,10 @@ export class AuthService {
     }
   }
 
-  private async resetStateAfterUserLogout() {
+  private resetStateAfterUserLogout() {
     // TODO: create UserUnloadTask interface and allow registering unload-tasks in the authService
     this.userStore.$reset()
-    await this.store.dispatch('runtime/auth/clearUserContext')
-    await this.store.dispatch('clearDynamicNavItems')
+    this.authStore.clearUserContext()
   }
 
   private handleDelegatedTokenUpdate(event: MessageEvent): void {

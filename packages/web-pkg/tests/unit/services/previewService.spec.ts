@@ -4,7 +4,7 @@ import { ConfigurationManager } from '../../../src/configuration'
 import { createStore, createTestingPinia, defaultStoreMockOptions } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { AxiosResponse } from 'axios'
-import { useUserStore } from '../../../src/composables/piniaStores'
+import { useAuthStore, useUserStore } from '../../../src/composables/piniaStores'
 import { User } from '@ownclouders/web-client/src/generated'
 
 describe('PreviewService', () => {
@@ -125,9 +125,12 @@ describe('PreviewService', () => {
   })
 })
 
-const getWrapper = ({ supportedMimeTypes = [], version = undefined, token = 'token' } = {}) => {
+const getWrapper = ({
+  supportedMimeTypes = [],
+  version = undefined,
+  accessToken = 'token'
+} = {}) => {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.auth.getters.accessToken.mockReturnValue(token)
   storeOptions.getters.capabilities.mockReturnValue({
     files: {
       thumbnail: {
@@ -146,11 +149,18 @@ const getWrapper = ({ supportedMimeTypes = [], version = undefined, token = 'tok
   const configurationManager = mock<ConfigurationManager>()
   configurationManager.serverUrl = 'https://someUrl.com'
 
-  createTestingPinia({ initialState: { user: { user: mock<User>() } } })
+  createTestingPinia({ initialState: { user: { user: mock<User>() }, auth: { accessToken } } })
   const userStore = useUserStore()
+  const authStore = useAuthStore()
 
   return {
-    previewService: new PreviewService({ store, clientService, configurationManager, userStore }),
+    previewService: new PreviewService({
+      store,
+      clientService,
+      configurationManager,
+      userStore,
+      authStore
+    }),
     clientService
   }
 }

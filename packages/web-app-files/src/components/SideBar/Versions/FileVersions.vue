@@ -82,7 +82,7 @@ export default defineComponent({
     const store = useStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
-    const { downloadFile } = useDownloadFile({ store, clientService })
+    const { downloadFile } = useDownloadFile({ clientService })
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')

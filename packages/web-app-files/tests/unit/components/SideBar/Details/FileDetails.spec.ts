@@ -208,9 +208,6 @@ function createWrapper({
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
-  storeOptions.modules.runtime.modules.auth.getters.isPublicLinkContextReady.mockReturnValue(
-    isPublicLinkContext
-  )
   const store = createStore(storeOptions)
 
   const spacesLocation = createLocationSpaces('files-spaces-generic')
@@ -226,7 +223,15 @@ function createWrapper({
           resource,
           space: mockDeep<SpaceResource>()
         },
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              userState: { user },
+              authState: { publicLinkContextReady: isPublicLinkContext }
+            }
+          }),
+          store
+        ],
         mocks
       }
     })

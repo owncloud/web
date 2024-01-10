@@ -53,13 +53,12 @@ import SideBarToggle from './SideBarToggle.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useAbility,
+  useAuthStore,
   useCapabilityNotifications,
   useEmbedMode,
-  usePublicLinkContext,
   useRouter,
   useStore,
-  useThemeStore,
-  useUserContext
+  useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
 
@@ -85,8 +84,7 @@ export default {
     const { currentTheme } = storeToRefs(themeStore)
 
     const notificationsSupport = useCapabilityNotifications()
-    const isUserContext = useUserContext({ store })
-    const isPublicLinkContext = usePublicLinkContext({ store })
+    const authStore = useAuthStore()
     const language = useGettext()
     const router = useRouter()
     const ability = useAbility()
@@ -94,11 +92,11 @@ export default {
 
     const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
-      return unref(isUserContext) && unref(notificationsSupport).includes('list')
+      return authStore.userContextReady && unref(notificationsSupport).includes('list')
     })
 
     const isSideBarToggleVisible = computed(() => {
-      return unref(isUserContext) || unref(isPublicLinkContext)
+      return authStore.userContextReady || authStore.publicLinkContextReady
     })
     const isSideBarToggleDisabled = computed(() => {
       return isRuntimeRoute(unref(router.currentRoute))

@@ -1,10 +1,10 @@
 import { storeToRefs } from 'pinia'
 import {
   useStore,
-  usePublicLinkContext,
   useThemeStore,
   useModals,
-  useUserStore
+  useUserStore,
+  useAuthStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
@@ -24,7 +24,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const userStore = useUserStore()
   const { $gettext } = useGettext()
   const uppyService = useService<UppyService>('$uppyService')
-  const publicLinkContext = usePublicLinkContext({ store })
+  const authStore = useAuthStore()
   const themeStore = useThemeStore()
   const { currentTheme } = storeToRefs(themeStore)
   const { dispatchModal, removeModal, activeModal } = useModals()
@@ -134,7 +134,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
                 return false
               }
 
-              if (unref(publicLinkContext)) {
+              if (authStore.publicLinkContextReady) {
                 return false
               }
 

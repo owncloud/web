@@ -66,7 +66,7 @@ export default defineComponent({
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
       spaceImageInput
     })
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
 
     const actions = computed(() =>
       [

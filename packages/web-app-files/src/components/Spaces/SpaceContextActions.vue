@@ -65,7 +65,7 @@ export default defineComponent({
     const { actions: restoreActions } = useSpaceActionsRestore()
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
     const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: navigateToTrashActions } = useSpaceActionsNavigateToTrash()
 
     const spaceImageInput: VNodeRef = ref(null)

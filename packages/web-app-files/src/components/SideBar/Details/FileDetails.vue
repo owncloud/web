@@ -19,7 +19,7 @@
         <resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
       </div>
       <div
-        v-if="!isPublicLinkContext && shareIndicators.length"
+        v-if="!publicLinkContextReady && shareIndicators.length"
         key="file-shares"
         data-testid="sharingInfo"
         class="oc-flex oc-flex-middle oc-my-m"
@@ -125,13 +125,17 @@
 import { storeToRefs } from 'pinia'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { mapGetters } from 'vuex'
-import { ImageDimension, useConfigurationManager, useUserStore } from '@ownclouders/web-pkg'
+import {
+  ImageDimension,
+  useAuthStore,
+  useConfigurationManager,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityFilesTags,
   useClientService,
-  usePublicLinkContext,
   useStore,
   usePreviewService,
   useGetMatchingSpace
@@ -152,7 +156,7 @@ import { AncestorMetaData, ResourceIcon } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
-import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDetails.vue'
+import { WebDavDetails } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -181,13 +185,15 @@ export default defineComponent({
 
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
-    const isPublicLinkContext = usePublicLinkContext({ store })
     const previewService = usePreviewService()
     const preview = ref(undefined)
 
+    const authStore = useAuthStore()
+    const { publicLinkContextReady } = storeToRefs(authStore)
+
     const loadData = async () => {
       const calls = []
-      if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
+      if (unref(resource).type === 'file' && !unref(publicLinkContextReady)) {
         calls.push(
           store.dispatch('Files/loadVersions', {
             client: clientService.webdav,
@@ -269,7 +275,7 @@ export default defineComponent({
     return {
       user,
       preview,
-      isPublicLinkContext,
+      publicLinkContextReady,
       space,
       resource,
       hasTags,
@@ -309,7 +315,7 @@ export default defineComponent({
       return this.showShares && this.sharedAncestor
     },
     showShares() {
-      if (this.isPublicLinkContext) {
+      if (this.publicLinkContextReady) {
         return false
       }
       return this.hasAnyShares
@@ -340,7 +346,7 @@ export default defineComponent({
       return this.resourceSize !== '?'
     },
     showVersions() {
-      if (this.resource.type === 'folder' || this.isPublicLinkContext) {
+      if (this.resource.type === 'folder' || this.publicLinkContextReady) {
         return
       }
       return this.versions.length > 0

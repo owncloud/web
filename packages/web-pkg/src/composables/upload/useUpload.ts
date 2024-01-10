@@ -1,5 +1,4 @@
 import { useStore } from '../store'
-import { useAccessToken, usePublicLinkContext, usePublicLinkPassword } from '../authContext'
 import {
   useCapabilityFilesTusExtension,
   useCapabilityFilesTusSupportHttpMethodOverride,
@@ -9,6 +8,7 @@ import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
+import { useAuthStore } from '../piniaStores'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -17,9 +17,7 @@ interface UploadOptions {
 export function useUpload(options: UploadOptions) {
   const store = useStore()
   const { current: currentLanguage } = useGettext()
-  const publicLinkPassword = usePublicLinkPassword({ store })
-  const isPublicLinkContext = usePublicLinkContext({ store })
-  const accessToken = useAccessToken({ store })
+  const authStore = useAuthStore()
 
   const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
   const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
@@ -27,8 +25,8 @@ export function useUpload(options: UploadOptions) {
 
   const headers = computed((): { [key: string]: string } => {
     const headers = { 'Accept-Language': currentLanguage }
-    if (unref(isPublicLinkContext)) {
-      const password = unref(publicLinkPassword)
+    if (authStore.publicLinkContextReady) {
+      const password = authStore.publicLinkPassword
       if (password) {
         return {
           ...headers,
@@ -40,7 +38,7 @@ export function useUpload(options: UploadOptions) {
     }
     return {
       ...headers,
-      Authorization: 'Bearer ' + unref(accessToken)
+      Authorization: 'Bearer ' + authStore.accessToken
     }
   })
 

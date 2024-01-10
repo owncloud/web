@@ -104,11 +104,13 @@
 import {
   createLocationCommon,
   isLocationCommonActive,
-  isLocationSpacesActive
+  isLocationSpacesActive,
+  useAuthStore
 } from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
+import { storeToRefs } from 'pinia'
 import { debounce } from 'lodash-es'
-import { useRouteQuery, useRouter, useStore, useUserContext } from '@ownclouders/web-pkg'
+import { useRouteQuery, useRouter, useStore } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from '@ownclouders/web-pkg'
@@ -125,6 +127,10 @@ export default defineComponent({
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
     const availableProviders = useAvailableProviders()
+
+    const authStore = useAuthStore()
+    const { userContextReady } = storeToRefs(authStore)
+
     const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
@@ -271,7 +277,7 @@ export default defineComponent({
     }
 
     return {
-      isUserContext: useUserContext({ store }),
+      userContextReady,
       showCancelButton,
       onLocationFilterChange,
       currentFolderAvailable,
@@ -308,7 +314,7 @@ export default defineComponent({
     },
 
     isSearchBarEnabled() {
-      return this.availableProviders.length && this.isUserContext
+      return this.availableProviders.length && this.userContextReady
     },
     displayProviders() {
       /**

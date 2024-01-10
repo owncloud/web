@@ -64,15 +64,14 @@ import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
+  useAuthStore,
   useClientService,
   useConfigurationManager,
   useRoute,
   useRouteParam,
   useRouteQuery,
   useRouter,
-  useStore,
-  useThemeStore,
-  useUserContext
+  useThemeStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent, onMounted } from 'vue'
@@ -97,7 +96,7 @@ export default defineComponent({
     const clientService = useClientService()
     const router = useRouter()
     const route = useRoute()
-    const store = useStore()
+    const authStore = useAuthStore()
     const { $gettext } = useGettext()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
@@ -128,15 +127,13 @@ export default defineComponent({
       return queryItemAsString(unref(route).params.driveAliasAndItem)
     })
 
-    const isUserContext = useUserContext({ store })
-
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
       return queryItemAsString(unref(detailsQuery))
     })
 
     // token info
-    const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, isUserContext })
+    const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, authStore })
     const tokenInfo = ref(null)
 
     // generic public link loading
