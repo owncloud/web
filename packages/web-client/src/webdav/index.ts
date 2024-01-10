@@ -46,7 +46,7 @@ export const webdav = (options: WebDavOptions): WebDAV => {
   const { putFileContents } = PutFileContentsFactory(dav, getFileInfoFactory, options)
 
   const { getFileUrl, revokeUrl } = GetFileUrlFactory(dav, getFileContentsFactory, options)
-  const { getPublicFileUrl } = GetPublicFileUrlFactory(dav)
+  const { getPublicFileUrl } = GetPublicFileUrlFactory(dav, options)
 
   const { copyFiles } = CopyFilesFactory(dav, options)
   const { moveFiles } = MoveFilesFactory(dav, options)

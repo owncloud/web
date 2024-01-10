@@ -1,7 +1,12 @@
 import { Resource, SpaceResource } from '../helpers'
 import { ListFilesFactory, ListFilesOptions } from './listFiles'
+import { WebDavOptions } from './types'
 
-export const GetFileInfoFactory = (listFilesFactory: ReturnType<typeof ListFilesFactory>) => {
+export const GetFileInfoFactory = (
+  listFilesFactory: ReturnType<typeof ListFilesFactory>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  options?: WebDavOptions
+) => {
   return {
     async getFileInfo(
       space: SpaceResource,

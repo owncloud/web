@@ -89,11 +89,11 @@ export default defineComponent({
      */
     resource: {
       type: Object as PropType<Resource>,
-      default: () => {}
+      default: () => ({})
     },
     resourceRoute: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     isResourceSelected: {
       type: Boolean,

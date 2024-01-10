@@ -106,7 +106,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsEditReadmeContent({ store })
+        const instance = useSpaceActionsEditReadmeContent()
         setup(instance, { storeOptions })
       },
       {

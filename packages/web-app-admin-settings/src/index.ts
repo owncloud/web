@@ -148,7 +148,7 @@ export const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem
 ]
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     const { can } = useAbility()
     const userStore = useUserStore()
 

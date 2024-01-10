@@ -5,7 +5,7 @@ exports[`ApplicationsMenu component should render navigation with button and men
   <oc-button-stub appearance="raw-inverse" arialabel="Application Switcher" class="oc-topbar-menu-burger" disabled="false" gapsize="medium" id="_appSwitcherButton" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand">
     <oc-icon-stub accessiblelabel="" class="oc-flex" color="" filltype="fill" name="grid" size="large" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub closeonclick="true" dropid="app-switcher-dropdown" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#_appSwitcherButton">
+  <oc-drop-stub closeonclick="true" dropid="app-switcher-dropdown" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#_appSwitcherButton">
     <div class="oc-display-block oc-position-relative">
       <oc-list-stub class="applications-list" raw="false">
         <li>

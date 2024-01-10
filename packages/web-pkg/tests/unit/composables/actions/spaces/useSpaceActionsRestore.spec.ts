@@ -17,7 +17,7 @@ describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
@@ -32,7 +32,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -48,7 +48,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
@@ -64,7 +64,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -74,7 +74,7 @@ describe('restore', () => {
   describe('handler', () => {
     it('should trigger the restore modal window', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
@@ -88,7 +88,7 @@ describe('restore', () => {
     })
     it('should not trigger the restore modal window without any resource', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]

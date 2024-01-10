@@ -1,13 +1,10 @@
-import { Store } from 'vuex'
-import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { ReadmeContentModal } from '../../../components'
 import { useModals, useUserStore } from '../../piniaStores'
 
-export const useSpaceActionsEditReadmeContent = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useSpaceActionsEditReadmeContent = () => {
   const { dispatchModal } = useModals()
   const userStore = useUserStore()
   const { $gettext } = useGettext()

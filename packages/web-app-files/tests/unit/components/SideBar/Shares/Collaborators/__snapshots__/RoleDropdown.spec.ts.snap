@@ -7,7 +7,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-7" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-7" isnested="false" mode="click" offset="0" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
@@ -44,7 +44,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
       </li>
     </oc-list-stub>
   </oc-drop-stub>
-  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-8" isnested="false" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-8" isnested="false" mode="manual" paddingsize="remove" popperoptions="[object Object]" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
@@ -78,7 +78,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-5" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-5" isnested="false" mode="click" offset="0" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
@@ -115,7 +115,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
       </li>
     </oc-list-stub>
   </oc-drop-stub>
-  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-6" isnested="false" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-6" isnested="false" mode="manual" paddingsize="remove" popperoptions="[object Object]" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
@@ -149,7 +149,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-3" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-3" isnested="false" mode="click" offset="0" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
@@ -186,7 +186,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
       </li>
     </oc-list-stub>
   </oc-drop-stub>
-  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-4" isnested="false" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-4" isnested="false" mode="manual" paddingsize="remove" popperoptions="[object Object]" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">
@@ -214,7 +214,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
-  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-1" isnested="false" mode="click" offset="0" paddingsize="small" position="bottom-start" toggle="#files-collaborators-role-button-new">
+  <oc-drop-stub class="files-recipient-role-drop" closeonclick="true" dropid="oc-drop-1" isnested="false" mode="click" offset="0" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#files-collaborators-role-button-new">
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
@@ -251,7 +251,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
       </li>
     </oc-list-stub>
   </oc-drop-stub>
-  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-2" isnested="false" mode="manual" paddingsize="remove" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
+  <oc-drop-stub class="files-recipient-custom-permissions-drop" closeonclick="false" dropid="oc-drop-2" isnested="false" mode="manual" paddingsize="remove" popperoptions="[object Object]" position="bottom-start" target="#files-collaborators-role-button-new" toggle="">
     <h4 class="oc-text-bold oc-m-rm oc-px-m oc-pt-m oc-pb-s">Custom permissions</h4>
     <oc-list-stub raw="false">
       <li class="oc-my-s oc-px-m">

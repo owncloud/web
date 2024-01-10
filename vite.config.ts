@@ -73,7 +73,7 @@ type ConfigJsonResponseBody = {
   options: Record<string, any>
 }
 
-const getConfigJson = async (url: string, config: UserConfig) => {
+const getConfigJson = async (url: string) => {
   const configJson = (await getJson(url)) as ConfigJsonResponseBody
 
   // enable previews and enable lazy resources, which are disabled for fast tests
@@ -103,9 +103,8 @@ export const historyModePlugins = () =>
     }
   ] as const
 
-export default defineConfig(async ({ mode, command }) => {
+export default defineConfig(({ mode, command }) => {
   const production = mode === 'production'
-  let config: UserConfig
 
   /**
     When setting `OWNCLOUD_WEB_CONFIG_URL` make sure to configure the oauth/oidc client
@@ -124,7 +123,7 @@ export default defineConfig(async ({ mode, command }) => {
   const configUrl =
     process.env.OWNCLOUD_WEB_CONFIG_URL || 'https://host.docker.internal:9200/config.json'
 
-  config = {
+  const config: UserConfig = {
     ...(!production && {
       server: {
         port: 9201,
@@ -251,7 +250,7 @@ export default defineConfig(async ({ mode, command }) => {
             server.middlewares.use(async (request, response, next) => {
               if (request.url === '/config.json') {
                 try {
-                  const configJson = await getConfigJson(configUrl, config)
+                  const configJson = await getConfigJson(configUrl)
                   response.statusCode = 200
                   response.setHeader('Content-Type', 'application/json')
                   response.end(JSON.stringify(configJson))
