@@ -15,10 +15,7 @@
       </template>
       <template v-else-if="errorMessage">
         <div class="oc-card-header oc-link-resolve-error-title">
-          <h2 v-if="isUnacceptedShareError">
-            {{ resource.name }}
-          </h2>
-          <h2 v-else key="private-link-error">
+          <h2 key="private-link-error">
             <span v-text="$gettext('An error occurred while resolving the private link')" />
           </h2>
         </div>
@@ -26,7 +23,9 @@
           <p class="oc-text-xlarge">{{ errorMessage }}</p>
           <p
             v-if="isUnacceptedShareError"
-            v-text="$gettext('Note: You can reload this page after you accept the share.')"
+            v-text="
+              $gettext('Note: You can reload this page after you enable the sync for the share.')
+            "
           />
         </div>
       </template>
@@ -90,60 +89,68 @@ export default defineComponent({
     })
 
     const resolvePrivateLinkTask = useTask(function* (signal, id) {
+      if (
+        [
+          `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`,
+          `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}`
+        ].includes(id)
+      ) {
+        return router.push(createLocationShares('files-shares-with-me'))
+      }
+
+      let result: Awaited<ReturnType<typeof getResourceContext>>
       try {
-        if (
-          [
-            `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}!${SHARE_JAIL_ID}`,
-            `${SHARE_JAIL_ID}$${SHARE_JAIL_ID}`
-          ].includes(id)
-        ) {
-          return router.push(createLocationShares('files-shares-with-me'))
-        }
-
-        const result = yield getResourceContext(id)
-        const { space, resource } = result
-        let { path } = result
-
-        let resourceIsNestedInShare = false
-        if (isShareSpaceResource(space)) {
-          sharedParentResource.value = resource
-          resourceIsNestedInShare = path !== '/'
-        }
-
-        let fileId: string
-        let targetLocation: RouteLocationNamedRaw
-        if (unref(resource).type === 'folder') {
-          fileId = unref(resource).fileId
-          targetLocation = createLocationSpaces('files-spaces-generic')
-        } else {
-          fileId = unref(resource).parentFolderId
-          path = dirname(path)
-          targetLocation =
-            space.driveType === 'share' && !resourceIsNestedInShare
-              ? createLocationShares('files-shares-with-me')
-              : createLocationSpaces('files-spaces-generic')
-        }
-
-        const { params, query } = createFileRouteOptions(space, { fileId, path })
-        const openWithDefault =
-          configurationManager.options.openLinksWithDefaultApp &&
-          unref(openWithDefaultApp) !== 'false' &&
-          !unref(details)
-
-        targetLocation.params = params
-        targetLocation.query = {
-          ...query,
-          scrollTo:
-            targetLocation.name === 'files-shares-with-me' ? space.shareId : unref(resource).fileId,
-          ...(unref(details) && { details: unref(details) }),
-          ...(openWithDefault && { openWithDefaultApp: 'true' })
-        }
-
-        router.push(targetLocation)
+        result = yield getResourceContext(id)
       } catch (e) {
+        // error means the resurce is an unaccepted/unsynced share
         isUnacceptedShareError.value = true
         throw Error(e)
       }
+
+      const { space, resource } = result
+      let { path } = result
+
+      if (!path) {
+        // empty path means the user has no access to the resource or it doesn't exist
+        throw new Error('The file or folder does not exist')
+      }
+
+      let resourceIsNestedInShare = false
+      if (isShareSpaceResource(space)) {
+        sharedParentResource.value = resource
+        resourceIsNestedInShare = path !== '/'
+      }
+
+      let fileId: string
+      let targetLocation: RouteLocationNamedRaw
+      if (unref(resource).type === 'folder') {
+        fileId = unref(resource).fileId
+        targetLocation = createLocationSpaces('files-spaces-generic')
+      } else {
+        fileId = unref(resource).parentFolderId
+        path = dirname(path)
+        targetLocation =
+          space.driveType === 'share' && !resourceIsNestedInShare
+            ? createLocationShares('files-shares-with-me')
+            : createLocationSpaces('files-spaces-generic')
+      }
+
+      const { params, query } = createFileRouteOptions(space, { fileId, path })
+      const openWithDefault =
+        configurationManager.options.openLinksWithDefaultApp &&
+        unref(openWithDefaultApp) !== 'false' &&
+        !unref(details)
+
+      targetLocation.params = params
+      targetLocation.query = {
+        ...query,
+        scrollTo:
+          targetLocation.name === 'files-shares-with-me' ? space.shareId : unref(resource).fileId,
+        ...(unref(details) && { details: unref(details) }),
+        ...(openWithDefault && { openWithDefaultApp: 'true' })
+      }
+
+      router.push(targetLocation)
     })
 
     const loading = computed(() => {
@@ -160,30 +167,13 @@ export default defineComponent({
 
     const errorMessage = computed(() => {
       if (unref(isUnacceptedShareError)) {
-        if (
-          !unref(sharedParentResource) ||
-          unref(resource).name === unref(sharedParentResource).name
-        ) {
-          if (unref(resource).type === 'file') {
-            return $gettext(
-              'This file has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
-            )
-          }
+        if (!unref(sharedParentResource)) {
           return $gettext(
-            'This folder has been shared with you. Accept it in "Shares" > "Shared with me" to view it.'
-          )
-        }
-
-        if (unref(resource).type === 'file') {
-          return $gettext(
-            'This file has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
-            {
-              parentShareName: unref(sharedParentResource).name
-            }
+            'This file or folder has been shared with you. Enable the sync in "Shares" > "Shared with me" to view it.'
           )
         } else {
           return $gettext(
-            'This folder has been shared with you via "%{parentShareName}". Accept the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
+            'This file or folder has been shared with you via "%{parentShareName}". Enable the sync for the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
             {
               parentShareName: unref(sharedParentResource).name
             }
