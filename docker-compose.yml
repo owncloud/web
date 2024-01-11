@@ -257,7 +257,7 @@ services:
     restart: always
 
   collabora:
-    image: collabora/code:23.05.6.4.1
+    image: collabora/code:23.05.6.5.1
     environment:
       DONT_GEN_SSL_CERT: 'YES'
       extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://host.docker.internal:9200
