@@ -99,11 +99,11 @@ const generatePasswordButton = '.oc-text-input-generate-password-button'
 const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
 
 const getRecentLinkUrl = async (page: Page): Promise<string> => {
-  return page.locator(publicLinkUrlList).first().textContent()
+  return await page.locator(publicLinkUrlList).first().textContent()
 }
 
 const getRecentLinkName = async (page: Page): Promise<string> => {
-  return page.locator(publicLinkNameList).first().textContent()
+  return await page.locator(publicLinkNameList).first().textContent()
 }
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
@@ -214,8 +214,8 @@ export const showOrHidePassword = async (args): Promise<void> => {
   const { page, showOrHide } = args
   await page.locator(showOrHidePasswordButton).click()
   showOrHide === 'reveals'
-    ? expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'text')
-    : expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'password')
+    ? await expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'text')
+    : await expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'password')
 }
 
 export const copyEnteredPassword = async (page: Page): Promise<void> => {

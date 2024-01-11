@@ -16,7 +16,7 @@ describe('editDescription', () => {
   describe('handler', () => {
     it('should trigger the editDescription modal window with one resource', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [{ id: '1' } as SpaceResource] })
 
@@ -26,7 +26,7 @@ describe('editDescription', () => {
     })
     it('should not trigger the editDescription modal window with no resource', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 

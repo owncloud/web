@@ -82,6 +82,7 @@ describe('Projects view', () => {
       expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
   })
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
       abilities: [{ action: 'create-all', subject: 'Drive' }],

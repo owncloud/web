@@ -246,7 +246,7 @@ export default {
     }
   },
   async changeShare(
-    { commit, dispatch, getters, rootGetters },
+    { commit, getters, rootGetters },
     { client, share, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {

@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { Resource, SpaceResource } from '../../../web-client/src'
+import { SpaceResource } from '../../../web-client/src'
 import { useGetMatchingSpace } from '../../../web-pkg'
 import { PersonalSpaceResource } from '../../../web-client/src/helpers'
 
@@ -7,19 +7,19 @@ export const useGetMatchingSpaceMock = (
   options: Partial<ReturnType<typeof useGetMatchingSpace>> = {}
 ): ReturnType<typeof useGetMatchingSpace> => {
   return {
-    getInternalSpace(storageId: string) {
+    getInternalSpace() {
       return mock<SpaceResource>()
     },
-    getMatchingSpace(resource: Resource) {
+    getMatchingSpace() {
       return mock<SpaceResource>()
     },
     getPersonalSpace() {
       return mock<PersonalSpaceResource>()
     },
-    isResourceAccessible({ space, path }) {
+    isResourceAccessible() {
       return false
     },
-    isPersonalSpaceRoot(resource: Resource) {
+    isPersonalSpaceRoot() {
       return false
     },
     ...options

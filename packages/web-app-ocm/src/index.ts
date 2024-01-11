@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
 ]
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     const { $gettext } = useGettext()
     const router = useRouter()
 
@@ -58,7 +58,7 @@ export default defineWebApplication({
       appInfo,
       routes,
       navItems,
-      extensions: extensions(args),
+      extensions: extensions(),
       translations
     }
   }

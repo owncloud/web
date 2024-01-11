@@ -84,5 +84,5 @@ export default {
   name: 'OcTooltip',
   beforeMount: initOrUpdate,
   updated: initOrUpdate,
-  unmounted: (el, binding) => destroy(el.tooltip)
+  unmounted: (el) => destroy(el.tooltip)
 }

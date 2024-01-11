@@ -111,11 +111,13 @@
           @sort="handleSort"
         >
           <template #additionalResourceContent="{ resource }">
+            <!-- eslint-disable vue/no-v-html -->
             <span
               v-if="resource.highlights"
               class="files-search-resource-highlights oc-text-truncate"
               v-html="resource.highlights"
             />
+            <!--eslint-enable-->
           </template>
           <template #contextMenu="{ resource }">
             <context-actions

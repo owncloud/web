@@ -53,8 +53,9 @@
           appearance="raw"
           class="toggle-shares-list-btn"
           @click="toggleShareListCollapsed"
-          v-text="collapseButtonTitle"
-        />
+        >
+          {{ collapseButtonTitle }}
+        </oc-button>
       </div>
     </template>
     <template v-if="showSpaceMembers">
@@ -76,11 +77,9 @@
         </li>
       </ul>
       <div v-if="showMemberToggle" class="oc-flex oc-flex-center">
-        <oc-button
-          appearance="raw"
-          @click="toggleMemberListCollapsed"
-          v-text="collapseButtonTitle"
-        />
+        <oc-button appearance="raw" @click="toggleMemberListCollapsed">
+          {{ collapseButtonTitle }}
+        </oc-button>
       </div>
     </template>
   </div>

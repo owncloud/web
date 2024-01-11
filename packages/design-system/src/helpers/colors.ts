@@ -91,8 +91,7 @@ export function generateHashedColorForString(name: string): string {
 export function setDesiredContrastRatio(
   targetColorRgb: Array<number>,
   associatedColorRgb: Array<number>,
-  desiredRatio: number,
-  dim = true
+  desiredRatio: number
 ): Array<number> {
   const ratio = getContrastRatio(targetColorRgb, associatedColorRgb)
   if (Math.abs(desiredRatio - ratio) <= 0.3) {
@@ -102,15 +101,13 @@ export function setDesiredContrastRatio(
     return setDesiredContrastRatio(
       hexToRgb(calculateShadeColor(targetColorRgb, -1)),
       associatedColorRgb,
-      desiredRatio,
-      true
+      desiredRatio
     )
   }
   return setDesiredContrastRatio(
     hexToRgb(calculateShadeColor(targetColorRgb, 1)),
     associatedColorRgb,
-    desiredRatio,
-    false
+    desiredRatio
   )
 }
 

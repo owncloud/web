@@ -6,6 +6,7 @@ expect.extend(toHaveNoViolations)
 
 describe('FeedbackLink component', () => {
   // FIXME: skip flaky test, also see: https://github.com/owncloud/web/issues/8244
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('has no accessibility violations', async () => {
     const { wrapper } = getWrapper()
     expect(

@@ -49,6 +49,7 @@ export class FolderLoaderSpace implements FolderLoader {
       try {
         store.commit('Files/CLEAR_CURRENT_FILES_LIST')
 
+        // eslint-disable-next-line prefer-const
         let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
           path,
           fileId

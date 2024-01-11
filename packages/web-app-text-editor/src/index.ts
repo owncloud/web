@@ -4,7 +4,7 @@ import TextEditor from './App.vue'
 import { AppWrapperRoute, defineWebApplication, useUserStore } from '@ownclouders/web-pkg'
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     const { $gettext } = useGettext()
     const userStore = useUserStore()
 

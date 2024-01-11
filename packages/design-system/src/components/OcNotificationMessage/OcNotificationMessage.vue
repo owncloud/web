@@ -81,14 +81,16 @@ export default defineComponent({
      */
     message: {
       type: String,
-      required: false
+      required: false,
+      default: null
     },
     /**
      * The error log content that will be displayed in notification
      */
     errorLogContent: {
       type: String,
-      required: false
+      required: false,
+      default: null
     },
     /**
      * Number of seconds the message shows. It will disappear after this time.

@@ -9,7 +9,7 @@ import {
 } from '../../../router'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
-import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '../../../helpers/router'
 import { useGetMatchingSpace } from '../../spaces'
 import { useRouter } from '../../router'
@@ -24,7 +24,7 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
   const { $gettext } = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
 
-  const getSpace = (space: SpaceResource, resource: Resource) => {
+  const getSpace = (space: SpaceResource) => {
     return space ? space : getMatchingSpace(space)
   }
 
@@ -81,7 +81,7 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
         return merge(
           {},
           unref(routeName),
-          createFileRouteOptions(getSpace(space, resources[0]), {
+          createFileRouteOptions(getSpace(space), {
             path: resources[0].path,
             fileId: resources[0].fileId
           })

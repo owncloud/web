@@ -53,7 +53,7 @@ describe('navigateToSpace', () => {
     })
   })
   describe('handler', () => {
-    it('should redirect to respective trash', async () => {
+    it('should redirect to respective trash', () => {
       const { mocks } = getWrapper({
         setup: async ({ actions }) => {
           await unref(actions)[0].handler({

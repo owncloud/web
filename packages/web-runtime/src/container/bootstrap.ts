@@ -641,7 +641,9 @@ const fileReadyEventSchema = z.object({
 const onSSEProcessingFinishedEvent = ({
   store,
   msg,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientService,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   resourceQueue
 }: {
   store: Store<unknown>

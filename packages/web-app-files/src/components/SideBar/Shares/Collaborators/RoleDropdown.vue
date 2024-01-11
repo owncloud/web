@@ -95,15 +95,18 @@
           size="small"
           class="files-recipient-custom-permissions-drop-cancel"
           @click="cancelCustomPermissions"
-          v-text="$gettext('Cancel')"
-        /><oc-button
+        >
+          {{ $gettext('Cancel') }}
+        </oc-button>
+        <oc-button
           size="small"
           variation="primary"
           appearance="filled"
           class="files-recipient-custom-permissions-drop-confirm oc-ml-s"
           @click="confirmCustomPermissions"
-          v-text="$gettext('Apply')"
-        />
+        >
+          {{ $gettext('Apply') }}
+        </oc-button>
       </div>
     </oc-drop>
   </span>

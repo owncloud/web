@@ -16,7 +16,7 @@ describe('rename', () => {
   describe('handler', () => {
     it('should trigger the rename modal window', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [{ id: '1', name: 'renamed space' } as SpaceResource]
@@ -28,7 +28,7 @@ describe('rename', () => {
     })
     it('should not trigger the rename modal window without any resource', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 

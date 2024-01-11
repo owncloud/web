@@ -13,7 +13,7 @@ export default class List implements SearchList {
     this.searchFunction = searchFunction
   }
 
-  public async search(term: string): Promise<SearchResult> {
+  public search(term: string): Promise<SearchResult> {
     return this.searchFunction(term, searchLimit)
   }
 }

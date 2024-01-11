@@ -19,7 +19,7 @@ describe('acceptShare', () => {
       ])(
         `should be set according to the resource share status if the route name is "${sharesWithMeLocation}"`,
         (inputData) => {
-          const { wrapper } = getWrapper({
+          getWrapper({
             setup: () => {
               const store = useStore()
               const { actions } = useFileActionsAcceptShare({ store })
@@ -39,7 +39,7 @@ describe('acceptShare', () => {
       ])(
         `should be set as false if the route name is other than "${sharesWithMeLocation}"`,
         (resource) => {
-          const { wrapper } = getWrapper({
+          getWrapper({
             routeName: sharesWithOthersLocation,
             setup: () => {
               const store = useStore()

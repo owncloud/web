@@ -179,11 +179,11 @@ const cleanUpGroup = async (adminUser: User) => {
 }
 
 const setAdminToken = async (browser: Browser) => {
-  return getTokenFromLogin({ browser })
+  return await getTokenFromLogin({ browser })
 }
 
 const setKeycloakAdminToken = async (browser: Browser) => {
-  return getTokenFromLogin({
+  return await getTokenFromLogin({
     browser,
     url: config.keycloakLoginUrl,
     tokenType: 'keycloak'

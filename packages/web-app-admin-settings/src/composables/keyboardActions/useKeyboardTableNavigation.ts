@@ -16,7 +16,7 @@ export const useKeyboardTableNavigation = (
 
   keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => handleNavigateAction())
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, async () =>
+  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () =>
     handleShiftUpAction()
   )
 
@@ -42,7 +42,7 @@ export const useKeyboardTableNavigation = (
     selectedRows.splice(0, selectedRows.length)
   })
 
-  const handleNavigateAction = async (up = false) => {
+  const handleNavigateAction = (up = false) => {
     const nextResource = !lastSelectedRowId ? getFirstResource() : getNextResource(up)
 
     if (nextResource === -1) {
@@ -62,7 +62,7 @@ export const useKeyboardTableNavigation = (
     scrollToResource(nextResource.id, { topbarElement: 'admin-settings-app-bar' })
   }
 
-  const handleShiftUpAction = async () => {
+  const handleShiftUpAction = () => {
     const nextResource = getNextResource(true)
     if (nextResource === -1) {
       return

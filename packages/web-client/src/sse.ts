@@ -42,6 +42,7 @@ export class SSEAdapter implements EventSource {
       openWhenHidden: true,
       signal: this.abortController.signal,
       fetch: this.fetchProvider.bind(this),
+      // eslint-disable-next-line require-await
       onopen: async () => {
         const event = new Event('open')
         this.onopen?.bind(this)(event)
@@ -74,9 +75,9 @@ export class SSEAdapter implements EventSource {
   }
 
   fetchProvider(...args) {
-    let [resource, config] = args
-    config = { ...config, ...this.fetchOptions }
-    return window.fetch(resource, config)
+    const [resource, config] = args
+    const fetchConfig = { ...config, ...this.fetchOptions }
+    return window.fetch(resource, fetchConfig)
   }
 
   close() {
@@ -95,7 +96,7 @@ export class SSEAdapter implements EventSource {
     this.eventListenerMap[type] = this.eventListenerMap[type]?.filter((func) => func !== listener)
   }
 
-  dispatchEvent(event: Event): boolean {
+  dispatchEvent(): boolean {
     throw new Error('Method not implemented.')
   }
 

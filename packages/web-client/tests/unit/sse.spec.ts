@@ -58,7 +58,7 @@ describe('SSEAdapter', () => {
 
   test('it should handle onclose events and throw RetriableError', () => {
     const fetchOptions = { method: 'GET' }
-    const sseAdapter = new SSEAdapter(url, fetchOptions)
+    new SSEAdapter(url, fetchOptions)
 
     expect(() => {
       // Simulate onclose

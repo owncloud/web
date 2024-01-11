@@ -159,7 +159,7 @@ describe('Details SideBar Panel', () => {
   })
 
   describe('tags', () => {
-    it('shows when enabled via capabilities', async () => {
+    it('shows when enabled via capabilities', () => {
       const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource })
       expect(wrapper.find(selectors.tags).exists()).toBeTruthy()

@@ -157,9 +157,9 @@ export class ResourceTransfer extends ConflictDialog {
     const movedResources: Resource[] = []
     const errors = []
 
-    for (let [i, resource] of this.resourcesToMove.entries()) {
+    for (const [i, resourceToMove] of this.resourcesToMove.entries()) {
       // shallow copy of resources to prevent modifying existing rows
-      resource = { ...resource }
+      const resource = { ...resourceToMove }
 
       const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
       let targetName = resource.name

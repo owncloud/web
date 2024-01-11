@@ -49,7 +49,7 @@ export default defineComponent({
     },
     warningMessageContextualHelperData: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     resourceType: {
       type: String,

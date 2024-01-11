@@ -60,7 +60,7 @@ export default defineComponent({
     const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
-    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
+    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
     const { actions: renameActions } = useSpaceActionsRename({ store })
     const { actions: restoreActions } = useSpaceActionsRestore({ store })
     const { actions: showDetailsActions } = useFileActionsShowDetails({ store })

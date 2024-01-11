@@ -62,19 +62,19 @@ export class Link {
   }
 
   async showOrHidePassword(args): Promise<void> {
-    return po.showOrHidePassword({ page: this.#page, ...args })
+    return await po.showOrHidePassword({ page: this.#page, ...args })
   }
 
   async copyEnteredPassword(): Promise<void> {
-    return po.copyEnteredPassword(this.#page)
+    return await po.copyEnteredPassword(this.#page)
   }
 
   async generatePassword(): Promise<void> {
-    return po.generatePassword(this.#page)
+    return await po.generatePassword(this.#page)
   }
 
   async setPassword(): Promise<void> {
-    return po.setPassword(this.#page)
+    return await po.setPassword(this.#page)
   }
 
   async changeRole(args: Omit<po.changeRoleArgs, 'page'>): Promise<string> {

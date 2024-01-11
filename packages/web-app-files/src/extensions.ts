@@ -1,5 +1,4 @@
 import {
-  ApplicationSetupOptions,
   Extension,
   useStore,
   useRouter,
@@ -11,7 +10,7 @@ import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
 import { sideBarPanels } from './fileSideBars'
 
-export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
+export const extensions = () => {
   const store = useStore()
   const router = useRouter()
   const { search: searchFunction } = useSearch()

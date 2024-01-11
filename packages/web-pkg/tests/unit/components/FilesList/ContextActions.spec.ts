@@ -16,16 +16,8 @@ import {
   useFileActionsRename,
   useFileActionsCopy
 } from '../../../../src/composables'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Action } from '../../../../src/composables/actions'
-
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
 
 // jest.mock('../../../../src/composables/actions/files', () =>
 //   createMockActionComposables(jest.requireActual('../../../../src/composables/actions/files'))
@@ -37,6 +29,7 @@ function createMockActionComposables(module) {
 //   )
 // )
 
+// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {

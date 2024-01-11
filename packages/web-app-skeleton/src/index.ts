@@ -26,7 +26,7 @@ const injectExtensions = async (api): Promise<void> => {
 }
 
 export default defineWebApplication({
-  setup: (args) => {
+  setup: () => {
     return {
       appInfo,
       navItems: [
@@ -45,7 +45,7 @@ export default defineWebApplication({
           component: App
         }
       ],
-      extensions: extensions(args),
+      extensions: extensions(),
       async mounted(api) {
         await injectExtensions(api)
       }

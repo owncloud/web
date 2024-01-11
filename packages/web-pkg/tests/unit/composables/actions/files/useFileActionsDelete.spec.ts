@@ -42,7 +42,7 @@ describe('delete', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({
+        getWrapper({
           invalidLocation: inputData.invalidLocation,
           setup: () => {
             const store = useStore()
@@ -77,7 +77,7 @@ describe('delete', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({
+        getWrapper({
           deletePermanent: true,
           invalidLocation: inputData.invalidLocation,
           setup: () => {
@@ -118,7 +118,7 @@ describe('delete', () => {
         ])('should filter non deletable resources', ({ resources, deletableResourceIds }) => {
           const filesListDeleteMock = jest.fn()
 
-          const { wrapper } = getWrapper({
+          getWrapper({
             searchLocation: true,
             filesListDeleteMock,
             setup: () => {

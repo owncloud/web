@@ -31,8 +31,8 @@
         <slot v-if="name !== 'search'" :name="name" v-bind="data" />
       </template>
       <template #no-options><div v-text="$gettext('No options available.')" /></template>
-      <template #spinner="{ loading }">
-        <oc-spinner v-if="loading" />
+      <template #spinner="{ loading: loadingSpinner }">
+        <oc-spinner v-if="loadingSpinner" />
       </template>
       <template #selected-option-container="{ option, deselect }">
         <span class="vs__selected" :class="{ 'vs__selected-readonly': option.readonly }">

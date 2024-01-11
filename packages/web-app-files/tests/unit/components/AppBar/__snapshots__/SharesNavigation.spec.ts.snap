@@ -27,7 +27,7 @@ exports[`SharesNavigation component renders a shares navigation for both mobile 
       <span>Shared with me</span>
       <oc-icon-stub accessiblelabel="" color="" filltype="line" name="arrow-down-s" size="small" type="span" variation="passive"></oc-icon-stub>
     </oc-button-stub>
-    <oc-drop-stub closeonclick="true" dropid="oc-drop-1" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#shares_navigation_mobile">
+    <oc-drop-stub closeonclick="true" dropid="oc-drop-1" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#shares_navigation_mobile">
       <oc-list-stub raw="false">
         <li>
           <oc-button-stub appearance="raw-inverse" class="oc-my-xs shares-nav-mobile oc-background-primary-gradient" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="/files/shares/with-me/" type="router-link" variation="primary">

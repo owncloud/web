@@ -27,8 +27,9 @@
       appearance="filled"
       variation="primary"
       v-bind="logoutButtonsAttrs"
-      v-text="navigateToLoginText"
-    />
+    >
+      {{ navigateToLoginText }}
+    </oc-button>
   </div>
 </template>
 

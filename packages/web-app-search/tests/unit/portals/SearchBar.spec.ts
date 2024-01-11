@@ -196,6 +196,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
+  // eslint-disable-next-line jest/expect-expect,jest/no-disabled-tests
   test.skip('sets active preview item via keyboard navigation', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')

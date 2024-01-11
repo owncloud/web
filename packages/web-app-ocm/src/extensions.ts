@@ -8,10 +8,9 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { Extension } from '@ownclouders/web-pkg'
-import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 import { OCM_PROVIDER_ID } from '@ownclouders/web-client/src/helpers'
 
-export const extensions = (options: ApplicationSetupOptions) => {
+export const extensions = () => {
   const { showErrorMessage } = useMessages()
   const clientService = useClientService()
   const configurationManager = useConfigurationManager()

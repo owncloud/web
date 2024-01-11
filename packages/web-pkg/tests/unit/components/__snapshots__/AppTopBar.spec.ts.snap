@@ -10,7 +10,7 @@ exports[`AppTopBar if a resource is present renders a resource and dropdownActio
       <div class="oc-flex main-actions">
         <!--v-if-->
         <oc-button-stub appearance="raw-inverse" arialabel="Show context menu" class="oc-p-xs" disabled="false" gapsize="medium" id="oc-openfile-contextmenu-trigger" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
-        <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub>
+        <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub>
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
@@ -28,7 +28,7 @@ exports[`AppTopBar if a resource is present renders a resource and dropdownActio
       <div class="oc-flex main-actions">
         <context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub>
         <oc-button-stub appearance="raw-inverse" arialabel="Show context menu" class="oc-p-xs" disabled="false" gapsize="medium" id="oc-openfile-contextmenu-trigger" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
-        <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub>
+        <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub>
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>
@@ -80,7 +80,7 @@ exports[`AppTopBar if a resource is present renders a resource without file exte
       <div class="oc-flex main-actions">
         <context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub>
         <oc-button-stub appearance="raw-inverse" arialabel="Show context menu" class="oc-p-xs" disabled="false" gapsize="medium" id="oc-openfile-contextmenu-trigger" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
-        <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub>
+        <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub>
         <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub>
       </div>
     </span>

@@ -30,7 +30,7 @@ describe('copy', () => {
             copyAbleResources: ['1', '2', '3']
           }
         ])('should filter non copyable resources', ({ resources, copyAbleResources }) => {
-          const { wrapper } = getWrapper({
+          getWrapper({
             searchLocation: true,
             setup: ({ actions }, { storeOptions }) => {
               unref(actions)[0].handler({ space: null, resources })
