@@ -54,10 +54,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const { publicLinkContextReady } = storeToRefs(authStore)
 
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-  const { space, item, itemId, loading } = useDriveResolver({
-    store,
-    driveAliasAndItem
-  })
+  const { space, item, itemId, loading } = useDriveResolver({ driveAliasAndItem })
   const currentFileContext = computed((): FileContext => {
     if (unref(loading)) {
       return null

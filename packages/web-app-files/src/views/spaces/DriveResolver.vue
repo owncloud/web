@@ -55,7 +55,7 @@ export default defineComponent({
     const router = useRouter()
     const driveAliasAndItem = useRouteParam('driveAliasAndItem')
     const isTrashRoute = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
-    const resolvedDrive = useDriveResolver({ store, driveAliasAndItem })
+    const resolvedDrive = useDriveResolver({ driveAliasAndItem })
     const { getInternalSpace } = useGetMatchingSpace()
     const configurationManager = useConfigurationManager()
 

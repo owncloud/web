@@ -29,7 +29,7 @@ import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useCreateLink } from '../../../src/composables/links'
 import { ref } from 'vue'
-import { CapabilityStore } from '../../../types'
+import { CapabilityStore } from '../../../src/composables/piniaStores'
 
 jest.mock('../../../src/composables/embedMode')
 jest.mock('../../../src/composables/passwordPolicyService')

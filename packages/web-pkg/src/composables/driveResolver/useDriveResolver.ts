@@ -1,5 +1,3 @@
-import { useStore } from '../store'
-import { Store } from 'vuex'
 import { computed, Ref, ref, unref, watch } from 'vue'
 import { buildShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouteQuery } from '../router'
@@ -11,7 +9,6 @@ import { useConfigurationManager } from '../configuration'
 import { useSpacesStore, useCapabilityStore } from '../piniaStores'
 
 interface DriveResolverOptions {
-  store?: Store<any>
   driveAliasAndItem?: Ref<string>
 }
 
@@ -23,7 +20,6 @@ interface DriveResolverResult {
 }
 
 export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResolverResult => {
-  const store = options.store || useStore()
   const spacesStore = useSpacesStore()
   const capabilityStore = useCapabilityStore()
   const { areSpacesLoading } = useSpacesLoading()

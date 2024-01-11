@@ -97,8 +97,7 @@ import {
   formatDateFromISO,
   formatRelativeDateFromISO,
   useClientService,
-  useRoute,
-  useStore
+  useRoute
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
@@ -112,7 +111,6 @@ export default {
     NotificationBell
   },
   setup() {
-    const store = useStore()
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
     const clientService = useClientService()

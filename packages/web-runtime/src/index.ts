@@ -74,7 +74,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     app,
     runtimeConfiguration,
     configurationManager,
-    store,
     userStore,
     authStore,
     capabilityStore
@@ -139,7 +138,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announceAuthService({
     app,
     configurationManager,
-    store,
     router,
     userStore,
     authStore,

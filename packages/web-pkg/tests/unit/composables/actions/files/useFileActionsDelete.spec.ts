@@ -14,7 +14,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { CapabilityStore } from '../../../../../types'
+import { CapabilityStore } from '../../../../../src/composables/piniaStores'
 
 jest.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')
 

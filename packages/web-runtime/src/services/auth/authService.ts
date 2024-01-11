@@ -1,6 +1,5 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
-import { Store } from 'vuex'
 import { AuthStore, ClientService, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
@@ -19,7 +18,6 @@ import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 export class AuthService {
   private clientService: ClientService
   private configurationManager: ConfigurationManager
-  private store: Store<any>
   private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
@@ -34,7 +32,6 @@ export class AuthService {
   public initialize(
     configurationManager: ConfigurationManager,
     clientService: ClientService,
-    store: Store<any>,
     router: Router,
     ability: Ability,
     language: Language,
@@ -44,7 +41,6 @@ export class AuthService {
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
-    this.store = store
     this.router = router
     this.hasAuthErrorOccurred = false
     this.ability = ability
@@ -69,8 +65,6 @@ export class AuthService {
     if (!this.publicLinkManager) {
       this.publicLinkManager = new PublicLinkManager({
         clientService: this.clientService,
-        configurationManager: this.configurationManager,
-        store: this.store,
         authStore: this.authStore,
         capabilityStore: this.capabilityStore
       })
@@ -89,7 +83,6 @@ export class AuthService {
       this.userManager = new UserManager({
         clientService: this.clientService,
         configurationManager: this.configurationManager,
-        store: this.store,
         ability: this.ability,
         language: this.language,
         userStore: this.userStore,

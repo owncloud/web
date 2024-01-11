@@ -1,27 +1,19 @@
 import { AuthStore, CapabilityStore, ClientService } from '@ownclouders/web-pkg'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
-import { Store } from 'vuex'
 import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export interface PublicLinkManagerOptions {
   clientService: ClientService
-  configurationManager: ConfigurationManager
-  store: Store<any>
   authStore: AuthStore
   capabilityStore: CapabilityStore
 }
 
 export class PublicLinkManager {
   private clientService: ClientService
-  private configurationManager: ConfigurationManager
-  private store: Store<any>
   private authStore: AuthStore
   private capabilityStore: CapabilityStore
 
   constructor(options: PublicLinkManagerOptions) {
     this.clientService = options.clientService
-    this.configurationManager = options.configurationManager
-    this.store = options.store
     this.authStore = options.authStore
     this.capabilityStore = options.capabilityStore
   }

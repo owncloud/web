@@ -23,7 +23,7 @@ const routes = [
 ]
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     const capabilityStore = useCapabilityStore()
 
     return {

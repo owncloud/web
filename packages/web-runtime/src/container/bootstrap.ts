@@ -348,7 +348,7 @@ export const announcePiniaStores = () => {
   const modalStore = useModals()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  return { authStore, capabilityStore, messagesStore, modalStore, userStore }
+  return { authStore, capabilityStore, messagesStore, modalStore, spacesStore, userStore }
 }
 
 /**
@@ -391,7 +391,6 @@ export const announceClientService = ({
   app,
   runtimeConfiguration,
   configurationManager,
-  store,
   userStore,
   authStore,
   capabilityStore
@@ -399,7 +398,6 @@ export const announceClientService = ({
   app: App
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
-  store: Store<any>
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
@@ -493,7 +491,6 @@ export const announcePreviewService = ({
 export const announceAuthService = ({
   app,
   configurationManager,
-  store,
   router,
   userStore,
   authStore,
@@ -501,7 +498,6 @@ export const announceAuthService = ({
 }: {
   app: App
   configurationManager: ConfigurationManager
-  store: Store<any>
   router: Router
   userStore: UserStore
   authStore: AuthStore
@@ -513,7 +509,6 @@ export const announceAuthService = ({
   authService.initialize(
     configurationManager,
     clientService,
-    store,
     router,
     ability,
     language,

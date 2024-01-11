@@ -13,8 +13,6 @@ import {
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { ContextActionMenu } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/src/generated'
-
-import { useStore } from '@ownclouders/web-pkg'
 import { useActionsShowDetails } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -27,7 +25,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const filterParams = computed(() => ({ resources: props.items }))
 
     const { actions: showDetailsActions } = useActionsShowDetails()

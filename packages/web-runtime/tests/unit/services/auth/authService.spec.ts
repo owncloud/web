@@ -1,6 +1,5 @@
 import { ConfigurationManager, useAuthStore } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
-import { Store } from 'vuex'
 import { AuthService } from 'web-runtime/src/services/auth/authService'
 import { UserManager } from 'web-runtime/src/services/auth/userManager'
 import { RouteLocation, createRouter, createTestingPinia } from 'web-test-helpers/src'
@@ -12,17 +11,7 @@ const initAuthService = ({ authService, configurationManager, router = null }) =
   createTestingPinia()
   const authStore = useAuthStore()
 
-  authService.initialize(
-    configurationManager,
-    null,
-    mock<Store<any>>({}),
-    router,
-    null,
-    null,
-    null,
-    authStore,
-    null
-  )
+  authService.initialize(configurationManager, null, router, null, null, null, authStore, null)
 }
 
 describe('AuthService', () => {

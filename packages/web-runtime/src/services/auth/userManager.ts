@@ -10,7 +10,6 @@ import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
 import { AuthStore, ConfigurationManager, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
-import { Store } from 'vuex'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
@@ -24,7 +23,6 @@ type UnloadReason = 'authError' | 'logout'
 export interface UserManagerOptions {
   clientService: ClientService
   configurationManager: ConfigurationManager
-  store: Store<any>
   ability: Ability
   language: Language
   userStore: UserStore
@@ -36,7 +34,6 @@ export class UserManager extends OidcUserManager {
   private readonly storePrefix
   private clientService: ClientService
   private configurationManager: ConfigurationManager
-  private store: Store<any>
   private userStore: UserStore
   private authStore: AuthStore
   private capabilityStore: CapabilityStore
@@ -112,7 +109,6 @@ export class UserManager extends OidcUserManager {
     this.browserStorage = browserStorage
     this.clientService = options.clientService
     this.configurationManager = options.configurationManager
-    this.store = options.store
     this.ability = options.ability
     this.language = options.language
     this.userStore = options.userStore
