@@ -37,7 +37,7 @@ export const webdav = (options: WebDavOptions): WebDAV => {
   const listFilesByIdFactory = ListFilesByIdFactory(dav, options)
   const { listFilesById } = listFilesByIdFactory
 
-  const getFileInfoFactory = GetFileInfoFactory(listFilesFactory)
+  const getFileInfoFactory = GetFileInfoFactory(listFilesFactory, options)
   const { getFileInfo } = getFileInfoFactory
 
   const { createFolder } = CreateFolderFactory(dav, getFileInfoFactory, options)
