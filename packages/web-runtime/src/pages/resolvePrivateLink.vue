@@ -52,7 +52,8 @@ import {
   useRouteQuery,
   useConfigurationManager,
   createLocationSpaces,
-  createLocationShares
+  createLocationShares,
+  useClientService
 } from '@ownclouders/web-pkg'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
@@ -70,6 +71,8 @@ export default defineComponent({
     const id = useRouteParam('fileId')
     const configurationManager = useConfigurationManager()
     const { $gettext } = useGettext()
+    const clientService = useClientService()
+
     const resource: Ref<Resource> = ref()
     const sharedParentResource: Ref<Resource> = ref()
     const isUnacceptedShareError = ref(false)
@@ -116,9 +119,14 @@ export default defineComponent({
       }
 
       let resourceIsNestedInShare = false
+      let isHiddenShare = false
       if (isShareSpaceResource(space)) {
         sharedParentResource.value = resource
         resourceIsNestedInShare = path !== '/'
+        if (!resourceIsNestedInShare && space.shareId) {
+          const { shareInfo } = yield clientService.owncloudSdk.shares.getShare(space.shareId)
+          isHiddenShare = shareInfo.hidden === 'true'
+        }
       }
 
       let fileId: string
@@ -147,6 +155,7 @@ export default defineComponent({
         scrollTo:
           targetLocation.name === 'files-shares-with-me' ? space.shareId : unref(resource).fileId,
         ...(unref(details) && { details: unref(details) }),
+        ...(isHiddenShare && { 'q_share-visibility': 'hidden' }),
         ...(openWithDefault && { openWithDefaultApp: 'true' })
       }
 

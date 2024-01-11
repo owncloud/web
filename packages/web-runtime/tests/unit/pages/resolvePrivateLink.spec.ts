@@ -74,6 +74,28 @@ describe('resolvePrivateLink', () => {
         expect.objectContaining({ name: 'files-shares-with-me' })
       )
     })
+    it('adds the hidden share param for hidden shares', async () => {
+      const fileId = '1'
+      const driveAliasAndItem = 'shares/someShare'
+      const space = mock<SpaceResource>({
+        driveType: 'share',
+        getDriveAliasAndItem: () => driveAliasAndItem
+      })
+      const resource = mock<Resource>({ fileId, type: 'file' })
+      const { wrapper, mocks } = getWrapper({
+        space,
+        resource,
+        fileId,
+        path: '/',
+        hiddenShare: true
+      })
+      await wrapper.vm.resolvePrivateLinkTask.last
+      expect(mocks.$router.push).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({ 'q_share-visibility': 'hidden' })
+        })
+      )
+    })
   })
   it('passes the details query param if given via query', async () => {
     const details = 'sharing'
@@ -137,6 +159,7 @@ function getWrapper({
   path = '',
   fileId = '',
   details = '',
+  hiddenShare = false,
   openWithDefaultAppQuery = 'true',
   openLinksWithDefaultApp = true
 } = {}) {
@@ -165,6 +188,10 @@ function getWrapper({
   )
 
   const mocks = { ...defaultComponentMocks() }
+  mocks.$clientService.owncloudSdk.shares.getShare.mockResolvedValue({
+    shareInfo: { hidden: hiddenShare ? 'true' : 'false' }
+  })
+
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
 
