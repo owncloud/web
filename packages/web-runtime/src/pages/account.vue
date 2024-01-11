@@ -479,4 +479,7 @@ export default defineComponent({
 dd {
   margin-left: 0;
 }
+main {
+  overflow-y: auto;
+}
 </style>
