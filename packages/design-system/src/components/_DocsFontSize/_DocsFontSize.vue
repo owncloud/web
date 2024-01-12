@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import designTokens from '../../../src/assets/tokens/ods.json'
+import designTokens from '../../assets/tokens/ods.json'
 
 /**
  * This typographic scale makes it easier to achieve visual harmony in the
@@ -23,7 +23,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * [/src/tokens/font-size.yml](https://github.com/owncloud/web/blob/master/packages/design-system/src/tokens/font-size.yml).
  */
 export default defineComponent({
-  name: 'FontSize',
+  name: 'DocsFontSize',
 
   computed: {
     tokens() {
@@ -34,7 +34,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../docs.tokens';
+@import '../../../docs/docs.tokens';
 
 /* STYLES
 --------------------------------------------- */
@@ -65,6 +65,6 @@ export default defineComponent({
 
 <docs>
   ```
-  <FontSize/>
+  <DocsFontSize/>
   ```
 </docs>

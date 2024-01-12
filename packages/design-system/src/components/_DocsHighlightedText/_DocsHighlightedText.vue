@@ -28,7 +28,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'HighlightedText',
+  name: 'DocsHighlightedText',
   props: {
     tag: {
       type: String,

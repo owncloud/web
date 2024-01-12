@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import designTokens from '../../../src/assets/tokens/ods.json'
+import designTokens from '../../assets/tokens/ods.json'
 
 /**
  * A framework for creating a predictable and harmonious spacing system. These
@@ -25,7 +25,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * [/src/tokens/spacing.yml](https://github.com/owncloud/web/blob/master/packages/design-system/src/tokens/spacing.yml).
  */
 export default defineComponent({
-  name: 'SpacingTokens',
+  name: 'DocsSpacingTokens',
   computed: {
     tokens() {
       return Object.values(designTokens).filter((token) => token.name.startsWith('oc-space'))
@@ -35,7 +35,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../docs.tokens';
+@import '../../../docs/docs.tokens';
 
 /* STYLES
 --------------------------------------------- */
@@ -71,6 +71,6 @@ export default defineComponent({
 
 <docs>
   ```jsx
-  <spacing-tokens />
+  <docs-spacing-tokens />
   ```
 </docs>

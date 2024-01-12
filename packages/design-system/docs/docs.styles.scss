@@ -437,7 +437,6 @@ thead[class^="rsg--tableHead"] {
 
 // Codemirror and markdown code blocks
 pre[class^="rsg--pre"],
-.vueds-html.cm-s-night.CodeMirror,
 .react-codemirror2 .CodeMirror.CodeMirror {
   background: mix($color-bleu-de-france, $color-rich-black, 10%);
   border-bottom-left-radius: $oc-docs-border-radius-default;
@@ -466,11 +465,6 @@ pre[class^="rsg--pre"],
   code {
     color: $color-white;
   }
-}
-
-// HTML preview needs some padding adjustments to match Styleguidist
-.vueds-html.cm-s-night.CodeMirror {
-  padding-left: $space-m - 4px;
 }
 
 // VUE & HTML Code tabs

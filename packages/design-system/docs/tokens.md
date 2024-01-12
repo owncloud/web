@@ -5,23 +5,23 @@ You’re looking at ownCloud Design System’s demo <code>design tokens</code>. 
 ## Color Palette
 
 ```
-<color-tokens />
+<docs-color-tokens />
 ```
 
 ## Font Sizes
 
 ```
-<font-size />
+<docs-font-size />
 ```
 
 ## Spacing
 
 ```
-<spacing-tokens />
+<docs-spacing-tokens />
 ```
 
 ## All Tokens
 
 ```
-<all-tokens />
+<docs-all-tokens />
 ```

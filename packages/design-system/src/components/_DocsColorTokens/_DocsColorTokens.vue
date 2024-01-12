@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import designTokens from '../../../src/assets/tokens/ods.json'
+import designTokens from '../../assets/tokens/ods.json'
 
 /**
  * The color palette comes with 5 different weights for each hue. These hues
@@ -31,7 +31,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * [/src/tokens/color.yml](https://github.com/owncloud/owncloud-design-system/blob/master/src/tokens/color.yml).
  */
 export default defineComponent({
-  name: 'ColorTokens',
+  name: 'DocsColorTokens',
 
   computed: {
     tokens() {
@@ -42,7 +42,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../docs.tokens';
+@import '../../../docs/docs.tokens';
 
 /* STYLES
 --------------------------------------------- */
@@ -112,9 +112,7 @@ h3 {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin-bottom: $space-m;
-  box-shadow:
-    0 0 0 1px rgba(63, 63, 68, 0.05),
-    0 1px 3px 0 rgba(63, 63, 68, 0.15);
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(63, 63, 68, 0.15);
   font-size: $size-s;
   font-family: $font-text;
   color: $color-rich-black;
@@ -157,6 +155,6 @@ h3 {
 
 <docs>
 ```jsx
-<color-tokens />
+<docs-color-tokens />
 ```
 </docs>

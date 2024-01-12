@@ -65,10 +65,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import orderBy from '../../utils/orderBy'
+import orderBy from '../../../docs/utils/orderBy'
 
 export default defineComponent({
-  name: 'ComponentsList',
+  name: 'DocsComponentsList',
   data() {
     return {
       components: this.orderData(this.getComponents())
@@ -95,7 +95,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../docs.tokens';
+@import '../../../docs/docs.tokens';
 
 /* STYLES
 --------------------------------------------- */
@@ -192,6 +192,6 @@ export default defineComponent({
 
 <docs>
   ```jsx
-  <components-list />
+  <docs-components-list />
   ```
 </docs>

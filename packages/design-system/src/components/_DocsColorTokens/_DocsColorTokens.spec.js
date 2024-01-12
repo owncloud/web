@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import ColorTokens from './ColorTokens.vue'
+import ColorTokens from './_DocsColorTokens.vue'
 
 const Constructor = Vue.extend(ColorTokens)
 const vm = new Constructor().$mount()

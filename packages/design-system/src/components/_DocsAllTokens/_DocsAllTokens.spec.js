@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import AllTokens from './AllTokens.vue'
+import AllTokens from './_DocsAllTokens.vue'
 
 const Constructor = Vue.extend(AllTokens)
 const vm = new Constructor().$mount()

@@ -8,7 +8,6 @@ module.exports = {
    * Name of your design system. Changes both page title and sidebar logo.
    */
   title: 'ownCloud Design System',
-  require: [path.join(__dirname, '../docs/docs.styles.scss')],
   webpackConfig: baseConfig,
   /**
    * Most of the styles are defined in /docs/docs.styles.scss
@@ -37,13 +36,14 @@ module.exports = {
    * Enabling the below option will break things in ownCloud Design System!
    */
   skipComponentsWithoutExample: false,
+  renderRootJsx: '../docs/components/Preview.js',
   /**
    * We’re defining below JS and SCSS requires for the documentation.
    */
-  // require: [
-  // path.join(__dirname, '../docs/docs.helper.js'),
-
-  // ],
+  require: [
+    path.join(__dirname, '../docs/docs.styles.scss'),
+    path.join(__dirname, '../docs/docs.helper.js')
+  ],
   /**
    * Enabling the following option splits sections into separate views.
    */
@@ -54,8 +54,7 @@ module.exports = {
       content: '../docs/getting-started.md',
       sectionDepth: 1,
       exampleMode: 'hide',
-      usageMode: 'hide',
-      components: ['../docs/components/status/ComponentsList.vue']
+      usageMode: 'hide'
     },
     {
       name: 'Design Principles',
@@ -84,12 +83,13 @@ module.exports = {
       sectionDepth: 1,
       exampleMode: 'hide',
       usageMode: 'hide',
-      components: () => [
-        '../docs/components/tokens/IconList.vue',
-        '../docs/components/tokens/ColorTokens.vue',
-        '../docs/components/tokens/FontSize.vue',
-        '../docs/components/tokens/SpacingTokens.vue',
-        '../docs/components/tokens/AllTokens.vue'
+      sections: [
+        {
+          name: 'Icons',
+          content: '../docs/icons.md',
+          exampleMode: 'hide',
+          usageMode: 'hide'
+        }
       ]
     },
     {

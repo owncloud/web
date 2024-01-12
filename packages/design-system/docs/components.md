@@ -5,5 +5,5 @@ You’re looking at ownCloud Design System’s demo <code>UI Components</code>. 
 ## Overview
 
 ```
-<components-list />
+<docs-components-list />
 ```
