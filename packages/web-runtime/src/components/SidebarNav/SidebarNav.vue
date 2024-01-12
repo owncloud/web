@@ -2,8 +2,8 @@
   <div
     id="web-nav-sidebar"
     :class="{
-      'oc-app-navigation-collapsed': navigation.closed,
-      'oc-app-navigation-expanded': !navigation.closed
+      'oc-app-navigation-collapsed': closed,
+      'oc-app-navigation-expanded': !closed
     }"
   >
     <oc-button
@@ -11,7 +11,7 @@
       :class="toggleSidebarButtonClass"
       class="toggle-sidebar-button oc-pb-s oc-pt-m"
       :aria-label="$gettext('Toggle sidebar')"
-      @click="toggleSidebarButtonClick"
+      @click="$emit('update:nav-bar-closed', !closed)"
     >
       <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
     </oc-button>
@@ -37,7 +37,7 @@
           :icon="link.icon"
           :fill-type="link.fillType"
           :name="link.name"
-          :collapsed="navigation.closed"
+          :collapsed="closed"
           :tag="link.tag"
           :handler="link.handler"
         />
@@ -60,7 +60,6 @@ import {
   unref,
   watch
 } from 'vue'
-import { mapState, mapActions } from 'vuex'
 import * as uuid from 'uuid'
 import SidebarNavItem from './SidebarNavItem.vue'
 import { NavItem } from '../../helpers/navItems'
@@ -73,8 +72,10 @@ export default defineComponent({
     navItems: {
       type: Array as PropType<NavItem[]>,
       required: true
-    }
+    },
+    closed: { type: Boolean, default: false }
   },
+  emits: ['update:nav-bar-closed'],
   setup(props) {
     let resizeObserver
     const navItemRefs = ref<Record<string, ComponentPublicInstance>>({})
@@ -129,16 +130,14 @@ export default defineComponent({
     return { highlighterAttrs, navItemRefs }
   },
   computed: {
-    ...mapState(['navigation']),
-
     toggleSidebarButtonClass() {
-      return this.navigation.closed
+      return this.closed
         ? 'toggle-sidebar-button-collapsed'
         : 'toggle-sidebar-button-expanded oc-pr-s'
     },
 
     toggleSidebarButtonIcon() {
-      return this.navigation.closed ? 'arrow-drop-right' : 'arrow-drop-left'
+      return this.closed ? 'arrow-drop-right' : 'arrow-drop-left'
     },
 
     isAnyNavItemActive() {
@@ -146,12 +145,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(['openNavigation', 'closeNavigation']),
-
-    toggleSidebarButtonClick() {
-      return this.navigation.closed ? this.openNavigation() : this.closeNavigation()
-    },
-
     getUuid() {
       return uuid.v4().replaceAll('-', '')
     }

@@ -11,7 +11,13 @@
       <div class="app-container oc-flex">
         <app-loading-spinner v-if="isLoading" />
         <template v-else>
-          <sidebar-nav v-if="isSidebarVisible" class="app-navigation" :nav-items="navItems" />
+          <sidebar-nav
+            v-if="isSidebarVisible"
+            class="app-navigation"
+            :nav-items="navItems"
+            :closed="navBarClosed"
+            @update:nav-bar-closed="setNavBarClosed"
+          />
           <portal to="app.runtime.mobile.nav">
             <mobile-nav v-if="isMobileWidth" :nav-items="navItems" />
           </portal>
@@ -174,12 +180,19 @@ export default defineComponent({
       return unref(navItems).length && !unref(isMobileWidth)
     })
 
+    const navBarClosed = ref(false)
+    const setNavBarClosed = (value: boolean) => {
+      navBarClosed.value = value
+    }
+
     return {
       isSidebarVisible,
       isLoading,
       navItems,
       onResize,
-      isMobileWidth
+      isMobileWidth,
+      navBarClosed,
+      setNavBarClosed
     }
   },
   computed: {
