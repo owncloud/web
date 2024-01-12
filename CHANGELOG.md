@@ -48,6 +48,7 @@ Summary
 * Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
 * Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+* Change - Capability store: [#10296](https://github.com/owncloud/web/pull/10296)
 * Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
 * Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
 * Change - Auth store to pinia: [#10323](https://github.com/owncloud/web/pull/10323)
@@ -490,6 +491,21 @@ Details
 
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10240
+
+* Change - Capability store: [#10296](https://github.com/owncloud/web/pull/10296)
+
+   BREAKING CHANGE for developers: The capabilities have been moved from vuex store
+   to pinia. We also removed the `use...Capability` composables in favor of the new
+   pinia store composable: `useCapabilityStore`.
+
+   Furthermore, the `enabled` callback as well as the `name` callback of the
+   `AppNavigationItem` no longer have the `capabilities` parameter.
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/issues/9748
+   https://github.com/owncloud/web/pull/10296
 
 * Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
 
