@@ -42,18 +42,13 @@
 <script lang="ts">
 import { mapGetters } from 'vuex'
 import orderBy from 'lodash-es/orderBy'
-import {
-  AppLoadingSpinner,
-  SidebarNavExtension,
-  useAuthStore,
-  useExtensionRegistry
-} from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useAuthStore, useExtensionRegistry } from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
 import UploadInfo from '../components/UploadInfo.vue'
 import MobileNav from '../components/MobileNav.vue'
-import { NavItem } from '../helpers/navItems'
+import { NavItem, getExtensionNavItems } from '../helpers/navItems'
 import { LoadingIndicator } from '@ownclouders/web-pkg'
 import {
   useActiveApp,
@@ -67,7 +62,6 @@ import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 import '@uppy/core/dist/style.min.css'
-import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 const MOBILE_BREAKPOINT = 640
 
@@ -92,13 +86,7 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
 
     const extensionNavItems = computed(() =>
-      extensionRegistry
-        .requestExtensions<SidebarNavExtension>('sidebarNav', [
-          unref(activeApp),
-          `app.${unref(activeApp)}`
-        ])
-        .map(({ navItem }) => navItem)
-        .filter((n) => n.enabled())
+      getExtensionNavItems({ extensionRegistry, appId: unref(activeApp) })
     )
 
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
@@ -141,14 +129,9 @@ export default defineComponent({
         return []
       }
 
-      const items = [
-        ...store.getters['getNavItemsByExtension'](unref(activeApp)),
-        ...unref(extensionNavItems)
-      ] as AppNavigationItem[]
-
       const { href: currentHref } = router.resolve(unref(route))
       return orderBy(
-        items.map((item) => {
+        unref(extensionNavItems).map((item) => {
           let active = typeof item.isActive !== 'function' || item.isActive()
 
           if (active) {

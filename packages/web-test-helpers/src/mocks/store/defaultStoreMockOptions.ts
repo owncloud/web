@@ -5,7 +5,6 @@ export const defaultStoreMockOptions = {
   commit: jest.fn(),
   getters: {
     newFileHandlers: jest.fn(() => []),
-    getNavItemsByExtension: jest.fn(),
     apps: jest.fn(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
       options: {

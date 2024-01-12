@@ -1,10 +1,10 @@
 import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import { RuntimeApi } from './types'
-import { ApiError } from '@ownclouders/web-pkg'
+import { ApiError, ExtensionRegistry, SidebarNavExtension } from '@ownclouders/web-pkg'
 import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
 import { Module, Store } from 'vuex'
-import { App, Component, h } from 'vue'
+import { App, Component, computed, h } from 'vue'
 import { ApplicationTranslations, AppNavigationItem } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
 
@@ -61,22 +61,25 @@ const announceRoutes = (applicationId: string, router: Router, routes: RouteReco
  * inject application specific navigation items into runtime
  *
  * @param applicationId
- * @param store
+ * @param extensionRegistry
  * @param navigationItems
  */
 const announceNavigationItems = (
   applicationId: string,
-  store: Store<unknown>,
+  extensionRegistry: ExtensionRegistry,
   navigationItems: AppNavigationItem[]
 ): void => {
   if (!isObject(navigationItems)) {
     throw new ApiError("navigationItems can't be blank")
   }
 
-  store.commit('SET_NAV_ITEMS_FROM_CONFIG', {
-    extension: applicationId,
-    navItems: navigationItems
-  })
+  const navExtensions = navigationItems.map((navItem) => ({
+    type: 'sidebarNav',
+    navItem,
+    scopes: [applicationId, `app.${applicationId}`]
+  })) as SidebarNavExtension[]
+
+  extensionRegistry.registerExtensions(computed(() => navExtensions))
 }
 
 /**
@@ -213,7 +216,8 @@ export const buildRuntimeApi = ({
   store,
   router,
   gettext,
-  supportedLanguages
+  supportedLanguages,
+  extensionRegistry
 }: {
   applicationName: string
   applicationId: string
@@ -221,6 +225,7 @@ export const buildRuntimeApi = ({
   gettext: Language
   router: Router
   supportedLanguages: { [key: string]: string }
+  extensionRegistry: ExtensionRegistry
 }): RuntimeApi => {
   if (!applicationName) {
     throw new ApiError("applicationName can't be blank")
@@ -234,7 +239,7 @@ export const buildRuntimeApi = ({
     announceRoutes: (routes: RouteRecordRaw[]): void =>
       announceRoutes(applicationId, router, routes),
     announceNavigationItems: (navigationItems: AppNavigationItem[]): void =>
-      announceNavigationItems(applicationId, store, navigationItems),
+      announceNavigationItems(applicationId, extensionRegistry, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>
       announceTranslations(supportedLanguages, gettext, appTranslations),
     announceStore: (applicationStore: Module<unknown, unknown>): void =>
