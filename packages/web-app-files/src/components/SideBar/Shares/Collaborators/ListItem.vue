@@ -137,12 +137,11 @@ import RoleDropdown from './RoleDropdown.vue'
 import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   queryItemAsString,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingResharingDefault,
   useMessages,
   useModals,
   useSpacesStore,
-  useUserStore
+  useUserStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
 import { computed, defineComponent, PropType } from 'vue'
@@ -189,6 +188,8 @@ export default defineComponent({
   setup(props, { emit }) {
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { dispatchModal } = useModals()
@@ -235,10 +236,10 @@ export default defineComponent({
     }
 
     return {
-      hasResharing: useCapabilityFilesSharingResharing(),
-      resharingDefault: useCapabilityFilesSharingResharingDefault(),
       changeSpaceMember,
       user,
+      hasResharing: capabilityRefs.sharingResharing,
+      resharingDefault: capabilityRefs.sharingResharingDefault,
       clientService,
       sharedParentDir,
       setDenyShare,

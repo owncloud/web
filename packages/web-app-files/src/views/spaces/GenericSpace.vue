@@ -169,6 +169,7 @@ import {
 
 import {
   ProcessorType,
+  useCapabilityStore,
   useEmbedMode,
   useFileActions,
   useFileActionsCreateNewFolder,
@@ -192,7 +193,6 @@ import {
   createLocationSpaces,
   displayPositionedDropdown,
   useBreadcrumbsFromPath,
-  useCapabilityShareJailEnabled,
   useClientService,
   useDocumentTitle,
   useOpenWithDefaultApp,
@@ -220,6 +220,7 @@ import {
   useKeyboardTableNavigation,
   useKeyboardTableSpaceActions
 } from 'web-app-files/src/composables/keyboardActions'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -265,10 +266,11 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { $gettext, $ngettext } = useGettext()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
-    const hasShareJail = useCapabilityShareJailEnabled()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
     const { openWithDefaultApp } = useOpenWithDefaultApp()
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
@@ -535,7 +537,7 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail,
+      hasShareJail: capabilityRefs.spacesShareJail,
       createNewFolderAction,
       isEmbedModeEnabled
     }

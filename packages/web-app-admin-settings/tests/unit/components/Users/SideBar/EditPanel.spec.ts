@@ -1,15 +1,14 @@
 import EditPanel from '../../../../../src/components/Users/SideBar/EditPanel.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   mockAxiosReject,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { AxiosResponse } from 'axios'
+import { CapabilityStore } from '@ownclouders/web-pkg'
 
 const availableGroupOptions = [
   mock<Group>({ id: '1', displayName: 'group1', groupTypes: [] }),
@@ -177,13 +176,10 @@ function getWrapper({
   groups = availableGroupOptions
 } = {}) {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockReturnValue({
-    graph: {
-      users: { read_only_attributes: readOnlyUserAttributes }
-    }
-  })
-  const store = createStore(storeOptions)
+  const capabilities = {
+    graph: { users: { read_only_attributes: readOnlyUserAttributes } }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     mocks,
     wrapper: shallowMount(EditPanel, {
@@ -202,7 +198,7 @@ function getWrapper({
       global: {
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })]
       }
     })
   }

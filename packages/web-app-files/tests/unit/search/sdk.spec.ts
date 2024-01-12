@@ -1,27 +1,20 @@
 import { SDKSearch } from '../../../src/search'
-import { Store } from 'vuex'
 import { RouteLocation, Router } from 'vue-router'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
-import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
+import { createTestingPinia } from 'web-test-helpers/src'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 
-jest.mock('@ownclouders/web-client/src/helpers/resource', () => ({
-  buildResource: (v) => v
-}))
-
-const getStore = () => {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockReturnValue({ dav: { reports: ['search-files'] } })
-  return createStore(storeOptions)
+const getStore = (reports = []) => {
+  createTestingPinia({
+    initialState: { capabilities: { capabilities: { dav: { reports } } } }
+  })
+  return useCapabilityStore()
 }
-
-const storeWithoutFileSearch = mockDeep<Store<any>>({
-  getters: { capabilities: { dav: { reports: [] } } }
-})
 
 describe('SDKProvider', () => {
   it('is only available if announced via capabilities', () => {
-    const search = new SDKSearch(storeWithoutFileSearch, mock<Router>(), jest.fn())
+    const search = new SDKSearch(getStore(), mock<Router>(), jest.fn())
     expect(search.available).toBe(false)
   })
 
@@ -33,7 +26,7 @@ describe('SDKProvider', () => {
         { route: 'bar', available: true }
       ].forEach((v) => {
         const search = new SDKSearch(
-          getStore(),
+          getStore(['search-files']),
           mock<Router>({
             currentRoute: ref(mock<RouteLocation>({ name: v.route }))
           }),

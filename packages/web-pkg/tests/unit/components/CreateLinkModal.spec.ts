@@ -29,6 +29,7 @@ import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useCreateLink } from '../../../src/composables/links'
 import { ref } from 'vue'
+import { CapabilityStore } from '../../../src/composables/piniaStores'
 
 jest.mock('../../../src/composables/embedMode')
 jest.mock('../../../src/composables/passwordPolicyService')
@@ -220,7 +221,13 @@ function getWrapper({
   const mocks = { ...defaultComponentMocks(), postMessageMock, createLinkMock }
 
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockReturnValue({
+  const store = createStore(storeOptions)
+  const abilities = [] as AbilityRule[]
+  if (userCanCreatePublicLinks) {
+    abilities.push({ action: 'create-all', subject: 'PublicLink' })
+  }
+
+  const capabilities = {
     files_sharing: {
       public: {
         expire_date: {},
@@ -230,13 +237,7 @@ function getWrapper({
         password: { enforced_for: { read_only: passwordEnforced } }
       }
     }
-  })
-
-  const store = createStore(storeOptions)
-  const abilities = [] as AbilityRule[]
-  if (userCanCreatePublicLinks) {
-    abilities.push({ action: 'create-all', subject: 'PublicLink' })
-  }
+  } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
     storeOptions,
@@ -248,7 +249,10 @@ function getWrapper({
         callbackFn
       },
       global: {
-        plugins: [...defaultPlugins({ abilities }), store],
+        plugins: [
+          ...defaultPlugins({ abilities, piniaOptions: { capabilityState: { capabilities } } }),
+          store
+        ],
         mocks,
         provide: mocks,
         stubs: { OcTextInput: true, OcDatepicker: true }

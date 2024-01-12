@@ -8,7 +8,12 @@ import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
 import SpaceProjects from './views/spaces/Projects.vue'
 import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
-import { defineWebApplication, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
+import {
+  defineWebApplication,
+  useCapabilityStore,
+  useSpacesStore,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import store from './store'
 import { extensions } from './extensions'
 import { buildRoutes } from '@ownclouders/web-pkg'
@@ -38,11 +43,12 @@ const appInfo = {
 export const navItems = (context): AppNavigationItem[] => {
   const spacesStores = useSpacesStore()
   const userStore = useUserStore()
+  const capabilityStore = useCapabilityStore()
 
   return [
     {
-      name(capabilities) {
-        return capabilities.spaces?.enabled ? $gettext('Personal') : $gettext('All files')
+      name() {
+        return capabilityStore.spacesEnabled ? $gettext('Personal') : $gettext('All files')
       },
       icon: appInfo.icon,
       route: {
@@ -51,8 +57,8 @@ export const navItems = (context): AppNavigationItem[] => {
       isActive: () => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
-      enabled(capabilities) {
-        if (!capabilities.spaces?.enabled) {
+      enabled() {
+        if (!capabilityStore.spacesEnabled) {
           return true
         }
         return !!spacesStores.spaces.find(
@@ -67,8 +73,8 @@ export const navItems = (context): AppNavigationItem[] => {
       route: {
         path: `/${appInfo.id}/favorites`
       },
-      enabled(capabilities) {
-        return capabilities.files?.favorites && context.$ability.can('read', 'Favorite')
+      enabled() {
+        return capabilityStore.filesFavorites && context.$ability.can('read', 'Favorite')
       },
       priority: 20
     },
@@ -87,8 +93,8 @@ export const navItems = (context): AppNavigationItem[] => {
         { path: `/${appInfo.id}/spaces/share` },
         { path: `/${appInfo.id}/spaces/personal` }
       ],
-      enabled(capabilities) {
-        return capabilities.files_sharing?.api_enabled !== false
+      enabled() {
+        return capabilityStore.sharingApiEnabled !== false
       },
       priority: 30
     },
@@ -99,8 +105,8 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/spaces/projects`
       },
       activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
-      enabled(capabilities) {
-        return capabilities.spaces?.projects
+      enabled() {
+        return capabilityStore.spacesProjects
       },
       priority: 40
     },
@@ -111,8 +117,8 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/trash/overview`
       },
       activeFor: [{ path: `/${appInfo.id}/trash` }],
-      enabled(capabilities) {
-        return capabilities.dav?.trashbin === '1.0' && capabilities.files?.undelete
+      enabled() {
+        return capabilityStore.davTrashbin === '1.0' && capabilityStore.filesUndelete
       },
       priority: 50
     }

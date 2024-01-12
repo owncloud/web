@@ -1,12 +1,12 @@
-import { computed, unref, toRaw } from 'vue'
+import { computed, toRaw } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
   QuotaModal,
   useAbility,
-  useCapabilityReadOnlyUserAttributes,
+  useModals,
   UserAction,
   UserActionOptions,
-  useModals
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
 import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -14,9 +14,9 @@ import { User } from '@ownclouders/web-client/src/generated'
 
 export const useUserActionsEditQuota = () => {
   const { dispatchModal } = useModals()
+  const capabilityStore = useCapabilityStore()
   const { $gettext } = useGettext()
   const ability = useAbility()
-  const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
 
   const getModalTitle = ({ resources }: { resources: User[] }) => {
     if (resources.length === 1) {
@@ -86,7 +86,7 @@ export const useUserActionsEditQuota = () => {
           return false
         }
 
-        if (unref(readOnlyUserAttributes).includes('drive.quota')) {
+        if (capabilityStore.graphUsersReadOnlyAttributes.includes('drive.quota')) {
           return false
         }
 

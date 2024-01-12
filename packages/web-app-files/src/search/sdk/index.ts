@@ -1,8 +1,13 @@
 import Preview from './preview'
 import List from './list'
-import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { SearchFunction, SearchList, SearchPreview, SearchProvider } from '@ownclouders/web-pkg'
+import {
+  CapabilityStore,
+  SearchFunction,
+  SearchList,
+  SearchPreview,
+  SearchProvider
+} from '@ownclouders/web-pkg'
 
 function $gettext(msg) {
   return msg
@@ -13,17 +18,17 @@ export default class Provider implements SearchProvider {
   public readonly displayName: string
   public readonly previewSearch: SearchPreview
   public readonly listSearch: SearchList
-  private readonly store: Store<any>
+  private readonly capabilityStore: CapabilityStore
 
-  constructor(store: Store<any>, router: Router, searchFunction: SearchFunction) {
+  constructor(capabilityStore: CapabilityStore, router: Router, searchFunction: SearchFunction) {
     this.id = 'files.sdk'
     this.displayName = $gettext('Files')
     this.previewSearch = new Preview(router, searchFunction)
     this.listSearch = new List(searchFunction)
-    this.store = store
+    this.capabilityStore = capabilityStore
   }
 
   public get available(): boolean {
-    return this.store.getters.capabilities?.dav?.reports?.includes('search-files')
+    return this.capabilityStore.davReports.includes('search-files')
   }
 }

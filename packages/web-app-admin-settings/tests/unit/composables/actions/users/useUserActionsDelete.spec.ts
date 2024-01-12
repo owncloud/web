@@ -2,12 +2,13 @@ import { useUserActionsDelete } from '../../../../../src/composables/actions/use
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
+import { eventBus, useCapabilityStore } from '@ownclouders/web-pkg'
 import {
   createStore,
   defaultComponentMocks,
   defaultStoreMockOptions,
-  getComposableWrapper
+  getComposableWrapper,
+  writable
 } from 'web-test-helpers'
 
 describe('useUserActionsDelete', () => {
@@ -21,10 +22,9 @@ describe('useUserActionsDelete', () => {
       'should only return true if 1 or more users are selected and not disabled via capability',
       ({ resources, disabledViaCapability, isEnabled }) => {
         getWrapper({
-          setup: ({ actions }, { storeOptions }) => {
-            storeOptions.getters.capabilities.mockImplementation(() => ({
-              graph: { users: { delete_disabled: !!disabledViaCapability } }
-            }))
+          setup: ({ actions }) => {
+            const capabilityStore = useCapabilityStore()
+            writable(capabilityStore).graphUsersDeleteDisabled = !!disabledViaCapability
             expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
           }
         })

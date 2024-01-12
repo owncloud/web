@@ -125,13 +125,7 @@ import {
 } from '@ownclouders/web-client/src/helpers/share'
 import * as uuid from 'uuid'
 import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
-import {
-  useAbility,
-  useCapabilityFilesSharingAllowCustomPermissions,
-  useCapabilityFilesSharingResharingDefault,
-  useStore,
-  useUserStore
-} from '@ownclouders/web-pkg'
+import { useAbility, useUserStore, useCapabilityStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { OcDrop } from 'design-system/src/components'
 
@@ -170,7 +164,8 @@ export default defineComponent({
   },
   emits: ['optionChange'],
   setup() {
-    const store = useStore()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const ability = useAbility()
     const userStore = useUserStore()
 
@@ -181,8 +176,8 @@ export default defineComponent({
       user,
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
-      resharingDefault: useCapabilityFilesSharingResharingDefault(store)
+      hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
+      resharingDefault: capabilityRefs.sharingResharingDefault
     }
   },
   data() {

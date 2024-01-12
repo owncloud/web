@@ -1,22 +1,16 @@
 import { computed, unref } from 'vue'
 import { useFileActionsCreateLink } from '../../../../../src/composables/actions/files/useFileActionsCreateLink'
-import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
+import { useMessages, useModals, CapabilityStore } from '../../../../../src/composables/piniaStores'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { useCreateLink, useDefaultLinkPermissions } from '../../../../../src/composables/links'
-import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../../../../src/composables/capability'
-import { PasswordEnforcedForCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('../../../../../src/composables/links', () => ({
   ...jest.requireActual('../../../../../src/composables/links'),
   useCreateLink: jest.fn(),
   useDefaultLinkPermissions: jest.fn()
-}))
-
-jest.mock('../../../../../src/composables/capability', () => ({
-  useCapabilityFilesSharingPublicPasswordEnforcedFor: jest.fn()
 }))
 
 describe('useFileActionsCreateLink', () => {
@@ -138,13 +132,11 @@ function getWrapper({
   jest
     .mocked(useDefaultLinkPermissions)
     .mockReturnValue({ defaultLinkPermissions: computed(() => defaultLinkPermissions) })
-  jest
-    .mocked(useCapabilityFilesSharingPublicPasswordEnforcedFor)
-    .mockReturnValue(
-      computed(() => mock<PasswordEnforcedForCapability>({ read_only: passwordEnforced }))
-    )
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }
+  const capabilities = {
+    files_sharing: { public: { password: { enforced_for: { read_only: passwordEnforced } } } }
+  } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
     wrapper: getComposableWrapper(
@@ -157,8 +149,8 @@ function getWrapper({
         setup(instance, { mocks })
       },
       {
-        mocks,
-        provide: mocks
+        provide: mocks,
+        pluginOptions: { piniaOptions: { capabilityState: { capabilities } } }
       }
     )
   }

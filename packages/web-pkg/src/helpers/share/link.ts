@@ -1,9 +1,8 @@
 import { DateTime } from 'luxon'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
-import { Store } from 'vuex'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { getLocaleFromLanguage } from '../locale'
-import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { CapabilityStore } from '../../composables'
 
 // TODO: move to useDefaultLinkPermissions composable
 export const getDefaultLinkPermissions = ({
@@ -30,14 +29,13 @@ export const getDefaultLinkPermissions = ({
 export type ExpirationRules = { enforced: boolean; default: DateTime; min: DateTime; max: DateTime }
 
 export const getExpirationRules = ({
-  store,
+  capabilityStore,
   currentLanguage
 }: {
-  store: Store<any>
+  capabilityStore: CapabilityStore
   currentLanguage: string
 }): ExpirationRules => {
-  const expireDate: PublicExpirationCapability =
-    store.getters.capabilities.files_sharing.public.expire_date
+  const expireDate = capabilityStore.sharingPublicExpireDate
 
   let defaultExpireDate: DateTime = null
   let maxExpireDateFromCaps: DateTime = null

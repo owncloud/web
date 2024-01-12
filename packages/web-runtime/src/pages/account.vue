@@ -144,9 +144,7 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
-  useCapabilityChangeSelfPasswordDisabled,
-  useCapabilityCoreSSE,
-  useCapabilityGraphPersonalDataExport,
+  useCapabilityStore,
   useClientService,
   useMessages,
   useModals,
@@ -184,22 +182,20 @@ export default defineComponent({
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
     const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
-    const sseEnabled = useCapabilityCoreSSE()
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
       () => !store.getters.configuration?.options?.runningOnEos
     )
 
-    const isChangePasswordDisabled = useCapabilityChangeSelfPasswordDisabled()
-    const isPersonalDataExportEnabled = useCapabilityGraphPersonalDataExport()
-
     const { user } = storeToRefs(userStore)
 
     const showGdprExport = computed(() => {
-      return unref(isPersonalDataExportEnabled) && spacesStore.personalSpace
+      return capabilityStore.personalDataExport && spacesStore.personalSpace
     })
 
     const loadValuesListTask = useTask(function* () {
@@ -332,7 +328,7 @@ export default defineComponent({
           languageSetting: option.value
         })
 
-        if (unref(sseEnabled)) {
+        if (capabilityStore.supportSSE) {
           ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
         }
 
@@ -421,7 +417,7 @@ export default defineComponent({
       updateDisableEmailNotifications,
       updateViewOptionsWebDavDetails,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
-      isChangePasswordDisabled,
+      isChangePasswordDisabled: capabilityRefs.graphUsersChangeSelfPasswordDisabled,
       showGdprExport,
       isSettingsServiceSupported,
       groupNames,

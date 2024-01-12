@@ -1,7 +1,6 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
-import { Store } from 'vuex'
-import { AuthStore, ClientService, UserStore } from '@ownclouders/web-pkg'
+import { AuthStore, ClientService, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -19,7 +18,6 @@ import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 export class AuthService {
   private clientService: ClientService
   private configurationManager: ConfigurationManager
-  private store: Store<any>
   private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
@@ -27,28 +25,29 @@ export class AuthService {
   private language: Language
   private userStore: UserStore
   private authStore: AuthStore
+  private capabilityStore: CapabilityStore
 
   public hasAuthErrorOccurred: boolean
 
   public initialize(
     configurationManager: ConfigurationManager,
     clientService: ClientService,
-    store: Store<any>,
     router: Router,
     ability: Ability,
     language: Language,
     userStore: UserStore,
-    authStore: AuthStore
+    authStore: AuthStore,
+    capabilityStore: CapabilityStore
   ): void {
     this.configurationManager = configurationManager
     this.clientService = clientService
-    this.store = store
     this.router = router
     this.hasAuthErrorOccurred = false
     this.ability = ability
     this.language = language
     this.userStore = userStore
     this.authStore = authStore
+    this.capabilityStore = capabilityStore
   }
 
   /**
@@ -66,9 +65,8 @@ export class AuthService {
     if (!this.publicLinkManager) {
       this.publicLinkManager = new PublicLinkManager({
         clientService: this.clientService,
-        configurationManager: this.configurationManager,
-        store: this.store,
-        authStore: this.authStore
+        authStore: this.authStore,
+        capabilityStore: this.capabilityStore
       })
     }
 
@@ -85,11 +83,11 @@ export class AuthService {
       this.userManager = new UserManager({
         clientService: this.clientService,
         configurationManager: this.configurationManager,
-        store: this.store,
         ability: this.ability,
         language: this.language,
         userStore: this.userStore,
-        authStore: this.authStore
+        authStore: this.authStore,
+        capabilityStore: this.capabilityStore
       })
     }
 

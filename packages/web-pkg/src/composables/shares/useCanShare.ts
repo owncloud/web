@@ -1,22 +1,16 @@
 import { Resource } from '@ownclouders/web-client'
 import { useAbility } from '../ability'
-import {
-  useCapabilityFilesSharingApiEnabled,
-  useCapabilityFilesSharingResharing
-} from '../capability'
-import { unref } from 'vue'
+import { useCapabilityStore } from '../piniaStores'
 
 export const useCanShare = () => {
+  const capabilityStore = useCapabilityStore()
   const ability = useAbility()
 
-  const sharingApiEnabled = useCapabilityFilesSharingApiEnabled()
-  const resharingEnabled = useCapabilityFilesSharingResharing()
-
   const canShare = (item: Resource) => {
-    if (!unref(sharingApiEnabled)) {
+    if (!capabilityStore.sharingApiEnabled) {
       return false
     }
-    if (item.isReceivedShare() && !unref(resharingEnabled)) {
+    if (item.isReceivedShare() && !capabilityStore.sharingResharing) {
       return false
     }
     return item.canShare({ ability })

@@ -11,6 +11,7 @@ import {
   useGetMatchingSpaceMock
 } from 'web-test-helpers'
 import { useFileActions } from '../../../../src/composables/actions'
+import { CapabilityStore } from '../../../../src/composables/piniaStores'
 
 jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
   useGetMatchingSpace: jest.fn()
@@ -55,11 +56,6 @@ describe('Preview component', () => {
 })
 
 function getWrapper({
-  route = {
-    query: {},
-    params: {}
-  },
-  hasShareJail = true,
   space = null,
   searchResult = {
     id: '1',
@@ -70,14 +66,10 @@ function getWrapper({
       shareRoot: ''
     }
   },
-  user = { id: 'test' },
   areFileExtensionsShown = true
 }: {
-  route?: any
-  hasShareJail?: boolean
   space?: SpaceResource
   searchResult?: any
-  user?: any
   areFileExtensionsShown?: boolean
 } = {}) {
   jest.mocked(useGetMatchingSpace).mockImplementation(() =>
@@ -107,18 +99,15 @@ function getWrapper({
         options: {
           disablePreviews: true
         }
-      }),
-      capabilities: () => ({
-        spaces: {
-          share_jail: hasShareJail,
-          projects: { enabled: true }
-        }
-      }),
-      user: () => user
+      })
     }
   }
   const store = createStore(storeOptions)
-  const mocks = defaultComponentMocks({ currentRoute: route })
+  const mocks = defaultComponentMocks()
+  const capabilities = {
+    spaces: { share_jail: true, projects: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: shallowMount(ResourcePreview, {
       props: {
@@ -128,7 +117,7 @@ function getWrapper({
         provide: mocks,
         renderStubDefaultSlot: true,
         mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
       }
     })
   }

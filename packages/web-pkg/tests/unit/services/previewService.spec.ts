@@ -4,7 +4,11 @@ import { ConfigurationManager } from '../../../src/configuration'
 import { createStore, createTestingPinia, defaultStoreMockOptions } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { AxiosResponse } from 'axios'
-import { useAuthStore, useUserStore } from '../../../src/composables/piniaStores'
+import {
+  useAuthStore,
+  useUserStore,
+  useCapabilityStore
+} from '../../../src/composables/piniaStores'
 import { User } from '@ownclouders/web-client/src/generated'
 
 describe('PreviewService', () => {
@@ -131,14 +135,6 @@ const getWrapper = ({
   accessToken = 'token'
 } = {}) => {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockReturnValue({
-    files: {
-      thumbnail: {
-        supportedMimeTypes,
-        version
-      }
-    }
-  })
   const store = createStore(storeOptions)
   const clientService = mockDeep<ClientService>()
   clientService.httpAuthenticated.get.mockResolvedValue({ data: {}, status: 200 } as AxiosResponse)
@@ -152,6 +148,8 @@ const getWrapper = ({
   createTestingPinia({ initialState: { user: { user: mock<User>() }, auth: { accessToken } } })
   const userStore = useUserStore()
   const authStore = useAuthStore()
+  const capabilityStore = useCapabilityStore()
+  capabilityStore.capabilities.files = { thumbnail: { supportedMimeTypes, version } }
 
   return {
     previewService: new PreviewService({
@@ -159,7 +157,8 @@ const getWrapper = ({
       clientService,
       configurationManager,
       userStore,
-      authStore
+      authStore,
+      capabilityStore
     }),
     clientService
   }

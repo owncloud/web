@@ -2,7 +2,6 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
-import { useCapabilityFilesSharingResharing } from '@ownclouders/web-pkg'
 import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
@@ -33,10 +32,17 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, spacesStore, router, clientService, configurationManager } = context
+    const {
+      store,
+      userStore,
+      spacesStore,
+      router,
+      clientService,
+      configurationManager,
+      capabilityStore
+    } = context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
-    const hasResharing = useCapabilityFilesSharingResharing(store)
 
     return useTask(function* (
       signal1,
@@ -65,7 +71,7 @@ export class FolderLoaderSpace implements FolderLoader {
             const aggregatedShares = aggregateResourceShares({
               shares: [parentShare.shareInfo],
               spaces: spacesStore.spaces,
-              allowSharePermission: unref(hasResharing),
+              allowSharePermission: capabilityStore.sharingResharing,
               hasShareJail: true,
               incomingShares: true,
               fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths

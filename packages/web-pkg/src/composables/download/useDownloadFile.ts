@@ -1,10 +1,8 @@
-import { unref } from 'vue'
 import { useClientService } from '../clientService'
 import { triggerDownloadWithFilename } from '../../../src/helpers'
 import { useGettext } from 'vue3-gettext'
-import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { ClientService } from '../../services'
-import { useAuthStore, useMessages } from '../piniaStores'
+import { useAuthStore, useMessages, useCapabilityStore } from '../piniaStores'
 
 export interface DownloadFileOptions {
   clientService?: ClientService
@@ -13,7 +11,7 @@ export interface DownloadFileOptions {
 export const useDownloadFile = (options?: DownloadFileOptions) => {
   const authStore = useAuthStore()
   const { showErrorMessage } = useMessages()
-  const isUrlSigningEnabled = useCapabilityCoreSupportUrlSigning()
+  const capabilityStore = useCapabilityStore()
   const clientService = options?.clientService || useClientService()
   const { $gettext } = useGettext()
 
@@ -33,7 +31,7 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
     }
 
     // download with signing enabled
-    if (authStore.userContextReady && unref(isUrlSigningEnabled)) {
+    if (authStore.userContextReady && capabilityStore.supportUrlSigning) {
       const httpClient = clientService.httpAuthenticated
       try {
         const response = await httpClient.head(url)

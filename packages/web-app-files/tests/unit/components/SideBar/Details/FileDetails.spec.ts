@@ -204,7 +204,6 @@ function createWrapper({
 } = {}) {
   const storeOptions = defaultStoreMockOptions
   storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
-  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: tagsEnabled } })
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
@@ -214,6 +213,7 @@ function createWrapper({
   const publicLocation = createLocationPublic('files-public-link')
   const currentRoute = isPublicLinkContext ? publicLocation : spacesLocation
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
+  const capabilities = { files: { tags: tagsEnabled } }
   return {
     wrapper: mount(FileDetails, {
       global: {
@@ -227,7 +227,8 @@ function createWrapper({
           ...defaultPlugins({
             piniaOptions: {
               userState: { user },
-              authState: { publicLinkContextReady: isPublicLinkContext }
+              authState: { publicLinkContextReady: isPublicLinkContext },
+              capabilityState: { capabilities }
             }
           }),
           store

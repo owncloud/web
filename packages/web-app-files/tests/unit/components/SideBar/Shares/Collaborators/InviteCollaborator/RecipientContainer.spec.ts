@@ -1,6 +1,7 @@
 import RecipientContainer from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { CapabilityStore } from '@ownclouders/web-pkg'
 
 jest.mock('web-app-files/src/helpers/user/avatarUrl', () => ({
   avatarUrl: jest.fn().mockReturnValue('avatarUrl')
@@ -41,18 +42,16 @@ describe('InviteCollaborator RecipientContainer', () => {
 
 function getMountedWrapper(recipient, avatarsEnabled = false) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({
+  const store = createStore(storeOptions)
+  const capabilities = {
     files_sharing: {
       user: {
         profile_picture: avatarsEnabled,
-        expire_date: {
-          enabled: true,
-          days: 10
-        }
+        expire_date: { enabled: true, days: '10' }
       }
     }
-  }))
-  const store = createStore(storeOptions)
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: mount(RecipientContainer, {
       props: {
@@ -60,7 +59,10 @@ function getMountedWrapper(recipient, avatarsEnabled = false) {
         deselect: jest.fn()
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
+          store
+        ],
         stubs: {
           OcIcon: true
         }

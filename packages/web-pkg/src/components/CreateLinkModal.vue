@@ -152,18 +152,14 @@ import {
 } from 'vue'
 import {
   useAbility,
-  useCapabilityFilesSharingPublicAlias,
-  useCapabilityFilesSharingPublicCanContribute,
-  useCapabilityFilesSharingPublicCanEdit,
-  useCapabilityFilesSharingPublicPasswordEnforcedFor,
   usePasswordPolicyService,
   useEmbedMode,
   useExpirationRules,
   useDefaultLinkPermissions,
   useCreateLink,
-  Modal
+  Modal,
+  useCapabilityStore
 } from '../composables'
-import { formatRelativeDateFromDateTime } from '../helpers'
 import {
   LinkShareRoles,
   Share,
@@ -176,6 +172,7 @@ import {
   linkRoleViewerFolder
 } from '@ownclouders/web-client/src/helpers'
 import { Resource } from '@ownclouders/web-client'
+import { formatRelativeDateFromDateTime } from '../helpers'
 
 export default defineComponent({
   name: 'CreateLinkModal',
@@ -191,6 +188,7 @@ export default defineComponent({
   },
   emits: ['cancel', 'confirm'],
   setup(props, { expose }) {
+    const capabilityStore = useCapabilityStore()
     const { $gettext, current: currentLanguage } = useGettext()
     const ability = useAbility()
     const passwordPolicyService = usePasswordPolicyService()
@@ -199,11 +197,7 @@ export default defineComponent({
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { createLink } = useCreateLink()
 
-    const hasPublicLinkEditing = useCapabilityFilesSharingPublicCanEdit()
-    const hasPublicLinkContribute = useCapabilityFilesSharingPublicCanContribute()
-    const hasPublicLinkAliasSupport = useCapabilityFilesSharingPublicAlias()
     const canCreatePublicLinks = computed(() => ability.can('create-all', 'PublicLink'))
-    const passwordEnforcedCapabilities = useCapabilityFilesSharingPublicPasswordEnforcedFor()
     const passwordPolicy = passwordPolicyService.getPolicy()
 
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
@@ -220,22 +214,22 @@ export default defineComponent({
     const availableRoleOptions = computed(() => {
       return LinkShareRoles.list(
         unref(isFolder),
-        unref(hasPublicLinkEditing),
-        unref(hasPublicLinkContribute),
-        unref(hasPublicLinkAliasSupport),
+        capabilityStore.sharingPublicCanEdit,
+        capabilityStore.sharingPublicCanContribute,
+        capabilityStore.sharingPublicAlias,
         unref(canCreatePublicLinks)
       )
     })
 
     const passwordEnforced = computed(() => {
       return (
-        (unref(passwordEnforcedCapabilities).read_only === true &&
+        (capabilityStore.sharingPublicPasswordEnforcedFor.read_only === true &&
           unref(selectedRole).name === linkRoleViewerFolder.name) ||
-        (unref(passwordEnforcedCapabilities).upload_only === true &&
+        (capabilityStore.sharingPublicPasswordEnforcedFor.upload_only === true &&
           unref(selectedRole).name === linkRoleUploaderFolder.name) ||
-        (unref(passwordEnforcedCapabilities).read_write === true &&
+        (capabilityStore.sharingPublicPasswordEnforcedFor.read_write === true &&
           unref(selectedRole).name === linkRoleContributorFolder.name) ||
-        (unref(passwordEnforcedCapabilities).read_write_delete === true &&
+        (capabilityStore.sharingPublicPasswordEnforcedFor.read_write_delete === true &&
           unref(selectedRole).name === linkRoleEditorFolder.name)
       )
     })

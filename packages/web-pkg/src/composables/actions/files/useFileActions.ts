@@ -8,7 +8,6 @@ import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
 import { useStore } from '../../store'
 import { useRouter } from '../../router'
-import { useCapabilityFilesAppProviders } from '../../capability'
 import { useGettext } from 'vue3-gettext'
 import {
   Action,
@@ -34,6 +33,7 @@ import {
   useFileActionsRestore,
   useFileActionsCreateSpaceFromResource
 } from './index'
+import { useCapabilityStore } from '../../piniaStores'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -44,12 +44,12 @@ export interface GetFileActionsOptions extends FileActionOptions {
 
 export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
-  const appProviders = useCapabilityFilesAppProviders()
   const appProvidersEnabled = computed(() => {
-    return !!unref(appProviders).find((appProvider) => appProvider.enabled)
+    return !!capabilityStore.filesAppProviders.find((appProvider) => appProvider.enabled)
   })
 
   const { openUrl } = useWindowOpen()

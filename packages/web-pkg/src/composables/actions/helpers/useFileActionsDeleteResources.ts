@@ -10,25 +10,24 @@ import { computed, unref } from 'vue'
 import { queryItemAsString } from '../../appDefaults'
 import { useGetMatchingSpace } from '../../spaces'
 import { useRouteQuery } from '../../router'
-import { useCapabilitySpacesEnabled } from '../../capability'
 import { useLoadingService } from '../../loadingService'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
-import { useMessages, useModals, useSpacesStore } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore, useCapabilityStore } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
   const messageStore = useMessages()
   const { showMessage, showErrorMessage } = messageStore
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = language
-  const hasSpacesEnabled = useCapabilitySpacesEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { dispatchModal } = useModals()
@@ -195,7 +194,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                   isLocationSpacesActive(router, 'files-spaces-generic') &&
                   !['public', 'share'].includes(spaceForDeletion?.driveType)
                 ) {
-                  if (unref(hasSpacesEnabled)) {
+                  if (capabilityStore.spacesEnabled) {
                     const graphClient = clientService.graphAuthenticated
                     const driveResponse = await graphClient.drives.getDrive(
                       unref(resources)[0].storageId

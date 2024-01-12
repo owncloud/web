@@ -8,7 +8,9 @@ import {
   useUserStore,
   UserStore,
   SpacesStore,
-  useSpacesStore
+  useSpacesStore,
+  CapabilityStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { Store } from 'vuex'
@@ -35,6 +37,7 @@ export type TaskContext = {
   userStore: UserStore
   spacesStore: SpacesStore
   router: Router
+  capabilityStore: CapabilityStore
 }
 
 export interface FolderLoader {
@@ -61,6 +64,7 @@ export class FolderService {
     const store = useStore()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
+    const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
@@ -77,6 +81,7 @@ export class FolderService {
         store,
         userStore,
         spacesStore,
+        capabilityStore,
         router
       }
       try {

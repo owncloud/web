@@ -23,6 +23,8 @@ import { avatarUrl } from '../../../../../helpers/user'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defineComponent } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   props: {
@@ -36,7 +38,14 @@ export default defineComponent({
       default: null
     }
   },
+  setup() {
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
+    return {
+      userProfilePicture: capabilityRefs.sharingUserProfilePicture
+    }
+  },
   data(): { formattedRecipient: Recipient } {
     return {
       formattedRecipient: {
@@ -51,7 +60,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['configuration', 'capabilities']),
+    ...mapGetters(['configuration']),
 
     btnDeselectRecipientLabel() {
       return this.$gettext('Deselect %{name}', { name: this.recipient.label })
@@ -59,7 +68,7 @@ export default defineComponent({
   },
 
   async created() {
-    if (this.capabilities.files_sharing.user.profile_picture && this.formattedRecipient.hasAvatar) {
+    if (this.userProfilePicture && this.formattedRecipient.hasAvatar) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,

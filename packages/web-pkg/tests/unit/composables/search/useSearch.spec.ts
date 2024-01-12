@@ -5,7 +5,7 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers'
-import { useSearch } from '../../../../src/composables'
+import { CapabilityStore, useSearch } from '../../../../src/composables'
 import { ConfigurationManager } from '../../../../src/configuration'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -51,9 +51,6 @@ describe('useSearch', () => {
 
 const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({
-    spaces: { projects: true, share_jail: true }
-  }))
 
   const spaces = [
     {
@@ -72,6 +69,9 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
 
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({})
+  const capabilities = {
+    spaces: { projects: true, share_jail: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
 
   mocks.$clientService.webdav.search.mockResolvedValue({
     resources,
@@ -90,7 +90,9 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
       mocks,
       provide: mocks,
       store,
-      pluginOptions: { piniaOptions: { spacesState: { spaces } } }
+      pluginOptions: {
+        piniaOptions: { spacesState: { spaces }, capabilityState: { capabilities } }
+      }
     }
   )
 }

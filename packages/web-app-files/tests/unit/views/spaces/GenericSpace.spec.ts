@@ -13,7 +13,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
+import { CapabilityStore, ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 
 const mockCreateFolder = jest.fn()
@@ -316,24 +316,26 @@ function getMountedWrapper({
     }
   }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  storeOptions.getters.capabilities.mockReturnValue({
-    spaces: {
-      share_jail: true
-    }
-  })
   const propsData = {
     space,
     item: '/',
     ...props
   }
   const store = createStore(storeOptions)
+  const capabilities = {
+    spaces: { share_jail: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     mocks: { ...defaultMocks, ...resourcesViewDetailsMock },
     storeOptions,
     wrapper: mount(GenericSpace, {
       props: propsData,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
+          store
+        ],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: { ...defaultStubs, 'resource-details': true, portal: true, ...stubs }

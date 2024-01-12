@@ -7,25 +7,23 @@ import {
 import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
-import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
 import { useConfigurationManager } from '../../configuration'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useSpacesStore } from '../../piniaStores'
+import { useMessages, useSpacesStore, useCapabilityStore } from '../../piniaStores'
 
 export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const { showMessage, showErrorMessage } = useMessages()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
 
-  const hasResharing = useCapabilityFilesSharingResharing()
-  const hasShareJail = useCapabilityShareJailEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const configurationManager = useConfigurationManager()
@@ -44,8 +42,8 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
             const share = await triggerShareAction({
               resource,
               status: ShareStatus.declined,
-              hasResharing: unref(hasResharing),
-              hasShareJail: unref(hasShareJail),
+              hasResharing: capabilityStore.sharingResharing,
+              hasShareJail: capabilityStore.spacesShareJail,
               client: clientService.owncloudSdk,
               spaces: spacesStore.spaces,
               fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths

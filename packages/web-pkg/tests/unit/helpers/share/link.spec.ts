@@ -1,9 +1,10 @@
 import { getDefaultLinkPermissions, getExpirationRules } from '../../../../src/helpers/share'
-import { Store } from 'vuex'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { mock } from 'jest-mock-extended'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { createTestingPinia } from 'web-test-helpers'
+import { useCapabilityStore } from '../../../../src/composables/piniaStores'
 
 describe('getDefaultLinkPermissions', () => {
   it('returns internal if user is not allowed to create public links', () => {
@@ -29,12 +30,14 @@ describe('getExpirationRules', () => {
   it('correctly computes rules based on the "expire_date"-capability', () => {
     jest.useFakeTimers().setSystemTime(new Date('2000-01-01'))
 
+    createTestingPinia()
+    const capabilityStore = useCapabilityStore()
     const capabilities = mock<PublicExpirationCapability>({ enforced: true, days: '10' })
+    capabilityStore.capabilities.files_sharing.public.expire_date = capabilities
+
     const rules = getExpirationRules({
       currentLanguage: 'de',
-      store: {
-        getters: { capabilities: { files_sharing: { public: { expire_date: capabilities } } } }
-      } as Store<any>
+      capabilityStore
     })
 
     expect(rules.enforced).toEqual(capabilities.enforced)

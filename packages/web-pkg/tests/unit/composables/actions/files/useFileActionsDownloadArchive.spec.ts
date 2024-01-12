@@ -68,6 +68,7 @@ function getWrapper({
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
   }
+
   return {
     wrapper: getComposableWrapper(setup, {
       mocks,

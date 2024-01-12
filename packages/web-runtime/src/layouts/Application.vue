@@ -92,7 +92,7 @@ export default defineComponent({
           `app.${unref(activeApp)}`
         ])
         .map(({ navItem }) => navItem)
-        .filter((n) => n.enabled(store.getters.capabilities))
+        .filter((n) => n.enabled())
     )
 
     // FIXME: we can convert to a single router-view without name (thus without the loop) and without this watcher when we release v6.0.0
@@ -157,8 +157,7 @@ export default defineComponent({
             })
           }
 
-          const name =
-            typeof item.name === 'function' ? item.name(store.getters['capabilities']) : item.name
+          const name = typeof item.name === 'function' ? item.name() : item.name
 
           return {
             ...item,

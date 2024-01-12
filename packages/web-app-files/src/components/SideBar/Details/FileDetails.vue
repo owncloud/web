@@ -129,12 +129,12 @@ import {
   ImageDimension,
   useAuthStore,
   useConfigurationManager,
-  useUserStore
+  useUserStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
-  useCapabilityFilesTags,
   useClientService,
   useStore,
   usePreviewService,
@@ -177,6 +177,7 @@ export default defineComponent({
     const configurationManager = useConfigurationManager()
     const store = useStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
@@ -267,9 +268,8 @@ export default defineComponent({
       data: tagsHelper({ configurationManager: configurationManager })
     } as ContextualHelper
 
-    const capabilityFilesTags = useCapabilityFilesTags()
     const hasTags = computed(() => {
-      return props.tagsEnabled && unref(capabilityFilesTags)
+      return props.tagsEnabled && capabilityStore.filesTags
     })
 
     return {

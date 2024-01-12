@@ -92,19 +92,13 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
   jest.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
 
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({
-    files: {
-      app_providers: [
-        {
-          apps_url: '/app/list',
-          enabled: true,
-          open_url: '/app/open'
-        }
-      ]
-    }
-  }))
-
   const store = createStore(storeOptions)
+
+  const capabilities = {
+    files: {
+      app_providers: [{ apps_url: '/app/list', enabled: true, open_url: '/app/open' }]
+    }
+  }
 
   return {
     wrapper: shallowMount(App, {
@@ -112,7 +106,7 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
         resource: mock<Resource>()
       },
       global: {
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
       }
     })
   }

@@ -32,7 +32,7 @@ export default defineComponent({
     const { currentTheme } = storeToRefs(themeStore)
 
     const router = useRouter()
-    useHead({ store })
+    useHead()
 
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
 

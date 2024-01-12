@@ -73,8 +73,7 @@ import {
   useClientService,
   useMessages,
   useRouteQuery,
-  useSideBar,
-  useStore
+  useSideBar
 } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
@@ -94,7 +93,6 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
     const { showErrorMessage } = useMessages()
     const groups = ref([])
     const template = ref()

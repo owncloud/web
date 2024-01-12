@@ -5,11 +5,6 @@ import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
 import { Store } from 'vuex'
 import { peopleRoleDenyFolder, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import {
-  useCapabilityFilesSharingResharing,
-  useCapabilityShareJailEnabled
-} from '@ownclouders/web-pkg'
-import { unref } from 'vue'
 
 export class FolderLoaderSharedWithOthers implements FolderLoader {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,10 +17,9 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, spacesStore, clientService, configurationManager } = context
+    const { store, userStore, spacesStore, clientService, configurationManager, capabilityStore } =
+      context
     const { owncloudSdk: client } = clientService
-    const hasResharing = useCapabilityFilesSharingResharing(store)
-    const hasShareJail = useCapabilityShareJailEnabled(store)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
@@ -56,8 +50,8 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
           shares: resources,
           spaces: spacesStore.spaces,
           incomingShares: false,
-          allowSharePermission: unref(hasResharing),
-          hasShareJail: unref(hasShareJail),
+          allowSharePermission: capabilityStore.sharingResharing,
+          hasShareJail: capabilityStore.spacesShareJail,
           fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
         }).map((resource) => {
           // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.

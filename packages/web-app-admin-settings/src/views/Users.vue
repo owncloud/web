@@ -152,19 +152,18 @@ import {
   NoContentMessage,
   eventBus,
   queryItemAsString,
-  useCapabilitySpacesMaxQuota,
   useClientService,
   useConfigurationManager,
   useRoute,
   useRouteQuery,
   useRouter,
   useSideBar,
-  useStore,
   SideBarPanel,
   SideBarPanelContext,
   useUserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -182,6 +181,7 @@ import { diff } from 'deep-object-diff'
 import Mark from 'mark.js'
 import { format } from 'util'
 import { isEqual, isEmpty, omit } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'UsersView',
@@ -197,8 +197,9 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const router = useRouter()
     const route = useRoute()
-    const store = useStore()
     const { showErrorMessage } = useMessages()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const userStore = useUserStore()
@@ -616,7 +617,7 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
-      maxQuota: useCapabilitySpacesMaxQuota(),
+      maxQuota: capabilityRefs.spacesMaxQuota,
       template,
       selectedUsers,
       sideBarLoading,

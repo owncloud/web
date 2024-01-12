@@ -16,7 +16,9 @@ import {
   useMessages,
   useSpacesStore,
   useAuthStore,
-  AuthStore
+  AuthStore,
+  useCapabilityStore,
+  CapabilityStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -341,11 +343,12 @@ export const announceTheme = async ({
 
 export const announcePiniaStores = () => {
   const authStore = useAuthStore()
+  const capabilityStore = useCapabilityStore()
   const messagesStore = useMessages()
   const modalStore = useModals()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  return { authStore, messagesStore, modalStore, spacesStore, userStore }
+  return { authStore, capabilityStore, messagesStore, modalStore, spacesStore, userStore }
 }
 
 /**
@@ -388,16 +391,16 @@ export const announceClientService = ({
   app,
   runtimeConfiguration,
   configurationManager,
-  store,
   userStore,
-  authStore
+  authStore,
+  capabilityStore
 }: {
   app: App
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
-  store: Store<any>
   userStore: UserStore
   authStore: AuthStore
+  capabilityStore: CapabilityStore
 }): void => {
   const sdk = new OwnCloud()
   sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
@@ -413,7 +416,7 @@ export const announceClientService = ({
     sdk,
     accessToken: computed(() => authStore.accessToken),
     baseUrl: runtimeConfiguration.server,
-    capabilities: computed(() => store.getters.capabilities),
+    capabilities: computed(() => capabilityStore.capabilities),
     clientService: app.config.globalProperties.$clientService,
     language: computed(() => app.config.globalProperties.$language.current),
     user: computed(() => userStore.user)
@@ -454,13 +457,15 @@ export const announcePreviewService = ({
   store,
   configurationManager,
   userStore,
-  authStore
+  authStore,
+  capabilityStore
 }: {
   app: App
   store: Store<any>
   configurationManager: ConfigurationManager
   userStore: UserStore
   authStore: AuthStore
+  capabilityStore: CapabilityStore
 }): void => {
   const clientService = app.config.globalProperties.$clientService
   const previewService = new PreviewService({
@@ -468,7 +473,8 @@ export const announcePreviewService = ({
     clientService,
     configurationManager,
     userStore,
-    authStore
+    authStore,
+    capabilityStore
   })
   app.config.globalProperties.$previewService = previewService
   app.provide('$previewService', previewService)
@@ -485,17 +491,17 @@ export const announcePreviewService = ({
 export const announceAuthService = ({
   app,
   configurationManager,
-  store,
   router,
   userStore,
-  authStore
+  authStore,
+  capabilityStore
 }: {
   app: App
   configurationManager: ConfigurationManager
-  store: Store<any>
   router: Router
   userStore: UserStore
   authStore: AuthStore
+  capabilityStore: CapabilityStore
 }): void => {
   const ability = app.config.globalProperties.$ability
   const language = app.config.globalProperties.$language
@@ -503,12 +509,12 @@ export const announceAuthService = ({
   authService.initialize(
     configurationManager,
     clientService,
-    store,
     router,
     ability,
     language,
     userStore,
-    authStore
+    authStore,
+    capabilityStore
   )
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)
@@ -562,10 +568,14 @@ export const announceDefaults = ({
 /**
  * announce some version numbers
  *
- * @param store
+ * @param capabilityStore
  */
-export const announceVersions = ({ store }: { store: Store<unknown> }): void => {
-  const versions = [getWebVersion(), getBackendVersion({ store })].filter(Boolean)
+export const announceVersions = ({
+  capabilityStore
+}: {
+  capabilityStore: CapabilityStore
+}): void => {
+  const versions = [getWebVersion(), getBackendVersion({ capabilityStore })].filter(Boolean)
   versions.forEach((version) => {
     console.log(
       `%c ${version} `,

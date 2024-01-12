@@ -54,7 +54,7 @@ import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useAbility,
   useAuthStore,
-  useCapabilityNotifications,
+  useCapabilityStore,
   useEmbedMode,
   useRouter,
   useStore,
@@ -80,10 +80,10 @@ export default {
   },
   setup(props) {
     const store = useStore()
+    const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
 
-    const notificationsSupport = useCapabilityNotifications()
     const authStore = useAuthStore()
     const language = useGettext()
     const router = useRouter()
@@ -92,7 +92,9 @@ export default {
 
     const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
-      return authStore.userContextReady && unref(notificationsSupport).includes('list')
+      return (
+        authStore.userContextReady && capabilityStore.notificationsOcsEndpoints.includes('list')
+      )
     })
 
     const isSideBarToggleVisible = computed(() => {

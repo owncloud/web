@@ -190,6 +190,7 @@ import { mapActions, mapGetters } from 'vuex'
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
+  useCapabilityStore,
   useFileActions,
   useFileActionsCreateNewShortcut,
   useMessages,
@@ -202,8 +203,6 @@ import {
   useFileActionsCreateNewFolder,
   useFileActionsPaste,
   useRequest,
-  useCapabilityShareJailEnabled,
-  useCapabilitySpacesEnabled,
   useStore,
   useClientService
 } from '@ownclouders/web-pkg'
@@ -234,6 +233,7 @@ import { useGettext } from 'vue3-gettext'
 import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Action, ResourceIcon } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -268,9 +268,10 @@ export default defineComponent({
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
     const messageStore = useMessages()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const route = useRoute()
     const language = useGettext()
-    const hasSpaces = useCapabilitySpacesEnabled(store)
     const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
 
     useUpload({ uppyService })
@@ -278,7 +279,7 @@ export default defineComponent({
     if (!uppyService.getPlugin('HandleUpload')) {
       uppyService.addPlugin(HandleUpload, {
         clientService,
-        hasSpaces,
+        hasSpaces: capabilityStore.spacesEnabled,
         language,
         route,
         space: props.space,
@@ -377,7 +378,7 @@ export default defineComponent({
         }
 
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (unref(hasSpaces) && !isPublicSpaceResource(props.space)) {
+        if (capabilityStore.spacesEnabled && !isPublicSpaceResource(props.space)) {
           const isOwnSpace = spacesStore.spaces
             .find(({ id }) => id === spaceId)
             ?.isOwner(userStore.user)
@@ -434,8 +435,8 @@ export default defineComponent({
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
-      hasShareJail: useCapabilityShareJailEnabled(),
-      hasSpaces: useCapabilitySpacesEnabled(),
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasSpaces: capabilityRefs.spacesEnabled,
       canUpload,
       currentFolder,
       createNewFileActions,
@@ -456,7 +457,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration', 'newFileHandlers']),
+    ...mapGetters(['configuration', 'newFileHandlers']),
     ...mapGetters('Files', ['files', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/ancestorMetaData', ['ancestorMetaData']),
 

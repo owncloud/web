@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 
-import { MessageStore, getParentPaths } from '@ownclouders/web-pkg'
+import { MessageStore, CapabilityStore, getParentPaths } from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
@@ -505,13 +505,15 @@ export default {
     { commit, rootGetters },
     {
       resource,
-      clientService
+      clientService,
+      capabilityStore
     }: {
       resource: Resource
       clientService: ClientService
+      capabilityStore: CapabilityStore
     }
   ) {
-    if (!rootGetters.capabilities.files_sharing.user.profile_picture) {
+    if (!capabilityStore.sharingUserProfilePicture) {
       return
     }
 

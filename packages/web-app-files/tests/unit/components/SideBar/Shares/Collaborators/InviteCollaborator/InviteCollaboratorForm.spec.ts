@@ -92,13 +92,12 @@ function getWrapper({
     )
 
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({
-    files_sharing: { federation: { incoming: true, outgoing: true } }
-  }))
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ params: { storageId } })
   })
+  const capabilities = { files_sharing: { federation: { incoming: true, outgoing: true } } }
+
   return {
     wrapper: shallowMount(InviteCollaboratorForm, {
       data() {
@@ -107,7 +106,10 @@ function getWrapper({
         }
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
+          store
+        ],
         provide: { ...mocks, resource },
         mocks
       }

@@ -23,15 +23,16 @@ import QuotaSelect from '../QuotaSelect.vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import {
   Modal,
-  useCapabilitySpacesMaxQuota,
   useClientService,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useCapabilityStore
 } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
 import { useStore } from '../../composables'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
@@ -65,10 +66,11 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { $gettext, $ngettext } = useGettext()
     const clientService = useClientService()
     const router = useRouter()
-    const maxQuota = useCapabilitySpacesMaxQuota()
     const spacesStore = useSpacesStore()
 
     const selectedOption = ref(0)
@@ -181,7 +183,7 @@ export default defineComponent({
       selectedOption,
       confirmButtonDisabled,
       changeSelectedQuotaOption,
-      maxQuota,
+      maxQuota: capabilityRefs.spacesMaxQuota,
 
       // unit tests
       onConfirm
