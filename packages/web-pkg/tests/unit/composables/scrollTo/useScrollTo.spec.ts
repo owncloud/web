@@ -146,8 +146,7 @@ describe('useScrollTo', () => {
       const mocks = {
         ...defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
-        }),
-        $store: store
+        })
       }
 
       getComposableWrapper(
@@ -174,8 +173,7 @@ describe('useScrollTo', () => {
           currentRoute: mock<RouteLocation>({
             query: { scrollTo: resourceId, details: 'details' }
           })
-        }),
-        $store: store
+        })
       }
 
       getComposableWrapper(

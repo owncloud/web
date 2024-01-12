@@ -122,7 +122,7 @@ export const buildApplication = async ({
     if (!isObject(applicationScript.appInfo) && !applicationScript.setup) {
       throw new RuntimeError('next applications not implemented yet, stay tuned')
     } else {
-      application = await convertClassicApplication({
+      application = convertClassicApplication({
         app,
         applicationScript,
         applicationConfig,
@@ -131,7 +131,7 @@ export const buildApplication = async ({
         gettext,
         supportedLanguages,
         configurationManager
-      }).catch()
+      })
     }
   } catch (err) {
     throw new RuntimeError('cannot create application', err.message, applicationPath)

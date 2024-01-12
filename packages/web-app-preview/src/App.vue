@@ -89,6 +89,7 @@ import {
   AppTopBar,
   FileSideBar,
   ProcessorType,
+  useAppsStore,
   useSelectedResources,
   useSideBar
 } from '@ownclouders/web-pkg'
@@ -111,25 +112,9 @@ import { CachedFile } from './helpers/types'
 import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
+import { getMimeTypes } from './mimeTypes'
 
 export const appId = 'preview'
-
-export const mimeTypes = () => {
-  return [
-    'audio/flac',
-    'audio/mpeg',
-    'audio/ogg',
-    'audio/wav',
-    'audio/x-flac',
-    'audio/x-wav',
-    'image/gif',
-    'image/jpeg',
-    'image/png',
-    'video/mp4',
-    'video/webm',
-    ...((window as any).__$store?.getters.extensionConfigByAppId(appId).mimeTypes || [])
-  ]
-}
 
 export default defineComponent({
   name: 'Preview',
@@ -145,6 +130,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const route = useRoute()
+    const appsStore = useAppsStore()
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery')
     const { downloadFile } = useDownloadFile()
@@ -152,6 +138,10 @@ export default defineComponent({
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
     const folderLoaded = ref(false)
+
+    const mimeTypes = computed(() => {
+      return getMimeTypes(appsStore.externalAppConfig[appId]?.mimeTypes)
+    })
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -189,7 +179,7 @@ export default defineComponent({
       }
 
       const files = unref(activeFiles).filter((file) => {
-        return mimeTypes().includes(file.mimeType?.toLowerCase())
+        return unref(mimeTypes).includes(file.mimeType?.toLowerCase())
       })
 
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))

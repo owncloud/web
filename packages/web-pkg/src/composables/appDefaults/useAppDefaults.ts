@@ -21,7 +21,7 @@ import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { useAuthStore } from '../piniaStores'
+import { useAppsStore, useAuthStore } from '../piniaStores'
 import { storeToRefs } from 'pinia'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
@@ -46,6 +46,7 @@ export type AppDefaultsResult = AppConfigResult &
 export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const router = useRouter()
   const store = useStore()
+  const appsStore = useAppsStore()
   const currentRoute = useRoute()
   const clientService = options.clientService ?? useClientService()
   const applicationId = options.applicationId
@@ -80,7 +81,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   useAppDocumentTitle({
-    store,
+    appsStore,
     applicationId,
     applicationName: options.applicationName,
     currentFileContext,
@@ -90,7 +91,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   return {
     isPublicLinkContext: publicLinkContextReady,
     currentFileContext,
-    ...useAppConfig({ store, ...options }),
+    ...useAppConfig({ appsStore, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
     ...useAppFileHandling({
       clientService

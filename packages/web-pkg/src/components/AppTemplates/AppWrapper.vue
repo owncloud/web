@@ -54,7 +54,8 @@ import {
   useSideBar,
   useModals,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useAppsStore
 } from '../../composables'
 import {
   Action,
@@ -106,6 +107,7 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
+    const appsStore = useAppsStore()
     const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const currentRoute = useRoute()
@@ -166,7 +168,7 @@ export default defineComponent({
       applicationId: props.applicationId
     })
 
-    const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, store })
+    const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, appsStore })
 
     const pageTitle = computed(() => {
       const { name: appName } = unref(applicationMeta)

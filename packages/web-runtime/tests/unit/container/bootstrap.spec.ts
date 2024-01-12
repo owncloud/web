@@ -1,7 +1,6 @@
 import { mock, mockDeep } from 'jest-mock-extended'
 import { createApp, defineComponent, App } from 'vue'
-import { createStore } from 'vuex'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, useAppsStore } from '@ownclouders/web-pkg'
 import {
   initializeApplications,
   announceApplicationsReady,
@@ -10,7 +9,7 @@ import {
   announceConfiguration
 } from '../../../src/container/bootstrap'
 import { buildApplication } from '../../../src/container/application'
-import { defaultStoreMockOptions } from 'web-test-helpers/src'
+import { createTestingPinia } from 'web-test-helpers/src'
 
 jest.mock('../../../src/container/application')
 
@@ -51,9 +50,10 @@ describe('initialize applications', () => {
     expect(errorSpy.mock.calls[0][0]).toMatchObject(fishyError)
     expect(errorSpy.mock.calls[1][0]).toMatchObject(fishyError)
 
+    createTestingPinia()
     await announceApplicationsReady({
       app: mock<App>(),
-      store: createStore(defaultStoreMockOptions),
+      appsStore: useAppsStore(),
       applications
     })
     expect(ready).toHaveBeenCalledTimes(2)
