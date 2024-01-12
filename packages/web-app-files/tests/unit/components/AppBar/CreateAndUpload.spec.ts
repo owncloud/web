@@ -23,7 +23,6 @@ import { ref } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  useAccessToken: jest.fn(),
   useExtensionRegistry: jest.fn(),
   useRequest: jest.fn(),
   useFileActionsCreateNewFile: jest.fn(),

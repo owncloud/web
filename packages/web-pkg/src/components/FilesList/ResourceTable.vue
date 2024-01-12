@@ -97,7 +97,7 @@
     </template>
     <template #tags="{ item }">
       <component
-        :is="isUserContext ? 'router-link' : 'span'"
+        :is="userContextReady ? 'router-link' : 'span'"
         v-for="tag in item.tags.slice(0, 2)"
         :key="tag"
         v-bind="getTagComponentAttrs(tag)"
@@ -227,13 +227,12 @@ import {
   useCapabilityProjectSpacesEnabled,
   useCapabilityShareJailEnabled,
   SortDir,
-  useStore,
-  useUserContext,
   ViewModeConstants,
   useConfigurationManager,
   useGetMatchingSpace,
   useFolderLink,
-  useEmbedMode
+  useEmbedMode,
+  useAuthStore
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -258,7 +257,7 @@ import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
-import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -452,11 +451,12 @@ export default defineComponent({
     'update:modelValue'
   ],
   setup(props, context) {
-    const store = useStore()
     const configurationManager = useConfigurationManager()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const { $gettext } = useGettext()
     const { isLocationPicker } = useEmbedMode()
+
+    const authStore = useAuthStore()
+    const { userContextReady } = storeToRefs(authStore)
 
     const dragItem = ref<Resource>()
     const ghostElement = ref()
@@ -496,7 +496,7 @@ export default defineComponent({
       isResourceDisabled,
       hasShareJail: useCapabilityShareJailEnabled(),
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      isUserContext: useUserContext({ store }),
+      userContextReady,
       getMatchingSpace,
       ...useResourceRouteResolver(
         {
@@ -764,7 +764,7 @@ export default defineComponent({
       })
     },
     getTagComponentAttrs(tag) {
-      if (!this.isUserContext) {
+      if (!this.userContextReady) {
         return {}
       }
 

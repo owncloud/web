@@ -51,7 +51,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { spacesStore, userStore } = announcePiniaStores()
+  const { authStore, spacesStore, userStore } = announcePiniaStores()
 
   app.provide('$router', router)
 
@@ -71,7 +71,14 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceUppyService({ app })
 
-  announceClientService({ app, runtimeConfiguration, configurationManager, store, userStore })
+  announceClientService({
+    app,
+    runtimeConfiguration,
+    configurationManager,
+    store,
+    userStore,
+    authStore
+  })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
@@ -89,7 +96,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
-  announcePreviewService({ app, store, configurationManager, userStore })
+  announcePreviewService({ app, store, configurationManager, userStore, authStore })
   announcePasswordPolicyService({ app })
   await announceClient(runtimeConfiguration)
 
@@ -121,7 +128,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
 
-  announceAuthService({ app, configurationManager, store, router, userStore })
+  announceAuthService({ app, configurationManager, store, router, userStore, authStore })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
   announceDefaults({ store, router })
@@ -141,10 +148,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   applications.forEach((application) => application.mounted(app))
 
   store.watch(
-    (state, getters) =>
-      getters['runtime/auth/isUserContextReady'] ||
-      getters['runtime/auth/isIdpContextReady'] ||
-      getters['runtime/auth/isPublicLinkContextReady'],
+    () =>
+      authStore.userContextReady || authStore.idpContextReady || authStore.publicLinkContextReady,
     async (newValue, oldValue) => {
       if (!newValue || newValue === oldValue) {
         return
@@ -158,8 +163,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   )
 
   store.watch(
-    (state, getters) => {
-      return getters['runtime/auth/isUserContextReady']
+    () => {
+      return authStore.userContextReady
     },
     async (userContextReady) => {
       if (!userContextReady) {
@@ -194,17 +199,17 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     }
   )
   store.watch(
-    (state, getters) => {
-      return getters['runtime/auth/isPublicLinkContextReady']
+    () => {
+      return authStore.publicLinkContextReady
     },
     (publicLinkContextReady) => {
       if (!publicLinkContextReady) {
         return
       }
       // Create virtual space for public link
-      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
-      const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
-      const publicLinkType = store.getters['runtime/auth/publicLinkType']
+      const publicLinkToken = authStore.publicLinkToken
+      const publicLinkPassword = authStore.publicLinkPassword
+      const publicLinkType = authStore.publicLinkType
 
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
@@ -224,11 +229,11 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   store.watch(
     // only needed if a public link gets re-resolved with a changed password prop (changed or removed).
     // don't need to set { immediate: true } on the watcher.
-    (state, getters) => {
-      return getters['runtime/auth/publicLinkPassword']
+    () => {
+      return authStore.publicLinkPassword
     },
     (publicLinkPassword: string | undefined) => {
-      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
+      const publicLinkToken = authStore.publicLinkToken
       const space = spacesStore.spaces.find((space) => {
         return isPublicSpaceResource(space) && space.id === publicLinkToken
       })

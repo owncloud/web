@@ -68,7 +68,6 @@ import {
   eventBus,
   configurationManager,
   queryItemAsString,
-  useAccessToken,
   useClientService,
   useRouteQuery,
   useSideBar,
@@ -99,7 +98,6 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const accessToken = useAccessToken({ store })
     const spaces = ref([])
     const clientService = useClientService()
     const { $gettext } = useGettext()
@@ -272,7 +270,6 @@ export default defineComponent({
       sideBarActivePanel,
       spaces,
       loadResourcesTask,
-      accessToken,
       breadcrumbs,
       batchActions,
       selectedSpaces,

@@ -205,7 +205,6 @@ import {
   useCapabilityShareJailEnabled,
   useCapabilitySpacesEnabled,
   useStore,
-  useUserContext,
   useClientService
 } from '@ownclouders/web-pkg'
 
@@ -437,7 +436,6 @@ export default defineComponent({
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasSpaces: useCapabilitySpacesEnabled(),
-      isUserContext: useUserContext({ store }),
       canUpload,
       currentFolder,
       createNewFileActions,

@@ -40,6 +40,7 @@ import { mapGetters } from 'vuex'
 import {
   createLocationPublic,
   createLocationSpaces,
+  useAuthStore,
   useMessages,
   useSpacesStore,
   useThemeStore,
@@ -59,13 +60,11 @@ import {
 import { useGettext } from 'vue3-gettext'
 import {
   useClientService,
-  usePublicLinkToken,
   useStore,
   useRouter,
   useRoute,
   useCapabilitySpacesEnabled,
   useGetMatchingSpace,
-  useUserContext,
   useRouteQuery,
   queryItemAsString,
   useUpload
@@ -95,8 +94,7 @@ export default defineComponent({
     const hasSpaces = useCapabilitySpacesEnabled(store)
     const authService = useAuthService()
     const clientService = useClientService()
-    const publicToken = usePublicLinkToken({ store })
-    const isUserContext = useUserContext({ store })
+    const authStore = useAuthStore()
     const { getInternalSpace } = useGetMatchingSpace()
     useUpload({ uppyService })
 
@@ -154,7 +152,7 @@ export default defineComponent({
     const resolvePublicLink = async () => {
       loading.value = true
 
-      if (unref(isUserContext) && unref(fileId)) {
+      if (authStore.userContextReady && unref(fileId)) {
         try {
           const path = await clientService.webdav.getPathForFileId(unref(fileId))
           await resolveToInternalLocation(path)
@@ -165,7 +163,9 @@ export default defineComponent({
         }
       }
 
-      const space = spacesStore.spaces.find((s) => s.driveAlias === `public/${unref(publicToken)}`)
+      const space = spacesStore.spaces.find(
+        (s) => s.driveAlias === `public/${authStore.publicLinkToken}`
+      )
 
       clientService.webdav
         .listFiles(space, {}, { depth: 0 })
@@ -175,7 +175,7 @@ export default defineComponent({
           if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
             router.replace(
               createLocationPublic('files-public-link', {
-                params: { driveAliasAndItem: `public/${unref(publicToken)}` }
+                params: { driveAliasAndItem: `public/${authStore.publicLinkToken}` }
               })
             )
             return

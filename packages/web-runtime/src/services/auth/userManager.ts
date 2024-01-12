@@ -8,7 +8,7 @@ import {
 } from 'oidc-client-ts'
 import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
-import { ConfigurationManager, UserStore } from '@ownclouders/web-pkg'
+import { AuthStore, ConfigurationManager, UserStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
@@ -29,6 +29,7 @@ export interface UserManagerOptions {
   ability: Ability
   language: Language
   userStore: UserStore
+  authStore: AuthStore
 }
 
 export class UserManager extends OidcUserManager {
@@ -37,6 +38,7 @@ export class UserManager extends OidcUserManager {
   private configurationManager: ConfigurationManager
   private store: Store<any>
   private userStore: UserStore
+  private authStore: AuthStore
   private updateAccessTokenPromise: Promise<void> | null
   private _unloadReason: UnloadReason
   private ability: Ability
@@ -113,6 +115,7 @@ export class UserManager extends OidcUserManager {
     this.ability = options.ability
     this.language = options.language
     this.userStore = options.userStore
+    this.authStore = options.authStore
   }
 
   /**
@@ -150,16 +153,16 @@ export class UserManager extends OidcUserManager {
 
   updateContext(accessToken: string, fetchUserData: boolean): Promise<void> {
     const userKnown = !!this.userStore.user
-    const accessTokenChanged = this.store.getters['runtime/auth/accessToken'] !== accessToken
+    const accessTokenChanged = this.authStore.accessToken !== accessToken
     if (!accessTokenChanged) {
       return this.updateAccessTokenPromise
     }
 
-    this.store.commit('runtime/auth/SET_ACCESS_TOKEN', accessToken)
+    this.authStore.setAccessToken(accessToken)
 
     this.updateAccessTokenPromise = (async () => {
       if (!fetchUserData) {
-        this.store.commit('runtime/auth/SET_IDP_CONTEXT_READY', true)
+        this.authStore.setIdpContextReady(true)
         return
       }
 
@@ -172,7 +175,7 @@ export class UserManager extends OidcUserManager {
       if (!userKnown) {
         await this.fetchUserInfo(accessToken)
         await this.updateUserAbilities(this.userStore.user)
-        this.store.commit('runtime/auth/SET_USER_CONTEXT_READY', true)
+        this.authStore.setUserContextReady(true)
       }
     })()
     return this.updateAccessTokenPromise

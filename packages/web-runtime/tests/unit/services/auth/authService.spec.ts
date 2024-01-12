@@ -1,12 +1,28 @@
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { ConfigurationManager, useAuthStore } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 import { Store } from 'vuex'
 import { AuthService } from 'web-runtime/src/services/auth/authService'
 import { UserManager } from 'web-runtime/src/services/auth/userManager'
-import { RouteLocation, createRouter } from 'web-test-helpers/src'
+import { RouteLocation, createRouter, createTestingPinia } from 'web-test-helpers/src'
 
 const mockUpdateContext = jest.fn()
 console.debug = jest.fn()
+
+const initAuthService = ({ authService, configurationManager, router = null }) => {
+  createTestingPinia()
+  const authStore = useAuthStore()
+
+  authService.initialize(
+    configurationManager,
+    null,
+    mock<Store<any>>({}),
+    router,
+    null,
+    null,
+    null,
+    authStore
+  )
+}
 
 describe('AuthService', () => {
   describe('signInCallback', () => {
@@ -40,7 +56,7 @@ describe('AuthService', () => {
           options: { embed: { enabled: false } }
         })
 
-        authService.initialize(configurationManager, null, null, router, null, null, null)
+        initAuthService({ authService, configurationManager, router })
 
         await authService.signInCallback()
 
@@ -70,15 +86,7 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: false } }
       })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService, configurationManager })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -102,15 +110,7 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: false } }
       })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService, configurationManager })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -134,15 +134,7 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: true, delegateAuthentication: false } }
       })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService, configurationManager })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -166,15 +158,7 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: true, delegateAuthentication: true } }
       })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService, configurationManager })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -198,15 +182,7 @@ describe('AuthService', () => {
         server: 'http://server/address/',
         options: { embed: { enabled: false, delegateAuthentication: true } }
       })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService, configurationManager })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 

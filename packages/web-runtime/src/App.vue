@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import ModalWrapper from './components/ModalWrapper.vue'
 import { useLayout } from './composables/layout'
@@ -36,7 +36,7 @@ export default defineComponent({
 
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
 
-    const { layout } = useLayout({ store, router })
+    const { layout } = useLayout({ router })
 
     watch(
       () => unref(activeRoute),
@@ -76,7 +76,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['modal']),
     ...mapGetters(['configuration'])
   },
   watch: {

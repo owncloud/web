@@ -460,9 +460,6 @@ function getMountedWrapper({
   addProcessingResources = false
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
-    isUserContextReady
-  )
   storeOptions.getters.capabilities.mockImplementation(() => ({
     files: {
       tags: true
@@ -496,7 +493,12 @@ function getMountedWrapper({
       },
       global: {
         renderStubDefaultSlot: true,
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+          }),
+          store
+        ],
         stubs: {
           OcButton: false,
           'router-link': true

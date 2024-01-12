@@ -14,7 +14,9 @@ import {
   useUserStore,
   UserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useAuthStore,
+  AuthStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -338,11 +340,12 @@ export const announceTheme = async ({
 }
 
 export const announcePiniaStores = () => {
+  const authStore = useAuthStore()
   const messagesStore = useMessages()
   const modalStore = useModals()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  return { messagesStore, modalStore, spacesStore, userStore }
+  return { authStore, messagesStore, modalStore, spacesStore, userStore }
 }
 
 /**
@@ -386,27 +389,29 @@ export const announceClientService = ({
   runtimeConfiguration,
   configurationManager,
   store,
-  userStore
+  userStore,
+  authStore
 }: {
   app: App
   runtimeConfiguration: RuntimeConfiguration
   configurationManager: ConfigurationManager
   store: Store<any>
   userStore: UserStore
+  authStore: AuthStore
 }): void => {
   const sdk = new OwnCloud()
   sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
   const clientService = new ClientService({
     configurationManager,
     language: app.config.globalProperties.$language,
-    store
+    authStore
   })
   app.config.globalProperties.$client = sdk
   app.config.globalProperties.$clientService = clientService
   app.config.globalProperties.$clientService.owncloudSdk = sdk
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk,
-    accessToken: computed(() => store.getters['runtime/auth/accessToken']),
+    accessToken: computed(() => authStore.accessToken),
     baseUrl: runtimeConfiguration.server,
     capabilities: computed(() => store.getters.capabilities),
     clientService: app.config.globalProperties.$clientService,
@@ -448,19 +453,22 @@ export const announcePreviewService = ({
   app,
   store,
   configurationManager,
-  userStore
+  userStore,
+  authStore
 }: {
   app: App
   store: Store<any>
   configurationManager: ConfigurationManager
   userStore: UserStore
+  authStore: AuthStore
 }): void => {
   const clientService = app.config.globalProperties.$clientService
   const previewService = new PreviewService({
     store,
     clientService,
     configurationManager,
-    userStore
+    userStore,
+    authStore
   })
   app.config.globalProperties.$previewService = previewService
   app.provide('$previewService', previewService)
@@ -479,13 +487,15 @@ export const announceAuthService = ({
   configurationManager,
   store,
   router,
-  userStore
+  userStore,
+  authStore
 }: {
   app: App
   configurationManager: ConfigurationManager
   store: Store<any>
   router: Router
   userStore: UserStore
+  authStore: AuthStore
 }): void => {
   const ability = app.config.globalProperties.$ability
   const language = app.config.globalProperties.$language
@@ -497,7 +507,8 @@ export const announceAuthService = ({
     router,
     ability,
     language,
-    userStore
+    userStore,
+    authStore
   )
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)

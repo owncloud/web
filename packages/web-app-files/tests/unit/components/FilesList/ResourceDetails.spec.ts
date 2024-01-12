@@ -15,6 +15,7 @@ import { ref } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
+  getIndicators: jest.fn(() => []),
   useRouteQuery: jest.fn(),
   useFileActions: jest.fn()
 }))

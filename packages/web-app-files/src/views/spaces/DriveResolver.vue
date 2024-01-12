@@ -16,6 +16,7 @@ import GenericTrash from './GenericTrash.vue'
 import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import {
   queryItemAsString,
+  useAuthStore,
   useClientService,
   useConfigurationManager,
   useDriveResolver,
@@ -23,8 +24,7 @@ import {
   useRouteParam,
   useRouteQuery,
   useRouter,
-  useStore,
-  useUserContext
+  useStore
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import { createLocationSpaces, isLocationTrashActive } from '@ownclouders/web-pkg'
@@ -50,7 +50,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const isUserContext = useUserContext({ store })
+    const authStore = useAuthStore()
     const clientService = useClientService()
     const router = useRouter()
     const driveAliasAndItem = useRouteParam('driveAliasAndItem')
@@ -135,7 +135,7 @@ export default defineComponent({
       const space = unref(resolvedDrive.space)
       if (space && isPublicSpaceResource(space)) {
         const isRunningOnEos = store.getters.configuration?.options?.runningOnEos
-        if (unref(isUserContext) && unref(fileId) && !isRunningOnEos) {
+        if (authStore.userContextReady && unref(fileId) && !isRunningOnEos) {
           try {
             const path = await clientService.webdav.getPathForFileId(unref(fileId))
             await resolveToInternalLocation(path)

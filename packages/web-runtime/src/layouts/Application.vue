@@ -36,7 +36,12 @@
 <script lang="ts">
 import { mapGetters } from 'vuex'
 import orderBy from 'lodash-es/orderBy'
-import { AppLoadingSpinner, SidebarNavExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  SidebarNavExtension,
+  useAuthStore,
+  useExtensionRegistry
+} from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
@@ -49,8 +54,7 @@ import {
   useRoute,
   useRouteMeta,
   useSpacesLoading,
-  useStore,
-  useUserContext
+  useStore
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, provide, ref, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -77,7 +81,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const { $gettext } = useGettext()
-    const isUserContext = useUserContext({ store })
+    const authStore = useAuthStore()
     const activeApp = useActiveApp()
     const extensionRegistry = useExtensionRegistry()
 
@@ -127,7 +131,7 @@ export default defineComponent({
     }
 
     const navItems = computed<NavItem[]>(() => {
-      if (!unref(isUserContext)) {
+      if (!authStore.userContextReady) {
         return []
       }
 

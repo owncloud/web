@@ -12,27 +12,23 @@ import {
   isPublicSpaceResource,
   Resource
 } from '@ownclouders/web-client/src/helpers'
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
-import { usePublicLinkPassword } from '../../authContext'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 
 import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useArchiverService } from '../../archiverService'
 import { formatFileSize } from '../../../helpers/filesize'
-import { useMessages } from '../../piniaStores'
+import { useAuthStore, useMessages } from '../../piniaStores'
 
-export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsDownloadArchive = () => {
   const { showErrorMessage } = useMessages()
   const router = useRouter()
   const loadingService = useLoadingService()
   const archiverService = useArchiverService()
   const { $ngettext, $gettext, current } = useGettext()
-  const publicLinkPassword = usePublicLinkPassword({ store })
+  const authStore = useAuthStore()
   const isFilesAppActive = useIsFilesAppActive()
 
   const handler = ({ space, resources }: FileActionOptions) => {
@@ -56,7 +52,7 @@ export const useFileActionsDownloadArchive = ({ store }: { store?: Store<any> } 
         ...(space &&
           isPublicSpaceResource(space) && {
             publicToken: space.id as string,
-            publicLinkPassword: unref(publicLinkPassword)
+            publicLinkPassword: authStore.publicLinkPassword
           })
       })
       .catch((e) => {

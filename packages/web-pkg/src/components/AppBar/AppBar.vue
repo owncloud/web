@@ -159,7 +159,7 @@ export default defineComponent({
     const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
     const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
     const { actions: moveActions } = useFileActionsMove({ store })

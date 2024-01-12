@@ -246,15 +246,17 @@ function getMountedWrapper({
   }
 
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockImplementation(
-    () => isUserContextReady
-  )
   const store = createStore(storeOptions)
   return {
     wrapper: mount(SearchBar, {
       attachTo: document.body,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+          }),
+          store
+        ],
         mocks: localMocks,
         provide: localMocks,
         stubs: {

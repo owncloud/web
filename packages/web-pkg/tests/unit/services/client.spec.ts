@@ -1,20 +1,25 @@
 import { HttpClient } from '../../../src/http'
-import { ClientService, ConfigurationManager } from '../../../src/'
+import { ClientService, ConfigurationManager, useAuthStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
-import { Store } from 'vuex'
 import mockAxios from 'jest-mock-axios'
 import { client as _client } from '@ownclouders/web-client'
+import { createTestingPinia } from 'web-test-helpers'
 
 const getters = { 'runtime/auth/accessToken': 'token' }
 const language = { current: 'en' }
 const serverUrl = 'someUrl'
 
 const getClientServiceMock = () => {
-  return new ClientService({
-    configurationManager: { serverUrl } as ConfigurationManager,
-    language: language as Language,
-    store: { getters } as Store<any>
-  })
+  const authStore = useAuthStore()
+
+  return {
+    clientService: new ClientService({
+      configurationManager: { serverUrl } as ConfigurationManager,
+      language: language as Language,
+      authStore
+    }),
+    authStore
+  }
 }
 const v4uuid = '00000000-0000-0000-0000-000000000000'
 jest.mock('uuid', () => ({ v4: () => v4uuid }))
@@ -22,11 +27,11 @@ jest.mock('@ownclouders/web-client', () => ({ client: jest.fn(() => ({ graph: {}
 
 describe('ClientService', () => {
   beforeEach(() => {
-    getters['runtime/auth/accessToken'] = 'token'
+    createTestingPinia({ initialState: { auth: { accessToken: 'token' } } })
     language.current = 'en'
   })
   it('initializes a http authenticated client', () => {
-    const clientService = getClientServiceMock()
+    const { clientService, authStore } = getClientServiceMock()
     const client = clientService.httpAuthenticated
     expect(client).toBeInstanceOf(HttpClient)
     expect(mockAxios.create).toHaveBeenCalledWith(
@@ -43,7 +48,7 @@ describe('ClientService', () => {
     // test re-instantiation on token and language change
     clientService.httpAuthenticated
     expect(mockAxios.create).toHaveBeenCalledTimes(1)
-    getters['runtime/auth/accessToken'] = 'changedToken'
+    authStore.accessToken = 'changedToken'
     clientService.httpAuthenticated
     expect(mockAxios.create).toHaveBeenCalledTimes(2)
     language.current = 'de'
@@ -51,7 +56,7 @@ describe('ClientService', () => {
     expect(mockAxios.create).toHaveBeenCalledTimes(3)
   })
   it('initializes a http unauthenticated client', () => {
-    const clientService = getClientServiceMock()
+    const { clientService } = getClientServiceMock()
     const client = clientService.httpUnAuthenticated
     expect(client).toBeInstanceOf(HttpClient)
     expect(mockAxios.create).toHaveBeenCalledWith(
@@ -77,7 +82,7 @@ describe('ClientService', () => {
     jest.mocked(_client).mockImplementation(() => {
       return { graph: graphClient, ocs: {} } as any
     })
-    const clientService = getClientServiceMock()
+    const { clientService, authStore } = getClientServiceMock()
     const client = clientService.graphAuthenticated
     expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
@@ -85,7 +90,7 @@ describe('ClientService', () => {
     // test re-instantiation on token and language change
     clientService.graphAuthenticated
     expect(_client).toHaveBeenCalledTimes(1)
-    getters['runtime/auth/accessToken'] = 'changedToken'
+    authStore.accessToken = 'changedToken'
     clientService.graphAuthenticated
     expect(_client).toHaveBeenCalledTimes(2)
     language.current = 'de'
@@ -97,7 +102,7 @@ describe('ClientService', () => {
     jest.mocked(_client).mockImplementation(() => {
       return { graph: {}, ocs: ocsClient } as any
     })
-    const clientService = getClientServiceMock()
+    const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsUserContext
     expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
@@ -105,7 +110,7 @@ describe('ClientService', () => {
     // test re-instantiation on token and language change
     clientService.ocsUserContext
     expect(_client).toHaveBeenCalledTimes(1)
-    getters['runtime/auth/accessToken'] = 'changedToken'
+    authStore.accessToken = 'changedToken'
     clientService.ocsUserContext
     expect(_client).toHaveBeenCalledTimes(2)
     language.current = 'de'
@@ -117,7 +122,7 @@ describe('ClientService', () => {
     jest.mocked(_client).mockImplementation(() => {
       return { graph: {}, ocs: ocsClient } as any
     })
-    const clientService = getClientServiceMock()
+    const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsPublicLinkContext()
     expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
@@ -125,7 +130,7 @@ describe('ClientService', () => {
     // test re-instantiation on token and language change
     clientService.ocsPublicLinkContext()
     expect(_client).toHaveBeenCalledTimes(1)
-    getters['runtime/auth/accessToken'] = 'changedToken'
+    authStore.accessToken = 'changedToken'
     clientService.ocsPublicLinkContext()
     expect(_client).toHaveBeenCalledTimes(2)
     language.current = 'de'

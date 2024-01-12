@@ -152,7 +152,6 @@ import {
   NoContentMessage,
   eventBus,
   queryItemAsString,
-  useAccessToken,
   useCapabilitySpacesMaxQuota,
   useClientService,
   useConfigurationManager,
@@ -200,7 +199,6 @@ export default defineComponent({
     const route = useRoute()
     const store = useStore()
     const { showErrorMessage } = useMessages()
-    const accessToken = useAccessToken({ store })
     const clientService = useClientService()
     const configurationManager = useConfigurationManager()
     const userStore = useUserStore()
@@ -629,7 +627,6 @@ export default defineComponent({
       loadResourcesTask,
       loadAdditionalUserDataTask,
       clientService,
-      accessToken,
       batchActions,
       filterGroups,
       filterRoles,

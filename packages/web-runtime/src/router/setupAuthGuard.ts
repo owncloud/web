@@ -5,7 +5,12 @@ import {
   isUserContextRequired
 } from './index'
 import { Router, RouteLocation } from 'vue-router'
-import { contextRouteNameKey, queryItemAsString, useEmbedMode } from '@ownclouders/web-pkg'
+import {
+  contextRouteNameKey,
+  queryItemAsString,
+  useAuthStore,
+  useEmbedMode
+} from '@ownclouders/web-pkg'
 import { authService } from '../services/auth/authService'
 import { unref } from 'vue'
 
@@ -18,7 +23,7 @@ export const setupAuthGuard = (router: Router) => {
       return true
     }
 
-    const store = (window as any).__$store
+    const authStore = useAuthStore()
     await authService.initializeContext(to)
 
     // vue-router currently (4.1.6) does not cancel navigations when a new one is triggered
@@ -29,7 +34,7 @@ export const setupAuthGuard = (router: Router) => {
     }
 
     if (isPublicLinkContextRequired(router, to)) {
-      if (!store.getters['runtime/auth/isPublicLinkContextReady']) {
+      if (!authStore.publicLinkContextReady) {
         const publicLinkToken = extractPublicLinkToken(to)
         return {
           name: 'resolvePublicLink',
@@ -41,7 +46,7 @@ export const setupAuthGuard = (router: Router) => {
     }
 
     if (isUserContextRequired(router, to)) {
-      if (!store.getters['runtime/auth/isUserContextReady']) {
+      if (!authStore.userContextReady) {
         if (unref(isDelegatingAuthentication)) {
           return { path: '/web-oidc-callback' }
         }
@@ -52,7 +57,7 @@ export const setupAuthGuard = (router: Router) => {
     }
 
     if (isIdpContextRequired(router, to)) {
-      if (!store.getters['runtime/auth/isIdpContextReady']) {
+      if (!authStore.idpContextReady) {
         if (unref(isDelegatingAuthentication)) {
           return { path: '/web-oidc-callback' }
         }

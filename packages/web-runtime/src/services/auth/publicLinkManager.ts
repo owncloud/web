@@ -1,4 +1,4 @@
-import { ClientService } from '@ownclouders/web-pkg'
+import { AuthStore, ClientService } from '@ownclouders/web-pkg'
 import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { Store } from 'vuex'
 import isEmpty from 'lodash-es/isEmpty'
@@ -8,28 +8,31 @@ export interface PublicLinkManagerOptions {
   clientService: ClientService
   configurationManager: ConfigurationManager
   store: Store<any>
+  authStore: AuthStore
 }
 
 export class PublicLinkManager {
   private clientService: ClientService
   private configurationManager: ConfigurationManager
   private store: Store<any>
+  private authStore: AuthStore
 
   constructor(options: PublicLinkManagerOptions) {
     this.clientService = options.clientService
     this.configurationManager = options.configurationManager
     this.store = options.store
+    this.authStore = options.authStore
   }
 
   private static buildStorageKey(token: string, suffix: string): string {
     return `oc.publicLink.${token}.${suffix}`
   }
 
-  async clear(token: string): Promise<void> {
+  clear(token: string) {
     ;['resolved', 'passwordRequired', 'password'].forEach((key) => {
       sessionStorage.removeItem(PublicLinkManager.buildStorageKey(token, key))
     })
-    await this.store.dispatch('runtime/auth/clearPublicLinkContext')
+    this.authStore.clearPublicLinkContext()
   }
 
   isResolved(token: string): boolean {
@@ -88,10 +91,7 @@ export class PublicLinkManager {
     if (!this.isResolved(token)) {
       return
     }
-    if (
-      this.store.getters['runtime/auth/isPublicLinkContextReady'] &&
-      this.store.getters['runtime/auth/publicLinkToken'] === token
-    ) {
+    if (this.authStore.publicLinkContextReady && this.authStore.publicLinkToken === token) {
       return
     }
 
@@ -108,7 +108,7 @@ export class PublicLinkManager {
       console.error(e)
     }
 
-    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
+    this.authStore.setPublicLinkContext({
       publicLinkToken: token,
       publicLinkPassword: password,
       publicLinkContextReady: true,
@@ -117,9 +117,7 @@ export class PublicLinkManager {
   }
 
   clearContext() {
-    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
-      publicLinkContextReady: false
-    })
+    this.authStore.clearPublicLinkContext()
   }
 
   private async fetchCapabilities({ password = '' }): Promise<void> {

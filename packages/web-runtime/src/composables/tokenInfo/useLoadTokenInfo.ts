@@ -1,21 +1,20 @@
-import { Ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { useClientService, useStore, useUserContext } from '@ownclouders/web-pkg'
+import { useClientService, useAuthStore, AuthStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 
 export interface LoadTokenInfoOptions {
   clientService?: ClientService
-  isUserContext?: Ref<boolean>
+  authStore?: AuthStore
 }
 
 export function useLoadTokenInfo(options: LoadTokenInfoOptions) {
   const { owncloudSdk } = options.clientService || useClientService()
-  const isUserContext = options.isUserContext || useUserContext({ store: useStore() })
+  const authStore = options.authStore || useAuthStore()
 
   const loadTokenInfoTask = useTask(function* (signal, token: string) {
     let tokenInfo
     try {
-      if (unref(isUserContext)) {
+      if (authStore.userContextReady) {
         tokenInfo = yield owncloudSdk.shares.getProtectedTokenInfo(token)
       } else {
         tokenInfo = yield owncloudSdk.shares.getUnprotectedTokenInfo(token)

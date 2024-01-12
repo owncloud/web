@@ -59,7 +59,7 @@ export default defineComponent({
     const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
     const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
     const { actions: deleteActions } = useFileActionsDelete({ store })
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
     const { actions: favoriteActions } = useFileActionsFavorite({ store })
     const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })

@@ -10,6 +10,12 @@ export { createTestingPinia }
 
 export type PiniaMockOptions = {
   stubActions?: boolean
+  authState?: {
+    accessToken?: string
+    idpContextReady?: boolean
+    userContextReady?: boolean
+    publicLinkContextReady?: boolean
+  }
   themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
   messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
@@ -19,6 +25,7 @@ export type PiniaMockOptions = {
 
 export function createMockStore({
   stubActions = true,
+  authState = {},
   themeState = {},
   messagesState = {},
   modalsState = {},
@@ -39,6 +46,7 @@ export function createMockStore({
   return createTestingPinia({
     stubActions,
     initialState: {
+      auth: { ...authState },
       messages: { messages: [], ...messagesState },
       modals: {
         modals: [],

@@ -149,16 +149,18 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
-    isUserContextReady
-  )
   const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(DriveResolver, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+          }),
+          store
+        ],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: { ...defaultStubs, 'app-banner': true }

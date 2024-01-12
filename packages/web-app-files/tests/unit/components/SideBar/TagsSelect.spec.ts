@@ -11,11 +11,6 @@ import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useAccessToken: jest.fn()
-}))
-
 describe('Tag Select', () => {
   it('show tags input form if loaded successfully', () => {
     const resource = mockDeep<Resource>({ tags: [] })

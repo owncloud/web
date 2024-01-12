@@ -59,7 +59,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   const { actions: copyActions } = useFileActionsCopy({ store })
   const { actions: deleteActions } = useFileActionsDelete({ store })
   const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
-  const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+  const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
   const { actions: downloadFileActions } = useFileActionsDownloadFile()
   const { actions: favoriteActions } = useFileActionsFavorite({ store })
   const { actions: moveActions } = useFileActionsMove({ store })

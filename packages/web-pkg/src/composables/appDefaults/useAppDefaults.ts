@@ -16,11 +16,13 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 import { useAppDocumentTitle } from './useAppDocumentTitle'
-import { RequestResult, usePublicLinkContext, useRequest } from '../authContext'
+import { RequestResult, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useAuthStore } from '../piniaStores'
+import { storeToRefs } from 'pinia'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -48,7 +50,8 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const clientService = options.clientService ?? useClientService()
   const applicationId = options.applicationId
 
-  const isPublicLinkContext = usePublicLinkContext({ store })
+  const authStore = useAuthStore()
+  const { publicLinkContextReady } = storeToRefs(authStore)
 
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const { space, item, itemId, loading } = useDriveResolver({
@@ -88,7 +91,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   return {
-    isPublicLinkContext,
+    isPublicLinkContext: publicLinkContextReady,
     currentFileContext,
     ...useAppConfig({ store, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
@@ -101,6 +104,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       store,
       currentRoute
     }),
-    ...useRequest({ clientService, store, currentRoute: unref(currentRoute) })
+    ...useRequest({ clientService, currentRoute: unref(currentRoute) })
   }
 }

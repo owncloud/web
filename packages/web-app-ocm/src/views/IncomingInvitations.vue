@@ -61,7 +61,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, unref, VNodeRef } from 'vue'
 import {
-  useStore,
   queryItemAsString,
   useClientService,
   useRoute,
@@ -77,7 +76,6 @@ import { providerListSchema } from '../schemas'
 export default defineComponent({
   emits: ['highlightNewConnections'],
   setup(props, { emit }) {
-    const store = useStore()
     const { showErrorMessage } = useMessages()
     const router = useRouter()
     const clientService = useClientService()
