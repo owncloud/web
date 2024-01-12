@@ -102,14 +102,16 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
     ...(mocks && mocks)
   }
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
   const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
     storeOptions,
     wrapper: mount(Projects, {
       global: {
-        plugins: [...defaultPlugins({ abilities }), store],
+        plugins: [
+          ...defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } }),
+          store
+        ],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: {

@@ -5,7 +5,8 @@ import {
   eventBus,
   useAppDefaults,
   useConfigurationManager,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
@@ -232,7 +233,7 @@ describe('Users view', () => {
         })
       )
 
-      const { wrapper, storeOptions } = getMountedWrapper({ clientService })
+      const { wrapper } = getMountedWrapper({ clientService })
 
       const busStub = jest.spyOn(eventBus, 'publish')
 
@@ -249,9 +250,8 @@ describe('Users view', () => {
       expect(updatedUser.memberOf[0].id).toEqual('1')
 
       expect(busStub).toHaveBeenCalled()
-      expect(
-        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
-      ).toHaveBeenCalled()
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.updateSpaceField).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {

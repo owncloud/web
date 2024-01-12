@@ -141,6 +141,7 @@ import {
   useCapabilityFilesSharingResharingDefault,
   useMessages,
   useModals,
+  useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
@@ -191,6 +192,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { dispatchModal } = useModals()
+    const { changeSpaceMember } = useSpacesStore()
 
     const { user } = storeToRefs(userStore)
 
@@ -235,6 +237,7 @@ export default defineComponent({
     return {
       hasResharing: useCapabilityFilesSharingResharing(),
       resharingDefault: useCapabilityFilesSharingResharingDefault(),
+      changeSpaceMember,
       user,
       clientService,
       sharedParentDir,
@@ -418,7 +421,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions('Files', ['changeShare']),
-    ...mapActions('runtime/spaces', ['changeSpaceMember']),
 
     removeShare() {
       this.$emit('onDelete', this.share)

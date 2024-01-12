@@ -25,7 +25,8 @@ import {
   Modal,
   useCapabilitySpacesMaxQuota,
   useClientService,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
@@ -68,6 +69,7 @@ export default defineComponent({
     const clientService = useClientService()
     const router = useRouter()
     const maxQuota = useCapabilitySpacesMaxQuota()
+    const spacesStore = useSpacesStore()
 
     const selectedOption = ref(0)
 
@@ -146,11 +148,7 @@ export default defineComponent({
             quota: driveData.quota
           })
         }
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-          id: space.id,
-          field: 'spaceQuota',
-          value: driveData.quota
-        })
+        spacesStore.updateSpaceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
         store.commit('Files/UPDATE_RESOURCE_FIELD', {
           id: space.id,
           field: 'spaceQuota',

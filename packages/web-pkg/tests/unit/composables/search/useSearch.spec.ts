@@ -7,6 +7,7 @@ import {
 } from 'web-test-helpers'
 import { useSearch } from '../../../../src/composables'
 import { ConfigurationManager } from '../../../../src/configuration'
+import { SpaceResource } from '@ownclouders/web-client'
 
 jest.mock('../../../../src/composables/configuration', () => ({
   useConfigurationManager: () =>
@@ -53,7 +54,8 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
   storeOptions.getters.capabilities.mockImplementation(() => ({
     spaces: { projects: true, share_jail: true }
   }))
-  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [
+
+  const spaces = [
     {
       id: '1',
       fileId: '1',
@@ -66,7 +68,8 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
       name: 'New space',
       getDriveAliasAndItem: jest.fn()
     }
-  ])
+  ] as unknown as SpaceResource[]
+
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({})
 
@@ -86,7 +89,8 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
     {
       mocks,
       provide: mocks,
-      store
+      store,
+      pluginOptions: { piniaOptions: { spacesState: { spaces } } }
     }
   )
 }

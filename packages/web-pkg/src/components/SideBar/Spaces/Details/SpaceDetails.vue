@@ -78,7 +78,6 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
-import { mapGetters } from 'vuex'
 import { useTask } from 'vue-concurrency'
 import {
   getRelativeSpecialFolderSpacePath,
@@ -89,7 +88,8 @@ import {
   useStore,
   usePreviewService,
   useClientService,
-  useUserStore
+  useUserStore,
+  useSpacesStore
 } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
@@ -119,6 +119,9 @@ export default defineComponent({
     const userStore = useUserStore()
     const previewService = usePreviewService()
     const clientService = useClientService()
+    const spacesStore = useSpacesStore()
+    const { spaceMembers } = storeToRefs(spacesStore)
+
     const resource = inject<Ref<SpaceResource>>('resource')
     const spaceImage = ref('')
 
@@ -156,12 +159,11 @@ export default defineComponent({
       resource,
       linkShareCount,
       showWebDavDetails,
-      user
+      user,
+      spaceMembers
     }
   },
   computed: {
-    ...mapGetters('runtime/spaces', ['spaceMembers']),
-
     hasShares() {
       return this.hasMemberShares || this.hasLinkShares
     },
@@ -184,13 +186,13 @@ export default defineComponent({
         default:
           if (this.linkShareCount === 1) {
             return this.$gettext('This space has %{memberShareCount} members and one link.', {
-              memberShareCount: this.memberShareCount
+              memberShareCount: this.memberShareCount.toString()
             })
           }
           return this.$gettext(
             'This space has %{memberShareCount} members and %{linkShareCount} links.',
             {
-              memberShareCount: this.memberShareCount,
+              memberShareCount: this.memberShareCount.toString(),
               linkShareCount: this.linkShareCount
             }
           )
@@ -235,7 +237,7 @@ export default defineComponent({
         'This space has %{memberShareCount} member.',
         'This space has %{memberShareCount} members.',
         this.memberShareCount,
-        { memberShareCount: this.memberShareCount }
+        { memberShareCount: this.memberShareCount.toString() }
       )
     },
     linkShareLabel() {

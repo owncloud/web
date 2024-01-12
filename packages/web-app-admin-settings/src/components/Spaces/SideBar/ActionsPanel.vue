@@ -40,11 +40,11 @@ export default defineComponent({
     }))
 
     const { actions: deleteActions } = useSpaceActionsDelete({ store })
-    const { actions: disableActions } = useSpaceActionsDisable({ store })
-    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
+    const { actions: disableActions } = useSpaceActionsDisable()
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: renameActions } = useSpaceActionsRename({ store })
-    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: renameActions } = useSpaceActionsRename()
+    const { actions: restoreActions } = useSpaceActionsRestore()
 
     const actions = computed(() => {
       return [

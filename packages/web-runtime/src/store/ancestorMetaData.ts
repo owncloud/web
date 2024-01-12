@@ -33,7 +33,7 @@ const mutations = {
 }
 
 const actions = {
-  loadAncestorMetaData({ commit, state, rootGetters }, { folder, space, client, userStore }) {
+  loadAncestorMetaData({ commit, state }, { folder, space, client, userStore, spacesStore }) {
     const ancestorMetaData: AncestorMetaData = {
       [folder.path]: {
         id: folder.fileId,
@@ -46,7 +46,7 @@ const actions = {
     const promises = []
     const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
     const parentPaths = getParentPaths(folder.path)
-    const spaces = rootGetters['runtime/spaces/spaces'] as SpaceResource[]
+    const spaces = spacesStore.spaces as SpaceResource[]
 
     const getMountPoints = () =>
       spaces.filter(

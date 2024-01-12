@@ -3,6 +3,8 @@ import defaultTheme from '../../../web-runtime/themes/owncloud/theme.json'
 import { User } from '../../../web-client/src/generated'
 import { Message, Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
 import { mock } from 'jest-mock-extended'
+import { SpaceResource } from '../../../web-client/src'
+import { Share } from '../../../web-client/src/helpers'
 
 export { createTestingPinia }
 
@@ -11,6 +13,7 @@ export type PiniaMockOptions = {
   themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
   messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
+  spacesState?: { spaces?: SpaceResource[]; spaceMembers?: Share[] }
   userState?: { user?: User }
 }
 
@@ -19,6 +22,7 @@ export function createMockStore({
   themeState = {},
   messagesState = {},
   modalsState = {},
+  spacesState = {},
   userState = {}
 }: PiniaMockOptions = {}) {
   const defaultOwnCloudTheme = {
@@ -48,6 +52,7 @@ export function createMockStore({
         availableThemes: defaultOwnCloudTheme.themes,
         ...themeState
       },
+      spaces: { spaces: [], spaceMembers: [], ...spacesState },
       user: { user: { ...mock<User>({ id: '1' }), ...(userState?.user && { ...userState.user }) } }
     }
   })

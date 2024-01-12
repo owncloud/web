@@ -21,7 +21,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, clientService, configurationManager } = context
+    const { store, userStore, spacesStore, clientService, configurationManager } = context
 
     const hasResharing = useCapabilityFilesSharingResharing(store)
     const hasShareJail = useCapabilityShareJailEnabled(store)
@@ -32,9 +32,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
 
       if (configurationManager.options.routing.fullShareOwnerPaths) {
-        yield store.dispatch('runtime/spaces/loadMountPoints', {
-          graphClient: clientService.graphAuthenticated
-        })
+        yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
       }
 
       let resources = yield clientService.owncloudSdk.shares.getShares('', {
@@ -49,7 +47,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       if (resources.length) {
         resources = aggregateResourceShares({
           shares: resources,
-          spaces: store.getters['runtime/spaces/spaces'],
+          spaces: spacesStore.spaces,
           incomingShares: true,
           allowSharePermission: unref(hasResharing),
           hasShareJail: unref(hasShareJail),

@@ -4,8 +4,6 @@ import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client
 import { mock } from 'jest-mock-extended'
 
 import {
-  createStore,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
   getComposableWrapper,
@@ -158,10 +156,7 @@ function getWrapper({
 }: {
   resolveGetFileContents?: boolean
   space?: SpaceResource
-  setup: (
-    instance: ReturnType<typeof useFileActionsSetReadme>,
-    options: { storeOptions: typeof defaultStoreMockOptions }
-  ) => void
+  setup: (instance: ReturnType<typeof useFileActionsSetReadme>) => void
 }) {
   const mocks = {
     ...defaultComponentMocks({
@@ -203,19 +198,13 @@ function getWrapper({
     })
   )
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsSetReadme({ store })
-        setup(instance, { storeOptions })
+        const instance = useFileActionsSetReadme()
+        setup(instance)
       },
       {
-        store,
         mocks,
         provide: mocks
       }

@@ -35,7 +35,7 @@ import {
   buildPublicSpaceResource,
   isPersonalSpaceResource,
   isPublicSpaceResource,
-  Resource
+  PublicSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
 import { computed, createApp } from 'vue'
@@ -51,7 +51,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { userStore } = announcePiniaStores()
+  const { spacesStore, userStore } = announcePiniaStores()
 
   app.provide('$router', router)
 
@@ -176,17 +176,14 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       }
 
       // Load spaces to make them available across the application
-      const graphClient = clientService.graphAuthenticated
-      await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-      const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
-        isPersonalSpaceResource(space)
-      )
+      await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
+      const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
 
       if (!personalSpace) {
         return
       }
 
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+      spacesStore.updateSpaceField({
         id: personalSpace.id,
         field: 'name',
         value: app.config.globalProperties.$gettext('Personal')
@@ -217,8 +214,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         publicLinkType: publicLinkType
       })
 
-      store.commit('runtime/spaces/ADD_SPACES', [space])
-      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
+      spacesStore.addSpaces([space])
+      spacesStore.setSpacesInitialized(true)
     },
     {
       immediate: true
@@ -232,13 +229,13 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     },
     (publicLinkPassword: string | undefined) => {
       const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
-      const space = store.getters['runtime/spaces/spaces'].find((space: Resource) => {
+      const space = spacesStore.spaces.find((space) => {
         return isPublicSpaceResource(space) && space.id === publicLinkToken
       })
       if (!space) {
         return
       }
-      space.publicLinkPassword = publicLinkPassword
+      ;(space as PublicSpaceResource).publicLinkPassword = publicLinkPassword
     }
   )
 }

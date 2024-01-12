@@ -157,7 +157,8 @@ import {
   useConfigurationManager,
   useStore,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
@@ -201,6 +202,9 @@ export default defineComponent({
     const store = useStore()
     const userStore = useUserStore()
     const clientService = useClientService()
+    const spacesStore = useSpacesStore()
+    const { addSpaceMember } = spacesStore
+    const { spaceMembers } = storeToRefs(spacesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -267,6 +271,8 @@ export default defineComponent({
       hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
       minSearchLength: useCapabilityFilesSharingSearchMinLength(store),
       isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
+      spaceMembers,
+      addSpaceMember,
       user,
       clientService,
       saving,
@@ -298,7 +304,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('runtime/spaces', ['spaceMembers']),
     ...mapGetters(['configuration']),
 
     $_announcementWhenCollaboratorAdded() {
@@ -354,7 +359,6 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['addShare']),
-    ...mapActions('runtime/spaces', ['addSpaceMember']),
 
     async fetchRecipients(query) {
       try {

@@ -65,13 +65,13 @@
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="spaceMemberLabel"
       >
-        <li v-for="collaborator in displaySpaceMembers" :key="collaborator.key">
+        <li v-for="(collaborator, i) in displaySpaceMembers" :key="i">
           <collaborator-list-item
-            :share="collaborator"
+            :share="(collaborator as Share)"
             :resource-name="resource.name"
             :deniable="isSpaceMemberDeniable(collaborator)"
             :modifiable="false"
-            :is-share-denied="isSpaceMemberDenied(collaborator)"
+            :is-share-denied="isSpaceMemberDenied(collaborator as Share)"
             @on-set-deny="setDenyShare"
           />
         </li>
@@ -98,7 +98,8 @@ import {
   useGetMatchingSpace,
   useModals,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -133,6 +134,8 @@ export default defineComponent({
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { dispatchModal } = useModals()
+    const spacesStore = useSpacesStore()
+    const { spaceMembers } = storeToRefs(spacesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -155,9 +158,7 @@ export default defineComponent({
       if (!username) {
         return false
       }
-      return store.getters['runtime/spaces/spaceMembers'].some(
-        (member) => member.collaborator?.name === username
-      )
+      return unref(spaceMembers).some((member) => member.collaborator?.name === username)
     })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
@@ -190,12 +191,12 @@ export default defineComponent({
       getSharedAncestor,
       configurationManager,
       dispatchModal,
+      spaceMembers,
       ...useMessages()
     }
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('runtime/spaces', ['spaceMembers', 'spaces']),
 
     inviteCollaboratorHelp() {
       const cernFeatures = !!this.configuration?.options?.cernFeatures

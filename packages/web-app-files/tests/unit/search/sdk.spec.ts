@@ -9,10 +9,9 @@ jest.mock('@ownclouders/web-client/src/helpers/resource', () => ({
   buildResource: (v) => v
 }))
 
-const getStore = (spaces = []) => {
+const getStore = () => {
   const storeOptions = defaultStoreMockOptions
   storeOptions.getters.capabilities.mockReturnValue({ dav: { reports: ['search-files'] } })
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
   return createStore(storeOptions)
 }
 

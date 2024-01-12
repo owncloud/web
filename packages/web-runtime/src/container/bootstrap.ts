@@ -13,7 +13,8 @@ import {
   useThemeStore,
   useUserStore,
   UserStore,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -339,8 +340,9 @@ export const announceTheme = async ({
 export const announcePiniaStores = () => {
   const messagesStore = useMessages()
   const modalStore = useModals()
+  const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  return { messagesStore, modalStore, userStore }
+  return { messagesStore, modalStore, spacesStore, userStore }
 }
 
 /**

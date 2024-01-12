@@ -17,7 +17,7 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
-import { useMessages, useModals } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore } from '../../piniaStores'
 import { useConfigurationManager } from '../../configuration'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
@@ -33,6 +33,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const loadingService = useLoadingService()
   const { dispatchModal } = useModals()
   const configurationManager = useConfigurationManager()
+  const spacesStore = useSpacesStore()
 
   const queue = new PQueue({
     concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
@@ -199,7 +200,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                     const driveResponse = await graphClient.drives.getDrive(
                       unref(resources)[0].storageId
                     )
-                    store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+                    spacesStore.updateSpaceField({
                       id: driveResponse.data.id,
                       field: 'spaceQuota',
                       value: driveResponse.data.quota

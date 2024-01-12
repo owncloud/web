@@ -10,7 +10,8 @@ import {
   UppyResource,
   locationSpacesGeneric,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
@@ -265,8 +266,7 @@ const getWrapper = ({
   const store = {
     getters: {
       'Files/currentFolder': mock<Resource>({ path: '/' }),
-      'Files/files': [mock<Resource>()],
-      'runtime/spaces/spaces': spaces
+      'Files/files': [mock<Resource>()]
     },
     dispatch: jest.fn()
   } as any
@@ -285,6 +285,7 @@ const getWrapper = ({
     store,
     userStore: useUserStore(createTestingPinia()),
     messageStore: useMessages(createTestingPinia()),
+    spacesStore: useSpacesStore(createTestingPinia({ initialState: { spaces: { spaces } } })),
     space: mock<SpaceResource>(),
     uppyService: mock<UppyService>(),
     conflictHandlingEnabled,

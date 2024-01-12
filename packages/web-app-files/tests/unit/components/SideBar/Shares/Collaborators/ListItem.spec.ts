@@ -190,11 +190,7 @@ function createWrapper({
   expires = undefined,
   sharedParentRoute = null
 } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    state: { user: { id: '1' } }
-  }
-  storeOptions.modules.Files.actions.changeShare = jest.fn()
+  const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {

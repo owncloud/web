@@ -1,0 +1,8 @@
+Change: Spaces store to pinia
+
+BREAKING CHANGE for developers: Spaces are no longer stored in a vuex store but in pinia instead. You can access all the store functionality via the new `useSpacesStore` composable.
+
+For more details please see the linked PR down below.
+
+https://github.com/owncloud/web/pull/10316
+https://github.com/owncloud/web/issues/10210

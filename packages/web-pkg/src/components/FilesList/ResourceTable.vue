@@ -528,7 +528,7 @@ export default defineComponent({
       'clipboardResources',
       'clipboardAction'
     ]),
-    ...mapState('runtime/spaces', ['spaces']),
+
     fields() {
       if (this.resources.length === 0) {
         return []

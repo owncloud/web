@@ -1,7 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
 import { useGetMatchingSpace } from '../../../web-pkg'
-import { PersonalSpaceResource } from '../../../web-client/src/helpers'
 
 export const useGetMatchingSpaceMock = (
   options: Partial<ReturnType<typeof useGetMatchingSpace>> = {}
@@ -12,9 +11,6 @@ export const useGetMatchingSpaceMock = (
     },
     getMatchingSpace() {
       return mock<SpaceResource>()
-    },
-    getPersonalSpace() {
-      return mock<PersonalSpaceResource>()
     },
     isResourceAccessible() {
       return false

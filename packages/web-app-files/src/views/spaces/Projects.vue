@@ -175,7 +175,7 @@ import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import { AppLoadingSpinner } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useSpacesStore } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
@@ -245,6 +245,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const spacesStore = useSpacesStore()
     const router = useRouter()
     const route = useRoute()
     const clientService = useClientService()
@@ -257,8 +258,8 @@ export default defineComponent({
     const previewService = usePreviewService()
     let loadPreviewToken = null
 
-    const runtimeSpaces = computed((): SpaceResource[] => {
-      return store.getters['runtime/spaces/spaces'].filter((s) => isProjectSpaceResource(s)) || []
+    const runtimeSpaces = computed(() => {
+      return spacesStore.spaces.filter(isProjectSpaceResource) || []
     })
     const selectedSpace = computed(() => {
       if (unref(selectedResources).length === 1) {
@@ -329,9 +330,7 @@ export default defineComponent({
     const loadResourcesTask = useTask(function* () {
       store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-        graphClient: clientService.graphAuthenticated
-      })
+      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
     })
 

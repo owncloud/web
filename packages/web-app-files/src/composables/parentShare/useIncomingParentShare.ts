@@ -1,5 +1,10 @@
 import { buildShare } from '@ownclouders/web-client/src/helpers/share'
-import { useCapabilitySpacesEnabled, useClientService, useStore } from '@ownclouders/web-pkg'
+import {
+  useCapabilitySpacesEnabled,
+  useClientService,
+  useSpacesStore,
+  useStore
+} from '@ownclouders/web-pkg'
 import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import {
@@ -14,6 +19,7 @@ import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 
 export function useIncomingParentShare() {
   const store = useStore()
+  const spacesStore = useSpacesStore()
   const clientService = useClientService()
   const incomingParentShare = ref(null)
   const incomingCollaborators = computed(() => store.getters['Files/incomingCollaborators'])
@@ -52,9 +58,7 @@ export function useIncomingParentShare() {
   })
 
   const getParentShare = async (resource: Resource) => {
-    await store.dispatch('runtime/spaces/loadMountPoints', {
-      graphClient: clientService.graphAuthenticated
-    })
+    await spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
     // do PROPFINDs on parents until root of accepted share is found in `mountpoint` spaces
     let mountPoint = findMatchingMountPoint(resource.id)
     const sharePathSegments = mountPoint ? [] : [resource.name]
@@ -71,11 +75,11 @@ export function useIncomingParentShare() {
     return buildShare(parentShare.shareInfo, tmpResource, true)
   }
 
-  const getMatchingSpace = (id) => {
+  const getMatchingSpace = (id: string) => {
     if (!unref(hasSpaces)) {
-      return store.getters['runtime/spaces/spaces'].find((space) => isPersonalSpaceResource(space))
+      return spacesStore.spaces.find(isPersonalSpaceResource)
     }
-    return store.getters['runtime/spaces/spaces'].find((space) => id.startsWith(space.id))
+    return spacesStore.spaces.find((space) => id.startsWith(space.id))
   }
 
   const fetchFileInfoById = async (id: string | number): Promise<Resource> => {
@@ -99,7 +103,7 @@ export function useIncomingParentShare() {
   }
 
   const findMatchingMountPoint = (id: string | number): SpaceResource => {
-    return store.getters['runtime/spaces/spaces'].find(
+    return spacesStore.spaces.find(
       (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
     )
   }

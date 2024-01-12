@@ -33,7 +33,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, router, clientService, configurationManager } = context
+    const { store, userStore, spacesStore, router, clientService, configurationManager } = context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
     const hasResharing = useCapabilityFilesSharingResharing(store)
@@ -64,7 +64,7 @@ export class FolderLoaderSpace implements FolderLoader {
             const parentShare = yield client.shares.getShare(space.shareId)
             const aggregatedShares = aggregateResourceShares({
               shares: [parentShare.shareInfo],
-              spaces: store.getters['runtime/spaces/spaces'],
+              spaces: spacesStore.spaces,
               allowSharePermission: unref(hasResharing),
               hasShareJail: true,
               incomingShares: true,
@@ -81,7 +81,8 @@ export class FolderLoaderSpace implements FolderLoader {
           folder: currentFolder,
           space,
           client: webdav,
-          userStore
+          userStore,
+          spacesStore
         })
 
         if (options.loadShares) {

@@ -41,6 +41,7 @@ import {
   createLocationPublic,
   createLocationSpaces,
   useMessages,
+  useSpacesStore,
   useThemeStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -75,7 +76,6 @@ import { useService, UppyService } from '@ownclouders/web-pkg'
 import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { SpaceResource } from '@ownclouders/web-client/src'
 import { PublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
@@ -88,6 +88,7 @@ export default defineComponent({
     const userStore = useUserStore()
     const messageStore = useMessages()
     const themeStore = useThemeStore()
+    const spacesStore = useSpacesStore()
     const router = useRouter()
     const route = useRoute()
     const language = useGettext()
@@ -115,6 +116,7 @@ export default defineComponent({
         route,
         store,
         userStore,
+        spacesStore,
         messageStore,
         uppyService,
         quotaCheckEnabled: false,
@@ -163,8 +165,7 @@ export default defineComponent({
         }
       }
 
-      const spaces: SpaceResource[] = store.getters['runtime/spaces/spaces']
-      const space = spaces.find((s) => s.driveAlias === `public/${unref(publicToken)}`)
+      const space = spacesStore.spaces.find((s) => s.driveAlias === `public/${unref(publicToken)}`)
 
       clientService.webdav
         .listFiles(space, {}, { depth: 0 })

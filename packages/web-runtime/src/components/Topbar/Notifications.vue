@@ -89,7 +89,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { eventBus, useCapabilityCoreSSE } from '@ownclouders/web-pkg'
+import { eventBus, useCapabilityCoreSSE, useSpacesStore } from '@ownclouders/web-pkg'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
@@ -113,6 +113,7 @@ export default {
   },
   setup() {
     const store = useStore()
+    const spacesStore = useSpacesStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
@@ -172,7 +173,7 @@ export default {
         }
       }
       if (object_type === 'storagespace' && messageRichParameters?.space?.id) {
-        const space = store.getters['runtime/spaces/spaces'].find(
+        const space = spacesStore.spaces.find(
           (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
         )
         if (space) {

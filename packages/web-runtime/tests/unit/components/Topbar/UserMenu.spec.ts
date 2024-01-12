@@ -1,21 +1,13 @@
 import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
 import {
-  createStore,
   defaultPlugins,
   defaultStubs,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
-
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useGetMatchingSpace: jest.fn()
-}))
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -149,20 +141,11 @@ describe('User Menu component', () => {
 })
 
 const getMountedWrapper = (quota, userEmail: string, noUser = false, areThemeUrlsSet = false) => {
-  jest.mocked(useGetMatchingSpace).mockReturnValue(
-    mock<ReturnType<typeof useGetMatchingSpace>>({
-      getPersonalSpace: () => mock<SpaceResource>({ spaceQuota: quota })
-    })
-  )
-
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ path: '/files', fullPath: '/files' })
     })
   }
-
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return mount(UserMenu, {
     props: {
@@ -199,10 +182,18 @@ const getMountedWrapper = (quota, userEmail: string, noUser = false, areThemeUrl
                     displayName: 'Albert Einstein',
                     mail: userEmail || ''
                   }
+            },
+            spacesState: {
+              spaces: [
+                mock<SpaceResource>({
+                  spaceQuota: quota,
+                  isOwner: () => true,
+                  driveType: 'personal'
+                })
+              ]
             }
           }
-        }),
-        store
+        })
       ],
       stubs: {
         ...defaultStubs,

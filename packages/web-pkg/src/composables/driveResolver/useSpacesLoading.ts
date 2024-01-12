@@ -1,17 +1,10 @@
 import { computed } from 'vue'
-import { Store } from 'vuex'
-import { useStore } from '../store'
+import { useSpacesStore } from '../piniaStores'
 
-export interface SpacesLoadingOptions {
-  store?: Store<any>
-}
-
-export const useSpacesLoading = (options: SpacesLoadingOptions) => {
-  const store = options?.store || useStore()
+export const useSpacesLoading = () => {
+  const spacesStore = useSpacesStore()
   const areSpacesLoading = computed(
-    () =>
-      !store.getters['runtime/spaces/spacesInitialized'] ||
-      store.getters['runtime/spaces/spacesLoading']
+    () => !spacesStore.spacesInitialized || spacesStore.spacesLoading
   )
   return {
     areSpacesLoading

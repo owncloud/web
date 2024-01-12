@@ -171,16 +171,19 @@ function getWrapper({
       }))
     }
   }
-  storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
-    () => spaceMembers
-  )
+
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
   return mountType(SpaceMembers, {
     global: {
-      plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+      plugins: [
+        ...defaultPlugins({
+          piniaOptions: { userState: { user }, spacesState: { spaceMembers: spaceMembers as any } }
+        }),
+        store
+      ],
       mocks,
       provide: {
         ...mocks,

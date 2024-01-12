@@ -112,7 +112,7 @@ export default defineComponent({
     )
 
     const requiredAuthContext = useRouteMeta('authContext')
-    const { areSpacesLoading } = useSpacesLoading({ store })
+    const { areSpacesLoading } = useSpacesLoading()
     const isLoading = computed(() => {
       if (['anonymous', 'idp'].includes(unref(requiredAuthContext))) {
         return false

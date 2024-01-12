@@ -24,7 +24,7 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
-import { useMessages, useUserStore } from '../../piniaStores'
+import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -34,6 +34,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const spacesStore = useSpacesStore()
 
   const hasSpacesEnabled = useCapabilitySpacesEnabled()
 
@@ -208,7 +209,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
     if (unref(hasSpacesEnabled)) {
       const graphClient = clientService.graphAuthenticated
       const driveResponse = await graphClient.drives.getDrive(space.id as string)
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+      spacesStore.updateSpaceField({
         id: driveResponse.data.id,
         field: 'spaceQuota',
         value: driveResponse.data.quota

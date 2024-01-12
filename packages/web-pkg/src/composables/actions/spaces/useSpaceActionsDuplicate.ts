@@ -14,7 +14,7 @@ import PQueue from 'p-queue'
 import { useRouter } from '../../router'
 import { isLocationSpacesActive } from '../../../router'
 import { useConfigurationManager } from '../../configuration'
-import { useMessages } from '../../piniaStores'
+import { useMessages, useSpacesStore } from '../../piniaStores'
 
 export const useSpaceActionsDuplicate = ({
   store
@@ -22,6 +22,7 @@ export const useSpaceActionsDuplicate = ({
   store?: Store<any>
 } = {}) => {
   store = store || useStore()
+  const spacesStore = useSpacesStore()
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -33,9 +34,7 @@ export const useSpaceActionsDuplicate = ({
   const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
 
   const duplicateSpace = async (existingSpace: SpaceResource) => {
-    const projectSpaces: SpaceResource[] = store.getters['runtime/spaces/spaces'].filter(
-      (space: SpaceResource) => isProjectSpaceResource(space)
-    )
+    const projectSpaces = spacesStore.spaces.filter(isProjectSpaceResource)
     const duplicatedSpaceName = resolveFileNameDuplicate(existingSpace.name, '', projectSpaces)
 
     try {
@@ -107,7 +106,7 @@ export const useSpaceActionsDuplicate = ({
         duplicatedSpace = buildSpace(updatedDriveData)
       }
 
-      store.commit('runtime/spaces/UPSERT_SPACE', duplicatedSpace)
+      spacesStore.upsertSpace(duplicatedSpace)
       if (isProjectsLocation) {
         store.commit('Files/UPSERT_RESOURCE', duplicatedSpace)
       }

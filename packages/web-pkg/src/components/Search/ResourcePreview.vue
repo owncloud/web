@@ -110,7 +110,6 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('runtime/spaces', ['spaces']),
 
     displayThumbnails() {
       return (

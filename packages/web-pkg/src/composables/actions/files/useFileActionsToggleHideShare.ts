@@ -12,7 +12,7 @@ import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import { useMessages } from '../../piniaStores'
+import { useMessages, useSpacesStore } from '../../piniaStores'
 
 export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -25,6 +25,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const configurationManager = useConfigurationManager()
+  const spacesStore = useSpacesStore()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
@@ -45,7 +46,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
               hasResharing: unref(hasResharing),
               hasShareJail: unref(hasShareJail),
               client: clientService.owncloudSdk,
-              spaces: store.getters['runtime/spaces/spaces'],
+              spaces: spacesStore.spaces,
               fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
             })
             if (share) {

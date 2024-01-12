@@ -11,7 +11,7 @@ import {
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
-import { useMessages } from '../../../../../src/composables/piniaStores'
+import { useMessages, useSpacesStore } from '../../../../../src/composables/piniaStores'
 
 const spaces = [
   mock<SpaceResource>({
@@ -105,7 +105,7 @@ describe('restore', () => {
     })
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
+        setup: async ({ duplicateSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
             mockAxiosResolve({
               id: '1',
@@ -125,9 +125,8 @@ describe('restore', () => {
             },
             expect.anything()
           )
-          expect(
-            storeOptions.modules.runtime.modules.spaces.mutations.UPSERT_SPACE
-          ).toHaveBeenCalled()
+          const spacesStore = useSpacesStore()
+          expect(spacesStore.upsertSpace).toHaveBeenCalled()
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalled()
         }
@@ -174,7 +173,6 @@ function getWrapper({
   const storeOptions = {
     ...defaultStoreMockOptions
   }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
@@ -190,7 +188,7 @@ function getWrapper({
         mocks,
         provide: mocks,
         store,
-        pluginOptions: { abilities }
+        pluginOptions: { abilities, piniaOptions: { spacesState: { spaces } } }
       }
     )
   }

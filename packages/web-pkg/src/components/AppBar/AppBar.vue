@@ -92,6 +92,7 @@ import {
   useAbility,
   useFileActionsToggleHideShare,
   useRouteMeta,
+  useSpacesStore,
   useStore,
   ViewModeConstants
 } from '../../composables'
@@ -148,6 +149,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const store = useStore()
+    const spacesStore = useSpacesStore()
     const { $gettext } = useGettext()
     const { can } = useAbility()
 
@@ -163,9 +165,9 @@ export default defineComponent({
     const { actions: moveActions } = useFileActionsMove({ store })
     const { actions: restoreActions } = useFileActionsRestore({ store })
     const { actions: deleteSpaceActions } = useSpaceActionsDelete({ store })
-    const { actions: disableSpaceActions } = useSpaceActionsDisable({ store })
+    const { actions: disableSpaceActions } = useSpaceActionsDisable()
     const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
+    const { actions: restoreSpaceActions } = useSpaceActionsRestore()
 
     const breadcrumbMaxWidth = ref<number>(0)
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
@@ -208,10 +210,8 @@ export default defineComponent({
       )
     })
 
-    const spaces = computed<SpaceResource[]>(() =>
-      store.getters['runtime/spaces/spaces'].filter(
-        (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
-      )
+    const spaces = computed(() =>
+      spacesStore.spaces.filter((s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s))
     )
 
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')

@@ -5,8 +5,6 @@ import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   MountPointSpaceResource,
-  PersonalSpaceResource,
-  ProjectSpaceResource,
   buildShareSpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
@@ -17,7 +15,7 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
-import { useUserStore } from '../piniaStores'
+import { useSpacesStore, useUserStore } from '../piniaStores'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
@@ -26,8 +24,9 @@ type GetMatchingSpaceOptions = {
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const store = useStore()
   const userStore = useUserStore()
+  const spacesStore = useSpacesStore()
   const configurationManager = useConfigurationManager()
-  const spaces = computed<ProjectSpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
+  const spaces = computed(() => spacesStore.spaces)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
   const hasSpaces = useCapabilitySpacesEnabled(store)
 
@@ -86,14 +85,10 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
     )
 
-  const getPersonalSpace = (): PersonalSpaceResource => {
-    return unref(spaces).find((s) => isPersonalSpaceResource(s) && s.isOwner(userStore.user))
-  }
-
   const isPersonalSpaceRoot = (resource: Resource) => {
     return (
       resource?.storageId &&
-      resource?.storageId === getPersonalSpace()?.storageId &&
+      resource?.storageId === spacesStore.personalSpace?.storageId &&
       resource?.path === '/'
     )
   }
@@ -116,7 +111,6 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   return {
     getInternalSpace,
     getMatchingSpace,
-    getPersonalSpace,
     isPersonalSpaceRoot,
     isResourceAccessible
   }

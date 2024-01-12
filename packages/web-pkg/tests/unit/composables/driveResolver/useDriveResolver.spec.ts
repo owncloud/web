@@ -11,13 +11,14 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { ConfigurationManager } from '../../../../src/configuration'
+import { useSpacesStore } from '../../../../src/composables/piniaStores'
 
 jest.mock('../../../../src/composables/capability', () => ({
   useCapabilitySpacesEnabled: jest.fn()
 }))
 
-jest.mock('../../../../src/composables', () => ({
-  ...jest.requireActual('../../../../src/composables'),
+jest.mock('../../../../src/composables/configuration', () => ({
+  ...jest.requireActual('../../../../src/composables/configuration'),
   useConfigurationManager: () =>
     mockDeep<ConfigurationManager>({
       options: {
@@ -48,7 +49,6 @@ describe('useDriveResolver', () => {
     const token = 'token'
     const spaceMock = mockDeep<SpaceResource>({ id: token })
     const storeOptions = { ...defaultStoreMockOptions }
-    storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
     const mocks = defaultComponentMocks()
 
@@ -58,13 +58,17 @@ describe('useDriveResolver', () => {
         expect(unref(space)).toEqual(spaceMock)
         expect(unref(item)).toEqual('/')
       },
-      { mocks, provide: mocks, store }
+      {
+        mocks,
+        provide: mocks,
+        store,
+        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
+      }
     )
   })
   it('returns a share space for a share', () => {
     const spaceMock = mockDeep<SpaceResource>()
     const storeOptions = { ...defaultStoreMockOptions }
-    storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
     const mocks = defaultComponentMocks()
     getComposableWrapper(
@@ -75,7 +79,12 @@ describe('useDriveResolver', () => {
         expect(isShareSpaceResource(unref(space))).toEqual(true)
         expect(unref(item)).toEqual('/')
       },
-      { mocks, provide: mocks, store }
+      {
+        mocks,
+        provide: mocks,
+        store,
+        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
+      }
     )
   })
   it('returns a space by fileId if given', () => {
@@ -84,7 +93,6 @@ describe('useDriveResolver', () => {
     const resourcePath = '/someFolder'
     const spaceMock = mockDeep<SpaceResource>({ fileId, driveAlias: 'driveAlias' })
     const storeOptions = { ...defaultStoreMockOptions }
-    storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
     const mocks = defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
@@ -107,7 +115,8 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store
+        store,
+        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
   })
@@ -117,7 +126,6 @@ describe('useDriveResolver', () => {
     const resourcePath = '/someFolder'
     const spaceMock = mockDeep<SpaceResource>({ driveAlias })
     const storeOptions = { ...defaultStoreMockOptions }
-    storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
     const mocks = defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
@@ -139,7 +147,8 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store
+        store,
+        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
   })
@@ -152,7 +161,6 @@ describe('useDriveResolver', () => {
     const driveAlias = `/${data.driveType}`
     const spaceMock = mockDeep<SpaceResource>({ driveAlias, driveType: data.driveType })
     const storeOptions = { ...defaultStoreMockOptions }
-    storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [spaceMock])
     const store = createStore(storeOptions)
 
     const mocks = defaultComponentMocks({
@@ -166,14 +174,14 @@ describe('useDriveResolver', () => {
     getComposableWrapper(
       () => {
         useDriveResolver({ driveAliasAndItem: ref(`${driveAlias}/someFolder`) })
-        expect(
-          storeOptions.modules.runtime.modules.spaces.actions.loadSpaceMembers
-        ).toHaveBeenCalledTimes(data.loadMembersCalls)
+        const spacesStore = useSpacesStore()
+        expect(spacesStore.loadSpaceMembers).toHaveBeenCalledTimes(data.loadMembersCalls)
       },
       {
         mocks,
         provide: mocks,
-        store
+        store,
+        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
   })

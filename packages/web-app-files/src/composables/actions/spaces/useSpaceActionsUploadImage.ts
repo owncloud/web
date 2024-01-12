@@ -1,14 +1,13 @@
 import { computed, unref, VNodeRef } from 'vue'
-import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import {
   useClientService,
   useLoadingService,
-  useStore,
   usePreviewService,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -16,14 +15,7 @@ import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useCreateSpace } from '@ownclouders/web-pkg'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
 
-export const useSpaceActionsUploadImage = ({
-  store,
-  spaceImageInput
-}: {
-  store?: Store<any>
-  spaceImageInput: VNodeRef
-}) => {
-  store = store || useStore()
+export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInput: VNodeRef }) => {
   const userStore = useUserStore()
   const { showMessage, showErrorMessage } = useMessages()
   const { $gettext } = useGettext()
@@ -31,6 +23,7 @@ export const useSpaceActionsUploadImage = ({
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
   const { createDefaultMetaFolder } = useCreateSpace()
+  const spacesStore = useSpacesStore()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -57,7 +50,7 @@ export const useSpaceActionsUploadImage = ({
     try {
       await clientService.webdav.getFileInfo(selectedSpace, { path: '.space' })
     } catch (_) {
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+      spacesStore.updateSpaceField({
         id: selectedSpace.id,
         field: 'spaceReadmeData',
         value: (await createDefaultMetaFolder(selectedSpace)).spaceReadmeData
@@ -103,7 +96,7 @@ export const useSpaceActionsUploadImage = ({
           {}
         )
 
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+        spacesStore.updateSpaceField({
           id: selectedSpace.id.toString(),
           field: 'spaceImageData',
           value: data.special.find((special) => special.specialFolder.name === 'image')

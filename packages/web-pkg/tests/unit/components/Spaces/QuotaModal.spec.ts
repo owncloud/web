@@ -8,12 +8,12 @@ import {
   mount,
   mockAxiosResolve
 } from 'web-test-helpers'
-import { useMessages } from '../../../../src/composables/piniaStores'
+import { useMessages, useSpacesStore } from '../../../../src/composables/piniaStores'
 
 describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
     it('should show message on success', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
         mockAxiosResolve({
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
@@ -28,22 +28,20 @@ describe('QuotaModal', () => {
       )
       await wrapper.vm.onConfirm()
 
-      expect(
-        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
-      ).toHaveBeenCalledTimes(1)
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(1)
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalledTimes(1)
     })
 
     it('should show message on server error', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
       await wrapper.vm.onConfirm()
 
-      expect(
-        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
-      ).toHaveBeenCalledTimes(0)
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(0)
       const { showErrorMessage } = useMessages()
       expect(showErrorMessage).toHaveBeenCalledTimes(1)
     })

@@ -1,5 +1,5 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import { spaceRoleManager, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { spaceRoleManager, ShareTypes, Share } from '@ownclouders/web-client/src/helpers/share'
 import {
   createStore,
   defaultPlugins,
@@ -33,7 +33,7 @@ const spaceShare = {
   role: {
     name: spaceRoleManager.name
   }
-}
+} as unknown as Share
 
 const selectors = {
   spaceDefaultImage: '.space-default-image',
@@ -60,9 +60,6 @@ describe('Details SideBar Panel', () => {
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
-    spaceShare
-  ])
   storeOptions.modules.Files.getters.outgoingCollaborators.mockImplementation(() => [spaceShare])
   const store = createStore(storeOptions)
   return {
@@ -71,7 +68,10 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } } }
+            piniaOptions: {
+              userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } },
+              spacesState: { spaceMembers: [spaceShare] }
+            }
           }),
           store
         ],

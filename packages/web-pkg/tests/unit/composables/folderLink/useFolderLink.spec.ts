@@ -7,6 +7,7 @@ import {
 } from 'web-test-helpers'
 import { useFolderLink } from '../../../../src/composables'
 import { ConfigurationManager } from '../../../../src/configuration'
+import { SpaceResource } from '@ownclouders/web-client'
 
 jest.mock('../../../../src/configuration', () => {
   return {
@@ -131,7 +132,8 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
   storeOptions.getters.capabilities.mockImplementation(() => ({
     spaces: { projects: true, share_jail: hasShareJail }
   }))
-  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => [
+
+  const spaces = [
     {
       id: '1',
       fileId: '1',
@@ -144,7 +146,8 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
       name: 'New space',
       getDriveAliasAndItem: jest.fn()
     }
-  ])
+  ] as unknown as SpaceResource[]
+
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({})
   return getComposableWrapper(
@@ -166,7 +169,8 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
     {
       mocks,
       provide: mocks,
-      store
+      store,
+      pluginOptions: { piniaOptions: { spacesState: { spaces } } }
     }
   )
 }
