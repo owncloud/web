@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
 import { createLinkArgs } from '../link/actions'
+import { ICollaborator } from './collaborator'
 export class Share {
   #page: Page
 
@@ -69,6 +70,20 @@ export class Share {
   async setDenyShare(args: Omit<po.setDenyShareArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.setDenyShare({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async addExpirationDate({
+    resource,
+    collaborator,
+    expirationDate
+  }: {
+    resource: string
+    collaborator: Omit<ICollaborator, 'role'>
+    expirationDate: string
+  }): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.addExpirationDate({ resource, collaborator, expirationDate, page: this.#page })
     await this.#page.goto(startUrl)
   }
 }

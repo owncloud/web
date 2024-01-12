@@ -25,11 +25,14 @@ const pendingShareItem =
   '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
 const passwordInput = '.oc-modal-body input.oc-text-input'
 const createLinkButton = '.oc-modal-body-actions-confirm'
+const showMoreOptionsButton = '#show-more-share-options-btn'
+const calendarDatePickerId = 'recipient-datepicker-btn'
 
 export interface ShareArgs {
   page: Page
   resource: string
   recipients: ICollaborator[]
+  expirationDate?: string
 }
 
 export const openSharingPanel = async function (
@@ -67,9 +70,14 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   if (via !== 'URL_NAVIGATION') {
     await openSharingPanel(page, resource, via)
   }
+  const expirationDate = recipients[0].expirationDate
 
+  if (expirationDate) {
+    await page.locator(showMoreOptionsButton).click()
+    await page.getByTestId(calendarDatePickerId).click()
+    await Collaborator.setExpirationDate(page, expirationDate)
+  }
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
-
   await sidebar.close({ page })
 }
 
@@ -248,4 +256,22 @@ export const setDenyShare = async (args: setDenyShareArgs): Promise<void> => {
   const { page, resource, deny, collaborator } = args
   await openSharingPanel(page, resource)
   await Collaborator.setDenyShareForCollaborator({ page, deny, collaborator })
+}
+
+export const addExpirationDate = async (args: {
+  page: Page
+  resource: string
+  collaborator: Omit<ICollaborator, 'role'>
+  expirationDate: string
+}): Promise<void> => {
+  const { page, resource, collaborator, expirationDate } = args
+  await openSharingPanel(page, resource)
+
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('shares') && resp.status() === 200 && resp.request().method() === 'PUT'
+    ),
+    Collaborator.setExpirationDateForCollaborator({ page, collaborator, expirationDate })
+  ])
 }
