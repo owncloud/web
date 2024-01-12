@@ -49,6 +49,7 @@ Summary
 * Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
+* Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -499,6 +500,17 @@ Details
 
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10309
+
+* Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
+
+   BREAKING CHANGE for developers: Spaces are no longer stored in a vuex store but
+   in pinia instead. You can access all the store functionality via the new
+   `useSpacesStore` composable.
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10316
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
