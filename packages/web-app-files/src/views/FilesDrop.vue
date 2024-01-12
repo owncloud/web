@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapGetters } from 'vuex'
 import {
   createLocationPublic,
   createLocationSpaces,
@@ -228,7 +227,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
     pageTitle() {
       return this.$gettext(this.$route.meta.title as string)
     },

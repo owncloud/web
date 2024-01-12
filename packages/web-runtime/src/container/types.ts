@@ -3,9 +3,6 @@ import { Router, RouteRecordRaw } from 'vue-router'
 import { App, Component } from 'vue'
 import { AppNavigationItem, ApplicationTranslations } from '@ownclouders/web-pkg'
 
-/** shim configuration for now, should be typed in a later step */
-export type RuntimeConfiguration = any
-
 /** RuntimeApi defines the publicly available runtime api */
 export interface RuntimeApi {
   announceRoutes: (routes: RouteRecordRaw[]) => void

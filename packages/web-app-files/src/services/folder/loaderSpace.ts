@@ -32,15 +32,8 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const {
-      store,
-      userStore,
-      spacesStore,
-      router,
-      clientService,
-      configurationManager,
-      capabilityStore
-    } = context
+    const { store, userStore, spacesStore, router, clientService, configStore, capabilityStore } =
+      context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
 
@@ -74,7 +67,7 @@ export class FolderLoaderSpace implements FolderLoader {
               allowSharePermission: capabilityStore.sharingResharing,
               hasShareJail: true,
               incomingShares: true,
-              fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })
             currentFolder = aggregatedShares[0]
           } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
@@ -88,7 +81,8 @@ export class FolderLoaderSpace implements FolderLoader {
           space,
           client: webdav,
           userStore,
-          spacesStore
+          spacesStore,
+          configStore
         })
 
         if (options.loadShares) {

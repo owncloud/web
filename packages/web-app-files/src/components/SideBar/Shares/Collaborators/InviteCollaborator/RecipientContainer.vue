@@ -18,12 +18,11 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defineComponent } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
-import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
@@ -42,7 +41,11 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
 
+    const configStore = useConfigStore()
+    const { serverUrl } = storeToRefs(configStore)
+
     return {
+      serverUrl,
       userProfilePicture: capabilityRefs.sharingUserProfilePicture
     }
   },
@@ -60,8 +63,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['configuration']),
-
     btnDeselectRecipientLabel() {
       return this.$gettext('Deselect %{name}', { name: this.recipient.label })
     }
@@ -72,7 +73,7 @@ export default defineComponent({
       try {
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,
-          server: this.configuration.server,
+          server: this.serverUrl,
           username: this.recipient.value.shareWith
         })
       } catch (error) {

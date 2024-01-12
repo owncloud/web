@@ -1,16 +1,15 @@
-import { useStore } from '../store'
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { useAuthStore, useCapabilityStore } from '../piniaStores'
+import { useAuthStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 
 interface UploadOptions {
   uppyService: UppyService
 }
 
 export function useUpload(options: UploadOptions) {
-  const store = useStore()
+  const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
   const { current: currentLanguage } = useGettext()
   const authStore = useAuthStore()
@@ -58,7 +57,7 @@ export function useUpload(options: UploadOptions) {
         tusExtension: capabilityStore.tusExtension
       }),
       ...(!isTusSupported && {
-        xhrTimeout: store.getters.configuration?.options?.upload?.xhr?.timeout || 60000
+        xhrTimeout: configStore.options.upload?.xhr?.timeout || 60000
       })
     }
   })

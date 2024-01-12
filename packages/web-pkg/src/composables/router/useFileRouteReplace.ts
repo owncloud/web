@@ -1,18 +1,17 @@
 import { useRouter } from './useRouter'
-import { useConfigurationManager } from '../configuration'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '../../helpers/router'
 import { Router } from 'vue-router'
-import { ConfigurationManager } from '../../configuration'
+import { ConfigStore, useConfigStore } from '../piniaStores'
 
 export interface FileRouteReplaceOptions {
   router?: Router
-  configurationManager?: ConfigurationManager
+  configStore?: ConfigStore
 }
 
 export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
   const router = options.router || useRouter()
-  const configurationManager = options.configurationManager || useConfigurationManager()
+  const configStore = options.configStore || useConfigStore()
 
   const replaceInvalidFileRoute = ({
     space,
@@ -25,16 +24,14 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
     path: string
     fileId?: string | number
   }): boolean => {
-    if (!configurationManager?.options?.routing?.idBased) {
+    if (!configStore.options.routing?.idBased) {
       return false
     }
     if (path === resource.path && fileId === resource.fileId) {
       return false
     }
 
-    const routeOptions = createFileRouteOptions(space, resource, {
-      configurationManager
-    })
+    const routeOptions = createFileRouteOptions(space, resource, { configStore })
     router.replace(routeOptions)
     return true
   }

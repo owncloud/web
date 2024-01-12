@@ -51,9 +51,9 @@ import {
   useRouter,
   queryItemAsString,
   useRouteQuery,
-  useConfigurationManager,
   createLocationSpaces,
-  createLocationShares
+  createLocationShares,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 // import { createLocationSpaces } from 'web-app-files/src/router'
@@ -69,7 +69,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const id = useRouteParam('fileId')
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const { $gettext } = useGettext()
     const resource: Ref<Resource> = ref()
     const sharedParentResource: Ref<Resource> = ref()
@@ -124,9 +124,9 @@ export default defineComponent({
               : createLocationSpaces('files-spaces-generic')
         }
 
-        const { params, query } = createFileRouteOptions(space, { fileId, path })
+        const { params, query } = createFileRouteOptions(space, { fileId, path }, { configStore })
         const openWithDefault =
-          configurationManager.options.openLinksWithDefaultApp &&
+          configStore.options.openLinksWithDefaultApp &&
           unref(openWithDefaultApp) !== 'false' &&
           !unref(details)
 

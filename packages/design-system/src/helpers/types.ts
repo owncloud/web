@@ -10,7 +10,7 @@ export interface ContextualHelperData {
 }
 
 export interface ContextualHelperOptions {
-  configurationManager: unknown
+  configStore: unknown
 }
 
 export interface ContextualHelper {

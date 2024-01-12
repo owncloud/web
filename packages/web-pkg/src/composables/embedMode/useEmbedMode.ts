@@ -1,23 +1,23 @@
 import { computed, unref } from 'vue'
-import { useConfigurationManager } from '../configuration'
+import { useConfigStore } from '../piniaStores'
 
 export const useEmbedMode = () => {
-  const configuration = useConfigurationManager()
+  const configStore = useConfigStore()
 
-  const isEnabled = computed(() => configuration.options.embed?.enabled)
+  const isEnabled = computed(() => configStore.options.embed?.enabled)
 
   const isLocationPicker = computed(() => {
-    return configuration.options.embed?.target === 'location'
+    return configStore.options.embed?.target === 'location'
   })
 
-  const messagesTargetOrigin = computed(() => configuration.options.embed?.messagesOrigin)
+  const messagesTargetOrigin = computed(() => configStore.options.embed?.messagesOrigin)
 
   const isDelegatingAuthentication = computed(
-    () => unref(isEnabled) && configuration.options.embed.delegateAuthentication
+    () => unref(isEnabled) && configStore.options.embed?.delegateAuthentication
   )
 
   const delegateAuthenticationOrigin = computed(
-    () => configuration.options.embed.delegateAuthenticationOrigin
+    () => configStore.options.embed?.delegateAuthenticationOrigin
   )
 
   const postMessage = <Payload>(name: string, data?: Payload): void => {

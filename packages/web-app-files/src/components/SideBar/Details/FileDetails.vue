@@ -128,9 +128,9 @@ import { mapGetters } from 'vuex'
 import {
   ImageDimension,
   useAuthStore,
-  useConfigurationManager,
   useUserStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
@@ -174,7 +174,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const store = useStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
@@ -268,8 +268,8 @@ export default defineComponent({
     )
 
     const contextualHelper = {
-      isEnabled: configurationManager.options.contextHelpers,
-      data: tagsHelper({ configurationManager: configurationManager })
+      isEnabled: configStore.options.contextHelpers,
+      data: tagsHelper({ configStore })
     } as ContextualHelper
 
     const hasTags = computed(() => {
@@ -294,7 +294,6 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('Files', ['versions']),
-    ...mapGetters(['configuration']),
 
     hasContent() {
       return (

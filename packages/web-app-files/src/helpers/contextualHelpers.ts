@@ -1,5 +1,6 @@
 import { omit } from 'lodash-es'
 import { ContextualHelperData, ContextualHelperOptions } from 'design-system/src/helpers'
+import { ConfigStore } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -134,7 +135,7 @@ const filterContextHelper = (
   data: ContextualHelperData,
   options?: ContextualHelperOptions
 ): ContextualHelperData => {
-  if ((options.configurationManager as any).options.contextHelpersReadMore === false) {
+  if ((options.configStore as ConfigStore).options.contextHelpersReadMore === false) {
     return omit(data, 'readMoreLink')
   }
   return data

@@ -64,9 +64,14 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-import { FileSideBar, useCapabilityStore, useFileActions } from '@ownclouders/web-pkg'
+import {
+  FileSideBar,
+  useCapabilityStore,
+  useConfigStore,
+  useFileActions
+} from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
@@ -107,6 +112,8 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
       useResourcesViewDefaults<Resource, any, any[]>()
@@ -133,18 +140,17 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
+      configOptions,
       getMatchingSpace,
       hasProjectSpaces: capabilityRefs.spacesProjects
     }
   },
 
   computed: {
-    ...mapState(['app']),
     ...mapGetters('Files', ['totalFilesCount']),
-    ...mapGetters(['configuration']),
 
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configOptions.contextHelpers
     },
 
     isEmpty() {
@@ -152,7 +158,7 @@ export default defineComponent({
     },
 
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     }
   },
 

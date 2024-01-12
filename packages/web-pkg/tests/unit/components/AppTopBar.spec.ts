@@ -10,18 +10,6 @@ import {
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import AppTopBar from '../../../src/components/AppTopBar.vue'
 import { Action } from '../../../src/composables/actions'
-import { ConfigurationManager } from '../../../types'
-
-jest.mock('../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 describe('AppTopBar', () => {
   describe('if no resource is present', () => {

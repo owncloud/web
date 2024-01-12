@@ -162,16 +162,7 @@ function getWrapper({
   user = mock<User>(),
   currentRouteName = 'files-spaces-generic'
 } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: jest.fn(() => ({
-        options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
-      }))
-    }
-  }
-
+  const storeOptions = { ...defaultStoreMockOptions }
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
@@ -180,7 +171,13 @@ function getWrapper({
     global: {
       plugins: [
         ...defaultPlugins({
-          piniaOptions: { userState: { user }, spacesState: { spaceMembers: spaceMembers as any } }
+          piniaOptions: {
+            userState: { user },
+            spacesState: { spaceMembers: spaceMembers as any },
+            configState: {
+              options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
+            }
+          }
         }),
         store
       ],

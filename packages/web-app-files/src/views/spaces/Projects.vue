@@ -175,7 +175,7 @@ import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import { AppLoadingSpinner, useSpacesStore } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useConfigStore, useSpacesStore } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
@@ -192,7 +192,6 @@ import {
   useRoute,
   Pagination,
   FileSideBar,
-  configurationManager,
   ImageDimension,
   NoContentMessage,
   ProcessorType,
@@ -256,6 +255,8 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const imageContentObject = ref({})
     const previewService = usePreviewService()
+    const configStore = useConfigStore()
+
     let loadPreviewToken = null
 
     const runtimeSpaces = computed(() => {
@@ -420,7 +421,7 @@ export default defineComponent({
       })
     })
 
-    const displayThumbnails = computed(() => configurationManager.options.displayThumbnails)
+    const displayThumbnails = computed(() => configStore.options.displayThumbnails)
 
     const rowMounted = (space) => {
       loadPreview(space)

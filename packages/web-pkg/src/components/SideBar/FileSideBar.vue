@@ -50,8 +50,8 @@ import {
   useActiveLocation,
   useExtensionRegistry,
   useSelectedResources,
-  useConfigurationManager,
-  useSpacesStore
+  useSpacesStore,
+  useConfigStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -85,7 +85,7 @@ export default defineComponent({
     const clientService = useClientService()
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const spacesStore = useSpacesStore()
 
     const loadedResource = ref<Resource>()
@@ -195,7 +195,7 @@ export default defineComponent({
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
           store.dispatch('Files/loadShares', {
             client: clientService.owncloudSdk,
-            configurationManager,
+            configStore,
             path: resource.path,
             storageId: resource.fileId,
             // cache must not be used on flat file lists that gather resources from various locations

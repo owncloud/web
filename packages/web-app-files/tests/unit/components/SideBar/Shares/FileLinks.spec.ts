@@ -175,15 +175,7 @@ function getWrapper({
     actions: computed(() => [mock<FileAction>({ name: 'create-links', handler: createLinkMock })])
   })
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: jest.fn(() => ({
-        options: { sidebar: { shares: { showAllOnLoad: true } } }
-      }))
-    }
-  }
+  const storeOptions = { ...defaultStoreMockOptions }
   defaultStoreMockOptions.modules.Files.getters.outgoingLinks.mockReturnValue(links)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
@@ -205,7 +197,13 @@ function getWrapper({
     wrapper: shallowMount(FileLinks, {
       global: {
         plugins: [
-          ...defaultPlugins({ abilities, piniaOptions: { capabilityState: { capabilities } } }),
+          ...defaultPlugins({
+            abilities,
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { sidebar: { shares: { showAllOnLoad: true } } } }
+            }
+          }),
           store
         ],
         renderStubDefaultSlot: true,

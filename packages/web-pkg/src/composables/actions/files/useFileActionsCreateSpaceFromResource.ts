@@ -11,8 +11,7 @@ import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
-import { useMessages, useModals, useSpacesStore } from '../../piniaStores'
-import { useConfigurationManager } from '../../configuration'
+import { useConfigStore, useMessages, useModals, useSpacesStore } from '../../piniaStores'
 
 export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -24,13 +23,13 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const router = useRouter()
   const hasCreatePermission = computed(() => can('create-all', 'Drive'))
   const { dispatchModal } = useModals()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
     const queue = new PQueue({
-      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+      concurrency: configStore.options.concurrentRequests.resourceBatchActions
     })
     const copyOps = []
 

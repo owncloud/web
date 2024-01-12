@@ -112,7 +112,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import {
   useStore,
   useAbility,
@@ -124,7 +124,8 @@ import {
   useModals,
   useUserStore,
   useMessages,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -149,7 +150,6 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { useShares } from 'web-app-files/src/composables'
-import { configurationManager } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 
@@ -174,6 +174,9 @@ export default defineComponent({
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
 
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
     const { actions: createLinkActions } = useFileActionsCreateLink()
     const createLinkAction = computed<FileAction>(() =>
       unref(createLinkActions).find(({ name }) => name === 'create-links')
@@ -185,8 +188,7 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const initialLinkListCollapsed =
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const initialLinkListCollapsed = !configStore.options.sidebar.shares.showAllOnLoad
     const linkListCollapsed = ref(initialLinkListCollapsed)
     const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
     const { outgoingLinks } = useShares()
@@ -287,7 +289,8 @@ export default defineComponent({
       indirectLinks,
       canCreatePublicLinks,
       canDeleteReadOnlyPublicLinkPassword,
-      configurationManager,
+      configStore,
+      configOptions,
       canCreateLinks,
       canEditLink,
       expirationRules,
@@ -301,8 +304,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     collapseButtonTitle() {
       return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
     },
@@ -321,14 +322,14 @@ export default defineComponent({
     },
 
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configOptions.contextHelpers
     },
 
     viaLinkHelp() {
-      return shareViaLinkHelp({ configurationManager: this.configurationManager })
+      return shareViaLinkHelp({ configStore: this.configStore })
     },
     indirectLinkHelp() {
-      return shareViaIndirectLinkHelp({ configurationManager: this.configurationManager })
+      return shareViaIndirectLinkHelp({ configStore: this.configStore })
     },
     noResharePermsMessage() {
       return this.$gettext('You do not have permission to create links')

@@ -85,11 +85,12 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import {
   queryItemAsString,
   useCapabilityStore,
+  useConfigStore,
   useFileActions,
   useRouteQuery
 } from '@ownclouders/web-pkg'
@@ -113,6 +114,7 @@ import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace, useMutationSubscription } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -134,6 +136,8 @@ export default defineComponent({
   setup() {
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
@@ -176,6 +180,8 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
+      configStore,
+      configOptions,
       capabilityStore,
       filteredItems,
       shareTypes,
@@ -187,17 +193,14 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(['app']),
-    ...mapState('Files', ['files']),
     ...mapGetters('Files', ['totalFilesCount']),
-    ...mapGetters(['configuration', 'user']),
 
     isEmpty() {
       return this.paginatedResources.length < 1
     },
 
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     }
   },
 
@@ -219,7 +222,8 @@ export default defineComponent({
         this.loadAvatars({
           resource,
           clientService: this.$clientService,
-          capabilityStore: this.capabilityStore
+          capabilityStore: this.capabilityStore,
+          configStore: this.configStore
         })
 
         if (!this.displayThumbnails) {

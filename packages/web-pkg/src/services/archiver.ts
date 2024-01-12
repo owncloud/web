@@ -6,7 +6,6 @@ import { RuntimeError } from '../errors'
 import { HttpError } from '@ownclouders/web-client/src/errors'
 import { ClientService } from '../services'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager } from '../configuration'
 import { triggerDownloadWithFilename } from '../../'
 
 import { Ref, ref, computed, unref } from 'vue'
@@ -128,7 +127,7 @@ export class ArchiverService {
     if (/^https?:\/\//i.test(capability.archiver_url)) {
       return capability.archiver_url
     }
-    return urlJoin(configurationManager.serverUrl, capability.archiver_url)
+    return urlJoin(this.serverUrl, capability.archiver_url)
   }
 
   private getFileNameFromResponseHeaders(headers) {

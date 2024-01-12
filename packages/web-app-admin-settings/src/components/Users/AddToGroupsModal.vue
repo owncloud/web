@@ -14,9 +14,9 @@ import GroupSelect from './GroupSelect.vue'
 import {
   useEventBus,
   useClientService,
-  useConfigurationManager,
   Modal,
-  useMessages
+  useMessages,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -37,7 +37,7 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
 
@@ -60,7 +60,7 @@ export default defineComponent({
       const promises = unref(selectedOptions).reduce((acc, group) => {
         for (const user of props.users) {
           if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-            acc.push(client.groups.addMember(group.id, user.id, configurationManager.serverUrl))
+            acc.push(client.groups.addMember(group.id, user.id, configStore.serverUrl))
             if (!usersToFetch.includes(user.id)) {
               usersToFetch.push(user.id)
             }

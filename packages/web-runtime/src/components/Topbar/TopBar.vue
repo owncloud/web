@@ -43,7 +43,6 @@
 import { storeToRefs } from 'pinia'
 import { computed, unref, PropType, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { mapGetters } from 'vuex'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
@@ -55,6 +54,7 @@ import {
   useAbility,
   useAuthStore,
   useCapabilityStore,
+  useConfigStore,
   useEmbedMode,
   useRouter,
   useStore,
@@ -83,6 +83,8 @@ export default {
     const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const authStore = useAuthStore()
     const language = useGettext()
@@ -204,6 +206,7 @@ export default {
     }
 
     return {
+      configOptions,
       contentOnLeftPortal,
       currentTheme,
       updateLeftPortal,
@@ -218,18 +221,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     sidebarLogoAlt() {
       return this.$gettext('Navigate to personal files page')
     },
 
     isFeedbackLinkEnabled() {
-      return !this.configuration?.options?.disableFeedbackLink
+      return !this.configOptions.disableFeedbackLink
     },
 
     feedbackLinkOptions() {
-      const feedback = this.configuration?.options?.feedbackLink
+      const feedback = this.configOptions.feedbackLink
       if (!this.isFeedbackLinkEnabled || !feedback) {
         return {}
       }

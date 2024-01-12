@@ -1,9 +1,7 @@
 import {
   RouteLocation,
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
 import oidcCallback from '../../../src/pages/oidcCallback.vue'
@@ -124,14 +122,6 @@ describe('oidcCallback page', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-
-  storeOptions.getters.configuration.mockReturnValue({
-    server: 'http://server/address/'
-  })
-
-  const store = createStore(storeOptions)
-
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ query: {} })
@@ -139,10 +129,13 @@ function getWrapper() {
   }
 
   return {
-    storeOptions,
     wrapper: shallowMount(oidcCallback, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { configState: { server: 'http://server/address/' } }
+          })
+        ],
         mocks,
         provide: {}
       }

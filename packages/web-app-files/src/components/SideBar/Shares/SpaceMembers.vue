@@ -63,13 +63,13 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapGetters } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
+  useConfigStore,
   useMessages,
   useModals,
   useSpacesStore,
@@ -81,7 +81,7 @@ import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { configurationManager, defaultFuseOptions } from '@ownclouders/web-pkg'
+import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -97,12 +97,16 @@ export default defineComponent({
     const { deleteSpaceMember } = spacesStore
     const { spaceMembers } = storeToRefs(spacesStore)
 
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
     const { user } = storeToRefs(userStore)
 
     return {
       user,
       clientService,
-      configurationManager,
+      configStore,
+      configOptions,
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
       dispatchModal,
       spaceMembers,
@@ -118,18 +122,14 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     filteredSpaceMembers() {
       return this.filter(this.spaceMembers, this.filterTerm)
     },
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configStore.options.contextHelpers
     },
     spaceAddMemberHelp() {
-      return shareSpaceAddMemberHelp({
-        configurationManager: this.configurationManager
-      })
+      return shareSpaceAddMemberHelp({ configStore: this.configStore })
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0

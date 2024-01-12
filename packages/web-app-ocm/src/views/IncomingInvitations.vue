@@ -65,8 +65,8 @@ import {
   useClientService,
   useRoute,
   useRouter,
-  useConfigurationManager,
-  useMessages
+  useMessages,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
@@ -79,7 +79,7 @@ export default defineComponent({
     const { showErrorMessage } = useMessages()
     const router = useRouter()
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const { $gettext } = useGettext()
 
     const token = ref(undefined)
@@ -151,7 +151,7 @@ export default defineComponent({
       }
     }
     const isMyProviderSelectedProvider = (p) => {
-      return p.domain === new URL(configurationManager.serverUrl).hostname
+      return p.domain === new URL(configStore.serverUrl).hostname
     }
 
     const handleParams = (to: RouteLocationNormalized) => {

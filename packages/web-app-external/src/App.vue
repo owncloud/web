@@ -34,7 +34,7 @@ import {
   isSameResource,
   queryItemAsString,
   useCapabilityStore,
-  useConfigurationManager,
+  useConfigStore,
   useMessages,
   useRequest,
   useRouteQuery
@@ -57,7 +57,7 @@ export default defineComponent({
     const language = useGettext()
     const { showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
 
     const { $gettext } = language
     const { makeRequest } = useRequest()
@@ -97,7 +97,7 @@ export default defineComponent({
 
         const fileId = props.resource.fileId
         const baseUrl = urlJoin(
-          configurationManager.serverUrl,
+          configStore.serverUrl,
           capabilityStore.filesAppProviders[0].open_url
         )
 
@@ -154,7 +154,7 @@ export default defineComponent({
     }).restartable()
 
     const determineOpenAsPreview = (appName: string) => {
-      const openAsPreview = configurationManager.options.editor.openAsPreview
+      const openAsPreview = configStore.options.editor.openAsPreview
       return (
         openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
       )

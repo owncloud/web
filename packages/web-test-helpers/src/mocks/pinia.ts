@@ -7,6 +7,7 @@ import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
 import { Share } from '../../../web-client/src/helpers'
 import { ApplicationFileExtension } from '../../../web-pkg/types'
+import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/config/types'
 
 export { createTestingPinia }
 
@@ -20,6 +21,10 @@ export type PiniaMockOptions = {
     publicLinkContextReady?: boolean
   }
   themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
+  configState?: {
+    server?: string
+    options?: OptionsConfig
+  }
   messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
   spacesState?: { spaces?: SpaceResource[]; spaceMembers?: Share[] }
@@ -34,6 +39,7 @@ export function createMockStore({
   stubActions = true,
   appsState = {},
   authState = {},
+  configState = {},
   themeState = {},
   messagesState = {},
   modalsState = {},
@@ -57,6 +63,16 @@ export function createMockStore({
     initialState: {
       apps: { ...appsState },
       auth: { ...authState },
+      config: {
+        apps: [],
+        external_apps: [],
+        customTranslations: [],
+        oAuth2: {},
+        openIdConnect: {},
+        options: {},
+        server: '',
+        ...configState
+      },
       messages: { messages: [], ...messagesState },
       modals: {
         modals: [],

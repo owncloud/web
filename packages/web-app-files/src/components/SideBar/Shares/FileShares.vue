@@ -87,7 +87,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import {
   useAbility,
   useStore,
@@ -96,7 +96,8 @@ import {
   useUserStore,
   useMessages,
   useSpacesStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -117,7 +118,6 @@ import {
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
 import { useShares } from 'web-app-files/src/composables'
-import { configurationManager } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileShares',
@@ -136,19 +136,18 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
 
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
     const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
 
-    const sharesListCollapsed = ref(
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    )
+    const sharesListCollapsed = ref(!configStore.options.sidebar.shares.showAllOnLoad)
     const toggleShareListCollapsed = () => {
       sharesListCollapsed.value = !unref(sharesListCollapsed)
     }
-    const memberListCollapsed = ref(
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    )
+    const memberListCollapsed = ref(!configStore.options.sidebar.shares.showAllOnLoad)
     const toggleMemberListCollapsed = () => {
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
@@ -188,21 +187,20 @@ export default defineComponent({
       hasResharing: capabilityRefs.sharingResharing,
       hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
       getSharedAncestor,
-      configurationManager,
+      configStore,
+      configOptions,
       dispatchModal,
       spaceMembers,
       ...useMessages()
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     inviteCollaboratorHelp() {
-      const cernFeatures = !!this.configuration?.options?.cernFeatures
+      const cernFeatures = this.configOptions.cernFeatures
 
       if (cernFeatures) {
         const options = {
-          configurationManager: this.configurationManager
+          configStore: this.configStore
         }
         const mergedHelp = shareInviteCollaboratorHelp(options)
         mergedHelp.list = [...shareInviteCollaboratorHelpCern(options).list, ...mergedHelp.list]
@@ -210,12 +208,12 @@ export default defineComponent({
       }
 
       return shareInviteCollaboratorHelp({
-        configurationManager: this.configurationManager
+        configStore: this.configStore
       })
     },
 
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configOptions.contextHelpers
     },
 
     sharedWithLabel() {

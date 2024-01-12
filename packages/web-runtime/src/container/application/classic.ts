@@ -5,7 +5,7 @@ import { isFunction, isObject } from 'lodash-es'
 import { NextApplication } from './next'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
-import { ConfigurationManager, RuntimeError, useAppsStore } from '@ownclouders/web-pkg'
+import { RuntimeError, useAppsStore } from '@ownclouders/web-pkg'
 import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from '@ownclouders/web-pkg'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
@@ -82,8 +82,7 @@ export const convertClassicApplication = ({
   store,
   router,
   gettext,
-  supportedLanguages,
-  configurationManager
+  supportedLanguages
 }: {
   app: App
   applicationScript: ClassicApplicationScript
@@ -92,7 +91,6 @@ export const convertClassicApplication = ({
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
-  configurationManager: ConfigurationManager
 }): NextApplication => {
   if (applicationScript.setup) {
     applicationScript = app.runWithContext(() => {
@@ -118,7 +116,7 @@ export const convertClassicApplication = ({
     throw new RuntimeError("appInfo.name can't be blank")
   }
 
-  const extensionRegistry = useExtensionRegistry({ configurationManager })
+  const extensionRegistry = useExtensionRegistry()
 
   const runtimeApi = buildRuntimeApi({
     applicationName,

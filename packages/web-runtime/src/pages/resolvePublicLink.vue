@@ -66,7 +66,7 @@ import {
   queryItemAsString,
   useAuthStore,
   useClientService,
-  useConfigurationManager,
+  useConfigStore,
   useRoute,
   useRouteParam,
   useRouteQuery,
@@ -92,7 +92,7 @@ import { storeToRefs } from 'pinia'
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const clientService = useClientService()
     const router = useRouter()
     const route = useRoute()
@@ -195,7 +195,7 @@ export default defineComponent({
       })
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
-      if (unref(isOcmLink) && !configurationManager.options.ocm.openRemotely) {
+      if (unref(isOcmLink) && !configStore.options.ocm.openRemotely) {
         throw new Error($gettext('Opening files from remote is disabled'))
       }
 
@@ -260,7 +260,7 @@ export default defineComponent({
       const targetLocation: RouteLocationNamedRaw = {
         name: 'files-public-link',
         query: {
-          ...(configurationManager.options.openLinksWithDefaultApp && {
+          ...(configStore.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'
           }),
           ...(!!fileId && { fileId }),

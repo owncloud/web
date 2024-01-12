@@ -93,6 +93,7 @@
 import {
   ResourceTable,
   useCapabilityStore,
+  useConfigStore,
   useFileActions,
   useFileActionsToggleHideShare
 } from '@ownclouders/web-pkg'
@@ -196,6 +197,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const capabilityStore = useCapabilityStore()
+    const configStore = useConfigStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const { triggerDefaultAction } = useFileActions()
@@ -215,6 +217,7 @@ export default defineComponent({
 
     return {
       capabilityStore,
+      configStore,
       triggerDefaultAction,
       hideShareAction,
       resourceTargetRouteCallback,
@@ -263,7 +266,8 @@ export default defineComponent({
         this.loadAvatars({
           resource,
           clientService: this.$clientService,
-          capabilityStore: this.capabilityStore
+          capabilityStore: this.capabilityStore,
+          configStore: this.configStore
         })
 
         if (!this.displayThumbnails) {

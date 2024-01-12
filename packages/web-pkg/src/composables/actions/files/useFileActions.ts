@@ -2,8 +2,6 @@ import kebabCase from 'lodash-es/kebabCase'
 import { Store } from 'vuex'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { routeToContextQuery } from '../../appDefaults'
-import { configurationManager } from '../../../configuration'
-
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
 import { useStore } from '../../store'
@@ -33,7 +31,7 @@ import {
   useFileActionsRestore,
   useFileActionsCreateSpaceFromResource
 } from './index'
-import { useAppsStore, useCapabilityStore } from '../../piniaStores'
+import { useAppsStore, useCapabilityStore, useConfigStore } from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
 
 export const EDITOR_MODE_EDIT = 'edit'
@@ -46,6 +44,7 @@ export interface GetFileActionsOptions extends FileActionOptions {
 export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const appsStore = useAppsStore()
+  const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -175,7 +174,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       },
       query: {
         ...(shareId && { shareId }),
-        ...(fileId && configurationManager.options.routing.idBased && { fileId }),
+        ...(fileId && configStore.options.routing.idBased && { fileId }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }
@@ -189,11 +188,9 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     mode: string,
     shareId: string = undefined
   ) => {
-    const configuration = store.getters['configuration']
-
     if (appFileExtension.handler) {
       return appFileExtension.handler({
-        config: configuration,
+        config: configStore.options,
         driveAliasAndItem,
         filePath,
         fileId,
@@ -211,7 +208,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       shareId
     )
 
-    if (configuration.options.openAppsInTab) {
+    if (configStore.options.openAppsInTab) {
       const path = router.resolve(routeOpts).href
       const target = `${appFileExtension.routeName}-${filePath}`
 
@@ -347,10 +344,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       ...routeOpts.query
     } as any
 
-    openUrl(
-      router.resolve(routeOpts).href,
-      configurationManager.options.openAppsInTab ? '_blank' : '_self'
-    )
+    openUrl(router.resolve(routeOpts).href, configStore.options.openAppsInTab ? '_blank' : '_self')
   }
 
   return {

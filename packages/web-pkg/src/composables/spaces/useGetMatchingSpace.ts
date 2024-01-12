@@ -1,4 +1,3 @@
-import { useConfigurationManager } from '../configuration'
 import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
@@ -13,7 +12,7 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
-import { useSpacesStore, useUserStore, useCapabilityStore } from '../piniaStores'
+import { useSpacesStore, useUserStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
@@ -23,7 +22,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const userStore = useUserStore()
   const spacesStore = useSpacesStore()
   const capabilityStore = useCapabilityStore()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
   const spaces = computed(() => spacesStore.spaces)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
 
@@ -73,7 +72,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       driveAliasPrefix,
       shareId: resource.shareId,
       shareName,
-      serverUrl: configurationManager.serverUrl
+      serverUrl: configStore.serverUrl
     })
   }
 
@@ -91,7 +90,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   }
 
   const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
-    if (!configurationManager.options.routing.fullShareOwnerPaths) {
+    if (!configStore.options.routing.fullShareOwnerPaths) {
       return true
     }
 

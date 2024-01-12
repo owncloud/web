@@ -153,7 +153,6 @@ import {
   eventBus,
   queryItemAsString,
   useClientService,
-  useConfigurationManager,
   useRoute,
   useRouteQuery,
   useRouter,
@@ -163,7 +162,8 @@ import {
   useUserStore,
   useMessages,
   useSpacesStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -201,7 +201,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
 
@@ -241,7 +241,7 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
-    const isFilteringMandatory = ref(configurationManager.options.userListRequiresFilter)
+    const isFilteringMandatory = ref(configStore.options.userListRequiresFilter)
     const sideBarLoading = ref(false)
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
@@ -569,9 +569,7 @@ export default defineComponent({
       const requests = []
 
       for (const groupToAdd of groupsToAdd) {
-        requests.push(
-          client.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
-        )
+        requests.push(client.groups.addMember(groupToAdd.id, user.id, configStore.serverUrl))
       }
       for (const groupToDelete of groupsToDelete) {
         requests.push(client.groups.deleteMember(groupToDelete.id, user.id))

@@ -2,7 +2,7 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
-import { RuntimeError } from '@ownclouders/web-pkg'
+import { RuntimeError, ConfigStore } from '@ownclouders/web-pkg'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 import type { Language } from 'vue3-gettext'
@@ -16,7 +16,6 @@ import * as webPkg from '@ownclouders/web-pkg'
 import * as webClient from '@ownclouders/web-client'
 
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { App } from 'vue'
 import { AppConfigObject, ClassicApplicationScript } from '@ownclouders/web-pkg'
 
@@ -68,7 +67,7 @@ export const buildApplication = async ({
   router,
   gettext,
   supportedLanguages,
-  configurationManager
+  configStore
 }: {
   app: App
   applicationPath: string
@@ -77,7 +76,7 @@ export const buildApplication = async ({
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
 }): Promise<NextApplication> => {
   if (applicationStore.has(applicationPath)) {
     throw new RuntimeError('application already announced', applicationPath)
@@ -91,7 +90,7 @@ export const buildApplication = async ({
         !applicationPath.startsWith('https://') &&
         !applicationPath.startsWith('//')
       ) {
-        applicationPath = urlJoin(configurationManager.serverUrl, applicationPath)
+        applicationPath = urlJoin(configStore.serverUrl, applicationPath)
       }
 
       if (applicationPath.endsWith('.mjs') || applicationPath.endsWith('.ts')) {
@@ -129,8 +128,7 @@ export const buildApplication = async ({
         store,
         router,
         gettext,
-        supportedLanguages,
-        configurationManager
+        supportedLanguages
       })
     }
   } catch (err) {

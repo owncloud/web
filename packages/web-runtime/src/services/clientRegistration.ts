@@ -1,4 +1,4 @@
-import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
+import { buildUrl, OpenIdConnectConfig } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
 import { router } from 'web-runtime/src/router'
 
@@ -29,7 +29,7 @@ async function post(url, data) {
     })
 }
 
-export async function registerClient(openIdConfig) {
+export async function registerClient(openIdConfig: OpenIdConnectConfig) {
   const clientData = JSON.parse(sessionStorage.getItem('dynamicClientData'))
   if (clientData !== null) {
     // eslint-disable-next-line camelcase

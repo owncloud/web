@@ -152,8 +152,8 @@ import { DateTime } from 'luxon'
 import * as EmailValidator from 'email-validator'
 import {
   createLocationSpaces,
-  useConfigurationManager,
   LinkRoleDropdown,
+  useConfigStore,
   useModals,
   useSpacesStore
 } from '@ownclouders/web-pkg'
@@ -215,7 +215,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { dispatchModal } = useModals()
     const { $gettext, current } = useGettext()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const passwordPolicyService = usePasswordPolicyService()
     const spacesStore = useSpacesStore()
     const { spaces } = storeToRefs(spacesStore)
@@ -259,7 +259,7 @@ export default defineComponent({
       updateLink,
       updateSelectedRole,
       currentLinkRole,
-      isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos),
+      isRunningOnEos: computed(() => configStore.options.isRunningOnEos),
       showPasswordModal,
       dispatchModal
     }

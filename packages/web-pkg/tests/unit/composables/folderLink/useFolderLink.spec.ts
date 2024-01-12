@@ -1,4 +1,3 @@
-import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultComponentMocks,
@@ -6,33 +5,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { CapabilityStore, useFolderLink } from '../../../../src/composables'
-import { ConfigurationManager } from '../../../../src/configuration'
 import { SpaceResource } from '@ownclouders/web-client'
-
-jest.mock('../../../../src/configuration', () => {
-  return {
-    configurationManager: {
-      options: {
-        routing: {
-          fullShareOwnerPaths: false,
-          idBased: true
-        }
-      }
-    }
-  }
-})
-
-jest.mock('../../../../src/composables/configuration', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false,
-          idBased: true
-        }
-      }
-    })
-}))
 
 describe('useFolderLink', () => {
   it('getFolderLink should return the correct folder link', () => {

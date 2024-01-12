@@ -156,7 +156,7 @@ import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
 import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref, ref } from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
-import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
+import { mapGetters, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
 import {
@@ -170,6 +170,7 @@ import {
 import {
   ProcessorType,
   useCapabilityStore,
+  useConfigStore,
   useEmbedMode,
   useFileActions,
   useFileActionsCreateNewFolder,
@@ -278,6 +279,9 @@ export default defineComponent({
       space: props.space
     })
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     let loadResourcesEventToken: string
 
@@ -523,6 +527,7 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
+      configOptions,
       canUpload,
       breadcrumbs,
       folderNotFound,
@@ -544,14 +549,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(['app']),
-    ...mapState('Files', ['files']),
     ...mapGetters('Files', ['currentFolder', 'totalFilesCount', 'totalFilesSize']),
-    ...mapGetters(['configuration']),
-
-    isRunningOnEos() {
-      return !!this.configuration?.options?.runningOnEos
-    },
 
     displayFullAppBar() {
       return !this.displayResourceAsSingleResource
@@ -574,7 +572,7 @@ export default defineComponent({
         return true
       }
 
-      if (this.isRunningOnEos) {
+      if (this.configOptions.runningOnEos) {
         if (
           !this.currentFolder.fileId ||
           this.currentFolder.path === this.paginatedResources[0].path
@@ -587,7 +585,7 @@ export default defineComponent({
     },
 
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     },
 
     isSpaceFrontpage() {

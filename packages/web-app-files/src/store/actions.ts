@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 
-import { MessageStore, CapabilityStore, getParentPaths } from '@ownclouders/web-pkg'
+import { MessageStore, CapabilityStore, getParentPaths, ConfigStore } from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
@@ -323,7 +323,7 @@ export default {
       context.commit('LOAD_INDICATORS', path)
     }
   },
-  async loadShares(context, { client, configurationManager, path, storageId, useCached = true }) {
+  async loadShares(context, { client, configStore, path, storageId, useCached = true }) {
     if (context.state.sharesLoading) {
       await context.state.sharesLoading
     }
@@ -341,7 +341,7 @@ export default {
     const shares = []
 
     const shareQueriesQueue = new PQueue({
-      concurrency: configurationManager.options.concurrentRequests.shares.list
+      concurrency: configStore.options.concurrentRequests.shares.list
     })
     const shareQueriesPromises = []
     const { highlightedFile } = context.getters
@@ -502,15 +502,17 @@ export default {
   },
 
   loadAvatars(
-    { commit, rootGetters },
+    { commit },
     {
       resource,
       clientService,
-      capabilityStore
+      capabilityStore,
+      configStore
     }: {
       resource: Resource
       clientService: ClientService
       capabilityStore: CapabilityStore
+      configStore: ConfigStore
     }
   ) {
     if (!capabilityStore.sharingUserProfilePicture) {
@@ -526,7 +528,7 @@ export default {
           {
             clientService,
             username: obj.username,
-            server: rootGetters.configuration.server
+            server: configStore.serverUrl
           },
           true
         ).then((url) =>

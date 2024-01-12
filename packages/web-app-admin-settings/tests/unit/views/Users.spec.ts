@@ -1,23 +1,14 @@
 import Users from '../../../src/views/Users.vue'
 import {
-  ConfigurationManager,
   UserAction,
   eventBus,
   useAppDefaults,
-  useConfigurationManager,
   useMessages,
   useSpacesStore
 } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/src/generated'
@@ -34,8 +25,7 @@ jest.mock('mark.js', () => {
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   queryItemAsString: jest.fn(),
-  useAppDefaults: jest.fn(),
-  useConfigurationManager: jest.fn()
+  useAppDefaults: jest.fn()
 }))
 jest.mock('../../../src/composables/actions/users/useUserActionsCreateUser')
 jest.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
@@ -129,11 +119,7 @@ describe('Users view', () => {
     it('renders initially warning if filters are mandatory', async () => {
       const { wrapper } = getMountedWrapper({
         mountType: mount,
-        configuration: {
-          options: {
-            userListRequiresFilter: true
-          }
-        }
+        options: { userListRequiresFilter: true }
       })
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
@@ -411,16 +397,13 @@ function getMountedWrapper({
   displayNameFilterQuery = null,
   groupFilterQuery = null,
   roleFilterQuery = null,
-  configuration = {},
+  options = {},
   createUserActionEnabled = true
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
-  jest
-    .mocked(useConfigurationManager)
-    .mockImplementation(() => mock<ConfigurationManager>(configuration))
   jest.mocked(useUserActionsCreateUser).mockReturnValue(
     mock<ReturnType<typeof useUserActionsCreateUser>>({
       actions: ref([mock<UserAction>({ isEnabled: () => createUserActionEnabled })])
@@ -434,15 +417,16 @@ function getMountedWrapper({
   mocks.$clientService = clientService
 
   const user = { id: '1', uuid: '1' }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
 
   return {
     mocks,
-    storeOptions,
     wrapper: mountType(Users, {
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { userState: { user }, configState: { options } }
+          })
+        ],
         mocks,
         provide: mocks,
         stubs: {

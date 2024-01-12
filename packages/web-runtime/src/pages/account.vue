@@ -142,6 +142,7 @@ import {
   useAuthStore,
   useCapabilityStore,
   useClientService,
+  useConfigStore,
   useMessages,
   useModals,
   useSpacesStore,
@@ -152,7 +153,6 @@ import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
-import { useConfigurationManager } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
@@ -172,7 +172,6 @@ export default defineComponent({
     const language = useGettext()
     const { $gettext } = language
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref<User>()
     const accountBundle = ref<SettingsBundle>()
@@ -182,11 +181,10 @@ export default defineComponent({
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
+    const configStore = useConfigStore()
 
     // FIXME: Use settings service capability when we have it
-    const isSettingsServiceSupported = computed(
-      () => !store.getters.configuration?.options?.runningOnEos
-    )
+    const isSettingsServiceSupported = computed(() => !configStore.options.runningOnEos)
 
     const { user } = storeToRefs(userStore)
 
@@ -205,7 +203,7 @@ export default defineComponent({
     const showNotifications = computed(
       () => authStore.userContextReady && unref(isSettingsServiceSupported)
     )
-    const showLogout = computed(() => authStore.userContextReady && configurationManager.logoutUrl)
+    const showLogout = computed(() => authStore.userContextReady && configStore.options.logoutUrl)
 
     const loadValuesListTask = useTask(function* () {
       if (!authStore.userContextReady || !unref(isSettingsServiceSupported)) {
@@ -431,7 +429,7 @@ export default defineComponent({
       updateSelectedLanguage,
       updateDisableEmailNotifications,
       updateViewOptionsWebDavDetails,
-      accountEditLink: store.getters.configuration?.options?.accountEditLink,
+      accountEditLink: computed(() => configStore.options.accountEditLink),
       showLogout,
       showGdprExport,
       showNotifications,
@@ -440,7 +438,7 @@ export default defineComponent({
       showWebDavDetails,
       groupNames,
       user,
-      logoutUrl: configurationManager.logoutUrl,
+      logoutUrl: computed(() => configStore.options.logoutUrl),
       isLoading,
       disableEmailNotificationsValue,
       viewOptionWebDavDetailsValue,

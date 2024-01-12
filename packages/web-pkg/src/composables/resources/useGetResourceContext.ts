@@ -7,14 +7,13 @@ import {
 import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { useConfigurationManager } from '../configuration'
 import { useLoadFileInfoById } from './useLoadFileInfoById'
-import { useSpacesStore, useCapabilityStore } from '../piniaStores'
+import { useSpacesStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 
 export const useGetResourceContext = () => {
   const capabilityStore = useCapabilityStore()
   const clientService = useClientService()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
   const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
   const spacesStore = useSpacesStore()
 
@@ -65,7 +64,7 @@ export const useGetResourceContext = () => {
       driveAliasPrefix: resource.storageId?.startsWith(OCM_PROVIDER_ID) ? 'ocm-share' : 'share',
       shareId: mountPoint.nodeId,
       shareName: mountPoint.name,
-      serverUrl: configurationManager.serverUrl
+      serverUrl: configStore.serverUrl
     })
 
     path = urlJoin(...sharePathSegments)

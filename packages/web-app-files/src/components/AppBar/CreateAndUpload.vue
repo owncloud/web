@@ -462,9 +462,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['files', 'selectedFiles', 'clipboardResources']),
-    ...mapGetters('runtime/ancestorMetaData', ['ancestorMetaData']),
+    ...mapGetters('Files', ['clipboardResources']),
 
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0

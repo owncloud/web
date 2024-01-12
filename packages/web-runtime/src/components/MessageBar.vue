@@ -14,17 +14,17 @@
 </template>
 
 <script lang="ts">
-import { Message, useConfigurationManager, useMessages } from '@ownclouders/web-pkg'
+import { Message, useConfigStore, useMessages } from '@ownclouders/web-pkg'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MessageBar',
   setup() {
     const messageStore = useMessages()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
 
     const notificationPosition = computed(() => {
-      if (configurationManager.options.topCenterNotifications) {
+      if (configStore.options.topCenterNotifications) {
         return 'top-center'
       }
       return 'default'

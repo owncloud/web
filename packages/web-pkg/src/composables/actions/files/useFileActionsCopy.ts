@@ -11,10 +11,11 @@ import { FileAction, FileActionOptions } from '../types'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
-import { useMessages } from '../../piniaStores'
+import { useConfigStore, useMessages } from '../../piniaStores'
 
 export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const configStore = useConfigStore()
   const messageStore = useMessages()
   const router = useRouter()
 
@@ -24,8 +25,6 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
   })
-
-  const runningOnEos = computed<boolean>(() => store.getters.configuration?.options?.runningOnEos)
 
   const copyShortcutString = computed(() => {
     if (unref(isMacOs)) {
@@ -77,7 +76,7 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
             return false
           }
 
-          if (unref(runningOnEos)) {
+          if (unref(configStore.options.runningOnEos)) {
             // CERNBox does not allow actions above home/project root
             const elems = resources[0].path?.split('/').filter(Boolean) || [] //"/eos/project/c/cernbox"
             if (isLocationSpacesActive(router, 'files-spaces-generic') && elems.length < 5) {

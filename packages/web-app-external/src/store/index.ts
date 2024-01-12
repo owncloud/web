@@ -1,6 +1,6 @@
 import { Commit } from 'vuex'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { CapabilityStore, configurationManager } from '@ownclouders/web-pkg'
+import { CapabilityStore, ConfigStore } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
 
 interface AppProvider {
@@ -31,17 +31,13 @@ const actions = {
     }: {
       commit: Commit
     },
-    { capabilityStore }: { capabilityStore: CapabilityStore }
+    { capabilityStore, configStore }: { capabilityStore: CapabilityStore; configStore: ConfigStore }
   ): Promise<void> {
     if (!capabilityStore.filesAppProviders[0]?.enabled) {
       return
     }
 
-    const url = urlJoin(
-      configurationManager.serverUrl,
-      capabilityStore.filesAppProviders[0].apps_url
-    )
-
+    const url = urlJoin(configStore.serverUrl, capabilityStore.filesAppProviders[0].apps_url)
     const response = await fetch(url, { headers: { 'X-Request-ID': uuidV4() } })
 
     if (!response.ok) {

@@ -8,7 +8,8 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { createTestingPinia } from 'web-test-helpers'
+import { useConfigStore } from '@ownclouders/web-pkg'
 
 jest.mock('@ownclouders/web-client/src/helpers/share/functions', () => {
   return {
@@ -27,6 +28,12 @@ const stateMock = {
 // we need to define $gettext explicitly to make it enumerable on the mock
 
 describe('vuex store actions', () => {
+  beforeEach(() => {
+    createTestingPinia({
+      initialState: { config: { options: { concurrentRequests: { shares: { list: 4 } } } } }
+    })
+  })
+
   describe('changeShare', () => {
     it('succeeds when resolved sucessfully', async () => {
       const clientMock = mockDeep<OwnCloudSdk>()
@@ -152,13 +159,12 @@ describe('vuex store actions', () => {
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 3 } }])
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 2 } }])
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 4 } }])
-      const configurationManagerMock = mock<ConfigurationManager>()
-      configurationManagerMock.options.concurrentRequests = { shares: { list: 4 } }
+
       await actions.loadShares(
         { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
-          configurationManager: configurationManagerMock,
+          configStore: useConfigStore(),
           path: '/someFolder/someFile.txt',
           storageId: '1',
           useCached: false
@@ -179,13 +185,12 @@ describe('vuex store actions', () => {
       const loadedShare = { id: 1, outgoing: true, indirect: true, path: '/someFile.txt' }
       stateMock.outgoingShares = [loadedShare]
       const clientMock = mockDeep<OwnCloudSdk>()
-      const configurationManagerMock = mock<ConfigurationManager>()
-      configurationManagerMock.options.concurrentRequests = { shares: { list: 4 } }
+
       await actions.loadShares(
         { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
-          configurationManager: configurationManagerMock,
+          configStore: useConfigStore(),
           path: '/someFile.txt',
           storageId: '1',
           useCached: true

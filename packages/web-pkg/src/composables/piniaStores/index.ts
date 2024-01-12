@@ -1,6 +1,7 @@
 export * from './apps'
 export * from './auth'
 export * from './capabilities'
+export * from './config'
 export * from './extensionRegistry'
 export * from './messages'
 export * from './modals'

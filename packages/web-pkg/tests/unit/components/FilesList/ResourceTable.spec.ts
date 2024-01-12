@@ -2,24 +2,16 @@ import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from '@ownclouders/web-client/src/helpers'
 import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
-import { CapabilityStore, ConfigurationManager, displayPositionedDropdown } from '../../../../src'
+import { CapabilityStore, displayPositionedDropdown } from '../../../../src'
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'jest-mock-extended'
 import { computed } from 'vue'
 
 const mockUseEmbedMode = jest.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
 
 jest.mock('../../../../src/helpers')
-jest.mock('../../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    }),
+jest.mock('../../../../src/composables/embedMode', () => ({
   useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 
@@ -460,16 +452,6 @@ function getMountedWrapper({
   addProcessingResources = false
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.configuration.mockImplementation(() => ({
-    currentTheme: { general: { slogan: '' } },
-    options: {
-      editor: {
-        autosaveEnabled: false,
-        autosaveInterval: 120
-      }
-    }
-  }))
-
   const store = createStore(storeOptions)
   const capabilities = {
     files: { tags: true }
@@ -494,8 +476,9 @@ function getMountedWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              authState: { userContextReady: userContextReady },
-              capabilityState: { capabilities }
+              authState: { userContextReady },
+              capabilityState: { capabilities },
+              configState: { options: { displayResourcesLazy: false } }
             }
           }),
           store
