@@ -11,7 +11,7 @@ import {
   useStore
 } from '@ownclouders/web-pkg'
 import { determineSortFields as determineResourceTableSortFields } from '@ownclouders/web-pkg'
-import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
+import { determineSortFields as determineResourceTilesSortFields } from '@ownclouders/web-pkg/src/helpers/ui/resourceTiles'
 import { Task } from 'vue-concurrency'
 import { Resource } from '@ownclouders/web-client'
 import { useSelectedResources, SelectedResourcesResult } from '@ownclouders/web-pkg'

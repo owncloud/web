@@ -1,4 +1,4 @@
-import { SortDir, SortField } from '@ownclouders/web-pkg'
+import { SortDir, SortField } from '../../composables'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
