@@ -1,3 +1,4 @@
+export * from './apps'
 export * from './auth'
 export * from './capabilities'
 export * from './extensionRegistry'

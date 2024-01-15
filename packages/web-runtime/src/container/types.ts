@@ -12,7 +12,6 @@ export interface RuntimeApi {
   announceNavigationItems: (navigationItems: AppNavigationItem[]) => void
   announceTranslations: (appTranslations: ApplicationTranslations) => void
   announceStore: (applicationStore: Module<unknown, unknown>) => void
-  announceExtension: (extension: { [key: string]: unknown }) => void
   requestStore: () => Store<unknown>
   requestRouter: () => Router
   openPortal: (

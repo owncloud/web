@@ -60,6 +60,7 @@ import {
   ApplicationInformation,
   EDITOR_MODE_EDIT,
   resolveFileNameDuplicate,
+  useAppsStore,
   useClientService,
   useFileActions,
   useGetMatchingSpace,
@@ -88,6 +89,7 @@ export default defineComponent({
     const appIconKey = ref('')
     const { getMatchingSpace } = useGetMatchingSpace()
     const spacesStore = useSpacesStore()
+    const appsStore = useAppsStore()
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -122,9 +124,12 @@ export default defineComponent({
       })
 
       const space = getMatchingSpace(emptyResource)
+      const appFileExtension = appsStore.fileExtensions.find(
+        ({ app, extension }) => app === item.id && extension === item.defaultExtension
+      )
 
       openEditor(
-        item,
+        appFileExtension,
         space.getDriveAliasAndItem(emptyResource),
         emptyResource.webDavPath,
         emptyResource.id,

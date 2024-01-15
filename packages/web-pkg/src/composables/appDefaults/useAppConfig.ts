@@ -1,10 +1,9 @@
-import { Store } from 'vuex'
-import { computed, Ref, unref } from 'vue'
-import { useAppMeta } from './useAppMeta'
+import { computed, Ref } from 'vue'
 import type { AppConfigObject } from '../../apps'
+import { AppsStore } from '../piniaStores'
 
 export interface AppConfigOptions {
-  store: Store<any>
+  appsStore: AppsStore
   applicationId: string
 }
 
@@ -13,9 +12,8 @@ export interface AppConfigResult {
 }
 
 export function useAppConfig(options: AppConfigOptions): AppConfigResult {
-  const applicationMetaResult = useAppMeta(options)
   const applicationConfig = computed(
-    () => unref(applicationMetaResult.applicationMeta).config || {}
+    () => options.appsStore.externalAppConfig[options.applicationId] || {}
   )
 
   return {

@@ -75,12 +75,7 @@ describe('Top Bar component', () => {
 
 const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
   const mocks = { ...defaultComponentMocks() }
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters
-    }
-  }
+  const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.configuration.mockImplementation(() => ({
     options: { disableFeedbackLink: false }
   }))

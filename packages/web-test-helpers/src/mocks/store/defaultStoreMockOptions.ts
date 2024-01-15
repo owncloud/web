@@ -4,8 +4,6 @@ import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 export const defaultStoreMockOptions = {
   commit: jest.fn(),
   getters: {
-    newFileHandlers: jest.fn(() => []),
-    apps: jest.fn(() => ({})),
     configuration: jest.fn().mockImplementation(() => ({
       options: {
         editor: {
@@ -18,12 +16,6 @@ export const defaultStoreMockOptions = {
   modules: {
     ...filesModuleMockOptions,
     ...runtimeModuleMockOptions,
-    apps: {
-      state: {
-        fileEditors: [],
-        meta: {}
-      }
-    },
     External: {
       getters: {
         mimeTypes: jest.fn(() => ({}))

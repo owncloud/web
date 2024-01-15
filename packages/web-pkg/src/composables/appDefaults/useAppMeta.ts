@@ -1,33 +1,18 @@
-import { Store } from 'vuex'
-import { computed, Ref } from 'vue'
-import type { AppConfigObject } from '../../apps'
+import { computed } from 'vue'
+import { AppsStore } from '../piniaStores'
 
 interface AppMetaOptions {
-  store: Store<any>
+  appsStore: AppsStore
   applicationId: string
 }
 
-export interface AppMetaObject {
-  config: AppConfigObject
-  theme: string
-  url: string
-  icon: string
-  id: string
-  img: string
-  name: string
-}
-
-export interface AppMetaResult {
-  applicationMeta: Ref<AppMetaObject>
-}
-
-export function useAppMeta({ store, applicationId }: AppMetaOptions): AppMetaResult {
+export function useAppMeta({ appsStore, applicationId }: AppMetaOptions) {
   const applicationMeta = computed(() => {
-    const editor = store.getters.apps[applicationId]
-    if (!editor) {
+    const appInfo = appsStore.apps[applicationId]
+    if (!appInfo) {
       throw new Error(`useAppConfig: could not find config for applicationId: ${applicationId}`)
     }
-    return editor || {}
+    return appInfo || {}
   })
 
   return {

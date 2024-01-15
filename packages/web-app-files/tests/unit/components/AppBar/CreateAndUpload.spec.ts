@@ -41,31 +41,18 @@ const elSelector = {
   clearClipboardBtn: '.clear-clipboard-btn'
 }
 
-const fileHandlerMocks = [
+const fileExtensionMocks = [
   {
-    ext: 'txt',
-    action: {
-      app: 'text-editor',
-      extension: 'txt'
-    },
-    menuTitle: () => 'Plain text file'
+    extension: 'txt',
+    newFileMenu: { menuTitle: () => 'Plain text file' }
   },
   {
-    ext: 'md',
-    action: {
-      app: 'text-editor',
-      extension: 'md'
-    },
-    menuTitle: () => 'Mark-down file'
+    extension: 'md',
+    newFileMenu: { menuTitle: () => 'Mark-down file' }
   },
   {
-    ext: 'drawio',
-    action: {
-      app: 'draw-io',
-      routeName: 'draw-io-edit',
-      extension: 'drawio'
-    },
-    menuTitle: () => 'Draw.io document'
+    extension: 'drawio',
+    newFileMenu: { menuTitle: () => 'Draw.io document' }
   }
 ]
 
@@ -95,12 +82,12 @@ describe('CreateAndUpload component', () => {
       expect(wrapper.findAll(elSelector.resourceUpload).length).toBe(2)
     })
     it('should show additional handlers', () => {
-      const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
+      const { wrapper } = getWrapper({ fileExtensions: fileExtensionMocks })
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('should show file extension if file extensions are enabled', () => {
       const { wrapper } = getWrapper({
-        newFileHandlers: fileHandlerMocks,
+        fileExtensions: fileExtensionMocks,
         areFileExtensionsShown: true
       })
       expect(wrapper.html()).toMatchSnapshot()
@@ -180,7 +167,7 @@ describe('CreateAndUpload component', () => {
 })
 
 function getWrapper({
-  newFileHandlers = [],
+  fileExtensions = [],
   clipboardResources = [],
   files = [],
   currentFolder = mock<Resource>({ canUpload: () => true }),
@@ -207,17 +194,7 @@ function getWrapper({
     })
   )
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      newFileHandlers: () => newFileHandlers,
-      user: () => ({ id: '1' })
-    }
-  }
-  storeOptions.getters.apps.mockImplementation(() => ({
-    fileEditors: []
-  }))
+  const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
@@ -245,6 +222,7 @@ function getWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
+              appsState: { fileExtensions },
               spacesState: { spaces: spaces as any },
               capabilityState: { capabilities }
             }

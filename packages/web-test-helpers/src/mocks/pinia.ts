@@ -6,11 +6,13 @@ import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
 import { Share } from '../../../web-client/src/helpers'
+import { ApplicationFileExtension } from '../../../web-pkg/types'
 
 export { createTestingPinia }
 
 export type PiniaMockOptions = {
   stubActions?: boolean
+  appsState?: { fileExtensions?: ApplicationFileExtension[] }
   authState?: {
     accessToken?: string
     idpContextReady?: boolean
@@ -30,6 +32,7 @@ export type PiniaMockOptions = {
 
 export function createMockStore({
   stubActions = true,
+  appsState = {},
   authState = {},
   themeState = {},
   messagesState = {},
@@ -52,6 +55,7 @@ export function createMockStore({
   return createTestingPinia({
     stubActions,
     initialState: {
+      apps: { ...appsState },
       auth: { ...authState },
       messages: { messages: [], ...messagesState },
       modals: {

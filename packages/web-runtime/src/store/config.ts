@@ -53,17 +53,13 @@ const state = {
 }
 
 const actions = {
-  loadConfig({ commit }, config) {
+  loadConfig({ commit }, { config, appsStore }) {
     commit('LOAD_CONFIG', config)
 
     if (config.external_apps) {
       config.external_apps.forEach((externalApp) => {
         if (externalApp.config !== undefined) {
-          commit(
-            'LOAD_EXTENSION_CONFIG',
-            { id: externalApp.id, config: externalApp.config },
-            { root: true }
-          )
+          appsStore.loadExternalAppConfig({ appId: externalApp.id, config: externalApp.config })
         }
       })
     }

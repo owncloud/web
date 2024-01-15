@@ -2,9 +2,9 @@ import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
 import { Module, Store } from 'vuex'
 import { Extension } from '../composables/piniaStores'
+import { IconFillType } from '../helpers'
 
 export interface AppReadyHookArgs {
-  announceExtension: (extension: { [key: string]: unknown }) => void
   globalProperties: ComponentCustomProperties & Record<string, any>
   router: Router
   store: Store<unknown>
@@ -42,18 +42,33 @@ export interface ApplicationQuickAction {
 export type AppConfigObject = Record<string, any>
 
 export interface ApplicationMenuItem {
-  enabled: () => boolean
-  priority: number
+  enabled?: () => boolean
+  priority?: number
   openAsEditor?: boolean
+}
+
+export interface ApplicationFileExtension {
+  app?: string
+  extension?: string
+  handler?: (...args) => Promise<void> | void
+  hasPriority?: boolean
+  label?: string
+  mimeType?: string
+  newFileMenu?: { menuTitle: () => string }
+  routeName?: string
 }
 
 /** ApplicationInformation describes required information of an application */
 export interface ApplicationInformation {
+  color?: string
   id?: string
   name?: string
   icon?: string
+  iconFillType?: IconFillType
+  iconColor?: string
+  img?: string
   isFileEditor?: boolean
-  extensions?: any[]
+  extensions?: ApplicationFileExtension[]
   defaultExtension?: string
   applicationMenu?: ApplicationMenuItem
 }

@@ -1,21 +1,22 @@
 import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
 import TextEditor from './App.vue'
-import { AppWrapperRoute, defineWebApplication, useUserStore } from '@ownclouders/web-pkg'
+import {
+  AppWrapperRoute,
+  ApplicationFileExtension,
+  defineWebApplication,
+  useUserStore
+} from '@ownclouders/web-pkg'
 
 export default defineWebApplication({
-  setup() {
+  setup({ applicationConfig }) {
     const { $gettext } = useGettext()
     const userStore = useUserStore()
 
     const appId = 'text-editor'
 
     const fileExtensions = () => {
-      const extensions: {
-        extension: string
-        label: string
-        newFileMenu?: any
-      }[] = [
+      const extensions: ApplicationFileExtension[] = [
         {
           extension: 'txt',
           label: $gettext('Plain text file')
@@ -50,17 +51,16 @@ export default defineWebApplication({
         }
       ]
 
-      const config = (window as any).__$store.getters.extensionConfigByAppId(appId)
-      extensions.push(...(config.extraExtensions || []).map((ext) => ({ extension: ext })))
+      const config = applicationConfig || {}
+      extensions.push(...(config.extraExtensions || []).map((ext: string) => ({ extension: ext })))
 
-      let primaryExtensions = (window as any).__$store.getters.extensionConfigByAppId(appId)
-        .primaryExtensions || ['txt', 'md']
+      let primaryExtensions: string[] = config.primaryExtensions || ['txt', 'md']
 
       if (typeof primaryExtensions === 'string') {
         primaryExtensions = [primaryExtensions]
       }
 
-      return extensions.reduce((acc, extensionItem) => {
+      return extensions.reduce<ApplicationFileExtension[]>((acc, extensionItem) => {
         const isPrimary = primaryExtensions.includes(extensionItem.extension)
         if (isPrimary) {
           extensionItem.newFileMenu = {

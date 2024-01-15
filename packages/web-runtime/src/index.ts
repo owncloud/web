@@ -50,7 +50,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { authStore, capabilityStore, extensionRegistry, spacesStore, userStore } =
+  const { appsStore, authStore, capabilityStore, extensionRegistry, spacesStore, userStore } =
     announcePiniaStores()
 
   app.provide('$router', router)
@@ -58,8 +58,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const runtimeConfiguration = await announceConfiguration(configurationPath)
   startSentry(runtimeConfiguration, app)
 
-  const store = await announceStore({ runtimeConfiguration })
-  app.provide('$store', store)
+  const store = await announceStore({ runtimeConfiguration, appsStore })
   app.provide('store', store)
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
@@ -146,7 +145,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
-  announceDefaults({ store, router, extensionRegistry })
+  announceDefaults({ store, appsStore, router, extensionRegistry })
 
   app.use(router)
   app.use(store)
@@ -170,7 +169,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         return
       }
       announceVersions({ capabilityStore })
-      await announceApplicationsReady({ app, store, applications })
+      await announceApplicationsReady({ app, appsStore, applications })
     },
     {
       immediate: true
@@ -261,7 +260,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 }
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
-  const store = await announceStore({ runtimeConfiguration: {} })
+  const { appsStore } = announcePiniaStores()
+  const store = await announceStore({ runtimeConfiguration: {}, appsStore })
   const { capabilityStore } = announcePiniaStores()
   announceVersions({ capabilityStore })
   const app = createApp(pages.failure)

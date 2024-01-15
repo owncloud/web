@@ -33,7 +33,8 @@ import {
   useFileActionsRestore,
   useFileActionsCreateSpaceFromResource
 } from './index'
-import { useCapabilityStore } from '../../piniaStores'
+import { useAppsStore, useCapabilityStore } from '../../piniaStores'
+import { ApplicationFileExtension } from '../../../apps'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -44,6 +45,7 @@ export interface GetFileActionsOptions extends FileActionOptions {
 
 export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
+  const appsStore = useAppsStore()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -87,25 +89,26 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   ])
 
   const editorActions = computed(() => {
-    const apps = store.state.apps
-    return (apps.fileEditors as any[])
-      .map((editor): FileAction => {
+    return appsStore.fileExtensions
+      .map((fileExtension): FileAction => {
+        const appInfo = appsStore.apps[fileExtension.app]
+
         return {
-          name: `editor-${editor.id}`,
+          name: `editor-${fileExtension.app}`,
           label: () => {
-            if (editor.label) {
-              return $gettext(editor.label)
+            if (fileExtension.label) {
+              return $gettext(fileExtension.label)
             }
-            return $gettext('Open in %{app}', { app: apps.meta[editor.app].name }, true)
+            return $gettext('Open in %{app}', { app: appInfo.name }, true)
           },
-          icon: apps.meta[editor.app].icon,
-          ...(apps.meta[editor.app].iconFillType && {
-            iconFillType: apps.meta[editor.app].iconFillType
+          icon: appInfo.icon,
+          ...(appInfo.iconFillType && {
+            iconFillType: appInfo.iconFillType
           }),
-          img: apps.meta[editor.app].img,
+          img: appInfo.img,
           handler: (options) =>
             openEditor(
-              editor,
+              fileExtension,
               options.space.getDriveAliasAndItem(options.resources[0]),
               options.resources[0].webDavPath,
               options.resources[0].fileId,
@@ -126,22 +129,23 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
               return false
             }
 
-            if (resources[0].extension && editor.extension) {
-              return resources[0].extension.toLowerCase() === editor.extension.toLowerCase()
+            if (resources[0].extension && fileExtension.extension) {
+              return resources[0].extension.toLowerCase() === fileExtension.extension.toLowerCase()
             }
 
-            if (resources[0].mimeType && editor.mimeType) {
+            if (resources[0].mimeType && fileExtension.mimeType) {
               return (
-                resources[0].mimeType.toLowerCase() === editor.mimeType.toLowerCase() ||
-                resources[0].mimeType.split('/')[0].toLowerCase() === editor.mimeType.toLowerCase()
+                resources[0].mimeType.toLowerCase() === fileExtension.mimeType.toLowerCase() ||
+                resources[0].mimeType.split('/')[0].toLowerCase() ===
+                  fileExtension.mimeType.toLowerCase()
               )
             }
 
             return false
           },
-          hasPriority: editor.hasPriority,
+          hasPriority: fileExtension.hasPriority,
           componentType: 'button',
-          class: `oc-files-actions-${kebabCase(apps.meta[editor.app].name).toLowerCase()}-trigger`
+          class: `oc-files-actions-${kebabCase(appInfo.name).toLowerCase()}-trigger`
         }
       })
       .sort((first, second) => {
@@ -153,9 +157,16 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       })
   })
 
-  const routeOptsHelper = (app, driveAliasAndItem: string, filePath, fileId, mode, shareId) => {
+  const routeOptsHelper = (
+    appFileExtension: ApplicationFileExtension,
+    driveAliasAndItem: string,
+    filePath: string,
+    fileId: string,
+    mode: string,
+    shareId: string
+  ) => {
     return {
-      name: app.routeName || app.app || app.id,
+      name: appFileExtension.routeName || appFileExtension.app,
       params: {
         driveAliasAndItem,
         filePath,
@@ -171,19 +182,18 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   }
 
   const openEditor = (
-    editor,
+    appFileExtension: ApplicationFileExtension,
     driveAliasAndItem: string,
-    filePath,
-    fileId,
-    mode,
-    shareId = undefined
+    filePath: string,
+    fileId: string,
+    mode: string,
+    shareId: string = undefined
   ) => {
     const configuration = store.getters['configuration']
 
-    if (editor.handler) {
-      return editor.handler({
+    if (appFileExtension.handler) {
+      return appFileExtension.handler({
         config: configuration,
-        extensionConfig: editor.config,
         driveAliasAndItem,
         filePath,
         fileId,
@@ -192,11 +202,18 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       })
     }
 
-    const routeOpts = routeOptsHelper(editor, driveAliasAndItem, filePath, fileId, mode, shareId)
+    const routeOpts = routeOptsHelper(
+      appFileExtension,
+      driveAliasAndItem,
+      filePath,
+      fileId,
+      mode,
+      shareId
+    )
 
     if (configuration.options.openAppsInTab) {
       const path = router.resolve(routeOpts).href
-      const target = `${editor.routeName}-${filePath}`
+      const target = `${appFileExtension.routeName}-${filePath}`
 
       openUrl(path, target, true)
       return

@@ -13,6 +13,7 @@ import {
   defaultStoreMockOptions,
   getComposableWrapper
 } from 'web-test-helpers/src'
+import { ApplicationFileExtension } from '../../../../../types'
 
 jest.mock('../../../../../src/composables/actions/files/useFileActions', () => ({
   useFileActions: jest.fn(() => mock<ReturnType<typeof useFileActions>>())
@@ -136,7 +137,12 @@ function getWrapper({
         const instance = useFileActionsCreateNewFile({
           store,
           space,
-          newFileHandlers: ref([{ action: null, ext: '.txt', menuTitle: jest.fn() }])
+          appNewFileMenuExtensions: ref([
+            mock<ApplicationFileExtension>({
+              extension: '.txt',
+              newFileMenu: { menuTitle: jest.fn() }
+            })
+          ])
         })
         setup(instance, { storeOptions })
       },

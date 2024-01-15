@@ -190,6 +190,7 @@ import { mapActions, mapGetters } from 'vuex'
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
+  useAppsStore,
   useCapabilityStore,
   useFileActions,
   useFileActionsCreateNewShortcut,
@@ -267,6 +268,7 @@ export default defineComponent({
     const store = useStore()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
+    const appsStore = useAppsStore()
     const messageStore = useMessages()
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
@@ -306,12 +308,14 @@ export default defineComponent({
 
     const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
-    const newFileHandlers = computed(() => store.getters.newFileHandlers)
+    const appNewFileMenuExtensions = computed(() =>
+      appsStore.fileExtensions.filter(({ newFileMenu }) => !!newFileMenu)
+    )
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
       space: props.space,
-      newFileHandlers: newFileHandlers
+      appNewFileMenuExtensions
     })
 
     const mimetypesAllowedForCreation = computed(() => {
@@ -432,6 +436,7 @@ export default defineComponent({
     return {
       ...useFileActions({ store }),
       ...useRequest(),
+      appNewFileMenuExtensions,
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
@@ -457,7 +462,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'newFileHandlers']),
+    ...mapGetters(['configuration']),
     ...mapGetters('Files', ['files', 'selectedFiles', 'clipboardResources']),
     ...mapGetters('runtime/ancestorMetaData', ['ancestorMetaData']),
 
@@ -473,7 +478,7 @@ export default defineComponent({
     },
 
     createFileActionsAvailable() {
-      return this.newFileHandlers.length > 0 || this.mimetypesAllowedForCreation.length > 0
+      return this.appNewFileMenuExtensions.length > 0 || this.mimetypesAllowedForCreation.length > 0
     },
     newButtonTooltip() {
       if (!this.canUpload) {

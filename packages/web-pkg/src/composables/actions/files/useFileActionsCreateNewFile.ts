@@ -22,16 +22,17 @@ import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'
 import { useMessages, useModals, useUserStore, useCapabilityStore } from '../../piniaStores'
+import { ApplicationFileExtension } from '../../../apps'
 
 export const useFileActionsCreateNewFile = ({
   store,
   space,
-  newFileHandlers,
+  appNewFileMenuExtensions,
   mimetypesAllowedForCreation
 }: {
   store?: Store<any>
   space?: SpaceResource
-  newFileHandlers?: Ref<any> // FIXME: type?
+  appNewFileMenuExtensions?: Ref<ApplicationFileExtension[]>
   mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
   store = store || useStore()
@@ -124,7 +125,7 @@ export const useFileActionsCreateNewFile = ({
     return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
   })
 
-  const addNewFile = async (fileName, openAction) => {
+  const addNewFile = async (fileName: string, appFileExtension: ApplicationFileExtension) => {
     if (fileName === '') {
       return
     }
@@ -141,9 +142,9 @@ export const useFileActionsCreateNewFile = ({
 
       store.commit('Files/UPSERT_RESOURCE', resource)
 
-      if (openAction) {
+      if (appFileExtension) {
         openEditor(
-          openAction,
+          appFileExtension,
           space.getDriveAliasAndItem(resource),
           resource.webDavPath,
           resource.fileId,
@@ -167,7 +168,7 @@ export const useFileActionsCreateNewFile = ({
   const handler = (
     fileActionOptions: FileActionOptions,
     extension: string,
-    openAction: any // FIXME: type?
+    appFileExtension: ApplicationFileExtension
   ) => {
     let defaultName = $gettext('New file') + `.${extension}`
 
@@ -195,11 +196,11 @@ export const useFileActionsCreateNewFile = ({
           fileName = `${fileName}.${extension}`
         }
 
-        if (!openAction) {
+        if (!appFileExtension) {
           return addAppProviderFileFunc(fileName)
         }
 
-        return addNewFile(fileName, openAction)
+        return addNewFile(fileName, appFileExtension)
       },
       onInput: (name, setError) =>
         setError(getNameErrorMsg(areFileExtensionsShown.value ? name : `${name}.${extension}`))
@@ -208,27 +209,25 @@ export const useFileActionsCreateNewFile = ({
 
   const actions = computed((): FileAction[] => {
     const actions = []
-    for (const newFileHandler of unref(newFileHandlers) || []) {
-      const openAction = newFileHandler.action
+    for (const appFileExtension of unref(appNewFileMenuExtensions) || []) {
       actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler: (args) => handler(args, newFileHandler.ext, openAction),
-        label: () => newFileHandler.menuTitle($gettext),
+        handler: (args) => handler(args, appFileExtension.extension, appFileExtension),
+        label: () => appFileExtension.newFileMenu.menuTitle(),
         isEnabled: () => {
           return unref(currentFolder)?.canUpload({ user: userStore.user })
         },
         componentType: 'button',
         class: 'oc-files-actions-create-new-file',
-        ext: newFileHandler.ext
+        ext: appFileExtension.extension
       })
     }
     for (const mimeType of unref(mimetypesAllowedForCreation) || []) {
-      const openAction = false
       actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler: (args) => handler(args, mimeType.ext, openAction),
+        handler: (args) => handler(args, mimeType.ext, undefined),
         label: () => mimeType.name,
         isEnabled: () => {
           return unref(currentFolder)?.canUpload({ user: userStore.user })
