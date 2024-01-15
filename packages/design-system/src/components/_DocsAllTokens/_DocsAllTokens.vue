@@ -1,11 +1,16 @@
 <template>
   <div class="all-tokens">
     <table>
+      <caption class="oc-invisible-sr">
+        {{
+          $gettext('A list of all defined design tokens')
+        }}
+      </caption>
       <thead>
         <tr>
-          <th>Token Name</th>
-          <th>Value</th>
-          <th>Category</th>
+          <th>{{ $gettext('Token Name') }}</th>
+          <th>{{ $gettext('Value') }}</th>
+          <th>{{ $gettext('Category') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -80,7 +85,6 @@ export default defineComponent({
     padding: $space-s $space-l $space-s $space-s;
     background: $color-cloud;
     font-size: $size-s;
-    font-weight: $weight-bold;
     color: $color-oxford-blue;
     text-transform: uppercase;
     letter-spacing: 1px;

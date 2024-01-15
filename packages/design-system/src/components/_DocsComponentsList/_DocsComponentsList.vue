@@ -3,31 +3,36 @@
     <ul class="status-list">
       <li>
         <oc-icon name="checkbox-circle" variation="success" />
-        <p>Ready</p>
+        <p>{{ $gettext('Ready') }}</p>
       </li>
       <li>
         <oc-icon name="todo" variation="warning" />
-        <p>Under review</p>
+        <p>{{ $gettext('Under review') }}</p>
       </li>
       <li>
         <oc-icon name="alert" variation="danger" />
-        <p>Deprecated</p>
+        <p>{{ $gettext('Deprecated') }}</p>
       </li>
       <li>
         <oc-icon name="code-box" />
-        <p>Prototype</p>
+        <p>{{ $gettext('Prototype') }}</p>
       </li>
       <li>
         <span>—</span>
-        <p>Not applicable</p>
+        <p>{{ $gettext('Not applicable') }}</p>
       </li>
     </ul>
     <table>
+      <caption class="oc-invisible-sr">
+        {{
+          $gettext('A list of all components defined in the design system')
+        }}
+      </caption>
       <thead>
         <tr>
-          <th>Component Name</th>
-          <th>Released in</th>
-          <th>Status</th>
+          <th>{{ $gettext('Component Name') }}</th>
+          <th>{{ $gettext('Released in') }}</th>
+          <th>{{ $gettext('Status') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -119,7 +124,6 @@ export default defineComponent({
     padding: $space-s;
     background: $color-cloud;
     font-size: $size-s;
-    font-weight: $weight-bold;
     color: $color-oxford-blue;
     text-transform: uppercase;
     letter-spacing: 1px;

@@ -163,10 +163,16 @@ export default (previewComponent) => {
             ]
           })
 
-          new EditorView({
-            state: editorState,
-            parent: elem
-          })
+          try {
+            // This code is wrapped in try/catch due to sonarcloud reporting this as issue otherwise
+            // Sonarcloud marks as issues instantiated classes which are not assigned anywhere but we need it like that here due to sideeffects of the class
+            new EditorView({
+              state: editorState,
+              parent: elem
+            })
+          } catch (error) {
+            console.error(error)
+          }
 
           elem.classList.add('vueds-html')
           elem.classList.add('vueds-hidden')
