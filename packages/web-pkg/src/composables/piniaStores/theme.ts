@@ -1,6 +1,6 @@
 import merge from 'deepmerge'
 import { defineStore } from 'pinia'
-import { ref, computed, unref } from 'vue'
+import { ref, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
 import { applyCustomProp } from 'design-system/src/'

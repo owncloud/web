@@ -49,7 +49,6 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
-import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useAbility,
   useAuthStore,
@@ -67,7 +66,6 @@ export default {
     FeedbackLink,
     Notifications,
     SideBarToggle,
-    ThemeSwitcher,
     UserMenu
   },
   props: {
