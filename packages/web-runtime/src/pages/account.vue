@@ -24,14 +24,8 @@
             {{ user.onPremisesSamAccountName }}
           </dd>
         </div>
-        <div v-if="user.id" class="account-page-info-userid">
-          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
-          <dd>
-            {{ user.id }}
-          </dd>
-        </div>
         <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('First and last name')" />
           <dd>
             {{ user.displayName }}
           </dd>

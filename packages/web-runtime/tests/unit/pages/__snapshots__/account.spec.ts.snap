@@ -6,12 +6,8 @@ exports[`account page account information section displays basic user informatio
     <dt class="oc-text-normal oc-text-muted">Username</dt>
     <dd>some-username</dd>
   </div>
-  <div class="account-page-info-userid">
-    <dt class="oc-text-normal oc-text-muted">User ID</dt>
-    <dd>1</dd>
-  </div>
   <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Display name</dt>
+    <dt class="oc-text-normal oc-text-muted">First and last name</dt>
     <dd>some-displayname</dd>
   </div>
   <div class="account-page-info-email oc-mb oc-width-1-2@s">
