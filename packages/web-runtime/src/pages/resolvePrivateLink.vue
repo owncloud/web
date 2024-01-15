@@ -24,7 +24,7 @@
           <p
             v-if="isUnacceptedShareError"
             v-text="
-              $gettext('Note: You can reload this page after you enable the sync for the share.')
+              $gettext('Note: You can reload this page after you have enabled syncing the share.')
             "
           />
         </div>
