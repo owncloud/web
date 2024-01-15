@@ -1,6 +1,6 @@
 import { SortDir, SortField } from '../../composables/sort'
 
-export const determineSortFields = (firstResource): SortField[] => {
+export const determineResourceTableSortFields = (firstResource): SortField[] => {
   if (!firstResource) {
     return []
   }

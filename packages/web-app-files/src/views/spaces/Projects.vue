@@ -213,7 +213,7 @@ import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
-import { sortFields as availableSortFields } from '@ownclouders/web-pkg/src/helpers/ui/resourceTiles'
+import { sortFields as availableSortFields } from '@ownclouders/web-pkg'
 import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import {

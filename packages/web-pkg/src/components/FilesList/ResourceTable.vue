@@ -251,7 +251,7 @@ import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue
 
 import { useResourceRouteResolver } from '../../composables/filesList/useResourceRouteResolver'
 import { ClipboardActions } from '../../helpers/clipboardActions'
-import { determineSortFields } from '../../helpers/ui/resourceTable'
+import { determineResourceTableSortFields } from '../../helpers'
 import { useFileActionsRename } from '../../composables/actions'
 import { createLocationCommon } from '../../router'
 import get from 'lodash-es/get'
@@ -545,7 +545,7 @@ export default defineComponent({
         })
       }
 
-      const sortFields = determineSortFields(firstResource)
+      const sortFields = determineResourceTableSortFields(firstResource)
       fields.push(
         ...[
           {

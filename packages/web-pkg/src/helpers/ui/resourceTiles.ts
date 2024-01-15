@@ -65,7 +65,7 @@ export const sortFields: SortField[] = [
   }
 ]
 
-export const determineSortFields = (firstResource): SortField[] => {
+export const determineResourceTilesSortFields = (firstResource): SortField[] => {
   if (!firstResource) {
     return []
   }
