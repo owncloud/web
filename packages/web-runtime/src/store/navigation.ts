@@ -1,7 +1,6 @@
 const state = {
   // static nav items are set during extension loading and will not be modified later on
-  staticNavItems: {},
-  closed: false
+  staticNavItems: {}
 }
 
 const mutations = {
@@ -18,9 +17,6 @@ const mutations = {
     const staticNavItems = state.staticNavItems
     staticNavItems[extension] = navItems
     state.staticNavItems = staticNavItems
-  },
-  SET_CLOSED(state, closed) {
-    state.closed = closed
   }
 }
 
@@ -49,14 +45,7 @@ const getters = {
   }
 }
 
-const actions = {
-  openNavigation({ commit }) {
-    commit('SET_CLOSED', false)
-  },
-  closeNavigation({ commit }) {
-    commit('SET_CLOSED', true)
-  }
-}
+const actions = {}
 export default {
   state,
   mutations,

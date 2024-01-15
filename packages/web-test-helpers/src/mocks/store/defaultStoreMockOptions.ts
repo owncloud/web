@@ -30,14 +30,5 @@ export const defaultStoreMockOptions = {
         mimeTypes: jest.fn(() => ({}))
       }
     }
-  },
-  actions: {
-    openNavigation: jest.fn(),
-    closeNavigation: jest.fn()
-  },
-  state: {
-    navigation: {
-      closed: false
-    }
   }
 } // FIXME: when we switch to TypeScript 4.9: satisfies StoreOptionsExtended<any>

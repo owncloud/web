@@ -1,6 +1,6 @@
 import SidebarNav from 'web-runtime/src/components/SidebarNav/SidebarNav.vue'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
-import { createStore, defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 jest.mock('uuid', () => ({
   v4: () => {
@@ -21,18 +21,18 @@ describe('OcSidebarNav', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
   })
-  it('toggles into closed state upon button click', async () => {
-    const { wrapper, storeOptions } = getWrapper()
-    await wrapper.find('.toggle-sidebar-button').trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(storeOptions.actions.closeNavigation).toHaveBeenCalled()
+  it('expands the navbar in open state', () => {
+    const { wrapper } = getWrapper({ closed: false })
+    expect(wrapper.find('.oc-app-navigation-expanded').exists).toBeTruthy()
   })
-  it('toggles back into open state upon button click', async () => {
-    const { wrapper, storeOptions } = getWrapper()
-    storeOptions.state.navigation.closed = true
+  it('collapses the navbar in closed state', () => {
+    const { wrapper } = getWrapper({ closed: true })
+    expect(wrapper.find('.oc-app-navigation-collapsed').exists).toBeTruthy()
+  })
+  it('emits "update:nav-bar-closed" upon button click', async () => {
+    const { wrapper } = getWrapper()
     await wrapper.find('.toggle-sidebar-button').trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(storeOptions.actions.openNavigation).toHaveBeenCalled()
+    expect(wrapper.emitted('update:nav-bar-closed').length).toBeGreaterThan(0)
   })
   it('initially sets the highlighter to the active nav item', async () => {
     const { wrapper } = getWrapper()
@@ -46,19 +46,17 @@ describe('OcSidebarNav', () => {
   })
 })
 
-function getWrapper() {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
+function getWrapper({ closed = false } = {}) {
   return {
-    storeOptions,
     wrapper: mount(SidebarNav, {
       slots,
       props: {
-        navItems: sidebarNavItemFixtures
+        navItems: sidebarNavItemFixtures,
+        closed
       },
       global: {
         renderStubDefaultSlot: true,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: { SidebarNavItem: true }
       }
     })
