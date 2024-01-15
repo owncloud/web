@@ -76,7 +76,7 @@ const announceNavigationItems = (
   const navExtensions = navigationItems.map((navItem) => ({
     type: 'sidebarNav',
     navItem,
-    scopes: [applicationId, `app.${applicationId}`]
+    scopes: [`app.${applicationId}`]
   })) as SidebarNavExtension[]
 
   extensionRegistry.registerExtensions(computed(() => navExtensions))
