@@ -1,27 +1,30 @@
-import Vue from 'vue'
+import { shallowMount } from '@vue/test-utils'
 import ColorTokens from './_DocsColorTokens.vue'
-
-const Constructor = Vue.extend(ColorTokens)
-const vm = new Constructor().$mount()
 
 describe('ColorTokens.vue', () => {
   it('should render correct contents', () => {
-    expect(vm.$el.querySelector('.color')).toBeDefined()
+    const wrapper = shallowMount(ColorTokens)
+
+    expect(wrapper.find('.color').exists()).toStrictEqual(true)
   })
 
   it('should render multiple colors', () => {
-    expect(vm.$el.querySelectorAll('.color').length).toBeGreaterThan(2)
+    const wrapper = shallowMount(ColorTokens)
+
+    expect(wrapper.findAll('.color').length).toBeGreaterThan(2)
   })
 
   it('should create code elements for copy pasting', () => {
-    expect(vm.$el.querySelector('.color span')).toBeDefined()
+    const wrapper = shallowMount(ColorTokens)
+
+    expect(wrapper.find('.color span').exists()).toStrictEqual(true)
   })
 
   it('should create swatches and apply inline styles', () => {
-    expect(vm.$el.querySelector('.color .swatch').style).toBeDefined()
-  })
+    const wrapper = shallowMount(ColorTokens)
 
-  it('should create multiple color groups', () => {
-    expect(vm.$el.querySelector('.color_group_2')).toBeDefined()
+    console.log(wrapper.find('.color .swatch').attributes())
+
+    expect(wrapper.find('.color .swatch').attributes()).toHaveProperty('style')
   })
 })

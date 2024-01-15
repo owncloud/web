@@ -31,25 +31,19 @@ exports[`SharesNavigation component renders a shares navigation for both mobile 
       <oc-list-stub raw="false">
         <li>
           <oc-button-stub appearance="raw-inverse" class="oc-my-xs shares-nav-mobile oc-background-primary-gradient" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="/files/shares/with-me/" type="router-link" variation="primary">
-            <span class="icon-box icon-box-active">
-              <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="share-forward" size="medium" type="span" variation="passive"></oc-icon-stub>
-            </span>
+            <span class="icon-box icon-box-active"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="share-forward" size="medium" type="span" variation="passive"></oc-icon-stub></span>
             <span>Shared with me</span>
           </oc-button-stub>
         </li>
         <li>
           <oc-button-stub appearance="raw" class="oc-my-xs shares-nav-mobile" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="/files/shares/with-others/" type="router-link" variation="passive">
-            <span class="icon-box">
-              <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="reply" size="medium" type="span" variation="passive"></oc-icon-stub>
-            </span>
+            <span class="icon-box"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="reply" size="medium" type="span" variation="passive"></oc-icon-stub></span>
             <span>Shared with others</span>
           </oc-button-stub>
         </li>
         <li>
           <oc-button-stub appearance="raw" class="oc-my-xs shares-nav-mobile" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" to="/files/shares/via-link/" type="router-link" variation="passive">
-            <span class="icon-box">
-              <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="link" size="medium" type="span" variation="passive"></oc-icon-stub>
-            </span>
+            <span class="icon-box"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="link" size="medium" type="span" variation="passive"></oc-icon-stub></span>
             <span>Shared via link</span>
           </oc-button-stub>
         </li>

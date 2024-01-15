@@ -1,31 +1,40 @@
-import Vue from 'vue'
+import { shallowMount } from '@vue/test-utils'
 import AllTokens from './_DocsAllTokens.vue'
-
-const Constructor = Vue.extend(AllTokens)
-const vm = new Constructor().$mount()
 
 describe('AllTokens.vue', () => {
   it('should render correct contents', () => {
-    expect(vm.$el.querySelector('.token')).toBeDefined()
+    const wrapper = shallowMount(AllTokens)
+
+    expect(wrapper.find('.token').exists()).toStrictEqual(true)
   })
 
   it('should render multiple tokens', () => {
-    expect(vm.$el.querySelectorAll('.token').length).toBeGreaterThan(10)
+    const wrapper = shallowMount(AllTokens)
+
+    expect(wrapper.findAll('.token').length).toBeGreaterThan(10)
   })
 
   it('should create code elements for copy pasting', () => {
-    expect(vm.$el.querySelector('code.name')).toBeDefined()
+    const wrapper = shallowMount(AllTokens)
+
+    expect(wrapper.find('code.name').exists()).toStrictEqual(true)
   })
 
   it('should create code elements with original values', () => {
-    expect(vm.$el.querySelector('code.type')).toBeDefined()
+    const wrapper = shallowMount(AllTokens)
+
+    expect(wrapper.find('code.type').exists()).toStrictEqual(true)
   })
 
   it('should create examples of usage', () => {
-    expect(vm.$el.querySelector('.example')).toBeDefined()
+    const wrapper = shallowMount(AllTokens)
+
+    expect(wrapper.find('.example').exists()).toStrictEqual(true)
   })
 
   it('should apply inline styles', () => {
-    expect(vm.$el.querySelector('.example.color').style).toBeDefined()
+    const wrapper = shallowMount(AllTokens)
+
+    expect(wrapper.find('.example.color').exists()).toStrictEqual(true)
   })
 })

@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RoleDropdown renders a button with existing role if given for resource type file 1`] = `
-<span class="oc-flex oc-flex-middle">
-  <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-    <!--v-if-->
+<span class="oc-flex oc-flex-middle"><oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"><!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -11,35 +9,20 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
     </oc-list-stub>
@@ -72,9 +55,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
 `;
 
 exports[`RoleDropdown renders a button with existing role if given for resource type folder 1`] = `
-<span class="oc-flex oc-flex-middle">
-  <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-    <!--v-if-->
+<span class="oc-flex oc-flex-middle"><oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"><!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -82,35 +63,20 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
     </oc-list-stub>
@@ -143,9 +109,7 @@ exports[`RoleDropdown renders a button with existing role if given for resource 
 `;
 
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type file 1`] = `
-<span class="oc-flex oc-flex-middle">
-  <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-    <!--v-if-->
+<span class="oc-flex oc-flex-middle"><oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"><!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -153,35 +117,20 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
     </oc-list-stub>
@@ -208,9 +157,7 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
 `;
 
 exports[`RoleDropdown renders a button with invite text if no existing role given for resource type folder 1`] = `
-<span class="oc-flex oc-flex-middle">
-  <oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-    <!--v-if-->
+<span class="oc-flex oc-flex-middle"><oc-button-stub appearance="raw" arialabel="Select permission" class="files-recipient-role-select-btn" disabled="false" gapsize="none" id="files-collaborators-role-button-new" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"><!--v-if-->
     <span class="oc-text-truncate">Can view</span>
     <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="arrow-down-s" size="medium" type="span" variation="passive"></oc-icon-stub>
   </oc-button-stub>
@@ -218,35 +165,20 @@ exports[`RoleDropdown renders a button with invite text if no existing role give
     <oc-list-stub aria-label="Select role for the invitation" class="files-recipient-role-drop-list" raw="false">
       <li>
         <oc-button-stub appearance="raw-inverse" class="files-recipient-role-drop-btn oc-p-s oc-background-primary-gradient selected" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-viewer" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="primary">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub>
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="eye" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><oc-icon-stub accessiblelabel="" color="" filltype="fill" name="check" size="medium" type="span" variation="inherit"></oc-icon-stub></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-editor" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="pencil" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
       <li>
         <oc-button-stub appearance="raw" class="files-recipient-role-drop-btn oc-p-s" disabled="false" gapsize="medium" id="files-recipient-role-drop-btn-custom" justifycontent="space-between" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-          <span class="oc-flex oc-flex-middle">
-            <oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub>
-            <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub>
-          </span>
-          <span class="oc-flex">
-            <!--v-if-->
-          </span>
+          <span class="oc-flex oc-flex-middle"><oc-icon-stub accessiblelabel="" class="oc-pl-s oc-pr-m" color="" filltype="fill" name="settings-3" size="medium" type="span" variation="inherit"></oc-icon-stub> <role-item-stub allowsharepermission="true" role="[object Object]"></role-item-stub></span>
+          <span class="oc-flex"><!--v-if--></span>
         </oc-button-stub>
       </li>
     </oc-list-stub>
