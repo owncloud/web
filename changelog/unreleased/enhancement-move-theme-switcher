@@ -1,0 +1,6 @@
+Enhancement: Move ThemeSwitcher into Account Settings
+
+We've moved the ThemeSwitcher to the account settings page.
+
+https://github.com/owncloud/web/pull/10334
+https://github.com/owncloud/web/issues/10181
