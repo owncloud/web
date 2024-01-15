@@ -47,8 +47,8 @@ Feature: spaces public link
       | spaceFolder/subFolder/shareToBrian.md | %public% |
     And "Alice" renames the most recently created public link of resource "spaceFolder/subFolder/shareToBrian.md" to "markdownLink"
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
-      | resource                              | password |
-      | spaceFolder/subFolder/shareToBrian.md | %public% |
+      | resource   | password |
+      | simple.pdf | %public% |
     And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
       | resource       | password |
