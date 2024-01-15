@@ -104,6 +104,12 @@
             />
           </dd>
         </div>
+        <div class="account-page-info-theme oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Theme')" />
+          <dd data-testid="theme" class="oc-width-1-3">
+            <theme-switcher @update="onUpdateTheme" />
+          </dd>
+        </div>
         <div v-if="showNotifications" class="account-page-notification oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
           <dd data-testid="notification-mails">
@@ -157,12 +163,14 @@ import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
 import { User } from '@ownclouders/web-client/src/generated'
+import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
 
 export default defineComponent({
   name: 'AccountPage',
   components: {
     AppLoadingSpinner,
-    GdprExport
+    GdprExport,
+    ThemeSwitcher
   },
   setup() {
     const store = useStore()
@@ -398,6 +406,10 @@ export default defineComponent({
       }
     }
 
+    const onUpdateTheme = () => {
+      showMessage({ title: $gettext('Preference saved.') })
+    }
+
     onMounted(async () => {
       await loadAccountBundleTask.perform()
       await loadValuesListTask.perform()
@@ -447,7 +459,8 @@ export default defineComponent({
       loadAccountBundleTask,
       loadGraphUserTask,
       loadValuesListTask,
-      showEditPasswordModal
+      showEditPasswordModal,
+      onUpdateTheme
     }
   },
   computed: {

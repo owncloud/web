@@ -45,7 +45,7 @@ describe('Top Bar component', () => {
       expect(wrapper.find('notifications-stub').exists()).toBeFalsy()
     })
   })
-  it.each(['applications-menu', 'theme-switcher', 'feedback-link', 'notifications', 'user-menu'])(
+  it.each(['applications-menu', 'feedback-link', 'notifications', 'user-menu'])(
     'should hide %s when mode is "embed"',
     (componentName) => {
       mockUseEmbedMode.mockReturnValue({
@@ -56,7 +56,7 @@ describe('Top Bar component', () => {
       expect(wrapper.find(`${componentName}-stub`).exists()).toBeFalsy()
     }
   )
-  it.each(['applications-menu', 'theme-switcher', 'feedback-link', 'notifications', 'user-menu'])(
+  it.each(['applications-menu', 'feedback-link', 'notifications', 'user-menu'])(
     'should not hide %s when mode is not "embed"',
     (componentName) => {
       mockUseEmbedMode.mockReturnValue({
