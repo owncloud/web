@@ -5,15 +5,13 @@ import {
   AppWrapperRoute,
   ApplicationFileExtension,
   defineWebApplication,
-  useAppsStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 
 export default defineWebApplication({
-  setup() {
+  setup({ applicationConfig }) {
     const { $gettext } = useGettext()
     const userStore = useUserStore()
-    const appsStore = useAppsStore()
 
     const appId = 'text-editor'
 
@@ -53,7 +51,7 @@ export default defineWebApplication({
         }
       ]
 
-      const config = appsStore.externalAppConfig[appId] || {}
+      const config = applicationConfig || {}
       extensions.push(...(config.extraExtensions || []).map((ext: string) => ({ extension: ext })))
 
       let primaryExtensions: string[] = config.primaryExtensions || ['txt', 'md']
