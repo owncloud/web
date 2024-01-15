@@ -206,8 +206,7 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
-import ResourceTiles from '@ownclouders/web-pkg/src/components/FilesList/ResourceTiles.vue'
-import { ResourceTable } from '@ownclouders/web-pkg'
+import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
