@@ -119,19 +119,22 @@ export const convertClassicApplication = async ({
     throw new RuntimeError("appInfo.name can't be blank")
   }
 
+  const extensionRegistry = useExtensionRegistry({ configurationManager })
+
   const runtimeApi = buildRuntimeApi({
     applicationName,
     applicationId,
     store,
     router,
     gettext,
-    supportedLanguages
+    supportedLanguages,
+    extensionRegistry
   })
 
   await store.dispatch('registerApp', applicationScript.appInfo)
 
   if (applicationScript.extensions) {
-    useExtensionRegistry({ configurationManager }).registerExtensions(applicationScript.extensions)
+    extensionRegistry.registerExtensions(applicationScript.extensions)
   }
 
   return new ClassicApplication(runtimeApi, applicationScript, app)

@@ -50,7 +50,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { authStore, capabilityStore, spacesStore, userStore } = announcePiniaStores()
+  const { authStore, capabilityStore, extensionRegistry, spacesStore, userStore } =
+    announcePiniaStores()
 
   app.provide('$router', router)
 
@@ -145,7 +146,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceCustomStyles({ runtimeConfiguration })
   announceCustomScripts({ runtimeConfiguration })
-  announceDefaults({ store, router })
+  announceDefaults({ store, router, extensionRegistry })
 
   app.use(router)
   app.use(store)

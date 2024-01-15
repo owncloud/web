@@ -56,11 +56,13 @@ import {
   useAuthStore,
   useCapabilityStore,
   useEmbedMode,
+  useExtensionRegistry,
   useRouter,
   useStore,
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
+import { getExtensionNavItems } from '../../helpers/navItems'
 
 export default {
   components: {
@@ -81,6 +83,7 @@ export default {
   setup(props) {
     const store = useStore()
     const capabilityStore = useCapabilityStore()
+    const extensionRegistry = useExtensionRegistry()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
 
@@ -127,9 +130,9 @@ export default {
           if (app.type === 'extension') {
             // check if the extension has at least one navItem with a matching menuId
             return (
-              store.getters
-                .getNavItemsByExtension(app.id)
-                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0 ||
+              getExtensionNavItems({ extensionRegistry, appId: app.id }).filter((navItem) =>
+                isNavItemPermitted(permittedMenus, navItem)
+              ).length > 0 ||
               (app.applicationMenu.enabled instanceof Function &&
                 app.applicationMenu.enabled(store, ability) &&
                 !permittedMenus.includes('user'))

@@ -2,7 +2,7 @@ import { registerClient } from '../services/clientRegistration'
 import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
-import { Router } from 'vue-router'
+import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
 import { App, computed } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
@@ -18,7 +18,9 @@ import {
   useAuthStore,
   AuthStore,
   useCapabilityStore,
-  CapabilityStore
+  CapabilityStore,
+  useExtensionRegistry,
+  ExtensionRegistry
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -46,6 +48,7 @@ import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
+import { getExtensionNavItems } from '../helpers/navItems'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -344,11 +347,21 @@ export const announceTheme = async ({
 export const announcePiniaStores = () => {
   const authStore = useAuthStore()
   const capabilityStore = useCapabilityStore()
+  const extensionRegistry = useExtensionRegistry({ configurationManager })
   const messagesStore = useMessages()
   const modalStore = useModals()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  return { authStore, capabilityStore, messagesStore, modalStore, spacesStore, userStore }
+
+  return {
+    authStore,
+    capabilityStore,
+    extensionRegistry,
+    messagesStore,
+    modalStore,
+    spacesStore,
+    userStore
+  }
 }
 
 /**
@@ -539,10 +552,12 @@ export const announcePasswordPolicyService = ({ app }: { app: App }): void => {
  */
 export const announceDefaults = ({
   store,
-  router
+  router,
+  extensionRegistry
 }: {
   store: Store<unknown>
   router: Router
+  extensionRegistry: ExtensionRegistry
 }): void => {
   // set home route
   const appIds = store.getters.appIds
@@ -551,11 +566,11 @@ export const announceDefaults = ({
     defaultExtensionId = appIds[0]
   }
 
-  let route = router.getRoutes().find((r) => {
+  let route: RouteRecordNormalized | RouteLocationRaw = router.getRoutes().find((r) => {
     return r.path.startsWith(`/${defaultExtensionId}`) && r.meta?.entryPoint === true
   })
   if (!route) {
-    route = store.getters.getNavItemsByExtension(defaultExtensionId)[0]?.route
+    route = getExtensionNavItems({ extensionRegistry, appId: defaultExtensionId })[0]?.route
   }
   if (route) {
     router.addRoute({
