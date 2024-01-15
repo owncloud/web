@@ -422,7 +422,7 @@ describe('ResourceTable', () => {
         const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
         const { wrapper } = getMountedWrapper({
           props: { resources: [resource] },
-          isUserContextReady: false
+          userContextReady: false
         })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual('SPAN')
@@ -456,7 +456,7 @@ describe('ResourceTable', () => {
 
 function getMountedWrapper({
   props = {},
-  isUserContextReady = true,
+  userContextReady = true,
   addProcessingResources = false
 } = {}) {
   const storeOptions = defaultStoreMockOptions
@@ -494,7 +494,7 @@ function getMountedWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              authState: { userContextReady: isUserContextReady },
+              authState: { userContextReady: userContextReady },
               capabilityState: { capabilities }
             }
           }),

@@ -31,7 +31,7 @@ describe('Top Bar component', () => {
     })
     it('should not display in an unauthenticated context', () => {
       const { wrapper } = getWrapper({
-        isUserContextReady: false,
+        userContextReady: false,
         capabilities: {
           notifications: { 'ocs-endpoints': ['list', 'get', 'delete'] }
         }
@@ -73,7 +73,7 @@ describe('Top Bar component', () => {
   )
 })
 
-const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
+const getWrapper = ({ capabilities = {}, userContextReady = true } = {}) => {
   const mocks = { ...defaultComponentMocks() }
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.getters.configuration.mockImplementation(() => ({
@@ -90,7 +90,7 @@ const getWrapper = ({ capabilities = {}, isUserContextReady = true } = {}) => {
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              authState: { userContextReady: isUserContextReady },
+              authState: { userContextReady: userContextReady },
               capabilityState: { capabilities }
             }
           }),

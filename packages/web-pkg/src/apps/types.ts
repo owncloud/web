@@ -42,7 +42,7 @@ export interface ApplicationQuickAction {
 export type AppConfigObject = Record<string, any>
 
 export interface ApplicationMenuItem {
-  enabled?: () => boolean
+  enabled: () => boolean
   priority?: number
   openAsEditor?: boolean
 }

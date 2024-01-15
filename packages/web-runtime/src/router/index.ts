@@ -77,7 +77,7 @@ const routes = [
     path: '/account',
     name: 'account',
     component: Account,
-    meta: { title: $gettext('Account'), authContext: 'user' }
+    meta: { title: $gettext('Account'), authContext: 'hybrid' }
   }
 ]
 export const router = patchRouter(

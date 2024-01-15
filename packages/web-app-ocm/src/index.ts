@@ -1,5 +1,5 @@
 import App from './views/App.vue'
-import { defineWebApplication, useRouter } from '@ownclouders/web-pkg'
+import { defineWebApplication, useRouter, useUserStore } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import { extensions } from './extensions'
 import { RouteRecordRaw } from 'vue-router'
@@ -27,13 +27,19 @@ export default defineWebApplication({
   setup() {
     const { $gettext } = useGettext()
     const router = useRouter()
+    const userStore = useUserStore()
 
     const appInfo = {
       name: $gettext('ScienceMesh'),
       id: 'ocm',
       color: '#AE291D',
       icon: 'contacts-book',
-      isFileEditor: false
+      isFileEditor: false,
+      applicationMenu: {
+        enabled: () => {
+          return !!userStore.user
+        }
+      }
     }
 
     router.addRoute({

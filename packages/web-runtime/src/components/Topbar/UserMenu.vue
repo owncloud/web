@@ -10,17 +10,17 @@
     >
       <avatar-image
         v-if="onPremisesSamAccountName"
-        class="oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
+        class="oc-topbar-avatar oc-topbar-personal-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         :width="32"
         :userid="onPremisesSamAccountName"
         :user-name="user.displayName"
       />
       <oc-avatar-item
         v-else
-        class="oc-topbar-unauthenticated-avatar oc-flex-inline oc-flex-center oc-flex-middle"
+        class="oc-topbar-avatar oc-topbar-unauthenticated-avatar oc-flex-inline oc-flex-center oc-flex-middle"
         :name="$gettext('User Menu login')"
         :width="32"
-        icon="user-add"
+        icon="user"
         icon-fill-type="line"
         icon-color="var(--oc-color-swatch-brand-default)"
         background="var(--oc-color-swatch-brand-contrast)"
@@ -39,6 +39,17 @@
         <template v-if="!onPremisesSamAccountName">
           <li>
             <oc-button
+              id="oc-topbar-account-manage"
+              type="router-link"
+              :to="accountPageRoute"
+              appearance="raw"
+            >
+              <oc-icon name="settings-4" fill-type="line" class="oc-p-xs" />
+              <span v-text="$gettext('Preferences')" />
+            </oc-button>
+          </li>
+          <li>
+            <oc-button
               id="oc-topbar-account-login"
               appearance="raw"
               type="router-link"
@@ -50,22 +61,26 @@
           </li>
         </template>
         <template v-else>
+          <li class="profile-info-wrapper oc-pl-s">
+            <avatar-image
+              :width="32"
+              :userid="onPremisesSamAccountName"
+              :user-name="user.displayName"
+            />
+            <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.mail }">
+              <span class="oc-display-block" v-text="user.displayName" />
+              <span v-if="user.mail" class="oc-text-small" v-text="user.mail" />
+            </span>
+          </li>
           <li>
             <oc-button
               id="oc-topbar-account-manage"
               type="router-link"
-              :to="{ path: '/account' }"
+              :to="accountPageRoute"
               appearance="raw"
             >
-              <avatar-image
-                :width="32"
-                :userid="onPremisesSamAccountName"
-                :user-name="user.displayName"
-              />
-              <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.mail }">
-                <span class="oc-display-block" v-text="user.displayName" />
-                <span v-if="user.mail" class="oc-text-small" v-text="user.mail" />
-              </span>
+              <oc-icon name="settings-4" fill-type="line" class="oc-p-xs" />
+              <span v-text="$gettext('Preferences')" />
             </oc-button>
           </li>
           <li v-for="(app, index) in applicationsList" :key="`user-menu-${index}`">
@@ -86,10 +101,13 @@
           </li>
           <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">
             <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
-            <div class="storage-wrapper-text oc-width-1-1">
+            <div class="oc-width-1-1">
               <p class="oc-my-rm">
                 <span class="oc-display-block" v-text="personalStorageLabel" />
-                <span class="oc-text-small" v-text="personalStorageDetailsLabel" />
+                <span
+                  class="storage-wrapper-quota oc-text-small"
+                  v-text="personalStorageDetailsLabel"
+                />
               </p>
               <oc-progress
                 v-if="limitedPersonalStorage"
@@ -126,7 +144,13 @@ import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
 import filesize from 'filesize'
 import { authService } from '../../services/auth'
-import { useRoute, useSpacesStore, useThemeStore, useUserStore } from '@ownclouders/web-pkg'
+import {
+  useRoute,
+  useSpacesStore,
+  useThemeStore,
+  useUserStore,
+  routeToContextQuery
+} from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 
 export default defineComponent({
@@ -145,6 +169,11 @@ export default defineComponent({
 
     const { user } = storeToRefs(userStore)
 
+    const accountPageRoute = computed(() => ({
+      name: 'account',
+      query: routeToContextQuery(unref(route))
+    }))
+
     const loginLink = computed(() => {
       return {
         name: 'login',
@@ -161,6 +190,7 @@ export default defineComponent({
 
     return {
       user,
+      accountPageRoute,
       loginLink,
       imprintUrl,
       privacyUrl,
@@ -255,21 +285,12 @@ export default defineComponent({
       color: var(--oc-color-swatch-passive-default);
       text-decoration: none;
     }
-
-    .profile-info-wrapper {
-      text-align: left;
-      word-break: break-all;
-      line-height: initial;
-    }
   }
 
+  &.profile-info-wrapper,
   &.storage-wrapper {
     gap: var(--oc-space-medium);
     min-height: 3rem;
-
-    .storage-wrapper-text {
-      align-self: flex-end;
-    }
   }
 }
 

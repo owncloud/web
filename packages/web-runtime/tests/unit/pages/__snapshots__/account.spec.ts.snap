@@ -1,17 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`account page account information displays basic user information 1`] = `
+exports[`account page account information section displays basic user information 1`] = `
 <dl class="account-page-info oc-flex oc-flex-wrap">
   <div class="account-page-info-username oc-mb oc-width-1-2@s">
     <dt class="oc-text-normal oc-text-muted">Username</dt>
     <dd>some-username</dd>
   </div>
-  <div class="account-page-info-userid">
-    <dt class="oc-text-normal oc-text-muted">User ID</dt>
-    <dd>1</dd>
-  </div>
   <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Display name</dt>
+    <dt class="oc-text-normal oc-text-muted">First and last name</dt>
     <dd>some-displayname</dd>
   </div>
   <div class="account-page-info-email oc-mb oc-width-1-2@s">
@@ -31,13 +27,36 @@ exports[`account page account information displays basic user information 1`] = 
     </dd>
   </div>
   <!--v-if-->
+  <!--v-if-->
 </dl>
 `;
 
-exports[`account page account information group membership displays group names 1`] = `
+exports[`account page account information section group membership displays group names 1`] = `
 <dd>
   <span>one, two, three</span>
 </dd>
 `;
 
 exports[`account page header section edit url button should be displayed if defined via config 1`] = `<oc-button-stub href="/" target="_blank" type="a" variation="primary"></oc-button-stub>`;
+
+exports[`account page public link context should render a limited view 1`] = `
+<main class="oc-height-1-1 oc-m" id="account">
+  <h1 class="oc-page-title oc-m-rm oc-invisible-sr" id="account-page-title">Some Title</h1>
+  <!--v-if-->
+  <div>
+    <div class="oc-flex oc-width-1-1">
+      <h2 class="oc-text-bold">Preferences</h2>
+    </div>
+    <dl class="account-page-preferences oc-flex oc-flex-wrap">
+      <div class="account-page-info-language oc-mb oc-width-1-2@s">
+        <dt class="oc-text-normal oc-text-muted">Language</dt>
+        <dd class="oc-width-1-3">
+          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-1" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" placeholder="Please choose..." readonly="false" searchable="true"></oc-select-stub>
+        </dd>
+      </div>
+      <!--v-if-->
+      <!--v-if-->
+    </dl>
+  </div>
+</main>
+`;

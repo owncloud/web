@@ -1,18 +1,10 @@
 <template>
   <app-loading-spinner v-if="isLoading" />
   <main v-else id="account" class="oc-height-1-1 oc-m">
-    <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1 oc-border-b oc-py">
-      <h1 id="account-page-title" class="oc-page-title oc-m-rm">{{ pageTitle }}</h1>
-      <div>
-        <oc-button
-          v-if="!isChangePasswordDisabled"
-          variation="primary"
-          data-testid="account-page-edit-password-btn"
-          @click="showEditPasswordModal"
-        >
-          <oc-icon name="lock" />
-          <span v-text="$gettext('Change Password')" />
-        </oc-button>
+    <h1 id="account-page-title" class="oc-page-title oc-m-rm oc-invisible-sr">{{ pageTitle }}</h1>
+    <div v-if="showAccountSection">
+      <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1">
+        <h2 class="oc-text-bold" v-text="$gettext('Account Information')" />
         <oc-button
           v-if="accountEditLink"
           variation="primary"
@@ -25,9 +17,6 @@
           <span v-text="$gettext('Edit')" />
         </oc-button>
       </div>
-    </div>
-    <div>
-      <h2 class="oc-text-bold oc-mb" v-text="$gettext('Account Information')" />
       <dl class="account-page-info oc-flex oc-flex-wrap">
         <div class="account-page-info-username oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
@@ -35,14 +24,8 @@
             {{ user.onPremisesSamAccountName }}
           </dd>
         </div>
-        <div v-if="user.onPremisesSamAccountName && user.id" class="account-page-info-userid">
-          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('User ID')" />
-          <dd>
-            {{ user.id }}
-          </dd>
-        </div>
         <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Display name')" />
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('First and last name')" />
           <dd>
             {{ user.displayName }}
           </dd>
@@ -65,7 +48,7 @@
             />
           </dd>
         </div>
-        <div v-if="logoutUrl" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+        <div v-if="showLogout" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
           <dt
             class="oc-text-normal oc-text-muted"
             v-text="$gettext('Logout from active devices')"
@@ -88,10 +71,25 @@
             <gdpr-export />
           </dd>
         </div>
+        <div v-if="showChangePassword" class="account-page-password oc-mb oc-width-1-2@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Password')" />
+          <dd data-testid="password">
+            <oc-button
+              appearance="raw"
+              variation="primary"
+              data-testid="account-page-edit-password-btn"
+              @click="showEditPasswordModal"
+            >
+              <span v-text="$gettext('Set new password')" />
+            </oc-button>
+          </dd>
+        </div>
       </dl>
     </div>
     <div>
-      <h2 class="oc-text-bold oc-mb" v-text="$gettext('Preferences')" />
+      <div class="oc-flex oc-width-1-1">
+        <h2 class="oc-text-bold" v-text="$gettext('Preferences')" />
+      </div>
       <dl class="account-page-preferences oc-flex oc-flex-wrap">
         <div class="account-page-info-language oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
@@ -106,10 +104,7 @@
             />
           </dd>
         </div>
-        <div
-          v-if="isSettingsServiceSupported"
-          class="account-page-notification oc-mb oc-width-1-2@s"
-        >
+        <div v-if="showNotifications" class="account-page-notification oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
           <dd data-testid="notification-mails">
             <oc-checkbox
@@ -121,7 +116,7 @@
             />
           </dd>
         </div>
-        <div class="account-page-view-options oc-mb oc-width-1-2@s">
+        <div v-if="showWebDavDetails" class="account-page-view-options oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('View options')" />
           <dd data-testid="view-options">
             <oc-checkbox
@@ -144,6 +139,7 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
+  useAuthStore,
   useCapabilityStore,
   useClientService,
   useMessages,
@@ -172,6 +168,7 @@ export default defineComponent({
     const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
+    const authStore = useAuthStore()
     const language = useGettext()
     const { $gettext } = language
     const clientService = useClientService()
@@ -185,7 +182,6 @@ export default defineComponent({
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
 
     // FIXME: Use settings service capability when we have it
     const isSettingsServiceSupported = computed(
@@ -195,11 +191,24 @@ export default defineComponent({
     const { user } = storeToRefs(userStore)
 
     const showGdprExport = computed(() => {
-      return capabilityStore.personalDataExport && spacesStore.personalSpace
+      return (
+        authStore.userContextReady &&
+        capabilityStore.personalDataExport &&
+        spacesStore.personalSpace
+      )
     })
+    const showChangePassword = computed(() => {
+      return authStore.userContextReady && !capabilityStore.graphUsersChangeSelfPasswordDisabled
+    })
+    const showAccountSection = computed(() => authStore.userContextReady)
+    const showWebDavDetails = computed(() => authStore.userContextReady)
+    const showNotifications = computed(
+      () => authStore.userContextReady && unref(isSettingsServiceSupported)
+    )
+    const showLogout = computed(() => authStore.userContextReady && configurationManager.logoutUrl)
 
     const loadValuesListTask = useTask(function* () {
-      if (!unref(isSettingsServiceSupported)) {
+      if (!authStore.userContextReady || !unref(isSettingsServiceSupported)) {
         return
       }
 
@@ -221,7 +230,7 @@ export default defineComponent({
     }).restartable()
 
     const loadAccountBundleTask = useTask(function* () {
-      if (!unref(isSettingsServiceSupported)) {
+      if (!authStore.userContextReady || !unref(isSettingsServiceSupported)) {
         return
       }
 
@@ -241,6 +250,10 @@ export default defineComponent({
     }).restartable()
 
     const loadGraphUserTask = useTask(function* () {
+      if (!authStore.userContextReady) {
+        return
+      }
+
       try {
         const { data } = yield clientService.graphAuthenticated.users.getMe()
         graphUser.value = data
@@ -319,27 +332,29 @@ export default defineComponent({
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
-        await clientService.graphAuthenticated.users.editMe({
-          preferredLanguage: option.value
-        })
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,
           languageSetting: option.value
         })
 
-        if (capabilityStore.supportSSE) {
-          ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
-        }
-
-        store.commit('SET_LANGUAGE', language.current)
-        if (spacesStore.personalSpace) {
-          // update personal space name with new translation
-          spacesStore.updateSpaceField({
-            id: spacesStore.personalSpace.id,
-            field: 'name',
-            value: $gettext('Personal')
+        if (authStore.userContextReady) {
+          await clientService.graphAuthenticated.users.editMe({
+            preferredLanguage: option.value
           })
+
+          if (capabilityStore.supportSSE) {
+            ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
+          }
+
+          if (spacesStore.personalSpace) {
+            // update personal space name with new translation
+            spacesStore.updateSpaceField({
+              id: spacesStore.personalSpace.id,
+              field: 'name',
+              value: $gettext('Personal')
+            })
+          }
         }
 
         showMessage({ title: $gettext('Preference saved.') })
@@ -390,7 +405,7 @@ export default defineComponent({
 
       selectedLanguageValue.value = unref(languageOptions)?.find(
         (languageOption) =>
-          languageOption.value === (unref(graphUser).preferredLanguage || language.current)
+          languageOption.value === (unref(graphUser)?.preferredLanguage || language.current)
       )
 
       const disableEmailNotificationsConfiguration = unref(valuesList)?.find(
@@ -417,9 +432,12 @@ export default defineComponent({
       updateDisableEmailNotifications,
       updateViewOptionsWebDavDetails,
       accountEditLink: store.getters.configuration?.options?.accountEditLink,
-      isChangePasswordDisabled: capabilityRefs.graphUsersChangeSelfPasswordDisabled,
+      showLogout,
       showGdprExport,
-      isSettingsServiceSupported,
+      showNotifications,
+      showAccountSection,
+      showChangePassword,
+      showWebDavDetails,
       groupNames,
       user,
       logoutUrl: configurationManager.logoutUrl,

@@ -94,7 +94,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find(selectors.search).exists()).toBeFalsy()
   })
   test('does not render a search field if no user given', () => {
-    wrapper = getMountedWrapper({ isUserContextReady: false }).wrapper
+    wrapper = getMountedWrapper({ userContextReady: false }).wrapper
     expect(wrapper.find(selectors.search).exists()).toBeFalsy()
   })
   test('updates the search term on input', () => {
@@ -228,7 +228,7 @@ describe('Search Bar portal component', () => {
 
 function getMountedWrapper({
   mocks = {},
-  isUserContextReady = true,
+  userContextReady = true,
   providers = [providerFiles, providerContacts]
 } = {}) {
   jest.mocked(useAvailableProviders).mockReturnValue(ref(providers))
@@ -253,7 +253,7 @@ function getMountedWrapper({
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+            piniaOptions: { authState: { userContextReady: userContextReady } }
           }),
           store
         ],

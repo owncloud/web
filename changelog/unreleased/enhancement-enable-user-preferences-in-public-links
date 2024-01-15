@@ -1,0 +1,6 @@
+Enhancement: Enable user preferences in public links
+
+We've enabled user preferences in public links, so any user even without an account can open
+preferences in a public link context and for example change the current language.
+
+https://github.com/owncloud/web/pull/10207

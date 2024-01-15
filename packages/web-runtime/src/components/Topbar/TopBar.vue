@@ -9,13 +9,13 @@
         v-if="appMenuItems.length && !isEmbedModeEnabled"
         :applications-list="appMenuItems"
       />
-      <router-link
-        ref="navigationSidebarLogo"
-        v-oc-tooltip="$gettext('Back to home')"
-        to="/"
-        class="oc-width-1-1"
-      >
-        <oc-img :src="currentTheme.logo.topbar" :alt="sidebarLogoAlt" class="oc-logo-image" />
+      <router-link ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
+        <oc-img
+          v-oc-tooltip="$gettext('Back to home')"
+          :src="currentTheme.logo.topbar"
+          :alt="sidebarLogoAlt"
+          class="oc-logo-image"
+        />
       </router-link>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
@@ -56,13 +56,11 @@ import {
   useAuthStore,
   useCapabilityStore,
   useEmbedMode,
-  useExtensionRegistry,
   useRouter,
   useStore,
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
-import { getExtensionNavItems } from '../../helpers/navItems'
 
 export default {
   components: {
@@ -83,7 +81,6 @@ export default {
   setup(props) {
     const store = useStore()
     const capabilityStore = useCapabilityStore()
-    const extensionRegistry = useExtensionRegistry()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
 
@@ -98,6 +95,17 @@ export default {
       return (
         authStore.userContextReady && capabilityStore.notificationsOcsEndpoints.includes('list')
       )
+    })
+
+    const homeLink = computed(() => {
+      if (authStore.publicLinkContextReady && !authStore.userContextReady) {
+        return {
+          name: 'resolvePublicLink',
+          params: { token: authStore.publicLinkToken }
+        }
+      }
+
+      return '/'
     })
 
     const isSideBarToggleVisible = computed(() => {
@@ -115,7 +123,7 @@ export default {
     }
 
     /**
-     * Returns well formed menuItem objects by a list of extensions.
+     * Returns well-formed menuItem objects by a list of extensions.
      * The following properties must be accessible in the wrapping code:
      * - applicationsList
      * - $language
@@ -128,14 +136,10 @@ export default {
       return props.applicationsList
         .filter((app) => {
           if (app.type === 'extension') {
-            // check if the extension has at least one navItem with a matching menuId
             return (
-              getExtensionNavItems({ extensionRegistry, appId: app.id }).filter((navItem) =>
-                isNavItemPermitted(permittedMenus, navItem)
-              ).length > 0 ||
-              (app.applicationMenu.enabled instanceof Function &&
-                app.applicationMenu.enabled(store, ability) &&
-                !permittedMenus.includes('user'))
+              app.applicationMenu.enabled instanceof Function &&
+              app.applicationMenu.enabled(store, ability) &&
+              !permittedMenus.includes('user')
             )
           }
           return isNavItemPermitted(permittedMenus, app)
@@ -209,7 +213,8 @@ export default {
       logoWidth,
       isEmbedModeEnabled,
       isSideBarToggleVisible,
-      isSideBarToggleDisabled
+      isSideBarToggleDisabled,
+      homeLink
     }
   },
   computed: {
