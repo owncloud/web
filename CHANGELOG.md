@@ -110,6 +110,7 @@ Summary
 * Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 
 Details
@@ -1124,6 +1125,14 @@ Details
 
    https://github.com/owncloud/web/pull/10111
    https://github.com/owncloud/web/pull/10152
+
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
+
+   We've enabled user preferences in public links, so any user even without an
+   account can open preferences in a public link context and for example change the
+   current language.
+
+   https://github.com/owncloud/web/pull/10207
 
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 
