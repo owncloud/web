@@ -52,6 +52,7 @@ Summary
 * Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
 * Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
 * Change - Auth store to pinia: [#10323](https://github.com/owncloud/web/pull/10323)
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -545,6 +546,16 @@ Details
 
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10323
+
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+
+   BREAKING CHANGE for developers: The `announceExtensions` method inside the app's
+   `ready` hook, which could be used to register file editors, has been removed.
+   Developers should use the `extensions` property inside the `appInfo` object
+   instead.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10330
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
