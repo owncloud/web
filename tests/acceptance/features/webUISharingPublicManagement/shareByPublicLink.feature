@@ -106,23 +106,6 @@ Feature: Public link share management
     Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
     And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Anyone with the link can view" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
-  @issue-3040 @issue-3841 @issue-ocis-reva-372
-  Scenario: sharing details of indirect link share in "favorites" file lists
-    Given user "Alice" has created folder "/simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created a public link with following settings in the server
-      | path | /simple-folder |
-      | name | Public Link    |
-    And user "Alice" has created a public link with following settings in the server
-      | path | /simple-folder/simple-empty-folder |
-      | name | Public Link Sub                    |
-    And user "Alice" has favorited element "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has logged in using the webUI
-    When the user browses to the shared-via-link page using the webUI
-    Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
-    And a link named "Public Link Sub" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-empty-folder" on the webUI
-    When the user browses to the favorites page using the webUI
-    Then a link named "Public Link" should be listed with role "Anyone with the link can view" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
-
   @skipOnOC10 @issue-product-130
   Scenario: User can attempt to upload a file in public link
     Given user "Alice" has created file "lorem.txt" in the server

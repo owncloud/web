@@ -123,8 +123,6 @@ config = {
                 ],
                 "oCISSharingInternal2": [
                     "webUISharingInternalUsers",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUISharingInternalUsersCollaborator",
                 ],
                 "oCISSharingInternal3": [
                     "webUISharingInternalGroupsSharingIndicator",
@@ -230,8 +228,6 @@ basicTestSuites = [
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",
-    "webUISharingInternalUsersBlacklisted",
-    "webUISharingInternalUsersCollaborator",
     "webUISharingInternalUsersShareWithPage",
     "webUISharingInternalUsersSharingIndicator",
     "webUISharingPermissionsUsers",

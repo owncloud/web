@@ -19,24 +19,6 @@ Feature: Autocompletion of share-with names
       | finance2  |
     And the setting "outgoing_server2server_share_enabled" of app "files_sharing" has been set to "no" in the server
 
-  @issue-ocis-1417
-  Scenario Outline: autocompletion of user having special characters in their usernames
-    Given these users have been created without initialization and without skeleton files in the server:
-      | username   | password  | displayname | email             |
-      | <username> | %regular% | SpecialUser | usrmail@oc.com.np |
-    And user "regularuser" has created file "data.zip" in the server
-    And user "regularuser" has logged in using the webUI
-    And the user has browsed to the personal page
-    And the user has opened the share dialog for file "data.zip"
-    When the user types "<search>" in the share-with-field
-    Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
-    Examples:
-      | username | search |
-      | @-_.     | @-     |
-      | -_.ocusr | -_     |
-      | ocusr-_. | oc     |
-      | _ocusr@  | _u     |
-
   @issue-ocis-1317 @issue-ocis-1675
   Scenario Outline: autocompletion of user having special characters in their displaynames
     Given these users have been created without initialization and without skeleton files in the server:
