@@ -18,7 +18,6 @@ Feature: language settings
       | resource      | recipient | type | role     |
       | check_message | Alice     | user | Can edit |
     And "Brian" logs out
-
     And "Alice" logs in
     And "Alice" opens the user menu
     And "Alice" changes the language to "Deutsch - German"
@@ -41,11 +40,9 @@ Feature: language settings
       | lorem.txt | folderPublic |
     And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
+    And "Alice" logs out
     When "Anonymous" opens the public link "myPublicLink"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" opens the user menu
     And "Anonymous" changes the language to "Deutsch - German"
     Then "Anonymous" should see the following account page title "Konto"
-    And "Alice" logs out
-
-
