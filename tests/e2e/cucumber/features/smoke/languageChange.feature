@@ -46,5 +46,6 @@ Feature: language settings
     And "Anonymous" opens the user menu
     And "Anonymous" changes the language to "Deutsch - German"
     Then "Anonymous" should see the following account page title "Konto"
+    And "Alice" logs out
 
 
