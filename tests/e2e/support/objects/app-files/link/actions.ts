@@ -7,6 +7,7 @@ import { shareRoles } from '../share/collaborator'
 
 export interface createLinkArgs {
   page: Page
+  role?: string
   resource?: string
   name?: string
   space?: boolean
@@ -97,6 +98,7 @@ const showOrHidePasswordButton = '.oc-text-input-show-password-toggle'
 const copyPasswordButton = '.oc-text-input-copy-password-button'
 const generatePasswordButton = '.oc-text-input-generate-password-button'
 const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
+const passwordInputDescription = '.oc-text-input-description .oc-text-input-description'
 
 const getRecentLinkUrl = async (page: Page): Promise<string> => {
   return await page.locator(publicLinkUrlList).first().textContent()
@@ -107,7 +109,7 @@ const getRecentLinkName = async (page: Page): Promise<string> => {
 }
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
-  const { space, page, resource, password } = args
+  const { space, page, resource, password, role } = args
   if (!space) {
     const resourcePaths = resource.split('/')
     const resourceName = resourcePaths.pop()
@@ -118,8 +120,25 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
-  await page.locator(editPublicLinkInput).fill(password)
-  setPassword(page)
+  if (role) {
+    await page.locator(util.format(publicLinkSetRoleButton, shareRoles[role])).click()
+  }
+
+  role === 'Invited people'
+    ? await expect(page.locator(passwordInputDescription).first()).toHaveText(
+        'Password cannot be set for internal links'
+      )
+    : await page.locator(editPublicLinkInput).fill(password)
+
+  await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.url().includes('api/v1/shares') &&
+        res.request().method() === 'POST' &&
+        res.status() === 200
+    ),
+    page.locator(editPublicLinkRenameConfirm).click()
+  ])
   await clearCurrentPopup(page)
   return await getRecentLinkUrl(page)
 }
