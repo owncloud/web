@@ -3,8 +3,9 @@ import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vu
 import { sortFields } from '../../../../src/helpers/ui/resourceTiles'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'jest-mock-extended'
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
+
+jest.mock('../../../../src/composables/viewMode', () => ({
+  ...jest.requireActual('../../../../src/composables/viewMode'),
   useTileSize: jest.fn().mockReturnValue({
     tileSizePixels: 100
   })
