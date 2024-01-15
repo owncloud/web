@@ -2,7 +2,7 @@ import { registerClient } from '../services/clientRegistration'
 import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
-import { Router, RouteRecordNormalized } from 'vue-router'
+import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
 import { App, computed } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
@@ -566,12 +566,11 @@ export const announceDefaults = ({
     defaultExtensionId = appIds[0]
   }
 
-  let route = router.getRoutes().find((r) => {
+  let route: RouteRecordNormalized | RouteLocationRaw = router.getRoutes().find((r) => {
     return r.path.startsWith(`/${defaultExtensionId}`) && r.meta?.entryPoint === true
   })
   if (!route) {
-    route = getExtensionNavItems({ extensionRegistry, appId: defaultExtensionId })[0]
-      ?.route as RouteRecordNormalized
+    route = getExtensionNavItems({ extensionRegistry, appId: defaultExtensionId })[0]?.route
   }
   if (route) {
     router.addRoute({
