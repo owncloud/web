@@ -236,7 +236,13 @@ export default defineComponent({
       if (unref(resource)?.tags) {
         selectedTags.value = unref(currentTags)
       }
-      loadAvailableTagsTask.perform()
+
+      /**
+       * If the user can't edit the tags, for example on a public link, there is no need to load the available tags
+       */
+      if (!unref(readonly)) {
+        loadAvailableTagsTask.perform()
+      }
     })
 
     const keydownMethods = (map, vm) => {

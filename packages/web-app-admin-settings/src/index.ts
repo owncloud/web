@@ -161,7 +161,13 @@ export default defineWebApplication({
         isFileEditor: false,
         applicationMenu: {
           enabled: () => {
-            return userStore.user && can('read-all', 'Setting')
+            return (
+              userStore.user &&
+              (can('read-all', 'Setting') ||
+                can('read-all', 'Account') ||
+                can('read-all', 'Group') ||
+                can('read-all', 'Drive'))
+            )
           },
           priority: 40
         }

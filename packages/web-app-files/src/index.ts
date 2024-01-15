@@ -34,12 +34,9 @@ const appInfo = {
   icon: 'resource-type-folder',
   color: 'var(--oc-color-swatch-primary-muted)',
   isFileEditor: false,
-  extensions: [],
-  applicationMenu: {
-    enabled: () => true,
-    priority: 10
-  }
+  extensions: []
 }
+
 export const navItems = (context): AppNavigationItem[] => {
   const spacesStores = useSpacesStore()
   const userStore = useUserStore()
@@ -127,8 +124,18 @@ export const navItems = (context): AppNavigationItem[] => {
 
 export default defineWebApplication({
   setup() {
+    const userStore = useUserStore()
+
     return {
-      appInfo,
+      appInfo: {
+        ...appInfo,
+        applicationMenu: {
+          enabled: () => {
+            return !!userStore.user
+          },
+          priority: 10
+        }
+      },
       store,
       routes: buildRoutes({
         App,

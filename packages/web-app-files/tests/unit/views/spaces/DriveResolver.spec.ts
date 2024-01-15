@@ -78,7 +78,7 @@ describe('DriveResolver view', () => {
       space,
       internalSpace,
       mocks: { $clientService: clientService },
-      isUserContextReady: true
+      userContextReady: true
     })
 
     await wrapper.vm.$nextTick()
@@ -94,7 +94,7 @@ describe('DriveResolver view', () => {
     const { wrapper, mocks } = getMountedWrapper({
       space,
       mocks: { $clientService: clientService },
-      isUserContextReady: true
+      userContextReady: true
     })
 
     await wrapper.vm.$nextTick()
@@ -121,7 +121,7 @@ function getMountedWrapper({
   space = undefined,
   internalSpace = undefined,
   currentRouteName = 'files-spaces-generic',
-  isUserContextReady = false,
+  userContextReady = false,
   driveAliasAndItem = 'personal/einstein/file',
   fileId = '1'
 } = {}) {
@@ -157,7 +157,7 @@ function getMountedWrapper({
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { authState: { userContextReady: isUserContextReady } }
+            piniaOptions: { authState: { userContextReady: userContextReady } }
           }),
           store
         ],
