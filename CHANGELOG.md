@@ -112,6 +112,7 @@ Summary
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
 
 Details
 -------
@@ -1140,6 +1141,13 @@ Details
 
    https://github.com/owncloud/web/issues/10121
    https://github.com/owncloud/web/pull/10224
+
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+
+   We've moved the ThemeSwitcher to the account settings page.
+
+   https://github.com/owncloud/web/issues/10181
+   https://github.com/owncloud/web/pull/10334
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
