@@ -95,13 +95,14 @@ export const useThemeStore = defineStore('theme', () => {
 
     setAndApplyTheme(
       unref(availableThemes).find((t) => t.name === unref(currentLocalStorageThemeName)) ||
-        availableThemes.value[0],
+        (isDark ? availableThemes.value[1] : availableThemes.value[0]),
       false
     )
   }
 
   const setAutoSystemTheme = () => {
     currentLocalStorageThemeName.value = null
+    setAndApplyTheme(isDark ? availableThemes.value[1] : availableThemes.value[0], false)
   }
 
   const isCurrentThemeAutoSystem = computed(() => {
