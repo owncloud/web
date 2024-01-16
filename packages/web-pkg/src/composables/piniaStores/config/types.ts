@@ -1,122 +1,166 @@
-import { AppConfigObject } from '../../../apps'
-import { Options as SentryOptions } from '@sentry/vue/types/types'
+import { z } from 'zod'
 
-export interface CustomTranslation {
-  url: string
-}
+const CustomTranslationSchema = z.object({
+  url: z.string()
+})
 
-export interface OAuth2Config {
-  apiUrl?: string
-  authUrl?: string
-  clientId?: string
-  clientSecret?: string
-  logoutUrl?: string
-  metaDataUrl?: string
-  url?: string
-}
+export type CustomTranslation = z.infer<typeof CustomTranslationSchema>
 
-export interface OpenIdConnectConfig {
-  authority?: string
-  client_id?: string
-  client_secret?: string
-  dynamic?: string
-  metadata_url?: string
-  response_type?: string
-  scope?: string
-}
+const OAuth2ConfigSchema = z.object({
+  apiUrl: z.string().optional(),
+  authUrl: z.string().optional(),
+  clientId: z.string().optional(),
+  clientSecret: z.string().optional(),
+  logoutUrl: z.string().optional(),
+  metaDataUrl: z.string().optional(),
+  url: z.string().optional()
+})
 
-export type SentryConfig = SentryOptions
+export type OAuth2Config = z.infer<typeof OAuth2ConfigSchema>
 
-export interface StyleConfig {
-  href?: string
-}
+const OpenIdConnectConfigSchema = z.object({
+  authority: z.string().optional(),
+  client_id: z.string().optional(),
+  client_secret: z.string().optional(),
+  dynamic: z.string().optional(),
+  metadata_url: z.string().optional(),
+  response_type: z.string().optional(),
+  scope: z.string().optional()
+})
 
-export interface ScriptConfig {
-  async?: boolean
-  src?: string
-}
+export type OpenIdConnectConfig = z.infer<typeof OpenIdConnectConfigSchema>
 
-export interface OptionsConfig {
-  cernFeatures?: boolean
-  concurrentRequests?: {
-    resourceBatchActions?: number
-    sse?: number
-    shares?: {
-      create?: number
-      list?: number
-    }
-  }
-  contextHelpers?: boolean
-  contextHelpersReadMore?: boolean
-  defaultExtension?: string
-  disabledExtensions?: string[]
-  disableFeedbackLink?: boolean
-  disablePreviews?: boolean
-  displayResourcesLazy?: boolean
-  displayThumbnails?: boolean
-  accountEditLink?: {
-    href?: string
-  }
-  editor?: {
-    autosaveEnabled?: boolean
-    autosaveInterval?: number
-    openAsPreview?: boolean | string[]
-  }
-  embed?: {
-    enabled?: boolean
-    target?: string
-    messagesOrigin?: string
-    delegateAuthentication?: boolean
-    delegateAuthenticationOrigin?: string
-  }
-  feedbackLink?: {
-    ariaLabel?: string
-    description?: string
-    href?: string
-  }
-  hoverableQuickActions?: boolean
-  isRunningOnEos?: boolean
-  loginUrl?: string
-  logoutUrl?: string
-  ocm?: {
-    openRemotely?: boolean
-  }
-  openAppsInTab?: boolean
-  openLinksWithDefaultApp?: boolean
-  previewFileMimeTypes?: string[]
-  routing?: {
-    fullShareOwnerPaths?: boolean
-    idBased?: boolean
-  }
-  runningOnEos?: boolean
-  sharingRecipientsPerPage?: number
-  sidebar?: {
-    shares?: {
-      showAllOnLoad?: boolean
-    }
-  }
-  tokenStorageLocal?: boolean
-  topCenterNotifications?: boolean
-  upload?: {
-    companionUrl?: string
-    xhr?: {
-      timeout?: number
-    }
-  }
-  userListRequiresFilter?: boolean
-}
+const SentryConfigSchema = z.record(z.any())
 
-// raw config that is coming from the server
-export interface RawConfig {
-  server: string
-  theme: string
-  options: OptionsConfig
-  apps?: string[]
-  external_apps?: AppConfigObject[]
-  customTranslations?: CustomTranslation[]
-  auth?: OAuth2Config
-  openIdConnect?: OpenIdConnectConfig
-  sentry?: SentryConfig
-  scripts?: ScriptConfig[]
-  styles?: StyleConfig[]
-}
+export type SentryConfig = z.infer<typeof SentryConfigSchema>
+
+const StyleConfigSchema = z.object({
+  href: z.string().optional()
+})
+
+export type StyleConfig = z.infer<typeof StyleConfigSchema>
+
+const ScriptConfigSchema = z.object({
+  async: z.boolean().optional(),
+  src: z.string().optional()
+})
+
+export type ScriptConfig = z.infer<typeof ScriptConfigSchema>
+
+const OptionsConfigSchema = z.object({
+  cernFeatures: z.boolean().optional(),
+  concurrentRequests: z
+    .object({
+      resourceBatchActions: z.number().optional(),
+      sse: z.number().optional(),
+      shares: z
+        .object({
+          create: z.number().optional(),
+          list: z.number().optional()
+        })
+        .optional()
+    })
+    .optional(),
+  contextHelpers: z.boolean().optional(),
+  contextHelpersReadMore: z.boolean().optional(),
+  defaultExtension: z.string().optional(),
+  disabledExtensions: z.array(z.string()).optional(),
+  disableFeedbackLink: z.boolean().optional(),
+  disablePreviews: z.boolean().optional(),
+  displayResourcesLazy: z.boolean().optional(),
+  displayThumbnails: z.boolean().optional(),
+  accountEditLink: z
+    .object({
+      href: z.string().optional()
+    })
+    .optional(),
+  editor: z
+    .object({
+      autosaveEnabled: z.boolean().optional(),
+      autosaveInterval: z.number().optional(),
+      openAsPreview: z.union([z.boolean(), z.array(z.string())]).optional()
+    })
+    .optional(),
+  embed: z
+    .object({
+      enabled: z.boolean().optional(),
+      target: z.string().optional(),
+      messagesOrigin: z.string().optional(),
+      delegateAuthentication: z.boolean().optional(),
+      delegateAuthenticationOrigin: z.string().optional()
+    })
+    .optional(),
+  feedbackLink: z
+    .object({
+      ariaLabel: z.string().optional(),
+      description: z.string().optional(),
+      href: z.string().optional()
+    })
+    .optional(),
+  hoverableQuickActions: z.boolean().optional(),
+  isRunningOnEos: z.boolean().optional(),
+  loginUrl: z.string().optional(),
+  logoutUrl: z.string().optional(),
+  ocm: z
+    .object({
+      openRemotely: z.boolean().optional()
+    })
+    .optional(),
+  openAppsInTab: z.boolean().optional(),
+  openLinksWithDefaultApp: z.boolean().optional(),
+  previewFileMimeTypes: z.array(z.string()).optional(),
+  routing: z
+    .object({
+      fullShareOwnerPaths: z.boolean().optional(),
+      idBased: z.boolean().optional()
+    })
+    .optional(),
+  runningOnEos: z.boolean().optional(),
+  sharingRecipientsPerPage: z.number().optional(),
+  sidebar: z
+    .object({
+      shares: z
+        .object({
+          showAllOnLoad: z.boolean().optional()
+        })
+        .optional()
+    })
+    .optional(),
+  tokenStorageLocal: z.boolean().optional(),
+  topCenterNotifications: z.boolean().optional(),
+  upload: z
+    .object({
+      companionUrl: z.string().optional(),
+      xhr: z
+        .object({
+          timeout: z.number().optional()
+        })
+        .optional()
+    })
+    .optional(),
+  userListRequiresFilter: z.boolean().optional()
+})
+
+export type OptionsConfig = z.infer<typeof OptionsConfigSchema>
+
+const ExternalApp = z.object({
+  id: z.string(),
+  path: z.string(),
+  config: z.record(z.unknown()).optional()
+})
+
+export const RawConfigSchema = z.object({
+  server: z.string(),
+  theme: z.string(),
+  options: OptionsConfigSchema,
+  apps: z.array(z.string()).optional(),
+  external_apps: z.array(ExternalApp).optional(),
+  customTranslations: z.array(CustomTranslationSchema).optional(),
+  auth: OAuth2ConfigSchema.optional(),
+  openIdConnect: OpenIdConnectConfigSchema.optional(),
+  sentry: SentryConfigSchema.optional(),
+  scripts: z.array(ScriptConfigSchema).optional(),
+  styles: z.array(StyleConfigSchema).optional()
+})
+
+export type RawConfig = z.infer<typeof RawConfigSchema>

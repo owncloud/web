@@ -52,7 +52,10 @@ import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { getExtensionNavItems } from '../helpers/navItems'
-import { SentryConfig } from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
+import {
+  RawConfigSchema,
+  SentryConfig
+} from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -106,9 +109,11 @@ export const announceConfiguration = async ({
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  const rawConfig = (await request.json().catch((error) => {
+  const data = await request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
-  })) as RawConfig
+  })
+
+  const rawConfig = RawConfigSchema.parse(data)
 
   const embedConfigFromQuery = getEmbedConfigFromQuery(
     rawConfig.options?.embed &&
@@ -306,7 +311,7 @@ export const announceTheme = async ({
 }: {
   app: App
   designSystem: any
-  configStore?: ConfigStore
+  configStore: ConfigStore
 }): Promise<void> => {
   const themeStore = useThemeStore()
   const { initializeThemes } = themeStore

@@ -265,10 +265,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   const store = announceStore()
-  const { capabilityStore } = announcePiniaStores()
+  const { capabilityStore, configStore } = announcePiniaStores()
   announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
-  await announceTheme({ app, designSystem })
+  await announceTheme({ app, designSystem, configStore })
   console.error(err)
   app.use(store)
   announceTranslations({

@@ -134,9 +134,12 @@ describe('announceConfiguration', () => {
   beforeEach(() => createTestingPinia({ stubActions: false }))
 
   it('should not enable embed mode when it is not set', async () => {
-    jest
-      .spyOn(global, 'fetch')
-      .mockResolvedValue(mock<Response>({ status: 200, json: () => Promise.resolve({}) }))
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ theme: '', server: '', options: {} })
+      })
+    )
     const configStore = useConfigStore()
     await announceConfiguration({ path: '/config.json', configStore })
     expect(configStore.options.embed.enabled).toStrictEqual(false)
@@ -146,7 +149,8 @@ describe('announceConfiguration', () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
-        json: () => Promise.resolve({ options: { embed: { enabled: true } } })
+        json: () =>
+          Promise.resolve({ theme: '', server: '', options: { embed: { enabled: true } } })
       })
     )
     const configStore = useConfigStore()
@@ -161,9 +165,12 @@ describe('announceConfiguration', () => {
       },
       writable: true
     })
-    jest
-      .spyOn(global, 'fetch')
-      .mockResolvedValue(mock<Response>({ status: 200, json: () => Promise.resolve({}) }))
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ theme: '', server: '', options: {} })
+      })
+    )
     const configStore = useConfigStore()
     await announceConfiguration({ path: '/config.json', configStore })
     expect(configStore.options.embed.enabled).toStrictEqual(true)
@@ -179,7 +186,8 @@ describe('announceConfiguration', () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
-        json: () => Promise.resolve({ options: { embed: { enabled: false } } })
+        json: () =>
+          Promise.resolve({ theme: '', server: '', options: { embed: { enabled: false } } })
       })
     )
     const configStore = useConfigStore()
