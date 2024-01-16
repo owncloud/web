@@ -1,4 +1,4 @@
-import { ConfigurationManager, useFileActionsRename, useStore } from '../../../../../src'
+import { useFileActionsRename, useStore } from '../../../../../src'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -9,17 +9,6 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { nextTick, unref } from 'vue'
-
-jest.mock('../../../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 const currentFolder = {
   id: '1',

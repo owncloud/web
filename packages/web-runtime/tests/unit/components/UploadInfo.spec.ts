@@ -20,13 +20,6 @@ const selectors = {
   }
 }
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  configurationManager: {
-    options: { routing: { idBased: true } }
-  }
-}))
-
 describe('UploadInfo component', () => {
   it('should render the component in a hidden state per default', () => {
     const { wrapper } = getShallowWrapper()

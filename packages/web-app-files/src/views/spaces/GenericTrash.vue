@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { storeToRefs } from 'pinia'
 
 import {
@@ -168,7 +168,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState('Files', ['files']),
     ...mapGetters('Files', ['totalFilesCount']),
 
     isEmpty() {

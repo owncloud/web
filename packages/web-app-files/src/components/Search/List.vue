@@ -153,7 +153,7 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import { AppLoadingSpinner, useCapabilityStore } from '@ownclouders/web-pkg'
+import { AppLoadingSpinner, useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -203,14 +203,10 @@ import {
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
-type FileCategoryKeyword = {
-  id: string
-  label: string
-  icon: string
-}
 type Tag = {
   id: string
   label: string
@@ -257,6 +253,9 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const searchTermQuery = useRouteQuery('term')
     const scopeQuery = useRouteQuery('scope')
@@ -482,6 +481,7 @@ export default defineComponent({
     return {
       ...useFileActions({ store }),
       ...resourcesView,
+      configOptions,
       loadAvailableTagsTask,
       fileListHeaderY,
       fullTextSearchEnabled: computed(() => capabilityStore.searchContent?.enabled),
@@ -499,10 +499,9 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
     ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     },
     itemCount() {
       return this.totalFilesCount.files + this.totalFilesCount.folders

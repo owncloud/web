@@ -1,5 +1,4 @@
 import { useStore, useFileActionsDeleteResources } from '../../../../../src'
-import { ConfigurationManager } from '../../../../../src/configuration'
 import { mockDeep } from 'jest-mock-extended'
 import { FolderResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -9,17 +8,6 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { nextTick } from 'vue'
-
-jest.mock('../../../../../src/composables/configuration', () => ({
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        concurrentRequests: {
-          resourceBatchActions: 1
-        }
-      }
-    })
-}))
 
 const currentFolder = {
   id: '1',

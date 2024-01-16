@@ -4,14 +4,13 @@ import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { isLocationSharesActive } from '../../../router'
 import { useClientService } from '../../clientService'
-import { useConfigurationManager } from '../../configuration'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import { useMessages, useSpacesStore, useCapabilityStore } from '../../piniaStores'
+import { useMessages, useSpacesStore, useCapabilityStore, useConfigStore } from '../../piniaStores'
 
 export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -22,14 +21,14 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
 
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
-      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+      concurrency: configStore.options.concurrentRequests.resourceBatchActions
     })
     const hidden = !resources[0].hidden
 
@@ -45,7 +44,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
               hasShareJail: capabilityStore.spacesShareJail,
               client: clientService.owncloudSdk,
               spaces: spacesStore.spaces,
-              fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })
             if (share) {
               store.commit('Files/UPDATE_RESOURCE', share)

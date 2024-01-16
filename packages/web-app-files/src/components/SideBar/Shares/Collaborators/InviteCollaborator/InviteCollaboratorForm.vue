@@ -133,7 +133,7 @@ import { debounce } from 'lodash-es'
 import PQueue from 'p-queue'
 import { storeToRefs } from 'pinia'
 
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
@@ -150,11 +150,10 @@ import {
   FederatedUser,
   useCapabilityStore,
   useClientService,
-  useConfigurationManager,
-  useStore,
   useUserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
@@ -195,7 +194,6 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
@@ -206,10 +204,12 @@ export default defineComponent({
 
     const { user } = storeToRefs(userStore)
 
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
     const saving = ref(false)
     const savingDelayed = ref(false)
     const notifyEnabled = ref(false)
-    const configurationManager = useConfigurationManager()
 
     watch(saving, (newValue) => {
       if (!newValue) {
@@ -258,7 +258,7 @@ export default defineComponent({
     ]
 
     const createSharesConcurrentRequests = computed(() => {
-      return configurationManager.options.concurrentRequests.shares.create
+      return configStore.options.concurrentRequests.shares.create
     })
 
     return {
@@ -268,7 +268,8 @@ export default defineComponent({
       hasShareJail: capabilityRefs.spacesShareJail,
       hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
       minSearchLength: capabilityRefs.sharingSearchMinLength,
-      isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
+      isRunningOnEos: computed(() => configStore.options.runningOnEos),
+      configOptions,
       spaceMembers,
       addSpaceMember,
       user,
@@ -302,8 +303,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     $_announcementWhenCollaboratorAdded() {
       return this.$gettext('Person was added')
     },
@@ -364,7 +363,7 @@ export default defineComponent({
           query,
           'folder',
           1,
-          this.configuration?.options?.sharingRecipientsPerPage
+          this.configOptions.sharingRecipientsPerPage
         )
 
         const users = recipients.exact.users

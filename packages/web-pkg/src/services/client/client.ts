@@ -5,11 +5,10 @@ import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
-import { ConfigurationManager } from '../../configuration'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
-import { AuthStore } from '../../composables'
+import { AuthStore, ConfigStore } from '../../composables'
 
 interface OcClient {
   token: string
@@ -51,13 +50,13 @@ const createAxiosInstance = (authParams: AuthParameters, language: string): Axio
 }
 
 export interface ClientServiceOptions {
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   language: Language
   authStore: AuthStore
 }
 
 export class ClientService {
-  private configurationManager: ConfigurationManager
+  private configStore: ConfigStore
   private language: Language
   private authStore: AuthStore
 
@@ -71,7 +70,7 @@ export class ClientService {
   private webdavClient: WebDAV
 
   constructor(options: ClientServiceOptions) {
-    this.configurationManager = options.configurationManager
+    this.configStore = options.configStore
     this.language = options.language
     this.authStore = options.authStore
   }
@@ -99,7 +98,7 @@ export class ClientService {
 
   public get sseAuthenticated(): EventSource {
     return sse(
-      this.configurationManager.serverUrl,
+      this.configStore.serverUrl,
       createFetchOptions({ accessToken: this.authStore.accessToken }, this.currentLanguage)
     )
   }
@@ -126,7 +125,7 @@ export class ClientService {
       ...(!!authenticated && { token: this.authStore.accessToken }),
       language: this.currentLanguage,
       client: new _HttpClient({
-        baseURL: this.configurationManager.serverUrl,
+        baseURL: this.configStore.serverUrl,
         headers: {
           'Accept-Language': this.currentLanguage,
           ...(!!authenticated && { Authorization: 'Bearer ' + this.authStore.accessToken }),
@@ -139,7 +138,7 @@ export class ClientService {
 
   private getOcsClient(authParams: AuthParameters): OcClient {
     const { graph, ocs } = client(
-      this.configurationManager.serverUrl,
+      this.configStore.serverUrl,
       createAxiosInstance(authParams, this.currentLanguage)
     )
     return {

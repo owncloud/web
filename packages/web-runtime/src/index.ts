@@ -1,6 +1,6 @@
 import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { PortalTarget, configurationManager } from '@ownclouders/web-pkg'
+import { PortalTarget } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -50,15 +50,22 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { appsStore, authStore, capabilityStore, extensionRegistry, spacesStore, userStore } =
-    announcePiniaStores()
+  const {
+    appsStore,
+    authStore,
+    configStore,
+    capabilityStore,
+    extensionRegistry,
+    spacesStore,
+    userStore
+  } = announcePiniaStores()
 
   app.provide('$router', router)
 
-  const runtimeConfiguration = await announceConfiguration(configurationPath)
-  startSentry(runtimeConfiguration, app)
+  await announceConfiguration({ path: configurationPath, configStore })
+  startSentry(configStore, app)
 
-  const store = await announceStore({ runtimeConfiguration, appsStore })
+  const store = announceStore()
   app.provide('store', store)
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
@@ -72,8 +79,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceClientService({
     app,
-    runtimeConfiguration,
-    configurationManager,
+    configStore,
     userStore,
     authStore,
     capabilityStore
@@ -81,7 +87,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
-    store.getters.configuration.server || window.location.origin,
+    configStore.serverUrl,
     computed(
       () =>
         capabilityStore.filesArchivers || [
@@ -89,7 +95,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
             enabled: true,
             version: '1.0.0',
             formats: ['tar', 'zip'],
-            archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
+            archiver_url: `${configStore.serverUrl}index.php/apps/files/ajax/download.php`
           }
         ]
     )
@@ -98,14 +104,13 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announceLoadingService({ app })
   announcePreviewService({
     app,
-    store,
-    configurationManager,
+    configStore,
     userStore,
     authStore,
     capabilityStore
   })
   announcePasswordPolicyService({ app })
-  await announceClient(runtimeConfiguration)
+  await announceClient(configStore)
 
   app.config.globalProperties.$wormhole = createWormhole()
   app.use(PortalVue, {
@@ -117,16 +122,15 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   const applicationsPromise = initializeApplications({
     app,
-    runtimeConfiguration,
-    configurationManager,
+    configStore,
     store,
     supportedLanguages,
     router,
     gettext
   })
 
-  const customTranslationsPromise = loadCustomTranslations({ configurationManager })
-  const themePromise = announceTheme({ app, designSystem, runtimeConfiguration })
+  const customTranslationsPromise = loadCustomTranslations({ configStore })
+  const themePromise = announceTheme({ app, designSystem, configStore })
   const [customTranslations] = await Promise.all([
     customTranslationsPromise,
     applicationsPromise,
@@ -137,15 +141,15 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceAuthService({
     app,
-    configurationManager,
+    configStore,
     router,
     userStore,
     authStore,
     capabilityStore
   })
-  announceCustomStyles({ runtimeConfiguration })
-  announceCustomScripts({ runtimeConfiguration })
-  announceDefaults({ store, appsStore, router, extensionRegistry })
+  announceCustomStyles({ configStore })
+  announceCustomScripts({ configStore })
+  announceDefaults({ store, appsStore, router, extensionRegistry, configStore })
 
   app.use(router)
   app.use(store)
@@ -191,7 +195,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       // Register SSE event listeners
       if (capabilityStore.supportSSE) {
-        registerSSEEventListeners({ store, clientService, configurationManager })
+        registerSSEEventListeners({ store, clientService, configStore })
       }
 
       // Load spaces to make them available across the application
@@ -229,7 +233,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         id: publicLinkToken,
         name: app.config.globalProperties.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
-        serverUrl: configurationManager.serverUrl,
+        serverUrl: configStore.serverUrl,
         publicLinkType: publicLinkType
       })
 
@@ -260,15 +264,14 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 }
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
-  const { appsStore } = announcePiniaStores()
-  const store = await announceStore({ runtimeConfiguration: {}, appsStore })
-  const { capabilityStore } = announcePiniaStores()
+  const store = announceStore()
+  const { capabilityStore, configStore } = announcePiniaStores()
   announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
-  await announceTheme({ app, designSystem })
+  await announceTheme({ app, designSystem, configStore })
   console.error(err)
   app.use(store)
-  await announceTranslations({
+  announceTranslations({
     app,
     availableLanguages: supportedLanguages,
     translations

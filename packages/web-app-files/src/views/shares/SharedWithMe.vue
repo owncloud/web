@@ -101,7 +101,8 @@ import {
   AppLoadingSpinner,
   FileSideBar,
   InlineFilterOption,
-  ItemFilter
+  ItemFilter,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
@@ -131,6 +132,7 @@ export default defineComponent({
 
   setup() {
     const { openWithDefaultApp } = useOpenWithDefaultApp()
+    const configStore = useConfigStore()
 
     const {
       areResourcesLoading,
@@ -221,7 +223,7 @@ export default defineComponent({
     const { getMatchingSpace } = useGetMatchingSpace()
     const store = useStore()
 
-    const displayThumbnails = computed(() => store.getters.configuration?.options?.disablePreviews)
+    const displayThumbnails = computed(() => configStore.options.disablePreviews)
 
     const selectedShareSpace = computed(() => {
       if (unref(selectedResources).length !== 1) {

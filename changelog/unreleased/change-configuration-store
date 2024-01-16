@@ -1,0 +1,8 @@
+Change: Configuration store to pinia
+
+BREAKING CHANGE for developers: Configuration is no longer stored in a vuex store but in pinia instead. You can access it via the new `useConfigStore` composable. The `ConfigurationManager` has also been removed in favour of this composable.
+
+For more details please see the linked PR down below.
+
+https://github.com/owncloud/web/pull/10336
+https://github.com/owncloud/web/issues/10210

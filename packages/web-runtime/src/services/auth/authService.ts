@@ -1,7 +1,12 @@
 import { UserManager } from './userManager'
 import { PublicLinkManager } from './publicLinkManager'
-import { AuthStore, ClientService, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import {
+  AuthStore,
+  ClientService,
+  UserStore,
+  CapabilityStore,
+  ConfigStore
+} from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
   extractPublicLinkToken,
@@ -17,7 +22,7 @@ import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export class AuthService {
   private clientService: ClientService
-  private configurationManager: ConfigurationManager
+  private configStore: ConfigStore
   private router: Router
   private userManager: UserManager
   private publicLinkManager: PublicLinkManager
@@ -30,7 +35,7 @@ export class AuthService {
   public hasAuthErrorOccurred: boolean
 
   public initialize(
-    configurationManager: ConfigurationManager,
+    configStore: ConfigStore,
     clientService: ClientService,
     router: Router,
     ability: Ability,
@@ -39,7 +44,7 @@ export class AuthService {
     authStore: AuthStore,
     capabilityStore: CapabilityStore
   ): void {
-    this.configurationManager = configurationManager
+    this.configStore = configStore
     this.clientService = clientService
     this.router = router
     this.hasAuthErrorOccurred = false
@@ -82,7 +87,7 @@ export class AuthService {
     if (!this.userManager) {
       this.userManager = new UserManager({
         clientService: this.clientService,
-        configurationManager: this.configurationManager,
+        configStore: this.configStore,
         ability: this.ability,
         language: this.language,
         userStore: this.userStore,
@@ -151,13 +156,12 @@ export class AuthService {
           }
 
           // handle redirect after logout
-          if (this.configurationManager.isOAuth2) {
-            const oAuth2 = this.configurationManager.oAuth2
+          if (this.configStore.isOAuth2) {
+            const oAuth2 = this.configStore.oAuth2
             if (oAuth2.logoutUrl) {
               return (window.location = oAuth2.logoutUrl as any)
             }
-            return (window.location =
-              `${this.configurationManager.serverUrl}/index.php/logout` as any)
+            return (window.location = `${this.configStore.serverUrl}/index.php/logout` as any)
           }
         })
         this.userManager.events.addSilentRenewError(async (error) => {
@@ -171,8 +175,8 @@ export class AuthService {
       // This is to prevent issues in embed mode when the expired token is still saved but already expired
       // If the following code gets executed, it would toggle errorOccurred var which would then lead to redirect to the access denied screen
       if (
-        this.configurationManager.options.embed?.enabled &&
-        this.configurationManager.options.embed.delegateAuthentication
+        this.configStore.options.embed?.enabled &&
+        this.configStore.options.embed.delegateAuthentication
       ) {
         return
       }
@@ -204,8 +208,8 @@ export class AuthService {
   public async signInCallback(accessToken?: string) {
     try {
       if (
-        this.configurationManager.options.embed.enabled &&
-        this.configurationManager.options.embed.delegateAuthentication &&
+        this.configStore.options.embed.enabled &&
+        this.configStore.options.embed.delegateAuthentication &&
         accessToken
       ) {
         console.debug('[authService:signInCallback] - setting access_token and fetching user')
@@ -309,8 +313,8 @@ export class AuthService {
 
   private handleDelegatedTokenUpdate(event: MessageEvent): void {
     if (
-      this.configurationManager.options.embed?.delegateAuthenticationOrigin &&
-      event.origin !== this.configurationManager.options.embed.delegateAuthenticationOrigin
+      this.configStore.options.embed?.delegateAuthenticationOrigin &&
+      event.origin !== this.configStore.options.embed.delegateAuthenticationOrigin
     ) {
       return
     }

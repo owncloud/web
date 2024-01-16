@@ -13,7 +13,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { CapabilityStore, ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
+import { CapabilityStore, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 
 const mockCreateFolder = jest.fn()
@@ -24,14 +24,6 @@ jest.mock('web-app-files/src/composables/keyboardActions')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useBreadcrumbsFromPath: jest.fn(),
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    }),
   useFileActionsCreateNewFolder: () => ({
     actions: [{ handler: mockCreateFolder }]
   }),
@@ -302,19 +294,7 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: function () {
-        return {
-          options: {
-            runningOnEos
-          }
-        }
-      }
-    }
-  }
+  const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
   const propsData = {
     space,
@@ -333,7 +313,12 @@ function getMountedWrapper({
       props: propsData,
       global: {
         plugins: [
-          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
+          ...defaultPlugins({
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { runningOnEos } }
+            }
+          }),
           store
         ],
         mocks: defaultMocks,

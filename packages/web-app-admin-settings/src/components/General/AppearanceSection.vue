@@ -50,7 +50,6 @@ import {
   useGeneralActionsUploadLogo
 } from '../../composables/actions/general'
 import { supportedLogoMimeTypes } from '../../defaults'
-import { useStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
@@ -59,7 +58,6 @@ export default defineComponent({
     ContextActionMenu
   },
   setup() {
-    const store = useStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
 

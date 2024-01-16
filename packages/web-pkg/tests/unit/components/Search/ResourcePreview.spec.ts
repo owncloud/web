@@ -92,14 +92,6 @@ function getWrapper({
           areFileExtensionsShown
         }
       }
-    },
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: () => ({
-        options: {
-          disablePreviews: true
-        }
-      })
     }
   }
   const store = createStore(storeOptions)
@@ -117,7 +109,15 @@ function getWrapper({
         provide: mocks,
         renderStubDefaultSlot: true,
         mocks,
-        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { disablePreviews: true } }
+            }
+          }),
+          store
+        ]
       }
     })
   }

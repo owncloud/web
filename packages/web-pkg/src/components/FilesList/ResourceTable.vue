@@ -216,7 +216,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -225,12 +225,12 @@ import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/sha
 import {
   SortDir,
   ViewModeConstants,
-  useConfigurationManager,
   useGetMatchingSpace,
   useFolderLink,
   useEmbedMode,
   useAuthStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -451,9 +451,11 @@ export default defineComponent({
   setup(props, context) {
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
-    const configurationManager = useConfigurationManager()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { isLocationPicker } = useEmbedMode()
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const authStore = useAuthStore()
     const { userContextReady } = storeToRefs(authStore)
@@ -484,7 +486,7 @@ export default defineComponent({
     })
 
     return {
-      configurationManager,
+      configOptions,
       dragItem,
       ghostElement,
       getTagToolTip,
@@ -521,7 +523,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
     ...mapState('Files', [
       'areFileExtensionsShown',
       'latestSelectedId',
@@ -716,7 +717,7 @@ export default defineComponent({
       return fields
     },
     lazyLoading() {
-      return this.configuration?.options?.displayResourcesLazy
+      return this.configOptions.displayResourcesLazy
     },
     areAllResourcesSelected() {
       return this.selectedResources.length === this.resources.length - this.disabledResources.length
@@ -731,7 +732,7 @@ export default defineComponent({
       return this.$gettext('Show context menu')
     },
     hoverableQuickActions() {
-      return this.configuration?.options?.hoverableQuickActions
+      return this.configOptions.hoverableQuickActions
     },
     dragSelection() {
       const selection = [...this.selectedResources]

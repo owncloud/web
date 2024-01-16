@@ -3,16 +3,6 @@ import { runtimeModuleMockOptions } from './runtimeModuleMockOptions'
 
 export const defaultStoreMockOptions = {
   commit: jest.fn(),
-  getters: {
-    configuration: jest.fn().mockImplementation(() => ({
-      options: {
-        editor: {
-          autosaveEnabled: false,
-          autosaveInterval: 120
-        }
-      }
-    }))
-  },
   modules: {
     ...filesModuleMockOptions,
     ...runtimeModuleMockOptions,

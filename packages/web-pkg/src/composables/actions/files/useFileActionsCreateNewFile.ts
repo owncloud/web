@@ -18,10 +18,15 @@ import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager } from '../../../configuration'
 import { stringify } from 'qs'
 import { AncestorMetaData } from '../../../types'
-import { useMessages, useModals, useUserStore, useCapabilityStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useUserStore,
+  useCapabilityStore,
+  useConfigStore
+} from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
 
 export const useFileActionsCreateNewFile = ({
@@ -36,6 +41,7 @@ export const useFileActionsCreateNewFile = ({
   mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
   store = store || useStore()
+  const configStore = useConfigStore()
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const capabilityStore = useCapabilityStore()
@@ -89,10 +95,7 @@ export const useFileActionsCreateNewFile = ({
       return
     }
     try {
-      const baseUrl = urlJoin(
-        configurationManager.serverUrl,
-        capabilityStore.filesAppProviders[0].new_url
-      )
+      const baseUrl = urlJoin(configStore.serverUrl, capabilityStore.filesAppProviders[0].new_url)
       const query = stringify({
         parent_container_id: unref(currentFolder).fileId,
         filename: fileName

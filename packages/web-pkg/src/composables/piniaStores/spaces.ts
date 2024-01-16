@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import { Graph, SpaceResource } from '@ownclouders/web-client'
-import { configurationManager } from '../../configuration'
 import {
   ShareType,
   buildSpace,
@@ -14,6 +13,7 @@ import {
 import type { Share, ShareRole } from '@ownclouders/web-client/src/helpers'
 import type { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { useUserStore } from './user'
+import { ConfigStore, useConfigStore } from './config'
 
 export const sortSpaceMembers = (shares: Share[]) => {
   const sortedManagers = shares
@@ -29,10 +29,12 @@ export const sortSpaceMembers = (shares: Share[]) => {
 
 export const getSpacesByType = async ({
   graphClient,
-  driveType
+  driveType,
+  configStore
 }: {
   graphClient: Graph
   driveType: string
+  configStore: ConfigStore
 }) => {
   const graphResponse = await graphClient.drives.listMyDrives(
     'name asc',
@@ -43,9 +45,9 @@ export const getSpacesByType = async ({
   }
 
   const mountpoints = graphResponse.data.value.map((space) =>
-    buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+    buildSpace({ ...space, serverUrl: configStore.serverUrl })
   )
-  if (driveType !== 'mountpoint' || !configurationManager.options.routing?.fullShareOwnerPaths) {
+  if (driveType !== 'mountpoint' || !configStore.options.routing?.fullShareOwnerPaths) {
     return mountpoints
   }
 
@@ -63,7 +65,7 @@ export const getSpacesByType = async ({
       driveType: driveAlias.split('/')[0], // FIXME: can we retrieve this from api?
       driveAlias,
       path: '/',
-      serverUrl: configurationManager.serverUrl
+      serverUrl: configStore.serverUrl
     })
   )
 
@@ -72,6 +74,7 @@ export const getSpacesByType = async ({
 
 export const useSpacesStore = defineStore('spaces', () => {
   const userStore = useUserStore()
+  const configStore = useConfigStore()
 
   const spaces = ref<SpaceResource[]>([])
   const spaceMembers = ref<Share[]>([])
@@ -144,8 +147,8 @@ export const useSpacesStore = defineStore('spaces', () => {
        *    fetched first. but at the moment fetching mountpoints is kind of expensive, so we need to accept that for now.
        */
       const [personalSpaces, projectSpaces] = await Promise.all([
-        getSpacesByType({ graphClient, driveType: 'personal' }),
-        getSpacesByType({ graphClient, driveType: 'project' })
+        getSpacesByType({ graphClient, driveType: 'personal', configStore }),
+        getSpacesByType({ graphClient, driveType: 'project', configStore })
       ])
 
       addSpaces([...personalSpaces, ...projectSpaces])
@@ -161,7 +164,11 @@ export const useSpacesStore = defineStore('spaces', () => {
       return
     }
     try {
-      const mountPointSpaces = await getSpacesByType({ graphClient, driveType: 'mountpoint' })
+      const mountPointSpaces = await getSpacesByType({
+        graphClient,
+        driveType: 'mountpoint',
+        configStore
+      })
       addSpaces(mountPointSpaces)
     } finally {
       mountPointsInitialized.value = true
@@ -169,7 +176,7 @@ export const useSpacesStore = defineStore('spaces', () => {
   }
 
   const reloadProjectSpaces = async ({ graphClient }: { graphClient: Graph }) => {
-    const projectSpaces = await getSpacesByType({ graphClient, driveType: 'project' })
+    const projectSpaces = await getSpacesByType({ graphClient, driveType: 'project', configStore })
     spaces.value = unref(spaces).filter((s) => !isProjectSpaceResource(s))
     addSpaces(projectSpaces)
   }

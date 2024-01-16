@@ -13,12 +13,11 @@ import { createFileRouteOptions } from '../../../helpers/router'
 import { renameResource as _renameResource } from '../../../helpers/resource'
 import { computed } from 'vue'
 import { useClientService } from '../../clientService'
-import { useConfigurationManager } from '../../configuration'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useModals, useCapabilityStore } from '../../piniaStores'
+import { useMessages, useModals, useCapabilityStore, useConfigStore } from '../../piniaStores'
 
 export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -27,7 +26,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
   const { dispatchModal } = useModals()
 
   const getNameErrorMsg = (resource: Resource, newName: string, parentResources = undefined) => {
@@ -221,7 +220,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
 
         // FIXME: Remove this check as soon as renaming shares works as expected
         // see https://github.com/owncloud/ocis/issues/4866
-        const rootShareIncluded = configurationManager.options.routing.fullShareOwnerPaths
+        const rootShareIncluded = configStore.options.routing.fullShareOwnerPaths
           ? resources.some((r) => r.shareRoot && r.path)
           : resources.some((r) => r.shareId && r.path === '/')
         if (rootShareIncluded) {

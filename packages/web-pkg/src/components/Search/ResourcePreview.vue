@@ -17,12 +17,18 @@ import { ImageDimension } from '../../constants'
 import { VisibilityObserver } from '../../observer'
 import { debounce } from 'lodash-es'
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
-import { mapGetters } from 'vuex'
-import { useGetMatchingSpace, useFileActions, useFolderLink, useStore } from '../../composables'
+import {
+  useGetMatchingSpace,
+  useFileActions,
+  useFolderLink,
+  useStore,
+  useConfigStore
+} from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -51,6 +57,9 @@ export default defineComponent({
       getFolderLink
     } = useFolderLink()
     const store = useStore()
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
     const previewData = ref()
 
     const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
@@ -92,6 +101,7 @@ export default defineComponent({
     })
 
     return {
+      configOptions,
       space,
       previewData,
       resource,
@@ -109,13 +119,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     displayThumbnails() {
-      return (
-        !this.configuration?.options?.disablePreviews &&
-        !isResourceTxtFileAlmostEmpty(this.resource)
-      )
+      return !this.configOptions.disablePreviews && !isResourceTxtFileAlmostEmpty(this.resource)
     }
   },
   mounted() {

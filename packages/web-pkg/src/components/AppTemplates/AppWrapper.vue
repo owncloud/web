@@ -55,7 +55,8 @@ import {
   useModals,
   useMessages,
   useSpacesStore,
-  useAppsStore
+  useAppsStore,
+  useConfigStore
 } from '../../composables'
 import {
   Action,
@@ -116,6 +117,7 @@ export default defineComponent({
     const { selectedResources } = useSelectedResources({ store })
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
+    const configStore = useConfigStore()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -370,7 +372,7 @@ export default defineComponent({
       if (!unref(isEditor)) {
         return
       }
-      const editorOptions = store.getters.configuration.options.editor
+      const editorOptions = configStore.options.editor
       if (editorOptions.autosaveEnabled) {
         autosaveIntervalId = setInterval(
           async () => {

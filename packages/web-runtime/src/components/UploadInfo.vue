@@ -156,12 +156,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
 import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager, useCapabilityStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import {
   formatFileSize,
   UppyResource,
@@ -177,8 +176,11 @@ export default defineComponent({
   setup() {
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     return {
+      configOptions,
       hasShareJail: capabilityRefs.spacesShareJail
     }
   },
@@ -204,8 +206,6 @@ export default defineComponent({
     disableActions: false // disables the following actions: pause, resume, retry
   }),
   computed: {
-    ...mapGetters(['configuration']),
-
     uploadDetails() {
       if (!this.uploadSpeed || !this.runningUploads) {
         return ''
@@ -262,7 +262,7 @@ export default defineComponent({
       )
     },
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     },
     uploadsPausable() {
       return this.$uppyService.tusActive()
@@ -520,7 +520,7 @@ export default defineComponent({
         },
         query: {
           ...file.targetRoute.query,
-          ...(configurationManager.options.routing.idBased &&
+          ...(this.configOptions.routing.idBased &&
             !isUndefined(file.meta.fileId) && { fileId: file.meta.fileId })
         }
       }
@@ -530,7 +530,7 @@ export default defineComponent({
         ...file.targetRoute,
         query: {
           ...file.targetRoute.query,
-          ...(configurationManager.options.routing.idBased &&
+          ...(this.configOptions.routing.idBased &&
             !isUndefined(file.meta.currentFolderId) && { fileId: file.meta.currentFolderId })
         }
       }

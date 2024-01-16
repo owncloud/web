@@ -1,4 +1,9 @@
-import { AppWrapperRoute, defineWebApplication, useCapabilityStore } from '@ownclouders/web-pkg'
+import {
+  AppWrapperRoute,
+  defineWebApplication,
+  useCapabilityStore,
+  useConfigStore
+} from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
 import store from './store'
@@ -25,6 +30,7 @@ const routes = [
 export default defineWebApplication({
   setup() {
     const capabilityStore = useCapabilityStore()
+    const configStore = useConfigStore()
 
     return {
       appInfo,
@@ -32,7 +38,7 @@ export default defineWebApplication({
       store,
       translations,
       ready({ store }) {
-        store.dispatch('External/fetchMimeTypes', { capabilityStore })
+        store.dispatch('External/fetchMimeTypes', { capabilityStore, configStore })
       }
     }
   }

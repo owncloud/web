@@ -205,15 +205,7 @@ function getWrapper({
   currentRouteName = 'files-spaces-generic',
   ancestorMetaData = {}
 } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: jest.fn(() => ({
-        options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
-      }))
-    }
-  }
+  const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
@@ -231,7 +223,10 @@ function getWrapper({
             piniaOptions: {
               userState: { user },
               spacesState: { spaceMembers },
-              capabilityState: { capabilities }
+              capabilityState: { capabilities },
+              configState: {
+                options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
+              }
             }
           }),
           store

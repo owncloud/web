@@ -1,5 +1,4 @@
 import { registerClient } from '../services/clientRegistration'
-import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
@@ -22,7 +21,10 @@ import {
   useExtensionRegistry,
   ExtensionRegistry,
   useAppsStore,
-  AppsStore
+  AppsStore,
+  useConfigStore,
+  ConfigStore,
+  RawConfig
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -34,7 +36,6 @@ import {
 } from '@ownclouders/web-pkg'
 import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
-import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
 import { merge } from 'lodash-es'
@@ -51,6 +52,10 @@ import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { getExtensionNavItems } from '../helpers/navItems'
+import {
+  RawConfigSchema,
+  SentryConfig
+} from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -92,15 +97,23 @@ const getEmbedConfigFromQuery = (
  *
  * @param path - path to main configuration
  */
-export const announceConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
+export const announceConfiguration = async ({
+  path,
+  configStore
+}: {
+  path: string
+  configStore: ConfigStore
+}) => {
   const request = await fetch(path, { headers: { 'X-Request-ID': uuidV4() } })
   if (request.status !== 200) {
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  const rawConfig = (await request.json().catch((error) => {
+  const data = await request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
-  })) as RawConfig
+  })
+
+  const rawConfig = RawConfigSchema.parse(data)
 
   const embedConfigFromQuery = getEmbedConfigFromQuery(
     rawConfig.options?.embed &&
@@ -112,27 +125,15 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
     embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery }
   }
 
-  configurationManager.initialize(rawConfig)
-  // TODO: we might want to get rid of exposing the raw config. needs more refactoring though.
-  return rawConfig
+  configStore.loadConfig(rawConfig)
 }
 
 /**
  * Announce and prepare vuex store with data that is needed before any application gets announced.
  *
- * @param vue
- * @param runtimeConfiguration
- * @param language
  */
-export const announceStore = async ({
-  runtimeConfiguration,
-  appsStore
-}: {
-  runtimeConfiguration: RuntimeConfiguration
-  appsStore: AppsStore
-}): Promise<any> => {
+export const announceStore = () => {
   const store = new Store({ ...storeOptions })
-  await store.dispatch('loadConfig', { config: runtimeConfiguration, appsStore })
   return store
 }
 
@@ -140,12 +141,12 @@ export const announceStore = async ({
  * announce auth client to the runtime, currently only openIdConnect is supported here
  *
  * @remarks
- * if runtimeConfiguration does not ship any options for openIdConnect this step get skipped
+ * if config does not ship any options for openIdConnect this step get skipped
  *
- * @param runtimeConfiguration
+ * @param configStore
  */
-export const announceClient = async (runtimeConfiguration: RuntimeConfiguration): Promise<void> => {
-  const { openIdConnect = {} } = runtimeConfiguration
+export const announceClient = async (configStore: ConfigStore): Promise<void> => {
+  const openIdConnect = configStore.openIdConnect || {}
 
   if (!openIdConnect.dynamic) {
     return
@@ -162,7 +163,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * - bulk register all applications, no other application is guaranteed to be registered here, don't request one
  *
  * @param app
- * @param runtimeConfiguration
+ * @param configStore
  * @param store
  * @param router
  * @param translations
@@ -170,34 +171,29 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  */
 export const initializeApplications = async ({
   app,
-  runtimeConfiguration,
-  configurationManager,
+  configStore,
   store,
   router,
   gettext,
   supportedLanguages
 }: {
   app: App
-  runtimeConfiguration: RuntimeConfiguration
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   store: Store<unknown>
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication[]> => {
-  const { apps: internalApplications = [], external_apps: externalApplications = [] } =
-    rewriteDeprecatedAppNames(runtimeConfiguration)
-
   type RawApplication = {
-    path: string
+    path?: string
     config?: AppConfigObject
   }
 
   const rawApplications: RawApplication[] = [
-    ...internalApplications.map((application) => ({
+    ...rewriteDeprecatedAppNames(configStore).map((application) => ({
       path: `web-app-${application}`
     })),
-    ...externalApplications
+    ...configStore.externalApps
   ]
 
   const applicationResults = await Promise.allSettled(
@@ -210,7 +206,7 @@ export const initializeApplications = async ({
         supportedLanguages,
         router,
         gettext,
-        configurationManager
+        configStore
       })
     )
   )
@@ -282,26 +278,21 @@ export const announceApplicationsReady = async ({
 /**
  * Rewrites old names of renamed apps to their new name and prints a warning to adjust configuration to the respective new app name.
  *
- * @param {RuntimeConfiguration} runtimeConfiguration
+ * @param {ConfigStore} configStore
  */
-const rewriteDeprecatedAppNames = (
-  runtimeConfiguration: RuntimeConfiguration
-): RuntimeConfiguration => {
+const rewriteDeprecatedAppNames = (configStore: ConfigStore) => {
   const appAliases = [
     { name: 'preview', oldName: 'media-viewer' },
     { name: 'text-editor', oldName: 'markdown-editor' }
   ]
-  return {
-    ...runtimeConfiguration,
-    apps: runtimeConfiguration.apps.map((appName) => {
-      const appAlias = appAliases.find((appAlias) => appAlias.oldName === appName)
-      if (appAlias) {
-        console.warn(`app "${appAlias.oldName}" has been renamed, use "${appAlias.name}" instead.`)
-        return appAlias.name
-      }
-      return appName
-    })
-  }
+  return configStore.apps.map((appName) => {
+    const appAlias = appAliases.find((appAlias) => appAlias.oldName === appName)
+    if (appAlias) {
+      console.warn(`app "${appAlias.oldName}" has been renamed, use "${appAlias.name}" instead.`)
+      return appAlias.name
+    }
+    return appName
+  })
 }
 
 /**
@@ -316,17 +307,17 @@ const rewriteDeprecatedAppNames = (
 export const announceTheme = async ({
   app,
   designSystem,
-  runtimeConfiguration
+  configStore
 }: {
   app: App
   designSystem: any
-  runtimeConfiguration?: RuntimeConfiguration
+  configStore: ConfigStore
 }): Promise<void> => {
   const themeStore = useThemeStore()
   const { initializeThemes } = themeStore
   const { currentTheme } = storeToRefs(themeStore)
 
-  const webTheme = await loadTheme(runtimeConfiguration?.theme)
+  const webTheme = await loadTheme(configStore.theme)
 
   await initializeThemes(webTheme)
 
@@ -339,7 +330,8 @@ export const announcePiniaStores = () => {
   const appsStore = useAppsStore()
   const authStore = useAuthStore()
   const capabilityStore = useCapabilityStore()
-  const extensionRegistry = useExtensionRegistry({ configurationManager })
+  const extensionRegistry = useExtensionRegistry()
+  const configStore = useConfigStore()
   const messagesStore = useMessages()
   const modalStore = useModals()
   const spacesStore = useSpacesStore()
@@ -350,6 +342,7 @@ export const announcePiniaStores = () => {
     authStore,
     capabilityStore,
     extensionRegistry,
+    configStore,
     messagesStore,
     modalStore,
     spacesStore,
@@ -389,29 +382,26 @@ export const announceAdditionalTranslations = ({
  * announce clientService and owncloud SDK and inject it into vue
  *
  * @param vue
- * @param runtimeConfiguration
- * @param configurationManager
+ * @param configStore
  * @param store
  */
 export const announceClientService = ({
   app,
-  runtimeConfiguration,
-  configurationManager,
+  configStore,
   userStore,
   authStore,
   capabilityStore
 }: {
   app: App
-  runtimeConfiguration: RuntimeConfiguration
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
 }): void => {
   const sdk = new OwnCloud()
-  sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
+  sdk.init({ baseUrl: configStore.serverUrl })
   const clientService = new ClientService({
-    configurationManager,
+    configStore,
     language: app.config.globalProperties.$language,
     authStore
   })
@@ -421,7 +411,7 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk,
     accessToken: computed(() => authStore.accessToken),
-    baseUrl: runtimeConfiguration.server,
+    baseUrl: configStore.serverUrl,
     capabilities: computed(() => capabilityStore.capabilities),
     clientService: app.config.globalProperties.$clientService,
     language: computed(() => app.config.globalProperties.$language.current),
@@ -456,31 +446,28 @@ export const announceUppyService = ({ app }: { app: App }): void => {
 /**
  * @param vue
  * @param store
- * @param configurationManager
+ * @param configStore
  */
 export const announcePreviewService = ({
   app,
-  store,
-  configurationManager,
+  configStore,
   userStore,
   authStore,
   capabilityStore
 }: {
   app: App
-  store: Store<any>
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
 }): void => {
   const clientService = app.config.globalProperties.$clientService
   const previewService = new PreviewService({
-    store,
     clientService,
-    configurationManager,
     userStore,
     authStore,
-    capabilityStore
+    capabilityStore,
+    configStore
   })
   app.config.globalProperties.$previewService = previewService
   app.provide('$previewService', previewService)
@@ -490,20 +477,20 @@ export const announcePreviewService = ({
  * announce authService and inject it into vue
  *
  * @param vue
- * @param configurationManager
+ * @param configStore
  * @param store
  * @param router
  */
 export const announceAuthService = ({
   app,
-  configurationManager,
+  configStore,
   router,
   userStore,
   authStore,
   capabilityStore
 }: {
   app: App
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   router: Router
   userStore: UserStore
   authStore: AuthStore
@@ -513,7 +500,7 @@ export const announceAuthService = ({
   const language = app.config.globalProperties.$language
   const clientService = app.config.globalProperties.$clientService
   authService.initialize(
-    configurationManager,
+    configStore,
     clientService,
     router,
     ability,
@@ -544,19 +531,20 @@ export const announcePasswordPolicyService = ({ app }: { app: App }): void => {
  * @param router
  */
 export const announceDefaults = ({
-  store,
   appsStore,
+  extensionRegistry,
   router,
-  extensionRegistry
+  configStore
 }: {
   store: Store<unknown>
   appsStore: AppsStore
   router: Router
   extensionRegistry: ExtensionRegistry
+  configStore: ConfigStore
 }): void => {
   // set home route
   const appIds = appsStore.appIds
-  let defaultExtensionId = store.getters.configuration.options.defaultExtension
+  let defaultExtensionId = configStore.options.defaultExtension
   if (!defaultExtensionId || appIds.indexOf(defaultExtensionId) < 0) {
     defaultExtensionId = appIds[0]
   }
@@ -598,13 +586,19 @@ export const announceVersions = ({
  * starts the sentry monitor
  *
  * @remarks
- * if runtimeConfiguration does not contain dsn sentry will not be started
+ * if config does not contain dsn sentry will not be started
  *
- * @param runtimeConfiguration
+ * @param configStore
+ * @param app
  */
-export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App): void => {
-  if (runtimeConfiguration.sentry?.dsn) {
-    const { dsn, environment = 'production', ...moreSentryOptions } = runtimeConfiguration.sentry
+export const startSentry = (configStore: ConfigStore, app: App): void => {
+  if (configStore.sentry?.dsn) {
+    const {
+      dsn,
+      environment = 'production',
+      transportOptions,
+      ...moreSentryOptions
+    } = configStore.sentry
 
     sentryInit({
       app,
@@ -612,6 +606,7 @@ export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App
       environment,
       attachProps: true,
       logErrors: true,
+      transportOptions: transportOptions as SentryConfig['transportOptions'],
       ...moreSentryOptions
     })
   }
@@ -620,16 +615,10 @@ export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App
 /**
  * announceCustomScripts injects custom header scripts.
  *
- * @param runtimeConfiguration
+ * @param configStore
  */
-export const announceCustomScripts = ({
-  runtimeConfiguration
-}: {
-  runtimeConfiguration?: RuntimeConfiguration
-}): void => {
-  const { scripts = [] } = runtimeConfiguration
-
-  scripts.forEach(({ src = '', async = false }) => {
+export const announceCustomScripts = ({ configStore }: { configStore?: ConfigStore }): void => {
+  configStore.scripts.forEach(({ src = '', async = false }) => {
     if (!src) {
       return
     }
@@ -644,16 +633,10 @@ export const announceCustomScripts = ({
 /**
  * announceCustomStyles injects custom header styles.
  *
- * @param runtimeConfiguration
+ * @param configStore
  */
-export const announceCustomStyles = ({
-  runtimeConfiguration
-}: {
-  runtimeConfiguration?: RuntimeConfiguration
-}): void => {
-  const { styles = [] } = runtimeConfiguration
-
-  styles.forEach(({ href = '' }) => {
+export const announceCustomStyles = ({ configStore }: { configStore?: ConfigStore }): void => {
+  configStore.styles.forEach(({ href = '' }) => {
     if (!href) {
       return
     }
@@ -731,14 +714,14 @@ const onSSEProcessingFinishedEvent = ({
 export const registerSSEEventListeners = ({
   store,
   clientService,
-  configurationManager
+  configStore
 }: {
   store: Store<unknown>
   clientService: ClientService
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
 }): void => {
   const resourceQueue = new PQueue({
-    concurrency: configurationManager.options.concurrentRequests.sse
+    concurrency: configStore.options.concurrentRequests.sse
   })
   store.watch(
     (state, getters) => getters['Files/currentFolder'],

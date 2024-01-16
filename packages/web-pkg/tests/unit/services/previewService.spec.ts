@@ -1,13 +1,13 @@
 import { ClientService, PreviewService } from '../../../src/services'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { ConfigurationManager } from '../../../src/configuration'
-import { createStore, createTestingPinia, defaultStoreMockOptions } from 'web-test-helpers'
+import { createTestingPinia } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { AxiosResponse } from 'axios'
 import {
   useAuthStore,
   useUserStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore
 } from '../../../src/composables/piniaStores'
 import { User } from '@ownclouders/web-client/src/generated'
 
@@ -134,28 +134,25 @@ const getWrapper = ({
   version = undefined,
   accessToken = 'token'
 } = {}) => {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const clientService = mockDeep<ClientService>()
   clientService.httpAuthenticated.get.mockResolvedValue({ data: {}, status: 200 } as AxiosResponse)
   clientService.httpUnAuthenticated.head.mockResolvedValue({
     data: {},
     status: 200
   } as AxiosResponse)
-  const configurationManager = mock<ConfigurationManager>()
-  configurationManager.serverUrl = 'https://someUrl.com'
 
   createTestingPinia({ initialState: { user: { user: mock<User>() }, auth: { accessToken } } })
   const userStore = useUserStore()
   const authStore = useAuthStore()
   const capabilityStore = useCapabilityStore()
+  const configStore = useConfigStore()
+
   capabilityStore.capabilities.files = { thumbnail: { supportedMimeTypes, version } }
 
   return {
     previewService: new PreviewService({
-      store,
+      configStore,
       clientService,
-      configurationManager,
       userStore,
       authStore,
       capabilityStore

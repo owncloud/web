@@ -1,4 +1,3 @@
-import { mock } from 'jest-mock-extended'
 import {
   createStore,
   defaultComponentMocks,
@@ -6,20 +5,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { CapabilityStore, useSearch } from '../../../../src/composables'
-import { ConfigurationManager } from '../../../../src/configuration'
 import { SpaceResource } from '@ownclouders/web-client'
-
-jest.mock('../../../../src/composables/configuration', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false,
-          idBased: true
-        }
-      }
-    })
-}))
 
 describe('useSearch', () => {
   describe('method "search"', () => {

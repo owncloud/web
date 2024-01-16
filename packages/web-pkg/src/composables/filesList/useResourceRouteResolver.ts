@@ -1,14 +1,14 @@
 import { unref, Ref } from 'vue'
 
-import { ConfigurationManager } from '../../configuration'
 import { useGetMatchingSpace } from '../spaces'
 import { createFileRouteOptions } from '../../helpers/router'
 import { createLocationSpaces, createLocationShares } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
+import { ConfigStore } from '../piniaStores'
 
 export type ResourceRouteResolverOptions = {
-  configurationManager?: ConfigurationManager
+  configStore?: ConfigStore
   targetRouteCallback?: Ref<any>
   space?: Ref<SpaceResource>
 }

@@ -9,12 +9,6 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
-import { ConfigurationManager, useConfigurationManager } from '@ownclouders/web-pkg'
-
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useConfigurationManager: jest.fn()
-}))
 
 const folderMock = {
   type: 'folder',
@@ -85,12 +79,6 @@ function getWrapper({
   storageId = 'fake-storage-id',
   resource = folderMock
 } = {}) {
-  jest
-    .mocked(useConfigurationManager)
-    .mockReturnValue(
-      mock<ConfigurationManager>({ options: { concurrentRequests: { shares: { create: 1 } } } })
-    )
-
   const storeOptions = defaultStoreMockOptions
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
@@ -107,7 +95,12 @@ function getWrapper({
       },
       global: {
         plugins: [
-          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
+          ...defaultPlugins({
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { concurrentRequests: { shares: { create: 1 } } } }
+            }
+          }),
           store
         ],
         provide: { ...mocks, resource },

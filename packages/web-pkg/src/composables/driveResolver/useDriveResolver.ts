@@ -5,8 +5,7 @@ import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useClientService } from '../clientService'
-import { useConfigurationManager } from '../configuration'
-import { useSpacesStore, useCapabilityStore } from '../piniaStores'
+import { useSpacesStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 
 interface DriveResolverOptions {
   driveAliasAndItem?: Ref<string>
@@ -28,7 +27,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
   const fileId = computed(() => {
     return queryItemAsString(unref(fileIdQueryItem))
   })
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
 
   const clientService = useClientService()
   const spaces = computed(() => spacesStore.spaces)
@@ -94,7 +93,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           driveAliasPrefix,
           shareId: queryItemAsString(unref(shareId)),
           shareName: unref(shareName),
-          serverUrl: configurationManager.serverUrl
+          serverUrl: configStore.serverUrl
         })
         path = item.join('/')
       } else {
@@ -109,7 +108,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         if (!matchingSpace) {
           if (
             !spacesStore.mountPointsInitialized &&
-            configurationManager.options.routing.fullShareOwnerPaths
+            configStore.options.routing.fullShareOwnerPaths
           ) {
             loading.value = true
             await spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })

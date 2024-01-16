@@ -1,9 +1,9 @@
 import { HttpClient } from '../../../src/http'
-import { ClientService, ConfigurationManager, useAuthStore } from '../../../src/'
+import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
 import mockAxios from 'jest-mock-axios'
 import { client as _client } from '@ownclouders/web-client'
-import { createTestingPinia } from 'web-test-helpers'
+import { createTestingPinia, writable } from 'web-test-helpers'
 
 const getters = { 'runtime/auth/accessToken': 'token' }
 const language = { current: 'en' }
@@ -11,10 +11,12 @@ const serverUrl = 'someUrl'
 
 const getClientServiceMock = () => {
   const authStore = useAuthStore()
+  const configStore = useConfigStore()
+  writable(configStore).serverUrl = serverUrl
 
   return {
     clientService: new ClientService({
-      configurationManager: { serverUrl } as ConfigurationManager,
+      configStore,
       language: language as Language,
       authStore
     }),

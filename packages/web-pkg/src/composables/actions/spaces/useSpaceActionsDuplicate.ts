@@ -9,12 +9,11 @@ import { useLoadingService } from '../../loadingService'
 import { Store } from 'vuex'
 import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { resolveFileNameDuplicate } from '../../../helpers'
+import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling'
 import PQueue from 'p-queue'
 import { useRouter } from '../../router'
 import { isLocationSpacesActive } from '../../../router'
-import { useConfigurationManager } from '../../configuration'
-import { useMessages, useSpacesStore } from '../../piniaStores'
+import { useConfigStore, useMessages, useSpacesStore } from '../../piniaStores'
 
 export const useSpaceActionsDuplicate = ({
   store
@@ -22,6 +21,7 @@ export const useSpaceActionsDuplicate = ({
   store?: Store<any>
 } = {}) => {
   store = store || useStore()
+  const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
@@ -29,7 +29,6 @@ export const useSpaceActionsDuplicate = ({
   const ability = useAbility()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const configurationManager = useConfigurationManager()
 
   const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
 
@@ -52,7 +51,7 @@ export const useSpaceActionsDuplicate = ({
 
       if (existingSpaceFiles.children.length) {
         const queue = new PQueue({
-          concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+          concurrency: configStore.options.concurrentRequests.resourceBatchActions
         })
         const copyOps = []
 

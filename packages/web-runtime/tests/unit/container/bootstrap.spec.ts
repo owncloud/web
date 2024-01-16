@@ -1,6 +1,6 @@
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { createApp, defineComponent, App } from 'vue'
-import { ConfigurationManager, useAppsStore } from '@ownclouders/web-pkg'
+import { useAppsStore, useConfigStore } from '@ownclouders/web-pkg'
 import {
   initializeApplications,
   announceApplicationsReady,
@@ -14,6 +14,8 @@ import { createTestingPinia } from 'web-test-helpers/src'
 jest.mock('../../../src/container/application')
 
 describe('initialize applications', () => {
+  beforeEach(() => createTestingPinia())
+
   it('continues even if one or more applications are falsy', async () => {
     const fishyError = new Error('fishy')
     const initialize = jest.fn()
@@ -31,13 +33,13 @@ describe('initialize applications', () => {
 
     jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
+    const configStore = useConfigStore()
+    configStore.apps = ['internalFishy', 'internalValid']
+    configStore.externalApps = [{ path: 'externalFishy' }, { path: 'externalValid' }]
+
     const applications = await initializeApplications({
       app: createApp(defineComponent({})),
-      configurationManager: mockDeep<ConfigurationManager>(),
-      runtimeConfiguration: {
-        apps: ['internalFishy', 'internalValid'],
-        external_apps: [{ path: 'externalFishy' }, { path: 'externalValid' }]
-      },
+      configStore,
       store: undefined,
       router: undefined,
       gettext: undefined,
@@ -61,45 +63,55 @@ describe('initialize applications', () => {
 })
 
 describe('announceCustomScripts', () => {
+  beforeEach(() => createTestingPinia())
   afterEach(() => {
     document.getElementsByTagName('html')[0].innerHTML = ''
   })
 
   it('injects basic scripts', () => {
-    announceCustomScripts({
-      runtimeConfiguration: { scripts: [{ src: 'foo.js' }, { src: 'bar.js' }] }
-    })
+    const configStore = useConfigStore()
+    configStore.scripts = [{ src: 'foo.js' }, { src: 'bar.js' }]
+    announceCustomScripts({ configStore })
     const elements = document.getElementsByTagName('script')
     expect(elements.length).toBe(2)
   })
 
   it('skips the injection if no src option is provided', () => {
-    announceCustomScripts({ runtimeConfiguration: { scripts: [{}, {}, {}, {}, {}] } })
+    const configStore = useConfigStore()
+    configStore.scripts = [{}, {}, {}, {}, {}]
+    announceCustomScripts({ configStore })
     const elements = document.getElementsByTagName('script')
     expect(elements.length).toBeFalsy()
   })
 
   it('loads scripts synchronous by default', () => {
-    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js' }] } })
+    const configStore = useConfigStore()
+    configStore.scripts = [{ src: 'foo.js' }]
+    announceCustomScripts({ configStore })
     const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
     expect(element.async).toBeFalsy()
   })
 
   it('injects scripts async if the corresponding configurations option is set', () => {
-    announceCustomScripts({ runtimeConfiguration: { scripts: [{ src: 'foo.js', async: true }] } })
+    const configStore = useConfigStore()
+    configStore.scripts = [{ src: 'foo.js', async: true }]
+    announceCustomScripts({ configStore })
     const element = document.querySelector<HTMLScriptElement>('[src="foo.js"]')
     expect(element.async).toBeTruthy()
   })
 })
 
 describe('announceCustomStyles', () => {
+  beforeEach(() => createTestingPinia())
   afterEach(() => {
     document.getElementsByTagName('html')[0].innerHTML = ''
   })
 
   it('injects basic styles', () => {
     const styles = [{ href: 'foo.css' }, { href: 'bar.css' }]
-    announceCustomStyles({ runtimeConfiguration: { styles } })
+    const configStore = useConfigStore()
+    configStore.styles = styles
+    announceCustomStyles({ configStore })
 
     styles.forEach(({ href }) => {
       const element = document.querySelector<HTMLLinkElement>(`[href="${href}"]`)
@@ -110,30 +122,40 @@ describe('announceCustomStyles', () => {
   })
 
   it('skips the injection if no href option is provided', () => {
-    announceCustomStyles({ runtimeConfiguration: { styles: [{}, {}] } })
+    const configStore = useConfigStore()
+    configStore.styles = [{}, {}]
+    announceCustomStyles({ configStore })
     const elements = document.getElementsByTagName('link')
     expect(elements.length).toBeFalsy()
   })
 })
 
 describe('announceConfiguration', () => {
+  beforeEach(() => createTestingPinia({ stubActions: false }))
+
   it('should not enable embed mode when it is not set', async () => {
-    jest
-      .spyOn(global, 'fetch')
-      .mockResolvedValue(mock<Response>({ status: 200, json: () => Promise.resolve({}) }))
-    const config = await announceConfiguration('/config.json')
-    expect(config.options.embed.enabled).toStrictEqual(false)
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ theme: '', server: '', options: {} })
+      })
+    )
+    const configStore = useConfigStore()
+    await announceConfiguration({ path: '/config.json', configStore })
+    expect(configStore.options.embed.enabled).toStrictEqual(false)
   })
 
   it('should embed mode when it is set in config.json', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
-        json: () => Promise.resolve({ options: { embed: { enabled: true } } })
+        json: () =>
+          Promise.resolve({ theme: '', server: '', options: { embed: { enabled: true } } })
       })
     )
-    const config = await announceConfiguration('/config.json')
-    expect(config.options.embed.enabled).toStrictEqual(true)
+    const configStore = useConfigStore()
+    await announceConfiguration({ path: '/config.json', configStore })
+    expect(configStore.options.embed.enabled).toStrictEqual(true)
   })
 
   it('should enable embed mode when it is set in URL query but config.json does not set it', async () => {
@@ -143,11 +165,15 @@ describe('announceConfiguration', () => {
       },
       writable: true
     })
-    jest
-      .spyOn(global, 'fetch')
-      .mockResolvedValue(mock<Response>({ status: 200, json: () => Promise.resolve({}) }))
-    const config = await announceConfiguration('/config.json')
-    expect(config.options.embed.enabled).toStrictEqual(true)
+    jest.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ theme: '', server: '', options: {} })
+      })
+    )
+    const configStore = useConfigStore()
+    await announceConfiguration({ path: '/config.json', configStore })
+    expect(configStore.options.embed.enabled).toStrictEqual(true)
   })
 
   it('should not enable the embed mode when it is set in URL query but config.json disables it', async () => {
@@ -160,10 +186,12 @@ describe('announceConfiguration', () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
-        json: () => Promise.resolve({ options: { embed: { enabled: false } } })
+        json: () =>
+          Promise.resolve({ theme: '', server: '', options: { embed: { enabled: false } } })
       })
     )
-    const config = await announceConfiguration('/config.json')
-    expect(config.options.embed.enabled).toStrictEqual(false)
+    const configStore = useConfigStore()
+    await announceConfiguration({ path: '/config.json', configStore })
+    expect(configStore.options.embed.enabled).toStrictEqual(false)
   })
 })

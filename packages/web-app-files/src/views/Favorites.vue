@@ -62,11 +62,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { debounce } from 'lodash-es'
 
 import { Resource } from '@ownclouders/web-client'
-import { VisibilityObserver } from '@ownclouders/web-pkg'
+import { VisibilityObserver, useConfigStore } from '@ownclouders/web-pkg'
 import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
@@ -82,6 +82,7 @@ import { ResourceTable } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -102,6 +103,8 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const viewModes = computed(() => [
       ViewModeConstants.condensedTable,
@@ -128,23 +131,21 @@ export default defineComponent({
     return {
       ...useFileActions(),
       ...useResourcesViewDefaults<Resource, any, any[]>(),
+      configOptions,
       getMatchingSpace,
       viewModes
     }
   },
 
   computed: {
-    ...mapState(['app']),
-    ...mapState('Files', ['files']),
     ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
-    ...mapGetters(['configuration']),
 
     isEmpty() {
       return this.paginatedResources.length < 1
     },
 
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     }
   },
 

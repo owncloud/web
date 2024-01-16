@@ -1,5 +1,4 @@
 import ancestorMetaData from './ancestorMetaData'
-import config from './config'
 
 const runtime = {
   namespaced: true,
@@ -10,7 +9,6 @@ const runtime = {
 
 export default {
   modules: {
-    config,
     runtime
   }
 }

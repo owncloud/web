@@ -91,7 +91,7 @@ import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   formatRelativeDateFromDateTime,
   useCapabilityStore,
-  useConfigurationManager
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
@@ -136,7 +136,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const language = useGettext()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
 
     const toggleShareDenied = (value) => {
       emit('setDenyShare', value)
@@ -150,7 +150,7 @@ export default defineComponent({
     )
 
     return {
-      configurationManager,
+      configStore,
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
       dateExpire,
@@ -196,7 +196,7 @@ export default defineComponent({
         {
           title: this.$gettext('Notify via mail'),
           method: () => this.$emit('notifyShare'),
-          enabled: this.configurationManager.options.isRunningOnEos,
+          enabled: this.configStore.options.isRunningOnEos,
           icon: 'mail',
           class: 'notify-via-mail'
         }

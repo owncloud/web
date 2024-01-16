@@ -40,7 +40,6 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import orderBy from 'lodash-es/orderBy'
 import {
   AppLoadingSpinner,
@@ -55,13 +54,7 @@ import UploadInfo from '../components/UploadInfo.vue'
 import MobileNav from '../components/MobileNav.vue'
 import { NavItem, getExtensionNavItems } from '../helpers/navItems'
 import { LoadingIndicator } from '@ownclouders/web-pkg'
-import {
-  useActiveApp,
-  useRoute,
-  useRouteMeta,
-  useSpacesLoading,
-  useStore
-} from '@ownclouders/web-pkg'
+import { useActiveApp, useRoute, useRouteMeta, useSpacesLoading } from '@ownclouders/web-pkg'
 import { computed, defineComponent, provide, ref, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
@@ -83,7 +76,6 @@ export default defineComponent({
     LoadingIndicator
   },
   setup() {
-    const store = useStore()
     const router = useRouter()
     const route = useRoute()
     const { $gettext } = useGettext()
@@ -188,7 +180,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
     isIE11() {
       return !!(window as any).MSInputMethodContext && !!(document as any).documentMode
     },
@@ -205,14 +196,6 @@ export default defineComponent({
         list.push({
           ...app,
           type: 'extension'
-        })
-      })
-
-      // Get extensions manually added into config
-      this.configuration.applications.forEach((application) => {
-        list.push({
-          ...application,
-          type: 'link'
         })
       })
 

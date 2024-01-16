@@ -16,11 +16,17 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
-import { useMessages, useModals, useSpacesStore, useCapabilityStore } from '../../piniaStores'
-import { useConfigurationManager } from '../../configuration'
+import {
+  useMessages,
+  useModals,
+  useSpacesStore,
+  useCapabilityStore,
+  useConfigStore
+} from '../../piniaStores'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
   store = store || useStore()
+  const configStore = useConfigStore()
   const messageStore = useMessages()
   const { showMessage, showErrorMessage } = messageStore
   const capabilityStore = useCapabilityStore()
@@ -31,11 +37,10 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { dispatchModal } = useModals()
-  const configurationManager = useConfigurationManager()
   const spacesStore = useSpacesStore()
 
   const queue = new PQueue({
-    concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+    concurrency: configStore.options.concurrentRequests.resourceBatchActions
   })
   const deleteOps = []
   const resourcesToDelete = ref([])

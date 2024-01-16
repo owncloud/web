@@ -8,7 +8,7 @@ import {
 } from 'oidc-client-ts'
 import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
 import { getAbilities } from './abilities'
-import { AuthStore, ConfigurationManager, UserStore, CapabilityStore } from '@ownclouders/web-pkg'
+import { AuthStore, UserStore, CapabilityStore, ConfigStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Language } from 'vue3-gettext'
@@ -22,7 +22,7 @@ type UnloadReason = 'authError' | 'logout'
 
 export interface UserManagerOptions {
   clientService: ClientService
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   ability: Ability
   language: Language
   userStore: UserStore
@@ -33,7 +33,7 @@ export interface UserManagerOptions {
 export class UserManager extends OidcUserManager {
   private readonly storePrefix
   private clientService: ClientService
-  private configurationManager: ConfigurationManager
+  private configStore: ConfigStore
   private userStore: UserStore
   private authStore: AuthStore
   private capabilityStore: CapabilityStore
@@ -45,7 +45,7 @@ export class UserManager extends OidcUserManager {
   public areEventHandlersRegistered: boolean
 
   constructor(options: UserManagerOptions) {
-    const browserStorage = options.configurationManager.options.tokenStorageLocal
+    const browserStorage = options.configStore.options.tokenStorageLocal
       ? localStorage
       : sessionStorage
     const storePrefix = 'oc_oAuth.'
@@ -66,22 +66,22 @@ export class UserManager extends OidcUserManager {
       authority: '',
       client_id: '',
 
-      automaticSilentRenew: options.configurationManager.options.embed?.enabled
-        ? !options.configurationManager.options.embed.delegateAuthentication
+      automaticSilentRenew: options.configStore.options.embed?.enabled
+        ? !options.configStore.options.embed.delegateAuthentication
         : true
     }
 
-    if (options.configurationManager.isOIDC) {
+    if (options.configStore.isOIDC) {
       Object.assign(openIdConfig, {
         scope: 'openid profile',
         loadUserInfo: false,
-        ...options.configurationManager.oidc,
-        ...(options.configurationManager.oidc.metadata_url && {
-          metadataUrl: options.configurationManager.oidc.metadata_url
+        ...options.configStore.openIdConnect,
+        ...(options.configStore.openIdConnect.metadata_url && {
+          metadataUrl: options.configStore.openIdConnect.metadata_url
         })
       })
-    } else if (options.configurationManager.isOAuth2) {
-      const oAuth2 = options.configurationManager.oAuth2
+    } else if (options.configStore.isOAuth2) {
+      const oAuth2 = options.configStore.oAuth2
       Object.assign(openIdConfig, {
         authority: oAuth2.url,
         client_id: oAuth2.clientId,
@@ -108,7 +108,7 @@ export class UserManager extends OidcUserManager {
     this.storePrefix = storePrefix
     this.browserStorage = browserStorage
     this.clientService = options.clientService
-    this.configurationManager = options.configurationManager
+    this.configStore = options.configStore
     this.ability = options.ability
     this.language = options.language
     this.userStore = options.userStore
@@ -181,7 +181,7 @@ export class UserManager extends OidcUserManager {
 
   private initializeOwnCloudSdk(accessToken: string): void {
     const options = {
-      baseUrl: this.configurationManager.serverUrl,
+      baseUrl: this.configStore.serverUrl,
       auth: {
         bearer: accessToken
       },
@@ -261,7 +261,7 @@ export class UserManager extends OidcUserManager {
 
   // copied from upstream oidc-client-ts UserManager with CERN customization
   protected async _signinEnd(url: string, verifySub?: string, ...args): Promise<User> {
-    if (!this.configurationManager.options.isRunningOnEos) {
+    if (!this.configStore.options.isRunningOnEos) {
       return (super._signinEnd as any)(url, verifySub, ...args)
     }
 

@@ -66,7 +66,6 @@ import {
   SpaceInfo,
   SpaceNoSelection,
   eventBus,
-  configurationManager,
   queryItemAsString,
   useClientService,
   useRouteQuery,
@@ -75,7 +74,8 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
-  useStore
+  useStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
@@ -102,6 +102,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
+    const configStore = useConfigStore()
 
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken: string
@@ -126,7 +127,7 @@ export default defineComponent({
         'driveType eq project'
       )
       const drives = drivesResponse.map((space) =>
-        buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+        buildSpace({ ...space, serverUrl: configStore.serverUrl })
       )
       spaces.value = drives
     })

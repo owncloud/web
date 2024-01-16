@@ -9,22 +9,10 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { FileResource } from '@ownclouders/web-client/src/helpers'
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
-import { ConfigurationManager } from '../../../src'
 import { useMessages } from '../../../src/composables/piniaStores'
-
-jest.mock('../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 describe('CreateShortcutModal', () => {
   describe('method "onConfirm"', () => {

@@ -5,7 +5,6 @@ import {
   isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
-import { configurationManager } from '@ownclouders/web-pkg'
 import { getParentPaths } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
 
@@ -33,7 +32,10 @@ const mutations = {
 }
 
 const actions = {
-  loadAncestorMetaData({ commit, state }, { folder, space, client, userStore, spacesStore }) {
+  loadAncestorMetaData(
+    { commit, state },
+    { folder, space, client, userStore, spacesStore, configStore }
+  ) {
     const ancestorMetaData: AncestorMetaData = {
       [folder.path]: {
         id: folder.fileId,
@@ -55,7 +57,7 @@ const actions = {
       )
 
     let fullyAccessibleSpace = true
-    if (configurationManager.options.routing.fullShareOwnerPaths) {
+    if (configStore.options.routing.fullShareOwnerPaths) {
       // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
       const projectSpace = spaces.find((s) => isProjectSpaceResource(s) && s.id === space.id)
       fullyAccessibleSpace = space.isOwner(userStore.user) || projectSpace?.isMember(userStore.user)

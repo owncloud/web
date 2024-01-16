@@ -4,13 +4,14 @@ import {
   useRouter,
   useClientService,
   useStore,
-  useConfigurationManager,
   useUserStore,
   UserStore,
   SpacesStore,
   useSpacesStore,
   CapabilityStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useConfigStore,
+  ConfigStore
 } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { Store } from 'vuex'
@@ -24,7 +25,6 @@ import {
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
 } from './folder/index'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 export * from './folder/types'
 
@@ -32,7 +32,7 @@ export type FolderLoaderTask = any
 
 export type TaskContext = {
   clientService: ClientService
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   store: Store<any>
   userStore: UserStore
   spacesStore: SpacesStore
@@ -67,7 +67,7 @@ export class FolderService {
     const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const loader = this.loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
     if (!loader) {
       console.error('No folder loader found for route')
@@ -77,7 +77,7 @@ export class FolderService {
     return useTask(function* (...args) {
       const context = {
         clientService,
-        configurationManager,
+        configStore,
         store,
         userStore,
         spacesStore,

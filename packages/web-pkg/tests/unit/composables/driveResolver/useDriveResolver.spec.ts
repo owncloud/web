@@ -10,20 +10,7 @@ import {
   RouteLocation,
   writable
 } from 'web-test-helpers'
-import { ConfigurationManager } from '../../../../src/configuration'
 import { useSpacesStore, useCapabilityStore } from '../../../../src/composables/piniaStores'
-
-jest.mock('../../../../src/composables/configuration', () => ({
-  ...jest.requireActual('../../../../src/composables/configuration'),
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 describe('useDriveResolver', () => {
   it('should be valid', () => {

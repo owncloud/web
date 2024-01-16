@@ -1,12 +1,6 @@
 import { computed } from 'vue'
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
@@ -75,12 +69,7 @@ describe('Top Bar component', () => {
 
 const getWrapper = ({ capabilities = {}, userContextReady = true } = {}) => {
   const mocks = { ...defaultComponentMocks() }
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.configuration.mockImplementation(() => ({
-    options: { disableFeedbackLink: false }
-  }))
 
-  const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(TopBar, {
       props: {
@@ -90,11 +79,11 @@ const getWrapper = ({ capabilities = {}, userContextReady = true } = {}) => {
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              authState: { userContextReady: userContextReady },
-              capabilityState: { capabilities }
+              authState: { userContextReady },
+              capabilityState: { capabilities },
+              configState: { options: { disableFeedbackLink: false } }
             }
-          }),
-          store
+          })
         ],
         stubs: { 'router-link': true, 'portal-target': true, notifications: true },
         mocks,

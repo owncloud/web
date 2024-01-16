@@ -2,19 +2,19 @@ import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
 import { useClientService } from '../clientService'
-import { useConfigurationManager } from '../configuration'
+import { useConfigStore } from '../piniaStores'
 
 export const useCreateSpace = () => {
   const clientService = useClientService()
   const { $gettext } = useGettext()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
 
   const createSpace = async (name: string) => {
     const { graphAuthenticated } = clientService
     const { data: createdSpace } = await graphAuthenticated.drives.createDrive({ name }, {})
     const spaceResource = buildSpace({
       ...createdSpace,
-      serverUrl: configurationManager.serverUrl
+      serverUrl: configStore.serverUrl
     })
 
     return await createDefaultMetaFolder(spaceResource)
@@ -41,7 +41,7 @@ export const useCreateSpace = () => {
       } as Drive,
       {}
     )
-    return buildSpace({ ...updatedDriveData, serverUrl: configurationManager.serverUrl })
+    return buildSpace({ ...updatedDriveData, serverUrl: configStore.serverUrl })
   }
 
   return { createSpace, createDefaultMetaFolder }

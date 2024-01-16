@@ -10,7 +10,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
-import { ConfigurationManager, useMessages } from '@ownclouders/web-pkg'
+import { useMessages } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
 
@@ -31,17 +31,6 @@ const selectors = {
   groupNamesEmpty: '[data-testid="group-names-empty"]',
   gdprExport: '[data-testid="gdpr-export"]'
 }
-
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      logoutUrl: 'https://account-manager/logout',
-      options: {
-        logoutUrl: 'https://account-manager/logout'
-      }
-    })
-}))
 
 describe('account page', () => {
   describe('public link context', () => {
@@ -279,11 +268,6 @@ function getWrapper({
   isUserContext = true
 } = {}) {
   const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.configuration.mockReturnValue({
-    server: 'http://server/address/',
-    options: { ...(accountEditLink && { accountEditLink }) }
-  })
-
   const store = createStore(storeOptions)
 
   const mocks = {
@@ -321,7 +305,13 @@ function getWrapper({
                 publicLinkContextReady: isPublicLinkContext
               },
               spacesState: { spaces },
-              capabilityState: { capabilities }
+              capabilityState: { capabilities },
+              configState: {
+                options: {
+                  logoutUrl: 'https://account-manager/logout',
+                  ...(accountEditLink && { accountEditLink })
+                }
+              }
             }
           }),
           store
