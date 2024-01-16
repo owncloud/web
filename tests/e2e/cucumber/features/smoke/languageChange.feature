@@ -13,7 +13,6 @@ Feature: language settings
     And "Brian" creates the following folder in personal space using API
       | name          |
       | check_message |
-    And "Brian" opens the "files" app
     And "Brian" shares the following resource using API
       | resource      | recipient | type | role     |
       | check_message | Alice     | user | Can edit |
