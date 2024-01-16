@@ -610,7 +610,7 @@ export default defineComponent({
 
   methods: {
     ...mapActions('Files', ['loadPreview']),
-    ...mapMutations('Files', ['REMOVE_FILES', 'REMOVE_FILES_FROM_SEARCHED', 'RESET_SELECTION']),
+    ...mapMutations('Files', ['REMOVE_FILES', 'RESET_SELECTION']),
 
     async fileDropped(fileTarget) {
       const selected = [...this.selectedResources]
@@ -659,7 +659,6 @@ export default defineComponent({
       )
       const movedResources = await copyMove.perform(TransferType.MOVE)
       this.REMOVE_FILES(movedResources)
-      this.REMOVE_FILES_FROM_SEARCHED(movedResources)
       this.RESET_SELECTION()
     },
 

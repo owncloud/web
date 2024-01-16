@@ -13,19 +13,6 @@ export default {
   CLEAR_FILES(state) {
     state.files = []
   },
-  LOAD_FILES_SEARCHED(state, files) {
-    state.filesSearched = files
-  },
-  REMOVE_FILES_FROM_SEARCHED(state, files) {
-    if (!state.filesSearched) {
-      return
-    }
-
-    state.filesSearched = state.filesSearched.filter((i) => !files.find((f) => f.id === i.id))
-  },
-  CLEAR_FILES_SEARCHED(state) {
-    state.filesSearched = null
-  },
   CLEAR_CLIPBOARD(state) {
     state.clipboardResources = []
     state.clipboardAction = null
@@ -182,7 +169,7 @@ export default {
    * @param params.value the value that will be attached to the key
    */
   UPDATE_RESOURCE_FIELD(state, params) {
-    let fileSource = state.filesSearched || state.files
+    let fileSource = state.files
     let index = fileSource.findIndex((r) => r.id === params.id)
     if (index < 0) {
       if (state.currentFolder?.id === params.id) {
@@ -231,8 +218,6 @@ function $_upsertResource(state, resource, allowInsert) {
     index = files.findIndex((r) => r.webDavPath === resource.webDavPath)
   }
   const found = index > -1
-
-  state.filesSearched = null
 
   if (!found && !allowInsert) {
     return

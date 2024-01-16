@@ -1,7 +1,6 @@
 export default {
   currentFolder: null,
   files: [],
-  filesSearched: null,
   selectedIds: [],
   latestSelectedId: null,
   clipboardResources: [],

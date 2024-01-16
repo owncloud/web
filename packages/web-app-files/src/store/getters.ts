@@ -3,12 +3,11 @@ import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 export default {
   selectedFiles: (state, getters) => {
-    return getters.filesAll.filter((f) => state.selectedIds.includes(f.id))
+    return getters.files.filter((f) => state.selectedIds.includes(f.id))
   },
   files: (state) => {
     return state.files
   },
-  filesAll: (state) => state.filesSearched || state.files,
   currentFolder: (state) => {
     return state.currentFolder
   },
@@ -19,7 +18,7 @@ export default {
     return state.clipboardAction
   },
   activeFiles: (state, getters) => {
-    let files = [].concat(getters.filesAll)
+    let files = [].concat(getters.files)
 
     if (!state.areHiddenFilesShown) {
       files = files.filter((file) => !file.name.startsWith('.'))
@@ -28,12 +27,12 @@ export default {
     return files
   },
   totalFilesSize: (state, getters) => {
-    return getters.filesAll.map((file) => parseInt(file.size)).reduce((x, y) => x + y, 0)
+    return getters.files.map((file) => parseInt(file.size)).reduce((x, y) => x + y, 0)
   },
   totalFilesCount: (state, getters) => {
-    const fileCount = getters.filesAll.filter((file) => file.type === 'file').length
-    const folderCount = getters.filesAll.filter((file) => file.type === 'folder').length
-    const spaceCount = getters.filesAll.filter((file) => isProjectSpaceResource(file)).length
+    const fileCount = getters.files.filter((file) => file.type === 'file').length
+    const folderCount = getters.files.filter((file) => file.type === 'folder').length
+    const spaceCount = getters.files.filter((file) => isProjectSpaceResource(file)).length
     return {
       files: fileCount,
       folders: folderCount,
