@@ -1,5 +1,6 @@
 import Users from '../../../src/views/Users.vue'
 import {
+  OptionsConfig,
   UserAction,
   eventBus,
   useAppDefaults,
@@ -399,6 +400,14 @@ function getMountedWrapper({
   roleFilterQuery = null,
   options = {},
   createUserActionEnabled = true
+}: {
+  mountType?: typeof shallowMount | typeof mount
+  clientService?: ReturnType<typeof mockDeep<ClientService>>
+  displayNameFilterQuery?: string
+  groupFilterQuery?: string
+  roleFilterQuery?: string
+  options?: OptionsConfig
+  createUserActionEnabled?: boolean
 } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
