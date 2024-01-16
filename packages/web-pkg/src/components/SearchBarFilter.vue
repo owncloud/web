@@ -62,13 +62,13 @@ export default defineComponent({
     const currentSelectionTitle = computed(() => $gettext(currentSelection.value?.title))
     const locationOptions = computed<LocationOption[]>(() => [
       {
-        id: SearchLocationFilterConstants.inHere,
-        title: $gettext('In here'),
+        id: SearchLocationFilterConstants.currentFolder,
+        title: $gettext('Current folder'),
         enabled: props.currentFolderAvailable
       },
       {
-        id: SearchLocationFilterConstants.everywhere,
-        title: $gettext('Everywhere'),
+        id: SearchLocationFilterConstants.allFiles,
+        title: $gettext('All files'),
         enabled: true
       }
     ])
@@ -84,19 +84,19 @@ export default defineComponent({
           const useScope = unref(useScopeQueryValue).toString() === 'true'
           if (useScope) {
             currentSelection.value = unref(locationOptions).find(
-              ({ id }) => id === SearchLocationFilterConstants.inHere
+              ({ id }) => id === SearchLocationFilterConstants.currentFolder
             )
             return
           }
           currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === SearchLocationFilterConstants.everywhere
+            ({ id }) => id === SearchLocationFilterConstants.allFiles
           )
           return
         }
 
         if (!props.currentFolderAvailable) {
           currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === SearchLocationFilterConstants.everywhere
+            ({ id }) => id === SearchLocationFilterConstants.allFiles
           )
           return
         }
@@ -109,7 +109,7 @@ export default defineComponent({
         }
 
         currentSelection.value = unref(locationOptions).find(
-          ({ id }) => id === SearchLocationFilterConstants.everywhere
+          ({ id }) => id === SearchLocationFilterConstants.allFiles
         )
       },
       { immediate: true }
