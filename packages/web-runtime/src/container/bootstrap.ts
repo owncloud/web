@@ -607,7 +607,7 @@ export const startSentry = (configStore: ConfigStore, app: App): void => {
  * @param configStore
  */
 export const announceCustomScripts = ({ configStore }: { configStore?: ConfigStore }): void => {
-  ;(configStore.scripts || []).forEach(({ src = '', async = false }) => {
+  configStore.scripts.forEach(({ src = '', async = false }) => {
     if (!src) {
       return
     }
@@ -625,7 +625,7 @@ export const announceCustomScripts = ({ configStore }: { configStore?: ConfigSto
  * @param configStore
  */
 export const announceCustomStyles = ({ configStore }: { configStore?: ConfigStore }): void => {
-  ;(configStore.styles || []).forEach(({ href = '' }) => {
+  configStore.styles.forEach(({ href = '' }) => {
     if (!href) {
       return
     }

@@ -63,8 +63,8 @@ export const useConfigStore = defineStore('config', () => {
   const oAuth2 = ref<RawConfig['auth']>()
   const openIdConnect = ref<RawConfig['openIdConnect']>()
   const sentry = ref<RawConfig['sentry']>()
-  const scripts = ref<RawConfig['scripts']>()
-  const styles = ref<RawConfig['styles']>()
+  const scripts = ref<RawConfig['scripts']>([])
+  const styles = ref<RawConfig['styles']>([])
 
   const serverUrl = computed(() =>
     urlJoin(unref(server) || window.location.origin, { trailingSlash: true })
@@ -83,8 +83,8 @@ export const useConfigStore = defineStore('config', () => {
     oAuth2.value = data.auth
     openIdConnect.value = data.openIdConnect
     sentry.value = data.sentry
-    scripts.value = data.scripts
-    styles.value = data.styles
+    scripts.value = data.scripts || []
+    styles.value = data.styles || []
     theme.value = data.theme
 
     if (data.options) {
