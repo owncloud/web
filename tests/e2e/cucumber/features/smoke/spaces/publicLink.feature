@@ -34,15 +34,25 @@ Feature: spaces public link
       | testavatar.jpg |
     And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
-    And "Alice" creates a public link for the resource "spaceFolder" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource    | password |
+      | spaceFolder | %public% |
     And "Alice" renames the most recently created public link of resource "spaceFolder" to "folderLink"
-    And "Alice" creates a public link for the resource "spaceFolder/shareToBrian.txt" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource                     | password |
+      | spaceFolder/shareToBrian.txt | %public% |
     And "Alice" renames the most recently created public link of resource "spaceFolder/shareToBrian.txt" to "textLink"
-    And "Alice" creates a public link for the resource "spaceFolder/subFolder/shareToBrian.md" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource                              | password |
+      | spaceFolder/subFolder/shareToBrian.md | %public% |
     And "Alice" renames the most recently created public link of resource "spaceFolder/subFolder/shareToBrian.md" to "markdownLink"
-    And "Alice" creates a public link for the resource "simple.pdf" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource   | password |
+      | simple.pdf | %public% |
     And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
-    And "Alice" creates a public link for the resource "testavatar.jpg" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource       | password |
+      | testavatar.jpg | %public% |
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
     When "Brian" logs in

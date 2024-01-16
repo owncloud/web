@@ -19,9 +19,9 @@ Feature: rename
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | folder   | Brian     | user | Can edit |
-    And "Alice" creates a public link for the resource "folder" with password "%public%" using the sidebar panel
-    And "Alice" renames the most recently created public link of resource "folder" to "myPublicLink"
-    And "Alice" edits the public link named "myPublicLink" of resource "folder" changing role to "Can edit"
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource | role     | password |
+      | folder   | Can edit | %public% |
     And "Brian" logs in
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
@@ -34,7 +34,7 @@ Feature: rename
     And "Brian" logs out
 
     # rename in the public link
-    When "Anonymous" opens the public link "myPublicLink"
+    When "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     When "Anonymous" renames the following resource
       | resource           | as                     |
