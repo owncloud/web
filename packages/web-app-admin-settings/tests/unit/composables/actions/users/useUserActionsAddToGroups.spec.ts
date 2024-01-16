@@ -17,6 +17,19 @@ describe('useUserActionsAddToGroups', () => {
         }
       })
     })
+    it('returns false if included in capability readOnlyUserAttributes list', () => {
+      getWrapper({
+        setup: ({ actions }, { storeOptions }) => {
+          storeOptions.getters.capabilities.mockReturnValue({
+            graph: {
+              users: { read_only_attributes: ['user.memberOf'] }
+            }
+          })
+
+          expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
+        }
+      })
+    })
   })
   describe('method "handler"', () => {
     it('creates a modal', () => {

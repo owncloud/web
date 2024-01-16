@@ -17,15 +17,28 @@ describe('useUserActionsRemoveFromGroups', () => {
         }
       })
     })
-  })
-  describe('method "handler"', () => {
-    it('creates a modal', () => {
+    it('returns false if included in capability readOnlyUserAttributes list', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
-          await unref(actions)[0].handler({ resources: [mock<User>()] })
-          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+        setup: ({ actions }, { storeOptions }) => {
+          storeOptions.getters.capabilities.mockReturnValue({
+            graph: {
+              users: { read_only_attributes: ['user.memberOf'] }
+            }
+          })
+
+          expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
         }
       })
+    })
+  })
+})
+describe('method "handler"', () => {
+  it('creates a modal', () => {
+    getWrapper({
+      setup: async ({ actions }, { storeOptions }) => {
+        await unref(actions)[0].handler({ resources: [mock<User>()] })
+        expect(storeOptions.actions.createModal).toHaveBeenCalled()
+      }
     })
   })
 })
