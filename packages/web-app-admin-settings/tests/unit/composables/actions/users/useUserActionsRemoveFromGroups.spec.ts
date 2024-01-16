@@ -31,14 +31,14 @@ describe('useUserActionsRemoveFromGroups', () => {
       })
     })
   })
-})
-describe('method "handler"', () => {
-  it('creates a modal', () => {
-    getWrapper({
-      setup: async ({ actions }, { storeOptions }) => {
-        await unref(actions)[0].handler({ resources: [mock<User>()] })
-        expect(storeOptions.actions.createModal).toHaveBeenCalled()
-      }
+  describe('method "handler"', () => {
+    it('creates a modal', () => {
+      getWrapper({
+        setup: async ({ actions }, { storeOptions }) => {
+          await unref(actions)[0].handler({ resources: [mock<User>()] })
+          expect(storeOptions.actions.createModal).toHaveBeenCalled()
+        }
+      })
     })
   })
 })
