@@ -163,7 +163,7 @@ import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
 import { User } from '@ownclouders/web-client/src/generated'
-import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
+import ThemeSwitcher from 'web-runtime/src/components/ThemeSwitcher.vue'
 
 export default defineComponent({
   name: 'AccountPage',
