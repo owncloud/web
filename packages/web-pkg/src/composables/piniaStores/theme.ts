@@ -1,6 +1,6 @@
 import merge from 'deepmerge'
 import { defineStore } from 'pinia'
-import { ref, computed, unref } from 'vue'
+import { ref, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
 import { applyCustomProp } from 'design-system/src/'
@@ -91,15 +91,6 @@ export const useThemeStore = defineStore('theme', () => {
 
   const availableThemes = ref<WebThemeType[]>([])
 
-  const hasOnlyOneTheme = computed(() => unref(availableThemes).length === 1)
-
-  const hasOnlyTwoThemesForLightDarkMode = computed(
-    () =>
-      unref(availableThemes).length === 2 &&
-      unref(availableThemes).some((t) => t.isDark === true) &&
-      unref(availableThemes).some((t) => t.isDark !== true)
-  )
-
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
 
@@ -137,18 +128,10 @@ export const useThemeStore = defineStore('theme', () => {
     })
   }
 
-  // This should only be used with hasOnlyTwoThemesForLightDarkMode - we know there's exactly two themes, one with darkMode and one without
-  const toggleTheme = () => {
-    setAndApplyTheme(unref(availableThemes).find((t) => t.isDark !== unref(currentTheme).isDark))
-  }
-
   return {
     availableThemes,
     currentTheme,
-    hasOnlyOneTheme,
-    hasOnlyTwoThemesForLightDarkMode,
     initializeThemes,
-    setAndApplyTheme,
-    toggleTheme
+    setAndApplyTheme
   }
 })

@@ -26,7 +26,6 @@
     </div>
     <template v-if="!isEmbedModeEnabled">
       <portal to="app.runtime.header.right" :order="50">
-        <theme-switcher />
         <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
       </portal>
       <portal to="app.runtime.header.right" :order="100">
@@ -50,7 +49,6 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
-import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useAbility,
   useAuthStore,
@@ -68,7 +66,6 @@ export default {
     FeedbackLink,
     Notifications,
     SideBarToggle,
-    ThemeSwitcher,
     UserMenu
   },
   props: {

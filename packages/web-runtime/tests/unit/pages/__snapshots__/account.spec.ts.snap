@@ -54,6 +54,12 @@ exports[`account page public link context should render a limited view 1`] = `
           <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-1" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" placeholder="Please choose..." readonly="false" searchable="true"></oc-select-stub>
         </dd>
       </div>
+      <div class="account-page-info-theme oc-mb oc-width-1-2@s">
+        <dt class="oc-text-normal oc-text-muted">Theme</dt>
+        <dd class="oc-width-1-3">
+          <theme-switcher-stub></theme-switcher-stub>
+        </dd>
+      </div>
       <!--v-if-->
       <!--v-if-->
     </dl>

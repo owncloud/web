@@ -2,68 +2,12 @@
 
 exports[`ThemeSwitcher component restores dark theme if dark theme is saved in localstorage 1`] = `
 <div>
-  <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
-    <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
-  </button>
+  <oc-select-stub clearable="false" model-value="[object Object]" option-label="name" options="[object Object],[object Object]"></oc-select-stub>
 </div>
 `;
 
 exports[`ThemeSwitcher component restores light theme if light theme is saved in localstorage 1`] = `
 <div>
-  <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
-    <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
-  </button>
-</div>
-`;
-
-exports[`ThemeSwitcher component visually does not render anything if only one theme is available 1`] = `<!--v-if-->`;
-
-exports[`ThemeSwitcher component visually if there is exactly two themes, one dark and one light renders a button, initially in dark mode if user prefers dark color scheme 1`] = `
-<div>
-  <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
-    <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
-  </button>
-</div>
-`;
-
-exports[`ThemeSwitcher component visually if there is exactly two themes, one dark and one light renders a button, initially in light mode per default 1`] = `
-<div>
-  <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
-    <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
-  </button>
-</div>
-`;
-
-exports[`ThemeSwitcher component visually if there is exactly two themes, one dark and one light toggles between themes upon click 1`] = `
-<div>
-  <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
-    <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="moon-clear" variation="inherit"></oc-icon-stub>
-  </button>
-</div>
-`;
-
-exports[`ThemeSwitcher component visually if there is exactly two themes, one dark and one light toggles between themes upon click 2`] = `
-<div>
-  <button aria-label="Click to switch theme" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-brand oc-button-brand-raw-inverse themeswitcher-btn" type="button">
-    <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span aria-label="Currently used theme" class="oc-visible@s"></span>
-    <oc-icon-stub fill-type="line" name="sun" variation="inherit"></oc-icon-stub>
-  </button>
+  <oc-select-stub clearable="false" model-value="[object Object]" option-label="name" options="[object Object],[object Object]"></oc-select-stub>
 </div>
 `;
