@@ -7,7 +7,8 @@ import {
   useFileActionsCreateNewFile,
   useRequest,
   useSpacesStore,
-  CapabilityStore
+  CapabilityStore,
+  useClipboardStore
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
@@ -116,9 +117,10 @@ describe('CreateAndUpload component', () => {
       expect(storeOptions.modules.Files.actions.pasteSelectedFiles).toHaveBeenCalled()
     })
     it('call "clear clipboard"-action', async () => {
-      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mock<Resource>()] })
+      const { wrapper } = getWrapper({ clipboardResources: [mock<Resource>()] })
       await wrapper.find(elSelector.clearClipboardBtn).trigger('click')
-      expect(storeOptions.modules.Files.actions.clearClipboardFiles).toHaveBeenCalled()
+      const clipboardStore = useClipboardStore()
+      expect(clipboardStore.clearClipboard).toHaveBeenCalled()
     })
   })
   describe('method "onUploadComplete"', () => {
@@ -197,7 +199,6 @@ function getWrapper({
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
-  storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
   const store = createStore(storeOptions)
   const mocks = {
@@ -224,7 +225,8 @@ function getWrapper({
             piniaOptions: {
               appsState: { fileExtensions },
               spacesState: { spaces: spaces as any },
-              capabilityState: { capabilities }
+              capabilityState: { capabilities },
+              clipboardState: { resources: clipboardResources }
             }
           }),
           store

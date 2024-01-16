@@ -5,9 +5,9 @@ import { Message, Modal, WebThemeType } from '../../../web-pkg/src/composables/p
 import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
-import { Share } from '../../../web-client/src/helpers'
-import { ApplicationFileExtension } from '../../../web-pkg/types'
 import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/config/types'
+import { Resource, Share } from '../../../web-client/src/helpers'
+import { ApplicationFileExtension, ClipboardActions } from '../../../web-pkg/types'
 
 export { createTestingPinia }
 
@@ -21,6 +21,7 @@ export type PiniaMockOptions = {
     publicLinkContextReady?: boolean
   }
   themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
+  clipboardState?: { action?: ClipboardActions; resources?: Resource[] }
   configState?: {
     server?: string
     options?: OptionsConfig
@@ -39,6 +40,7 @@ export function createMockStore({
   stubActions = true,
   appsState = {},
   authState = {},
+  clipboardState = {},
   configState = {},
   themeState = {},
   messagesState = {},
@@ -63,6 +65,7 @@ export function createMockStore({
     initialState: {
       apps: { ...appsState },
       auth: { ...authState },
+      clipboard: { resources: [], ...clipboardState },
       config: {
         apps: [],
         external_apps: [],

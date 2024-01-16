@@ -230,7 +230,8 @@ import {
   useEmbedMode,
   useAuthStore,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  useClipboardStore
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -457,6 +458,9 @@ export default defineComponent({
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
+    const clipboardStore = useClipboardStore()
+    const { resources: clipboardResources, action: clipboardAction } = storeToRefs(clipboardStore)
+
     const authStore = useAuthStore()
     const { userContextReady } = storeToRefs(authStore)
 
@@ -500,6 +504,8 @@ export default defineComponent({
       hasProjectSpaces: capabilityRefs.spacesEnabled,
       userContextReady,
       getMatchingSpace,
+      clipboardResources,
+      clipboardAction,
       ...useResourceRouteResolver(
         {
           space: ref(props.space),
@@ -523,12 +529,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState('Files', [
-      'areFileExtensionsShown',
-      'latestSelectedId',
-      'clipboardResources',
-      'clipboardAction'
-    ]),
+    ...mapState('Files', ['areFileExtensionsShown', 'latestSelectedId']),
 
     fields() {
       if (this.resources.length === 0) {

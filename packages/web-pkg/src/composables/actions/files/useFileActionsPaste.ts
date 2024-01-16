@@ -13,6 +13,7 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { useClipboardStore } from '../../piniaStores'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -21,6 +22,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = useGettext()
+  const clipboardStore = useClipboardStore()
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -35,7 +37,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
 
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
     const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
-      store.getters['Files/clipboardResources'].reduce((acc, resource) => {
+      clipboardStore.resources.reduce((acc, resource) => {
         if (resource.storageId in acc) {
           acc[resource.storageId].resources.push(resource)
           return acc
@@ -52,6 +54,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
       }, {})
     const promises = Object.values(resourceSpaceMapping).map(
       ({ space: sourceSpace, resources: resourcesToCopy }) => {
+        // TODO: move away from store, no need to sit there
         return store.dispatch('Files/pasteSelectedFiles', {
           targetSpace,
           sourceSpace: sourceSpace,
@@ -59,12 +62,13 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
           clientService,
           loadingService,
           $gettext,
-          $ngettext
+          $ngettext,
+          clipboardStore
         })
       }
     )
     await Promise.all(promises)
-    store.commit('Files/CLEAR_CLIPBOARD')
+    clipboardStore.clearClipboard()
   }
 
   const actions = computed((): FileAction[] => [
@@ -75,7 +79,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
       label: () => $gettext('Paste'),
       shortcut: unref(pasteShortcutString),
       isEnabled: ({ resources }) => {
-        if (store.getters['Files/clipboardResources'].length === 0) {
+        if (clipboardStore.resources.length === 0) {
           return false
         }
         if (

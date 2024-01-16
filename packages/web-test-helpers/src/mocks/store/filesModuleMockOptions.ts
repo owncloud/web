@@ -12,7 +12,6 @@ export const filesModuleMockOptions = {
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
       highlightedFile: jest.fn(),
-      clipboardResources: jest.fn(() => []),
       selectedFiles: jest.fn(() => []),
       versions: jest.fn(() => []),
       outgoingCollaborators: jest.fn(() => []),
@@ -35,13 +34,11 @@ export const filesModuleMockOptions = {
       REMOVE_FILE: jest.fn(),
       REMOVE_FILES: jest.fn(),
       RESET_SELECTION: jest.fn(),
-      SET_LATEST_SELECTED_FILE_ID: jest.fn(),
-      CLEAR_CLIPBOARD: jest.fn()
+      SET_LATEST_SELECTED_FILE_ID: jest.fn()
     },
     actions: {
       deleteFiles: jest.fn(),
       pasteSelectedFiles: jest.fn(),
-      clearClipboardFiles: jest.fn(),
       loadIndicators: jest.fn(),
       loadVersions: jest.fn(),
       loadShares: jest.fn(),
@@ -52,8 +49,6 @@ export const filesModuleMockOptions = {
       changeShare: jest.fn(),
       addLink: jest.fn(),
       addShare: jest.fn(),
-      copySelectedFiles: jest.fn(),
-      cutSelectedFiles: jest.fn(),
       resetFileSelection: jest.fn(),
       toggleFileSelection: jest.fn()
     }

@@ -10,12 +10,13 @@ import { ActionOptions, FileAction } from '../types'
 import { computed, unref } from 'vue'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
-import { useMessages } from '../../piniaStores'
+import { useClipboardStore } from '../../piniaStores'
+import { Resource } from '@ownclouders/web-client'
 
 export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
-  const messageStore = useMessages()
   const router = useRouter()
+  const { cutResources } = useClipboardStore()
   const language = useGettext()
   const { $gettext } = language
 
@@ -30,8 +31,8 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
     return $gettext('Ctrl + X')
   })
 
-  const handler = ({ space, resources }: ActionOptions) => {
-    store.dispatch('Files/cutSelectedFiles', { ...language, space, resources, messageStore })
+  const handler = ({ resources }: ActionOptions) => {
+    cutResources(resources as Resource[])
   }
   const actions = computed((): FileAction[] => [
     {

@@ -45,34 +45,18 @@ export default {
       context.commit('ADD_FILE_SELECTION', file)
     }
   },
-  copySelectedFiles(
-    context,
-    options: { resources: Resource[]; messageStore: MessageStore } & Language
-  ) {
-    const { $gettext } = options
-    context.commit('CLIPBOARD_SELECTED', options)
-    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
-    options.messageStore.showMessage({ title: $gettext('Copied to clipboard!'), status: 'success' })
-  },
-  cutSelectedFiles(
-    context,
-    options: {
-      space: SpaceResource
-      resources: Resource[]
-      messageStore: MessageStore
-    } & Language
-  ) {
-    const { $gettext } = options
-    context.commit('CLIPBOARD_SELECTED', options)
-    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
-    options.messageStore.showMessage({ title: $gettext('Cut to clipboard!'), status: 'success' })
-  },
-  clearClipboardFiles(context) {
-    context.commit('CLEAR_CLIPBOARD')
-  },
   pasteSelectedFiles(
     context,
-    { targetSpace, clientService, loadingService, $gettext, $ngettext, sourceSpace, resources }
+    {
+      targetSpace,
+      clientService,
+      loadingService,
+      $gettext,
+      $ngettext,
+      sourceSpace,
+      resources,
+      clipboardStore
+    }
   ) {
     const copyMove = new ResourceTransfer(
       sourceSpace,
@@ -85,10 +69,10 @@ export default {
       $ngettext
     )
     let movedResourcesPromise
-    if (context.state.clipboardAction === ClipboardActions.Cut) {
+    if (clipboardStore.action === ClipboardActions.Cut) {
       movedResourcesPromise = copyMove.perform(TransferType.MOVE)
     }
-    if (context.state.clipboardAction === ClipboardActions.Copy) {
+    if (clipboardStore.action === ClipboardActions.Copy) {
       movedResourcesPromise = copyMove.perform(TransferType.COPY)
     }
     return movedResourcesPromise.then((movedResources) => {

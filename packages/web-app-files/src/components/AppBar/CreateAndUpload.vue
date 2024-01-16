@@ -177,7 +177,7 @@
       <oc-button
         :disabled="uploadOrFileCreationBlocked"
         class="clear-clipboard-btn"
-        @click="clearClipboardFiles"
+        @click="clearClipboard"
       >
         <oc-icon fill-type="line" name="close" />
       </oc-button>
@@ -186,12 +186,12 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
   useAppsStore,
   useCapabilityStore,
+  useClipboardStore,
   useFileActions,
   useFileActionsCreateNewShortcut,
   useMessages,
@@ -274,6 +274,11 @@ export default defineComponent({
     const capabilityRefs = storeToRefs(capabilityStore)
     const route = useRoute()
     const language = useGettext()
+
+    const clipboardStore = useClipboardStore()
+    const { clearClipboard } = clipboardStore
+    const { resources: clipboardResources } = storeToRefs(clipboardStore)
+
     const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
 
     useUpload({ uppyService })
@@ -359,7 +364,7 @@ export default defineComponent({
 
     const handlePasteFileEvent = (event) => {
       // Ignore file in clipboard if there are already files from owncloud in the clipboard
-      if (store.state.Files.clipboardResources.length || !unref(canUpload)) {
+      if (unref(clipboardResources).length || !unref(canUpload)) {
         return
       }
       // Browsers only allow single files to be pasted for security reasons
@@ -456,14 +461,14 @@ export default defineComponent({
       actionKeySuffix,
       showDrop,
       areFileExtensionsShown,
+      clearClipboard,
+      clipboardResources,
 
       // HACK: exported for unit tests:
       onUploadComplete
     }
   },
   computed: {
-    ...mapGetters('Files', ['clipboardResources']),
-
     showPasteHereButton() {
       return this.clipboardResources && this.clipboardResources.length !== 0
     },
@@ -521,8 +526,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['clearClipboardFiles']),
-
     getIconResource(fileHandler) {
       return { type: 'file', extension: fileHandler.ext } as Resource
     }

@@ -10,6 +10,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { useFileActionsCopy } from '../../../../../src/composables/actions/files'
+import { useClipboardStore } from '../../../../../src/composables/piniaStores'
 
 describe('copy', () => {
   describe('search context', () => {
@@ -32,13 +33,11 @@ describe('copy', () => {
         ])('should filter non copyable resources', ({ resources, copyAbleResources }) => {
           getWrapper({
             searchLocation: true,
-            setup: ({ actions }, { storeOptions }) => {
+            setup: ({ actions }) => {
               unref(actions)[0].handler({ space: null, resources })
-              expect(storeOptions.modules.Files.actions.copySelectedFiles).toHaveBeenCalledWith(
-                expect.anything(),
-                expect.objectContaining({
-                  resources: resources.filter((r) => copyAbleResources.includes(r.id as string))
-                })
+              const clipboardStore = useClipboardStore()
+              expect(clipboardStore.copyResources).toHaveBeenCalledWith(
+                resources.filter((r) => copyAbleResources.includes(r.id as string))
               )
             }
           })
