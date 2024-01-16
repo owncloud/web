@@ -195,6 +195,7 @@ export default defineComponent({
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
           store.dispatch('Files/loadShares', {
             client: clientService.owncloudSdk,
+            resource: resource,
             configStore,
             path: resource.path,
             storageId: resource.fileId,

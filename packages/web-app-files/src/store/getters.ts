@@ -49,12 +49,6 @@ export default {
     })
   },
   sharesLoading: (state) => state.sharesLoading,
-  highlightedFile: (state, getters) => {
-    if (getters.selectedFiles.length > 0) {
-      return getters.selectedFiles[0]
-    }
-    return state.currentFolder
-  },
   versions: (state) => {
     return state.versions
   },

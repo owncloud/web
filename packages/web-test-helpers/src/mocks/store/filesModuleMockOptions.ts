@@ -2,7 +2,6 @@ export const filesModuleMockOptions = {
   Files: {
     namespaced: true,
     state: {
-      highlightedFile: undefined,
       currentFolder: undefined,
       latestSelectedId: undefined,
       areFileExtensionsShown: undefined
@@ -11,7 +10,6 @@ export const filesModuleMockOptions = {
       currentFolder: jest.fn(),
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
-      highlightedFile: jest.fn(),
       selectedFiles: jest.fn(() => []),
       versions: jest.fn(() => []),
       outgoingCollaborators: jest.fn(() => []),

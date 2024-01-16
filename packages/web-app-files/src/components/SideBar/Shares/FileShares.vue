@@ -393,6 +393,7 @@ export default defineComponent({
         try {
           await this.addShare({
             client: this.$client,
+            resource: this.resource,
             shareWith: share.collaborator.name,
             displayName: share.collaborator.displayName,
             shareType: share.shareType,

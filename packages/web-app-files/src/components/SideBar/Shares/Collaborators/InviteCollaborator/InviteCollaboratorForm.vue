@@ -517,6 +517,7 @@ export default defineComponent({
             try {
               await addMethod({
                 client: this.$client,
+                resource: this.resource,
                 graphClient: this.clientService.graphAuthenticated,
                 path,
                 shareWith: collaborator.value.shareWith,
