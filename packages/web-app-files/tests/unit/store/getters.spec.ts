@@ -22,8 +22,8 @@ describe('Getters', () => {
     it.each(cases)('%s hidden files if areHiddenFilesShown is set to %s', (value) => {
       state.areHiddenFilesShown = value
 
-      const { activeFiles, filesAll } = getters
-      const result = activeFiles(state, { filesAll: filesAll(state) })
+      const { activeFiles, files } = getters
+      const result = activeFiles(state, { files: files(state) })
 
       expect(result.length).toEqual(mockedFiles.length)
     })

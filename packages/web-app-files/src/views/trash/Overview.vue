@@ -117,7 +117,6 @@ export default defineComponent({
     )
 
     const loadResourcesTask = useTask(function* () {
-      store.commit('Files/CLEAR_FILES_SEARCHED')
       store.commit('Files/CLEAR_CURRENT_FILES_LIST')
       yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
       store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })

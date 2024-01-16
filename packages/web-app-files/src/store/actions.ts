@@ -190,7 +190,6 @@ export default {
     }
     return Promise.all(promises).then(() => {
       context.commit('REMOVE_FILES', removedFiles)
-      context.commit('REMOVE_FILES_FROM_SEARCHED', removedFiles)
       context.commit('RESET_SELECTION')
       context.commit('PRUNE_SHARES')
 
@@ -212,11 +211,9 @@ export default {
   clearTrashBin(context) {
     context.commit('CLEAR_FILES')
     context.commit('RESET_SELECTION')
-    context.commit('CLEAR_FILES_SEARCHED')
   },
   removeFilesFromTrashbin(context, files) {
     context.commit('REMOVE_FILES', files)
-    context.commit('REMOVE_FILES_FROM_SEARCHED', files)
     context.commit('RESET_SELECTION')
   },
   updateFileShareTypes({ state, getters, commit, rootState }, path) {
