@@ -82,7 +82,6 @@ export type WebThemeConfigType = z.infer<typeof WebThemeConfig>
 const themeStorageKey = 'oc_currentThemeName'
 
 export const useThemeStore = defineStore('theme', () => {
-  const currentThemeName = useLocalStorage(themeStorageKey, null) // null as default to make fallback possible
   const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, null)
 
   const isDark = usePreferredDark()
@@ -94,13 +93,10 @@ export const useThemeStore = defineStore('theme', () => {
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
 
-    if (unref(currentThemeName) === null) {
-      currentThemeName.value = unref(availableThemes).find((t) => t.isDark === unref(isDark)).name
-    }
-
     setAndApplyTheme(
-      unref(availableThemes).find((t) => t.name === unref(currentThemeName)) ||
-        availableThemes.value[0]
+      unref(availableThemes).find((t) => t.name === unref(currentLocalStorageThemeName)) ||
+        availableThemes.value[0],
+      false
     )
   }
 
@@ -112,9 +108,11 @@ export const useThemeStore = defineStore('theme', () => {
     return currentLocalStorageThemeName.value == null
   })
 
-  const setAndApplyTheme = (theme: WebThemeType) => {
+  const setAndApplyTheme = (theme: WebThemeType, updateStorage = true) => {
     currentTheme.value = theme
-    currentLocalStorageThemeName.value = unref(currentTheme).name
+    if (updateStorage) {
+      currentLocalStorageThemeName.value = unref(currentTheme).name
+    }
 
     const customizableDesignTokens = [
       { name: 'breakpoints', prefix: 'breakpoint' },

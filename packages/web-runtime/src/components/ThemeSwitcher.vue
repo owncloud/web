@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import { useMessages, useThemeStore, WebThemeType } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 import { useGettext } from 'vue3-gettext'
@@ -21,10 +21,13 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const autoTheme = { name: $gettext('Auto (same as system)') }
+    const { availableThemes, currentTheme } = storeToRefs(themeStore)
+    const currentThemeSelection = ref(null)
 
     const { setAndApplyTheme, setAutoSystemTheme, isCurrentThemeAutoSystem } = themeStore
 
     const updateTheme = (newTheme: WebThemeType) => {
+      currentThemeSelection.value = newTheme
       if (newTheme == autoTheme) {
         setAutoSystemTheme()
         return
@@ -33,8 +36,10 @@ export default defineComponent({
       showMessage({ title: $gettext('Preference saved.') })
     }
 
-    const { availableThemes, currentTheme } = storeToRefs(themeStore)
     const currentThemeOrAuto = computed(() => {
+      if (unref(currentThemeSelection)) {
+        return unref(currentThemeSelection)
+      }
       if (unref(isCurrentThemeAutoSystem)) {
         return autoTheme
       }
