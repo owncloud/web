@@ -51,7 +51,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const { editorActions, loadExternalAppActions } = useFileActions()
+    const { editorActions } = useFileActions()
 
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
@@ -101,11 +101,7 @@ export default defineComponent({
     )
 
     const menuItemsContext = computed(() => {
-      const fileHandlers = [
-        ...unref(openShortcutActions),
-        ...unref(editorActions),
-        ...loadExternalAppActions(unref(actionOptions))
-      ]
+      const fileHandlers = [...unref(openShortcutActions), ...unref(editorActions)]
 
       return [...fileHandlers]
         .filter((item) => item.isEnabled(unref(actionOptions)))

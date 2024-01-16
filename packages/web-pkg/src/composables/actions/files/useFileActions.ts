@@ -31,8 +31,9 @@ import {
   useFileActionsRestore,
   useFileActionsCreateSpaceFromResource
 } from './index'
-import { useAppsStore, useCapabilityStore, useConfigStore } from '../../piniaStores'
+import { useAppsStore, useConfigStore } from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -45,13 +46,9 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const appsStore = useAppsStore()
   const configStore = useConfigStore()
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
-  const appProvidersEnabled = computed(() => {
-    return !!capabilityStore.filesAppProviders.find((appProvider) => appProvider.enabled)
-  })
 
   const { openUrl } = useWindowOpen()
 
@@ -108,9 +105,8 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
           handler: (options) =>
             openEditor(
               fileExtension,
-              options.space.getDriveAliasAndItem(options.resources[0]),
-              options.resources[0].webDavPath,
-              options.resources[0].fileId,
+              options.space,
+              options.resources[0],
               EDITOR_MODE_EDIT,
               options.space.shareId
             ),
@@ -158,23 +154,22 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const routeOptsHelper = (
     appFileExtension: ApplicationFileExtension,
-    driveAliasAndItem: string,
-    filePath: string,
-    fileId: string,
+    space: SpaceResource,
+    resource: Resource,
     mode: string,
     shareId: string
   ) => {
     return {
       name: appFileExtension.routeName || appFileExtension.app,
       params: {
-        driveAliasAndItem,
-        filePath,
-        fileId,
+        driveAliasAndItem: space.getDriveAliasAndItem(resource),
+        filePath: resource.path,
+        fileId: resource.fileId,
         mode
       },
       query: {
         ...(shareId && { shareId }),
-        ...(fileId && configStore.options.routing.idBased && { fileId }),
+        ...(resource.fileId && configStore.options.routing.idBased && { fileId: resource.fileId }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }
@@ -182,35 +177,16 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const openEditor = (
     appFileExtension: ApplicationFileExtension,
-    driveAliasAndItem: string,
-    filePath: string,
-    fileId: string,
+    space: SpaceResource,
+    resource: Resource,
     mode: string,
     shareId: string = undefined
   ) => {
-    if (appFileExtension.handler) {
-      return appFileExtension.handler({
-        config: configStore.options,
-        driveAliasAndItem,
-        filePath,
-        fileId,
-        mode,
-        ...(shareId && { shareId })
-      })
-    }
-
-    const routeOpts = routeOptsHelper(
-      appFileExtension,
-      driveAliasAndItem,
-      filePath,
-      fileId,
-      mode,
-      shareId
-    )
+    const routeOpts = routeOptsHelper(appFileExtension, space, resource, mode, shareId)
 
     if (configStore.options.openAppsInTab) {
       const path = router.resolve(routeOpts).href
-      const target = `${appFileExtension.routeName}-${filePath}`
+      const target = `${appFileExtension.routeName}-${resource.path}`
 
       openUrl(path, target, true)
       return
@@ -250,12 +226,8 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     // first priority: handlers from config
     const enabledEditorActions = unref(editorActions).filter(filterCallback)
 
-    // second priority: `/app/open` endpoint of app provider if available
-    // FIXME: files app should not know anything about the `external apps` app
-    const externalAppsActions = loadExternalAppActions(options).filter(filterCallback)
-
     // prioritize apps that have hasPriority set
-    const appActions = [...enabledEditorActions, ...externalAppsActions].sort(
+    const appActions = enabledEditorActions.sort(
       (a, b) => Number(b.hasPriority) - Number(a.hasPriority)
     )
 
@@ -268,83 +240,9 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
   }
 
   const getAllAvailableActions = (options: FileActionOptions) => {
-    return [
-      ...unref(editorActions),
-      ...loadExternalAppActions(options),
-      ...unref(systemActions)
-    ].filter((action) => {
+    return [...unref(editorActions), ...unref(systemActions)].filter((action) => {
       return action.isEnabled(options)
     })
-  }
-
-  // returns an array of available external Apps
-  // to open a resource with a specific mimeType
-  // FIXME: filesApp should not know anything about any other app, dont cross the line!!! BAD
-  const loadExternalAppActions = (options: FileActionOptions): Action[] => {
-    if (isLocationTrashActive(router, 'files-trash-generic')) {
-      return []
-    }
-
-    // we don't support external apps as batch action as of now
-    if (options.resources.length !== 1) {
-      return []
-    }
-
-    const resource = options.resources[0]
-    const { mimeType, webDavPath, fileId } = resource
-    const driveAliasAndItem = options.space?.getDriveAliasAndItem(resource)
-    if (!driveAliasAndItem) {
-      return []
-    }
-
-    const mimeTypes = store.getters['External/mimeTypes'] || []
-    if (mimeType === undefined || !unref(appProvidersEnabled) || !mimeTypes.length) {
-      return []
-    }
-
-    const filteredMimeTypes = mimeTypes.find((t) => t.mime_type === mimeType)
-    if (filteredMimeTypes === undefined) {
-      return []
-    }
-    const { app_providers: appProviders = [], default_application: defaultApplication } =
-      filteredMimeTypes
-
-    return appProviders.map((app): FileAction => {
-      const label = $gettext('Open in %{ appName }')
-      return {
-        name: app.name,
-        icon: app.icon,
-        img: app.img,
-        componentType: 'button',
-        class: `oc-files-actions-${app.name}-trigger`,
-        isEnabled: () => true,
-        hasPriority: defaultApplication === app.name,
-        handler: () =>
-          openExternalApp(app.name, driveAliasAndItem, webDavPath, fileId, options.space.shareId),
-        label: () => $gettext(label, { appName: app.name })
-      }
-    })
-  }
-
-  const openExternalApp = (app, driveAliasAndItem: string, filePath, fileId, shareId) => {
-    const routeOpts = routeOptsHelper(
-      {
-        routeName: 'external-apps'
-      },
-      driveAliasAndItem,
-      filePath,
-      undefined,
-      undefined,
-      shareId
-    )
-
-    routeOpts.query = {
-      app,
-      fileId,
-      ...routeOpts.query
-    } as any
-
-    openUrl(router.resolve(routeOpts).href, configStore.options.openAppsInTab ? '_blank' : '_self')
   }
 
   return {
@@ -353,7 +251,6 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     getDefaultAction,
     getDefaultEditorAction,
     getAllAvailableActions,
-    loadExternalAppActions,
     openEditor,
     triggerAction,
     triggerDefaultAction

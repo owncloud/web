@@ -39,7 +39,7 @@ export const useAppsStore = defineStore('apps', () => {
     unref(fileExtensions).push({
       app: appId,
       extension: data.extension,
-      handler: data.handler,
+      createFileHandler: data.createFileHandler,
       label: data.label,
       mimeType: data.mimeType,
       routeName: data.routeName,
@@ -62,6 +62,7 @@ export const useAppsStore = defineStore('apps', () => {
     fileExtensions,
 
     registerApp,
+    registerFileExtension,
     loadExternalAppConfig
   }
 })

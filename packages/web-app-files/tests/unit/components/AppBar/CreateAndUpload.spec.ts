@@ -41,21 +41,6 @@ const elSelector = {
   clearClipboardBtn: '.clear-clipboard-btn'
 }
 
-const fileExtensionMocks = [
-  {
-    extension: 'txt',
-    newFileMenu: { menuTitle: () => 'Plain text file' }
-  },
-  {
-    extension: 'md',
-    newFileMenu: { menuTitle: () => 'Mark-down file' }
-  },
-  {
-    extension: 'drawio',
-    newFileMenu: { menuTitle: () => 'Draw.io document' }
-  }
-]
-
 describe('CreateAndUpload component', () => {
   describe('action buttons', () => {
     it('should show and be enabled if file creation is possible', () => {
@@ -66,7 +51,7 @@ describe('CreateAndUpload component', () => {
     })
     it('should be disabled if file creation is not possible', () => {
       const currentFolder = mock<Resource>({ canUpload: () => false })
-      const { wrapper } = getWrapper({ currentFolder })
+      const { wrapper } = getWrapper({ currentFolder, createActions: [] })
       expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeTruthy()
       expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeTruthy()
     })
@@ -81,15 +66,8 @@ describe('CreateAndUpload component', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.findAll(elSelector.resourceUpload).length).toBe(2)
     })
-    it('should show additional handlers', () => {
-      const { wrapper } = getWrapper({ fileExtensions: fileExtensionMocks })
-      expect(wrapper.html()).toMatchSnapshot()
-    })
-    it('should show file extension if file extensions are enabled', () => {
-      const { wrapper } = getWrapper({
-        fileExtensions: fileExtensionMocks,
-        areFileExtensionsShown: true
-      })
+    it('should show entries for all new file handlers', () => {
+      const { wrapper } = getWrapper()
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
@@ -167,7 +145,6 @@ describe('CreateAndUpload component', () => {
 })
 
 function getWrapper({
-  fileExtensions = [],
   clipboardResources = [],
   files = [],
   currentFolder = mock<Resource>({ canUpload: () => true }),
@@ -177,7 +154,12 @@ function getWrapper({
   item = undefined,
   itemId = undefined,
   newFileAction = false,
-  areFileExtensionsShown = false
+  areFileExtensionsShown = false,
+  createActions = [
+    mock<FileAction>({ label: () => 'Plain text file', ext: 'txt' }),
+    mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
+    mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
+  ]
 } = {}) {
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest: jest.fn().mockResolvedValue({ status: 200 })
@@ -186,11 +168,7 @@ function getWrapper({
 
   jest.mocked(useFileActionsCreateNewFile).mockReturnValue(
     mock<ReturnType<typeof useFileActionsCreateNewFile>>({
-      actions: ref([
-        mock<FileAction>({ label: () => 'Plain text file', ext: 'txt' }),
-        mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
-        mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
-      ])
+      actions: ref(createActions)
     })
   )
 
@@ -222,7 +200,6 @@ function getWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              appsState: { fileExtensions },
               spacesState: { spaces: spaces as any },
               capabilityState: { capabilities }
             }
