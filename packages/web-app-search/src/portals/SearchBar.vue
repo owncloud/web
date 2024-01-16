@@ -125,7 +125,7 @@ export default defineComponent({
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
     const availableProviders = useAvailableProviders()
-    const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
+    const locationFilterId = ref(SearchLocationFilterConstants.allFiles)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
@@ -174,7 +174,7 @@ export default defineComponent({
 
       if (
         unref(currentFolderAvailable) &&
-        unref(locationFilterId) === SearchLocationFilterConstants.inHere
+        unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
       ) {
         const currentFolder = store.getters['Files/currentFolder']
         let scope
@@ -222,7 +222,7 @@ export default defineComponent({
         }
         const useScope =
           unref(currentFolderAvailable) &&
-          unref(locationFilterId) === SearchLocationFilterConstants.inHere
+          unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
         router.push(
           createLocationCommon('files-common-search', {
             query: {
