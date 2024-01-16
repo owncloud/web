@@ -38,7 +38,6 @@ export const filesModuleMockOptions = {
     },
     actions: {
       deleteFiles: jest.fn(),
-      pasteSelectedFiles: jest.fn(),
       loadIndicators: jest.fn(),
       loadVersions: jest.fn(),
       loadShares: jest.fn(),

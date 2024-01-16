@@ -1,13 +1,6 @@
 import PQueue from 'p-queue'
 
-import {
-  MessageStore,
-  CapabilityStore,
-  getParentPaths,
-  ConfigStore,
-  ResourceTransfer,
-  TransferType
-} from '@ownclouders/web-pkg'
+import { MessageStore, CapabilityStore, ConfigStore, getParentPaths } from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
@@ -16,7 +9,6 @@ import {
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import get from 'lodash-es/get'
-import { ClipboardActions } from '@ownclouders/web-pkg'
 import {
   buildResource,
   isProjectSpaceResource,
@@ -50,58 +42,6 @@ export default {
     } else {
       context.commit('ADD_FILE_SELECTION', file)
     }
-  },
-  pasteSelectedFiles(
-    context,
-    {
-      targetSpace,
-      clientService,
-      loadingService,
-      $gettext,
-      $ngettext,
-      sourceSpace,
-      resources,
-      clipboardStore
-    }
-  ) {
-    const copyMove = new ResourceTransfer(
-      sourceSpace,
-      resources,
-      targetSpace,
-      context.state.currentFolder,
-      clientService,
-      loadingService,
-      $gettext,
-      $ngettext
-    )
-    let movedResourcesPromise
-    if (clipboardStore.action === ClipboardActions.Cut) {
-      movedResourcesPromise = copyMove.perform(TransferType.MOVE)
-    }
-    if (clipboardStore.action === ClipboardActions.Copy) {
-      movedResourcesPromise = copyMove.perform(TransferType.COPY)
-    }
-    return movedResourcesPromise.then((movedResources) => {
-      const loadingResources = []
-      const fetchedResources = []
-      for (const resource of movedResources) {
-        loadingResources.push(
-          (async () => {
-            const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-              targetSpace,
-              resource
-            )
-            fetchedResources.push(movedResource)
-          })()
-        )
-      }
-
-      return Promise.all(loadingResources).then(() => {
-        const currentFolder = context.getters.currentFolder
-        context.commit('UPSERT_RESOURCES', fetchedResources)
-        context.commit('LOAD_INDICATORS', currentFolder.path)
-      })
-    })
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

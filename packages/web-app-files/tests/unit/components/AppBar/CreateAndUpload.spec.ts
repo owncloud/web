@@ -8,7 +8,8 @@ import {
   useRequest,
   useSpacesStore,
   CapabilityStore,
-  useClipboardStore
+  useClipboardStore,
+  useFileActionsPaste
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
@@ -28,7 +29,8 @@ jest.mock('@ownclouders/web-pkg', () => ({
   useExtensionRegistry: jest.fn(),
   useRequest: jest.fn(),
   useFileActionsCreateNewFile: jest.fn(),
-  useFileActions: jest.fn()
+  useFileActions: jest.fn(),
+  useFileActionsPaste: jest.fn()
 }))
 
 const elSelector = {
@@ -106,7 +108,7 @@ describe('CreateAndUpload component', () => {
       expect(wrapper.findAll(`${elSelector.clipboardBtns} .oc-button`).length).toBe(2)
     })
     it('call the "paste files"-action', async () => {
-      const { wrapper, storeOptions } = getWrapper({
+      const { wrapper, mocks } = getWrapper({
         clipboardResources: [
           mock<Resource>({
             shareRoot: undefined
@@ -114,7 +116,7 @@ describe('CreateAndUpload component', () => {
         ]
       })
       await wrapper.find(elSelector.pasteFilesBtn).trigger('click')
-      expect(storeOptions.modules.Files.actions.pasteSelectedFiles).toHaveBeenCalled()
+      expect(mocks.pasteActionHandler).toHaveBeenCalled()
     })
     it('call "clear clipboard"-action', async () => {
       const { wrapper } = getWrapper({ clipboardResources: [mock<Resource>()] })
@@ -196,13 +198,21 @@ function getWrapper({
     })
   )
 
+  const pasteActionHandler = jest.fn()
+  jest.mocked(useFileActionsPaste).mockReturnValue(
+    mock<ReturnType<typeof useFileActionsPaste>>({
+      actions: ref([mock<FileAction>({ handler: pasteActionHandler })])
+    })
+  )
+
   const storeOptions = { ...defaultStoreMockOptions }
   storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
   storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
   storeOptions.modules.Files.getters.files.mockImplementation(() => files)
   const store = createStore(storeOptions)
   const mocks = {
-    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) })
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) }),
+    pasteActionHandler
   }
   const capabilities = {
     spaces: { enabled: true },
