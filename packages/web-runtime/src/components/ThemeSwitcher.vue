@@ -11,19 +11,21 @@
 </template>
 <script lang="ts">
 import { defineComponent, unref } from 'vue'
-import { useThemeStore, WebThemeType } from '@ownclouders/web-pkg'
+import { useMessages, useThemeStore, WebThemeType } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
-  emits: ['update'],
-  setup(props, { emit }) {
+  setup() {
     const themeStore = useThemeStore()
+    const { showMessage } = useMessages()
+    const { $gettext } = useGettext()
 
     const { setAndApplyTheme } = themeStore
 
     const updateTheme = (newTheme: WebThemeType) => {
       setAndApplyTheme(newTheme)
-      emit('update')
+      showMessage({ title: $gettext('Preference saved.') })
     }
 
     const { availableThemes, currentTheme } = storeToRefs(themeStore)

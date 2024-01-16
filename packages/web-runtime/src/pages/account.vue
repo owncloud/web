@@ -107,7 +107,7 @@
         <div class="account-page-info-theme oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Theme')" />
           <dd data-testid="theme" class="oc-width-1-3">
-            <theme-switcher @update="onUpdateTheme" />
+            <theme-switcher />
           </dd>
         </div>
         <div v-if="showNotifications" class="account-page-notification oc-mb oc-width-1-2@s">
@@ -406,10 +406,6 @@ export default defineComponent({
       }
     }
 
-    const onUpdateTheme = () => {
-      showMessage({ title: $gettext('Preference saved.') })
-    }
-
     onMounted(async () => {
       await loadAccountBundleTask.perform()
       await loadValuesListTask.perform()
@@ -459,8 +455,7 @@ export default defineComponent({
       loadAccountBundleTask,
       loadGraphUserTask,
       loadValuesListTask,
-      showEditPasswordModal,
-      onUpdateTheme
+      showEditPasswordModal
     }
   },
   computed: {
