@@ -53,6 +53,7 @@ Summary
 * Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
 * Change - Auth store to pinia: [#10323](https://github.com/owncloud/web/pull/10323)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+* Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -558,6 +559,18 @@ Details
 
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10330
+
+* Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
+
+   BREAKING CHANGE for developers: Configuration is no longer stored in a vuex
+   store but in pinia instead. You can access it via the new `useConfigStore`
+   composable. The `ConfigurationManager` has also been removed in favour of this
+   composable.
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10336
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
