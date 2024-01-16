@@ -1,6 +1,6 @@
 import merge from 'deepmerge'
 import { defineStore } from 'pinia'
-import { ref, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
 import { applyCustomProp } from 'design-system/src/'
@@ -104,6 +104,14 @@ export const useThemeStore = defineStore('theme', () => {
     )
   }
 
+  const setAutoSystemTheme = () => {
+    currentLocalStorageThemeName.value = null
+  }
+
+  const isCurrentThemeAutoSystem = computed(() => {
+    return currentLocalStorageThemeName.value == null
+  })
+
   const setAndApplyTheme = (theme: WebThemeType) => {
     currentTheme.value = theme
     currentLocalStorageThemeName.value = unref(currentTheme).name
@@ -132,6 +140,8 @@ export const useThemeStore = defineStore('theme', () => {
     availableThemes,
     currentTheme,
     initializeThemes,
-    setAndApplyTheme
+    setAndApplyTheme,
+    setAutoSystemTheme,
+    isCurrentThemeAutoSystem
   }
 })
