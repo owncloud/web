@@ -557,8 +557,12 @@ Details
    Developers should use the `extensions` property inside the `appInfo` object
    instead.
 
+   Note that the `handler` property of such an extension has been renamed to
+   `createFileHandler`.
+
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10330
+   https://github.com/owncloud/web/pull/10346
 
 * Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
 
