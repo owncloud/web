@@ -14,7 +14,9 @@ Feature: internal link share
       | resource | recipient | type | role     |
       | myfolder | Brian     | user | Can edit |
     And "Alice" opens the "files" app
-    And "Alice" creates a public link for the resource "myfolder" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource | password |
+      | myfolder | %public% |
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link

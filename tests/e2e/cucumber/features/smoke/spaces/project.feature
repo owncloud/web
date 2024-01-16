@@ -48,9 +48,10 @@ Feature: spaces.personal
       | lorem.txt | folderPublic     |
       | lorem.txt | folder_to_shared |
 
-    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource     | role             | password |
+      | folderPublic | Secret File Drop | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "team.1"
-    And "Alice" edits the public link named "team.1" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "team.1" of resource "folderPublic" to "+5 days"
 
     # borrowed from share.feature
@@ -74,7 +75,9 @@ Feature: spaces.personal
       | resource  | to           |
       | lorem.txt | folderPublic |
 
-    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource     | password |
+      | folderPublic | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "team.2"
     And "Alice" edits the public link named "team.2" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "team.2" of resource "folderPublic" to "+5 days"
@@ -168,5 +171,5 @@ Feature: spaces.personal
       | textfile.txt | parent |
     And "Brian" restores following resources
       | resource     | to     | version | openDetailsPanel |
-      | textfile.txt | parent | 1       |true              |
+      | textfile.txt | parent | 1       | true             |
     And "Brian" logs out

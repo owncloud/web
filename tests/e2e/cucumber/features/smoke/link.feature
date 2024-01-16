@@ -8,14 +8,17 @@ Feature: link
 
   Scenario: public link
     When "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name         |
+      | folderPublic |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile             | content     |
+      | folderPublic/lorem.txt | lorem ipsum |
+
     And "Alice" opens the "files" app
-    And "Alice" creates the following resources
-      | resource     | type   |
-      | folderPublic | folder |
-    And "Alice" uploads the following resources
-      | resource  | to           |
-      | lorem.txt | folderPublic |
-    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource     | role             | password |
+      | folderPublic | Secret File Drop | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Secret File Drop"
     And "Alice" sets the expiration date of the public link named "myPublicLink" of resource "folderPublic" to "+5 days"
@@ -55,6 +58,7 @@ Feature: link
     And "Alice" creates the following files into personal space using API
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
+
     And "Alice" opens the "files" app
     When "Alice" creates quick link of the resource "folderPublic" with password "%public%" from the context menu
     And "Anonymous" opens the public link "Link"
@@ -70,31 +74,43 @@ Feature: link
       | id    |
       | Brian |
     And "Alice" logs in
-    And "Alice" creates the following resources
-      | resource     | type   |
-      | folderPublic | folder |
-    And "Alice" creates the following resources
-      | resource                      | type    | content   |
-      | folderPublic/shareToBrian.txt | txtFile | some text |
-      | folderPublic/shareToBrian.md  | mdFile  | readme    |
-    And "Alice" uploads the following resources via drag-n-drop
-      | resource       |
-      | simple.pdf     |
-      | testavatar.jpg |
-    And "Alice" shares the following resources using the sidebar panel
+    And "Alice" creates the following folders in personal space using API
+      | name         |
+      | folderPublic |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile                    | content   |
+      | folderPublic/shareToBrian.txt | some text |
+      | folderPublic/shareToBrian.md  | readme    |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                     | to             |
+      | filesForUpload/simple.pdf     | simple.pdf     |
+      | filesForUpload/testavatar.jpg | testavatar.jpg |
+    And "Alice" shares the following resource using API
       | resource       | recipient | type | role     |
       | folderPublic   | Brian     | user | Can edit |
       | simple.pdf     | Brian     | user | Can edit |
       | testavatar.jpg | Brian     | user | Can edit |
-    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
+
+    And "Alice" opens the "files" app
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource     | password |
+      | folderPublic | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "folderLink"
-    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.txt" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource                      | password |
+      | folderPublic/shareToBrian.txt | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.txt" to "textLink"
-    And "Alice" creates a public link for the resource "folderPublic/shareToBrian.md" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource                     | password |
+      | folderPublic/shareToBrian.md | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.md" to "markdownLink"
-    And "Alice" creates a public link for the resource "simple.pdf" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource   | password |
+      | simple.pdf | %public% |
     And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
-    And "Alice" creates a public link for the resource "testavatar.jpg" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource       | password |
+      | testavatar.jpg | %public% |
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
     And "Brian" logs in
@@ -124,18 +140,21 @@ Feature: link
 
   Scenario: add banned password for public link
     When "Alice" logs in
-    And "Alice" uploads the following resources
-      | resource  |
-      | lorem.txt |
-    And "Alice" creates a public link for the resource "lorem.txt" with password "%public%" using the sidebar panel
-    And "Alice" renames the most recently created public link of resource "lorem.txt" to "myPublicLink"
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "myPublicLink" of resource "lorem.txt"
+    And "Alice" creates the following files into personal space using API
+      | pathToFile | content   |
+      | lorem.txt  | some text |
+
+    And "Alice" opens the "files" app
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource  | password |
+      | lorem.txt | %public% |
+    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
     Then "Alice" should see an error message
       """
       Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
       """
     And "Alice" closes the public link password dialog box
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "myPublicLink" of resource "lorem.txt"
+    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
     Then "Alice" should see an error message
       """
       Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
@@ -145,7 +164,6 @@ Feature: link
     And "Alice" generates the password for the public link
     And "Alice" copies the password of the public link
     And "Alice" sets the password of the public link
-    And "Anonymous" opens the public link "myPublicLink"
+    And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%copied_password%"
     And "Alice" logs out
-    

@@ -13,7 +13,6 @@ Feature: language settings
     And "Brian" creates the following folder in personal space using API
       | name          |
       | check_message |
-    And "Brian" opens the "files" app
     And "Brian" shares the following resource using API
       | resource      | recipient | type | role     |
       | check_message | Alice     | user | Can edit |
@@ -29,19 +28,22 @@ Feature: language settings
       | Brian Murphy hat check_message mit Ihnen geteilt |
     And "Alice" logs out
 
+
   Scenario: anonymous user language change
     When "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
+      | name         |
+      | folderPublic |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                | to        |
+      | filesForUpload/lorem.txt | lorem.txt |
+
     And "Alice" opens the "files" app
-    And "Alice" creates the following resources
-      | resource     | type   |
-      | folderPublic | folder |
-    And "Alice" uploads the following resources
-      | resource  | to           |
-      | lorem.txt | folderPublic |
-    And "Alice" creates a public link for the resource "folderPublic" with password "%public%" using the sidebar panel
-    And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource     | password |
+      | folderPublic | %public% |
     And "Alice" logs out
-    When "Anonymous" opens the public link "myPublicLink"
+    When "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" opens the user menu
     And "Anonymous" changes the language to "Deutsch - German"
