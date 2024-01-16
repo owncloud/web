@@ -2,5 +2,8 @@ Change: Registering app file editors
 
 BREAKING CHANGE for developers: The `announceExtensions` method inside the app's `ready` hook, which could be used to register file editors, has been removed. Developers should use the `extensions` property inside the `appInfo` object instead.
 
+Note that the `handler` property of such an extension has been renamed to `createFileHandler`.
+
 https://github.com/owncloud/web/pull/10330
+https://github.com/owncloud/web/pull/10346
 https://github.com/owncloud/web/issues/10210

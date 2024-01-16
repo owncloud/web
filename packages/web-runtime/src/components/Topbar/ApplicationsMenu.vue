@@ -128,14 +128,7 @@ export default defineComponent({
         ({ app, extension }) => app === item.id && extension === item.defaultExtension
       )
 
-      openEditor(
-        appFileExtension,
-        space.getDriveAliasAndItem(emptyResource),
-        emptyResource.webDavPath,
-        emptyResource.id,
-        EDITOR_MODE_EDIT,
-        space.shareId
-      )
+      openEditor(appFileExtension, space, emptyResource, EDITOR_MODE_EDIT, space.shareId)
     }
     const getAdditionalEventBindings = (item: ApplicationInformation) => {
       if (item.applicationMenu?.openAsEditor) {

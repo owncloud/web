@@ -659,6 +659,9 @@ importers:
       vuex:
         specifier: 4.1.0
         version: 4.1.0(vue@3.3.8)
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
     devDependencies:
       web-test-helpers:
         specifier: workspace:*

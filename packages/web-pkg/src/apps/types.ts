@@ -3,6 +3,7 @@ import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
 import { Module, Store } from 'vuex'
 import { Extension } from '../composables/piniaStores'
 import { IconFillType } from '../helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export interface AppReadyHookArgs {
   globalProperties: ComponentCustomProperties & Record<string, any>
@@ -50,7 +51,11 @@ export interface ApplicationMenuItem {
 export interface ApplicationFileExtension {
   app?: string
   extension?: string
-  handler?: (...args) => Promise<void> | void
+  createFileHandler?: (arg: {
+    fileName: string
+    space: SpaceResource
+    currentFolder: Resource
+  }) => Promise<Resource>
   hasPriority?: boolean
   label?: string
   mimeType?: string
@@ -91,7 +96,7 @@ export interface ClassicApplicationScript {
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
   initialize?: () => void
-  ready?: (args: AppReadyHookArgs) => void
+  ready?: (args: AppReadyHookArgs) => Promise<void> | void
   mounted?: (...args) => void
   // TODO: move this to its own type
   setup?: (args: { applicationConfig: AppConfigObject }) => ClassicApplicationScript

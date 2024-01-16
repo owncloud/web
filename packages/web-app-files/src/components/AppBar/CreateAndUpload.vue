@@ -30,32 +30,26 @@
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
-          <template v-if="mimetypesAllowedForCreation">
+          <template v-if="externalFileActions">
             <li
-              v-for="(mimeTypeAction, key) in createNewFileMimeTypeActions"
+              v-for="(fileAction, key) in externalFileActions"
               :key="`file-creation-item-external-${key}`"
               class="create-list-file oc-menu-item-hover"
             >
-              <oc-button appearance="raw" @click="mimeTypeAction.handler">
-                <resource-icon :resource="getIconResource(mimeTypeAction)" size="medium" />
+              <oc-button appearance="raw" @click="fileAction.handler">
+                <resource-icon :resource="getIconResource(fileAction)" size="medium" />
+                <span class="create-list-file-item-text" v-text="fileAction.label()" />
                 <span
-                  class="create-list-file-item-text"
-                  v-text="$gettext(mimeTypeAction.label())"
-                />
-                <span
-                  v-if="areFileExtensionsShown && mimeTypeAction.ext"
+                  v-if="areFileExtensionsShown && fileAction.ext"
                   class="create-list-file-item-extension"
-                  v-text="mimeTypeAction.ext"
+                  v-text="fileAction.ext"
                 />
               </oc-button>
             </li>
           </template>
+          <li v-if="externalFileActions.length && appFileActions.length" class="bottom-seperator" />
           <li
-            v-if="mimetypesAllowedForCreation && createNewFileMimeTypeActions.length > 0"
-            class="bottom-seperator"
-          />
-          <li
-            v-for="(fileAction, key) in createNewFileActions"
+            v-for="(fileAction, key) in appFileActions"
             :key="`file-creation-item-${key}`"
             class="create-list-file oc-menu-item-hover"
           >
@@ -319,23 +313,16 @@ export default defineComponent({
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
-      space: props.space,
-      appNewFileMenuExtensions
+      space: props.space
     })
 
-    const mimetypesAllowedForCreation = computed(() => {
-      const mimeTypes = store.getters['External/mimeTypes']
-      if (!mimeTypes) {
-        return []
-      }
-      return mimeTypes.filter((mimetype) => mimetype.allow_creation) || []
-    })
+    const appFileActions = computed(() =>
+      unref(createNewFileActions).filter(({ isExternal }) => !isExternal)
+    )
 
-    const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
-      store,
-      space: props.space,
-      mimetypesAllowedForCreation: mimetypesAllowedForCreation
-    })
+    const externalFileActions = computed(() =>
+      unref(createNewFileActions).filter(({ isExternal }) => isExternal)
+    )
 
     const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
@@ -449,10 +436,9 @@ export default defineComponent({
       hasSpaces: capabilityRefs.spacesEnabled,
       canUpload,
       currentFolder,
-      createNewFileActions,
-      createNewFileMimeTypeActions,
       createNewFolder,
-      mimetypesAllowedForCreation,
+      appFileActions,
+      externalFileActions,
       createNewFolderAction,
       createNewShortcutAction,
       extensionActions,
@@ -481,7 +467,7 @@ export default defineComponent({
     },
 
     createFileActionsAvailable() {
-      return this.appNewFileMenuExtensions.length > 0 || this.mimetypesAllowedForCreation.length > 0
+      return this.appFileActions.length > 0 || this.externalFileActions.length > 0
     },
     newButtonTooltip() {
       if (!this.canUpload) {
