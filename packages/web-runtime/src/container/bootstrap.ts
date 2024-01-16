@@ -588,7 +588,12 @@ export const announceVersions = ({
  */
 export const startSentry = (configStore: ConfigStore, app: App): void => {
   if (configStore.sentry?.dsn) {
-    const { dsn, environment = 'production', ...moreSentryOptions } = configStore.sentry
+    const {
+      dsn,
+      environment = 'production',
+      transportOptions,
+      ...moreSentryOptions
+    } = configStore.sentry
 
     sentryInit({
       app,
@@ -596,8 +601,9 @@ export const startSentry = (configStore: ConfigStore, app: App): void => {
       environment,
       attachProps: true,
       logErrors: true,
+      transportOptions: transportOptions as SentryConfig['transportOptions'],
       ...moreSentryOptions
-    } as SentryConfig)
+    })
   }
 }
 

@@ -1,5 +1,5 @@
-import { init } from '@sentry/vue'
 import { AppConfigObject } from '../../../apps'
+import { Options as SentryOptions } from '@sentry/vue/types/types'
 
 export interface CustomTranslation {
   url: string
@@ -25,7 +25,7 @@ export interface OpenIdConnectConfig {
   scope?: string
 }
 
-export type SentryConfig = Parameters<typeof init>[0]
+export type SentryConfig = SentryOptions
 
 export interface StyleConfig {
   href?: string
