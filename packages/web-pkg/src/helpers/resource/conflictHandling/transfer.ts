@@ -2,20 +2,15 @@ import { Resource } from '@ownclouders/web-client'
 import { basename, join } from 'path'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
-  ClientService,
-  LoadingService,
-  LoadingTaskCallbackArguments,
-  useMessages
-} from '@ownclouders/web-pkg'
-import {
   ConflictDialog,
+  FileConflict,
   ResolveStrategy,
+  TransferType,
   isResourceBeeingMovedToSameLocation,
-  resolveFileNameDuplicate,
-  FileConflict
-} from '@ownclouders/web-pkg'
-
-import { TransferType } from '.'
+  resolveFileNameDuplicate
+} from '.'
+import { ClientService, LoadingService, LoadingTaskCallbackArguments } from '../../../services'
+import { useMessages } from '../../../composables'
 
 export class ResourceTransfer extends ConflictDialog {
   constructor(
@@ -165,8 +160,9 @@ export class ResourceTransfer extends ConflictDialog {
       let targetName = resource.name
       let overwriteTarget = false
       if (hasConflict) {
-        const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)
-          ?.strategy
+        const resolveStrategy = resolvedConflicts.find(
+          (e) => e.resource.id === resource.id
+        )?.strategy
         if (resolveStrategy === ResolveStrategy.SKIP) {
           continue
         }

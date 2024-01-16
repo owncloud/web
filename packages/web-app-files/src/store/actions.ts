@@ -1,12 +1,18 @@
 import PQueue from 'p-queue'
 
-import { MessageStore, CapabilityStore, getParentPaths, ConfigStore } from '@ownclouders/web-pkg'
+import {
+  MessageStore,
+  CapabilityStore,
+  getParentPaths,
+  ConfigStore,
+  ResourceTransfer,
+  TransferType
+} from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
   ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
-import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import get from 'lodash-es/get'
