@@ -8,3 +8,8 @@ export interface ResolveConflict {
   strategy: ResolveStrategy
   doForAllConflicts: boolean
 }
+
+export enum TransferType {
+  COPY,
+  MOVE
+}

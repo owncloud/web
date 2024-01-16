@@ -169,6 +169,8 @@ import {
 
 import {
   ProcessorType,
+  ResourceTransfer,
+  TransferType,
   useCapabilityStore,
   useConfigStore,
   useEmbedMode,
@@ -212,7 +214,6 @@ import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
-import { ResourceTransfer, TransferType } from '../../helpers/resource'
 import { FolderLoaderOptions } from '../../services/folder'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { v4 as uuidv4 } from 'uuid'

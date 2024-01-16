@@ -1,11 +1,19 @@
-import { ClientService, LoadingService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
-import { ResourceTransfer, TransferType } from '../../../../src/helpers/resource'
-import { ResolveConflict, resolveFileNameDuplicate } from '@ownclouders/web-pkg'
+import {
+  ResolveConflict,
+  ResourceTransfer,
+  TransferType,
+  resolveFileNameDuplicate
+} from '../../../../../src/helpers/resource/conflictHandling'
 import { mock, mockDeep, mockReset } from 'jest-mock-extended'
 import { buildSpace, Resource } from '@ownclouders/web-client/src/helpers'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { createTestingPinia } from 'web-test-helpers'
+import {
+  ClientService,
+  LoadingService,
+  LoadingTaskCallbackArguments
+} from '../../../../../src/services'
 
 const clientServiceMock = mockDeep<ClientService>()
 const loadingServiceMock = mock<LoadingService>({

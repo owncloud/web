@@ -11,12 +11,6 @@ export default {
   currentFolder: (state) => {
     return state.currentFolder
   },
-  clipboardResources: (state) => {
-    return state.clipboardResources
-  },
-  clipboardAction: (state) => {
-    return state.clipboardAction
-  },
   activeFiles: (state, getters) => {
     let files = [].concat(getters.files)
 

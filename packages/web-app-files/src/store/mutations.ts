@@ -1,6 +1,5 @@
 import { set, has } from 'lodash-es'
 import { getIndicators } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client/src/helpers'
 
 export default {
   LOAD_FILES(state, { currentFolder, files }) {
@@ -12,16 +11,6 @@ export default {
   },
   CLEAR_FILES(state) {
     state.files = []
-  },
-  CLEAR_CLIPBOARD(state) {
-    state.clipboardResources = []
-    state.clipboardAction = null
-  },
-  CLIPBOARD_SELECTED(state, { resources }: { resources: Resource[] }) {
-    state.clipboardResources = resources
-  },
-  SET_CLIPBOARD_ACTION(state, action) {
-    state.clipboardAction = action
   },
   SET_LATEST_SELECTED_FILE_ID(state, fileId) {
     state.latestSelectedId = fileId

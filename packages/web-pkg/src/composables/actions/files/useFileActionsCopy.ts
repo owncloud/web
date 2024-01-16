@@ -11,14 +11,13 @@ import { FileAction, FileActionOptions } from '../types'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
-import { useConfigStore, useMessages } from '../../piniaStores'
+import { useConfigStore, useClipboardStore } from '../../piniaStores'
 
 export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
   const configStore = useConfigStore()
-  const messageStore = useMessages()
   const router = useRouter()
-
+  const { copyResources } = useClipboardStore()
   const language = useGettext()
   const { $gettext } = language
 
@@ -33,12 +32,12 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
     return $gettext('Ctrl + C')
   })
 
-  const handler = ({ space, resources }: FileActionOptions) => {
+  const handler = ({ resources }: FileActionOptions) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
       resources = resources.filter((r) => !isProjectSpaceResource(r))
     }
 
-    store.dispatch('Files/copySelectedFiles', { ...language, space, resources, messageStore })
+    copyResources(resources)
   }
 
   const actions = computed((): FileAction[] => {

@@ -1,16 +1,14 @@
 import PQueue from 'p-queue'
 
-import { MessageStore, CapabilityStore, getParentPaths, ConfigStore } from '@ownclouders/web-pkg'
+import { MessageStore, CapabilityStore, ConfigStore, getParentPaths } from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
   ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
-import { ResourceTransfer, TransferType } from '../helpers/resource'
 import { avatarUrl } from '../helpers/user'
 import { has } from 'lodash-es'
 import get from 'lodash-es/get'
-import { ClipboardActions } from '@ownclouders/web-pkg'
 import {
   buildResource,
   isProjectSpaceResource,
@@ -44,74 +42,6 @@ export default {
     } else {
       context.commit('ADD_FILE_SELECTION', file)
     }
-  },
-  copySelectedFiles(
-    context,
-    options: { resources: Resource[]; messageStore: MessageStore } & Language
-  ) {
-    const { $gettext } = options
-    context.commit('CLIPBOARD_SELECTED', options)
-    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Copy)
-    options.messageStore.showMessage({ title: $gettext('Copied to clipboard!'), status: 'success' })
-  },
-  cutSelectedFiles(
-    context,
-    options: {
-      space: SpaceResource
-      resources: Resource[]
-      messageStore: MessageStore
-    } & Language
-  ) {
-    const { $gettext } = options
-    context.commit('CLIPBOARD_SELECTED', options)
-    context.commit('SET_CLIPBOARD_ACTION', ClipboardActions.Cut)
-    options.messageStore.showMessage({ title: $gettext('Cut to clipboard!'), status: 'success' })
-  },
-  clearClipboardFiles(context) {
-    context.commit('CLEAR_CLIPBOARD')
-  },
-  pasteSelectedFiles(
-    context,
-    { targetSpace, clientService, loadingService, $gettext, $ngettext, sourceSpace, resources }
-  ) {
-    const copyMove = new ResourceTransfer(
-      sourceSpace,
-      resources,
-      targetSpace,
-      context.state.currentFolder,
-      clientService,
-      loadingService,
-      $gettext,
-      $ngettext
-    )
-    let movedResourcesPromise
-    if (context.state.clipboardAction === ClipboardActions.Cut) {
-      movedResourcesPromise = copyMove.perform(TransferType.MOVE)
-    }
-    if (context.state.clipboardAction === ClipboardActions.Copy) {
-      movedResourcesPromise = copyMove.perform(TransferType.COPY)
-    }
-    return movedResourcesPromise.then((movedResources) => {
-      const loadingResources = []
-      const fetchedResources = []
-      for (const resource of movedResources) {
-        loadingResources.push(
-          (async () => {
-            const movedResource = await (clientService.webdav as WebDAV).getFileInfo(
-              targetSpace,
-              resource
-            )
-            fetchedResources.push(movedResource)
-          })()
-        )
-      }
-
-      return Promise.all(loadingResources).then(() => {
-        const currentFolder = context.getters.currentFolder
-        context.commit('UPSERT_RESOURCES', fetchedResources)
-        context.commit('LOAD_INDICATORS', currentFolder.path)
-      })
-    })
   },
   resetFileSelection(context) {
     context.commit('RESET_SELECTION')

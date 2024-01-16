@@ -13,6 +13,8 @@ import { useRouter } from '../../router'
 import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { useClipboardStore } from '../../piniaStores'
+import { ClipboardActions, ResourceTransfer, TransferType } from '../../../helpers'
 
 export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   store = store || useStore()
@@ -21,6 +23,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
   const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = useGettext()
+  const clipboardStore = useClipboardStore()
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -33,9 +36,56 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     return $gettext('Ctrl + V')
   })
 
+  const currentFolder = computed<Resource>(() => store.getters['Files/currentFolder'])
+
+  const pasteSelectedFiles = ({
+    targetSpace,
+    sourceSpace,
+    resources
+  }: {
+    targetSpace: SpaceResource
+    sourceSpace: SpaceResource
+    resources: Resource[]
+  }) => {
+    const copyMove = new ResourceTransfer(
+      sourceSpace,
+      resources,
+      targetSpace,
+      unref(currentFolder),
+      clientService,
+      loadingService,
+      $gettext,
+      $ngettext
+    )
+    let movedResourcesPromise: Promise<Resource[]>
+    if (clipboardStore.action === ClipboardActions.Cut) {
+      movedResourcesPromise = copyMove.perform(TransferType.MOVE)
+    }
+    if (clipboardStore.action === ClipboardActions.Copy) {
+      movedResourcesPromise = copyMove.perform(TransferType.COPY)
+    }
+    return movedResourcesPromise.then((movedResources) => {
+      const loadingResources = []
+      const fetchedResources: Resource[] = []
+      for (const resource of movedResources) {
+        loadingResources.push(
+          (async () => {
+            const movedResource = await clientService.webdav.getFileInfo(targetSpace, resource)
+            fetchedResources.push(movedResource)
+          })()
+        )
+      }
+
+      return Promise.all(loadingResources).then(() => {
+        store.commit('Files/UPSERT_RESOURCES', fetchedResources)
+        store.commit('Files/LOAD_INDICATORS', unref(currentFolder).path)
+      })
+    })
+  }
+
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
     const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
-      store.getters['Files/clipboardResources'].reduce((acc, resource) => {
+      clipboardStore.resources.reduce((acc, resource) => {
         if (resource.storageId in acc) {
           acc[resource.storageId].resources.push(resource)
           return acc
@@ -50,21 +100,14 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
         acc[matchingSpace.id].resources.push(resource)
         return acc
       }, {})
+
     const promises = Object.values(resourceSpaceMapping).map(
       ({ space: sourceSpace, resources: resourcesToCopy }) => {
-        return store.dispatch('Files/pasteSelectedFiles', {
-          targetSpace,
-          sourceSpace: sourceSpace,
-          resources: resourcesToCopy,
-          clientService,
-          loadingService,
-          $gettext,
-          $ngettext
-        })
+        return pasteSelectedFiles({ targetSpace, sourceSpace, resources: resourcesToCopy })
       }
     )
     await Promise.all(promises)
-    store.commit('Files/CLEAR_CLIPBOARD')
+    clipboardStore.clearClipboard()
   }
 
   const actions = computed((): FileAction[] => [
@@ -75,7 +118,7 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
       label: () => $gettext('Paste'),
       shortcut: unref(pasteShortcutString),
       isEnabled: ({ resources }) => {
-        if (store.getters['Files/clipboardResources'].length === 0) {
+        if (clipboardStore.resources.length === 0) {
           return false
         }
         if (
