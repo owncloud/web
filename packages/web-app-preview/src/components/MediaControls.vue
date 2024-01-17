@@ -208,7 +208,7 @@ export default defineComponent({
       exitFullScreenDescription: $gettext('Exit full screen mode'),
       imageShrinkDescription: $gettext('Shrink the image'),
       imageZoomDescription: $gettext('Enlarge the image'),
-      imageResetDescription: $gettext('Reset image zoom, rotation and position'),
+      imageResetDescription: $gettext('Reset'),
       imageOriginalSizeDescription: $gettext('Show the image at its normal size'),
       imageRotateLeftDescription: $gettext('Rotate the image 90 degrees to the left'),
       imageRotateRightDescription: $gettext('Rotate the image 90 degrees to the right'),
