@@ -173,8 +173,8 @@ export default {
     }
   },
   async changeShare(
-    { commit, getters, rootGetters },
-    { client, share, permissions, expirationDate, role }
+    { commit, rootGetters },
+    { client, share, resource, permissions, expirationDate, role }
   ) {
     if (!permissions && !role) {
       throw new Error('Nothing changed')
@@ -188,7 +188,7 @@ export default {
 
     const builtShare = buildCollaboratorShare(
       updatedShare.shareInfo,
-      getters.highlightedFile,
+      resource,
       allowSharePermissions(rootGetters)
     )
     commit('OUTGOING_SHARES_UPSERT', { ...builtShare, outgoing: true })
@@ -197,6 +197,7 @@ export default {
     context,
     {
       client,
+      resource,
       path,
       shareWith,
       shareType,
@@ -229,7 +230,7 @@ export default {
     const share = await client.shares[shareMethod](path, shareWith, options)
     const builtShare = buildCollaboratorShare(
       share.shareInfo,
-      context.getters.highlightedFile,
+      resource,
       allowSharePermissions(context.rootGetters)
     )
     if (context.state.sharesLoading) {
@@ -250,7 +251,7 @@ export default {
       context.commit('LOAD_INDICATORS', path)
     }
   },
-  async loadShares(context, { client, configStore, path, storageId, useCached = true }) {
+  async loadShares(context, { client, resource, configStore, path, storageId, useCached = true }) {
     if (context.state.sharesLoading) {
       await context.state.sharesLoading
     }
@@ -271,18 +272,16 @@ export default {
       concurrency: configStore.options.concurrentRequests.shares.list
     })
     const shareQueriesPromises = []
-    const { highlightedFile } = context.getters
-
     const getShares = (subPath, indirect, options, outgoing) => {
       const buildMethod = outgoing ? buildShare : buildCollaboratorShare
-      const resource = indirect || !highlightedFile ? { type: 'folder' } : highlightedFile
+      const res = indirect || !resource ? { type: 'folder' } : resource
       const permissions = allowSharePermissions(context.rootGetters)
       return client.shares
         .getShares(subPath, options)
         .then((data) => {
           data.forEach((element) => {
             shares.push({
-              ...buildMethod(element.shareInfo, resource, permissions),
+              ...buildMethod(element.shareInfo, res, permissions),
               outgoing,
               indirect
             })

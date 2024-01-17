@@ -40,6 +40,7 @@ describe('vuex store actions', () => {
       clientMock.shares.updateShare.mockResolvedValue({})
       await actions.changeShare(stateMock, {
         client: clientMock,
+        resource: mock<Resource>(),
         share: mockDeep<Share>({ shareType: ShareTypes.user.value }),
         permissions: spaceRoleManager.bitmask(false),
         role: spaceRoleManager,
@@ -54,6 +55,7 @@ describe('vuex store actions', () => {
       await expect(
         actions.changeShare(stateMock, {
           client: clientMock,
+          resource: mock<Resource>(),
           share: mockDeep<Share>({ shareType: ShareTypes.user.value }),
           permissions: spaceRoleManager.bitmask(false),
           role: spaceRoleManager,
@@ -74,6 +76,7 @@ describe('vuex store actions', () => {
       clientMock.shares[data.shareMethod].mockResolvedValue({})
       await actions.addShare(stateMock, {
         client: clientMock,
+        resource: mock<Resource>(),
         path: '/someFile.txt',
         shareWith: 'user',
         shareType: data.shareType,
@@ -92,6 +95,7 @@ describe('vuex store actions', () => {
       await expect(
         actions.addShare(stateMock, {
           client: clientMock,
+          resource: mock<Resource>(),
           path: '/someFile.txt',
           shareWith: 'user',
           shareType: ShareTypes.user.value,
@@ -134,9 +138,8 @@ describe('vuex store actions', () => {
         }
       }
     }
-    const gettersMock = {
-      highlightedFile: () => mock<Resource>({ path: 'someFolder/someFile.txt' })
-    }
+
+    const resource = mock<Resource>({ path: 'someFolder/someFile.txt' })
     let outgoingShares = []
     let incomingShares = []
     const commitMock = jest.fn((mutation, value) => {
@@ -161,9 +164,10 @@ describe('vuex store actions', () => {
       clientMock.shares.getShares.mockResolvedValueOnce([{ shareInfo: { id: 4 } }])
 
       await actions.loadShares(
-        { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
+        { state: stateMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
+          resource,
           configStore: useConfigStore(),
           path: '/someFolder/someFile.txt',
           storageId: '1',
@@ -187,9 +191,10 @@ describe('vuex store actions', () => {
       const clientMock = mockDeep<OwnCloudSdk>()
 
       await actions.loadShares(
-        { state: stateMock, getters: gettersMock, commit: commitMock, rootState: rootStateMock },
+        { state: stateMock, commit: commitMock, rootState: rootStateMock },
         {
           client: clientMock,
+          resource,
           configStore: useConfigStore(),
           path: '/someFile.txt',
           storageId: '1',

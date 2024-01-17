@@ -143,8 +143,8 @@ import {
   useUserStore,
   useCapabilityStore
 } from '@ownclouders/web-pkg'
-import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
-import { computed, defineComponent, PropType } from 'vue'
+import { Resource, extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
+import { computed, defineComponent, inject, PropType, Ref } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
@@ -236,6 +236,7 @@ export default defineComponent({
     }
 
     return {
+      resource: inject<Ref<Resource>>('resource'),
       changeSpaceMember,
       user,
       hasResharing: capabilityRefs.sharingResharing,
@@ -475,6 +476,7 @@ export default defineComponent({
         changeMethod({
           client: this.$client,
           graphClient: this.clientService.graphAuthenticated,
+          resource: this.resource,
           share: this.share,
           permissions: bitmask,
           expirationDate: expirationDate || '',
