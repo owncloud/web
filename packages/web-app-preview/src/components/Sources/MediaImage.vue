@@ -11,7 +11,7 @@
 <script lang="ts">
 import { CachedFile } from '../../helpers/types'
 import { defineComponent, PropType, onMounted, ref, VNodeRef, watch, unref, nextTick } from 'vue'
-import type { PanzoomEventDetail, PanzoomObject } from '@panzoom/panzoom'
+import type { PanzoomObject } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
 
 export default defineComponent({
@@ -38,14 +38,13 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['panChange'],
+  emits: ['panZoomChange'],
   setup(props, { emit }) {
     const img = ref<VNodeRef>()
     const panzoom = ref<PanzoomObject>()
 
     const onPanZoomChange = (event) => {
-      const eventDetail: PanzoomEventDetail = event.detail
-      emit('panChange', { x: eventDetail.x, y: eventDetail.y })
+      emit('panZoomChange', event)
     }
 
     const initPanzoom = async () => {
@@ -107,14 +106,7 @@ export default defineComponent({
     })
 
     watch([() => props.currentImagePositionX, () => props.currentImagePositionY], () => {
-      const currentPan = unref(panzoom).getPan()
-
-      if (
-        currentPan.x !== props.currentImagePositionX ||
-        currentPan.y !== props.currentImagePositionY
-      ) {
-        unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY)
-      }
+      unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY)
     })
 
     return {

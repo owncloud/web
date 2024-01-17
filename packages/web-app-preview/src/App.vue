@@ -50,7 +50,7 @@
               :current-image-zoom="currentImageZoom"
               :current-image-position-x="currentImagePositionX"
               :current-image-position-y="currentImagePositionY"
-              @pan-change="onPanChanged"
+              @pan-zoom-change="onPanZoomChanged"
             />
             <media-video
               v-else-if="activeMediaFileCached.isVideo"
@@ -115,6 +115,7 @@ import { CachedFile } from './helpers/types'
 import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
+import { PanzoomEventDetail } from '@panzoom/panzoom'
 
 export const appId = 'preview'
 
@@ -195,9 +196,9 @@ export default defineComponent({
       }
     }
 
-    const onPanChanged = ({ x, y }: { x: number; y: number }) => {
-      currentImagePositionX.value = x
-      currentImagePositionY.value = y
+    const onPanZoomChanged = ({ detail }: { detail: PanzoomEventDetail }) => {
+      currentImagePositionX.value = detail.x
+      currentImagePositionY.value = detail.y
     }
 
     const resetImage = () => {
@@ -313,7 +314,7 @@ export default defineComponent({
       currentImageRotation,
       currentImagePositionX,
       currentImagePositionY,
-      onPanChanged,
+      onPanZoomChanged,
       preloadImageCount
     }
   },
