@@ -97,7 +97,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
             }
             return $gettext('Open in %{app}', { app: appInfo.name }, true)
           },
-          icon: appInfo.icon,
+          icon: fileExtension.icon || appInfo.icon,
           ...(appInfo.iconFillType && {
             iconFillType: appInfo.iconFillType
           }),
@@ -170,6 +170,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
       query: {
         ...(shareId && { shareId }),
         ...(resource.fileId && configStore.options.routing.idBased && { fileId: resource.fileId }),
+        ...(appFileExtension.app === 'external' && { app: appFileExtension.name }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }

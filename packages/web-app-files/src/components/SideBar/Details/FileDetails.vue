@@ -370,9 +370,9 @@ export default defineComponent({
     },
     ownedByCurrentUser() {
       return (
-        this.resource.ownerId === this.user.onPremisesSamAccountName ||
-        this.resource.owner?.[0].username === this.user.onPremisesSamAccountName ||
-        this.resource.shareOwner === this.user.onPremisesSamAccountName
+        this.resource.ownerId === this.user?.onPremisesSamAccountName ||
+        this.resource.owner?.[0].username === this.user?.onPremisesSamAccountName ||
+        this.resource.shareOwner === this.user?.onPremisesSamAccountName
       )
     },
     shareIndicators() {
