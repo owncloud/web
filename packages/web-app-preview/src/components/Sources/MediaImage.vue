@@ -13,7 +13,6 @@ import { CachedFile } from '../../helpers/types'
 import { defineComponent, PropType, onMounted, ref, VNodeRef, watch, unref, nextTick } from 'vue'
 import type { PanzoomEventDetail, PanzoomObject } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
-import { ElementRef } from 'react'
 
 export default defineComponent({
   name: 'MediaImage',
@@ -62,7 +61,7 @@ export default defineComponent({
       await nextTick()
 
       panzoom.value = Panzoom(unref(img) as any, {
-        animate: true,
+        animate: false,
         duration: 300,
         overflow: 'auto',
         maxScale: 10,
@@ -101,10 +100,10 @@ export default defineComponent({
     }
 
     watch(img, initPanzoom)
-    onMounted(() => initPanzoom)
+    onMounted(initPanzoom)
 
     watch([() => props.currentImageZoom, () => props.currentImageRotation], () => {
-      unref(panzoom).zoom(props.currentImageZoom, { animate: false })
+      unref(panzoom).zoom(props.currentImageZoom)
     })
 
     watch([() => props.currentImagePositionX, () => props.currentImagePositionY], () => {
@@ -114,9 +113,7 @@ export default defineComponent({
         currentPan.x !== props.currentImagePositionX ||
         currentPan.y !== props.currentImagePositionY
       ) {
-        unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY, {
-          animate: false
-        })
+        unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY)
       }
     })
 
