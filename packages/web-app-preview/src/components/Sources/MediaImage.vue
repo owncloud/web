@@ -107,14 +107,7 @@ export default defineComponent({
     })
 
     watch([() => props.currentImagePositionX, () => props.currentImagePositionY], () => {
-      const currentPan = unref(panzoom).getPan()
-
-      if (
-        currentPan.x !== props.currentImagePositionX ||
-        currentPan.y !== props.currentImagePositionY
-      ) {
-        unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY)
-      }
+      unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY)
     })
 
     return {
