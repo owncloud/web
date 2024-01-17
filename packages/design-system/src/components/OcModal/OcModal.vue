@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
@@ -269,6 +269,12 @@ export default defineComponent({
     }
   },
   emits: ['cancel', 'confirm', 'input'],
+  setup() {
+    const ocModalInput = ref<ComponentPublicInstance>()
+    const ocModal = ref<HTMLElement>()
+
+    return { ocModalInput, ocModal }
+  },
   data() {
     return {
       userInputValue: null
@@ -280,10 +286,7 @@ export default defineComponent({
         return this.focusTrapInitial
       }
       return () => {
-        // FIXME: according to the types it's incorrect to pass this.$refs.ocModalInput
-        // but passing this.$refs.ocModalInput?.$el does not work …
-        return ((this.$refs.ocModalInput as ComponentPublicInstance as unknown as HTMLElement) ||
-          (this.$refs.ocModal as HTMLElement)) as FocusTargetValueOrFalse
+        return (this.ocModalInput?.$el || this.ocModal) as FocusTargetValueOrFalse
       }
     },
     classes() {
