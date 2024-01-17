@@ -11,8 +11,9 @@
 <script lang="ts">
 import { CachedFile } from '../../helpers/types'
 import { defineComponent, PropType, onMounted, ref, VNodeRef, watch, unref, nextTick } from 'vue'
-import type { PanzoomObject } from '@panzoom/panzoom'
+import type { PanzoomEventDetail, PanzoomObject } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
+import { ElementRef } from 'react'
 
 export default defineComponent({
   name: 'MediaImage',
@@ -28,14 +29,32 @@ export default defineComponent({
     currentImageRotation: {
       type: Number,
       required: true
+    },
+    currentImagePositionX: {
+      type: Number,
+      required: true
+    },
+    currentImagePositionY: {
+      type: Number,
+      required: true
     }
   },
-  setup(props) {
+  emits: ['panChange'],
+  setup(props, { emit }) {
     const img = ref<VNodeRef>()
     const panzoom = ref<PanzoomObject>()
 
+    const onPanZoomChange = (event) => {
+      const eventDetail: PanzoomEventDetail = event.detail
+      emit('panChange', { x: eventDetail.x, y: eventDetail.y })
+    }
+
     const initPanzoom = async () => {
       if (unref(panzoom)) {
+        ;(unref(img) as unknown as HTMLElement).removeEventListener(
+          'panzoomchange',
+          onPanZoomChange
+        )
         unref(panzoom)?.destroy()
       }
 
@@ -78,13 +97,27 @@ export default defineComponent({
           )
         }
       })
+      ;(unref(img) as unknown as HTMLElement).addEventListener('panzoomchange', onPanZoomChange)
     }
 
     watch(img, initPanzoom)
-    onMounted(initPanzoom)
+    onMounted(() => initPanzoom)
 
     watch([() => props.currentImageZoom, () => props.currentImageRotation], () => {
-      unref(panzoom).zoom(props.currentImageZoom)
+      unref(panzoom).zoom(props.currentImageZoom, { animate: false })
+    })
+
+    watch([() => props.currentImagePositionX, () => props.currentImagePositionY], () => {
+      const currentPan = unref(panzoom).getPan()
+
+      if (
+        currentPan.x !== props.currentImagePositionX ||
+        currentPan.y !== props.currentImagePositionY
+      ) {
+        unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY, {
+          animate: false
+        })
+      }
     })
 
     return {
@@ -97,5 +130,6 @@ export default defineComponent({
 img {
   max-width: 80%;
   max-height: 80%;
+  cursor: move;
 }
 </style>

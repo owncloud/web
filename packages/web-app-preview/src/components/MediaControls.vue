@@ -102,6 +102,18 @@
             <oc-icon fill-type="line" name="clockwise" variation="inherit" />
           </oc-button>
         </div>
+        <div class="oc-ml-m">
+          <oc-button
+            v-oc-tooltip="imageResetDescription"
+            class="preview-controls-rotate-right"
+            appearance="raw-inverse"
+            variation="brand"
+            :aria-label="imageResetDescription"
+            @click="$emit('resetImage')"
+          >
+            <oc-icon fill-type="line" name="refresh" variation="inherit" />
+          </oc-button>
+        </div>
       </div>
     </div>
   </div>
@@ -143,7 +155,14 @@ export default defineComponent({
       default: 0
     }
   },
-  emits: ['setRotation', 'setZoom', 'toggleFullScreen', 'toggleNext', 'togglePrevious'],
+  emits: [
+    'setRotation',
+    'setZoom',
+    'toggleFullScreen',
+    'toggleNext',
+    'togglePrevious',
+    'resetImage'
+  ],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
 
@@ -189,6 +208,7 @@ export default defineComponent({
       exitFullScreenDescription: $gettext('Exit full screen mode'),
       imageShrinkDescription: $gettext('Shrink the image'),
       imageZoomDescription: $gettext('Enlarge the image'),
+      imageResetDescription: $gettext('Reset image zoom, rotation and position'),
       imageOriginalSizeDescription: $gettext('Show the image at its normal size'),
       imageRotateLeftDescription: $gettext('Rotate the image 90 degrees to the left'),
       imageRotateRightDescription: $gettext('Rotate the image 90 degrees to the right'),
