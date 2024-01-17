@@ -132,9 +132,6 @@
 import { debounce } from 'lodash-es'
 import PQueue from 'p-queue'
 import { storeToRefs } from 'pinia'
-
-import { mapActions } from 'vuex'
-
 import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
@@ -153,12 +150,13 @@ import {
   useUserStore,
   useMessages,
   useSpacesStore,
-  useConfigStore
+  useConfigStore,
+  useSharesStore,
+  useStore
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { useShares } from 'web-app-files/src/composables'
 import {
   displayPositionedDropdown,
   formatDateFromDateTime,
@@ -194,6 +192,7 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore()
     const userStore = useUserStore()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
@@ -206,6 +205,10 @@ export default defineComponent({
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
+
+    const sharesStore = useSharesStore()
+    const { addShare } = sharesStore
+    const { outgoingCollaborators } = storeToRefs(sharesStore)
 
     const saving = ref(false)
     const savingDelayed = ref(false)
@@ -262,6 +265,7 @@ export default defineComponent({
     })
 
     return {
+      store,
       resource: inject<Resource>('resource'),
       hasResharing: capabilityRefs.sharingResharing,
       resharingDefault: capabilityRefs.sharingResharingDefault,
@@ -276,7 +280,8 @@ export default defineComponent({
       clientService,
       saving,
       savingDelayed,
-      ...useShares(),
+      outgoingCollaborators,
+      addShare,
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
       notifyEnabled,
@@ -355,8 +360,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['addShare']),
-
     async fetchRecipients(query) {
       try {
         const recipients = await this.$client.shares.getRecipients(
@@ -494,43 +497,56 @@ export default defineComponent({
       const saveQueue = new PQueue({
         concurrency: this.createSharesConcurrentRequests
       })
+
+      const bitmask = this.selectedRole.hasCustomPermissions
+        ? SharePermissions.permissionsToBitmask(this.customPermissions)
+        : SharePermissions.permissionsToBitmask(
+            this.selectedRole.permissions(
+              (this.hasResharing && this.resharingDefault) || this.resourceIsSpace
+            )
+          )
+
+      let path = this.resource.path
+      // sharing a share root from the share jail -> use resource name as path
+      if (this.hasShareJail && path === '/') {
+        path = `/${this.resource.name}`
+      }
+
       const savePromises = []
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
           saveQueue.add(async () => {
-            const bitmask = this.selectedRole.hasCustomPermissions
-              ? SharePermissions.permissionsToBitmask(this.customPermissions)
-              : SharePermissions.permissionsToBitmask(
-                  this.selectedRole.permissions(
-                    (this.hasResharing && this.resharingDefault) || this.resourceIsSpace
-                  )
-                )
-
-            let path = this.resource.path
-            // sharing a share root from the share jail -> use resource name as path
-            if (this.hasShareJail && path === '/') {
-              path = `/${this.resource.name}`
-            }
-
-            const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
-
             try {
-              await addMethod({
-                client: this.$client,
-                resource: this.resource,
-                graphClient: this.clientService.graphAuthenticated,
-                path,
-                shareWith: collaborator.value.shareWith,
-                displayName: collaborator.label,
-                shareType: collaborator.value.shareType,
-                shareWithUser: collaborator.value.shareWithUser,
-                shareWithProvider: collaborator.value.shareWithProvider,
-                permissions: bitmask,
-                role: this.selectedRole,
-                expirationDate: this.expirationDate,
-                storageId: this.resource.fileId || this.resource.id,
-                notify: this.notifyEnabled
-              })
+              if (this.resourceIsSpace) {
+                await this.addSpaceMember({
+                  client: this.$client,
+                  graphClient: this.clientService.graphAuthenticated,
+                  path,
+                  shareWith: collaborator.value.shareWith,
+                  displayName: collaborator.label,
+                  shareType: collaborator.value.shareType,
+                  permissions: bitmask,
+                  role: this.selectedRole,
+                  expirationDate: this.expirationDate,
+                  storageId: this.resource.fileId || this.resource.id
+                })
+              } else {
+                await this.addShare({
+                  clientService: this.$clientService,
+                  vuexStore: this.store,
+                  resource: this.resource,
+                  path,
+                  shareWith: collaborator.value.shareWith,
+                  shareType: collaborator.value.shareType,
+                  shareWithUser: collaborator.value.shareWithUser,
+                  shareWithProvider: collaborator.value.shareWithProvider,
+                  permissions: bitmask,
+                  role: this.selectedRole,
+                  expirationDate: this.expirationDate,
+                  storageId: this.resource.fileId || this.resource.id,
+                  notify: this.notifyEnabled
+                })
+              }
             } catch (e) {
               console.error(e)
               errors.push({

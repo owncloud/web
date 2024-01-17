@@ -112,7 +112,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { DateTime } from 'luxon'
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import {
   useStore,
   useAbility,
@@ -148,8 +148,7 @@ import {
   isProjectSpaceResource,
   isShareSpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { isLocationSharesActive } from '@ownclouders/web-pkg'
-import { useShares } from 'web-app-files/src/composables'
+import { isLocationSharesActive, useSharesStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 
@@ -174,6 +173,10 @@ export default defineComponent({
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
 
+    const sharesStore = useSharesStore()
+    const { updateLink, deleteLink, shares } = sharesStore
+    const { outgoingLinks } = storeToRefs(sharesStore)
+
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
@@ -191,7 +194,6 @@ export default defineComponent({
     const initialLinkListCollapsed = !configStore.options.sidebar.shares.showAllOnLoad
     const linkListCollapsed = ref(initialLinkListCollapsed)
     const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
-    const { outgoingLinks } = useShares()
     const directLinks = computed(() =>
       unref(outgoingLinks)
         .filter((l) => !l.indirect && !l.quicklink)
@@ -249,11 +251,7 @@ export default defineComponent({
 
     const updatePublicLink = async ({ params }) => {
       try {
-        await store.dispatch('Files/updateLink', {
-          id: params.id,
-          client: clientService.owncloudSdk,
-          params
-        })
+        await updateLink({ id: params.id, clientService, params })
         showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
         showErrorMessage({
@@ -272,6 +270,7 @@ export default defineComponent({
     }
 
     return {
+      store,
       ability,
       space,
       resource,
@@ -287,6 +286,7 @@ export default defineComponent({
       outgoingLinks,
       directLinks,
       indirectLinks,
+      deleteLink,
       canCreatePublicLinks,
       canDeleteReadOnlyPublicLinkPassword,
       configStore,
@@ -379,7 +379,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
     toggleLinkListCollapsed() {
@@ -504,15 +503,15 @@ export default defineComponent({
         ),
         confirmText: this.$gettext('Delete'),
         onConfirm: () =>
-          this.deleteLink({
-            client: this.$client,
+          this.removeLink({
+            clientService: this.$clientService,
             share: link,
             resource: this.resource
           })
       })
     },
 
-    async deleteLink({ client, share, resource }) {
+    async removeLink({ clientService, share, resource }) {
       let path = resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
@@ -523,7 +522,13 @@ export default defineComponent({
       const loadIndicators = this.outgoingLinks.filter((l) => !l.indirect).length === 1
 
       try {
-        await this.removeLink({ client, share, path, loadIndicators })
+        await this.deleteLink({
+          clientService,
+          share,
+          path,
+          loadIndicators,
+          vuexStore: this.store
+        })
         this.showMessage({
           title: this.$gettext('Link was deleted successfully')
         })

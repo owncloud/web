@@ -19,6 +19,7 @@ import { CapabilityStore } from '@ownclouders/web-pkg'
 const getCollaborator = () => ({
   shareType: 0,
   id: uuidV4(),
+  outgoing: true,
   collaborator: {
     name: 'einstein',
     displayName: 'Albert Einstein',
@@ -209,7 +210,6 @@ function getWrapper({
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
-  storeOptions.modules.Files.getters.outgoingCollaborators.mockReturnValue(collaborators)
   const store = createStore(storeOptions)
   const capabilities = {
     files_sharing: { resharing: hasReSharing, deny_access: false }
@@ -226,7 +226,8 @@ function getWrapper({
               capabilityState: { capabilities },
               configState: {
                 options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
-              }
+              },
+              sharesState: { shares: collaborators }
             }
           }),
           store

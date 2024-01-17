@@ -13,6 +13,7 @@ import {
   defaultStubs,
   defaultComponentMocks
 } from 'web-test-helpers'
+import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
 
 jest.mock('uuid', () => ({
   v4: () => {
@@ -115,21 +116,21 @@ describe('Collaborator ListItem component', () => {
   describe('change share role', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
-      const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
       ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
-      expect(changeShareStub).toHaveBeenCalled()
+      const sharesStore = useSharesStore()
+      expect(sharesStore.updateShare).toHaveBeenCalled()
     })
     it('calls "changeSpaceMember" for space resources', () => {
       const { wrapper } = createWrapper({ shareType: ShareTypes.spaceUser.value })
-      const changeShareStub = jest.spyOn(wrapper.vm, 'changeSpaceMember')
       ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
-      expect(changeShareStub).toHaveBeenCalled()
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.changeSpaceMember).toHaveBeenCalled()
     })
     it('shows a message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
@@ -137,24 +138,24 @@ describe('Collaborator ListItem component', () => {
       jest.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
-      const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
-      expect(changeShareStub).not.toHaveBeenCalled()
-      expect(showErrorMessageStub).toHaveBeenCalled()
+      const sharesStore = useSharesStore()
+      expect(sharesStore.updateShare).not.toHaveBeenCalled()
+      const messagesStore = useMessages()
+      expect(messagesStore.showErrorMessage).toHaveBeenCalled()
     })
   })
   describe('change expiration date', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
-      const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
       ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
         shareExpirationChanged: new Date()
       })
-      expect(changeShareStub).toHaveBeenCalled()
+      const sharesStore = useSharesStore()
+      expect(sharesStore.updateShare).toHaveBeenCalled()
     })
     it('shows a message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
@@ -162,13 +163,13 @@ describe('Collaborator ListItem component', () => {
       jest.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
-      const changeShareStub = jest.spyOn(wrapper.vm, 'changeShare')
-      const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
       ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
         shareExpirationChanged: new Date()
       })
-      expect(changeShareStub).not.toHaveBeenCalled()
-      expect(showErrorMessageStub).toHaveBeenCalled()
+      const sharesStore = useSharesStore()
+      expect(sharesStore.updateShare).not.toHaveBeenCalled()
+      const messagesStore = useMessages()
+      expect(messagesStore.showErrorMessage).toHaveBeenCalled()
     })
   })
 })

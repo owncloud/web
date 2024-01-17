@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
+import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
 import {
   CapabilityStore,
@@ -25,7 +25,9 @@ const defaultLinksList = [
     name: 'public link 1',
     url: 'some-link-1',
     path: '/file-1.txt',
-    permissions: 1
+    permissions: 1,
+    outgoing: true,
+    shareType: ShareTypes.link.value
   },
   {
     id: '2',
@@ -33,7 +35,9 @@ const defaultLinksList = [
     name: 'public link 2',
     url: 'some-link-2',
     path: '/file-2.txt',
-    permissions: 1
+    permissions: 1,
+    outgoing: true,
+    shareType: ShareTypes.link.value
   }
 ]
 
@@ -55,9 +59,9 @@ jest.mock('@ownclouders/web-pkg', () => ({
 describe('FileLinks', () => {
   describe('links', () => {
     describe('when links list is not empty', () => {
-      const { wrapper } = getWrapper()
-
       it('should render a list of direct and indirect links', () => {
+        const { wrapper } = getWrapper()
+
         const linkListItems = wrapper.findAllComponents<any>(linkListItemNameAndCopy)
         const linkListItemsDetails = wrapper.findAll(linkListItemDetailsAndEdit)
 
@@ -79,6 +83,8 @@ describe('FileLinks', () => {
       })
 
       it('should not show the "no results" message', () => {
+        const { wrapper } = getWrapper()
+
         expect(wrapper.find(selectors.linkNoResults).exists()).toBeFalsy()
       })
     })
@@ -131,7 +137,9 @@ describe('FileLinks', () => {
         name: 'public link 1',
         url: 'some-link-1',
         path: '/file-1.txt',
-        permissions: 1
+        permissions: 1,
+        outgoing: true,
+        shareType: ShareTypes.link.value
       }
       const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
       const detailsAndEdit = wrapper.findComponent<any>(linkListItemDetailsAndEdit)
@@ -145,7 +153,9 @@ describe('FileLinks', () => {
         name: 'internal link 1',
         url: 'some-link-1',
         path: '/file-1.txt',
-        permissions: 0
+        permissions: 0,
+        outgoing: true,
+        shareType: ShareTypes.link.value
       }
       const { wrapper } = getWrapper({ resource, abilities: [], links: [internalLink] })
       const detailsAndEdit = wrapper.findComponent<any>(linkListItemDetailsAndEdit)
@@ -176,7 +186,6 @@ function getWrapper({
   })
 
   const storeOptions = { ...defaultStoreMockOptions }
-  defaultStoreMockOptions.modules.Files.getters.outgoingLinks.mockReturnValue(links)
   const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   const capabilities = {
@@ -201,7 +210,8 @@ function getWrapper({
             abilities,
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { sidebar: { shares: { showAllOnLoad: true } } } }
+              configState: { options: { sidebar: { shares: { showAllOnLoad: true } } } },
+              sharesState: { shares: links as Share[] }
             }
           }),
           store

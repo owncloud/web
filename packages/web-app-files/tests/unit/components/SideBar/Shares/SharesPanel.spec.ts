@@ -28,12 +28,14 @@ describe('SharesPanel', () => {
 
   function getWrapper({ sharesLoading = false } = {}) {
     const storeOptions = defaultStoreMockOptions
-    storeOptions.modules.Files.getters.sharesLoading.mockImplementation(() => sharesLoading)
     const store = createStore(storeOptions)
     return {
       wrapper: shallowMount(SharesPanel, {
         global: {
-          plugins: [...defaultPlugins(), store],
+          plugins: [
+            ...defaultPlugins({ piniaOptions: { sharesState: { loading: sharesLoading } } }),
+            store
+          ],
           provide: {
             activePanel: null,
             displayedItem: {},

@@ -89,7 +89,8 @@ import {
   usePreviewService,
   useClientService,
   useUserStore,
-  useSpacesStore
+  useSpacesStore,
+  useSharesStore
 } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
@@ -120,6 +121,7 @@ export default defineComponent({
     const previewService = usePreviewService()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
+    const sharesStore = useSharesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
 
     const resource = inject<Ref<SpaceResource>>('resource')
@@ -146,7 +148,7 @@ export default defineComponent({
     })
 
     const linkShareCount = computed(() => {
-      return store.getters['Files/outgoingLinks'].length
+      return sharesStore.outgoingLinks.length
     })
 
     const showWebDavDetails = computed(() => {
@@ -181,7 +183,7 @@ export default defineComponent({
             'This space has one member and %{linkShareCount} link.',
             'This space has one member and %{linkShareCount} links.',
             this.linkShareCount,
-            { linkShareCount: this.linkShareCount }
+            { linkShareCount: this.linkShareCount.toString() }
           )
         default:
           if (this.linkShareCount === 1) {
@@ -193,7 +195,7 @@ export default defineComponent({
             'This space has %{memberShareCount} members and %{linkShareCount} links.',
             {
               memberShareCount: this.memberShareCount.toString(),
-              linkShareCount: this.linkShareCount
+              linkShareCount: this.linkShareCount.toString()
             }
           )
       }
@@ -245,7 +247,7 @@ export default defineComponent({
         '%{linkShareCount} link giving access.',
         '%{linkShareCount} links giving access.',
         this.linkShareCount,
-        { linkShareCount: this.linkShareCount }
+        { linkShareCount: this.linkShareCount.toString() }
       )
     }
   },

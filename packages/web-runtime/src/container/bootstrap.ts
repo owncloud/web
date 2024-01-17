@@ -24,7 +24,8 @@ import {
   AppsStore,
   useConfigStore,
   ConfigStore,
-  RawConfig
+  RawConfig,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -334,6 +335,7 @@ export const announcePiniaStores = () => {
   const configStore = useConfigStore()
   const messagesStore = useMessages()
   const modalStore = useModals()
+  const sharesStore = useSharesStore()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
 
@@ -345,6 +347,7 @@ export const announcePiniaStores = () => {
     configStore,
     messagesStore,
     modalStore,
+    sharesStore,
     spacesStore,
     userStore
   }

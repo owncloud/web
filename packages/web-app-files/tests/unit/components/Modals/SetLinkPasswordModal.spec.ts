@@ -7,7 +7,7 @@ import {
   defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
-import { Modal, useMessages } from '@ownclouders/web-pkg'
+import { Modal, useMessages, useSharesStore } from '@ownclouders/web-pkg'
 
 describe('SetLinkPasswordModal', () => {
   it('should render a text input field for the password', () => {
@@ -20,13 +20,15 @@ describe('SetLinkPasswordModal', () => {
       const { wrapper, storeOptions } = getWrapper()
       await wrapper.vm.onConfirm()
 
-      expect(storeOptions.modules.Files.actions.updateLink).toHaveBeenCalled()
+      const sharesStore = useSharesStore()
+      expect(sharesStore.updateLink).toHaveBeenCalled()
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
     })
     it('shows an error message on error', async () => {
       const { wrapper, storeOptions } = getWrapper()
-      storeOptions.modules.Files.actions.updateLink.mockRejectedValue(new Error(''))
+      const sharesStore = useSharesStore()
+      ;(sharesStore.updateLink as any).mockRejectedValue(new Error(''))
       await wrapper.vm.onConfirm()
 
       const { showErrorMessage } = useMessages()

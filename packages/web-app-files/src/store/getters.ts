@@ -1,5 +1,4 @@
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 export default {
   selectedFiles: (state, getters) => {
@@ -33,22 +32,6 @@ export default {
       spaces: spaceCount
     }
   },
-  outgoingCollaborators: (state) => {
-    return state.outgoingShares.filter((s) =>
-      ShareTypes.containsAnyValue(ShareTypes.authenticated, [s.shareType])
-    )
-  },
-  incomingCollaborators: (state) => {
-    return state.incomingShares.filter((s) =>
-      ShareTypes.containsAnyValue(ShareTypes.authenticated, [s.shareType])
-    )
-  },
-  outgoingLinks: (state) => {
-    return state.outgoingShares.filter((share) => {
-      return ShareTypes.containsAnyValue(ShareTypes.unauthenticated, [share.shareType])
-    })
-  },
-  sharesLoading: (state) => state.sharesLoading,
   versions: (state) => {
     return state.versions
   },
