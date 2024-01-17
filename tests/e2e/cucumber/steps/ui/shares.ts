@@ -143,6 +143,15 @@ When(
 )
 
 When(
+  '{string} navigates to the shared with others page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.shares.WithOthers({ page })
+    await pageObject.navigate()
+  }
+)
+
+When(
   '{string} declines the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

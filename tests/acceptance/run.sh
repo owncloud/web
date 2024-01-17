@@ -77,7 +77,6 @@ FINAL_EXIT_STATUS=0
 # Example: "features/webUILogin features/webUINotifications"
 # or
 # TEST_CONTEXT: name of the suite to run
-# Example: "webUIFavorites"
 
 if [ -n "${TEST_PATHS}" ]
 then
