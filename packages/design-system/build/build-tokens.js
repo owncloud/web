@@ -10,12 +10,27 @@ StyleDictionary.extend({
   parsers: [
     {
       pattern: /\.yaml$/,
-      parse: ({ contents }) => yaml.parse(contents)
+      parse: ({ contents, filePath }) => {
+        // This is a bit of a hack to prevent name collisions which would drop the tokens then
+        if (filePath.split('/').some((n) => n === 'docs')) {
+          const parsed = yaml.parse(contents)
+
+          Object.keys(parsed).forEach((k) => {
+            parsed['docs-' + k] = parsed[k]
+
+            delete parsed[k]
+          })
+
+          return parsed
+        }
+
+        return yaml.parse(contents)
+      }
     }
   ],
   source: [path.join(__dirname, '../src/tokens/**/*.yaml')],
   platforms: {
-    default: {
+    ods: {
       transforms: ['name/cti/kebab', 'transform/ods/namespace'],
       buildPath: 'src/assets/tokens/',
       files: [

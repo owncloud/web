@@ -126,8 +126,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new VueLoaderPlugin()
-    // new MiniCssExtractPlugin({ filename: 'style.css' }),
-  ]
+  plugins: [new VueLoaderPlugin(), new MiniCssExtractPlugin({ filename: 'style.css' })]
 }

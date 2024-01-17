@@ -238,7 +238,7 @@ export default defineComponent({
       }
     )
     const inputIconRightPadding = computed(() => {
-      if (slots.locationFilter && slots.locationFilter().length > 0) {
+      if (slots.locationFilter?.().length > 0) {
         return '125px'
       }
       return '48px'
