@@ -62,7 +62,6 @@ config = {
         "oCIS-1": {
             "earlyFail": True,
             "skip": False,
-            "tikaNeeded": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
             ],
@@ -77,8 +76,9 @@ config = {
         "oCIS-3": {
             "earlyFail": True,
             "skip": False,
+            "tikaNeeded": True,
             "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/shares/*.feature",
+                "tests/e2e/cucumber/features/smoke/{search,shares}/*.feature",
             ],
         },
         "oCIS-app-provider": {
