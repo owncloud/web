@@ -74,6 +74,13 @@ config = {
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
             ],
         },
+        "oCIS-3": {
+            "earlyFail": True,
+            "skip": False,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/shares/*.feature",
+            ],
+        },
         "oCIS-app-provider": {
             "skip": False,
             "featurePaths": [
