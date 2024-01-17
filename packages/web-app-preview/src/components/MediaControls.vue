@@ -105,7 +105,7 @@
         <div class="oc-ml-m">
           <oc-button
             v-oc-tooltip="imageResetDescription"
-            class="preview-controls-rotate-right"
+            class="preview-controls-image-reset"
             appearance="raw-inverse"
             variation="brand"
             :aria-label="imageResetDescription"
