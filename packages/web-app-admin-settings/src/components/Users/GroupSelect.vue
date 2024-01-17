@@ -8,6 +8,7 @@
       option-label="displayName"
       :label="$gettext('Groups')"
       :fix-message-line="true"
+      v-bind="$attrs"
       @update:model-value="onUpdate"
     >
       <template #selected-option="{ displayName, id }">
