@@ -1165,6 +1165,7 @@ Details
 
    https://github.com/owncloud/web/issues/10181
    https://github.com/owncloud/web/pull/10334
+   https://github.com/owncloud/web/pull/10342
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
