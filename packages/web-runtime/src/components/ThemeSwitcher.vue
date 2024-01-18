@@ -20,7 +20,7 @@ export default defineComponent({
     const themeStore = useThemeStore()
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
-    const autoTheme = { name: $gettext('Auto (same as system)') }
+    const autoTheme = computed(() => ({ name: $gettext('Auto (same as system)') }))
     const { availableThemes, currentTheme } = storeToRefs(themeStore)
     const currentThemeSelection = ref(null)
 
@@ -28,7 +28,7 @@ export default defineComponent({
 
     const updateTheme = (newTheme: WebThemeType) => {
       currentThemeSelection.value = newTheme
-      if (newTheme == autoTheme) {
+      if (newTheme == unref(autoTheme)) {
         setAutoSystemTheme()
         return
       }
@@ -41,11 +41,11 @@ export default defineComponent({
         return unref(currentThemeSelection)
       }
       if (unref(isCurrentThemeAutoSystem)) {
-        return autoTheme
+        return unref(autoTheme)
       }
       return unref(currentTheme)
     })
-    const availableThemesAndAuto = [autoTheme, ...unref(availableThemes)]
+    const availableThemesAndAuto = computed(() => [unref(autoTheme), ...unref(availableThemes)])
 
     return {
       availableThemesAndAuto,
