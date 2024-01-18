@@ -158,7 +158,23 @@ export const useFileActionsCreateNewFile = ({
 
   const actions = computed((): FileAction[] => {
     const actions = []
+    // make sure there is only one action for a file extension/mime-type
+    // if there are
+    // - multiple ApplicationFileExtensions with priority
+    // or
+    // - multiple ApplicationFileExtensions without priority (and none with)
+    // we do not guarantee which one is chosen
+    const defaultMapping: Record<string, ApplicationFileExtension> = {}
     for (const appFileExtension of unref(appNewFileMenuExtensions) || []) {
+      if (appFileExtension.hasPriority) {
+        defaultMapping[appFileExtension.extension] = appFileExtension
+      } else {
+        defaultMapping[appFileExtension.extension] =
+          defaultMapping[appFileExtension.extension] || appFileExtension
+      }
+    }
+
+    for (const [_, appFileExtension] of Object.entries(defaultMapping)) {
       actions.push({
         name: 'create-new-file',
         icon: 'add',
