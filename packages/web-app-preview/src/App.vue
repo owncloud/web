@@ -48,6 +48,9 @@
               :file="activeMediaFileCached"
               :current-image-rotation="currentImageRotation"
               :current-image-zoom="currentImageZoom"
+              :current-image-position-x="currentImagePositionX"
+              :current-image-position-y="currentImagePositionY"
+              @pan-zoom-change="onPanZoomChanged"
             />
             <media-video
               v-else-if="activeMediaFileCached.isVideo"
@@ -71,6 +74,7 @@
             :current-image-zoom="currentImageZoom"
             @set-rotation="currentImageRotation = $event"
             @set-zoom="currentImageZoom = $event"
+            @reset-image="resetImage"
             @toggle-full-screen="toggleFullscreenMode"
             @toggle-previous="prev"
             @toggle-next="next"
@@ -111,6 +115,7 @@ import { CachedFile } from './helpers/types'
 import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
 import { watch } from 'vue'
 import { getCurrentInstance } from 'vue'
+import { PanzoomEventDetail } from '@panzoom/panzoom'
 
 export const appId = 'preview'
 
@@ -152,6 +157,14 @@ export default defineComponent({
     const activeIndex = ref()
     const cachedFiles = ref<CachedFile[]>([])
     const folderLoaded = ref(false)
+    const isFileContentError = ref(false)
+    const isAutoPlayEnabled = ref(true)
+    const toPreloadImageIds = ref([])
+    const currentImageZoom = ref(1)
+    const currentImageRotation = ref(0)
+    const currentImagePositionX = ref(0)
+    const currentImagePositionY = ref(0)
+    const preloadImageCount = ref(10)
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -181,6 +194,18 @@ export default defineComponent({
           document.exitFullscreen()
         }
       }
+    }
+
+    const onPanZoomChanged = ({ detail }: { detail: PanzoomEventDetail }) => {
+      currentImagePositionX.value = detail.x
+      currentImagePositionY.value = detail.y
+    }
+
+    const resetImage = () => {
+      currentImageZoom.value = 1
+      currentImageRotation.value = 0
+      currentImagePositionX.value = 0
+      currentImagePositionY.value = 0
     }
 
     const filteredFiles = computed<Resource[]>(() => {
@@ -280,23 +305,19 @@ export default defineComponent({
       toggleFullscreenMode,
       updateLocalHistory,
       fileId,
-      space
+      space,
+      resetImage,
+      isFileContentError,
+      isAutoPlayEnabled,
+      toPreloadImageIds,
+      currentImageZoom,
+      currentImageRotation,
+      currentImagePositionX,
+      currentImagePositionY,
+      onPanZoomChanged,
+      preloadImageCount
     }
   },
-  data() {
-    return {
-      isFileContentError: false,
-      isAutoPlayEnabled: true,
-
-      toPreloadImageIds: [],
-
-      currentImageZoom: 1,
-      currentImageRotation: 0,
-
-      preloadImageCount: 10
-    }
-  },
-
   computed: {
     pageTitle() {
       return this.$gettext('Preview for %{currentMediumName}', {
@@ -544,6 +565,7 @@ export default defineComponent({
     margin: 10px auto;
   }
 }
+
 @media (max-width: $oc-breakpoint-medium-default) {
   .preview-sidebar-open {
     display: none;

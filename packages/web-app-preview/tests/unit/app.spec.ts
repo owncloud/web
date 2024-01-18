@@ -85,6 +85,7 @@ describe('Preview app', () => {
       await nextTick()
 
       wrapper.vm.toPreloadImageIds = []
+      wrapper.vm.preloadImageCount = 3
       wrapper.vm.setActiveFile('personal/admin/sleeping_dog.gif')
 
       await nextTick()
@@ -119,11 +120,6 @@ function createShallowMountWrapper() {
   mocks.$previewService.loadPreview.mockResolvedValue('')
   return {
     wrapper: shallowMount(App, {
-      data: function () {
-        return {
-          preloadImageCount: 3
-        }
-      },
       global: {
         plugins: [...defaultPlugins(), store],
         mocks,

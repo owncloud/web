@@ -28,14 +28,31 @@ export default defineComponent({
     currentImageRotation: {
       type: Number,
       required: true
+    },
+    currentImagePositionX: {
+      type: Number,
+      required: true
+    },
+    currentImagePositionY: {
+      type: Number,
+      required: true
     }
   },
-  setup(props) {
+  emits: ['panZoomChange'],
+  setup(props, { emit }) {
     const img = ref<VNodeRef>()
     const panzoom = ref<PanzoomObject>()
 
+    const onPanZoomChange = (event) => {
+      emit('panZoomChange', event)
+    }
+
     const initPanzoom = async () => {
       if (unref(panzoom)) {
+        ;(unref(img) as unknown as HTMLElement).removeEventListener(
+          'panzoomchange',
+          onPanZoomChange
+        )
         unref(panzoom)?.destroy()
       }
 
@@ -43,7 +60,7 @@ export default defineComponent({
       await nextTick()
 
       panzoom.value = Panzoom(unref(img) as any, {
-        animate: true,
+        animate: false,
         duration: 300,
         overflow: 'auto',
         maxScale: 10,
@@ -78,6 +95,7 @@ export default defineComponent({
           )
         }
       })
+      ;(unref(img) as unknown as HTMLElement).addEventListener('panzoomchange', onPanZoomChange)
     }
 
     watch(img, initPanzoom)
@@ -85,6 +103,10 @@ export default defineComponent({
 
     watch([() => props.currentImageZoom, () => props.currentImageRotation], () => {
       unref(panzoom).zoom(props.currentImageZoom)
+    })
+
+    watch([() => props.currentImagePositionX, () => props.currentImagePositionY], () => {
+      unref(panzoom).pan(props.currentImagePositionX, props.currentImagePositionY)
     })
 
     return {
@@ -97,5 +119,6 @@ export default defineComponent({
 img {
   max-width: 80%;
   max-height: 80%;
+  cursor: move;
 }
 </style>
