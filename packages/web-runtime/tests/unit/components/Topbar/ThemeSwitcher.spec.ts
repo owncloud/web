@@ -1,6 +1,6 @@
 import { WebThemeType, useThemeStore } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
-import ThemeSwitcher from 'web-runtime/src/components/Topbar/ThemeSwitcher.vue'
+import ThemeSwitcher from 'web-runtime/src/components/ThemeSwitcher.vue'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 import { defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 
