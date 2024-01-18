@@ -92,9 +92,14 @@ export const useThemeStore = defineStore('theme', () => {
 
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
+    setThemeFromStorageOrSystem()
+  }
 
-    const firstLightTheme = unref(availableThemes).find((theme) => !theme.isDark)
-    const firstDarkTheme = unref(availableThemes).find((theme) => theme.isDark)
+  const setThemeFromStorageOrSystem = () => {
+    const firstLightTheme =
+      unref(availableThemes).find((theme) => !theme.isDark) || unref(availableThemes)[0]
+    const firstDarkTheme =
+      unref(availableThemes).find((theme) => theme.isDark) || unref(availableThemes)[0]
     setAndApplyTheme(
       unref(availableThemes).find((t) => t.name === unref(currentLocalStorageThemeName)) ||
         (unref(isDark) ? firstDarkTheme : firstLightTheme),
@@ -104,7 +109,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   const setAutoSystemTheme = () => {
     currentLocalStorageThemeName.value = null
-    setAndApplyTheme(unref(isDark) ? availableThemes.value[1] : availableThemes.value[0], false)
+    setThemeFromStorageOrSystem()
   }
 
   const isCurrentThemeAutoSystem = computed(() => {

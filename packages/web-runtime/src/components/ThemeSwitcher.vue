@@ -28,12 +28,11 @@ export default defineComponent({
 
     const updateTheme = (newTheme: WebThemeType) => {
       currentThemeSelection.value = newTheme
+      showMessage({ title: $gettext('Preference saved.') })
       if (newTheme == unref(autoTheme)) {
-        setAutoSystemTheme()
-        return
+        return setAutoSystemTheme()
       }
       setAndApplyTheme(newTheme)
-      showMessage({ title: $gettext('Preference saved.') })
     }
 
     const currentThemeOrAuto = computed(() => {
