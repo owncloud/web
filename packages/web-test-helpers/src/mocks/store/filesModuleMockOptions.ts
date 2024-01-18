@@ -11,10 +11,7 @@ export const filesModuleMockOptions = {
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
       selectedFiles: jest.fn(() => []),
-      versions: jest.fn(() => []),
-      outgoingCollaborators: jest.fn(() => []),
-      outgoingLinks: jest.fn(() => []),
-      sharesLoading: jest.fn(() => false)
+      versions: jest.fn(() => [])
     },
     mutations: {
       SET_FILE_SELECTION: jest.fn(),
@@ -38,14 +35,8 @@ export const filesModuleMockOptions = {
       deleteFiles: jest.fn(),
       loadIndicators: jest.fn(),
       loadVersions: jest.fn(),
-      loadShares: jest.fn(),
-      deleteShare: jest.fn(),
-      updateLink: jest.fn(),
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),
-      changeShare: jest.fn(),
-      addLink: jest.fn(),
-      addShare: jest.fn(),
       resetFileSelection: jest.fn(),
       toggleFileSelection: jest.fn()
     }

@@ -24,7 +24,7 @@ import {
   useClientService,
   useMessages,
   usePasswordPolicyService,
-  useStore
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { Share } from '@ownclouders/web-client/src/helpers'
 
@@ -36,11 +36,11 @@ export default defineComponent({
   },
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { expose }) {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
     const passwordPolicyService = usePasswordPolicyService()
     const { $gettext } = useGettext()
+    const { updateLink } = useSharesStore()
 
     const password = ref('')
     const errorMessage = ref<string>()
@@ -52,9 +52,9 @@ export default defineComponent({
 
     const onConfirm = async () => {
       try {
-        await store.dispatch('Files/updateLink', {
+        await updateLink({
           id: props.link.id,
-          client: clientService.owncloudSdk,
+          clientService,
           params: { ...props.link, password: unref(password) }
         })
         showMessage({ title: $gettext('Link was updated successfully') })

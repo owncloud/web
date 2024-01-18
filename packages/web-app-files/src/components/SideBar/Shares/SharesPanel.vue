@@ -14,13 +14,14 @@
 </template>
 
 <script lang="ts">
-import { ComponentPublicInstance, computed, defineComponent, inject, provide } from 'vue'
+import { ComponentPublicInstance, defineComponent, inject, provide } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
-import { useStore } from '@ownclouders/web-pkg'
+import { useSharesStore } from '@ownclouders/web-pkg'
 import { useIncomingParentShare } from '../../../composables/parentShare'
 import { Resource } from '@ownclouders/web-client'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'SharesPanel',
@@ -35,8 +36,8 @@ export default defineComponent({
   },
   emits: ['scrollToElement'],
   setup() {
-    const store = useStore()
-    const sharesLoading = computed(() => store.getters['Files/sharesLoading'])
+    const sharesStore = useSharesStore()
+    const { loading: sharesLoading } = storeToRefs(sharesStore)
 
     const { incomingParentShare, ...rest } = useIncomingParentShare()
     provide('incomingParentShare', incomingParentShare)

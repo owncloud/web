@@ -28,6 +28,7 @@ export type PiniaMockOptions = {
   }
   messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
+  sharesState?: { shares?: Share[]; loading?: boolean }
   spacesState?: { spaces?: SpaceResource[]; spaceMembers?: Share[] }
   userState?: { user?: User }
   capabilityState?: {
@@ -45,6 +46,7 @@ export function createMockStore({
   themeState = {},
   messagesState = {},
   modalsState = {},
+  sharesState = {},
   spacesState = {},
   userState = {},
   capabilityState = {}
@@ -89,6 +91,7 @@ export function createMockStore({
         availableThemes: defaultOwnCloudTheme.themes,
         ...themeState
       },
+      shares: { shares: [], ...sharesState },
       spaces: { spaces: [], spaceMembers: [], ...spacesState },
       user: { user: { ...mock<User>({ id: '1' }), ...(userState?.user && { ...userState.user }) } },
       capabilities: {

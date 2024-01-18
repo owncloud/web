@@ -6,13 +6,6 @@ export default {
   versions: [],
 
   /**
-   * Shares
-   **/
-  sharesLoading: false,
-  incomingShares: [],
-  outgoingShares: [],
-
-  /**
    * View settings
    */
   areHiddenFilesShown: true,

@@ -51,7 +51,7 @@ import {
   useExtensionRegistry,
   useSelectedResources,
   useSpacesStore,
-  useConfigStore
+  useSharesStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -59,6 +59,7 @@ import {
   Resource
 } from '@ownclouders/web-client/src/helpers'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { AncestorMetaData } from '../../types'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -85,8 +86,8 @@ export default defineComponent({
     const clientService = useClientService()
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
-    const configStore = useConfigStore()
     const spacesStore = useSpacesStore()
+    const { loadShares } = useSharesStore()
 
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
@@ -175,6 +176,10 @@ export default defineComponent({
         .map((e) => e.panel)
     )
 
+    const ancestorMetaData = computed<AncestorMetaData>(
+      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
+    )
+
     watch(
       () => [...unref(panelContext).items, props.isOpen],
       async () => {
@@ -193,12 +198,12 @@ export default defineComponent({
 
         isLoading.value = true
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
-          store.dispatch('Files/loadShares', {
-            client: clientService.owncloudSdk,
-            resource: resource,
-            configStore,
+          loadShares({
+            clientService,
+            resource,
             path: resource.path,
             storageId: resource.fileId,
+            ancestorMetaData: unref(ancestorMetaData),
             // cache must not be used on flat file lists that gather resources from various locations
             useCached: !unref(isFlatFileList) && !unref(isProjectsLocation)
           })

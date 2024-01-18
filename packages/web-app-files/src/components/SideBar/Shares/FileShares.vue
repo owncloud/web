@@ -87,7 +87,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import {
   useAbility,
   useStore,
@@ -97,7 +97,8 @@ import {
   useMessages,
   useSpacesStore,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -117,7 +118,6 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
-import { useShares } from 'web-app-files/src/composables'
 
 export default defineComponent({
   name: 'FileShares',
@@ -138,6 +138,10 @@ export default defineComponent({
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
+
+    const sharesStore = useSharesStore()
+    const { addShare, deleteShare } = sharesStore
+    const { outgoingCollaborators } = storeToRefs(sharesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -171,7 +175,10 @@ export default defineComponent({
     })
 
     return {
-      ...useShares(),
+      store,
+      addShare,
+      deleteShare,
+      outgoingCollaborators,
       user,
       ability,
       resource,
@@ -302,10 +309,9 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['deleteShare', 'addShare']),
     ...mapMutations('Files', ['REMOVE_FILES']),
 
-    getDeniedShare(collaborator: Share): Share {
+    getDeniedShare(collaborator: Share) {
       return this.collaborators.find(
         (c) =>
           c.permissions === peopleRoleDenyFolder.bitmask(false) &&
@@ -324,7 +330,7 @@ export default defineComponent({
       )
     },
 
-    getDeniedSpaceMember(collaborator: Share): Share {
+    getDeniedSpaceMember(collaborator: Share) {
       let shareType = null
 
       if (collaborator.shareType === ShareTypes.spaceUser.value) {
@@ -392,10 +398,10 @@ export default defineComponent({
       if (value === true) {
         try {
           await this.addShare({
-            client: this.$client,
+            clientService: this.$clientService,
+            vuexStore: this.store,
             resource: this.resource,
             shareWith: share.collaborator.name,
-            displayName: share.collaborator.displayName,
             shareType: share.shareType,
             role: peopleRoleDenyFolder,
             path: this.resource.path,
@@ -415,7 +421,8 @@ export default defineComponent({
       } else {
         try {
           await this.deleteShare({
-            client: this.$client,
+            clientService: this.$clientService,
+            vuexStore: this.store,
             share:
               share.shareType === ShareTypes.spaceUser.value ||
               share.shareType === ShareTypes.spaceGroup.value
@@ -461,7 +468,8 @@ export default defineComponent({
 
       try {
         await this.deleteShare({
-          client: this.$client,
+          clientService: this.$clientService,
+          vuexStore: this.store,
           share: share,
           path,
           loadIndicators

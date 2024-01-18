@@ -21,7 +21,8 @@ import {
   useModals,
   useSpacesStore,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  useSharesStore
 } from '../../piniaStores'
 
 export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
@@ -38,6 +39,7 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const loadingService = useLoadingService()
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
 
   const queue = new PQueue({
     concurrency: configStore.options.concurrentRequests.resourceBatchActions
@@ -191,7 +193,8 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
                 files: resourcesForDeletion,
                 clientService,
                 loadingCallbackArgs,
-                messageStore
+                messageStore,
+                sharesStore
               })
               .then(async () => {
                 // Load quota

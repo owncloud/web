@@ -55,37 +55,6 @@ export default {
   REMOVE_FILES(state, removedFiles) {
     state.files = [...state.files].filter((file) => !removedFiles.find((r) => r.id === file.id))
   },
-  OUTGOING_SHARES_SET(state, shares) {
-    state.outgoingShares = shares
-  },
-  OUTGOING_SHARES_REMOVE(state, share) {
-    state.outgoingShares = state.outgoingShares.filter((s) => share.id !== s.id)
-  },
-  OUTGOING_SHARES_UPSERT(state, share) {
-    const fileIndex = state.outgoingShares.findIndex((s) => {
-      return s.id === share.id
-    })
-
-    if (fileIndex >= 0) {
-      state.outgoingShares[fileIndex] = share
-    } else {
-      // share was not present in the list while updating, add it instead
-      state.outgoingShares.push(share)
-    }
-  },
-  INCOMING_SHARES_SET(state, shares) {
-    state.incomingShares = shares
-  },
-  SHARES_LOADING(state, loading) {
-    state.sharesLoading = loading
-  },
-  PRUNE_SHARES(state) {
-    state.sharesLoading = true
-    state.outgoingShares = []
-    state.incomingShares = []
-    state.sharesLoading = false
-  },
-
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null
     state.selectedIds = []
