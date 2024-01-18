@@ -563,6 +563,8 @@ Details
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10330
    https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10357
+   https://github.com/owncloud/web/pull/10361
 
 * Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
 
