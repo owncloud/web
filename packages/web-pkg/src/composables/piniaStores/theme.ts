@@ -96,13 +96,12 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const setThemeFromStorageOrSystem = () => {
-    const firstLightTheme =
-      unref(availableThemes).find((theme) => !theme.isDark) || unref(availableThemes)[0]
-    const firstDarkTheme =
-      unref(availableThemes).find((theme) => theme.isDark) || unref(availableThemes)[0]
+    const firstLightTheme = unref(availableThemes).find((theme) => !theme.isDark)
+    const firstDarkTheme = unref(availableThemes).find((theme) => theme.isDark)
     setAndApplyTheme(
       unref(availableThemes).find((t) => t.name === unref(currentLocalStorageThemeName)) ||
-        (unref(isDark) ? firstDarkTheme : firstLightTheme),
+        (unref(isDark) ? firstDarkTheme : firstLightTheme) ||
+        unref(availableThemes)[0],
       false
     )
   }
