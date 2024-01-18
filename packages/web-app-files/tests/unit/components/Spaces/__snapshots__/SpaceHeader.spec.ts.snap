@@ -4,9 +4,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
 <div class="space-header oc-p-m oc-flex space-header-squashed">
   <div class="space-header-image">
     <div class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
-      <span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m">
-        <!---->
-      </span>
+      <span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m"><!----></span>
     </div>
   </div>
   <div class="space-header-infos">
@@ -16,9 +14,7 @@ exports[`SpaceHeader should add the "squashed"-class when the sidebar is opened 
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
           <!--v-if-->
           <!-- @slot Content of the button -->
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
+          <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
@@ -42,9 +38,7 @@ exports[`SpaceHeader space image should show the default image if no other image
 <div class="space-header oc-p-m oc-flex">
   <div class="space-header-image">
     <div class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
-      <span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m">
-        <!---->
-      </span>
+      <span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m"><!----></span>
     </div>
   </div>
   <div class="space-header-infos">
@@ -54,9 +48,7 @@ exports[`SpaceHeader space image should show the default image if no other image
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
           <!--v-if-->
           <!-- @slot Content of the button -->
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
+          <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
@@ -88,9 +80,7 @@ exports[`SpaceHeader space image should show the set image 1`] = `
         <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn" type="button">
           <!--v-if-->
           <!-- @slot Content of the button -->
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
+          <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div class="oc-drop oc-box-shadow-medium oc-rounded" id="space-context-drop" options="[object Object]">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">

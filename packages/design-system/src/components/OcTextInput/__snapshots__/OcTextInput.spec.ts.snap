@@ -10,16 +10,12 @@ exports[`OcTextInput password input field password policy displays error state i
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
+        <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button>
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
+        <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button>
       <!--v-if-->
     </div>
@@ -27,9 +23,7 @@ exports[`OcTextInput password input field password policy displays error state i
       <div class="oc-text-small oc-flex oc-flex-column">
         <span>Please enter a password that meets the following criteria:</span>
         <div class="oc-flex oc-flex-middle">
-          <span class="oc-icon oc-icon-s oc-icon-danger">
-            <!---->
-          </span>
+          <span class="oc-icon oc-icon-s oc-icon-danger"><!----></span>
           <span class="oc-text-input-danger">At least 8 characters</span>
         </div>
       </div>
@@ -51,16 +45,12 @@ exports[`OcTextInput password input field password policy displays success state
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
+        <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button>
       <button class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default" type="button">
         <!--v-if-->
         <!-- @slot Content of the button -->
-        <span class="oc-icon oc-icon-s oc-icon-passive">
-          <!---->
-        </span>
+        <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button>
       <!--v-if-->
     </div>
@@ -68,9 +58,7 @@ exports[`OcTextInput password input field password policy displays success state
       <div class="oc-text-small oc-flex oc-flex-column">
         <span>Please enter a password that meets the following criteria:</span>
         <div class="oc-flex oc-flex-middle">
-          <span class="oc-icon oc-icon-s oc-icon-success">
-            <!---->
-          </span>
+          <span class="oc-icon oc-icon-s oc-icon-success"><!----></span>
           <span class="oc-text-input-success">At least 8 characters</span>
         </div>
       </div>

@@ -5,5 +5,5 @@ You’re looking at [ownCloud Design System’s](https://owncloud.github.io/ownc
 ## System Overview
 
 ```
-<components-list />
+<docs-components-list />
 ```

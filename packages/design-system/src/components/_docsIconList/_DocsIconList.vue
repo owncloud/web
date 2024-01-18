@@ -1,11 +1,12 @@
 <template>
   <div>
     <oc-search-bar
-      v-model="query"
+      :value="query"
       :is-filter="true"
       :button-hidden="true"
       label="Filter icons by name"
       class="oc-mb"
+      @input="updateQuery"
     />
     <div class="oc-mb oc-px">
       <strong>Displaying {{ filteredIcons.length }} out of {{ icons.length }} icons</strong>
@@ -56,10 +57,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import OcIcon from '../../../src/components/OcIcon/OcIcon.vue'
-import OcTable from '../../../src/components/OcTable/OcTable.vue'
-import OcSearchBar from '../../../src/components/OcSearchBar/OcSearchBar.vue'
-import HighlightedText from './_HighlightedText.vue'
+import OcIcon from '../OcIcon/OcIcon.vue'
+import OcTable from '../OcTable/OcTable.vue'
+import OcSearchBar from '../OcSearchBar/OcSearchBar.vue'
+import HighlightedText from '../_DocsHighlightedText/_DocsHighlightedText.vue'
+import { ref } from 'vue'
 const req = (require as any).context('../../../src/assets/icons/', true, /^\.\/.*\.svg$/)
 
 /**
@@ -69,11 +71,20 @@ const req = (require as any).context('../../../src/assets/icons/', true, /^\.\/.
  * </p>
  */
 export default defineComponent({
-  name: 'IconList',
+  name: 'DocsIconList',
   components: { HighlightedText, OcSearchBar, OcIcon, OcTable },
+
+  setup() {
+    const query = ref('')
+
+    const updateQuery = (value) => {
+      query.value = value
+    }
+
+    return { query, updateQuery }
+  },
   data() {
     return {
-      query: '',
       icons: []
     }
   },
@@ -81,7 +92,8 @@ export default defineComponent({
     filteredIcons() {
       return this.icons
         .filter((icon) => icon.includes(this.query))
-        .map((icon) => ({
+        .map((icon, index) => ({
+          id: index,
           filename: icon.replace('-fill', '').replace('-line', ''),
           fillType: icon.endsWith('-fill') ? 'fill' : icon.endsWith('-line') ? 'line' : 'none'
         }))
@@ -136,6 +148,6 @@ export default defineComponent({
 
 <docs>
   ```
-  <icon-list />
+  <docs-icon-list />
   ```
 </docs>

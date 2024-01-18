@@ -1,11 +1,16 @@
 <template>
   <div class="all-tokens">
     <table>
+      <caption class="oc-invisible-sr">
+        {{
+          $gettext('A list of all defined design tokens')
+        }}
+      </caption>
       <thead>
         <tr>
-          <th>Token Name</th>
-          <th>Value</th>
-          <th>Category</th>
+          <th>{{ $gettext('Token Name') }}</th>
+          <th>{{ $gettext('Value') }}</th>
+          <th>{{ $gettext('Category') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import designTokens from '../../../src/assets/tokens/ods.json'
+import designTokens from '../../assets/tokens/ods.json'
 
 /**
  * A list of available tokens in ownCloud Design System. Use these tokens in place
@@ -44,7 +49,7 @@ import designTokens from '../../../src/assets/tokens/ods.json'
  * [/src/tokens/](https://github.com/owncloud/owncloud-design-system/blob/master/src/tokens).
  */
 export default defineComponent({
-  name: 'AllTokens',
+  name: 'DocsAllTokens',
   data() {
     return {
       tokens: Object.values(designTokens)
@@ -54,7 +59,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../docs.tokens';
+@import '../../../docs/docs.tokens';
 
 /* STYLES
 --------------------------------------------- */
@@ -80,7 +85,6 @@ export default defineComponent({
     padding: $space-s $space-l $space-s $space-s;
     background: $color-cloud;
     font-size: $size-s;
-    font-weight: $weight-bold;
     color: $color-oxford-blue;
     text-transform: uppercase;
     letter-spacing: 1px;

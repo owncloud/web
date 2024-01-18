@@ -3,10 +3,7 @@
 exports[`CreateAndUpload component action buttons should show and be enabled if file creation is possible 1`] = `
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
-    <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button">
-      <!--v-if-->
-      <!-- @slot Content of the button -->
-      <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
+    <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>New</span>
     </button>
   </span>
@@ -60,10 +57,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
     </oc-list-stub>
   </oc-drop-stub>
   <span>
-    <button aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn" type="button">
-      <!--v-if-->
-      <!-- @slot Content of the button -->
-      <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
+    <button aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn" type="button"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>Upload</span>
     </button>
   </span>
@@ -85,10 +79,7 @@ exports[`CreateAndUpload component action buttons should show and be enabled if 
 exports[`CreateAndUpload component file handlers should show entries for all new file handlers 1`] = `
 <div class="create-and-upload-actions oc-flex-inline oc-mr-s">
   <span>
-    <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button">
-      <!--v-if-->
-      <!-- @slot Content of the button -->
-      <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
+    <button aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn" type="button"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="add" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>New</span>
     </button>
   </span>
@@ -142,10 +133,7 @@ exports[`CreateAndUpload component file handlers should show entries for all new
     </oc-list-stub>
   </oc-drop-stub>
   <span>
-    <button aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn" type="button">
-      <!--v-if-->
-      <!-- @slot Content of the button -->
-      <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
+    <button aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn" type="button"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub accessiblelabel="" color="" filltype="line" name="upload" size="medium" type="span" variation="passive"></oc-icon-stub>
       <span>Upload</span>
     </button>
   </span>
