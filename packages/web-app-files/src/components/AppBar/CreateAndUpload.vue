@@ -183,7 +183,6 @@
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
-  useAppsStore,
   useCapabilityStore,
   useClipboardStore,
   useFileActions,
@@ -262,7 +261,6 @@ export default defineComponent({
     const store = useStore()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
-    const appsStore = useAppsStore()
     const messageStore = useMessages()
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
@@ -306,10 +304,6 @@ export default defineComponent({
     const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space: props.space })
 
     const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
-
-    const appNewFileMenuExtensions = computed(() =>
-      appsStore.fileExtensions.filter(({ newFileMenu }) => !!newFileMenu)
-    )
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
@@ -428,7 +422,6 @@ export default defineComponent({
     return {
       ...useFileActions({ store }),
       ...useRequest(),
-      appNewFileMenuExtensions,
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
