@@ -10,8 +10,7 @@ export const filesModuleMockOptions = {
       currentFolder: jest.fn(),
       files: jest.fn(() => []),
       activeFiles: jest.fn(),
-      selectedFiles: jest.fn(() => []),
-      versions: jest.fn(() => [])
+      selectedFiles: jest.fn(() => [])
     },
     mutations: {
       SET_FILE_SELECTION: jest.fn(),
@@ -34,7 +33,6 @@ export const filesModuleMockOptions = {
     actions: {
       deleteFiles: jest.fn(),
       loadIndicators: jest.fn(),
-      loadVersions: jest.fn(),
       clearTrashBin: jest.fn(),
       removeFilesFromTrashbin: jest.fn(),
       resetFileSelection: jest.fn(),

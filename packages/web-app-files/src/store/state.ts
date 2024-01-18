@@ -3,7 +3,6 @@ export default {
   files: [],
   selectedIds: [],
   latestSelectedId: null,
-  versions: [],
 
   /**
    * View settings
