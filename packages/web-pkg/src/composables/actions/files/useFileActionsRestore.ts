@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { dirname } from 'path'
 import { isLocationTrashActive } from '../../../router'
 
@@ -18,15 +17,19 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
-import { useMessages, useSpacesStore, useUserStore, useCapabilityStore } from '../../piniaStores'
+import {
+  useMessages,
+  useSpacesStore,
+  useUserStore,
+  useCapabilityStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsRestore = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const capabilityStore = useCapabilityStore()
@@ -35,6 +38,7 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   const collectConflicts = async (space: SpaceResource, sortedResources: Resource[]) => {
     const existingResourcesCache = {}
@@ -175,8 +179,9 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
 
     // success handler (for partial and full success)
     if (restoredResources.length) {
-      store.dispatch('Files/removeFilesFromTrashbin', restoredResources)
-      let title
+      resourcesStore.removeResources(restoredResources)
+      resourcesStore.resetSelection()
+      let title: string
       if (restoredResources.length === 1) {
         title = $gettext('%{resource} was restored successfully', {
           resource: restoredResources[0].name

@@ -151,8 +151,7 @@ import {
   useMessages,
   useSpacesStore,
   useConfigStore,
-  useSharesStore,
-  useStore
+  useSharesStore
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
@@ -192,7 +191,6 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
@@ -265,7 +263,6 @@ export default defineComponent({
     })
 
     return {
-      store,
       resource: inject<Resource>('resource'),
       hasResharing: capabilityRefs.sharingResharing,
       resharingDefault: capabilityRefs.sharingResharingDefault,
@@ -533,7 +530,6 @@ export default defineComponent({
               } else {
                 await this.addShare({
                   clientService: this.$clientService,
-                  vuexStore: this.store,
                   resource: this.resource,
                   path,
                   shareWith: collaborator.value.shareWith,

@@ -1,22 +1,14 @@
 import { useFileActionsRestore } from '../../../../../src/composables/actions'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper,
-  RouteLocation
-} from 'web-test-helpers'
-import { useMessages, useStore } from '../../../../../src/composables'
+import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
+import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
 
 describe('restore', () => {
-  afterEach(() => jest.clearAllMocks())
-
   describe('isEnabled property', () => {
     it('should be false when no resource is given', () => {
       getWrapper({
@@ -80,7 +72,7 @@ describe('restore', () => {
   describe('method "restoreResources"', () => {
     it('should show message on success', () => {
       getWrapper({
-        setup: async ({ restoreResources }, { space, storeOptions }) => {
+        setup: async ({ restoreResources }, { space }) => {
           await restoreResources(
             space,
             [{ id: '1', path: '/1' }],
@@ -90,9 +82,10 @@ describe('restore', () => {
 
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
-          expect(storeOptions.modules.Files.actions.removeFilesFromTrashbin).toHaveBeenCalledTimes(
-            1
-          )
+
+          const { removeResources, resetSelection } = useResourcesStore()
+          expect(removeResources).toHaveBeenCalledTimes(1)
+          expect(resetSelection).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -169,11 +162,9 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useFileActionsRestore>,
     {
-      space,
-      storeOptions
+      space
     }: {
       space: SpaceResource
-      storeOptions: typeof defaultStoreMockOptions
       router: ReturnType<typeof defaultComponentMocks>['$router']
     }
   ) => void
@@ -200,28 +191,17 @@ function getWrapper({
   } else {
     mocks.$clientService.webdav.restoreFile.mockRejectedValue(new Error(''))
   }
-  mocks.$clientService.owncloudSdk.users.getUser.mockImplementation(() => ({ quota: {} }))
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: {
-      ...defaultStoreMockOptions.modules,
-      user: { state: { uuid: 1 } }
-    }
-  }
-  const store = createStore(storeOptions)
   return {
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const store = useStore()
-        const instance = useFileActionsRestore({ store })
-        setup(instance, { space: mocks.space, storeOptions, router: mocks.$router })
+        const instance = useFileActionsRestore()
+        setup(instance, { space: mocks.space, router: mocks.$router })
       },
       {
         mocks,
-        provide: mocks,
-        store
+        provide: mocks
       }
     )
   }

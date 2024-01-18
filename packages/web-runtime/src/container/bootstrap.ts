@@ -2,7 +2,7 @@ import { registerClient } from '../services/clientRegistration'
 import { buildApplication, NextApplication } from './application'
 import { Store } from 'vuex'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
-import { App, computed } from 'vue'
+import { App, computed, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
@@ -25,7 +25,9 @@ import {
   useConfigStore,
   ConfigStore,
   RawConfig,
-  useSharesStore
+  useSharesStore,
+  useResourcesStore,
+  ResourcesStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -48,7 +50,6 @@ import {
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
 import { z } from 'zod'
-import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
@@ -335,6 +336,7 @@ export const announcePiniaStores = () => {
   const configStore = useConfigStore()
   const messagesStore = useMessages()
   const modalStore = useModals()
+  const resourcesStore = useResourcesStore()
   const sharesStore = useSharesStore()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
@@ -345,6 +347,7 @@ export const announcePiniaStores = () => {
     capabilityStore,
     extensionRegistry,
     configStore,
+    resourcesStore,
     messagesStore,
     modalStore,
     sharesStore,
@@ -658,21 +661,21 @@ const fileReadyEventSchema = z.object({
 })
 
 const onSSEProcessingFinishedEvent = ({
-  store,
+  resourcesStore,
   msg,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientService,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   resourceQueue
 }: {
-  store: Store<unknown>
+  resourcesStore: ResourcesStore
   msg: MessageEvent
   clientService: ClientService
   resourceQueue: PQueue
 }) => {
   try {
     const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-    const currentFolder = store.getters['Files/currentFolder']
+    const currentFolder = resourcesStore.currentFolder
     if (!currentFolder) {
       return
     }
@@ -689,11 +692,9 @@ const onSSEProcessingFinishedEvent = ({
       }
     }
 
-    const isFileLoaded = !!(store.getters['Files/files'] as Resource[]).find(
-      (f) => f.id === postProcessingData.itemid
-    )
+    const isFileLoaded = !!resourcesStore.resources.find((f) => f.id === postProcessingData.itemid)
     if (isFileLoaded) {
-      store.commit('Files/UPDATE_RESOURCE_FIELD', {
+      resourcesStore.updateResourceField({
         id: postProcessingData.itemid,
         field: 'processing',
         value: false
@@ -706,7 +707,7 @@ const onSSEProcessingFinishedEvent = ({
       //     fileId: postProcessingData.itemid
       //   })
       //   resource.path = urlJoin(currentFolder.path, resource.name)
-      //   store.commit('Files/UPSERT_RESOURCE', resource)
+      //   resourcesStore.upsertResource(resource)
       // })
     }
   } catch (e) {
@@ -715,50 +716,52 @@ const onSSEProcessingFinishedEvent = ({
 }
 
 export const registerSSEEventListeners = ({
-  store,
+  resourcesStore,
   clientService,
   configStore
 }: {
-  store: Store<unknown>
+  resourcesStore: ResourcesStore
   clientService: ClientService
   configStore: ConfigStore
 }): void => {
   const resourceQueue = new PQueue({
     concurrency: configStore.options.concurrentRequests.sse
   })
-  store.watch(
-    (state, getters) => getters['Files/currentFolder'],
+
+  watch(
+    () => resourcesStore.currentFolder,
     () => {
       resourceQueue.clear()
     }
   )
+
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
-    onSSEProcessingFinishedEvent({ store, msg, clientService, resourceQueue })
+    onSSEProcessingFinishedEvent({ resourcesStore, msg, clientService, resourceQueue })
   )
 }
 
-export const setViewOptions = ({ store }: { store: Store<unknown> }): void => {
+export const setViewOptions = ({ resourcesStore }: { resourcesStore: ResourcesStore }) => {
   /**
    *   Storage returns a string so we need to convert it into a boolean
    */
   const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
   const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
 
-  if (areHiddenFilesShownBoolean !== store.getters['Files/areHiddenFilesShown']) {
-    store.commit('Files/SET_HIDDEN_FILES_VISIBILITY', areHiddenFilesShownBoolean)
+  if (areHiddenFilesShownBoolean !== resourcesStore.areHiddenFilesShown) {
+    resourcesStore.setAreHiddenFilesShown(areHiddenFilesShownBoolean)
   }
 
   const areFileExtensionsShown = window.localStorage.getItem('oc_fileExtensionsShown') || 'true'
   const areFileExtensionsShownBoolean = areFileExtensionsShown === 'true'
 
-  if (areFileExtensionsShownBoolean !== store.getters['Files/areFileExtensionsShownBoolean']) {
-    store.commit('Files/SET_FILE_EXTENSIONS_VISIBILITY', areFileExtensionsShownBoolean)
+  if (areFileExtensionsShownBoolean !== resourcesStore.areFileExtensionsShown) {
+    resourcesStore.setAreFileExtensionsShown(areFileExtensionsShownBoolean)
   }
 
   const areWebDavDetailsShown = window.localStorage.getItem('oc_webDavDetailsShown') || 'false'
   const areWebDavDetailsShownBoolean = areWebDavDetailsShown === 'true'
 
-  if (areWebDavDetailsShownBoolean !== store.getters['Files/areWebDavDetailsShown']) {
-    store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', areWebDavDetailsShownBoolean)
+  if (areWebDavDetailsShownBoolean !== resourcesStore.areWebDavDetailsShown) {
+    resourcesStore.setAreWebDavDetailsShown(areWebDavDetailsShownBoolean)
   }
 }

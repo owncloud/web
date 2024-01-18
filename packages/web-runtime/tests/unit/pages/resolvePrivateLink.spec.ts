@@ -1,11 +1,5 @@
 import resolvePrivateLink from '../../../src/pages/resolvePrivateLink.vue'
-import {
-  defaultPlugins,
-  defaultComponentMocks,
-  createStore,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -142,8 +136,6 @@ function getWrapper({
   })
 
   const mocks = { ...defaultComponentMocks() }
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return {
     mocks,
@@ -152,8 +144,7 @@ function getWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: { configState: { options: { openLinksWithDefaultApp } } }
-          }),
-          store
+          })
         ],
         mocks,
         provide: mocks

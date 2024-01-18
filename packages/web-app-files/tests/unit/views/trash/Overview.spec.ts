@@ -1,9 +1,7 @@
 import TrashOverview from '../../../../src/views/trash/Overview.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   defaultStubs,
   mount,
   RouteLocation
@@ -109,8 +107,6 @@ describe('TrashOverview', () => {
 })
 
 function getWrapper({ spaces = spaceMocks }: { spaces?: SpaceResource[] } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'trash-overview' })
@@ -124,7 +120,7 @@ function getWrapper({ spaces = spaceMocks }: { spaces?: SpaceResource[] } = {}) 
         stubs: { ...defaultStubs, NoContentMessage: true },
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins({ piniaOptions: { spacesState: { spaces } } }), store]
+        plugins: [...defaultPlugins({ piniaOptions: { spacesState: { spaces } } })]
       }
     })
   }

@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -13,7 +12,6 @@ import { useRouteQuery } from '../../router'
 import { useLoadingService } from '../../loadingService'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { ref } from 'vue'
 import {
@@ -22,11 +20,13 @@ import {
   useSpacesStore,
   useCapabilityStore,
   useConfigStore,
-  useSharesStore
+  useSharesStore,
+  useResourcesStore
 } from '../../piniaStores'
+import { storeToRefs } from 'pinia'
+import { LoadingTaskCallbackArguments } from '../../../services'
 
-export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> }) => {
-  store = store || useStore()
+export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()
   const messageStore = useMessages()
   const { showMessage, showErrorMessage } = messageStore
@@ -40,6 +40,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
   const sharesStore = useSharesStore()
+
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
 
   const queue = new PQueue({
     concurrency: configStore.options.concurrentRequests.resourceBatchActions
@@ -122,7 +125,9 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
         id: resource.id
       })
       .then(() => {
-        store.dispatch('Files/removeFilesFromTrashbin', [resource])
+        resourcesStore.removeResources([resource])
+        resourcesStore.resetSelection()
+
         const translated = $gettext(
           '"%{file}" was deleted successfully',
           { file: resource.name },
@@ -162,6 +167,63 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
     await Promise.all(deleteOps)
   }
 
+  const deleteFiles = ({
+    space,
+    files,
+    loadingCallbackArgs,
+    firstRun
+  }: {
+    space: SpaceResource
+    files: Resource[]
+    loadingCallbackArgs: LoadingTaskCallbackArguments
+    firstRun?: boolean
+  }) => {
+    const { setProgress } = loadingCallbackArgs
+    const promises = []
+    const removedFiles = []
+    for (const [i, file] of files.entries()) {
+      const promise = clientService.webdav
+        .deleteFile(space, file)
+        .then(() => {
+          removedFiles.push(file)
+        })
+        .catch((error) => {
+          let title = $gettext('Failed to delete "%{file}"', { file: file.name })
+          if (error.statusCode === 423) {
+            if (firstRun) {
+              return deleteFiles({ space, files: [file], loadingCallbackArgs, firstRun: false })
+            }
+
+            title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
+          }
+          messageStore.showErrorMessage({ title, errors: [error] })
+        })
+        .finally(() => {
+          setProgress({ total: files.length, current: i + 1 })
+        })
+      promises.push(promise)
+    }
+    return Promise.all(promises).then(() => {
+      resourcesStore.removeResources(removedFiles)
+      resourcesStore.resetSelection()
+      sharesStore.pruneShares()
+
+      if (removedFiles.length) {
+        const title =
+          removedFiles.length === 1 && files.length === 1
+            ? $gettext('"%{item}" was moved to trash bin', { item: removedFiles[0].name })
+            : $ngettext(
+                '%{itemCount} item was moved to trash bin',
+                '%{itemCount} items were moved to trash bin',
+                removedFiles.length,
+                { itemCount: removedFiles.length.toString() },
+                true
+              )
+        messageStore.showMessage({ title })
+      }
+    })
+  }
+
   const filesList_delete = (resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
@@ -186,55 +248,49 @@ export const useFileActionsDeleteResources = ({ store }: { store?: Store<any> })
       ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {
         return loadingService.addTask(
           (loadingCallbackArgs) => {
-            return store
-              .dispatch('Files/deleteFiles', {
-                ...language,
-                space: spaceForDeletion,
-                files: resourcesForDeletion,
-                clientService,
-                loadingCallbackArgs,
-                messageStore,
-                sharesStore
-              })
-              .then(async () => {
-                // Load quota
-                if (
-                  isLocationSpacesActive(router, 'files-spaces-generic') &&
-                  !['public', 'share'].includes(spaceForDeletion?.driveType)
-                ) {
-                  if (capabilityStore.spacesEnabled) {
-                    const graphClient = clientService.graphAuthenticated
-                    const driveResponse = await graphClient.drives.getDrive(
-                      unref(resources)[0].storageId
-                    )
-                    spacesStore.updateSpaceField({
-                      id: driveResponse.data.id,
-                      field: 'spaceQuota',
-                      value: driveResponse.data.quota
-                    })
-                  }
-                }
-
-                if (
-                  unref(resourcesToDelete).length &&
-                  isSameResource(unref(resourcesToDelete)[0], store.getters['Files/currentFolder'])
-                ) {
-                  // current folder is being deleted
-                  return router.push(
-                    createFileRouteOptions(spaceForDeletion, {
-                      path: dirname(unref(resourcesToDelete)[0].path),
-                      fileId: unref(resourcesToDelete)[0].parentFolderId
-                    })
+            return deleteFiles({
+              space: spaceForDeletion,
+              files: resourcesForDeletion,
+              loadingCallbackArgs
+            }).then(async () => {
+              // Load quota
+              if (
+                isLocationSpacesActive(router, 'files-spaces-generic') &&
+                !['public', 'share'].includes(spaceForDeletion?.driveType)
+              ) {
+                if (capabilityStore.spacesEnabled) {
+                  const graphClient = clientService.graphAuthenticated
+                  const driveResponse = await graphClient.drives.getDrive(
+                    unref(resources)[0].storageId
                   )
+                  spacesStore.updateSpaceField({
+                    id: driveResponse.data.id,
+                    field: 'spaceQuota',
+                    value: driveResponse.data.quota
+                  })
                 }
+              }
 
-                const activeFilesCount = store.getters['Files/activeFiles'].length
-                const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
-                if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-                  // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-                  currentPageQuery.value = pageCount.toString()
-                }
-              })
+              if (
+                unref(resourcesToDelete).length &&
+                isSameResource(unref(resourcesToDelete)[0], unref(currentFolder))
+              ) {
+                // current folder is being deleted
+                return router.push(
+                  createFileRouteOptions(spaceForDeletion, {
+                    path: dirname(unref(resourcesToDelete)[0].path),
+                    fileId: unref(resourcesToDelete)[0].parentFolderId
+                  })
+                )
+              }
+
+              const activeFilesCount = resourcesStore.activeResources.length
+              const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
+              if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+                // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+                currentPageQuery.value = pageCount.toString()
+              }
+            })
           },
           { indeterminate: false }
         )

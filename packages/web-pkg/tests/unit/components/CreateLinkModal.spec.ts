@@ -1,11 +1,5 @@
 import CreateLinkModal from '../../../src/components/CreateLinkModal.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
@@ -220,8 +214,6 @@ function getWrapper({
 
   const mocks = { ...defaultComponentMocks(), postMessageMock, createLinkMock }
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const abilities = [] as AbilityRule[]
   if (userCanCreatePublicLinks) {
     abilities.push({ action: 'create-all', subject: 'PublicLink' })
@@ -240,7 +232,6 @@ function getWrapper({
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
-    storeOptions,
     mocks,
     wrapper: mount(CreateLinkModal, {
       props: {
@@ -250,8 +241,7 @@ function getWrapper({
       },
       global: {
         plugins: [
-          ...defaultPlugins({ abilities, piniaOptions: { capabilityState: { capabilities } } }),
-          store
+          ...defaultPlugins({ abilities, piniaOptions: { capabilityState: { capabilities } } })
         ],
         mocks,
         provide: mocks,

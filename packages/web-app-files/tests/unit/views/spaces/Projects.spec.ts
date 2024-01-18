@@ -4,10 +4,8 @@ import { nextTick } from 'vue'
 import { queryItemAsString, useFileActionsDelete } from '@ownclouders/web-pkg'
 
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -101,17 +99,12 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(Projects, {
       global: {
-        plugins: [
-          ...defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } }),
-          store
-        ],
+        plugins: [...defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: {

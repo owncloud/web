@@ -1,9 +1,7 @@
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { Store } from 'vuex'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { computed, nextTick, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { FileAction } from '../../../'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
@@ -12,26 +10,20 @@ import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useScrollTo } from '../../scrollTo'
-import { AncestorMetaData } from '../../../types'
-import { useMessages, useModals } from '../../../composables/piniaStores'
+import { useMessages, useModals, useResourcesStore } from '../../../composables/piniaStores'
+import { storeToRefs } from 'pinia'
 
-export const useFileActionsCreateNewFolder = ({
-  store,
-  space
-}: { store?: Store<any>; space?: SpaceResource } = {}) => {
-  store = store || useStore()
+export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const { scrollToResource } = useScrollTo()
 
+  const resourcesStore = useResourcesStore()
+  const { resources, currentFolder, ancestorMetaData } = storeToRefs(resourcesStore)
+
   const clientService = useClientService()
-  const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
-  const files = computed((): Array<Resource> => store.getters['Files/files'])
-  const ancestorMetaData = computed<AncestorMetaData>(
-    () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-  )
 
   const checkNewFolderName = (folderName: string, setError: (error: string) => void) => {
     if (folderName.trim() === '') {
@@ -50,7 +42,7 @@ export const useFileActionsCreateNewFolder = ({
       return setError($gettext('Folder name cannot be equal to ".."'))
     }
 
-    const exists = unref(files).find((file) => file.name === folderName)
+    const exists = unref(resources).find((file) => file.name === folderName)
 
     if (exists) {
       return setError($gettext('%{name} already exists', { name: folderName }, true))
@@ -76,7 +68,7 @@ export const useFileActionsCreateNewFolder = ({
         resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
       }
 
-      store.commit('Files/UPSERT_RESOURCE', resource)
+      resourcesStore.upsertResource(resource)
 
       showMessage({ title: $gettext('"%{folderName}" was created successfully', { folderName }) })
 
@@ -94,8 +86,8 @@ export const useFileActionsCreateNewFolder = ({
   const handler = () => {
     let defaultName = $gettext('New folder')
 
-    if (unref(files).some((f) => f.name === defaultName)) {
-      defaultName = resolveFileNameDuplicate(defaultName, '', unref(files))
+    if (unref(resources).some((f) => f.name === defaultName)) {
+      defaultName = resolveFileNameDuplicate(defaultName, '', unref(resources))
     }
 
     dispatchModal({

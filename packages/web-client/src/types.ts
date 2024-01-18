@@ -16,6 +16,7 @@ export type OwnCloudSdk = {
     copy(...args): any
     move(...args): any
     delete(...args): any
+    favorite(...args): any
   }
   /** @deprecated */
   fileTrash: {

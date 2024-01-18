@@ -1,7 +1,7 @@
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useSpaceActionsShowMembers } from '../../../../../src'
-import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
+import { useSpaceActionsShowMembers } from '../../../../../src/composables/actions'
+import { getComposableWrapper } from 'web-test-helpers'
 
 describe('showMembers', () => {
   describe('isEnabled property', () => {
@@ -29,17 +29,10 @@ function getWrapper({
 }: {
   setup: (instance: ReturnType<typeof useSpaceActionsShowMembers>) => void
 }) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
-    wrapper: getComposableWrapper(
-      () => {
-        const instance = useSpaceActionsShowMembers({ store })
-        setup(instance)
-      },
-      {
-        store
-      }
-    )
+    wrapper: getComposableWrapper(() => {
+      const instance = useSpaceActionsShowMembers()
+      setup(instance)
+    })
   }
 }

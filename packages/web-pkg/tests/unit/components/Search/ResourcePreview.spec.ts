@@ -3,11 +3,9 @@ import { ResourcePreview } from '../../../../src/components'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { useGetMatchingSpace } from '../../../../src/composables/spaces/useGetMatchingSpace'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions,
   useGetMatchingSpaceMock
 } from 'web-test-helpers'
 import { useFileActions } from '../../../../src/composables/actions'
@@ -84,17 +82,6 @@ function getWrapper({
   )
   jest.mocked(useFileActions).mockReturnValue(mock<ReturnType<typeof useFileActions>>())
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: {
-      Files: {
-        state: {
-          areFileExtensionsShown
-        }
-      }
-    }
-  }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   const capabilities = {
     spaces: { share_jail: true, projects: true }
@@ -113,10 +100,10 @@ function getWrapper({
           ...defaultPlugins({
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { disablePreviews: true } }
+              configState: { options: { disablePreviews: true } },
+              resourcesStore: { areFileExtensionsShown }
             }
-          }),
-          store
+          })
         ]
       }
     })

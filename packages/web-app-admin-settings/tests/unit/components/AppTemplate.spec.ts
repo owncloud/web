@@ -1,10 +1,8 @@
 import { ref } from 'vue'
 import AppTemplate from '../../../src/components/AppTemplate.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
@@ -24,8 +22,6 @@ const elSelectors = {
 }
 
 jest.mock('@ownclouders/web-pkg')
-
-afterEach(() => jest.clearAllMocks())
 
 describe('AppTemplate', () => {
   describe('loading is true', () => {
@@ -114,9 +110,6 @@ describe('AppTemplate', () => {
   })
 })
 
-const storeOptions = { ...defaultStoreMockOptions }
-const store = createStore(storeOptions)
-
 function getWrapper({ props = {}, isMobileWidth = false } = {}) {
   return {
     wrapper: shallowMount(AppTemplate, {
@@ -129,7 +122,7 @@ function getWrapper({ props = {}, isMobileWidth = false } = {}) {
         ...props
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         provide: { isMobileWidth: ref(isMobileWidth) },
         stubs: {
           OcButton: false

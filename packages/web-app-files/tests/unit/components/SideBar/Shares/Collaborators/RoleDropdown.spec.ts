@@ -1,12 +1,6 @@
 import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { PeopleShareRoles, SharePermissions } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 
@@ -128,8 +122,6 @@ function getWrapper({
   canShare = false,
   incomingParentShare = null
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
@@ -140,8 +132,7 @@ function getWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: { userState: { user: { onPremisesSamAccountName: 'name' } } }
-          }),
-          store
+          })
         ],
         renderStubDefaultSlot: true,
         provide: {

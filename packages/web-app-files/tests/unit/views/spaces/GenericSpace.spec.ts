@@ -5,10 +5,8 @@ import GenericSpace from 'web-app-files/src/views/spaces/GenericSpace.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables/resourcesViewDefaults'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -170,7 +168,7 @@ describe('GenericSpace view', () => {
     describe('on EOS for single shared resources', () => {
       it('renders the ResourceDetails component if no currentFolder id is present', () => {
         const { wrapper } = getMountedWrapper({
-          currentFolder: {},
+          currentFolder: mock<Resource>({ fileId: '' }),
           files: [mock<Resource>({ isFolder: false })],
           runningOnEos: true
         })
@@ -273,7 +271,7 @@ function getMountedWrapper({
   files = [],
   loading = false,
   currentRoute = { name: 'files-spaces-generic', path: '/' },
-  currentFolder = mock<Resource>() || {},
+  currentFolder = mock<Resource>(),
   runningOnEos = false,
   space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' },
   breadcrumbsFromPath = [],
@@ -294,21 +292,17 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
   const propsData = {
     space,
     item: '/',
     ...props
   }
-  const store = createStore(storeOptions)
   const capabilities = {
     spaces: { share_jail: true }
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
     mocks: { ...defaultMocks, ...resourcesViewDetailsMock },
-    storeOptions,
     wrapper: mount(GenericSpace, {
       props: propsData,
       global: {
@@ -316,10 +310,10 @@ function getMountedWrapper({
           ...defaultPlugins({
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { runningOnEos } }
+              configState: { options: { runningOnEos } },
+              resourcesStore: { currentFolder }
             }
-          }),
-          store
+          })
         ],
         mocks: defaultMocks,
         provide: defaultMocks,

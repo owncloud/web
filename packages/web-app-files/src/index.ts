@@ -14,7 +14,6 @@ import {
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
-import store from './store'
 import { extensions } from './extensions'
 import { buildRoutes } from '@ownclouders/web-pkg'
 import { AppNavigationItem } from '@ownclouders/web-pkg'
@@ -136,7 +135,6 @@ export default defineWebApplication({
           priority: 10
         }
       },
-      store,
       routes: buildRoutes({
         App,
         Favorites,

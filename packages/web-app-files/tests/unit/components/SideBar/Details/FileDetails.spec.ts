@@ -1,12 +1,6 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createLocationSpaces, createLocationPublic } from '@ownclouders/web-pkg/'
@@ -203,12 +197,6 @@ function createWrapper({
   versions = [],
   tagsEnabled = true
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
-    ancestorMetaData
-  )
-  const store = createStore(storeOptions)
-
   const spacesLocation = createLocationSpaces('files-spaces-generic')
   const publicLocation = createLocationPublic('files-public-link')
   const currentRoute = isPublicLinkContext ? publicLocation : spacesLocation
@@ -229,10 +217,10 @@ function createWrapper({
             piniaOptions: {
               userState: { user },
               authState: { publicLinkContextReady: isPublicLinkContext },
-              capabilityState: { capabilities }
+              capabilityState: { capabilities },
+              resourcesStore: { ancestorMetaData }
             }
-          }),
-          store
+          })
         ],
         mocks
       }

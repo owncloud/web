@@ -1,10 +1,8 @@
 import DriveRedirect from '../../../../src/views/spaces/DriveRedirect.vue'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -23,14 +21,12 @@ function getMountedWrapper({ currentRouteName = 'files-spaces-generic' } = {}) {
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) })
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
-    storeOptions,
     mocks,
     wrapper: mount(DriveRedirect, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: defaultStubs,
         mocks,
         provide: mocks

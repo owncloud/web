@@ -2,10 +2,8 @@ import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
-  createStore,
   defaultComponentMocks,
   mockAxiosResolve,
-  defaultStoreMockOptions,
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
@@ -141,19 +139,12 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useSpaceActionsDelete>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
   })
@@ -161,13 +152,12 @@ function getWrapper({
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsDelete({ store })
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        const instance = useSpaceActionsDelete()
+        setup(instance, { clientService: mocks.$clientService })
       },
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: {
           piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
         }

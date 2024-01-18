@@ -1,41 +1,34 @@
 import { computed, unref, WritableComputedRef, Ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '../spaces'
-import { useStore } from '../store'
-import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useResourcesStore } from '../piniaStores'
 
 export interface SelectedResourcesResult {
   selectedResources: Ref<Resource[]>
-  selectedResourcesIds: Ref<(string | number)[]>
+  selectedResourcesIds: Ref<string[]>
   isResourceInSelection(resource: Resource): boolean
   selectedResourceSpace?: Ref<SpaceResource>
 }
 
-interface SelectedResourcesOptions {
-  store?: Store<any>
-}
-
-export const useSelectedResources = (
-  options?: SelectedResourcesOptions
-): SelectedResourcesResult => {
-  const store = options.store || useStore()
+export const useSelectedResources = (): SelectedResourcesResult => {
   const { getMatchingSpace } = useGetMatchingSpace()
+  const resourcesStore = useResourcesStore()
 
   const selectedResources: WritableComputedRef<Resource[]> = computed({
     get(): Resource[] {
-      return store.getters['Files/selectedFiles']
+      return resourcesStore.selectedResources
     },
     set(resources) {
-      store.commit('Files/SET_FILE_SELECTION', resources)
+      resourcesStore.setSelection(resources.map(({ id }) => id))
     }
   })
-  const selectedResourcesIds: WritableComputedRef<(string | number)[]> = computed({
-    get(): (string | number)[] {
-      return store.state.Files.selectedIds
+  const selectedResourcesIds: WritableComputedRef<string[]> = computed({
+    get(): string[] {
+      return resourcesStore.selectedIds
     },
     set(selectedIds) {
-      store.commit('Files/SET_SELECTED_IDS', selectedIds)
+      resourcesStore.setSelection(selectedIds)
     }
   })
 

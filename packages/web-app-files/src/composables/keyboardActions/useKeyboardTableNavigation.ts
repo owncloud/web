@@ -1,9 +1,10 @@
-import { QueryValue, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
+import { QueryValue, useResourcesStore, ViewModeConstants } from '@ownclouders/web-pkg'
 import { useScrollTo } from '@ownclouders/web-pkg'
-import { computed, Ref, ref, unref, nextTick, watchEffect } from 'vue'
+import { Ref, ref, unref, nextTick, watchEffect } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 
 const enum Direction {
   LEFT = 'left',
@@ -14,9 +15,10 @@ export const useKeyboardTableNavigation = (
   paginatedResources: Ref<Resource[]>,
   viewMode: Ref<string | QueryValue>
 ) => {
-  const store = useStore()
   const { scrollToResource } = useScrollTo()
-  const latestSelectedId = computed(() => store.state.Files.latestSelectedId)
+  const resourcesStore = useResourcesStore()
+  const { latestSelectedId } = storeToRefs(resourcesStore)
+
   const bindKeyActionsIds = ref([])
   const tileViewStart = ref(null)
   const tileViewDirection = ref(null)
@@ -25,14 +27,14 @@ export const useKeyboardTableNavigation = (
     handleSelectAllAction()
   )
 
-  keyActions.bindKeyAction({ primary: Key.Space }, async () => {
-    await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
+  keyActions.bindKeyAction({ primary: Key.Space }, () => {
+    resourcesStore.toggleSelection(unref(latestSelectedId))
   })
 
-  keyActions.bindKeyAction({ primary: Key.Esc }, async () => {
+  keyActions.bindKeyAction({ primary: Key.Esc }, () => {
     keyActions.resetSelectionCursor()
     tileViewStart.value = null
-    await store.dispatch('Files/resetFileSelection')
+    resourcesStore.resetSelection()
   })
 
   const bindTilesViewKeyActions = () => {
@@ -117,9 +119,9 @@ export const useKeyboardTableNavigation = (
     }
     keyActions.resetSelectionCursor()
     tileViewStart.value = null
-    await store.dispatch('Files/resetFileSelection')
+    resourcesStore.resetSelection()
     await nextTick()
-    store.commit('Files/ADD_FILE_SELECTION', { id: nextId })
+    resourcesStore.addSelection(nextId)
     await nextTick()
     scrollToResource(nextId, { topbarElement: 'files-app-bar' })
   }
@@ -172,9 +174,10 @@ export const useKeyboardTableNavigation = (
 
   const handleSelectAllAction = () => {
     keyActions.resetSelectionCursor()
-    store.commit(
-      'Files/SET_FILE_SELECTION',
-      unref(paginatedResources).filter((resource) => resource.processing !== true)
+    resourcesStore.setSelection(
+      unref(paginatedResources)
+        .filter((resource) => resource.processing !== true)
+        .map(({ id }) => id)
     )
   }
 
@@ -231,10 +234,10 @@ export const useKeyboardTableNavigation = (
       }
       const id = vp.tilesListCard[i].getAttribute('data-item-id')
       i < vp.tileViewStartIndex
-        ? store.commit('Files/ADD_FILE_SELECTION', { id })
-        : store.commit('Files/REMOVE_FILE_SELECTION', { id })
+        ? resourcesStore.addSelection(id)
+        : resourcesStore.removeSelection(id)
     }
-    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', vp.lastSelectedFileId)
+    resourcesStore.setLastSelectedId(vp.lastSelectedFileId)
   }
   const handleTilesShiftDownAction = () => {
     const vp = getVerticalProperties(Direction.RIGHT)
@@ -248,13 +251,13 @@ export const useKeyboardTableNavigation = (
       }
       const id = vp.tilesListCard[i].getAttribute('data-item-id')
       i > vp.tileViewStartIndex
-        ? store.commit('Files/ADD_FILE_SELECTION', { id })
-        : store.commit('Files/REMOVE_FILE_SELECTION', { id })
+        ? resourcesStore.addSelection(id)
+        : resourcesStore.removeSelection(id)
     }
-    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', vp.lastSelectedFileId)
+    resourcesStore.setLastSelectedId(vp.lastSelectedFileId)
   }
 
-  const handleTilesShiftHorizontalAction = async (direction: Direction) => {
+  const handleTilesShiftHorizontalAction = (direction: Direction) => {
     const nextResourceId = !unref(latestSelectedId)
       ? getFirstResourceId()
       : getNextResourceId(direction === Direction.LEFT, 1)
@@ -272,38 +275,38 @@ export const useKeyboardTableNavigation = (
       tileViewDirection.value = direction
     }
     if (tileViewDirection.value !== direction && tileViewDirection.value !== null) {
-      await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
-      store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
+      resourcesStore.toggleSelection(unref(latestSelectedId))
+      resourcesStore.setLastSelectedId(nextResourceId)
     }
     if (tileViewDirection.value === direction) {
-      store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
+      resourcesStore.addSelection(nextResourceId)
     }
   }
 
-  const handleShiftUpAction = async (movedBy = 1) => {
+  const handleShiftUpAction = (movedBy = 1) => {
     const nextResourceId = getNextResourceId(true, movedBy)
     if (nextResourceId === -1) {
       return
     }
     if (unref(keyActions.selectionCursor) > 0) {
-      await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
-      store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
+      resourcesStore.toggleSelection(unref(latestSelectedId))
+      resourcesStore.setLastSelectedId(nextResourceId)
     } else {
-      store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
+      resourcesStore.addSelection(nextResourceId)
     }
     scrollToResource(nextResourceId, { topbarElement: 'files-app-bar' })
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
   }
-  const handleShiftDownAction = async (movedBy = 1) => {
+  const handleShiftDownAction = (movedBy = 1) => {
     const nextResourceId = getNextResourceId(false, movedBy)
     if (nextResourceId === -1) {
       return
     }
     if (unref(keyActions.selectionCursor) < 0) {
-      await store.dispatch('Files/toggleFileSelection', { id: unref(latestSelectedId) })
-      store.commit('Files/SET_LATEST_SELECTED_FILE_ID', nextResourceId)
+      resourcesStore.toggleSelection(unref(latestSelectedId))
+      resourcesStore.setLastSelectedId(nextResourceId)
     } else {
-      store.commit('Files/ADD_FILE_SELECTION', { id: nextResourceId })
+      resourcesStore.addSelection(nextResourceId)
     }
     scrollToResource(nextResourceId, { topbarElement: 'files-app-bar' })
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) + 1

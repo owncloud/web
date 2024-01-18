@@ -171,11 +171,15 @@ import {
   onBeforeUnmount
 } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { mapMutations } from 'vuex'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 
-import { AppLoadingSpinner, useConfigStore, useSpacesStore } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  useConfigStore,
+  useResourcesStore,
+  useSpacesStore
+} from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
 import CreateSpace from '../../components/AppBar/CreateSpace.vue'
@@ -185,7 +189,6 @@ import {
   ViewModeConstants,
   useRouteQueryPersisted,
   useSort,
-  useStore,
   useRouteName,
   usePagination,
   useRouter,
@@ -243,12 +246,11 @@ export default defineComponent({
     SpaceContextActions
   },
   setup() {
-    const store = useStore()
     const spacesStore = useSpacesStore()
     const router = useRouter()
     const route = useRoute()
     const clientService = useClientService()
-    const { selectedResourcesIds, selectedResources } = useSelectedResources({ store })
+    const { selectedResourcesIds, selectedResources } = useSelectedResources()
     const { can } = useAbility()
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
@@ -256,6 +258,8 @@ export default defineComponent({
     const imageContentObject = ref({})
     const previewService = usePreviewService()
     const configStore = useConfigStore()
+
+    const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
 
     let loadPreviewToken = null
 
@@ -329,9 +333,9 @@ export default defineComponent({
     const { scrollToResourceFromRoute } = useScrollTo()
 
     const loadResourcesTask = useTask(function* () {
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+      clearResourceList()
       yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
-      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+      initResourceList({ currentFolder: null, resources: unref(spaces) })
     })
 
     const areResourcesLoading = computed(() => {
@@ -488,7 +492,8 @@ export default defineComponent({
       footerTextFilter,
       items,
       imageContentObject,
-      rowMounted
+      rowMounted,
+      setSelection
     }
   },
   computed: {
@@ -506,9 +511,8 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_FILE_SELECTION']),
     openSidebarSharePanel(space: SpaceResource) {
-      this.SET_FILE_SELECTION([space])
+      this.setSelection([space.id])
       eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
     }
   }

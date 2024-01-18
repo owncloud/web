@@ -1,11 +1,5 @@
 import NotificationBell from 'web-runtime/src/components/Topbar/NotificationBell.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount
-} from 'web-test-helpers/src'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers/src'
 
 describe('NotificationBell', () => {
   it('should match snapshot', () => {
@@ -42,17 +36,13 @@ describe('NotificationBell', () => {
 })
 function getWrapper({ mountType = mount, mocks = {} } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const store = createStore(storeOptions)
+
   return {
     mocks: localMocks,
-    storeOptions,
     wrapper: mountType(NotificationBell, {
       global: {
         renderStubDefaultSlot: true,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: localMocks,
         stubs: { 'oc-icon': true }
       }

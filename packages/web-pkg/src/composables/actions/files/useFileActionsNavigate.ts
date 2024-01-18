@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { isSameResource } from '../../../helpers/resource'
 import {
   createLocationPublic,
@@ -13,16 +12,19 @@ import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src
 import { createFileRouteOptions } from '../../../helpers/router'
 import { useGetMatchingSpace } from '../../spaces'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction } from '../types'
+import { useResourcesStore } from '../../piniaStores'
+import { storeToRefs } from 'pinia'
 
-export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsNavigate = () => {
   const router = useRouter()
   const { $gettext } = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
+
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
 
   const getSpace = (space: SpaceResource) => {
     return space ? space : getMatchingSpace(space)
@@ -49,8 +51,7 @@ export const useFileActionsNavigate = ({ store }: { store?: Store<any> } = {}) =
           return false
         }
 
-        const currentFolder = store.getters['Files/currentFolder']
-        if (currentFolder !== null && isSameResource(resources[0], currentFolder)) {
+        if (unref(currentFolder) !== null && isSameResource(resources[0], unref(currentFolder))) {
           return false
         }
 

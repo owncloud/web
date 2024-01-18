@@ -73,9 +73,9 @@ import { useTask } from 'vue-concurrency'
 import {
   defaultFuseOptions,
   useClientService,
+  useResourcesStore,
   useRouter,
   useSpacesStore,
-  useStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { createLocationTrash } from '@ownclouders/web-pkg'
@@ -96,13 +96,14 @@ export default defineComponent({
   name: 'TrashOverview',
   components: { FilesViewWrapper, AppBar, AppLoadingSpinner, NoContentMessage },
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
     const router = useRouter()
     const { $gettext } = useGettext()
     const clientService = useClientService()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
+    const resourcesStore = useResourcesStore()
+
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
@@ -117,9 +118,9 @@ export default defineComponent({
     )
 
     const loadResourcesTask = useTask(function* () {
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+      resourcesStore.clearResourceList()
       yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
-      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+      resourcesStore.initResourceList({ currentFolder: null, resources: unref(spaces) })
     })
 
     const areResourcesLoading = computed(() => {

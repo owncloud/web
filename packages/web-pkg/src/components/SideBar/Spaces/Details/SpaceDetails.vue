@@ -85,12 +85,12 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import {
-  useStore,
   usePreviewService,
   useClientService,
   useUserStore,
   useSpacesStore,
-  useSharesStore
+  useSharesStore,
+  useResourcesStore
 } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
@@ -116,11 +116,12 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const userStore = useUserStore()
     const previewService = usePreviewService()
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
+    const resourcesStore = useResourcesStore()
+
     const sharesStore = useSharesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
 
@@ -151,9 +152,7 @@ export default defineComponent({
       return sharesStore.outgoingLinks.length
     })
 
-    const showWebDavDetails = computed(() => {
-      return store.getters['Files/areWebDavDetailsShown']
-    })
+    const showWebDavDetails = computed(() => resourcesStore.areWebDavDetailsShown)
 
     return {
       loadImageTask,

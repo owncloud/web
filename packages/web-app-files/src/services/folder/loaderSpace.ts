@@ -32,7 +32,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, spacesStore, router, clientService, configStore, capabilityStore } =
+    const { spacesStore, router, clientService, configStore, capabilityStore, resourcesStore } =
       context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
@@ -46,7 +46,7 @@ export class FolderLoaderSpace implements FolderLoader {
       options: FolderLoaderOptions = {}
     ) {
       try {
-        store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+        resourcesStore.clearResourceList()
 
         // eslint-disable-next-line prefer-const
         let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
@@ -76,17 +76,10 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        yield store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
-          folder: currentFolder,
-          space,
-          client: webdav,
-          userStore,
-          spacesStore,
-          configStore
-        })
+        yield resourcesStore.loadAncestorMetaData({ folder: currentFolder, space, client: webdav })
 
         if (options.loadShares) {
-          const ancestorMetaData = store.getters['runtime/ancestorMetaData/ancestorMetaData']
+          const ancestorMetaData = resourcesStore.ancestorMetaData
           for (const file of resources) {
             file.indicators = getIndicators({ resource: file, ancestorMetaData })
           }
@@ -97,12 +90,9 @@ export class FolderLoaderSpace implements FolderLoader {
           resources.forEach((r) => (r.shareId = space.shareId))
         }
 
-        store.commit('Files/LOAD_FILES', {
-          currentFolder,
-          files: resources
-        })
+        resourcesStore.initResourceList({ currentFolder, resources })
       } catch (error) {
-        store.commit('Files/SET_CURRENT_FOLDER', null)
+        resourcesStore.setCurrentFolder(null)
         console.error(error)
 
         if (error.statusCode === 401) {

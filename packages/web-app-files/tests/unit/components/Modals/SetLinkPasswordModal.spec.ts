@@ -1,12 +1,6 @@
 import { mock } from 'jest-mock-extended'
 import SetLinkPasswordModal from '../../../../src/components/Modals/SetLinkPasswordModal.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { Modal, useMessages, useSharesStore } from '@ownclouders/web-pkg'
 
 describe('SetLinkPasswordModal', () => {
@@ -17,7 +11,7 @@ describe('SetLinkPasswordModal', () => {
   })
   describe('method "onConfirm"', () => {
     it('updates the link', async () => {
-      const { wrapper, storeOptions } = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.onConfirm()
 
       const sharesStore = useSharesStore()
@@ -26,7 +20,7 @@ describe('SetLinkPasswordModal', () => {
       expect(showMessage).toHaveBeenCalled()
     })
     it('shows an error message on error', async () => {
-      const { wrapper, storeOptions } = getWrapper()
+      const { wrapper } = getWrapper()
       const sharesStore = useSharesStore()
       ;(sharesStore.updateLink as any).mockRejectedValue(new Error(''))
       await wrapper.vm.onConfirm()
@@ -40,19 +34,15 @@ describe('SetLinkPasswordModal', () => {
 function getWrapper({ link = {} } = {}) {
   const mocks = { ...defaultComponentMocks() }
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   return {
     mocks,
-    storeOptions,
     wrapper: shallowMount(SetLinkPasswordModal, {
       props: {
         modal: mock<Modal>(),
         link
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks
       }

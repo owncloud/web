@@ -2,10 +2,8 @@ import FileSideBar from '../../../../src/components/SideBar/FileSideBar.vue'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
@@ -81,17 +79,12 @@ function createWrapper({
   item = undefined,
   isOpen = true
 }: { item?: Resource; isOpen?: boolean } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
   jest.mocked(useSelectedResources).mockReturnValue(
     mock<ReturnType<typeof useSelectedResources>>({
       selectedResources: item ? ref([item]) : ref([])
     })
   )
 
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
   })
@@ -101,7 +94,7 @@ function createWrapper({
         isOpen
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         renderStubDefaultSlot: true,
         stubs: {
           InnerSideBar: InnerSideBarComponent

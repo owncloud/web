@@ -1,13 +1,6 @@
 import ReadmeContentModal from '../../../../src/components/Spaces/ReadmeContentModal.vue'
 
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  defaultStubs
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks, defaultStubs } from 'web-test-helpers'
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
@@ -33,9 +26,6 @@ describe('ReadmeContentModal', () => {
 })
 
 function getWrapper(resolvePutFileContents = true) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   const mocks = defaultComponentMocks()
   const { $clientService: clientService } = mocks
   clientService.webdav.getFileContents.mockResolvedValue(mock<GetFileContentsResponse>())
@@ -46,7 +36,6 @@ function getWrapper(resolvePutFileContents = true) {
   }
 
   return {
-    storeOptions,
     wrapper: mount(ReadmeContentModal, {
       props: {
         cancel: jest.fn(),
@@ -59,7 +48,7 @@ function getWrapper(resolvePutFileContents = true) {
         }
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: { ...defaultStubs, portal: true, 'oc-modal': true },
         mocks,
         provide: mocks

@@ -5,16 +5,14 @@ import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
 import { Share } from '@ownclouders/web-client/src/helpers/share'
 import {
-  createStore,
   defaultPlugins,
   mount,
   shallowMount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { CapabilityStore } from '@ownclouders/web-pkg'
+import { CapabilityStore, useResourcesStore, useSharesStore } from '@ownclouders/web-pkg'
 
 const getCollaborator = () => ({
   shareType: 0,
@@ -184,12 +182,14 @@ describe('FileShares', () => {
         collaborators: [getCollaborator()],
         currentRouteName: 'files-shares-with-others'
       })
-      const deleteShareSpy = jest.spyOn(wrapper.vm, 'deleteShare')
-      const removeFilesSpy = jest.spyOn(wrapper.vm, 'REMOVE_FILES')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
-      expect(deleteShareSpy).toHaveBeenCalled()
-      expect(removeFilesSpy).toHaveBeenCalled()
+
+      const { removeResources } = useResourcesStore()
+      expect(removeResources).toHaveBeenCalled()
+
+      const { deleteShare } = useSharesStore()
+      expect(deleteShare).toHaveBeenCalled()
     })
   })
 })
@@ -206,11 +206,6 @@ function getWrapper({
   currentRouteName = 'files-spaces-generic',
   ancestorMetaData = {}
 } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
-    ancestorMetaData
-  )
-  const store = createStore(storeOptions)
   const capabilities = {
     files_sharing: { resharing: hasReSharing, deny_access: false }
   } satisfies Partial<CapabilityStore['capabilities']>
@@ -227,10 +222,10 @@ function getWrapper({
               configState: {
                 options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
               },
-              sharesState: { shares: collaborators }
+              sharesState: { shares: collaborators },
+              resourcesStore: { ancestorMetaData }
             }
-          }),
-          store
+          })
         ],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ name: currentRouteName })

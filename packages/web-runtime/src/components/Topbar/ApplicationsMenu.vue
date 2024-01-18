@@ -64,11 +64,11 @@ import {
   useClientService,
   useFileActions,
   useGetMatchingSpace,
-  useSpacesStore,
-  useStore
+  useResourcesStore,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -82,7 +82,6 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
     const { openEditor } = useFileActions()
     const clientService = useClientService()
     const { $gettext } = useGettext()
@@ -91,20 +90,19 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const appsStore = useAppsStore()
 
+    const resourcesStore = useResourcesStore()
+    const { resources, currentFolder } = storeToRefs(resourcesStore)
+
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
     })
     const updateAppIcons = () => {
       appIconKey.value = uuid.v4().replaceAll('-', '')
     }
-    const currentFolder = computed(() => {
-      return store.getters['Files/currentFolder']
-    })
-    const files = computed((): Array<Resource> => store.getters['Files/files'])
 
     const onEditorApplicationClick = async (item: ApplicationInformation) => {
       let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
-      let destinationFiles = unref(files)
+      let destinationFiles = unref(resources)
       let filePath = unref(currentFolder)?.path
 
       if (!destinationSpace || !unref(currentFolder).canCreate()) {

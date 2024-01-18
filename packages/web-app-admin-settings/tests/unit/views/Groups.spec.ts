@@ -2,13 +2,7 @@ import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { Group } from '@ownclouders/web-client/src/generated'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }
@@ -125,13 +119,11 @@ describe('Groups view', () => {
 
 function getWrapper({ clientService = getClientServiceMock() } = {}) {
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
-    storeOptions,
     wrapper: mount(Groups, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks,
         stubs: {

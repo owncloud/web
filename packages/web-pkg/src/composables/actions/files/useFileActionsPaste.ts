@@ -3,27 +3,28 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../../router'
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useGetMatchingSpace } from '../../spaces'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useClipboardStore } from '../../piniaStores'
+import { useClipboardStore, useResourcesStore } from '../../piniaStores'
 import { ClipboardActions, ResourceTransfer, TransferType } from '../../../helpers'
+import { storeToRefs } from 'pinia'
 
-export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsPaste = () => {
   const router = useRouter()
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = useGettext()
   const clipboardStore = useClipboardStore()
+
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -35,8 +36,6 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
     }
     return $gettext('Ctrl + V')
   })
-
-  const currentFolder = computed<Resource>(() => store.getters['Files/currentFolder'])
 
   const pasteSelectedFiles = ({
     targetSpace,
@@ -77,8 +76,8 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
       }
 
       return Promise.all(loadingResources).then(() => {
-        store.commit('Files/UPSERT_RESOURCES', fetchedResources)
-        store.commit('Files/LOAD_INDICATORS', unref(currentFolder).path)
+        resourcesStore.upsertResources(fetchedResources)
+        resourcesStore.loadIndicators(unref(currentFolder).path)
       })
     })
   }
@@ -132,9 +131,8 @@ export const useFileActionsPaste = ({ store }: { store?: Store<any> } = {}) => {
           return false
         }
 
-        const currentFolder = store.getters['Files/currentFolder']
-        if (isLocationPublicActive(router, 'files-public-link') && currentFolder) {
-          return currentFolder.canCreate()
+        if (isLocationPublicActive(router, 'files-public-link') && unref(currentFolder)) {
+          return unref(currentFolder).canCreate()
         }
 
         // copy can't be restricted in authenticated context, because

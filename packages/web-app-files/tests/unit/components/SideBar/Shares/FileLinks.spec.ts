@@ -1,11 +1,5 @@
 import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
@@ -185,8 +179,6 @@ function getWrapper({
     actions: computed(() => [mock<FileAction>({ name: 'create-links', handler: createLinkMock })])
   })
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   const capabilities = {
     files_sharing: {
@@ -202,7 +194,6 @@ function getWrapper({
 
   return {
     mocks: { ...mocks, createLinkMock },
-    storeOptions,
     wrapper: shallowMount(FileLinks, {
       global: {
         plugins: [
@@ -213,8 +204,7 @@ function getWrapper({
               configState: { options: { sidebar: { shares: { showAllOnLoad: true } } } },
               sharesState: { shares: links as Share[] }
             }
-          }),
-          store
+          })
         ],
         renderStubDefaultSlot: true,
         stubs: { OcButton: false },

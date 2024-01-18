@@ -1,19 +1,18 @@
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource'
-import { ResolveStrategy, UppyResource } from '@ownclouders/web-pkg'
+import { ResolveStrategy, UppyResource, useResourcesStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client/src/helpers'
-import { createStore, defaultStoreMockOptions } from 'web-test-helpers/src'
+import { createTestingPinia } from 'web-test-helpers/src'
 
 const getResourceConflictInstance = ({
   currentFiles = [mockDeep<Resource>()]
 }: {
   currentFiles?: Resource[]
 } = {}) => {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.files.mockReturnValue(currentFiles)
-  const store = createStore(storeOptions)
-  return new ResourceConflict(store, mock<Language>())
+  createTestingPinia({ initialState: { resources: { resources: currentFiles } } })
+  const resourcesStore = useResourcesStore()
+  return new ResourceConflict(resourcesStore, mock<Language>())
 }
 
 describe('upload helper', () => {

@@ -1,16 +1,14 @@
 import { computed, unref } from 'vue'
-import { Store } from 'vuex'
 import { isLocationCommonActive, isLocationSpacesActive } from '../../../router'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions, useIsFilesAppActive } from '../../actions'
-import { useStore } from '../../store'
 import { useRouter } from '../../router'
 import { useClientService } from '../../clientService'
 import { useAbility } from '../../ability'
-import { useMessages, useCapabilityStore } from '../../piniaStores'
+import { useMessages, useCapabilityStore, useResourcesStore } from '../../piniaStores'
+import { useEventBus } from '../../eventBus'
 
-export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsFavorite = () => {
   const { showErrorMessage } = useMessages()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
@@ -18,21 +16,26 @@ export const useFileActionsFavorite = ({ store }: { store?: Store<any> } = {}) =
   const clientService = useClientService()
   const isFilesAppActive = useIsFilesAppActive()
   const ability = useAbility()
+  const resourcesStore = useResourcesStore()
+  const eventBus = useEventBus()
 
-  const handler = ({ resources }: FileActionOptions) => {
-    store
-      .dispatch('Files/markFavorite', {
-        client: clientService.owncloudSdk,
-        file: resources[0]
-      })
-      .catch((error) => {
-        const title = $gettext(
-          'Failed to change favorite state of "%{file}"',
-          { file: resources[0].name },
-          true
-        )
-        showErrorMessage({ title, errors: [error] })
-      })
+  const handler = async ({ resources }: FileActionOptions) => {
+    try {
+      const newValue = !resources[0].starred
+      await clientService.owncloudSdk.files.favorite(resources[0].webDavPath, newValue)
+
+      resourcesStore.updateResourceField({ id: resources[0].id, field: 'starred', value: newValue })
+      if (!newValue) {
+        eventBus.publish('app.files.list.removeFromFavorites', resources[0].id)
+      }
+    } catch (error) {
+      const title = $gettext(
+        'Failed to change favorite state of "%{file}"',
+        { file: resources[0].name },
+        true
+      )
+      showErrorMessage({ title, errors: [error] })
+    }
   }
 
   const actions = computed((): FileAction[] => [

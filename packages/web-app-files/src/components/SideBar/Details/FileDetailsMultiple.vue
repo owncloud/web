@@ -29,19 +29,24 @@
   </div>
 </template>
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { defineComponent } from 'vue'
-import { formatFileSize } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
+import { formatFileSize, useResourcesStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileDetailsMultiple',
   props: {
     showSpaceCount: { type: Boolean, default: false }
   },
+  setup() {
+    const resourcesStore = useResourcesStore()
+    const { selectedResources } = storeToRefs(resourcesStore)
+
+    return { selectedResources }
+  },
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
     selectedFilesCount() {
-      return this.selectedFiles.length
+      return this.selectedResources.length
     },
     selectedFilesString() {
       return this.$ngettext(
@@ -49,32 +54,32 @@ export default defineComponent({
         '%{ itemCount } items selected',
         this.selectedFilesCount,
         {
-          itemCount: this.selectedFilesCount
+          itemCount: this.selectedFilesCount.toString()
         }
       )
     },
     sizeValue() {
       let size = 0
-      this.selectedFiles.forEach((i) => (size += parseInt(i.size)))
+      this.selectedResources.forEach((i) => (size += parseInt(i.size.toString())))
       return formatFileSize(size, this.$language.current)
     },
     sizeText() {
       return this.$gettext('Size')
     },
     filesCount() {
-      return this.selectedFiles.filter((i) => i.type === 'file').length
+      return this.selectedResources.filter((i) => i.type === 'file').length
     },
     filesText() {
       return this.$gettext('Files')
     },
     foldersCount() {
-      return this.selectedFiles.filter((i) => i.type === 'folder').length
+      return this.selectedResources.filter((i) => i.type === 'folder').length
     },
     foldersText() {
       return this.$gettext('Folders')
     },
     spacesCount() {
-      return this.selectedFiles.filter((i) => i.type === 'space').length
+      return this.selectedResources.filter((i) => i.type === 'space').length
     },
     spacesText() {
       return this.$gettext('Spaces')

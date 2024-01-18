@@ -12,7 +12,7 @@ import { defineComponent, PropType, onMounted, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
-import { Modal, useClientService, useMessages, useStore } from '../../composables'
+import { Modal, useClientService, useMessages, useSpacesStore } from '../../composables'
 
 export default defineComponent({
   name: 'SpaceReadmeContentModal',
@@ -24,10 +24,10 @@ export default defineComponent({
     }
   },
   setup(props, { expose }) {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
     const clientService = useClientService()
+    const { updateSpaceField } = useSpacesStore()
 
     const readmeContent = ref<string>()
 
@@ -38,7 +38,7 @@ export default defineComponent({
           content: unref(readmeContent)
         })
 
-        store.commit('Files/UPDATE_RESOURCE_FIELD', {
+        updateSpaceField({
           id: props.space.id,
           field: 'spaceReadmeData',
           value: { ...props.space.spaceReadmeData, ...{ etag: readmeMetaData.etag } }

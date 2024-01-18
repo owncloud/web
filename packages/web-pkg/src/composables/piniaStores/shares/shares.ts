@@ -2,7 +2,8 @@ import {
   Share,
   ShareTypes,
   buildCollaboratorShare,
-  buildShare
+  buildShare,
+  isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { defineStore } from 'pinia'
 import { Ref, computed, ref, unref } from 'vue'
@@ -19,10 +20,12 @@ import {
   UpdateLinkOptions,
   UpdateShareOptions
 } from './types'
+import { useResourcesStore } from '../resources'
 
 export const useSharesStore = defineStore('shares', () => {
   const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
+  const resourcesStore = useResourcesStore()
 
   const loading = ref<Promise<unknown>>()
   const shares = ref<Share[]>([]) as Ref<Share[]>
@@ -91,6 +94,39 @@ export const useSharesStore = defineStore('shares', () => {
 
     return resolvePromise
   }
+
+  const updateFileShareTypes = (path: string) => {
+    const computeShareTypes = (shares: Share[]): any => {
+      const shareTypes = new Set()
+      shares.forEach((share) => {
+        shareTypes.add(share.shareType)
+      })
+      return Array.from(shareTypes)
+    }
+
+    const file = [...resourcesStore.resources, resourcesStore.currentFolder].find(
+      (f) => f?.path === path
+    )
+    if (!file || isProjectSpaceResource(file)) {
+      return
+    }
+
+    resourcesStore.updateResourceField({
+      id: file.id,
+      field: 'shareTypes',
+      value: computeShareTypes(unref(outgoingShares).filter((s) => !s.indirect))
+    })
+
+    const ancestorEntry = resourcesStore.ancestorMetaData[file.path] ?? null
+    if (ancestorEntry) {
+      resourcesStore.updateAncestorField({
+        path: ancestorEntry.path,
+        field: 'shareTypes',
+        value: computeShareTypes(unref(outgoingShares).filter((s) => !s.indirect))
+      })
+    }
+  }
+
   const loadShares = async ({
     clientService,
     resource,
@@ -175,7 +211,6 @@ export const useSharesStore = defineStore('shares', () => {
   const addShare = async ({
     clientService,
     resource,
-    vuexStore,
     path,
     shareWith,
     shareType,
@@ -209,11 +244,8 @@ export const useSharesStore = defineStore('shares', () => {
 
     await awaitLoading()
     upsertShare({ ...builtShare, outgoing: true })
-    vuexStore.dispatch('Files/updateFileShareTypes', {
-      path,
-      outgoingShares: unref(outgoingShares)
-    })
-    vuexStore.commit('Files/LOAD_INDICATORS', path)
+    updateFileShareTypes(path)
+    resourcesStore.loadIndicators(path)
   }
 
   const updateShare = async ({
@@ -242,22 +274,18 @@ export const useSharesStore = defineStore('shares', () => {
     clientService,
     share,
     path,
-    vuexStore,
     loadIndicators = false
   }: DeleteShareOptions) => {
     await clientService.owncloudSdk.shares.deleteShare(share.id, {} as any)
     await awaitLoading()
     removeShare(share)
-    vuexStore.dispatch('Files/updateFileShareTypes', {
-      path,
-      outgoingShares: unref(outgoingShares)
-    })
+    updateFileShareTypes(path)
     if (loadIndicators) {
-      vuexStore.commit('Files/LOAD_INDICATORS', path)
+      resourcesStore.loadIndicators(path)
     }
   }
 
-  const addLink = async ({ path, clientService, params, storageId, vuexStore }: AddLinkOptions) => {
+  const addLink = async ({ path, clientService, params, storageId }: AddLinkOptions) => {
     const { shareInfo } = await clientService.owncloudSdk.shares.shareFileWithLink(path, {
       ...params,
       spaceRef: storageId
@@ -266,38 +294,30 @@ export const useSharesStore = defineStore('shares', () => {
     const link = buildShare(shareInfo, null, unref(allowResharing))
     await awaitLoading()
 
-    const selectedFiles = vuexStore.getters['Files/selectedFiles']
-    const currentFolder = vuexStore.getters['Files/currentFolder']
+    const selectedFiles = resourcesStore.selectedResources
     const fileIsSelected =
       selectedFiles.some(({ fileId }) => fileId === storageId) ||
-      (selectedFiles.length === 0 && currentFolder.fileId === storageId)
+      (selectedFiles.length === 0 && resourcesStore.currentFolder.fileId === storageId)
 
     upsertShare({ ...link, outgoing: true, indirect: !fileIsSelected })
-    vuexStore.dispatch('Files/updateFileShareTypes', {
-      path,
-      outgoingShares: unref(outgoingShares)
-    })
+    updateFileShareTypes(path)
 
     if (!fileIsSelected) {
       // we might need to update the share types for the ancestor resource as well
-      const ancestor = vuexStore.getters['runtime/ancestorMetaData/ancestorMetaData'][path] ?? null
+      const ancestor = resourcesStore.ancestorMetaData[path] ?? null
       if (ancestor) {
         const { shareTypes } = ancestor
         if (!shareTypes.includes(ShareTypes.link.value)) {
-          vuexStore.commit(
-            'runtime/ancestorMetaData/UPDATE_ANCESTOR_FIELD',
-            {
-              path: ancestor.path,
-              field: 'shareTypes',
-              value: [...shareTypes, ShareTypes.link.value]
-            },
-            { root: true }
-          )
+          resourcesStore.updateAncestorField({
+            path: ancestor.path,
+            field: 'shareTypes',
+            value: [...shareTypes, ShareTypes.link.value]
+          })
         }
       }
     }
 
-    vuexStore.commit('Files/LOAD_INDICATORS', path)
+    resourcesStore.loadIndicators(path)
     return link
   }
 
@@ -313,18 +333,14 @@ export const useSharesStore = defineStore('shares', () => {
     share,
     clientService,
     path,
-    vuexStore,
     loadIndicators = false
   }: DeleteLinkOptions) => {
     await clientService.owncloudSdk.shares.deleteShare(share.id)
     await awaitLoading()
     removeShare(share)
-    vuexStore.dispatch('Files/updateFileShareTypes', {
-      path,
-      outgoingShares: unref(outgoingShares)
-    })
+    updateFileShareTypes(path)
     if (loadIndicators) {
-      vuexStore.commit('Files/LOAD_INDICATORS', path)
+      resourcesStore.loadIndicators(path)
     }
   }
 

@@ -1,11 +1,6 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
 import { spaceRoleManager, ShareTypes, Share } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const spaceMock = {
   type: 'space',
@@ -60,8 +55,6 @@ describe('Details SideBar Panel', () => {
 })
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(SpaceDetails, {
       props: { ...props },
@@ -73,8 +66,7 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
               spacesState: { spaceMembers: [spaceShare] },
               sharesState: { shares: [spaceShare] }
             }
-          }),
-          store
+          })
         ],
         provide: { resource: spaceResource }
       }

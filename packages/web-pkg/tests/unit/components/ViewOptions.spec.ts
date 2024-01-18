@@ -1,15 +1,13 @@
 import { ref, unref } from 'vue'
-import {
-  createStore,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  mount,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, mount, RouteLocation } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import ViewOptions from '../../../src/components/ViewOptions.vue'
-import { ViewModeConstants, useRouteQuery, useRouteQueryPersisted } from '../../../src/composables'
+import {
+  ViewModeConstants,
+  useResourcesStore,
+  useRouteQuery,
+  useRouteQueryPersisted
+} from '../../../src/composables'
 
 jest.mock('../../../src/composables/router', () => ({
   ...jest.requireActual('../../../src/composables/router'),
@@ -65,12 +63,14 @@ describe('ViewOptions component', () => {
       expect(wrapper.find(selectors.hiddenFilesSwitch).exists()).toBeFalsy()
     })
     it('toggles the setting to show/hide hidden files', () => {
-      const { wrapper, storeOptions } = getWrapper()
+      const { wrapper } = getWrapper()
       ;(wrapper.findComponent<any>(selectors.hiddenFilesSwitch).vm as any).$emit(
         'update:checked',
         false
       )
-      expect(storeOptions.modules.Files.mutations.SET_HIDDEN_FILES_VISIBILITY).toHaveBeenCalled()
+
+      const { setAreHiddenFilesShown } = useResourcesStore()
+      expect(setAreHiddenFilesShown).toHaveBeenCalled()
     })
   })
   describe('file extension toggle', () => {
@@ -79,12 +79,14 @@ describe('ViewOptions component', () => {
       expect(wrapper.find(selectors.fileExtensionsSwitch).exists()).toBeFalsy()
     })
     it('toggles the setting to show/hide file extensions', () => {
-      const { wrapper, storeOptions } = getWrapper()
+      const { wrapper } = getWrapper()
       ;(wrapper.findComponent<any>(selectors.fileExtensionsSwitch).vm as any).$emit(
         'update:checked',
         false
       )
-      expect(storeOptions.modules.Files.mutations.SET_FILE_EXTENSIONS_VISIBILITY).toHaveBeenCalled()
+
+      const { setAreFileExtensionsShown } = useResourcesStore()
+      expect(setAreFileExtensionsShown).toHaveBeenCalled()
     })
   })
   describe('view mode switcher', () => {
@@ -133,14 +135,11 @@ function getWrapper({
   jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => tileSizeQueryMock)
   jest.mocked(useRouteQuery).mockImplementationOnce(() => ref(currentPage))
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) }),
     tileSizeQueryMock
   }
   return {
-    storeOptions,
     mocks,
     wrapper: mount(ViewOptions, {
       props: { ...props },
@@ -148,7 +147,7 @@ function getWrapper({
         mocks,
         provide: mocks,
         stubs: { OcButton: true, OcPageSize: false, OcSelect: true },
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

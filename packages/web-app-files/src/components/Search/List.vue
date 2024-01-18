@@ -135,9 +135,9 @@
             <list-info
               v-else-if="paginatedResources.length > 0"
               class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
+              :files="totalResourcesCount.files"
+              :folders="totalResourcesCount.folders"
+              :size="totalResourcesSize"
             />
           </template>
         </resource-table>
@@ -153,14 +153,18 @@
 
 <script lang="ts">
 import { useResourcesViewDefaults } from '../../composables'
-import { AppLoadingSpinner, useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
-import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
-import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
 import {
@@ -187,8 +191,7 @@ import {
   useGetMatchingSpace,
   useRoute,
   useRouteQuery,
-  useRouter,
-  useStore
+  useRouter
 } from '@ownclouders/web-pkg'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
@@ -245,7 +248,6 @@ export default defineComponent({
   },
   emits: ['search'],
   setup(props, { emit }) {
-    const store = useStore()
     const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const route = useRoute()
@@ -253,6 +255,10 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
+
+    const resourcesStore = useResourcesStore()
+    const { initResourceList, clearResourceList, updateResourceField } = resourcesStore
+    const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -439,7 +445,7 @@ export default defineComponent({
       // Store resources are shared across table views, therefore
       // the store state needs a reset to prevent the old list of resources
       // from being rendered while the request retrieves the new resources from the server.
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
+      clearResourceList()
 
       if (capabilityStore.filesTags) {
         await loadAvailableTagsTask.perform()
@@ -479,7 +485,7 @@ export default defineComponent({
     )
 
     return {
-      ...useFileActions({ store }),
+      ...useFileActions(),
       ...resourcesView,
       configOptions,
       loadAvailableTagsTask,
@@ -495,16 +501,20 @@ export default defineComponent({
       mediaTypeFilter,
       availableMediaTypeValues,
       getFakeResourceForIcon,
-      resourceDomSelector
+      resourceDomSelector,
+      initResourceList,
+      clearResourceList,
+      updateResourceField,
+      totalResourcesCount,
+      totalResourcesSize
     }
   },
   computed: {
-    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
       return !this.configOptions.disablePreviews
     },
     itemCount() {
-      return this.totalFilesCount.files + this.totalFilesCount.folders
+      return this.totalResourcesCount.files + this.totalResourcesCount.folders
     },
     rangeSupported() {
       return this.searchResult.totalResults
@@ -525,7 +535,7 @@ export default defineComponent({
       return this.$gettext(
         'Found %{totalResults}, showing the %{itemCount} best matching results',
         {
-          itemCount: this.itemCount,
+          itemCount: this.itemCount.toString(),
           totalResults: this.searchResult.totalResults
         }
       )
@@ -538,10 +548,10 @@ export default defineComponent({
           return
         }
 
-        this.CLEAR_CURRENT_FILES_LIST()
-        this.LOAD_FILES({
+        this.clearResourceList()
+        this.initResourceList({
           currentFolder: null,
-          files: this.searchResult.values.length
+          resources: this.searchResult.values.length
             ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
@@ -554,22 +564,28 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES']),
-    ...mapActions('Files', ['loadPreview']),
-    rowMounted(resource, component) {
+    rowMounted(resource: Resource, component) {
       if (!this.displayThumbnails) {
         return
       }
 
+      const loadPreview = async () => {
+        const preview = await this.$previewService.loadPreview(
+          {
+            space: this.getMatchingSpace(resource),
+            resource,
+            dimensions: ImageDimension.Thumbnail
+          },
+          true
+        )
+        if (preview) {
+          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
+        }
+      }
+
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadPreview({
-          previewService: this.$previewService,
-          space: this.getMatchingSpace(resource),
-          resource,
-          dimensions: ImageDimension.Thumbnail,
-          type: ImageType.Thumbnail
-        })
+        loadPreview()
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })

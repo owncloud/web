@@ -2,7 +2,6 @@ import { Resource } from '@ownclouders/web-client'
 import { ClientService } from '../../../services'
 import { AncestorMetaData } from '../../../types'
 import { Share, ShareRole, ShareTypes } from '@ownclouders/web-client/src/helpers'
-import { Store } from 'vuex'
 
 export interface LoadSharesOptions {
   clientService: ClientService
@@ -22,7 +21,6 @@ export interface AddShareOptions {
   permissions: number
   role: ShareRole
   storageId: string
-  vuexStore: Store<any>
   expirationDate?: string
   notify?: boolean
   shareWithUser?: string
@@ -42,7 +40,6 @@ export interface DeleteShareOptions {
   clientService: ClientService
   share: Share
   path: string
-  vuexStore: Store<any>
   loadIndicators?: boolean
 }
 
@@ -51,7 +48,6 @@ export interface AddLinkOptions {
   path: string
   params: any
   storageId: string
-  vuexStore: Store<any>
 }
 
 export interface UpdateLinkOptions {
@@ -64,6 +60,5 @@ export interface DeleteLinkOptions {
   clientService: ClientService
   share: Share
   path: string
-  vuexStore: Store<any>
   loadIndicators?: boolean
 }

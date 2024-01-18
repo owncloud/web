@@ -2,13 +2,7 @@ import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { useMessages, useModals, useSpacesStore } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 
@@ -61,17 +55,14 @@ describe('CreateSpace component', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
-    storeOptions,
     mocks,
     wrapper: mount(CreateSpace, {
       global: {
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins({ piniaOptions: { stubActions: false } }), store]
+        plugins: [...defaultPlugins({ piniaOptions: { stubActions: false } })]
       }
     })
   }

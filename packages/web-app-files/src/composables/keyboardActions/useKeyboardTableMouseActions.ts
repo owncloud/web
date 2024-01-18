@@ -1,23 +1,24 @@
-import { onBeforeUnmount, onMounted, unref, computed, Ref, watchEffect } from 'vue'
-import { QueryValue, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
+import { onBeforeUnmount, onMounted, unref, Ref, watchEffect } from 'vue'
+import { QueryValue, useResourcesStore, ViewModeConstants } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { KeyboardActions } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 
 export const useKeyboardTableMouseActions = (
   keyActions: KeyboardActions,
   viewMode: Ref<string | QueryValue>
 ) => {
-  const store = useStore()
-  const latestSelectedId = computed(() => store.state.Files.latestSelectedId)
+  const resourcesStore = useResourcesStore()
+  const { latestSelectedId } = storeToRefs(resourcesStore)
 
-  let fileListClickedEvent
-  let fileListClickedMetaEvent
-  let fileListClickedShiftEvent
+  let fileListClickedEvent: string
+  let fileListClickedMetaEvent: string
+  let fileListClickedShiftEvent: string
 
   const handleCtrlClickAction = (resource: Resource) => {
-    store.dispatch('Files/toggleFileSelection', { id: resource.id })
+    resourcesStore.toggleSelection(resource.id)
   }
 
   const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
@@ -41,9 +42,9 @@ export const useKeyboardTableMouseActions = (
       if ((skipTargetSelection && nodeId === resource.id) || isDisabled) {
         continue
       }
-      store.commit('Files/ADD_FILE_SELECTION', { id: nodeId })
+      resourcesStore.addSelection(nodeId)
     }
-    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', resource.id)
+    resourcesStore.setLastSelectedId(resource.id)
   }
 
   const handleTilesShiftClickAction = ({ resource, skipTargetSelection }) => {
@@ -66,9 +67,9 @@ export const useKeyboardTableMouseActions = (
       if ((skipTargetSelection && nodeId === resource.id) || isDisabled) {
         continue
       }
-      store.commit('Files/ADD_FILE_SELECTION', { id: nodeId })
+      resourcesStore.addSelection(nodeId)
     }
-    store.commit('Files/SET_LATEST_SELECTED_FILE_ID', resource.id)
+    resourcesStore.setLastSelectedId(resource.id)
   }
 
   onMounted(() => {

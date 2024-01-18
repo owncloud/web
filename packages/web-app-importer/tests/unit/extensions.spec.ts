@@ -1,10 +1,4 @@
-import {
-  createStore,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  getComposableWrapper,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { mock, mockDeep } from 'jest-mock-extended'
@@ -141,14 +135,12 @@ function getWrapper({
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     $uppyService: uppyService
   }
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  const store = createStore(storeOptions)
+
   return {
     wrapper: getComposableWrapper(setup, {
       mocks,
       provide: mocks,
-      store
+      pluginOptions: { piniaOptions: { resourcesStore: { currentFolder } } }
     })
   }
 }

@@ -11,13 +11,7 @@ import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mock } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { Resource } from '@ownclouders/web-client'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 
@@ -181,14 +175,12 @@ function getMountedWrapper({
     ...(mocks && mocks),
     openWithDefaultApp
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(SharedWithMe, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         stubs: { ...defaultStubs, itemFilterInline: true, ItemFilter: true }
       }

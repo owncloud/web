@@ -27,7 +27,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { useStore } from '../../../composables'
+import { useResourcesStore } from '../../../composables'
 import ResourceIcon from '../../FilesList/ResourceIcon.vue'
 import ResourceName from '../../FilesList/ResourceName.vue'
 
@@ -41,9 +41,10 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
+    const resourcesStore = useResourcesStore()
+
     const resource = inject<Resource>('resource')
-    const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
+    const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
     return { resource, areFileExtensionsShown }
   }

@@ -8,7 +8,6 @@
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { ContextActionMenu } from '@ownclouders/web-pkg'
-import { useStore } from '@ownclouders/web-pkg'
 
 import {
   useSpaceActionsDelete,
@@ -30,10 +29,9 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const filterParams = computed(() => ({ resources: props.items }))
 
-    const { actions: deleteActions } = useSpaceActionsDelete({ store })
+    const { actions: deleteActions } = useSpaceActionsDelete()
     const { actions: disableActions } = useSpaceActionsDisable()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription()

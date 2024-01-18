@@ -3,7 +3,6 @@ import { useScrollTo } from '../../../../src/composables/scrollTo'
 import { Resource } from '@ownclouders/web-client/src'
 import { eventBus } from '../../../../src/services'
 import { defaultComponentMocks } from 'web-test-helpers/src/mocks/defaultComponentMocks'
-import { defaultStoreMockOptions } from 'web-test-helpers/src/mocks/store/defaultStoreMockOptions'
 import { getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const mockResourceId = 'fakeResourceId'
@@ -36,7 +35,7 @@ describe('useScrollTo', () => {
           scrollToResource(mockResourceId)
           expect(htmlPageObject.scrollIntoView).not.toHaveBeenCalled()
         },
-        { mocks, provide: mocks, store: defaultStoreMockOptions }
+        { mocks, provide: mocks }
       )
     })
     it('calls "scrollIntoView" when the page bottom is reached', () => {
@@ -54,7 +53,7 @@ describe('useScrollTo', () => {
           scrollToResource(mockResourceId)
           expect(htmlPageObject.scrollIntoView).toHaveBeenCalled()
         },
-        { mocks, provide: mocks, store: defaultStoreMockOptions }
+        { mocks, provide: mocks }
       )
     })
     it('calls "scrollIntoView" when the page top is reached', () => {
@@ -72,7 +71,7 @@ describe('useScrollTo', () => {
           scrollToResource(mockResourceId)
           expect(htmlPageObject.scrollIntoView).toHaveBeenCalled()
         },
-        { mocks, provide: mocks, store: defaultStoreMockOptions }
+        { mocks, provide: mocks }
       )
     })
   })
@@ -90,11 +89,7 @@ describe('useScrollTo', () => {
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
-        {
-          mocks,
-          provide: mocks,
-          store: defaultStoreMockOptions
-        }
+        { mocks, provide: mocks }
       )
     })
     it('does not scroll when no resource found', () => {
@@ -112,11 +107,7 @@ describe('useScrollTo', () => {
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
-        {
-          mocks,
-          provide: mocks,
-          store: defaultStoreMockOptions
-        }
+        { mocks, provide: mocks }
       )
     })
     it('does not scroll when resource is processing', () => {
@@ -134,11 +125,7 @@ describe('useScrollTo', () => {
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
-        {
-          mocks,
-          provide: mocks,
-          store: defaultStoreMockOptions
-        }
+        { mocks, provide: mocks }
       )
     })
     it('scrolls to the resource when the "scrollTo" param is given and a resource is found', () => {

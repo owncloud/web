@@ -1,10 +1,6 @@
-import ancestorMetaData from './ancestorMetaData'
-
 const runtime = {
   namespaced: true,
-  modules: {
-    ancestorMetaData
-  }
+  modules: {}
 }
 
 export default {

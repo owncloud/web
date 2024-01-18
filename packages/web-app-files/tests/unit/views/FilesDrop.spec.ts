@@ -1,9 +1,7 @@
 import FilesDrop from '../../../src/views/FilesDrop.vue'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -38,14 +36,11 @@ function getMountedWrapper() {
     $clientService: $clientService
   }
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(FilesDrop, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: defaultStubs

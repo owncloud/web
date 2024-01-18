@@ -1,9 +1,7 @@
 import QuotaModal from '../../../../src/components/Spaces/QuotaModal.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   defaultStubs,
   mount,
   mockAxiosResolve
@@ -49,12 +47,9 @@ describe('QuotaModal', () => {
 })
 
 function getWrapper() {
-  const storeOptions = defaultStoreMockOptions
   const mocks = defaultComponentMocks()
-  const store = createStore(storeOptions)
   return {
     mocks,
-    storeOptions,
     wrapper: mount(QuotaModal, {
       props: {
         spaces: [
@@ -73,7 +68,7 @@ function getWrapper() {
         stubs: { ...defaultStubs },
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

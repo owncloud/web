@@ -1,14 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsCopy } from '../../../../../src/composables/actions/files'
 import { useClipboardStore } from '../../../../../src/composables/piniaStores'
 
@@ -52,22 +45,10 @@ function getWrapper({
   setup
 }: {
   searchLocation: boolean
-  setup: (
-    instance: ReturnType<typeof useFileActionsCopy>,
-    {
-      storeOptions
-    }: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useFileActionsCopy>) => void
 }) {
   const routeName = searchLocation ? 'files-common-search' : 'files-spaces-generic'
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
-  }
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
@@ -76,13 +57,12 @@ function getWrapper({
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCopy({ store })
-        setup(instance, { storeOptions })
+        const instance = useFileActionsCopy()
+        setup(instance)
       },
       {
         mocks,
-        provide: mocks,
-        store
+        provide: mocks
       }
     )
   }

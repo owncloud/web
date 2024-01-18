@@ -2,11 +2,9 @@ import FileActions from 'web-app-files/src/components/SideBar/Actions/FileAction
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultPlugins,
   defaultStubs,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
@@ -86,13 +84,10 @@ describe('FileActions', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.state.currentFolder = { path: '' }
-  const store = createStore(storeOptions)
   return {
     wrapper: mount(FileActions, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({
             name: 'files-spaces-generic',

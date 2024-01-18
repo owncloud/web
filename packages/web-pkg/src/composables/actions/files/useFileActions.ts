@@ -1,10 +1,8 @@
 import kebabCase from 'lodash-es/kebabCase'
-import { Store } from 'vuex'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { routeToContextQuery } from '../../appDefaults'
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
-import { useStore } from '../../store'
 import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import {
@@ -31,9 +29,10 @@ import {
   useFileActionsRestore,
   useFileActionsCreateSpaceFromResource
 } from './index'
-import { useAppsStore, useConfigStore } from '../../piniaStores'
+import { useAppsStore, useConfigStore, useResourcesStore } from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { storeToRefs } from 'pinia'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -42,8 +41,7 @@ export interface GetFileActionsOptions extends FileActionOptions {
   omitSystemActions?: boolean
 }
 
-export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActions = () => {
   const appsStore = useAppsStore()
   const configStore = useConfigStore()
   const router = useRouter()
@@ -52,19 +50,22 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
 
   const { openUrl } = useWindowOpen()
 
-  const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
-  const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
-  const { actions: copyActions } = useFileActionsCopy({ store })
-  const { actions: deleteActions } = useFileActionsDelete({ store })
-  const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
+
+  const { actions: acceptShareActions } = useFileActionsAcceptShare()
+  const { actions: hideShareActions } = useFileActionsToggleHideShare()
+  const { actions: copyActions } = useFileActionsCopy()
+  const { actions: deleteActions } = useFileActionsDelete()
+  const { actions: declineShareActions } = useFileActionsDeclineShare()
   const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
   const { actions: downloadFileActions } = useFileActionsDownloadFile()
-  const { actions: favoriteActions } = useFileActionsFavorite({ store })
-  const { actions: moveActions } = useFileActionsMove({ store })
-  const { actions: navigateActions } = useFileActionsNavigate({ store })
-  const { actions: renameActions } = useFileActionsRename({ store })
-  const { actions: restoreActions } = useFileActionsRestore({ store })
-  const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource({ store })
+  const { actions: favoriteActions } = useFileActionsFavorite()
+  const { actions: moveActions } = useFileActionsMove()
+  const { actions: navigateActions } = useFileActionsNavigate()
+  const { actions: renameActions } = useFileActionsRename()
+  const { actions: restoreActions } = useFileActionsRestore()
+  const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource()
   const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
   const systemActions = computed((): Action[] => [
@@ -221,7 +222,7 @@ export const useFileActions = ({ store }: { store?: Store<any> } = {}) => {
     const filterCallback = (action) =>
       action.isEnabled({
         ...options,
-        parent: store.getters['Files/currentFolder']
+        parent: unref(currentFolder)
       })
 
     // first priority: handlers from config

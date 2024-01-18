@@ -1,11 +1,16 @@
-import { Key, KeyboardActions, ModifierKey, useClipboardStore } from '@ownclouders/web-pkg'
-import { useStore } from '@ownclouders/web-pkg'
+import {
+  Key,
+  KeyboardActions,
+  ModifierKey,
+  useClipboardStore,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 
 export const useKeyboardTableActions = (keyActions: KeyboardActions) => {
-  const store = useStore()
+  const resourcesStore = useResourcesStore()
   const { copyResources } = useClipboardStore()
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.C }, () => {
-    copyResources(store.getters['Files/selectedFiles'])
+    copyResources(resourcesStore.selectedResources)
   })
 }

@@ -9,11 +9,9 @@ import {
 import { mock } from 'jest-mock-extended'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
-  createStore,
   defaultPlugins,
   mount,
   shallowMount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
@@ -162,8 +160,6 @@ function getWrapper({
   user = mock<User>(),
   currentRouteName = 'files-spaces-generic'
 } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
@@ -178,8 +174,7 @@ function getWrapper({
               options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
             }
           }
-        }),
-        store
+        })
       ],
       mocks,
       provide: {

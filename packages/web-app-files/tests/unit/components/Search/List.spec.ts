@@ -6,14 +6,8 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { createRouter, createMemoryHistory } from 'vue-router'
 
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mockAxiosResolve
-} from 'web-test-helpers/src'
-import { queryItemAsString } from '@ownclouders/web-pkg'
+import { defaultComponentMocks, defaultPlugins, mockAxiosResolve } from 'web-test-helpers/src'
+import { queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'jest-mock-extended'
@@ -46,8 +40,10 @@ describe('List component', () => {
     expect(wrapper.find(selectors.resourceTableStub).exists()).toBeTruthy()
   })
   it('resets the initial store file state', () => {
-    const { storeOptions } = getWrapper({ resources: [mock<Resource>()] })
-    expect(storeOptions.modules.Files.mutations.CLEAR_CURRENT_FILES_LIST).toHaveBeenCalled()
+    getWrapper({ resources: [mock<Resource>()] })
+
+    const { clearResourceList } = useResourcesStore()
+    expect(clearResourceList).toHaveBeenCalled()
   })
   it('should emit search event on mount', async () => {
     const { wrapper } = getWrapper()
@@ -233,8 +229,6 @@ function getWrapper({
   localMocks.$clientService.graphAuthenticated.tags.getTags.mockReturnValue(
     mockAxiosResolve({ value: availableTags })
   )
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   const capabilities = {
     files: { tags: true },
@@ -248,7 +242,6 @@ function getWrapper({
   } satisfies Partial<Capabilities['capabilities']>
 
   return {
-    storeOptions,
     mocks: localMocks,
     wrapper: shallowMount(List, {
       global: {
@@ -257,7 +250,7 @@ function getWrapper({
         stubs: {
           FilesViewWrapper: false
         },
-        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })]
       }
     })
   }

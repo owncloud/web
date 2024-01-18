@@ -12,13 +12,7 @@ import {
   useFileActionsPaste
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
@@ -183,11 +177,6 @@ function getWrapper({
     })
   )
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
-  storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
-  storeOptions.modules.Files.getters.files.mockImplementation(() => files)
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) }),
     pasteActionHandler
@@ -198,7 +187,6 @@ function getWrapper({
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
-    storeOptions,
     mocks,
     wrapper: shallowMount(CreateAndUpload as any, {
       data: () => ({ newFileAction }),
@@ -213,10 +201,10 @@ function getWrapper({
             piniaOptions: {
               spacesState: { spaces: spaces as any },
               capabilityState: { capabilities },
-              clipboardState: { resources: clipboardResources }
+              clipboardState: { resources: clipboardResources },
+              resourcesStore: { areFileExtensionsShown, currentFolder, resources: files }
             }
-          }),
-          store
+          })
         ]
       }
     })

@@ -21,8 +21,8 @@ import {
   useGetMatchingSpace,
   useFileActions,
   useFolderLink,
-  useStore,
-  useConfigStore
+  useConfigStore,
+  useResourcesStore
 } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
@@ -56,13 +56,13 @@ export default defineComponent({
       getParentFolderLinkIconAdditionalAttributes,
       getFolderLink
     } = useFolderLink()
-    const store = useStore()
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
+    const resourcesStore = useResourcesStore()
 
     const previewData = ref()
 
-    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
+    const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
     const resource = computed((): Resource => {
       return {
@@ -132,8 +132,7 @@ export default defineComponent({
       return
     }
 
-    const debounced = debounce(async ({ unobserve }) => {
-      unobserve()
+    const loadPreview = async () => {
       const preview = await this.$previewService.loadPreview(
         {
           space: this.space,
@@ -142,7 +141,13 @@ export default defineComponent({
         },
         true
       )
+
       preview && (this.previewData = preview)
+    }
+
+    const debounced = debounce(({ unobserve }) => {
+      unobserve()
+      loadPreview()
     }, 250)
 
     visibilityObserver.observe(this.$el, { onEnter: debounced, onExit: debounced.cancel })

@@ -3,13 +3,7 @@ import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
 import { eventBus, useCapabilityStore } from '@ownclouders/web-pkg'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper,
-  writable
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
 
 describe('useUserActionsDelete', () => {
   describe('method "isEnabled"', () => {
@@ -65,24 +59,20 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useUserActionsDelete>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useUserActionsDelete()
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        setup(instance, { clientService: mocks.$clientService })
       },
-      { store, mocks, provide: mocks }
+      { mocks, provide: mocks }
     )
   }
 }

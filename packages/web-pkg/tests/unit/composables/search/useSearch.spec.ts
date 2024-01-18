@@ -1,9 +1,4 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { CapabilityStore, useSearch } from '../../../../src/composables'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -36,8 +31,6 @@ describe('useSearch', () => {
 })
 
 const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
-  const storeOptions = { ...defaultStoreMockOptions }
-
   const spaces = [
     {
       id: '1',
@@ -53,7 +46,6 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
     }
   ] as unknown as SpaceResource[]
 
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({})
   const capabilities = {
     spaces: { projects: true, share_jail: true }
@@ -75,7 +67,6 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
     {
       mocks,
       provide: mocks,
-      store,
       pluginOptions: {
         piniaOptions: { spacesState: { spaces }, capabilityState: { capabilities } }
       }

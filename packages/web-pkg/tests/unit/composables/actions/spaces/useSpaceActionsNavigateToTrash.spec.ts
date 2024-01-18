@@ -1,12 +1,6 @@
 import { useSpaceActionsNavigateToTrash } from '../../../../../src'
 import { mock } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
 
@@ -69,20 +63,8 @@ describe('navigateToSpace', () => {
 function getWrapper({
   setup
 }: {
-  setup: (
-    instance: ReturnType<typeof useSpaceActionsNavigateToTrash>,
-    {
-      storeOptions
-    }: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useSpaceActionsNavigateToTrash>) => void
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
-  }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
   })
@@ -91,10 +73,9 @@ function getWrapper({
     wrapper: getComposableWrapper(
       () => {
         const instance = useSpaceActionsNavigateToTrash()
-        setup(instance, { storeOptions })
+        setup(instance)
       },
       {
-        store,
         mocks,
         provide: mocks
       }

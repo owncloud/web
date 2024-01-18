@@ -85,10 +85,10 @@ import {
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   useClientService,
-  useStore,
   usePreviewService,
   ProcessorType,
-  useSpacesStore
+  useSpacesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
@@ -120,9 +120,9 @@ export default defineComponent({
     const { $gettext, $ngettext } = language
     const clientService = useClientService()
     const { getFileContents, getFileInfo } = clientService.webdav
-    const store = useStore()
     const previewService = usePreviewService()
     const spacesStore = useSpacesStore()
+    const resourcesStore = useResourcesStore()
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -236,7 +236,7 @@ export default defineComponent({
     })
 
     const openSideBarSharePanel = () => {
-      store.commit('Files/SET_SELECTED_IDS', [])
+      resourcesStore.setSelection([])
       eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
     }
 

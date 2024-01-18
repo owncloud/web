@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from '@ownclouders/web-client/src/helpers'
-import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import { CapabilityStore, displayPositionedDropdown } from '../../../../src'
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
@@ -451,8 +451,6 @@ function getMountedWrapper({
   userContextReady = true,
   addProcessingResources = false
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const capabilities = {
     files: { tags: true }
   } satisfies Partial<CapabilityStore['capabilities']>
@@ -480,8 +478,7 @@ function getMountedWrapper({
               capabilityState: { capabilities },
               configState: { options: { displayResourcesLazy: false } }
             }
-          }),
-          store
+          })
         ],
         stubs: {
           OcButton: false,

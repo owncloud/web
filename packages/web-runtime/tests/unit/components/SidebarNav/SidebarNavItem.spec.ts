@@ -1,6 +1,6 @@
 import SidebarNavItem from 'web-runtime/src/components/SidebarNav/SidebarNavItem.vue'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
-import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 
 const exampleNavItem = sidebarNavItemFixtures[0]
 
@@ -26,8 +26,6 @@ describe('OcSidebarNav', () => {
 })
 
 function getWrapper(collapsed) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
     wrapper: mount(SidebarNavItem, {
       props: {
@@ -35,7 +33,7 @@ function getWrapper(collapsed) {
         collapsed
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: { 'router-link': true }
       }
     })

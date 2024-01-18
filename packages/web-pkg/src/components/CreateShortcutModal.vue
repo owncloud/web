@@ -89,15 +89,15 @@ import {
   watch,
   onMounted
 } from 'vue'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import {
   Modal,
   useClientService,
   useFolderLink,
   useMessages,
+  useResourcesStore,
   useRouter,
-  useSearch,
-  useStore
+  useSearch
 } from '../composables'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useGettext } from 'vue3-gettext'
@@ -110,6 +110,7 @@ import { debounce } from 'lodash-es'
 import ResourcePreview from './Search/ResourcePreview.vue'
 import { SearchResult, SearchResultValue } from './Search'
 import { isLocationPublicActive } from '../router'
+import { storeToRefs } from 'pinia'
 
 const SEARCH_LIMIT = 7
 const SEARCH_DEBOUNCE_TIME = 200
@@ -128,7 +129,6 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const clientService = useClientService()
     const { $gettext } = useGettext()
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const { search } = useSearch()
@@ -139,6 +139,9 @@ export default defineComponent({
       getParentFolderLinkIconAdditionalAttributes,
       getFolderLink
     } = useFolderLink()
+
+    const resourcesStore = useResourcesStore()
+    const { resources, currentFolder } = storeToRefs(resourcesStore)
 
     const dropRef = ref(null)
     const inputUrl = ref('')
@@ -158,10 +161,8 @@ export default defineComponent({
       return `https://${url}`
     })
 
-    const currentFolder = computed<Resource>(() => store.getters['Files/currentFolder'])
-    const files = computed((): Array<Resource> => store.getters['Files/files'])
     const fileAlreadyExists = computed(
-      () => !!unref(files).find((file) => file.name === `${unref(inputFilename)}.url`)
+      () => !!unref(resources).find((file) => file.name === `${unref(inputFilename)}.url`)
     )
 
     const confirmButtonDisabled = computed(
@@ -209,8 +210,11 @@ export default defineComponent({
       inputUrl.value = unref(dropItemUrl)
       try {
         let filename = new URL(unref(dropItemUrl)).host
-        if (unref(files).some((f) => f.name === `${filename}.url`)) {
-          filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
+        if (unref(resources).some((f) => f.name === `${filename}.url`)) {
+          filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(resources)).slice(
+            0,
+            -4
+          )
         }
         inputFilename.value = filename
       } catch (_) {}
@@ -223,8 +227,8 @@ export default defineComponent({
 
       inputUrl.value = `${webURL.origin}/f/${item.id}`
 
-      if (unref(files).some((f) => f.name === `${filename}.url`)) {
-        filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(files)).slice(0, -4)
+      if (unref(resources).some((f) => f.name === `${filename}.url`)) {
+        filename = resolveFileNameDuplicate(`${filename}.url`, 'url', unref(resources)).slice(0, -4)
       }
 
       inputFilename.value = filename
@@ -336,7 +340,7 @@ export default defineComponent({
           path,
           content
         })
-        store.commit('Files/UPSERT_RESOURCE', resource)
+        resourcesStore.upsertResource(resource)
         showMessage({ title: $gettext('Shortcut was created successfully') })
       } catch (e) {
         console.error(e)

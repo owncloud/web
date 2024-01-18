@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
@@ -11,9 +10,15 @@ import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
-import { useConfigStore, useMessages, useModals, useSpacesStore } from '../../piniaStores'
+import {
+  useConfigStore,
+  useMessages,
+  useModals,
+  useResourcesStore,
+  useSpacesStore
+} from '../../piniaStores'
 
-export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsCreateSpaceFromResource = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const { can } = useAbility()
   const { $gettext, $ngettext } = useGettext()
@@ -25,6 +30,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const { dispatchModal } = useModals()
   const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
@@ -49,7 +55,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
       }
 
       await Promise.all(copyOps)
-      store.dispatch('Files/resetFileSelection')
+      resourcesStore.resetSelection()
       showMessage({ title: $gettext('Space was created successfully') })
     } catch (error) {
       console.error(error)
