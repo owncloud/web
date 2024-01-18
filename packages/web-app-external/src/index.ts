@@ -12,6 +12,7 @@ import { stringify } from 'qs'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { join } from 'path'
 import { AppListSchema } from './schemas'
+import { useGettext } from 'vue3-gettext'
 
 const appInfo = {
   name: 'External',
@@ -38,6 +39,7 @@ export default defineWebApplication({
     const appsStore = useAppsStore()
     const { makeRequest } = useRequest()
     const clientService = useClientService()
+    const { $gettext } = useGettext()
 
     return {
       appInfo,
@@ -63,7 +65,9 @@ export default defineWebApplication({
               appId: 'external',
               data: {
                 extension: mimeType.ext,
-                label: mimeType.name,
+                label: $gettext('Open in %{app}', { app: provider.name }),
+                icon: provider.icon,
+                name: provider.name,
                 mimeType: mimeType.mime_type,
                 routeName: 'external-apps',
                 hasPriority: mimeType.default_application === provider.name,

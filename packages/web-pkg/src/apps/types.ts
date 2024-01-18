@@ -58,6 +58,8 @@ export interface ApplicationFileExtension {
   }) => Promise<Resource>
   hasPriority?: boolean
   label?: string
+  name?: string
+  icon?: string
   mimeType?: string
   newFileMenu?: { menuTitle: () => string }
   routeName?: string

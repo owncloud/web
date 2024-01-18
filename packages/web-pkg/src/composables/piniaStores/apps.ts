@@ -44,6 +44,8 @@ export const useAppsStore = defineStore('apps', () => {
       mimeType: data.mimeType,
       routeName: data.routeName,
       newFileMenu: data.newFileMenu,
+      icon: data.icon,
+      name: data.name,
       hasPriority:
         data.hasPriority ||
         unref(externalAppConfig)?.[appId]?.priorityExtensions?.includes(data.extension) ||
