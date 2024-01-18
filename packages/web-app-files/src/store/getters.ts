@@ -32,9 +32,6 @@ export default {
       spaces: spaceCount
     }
   },
-  versions: (state) => {
-    return state.versions
-  },
   areHiddenFilesShown: (state) => {
     return state.areHiddenFilesShown
   },

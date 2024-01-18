@@ -141,9 +141,10 @@ describe('Details SideBar Panel', () => {
     })
   })
   describe('versions', () => {
-    it('show if given for files on a private page', () => {
+    it('show if given for files on a private page', async () => {
       const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource, versions: ['1'] })
+      await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.versionsInfo).exists()).toBeTruthy()
     })
     it('do not show for folders on a private page', () => {
@@ -203,7 +204,6 @@ function createWrapper({
   tagsEnabled = true
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
   storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
     ancestorMetaData
   )
@@ -213,6 +213,7 @@ function createWrapper({
   const publicLocation = createLocationPublic('files-public-link')
   const currentRoute = isPublicLinkContext ? publicLocation : spacesLocation
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
+  mocks.$clientService.webdav.listFileVersions.mockResolvedValue(versions)
   const capabilities = { files: { tags: tagsEnabled } }
   return {
     wrapper: mount(FileDetails, {

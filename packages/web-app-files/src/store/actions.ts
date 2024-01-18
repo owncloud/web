@@ -7,7 +7,6 @@ import {
   Resource,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { ClientService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { eventBus } from '@ownclouders/web-pkg'
@@ -159,16 +158,6 @@ export default {
         { root: true }
       )
     }
-  },
-  async loadVersions(context, { client, fileId }: { client: WebDAV; fileId: Resource['fileId'] }) {
-    let response
-    try {
-      response = await client.listFileVersions(fileId)
-    } catch (e) {
-      console.error(e)
-      response = []
-    }
-    context.commit('SET_VERSIONS', response)
   },
   loadAvatars(
     { commit },

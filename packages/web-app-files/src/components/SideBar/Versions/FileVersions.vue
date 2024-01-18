@@ -63,7 +63,7 @@ import {
   useDownloadFile,
   useStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import { useTask } from 'vue-concurrency'
@@ -87,15 +87,13 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const versions = computed(() => {
-      return store.getters['Files/versions']
-    })
-
+    const versions = ref<Resource[]>([])
     const fetchVersionsTask = useTask(function* () {
-      yield store.dispatch('Files/loadVersions', {
-        client: clientService.webdav,
-        fileId: unref(resource).fileId
-      })
+      try {
+        versions.value = yield clientService.webdav.listFileVersions(unref(resource).fileId)
+      } catch (e) {
+        console.error(e)
+      }
     })
     const areVersionsLoading = computed(() => {
       return !fetchVersionsTask.last || fetchVersionsTask.isRunning

@@ -53,6 +53,7 @@ describe('ResourceDetails component', () => {
         })
       })
     }
+    mocks.$clientService.webdav.listFileVersions.mockResolvedValue([])
     const storeOptions = { ...defaultStoreMockOptions }
     const store = createStore(storeOptions)
 
@@ -82,6 +83,7 @@ describe('ResourceDetails component', () => {
           mocks,
           plugins: [...defaultPlugins(), store],
           provide: {
+            ...mocks,
             space,
             resource: file
           }

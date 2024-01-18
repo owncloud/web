@@ -177,12 +177,6 @@ function getMountedWrapper({
   loadingStateDelay = 0
 } = {}) {
   const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.versions.mockImplementation(() => versions)
-  storeOptions.modules.Files.actions.loadVersions.mockImplementation(() => {
-    if (loadingStateDelay > 0) {
-      return new Promise((res) => setTimeout(res, loadingStateDelay))
-    }
-  })
   const store = createStore(storeOptions)
   const downloadFile = jest.fn()
   jest.mocked(useDownloadFile).mockReturnValue({ downloadFile })
@@ -191,6 +185,13 @@ function getMountedWrapper({
     downloadFile
   }
   mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mock<Resource>({ id: '1' }))
+  mocks.$clientService.webdav.listFileVersions.mockImplementation(() => {
+    if (loadingStateDelay > 0) {
+      return new Promise((res) => setTimeout(() => res(versions), loadingStateDelay))
+    }
+    return new Promise((res) => res(versions))
+  })
+
   return {
     wrapper: mountType(FileVersions, {
       global: {

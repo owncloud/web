@@ -124,22 +124,17 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
-import { mapGetters } from 'vuex'
 import {
   ImageDimension,
   useAuthStore,
   useUserStore,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  useClientService
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import {
-  useClientService,
-  useStore,
-  usePreviewService,
-  useGetMatchingSpace
-} from '@ownclouders/web-pkg'
+import { useStore, usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
   formatDateFromHTTP,
@@ -192,17 +187,13 @@ export default defineComponent({
     const authStore = useAuthStore()
     const { publicLinkContextReady } = storeToRefs(authStore)
 
-    const loadData = async () => {
-      const calls = []
-      if (unref(resource).type === 'file' && !unref(publicLinkContextReady)) {
-        calls.push(
-          store.dispatch('Files/loadVersions', {
-            client: clientService.webdav,
-            fileId: unref(resource).id
-          })
-        )
+    const versions = ref<Resource[]>([])
+    const loadVersions = async (fileId: Resource['fileId']) => {
+      try {
+        versions.value = await clientService.webdav.listFileVersions(fileId)
+      } catch (e) {
+        console.error(e)
       }
-      await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
     const isPreviewEnabled = computed(() => {
@@ -260,8 +251,11 @@ export default defineComponent({
       resource,
       () => {
         if (unref(resource)) {
-          loadData()
           loadPreviewTask.perform(unref(resource))
+
+          if (!unref(resource).isFolder && !unref(publicLinkContextReady)) {
+            loadVersions(unref(resource).fileId)
+          }
         }
       },
       { immediate: true }
@@ -289,12 +283,11 @@ export default defineComponent({
       sharedAncestorRoute,
       formatDateRelative,
       contextualHelper,
-      showWebDavDetails
+      showWebDavDetails,
+      versions
     }
   },
   computed: {
-    ...mapGetters('Files', ['versions']),
-
     hasContent() {
       return (
         this.hasTimestamp ||
