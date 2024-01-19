@@ -1,0 +1,53 @@
+Change: Vuex store removed
+
+BREAKING CHANGE for developers: The vuex store has been removed in favor of pinia.
+
+All store modules have been migrated to a pinia store module. Please see the linked issue down below for a list of all migrated stores and how to use them now.
+
+There are a number of things that have been removed and/or moved into pinia composables instead:
+
+Globals:
+
+- `store` and `$store` variables have been removed.
+- `ConfigurationManager` has been removed. The config now sits inside the configuration store.
+
+App framework:
+
+- `announceStore` has been removed. There is no need for apps to announce stores to the runtime. If you need to use a store in your app, simply create a pinia store module and use it.
+- `announceExtensions` has been removed. The proper way for an app to register file extensions is via the `extensions` property inside the `appInfo` object.
+- `requestStore` has been removed. There is no need to request specific stores. All stores that `web-pkg` provides can be imported and accessed via their composables.
+- `enabled` callback as well as the `name` callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
+- `store` param of the `ClassicApplicationScript` has been removed.
+
+Composables:
+
+- `useStore` has been removed. Use the pinia for the store you want to use instead.
+- `useAccessToken` has been removed. It now sits inside the auth store.
+- `usePublicLinkContext` has been removed. It now sits inside the auth store.
+- `usePublicLinkPassword` has been removed. It now sits inside the auth store.
+- `usePublicLinkToken` has been removed. It now sits inside the auth store.
+- `useUserContext` has been removed. It now sits inside the auth store.
+- `useConfigurationManager` has been removed. The config now sits inside the configuration store.
+- `use...Capability` composables have been removed. Capablities now sit inside the capability store.
+
+For store specific changes please see the linked issue and PRs down below.
+
+https://github.com/owncloud/web/issues/10210
+https://github.com/owncloud/web/pull/10212
+https://github.com/owncloud/web/pull/10240
+https://github.com/owncloud/web/pull/10307
+https://github.com/owncloud/web/pull/10309
+https://github.com/owncloud/web/pull/10316
+https://github.com/owncloud/web/pull/10323
+https://github.com/owncloud/web/pull/10326
+https://github.com/owncloud/web/pull/10329
+https://github.com/owncloud/web/pull/10331
+https://github.com/owncloud/web/pull/10336
+https://github.com/owncloud/web/pull/10338
+https://github.com/owncloud/web/pull/10341
+https://github.com/owncloud/web/pull/10346
+https://github.com/owncloud/web/pull/10349
+https://github.com/owncloud/web/pull/10362
+https://github.com/owncloud/web/pull/10363
+https://github.com/owncloud/web/pull/10368
+https://github.com/owncloud/web/pull/10372

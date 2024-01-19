@@ -2,8 +2,7 @@ import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import { RuntimeApi } from './types'
 import { ApiError, ExtensionRegistry, SidebarNavExtension } from '@ownclouders/web-pkg'
-import { get, isEqual, isObject, isArray, merge } from 'lodash-es'
-import { Module, Store } from 'vuex'
+import { isEqual, isObject, isArray, merge } from 'lodash-es'
 import { App, Component, computed, h } from 'vue'
 import { ApplicationTranslations, AppNavigationItem } from '@ownclouders/web-pkg'
 import type { Language } from 'vue3-gettext'
@@ -106,27 +105,6 @@ const announceTranslations = (
 }
 
 /**
- * inject application specific store into runtime
- *
- * @param applicationName
- * @param store
- * @param applicationStore
- */
-const announceStore = (
-  applicationName: string,
-  store: Store<unknown>,
-  applicationStore: Module<unknown, unknown>
-): void => {
-  const obtainedStore: Module<unknown, unknown> = get(applicationStore, 'default', applicationStore)
-
-  if (!isObject(obtainedStore)) {
-    throw new ApiError("store can't be blank")
-  }
-
-  store.registerModule(applicationName, obtainedStore)
-}
-
-/**
  * open a wormhole portal, this wraps vue-portal
  *
  * @param instance
@@ -150,21 +128,6 @@ const openPortal = (
     order: order,
     content: () => components.map((c) => h(c))
   })
-}
-
-/**
- * expose store to the application
- *
- * @deprecated use with caution
- *
- * @param store
- */
-const requestStore = (store: Store<unknown>): Store<unknown> => {
-  if (isEqual(process.env.NODE_ENV, 'development')) {
-    console.warn('requestStore // store api is deprecated, use with caution')
-  }
-
-  return store
 }
 
 /**
@@ -198,7 +161,6 @@ const requestRouter = (router: Router): Router => {
 export const buildRuntimeApi = ({
   applicationName,
   applicationId,
-  store,
   router,
   gettext,
   supportedLanguages,
@@ -206,7 +168,6 @@ export const buildRuntimeApi = ({
 }: {
   applicationName: string
   applicationId: string
-  store: Store<unknown>
   gettext: Language
   router: Router
   supportedLanguages: { [key: string]: string }
@@ -227,9 +188,6 @@ export const buildRuntimeApi = ({
       announceNavigationItems(applicationId, extensionRegistry, navigationItems),
     announceTranslations: (appTranslations: ApplicationTranslations): void =>
       announceTranslations(supportedLanguages, gettext, appTranslations),
-    announceStore: (applicationStore: Module<unknown, unknown>): void =>
-      announceStore(applicationName, store, applicationStore),
-    requestStore: (): Store<unknown> => requestStore(store),
     requestRouter: (): Router => requestRouter(router),
     openPortal: (
       instance: App,

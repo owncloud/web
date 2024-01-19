@@ -56,7 +56,6 @@ export const defineConfig = (overrides = {}) => {
             // keep in sync with packages/web-runtime/src/container/application/index.ts
             external: [
               'vue',
-              'vuex',
               'luxon',
               'vue3-gettext',
 

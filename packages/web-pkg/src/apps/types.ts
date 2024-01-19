@@ -1,6 +1,5 @@
 import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
-import { Module, Store } from 'vuex'
 import { Extension } from '../composables/piniaStores'
 import { IconFillType } from '../helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -8,7 +7,6 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 export interface AppReadyHookArgs {
   globalProperties: ComponentCustomProperties & Record<string, any>
   router: Router
-  store: Store<unknown>
   instance?: App
   portal?: any
 }
@@ -92,7 +90,6 @@ export interface ApplicationTranslations {
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
-  store?: Module<unknown, unknown>
   routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations

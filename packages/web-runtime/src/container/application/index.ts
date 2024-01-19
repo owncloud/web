@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
@@ -9,7 +8,6 @@ import type { Language } from 'vue3-gettext'
 
 // import modules to provide them to applications
 import * as vue from 'vue' // eslint-disable-line
-import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
 import * as webPkg from '@ownclouders/web-pkg'
@@ -30,7 +28,6 @@ const injectionMap = {
   luxon,
   vue,
   'vue3-gettext': vueGettext,
-  vuex,
   '@ownclouders/web-pkg': webPkg,
   '@ownclouders/web-client': webClient,
   'web-pkg': webPkg,
@@ -63,7 +60,6 @@ export const buildApplication = async ({
   app,
   applicationPath,
   applicationConfig,
-  store,
   router,
   gettext,
   supportedLanguages,
@@ -72,7 +68,6 @@ export const buildApplication = async ({
   app: App
   applicationPath: string
   applicationConfig: AppConfigObject
-  store: Store<unknown>
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
@@ -125,7 +120,6 @@ export const buildApplication = async ({
         app,
         applicationScript,
         applicationConfig,
-        store,
         router,
         gettext,
         supportedLanguages

@@ -1,6 +1,5 @@
 import { registerClient } from '../services/clientRegistration'
 import { buildApplication, NextApplication } from './application'
-import { Store } from 'vuex'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
 import { App, computed, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
@@ -37,7 +36,6 @@ import {
   PreviewService,
   UppyService
 } from '@ownclouders/web-pkg'
-import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
 import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
@@ -131,15 +129,6 @@ export const announceConfiguration = async ({
 }
 
 /**
- * Announce and prepare vuex store with data that is needed before any application gets announced.
- *
- */
-export const announceStore = () => {
-  const store = new Store({ ...storeOptions })
-  return store
-}
-
-/**
  * announce auth client to the runtime, currently only openIdConnect is supported here
  *
  * @remarks
@@ -174,14 +163,12 @@ export const announceClient = async (configStore: ConfigStore): Promise<void> =>
 export const initializeApplications = async ({
   app,
   configStore,
-  store,
   router,
   gettext,
   supportedLanguages
 }: {
   app: App
   configStore: ConfigStore
-  store: Store<unknown>
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
@@ -204,7 +191,6 @@ export const initializeApplications = async ({
         app,
         applicationPath: rawApplication.path,
         applicationConfig: rawApplication.config,
-        store,
         supportedLanguages,
         router,
         gettext,
@@ -302,7 +288,6 @@ const rewriteDeprecatedAppNames = (configStore: ConfigStore) => {
  * and designSystem has all needed information to render the customized ui
  *
  * @param themeLocation
- * @param store
  * @param vue
  * @param designSystem
  */
@@ -389,7 +374,6 @@ export const announceAdditionalTranslations = ({
  *
  * @param vue
  * @param configStore
- * @param store
  */
 export const announceClientService = ({
   app,
@@ -533,7 +517,6 @@ export const announcePasswordPolicyService = ({ app }: { app: App }): void => {
  * announce runtime defaults, this is usual the last needed announcement before rendering the actual ui
  *
  * @param vue
- * @param store
  * @param router
  */
 export const announceDefaults = ({
@@ -542,7 +525,6 @@ export const announceDefaults = ({
   router,
   configStore
 }: {
-  store: Store<unknown>
   appsStore: AppsStore
   router: Router
   extensionRegistry: ExtensionRegistry
