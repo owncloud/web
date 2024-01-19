@@ -63,7 +63,7 @@
     "deepmerge": "^4.2.2",
     "file-loader": "^6.2.0",
     "filesize": "^9.0.11",
-    "focus-trap": "^7.2.0",
+    "focus-trap": "7.2.0",
     "focus-trap-vue": "^4.0.1",
     "fuse.js": "6.6.2",
     "glob": "^10.0.0",
@@ -129,7 +129,7 @@
   "peerDependencies": {
     "@popperjs/core": "^2.11.5",
     "filesize": "^9.0.11",
-    "focus-trap": "^7.2.0",
+    "focus-trap": "7.2.0",
     "focus-trap-vue": "^4.0.1",
     "postcss-import": "^16.0.0",
     "postcss-url": "10.1.3",
