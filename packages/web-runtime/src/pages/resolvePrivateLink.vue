@@ -23,9 +23,7 @@
           <p class="oc-text-xlarge">{{ errorMessage }}</p>
           <p
             v-if="isUnacceptedShareError"
-            v-text="
-              $gettext('Note: You can reload this page after you have enabled syncing the share.')
-            "
+            v-text="$gettext('You can reload this page after you have enabled syncing the share.')"
           />
         </div>
       </template>
