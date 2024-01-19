@@ -2115,7 +2115,7 @@ def wopiServer():
         {
             "name": "wopiserver",
             "type": "docker",
-            "image": "cs3org/wopiserver:v10.2.1",
+            "image": "cs3org/wopiserver:v10.2.2",
             "detach": True,
             "commands": [
                 "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
@@ -2137,7 +2137,7 @@ def collaboraService():
         {
             "name": "collabora",
             "type": "docker",
-            "image": "collabora/code:23.05.5.4.1",
+            "image": "collabora/code:23.05.6.5.1",
             "detach": True,
             "environment": {
                 "DONT_GEN_SSL_CERT": "set",

@@ -215,7 +215,7 @@ services:
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
       # share the registry with the ocis container
-      MICRO_REGISTRY: 'natsjs'
+      MICRO_REGISTRY: 'nats-js-kv'
       MICRO_REGISTRY_ADDRESS: http://ocis:9233
     volumes:
       - ocis-config:/etc/ocis
@@ -246,7 +246,7 @@ services:
       APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
       APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
       # share the registry with the ocis container
-      MICRO_REGISTRY: 'natsjs'
+      MICRO_REGISTRY: 'nats-js-kv'
       MICRO_REGISTRY_ADDRESS: http://ocis:9233
     volumes:
       - ./dev/docker/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
