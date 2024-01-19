@@ -67,6 +67,9 @@ export default {
     '!<rootDir>/**/node_modules/**'
   ],
   testMatch: ['**/*.spec.{js,ts}'],
-  testPathIgnorePatterns: ['<rootDir>/.pnpm-store/*'],
+  testPathIgnorePatterns: [
+    '<rootDir>/.pnpm-store/*',
+    '<rootDir>/packages/design-system/tests/e2e/*'
+  ],
   clearMocks: true
 } satisfies Config
