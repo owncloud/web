@@ -346,11 +346,11 @@ importers:
         specifier: ^9.0.11
         version: 9.0.11
       focus-trap:
-        specifier: ^7.2.0
-        version: 7.5.4
+        specifier: 7.2.0
+        version: 7.2.0
       focus-trap-vue:
         specifier: ^4.0.1
-        version: 4.0.3(focus-trap@7.5.4)(vue@3.3.8)
+        version: 4.0.3(focus-trap@7.2.0)(vue@3.3.8)
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2
@@ -1155,7 +1155,7 @@ importers:
         specifier: ^9.0.11
         version: 9.0.11
       focus-trap:
-        specifier: ^7.2.0
+        specifier: 7.2.0
         version: 7.2.0
       focus-trap-vue:
         specifier: ^4.0.1
@@ -9156,27 +9156,20 @@ packages:
       vue: 3.3.8(typescript@5.3.3)
     dev: false
 
-  /focus-trap-vue@4.0.3(focus-trap@7.5.4)(vue@3.3.8):
+  /focus-trap-vue@4.0.3(focus-trap@7.2.0)(vue@3.3.8):
     resolution: {integrity: sha512-cIX5rybkCAlNZ4IHYJ3nCFIsipDDljJHHjtTO2IgYWkVYg7X9ipUVdab3HzYp88kmHgMwjcB71LYnXRRsF6ZqQ==}
     peerDependencies:
       focus-trap: ^7.0.0
       vue: ^3.0.0
     dependencies:
-      focus-trap: 7.5.4
+      focus-trap: 7.2.0
       vue: 3.3.8(typescript@5.3.3)
     dev: true
 
   /focus-trap@7.2.0:
     resolution: {integrity: sha512-v4wY6HDDYvzkBy4735kW5BUEuw6Yz9ABqMYLuTNbzAFPcBOGiGHwwcNVMvUz4G0kgSYh13wa/7TG3XwTeT4O/A==}
     dependencies:
-      tabbable: 6.0.1
-    dev: false
-
-  /focus-trap@7.5.4:
-    resolution: {integrity: sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==}
-    dependencies:
       tabbable: 6.2.0
-    dev: true
 
   /follow-redirects@1.15.4(debug@4.3.4):
     resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
@@ -16959,13 +16952,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /tabbable@6.0.1:
-    resolution: {integrity: sha512-SYJSIgeyXW7EuX1ytdneO5e8jip42oHWg9xl/o3oTYhmXusZVgiA+VlPvjIN+kHii9v90AmzTZEBcsEvuAY+TA==}
-    dev: false
-
   /tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
-    dev: true
 
   /table@6.8.1:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}
