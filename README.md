@@ -18,7 +18,7 @@ With ownCloud Web you can manage your ownCloud in your browser.
 ownCloud Web is a single page, standalone frontend, based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server.
 
 ## Compatiblity
-Usage of Web UI and [ownCloud 10](https://github.com/owncloud/core) as backend is not recommended starting with version `7.1.0` of the Web UI, meaning newer versions only support [ownCloud Infinite Scale](https://github.com/owncloud/ocis). If you want to use the Web UI with ownCloud 10, please use App version `7.0.2`. Critical bugs can be fixed upon request.
+Usage of Web UI and [ownCloud 10](https://github.com/owncloud/core) as backend is **not** recommended starting with version `7.1.0` of the Web UI, meaning newer versions only support [ownCloud Infinite Scale](https://github.com/owncloud/ocis). If you want to use the Web UI with ownCloud 10, please use App version `7.0.2`. Critical bugs can be fixed upon request.
 
 ## Examples
 Here are some examples of what you can do with ownCloud Web:
