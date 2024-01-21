@@ -40,6 +40,7 @@ Summary
 * Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
 * Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
 * Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -375,6 +376,15 @@ Details
 
    https://github.com/owncloud/web/issues/10227
    https://github.com/owncloud/web/pull/10230
+
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+
+   We've fixed a bug, where the user data was not updated when altering the own
+   user via the admin settings app, this effected for example the username and
+   email address in the top bar.
+
+   https://github.com/owncloud/web/issues/10373
+   https://github.com/owncloud/web/pull/10377
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
