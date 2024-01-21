@@ -523,6 +523,10 @@ export default defineComponent({
 
         eventBus.publish('sidebar.entity.saved')
 
+        if (userStore.user.id === updatedUser.id) {
+          userStore.setUser(updatedUser)
+        }
+
         return updatedUser
       } catch (error) {
         console.error(error)
