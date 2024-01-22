@@ -2,8 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
-import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
-import { peopleRoleDenyFolder, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { buildOutgoingShareResource } from '@ownclouders/web-client/src/helpers/share/functionsNG'
 
 export class FolderLoaderSharedWithOthers implements FolderLoader {
   public isEnabled(): boolean {
@@ -15,9 +14,7 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { userStore, spacesStore, clientService, configStore, capabilityStore, resourcesStore } =
-      context
-    const { owncloudSdk: client } = clientService
+    const { userStore, spacesStore, clientService, configStore, resourcesStore } = context
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
@@ -28,37 +25,13 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
         yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
       }
 
-      const shareTypes = ShareTypes.authenticated
-        .filter(
-          (type) => ![ShareTypes.spaceUser.value, ShareTypes.spaceGroup.value].includes(type.value)
-        )
-        .map((share) => share.value)
-        .join(',')
+      const {
+        data: { value }
+      } = yield clientService.graphAuthenticated.drives.listSharedByMe()
 
-      let resources = yield client.shares.getShares('', {
-        share_types: shareTypes,
-        reshares: true,
-        include_tags: false
-      })
-      resources = resources
-        .filter((r) => parseInt(r.shareInfo.permissions) !== peopleRoleDenyFolder.bitmask(false))
-        .map((r) => r.shareInfo)
-      if (resources.length) {
-        resources = aggregateResourceShares({
-          shares: resources,
-          spaces: spacesStore.spaces,
-          incomingShares: false,
-          allowSharePermission: capabilityStore.sharingResharing,
-          hasShareJail: capabilityStore.spacesShareJail,
-          fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
-        }).map((resource) => {
-          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
-          if (!resource.storageId) {
-            resource.storageId = userStore.user.onPremisesSamAccountName
-          }
-          return resource
-        })
-      }
+      const resources = value
+        .filter((s) => s.permissions.some(({ link }) => !link))
+        .map((driveItem) => buildOutgoingShareResource({ driveItem, user: userStore.user }))
 
       resourcesStore.initResourceList({ currentFolder: null, resources })
     })

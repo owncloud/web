@@ -1,5 +1,8 @@
 import { Identity, UnifiedRoleDefinition } from '../../generated'
 import { Resource } from '../resource'
+import type { User } from '../user'
+import type { ShareRole } from './role'
+import type { SharePermission } from './permission'
 
 export enum GraphSharePermission {
   createUpload = 'libre.graph/driveItem/upload/create',
@@ -17,15 +20,42 @@ export enum GraphSharePermission {
 }
 
 export interface ShareResource extends Resource {
-  shareType: number
+  sharedWith: Array<{ shareType: number } & Identity>
+  sharedBy: Identity
 
   syncEnabled?: boolean
   shareRoles?: UnifiedRoleDefinition[]
   sharePermissions?: GraphSharePermission[]
-  sharedWith?: Identity[]
-  sharedBy?: Identity
   hidden?: boolean
 
   status?: number // FIXME: remove in favour of syncEnabled
   share?: any // FIXME: type DriveItem OR remove? do we want to expose the share on each resource?
+}
+
+/** @deprecated */
+export interface Share {
+  shareType: number
+  id: string
+  collaborator?: User
+  permissions?: number
+  role?: ShareRole
+  token?: string
+  url?: string
+  path?: string
+  description?: string
+  stime?: string
+  name?: string
+  password?: boolean
+  expiration?: string
+  itemSource?: string
+  file?: { parent: string; source: string; target: string }
+  owner?: User
+  fileOwner?: User
+  customPermissions?: SharePermission[]
+  expires?: Date
+  quicklink?: boolean
+  outgoing?: boolean
+  indirect?: boolean
+  notifyUploads?: boolean
+  notifyUploadsExtraRecipients?: string
 }

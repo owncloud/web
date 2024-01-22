@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
+import { buildIncomingShareResource } from '@ownclouders/web-client/src/helpers/share/functionsNG'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
@@ -14,8 +14,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { userStore, spacesStore, clientService, configStore, capabilityStore, resourcesStore } =
-      context
+    const { spacesStore, clientService, configStore, resourcesStore, sharesStore } = context
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
@@ -26,31 +25,13 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
         yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
       }
 
-      let resources = yield clientService.owncloudSdk.shares.getShares('', {
-        state: 'all',
-        include_tags: false,
-        shared_with_me: true,
-        show_hidden: true
-      })
+      const {
+        data: { value }
+      } = yield clientService.graphAuthenticated.drives.listSharedWithMe()
 
-      resources = resources.map((r) => r.shareInfo)
-
-      if (resources.length) {
-        resources = aggregateResourceShares({
-          shares: resources,
-          spaces: spacesStore.spaces,
-          incomingShares: true,
-          allowSharePermission: capabilityStore.sharingResharing,
-          hasShareJail: capabilityStore.spacesShareJail,
-          fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
-        }).map((resource) => {
-          // info: in oc10 we have no storageId in resources. All resources are mounted into the personal space.
-          if (!resource.storageId) {
-            resource.storageId = userStore.user.onPremisesSamAccountName
-          }
-          return resource
-        })
-      }
+      const resources = value.map((driveItem) =>
+        buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+      )
 
       resourcesStore.initResourceList({ currentFolder: null, resources })
     })

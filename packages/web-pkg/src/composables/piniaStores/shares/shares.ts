@@ -21,6 +21,7 @@ import {
   UpdateShareOptions
 } from './types'
 import { useResourcesStore } from '../resources'
+import { UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
 
 export const useSharesStore = defineStore('shares', () => {
   const configStore = useConfigStore()
@@ -29,6 +30,7 @@ export const useSharesStore = defineStore('shares', () => {
 
   const loading = ref<Promise<unknown>>()
   const shares = ref<Share[]>([]) as Ref<Share[]>
+  const graphRoles = ref<UnifiedRoleDefinition[]>([])
 
   const incomingShares = computed(() => unref(shares).filter(({ outgoing }) => !outgoing) || [])
   const incomingCollaborators = computed(
@@ -55,6 +57,10 @@ export const useSharesStore = defineStore('shares', () => {
   const allowResharing = computed(
     () => capabilityStore.sharingResharing && capabilityStore.sharingResharingDefault
   )
+
+  const setGraphRoles = (values: UnifiedRoleDefinition[]) => {
+    graphRoles.value = values
+  }
 
   const upsertShare = (share: Share) => {
     const existingShare = unref(shares).find(({ id }) => id === share.id)
@@ -351,11 +357,14 @@ export const useSharesStore = defineStore('shares', () => {
   return {
     loading,
     shares,
+    graphRoles,
     incomingShares,
     incomingCollaborators,
     outgoingShares,
     outgoingLinks,
     outgoingCollaborators,
+
+    setGraphRoles,
 
     pruneShares,
     loadShares,

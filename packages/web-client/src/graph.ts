@@ -24,7 +24,11 @@ import {
   ApplicationsApiFactory,
   UserAppRoleAssignmentApiFactory,
   AppRoleAssignment,
-  ExportPersonalDataRequest
+  ExportPersonalDataRequest,
+  MeDriveApiFactory,
+  RoleManagementApiFactory,
+  UnifiedRoleDefinition,
+  CollectionOfDriveItems1
 } from './generated'
 
 export interface Graph {
@@ -39,6 +43,8 @@ export interface Graph {
   drives: {
     listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
     listAllDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
+    listSharedWithMe: () => AxiosPromise<CollectionOfDriveItems1>
+    listSharedByMe: () => AxiosPromise<CollectionOfDriveItems1>
     getDrive: (id: string) => AxiosPromise<Drive>
     createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
@@ -72,6 +78,9 @@ export interface Graph {
     addMember: (groupId: string, userId: string, server: string) => AxiosPromise<void>
     deleteMember: (groupId: string, userId: string) => AxiosPromise<void>
   }
+  roleManagement: {
+    listPermissionRoleDefinitions: () => AxiosPromise<UnifiedRoleDefinition>
+  }
 }
 
 export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
@@ -84,6 +93,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
   const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
+  const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
   const meChangepasswordApiFactory = MeChangepasswordApiFactory(
     config,
     config.basePath,
@@ -101,6 +111,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const groupsApiFactory = GroupsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
   const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
+  const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
     applications: {
@@ -117,6 +128,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         meDrivesApi.listMyDrives(orderBy, filter),
       listAllDrives: (orderBy?: string, filter?: string) =>
         allDrivesApi.listAllDrives(orderBy, filter),
+      listSharedWithMe: () => meDriveApiFactory.listSharedWithMe(),
+      listSharedByMe: () => meDriveApiFactory.listSharedByMe(),
       getDrive: (id: string) => drivesApiFactory.getDrive(id),
       createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
         drivesApiFactory.createDrive(drive, options),
@@ -174,6 +187,9 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         groupApiFactory.addMember(groupId, { '@odata.id': `${server}graph/v1.0/users/${userId}` }),
       deleteMember: (groupId: string, userId: string) =>
         groupApiFactory.deleteMember(groupId, userId)
+    },
+    roleManagement: {
+      listPermissionRoleDefinitions: () => roleManagementApiFactory.listPermissionRoleDefinitions()
     }
   }
 }

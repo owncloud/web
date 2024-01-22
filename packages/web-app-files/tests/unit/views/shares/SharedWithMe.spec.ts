@@ -84,8 +84,8 @@ describe('SharedWithMe view', () => {
         const shareType2 = ShareTypes.group
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<ShareResource>({ shareType: shareType1.value }),
-            mock<ShareResource>({ shareType: shareType2.value })
+            mock<ShareResource>({ shareTypes: [shareType1.value] }),
+            mock<ShareResource>({ shareTypes: [shareType2.value] })
           ]
         })
         const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
@@ -101,11 +101,11 @@ describe('SharedWithMe view', () => {
           files: [
             mock<ShareResource>({
               sharedBy: collaborator1,
-              shareType: ShareTypes.user.value
+              shareTypes: [ShareTypes.user.value]
             }),
             mock<ShareResource>({
               sharedBy: collaborator2,
-              shareType: ShareTypes.user.value
+              shareTypes: [ShareTypes.user.value]
             })
           ]
         })
@@ -125,12 +125,12 @@ describe('SharedWithMe view', () => {
             mock<ShareResource>({
               name: 'share1',
               hidden: false,
-              shareType: ShareTypes.user.value
+              shareTypes: [ShareTypes.user.value]
             }),
             mock<ShareResource>({
               name: 'share2',
               hidden: false,
-              shareType: ShareTypes.user.value
+              shareTypes: [ShareTypes.user.value]
             })
           ]
         })

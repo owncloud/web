@@ -12,7 +12,9 @@ import {
   useConfigStore,
   ConfigStore,
   ResourcesStore,
-  useResourcesStore
+  useResourcesStore,
+  SharesStore,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { ClientService } from '@ownclouders/web-pkg'
@@ -38,6 +40,7 @@ export type TaskContext = {
   router: Router
   capabilityStore: CapabilityStore
   resourcesStore: ResourcesStore
+  sharesStore: SharesStore
 }
 
 export interface FolderLoader {
@@ -68,6 +71,7 @@ export class FolderService {
     const clientService = useClientService()
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
+    const sharesStore = useSharesStore()
 
     const loader = this.loaders.find((l) => l.isEnabled() && l.isActive(unref(router)))
     if (!loader) {
@@ -83,6 +87,7 @@ export class FolderService {
         spacesStore,
         capabilityStore,
         resourcesStore,
+        sharesStore,
         router
       }
       try {

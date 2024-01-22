@@ -828,10 +828,8 @@ export default defineComponent({
       let panelToOpen
       if (file.type === 'space') {
         panelToOpen = 'space-share'
-      } else if (isShareResource(file) && file.shareType === ShareTypes.link.value) {
-        panelToOpen = 'sharing#linkShares'
       } else {
-        panelToOpen = 'sharing#peopleShares'
+        panelToOpen = 'sharing'
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
@@ -1022,35 +1020,38 @@ export default defineComponent({
       if (!isShareResource(resource)) {
         return
       }
-
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
 
-      if (!resource.sharedWith.length) {
-        return ''
-      }
+      const shareCount = resource.sharedWith.filter(({ shareType }) =>
+        [ShareTypes.user.value, ShareTypes.link.value].includes(shareType)
+      ).length
+      const linkCount = resource.sharedWith.filter(
+        ({ shareType }) => shareType === ShareTypes.link.value
+      ).length
 
-      if (resource.shareType === ShareTypes.link.value) {
-        return this.$ngettext(
-          'This %{ resourceType } is shared via %{ count } link',
-          'This %{ resourceType } is shared via %{ count } links',
-          resource.sharedWith.length,
-          {
-            resourceType,
-            count: resource.sharedWith.length.toString()
-          }
-        )
-      }
-
-      return this.$ngettext(
-        'This %{ resourceType } is shared via %{ count } invite',
-        'This %{ resourceType } is shared via %{ count } invites',
-        resource.sharedWith.length,
-        {
-          resourceType,
-          count: resource.sharedWith.length.toString()
-        }
-      )
+      const shareText =
+        shareCount > 0
+          ? this.$ngettext(
+              'This %{ resourceType } is shared via %{ shareCount } invite',
+              'This %{ resourceType } is shared via %{ shareCount } invites',
+              shareCount
+            )
+          : ''
+      const linkText =
+        linkCount > 0
+          ? this.$ngettext(
+              'This %{ resourceType } is shared via %{ linkCount } link',
+              'This %{ resourceType } is shared via %{ linkCount } links',
+              linkCount
+            )
+          : ''
+      const description = [shareText, linkText].join(' ')
+      return this.$gettext(description, {
+        resourceType,
+        shareCount: shareCount.toString(),
+        linkCount: linkCount.toString()
+      })
     },
     getOwnerAvatarDescription(resource: Resource) {
       const resourceType =
@@ -1082,7 +1083,7 @@ export default defineComponent({
       return resource.sharedWith.map((s) => ({
         displayName: s.displayName,
         name: s.displayName,
-        shareType: resource.shareType,
+        shareType: s.shareType,
         username: s.id
       }))
     }
@@ -1326,23 +1327,15 @@ export default defineComponent({
 }
 
 // shared with me: on tablets hide shared with column and display owner column instead
-#files-shared-with-me-pending-section .files-table .oc-table-header-cell-owner,
-#files-shared-with-me-pending-section .files-table .oc-table-data-cell-owner,
-#files-shared-with-me-accepted-section .files-table .oc-table-header-cell-owner,
-#files-shared-with-me-accepted-section .files-table .oc-table-data-cell-owner,
-#files-shared-with-me-declined-section .files-table .oc-table-header-cell-owner,
-#files-shared-with-me-declined-section .files-table .oc-table-data-cell-owner {
+#files-shared-with-me-view .files-table .oc-table-header-cell-owner,
+#files-shared-with-me-view .files-table .oc-table-data-cell-owner {
   @media only screen and (min-width: 640px) {
     display: table-cell;
   }
 }
 
-#files-shared-with-me-pending-section .files-table .oc-table-header-cell-sharedWith,
-#files-shared-with-me-pending-section .files-table .oc-table-data-cell-sharedWith,
-#files-shared-with-me-accepted-section .files-table .oc-table-header-cell-sharedWith,
-#files-shared-with-me-accepted-section .files-table .oc-table-data-cell-sharedWith,
-#files-shared-with-me-declined-section .files-table .oc-table-header-cell-sharedWith,
-#files-shared-with-me-declined-section .files-table .oc-table-data-cell-sharedWith {
+#files-shared-with-me-view .files-table .oc-table-header-cell-sharedWith,
+#files-shared-with-me-view .files-table .oc-table-data-cell-sharedWith {
   @media only screen and (max-width: 1199px) {
     display: none;
   }
