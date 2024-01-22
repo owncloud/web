@@ -2,12 +2,7 @@ import { useUserActionsEditLogin } from '../../../../../src/composables/actions/
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import {
-  createStore,
-  defaultStoreMockOptions,
-  getComposableWrapper,
-  writable
-} from 'web-test-helpers'
+import { getComposableWrapper, writable } from 'web-test-helpers'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditLogin', () => {
@@ -50,25 +45,12 @@ describe('useUserActionsEditLogin', () => {
 function getWrapper({
   setup
 }: {
-  setup: (
-    instance: ReturnType<typeof useUserActionsEditLogin>,
-    {
-      storeOptions
-    }: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useUserActionsEditLogin>) => void
 }) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   return {
-    wrapper: getComposableWrapper(
-      () => {
-        const instance = useUserActionsEditLogin()
-        setup(instance, { storeOptions })
-      },
-      { store }
-    )
+    wrapper: getComposableWrapper(() => {
+      const instance = useUserActionsEditLogin()
+      setup(instance)
+    })
   }
 }

@@ -1,11 +1,5 @@
 import ResourceConflictModal from '../../../../src/components/Modals/ResourceConflictModal.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveStrategy } from '../../../../src/helpers/resource'
@@ -68,8 +62,6 @@ describe('ResourceConflictModal', () => {
 
 function getWrapper({ props = {} } = {}) {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return {
     mocks,
@@ -82,7 +74,7 @@ function getWrapper({ props = {} } = {}) {
         ...props
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks
       }

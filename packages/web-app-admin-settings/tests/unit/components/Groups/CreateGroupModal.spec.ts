@@ -1,9 +1,7 @@
 import CreateGroupModal from '../../../../src/components/Groups/CreateGroupModal.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   mockAxiosReject,
   mockAxiosResolve,
   shallowMount
@@ -114,12 +112,9 @@ describe('CreateGroupModal', () => {
 
 function getWrapper() {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return {
     mocks,
-    storeOptions,
     wrapper: shallowMount(CreateGroupModal, {
       props: {
         modal: mock<Modal>()
@@ -127,7 +122,7 @@ function getWrapper() {
       global: {
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

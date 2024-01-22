@@ -1,13 +1,6 @@
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -39,7 +32,6 @@ describe('SpaceContextActions', () => {
 function getWrapper(space) {
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
   mocks.$previewService.getSupportedMimeTypes.mockReturnValue([])
-  const store = createStore(defaultStoreMockOptions)
   return {
     wrapper: mount(SpaceContextActions, {
       props: {
@@ -53,8 +45,7 @@ function getWrapper(space) {
         plugins: [
           ...defaultPlugins({
             abilities: [{ action: 'set-quota-all', subject: 'Drive' }]
-          }),
-          store
+          })
         ]
       }
     })

@@ -1,13 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
-import { useFileActionsCreateNewShortcut, useModals } from '../../../../../src'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import { useFileActionsCreateNewShortcut, useModals } from '../../../../../src/composables'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('createNewShortcut', () => {
@@ -49,12 +43,7 @@ function getWrapper({
   setup,
   currentFolder = mock<Resource>()
 }: {
-  setup: (
-    instance: ReturnType<typeof useFileActionsCreateNewShortcut>,
-    options: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useFileActionsCreateNewShortcut>) => void
   currentFolder?: Resource
 }) {
   const mocks = {
@@ -63,23 +52,16 @@ function getWrapper({
     })
   }
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-
-  const store = createStore(storeOptions)
-
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useFileActionsCreateNewShortcut({ space: mock<SpaceResource>() })
-        setup(instance, { storeOptions })
+        setup(instance)
       },
       {
-        store,
         mocks,
-        provide: mocks
+        provide: mocks,
+        pluginOptions: { piniaOptions: { resourcesStore: { currentFolder } } }
       }
     )
   }

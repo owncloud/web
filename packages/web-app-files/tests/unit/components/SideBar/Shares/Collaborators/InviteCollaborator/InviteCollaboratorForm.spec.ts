@@ -2,10 +2,8 @@ import { mock } from 'jest-mock-extended'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
@@ -79,8 +77,6 @@ function getWrapper({
   storageId = 'fake-storage-id',
   resource = folderMock
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ params: { storageId } })
   })
@@ -100,8 +96,7 @@ function getWrapper({
               capabilityState: { capabilities },
               configState: { options: { concurrentRequests: { shares: { create: 1 } } } }
             }
-          }),
-          store
+          })
         ],
         provide: { ...mocks, resource },
         mocks

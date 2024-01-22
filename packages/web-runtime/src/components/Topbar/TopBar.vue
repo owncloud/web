@@ -55,7 +55,6 @@ import {
   useConfigStore,
   useEmbedMode,
   useRouter,
-  useStore,
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
@@ -76,7 +75,6 @@ export default {
     }
   },
   setup(props) {
-    const store = useStore()
     const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
@@ -137,7 +135,7 @@ export default {
           if (app.type === 'extension') {
             return (
               app.applicationMenu.enabled instanceof Function &&
-              app.applicationMenu.enabled(store, ability) &&
+              app.applicationMenu.enabled(ability) &&
               !permittedMenus.includes('user')
             )
           }

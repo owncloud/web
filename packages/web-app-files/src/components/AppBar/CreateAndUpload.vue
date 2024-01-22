@@ -188,6 +188,7 @@ import {
   useFileActions,
   useFileActionsCreateNewShortcut,
   useMessages,
+  useResourcesStore,
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -197,7 +198,6 @@ import {
   useFileActionsCreateNewFolder,
   useFileActionsPaste,
   useRequest,
-  useStore,
   useClientService
 } from '@ownclouders/web-pkg'
 
@@ -258,7 +258,6 @@ export default defineComponent({
   setup(props) {
     const uppyService = useService<UppyService>('$uppyService')
     const clientService = useClientService()
-    const store = useStore()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
     const messageStore = useMessages()
@@ -271,7 +270,10 @@ export default defineComponent({
     const { clearClipboard } = clipboardStore
     const { resources: clipboardResources } = storeToRefs(clipboardStore)
 
-    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
+    const resourcesStore = useResourcesStore()
+    const { currentFolder } = storeToRefs(resourcesStore)
+
+    const areFileExtensionsShown = computed(() => unref(resourcesStore.areFileExtensionsShown))
 
     useUpload({ uppyService })
 
@@ -282,21 +284,20 @@ export default defineComponent({
         language,
         route,
         space: props.space,
-        store,
         userStore,
         spacesStore,
         messageStore,
+        resourcesStore,
         uppyService
       })
     }
 
-    let uploadCompletedSub
+    let uploadCompletedSub: string
 
-    const { actions: pasteFileActions } = useFileActionsPaste({ store })
+    const { actions: pasteFileActions } = useFileActionsPaste()
     const pasteFileAction = unref(pasteFileActions)[0].handler
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
-      store,
       space: props.space
     })
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
@@ -306,7 +307,6 @@ export default defineComponent({
     const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
-      store,
       space: props.space
     })
 
@@ -327,9 +327,6 @@ export default defineComponent({
       ].filter((e) => e.isEnabled())
     })
 
-    const currentFolder = computed<Resource>(() => {
-      return store.getters['Files/currentFolder']
-    })
     const canUpload = computed(() => {
       return unref(currentFolder)?.canUpload({ user: userStore.user })
     })
@@ -420,7 +417,7 @@ export default defineComponent({
     )
 
     return {
-      ...useFileActions({ store }),
+      ...useFileActions(),
       ...useRequest(),
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),

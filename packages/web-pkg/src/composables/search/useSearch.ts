@@ -2,19 +2,18 @@ import { computed, unref } from 'vue'
 import { SearchResult } from '../../components'
 import { DavProperties } from '@ownclouders/web-client/src/webdav'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { useStore } from '../store'
 import { useClientService } from '../clientService'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useConfigStore, useSpacesStore } from '../piniaStores'
+import { useConfigStore, useResourcesStore, useSpacesStore } from '../piniaStores'
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
 
 export const useSearch = () => {
-  const store = useStore()
   const configStore = useConfigStore()
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
-  const areHiddenFilesShown = computed(() => store.state.Files?.areHiddenFilesShown)
+  const areHiddenFilesShown = computed(() => resourcesStore.areHiddenFilesShown)
   const projectSpaces = computed(() => spacesStore.spaces.filter(isProjectSpaceResource))
   const getProjectSpace = (id: string) => {
     return unref(projectSpaces).find((s) => s.id === id)

@@ -74,7 +74,6 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
-  useStore,
   useConfigStore
 } from '@ownclouders/web-pkg'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -97,7 +96,6 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
     const spaces = ref([])
     const clientService = useClientService()
     const { $gettext } = useGettext()
@@ -161,7 +159,7 @@ export default defineComponent({
       selectedSpaces.value.splice(0, selectedSpaces.value.length)
     }
 
-    const { actions: deleteActions } = useSpaceActionsDelete({ store })
+    const { actions: deleteActions } = useSpaceActionsDelete()
     const { actions: disableActions } = useSpaceActionsDisable()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
     const { actions: restoreActions } = useSpaceActionsRestore()

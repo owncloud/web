@@ -8,10 +8,8 @@ import { locationPublicUpload } from '@ownclouders/web-pkg'
 import { PublicSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation,
@@ -148,18 +146,15 @@ function getMountedWrapper({
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(DriveResolver, {
       global: {
         plugins: [
           ...defaultPlugins({
             piniaOptions: { authState: { userContextReady: userContextReady } }
-          }),
-          store
+          })
         ],
         mocks: defaultMocks,
         provide: defaultMocks,

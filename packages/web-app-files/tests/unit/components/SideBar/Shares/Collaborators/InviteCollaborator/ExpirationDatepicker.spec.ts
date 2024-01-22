@@ -2,7 +2,7 @@ import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Co
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import { DateTime } from 'luxon'
-import { createStore, defaultPlugins, mount, defaultStoreMockOptions } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import { nextTick } from 'vue'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
 
@@ -190,17 +190,13 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
 })
 
 const createWrapper = ({ sharingCapabilities = {}, stubOcDatepicker = false } = {}) => {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const capabilities = { files_sharing: sharingCapabilities }
 
   return {
-    store,
-    storeOptions,
     wrapper: mount(ExpirationDatepicker, {
       global: {
         stubs: { OcDatepicker: stubOcDatepicker },
-        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }), store]
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })]
       }
     })
   }

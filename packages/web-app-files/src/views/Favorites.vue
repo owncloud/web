@@ -44,9 +44,9 @@
             <list-info
               v-if="paginatedResources.length > 0"
               class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
+              :files="totalResourcesCount.files"
+              :folders="totalResourcesCount.folders"
+              :size="totalResourcesSize"
             />
           </template>
         </resource-table>
@@ -62,17 +62,16 @@
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
-import { mapGetters, mapActions } from 'vuex'
 import { debounce } from 'lodash-es'
 
 import { Resource } from '@ownclouders/web-client'
-import { VisibilityObserver, useConfigStore } from '@ownclouders/web-pkg'
-import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
+import { VisibilityObserver, useConfigStore, useResourcesStore } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { useGetMatchingSpace, useStore, ViewModeConstants } from '@ownclouders/web-pkg'
+import { useGetMatchingSpace, ViewModeConstants } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
 import QuickActions from '../components/FilesList/QuickActions.vue'
@@ -101,10 +100,13 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
     const { getMatchingSpace } = useGetMatchingSpace()
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
+
+    const resourcesStore = useResourcesStore()
+    const { updateResourceField } = resourcesStore
+    const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
 
     const viewModes = computed(() => [
       ViewModeConstants.condensedTable,
@@ -118,7 +120,7 @@ export default defineComponent({
       loadResourcesEventToken.value = eventBus.subscribe(
         'app.files.list.removeFromFavorites',
         (resourceId: string) => {
-          store.commit('Files/REMOVE_FILES', [{ id: resourceId }])
+          resourcesStore.removeResources([{ id: resourceId }] as Resource[])
         }
       )
     })
@@ -133,13 +135,14 @@ export default defineComponent({
       ...useResourcesViewDefaults<Resource, any, any[]>(),
       configOptions,
       getMatchingSpace,
-      viewModes
+      viewModes,
+      updateResourceField,
+      totalResourcesCount,
+      totalResourcesSize
     }
   },
 
   computed: {
-    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
-
     isEmpty() {
       return this.paginatedResources.length < 1
     },
@@ -155,22 +158,28 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['loadPreview']),
-
-    rowMounted(resource, component) {
+    rowMounted(resource: Resource, component) {
       if (!this.displayThumbnails) {
         return
       }
 
+      const loadPreview = async () => {
+        const preview = await this.$previewService.loadPreview(
+          {
+            space: this.getMatchingSpace(resource),
+            resource,
+            dimensions: ImageDimension.Thumbnail
+          },
+          true
+        )
+        if (preview) {
+          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
+        }
+      }
+
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadPreview({
-          previewService: this.$previewService,
-          space: this.getMatchingSpace(resource),
-          resource,
-          dimensions: ImageDimension.Thumbnail,
-          type: ImageType.Thumbnail
-        })
+        loadPreview()
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })

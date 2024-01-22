@@ -57,7 +57,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     capabilityStore,
     extensionRegistry,
     spacesStore,
-    userStore
+    userStore,
+    resourcesStore
   } = announcePiniaStores()
 
   app.provide('$router', router)
@@ -160,7 +161,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   app.mount('#owncloud')
 
-  setViewOptions({ store })
+  setViewOptions({ resourcesStore })
 
   const applications = Array.from(applicationStore.values())
   applications.forEach((application) => application.mounted(app))
@@ -195,7 +196,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       // Register SSE event listeners
       if (capabilityStore.supportSSE) {
-        registerSSEEventListeners({ store, clientService, configStore })
+        registerSSEEventListeners({ resourcesStore, clientService, configStore })
       }
 
       // Load spaces to make them available across the application

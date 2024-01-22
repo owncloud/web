@@ -151,8 +151,8 @@ import {
   useConfigStore,
   useMessages,
   useModals,
+  useResourcesStore,
   useSpacesStore,
-  useStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
@@ -173,19 +173,20 @@ export default defineComponent({
     ThemeSwitcher
   },
   setup() {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const language = useGettext()
     const { $gettext } = language
     const clientService = useClientService()
+    const resourcesStore = useResourcesStore()
+
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref<User>()
     const accountBundle = ref<SettingsBundle>()
     const selectedLanguageValue = ref<LanguageOption>()
     const disableEmailNotificationsValue = ref<boolean>()
-    const viewOptionWebDavDetailsValue = ref<boolean>(store.getters['Files/areWebDavDetailsShown'])
+    const viewOptionWebDavDetailsValue = ref<boolean>(resourcesStore.areWebDavDetailsShown)
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
@@ -392,7 +393,7 @@ export default defineComponent({
 
     const updateViewOptionsWebDavDetails = (option: boolean) => {
       try {
-        store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', option)
+        resourcesStore.setAreWebDavDetailsShown(option)
         viewOptionWebDavDetailsValue.value = option
         showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {

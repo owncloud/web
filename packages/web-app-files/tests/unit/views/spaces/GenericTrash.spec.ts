@@ -6,10 +6,8 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -70,19 +68,16 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
   const propsData = {
     space: { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space' },
     ...props
   }
-  const store = createStore(storeOptions)
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(GenericTrash, {
       props: propsData,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         stubs: { ...defaultStubs, portal: true }
       }

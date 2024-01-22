@@ -2,8 +2,8 @@ import { buildShare } from '@ownclouders/web-client/src/helpers/share'
 import {
   useClientService,
   useSpacesStore,
-  useStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
@@ -18,12 +18,13 @@ import {
 import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 
 export function useIncomingParentShare() {
-  const store = useStore()
   const spacesStore = useSpacesStore()
   const capabilityStore = useCapabilityStore()
   const clientService = useClientService()
+  const sharesStore = useSharesStore()
+
   const incomingParentShare = ref(null)
-  const incomingCollaborators = computed(() => store.getters['Files/incomingCollaborators'])
+  const incomingCollaborators = computed(() => sharesStore.incomingCollaborators)
 
   const loadIncomingParentShare = useTask(function* (signal, resource) {
     let parentShare

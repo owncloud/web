@@ -1,11 +1,5 @@
 import MobileNav from '../../../src/components/MobileNav.vue'
-import {
-  createStore,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  mount
-} from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { NavItem } from 'web-runtime/src/helpers/navItems'
 
@@ -35,17 +29,14 @@ function getWrapper() {
   const mocks = {
     ...defaultComponentMocks()
   }
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const store = createStore(storeOptions)
+
   return {
     wrapper: mount(MobileNav, {
       props: {
         navItems
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks
       }
     })

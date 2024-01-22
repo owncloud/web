@@ -87,10 +87,8 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapMutations } from 'vuex'
 import {
   useAbility,
-  useStore,
   useGetMatchingSpace,
   useModals,
   useUserStore,
@@ -98,7 +96,8 @@ import {
   useSpacesStore,
   useCapabilityStore,
   useConfigStore,
-  useSharesStore
+  useSharesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -117,7 +116,6 @@ import {
   User
 } from '@ownclouders/web-client/src/helpers'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
-import { AncestorMetaData } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileShares',
@@ -126,13 +124,17 @@ export default defineComponent({
     CollaboratorListItem
   },
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { dispatchModal } = useModals()
+
+    const resourcesStore = useResourcesStore()
+    const { removeResources } = resourcesStore
+    const { ancestorMetaData } = storeToRefs(resourcesStore)
+
     const spacesStore = useSpacesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
 
@@ -163,10 +165,7 @@ export default defineComponent({
       return unref(spaceMembers).some((member) => member.collaborator?.name === username)
     })
 
-    const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-    )
-    const getSharedAncestor = (fileId) => {
+    const getSharedAncestor = (fileId: string) => {
       return Object.values(unref(ancestorMetaData)).find((a) => a.id === fileId)
     }
 
@@ -175,7 +174,6 @@ export default defineComponent({
     })
 
     return {
-      store,
       addShare,
       deleteShare,
       outgoingCollaborators,
@@ -198,6 +196,7 @@ export default defineComponent({
       configOptions,
       dispatchModal,
       spaceMembers,
+      removeResources,
       ...useMessages()
     }
   },
@@ -309,8 +308,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations('Files', ['REMOVE_FILES']),
-
     getDeniedShare(collaborator: Share) {
       return this.collaborators.find(
         (c) =>
@@ -399,7 +396,6 @@ export default defineComponent({
         try {
           await this.addShare({
             clientService: this.$clientService,
-            vuexStore: this.store,
             resource: this.resource,
             shareWith: share.collaborator.name,
             shareType: share.shareType,
@@ -422,7 +418,6 @@ export default defineComponent({
         try {
           await this.deleteShare({
             clientService: this.$clientService,
-            vuexStore: this.store,
             share:
               share.shareType === ShareTypes.spaceUser.value ||
               share.shareType === ShareTypes.spaceGroup.value
@@ -469,7 +464,6 @@ export default defineComponent({
       try {
         await this.deleteShare({
           clientService: this.$clientService,
-          vuexStore: this.store,
           share: share,
           path,
           loadIndicators
@@ -479,7 +473,7 @@ export default defineComponent({
           title: this.$gettext('Share was removed successfully')
         })
         if (lastShareId && isLocationSharesActive(this.$router, 'files-shares-with-others')) {
-          this.REMOVE_FILES([{ id: lastShareId }])
+          this.removeResources([{ id: lastShareId }] as Resource[])
         }
       } catch (error) {
         console.error(error)

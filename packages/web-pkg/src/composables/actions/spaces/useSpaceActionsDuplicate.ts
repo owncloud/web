@@ -2,25 +2,18 @@ import { SpaceResource } from '@ownclouders/web-client'
 import { computed } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
-import { useStore } from '../../store'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
-import { Store } from 'vuex'
 import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling'
 import PQueue from 'p-queue'
 import { useRouter } from '../../router'
 import { isLocationSpacesActive } from '../../../router'
-import { useConfigStore, useMessages, useSpacesStore } from '../../piniaStores'
+import { useConfigStore, useMessages, useResourcesStore, useSpacesStore } from '../../piniaStores'
 
-export const useSpaceActionsDuplicate = ({
-  store
-}: {
-  store?: Store<any>
-} = {}) => {
-  store = store || useStore()
+export const useSpaceActionsDuplicate = () => {
   const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
   const { showMessage, showErrorMessage } = useMessages()
@@ -29,6 +22,7 @@ export const useSpaceActionsDuplicate = ({
   const ability = useAbility()
   const clientService = useClientService()
   const loadingService = useLoadingService()
+  const { upsertResource } = useResourcesStore()
 
   const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
 
@@ -107,7 +101,7 @@ export const useSpaceActionsDuplicate = ({
 
       spacesStore.upsertSpace(duplicatedSpace)
       if (isProjectsLocation) {
-        store.commit('Files/UPSERT_RESOURCE', duplicatedSpace)
+        upsertResource(duplicatedSpace)
       }
 
       showMessage({

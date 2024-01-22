@@ -1,9 +1,4 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { CapabilityStore, useFolderLink } from '../../../../src/composables'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -101,8 +96,6 @@ describe('useFolderLink', () => {
 })
 
 const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {}) => {
-  const storeOptions = { ...defaultStoreMockOptions }
-
   const spaces = [
     {
       id: '1',
@@ -118,7 +111,6 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
     }
   ] as unknown as SpaceResource[]
 
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({})
   const capabilities = {
     spaces: { projects: true, share_jail: hasShareJail }
@@ -143,7 +135,6 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
     {
       mocks,
       provide: mocks,
-      store,
       pluginOptions: {
         piniaOptions: { spacesState: { spaces }, capabilityState: { capabilities } }
       }

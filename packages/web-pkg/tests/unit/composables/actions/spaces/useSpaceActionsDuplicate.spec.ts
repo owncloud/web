@@ -2,16 +2,18 @@ import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultComponentMocks,
   mockAxiosResolve,
-  defaultStoreMockOptions,
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
-import { useMessages, useSpacesStore } from '../../../../../src/composables/piniaStores'
+import {
+  useMessages,
+  useResourcesStore,
+  useSpacesStore
+} from '../../../../../src/composables/piniaStores'
 
 const spaces = [
   mock<SpaceResource>({
@@ -135,7 +137,7 @@ describe('restore', () => {
     it('should upsert a space as resource on the projects page', () => {
       getWrapper({
         currentRouteName: 'files-spaces-projects',
-        setup: async ({ duplicateSpace }, { storeOptions, clientService }) => {
+        setup: async ({ duplicateSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
             mockAxiosResolve({
               id: '1',
@@ -145,7 +147,9 @@ describe('restore', () => {
           )
           clientService.webdav.listFiles.mockResolvedValue({ children: [] } as ListFilesResult)
           await duplicateSpace(spaces[0])
-          expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
+
+          const { upsertResource } = useResourcesStore()
+          expect(upsertResource).toHaveBeenCalled()
         }
       })
     })
@@ -160,20 +164,14 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useSpaceActionsDuplicate>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
   abilities?: AbilityRule[]
   currentRouteName?: string
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
@@ -181,13 +179,12 @@ function getWrapper({
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsDuplicate({ store })
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        const instance = useSpaceActionsDuplicate()
+        setup(instance, { clientService: mocks.$clientService })
       },
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: { abilities, piniaOptions: { spacesState: { spaces } } }
       }
     )

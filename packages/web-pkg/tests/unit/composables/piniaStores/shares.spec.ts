@@ -17,14 +17,13 @@ jest.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
   buildCollaboratorShare: (share) => share
 }))
 
-const getVuexStoreMock = () => ({
-  dispatch: jest.fn(),
-  commit: jest.fn(),
-  getters: { 'Files/selectedFiles': [], 'Files/currentFolder': {} }
-})
-
 describe('useSharesStore', () => {
-  beforeEach(() => createTestingPinia({ stubActions: false }))
+  beforeEach(() =>
+    createTestingPinia({
+      stubActions: false,
+      initialState: { resources: { currentFolder: mock<Resource>() } }
+    })
+  )
 
   describe('loadShares', () => {
     it('fetches shares and sets them as in- and outgoing shares', () => {
@@ -101,8 +100,7 @@ describe('useSharesStore', () => {
           await instance.addShare(
             mock<AddShareOptions>({
               clientService,
-              shareType: ShareTypes.user.value,
-              vuexStore: getVuexStoreMock() as any
+              shareType: ShareTypes.user.value
             })
           )
 
@@ -118,8 +116,7 @@ describe('useSharesStore', () => {
           await instance.addShare(
             mock<AddShareOptions>({
               clientService,
-              shareType: ShareTypes.group.value,
-              vuexStore: getVuexStoreMock() as any
+              shareType: ShareTypes.group.value
             })
           )
 
@@ -149,8 +146,7 @@ describe('useSharesStore', () => {
           clientService.owncloudSdk.shares.deleteShare.mockResolvedValue({})
           await instance.deleteShare(
             mock<DeleteShareOptions>({
-              clientService,
-              vuexStore: getVuexStoreMock() as any
+              clientService
             })
           )
 
@@ -166,9 +162,7 @@ describe('useSharesStore', () => {
         setup: async (instance) => {
           const clientService = mockDeep<ClientService>()
           clientService.owncloudSdk.shares.shareFileWithLink.mockResolvedValue({})
-          await instance.addLink(
-            mock<AddLinkOptions>({ clientService, vuexStore: getVuexStoreMock() as any })
-          )
+          await instance.addLink(mock<AddLinkOptions>({ clientService }))
 
           expect(clientService.owncloudSdk.shares.shareFileWithLink).toHaveBeenCalledTimes(1)
         }
@@ -194,9 +188,7 @@ describe('useSharesStore', () => {
         setup: async (instance) => {
           const clientService = mockDeep<ClientService>()
           clientService.owncloudSdk.shares.deleteShare.mockResolvedValue({})
-          await instance.deleteLink(
-            mock<DeleteLinkOptions>({ clientService, vuexStore: getVuexStoreMock() as any })
-          )
+          await instance.deleteLink(mock<DeleteLinkOptions>({ clientService }))
 
           expect(clientService.owncloudSdk.shares.deleteShare).toHaveBeenCalledTimes(1)
         }

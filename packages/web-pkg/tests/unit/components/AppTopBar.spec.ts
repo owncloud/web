@@ -1,10 +1,8 @@
 import { mock } from 'jest-mock-extended'
 import {
   RouteLocation,
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
 import { Resource } from '@ownclouders/web-client/src/helpers'
@@ -68,14 +66,10 @@ function getWrapper(
   mainActions: Action[] = [],
   areFileExtensionsShown = true
 ) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'admin-settings-general' })
   })
   return {
-    storeOptions,
     wrapper: shallowMount(AppTopBar, {
       props: {
         dropDownActions,
@@ -83,7 +77,9 @@ function getWrapper(
         resource
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { resourcesStore: { areFileExtensionsShown } } })
+        ],
         mocks,
         provide: mocks
       }

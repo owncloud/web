@@ -44,7 +44,8 @@ import {
   useSpacesStore,
   useThemeStore,
   useUserStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
@@ -60,7 +61,6 @@ import {
 import { useGettext } from 'vue3-gettext'
 import {
   useClientService,
-  useStore,
   useRouter,
   useRoute,
   useGetMatchingSpace,
@@ -82,7 +82,6 @@ export default defineComponent({
   },
   setup() {
     const uppyService = useService<UppyService>('$uppyService')
-    const store = useStore()
     const userStore = useUserStore()
     const messageStore = useMessages()
     const themeStore = useThemeStore()
@@ -96,6 +95,8 @@ export default defineComponent({
     const authStore = useAuthStore()
     const { getInternalSpace } = useGetMatchingSpace()
     useUpload({ uppyService })
+
+    const resourcesStore = useResourcesStore()
 
     const { currentTheme } = storeToRefs(themeStore)
     const themeSlogan = computed(() => currentTheme.value.common.slogan)
@@ -111,10 +112,10 @@ export default defineComponent({
         hasSpaces: capabilityStore.spacesEnabled,
         language,
         route,
-        store,
         userStore,
         spacesStore,
         messageStore,
+        resourcesStore,
         uppyService,
         quotaCheckEnabled: false,
         directoryTreeCreateEnabled: false,

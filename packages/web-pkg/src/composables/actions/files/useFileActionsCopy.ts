@@ -3,23 +3,24 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../../router'
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
-import { useConfigStore, useClipboardStore } from '../../piniaStores'
+import { useConfigStore, useClipboardStore, useResourcesStore } from '../../piniaStores'
+import { storeToRefs } from 'pinia'
 
-export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsCopy = () => {
   const configStore = useConfigStore()
   const router = useRouter()
   const { copyResources } = useClipboardStore()
   const language = useGettext()
   const { $gettext } = language
+
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -65,7 +66,7 @@ export const useFileActionsCopy = ({ store }: { store?: Store<any> } = {}) => {
           }
 
           if (isLocationPublicActive(router, 'files-public-link')) {
-            return store.getters['Files/currentFolder'].canCreate()
+            return unref(currentFolder).canCreate()
           }
 
           if (

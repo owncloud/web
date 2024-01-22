@@ -251,7 +251,7 @@ export default defineComponent({
 
     const fileId = computed(() => unref(unref(currentFileContext).itemId))
     const space = computed(() => unref(unref(currentFileContext).space))
-    const { selectedResources } = useSelectedResources({})
+    const { selectedResources } = useSelectedResources()
     watch(activeFilteredFile, (file) => {
       selectedResources.value = [file]
     })

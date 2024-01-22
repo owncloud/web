@@ -112,9 +112,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { DateTime } from 'luxon'
-import { mapMutations } from 'vuex'
 import {
-  useStore,
   useAbility,
   useExpirationRules,
   useDefaultLinkPermissions,
@@ -125,7 +123,8 @@ import {
   useUserStore,
   useMessages,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -160,7 +159,6 @@ export default defineComponent({
     NameAndCopy
   },
   setup() {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const { $gettext } = useGettext()
@@ -172,9 +170,10 @@ export default defineComponent({
     const capabilityRefs = storeToRefs(capabilityStore)
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
+    const { removeResources } = useResourcesStore()
 
     const sharesStore = useSharesStore()
-    const { updateLink, deleteLink, shares } = sharesStore
+    const { updateLink, deleteLink } = sharesStore
     const { outgoingLinks } = storeToRefs(sharesStore)
 
     const configStore = useConfigStore()
@@ -270,7 +269,6 @@ export default defineComponent({
     }
 
     return {
-      store,
       ability,
       space,
       resource,
@@ -300,7 +298,8 @@ export default defineComponent({
       addNewLink,
       dispatchModal,
       showMessage,
-      showErrorMessage
+      showErrorMessage,
+      removeResources
     }
   },
   computed: {
@@ -379,8 +378,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations('Files', ['REMOVE_FILES']),
-
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
     },
@@ -526,8 +523,7 @@ export default defineComponent({
           clientService,
           share,
           path,
-          loadIndicators,
-          vuexStore: this.store
+          loadIndicators
         })
         this.showMessage({
           title: this.$gettext('Link was deleted successfully')
@@ -538,7 +534,7 @@ export default defineComponent({
             // spaces need their actual id instead of their share id to be removed from the file list
             lastLinkId = this.resource.id.toString()
           }
-          this.REMOVE_FILES([{ id: lastLinkId }])
+          this.removeResources([{ id: lastLinkId }] as Resource[])
         }
       } catch (e) {
         console.error(e)

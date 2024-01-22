@@ -1,5 +1,4 @@
 import { useFileActionsDeleteResources } from '../helpers'
-import { Store } from 'vuex'
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
@@ -8,18 +7,16 @@ import {
 } from '../../../router'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { computed } from 'vue'
 import { useUserStore, useCapabilityStore } from '../../piniaStores'
 
-export const useFileActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsDelete = () => {
   const userStore = useUserStore()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
-  const { displayDialog, filesList_delete } = useFileActionsDeleteResources({ store })
+  const { displayDialog, filesList_delete } = useFileActionsDeleteResources()
 
   const { $gettext } = useGettext()
 

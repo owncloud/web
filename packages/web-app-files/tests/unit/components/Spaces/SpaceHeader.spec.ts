@@ -2,13 +2,7 @@ import { ref } from 'vue'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 
 describe('SpaceHeader', () => {
   it('should add the "squashed"-class when the sidebar is opened', () => {
@@ -50,7 +44,6 @@ describe('SpaceHeader', () => {
 function getWrapper({ space = {}, isSideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('blob:image')
-  const store = createStore(defaultStoreMockOptions)
   return mount(SpaceHeader, {
     props: {
       space,
@@ -58,7 +51,7 @@ function getWrapper({ space = {}, isSideBarOpen = false, isMobileWidth = false }
     },
     global: {
       mocks,
-      plugins: [...defaultPlugins(), store],
+      plugins: [...defaultPlugins()],
       provide: { ...mocks, isMobileWidth: ref(isMobileWidth) },
       stubs: {
         'quota-modal': true,

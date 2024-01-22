@@ -26,11 +26,11 @@ import {
   useClientService,
   useMessages,
   useSpacesStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useResourcesStore
 } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
-import { useStore } from '../../composables'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { storeToRefs } from 'pinia'
 
@@ -64,7 +64,6 @@ export default defineComponent({
   },
   emits: ['update:confirmDisabled'],
   setup(props, { emit, expose }) {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
@@ -72,6 +71,7 @@ export default defineComponent({
     const clientService = useClientService()
     const router = useRouter()
     const spacesStore = useSpacesStore()
+    const { updateResourceField } = useResourcesStore()
 
     const selectedOption = ref(0)
 
@@ -151,11 +151,7 @@ export default defineComponent({
           })
         }
         spacesStore.updateSpaceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
-        store.commit('Files/UPDATE_RESOURCE_FIELD', {
-          id: space.id,
-          field: 'spaceQuota',
-          value: driveData.quota
-        })
+        updateResourceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
       })
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')

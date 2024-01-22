@@ -1,15 +1,16 @@
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { computed, unref } from 'vue'
-import { useStore } from '../../store'
-import { FileAction, useModals } from '../../../composables'
+import { FileAction, useModals, useResourcesStore } from '../../../composables'
 import { CreateShortcutModal } from '../../../components'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
+import { SpaceResource } from '@ownclouders/web-client'
 
 export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResource }) => {
-  const store = useStore()
   const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
-  const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
+
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
 
   const actions = computed((): FileAction[] => {
     return [

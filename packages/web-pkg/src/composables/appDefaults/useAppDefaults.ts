@@ -1,6 +1,5 @@
 import { computed, unref, Ref } from 'vue'
 import { useRouter, useRoute, useRouteParam } from '../router'
-import { useStore } from '../store'
 import { ClientService } from '../../services'
 import { basename } from 'path'
 
@@ -45,7 +44,6 @@ export type AppDefaultsResult = AppConfigResult &
 
 export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const router = useRouter()
-  const store = useStore()
   const appsStore = useAppsStore()
   const currentRoute = useRoute()
   const clientService = options.clientService ?? useClientService()
@@ -60,7 +58,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     if (unref(loading)) {
       return null
     }
-    let path
+    let path: string
     if (unref(space)) {
       path = urlJoin(unref(space).webDavPath, unref(item))
     } else {
@@ -99,7 +97,6 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     ...useAppFolderHandling({
       // FIXME: what's wrong here? mismatch in packages somehow...
       clientService: clientService as any,
-      store,
       currentRoute
     }),
     ...useRequest({ clientService, currentRoute: unref(currentRoute) })

@@ -3,9 +3,7 @@ import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
-  createStore,
   getComposableWrapper,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
   writable
@@ -25,14 +23,13 @@ describe('useDriveResolver', () => {
         expect(unref(space)).toEqual(null)
         expect(unref(item)).toEqual(null)
       },
-      { mocks, provide: mocks, store: createStore(defaultStoreMockOptions) }
+      { mocks, provide: mocks }
     )
   })
   it('returns a public space on a public page', () => {
     const token = 'token'
     const spaceMock = mockDeep<SpaceResource>({ id: token })
-    const storeOptions = { ...defaultStoreMockOptions }
-    const store = createStore(storeOptions)
+
     const mocks = defaultComponentMocks()
 
     getComposableWrapper(
@@ -44,15 +41,13 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
   })
   it('returns a share space for a share', () => {
     const spaceMock = mockDeep<SpaceResource>()
-    const storeOptions = { ...defaultStoreMockOptions }
-    const store = createStore(storeOptions)
+
     const mocks = defaultComponentMocks()
     getComposableWrapper(
       () => {
@@ -65,7 +60,6 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
@@ -75,8 +69,6 @@ describe('useDriveResolver', () => {
     const fileId = 'someFileId'
     const resourcePath = '/someFolder'
     const spaceMock = mockDeep<SpaceResource>({ fileId, driveAlias: 'driveAlias' })
-    const storeOptions = { ...defaultStoreMockOptions }
-    const store = createStore(storeOptions)
     const mocks = defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
         name: 'files-spaces-generic',
@@ -100,7 +92,6 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
@@ -110,8 +101,6 @@ describe('useDriveResolver', () => {
     const driveAlias = '/personal'
     const resourcePath = '/someFolder'
     const spaceMock = mockDeep<SpaceResource>({ driveAlias })
-    const storeOptions = { ...defaultStoreMockOptions }
-    const store = createStore(storeOptions)
     const mocks = defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
         name: 'files-spaces-generic',
@@ -134,7 +123,6 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )
@@ -147,8 +135,6 @@ describe('useDriveResolver', () => {
   ])('loads space members for a project space', (data) => {
     const driveAlias = `/${data.driveType}`
     const spaceMock = mockDeep<SpaceResource>({ driveAlias, driveType: data.driveType })
-    const storeOptions = { ...defaultStoreMockOptions }
-    const store = createStore(storeOptions)
 
     const mocks = defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
@@ -167,7 +153,6 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
       }
     )

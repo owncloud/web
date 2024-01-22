@@ -216,7 +216,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
-import { mapActions, mapState } from 'vuex'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -231,7 +230,8 @@ import {
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
-  useClipboardStore
+  useClipboardStore,
+  useResourcesStore
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -316,7 +316,7 @@ export default defineComponent({
      * V-model for the selection
      */
     selectedIds: {
-      type: Array,
+      type: Array as PropType<string[]>,
       default: () => []
     },
     /**
@@ -464,6 +464,10 @@ export default defineComponent({
     const authStore = useAuthStore()
     const { userContextReady } = storeToRefs(authStore)
 
+    const resourcesStore = useResourcesStore()
+    const { toggleSelection } = resourcesStore
+    const { areFileExtensionsShown, latestSelectedId } = storeToRefs(resourcesStore)
+
     const dragItem = ref<Resource>()
     const ghostElement = ref()
 
@@ -517,7 +521,10 @@ export default defineComponent({
         space: ref(props.space),
         targetRouteCallback: computed(() => props.targetRouteCallback)
       }),
-      isLocationPicker
+      isLocationPicker,
+      toggleSelection,
+      areFileExtensionsShown,
+      latestSelectedId
     }
   },
   data() {
@@ -529,8 +536,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState('Files', ['areFileExtensionsShown', 'latestSelectedId']),
-
     fields() {
       if (this.resources.length === 0) {
         return []
@@ -745,8 +750,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['toggleFileSelection']),
-
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
@@ -774,15 +777,15 @@ export default defineComponent({
         to: this.getTagLink(tag)
       }
     },
-    isLatestSelectedItem(item) {
+    isLatestSelectedItem(item: Resource) {
       return item.id === this.latestSelectedId
     },
-    hasRenameAction(item) {
+    hasRenameAction(item: Resource) {
       return this.renameActions.filter((menuItem) =>
         menuItem.isEnabled({ space: this.space, resources: [item] })
       ).length
     },
-    openRenameDialog(item) {
+    openRenameDialog(item: Resource) {
       this.renameHandler({
         space: this.getMatchingSpace(item),
         resources: [item]
@@ -853,12 +856,12 @@ export default defineComponent({
     sort(opts) {
       this.$emit('sort', opts)
     },
-    addSelectedResource(file) {
+    addSelectedResource(file: Resource) {
       const isSelected = this.isResourceSelected(file)
       if (isSelected) {
         return
       }
-      this.toggleFileSelection(file)
+      this.toggleSelection(file.id)
     },
     showContextMenuOnBtnClick(data, item) {
       if (this.isResourceDisabled(item)) {
@@ -934,14 +937,14 @@ export default defineComponent({
     formatDateRelative(date) {
       return formatRelativeDateFromJSDate(new Date(date), this.$language.current)
     },
-    setSelection(selected, resource) {
+    setSelection(selected, resource: Resource) {
       if (selected) {
         this.emitSelect([...this.selectedIds, resource.id])
       } else {
         this.emitSelect(this.selectedIds.filter((id) => id !== resource.id))
       }
     },
-    emitSelect(selectedIds) {
+    emitSelect(selectedIds: string[]) {
       eventBus.publish('app.files.list.clicked')
       this.$emit('update:selectedIds', selectedIds)
     },

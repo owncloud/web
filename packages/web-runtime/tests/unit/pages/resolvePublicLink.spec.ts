@@ -1,11 +1,5 @@
 import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
-import {
-  defaultPlugins,
-  defaultComponentMocks,
-  createStore,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -78,8 +72,6 @@ function getWrapper({ passwordRequired = false } = {}) {
   $clientService.owncloudSdk.shares.getProtectedTokenInfo.mockResolvedValue(tokenInfo)
   const mocks = { ...defaultComponentMocks(), $clientService }
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const capabilities = {
     files_sharing: { federation: { incoming: true, outgoing: true } }
   } satisfies Partial<CapabilityStore['capabilities']>
@@ -87,10 +79,7 @@ function getWrapper({ passwordRequired = false } = {}) {
   return {
     wrapper: shallowMount(ResolvePublicLink, {
       global: {
-        plugins: [
-          ...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } }),
-          store
-        ],
+        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })],
         mocks,
         provide: mocks
       }

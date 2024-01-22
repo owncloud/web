@@ -1,12 +1,5 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mockAxiosReject,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mockAxiosReject, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
 
@@ -79,8 +72,6 @@ describe('EditPanel', () => {
 
 function getWrapper() {
   const mocks = defaultComponentMocks()
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return {
     mocks,
@@ -91,7 +82,7 @@ function getWrapper() {
       global: {
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         stubs: {
           'oc-text-input': true,
           'avatar-image': true,

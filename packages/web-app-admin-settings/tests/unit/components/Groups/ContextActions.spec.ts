@@ -1,4 +1,4 @@
-import { defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
@@ -63,9 +63,7 @@ describe.skip('ContextActions', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
   return {
-    storeOptions,
     wrapper: mount(ContextActions, {
       props: {
         items: [mock<Resource>()]

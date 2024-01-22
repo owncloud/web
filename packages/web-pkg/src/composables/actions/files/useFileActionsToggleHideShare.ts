@@ -1,19 +1,22 @@
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 
-import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { isLocationSharesActive } from '../../../router'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import { useMessages, useSpacesStore, useCapabilityStore, useConfigStore } from '../../piniaStores'
+import {
+  useMessages,
+  useSpacesStore,
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsToggleHideShare = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
@@ -23,6 +26,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
   const loadingService = useLoadingService()
   const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
+  const { upsertResource, resetSelection } = useResourcesStore()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
@@ -47,7 +51,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
               fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })
             if (share) {
-              store.commit('Files/UPDATE_RESOURCE', share)
+              upsertResource(share)
             }
           } catch (error) {
             console.error(error)
@@ -60,7 +64,7 @@ export const useFileActionsToggleHideShare = ({ store }: { store?: Store<any> } 
     await Promise.all(triggerPromises)
 
     if (errors.length === 0) {
-      store.dispatch('Files/resetFileSelection')
+      resetSelection()
       showMessage({
         title: hidden
           ? $gettext('The share was hidden successfully')

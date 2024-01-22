@@ -4,20 +4,23 @@ import {
   isLocationSpacesActive,
   createLocationShares
 } from '../../../router'
-import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useSpacesStore, useCapabilityStore, useConfigStore } from '../../piniaStores'
+import {
+  useMessages,
+  useSpacesStore,
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsDeclineShare = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
@@ -27,6 +30,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
   const loadingService = useLoadingService()
   const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
+  const { upsertResource } = useResourcesStore()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
@@ -48,7 +52,7 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
               fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })
             if (share) {
-              store.commit('Files/UPDATE_RESOURCE', share)
+              upsertResource(share)
             }
           } catch (error) {
             console.error(error)

@@ -3,14 +3,7 @@ import flushPromises from 'flush-promises'
 import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
 import { defineComponent } from 'vue'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 
 const component = defineComponent({
@@ -245,8 +238,6 @@ function getMountedWrapper({
     ...mocks
   }
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
     wrapper: mount(SearchBar, {
       attachTo: document.body,
@@ -254,8 +245,7 @@ function getMountedWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: { authState: { userContextReady: userContextReady } }
-          }),
-          store
+          })
         ],
         mocks: localMocks,
         provide: localMocks,

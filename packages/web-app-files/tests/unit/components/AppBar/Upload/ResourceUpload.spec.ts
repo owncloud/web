@@ -1,13 +1,6 @@
 import { mockDeep } from 'jest-mock-extended'
 import ResourceUpload from 'web-app-files/src/components/AppBar/Upload/ResourceUpload.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  defaultStubs,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { UppyService } from '@ownclouders/web-pkg'
 
 describe('Resource Upload Component', () => {
@@ -54,14 +47,11 @@ describe('Resource Upload Component', () => {
 })
 
 function getWrapper(props = {}, uppyService = mockDeep<UppyService>()) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks(),
     $uppyService: uppyService
   }
   return {
-    storeOptions,
     mocks,
     wrapper: mount(ResourceUpload, {
       props,
@@ -69,7 +59,7 @@ function getWrapper(props = {}, uppyService = mockDeep<UppyService>()) {
         mocks,
         stubs: defaultStubs,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

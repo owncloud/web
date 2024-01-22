@@ -20,25 +20,25 @@ import {
   useModals,
   useCreateSpace,
   useSpaceHelpers,
-  useStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   setup() {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
     const { createSpace } = useCreateSpace()
     const { checkSpaceNameModalInput } = useSpaceHelpers()
     const { dispatchModal } = useModals()
     const spacesStore = useSpacesStore()
+    const { upsertResource } = useResourcesStore()
 
     const addNewSpace = async (name: string) => {
       try {
         const createdSpace = await createSpace(name)
-        store.commit('Files/UPSERT_RESOURCE', createdSpace)
+        upsertResource(createdSpace)
         spacesStore.upsertSpace(createdSpace)
         showMessage({ title: $gettext('Space was created successfully') })
       } catch (error) {

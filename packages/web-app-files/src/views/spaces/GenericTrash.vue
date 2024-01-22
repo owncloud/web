@@ -49,8 +49,8 @@
             <list-info
               v-if="paginatedResources.length > 0"
               class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
+              :files="totalResourcesCount.files"
+              :folders="totalResourcesCount.folders"
             />
           </template>
         </resource-table>
@@ -61,7 +61,6 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { storeToRefs } from 'pinia'
 
 import {
@@ -69,7 +68,8 @@ import {
   ContextActions,
   FileSideBar,
   useUserStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -122,6 +122,9 @@ export default defineComponent({
     const userStore = useUserStore()
     const { user } = storeToRefs(userStore)
 
+    const resourcesStore = useResourcesStore()
+    const { totalResourcesCount } = storeToRefs(resourcesStore)
+
     let loadResourcesEventToken: string
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
@@ -163,13 +166,12 @@ export default defineComponent({
       ...resourcesViewDefaults,
       hasShareJail: capabilityRefs.spacesShareJail,
       user,
-      noContentMessage
+      noContentMessage,
+      totalResourcesCount
     }
   },
 
   computed: {
-    ...mapGetters('Files', ['totalFilesCount']),
-
     isEmpty() {
       return this.paginatedResources.length < 1
     },

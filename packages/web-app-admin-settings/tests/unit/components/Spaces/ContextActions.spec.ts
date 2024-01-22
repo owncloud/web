@@ -1,11 +1,4 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  defaultStubs,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Spaces/ContextActions.vue'
@@ -55,13 +48,10 @@ describe.skip('ContextActions', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks()
   }
   return {
-    storeOptions,
     mocks,
     wrapper: mount(ContextActions, {
       props: {
@@ -70,7 +60,7 @@ function getWrapper() {
       global: {
         mocks,
         stubs: { ...defaultStubs, 'action-menu-item': true },
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

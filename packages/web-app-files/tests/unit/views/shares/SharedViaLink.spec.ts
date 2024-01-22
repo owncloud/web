@@ -5,10 +5,8 @@ import { ref } from 'vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -64,14 +62,12 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(SharedViaLink, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: defaultStubs

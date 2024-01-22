@@ -1,18 +1,23 @@
-import { Key, KeyboardActions, ModifierKey, useClipboardStore } from '@ownclouders/web-pkg'
+import {
+  Key,
+  KeyboardActions,
+  ModifierKey,
+  useClipboardStore,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
-import { useStore } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { useFileActionsPaste } from '@ownclouders/web-pkg'
 
 export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space: SpaceResource) => {
-  const store = useStore()
   const { copyResources, cutResources } = useClipboardStore()
+  const resourcesStore = useResourcesStore()
 
-  const { actions: pasteFileActions } = useFileActionsPaste({ store })
+  const { actions: pasteFileActions } = useFileActionsPaste()
   const pasteFileAction = unref(pasteFileActions)[0].handler
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.C }, () => {
-    copyResources(store.getters['Files/selectedFiles'])
+    copyResources(resourcesStore.selectedResources)
   })
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.V }, () => {
@@ -20,6 +25,6 @@ export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space:
   })
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.X }, () => {
-    cutResources(store.getters['Files/selectedFiles'])
+    cutResources(resourcesStore.selectedResources)
   })
 }

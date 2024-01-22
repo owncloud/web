@@ -1,11 +1,5 @@
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client/src'
@@ -80,14 +74,14 @@ function getWrapper(resource = undefined) {
   }
   const mocks = defaultComponentMocks()
   mocks.$clientService = clientService
-  const store = createStore(defaultStoreMockOptions)
+
   return {
     mocks,
     wrapper: shallowMount(GdprExport, {
       global: {
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

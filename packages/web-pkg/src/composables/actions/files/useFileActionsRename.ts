@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { isSameResource } from '../../../helpers/resource'
 import { isLocationTrashActive, isLocationSharesActive } from '../../../router'
 import { Resource } from '@ownclouders/web-client'
@@ -14,13 +13,17 @@ import { renameResource as _renameResource } from '../../../helpers/resource'
 import { computed } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useModals, useCapabilityStore, useConfigStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsRename = () => {
   const { showErrorMessage } = useMessages()
   const capabilityStore = useCapabilityStore()
   const router = useRouter()
@@ -28,6 +31,9 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   const clientService = useClientService()
   const configStore = useConfigStore()
   const { dispatchModal } = useModals()
+
+  const resourcesStore = useResourcesStore()
+  const { setCurrentFolder, upsertResource } = resourcesStore
 
   const getNameErrorMsg = (resource: Resource, newName: string, parentResources = undefined) => {
     const newPath =
@@ -53,7 +59,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       return $gettext('The name cannot end with whitespace')
     }
 
-    const exists = store.getters['Files/files'].find(
+    const exists = resourcesStore.resources.find(
       (file) => file.path === newPath && resource.name !== newName
     )
     if (exists) {
@@ -76,7 +82,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   }
 
   const renameResource = async (space: SpaceResource, resource: Resource, newName: string) => {
-    let currentFolder = store.getters['Files/currentFolder']
+    let currentFolder = resourcesStore.currentFolder
 
     try {
       const newPath = join(dirname(resource.path), newName)
@@ -92,7 +98,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
         if (isCurrentFolder) {
           currentFolder = { ...currentFolder } as Resource
           currentFolder.name = newName
-          store.commit('Files/SET_CURRENT_FOLDER', currentFolder)
+          setCurrentFolder(currentFolder)
           return router.push(
             createFileRouteOptions(space, {
               path: '',
@@ -103,14 +109,14 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
 
         const sharedResource = { ...resource }
         sharedResource.name = newName
-        store.commit('Files/UPSERT_RESOURCE', sharedResource)
+        upsertResource(sharedResource)
         return
       }
 
       if (isCurrentFolder) {
         currentFolder = { ...currentFolder } as Resource
         _renameResource(space, currentFolder, newPath)
-        store.commit('SET_CURRENT_FOLDER', currentFolder)
+        setCurrentFolder(currentFolder)
         return router.push(
           createFileRouteOptions(space, {
             path: newPath,
@@ -120,7 +126,7 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
       }
       const fileResource = { ...resource } as Resource
       _renameResource(space, fileResource, newPath)
-      store.commit('Files/UPSERT_RESOURCE', fileResource)
+      upsertResource(fileResource)
     } catch (error) {
       console.error(error)
       let title = $gettext(
@@ -140,18 +146,14 @@ export const useFileActionsRename = ({ store }: { store?: Store<any> } = {}) => 
   }
 
   const handler = async ({ space, resources }: FileActionOptions) => {
-    const currentFolder = store.getters['Files/currentFolder']
+    const currentFolder = resourcesStore.currentFolder
     let parentResources
     if (isSameResource(resources[0], currentFolder)) {
       const parentPath = dirname(currentFolder.path)
-      parentResources = (
-        await (clientService.webdav as WebDAV).listFiles(space, {
-          path: parentPath
-        })
-      ).children
+      parentResources = (await clientService.webdav.listFiles(space, { path: parentPath })).children
     }
 
-    const areFileExtensionsShown = store.state.Files.areFileExtensionsShown
+    const areFileExtensionsShown = resourcesStore.areFileExtensionsShown
     const onConfirm = async (newName: string) => {
       if (!areFileExtensionsShown) {
         newName = `${newName}.${resources[0].extension}`

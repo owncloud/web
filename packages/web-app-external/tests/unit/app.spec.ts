@@ -1,10 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
@@ -83,9 +78,6 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
 
   jest.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   const capabilities = {
     files: {
       app_providers: [{ apps_url: '/app/list', enabled: true, open_url: '/app/open' }]
@@ -104,8 +96,7 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
               capabilityState: { capabilities },
               configState: { options: { editor: { openAsPreview: true } } }
             }
-          }),
-          store
+          })
         ]
       }
     })

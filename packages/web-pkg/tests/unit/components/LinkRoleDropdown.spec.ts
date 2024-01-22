@@ -1,11 +1,5 @@
 import LinkRoleDropdown from '../../../src/components/LinkRoleDropdown.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import {
   ShareRole,
@@ -39,21 +33,17 @@ describe('LinkRoleDropdown', () => {
 })
 
 function getWrapper({ modelValue = mock<ShareRole>(), availableRoleOptions = [] } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
-
   const mocks = { ...defaultComponentMocks() }
 
   return {
     mocks,
-    storeOptions,
     wrapper: mount(LinkRoleDropdown, {
       props: {
         modelValue,
         availableRoleOptions
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks
       }

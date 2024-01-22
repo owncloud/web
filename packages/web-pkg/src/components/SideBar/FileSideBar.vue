@@ -45,21 +45,20 @@ import {
   SideBarEventTopics,
   useClientService,
   useEventBus,
-  useStore,
   useRouter,
   useActiveLocation,
   useExtensionRegistry,
   useSelectedResources,
   useSpacesStore,
-  useSharesStore
+  useSharesStore,
+  useResourcesStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
   SpaceResource,
   Resource
 } from '@ownclouders/web-client/src/helpers'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { AncestorMetaData } from '../../types'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -81,7 +80,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const router = useRouter()
     const clientService = useClientService()
     const extensionRegistry = useExtensionRegistry()
@@ -89,13 +87,14 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const { loadShares } = useSharesStore()
 
+    const resourcesStore = useResourcesStore()
+    const { currentFolder, ancestorMetaData } = storeToRefs(resourcesStore)
+
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
 
-    const { selectedResources } = useSelectedResources({ store })
-    const currentFolder = computed(() => {
-      return store.getters['Files/currentFolder']
-    })
+    const { selectedResources } = useSelectedResources()
+
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
         return {
@@ -176,10 +175,6 @@ export default defineComponent({
         .map((e) => e.panel)
     )
 
-    const ancestorMetaData = computed<AncestorMetaData>(
-      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-    )
-
     watch(
       () => [...unref(panelContext).items, props.isOpen],
       async () => {
@@ -224,7 +219,7 @@ export default defineComponent({
 
         // shared resources look different, hence we need to fetch the actual resource here
         try {
-          let shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
+          let shareResource = await clientService.webdav.getFileInfo(props.space, {
             path: resource.path
           })
           shareResource.share = resource.share

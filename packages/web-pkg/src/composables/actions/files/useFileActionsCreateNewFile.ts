@@ -3,11 +3,9 @@ import {
   SpaceResource,
   extractNameWithoutExtension
 } from '@ownclouders/web-client/src/helpers'
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
@@ -16,18 +14,17 @@ import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
-import { AncestorMetaData } from '../../../types'
-import { useMessages, useModals, useUserStore, useAppsStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useUserStore,
+  useAppsStore,
+  useResourcesStore
+} from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
+import { storeToRefs } from 'pinia'
 
-export const useFileActionsCreateNewFile = ({
-  store,
-  space
-}: {
-  store?: Store<any>
-  space?: SpaceResource
-} = {}) => {
-  store = store || useStore()
+export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
@@ -37,12 +34,10 @@ export const useFileActionsCreateNewFile = ({
 
   const { openEditor } = useFileActions()
   const clientService = useClientService()
-  const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
-  const files = computed((): Array<Resource> => store.getters['Files/files'])
-  const ancestorMetaData = computed<AncestorMetaData>(
-    () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-  )
-  const areFileExtensionsShown = computed((): boolean => store.state.Files.areFileExtensionsShown)
+
+  const resourcesStore = useResourcesStore()
+  const { resources, currentFolder, ancestorMetaData, areFileExtensionsShown } =
+    storeToRefs(resourcesStore)
 
   const appNewFileMenuExtensions = computed(() =>
     appsStore.fileExtensions.filter(({ newFileMenu }) => !!newFileMenu)
@@ -69,7 +64,7 @@ export const useFileActionsCreateNewFile = ({
       return $gettext('File name cannot end with whitespace')
     }
 
-    const exists = unref(files).find((file) => file.name === fileName)
+    const exists = unref(resources).find((file) => file.name === fileName)
 
     if (exists) {
       return $gettext('%{name} already exists', { name: fileName }, true)
@@ -87,7 +82,7 @@ export const useFileActionsCreateNewFile = ({
       resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
     }
 
-    store.commit('Files/UPSERT_RESOURCE', resource)
+    resourcesStore.upsertResource(resource)
 
     return openEditor(appFileExtension, space, resource, EDITOR_MODE_CREATE, space.shareId)
   }
@@ -99,8 +94,8 @@ export const useFileActionsCreateNewFile = ({
   ) => {
     let defaultName = $gettext('New file') + `.${extension}`
 
-    if (unref(files).some((f) => f.name === defaultName)) {
-      defaultName = resolveFileNameDuplicate(defaultName, extension, unref(files))
+    if (unref(resources).some((f) => f.name === defaultName)) {
+      defaultName = resolveFileNameDuplicate(defaultName, extension, unref(resources))
     }
 
     if (!areFileExtensionsShown.value) {

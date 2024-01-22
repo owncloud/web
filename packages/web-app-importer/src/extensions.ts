@@ -1,15 +1,14 @@
 import { storeToRefs } from 'pinia'
 import {
-  useStore,
   useThemeStore,
   useModals,
   useUserStore,
-  useAuthStore
+  useAuthStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useService } from '@ownclouders/web-pkg'
 import { computed, nextTick, unref } from 'vue'
-import { Resource } from '@ownclouders/web-client/src'
 import type { UppyService } from '@ownclouders/web-pkg'
 import '@uppy/dashboard/dist/style.min.css'
 import Dashboard from '@uppy/dashboard'
@@ -20,7 +19,6 @@ import { Extension } from '@ownclouders/web-pkg'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
-  const store = useStore()
   const userStore = useUserStore()
   const { $gettext } = useGettext()
   const uppyService = useService<UppyService>('$uppyService')
@@ -29,13 +27,13 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { currentTheme } = storeToRefs(themeStore)
   const { dispatchModal, removeModal, activeModal } = useModals()
 
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
+
   const { companionUrl, webdavCloudType } = applicationConfig
   let { supportedClouds } = applicationConfig
   supportedClouds = supportedClouds || ['OneDrive', 'GoogleDrive', 'WebdavPublicLink']
 
-  const currentFolder = computed<Resource>(() => {
-    return store.getters['Files/currentFolder']
-  })
   const canUpload = computed(() => {
     return unref(currentFolder)?.canUpload({ user: userStore.user })
   })

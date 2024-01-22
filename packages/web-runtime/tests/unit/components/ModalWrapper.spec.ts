@@ -2,13 +2,7 @@ import { Modal, useModals } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 import { PropType, defineComponent } from 'vue'
 import ModalWrapper from 'web-runtime/src/components/ModalWrapper.vue'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 
 const CustomModalComponent = defineComponent({
   name: 'CustomModalComponent',
@@ -134,15 +128,12 @@ describe('ModalWrapper', () => {
 })
 
 function getShallowWrapper({ modals = [] } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
-
   const mocks = defaultComponentMocks()
 
   return {
     wrapper: shallowMount(ModalWrapper, {
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { modalsState: { modals } } }), store],
+        plugins: [...defaultPlugins({ piniaOptions: { modalsState: { modals } } })],
         renderStubDefaultSlot: true,
         mocks,
         provide: mocks,

@@ -6,20 +6,19 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useIsFilesAppActive } from '../helpers'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
-import { Store } from 'vuex'
 import { FileAction, FileActionOptions } from '../types'
 import { useCanShare } from '../../shares'
+import { useResourcesStore } from '../../piniaStores'
 
-export const useFileActionsShowShares = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsShowShares = () => {
   const router = useRouter()
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
   const { canShare } = useCanShare()
+  const resourcesStore = useResourcesStore()
 
   const handler = ({ resources }: FileActionOptions) => {
-    store.commit('Files/SET_FILE_SELECTION', resources)
+    resourcesStore.setSelection(resources.map(({ id }) => id))
     eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares')
   }
 

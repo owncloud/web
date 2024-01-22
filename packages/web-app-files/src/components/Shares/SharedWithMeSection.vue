@@ -95,14 +95,14 @@ import {
   useCapabilityStore,
   useConfigStore,
   useFileActions,
-  useFileActionsToggleHideShare
+  useFileActionsToggleHideShare,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
-import { ImageDimension, ImageType } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
-import { mapActions } from 'vuex'
-import { SortDir, useStore, useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { SortDir, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
@@ -195,14 +195,15 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const { triggerDefaultAction } = useFileActions()
-    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
+    const { actions: hideShareActions } = useFileActionsToggleHideShare()
     const hideShareAction = computed(() => unref(hideShareActions)[0])
+
+    const { updateResourceField } = useResourcesStore()
 
     const resourceTargetRouteCallback = ({
       path,
@@ -221,8 +222,9 @@ export default defineComponent({
       triggerDefaultAction,
       hideShareAction,
       resourceTargetRouteCallback,
-      ...useSelectedResources({ store }),
-      getMatchingSpace
+      ...useSelectedResources(),
+      getMatchingSpace,
+      updateResourceField
     }
   },
 
@@ -258,29 +260,24 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    ...mapActions('Files', ['loadPreview', 'loadAvatars']),
+    rowMounted(resource: Resource, component) {
+      const loadPreview = async () => {
+        const preview = await this.$previewService.loadPreview(
+          {
+            space: this.getMatchingSpace(resource),
+            resource,
+            dimensions: ImageDimension.Thumbnail
+          },
+          true
+        )
+        if (preview) {
+          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
+        }
+      }
 
-    rowMounted(resource, component) {
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadAvatars({
-          resource,
-          clientService: this.$clientService,
-          capabilityStore: this.capabilityStore,
-          configStore: this.configStore
-        })
-
-        if (!this.displayThumbnails) {
-          return
-        }
-
-        this.loadPreview({
-          previewService: this.$previewService,
-          space: this.getMatchingSpace(resource),
-          resource,
-          dimensions: ImageDimension.Thumbnail,
-          type: ImageType.Thumbnail
-        })
+        loadPreview()
       }, 250)
 
       visibilityObserver.observe(component.$el, {

@@ -5,14 +5,7 @@ import {
   SharePermissions,
   ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultStubs,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultStubs, defaultComponentMocks } from 'web-test-helpers'
 import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
 
 jest.mock('uuid', () => ({
@@ -191,8 +184,6 @@ function createWrapper({
   expires = undefined,
   sharedParentRoute = null
 } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
     wrapper: mount(ListItem, {
@@ -209,7 +200,7 @@ function createWrapper({
         sharedParentRoute
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks,
         renderStubDefaultSlot: true,

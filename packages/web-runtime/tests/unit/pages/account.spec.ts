@@ -1,16 +1,14 @@
 import account from '../../../src/pages/account.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
   mockAxiosResolve,
   shallowMount,
-  defaultStoreMockOptions,
   mockAxiosReject
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { AxiosResponse } from 'axios'
-import { useMessages } from '@ownclouders/web-pkg'
+import { useMessages, useResourcesStore } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
 
@@ -160,7 +158,6 @@ describe('account page', () => {
         await wrapper.vm.loadValuesListTask.last
         await wrapper.vm.loadGraphUserTask.last
 
-        console.log(wrapper.html())
         const editPasswordButton = wrapper.find(selectors.editPasswordButton)
         expect(editPasswordButton.exists()).toBeTruthy()
       })
@@ -243,7 +240,7 @@ describe('account page', () => {
 
   describe('Method "updateViewOptionsWebDavDetails', () => {
     it('should show a message on success', async () => {
-      const { wrapper, storeOptions } = getWrapper({})
+      const { wrapper } = getWrapper({})
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -252,9 +249,9 @@ describe('account page', () => {
       await wrapper.vm.updateViewOptionsWebDavDetails(true)
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
-      expect(
-        storeOptions.modules.Files.mutations.SET_FILE_WEB_DAV_DETAILS_VISIBILITY
-      ).toHaveBeenCalled()
+
+      const { setAreWebDavDetailsShown } = useResourcesStore()
+      expect(setAreWebDavDetailsShown).toHaveBeenCalled()
     })
   })
 })
@@ -267,9 +264,6 @@ function getWrapper({
   isPublicLinkContext = false,
   isUserContext = true
 } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
-
   const mocks = {
     ...defaultComponentMocks(),
     $route
@@ -292,7 +286,6 @@ function getWrapper({
   )
 
   return {
-    storeOptions,
     mocks,
     wrapper: shallowMount(account, {
       global: {
@@ -313,8 +306,7 @@ function getWrapper({
                 }
               }
             }
-          }),
-          store
+          })
         ],
         mocks,
         provide: mocks,

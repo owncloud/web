@@ -9,8 +9,7 @@ import {
   useFileActionsOpenShortcut,
   ActionExtension,
   useExtensionRegistry,
-  useFileActionsToggleHideShare,
-  useStore
+  useFileActionsToggleHideShare
 } from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
 
@@ -49,32 +48,28 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
-
     const { editorActions } = useFileActions()
 
-    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
-    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
-    const { actions: copyActions } = useFileActionsCopy({ store })
+    const { actions: acceptShareActions } = useFileActionsAcceptShare()
+    const { actions: hideShareActions } = useFileActionsToggleHideShare()
+    const { actions: copyActions } = useFileActionsCopy()
     const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
-    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
-    const { actions: deleteActions } = useFileActionsDelete({ store })
+    const { actions: declineShareActions } = useFileActionsDeclineShare()
+    const { actions: deleteActions } = useFileActionsDelete()
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
-    const { actions: favoriteActions } = useFileActionsFavorite({ store })
-    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
-    const { actions: moveActions } = useFileActionsMove({ store })
-    const { actions: navigateActions } = useFileActionsNavigate({ store })
-    const { actions: pasteActions } = useFileActionsPaste({ store })
-    const { actions: renameActions } = useFileActionsRename({ store })
-    const { actions: restoreActions } = useFileActionsRestore({ store })
+    const { actions: favoriteActions } = useFileActionsFavorite()
+    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin()
+    const { actions: moveActions } = useFileActionsMove()
+    const { actions: navigateActions } = useFileActionsNavigate()
+    const { actions: pasteActions } = useFileActionsPaste()
+    const { actions: renameActions } = useFileActionsRename()
+    const { actions: restoreActions } = useFileActionsRestore()
     const { actions: setSpaceImageActions } = useFileActionsSetImage()
     const { actions: setSpaceReadmeActions } = useFileActionsSetReadme()
-    const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
-    const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource({
-      store
-    })
-    const { actions: showSharesActions } = useFileActionsShowShares({ store })
+    const { actions: showDetailsActions } = useFileActionsShowDetails()
+    const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource()
+    const { actions: showSharesActions } = useFileActionsShowShares()
     const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
     const extensionRegistry = useExtensionRegistry()

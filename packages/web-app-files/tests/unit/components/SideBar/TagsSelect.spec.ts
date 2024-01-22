@@ -1,11 +1,4 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  mount,
-  defaultPlugins,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultComponentMocks, mount, defaultPlugins, mockAxiosResolve } from 'web-test-helpers'
 import TagsSelect from 'web-app-files/src/components/SideBar/Details/TagsSelect.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
@@ -134,14 +127,11 @@ describe('Tag Select', () => {
 })
 
 function createWrapper(resource, clientService = mockDeep<ClientService>(), stubVueSelect = true) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
   return {
-    storeOptions,
     wrapper: mount(TagsSelect, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: { ...mocks },
         stubs: { VueSelect: stubVueSelect, CompareSaveDialog: true }

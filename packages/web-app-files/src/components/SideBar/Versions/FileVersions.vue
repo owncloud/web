@@ -61,7 +61,7 @@ import {
   formatFileSize,
   useClientService,
   useDownloadFile,
-  useStore
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -79,10 +79,10 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const { downloadFile } = useDownloadFile({ clientService })
+    const { updateResourceField } = useResourcesStore()
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
@@ -135,9 +135,9 @@ export default defineComponent({
       const fieldsToUpdate = ['size', 'mdate']
       for (const field of fieldsToUpdate) {
         if (Object.prototype.hasOwnProperty.call(unref(resource), field)) {
-          store.commit('Files/UPDATE_RESOURCE_FIELD', {
+          updateResourceField({
             id: unref(resource).id,
-            field,
+            field: field as any,
             value: restoredResource[field]
           })
         }

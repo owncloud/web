@@ -1,11 +1,5 @@
 import accessDenied from '../../../src/pages/accessDenied.vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 
 const selectors = {
   logInAgainButton: '#exitAnchor'
@@ -35,19 +29,12 @@ function getWrapper({ loginUrl = '' } = {}) {
   const mocks = {
     ...defaultComponentMocks()
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-
-  const store = createStore(storeOptions)
 
   return {
-    storeOptions,
     mocks,
     wrapper: mount(accessDenied, {
       global: {
-        plugins: [
-          ...defaultPlugins({ piniaOptions: { configState: { options: { loginUrl } } } }),
-          store
-        ],
+        plugins: [...defaultPlugins({ piniaOptions: { configState: { options: { loginUrl } } } })],
         mocks,
         provide: mocks
       }

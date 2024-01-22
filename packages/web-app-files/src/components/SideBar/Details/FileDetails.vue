@@ -130,11 +130,12 @@ import {
   useUserStore,
   useCapabilityStore,
   useConfigStore,
-  useClientService
+  useClientService,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import { useStore, usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
   formatDateFromHTTP,
@@ -147,7 +148,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
-import { AncestorMetaData, ResourceIcon } from '@ownclouders/web-pkg'
+import { ResourceIcon } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
@@ -170,12 +171,14 @@ export default defineComponent({
   },
   setup(props) {
     const configStore = useConfigStore()
-    const store = useStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
+
+    const resourcesStore = useResourcesStore()
+    const { ancestorMetaData } = storeToRefs(resourcesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -220,9 +223,6 @@ export default defineComponent({
       return loadPreviewTask.isRunning || !loadPreviewTask.last
     })
 
-    const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-    )
     const sharedAncestor = computed(() => {
       return Object.values(unref(ancestorMetaData)).find(
         (a) =>
@@ -241,7 +241,7 @@ export default defineComponent({
        * webDavPath might not be set when user is navigating on public link,
        * even if the user is authenticated and the file owner.
        */
-      return store.getters['Files/areWebDavDetailsShown'] && unref(resource).webDavPath
+      return resourcesStore.areWebDavDetailsShown && unref(resource).webDavPath
     })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)

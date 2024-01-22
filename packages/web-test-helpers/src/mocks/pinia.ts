@@ -7,7 +7,11 @@ import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
 import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/config/types'
 import { Resource, Share } from '../../../web-client/src/helpers'
-import { ApplicationFileExtension, ClipboardActions } from '../../../web-pkg/types'
+import {
+  AncestorMetaData,
+  ApplicationFileExtension,
+  ClipboardActions
+} from '../../../web-pkg/types'
 
 export { createTestingPinia }
 
@@ -28,6 +32,13 @@ export type PiniaMockOptions = {
   }
   messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
+  resourcesStore?: {
+    resources?: Resource[]
+    currentFolder?: Resource
+    ancestorMetaData?: AncestorMetaData
+    selectedIds?: string[]
+    areFileExtensionsShown?: boolean
+  }
   sharesState?: { shares?: Share[]; loading?: boolean }
   spacesState?: { spaces?: SpaceResource[]; spaceMembers?: Share[] }
   userState?: { user?: User }
@@ -46,6 +57,7 @@ export function createMockStore({
   themeState = {},
   messagesState = {},
   modalsState = {},
+  resourcesStore = {},
   sharesState = {},
   spacesState = {},
   userState = {},
@@ -91,6 +103,7 @@ export function createMockStore({
         availableThemes: defaultOwnCloudTheme.themes,
         ...themeState
       },
+      resources: { resources: [], ...resourcesStore },
       shares: { shares: [], ...sharesState },
       spaces: { spaces: [], spaceMembers: [], ...spacesState },
       user: { user: { ...mock<User>({ id: '1' }), ...(userState?.user && { ...userState.user }) } },

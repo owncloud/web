@@ -1,4 +1,4 @@
-import { createStore, defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import ResourceTiles from 'web-app-files/src/components/FilesList/ResourceTiles.vue'
 import { sortFields } from 'web-app-files/src/helpers/ui/resourceTiles'
 import { Resource } from '@ownclouders/web-client'
@@ -136,9 +136,6 @@ describe('ResourceTiles component', () => {
   })
 
   function getWrapper(props = {}, slots = {}) {
-    const storeOptions = defaultStoreMockOptions
-    const store = createStore(storeOptions)
-
     return {
       wrapper: mount(ResourceTiles, {
         props: {
@@ -148,7 +145,7 @@ describe('ResourceTiles component', () => {
           ...slots
         },
         global: {
-          plugins: [...defaultPlugins({ designSystem: false }), store],
+          plugins: [...defaultPlugins({ designSystem: false })],
           stubs: { ResourceTile: true }
         }
       })
