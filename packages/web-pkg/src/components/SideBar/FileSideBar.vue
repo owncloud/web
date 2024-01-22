@@ -95,7 +95,20 @@ export default defineComponent({
     const isLoading = ref(false)
 
     const versions = ref<Resource[]>([])
-    provide('versions', versions)
+    const fetchVersionsTask = useTask(function* () {
+      try {
+        if (unref(loadedResource).id) {
+          versions.value = yield clientService.webdav.listFileVersions(unref(loadedResource).id)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    provide('versions', {
+      versions,
+      fetchVersions: () => fetchVersionsTask.perform()
+    })
 
     const { selectedResources } = useSelectedResources()
 
@@ -111,16 +124,6 @@ export default defineComponent({
         root: props.space,
         parent: unref(currentFolder),
         items: unref(selectedResources)
-      }
-    })
-
-    const fetchVersionsTask = useTask(function* () {
-      try {
-        if (unref(loadedResource).id) {
-          versions.value = yield clientService.webdav.listFileVersions(unref(loadedResource).id)
-        }
-      } catch (e) {
-        console.error(e)
       }
     })
 

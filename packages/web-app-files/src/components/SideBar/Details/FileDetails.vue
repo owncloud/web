@@ -188,7 +188,7 @@ export default defineComponent({
     const authStore = useAuthStore()
     const { publicLinkContextReady } = storeToRefs(authStore)
 
-    const versions: Ref<Resource[]> = inject('versions')
+    const { versions }: { versions: Ref<Resource[]>; fetchVersions: Function } = inject('versions')
 
     const isPreviewEnabled = computed(() => {
       if (unref(resource).isFolder) {

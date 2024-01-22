@@ -86,7 +86,8 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const versions: Ref<Resource[]> = inject('versions')
+    const { versions, fetchVersions }: { versions: Ref<Resource[]>; fetchVersions: Function } =
+      inject('versions')
 
     const areVersionsLoading = computed(() => versions.value.length === 0)
 
@@ -109,6 +110,7 @@ export default defineComponent({
 
     const revertToVersion = async (version: Resource) => {
       await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name)
+      fetchVersions()
       const restoredResource = await clientService.webdav.getFileInfo(unref(space), unref(resource))
 
       const fieldsToUpdate = ['size', 'mdate']
