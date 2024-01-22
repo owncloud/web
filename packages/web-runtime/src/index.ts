@@ -13,7 +13,6 @@ import {
   announceClient,
   announceDefaults,
   announceClientService,
-  announceStore,
   announceTheme,
   announcePiniaStores,
   announceCustomStyles,
@@ -38,7 +37,7 @@ import {
   PublicSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
-import { computed, createApp } from 'vue'
+import { computed, createApp, watch } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
@@ -65,9 +64,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   await announceConfiguration({ path: configurationPath, configStore })
   startSentry(configStore, app)
-
-  const store = announceStore()
-  app.provide('store', store)
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
@@ -124,7 +120,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const applicationsPromise = initializeApplications({
     app,
     configStore,
-    store,
     supportedLanguages,
     router,
     gettext
@@ -150,10 +145,9 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceCustomStyles({ configStore })
   announceCustomScripts({ configStore })
-  announceDefaults({ store, appsStore, router, extensionRegistry, configStore })
+  announceDefaults({ appsStore, router, extensionRegistry, configStore })
 
   app.use(router)
-  app.use(store)
   app.use(createHead())
 
   app.component('AvatarImage', Avatar)
@@ -166,7 +160,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   const applications = Array.from(applicationStore.values())
   applications.forEach((application) => application.mounted(app))
 
-  store.watch(
+  watch(
     () =>
       authStore.userContextReady || authStore.idpContextReady || authStore.publicLinkContextReady,
     async (newValue, oldValue) => {
@@ -181,10 +175,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     }
   )
 
-  store.watch(
-    () => {
-      return authStore.userContextReady
-    },
+  watch(
+    () => authStore.userContextReady,
     async (userContextReady) => {
       if (!userContextReady) {
         return
@@ -217,10 +209,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       immediate: true
     }
   )
-  store.watch(
-    () => {
-      return authStore.publicLinkContextReady
-    },
+  watch(
+    () => authStore.publicLinkContextReady,
     (publicLinkContextReady) => {
       if (!publicLinkContextReady) {
         return
@@ -245,12 +235,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       immediate: true
     }
   )
-  store.watch(
+  watch(
     // only needed if a public link gets re-resolved with a changed password prop (changed or removed).
     // don't need to set { immediate: true } on the watcher.
-    () => {
-      return authStore.publicLinkPassword
-    },
+    () => authStore.publicLinkPassword,
     (publicLinkPassword: string | undefined) => {
       const publicLinkToken = authStore.publicLinkToken
       const space = spacesStore.spaces.find((space) => {
@@ -265,13 +253,11 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 }
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
-  const store = announceStore()
   const { capabilityStore, configStore } = announcePiniaStores()
   announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
   await announceTheme({ app, designSystem, configStore })
   console.error(err)
-  app.use(store)
   announceTranslations({
     app,
     availableLanguages: supportedLanguages,

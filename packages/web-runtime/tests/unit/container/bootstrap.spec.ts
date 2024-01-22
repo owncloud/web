@@ -40,7 +40,6 @@ describe('initialize applications', () => {
     const applications = await initializeApplications({
       app: createApp(defineComponent({})),
       configStore,
-      store: undefined,
       router: undefined,
       gettext: undefined,
       supportedLanguages: {}
