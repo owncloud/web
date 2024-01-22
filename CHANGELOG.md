@@ -47,15 +47,9 @@ Summary
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
 * Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
-* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
-* Change - Capability store: [#10296](https://github.com/owncloud/web/pull/10296)
-* Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
-* Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
-* Change - Auth store to pinia: [#10323](https://github.com/owncloud/web/pull/10323)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
-* Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
-* Change - Resources store to pinia: [#10368](https://github.com/owncloud/web/pull/10368)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -482,18 +476,68 @@ Details
 
    https://github.com/owncloud/web/pull/10122
 
-* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
 
-   BREAKING CHANGE for developers: The way how to work with modals has been
-   reworked. Modals can now be registered via the `dispatchModal` method provided
-   by the `useModals` composable, instead of calling `createModal` or `hideModal`
-   from the store.
+   BREAKING CHANGE for developers: The vuex store has been removed in favor of
+   pinia.
 
-   For more details on how to use the modal please see the linked PR down below.
+   All store modules have been migrated to a pinia store module. Please see the
+   linked issue down below for a list of all migrated stores and how to use them
+   now.
 
-   https://github.com/owncloud/web/issues/10095
+   There are a number of things that have been removed and/or moved into pinia
+   composables instead:
+
+   Globals:
+
+   - `store` and `$store` variables have been removed. - `ConfigurationManager` has
+   been removed. The config now sits inside the configuration store.
+
+   App framework:
+
+   - `announceStore` has been removed. There is no need for apps to announce stores
+   to the runtime. If you need to use a store in your app, simply create a pinia
+   store module and use it. - `announceExtensions` has been removed. The proper way
+   for an app to register file extensions is via the `extensions` property inside
+   the `appInfo` object. - `requestStore` has been removed. There is no need to
+   request specific stores. All stores that `web-pkg` provides can be imported and
+   accessed via their composables. - `enabled` callback as well as the `name`
+   callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
+   - `store` param of the `ClassicApplicationScript` has been removed.
+
+   Composables:
+
+   - `useStore` has been removed. Use the pinia for the store you want to use
+   instead. - `useAccessToken` has been removed. It now sits inside the auth store.
+   - `usePublicLinkContext` has been removed. It now sits inside the auth store. -
+   `usePublicLinkPassword` has been removed. It now sits inside the auth store. -
+   `usePublicLinkToken` has been removed. It now sits inside the auth store. -
+   `useUserContext` has been removed. It now sits inside the auth store. -
+   `useConfigurationManager` has been removed. The config now sits inside the
+   configuration store. - `use...Capability` composables have been removed.
+   Capablities now sit inside the capability store.
+
+   For store specific changes please see the linked issue and PRs down below.
+
+   https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10212
-   https://github.com/owncloud/web/pull/10239
+   https://github.com/owncloud/web/pull/10240
+   https://github.com/owncloud/web/pull/10307
+   https://github.com/owncloud/web/pull/10309
+   https://github.com/owncloud/web/pull/10316
+   https://github.com/owncloud/web/pull/10323
+   https://github.com/owncloud/web/pull/10326
+   https://github.com/owncloud/web/pull/10329
+   https://github.com/owncloud/web/pull/10331
+   https://github.com/owncloud/web/pull/10336
+   https://github.com/owncloud/web/pull/10338
+   https://github.com/owncloud/web/pull/10341
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10349
+   https://github.com/owncloud/web/pull/10362
+   https://github.com/owncloud/web/pull/10363
+   https://github.com/owncloud/web/pull/10368
+   https://github.com/owncloud/web/pull/10372
 
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 
@@ -506,60 +550,6 @@ Details
 
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10240
-
-* Change - Capability store: [#10296](https://github.com/owncloud/web/pull/10296)
-
-   BREAKING CHANGE for developers: The capabilities have been moved from vuex store
-   to pinia. We also removed the `use...Capability` composables in favor of the new
-   pinia store composable: `useCapabilityStore`.
-
-   Furthermore, the `enabled` callback as well as the `name` callback of the
-   `AppNavigationItem` no longer have the `capabilities` parameter.
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/issues/9748
-   https://github.com/owncloud/web/pull/10296
-
-* Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
-
-   BREAKING CHANGE for developers: Messages are no longer stored in a vuex store
-   but in pinia instead. This means to display a message in the UI, you need to use
-   the new `useMessages` composable.
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10309
-
-* Change - Spaces store to pinia: [#10316](https://github.com/owncloud/web/pull/10316)
-
-   BREAKING CHANGE for developers: Spaces are no longer stored in a vuex store but
-   in pinia instead. You can access all the store functionality via the new
-   `useSpacesStore` composable.
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10316
-
-* Change - Auth store to pinia: [#10323](https://github.com/owncloud/web/pull/10323)
-
-   BREAKING CHANGE for developers: Auth information is no longer stored in a vuex
-   store but in pinia instead. You can access all the store functionality via the
-   new `useAuthStore` composable.
-
-   Note that the following composables have also been removed in favour of the
-   pinia composable:
-
-   - `useAccessToken` - `usePublicLinkContext` - `usePublicLinkPassword` -
-   `usePublicLinkToken` - `useUserContext`
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10323
 
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 
@@ -576,34 +566,6 @@ Details
    https://github.com/owncloud/web/pull/10346
    https://github.com/owncloud/web/pull/10357
    https://github.com/owncloud/web/pull/10361
-
-* Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
-
-   BREAKING CHANGE for developers: Configuration is no longer stored in a vuex
-   store but in pinia instead. You can access it via the new `useConfigStore`
-   composable. The `ConfigurationManager` has also been removed in favour of this
-   composable.
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10336
-
-* Change - Resources store to pinia: [#10368](https://github.com/owncloud/web/pull/10368)
-
-   BREAKING CHANGE for developers: Resources are no longer stored in a vuex store
-   module but in pinia instead. You can access all the store functionality via the
-   new `useResourcesStore` composable.
-
-   Technically the former vuex store was only supposed to be used inside the files
-   app. However, it was reachable from the outside as well and was therefore quite
-   frequently used by other apps. So we decided to declare this as a breaking
-   change.
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10368
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
