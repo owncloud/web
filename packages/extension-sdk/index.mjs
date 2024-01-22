@@ -57,6 +57,7 @@ export const defineConfig = (overrides = {}) => {
             external: [
               'vue',
               'luxon',
+              'pinia',
               'vue3-gettext',
 
               '@ownclouders/web-client',

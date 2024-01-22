@@ -10,6 +10,7 @@ import type { Language } from 'vue3-gettext'
 import * as vue from 'vue' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
+import * as pinia from 'pinia' // eslint-disable-line
 import * as webPkg from '@ownclouders/web-pkg'
 import * as webClient from '@ownclouders/web-client'
 
@@ -26,6 +27,7 @@ const { requirejs, define } = window as any
 // keep in sync with packages/extension-sdk/index.mjs
 const injectionMap = {
   luxon,
+  pinia,
   vue,
   'vue3-gettext': vueGettext,
   '@ownclouders/web-pkg': webPkg,
