@@ -1,10 +1,5 @@
 import FileDetailsMultiple from '../../../../../src/components/SideBar/Details/FileDetailsMultiple.vue'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const selectors = {
   selectedFilesText: '[data-testid="selectedFilesText"]',
@@ -14,6 +9,7 @@ const selectors = {
 }
 
 const folderA = {
+  id: '1',
   type: 'folder',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -21,6 +17,7 @@ const folderA = {
   size: '740'
 }
 const folderB = {
+  id: '2',
   type: 'folder',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -28,6 +25,7 @@ const folderB = {
   size: '740'
 }
 const fileA = {
+  id: '3',
   type: 'file',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -35,6 +33,7 @@ const fileA = {
   size: '740'
 }
 const fileB = {
+  id: '4',
   type: 'file',
   ownerId: 'marie',
   ownerDisplayName: 'Marie',
@@ -66,14 +65,17 @@ describe('Details Multiple Selection SideBar Item', () => {
   })
 })
 
-function createWrapper(testResources) {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.selectedFiles.mockImplementation(() => testResources)
-  const store = createStore(storeOptions)
+function createWrapper(resources) {
   return {
     wrapper: shallowMount(FileDetailsMultiple, {
       global: {
-        plugins: [...defaultPlugins(), store]
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              resourcesStore: { resources, selectedIds: resources.map(({ id }) => id) }
+            }
+          })
+        ]
       }
     })
   }

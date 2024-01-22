@@ -1,16 +1,14 @@
 import { mock } from 'jest-mock-extended'
 import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
-import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import { SpaceResource } from '@ownclouders/web-client/src'
-import { FolderResource } from '@ownclouders/web-client/src/helpers'
 import {
-  RouteLocation,
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers/src'
+  useMessages,
+  useModals,
+  useResourcesStore
+} from '../../../../../src/composables/piniaStores'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import { FolderResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers/src'
 import { useScrollToMock } from '../../../../mocks/useScrollToMock'
 import { useScrollTo } from '../../../../../src/composables/scrollTo'
 
@@ -41,10 +39,13 @@ describe('useFileActionsCreateNewFolder', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ addNewFolder }, { storeOptions }) => {
+        setup: async ({ addNewFolder }) => {
           await addNewFolder('myfolder')
           await nextTick()
-          expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
+
+          const { upsertResource } = useResourcesStore()
+          expect(upsertResource).toHaveBeenCalled()
+
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledWith({ title: '"myfolder" was created successfully' })
 
@@ -95,10 +96,7 @@ function getWrapper({
 }: {
   resolveCreateFolder?: boolean
   space?: SpaceResource
-  setup: (
-    instance: ReturnType<typeof useFileActionsCreateNewFolder>,
-    options: { storeOptions: typeof defaultStoreMockOptions }
-  ) => void
+  setup: (instance: ReturnType<typeof useFileActionsCreateNewFolder>) => void
 }) {
   jest.mocked(useScrollTo).mockImplementation(() => useScrollToMock())
 
@@ -120,25 +118,18 @@ function getWrapper({
     return Promise.reject('error')
   })
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const currentFolder = {
-    id: 1,
-    path: '/'
-  }
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  const store = createStore(storeOptions)
+  const currentFolder = mock<Resource>({ id: '1', path: '/' })
+
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewFolder({ store, space })
-        setup(instance, { storeOptions })
+        const instance = useFileActionsCreateNewFolder({ space })
+        setup(instance)
       },
       {
-        store,
         mocks,
-        provide: mocks
+        provide: mocks,
+        pluginOptions: { piniaOptions: { resourcesStore: { currentFolder } } }
       }
     )
   }

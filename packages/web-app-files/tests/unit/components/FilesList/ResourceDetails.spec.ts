@@ -1,11 +1,4 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'jest-mock-extended'
 import { useFileActions } from '@ownclouders/web-pkg'
@@ -15,6 +8,7 @@ import { ref } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
+  getIndicators: jest.fn(() => []),
   useRouteQuery: jest.fn(),
   useFileActions: jest.fn()
 }))
@@ -52,8 +46,7 @@ describe('ResourceDetails component', () => {
         })
       })
     }
-    const storeOptions = { ...defaultStoreMockOptions }
-    const store = createStore(storeOptions)
+    mocks.$clientService.webdav.listFileVersions.mockResolvedValue([])
 
     const file = {
       id: 0,
@@ -79,8 +72,9 @@ describe('ResourceDetails component', () => {
         },
         global: {
           mocks,
-          plugins: [...defaultPlugins(), store],
+          plugins: [...defaultPlugins()],
           provide: {
+            ...mocks,
             space,
             resource: file
           }

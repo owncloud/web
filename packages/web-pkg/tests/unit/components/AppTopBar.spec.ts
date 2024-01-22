@@ -1,27 +1,13 @@
 import { mock } from 'jest-mock-extended'
 import {
   RouteLocation,
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   shallowMount
 } from 'web-test-helpers'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import AppTopBar from '../../../src/components/AppTopBar.vue'
 import { Action } from '../../../src/composables/actions'
-import { ConfigurationManager } from '../../../types'
-
-jest.mock('../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 describe('AppTopBar', () => {
   describe('if no resource is present', () => {
@@ -80,14 +66,10 @@ function getWrapper(
   mainActions: Action[] = [],
   areFileExtensionsShown = true
 ) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'admin-settings-general' })
   })
   return {
-    storeOptions,
     wrapper: shallowMount(AppTopBar, {
       props: {
         dropDownActions,
@@ -95,7 +77,9 @@ function getWrapper(
         resource
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({ piniaOptions: { resourcesStore: { areFileExtensionsShown } } })
+        ],
         mocks,
         provide: mocks
       }

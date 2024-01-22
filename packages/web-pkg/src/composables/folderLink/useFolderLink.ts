@@ -7,16 +7,15 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
-import { useCapabilityProjectSpacesEnabled, useCapabilityShareJailEnabled } from '../capability'
 import { useGetMatchingSpace } from '../spaces'
 import path, { dirname } from 'path'
 import { ResourceRouteResolverOptions, useResourceRouteResolver } from '../filesList'
 import { createLocationShares, createLocationSpaces } from '../../router'
+import { useCapabilityStore } from '../piniaStores'
 
 export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
+  const capabilityStore = useCapabilityStore()
   const { $gettext } = useGettext()
-  const hasShareJail = useCapabilityShareJailEnabled()
-  const hasProjectSpaces = useCapabilityProjectSpacesEnabled()
   const { getInternalSpace, getMatchingSpace, isResourceAccessible } = useGetMatchingSpace()
   const { createFolderLink } = useResourceRouteResolver(options)
 
@@ -79,7 +78,7 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
       return space.name
     }
 
-    if (unref(hasProjectSpaces)) {
+    if (capabilityStore.spacesProjects) {
       if (isProjectSpaceResource(resource)) {
         return $gettext('Spaces')
       }
@@ -88,7 +87,7 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
       }
     }
 
-    if (!unref(hasShareJail)) {
+    if (!capabilityStore.spacesShareJail) {
       return $gettext('All files and folders')
     }
 

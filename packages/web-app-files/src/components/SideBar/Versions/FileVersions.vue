@@ -61,9 +61,9 @@ import {
   formatFileSize,
   useClientService,
   useDownloadFile,
-  useStore
+  useResourcesStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import { useTask } from 'vue-concurrency'
@@ -79,23 +79,21 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
-    const { downloadFile } = useDownloadFile({ store, clientService })
+    const { downloadFile } = useDownloadFile({ clientService })
+    const { updateResourceField } = useResourcesStore()
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const versions = computed(() => {
-      return store.getters['Files/versions']
-    })
-
+    const versions = ref<Resource[]>([])
     const fetchVersionsTask = useTask(function* () {
-      yield store.dispatch('Files/loadVersions', {
-        client: clientService.webdav,
-        fileId: unref(resource).fileId
-      })
+      try {
+        versions.value = yield clientService.webdav.listFileVersions(unref(resource).fileId)
+      } catch (e) {
+        console.error(e)
+      }
     })
     const areVersionsLoading = computed(() => {
       return !fetchVersionsTask.last || fetchVersionsTask.isRunning
@@ -137,9 +135,9 @@ export default defineComponent({
       const fieldsToUpdate = ['size', 'mdate']
       for (const field of fieldsToUpdate) {
         if (Object.prototype.hasOwnProperty.call(unref(resource), field)) {
-          store.commit('Files/UPDATE_RESOURCE_FIELD', {
+          updateResourceField({
             id: unref(resource).id,
-            field,
+            field: field as any,
             value: restoredResource[field]
           })
         }

@@ -77,8 +77,8 @@ import {
   SideBarEventTopics,
   useClientService,
   useMessages,
-  useRouter,
-  useStore
+  useResourcesStore,
+  useRouter
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
@@ -112,10 +112,10 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const { showErrorMessage } = useMessages()
     const clientService = useClientService()
     const router = useRouter()
+    const { updateResourceField } = useResourcesStore()
 
     const isPublicLocation = isLocationPublicActive(router, 'files-public-link')
     const type = unref(isPublicLocation) ? 'span' : 'router-link'
@@ -204,11 +204,7 @@ export default defineComponent({
           })
         }
 
-        store.commit('Files/UPDATE_RESOURCE_FIELD', {
-          id: id,
-          field: 'tags',
-          value: [...selectedTagLabels]
-        })
+        updateResourceField({ id: id, field: 'tags', value: [...selectedTagLabels] })
 
         eventBus.publish('sidebar.entity.saved')
         if (unref(tagSelect) !== null) {
@@ -236,7 +232,13 @@ export default defineComponent({
       if (unref(resource)?.tags) {
         selectedTags.value = unref(currentTags)
       }
-      loadAvailableTagsTask.perform()
+
+      /**
+       * If the user can't edit the tags, for example on a public link, there is no need to load the available tags
+       */
+      if (!unref(readonly)) {
+        loadAvailableTagsTask.perform()
+      }
     })
 
     const keydownMethods = (map, vm) => {

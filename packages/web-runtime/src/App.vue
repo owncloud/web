@@ -10,13 +10,12 @@
   </div>
 </template>
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
 import SkipTo from './components/SkipTo.vue'
 import ModalWrapper from './components/ModalWrapper.vue'
 import { useLayout } from './composables/layout'
 import { computed, defineComponent, unref, watch } from 'vue'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
-import { eventBus, useRouter, useStore, useThemeStore } from '@ownclouders/web-pkg'
+import { eventBus, useResourcesStore, useRouter, useThemeStore } from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { RouteLocation } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -27,16 +26,16 @@ export default defineComponent({
     ModalWrapper
   },
   setup() {
-    const store = useStore()
+    const resourcesStore = useResourcesStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
 
     const router = useRouter()
-    useHead({ store })
+    useHead()
 
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
 
-    const { layout } = useLayout({ store, router })
+    const { layout } = useLayout({ router })
 
     watch(
       () => unref(activeRoute),
@@ -59,7 +58,7 @@ export default defineComponent({
         /*
          * If app has been changed and no file context is set, we will reset current folder.
          */
-        store.commit('Files/SET_CURRENT_FOLDER', null)
+        resourcesStore.setCurrentFolder(null)
       }
     )
 
@@ -74,10 +73,6 @@ export default defineComponent({
       announcement: '',
       activeBlobStyle: {}
     }
-  },
-  computed: {
-    ...mapState(['modal']),
-    ...mapGetters(['configuration'])
   },
   watch: {
     $route: {

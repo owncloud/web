@@ -3,11 +3,9 @@ import { locationSharesWithMe } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
 import { RouteRecordNormalized } from 'vue-router'
 import {
-  createStore,
   defaultPlugins,
   defaultStubs,
   shallowMount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
@@ -35,14 +33,11 @@ describe('SharesNavigation component', () => {
 })
 
 function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
   mocks.$router.getRoutes.mockImplementation(() => routes)
   return {
-    storeOptions,
     mocks,
     wrapper: shallowMount(SharesNavigation, {
       global: {
@@ -50,7 +45,7 @@ function getWrapper({ currentRouteName = locationSharesWithMe.name } = {}) {
         renderStubDefaultSlot: true,
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

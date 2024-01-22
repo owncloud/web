@@ -49,11 +49,14 @@ import {
   useRoute,
   useRouteParam,
   useRouteQuery,
-  useStore,
   useSelectedResources,
   useSideBar,
   useModals,
-  useMessages
+  useMessages,
+  useSpacesStore,
+  useAppsStore,
+  useConfigStore,
+  useResourcesStore
 } from '../../composables'
 import {
   Action,
@@ -104,14 +107,17 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
-    const store = useStore()
+    const appsStore = useAppsStore()
     const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
     const currentRoute = useRoute()
     const clientService = useClientService()
     const { getResourceContext } = useGetResourceContext()
-    const { selectedResources } = useSelectedResources({ store })
+    const { selectedResources } = useSelectedResources()
     const { dispatchModal } = useModals()
+    const spacesStore = useSpacesStore()
+    const configStore = useConfigStore()
+    const resourcesStore = useResourcesStore()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -164,7 +170,7 @@ export default defineComponent({
       applicationId: props.applicationId
     })
 
-    const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, store })
+    const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, appsStore })
 
     const pageTitle = computed(() => {
       const { name: appName } = unref(applicationMeta)
@@ -229,7 +235,7 @@ export default defineComponent({
 
         space.value = unref(unref(currentFileContext).space)
         resource.value = yield getFileInfo(currentFileContext)
-        store.commit('Files/LOAD_FILES', { currentFolder: null, files: [unref(resource)] })
+        resourcesStore.initResourceList({ currentFolder: null, resources: [unref(resource)] })
         selectedResources.value = [unref(resource)]
 
         const newExtension = props.importResourceWithExtension(unref(resource))
@@ -312,7 +318,7 @@ export default defineComponent({
         })
         serverContent.value = newContent
         currentETag.value = putFileContentsResponse.etag
-        store.commit('Files/UPSERT_RESOURCE', putFileContentsResponse)
+        resourcesStore.upsertResource(putFileContentsResponse)
       } catch (e) {
         switch (e.statusCode) {
           case 401:
@@ -333,7 +339,7 @@ export default defineComponent({
             )
             break
           case 507:
-            const space = store.getters['runtime/spaces/spaces'].find(
+            const space = spacesStore.spaces.find(
               (space) => space.id === unref(resource).storageId && isProjectSpaceResource(space)
             )
             if (space) {
@@ -366,7 +372,7 @@ export default defineComponent({
       if (!unref(isEditor)) {
         return
       }
-      const editorOptions = store.getters.configuration.options.editor
+      const editorOptions = configStore.options.editor
       if (editorOptions.autosaveEnabled) {
         autosaveIntervalId = setInterval(
           async () => {

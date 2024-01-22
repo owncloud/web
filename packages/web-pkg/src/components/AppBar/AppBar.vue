@@ -50,7 +50,7 @@
             v-if="showBatchActions"
             v-bind="{} as any"
             :actions="batchActions"
-            :action-options="{ space, resources: selectedFiles }"
+            :action-options="{ space, resources: selectedResources }"
             :limited-screen-space="limitedScreenSpace"
           />
         </div>
@@ -63,7 +63,6 @@
 <script lang="ts">
 import last from 'lodash-es/last'
 import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
-import { mapGetters } from 'vuex'
 import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
@@ -91,8 +90,9 @@ import {
 import {
   useAbility,
   useFileActionsToggleHideShare,
+  useResourcesStore,
   useRouteMeta,
-  useStore,
+  useSpacesStore,
   ViewModeConstants
 } from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
@@ -106,6 +106,7 @@ import {
   useSpaceActionsEditQuota,
   useSpaceActionsRestore
 } from '../../composables'
+import { storeToRefs } from 'pinia'
 
 const { EVENT_ITEM_DROPPED } = helpers
 
@@ -147,25 +148,28 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const store = useStore()
+    const spacesStore = useSpacesStore()
     const { $gettext } = useGettext()
     const { can } = useAbility()
 
-    const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
-    const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
-    const { actions: copyActions } = useFileActionsCopy({ store })
-    const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
-    const { actions: declineShareActions } = useFileActionsDeclineShare({ store })
-    const { actions: deleteActions } = useFileActionsDelete({ store })
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const resourcesStore = useResourcesStore()
+    const { selectedResources } = storeToRefs(resourcesStore)
+
+    const { actions: acceptShareActions } = useFileActionsAcceptShare()
+    const { actions: hideShareActions } = useFileActionsToggleHideShare()
+    const { actions: copyActions } = useFileActionsCopy()
+    const { actions: duplicateActions } = useSpaceActionsDuplicate()
+    const { actions: declineShareActions } = useFileActionsDeclineShare()
+    const { actions: deleteActions } = useFileActionsDelete()
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
-    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin({ store })
-    const { actions: moveActions } = useFileActionsMove({ store })
-    const { actions: restoreActions } = useFileActionsRestore({ store })
-    const { actions: deleteSpaceActions } = useSpaceActionsDelete({ store })
-    const { actions: disableSpaceActions } = useSpaceActionsDisable({ store })
+    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin()
+    const { actions: moveActions } = useFileActionsMove()
+    const { actions: restoreActions } = useFileActionsRestore()
+    const { actions: deleteSpaceActions } = useSpaceActionsDelete()
+    const { actions: disableSpaceActions } = useSpaceActionsDisable()
     const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: restoreSpaceActions } = useSpaceActionsRestore({ store })
+    const { actions: restoreSpaceActions } = useSpaceActionsRestore()
 
     const breadcrumbMaxWidth = ref<number>(0)
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
@@ -204,14 +208,12 @@ export default defineComponent({
       }
 
       return actions.filter((item) =>
-        item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
+        item.isEnabled({ space: props.space, resources: resourcesStore.selectedResources })
       )
     })
 
-    const spaces = computed<SpaceResource[]>(() =>
-      store.getters['runtime/spaces/spaces'].filter(
-        (s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s)
-      )
+    const spaces = computed(() =>
+      spacesStore.spaces.filter((s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s))
     )
 
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
@@ -240,7 +242,7 @@ export default defineComponent({
         ? 3
         : 2
     })
-    const fileDroppedBreadcrumb = async (data) => {
+    const fileDroppedBreadcrumb = (data) => {
       emit(EVENT_ITEM_DROPPED, data)
     }
 
@@ -260,7 +262,8 @@ export default defineComponent({
       breadcrumbMaxWidth,
       breadcrumbTruncationOffset,
       fileDroppedBreadcrumb,
-      pageTitle
+      pageTitle,
+      selectedResources
     }
   },
   data: function () {
@@ -270,28 +273,26 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('Files', ['files', 'selectedFiles']),
-
     showContextActions() {
       return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
     },
     showBatchActions() {
       return (
         this.hasBulkActions &&
-        (this.selectedFiles.length >= 1 ||
+        (this.selectedResources.length >= 1 ||
           isLocationTrashActive(this.$router, 'files-trash-generic'))
       )
     },
     selectedResourcesAnnouncement() {
-      if (this.selectedFiles.length === 0) {
+      if (this.selectedResources.length === 0) {
         return this.$gettext('No items selected.')
       }
       return this.$ngettext(
         '%{ amount } item selected. Actions are available above the table.',
         '%{ amount } items selected. Actions are available above the table.',
-        this.selectedFiles.length,
+        this.selectedResources.length,
         {
-          amount: this.selectedFiles.length
+          amount: this.selectedResources.length.toString()
         }
       )
     }

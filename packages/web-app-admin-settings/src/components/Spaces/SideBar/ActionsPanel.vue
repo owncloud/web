@@ -24,13 +24,11 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
-import { useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ActionsPanel',
   components: { ActionMenuItem },
   setup() {
-    const store = useStore()
     const resource = inject<SpaceResource>('resource')
     const resources = computed(() => {
       return [unref(resource)]
@@ -39,12 +37,12 @@ export default defineComponent({
       resources: unref(resources)
     }))
 
-    const { actions: deleteActions } = useSpaceActionsDelete({ store })
-    const { actions: disableActions } = useSpaceActionsDisable({ store })
-    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
+    const { actions: deleteActions } = useSpaceActionsDelete()
+    const { actions: disableActions } = useSpaceActionsDisable()
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: renameActions } = useSpaceActionsRename({ store })
-    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: renameActions } = useSpaceActionsRename()
+    const { actions: restoreActions } = useSpaceActionsRestore()
 
     const actions = computed(() => {
       return [

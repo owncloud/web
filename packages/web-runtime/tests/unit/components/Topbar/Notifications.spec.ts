@@ -1,13 +1,7 @@
 import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
 import { Notification, NotificationAction } from 'web-runtime/src/helpers/notifications'
 import { mock, mockDeep } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -240,16 +234,12 @@ function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
   clientMock.requests.ocs.mockResolvedValue(mockDeep<Response>(jsonResponse))
   localMocks.$clientService.owncloudSdk = clientMock
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
-  const store = createStore(storeOptions)
   return {
     mocks: localMocks,
-    storeOptions,
     wrapper: shallowMount(Notifications, {
       global: {
         renderStubDefaultSlot: true,
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins({ piniaOptions: { spacesState: { spaces } } })],
         mocks: localMocks,
         provide: localMocks,
         stubs: { 'avatar-image': true, OcButton: false }

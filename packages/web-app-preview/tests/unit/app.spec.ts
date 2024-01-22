@@ -1,12 +1,6 @@
 import App from '../../src/App.vue'
 import { nextTick, ref } from 'vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { FileContext, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
@@ -94,10 +88,6 @@ describe('Preview app', () => {
   })
 })
 
-const storeOptions = defaultStoreMockOptions
-storeOptions.modules.Files.getters.activeFiles.mockImplementation(() => ['3'])
-const store = createStore(storeOptions)
-
 function createShallowMountWrapper() {
   jest.mocked(useAppDefaults).mockImplementation(() =>
     useAppDefaultsMock({
@@ -125,7 +115,7 @@ function createShallowMountWrapper() {
         }
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks
       }

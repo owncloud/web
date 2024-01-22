@@ -3,8 +3,6 @@ import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import {
-  createStore,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
   getComposableWrapper,
@@ -67,7 +65,7 @@ describe('setImage', () => {
         })
       )
       getWrapper({
-        setup: async ({ actions }) => {
+        setup: ({ actions }) => {
           expect(
             unref(actions)[0].isEnabled({
               space,
@@ -155,7 +153,6 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useFileActionsSetImage>,
     options: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
@@ -169,19 +166,13 @@ function getWrapper({
   mocks.$previewService.isMimetypeSupported.mockReturnValue(isMimetypeSupported)
   mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsSetImage({ store })
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        const instance = useFileActionsSetImage()
+        setup(instance, { clientService: mocks.$clientService })
       },
       {
-        store,
         mocks,
         provide: mocks,
         pluginOptions: {

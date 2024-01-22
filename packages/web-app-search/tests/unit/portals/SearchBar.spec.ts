@@ -3,14 +3,7 @@ import flushPromises from 'flush-promises'
 import { mock } from 'jest-mock-extended'
 import { ref } from 'vue'
 import { defineComponent } from 'vue'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 
 const component = defineComponent({
@@ -94,7 +87,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.find(selectors.search).exists()).toBeFalsy()
   })
   test('does not render a search field if no user given', () => {
-    wrapper = getMountedWrapper({ isUserContextReady: false }).wrapper
+    wrapper = getMountedWrapper({ userContextReady: false }).wrapper
     expect(wrapper.find(selectors.search).exists()).toBeFalsy()
   })
   test('updates the search term on input', () => {
@@ -196,6 +189,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
+  // eslint-disable-next-line jest/expect-expect,jest/no-disabled-tests
   test.skip('sets active preview item via keyboard navigation', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
@@ -227,7 +221,7 @@ describe('Search Bar portal component', () => {
 
 function getMountedWrapper({
   mocks = {},
-  isUserContextReady = true,
+  userContextReady = true,
   providers = [providerFiles, providerContacts]
 } = {}) {
   jest.mocked(useAvailableProviders).mockReturnValue(ref(providers))
@@ -244,16 +238,15 @@ function getMountedWrapper({
     ...mocks
   }
 
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockImplementation(
-    () => isUserContextReady
-  )
-  const store = createStore(storeOptions)
   return {
     wrapper: mount(SearchBar, {
       attachTo: document.body,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { authState: { userContextReady: userContextReady } }
+          })
+        ],
         mocks: localMocks,
         provide: localMocks,
         stubs: {

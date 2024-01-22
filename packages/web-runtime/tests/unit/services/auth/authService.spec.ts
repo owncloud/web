@@ -1,12 +1,19 @@
-import { ConfigurationManager } from '@ownclouders/web-pkg'
+import { useAuthStore, useConfigStore } from '@ownclouders/web-pkg'
 import { mock } from 'jest-mock-extended'
-import { Store } from 'vuex'
 import { AuthService } from 'web-runtime/src/services/auth/authService'
 import { UserManager } from 'web-runtime/src/services/auth/userManager'
-import { RouteLocation, createRouter } from 'web-test-helpers/src'
+import { RouteLocation, createRouter, createTestingPinia } from 'web-test-helpers/src'
 
 const mockUpdateContext = jest.fn()
 console.debug = jest.fn()
+
+const initAuthService = ({ authService, configStore = null, router = null }) => {
+  createTestingPinia()
+  const authStore = useAuthStore()
+  configStore = configStore || useConfigStore()
+
+  authService.initialize(configStore, null, router, null, null, null, authStore, null)
+}
 
 describe('AuthService', () => {
   describe('signInCallback', () => {
@@ -25,7 +32,6 @@ describe('AuthService', () => {
       'parses query params and passes them explicitly to router.replace: %s => %s %s',
       async (url, path, query: any) => {
         const authService = new AuthService()
-        const configurationManager = new ConfigurationManager()
 
         jest.replaceProperty(authService as any, 'userManager', {
           signinRedirectCallback: jest.fn(),
@@ -35,12 +41,7 @@ describe('AuthService', () => {
         const router = createRouter()
         const replaceSpy = jest.spyOn(router, 'replace')
 
-        configurationManager.initialize({
-          server: 'http://server/address/',
-          options: { embed: { enabled: false } }
-        })
-
-        authService.initialize(configurationManager, null, null, router, null, null, null)
+        initAuthService({ authService, router })
 
         await authService.signInCallback()
 
@@ -55,7 +56,6 @@ describe('AuthService', () => {
   describe('initializeContext', () => {
     it('when embed mode is disabled and access_token is present, should call updateContext', async () => {
       const authService = new AuthService()
-      const configurationManager = new ConfigurationManager()
 
       jest.replaceProperty(
         authService as any,
@@ -66,19 +66,7 @@ describe('AuthService', () => {
         })
       )
 
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: false } }
-      })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -87,7 +75,6 @@ describe('AuthService', () => {
 
     it('when embed mode is disabled and access_token is not present, should not call updateContext', async () => {
       const authService = new AuthService()
-      const configurationManager = new ConfigurationManager()
 
       jest.replaceProperty(
         authService as any,
@@ -98,19 +85,7 @@ describe('AuthService', () => {
         })
       )
 
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: false } }
-      })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -119,7 +94,6 @@ describe('AuthService', () => {
 
     it('when embed mode is enabled, access_token is present but auth is not delegated, should call updateContext', async () => {
       const authService = new AuthService()
-      const configurationManager = new ConfigurationManager()
 
       jest.replaceProperty(
         authService as any,
@@ -130,19 +104,7 @@ describe('AuthService', () => {
         })
       )
 
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: true, delegateAuthentication: false } }
-      })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -151,7 +113,6 @@ describe('AuthService', () => {
 
     it('when embed mode is enabled, access_token is present and auth is delegated, should not call updateContext', async () => {
       const authService = new AuthService()
-      const configurationManager = new ConfigurationManager()
 
       jest.replaceProperty(
         authService as any,
@@ -162,19 +123,9 @@ describe('AuthService', () => {
         })
       )
 
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: true, delegateAuthentication: true } }
-      })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      const configStore = useConfigStore()
+      configStore.options = { embed: { enabled: true, delegateAuthentication: true } }
+      initAuthService({ authService, configStore })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 
@@ -183,7 +134,6 @@ describe('AuthService', () => {
 
     it('when embed mode is disabled, access_token is present and auth is delegated, should call updateContext', async () => {
       const authService = new AuthService()
-      const configurationManager = new ConfigurationManager()
 
       jest.replaceProperty(
         authService as any,
@@ -194,19 +144,7 @@ describe('AuthService', () => {
         })
       )
 
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: false, delegateAuthentication: true } }
-      })
-      authService.initialize(
-        configurationManager,
-        null,
-        mock<Store<any>>({}),
-        null,
-        null,
-        null,
-        null
-      )
+      initAuthService({ authService })
 
       await authService.initializeContext(mock<RouteLocation>({}))
 

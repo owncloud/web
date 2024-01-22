@@ -111,16 +111,17 @@
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import UserInfoBox from './UserInfoBox.vue'
-import { CompareSaveDialog, QuotaSelect, useUserStore } from '@ownclouders/web-pkg'
+import {
+  CompareSaveDialog,
+  QuotaSelect,
+  useUserStore,
+  useCapabilityStore
+} from '@ownclouders/web-pkg'
 import GroupSelect from '../GroupSelect.vue'
 import { cloneDeep } from 'lodash-es'
 import { AppRole, AppRoleAssignment, Group, User } from '@ownclouders/web-client/src/generated'
-import {
-  MaybeRef,
-  useCapabilityReadOnlyUserAttributes,
-  useClientService,
-  useCapabilitySpacesMaxQuota
-} from '@ownclouders/web-pkg'
+import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -147,6 +148,8 @@ export default defineComponent({
   },
   emits: ['confirm'],
   setup(props) {
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const userStore = useUserStore()
 
@@ -172,13 +175,12 @@ export default defineComponent({
       )
     })
     const isLoginInputDisabled = computed(() => userStore.user.id === (props.user as User).id)
-    const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
     const isInputFieldReadOnly = (key) => {
-      return unref(readOnlyUserAttributes).includes(key)
+      return capabilityStore.graphUsersReadOnlyAttributes.includes(key)
     }
 
     return {
-      maxQuota: useCapabilitySpacesMaxQuota(),
+      maxQuota: capabilityRefs.spacesMaxQuota,
       isInputFieldReadOnly,
       isLoginInputDisabled,
       editUser,

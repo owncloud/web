@@ -1,12 +1,7 @@
-import { useCapabilitySpacesEnabled } from '../capability'
-import { useStore } from '../store'
-import { useConfigurationManager } from '../configuration'
 import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   MountPointSpaceResource,
-  PersonalSpaceResource,
-  ProjectSpaceResource,
   buildShareSpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
@@ -17,25 +12,25 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
-import { useUserStore } from '../piniaStores'
+import { useSpacesStore, useUserStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 
 type GetMatchingSpaceOptions = {
   space?: Ref<SpaceResource>
 }
 
 export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
-  const store = useStore()
   const userStore = useUserStore()
-  const configurationManager = useConfigurationManager()
-  const spaces = computed<ProjectSpaceResource[]>(() => store.getters['runtime/spaces/spaces'])
+  const spacesStore = useSpacesStore()
+  const capabilityStore = useCapabilityStore()
+  const configStore = useConfigStore()
+  const spaces = computed(() => spacesStore.spaces)
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-  const hasSpaces = useCapabilitySpacesEnabled(store)
 
   const getInternalSpace = (storageId: string): SpaceResource => {
     return (
       unref(options?.space) ||
       unref(spaces).find((space) => space.id === storageId) ||
-      (!unref(hasSpaces) && unref(spaces).find((s) => isPersonalSpaceResource(s)))
+      (!capabilityStore.spacesEnabled && unref(spaces).find((s) => isPersonalSpaceResource(s)))
     )
   }
 
@@ -77,7 +72,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       driveAliasPrefix,
       shareId: resource.shareId,
       shareName,
-      serverUrl: configurationManager.serverUrl
+      serverUrl: configStore.serverUrl
     })
   }
 
@@ -86,20 +81,16 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       (s) => isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
     )
 
-  const getPersonalSpace = (): PersonalSpaceResource => {
-    return unref(spaces).find((s) => isPersonalSpaceResource(s) && s.isOwner(userStore.user))
-  }
-
   const isPersonalSpaceRoot = (resource: Resource) => {
     return (
       resource?.storageId &&
-      resource?.storageId === getPersonalSpace()?.storageId &&
+      resource?.storageId === spacesStore.personalSpace?.storageId &&
       resource?.path === '/'
     )
   }
 
   const isResourceAccessible = ({ space, path }: { space: SpaceResource; path: string }) => {
-    if (!configurationManager.options.routing.fullShareOwnerPaths) {
+    if (!configStore.options.routing.fullShareOwnerPaths) {
       return true
     }
 
@@ -116,7 +107,6 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   return {
     getInternalSpace,
     getMatchingSpace,
-    getPersonalSpace,
     isPersonalSpaceRoot,
     isResourceAccessible
   }

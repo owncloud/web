@@ -26,11 +26,15 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useFileActionsPaste, useFileActionsShowDetails } from '@ownclouders/web-pkg'
+import {
+  useFileActionsPaste,
+  useFileActionsShowDetails,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import { useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useStore } from '@ownclouders/web-pkg'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'WhitespaceContextMenu',
@@ -44,19 +48,19 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
-    const store = useStore()
+    const resourcesStore = useResourcesStore()
+    const { currentFolder } = storeToRefs(resourcesStore)
+
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
-    const currentFolder = computed(() => store.getters['Files/currentFolder'])
     const actionOptions = computed(() => ({
       space: props.space,
       resources: [currentFolder.value]
     }))
     const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({
-      store,
       space: props.space
     })
-    const { actions: showDetailsAction } = useFileActionsShowDetails({ store })
-    const { actions: pasteAction } = useFileActionsPaste({ store })
+    const { actions: showDetailsAction } = useFileActionsShowDetails()
+    const { actions: pasteAction } = useFileActionsPaste()
 
     const menuItemsActions = computed(() => {
       return [

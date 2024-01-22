@@ -5,19 +5,19 @@ import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
 import { Share } from '@ownclouders/web-client/src/helpers/share'
 import {
-  createStore,
   defaultPlugins,
   mount,
   shallowMount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { CapabilityStore, useResourcesStore, useSharesStore } from '@ownclouders/web-pkg'
 
 const getCollaborator = () => ({
   shareType: 0,
   id: uuidV4(),
+  outgoing: true,
   collaborator: {
     name: 'einstein',
     displayName: 'Albert Einstein',
@@ -103,23 +103,23 @@ describe('FileShares', () => {
       await wrapper.find('.toggle-shares-list-btn').trigger('click')
       expect(wrapper.vm.sharesListCollapsed).toBe(showAllOnLoad)
     })
-    it('share should be modifiable if its personal space share', async () => {
+    it('share should be modifiable if its personal space share', () => {
       const space = mock<SpaceResource>({ driveType: 'personal' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(true)
     })
-    it('share should not be modifiable if its not personal space share', async () => {
+    it('share should not be modifiable if its not personal space share', () => {
       const space = mock<SpaceResource>({ driveType: 'project' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
-    it('share should not be modifiable if collaborator is indirect', async () => {
+    it('share should not be modifiable if collaborator is indirect', () => {
       const space = mock<SpaceResource>({ driveType: 'personal' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       collaborators[0]['indirect'] = true
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
-    it('share should not be modifiable if user is not manager', async () => {
+    it('share should not be modifiable if user is not manager', () => {
       const space = mock<SpaceResource>({ driveType: 'personal' })
       ;(space as any).isManager = jest.fn(() => false)
       collaborators[0]['indirect'] = true
@@ -182,12 +182,14 @@ describe('FileShares', () => {
         collaborators: [getCollaborator()],
         currentRouteName: 'files-shares-with-others'
       })
-      const deleteShareSpy = jest.spyOn(wrapper.vm, 'deleteShare')
-      const removeFilesSpy = jest.spyOn(wrapper.vm, 'REMOVE_FILES')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
-      expect(deleteShareSpy).toHaveBeenCalled()
-      expect(removeFilesSpy).toHaveBeenCalled()
+
+      const { removeResources } = useResourcesStore()
+      expect(removeResources).toHaveBeenCalled()
+
+      const { deleteShare } = useSharesStore()
+      expect(deleteShare).toHaveBeenCalled()
     })
   })
 })
@@ -204,30 +206,27 @@ function getWrapper({
   currentRouteName = 'files-spaces-generic',
   ancestorMetaData = {}
 } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      capabilities: jest.fn(() => ({
-        files_sharing: { resharing: hasReSharing }
-      })),
-      configuration: jest.fn(() => ({
-        options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
-      }))
-    }
-  }
-  storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
-    ancestorMetaData
-  )
-  storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
-    () => spaceMembers
-  )
-  storeOptions.modules.Files.getters.outgoingCollaborators.mockReturnValue(collaborators)
-  const store = createStore(storeOptions)
+  const capabilities = {
+    files_sharing: { resharing: hasReSharing, deny_access: false }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: mountType(FileShares, {
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              userState: { user },
+              spacesState: { spaceMembers },
+              capabilityState: { capabilities },
+              configState: {
+                options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
+              },
+              sharesState: { shares: collaborators },
+              resourcesStore: { ancestorMetaData }
+            }
+          })
+        ],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ name: currentRouteName })
         }),

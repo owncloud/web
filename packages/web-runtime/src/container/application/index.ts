@@ -1,22 +1,20 @@
-import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { NextApplication } from './next'
 import { convertClassicApplication } from './classic'
-import { RuntimeError } from '@ownclouders/web-pkg'
+import { RuntimeError, ConfigStore } from '@ownclouders/web-pkg'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 import type { Language } from 'vue3-gettext'
 
 // import modules to provide them to applications
 import * as vue from 'vue' // eslint-disable-line
-import * as vuex from 'vuex' // eslint-disable-line
 import * as luxon from 'luxon' // eslint-disable-line
 import * as vueGettext from 'vue3-gettext' // eslint-disable-line
+import * as pinia from 'pinia' // eslint-disable-line
 import * as webPkg from '@ownclouders/web-pkg'
 import * as webClient from '@ownclouders/web-client'
 
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
 import { App } from 'vue'
 import { AppConfigObject, ClassicApplicationScript } from '@ownclouders/web-pkg'
 
@@ -29,9 +27,9 @@ const { requirejs, define } = window as any
 // keep in sync with packages/extension-sdk/index.mjs
 const injectionMap = {
   luxon,
+  pinia,
   vue,
   'vue3-gettext': vueGettext,
-  vuex,
   '@ownclouders/web-pkg': webPkg,
   '@ownclouders/web-client': webClient,
   'web-pkg': webPkg,
@@ -64,20 +62,18 @@ export const buildApplication = async ({
   app,
   applicationPath,
   applicationConfig,
-  store,
   router,
   gettext,
   supportedLanguages,
-  configurationManager
+  configStore
 }: {
   app: App
   applicationPath: string
   applicationConfig: AppConfigObject
-  store: Store<unknown>
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
 }): Promise<NextApplication> => {
   if (applicationStore.has(applicationPath)) {
     throw new RuntimeError('application already announced', applicationPath)
@@ -91,7 +87,7 @@ export const buildApplication = async ({
         !applicationPath.startsWith('https://') &&
         !applicationPath.startsWith('//')
       ) {
-        applicationPath = urlJoin(configurationManager.serverUrl, applicationPath)
+        applicationPath = urlJoin(configStore.serverUrl, applicationPath)
       }
 
       if (applicationPath.endsWith('.mjs') || applicationPath.endsWith('.ts')) {
@@ -122,16 +118,14 @@ export const buildApplication = async ({
     if (!isObject(applicationScript.appInfo) && !applicationScript.setup) {
       throw new RuntimeError('next applications not implemented yet, stay tuned')
     } else {
-      application = await convertClassicApplication({
+      application = convertClassicApplication({
         app,
         applicationScript,
         applicationConfig,
-        store,
         router,
         gettext,
-        supportedLanguages,
-        configurationManager
-      }).catch()
+        supportedLanguages
+      })
     }
   } catch (err) {
     throw new RuntimeError('cannot create application', err.message, applicationPath)

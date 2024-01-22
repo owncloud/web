@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
@@ -11,10 +10,15 @@ import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
 import PQueue from 'p-queue'
-import { useMessages, useModals } from '../../piniaStores'
-import { useConfigurationManager } from '../../configuration'
+import {
+  useConfigStore,
+  useMessages,
+  useModals,
+  useResourcesStore,
+  useSpacesStore
+} from '../../piniaStores'
 
-export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store<any> } = {}) => {
+export const useFileActionsCreateSpaceFromResource = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const { can } = useAbility()
   const { $gettext, $ngettext } = useGettext()
@@ -24,18 +28,20 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
   const router = useRouter()
   const hasCreatePermission = computed(() => can('create-all', 'Drive'))
   const { dispatchModal } = useModals()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
+  const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   const confirmAction = async ({ spaceName, resources, space }) => {
     const { webdav } = clientService
     const queue = new PQueue({
-      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+      concurrency: configStore.options.concurrentRequests.resourceBatchActions
     })
     const copyOps = []
 
     try {
       const createdSpace = await createSpace(spaceName)
-      store.commit('runtime/spaces/UPSERT_SPACE', createdSpace)
+      spacesStore.upsertSpace(createdSpace)
 
       if (resources.length === 1 && resources[0].isFolder) {
         //If a single folder is selected we copy it's content to the Space's root folder
@@ -49,7 +55,7 @@ export const useFileActionsCreateSpaceFromResource = ({ store }: { store?: Store
       }
 
       await Promise.all(copyOps)
-      store.dispatch('Files/resetFileSelection')
+      resourcesStore.resetSelection()
       showMessage({ title: $gettext('Space was created successfully') })
     } catch (error) {
       console.error(error)

@@ -1,18 +1,14 @@
 import { mock } from 'jest-mock-extended'
-import { nextTick, ref, unref } from 'vue'
+import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
-import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
+import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
 import { useFileActions } from '../../../../../src/composables/actions/files/useFileActions'
-import {
-  RouteLocation,
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers/src'
+import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers/src'
+import { ApplicationFileExtension } from '../../../../../types'
+import { useResourcesStore } from '../../../../../src/composables/piniaStores'
 
 jest.mock('../../../../../src/composables/actions/files/useFileActions', () => ({
   useFileActions: jest.fn(() => mock<ReturnType<typeof useFileActions>>())
@@ -38,38 +34,16 @@ describe('useFileActionsCreateNewFile', () => {
     })
   })
 
-  describe('addNewFile', () => {
-    it('create new file', () => {
+  describe('openFile', () => {
+    it('upserts the resource before opening', () => {
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         space,
-        setup: async ({ addNewFile }, { storeOptions }) => {
-          await addNewFile('myfile.txt', null)
-          await nextTick()
-          expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
-          const { showMessage } = useMessages()
-          expect(showMessage).toHaveBeenCalledWith({
-            title: '"myfile.txt" was created successfully'
-          })
-        }
-      })
-    })
-    it('show error message if createFile fails', () => {
-      const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
-      const space = mock<SpaceResource>({ id: '1' })
-      getWrapper({
-        resolveCreateFile: false,
-        space,
-        setup: async ({ addNewFile }) => {
-          await addNewFile('myfolder', null)
-          await nextTick()
+        setup: ({ openFile }) => {
+          openFile(mock<Resource>(), null)
 
-          const { showErrorMessage } = useMessages()
-          expect(showErrorMessage).toHaveBeenCalledWith(
-            expect.objectContaining({ title: 'Failed to create file' })
-          )
-
-          consoleErrorMock.mockRestore()
+          const { upsertResource } = useResourcesStore()
+          expect(upsertResource).toHaveBeenCalled()
         }
       })
     })
@@ -98,10 +72,7 @@ function getWrapper({
 }: {
   resolveCreateFile?: boolean
   space?: SpaceResource
-  setup: (
-    instance: ReturnType<typeof useFileActionsCreateNewFile>,
-    options: { storeOptions: typeof defaultStoreMockOptions }
-  ) => void
+  setup: (instance: ReturnType<typeof useFileActionsCreateNewFile>) => void
 }) {
   const mocks = {
     ...defaultComponentMocks({
@@ -121,29 +92,30 @@ function getWrapper({
     return Promise.reject('error')
   })
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const currentFolder = {
-    id: 1,
-    path: '/'
-  }
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  const store = createStore(storeOptions)
+  const currentFolder = mock<Resource>({ id: '1', path: '/' })
+
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewFile({
-          store,
-          space,
-          newFileHandlers: ref([{ action: null, ext: '.txt', menuTitle: jest.fn() }])
-        })
-        setup(instance, { storeOptions })
+        const instance = useFileActionsCreateNewFile({ space })
+        setup(instance)
       },
       {
-        store,
         provide: mocks,
-        mocks
+        mocks,
+        pluginOptions: {
+          piniaOptions: {
+            appsState: {
+              fileExtensions: [
+                mock<ApplicationFileExtension>({
+                  extension: '.txt',
+                  newFileMenu: { menuTitle: jest.fn() }
+                })
+              ]
+            },
+            resourcesStore: { currentFolder }
+          }
+        }
       }
     )
   }

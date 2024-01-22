@@ -54,7 +54,18 @@ When(
   async function (this: World, stepUser: string, language: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const accountObject = new objects.account.Account({ page })
-    const expectedLanguage = await accountObject.changeLanguage(language)
+    const isAnonymousUser = stepUser === 'Anonymous'
+    const expectedLanguage = await accountObject.changeLanguage(language, isAnonymousUser)
     expect(expectedLanguage).toBe(language)
+  }
+)
+
+Then(
+  '{string} should see the following account page title {string}',
+  async function (this: World, stepUser: string, title: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const accountObject = new objects.account.Account({ page })
+    const pageTitle = await accountObject.getTitle()
+    expect(pageTitle).toEqual(title)
   }
 )

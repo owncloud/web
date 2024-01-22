@@ -152,19 +152,18 @@ import {
   NoContentMessage,
   eventBus,
   queryItemAsString,
-  useAccessToken,
-  useCapabilitySpacesMaxQuota,
   useClientService,
-  useConfigurationManager,
   useRoute,
   useRouteQuery,
   useRouter,
   useSideBar,
-  useStore,
   SideBarPanel,
   SideBarPanelContext,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore,
+  useCapabilityStore,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -182,6 +181,7 @@ import { diff } from 'deep-object-diff'
 import Mark from 'mark.js'
 import { format } from 'util'
 import { isEqual, isEmpty, omit } from 'lodash-es'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'UsersView',
@@ -197,12 +197,13 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const router = useRouter()
     const route = useRoute()
-    const store = useStore()
     const { showErrorMessage } = useMessages()
-    const accessToken = useAccessToken({ store })
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
@@ -240,7 +241,7 @@ export default defineComponent({
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
-    const isFilteringMandatory = ref(configurationManager.options.userListRequiresFilter)
+    const isFilteringMandatory = ref(configStore.options.userListRequiresFilter)
     const sideBarLoading = ref(false)
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
@@ -522,6 +523,10 @@ export default defineComponent({
 
         eventBus.publish('sidebar.entity.saved')
 
+        if (userStore.user.id === updatedUser.id) {
+          userStore.setUser(updatedUser)
+        }
+
         return updatedUser
       } catch (error) {
         console.error(error)
@@ -542,7 +547,7 @@ export default defineComponent({
 
       if (editUser.id === userStore.user.id) {
         // Load current user quota
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+        spacesStore.updateSpaceField({
           id: editUser.drive.id,
           field: 'spaceQuota',
           value: updateDriveResponse.data.quota
@@ -568,9 +573,7 @@ export default defineComponent({
       const requests = []
 
       for (const groupToAdd of groupsToAdd) {
-        requests.push(
-          client.groups.addMember(groupToAdd.id, user.id, configurationManager.serverUrl)
-        )
+        requests.push(client.groups.addMember(groupToAdd.id, user.id, configStore.serverUrl))
       }
       for (const groupToDelete of groupsToDelete) {
         requests.push(client.groups.deleteMember(groupToDelete.id, user.id))
@@ -616,7 +619,7 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
-      maxQuota: useCapabilitySpacesMaxQuota(),
+      maxQuota: capabilityRefs.spacesMaxQuota,
       template,
       selectedUsers,
       sideBarLoading,
@@ -627,7 +630,6 @@ export default defineComponent({
       loadResourcesTask,
       loadAdditionalUserDataTask,
       clientService,
-      accessToken,
       batchActions,
       filterGroups,
       filterRoles,

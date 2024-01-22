@@ -8,10 +8,8 @@ import { locationPublicUpload } from '@ownclouders/web-pkg'
 import { PublicSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation,
@@ -78,7 +76,7 @@ describe('DriveResolver view', () => {
       space,
       internalSpace,
       mocks: { $clientService: clientService },
-      isUserContextReady: true
+      userContextReady: true
     })
 
     await wrapper.vm.$nextTick()
@@ -94,7 +92,7 @@ describe('DriveResolver view', () => {
     const { wrapper, mocks } = getMountedWrapper({
       space,
       mocks: { $clientService: clientService },
-      isUserContextReady: true
+      userContextReady: true
     })
 
     await wrapper.vm.$nextTick()
@@ -121,7 +119,7 @@ function getMountedWrapper({
   space = undefined,
   internalSpace = undefined,
   currentRouteName = 'files-spaces-generic',
-  isUserContextReady = false,
+  userContextReady = false,
   driveAliasAndItem = 'personal/einstein/file',
   fileId = '1'
 } = {}) {
@@ -135,7 +133,7 @@ function getMountedWrapper({
   }))
   jest.mocked(useGetMatchingSpace).mockImplementation(() =>
     useGetMatchingSpaceMock({
-      getInternalSpace: (storageId: string) => internalSpace
+      getInternalSpace: () => internalSpace
     })
   )
 
@@ -148,17 +146,16 @@ function getMountedWrapper({
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.auth.getters.isUserContextReady.mockReturnValue(
-    isUserContextReady
-  )
-  const store = createStore(storeOptions)
+
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(DriveResolver, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { authState: { userContextReady: userContextReady } }
+          })
+        ],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: { ...defaultStubs, 'app-banner': true }

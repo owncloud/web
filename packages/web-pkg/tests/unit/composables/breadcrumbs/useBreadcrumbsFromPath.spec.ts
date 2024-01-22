@@ -2,18 +2,6 @@ import { mock } from 'jest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { RouteLocation, getComposableWrapper } from 'web-test-helpers/src'
 import { useBreadcrumbsFromPath } from '../../../../src/composables/breadcrumbs'
-import { ConfigurationManager } from '../../../../src/configuration'
-
-jest.mock('../../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 describe('useBreadcrumbsFromPath', () => {
   describe('builds an array of breadcrumbitems', () => {

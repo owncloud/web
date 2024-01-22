@@ -111,11 +111,13 @@
           @sort="handleSort"
         >
           <template #additionalResourceContent="{ resource }">
+            <!-- eslint-disable vue/no-v-html -->
             <span
               v-if="resource.highlights"
               class="files-search-resource-highlights oc-text-truncate"
               v-html="resource.highlights"
             />
+            <!--eslint-enable-->
           </template>
           <template #contextMenu="{ resource }">
             <context-actions
@@ -133,9 +135,9 @@
             <list-info
               v-else-if="paginatedResources.length > 0"
               class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
-              :size="totalFilesSize"
+              :files="totalResourcesCount.files"
+              :folders="totalResourcesCount.folders"
+              :size="totalResourcesSize"
             />
           </template>
         </resource-table>
@@ -153,16 +155,16 @@
 import { useResourcesViewDefaults } from '../../composables'
 import {
   AppLoadingSpinner,
-  useCapabilitySearchMediaType,
-  useCapabilitySearchModifiedDate
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
-import { ImageType, ImageDimension } from '@ownclouders/web-pkg'
+import { ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
-import { mapMutations, mapGetters, mapActions } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
 import {
@@ -184,15 +186,12 @@ import { Resource } from '@ownclouders/web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import {
   queryItemAsString,
-  useCapabilityFilesTags,
   useClientService,
   useFileListHeaderPosition,
   useGetMatchingSpace,
-  useCapabilityFilesFullTextSearch,
   useRoute,
   useRouteQuery,
-  useRouter,
-  useStore
+  useRouter
 } from '@ownclouders/web-pkg'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
@@ -207,14 +206,10 @@ import {
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { extractDomSelector } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
 
-type FileCategoryKeyword = {
-  id: string
-  label: string
-  icon: string
-}
 type Tag = {
   id: string
   label: string
@@ -253,17 +248,20 @@ export default defineComponent({
   },
   emits: ['search'],
   setup(props, { emit }) {
-    const store = useStore()
+    const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const route = useRoute()
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
-    const hasTags = useCapabilityFilesTags()
-    const fullTextSearchEnabled = useCapabilityFilesFullTextSearch()
-    const modifiedDateCapability = useCapabilitySearchModifiedDate()
-    const mediaTypeCapability = useCapabilitySearchMediaType()
     const { getMatchingSpace } = useGetMatchingSpace()
+
+    const resourcesStore = useResourcesStore()
+    const { initResourceList, clearResourceList, updateResourceField } = resourcesStore
+    const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const searchTermQuery = useRouteQuery('term')
     const scopeQuery = useRouteQuery('scope')
@@ -289,9 +287,9 @@ export default defineComponent({
 
     const displayFilter = computed(() => {
       return (
-        unref(fullTextSearchEnabled) ||
+        capabilityStore.searchContent?.enabled ||
         unref(availableTags).length ||
-        (unref(modifiedDateCapability) && unref(modifiedDateCapability).enabled)
+        capabilityStore.searchLastMofifiedDate?.enabled
       )
     })
 
@@ -322,7 +320,7 @@ export default defineComponent({
 
     const lastModifiedFilter = ref<VNodeRef>()
     const availableLastModifiedValues = ref<LastModifiedKeyword[]>(
-      unref(modifiedDateCapability).keywords?.map((k: string) => ({
+      capabilityStore.searchLastMofifiedDate.keywords?.map((k: string) => ({
         id: k,
         label: lastModifiedTranslations[k]
       })) || []
@@ -340,15 +338,11 @@ export default defineComponent({
       audio: { label: $gettext('Audio'), icon: 'mp3' },
       archive: { label: $gettext('Archive'), icon: 'zip' }
     }
-    const availableMediaTypeValues: FileCategoryKeyword[] = []
-    unref(mediaTypeCapability).keywords?.forEach((key: string) => {
-      if (!mediaTypeMapping[key]) {
-        return
-      }
-      availableMediaTypeValues.push({
-        id: key,
-        ...mediaTypeMapping[key]
-      })
+
+    const availableMediaTypeValues = computed(() => {
+      return (
+        capabilityStore.searchMediaType.keywords?.filter((key) => mediaTypeMapping[key]) || []
+      ).map((key) => ({ id: key, ...mediaTypeMapping[key] }))
     })
 
     const getFakeResourceForIcon = (item) => {
@@ -451,9 +445,9 @@ export default defineComponent({
       // Store resources are shared across table views, therefore
       // the store state needs a reset to prevent the old list of resources
       // from being rendered while the request retrieves the new resources from the server.
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
+      clearResourceList()
 
-      if (unref(hasTags)) {
+      if (capabilityStore.filesTags) {
         await loadAvailableTagsTask.perform()
       }
       emit('search', buildSearchTerm())
@@ -491,11 +485,12 @@ export default defineComponent({
     )
 
     return {
-      ...useFileActions({ store }),
+      ...useFileActions(),
       ...resourcesView,
+      configOptions,
       loadAvailableTagsTask,
       fileListHeaderY,
-      fullTextSearchEnabled,
+      fullTextSearchEnabled: computed(() => capabilityStore.searchContent?.enabled),
       getMatchingSpace,
       availableTags,
       tagFilter,
@@ -506,17 +501,20 @@ export default defineComponent({
       mediaTypeFilter,
       availableMediaTypeValues,
       getFakeResourceForIcon,
-      resourceDomSelector
+      resourceDomSelector,
+      initResourceList,
+      clearResourceList,
+      updateResourceField,
+      totalResourcesCount,
+      totalResourcesSize
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['totalFilesCount', 'totalFilesSize']),
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     },
     itemCount() {
-      return this.totalFilesCount.files + this.totalFilesCount.folders
+      return this.totalResourcesCount.files + this.totalResourcesCount.folders
     },
     rangeSupported() {
       return this.searchResult.totalResults
@@ -537,7 +535,7 @@ export default defineComponent({
       return this.$gettext(
         'Found %{totalResults}, showing the %{itemCount} best matching results',
         {
-          itemCount: this.itemCount,
+          itemCount: this.itemCount.toString(),
           totalResults: this.searchResult.totalResults
         }
       )
@@ -550,10 +548,10 @@ export default defineComponent({
           return
         }
 
-        this.CLEAR_CURRENT_FILES_LIST()
-        this.LOAD_FILES({
+        this.clearResourceList()
+        this.initResourceList({
           currentFolder: null,
-          files: this.searchResult.values.length
+          resources: this.searchResult.values.length
             ? this.searchResult.values.map((searchResult) => searchResult.data)
             : []
         })
@@ -566,22 +564,28 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES']),
-    ...mapActions('Files', ['loadPreview']),
-    rowMounted(resource, component) {
+    rowMounted(resource: Resource, component) {
       if (!this.displayThumbnails) {
         return
       }
 
+      const loadPreview = async () => {
+        const preview = await this.$previewService.loadPreview(
+          {
+            space: this.getMatchingSpace(resource),
+            resource,
+            dimensions: ImageDimension.Thumbnail
+          },
+          true
+        )
+        if (preview) {
+          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
+        }
+      }
+
       const debounced = debounce(({ unobserve }) => {
         unobserve()
-        this.loadPreview({
-          previewService: this.$previewService,
-          space: this.getMatchingSpace(resource),
-          resource,
-          dimensions: ImageDimension.Thumbnail,
-          type: ImageType.Thumbnail
-        })
+        loadPreview()
       }, 250)
 
       visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })

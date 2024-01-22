@@ -1,140 +1,100 @@
-import { configurationManager, useEmbedMode } from '../../../../src'
+import { useEmbedMode } from '../../../../src/composables/embedMode'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 
 describe('useEmbedMode', () => {
   describe('isEnabled', () => {
     it('when embed mode is disabled should return false', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: false } }
-      })
-
       getComposableWrapper(
         () => {
           const { isEnabled } = useEmbedMode()
 
           expect(unref(isEnabled)).toStrictEqual(false)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ enabled: false })
       )
     })
 
     it('when embed mode is enabled should return true', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: true } }
-      })
-
       getComposableWrapper(
         () => {
           const { isEnabled } = useEmbedMode()
 
           expect(unref(isEnabled)).toStrictEqual(true)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ enabled: true })
       )
     })
   })
 
   describe('isLocationPicker', () => {
     it('when target is not location should return false', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { target: 'resources' } }
-      })
-
       getComposableWrapper(
         () => {
           const { isLocationPicker } = useEmbedMode()
 
           expect(unref(isLocationPicker)).toStrictEqual(false)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ target: 'resources' })
       )
     })
 
     it('when target is location should return true', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { target: 'location' } }
-      })
-
       getComposableWrapper(
         () => {
           const { isLocationPicker } = useEmbedMode()
 
           expect(unref(isLocationPicker)).toStrictEqual(true)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ target: 'location' })
       )
     })
   })
 
   describe('messagesTargetOrigin', () => {
     it('when messagesOrigin is set should return it', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { messagesOrigin: 'message-origin' } }
-      })
-
       getComposableWrapper(
         () => {
           const { messagesTargetOrigin } = useEmbedMode()
 
           expect(unref(messagesTargetOrigin)).toStrictEqual('message-origin')
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ messagesOrigin: 'message-origin' })
       )
     })
   })
 
   describe('isDelegatingAuthentication', () => {
     it('when delegation is enabled but embed mode is not enabled should return false', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: false, delegateAuthentication: true } }
-      })
-
       getComposableWrapper(
         () => {
           const { isDelegatingAuthentication } = useEmbedMode()
 
           expect(unref(isDelegatingAuthentication)).toStrictEqual(false)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ enabled: false, delegateAuthentication: true })
       )
     })
 
     it('when delegation is enabled and embed mode is enabled should return true', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: true, delegateAuthentication: true } }
-      })
-
       getComposableWrapper(
         () => {
           const { isDelegatingAuthentication } = useEmbedMode()
 
           expect(unref(isDelegatingAuthentication)).toStrictEqual(true)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ enabled: true, delegateAuthentication: true })
       )
     })
 
     it('when delegation is disabled and embed mode is enabled should return false', () => {
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { enabled: true, delegateAuthentication: false } }
-      })
-
       getComposableWrapper(
         () => {
           const { isDelegatingAuthentication } = useEmbedMode()
 
           expect(unref(isDelegatingAuthentication)).toStrictEqual(false)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ enabled: false, delegateAuthentication: false })
       )
     })
   })
@@ -157,17 +117,12 @@ describe('useEmbedMode', () => {
             {}
           )
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ messagesOrigin: undefined })
       )
     })
 
     it('when targetOrigin is set should call postMessage with its value as origin', () => {
       window.parent.postMessage = jest.fn()
-
-      configurationManager.initialize({
-        server: 'http://server/address/',
-        options: { embed: { messagesOrigin: 'messages-origin' } }
-      })
 
       getComposableWrapper(
         () => {
@@ -183,7 +138,7 @@ describe('useEmbedMode', () => {
             { targetOrigin: 'messages-origin' }
           )
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ messagesOrigin: 'messages-origin' })
       )
     })
   })
@@ -203,33 +158,32 @@ describe('useEmbedMode', () => {
     it('when delegateAuthenticationOrigin is set and origins match should return true', () => {
       getComposableWrapper(
         () => {
-          configurationManager.initialize({
-            server: 'http://server/address/',
-            options: { embed: { delegateAuthenticationOrigin: 'event-origin' } }
-          })
-
           const { verifyDelegatedAuthenticationOrigin } = useEmbedMode()
 
           expect(verifyDelegatedAuthenticationOrigin('event-origin')).toStrictEqual(true)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ messagesOrigin: 'event-origin' })
       )
     })
 
     it('when delegateAuthenticationOrigin is set but origins do not match should return false', () => {
       getComposableWrapper(
         () => {
-          configurationManager.initialize({
-            server: 'http://server/address/',
-            options: { embed: { delegateAuthenticationOrigin: 'authentication-origin' } }
-          })
-
           const { verifyDelegatedAuthenticationOrigin } = useEmbedMode()
 
           expect(verifyDelegatedAuthenticationOrigin('event-origin')).toStrictEqual(false)
         },
-        { mocks: defaultComponentMocks() }
+        getWrapperOptions({ delegateAuthenticationOrigin: 'authentication-origin' })
       )
     })
   })
+})
+
+const getWrapperOptions = (embed = {}) => ({
+  mocks: defaultComponentMocks(),
+  pluginOptions: {
+    piniaOptions: {
+      configState: { options: { embed } }
+    }
+  }
 })

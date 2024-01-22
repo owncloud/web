@@ -97,7 +97,7 @@
     </template>
     <template #tags="{ item }">
       <component
-        :is="isUserContext ? 'router-link' : 'span'"
+        :is="userContextReady ? 'router-link' : 'span'"
         v-for="tag in item.tags.slice(0, 2)"
         :key="tag"
         v-bind="getTagComponentAttrs(tag)"
@@ -216,24 +216,22 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
-import { mapGetters, mapActions, mapState } from 'vuex'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 import {
-  useCapabilityFilesTags,
-  useCapabilityProjectSpacesEnabled,
-  useCapabilityShareJailEnabled,
   SortDir,
-  useStore,
-  useUserContext,
   ViewModeConstants,
-  useConfigurationManager,
   useGetMatchingSpace,
   useFolderLink,
-  useEmbedMode
+  useEmbedMode,
+  useAuthStore,
+  useCapabilityStore,
+  useConfigStore,
+  useClipboardStore,
+  useResourcesStore
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -258,7 +256,7 @@ import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
-import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -318,7 +316,7 @@ export default defineComponent({
      * V-model for the selection
      */
     selectedIds: {
-      type: Array,
+      type: Array as PropType<string[]>,
       default: () => []
     },
     /**
@@ -452,18 +450,30 @@ export default defineComponent({
     'update:modelValue'
   ],
   setup(props, context) {
-    const store = useStore()
-    const configurationManager = useConfigurationManager()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
-    const { $gettext } = useGettext()
     const { isLocationPicker } = useEmbedMode()
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
+    const clipboardStore = useClipboardStore()
+    const { resources: clipboardResources, action: clipboardAction } = storeToRefs(clipboardStore)
+
+    const authStore = useAuthStore()
+    const { userContextReady } = storeToRefs(authStore)
+
+    const resourcesStore = useResourcesStore()
+    const { toggleSelection } = resourcesStore
+    const { areFileExtensionsShown, latestSelectedId } = storeToRefs(resourcesStore)
 
     const dragItem = ref<Resource>()
     const ghostElement = ref()
 
     const { width } = useWindowSize()
     const hasTags = computed(
-      () => useCapabilityFilesTags().value && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
+      () => capabilityStore.filesTags && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
     )
 
     const { actions: renameActions } = useFileActionsRename()
@@ -484,7 +494,7 @@ export default defineComponent({
     })
 
     return {
-      configurationManager,
+      configOptions,
       dragItem,
       ghostElement,
       getTagToolTip,
@@ -494,10 +504,12 @@ export default defineComponent({
       hasTags,
       disabledResources,
       isResourceDisabled,
-      hasShareJail: useCapabilityShareJailEnabled(),
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      isUserContext: useUserContext({ store }),
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasProjectSpaces: capabilityRefs.spacesEnabled,
+      userContextReady,
       getMatchingSpace,
+      clipboardResources,
+      clipboardAction,
       ...useResourceRouteResolver(
         {
           space: ref(props.space),
@@ -509,7 +521,10 @@ export default defineComponent({
         space: ref(props.space),
         targetRouteCallback: computed(() => props.targetRouteCallback)
       }),
-      isLocationPicker
+      isLocationPicker,
+      toggleSelection,
+      areFileExtensionsShown,
+      latestSelectedId
     }
   },
   data() {
@@ -521,14 +536,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapState('Files', [
-      'areFileExtensionsShown',
-      'latestSelectedId',
-      'clipboardResources',
-      'clipboardAction'
-    ]),
-    ...mapState('runtime/spaces', ['spaces']),
     fields() {
       if (this.resources.length === 0) {
         return []
@@ -716,7 +723,7 @@ export default defineComponent({
       return fields
     },
     lazyLoading() {
-      return this.configuration?.options?.displayResourcesLazy
+      return this.configOptions.displayResourcesLazy
     },
     areAllResourcesSelected() {
       return this.selectedResources.length === this.resources.length - this.disabledResources.length
@@ -731,7 +738,7 @@ export default defineComponent({
       return this.$gettext('Show context menu')
     },
     hoverableQuickActions() {
-      return this.configuration?.options?.hoverableQuickActions
+      return this.configOptions.hoverableQuickActions
     },
     dragSelection() {
       const selection = [...this.selectedResources]
@@ -743,8 +750,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['toggleFileSelection']),
-
     isResourceSelected(item) {
       return this.selectedIds.includes(item.id)
     },
@@ -764,7 +769,7 @@ export default defineComponent({
       })
     },
     getTagComponentAttrs(tag) {
-      if (!this.isUserContext) {
+      if (!this.userContextReady) {
         return {}
       }
 
@@ -772,15 +777,15 @@ export default defineComponent({
         to: this.getTagLink(tag)
       }
     },
-    isLatestSelectedItem(item) {
+    isLatestSelectedItem(item: Resource) {
       return item.id === this.latestSelectedId
     },
-    hasRenameAction(item) {
+    hasRenameAction(item: Resource) {
       return this.renameActions.filter((menuItem) =>
         menuItem.isEnabled({ space: this.space, resources: [item] })
       ).length
     },
-    openRenameDialog(item) {
+    openRenameDialog(item: Resource) {
       this.renameHandler({
         space: this.getMatchingSpace(item),
         resources: [item]
@@ -851,12 +856,12 @@ export default defineComponent({
     sort(opts) {
       this.$emit('sort', opts)
     },
-    addSelectedResource(file) {
+    addSelectedResource(file: Resource) {
       const isSelected = this.isResourceSelected(file)
       if (isSelected) {
         return
       }
-      this.toggleFileSelection(file)
+      this.toggleSelection(file.id)
     },
     showContextMenuOnBtnClick(data, item) {
       if (this.isResourceDisabled(item)) {
@@ -932,14 +937,14 @@ export default defineComponent({
     formatDateRelative(date) {
       return formatRelativeDateFromJSDate(new Date(date), this.$language.current)
     },
-    setSelection(selected, resource) {
+    setSelection(selected, resource: Resource) {
       if (selected) {
         this.emitSelect([...this.selectedIds, resource.id])
       } else {
         this.emitSelect(this.selectedIds.filter((id) => id !== resource.id))
       }
     },
-    emitSelect(selectedIds) {
+    emitSelect(selectedIds: string[]) {
       eventBus.publish('app.files.list.clicked')
       this.$emit('update:selectedIds', selectedIds)
     },

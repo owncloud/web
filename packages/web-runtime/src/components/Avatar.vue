@@ -17,7 +17,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { mapGetters } from 'vuex'
+import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'Avatar',
@@ -50,6 +51,17 @@ export default defineComponent({
       default: 42
     }
   },
+  setup() {
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
+    const configStore = useConfigStore()
+    const { serverUrl } = storeToRefs(configStore)
+
+    return {
+      serverUrl,
+      userProfilePicture: capabilityRefs.sharingUserProfilePicture
+    }
+  },
   data() {
     return {
       /**
@@ -61,9 +73,6 @@ export default defineComponent({
        */
       loading: true
     }
-  },
-  computed: {
-    ...mapGetters(['capabilities', 'configuration'])
   },
   watch: {
     userid: function (userid) {
@@ -84,12 +93,11 @@ export default defineComponent({
     setUser(userid) {
       this.loading = true
       this.avatarSource = ''
-      if (!this.capabilities.files_sharing.user.profile_picture || userid === '') {
+      if (!this.userProfilePicture || userid === '') {
         this.loading = false
         return
       }
-      const instance = this.configuration.server || window.location.origin
-      const url = instance + 'remote.php/dav/avatars/' + userid + '/128.png'
+      const url = this.serverUrl + 'remote.php/dav/avatars/' + userid + '/128.png'
       this.$clientService.httpAuthenticated
         .get<Blob>(url, { responseType: 'blob' })
         .then((response) => {

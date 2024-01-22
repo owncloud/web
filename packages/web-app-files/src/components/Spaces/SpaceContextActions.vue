@@ -31,7 +31,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
-import { useRouter, useStore, usePreviewService } from '@ownclouders/web-pkg'
+import { useRouter, usePreviewService } from '@ownclouders/web-pkg'
 import { FileActionOptions, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
@@ -46,7 +46,6 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter()
-    const store = useStore()
     const previewService = usePreviewService()
 
     const actionOptions = toRef(props, 'actionOptions') as Ref<SpaceActionOptions>
@@ -55,22 +54,21 @@ export default defineComponent({
       return previewService.getSupportedMimeTypes('image/').join(',')
     })
 
-    const { actions: deleteActions } = useSpaceActionsDelete({ store })
-    const { actions: disableActions } = useSpaceActionsDisable({ store })
-    const { actions: duplicateActions } = useSpaceActionsDuplicate({ store })
+    const { actions: deleteActions } = useSpaceActionsDelete()
+    const { actions: disableActions } = useSpaceActionsDisable()
+    const { actions: duplicateActions } = useSpaceActionsDuplicate()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: editDescriptionActions } = useSpaceActionsEditDescription({ store })
-    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent({ store })
-    const { actions: renameActions } = useSpaceActionsRename({ store })
-    const { actions: restoreActions } = useSpaceActionsRestore({ store })
-    const { actions: showDetailsActions } = useFileActionsShowDetails({ store })
-    const { actions: showMembersActions } = useSpaceActionsShowMembers({ store })
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive({ store })
+    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
+    const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
+    const { actions: renameActions } = useSpaceActionsRename()
+    const { actions: restoreActions } = useSpaceActionsRestore()
+    const { actions: showDetailsActions } = useFileActionsShowDetails()
+    const { actions: showMembersActions } = useSpaceActionsShowMembers()
+    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: navigateToTrashActions } = useSpaceActionsNavigateToTrash()
 
     const spaceImageInput: VNodeRef = ref(null)
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
-      store,
       spaceImageInput
     })
 

@@ -1,11 +1,6 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import { spaceRoleManager, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { spaceRoleManager, ShareTypes, Share } from '@ownclouders/web-client/src/helpers/share'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const spaceMock = {
   type: 'space',
@@ -26,6 +21,7 @@ const spaceMock = {
 const spaceShare = {
   id: '1',
   shareType: ShareTypes.spaceUser.value,
+  outgoing: true,
   collaborator: {
     onPremisesSamAccountName: 'Alice',
     displayName: 'alice'
@@ -33,7 +29,7 @@ const spaceShare = {
   role: {
     name: spaceRoleManager.name
   }
-}
+} as unknown as Share
 
 const selectors = {
   spaceDefaultImage: '.space-default-image',
@@ -59,21 +55,18 @@ describe('Details SideBar Panel', () => {
 })
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(() => [
-    spaceShare
-  ])
-  storeOptions.modules.Files.getters.outgoingCollaborators.mockImplementation(() => [spaceShare])
-  const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(SpaceDetails, {
       props: { ...props },
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } } }
-          }),
-          store
+            piniaOptions: {
+              userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } },
+              spacesState: { spaceMembers: [spaceShare] },
+              sharesState: { shares: [spaceShare] }
+            }
+          })
         ],
         provide: { resource: spaceResource }
       }

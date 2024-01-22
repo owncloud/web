@@ -1,35 +1,32 @@
-import { ClientService } from '@ownclouders/web-pkg'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
-import { Store } from 'vuex'
-import isEmpty from 'lodash-es/isEmpty'
+import { AuthStore, CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
 
 export interface PublicLinkManagerOptions {
   clientService: ClientService
-  configurationManager: ConfigurationManager
-  store: Store<any>
+  authStore: AuthStore
+  capabilityStore: CapabilityStore
 }
 
 export class PublicLinkManager {
   private clientService: ClientService
-  private configurationManager: ConfigurationManager
-  private store: Store<any>
+  private authStore: AuthStore
+  private capabilityStore: CapabilityStore
 
   constructor(options: PublicLinkManagerOptions) {
     this.clientService = options.clientService
-    this.configurationManager = options.configurationManager
-    this.store = options.store
+    this.authStore = options.authStore
+    this.capabilityStore = options.capabilityStore
   }
 
   private static buildStorageKey(token: string, suffix: string): string {
     return `oc.publicLink.${token}.${suffix}`
   }
 
-  async clear(token: string): Promise<void> {
+  clear(token: string) {
     ;['resolved', 'passwordRequired', 'password'].forEach((key) => {
       sessionStorage.removeItem(PublicLinkManager.buildStorageKey(token, key))
     })
-    await this.store.dispatch('runtime/auth/clearPublicLinkContext')
+    this.authStore.clearPublicLinkContext()
   }
 
   isResolved(token: string): boolean {
@@ -88,10 +85,7 @@ export class PublicLinkManager {
     if (!this.isResolved(token)) {
       return
     }
-    if (
-      this.store.getters['runtime/auth/isPublicLinkContextReady'] &&
-      this.store.getters['runtime/auth/publicLinkToken'] === token
-    ) {
+    if (this.authStore.publicLinkContextReady && this.authStore.publicLinkToken === token) {
       return
     }
 
@@ -102,14 +96,13 @@ export class PublicLinkManager {
 
     try {
       await this.fetchCapabilities({
-        token,
         password
       })
     } catch (e) {
       console.error(e)
     }
 
-    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
+    this.authStore.setPublicLinkContext({
       publicLinkToken: token,
       publicLinkPassword: password,
       publicLinkContextReady: true,
@@ -118,17 +111,15 @@ export class PublicLinkManager {
   }
 
   clearContext() {
-    this.store.commit('runtime/auth/SET_PUBLIC_LINK_CONTEXT', {
-      publicLinkContextReady: false
-    })
+    this.authStore.clearPublicLinkContext()
   }
 
-  private async fetchCapabilities({ token = '', password = '' }): Promise<void> {
-    if (!isEmpty(this.store.getters.capabilities)) {
+  private async fetchCapabilities({ password = '' }): Promise<void> {
+    if (this.capabilityStore.isInitialized) {
       return
     }
     const client = this.clientService.ocsPublicLinkContext(password)
     const response = await client.getCapabilities()
-    this.store.commit('SET_CAPABILITIES', response)
+    this.capabilityStore.setCapabilities(response)
   }
 }

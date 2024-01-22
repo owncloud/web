@@ -6,14 +6,10 @@ exports[`ItemFilter can use a custom attribute as display name 1`] = `
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-3" type="button">
       <!--v-if-->
       <!-- @slot Content of the button -->
-      <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive">
-        <!---->
-      </span>
+      <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span>
       <span class="oc-text-truncate oc-filter-chip-label">Users</span>
       <!--v-if-->
-      <span class="oc-icon oc-icon-s oc-icon-passive">
-        <!---->
-      </span>
+      <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
     </button>
     <div class="oc-drop oc-box-shadow-medium oc-rounded oc-filter-chip-drop" id="oc-drop-4">
       <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
@@ -63,14 +59,10 @@ exports[`ItemFilter renders all items 1`] = `
     <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-1" type="button">
       <!--v-if-->
       <!-- @slot Content of the button -->
-      <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive">
-        <!---->
-      </span>
+      <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span>
       <span class="oc-text-truncate oc-filter-chip-label">Users</span>
       <!--v-if-->
-      <span class="oc-icon oc-icon-s oc-icon-passive">
-        <!---->
-      </span>
+      <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
     </button>
     <div class="oc-drop oc-box-shadow-medium oc-rounded oc-filter-chip-drop" id="oc-drop-2">
       <div class="oc-card oc-card-body oc-background-secondary oc-p-s">

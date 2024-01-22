@@ -18,9 +18,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
     <thead class="oc-thead">
       <tr class="oc-table-header-row" tabindex="-1">
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-select oc-pl-s" style="top: 0px;">
-          <span class="oc-table-thead-content">
-            <oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-1" label="Select all spaces" modelvalue="false" outline="false" size="large"></oc-checkbox-stub>
-          </span>
+          <span class="oc-table-thead-content"><oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-1" label="Select all spaces" modelvalue="false" outline="false" size="large"></oc-checkbox-stub></span>
           <!--v-if-->
         </th>
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-icon" style="top: 0px;">
@@ -32,9 +30,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by name" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-manager" style="top: 0px;">
@@ -46,9 +42,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-totalQuota" style="top: 0px;">
@@ -56,9 +50,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by totalQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-usedQuota" style="top: 0px;">
@@ -66,9 +58,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by usedQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-remainingQuota" style="top: 0px;">
@@ -76,9 +66,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by remainingQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-mdate" style="top: 0px;">
@@ -86,9 +74,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by mdate" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status" style="top: 0px;">
@@ -96,9 +82,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <button aria-label="Sort by status" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
             <!--v-if-->
             <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button>
         </th>
         <th class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-actions oc-pr-s" style="top: 0px;">
@@ -113,9 +97,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
           <oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-2" label="Select 1 Some space" modelvalue="false" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
         </td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon">
-          <span class="oc-icon oc-icon-m oc-icon-passive">
-            <!---->
-          </span>
+          <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name mark-element">
           <span class="spaces-table-space-name" data-test-space-name="1 Some space">1 Some space</span>
@@ -130,9 +112,7 @@ exports[`SpacesList should render all spaces in a table 1`] = `
         </td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status">
           <span class="oc-flex oc-flex-middle">
-            <span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s">
-              <!---->
-            </span>
+            <span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s"><!----></span>
             <span>Enabled</span>
           </span>
         </td>
@@ -141,16 +121,12 @@ exports[`SpacesList should render all spaces in a table 1`] = `
             <button aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-details" type="button">
               <!--v-if-->
               <!-- @slot Content of the button -->
-              <span class="oc-icon oc-icon-m oc-icon-passive">
-                <!---->
-              </span>
+              <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
             </button>
             <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-action-dropdown" id="context-menu-trigger-1" type="button">
               <!--v-if-->
               <!-- @slot Content of the button -->
-              <span class="oc-icon oc-icon-m oc-icon-passive">
-                <!---->
-              </span>
+              <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
               <div class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden" id="context-menu-drop-1">
                 <div class="oc-card oc-card-body oc-background-secondary oc-p-s"></div>
               </div>

@@ -16,15 +16,15 @@ export class FolderLoaderFavorites implements FolderLoader {
 
   public getTask(context: TaskContext): FolderLoaderTask {
     const {
-      store,
       userStore,
+      resourcesStore,
       clientService: { owncloudSdk: client }
     } = context
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return useTask(function* (signal1, signal2) {
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      store.commit('runtime/ancestorMetaData/SET_ANCESTOR_META_DATA', {})
+      resourcesStore.clearResourceList()
+      resourcesStore.setAncestorMetaData({})
 
       // favorite implementation is going to change soon, so we are not implementing it
       // as a proper factory in our new WebDAV client for now
@@ -45,14 +45,8 @@ export class FolderLoaderFavorites implements FolderLoader {
         }
         return resource
       })
-      store.commit('Files/LOAD_FILES', {
-        currentFolder: null,
-        files: resources
-      })
-      store.dispatch('Files/loadIndicators', {
-        client: client,
-        currentFolder: '/'
-      })
+      resourcesStore.initResourceList({ currentFolder: null, resources })
+      resourcesStore.loadIndicators('/')
     })
   }
 }

@@ -9,11 +9,9 @@ import {
 import { mock } from 'jest-mock-extended'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
-  createStore,
   defaultPlugins,
   mount,
   shallowMount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
@@ -162,25 +160,22 @@ function getWrapper({
   user = mock<User>(),
   currentRouteName = 'files-spaces-generic'
 } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: jest.fn(() => ({
-        options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
-      }))
-    }
-  }
-  storeOptions.modules.runtime.modules.spaces.getters.spaceMembers.mockImplementation(
-    () => spaceMembers
-  )
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
   return mountType(SpaceMembers, {
     global: {
-      plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+      plugins: [
+        ...defaultPlugins({
+          piniaOptions: {
+            userState: { user },
+            spacesState: { spaceMembers: spaceMembers as any },
+            configState: {
+              options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
+            }
+          }
+        })
+      ],
       mocks,
       provide: {
         ...mocks,

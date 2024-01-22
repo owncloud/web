@@ -1,25 +1,8 @@
-import { useStore, useFileActionsDeleteResources } from '../../../../../src'
-import { ConfigurationManager } from '../../../../../src/configuration'
+import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { mockDeep } from 'jest-mock-extended'
 import { FolderResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import {
-  createStore,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { nextTick } from 'vue'
-
-jest.mock('../../../../../src/composables/configuration', () => ({
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        concurrentRequests: {
-          resourceBatchActions: 1
-        }
-      }
-    })
-}))
 
 const currentFolder = {
   id: '1',
@@ -28,10 +11,10 @@ const currentFolder = {
 
 describe('deleteResources', () => {
   describe('method "filesList_delete"', () => {
-    it('should call the delete action on a resource in the file list', async () => {
-      const { wrapper } = getWrapper({
+    it('should call the delete action on a resource in the file list', () => {
+      getWrapper({
         currentFolder,
-        setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
+        setup: async ({ filesList_delete }, { router }) => {
           await filesList_delete([{ id: '2', path: '/folder/fileToDelete.txt' }])
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(0)
@@ -39,12 +22,19 @@ describe('deleteResources', () => {
       })
     })
 
-    it('should call the delete action on the current folder', async () => {
+    it('should call the delete action on the current folder', () => {
       const resourcesToDelete = [currentFolder]
-      const { wrapper } = getWrapper({
+      getWrapper({
         currentFolder,
-        setup: async ({ displayDialog, filesList_delete }, { space, router, storeOptions }) => {
+        setup: async ({ filesList_delete }, { router }) => {
           await filesList_delete(resourcesToDelete)
+          // FIXME: well...
+          await nextTick()
+          await nextTick()
+          await nextTick()
+          await nextTick()
+          await nextTick()
+          await nextTick()
           await nextTick()
           expect(router.push).toHaveBeenCalledTimes(1)
         }
@@ -62,12 +52,10 @@ function getWrapper({
     instance: ReturnType<typeof useFileActionsDeleteResources>,
     {
       space,
-      router,
-      storeOptions
+      router
     }: {
       space: SpaceResource
       router: ReturnType<typeof defaultComponentMocks>['$router']
-      storeOptions: typeof defaultStoreMockOptions
     }
   ) => void
 }) {
@@ -75,27 +63,19 @@ function getWrapper({
     ...defaultComponentMocks(),
     space: mockDeep<SpaceResource>()
   }
+  mocks.$clientService.webdav.deleteFile.mockResolvedValue(undefined)
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  storeOptions.modules.Files.getters.activeFiles.mockReturnValue([])
-
-  const store = createStore(storeOptions)
   return {
     mocks,
-    storeOptions,
     wrapper: getComposableWrapper(
       () => {
-        const store = useStore()
-        const instance = useFileActionsDeleteResources({ store })
-        setup(instance, { space: mocks.space, storeOptions, router: mocks.$router })
+        const instance = useFileActionsDeleteResources()
+        setup(instance, { space: mocks.space, router: mocks.$router })
       },
       {
         mocks,
         provide: mocks,
-        store
+        pluginOptions: { piniaOptions: { resourcesStore: { currentFolder } } }
       }
     )
   }

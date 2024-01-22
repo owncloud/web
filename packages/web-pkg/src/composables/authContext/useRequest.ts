@@ -1,15 +1,12 @@
-import { unref } from 'vue'
 import { useClientService } from '../clientService'
-import type { Store } from 'vuex'
 import type { Router, RouteLocationNormalizedLoaded } from 'vue-router'
 import type { Method, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ClientService } from '../../services'
-import { useAccessToken, usePublicLinkPassword, usePublicLinkToken, usePublicLinkContext } from './'
-import { useStore } from '../store'
+import { AuthStore, useAuthStore } from '../piniaStores'
 
 interface RequestOptions {
   router?: Router
-  store?: Store<any>
+  authStore?: AuthStore
   clientService?: ClientService
   currentRoute?: RouteLocationNormalizedLoaded
 }
@@ -20,31 +17,27 @@ export interface RequestResult {
 
 export function useRequest(options: RequestOptions = {}): RequestResult {
   const clientService = options.clientService ?? useClientService()
-  const store = options.store ?? useStore()
-
-  const isPublicLinkContext = usePublicLinkContext({ store })
-  const publicLinkPassword = usePublicLinkPassword({ store })
-  const accessToken = useAccessToken({ store })
-  const publicToken = usePublicLinkToken({ store })
+  const authStore = options.authStore ?? useAuthStore()
 
   const makeRequest = (
     method: Method,
     url: string,
     config: AxiosRequestConfig = {}
   ): Promise<AxiosResponse> => {
-    const httpClient = unref(accessToken)
+    const httpClient = authStore.accessToken
       ? clientService.httpAuthenticated
       : clientService.httpUnAuthenticated
 
     config.headers = config.headers || {}
 
-    if (unref(isPublicLinkContext)) {
-      if (unref(publicLinkPassword)) {
+    if (authStore.publicLinkContextReady) {
+      if (authStore.publicLinkPassword) {
         config.headers.Authorization =
-          'Basic ' + Buffer.from(['public', unref(publicLinkPassword)].join(':')).toString('base64')
+          'Basic ' +
+          Buffer.from(['public', authStore.publicLinkPassword].join(':')).toString('base64')
       }
-      if (unref(publicToken)) {
-        config.headers['public-token'] = unref(publicToken)
+      if (authStore.publicLinkToken) {
+        config.headers['public-token'] = authStore.publicLinkToken
       }
     }
 

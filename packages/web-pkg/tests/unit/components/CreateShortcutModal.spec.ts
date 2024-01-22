@@ -1,45 +1,35 @@
 import CreateShortcutModal from '../../../src/components/CreateShortcutModal.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   mockAxiosReject,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'jest-mock-extended'
 import { FileResource } from '@ownclouders/web-client/src/helpers'
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
-import { ConfigurationManager } from '../../../src'
-import { useMessages } from '../../../src/composables/piniaStores'
-
-jest.mock('../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
+import { useMessages, useResourcesStore } from '../../../src/composables/piniaStores'
 
 describe('CreateShortcutModal', () => {
   describe('method "onConfirm"', () => {
     it('should show message on success', async () => {
-      const { wrapper, storeOptions } = getWrapper()
+      const { wrapper } = getWrapper()
       await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
-      expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalled()
+
+      const { upsertResource } = useResourcesStore()
+      expect(upsertResource).toHaveBeenCalled()
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
     })
     it('should show error message on fail', async () => {
       console.error = jest.fn()
-      const { wrapper, storeOptions } = getWrapper({ rejectPutFileContents: true })
+      const { wrapper } = getWrapper({ rejectPutFileContents: true })
       await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
-      expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).not.toHaveBeenCalled()
+
+      const { upsertResource } = useResourcesStore()
+      expect(upsertResource).not.toHaveBeenCalled()
       const { showErrorMessage } = useMessages()
       expect(showErrorMessage).toHaveBeenCalled()
     })
@@ -60,14 +50,6 @@ describe('CreateShortcutModal', () => {
 })
 
 function getWrapper({ rejectPutFileContents = false, rejectSearch = false } = {}) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => mock<FileResource>())
-
-  const store = createStore(storeOptions)
-
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
@@ -95,13 +77,16 @@ function getWrapper({ rejectPutFileContents = false, rejectSearch = false } = {}
 
   return {
     mocks,
-    storeOptions,
     wrapper: shallowMount(CreateShortcutModal, {
       props: {
         space: mock<SpaceResource>()
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { resourcesStore: { currentFolder: mock<FileResource>() } }
+          })
+        ],
         mocks,
         provide: mocks
       }

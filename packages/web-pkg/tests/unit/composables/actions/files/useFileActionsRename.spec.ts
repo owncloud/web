@@ -1,25 +1,13 @@
-import { ConfigurationManager, useFileActionsRename, useStore } from '../../../../../src'
-import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
+import { useFileActionsRename } from '../../../../../src/composables/actions'
+import {
+  useMessages,
+  useModals,
+  useResourcesStore
+} from '../../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import {
-  createStore,
-  defaultStoreMockOptions,
-  defaultComponentMocks,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { nextTick, unref } from 'vue'
-
-jest.mock('../../../../../src/composables/configuration/useConfigurationManager', () => ({
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    })
-}))
 
 const currentFolder = {
   id: '1',
@@ -67,10 +55,9 @@ describe('rename', () => {
   describe('method "getNameErrorMsg"', () => {
     it('should not show an error if new name not taken', () => {
       getWrapper({
-        setup: ({ getNameErrorMsg }, { storeOptions }) => {
-          storeOptions.modules.Files.getters.files.mockReturnValue([
-            { name: 'file1', path: '/file1' }
-          ])
+        setup: ({ getNameErrorMsg }) => {
+          const resourcesStore = useResourcesStore()
+          resourcesStore.resources = [{ name: 'file1', path: '/file1' }] as Resource[]
           const message = getNameErrorMsg(
             { name: 'currentName', path: '/currentName' } as Resource,
             'newName'
@@ -82,10 +69,10 @@ describe('rename', () => {
 
     it('should not show an error if new name already exists but in different folder', () => {
       getWrapper({
-        setup: ({ getNameErrorMsg }, { storeOptions }) => {
-          storeOptions.modules.Files.getters.files.mockReturnValue([
-            { name: 'file1', path: '/file1' }
-          ])
+        setup: ({ getNameErrorMsg }) => {
+          const resourcesStore = useResourcesStore()
+          resourcesStore.resources = [{ name: 'file1', path: '/file1' }] as Resource[]
+
           const message = getNameErrorMsg(
             mock<Resource>({ name: 'currentName', path: '/favorites/currentName' }),
             'file1'
@@ -119,6 +106,9 @@ describe('rename', () => {
     ])('should detect name errors and display error messages accordingly', (inputData) => {
       getWrapper({
         setup: ({ getNameErrorMsg }) => {
+          const resourcesStore = useResourcesStore()
+          resourcesStore.resources = [{ name: 'file1', path: '/file1' }] as Resource[]
+
           const message = getNameErrorMsg(
             mock<Resource>({ name: inputData.currentName, path: `/${inputData.currentName}` }),
             inputData.newName,
@@ -133,21 +123,25 @@ describe('rename', () => {
   describe('method "renameResource"', () => {
     it('should call the rename action on a resource in the file list', () => {
       getWrapper({
-        setup: async ({ renameResource }, { space, storeOptions }) => {
+        setup: async ({ renameResource }, { space }) => {
           const resource = { id: '2', path: '/folder', webDavPath: '/files/admin/folder' }
           renameResource(space, resource, 'new name')
           await nextTick()
-          expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalledTimes(1)
+
+          const { upsertResource } = useResourcesStore()
+          expect(upsertResource).toHaveBeenCalledTimes(1)
         }
       })
     })
 
     it('should call the rename action on the current folder', () => {
       getWrapper({
-        setup: async ({ renameResource }, { space, storeOptions }) => {
+        setup: async ({ renameResource }, { space }) => {
           renameResource(space, currentFolder, 'new name')
           await nextTick()
-          expect(storeOptions.modules.Files.mutations.UPSERT_RESOURCE).toHaveBeenCalledTimes(1)
+
+          const { upsertResource } = useResourcesStore()
+          expect(upsertResource).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -177,11 +171,9 @@ function getWrapper({
     instance: ReturnType<typeof useFileActionsRename>,
     {
       space,
-      storeOptions,
       clientService
     }: {
       space: SpaceResource
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
@@ -193,21 +185,16 @@ function getWrapper({
     })
   }
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
     mocks,
-    storeOptions,
     wrapper: getComposableWrapper(
       () => {
-        const store = useStore()
-        const instance = useFileActionsRename({ store })
-        setup(instance, { space: mocks.space, storeOptions, clientService: mocks.$clientService })
+        const instance = useFileActionsRename()
+        setup(instance, { space: mocks.space, clientService: mocks.$clientService })
       },
       {
         mocks,
-        provide: mocks,
-        store
+        provide: mocks
       }
     )
   }

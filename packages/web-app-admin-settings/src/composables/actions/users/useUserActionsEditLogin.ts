@@ -1,11 +1,11 @@
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction, useCapabilityReadOnlyUserAttributes, useModals } from '@ownclouders/web-pkg'
+import { UserAction, useModals, useCapabilityStore } from '@ownclouders/web-pkg'
 import LoginModal from '../../../components/Users/LoginModal.vue'
 
 export const useUserActionsEditLogin = () => {
   const { dispatchModal } = useModals()
-  const readOnlyUserAttributes = useCapabilityReadOnlyUserAttributes()
+  const capabilityStore = useCapabilityStore()
   const { $gettext, $ngettext } = useGettext()
 
   const handler = ({ resources }) => {
@@ -34,7 +34,7 @@ export const useUserActionsEditLogin = () => {
       class: 'oc-users-actions-edit-login-trigger',
       label: () => $gettext('Edit login'),
       isEnabled: ({ resources }) => {
-        if (unref(readOnlyUserAttributes).includes('user.accountEnabled')) {
+        if (capabilityStore.graphUsersReadOnlyAttributes.includes('user.accountEnabled')) {
           return false
         }
 

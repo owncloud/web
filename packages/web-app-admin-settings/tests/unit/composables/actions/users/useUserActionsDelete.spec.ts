@@ -2,13 +2,8 @@ import { useUserActionsDelete } from '../../../../../src/composables/actions/use
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { eventBus, useCapabilityStore } from '@ownclouders/web-pkg'
+import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
 
 describe('useUserActionsDelete', () => {
   describe('method "isEnabled"', () => {
@@ -21,10 +16,9 @@ describe('useUserActionsDelete', () => {
       'should only return true if 1 or more users are selected and not disabled via capability',
       ({ resources, disabledViaCapability, isEnabled }) => {
         getWrapper({
-          setup: ({ actions }, { storeOptions }) => {
-            storeOptions.getters.capabilities.mockImplementation(() => ({
-              graph: { users: { delete_disabled: !!disabledViaCapability } }
-            }))
+          setup: ({ actions }) => {
+            const capabilityStore = useCapabilityStore()
+            writable(capabilityStore).graphUsersDeleteDisabled = !!disabledViaCapability
             expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
           }
         })
@@ -65,24 +59,20 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useUserActionsDelete>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useUserActionsDelete()
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        setup(instance, { clientService: mocks.$clientService })
       },
-      { store, mocks, provide: mocks }
+      { mocks, provide: mocks }
     )
   }
 }

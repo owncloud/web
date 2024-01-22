@@ -3,11 +3,11 @@ import get from 'lodash-es/get'
 
 /* eslint-disable camelcase */
 export interface AppProviderCapability {
-  apps_url: string
-  enabled: boolean
-  new_url: string
-  open_url: string
-  version: string
+  apps_url?: string
+  enabled?: boolean
+  new_url?: string
+  open_url?: string
+  version?: string
 }
 
 export interface PasswordPolicyCapability {
@@ -32,99 +32,148 @@ export interface PublicExpirationCapability {
   enforced?: boolean
 }
 
-export interface LastModifiedFilterCapability {
-  keywords?: string[]
+export interface SearchPropertyCapability {
   enabled?: boolean
 }
-
-export interface MediaTypeCapability {
+export interface LastModifiedFilterCapability extends SearchPropertyCapability {
   keywords?: string[]
+}
+
+export interface MediaTypeCapability extends SearchPropertyCapability {
+  keywords?: string[]
+}
+
+/**
+ * Archiver struct within the capabilities as defined in reva
+ * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
+ */
+export interface ArchiverCapability {
   enabled?: boolean
+  version?: string // version is just a major version, e.g. `v2`
+  formats?: string[]
+  // eslint-disable-next-line camelcase
+  archiver_url?: string
+  max_num_files?: string
+  max_size?: string
 }
 
 export interface Capabilities {
   capabilities: {
+    checksums?: {
+      preferredUploadType?: string
+      supportedTypes?: string[]
+    }
     password_policy?: PasswordPolicyCapability
-    search: {
-      property: {
-        mtime: LastModifiedFilterCapability
-        mimetype: MediaTypeCapability
+    search?: {
+      property?: {
+        content?: SearchPropertyCapability
+        mediatype?: MediaTypeCapability
+        mtime?: LastModifiedFilterCapability
+        name?: MediaTypeCapability
+        scope?: MediaTypeCapability
+        size?: MediaTypeCapability
+        tag?: MediaTypeCapability
+        tags?: MediaTypeCapability
+        type?: MediaTypeCapability
       }
     }
-    notifications: {
-      ocs_endpoints: string[]
+    notifications?: {
+      'ocs-endpoints'?: string[]
     }
     core: {
-      pollinterval: number
-      status: {
-        edition: string
-        installed: boolean
-        maintenance: boolean
-        needsDbUpgrade: boolean
-        product: string
+      pollinterval?: number
+      status?: {
+        edition?: string
+        installed?: boolean
+        maintenance?: boolean
+        needsDbUpgrade?: boolean
+        product?: string
         productname?: string
         productversion?: string
-        version: string
-        versionstring: string
+        version?: string
+        versionstring?: string
       }
-      'support-url-signing': boolean
-      'webdav-root': string
+      'support-sse'?: boolean
+      'support-url-signing'?: boolean
+      'webdav-root'?: string
     }
     dav: {
-      reports: string[]
+      chunking?: string
+      chunkingParallelUploadDisabled?: boolean
+      reports?: string[]
+      trashbin?: string
     }
     files: {
       app_providers?: AppProviderCapability[]
-      archivers?: {
-        archiver_url: string
-        enabled: boolean
-        formats: string[]
-        max_num_files: string
-        max_size: string
-        version: string
-      }[]
-      favorites: boolean
-      privateLinks: boolean
+      archivers?: ArchiverCapability[]
+      favorites?: boolean
+      full_text_search?: boolean
+      permanent_deletion?: boolean
+      privateLinks?: boolean
+      tags?: boolean
       tus_support?: {
-        extension: string
-        http_method_override: string
-        max_chunk_size: number
-        resumable: string
-        version: string
+        extension?: string
+        http_method_override?: boolean
+        max_chunk_size?: number
+        resumable?: string
+        version?: string
       }
-      undelete: boolean
-      versioning: true
+      undelete?: boolean
+      versioning?: boolean
+      thumbnail?: {
+        enabled?: boolean
+        version?: string
+        supportedMimeTypes?: string[]
+      }
     }
     files_sharing: {
-      api_enabled: boolean
-      default_permissions: number
-      federation: {
-        incoming: boolean
-        outgoing: boolean
+      allow_custom?: boolean
+      api_enabled?: boolean
+      can_rename?: boolean
+      default_permissions?: number
+      deny_access?: boolean
+      federation?: {
+        incoming?: boolean
+        outgoing?: boolean
       }
-      group_sharing: boolean
-      public: {
+      group_sharing?: boolean
+      public?: {
         alias?: boolean
-        can_edit: boolean
-        enabled: boolean
-        expire_date: PublicExpirationCapability
-        multiple: boolean
-        password: {
-          enforced: boolean
-          enforced_for: PasswordEnforcedForCapability
+        can_contribute?: boolean
+        can_edit?: boolean
+        default_permissions?: number
+        enabled?: boolean
+        expire_date?: PublicExpirationCapability
+        multiple?: boolean
+        password?: {
+          enforced?: boolean
+          enforced_for?: PasswordEnforcedForCapability
         }
-        send_mail: boolean
-        supports_upload_only: boolean
-        upload: boolean
+        send_mail?: boolean
+        supports_upload_only?: boolean
+        upload?: boolean
       }
-      resharing: boolean
-      search_min_length: number
-      user: {
-        profile_picture: boolean
-        send_mail: boolean
-        settings: {
-          enabled: boolean
-          version: string
+      resharing?: boolean
+      resharing_default?: boolean
+      search_min_length?: number
+      group?: {
+        expire_date?: {
+          enabled?: boolean
+          enforced?: boolean
+          days?: string
+        }
+      }
+      user?: {
+        expire_date?: {
+          enabled?: boolean
+          enforced?: boolean
+          days?: string
+        }
+        profile_picture?: boolean
+        send_mail?: boolean
+        settings?: {
+          enabled?: boolean
+          version?: string
         }[]
       }
       quick_link?: {
@@ -133,19 +182,29 @@ export interface Capabilities {
     }
     spaces?: {
       enabled?: boolean
+      max_quota?: number
       projects?: boolean
       share_jail?: boolean
       version?: string
     }
+    graph?: {
+      'personal-data-export'?: boolean
+      users: {
+        change_password_self_disabled?: boolean
+        create_disabled?: boolean
+        delete_disabled?: boolean
+        read_only_attributes?: string[]
+      }
+    }
   }
   version: {
-    edition: string
-    major: string
-    minor: string
-    micro: string
-    product: string
+    edition?: string
+    major?: string
+    minor?: string
+    micro?: string
+    product?: string
     productversion?: string
-    string: string
+    string?: string
   }
 }
 /* eslint-enable camelcase */

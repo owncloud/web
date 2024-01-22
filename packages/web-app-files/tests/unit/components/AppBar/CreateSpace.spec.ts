@@ -2,14 +2,8 @@ import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
-import { useMessages, useModals } from '@ownclouders/web-pkg'
+import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
+import { useMessages, useModals, useSpacesStore } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 
 const selectors = {
@@ -30,7 +24,7 @@ describe('CreateSpace component', () => {
   })
   describe('method "addNewSpace"', () => {
     it('creates the space and updates the readme data after creation', async () => {
-      const { wrapper, mocks, storeOptions } = getWrapper()
+      const { wrapper, mocks } = getWrapper()
       const { modals } = useModals()
       await wrapper.find(selectors.newSpaceBtn).trigger('click')
 
@@ -41,7 +35,8 @@ describe('CreateSpace component', () => {
       mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
       await unref(modals)[0].onConfirm('New Space')
 
-      expect(storeOptions.modules.runtime.modules.spaces.mutations.UPSERT_SPACE).toHaveBeenCalled()
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.upsertSpace).toHaveBeenCalled()
     })
     it('shows a message when an error occurred', async () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
@@ -60,17 +55,14 @@ describe('CreateSpace component', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks()
   return {
-    storeOptions,
     mocks,
     wrapper: mount(CreateSpace, {
       global: {
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins({ piniaOptions: { stubActions: false } }), store]
+        plugins: [...defaultPlugins({ piniaOptions: { stubActions: false } })]
       }
     })
   }

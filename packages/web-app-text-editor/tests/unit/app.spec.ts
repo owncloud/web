@@ -7,7 +7,7 @@ import App from '../../src/App.vue'
 jest.mock('@ownclouders/web-pkg')
 
 describe('Text editor app', () => {
-  it('shows the editor', async () => {
+  it('shows the editor', () => {
     const { wrapper } = getWrapper({
       applicationConfig: {}
     })
@@ -22,7 +22,7 @@ describe('Text editor app', () => {
       { fileExtension: 'json', showPreview: false },
       { fileExtension: 'xml', showPreview: false },
       { fileExtension: 'md', showPreview: true }
-    ])('shows only for supported file types: %s', async (data) => {
+    ])('shows only for supported file types: %s', (data) => {
       const { wrapper } = getWrapper({
         applicationConfig: {},
         resource: mock<Resource>({

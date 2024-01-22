@@ -1,12 +1,6 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  RouteLocation
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createLocationSpaces, createLocationPublic } from '@ownclouders/web-pkg/'
@@ -141,9 +135,10 @@ describe('Details SideBar Panel', () => {
     })
   })
   describe('versions', () => {
-    it('show if given for files on a private page', () => {
+    it('show if given for files on a private page', async () => {
       const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource, versions: ['1'] })
+      await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.versionsInfo).exists()).toBeTruthy()
     })
     it('do not show for folders on a private page', () => {
@@ -159,7 +154,7 @@ describe('Details SideBar Panel', () => {
   })
 
   describe('tags', () => {
-    it('shows when enabled via capabilities', async () => {
+    it('shows when enabled via capabilities', () => {
       const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource })
       expect(wrapper.find(selectors.tags).exists()).toBeTruthy()
@@ -202,21 +197,12 @@ function createWrapper({
   versions = [],
   tagsEnabled = true
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.versions.mockReturnValue(versions)
-  storeOptions.getters.capabilities.mockReturnValue({ files: { tags: tagsEnabled } })
-  storeOptions.modules.runtime.modules.ancestorMetaData.getters.ancestorMetaData.mockReturnValue(
-    ancestorMetaData
-  )
-  storeOptions.modules.runtime.modules.auth.getters.isPublicLinkContextReady.mockReturnValue(
-    isPublicLinkContext
-  )
-  const store = createStore(storeOptions)
-
   const spacesLocation = createLocationSpaces('files-spaces-generic')
   const publicLocation = createLocationPublic('files-public-link')
   const currentRoute = isPublicLinkContext ? publicLocation : spacesLocation
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
+  mocks.$clientService.webdav.listFileVersions.mockResolvedValue(versions)
+  const capabilities = { files: { tags: tagsEnabled } }
   return {
     wrapper: mount(FileDetails, {
       global: {
@@ -226,7 +212,16 @@ function createWrapper({
           resource,
           space: mockDeep<SpaceResource>()
         },
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              userState: { user },
+              authState: { publicLinkContextReady: isPublicLinkContext },
+              capabilityState: { capabilities },
+              resourcesStore: { ancestorMetaData }
+            }
+          })
+        ],
         mocks
       }
     })

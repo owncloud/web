@@ -1,13 +1,12 @@
 import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
-import { Module, Store } from 'vuex'
 import { Extension } from '../composables/piniaStores'
+import { IconFillType } from '../helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export interface AppReadyHookArgs {
-  announceExtension: (extension: { [key: string]: unknown }) => void
   globalProperties: ComponentCustomProperties & Record<string, any>
   router: Router
-  store: Store<unknown>
   instance?: App
   portal?: any
 }
@@ -15,10 +14,10 @@ export interface AppReadyHookArgs {
 export interface AppNavigationItem {
   isActive?: () => boolean
   activeFor?: { name?: string; path?: string }[]
-  enabled?: (capabilities?: Record<string, any>) => boolean
+  enabled?: () => boolean
   fillType?: string
   icon?: string
-  name?: string | ((capabilities?: Record<string, any>) => string)
+  name?: string | (() => string)
   route?: RouteLocationRaw
   tag?: string
   handler?: () => void
@@ -43,17 +42,38 @@ export type AppConfigObject = Record<string, any>
 
 export interface ApplicationMenuItem {
   enabled: () => boolean
-  priority: number
+  priority?: number
   openAsEditor?: boolean
+}
+
+export interface ApplicationFileExtension {
+  app?: string
+  extension?: string
+  createFileHandler?: (arg: {
+    fileName: string
+    space: SpaceResource
+    currentFolder: Resource
+  }) => Promise<Resource>
+  hasPriority?: boolean
+  label?: string
+  name?: string
+  icon?: string
+  mimeType?: string
+  newFileMenu?: { menuTitle: () => string }
+  routeName?: string
 }
 
 /** ApplicationInformation describes required information of an application */
 export interface ApplicationInformation {
+  color?: string
   id?: string
   name?: string
   icon?: string
+  iconFillType?: IconFillType
+  iconColor?: string
+  img?: string
   isFileEditor?: boolean
-  extensions?: any[]
+  extensions?: ApplicationFileExtension[]
   defaultExtension?: string
   applicationMenu?: ApplicationMenuItem
 }
@@ -70,13 +90,12 @@ export interface ApplicationTranslations {
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
-  store?: Module<unknown, unknown>
   routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
   initialize?: () => void
-  ready?: (args: AppReadyHookArgs) => void
+  ready?: (args: AppReadyHookArgs) => Promise<void> | void
   mounted?: (...args) => void
   // TODO: move this to its own type
   setup?: (args: { applicationConfig: AppConfigObject }) => ClassicApplicationScript

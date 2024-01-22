@@ -5,15 +5,13 @@ import GenericSpace from 'web-app-files/src/views/spaces/GenericSpace.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables/resourcesViewDefaults'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { ConfigurationManager, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
+import { CapabilityStore, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 
 const mockCreateFolder = jest.fn()
@@ -24,14 +22,6 @@ jest.mock('web-app-files/src/composables/keyboardActions')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useBreadcrumbsFromPath: jest.fn(),
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        routing: {
-          fullShareOwnerPaths: false
-        }
-      }
-    }),
   useFileActionsCreateNewFolder: () => ({
     actions: [{ handler: mockCreateFolder }]
   }),
@@ -178,7 +168,7 @@ describe('GenericSpace view', () => {
     describe('on EOS for single shared resources', () => {
       it('renders the ResourceDetails component if no currentFolder id is present', () => {
         const { wrapper } = getMountedWrapper({
-          currentFolder: {},
+          currentFolder: mock<Resource>({ fileId: '' }),
           files: [mock<Resource>({ isFolder: false })],
           runningOnEos: true
         })
@@ -281,7 +271,7 @@ function getMountedWrapper({
   files = [],
   loading = false,
   currentRoute = { name: 'files-spaces-generic', path: '/' },
-  currentFolder = mock<Resource>() || {},
+  currentFolder = mock<Resource>(),
   runningOnEos = false,
   space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' },
   breadcrumbsFromPath = [],
@@ -302,38 +292,29 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      configuration: function () {
-        return {
-          options: {
-            runningOnEos
-          }
-        }
-      }
-    }
-  }
-  storeOptions.modules.Files.getters.currentFolder.mockReturnValue(currentFolder)
-  storeOptions.getters.capabilities.mockReturnValue({
-    spaces: {
-      share_jail: true
-    }
-  })
   const propsData = {
     space,
     item: '/',
     ...props
   }
-  const store = createStore(storeOptions)
+  const capabilities = {
+    spaces: { share_jail: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     mocks: { ...defaultMocks, ...resourcesViewDetailsMock },
-    storeOptions,
     wrapper: mount(GenericSpace, {
       props: propsData,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { runningOnEos } },
+              resourcesStore: { currentFolder }
+            }
+          })
+        ],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: { ...defaultStubs, 'resource-details': true, portal: true, ...stubs }

@@ -4,11 +4,10 @@ import LayoutLoading from '../../layouts/Loading.vue'
 import { isPublicLinkContextRequired, isUserContextRequired } from '../../router'
 import { computed, unref } from 'vue'
 import { Router } from 'vue-router'
-import { Store } from 'vuex'
-import { useStore, useRouter, useUserContext, usePublicLinkContext } from '@ownclouders/web-pkg'
+import { useRouter, useAuthStore, AuthStore } from '@ownclouders/web-pkg'
 
 export interface LayoutOptions {
-  store?: Store<any>
+  authStore?: AuthStore
   router?: Router
 }
 
@@ -16,10 +15,8 @@ const layoutTypes = ['plain', 'loading', 'application'] as const
 type LayoutType = (typeof layoutTypes)[number]
 
 export const useLayout = (options?: LayoutOptions) => {
-  const store = options?.store || useStore()
+  const authStore = options?.authStore || useAuthStore()
   const router = options?.router || useRouter()
-  const isPublicLinkContextReady = usePublicLinkContext({ store })
-  const isUserContextReady = useUserContext({ store })
 
   const layoutType = computed<LayoutType>(() => {
     const plainLayoutRoutes = [
@@ -37,10 +34,10 @@ export const useLayout = (options?: LayoutOptions) => {
       return 'plain'
     }
     if (isPublicLinkContextRequired(router, unref(router.currentRoute))) {
-      return unref(isPublicLinkContextReady) ? 'application' : 'loading'
+      return authStore.publicLinkContextReady ? 'application' : 'loading'
     }
     if (isUserContextRequired(router, unref(router.currentRoute))) {
-      return unref(isUserContextReady) ? 'application' : 'loading'
+      return authStore.userContextReady ? 'application' : 'loading'
     }
     return 'application'
   })

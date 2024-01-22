@@ -82,7 +82,7 @@
 import { computed, defineComponent, PropType, unref } from 'vue'
 import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
-import { Action, useFolderLink, useGetMatchingSpace, useStore } from '../composables'
+import { Action, useFolderLink, useGetMatchingSpace, useResourcesStore } from '../composables'
 import ResourceListItem from './FilesList/ResourceListItem.vue'
 import {
   Resource,
@@ -114,9 +114,9 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const store = useStore()
+    const resourcesStore = useResourcesStore()
 
-    const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
+    const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
 

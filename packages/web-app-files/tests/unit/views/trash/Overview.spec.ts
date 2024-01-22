@@ -1,15 +1,14 @@
 import TrashOverview from '../../../../src/views/trash/Overview.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   defaultStubs,
   mount,
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { nextTick } from 'vue'
+import { SpaceResource } from '@ownclouders/web-client'
 
 const spaceMocks = [
   {
@@ -36,7 +35,7 @@ const spaceMocks = [
     getDriveAliasAndItem: () => '3',
     isOwner: () => false
   }
-]
+] as unknown as SpaceResource[]
 
 describe('TrashOverview', () => {
   it('should render no content message if no spaces exist', async () => {
@@ -48,7 +47,7 @@ describe('TrashOverview', () => {
     const { mocks } = getWrapper({ spaces: [spaceMocks[0]] })
     expect(mocks.$router.push).toHaveBeenCalledWith({
       name: 'files-trash-generic',
-      params: { driveAliasAndItem: spaceMocks[0].getDriveAliasAndItem() },
+      params: { driveAliasAndItem: spaceMocks[0].getDriveAliasAndItem(undefined) },
       query: {}
     })
   })
@@ -107,10 +106,7 @@ describe('TrashOverview', () => {
   })
 })
 
-function getWrapper({ spaces = spaceMocks } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
+function getWrapper({ spaces = spaceMocks }: { spaces?: SpaceResource[] } = {}) {
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'trash-overview' })
@@ -124,7 +120,7 @@ function getWrapper({ spaces = spaceMocks } = {}) {
         stubs: { ...defaultStubs, NoContentMessage: true },
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins({ piniaOptions: { spacesState: { spaces } } })]
       }
     })
   }

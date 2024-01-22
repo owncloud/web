@@ -1,12 +1,7 @@
 import { useSpaceActionsEditQuota } from '../../../../../src/composables/actions'
 import { useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock } from 'jest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
@@ -73,31 +68,17 @@ function getWrapper({
   setup
 }: {
   canEditSpaceQuota?: boolean
-  setup: (
-    instance: ReturnType<typeof useSpaceActionsEditQuota>,
-    {
-      storeOptions
-    }: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useSpaceActionsEditQuota>) => void
 }) {
   const mocks = defaultComponentMocks()
-
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
-  }
-  const store = createStore(storeOptions)
 
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useSpaceActionsEditQuota()
-        setup(instance, { storeOptions })
+        setup(instance)
       },
       {
-        store,
         mocks,
         pluginOptions: {
           abilities: canEditSpaceQuota ? [{ action: 'set-quota-all', subject: 'Drive' }] : []

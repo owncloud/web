@@ -1,15 +1,16 @@
 import { nextTick, computed, unref, Ref } from 'vue'
 import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
-import { usePagination, useSort, SortDir, SortField, useRouteName } from '@ownclouders/web-pkg'
-import { useSideBar } from '@ownclouders/web-pkg'
-
 import {
-  queryItemAsString,
-  useMutationSubscription,
-  useRouteQuery,
-  useStore
+  usePagination,
+  useSort,
+  SortDir,
+  SortField,
+  useRouteName,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
+import { useSideBar } from '@ownclouders/web-pkg'
+import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import {
   determineResourceTableSortFields,
   determineResourceTilesSortFields
@@ -26,6 +27,7 @@ import {
 } from '@ownclouders/web-pkg'
 
 import { ScrollToResult, useScrollTo } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -36,9 +38,9 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   refreshFileListHeaderPosition(): void
   loadResourcesTask: Task<TT, TU>
   areResourcesLoading: ReadOnlyRef<boolean>
-  storeItems: ReadOnlyRef<T[]>
+  storeItems: ReadOnlyRef<Resource[]>
   sortFields: ReadOnlyRef<SortField[]>
-  paginatedResources: Ref<T[]>
+  paginatedResources: Ref<Resource[]>
   paginationPages: ReadOnlyRef<number>
   paginationPage: ReadOnlyRef<number>
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
@@ -47,7 +49,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
   viewMode: ReadOnlyRef<string>
   viewSize: ReadOnlyRef<number>
   selectedResources: Ref<Resource[]>
-  selectedResourcesIds: Ref<(string | number)[]>
+  selectedResourcesIds: Ref<string[]>
   isResourceInSelection(resource: Resource): boolean
 
   isSideBarOpen: Ref<boolean>
@@ -63,10 +65,10 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     return loadResourcesTask.isRunning || !loadResourcesTask.last
   })
 
-  const store = useStore()
-  const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
+  const resourcesStore = useResourcesStore()
+  const { activeResources: storeItems } = storeToRefs(resourcesStore)
 
-  const storeItems = computed((): T[] => store.getters['Files/activeFiles'] || [])
+  const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
 
   const currentRoute = useRouteName()
   const currentViewModeQuery = useRouteQuery(
@@ -94,9 +96,14 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     page: paginationPage
   } = usePagination({ items, perPageStoragePrefix: 'files' })
 
-  useMutationSubscription(['Files/UPSERT_RESOURCE'], async ({ payload }) => {
+  const accentuateItem = async (id: string) => {
     await nextTick()
-    fileList.accentuateItem(payload.id)
+    fileList.accentuateItem(id)
+  }
+  resourcesStore.$onAction((action) => {
+    if (action.name === 'upsertResource') {
+      accentuateItem(action.args[0].id)
+    }
   })
 
   return {
@@ -114,7 +121,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     handleSort,
     sortBy,
     sortDir,
-    ...useSelectedResources({ store }),
+    ...useSelectedResources(),
     ...useSideBar(),
     ...useScrollTo()
   }

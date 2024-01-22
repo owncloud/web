@@ -112,16 +112,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { DateTime } from 'luxon'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
-  useStore,
-  useCapabilitySpacesEnabled,
-  useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingPublicCanEdit,
-  useCapabilityFilesSharingPublicCanContribute,
-  useCapabilityFilesSharingPublicAlias,
-  useCapabilityFilesSharingPublicPasswordEnforcedFor,
   useAbility,
   useExpirationRules,
   useDefaultLinkPermissions,
@@ -130,7 +121,10 @@ import {
   useClientService,
   useModals,
   useUserStore,
-  useMessages
+  useMessages,
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import {
@@ -153,10 +147,9 @@ import {
   isProjectSpaceResource,
   isShareSpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { isLocationSharesActive } from '@ownclouders/web-pkg'
-import { useShares } from 'web-app-files/src/composables'
-import { configurationManager } from '@ownclouders/web-pkg'
+import { isLocationSharesActive, useSharesStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -166,7 +159,6 @@ export default defineComponent({
     NameAndCopy
   },
   setup() {
-    const store = useStore()
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const { $gettext } = useGettext()
@@ -174,10 +166,18 @@ export default defineComponent({
     const clientService = useClientService()
     const { can } = ability
     const { expirationRules } = useExpirationRules()
-    const hasResharing = useCapabilityFilesSharingResharing()
-    const hasShareJail = useCapabilityShareJailEnabled()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
+    const { removeResources } = useResourcesStore()
+
+    const sharesStore = useSharesStore()
+    const { updateLink, deleteLink } = sharesStore
+    const { outgoingLinks } = storeToRefs(sharesStore)
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const { actions: createLinkActions } = useFileActionsCreateLink()
     const createLinkAction = computed<FileAction>(() =>
@@ -190,11 +190,9 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const initialLinkListCollapsed =
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
+    const initialLinkListCollapsed = !configStore.options.sidebar.shares.showAllOnLoad
     const linkListCollapsed = ref(initialLinkListCollapsed)
     const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
-    const { outgoingLinks } = useShares()
     const directLinks = computed(() =>
       unref(outgoingLinks)
         .filter((l) => !l.indirect && !l.quicklink)
@@ -218,12 +216,12 @@ export default defineComponent({
     )
 
     const canCreateLinks = computed(() => {
-      if (unref(resource).isReceivedShare() && !unref(hasResharing)) {
+      if (unref(resource).isReceivedShare() && !capabilityStore.sharingResharing) {
         return false
       }
 
       const isShareJail = isShareSpaceResource(unref(space))
-      if (isShareJail && !unref(hasResharing)) {
+      if (isShareJail && !capabilityStore.sharingResharing) {
         return false
       }
 
@@ -252,11 +250,7 @@ export default defineComponent({
 
     const updatePublicLink = async ({ params }) => {
       try {
-        await store.dispatch('Files/updateLink', {
-          id: params.id,
-          client: clientService.owncloudSdk,
-          params
-        })
+        await updateLink({ id: params.id, clientService, params })
         showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
         showErrorMessage({
@@ -279,20 +273,22 @@ export default defineComponent({
       space,
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasSpaces: useCapabilitySpacesEnabled(),
-      hasShareJail,
-      hasPublicLinkEditing: useCapabilityFilesSharingPublicCanEdit(),
-      hasPublicLinkContribute: useCapabilityFilesSharingPublicCanContribute(),
-      hasPublicLinkAliasSupport: useCapabilityFilesSharingPublicAlias(),
-      passwordEnforced: useCapabilityFilesSharingPublicPasswordEnforcedFor(),
+      hasSpaces: capabilityRefs.spacesEnabled,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasPublicLinkEditing: capabilityRefs.sharingPublicCanEdit,
+      hasPublicLinkContribute: capabilityRefs.sharingPublicCanContribute,
+      hasPublicLinkAliasSupport: capabilityRefs.sharingPublicAlias,
+      passwordEnforced: capabilityRefs.sharingPublicPasswordEnforcedFor,
       indirectLinkListCollapsed,
       linkListCollapsed,
       outgoingLinks,
       directLinks,
       indirectLinks,
+      deleteLink,
       canCreatePublicLinks,
       canDeleteReadOnlyPublicLinkPassword,
-      configurationManager,
+      configStore,
+      configOptions,
       canCreateLinks,
       canEditLink,
       expirationRules,
@@ -302,12 +298,11 @@ export default defineComponent({
       addNewLink,
       dispatchModal,
       showMessage,
-      showErrorMessage
+      showErrorMessage,
+      removeResources
     }
   },
   computed: {
-    ...mapGetters(['capabilities', 'configuration']),
-
     collapseButtonTitle() {
       return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
     },
@@ -326,14 +321,14 @@ export default defineComponent({
     },
 
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configOptions.contextHelpers
     },
 
     viaLinkHelp() {
-      return shareViaLinkHelp({ configurationManager: this.configurationManager })
+      return shareViaLinkHelp({ configStore: this.configStore })
     },
     indirectLinkHelp() {
-      return shareViaIndirectLinkHelp({ configurationManager: this.configurationManager })
+      return shareViaIndirectLinkHelp({ configStore: this.configStore })
     },
     noResharePermsMessage() {
       return this.$gettext('You do not have permission to create links')
@@ -383,9 +378,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['addLink', 'updateLink', 'removeLink']),
-    ...mapMutations('Files', ['REMOVE_FILES']),
-
     toggleLinkListCollapsed() {
       this.linkListCollapsed = !this.linkListCollapsed
     },
@@ -508,15 +500,15 @@ export default defineComponent({
         ),
         confirmText: this.$gettext('Delete'),
         onConfirm: () =>
-          this.deleteLink({
-            client: this.$client,
+          this.removeLink({
+            clientService: this.$clientService,
             share: link,
             resource: this.resource
           })
       })
     },
 
-    async deleteLink({ client, share, resource }) {
+    async removeLink({ clientService, share, resource }) {
       let path = resource.path
       // sharing a share root from the share jail -> use resource name as path
       if (this.hasShareJail && path === '/') {
@@ -527,7 +519,12 @@ export default defineComponent({
       const loadIndicators = this.outgoingLinks.filter((l) => !l.indirect).length === 1
 
       try {
-        await this.removeLink({ client, share, path, loadIndicators })
+        await this.deleteLink({
+          clientService,
+          share,
+          path,
+          loadIndicators
+        })
         this.showMessage({
           title: this.$gettext('Link was deleted successfully')
         })
@@ -537,7 +534,7 @@ export default defineComponent({
             // spaces need their actual id instead of their share id to be removed from the file list
             lastLinkId = this.resource.id.toString()
           }
-          this.REMOVE_FILES([{ id: lastLinkId }])
+          this.removeResources([{ id: lastLinkId }] as Resource[])
         }
       } catch (e) {
         console.error(e)

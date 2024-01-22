@@ -8,10 +8,9 @@ import {
   SharePermissionBit,
   isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../capability'
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useUserStore, useCapabilityStore } from '../../piniaStores'
 
 export const useFileActionsCreateLink = ({
   enforceModal = false,
@@ -25,9 +24,9 @@ export const useFileActionsCreateLink = ({
   const userStore = useUserStore()
   const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
+  const capabilityStore = useCapabilityStore()
   const ability = useAbility()
   const loadingService = useLoadingService()
-  const passwordEnforcedCapabilities = useCapabilityFilesSharingPublicPasswordEnforcedFor()
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { createLink } = useCreateLink()
   const { dispatchModal } = useModals()
@@ -63,7 +62,7 @@ export const useFileActionsCreateLink = ({
     { space, resources }: FileActionOptions,
     { isQuickLink = false }: { isQuickLink?: boolean } = {}
   ) => {
-    const passwordEnforced = unref(passwordEnforcedCapabilities).read_only === true
+    const passwordEnforced = capabilityStore.sharingPublicPasswordEnforcedFor.read_only === true
     if (
       enforceModal ||
       (passwordEnforced && unref(defaultLinkPermissions) > SharePermissionBit.Internal)

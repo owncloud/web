@@ -33,11 +33,11 @@ import { urlJoin } from '@ownclouders/web-client/src/utils'
 import {
   isSameResource,
   queryItemAsString,
-  useConfigurationManager,
+  useCapabilityStore,
+  useConfigStore,
   useMessages,
   useRequest,
-  useRouteQuery,
-  useStore
+  useRouteQuery
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -55,9 +55,9 @@ export default defineComponent({
   emits: ['update:applicationName'],
   setup(props, { emit }) {
     const language = useGettext()
-    const store = useStore()
     const { showErrorMessage } = useMessages()
-    const configurationManager = useConfigurationManager()
+    const capabilityStore = useCapabilityStore()
+    const configStore = useConfigStore()
 
     const { $gettext } = language
     const { makeRequest } = useRequest()
@@ -68,7 +68,6 @@ export default defineComponent({
     const method = ref()
     const subm: VNodeRef = ref()
 
-    const capabilities = computed(() => store.getters['capabilities'])
     const applicationName = computed(() => {
       const appName = queryItemAsString(unref(appNameQuery))
       emit('update:applicationName', appName)
@@ -98,8 +97,8 @@ export default defineComponent({
 
         const fileId = props.resource.fileId
         const baseUrl = urlJoin(
-          configurationManager.serverUrl,
-          unref(capabilities).files.app_providers[0].open_url
+          configStore.serverUrl,
+          capabilityStore.filesAppProviders[0].open_url
         )
 
         const query = stringify({
@@ -155,7 +154,7 @@ export default defineComponent({
     }).restartable()
 
     const determineOpenAsPreview = (appName: string) => {
-      const openAsPreview = configurationManager.options.editor.openAsPreview
+      const openAsPreview = configStore.options.editor.openAsPreview
       return (
         openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
       )

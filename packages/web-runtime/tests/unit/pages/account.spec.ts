@@ -1,17 +1,14 @@
 import account from '../../../src/pages/account.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
   mockAxiosResolve,
   shallowMount,
-  defaultStoreMockOptions,
   mockAxiosReject
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { AxiosResponse } from 'axios'
-import { ConfigurationManager, useMessages } from '@ownclouders/web-pkg'
+import { useMessages, useResourcesStore } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
 
@@ -33,31 +30,18 @@ const selectors = {
   gdprExport: '[data-testid="gdpr-export"]'
 }
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      logoutUrl: 'https://account-manager/logout',
-      options: {
-        logoutUrl: 'https://account-manager/logout'
-      }
-    })
-}))
-
 describe('account page', () => {
-  describe('header section', () => {
-    it('renders page title', async () => {
-      const { wrapper } = getWrapper()
-
+  describe('public link context', () => {
+    it('should render a limited view', async () => {
+      const { wrapper } = getWrapper({ isUserContext: false, isPublicLinkContext: true })
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
       await wrapper.vm.loadGraphUserTask.last
-
-      const pageTitle = wrapper.find(selectors.pageTitle)
-      expect(pageTitle.exists()).toBeTruthy()
-      expect(pageTitle.text()).toBe($route.meta.title)
+      expect(wrapper.html()).toMatchSnapshot()
     })
+  })
 
+  describe('header section', () => {
     describe('edit url button', () => {
       it('should be displayed if defined via config', async () => {
         const { wrapper } = getWrapper({
@@ -82,35 +66,9 @@ describe('account page', () => {
         expect(editUrlButton.exists()).toBeFalsy()
       })
     })
-
-    describe('change password button', () => {
-      it('should be displayed if not disabled via capability', async () => {
-        const { wrapper } = getWrapper({
-          capabilities: { graph: { users: { change_password_self_disabled: false } } }
-        })
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
-
-        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
-        expect(editPasswordButton.exists()).toBeTruthy()
-      })
-      it('should not be displayed if disabled via capability', async () => {
-        const { wrapper } = getWrapper({
-          capabilities: { graph: { users: { change_password_self_disabled: true } } }
-        })
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
-
-        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
-        expect(editPasswordButton.exists()).toBeFalsy()
-      })
-    })
   })
-  describe('account information', () => {
+
+  describe('account information section', () => {
     it('displays basic user information', async () => {
       const { wrapper } = getWrapper({
         user: mock<User>({
@@ -155,79 +113,66 @@ describe('account page', () => {
         expect(groupNames.html()).toMatchSnapshot()
       })
     })
-  })
 
-  describe('gdpr export section', () => {
-    it('does show if announced via capabilities and user has a personal space', async () => {
-      const spaces = [mock<SpaceResource>({ driveType: 'personal', isOwner: () => true })]
-      const { wrapper } = getWrapper({
-        spaces,
-        capabilities: { graph: { 'personal-data-export': true } }
+    describe('Logout from all devices link', () => {
+      it('should render the logout from active devices if logoutUrl is provided', async () => {
+        const { wrapper } = getWrapper()
+
+        await wrapper.vm.loadAccountBundleTask.last
+        await wrapper.vm.loadValuesListTask.last
+        await wrapper.vm.loadGraphUserTask.last
+
+        expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
       })
+      it("shouldn't render the logout from active devices if logoutUrl isn't provided", async () => {
+        const { wrapper } = getWrapper()
 
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+        await wrapper.vm.loadAccountBundleTask.last
+        await wrapper.vm.loadValuesListTask.last
+        await wrapper.vm.loadGraphUserTask.last
 
-      expect(wrapper.find(selectors.gdprExport).exists()).toBeTruthy()
-    })
-    it('does not show if not announced via capabilities', async () => {
-      const spaces = [mock<SpaceResource>({ driveType: 'personal' })]
-      const { wrapper } = getWrapper({
-        spaces,
-        capabilities: { graph: { 'personal-data-export': false } }
+        wrapper.vm.logoutUrl = undefined
+        expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
       })
+      it('should use url from configuration manager', async () => {
+        const { wrapper } = getWrapper()
 
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+        await wrapper.vm.loadAccountBundleTask.last
+        await wrapper.vm.loadValuesListTask.last
+        await wrapper.vm.loadGraphUserTask.last
 
-      expect(wrapper.find(selectors.gdprExport).exists()).toBeFalsy()
-    })
-    it('does not show if user has no personal space', async () => {
-      const spaces = [mock<SpaceResource>({ driveType: 'project' })]
-      const { wrapper } = getWrapper({
-        spaces,
-        capabilities: { graph: { 'personal-data-export': true } }
+        const logoutButton = wrapper.find(selectors.logoutButton)
+        expect(logoutButton.attributes('href')).toBe('https://account-manager/logout')
       })
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
-
-      expect(wrapper.find(selectors.gdprExport).exists()).toBeFalsy()
     })
   })
 
-  describe('Logout from all devices link', () => {
-    it('should render the logout from active devices if logoutUrl is provided', async () => {
-      const { wrapper } = getWrapper()
+  describe('Preferences section', () => {
+    describe('change password button', () => {
+      it('should be displayed if not disabled via capability', async () => {
+        const { wrapper } = getWrapper({
+          capabilities: { graph: { users: { change_password_self_disabled: false } } }
+        })
 
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+        await wrapper.vm.loadAccountBundleTask.last
+        await wrapper.vm.loadValuesListTask.last
+        await wrapper.vm.loadGraphUserTask.last
 
-      expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
-    })
-    it("shouldn't render the logout from active devices if logoutUrl isn't provided", async () => {
-      const { wrapper } = getWrapper()
+        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
+        expect(editPasswordButton.exists()).toBeTruthy()
+      })
+      it('should not be displayed if disabled via capability', async () => {
+        const { wrapper } = getWrapper({
+          capabilities: { graph: { users: { change_password_self_disabled: true } } }
+        })
 
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+        await wrapper.vm.loadAccountBundleTask.last
+        await wrapper.vm.loadValuesListTask.last
+        await wrapper.vm.loadGraphUserTask.last
 
-      wrapper.vm.logoutUrl = undefined
-      expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
-    })
-    it('should use url from configuration manager', async () => {
-      const { wrapper } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
-
-      const logoutButton = wrapper.find(selectors.logoutButton)
-      expect(logoutButton.attributes('href')).toBe('https://account-manager/logout')
+        const editPasswordButton = wrapper.find(selectors.editPasswordButton)
+        expect(editPasswordButton.exists()).toBeFalsy()
+      })
     })
   })
 
@@ -295,7 +240,7 @@ describe('account page', () => {
 
   describe('Method "updateViewOptionsWebDavDetails', () => {
     it('should show a message on success', async () => {
-      const { wrapper, storeOptions } = getWrapper({})
+      const { wrapper } = getWrapper({})
 
       await wrapper.vm.loadAccountBundleTask.last
       await wrapper.vm.loadValuesListTask.last
@@ -304,9 +249,9 @@ describe('account page', () => {
       await wrapper.vm.updateViewOptionsWebDavDetails(true)
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
-      expect(
-        storeOptions.modules.Files.mutations.SET_FILE_WEB_DAV_DETAILS_VISIBILITY
-      ).toHaveBeenCalled()
+
+      const { setAreWebDavDetailsShown } = useResourcesStore()
+      expect(setAreWebDavDetailsShown).toHaveBeenCalled()
     })
   })
 })
@@ -315,18 +260,10 @@ function getWrapper({
   user = mock<User>({ memberOf: [] }),
   capabilities = {},
   accountEditLink = undefined,
-  spaces = []
+  spaces = [],
+  isPublicLinkContext = false,
+  isUserContext = true
 } = {}) {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
-  storeOptions.getters.capabilities.mockReturnValue(capabilities)
-  storeOptions.getters.configuration.mockReturnValue({
-    server: 'http://server/address/',
-    options: { ...(accountEditLink && { accountEditLink }) }
-  })
-
-  const store = createStore(storeOptions)
-
   const mocks = {
     ...defaultComponentMocks(),
     $route
@@ -349,11 +286,28 @@ function getWrapper({
   )
 
   return {
-    storeOptions,
     mocks,
     wrapper: shallowMount(account, {
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { userState: { user } } }), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              userState: { user },
+              authState: {
+                userContextReady: isUserContext,
+                publicLinkContextReady: isPublicLinkContext
+              },
+              spacesState: { spaces },
+              capabilityState: { capabilities },
+              configState: {
+                options: {
+                  logoutUrl: 'https://account-manager/logout',
+                  ...(accountEditLink && { accountEditLink })
+                }
+              }
+            }
+          })
+        ],
         mocks,
         provide: mocks,
         stubs: {

@@ -47,8 +47,9 @@
                 class="oc-display-block"
                 appearance="raw"
                 v-bind="getSpaceAttributes(item)"
-                v-text="getSpaceName(item)"
-              />
+              >
+                {{ getSpaceName(item) }}
+              </oc-button>
             </template>
             <template #footer>
               <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
@@ -72,8 +73,9 @@ import { useTask } from 'vue-concurrency'
 import {
   defaultFuseOptions,
   useClientService,
+  useResourcesStore,
   useRouter,
-  useStore,
+  useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { createLocationTrash } from '@ownclouders/web-pkg'
@@ -94,32 +96,31 @@ export default defineComponent({
   name: 'TrashOverview',
   components: { FilesViewWrapper, AppBar, AppLoadingSpinner, NoContentMessage },
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
     const router = useRouter()
     const { $gettext } = useGettext()
     const clientService = useClientService()
     const { y: fileListHeaderY } = useFileListHeaderPosition()
+    const resourcesStore = useResourcesStore()
+
     const sortBy = ref('name')
     const sortDir = ref('asc')
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
 
-    const spaces = computed<SpaceResource[]>(() =>
-      store.getters['runtime/spaces/spaces'].filter(
+    const spaces = computed(() =>
+      spacesStore.spaces.filter(
         (s: SpaceResource) =>
           (isPersonalSpaceResource(s) && s.isOwner(userStore.user)) || isProjectSpaceResource(s)
       )
     )
 
     const loadResourcesTask = useTask(function* () {
-      store.commit('Files/CLEAR_FILES_SEARCHED')
-      store.commit('Files/CLEAR_CURRENT_FILES_LIST')
-      yield store.dispatch('runtime/spaces/reloadProjectSpaces', {
-        graphClient: clientService.graphAuthenticated
-      })
-      store.commit('Files/LOAD_FILES', { currentFolder: null, files: unref(spaces) })
+      resourcesStore.clearResourceList()
+      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
+      resourcesStore.initResourceList({ currentFolder: null, resources: unref(spaces) })
     })
 
     const areResourcesLoading = computed(() => {

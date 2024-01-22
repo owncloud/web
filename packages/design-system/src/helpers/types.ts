@@ -9,10 +9,6 @@ export interface ContextualHelperData {
   readMoreLink?: string
 }
 
-export interface ContextualHelperOptions {
-  configurationManager: unknown
-}
-
 export interface ContextualHelper {
   isEnabled: boolean
   data: ContextualHelperData

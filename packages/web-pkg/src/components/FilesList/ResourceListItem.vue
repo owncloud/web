@@ -141,7 +141,7 @@ export default defineComponent({
     parentFolderLinkIconAdditionalAttributes: {
       type: Object,
       required: false,
-      default: () => {}
+      default: () => ({})
     },
     /**
      * Asserts whether the resource extension should be displayed

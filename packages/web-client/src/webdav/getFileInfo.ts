@@ -4,6 +4,7 @@ import { WebDavOptions } from './types'
 
 export const GetFileInfoFactory = (
   listFilesFactory: ReturnType<typeof ListFilesFactory>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options?: WebDavOptions
 ) => {
   return {

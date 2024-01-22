@@ -15,7 +15,7 @@ export function useViewMode(options: ComputedRef<string>): ComputedRef<string> {
   return computed(() => queryItemAsString(unref(viewModeQuery)))
 }
 
-export function useViewSize<T>(options: ComputedRef<string>): ComputedRef<number> {
+export function useViewSize(options: ComputedRef<string>): ComputedRef<number> {
   if (options) {
     return computed(() => parseInt(unref(options)))
   }

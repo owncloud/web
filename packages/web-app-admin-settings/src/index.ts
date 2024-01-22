@@ -148,7 +148,7 @@ export const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem
 ]
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     const { can } = useAbility()
     const userStore = useUserStore()
 
@@ -161,7 +161,13 @@ export default defineWebApplication({
         isFileEditor: false,
         applicationMenu: {
           enabled: () => {
-            return userStore.user && can('read-all', 'Setting')
+            return (
+              userStore.user &&
+              (can('read-all', 'Setting') ||
+                can('read-all', 'Account') ||
+                can('read-all', 'Group') ||
+                can('read-all', 'Drive'))
+            )
           },
           priority: 40
         }

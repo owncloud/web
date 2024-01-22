@@ -1,11 +1,4 @@
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  defaultStubs,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'
@@ -16,16 +9,8 @@ import {
   useFileActionsRename,
   useFileActionsCopy
 } from '../../../../src/composables'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Action } from '../../../../src/composables/actions'
-
-function createMockActionComposables(module) {
-  const mockModule: Record<string, any> = {}
-  for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
-  }
-  return mockModule
-}
 
 // jest.mock('../../../../src/composables/actions/files', () =>
 //   createMockActionComposables(jest.requireActual('../../../../src/composables/actions/files'))
@@ -37,6 +22,7 @@ function createMockActionComposables(module) {
 //   )
 // )
 
+// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
@@ -64,14 +50,10 @@ describe.skip('ContextActions', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => '/')
-  const store = createStore(storeOptions)
   const mocks = {
     ...defaultComponentMocks()
   }
   return {
-    storeOptions,
     mocks,
     wrapper: mount(ContextActions, {
       props: {
@@ -84,7 +66,7 @@ function getWrapper() {
         mocks,
         provide: { ...mocks, currentSpace: mock<SpaceResource>() },
         stubs: { ...defaultStubs, 'action-menu-item': true },
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     })
   }

@@ -62,7 +62,6 @@ config = {
         "oCIS-1": {
             "earlyFail": True,
             "skip": False,
-            "tikaNeeded": True,
             "featurePaths": [
                 "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
             ],
@@ -72,6 +71,14 @@ config = {
             "skip": False,
             "featurePaths": [
                 "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
+            ],
+        },
+        "oCIS-3": {
+            "earlyFail": True,
+            "skip": False,
+            "tikaNeeded": True,
+            "featurePaths": [
+                "tests/e2e/cucumber/features/smoke/{search,shares}/*.feature",
             ],
         },
         "oCIS-app-provider": {
@@ -123,8 +130,6 @@ config = {
                 ],
                 "oCISSharingInternal2": [
                     "webUISharingInternalUsers",
-                    "webUISharingInternalUsersBlacklisted",
-                    "webUISharingInternalUsersCollaborator",
                 ],
                 "oCISSharingInternal3": [
                     "webUISharingInternalGroupsSharingIndicator",
@@ -230,8 +235,6 @@ basicTestSuites = [
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",
-    "webUISharingInternalUsersBlacklisted",
-    "webUISharingInternalUsersCollaborator",
     "webUISharingInternalUsersShareWithPage",
     "webUISharingInternalUsersSharingIndicator",
     "webUISharingPermissionsUsers",
@@ -2112,7 +2115,7 @@ def wopiServer():
         {
             "name": "wopiserver",
             "type": "docker",
-            "image": "cs3org/wopiserver:v10.2.1",
+            "image": "cs3org/wopiserver:v10.2.2",
             "detach": True,
             "commands": [
                 "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
@@ -2134,7 +2137,7 @@ def collaboraService():
         {
             "name": "collabora",
             "type": "docker",
-            "image": "collabora/code:23.05.5.4.1",
+            "image": "collabora/code:23.05.6.5.1",
             "detach": True,
             "environment": {
                 "DONT_GEN_SSL_CERT": "set",

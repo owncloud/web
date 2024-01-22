@@ -2,19 +2,11 @@ import { mock } from 'jest-mock-extended'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
-import { ConfigurationManager, useConfigurationManager } from '@ownclouders/web-pkg'
-
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useConfigurationManager: jest.fn()
-}))
 
 const folderMock = {
   type: 'folder',
@@ -85,20 +77,11 @@ function getWrapper({
   storageId = 'fake-storage-id',
   resource = folderMock
 } = {}) {
-  jest
-    .mocked(useConfigurationManager)
-    .mockReturnValue(
-      mock<ConfigurationManager>({ options: { concurrentRequests: { shares: { create: 1 } } } })
-    )
-
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({
-    files_sharing: { federation: { incoming: true, outgoing: true } }
-  }))
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ params: { storageId } })
   })
+  const capabilities = { files_sharing: { federation: { incoming: true, outgoing: true } } }
+
   return {
     wrapper: shallowMount(InviteCollaboratorForm, {
       data() {
@@ -107,7 +90,14 @@ function getWrapper({
         }
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { concurrentRequests: { shares: { create: 1 } } } }
+            }
+          })
+        ],
         provide: { ...mocks, resource },
         mocks
       }

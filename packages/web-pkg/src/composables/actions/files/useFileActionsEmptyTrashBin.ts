@@ -1,33 +1,36 @@
-import { Store } from 'vuex'
 import { isLocationTrashActive } from '../../../router'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { computed, unref } from 'vue'
-import { useCapabilityFilesPermanentDeletion } from '../../capability'
+import { computed } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
-
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useUserStore,
+  useCapabilityStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsEmptyTrashBin = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const clientService = useClientService()
-  const hasPermanentDeletion = useCapabilityFilesPermanentDeletion()
   const { dispatchModal } = useModals()
+  const resourcesStore = useResourcesStore()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
     return clientService.webdav
       .clearTrashBin(space)
       .then(() => {
         showMessage({ title: $gettext('All deleted files were removed') })
-        store.dispatch('Files/clearTrashBin')
+        resourcesStore.clearResources()
+        resourcesStore.resetSelection()
       })
       .catch((error) => {
         console.error(error)
@@ -61,7 +64,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
-        if (!unref(hasPermanentDeletion)) {
+        if (!capabilityStore.filesPermanentDeletion) {
           return false
         }
 
@@ -75,7 +78,7 @@ export const useFileActionsEmptyTrashBin = ({ store }: { store?: Store<any> } = 
         return true
       },
       isDisabled: () => {
-        return store.getters['Files/activeFiles'].length === 0
+        return resourcesStore.activeResources.length === 0
       },
       componentType: 'button',
       class: 'oc-files-actions-empty-trash-bin-trigger',

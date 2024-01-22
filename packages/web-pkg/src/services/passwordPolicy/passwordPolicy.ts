@@ -9,10 +9,9 @@ import {
   MustNotBeEmptyRule
 } from './rules'
 import { PasswordPolicyCapability } from '@ownclouders/web-client/src/ocs/capabilities'
-import get from 'lodash-es/get'
-import { Store } from 'vuex'
 import { PasswordPolicy } from 'password-sheriff'
 import { GeneratePassword } from 'js-generate-password'
+import { CapabilityStore } from '../../composables'
 
 interface GeneratePasswordRules {
   length: number
@@ -32,8 +31,8 @@ export class PasswordPolicyService {
     this.language = language
   }
 
-  public initialize(store: Store<unknown>) {
-    this.capability = get(store, 'getters.capabilities.password_policy', {})
+  public initialize(capabilityStore: CapabilityStore) {
+    this.capability = capabilityStore.passwordPolicy
     this.buildGeneratePasswordRules()
     this.buildPolicy()
   }

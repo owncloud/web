@@ -132,9 +132,6 @@
 import { debounce } from 'lodash-es'
 import PQueue from 'p-queue'
 import { storeToRefs } from 'pinia'
-
-import { mapActions, mapGetters } from 'vuex'
-
 import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
@@ -148,21 +145,17 @@ import {
 import {
   // FederatedConnection,
   FederatedUser,
-  useCapabilityFilesSharingAllowCustomPermissions,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingResharingDefault,
-  useCapabilityFilesSharingSearchMinLength,
-  useCapabilityShareJailEnabled,
+  useCapabilityStore,
   useClientService,
-  useConfigurationManager,
-  useStore,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore,
+  useConfigStore,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { useShares } from 'web-app-files/src/composables'
 import {
   displayPositionedDropdown,
   formatDateFromDateTime,
@@ -198,16 +191,26 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
     const clientService = useClientService()
+    const spacesStore = useSpacesStore()
+    const { addSpaceMember } = spacesStore
+    const { spaceMembers } = storeToRefs(spacesStore)
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
     const { user } = storeToRefs(userStore)
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
+    const sharesStore = useSharesStore()
+    const { addShare } = sharesStore
+    const { outgoingCollaborators } = storeToRefs(sharesStore)
 
     const saving = ref(false)
     const savingDelayed = ref(false)
     const notifyEnabled = ref(false)
-    const configurationManager = useConfigurationManager()
 
     watch(saving, (newValue) => {
       if (!newValue) {
@@ -256,22 +259,26 @@ export default defineComponent({
     ]
 
     const createSharesConcurrentRequests = computed(() => {
-      return configurationManager.options.concurrentRequests.shares.create
+      return configStore.options.concurrentRequests.shares.create
     })
 
     return {
       resource: inject<Resource>('resource'),
-      hasResharing: useCapabilityFilesSharingResharing(store),
-      resharingDefault: useCapabilityFilesSharingResharingDefault(store),
-      hasShareJail: useCapabilityShareJailEnabled(store),
-      hasRoleCustomPermissions: useCapabilityFilesSharingAllowCustomPermissions(store),
-      minSearchLength: useCapabilityFilesSharingSearchMinLength(store),
-      isRunningOnEos: computed(() => store.getters.configuration?.options?.runningOnEos),
+      hasResharing: capabilityRefs.sharingResharing,
+      resharingDefault: capabilityRefs.sharingResharingDefault,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
+      minSearchLength: capabilityRefs.sharingSearchMinLength,
+      isRunningOnEos: computed(() => configStore.options.runningOnEos),
+      configOptions,
+      spaceMembers,
+      addSpaceMember,
       user,
       clientService,
       saving,
       savingDelayed,
-      ...useShares(),
+      outgoingCollaborators,
+      addShare,
       showContextMenuOnBtnClick,
       contextMenuButtonRef,
       notifyEnabled,
@@ -298,9 +305,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('runtime/spaces', ['spaceMembers']),
-    ...mapGetters(['configuration']),
-
     $_announcementWhenCollaboratorAdded() {
       return this.$gettext('Person was added')
     },
@@ -353,16 +357,13 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions('Files', ['addShare']),
-    ...mapActions('runtime/spaces', ['addSpaceMember']),
-
     async fetchRecipients(query) {
       try {
         const recipients = await this.$client.shares.getRecipients(
           query,
           'folder',
           1,
-          this.configuration?.options?.sharingRecipientsPerPage
+          this.configOptions.sharingRecipientsPerPage
         )
 
         const users = recipients.exact.users
@@ -493,42 +494,55 @@ export default defineComponent({
       const saveQueue = new PQueue({
         concurrency: this.createSharesConcurrentRequests
       })
+
+      const bitmask = this.selectedRole.hasCustomPermissions
+        ? SharePermissions.permissionsToBitmask(this.customPermissions)
+        : SharePermissions.permissionsToBitmask(
+            this.selectedRole.permissions(
+              (this.hasResharing && this.resharingDefault) || this.resourceIsSpace
+            )
+          )
+
+      let path = this.resource.path
+      // sharing a share root from the share jail -> use resource name as path
+      if (this.hasShareJail && path === '/') {
+        path = `/${this.resource.name}`
+      }
+
       const savePromises = []
       this.selectedCollaborators.forEach((collaborator) => {
         savePromises.push(
           saveQueue.add(async () => {
-            const bitmask = this.selectedRole.hasCustomPermissions
-              ? SharePermissions.permissionsToBitmask(this.customPermissions)
-              : SharePermissions.permissionsToBitmask(
-                  this.selectedRole.permissions(
-                    (this.hasResharing && this.resharingDefault) || this.resourceIsSpace
-                  )
-                )
-
-            let path = this.resource.path
-            // sharing a share root from the share jail -> use resource name as path
-            if (this.hasShareJail && path === '/') {
-              path = `/${this.resource.name}`
-            }
-
-            const addMethod = this.resourceIsSpace ? this.addSpaceMember : this.addShare
-
             try {
-              await addMethod({
-                client: this.$client,
-                graphClient: this.clientService.graphAuthenticated,
-                path,
-                shareWith: collaborator.value.shareWith,
-                displayName: collaborator.label,
-                shareType: collaborator.value.shareType,
-                shareWithUser: collaborator.value.shareWithUser,
-                shareWithProvider: collaborator.value.shareWithProvider,
-                permissions: bitmask,
-                role: this.selectedRole,
-                expirationDate: this.expirationDate,
-                storageId: this.resource.fileId || this.resource.id,
-                notify: this.notifyEnabled
-              })
+              if (this.resourceIsSpace) {
+                await this.addSpaceMember({
+                  client: this.$client,
+                  graphClient: this.clientService.graphAuthenticated,
+                  path,
+                  shareWith: collaborator.value.shareWith,
+                  displayName: collaborator.label,
+                  shareType: collaborator.value.shareType,
+                  permissions: bitmask,
+                  role: this.selectedRole,
+                  expirationDate: this.expirationDate,
+                  storageId: this.resource.fileId || this.resource.id
+                })
+              } else {
+                await this.addShare({
+                  clientService: this.$clientService,
+                  resource: this.resource,
+                  path,
+                  shareWith: collaborator.value.shareWith,
+                  shareType: collaborator.value.shareType,
+                  shareWithUser: collaborator.value.shareWithUser,
+                  shareWithProvider: collaborator.value.shareWithProvider,
+                  permissions: bitmask,
+                  role: this.selectedRole,
+                  expirationDate: this.expirationDate,
+                  storageId: this.resource.fileId || this.resource.id,
+                  notify: this.notifyEnabled
+                })
+              }
             } catch (e) {
               console.error(e)
               errors.push({

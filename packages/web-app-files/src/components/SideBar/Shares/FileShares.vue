@@ -53,8 +53,9 @@
           appearance="raw"
           class="toggle-shares-list-btn"
           @click="toggleShareListCollapsed"
-          v-text="collapseButtonTitle"
-        />
+        >
+          {{ collapseButtonTitle }}
+        </oc-button>
       </div>
     </template>
     <template v-if="showSpaceMembers">
@@ -64,23 +65,21 @@
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="spaceMemberLabel"
       >
-        <li v-for="collaborator in displaySpaceMembers" :key="collaborator.key">
+        <li v-for="(collaborator, i) in displaySpaceMembers" :key="i">
           <collaborator-list-item
-            :share="collaborator"
+            :share="(collaborator as Share)"
             :resource-name="resource.name"
             :deniable="isSpaceMemberDeniable(collaborator)"
             :modifiable="false"
-            :is-share-denied="isSpaceMemberDenied(collaborator)"
+            :is-share-denied="isSpaceMemberDenied(collaborator as Share)"
             @on-set-deny="setDenyShare"
           />
         </li>
       </ul>
       <div v-if="showMemberToggle" class="oc-flex oc-flex-center">
-        <oc-button
-          appearance="raw"
-          @click="toggleMemberListCollapsed"
-          v-text="collapseButtonTitle"
-        />
+        <oc-button appearance="raw" @click="toggleMemberListCollapsed">
+          {{ collapseButtonTitle }}
+        </oc-button>
       </div>
     </template>
   </div>
@@ -88,18 +87,17 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   useAbility,
-  useStore,
-  useCapabilityProjectSpacesEnabled,
-  useCapabilityShareJailEnabled,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingCanDenyAccess,
   useGetMatchingSpace,
   useModals,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore,
+  useCapabilityStore,
+  useConfigStore,
+  useSharesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
@@ -118,9 +116,6 @@ import {
   User
 } from '@ownclouders/web-client/src/helpers'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
-import { AncestorMetaData } from '@ownclouders/web-pkg'
-import { useShares } from 'web-app-files/src/composables'
-import { configurationManager } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileShares',
@@ -129,25 +124,36 @@ export default defineComponent({
     CollaboratorListItem
   },
   setup() {
-    const store = useStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const ability = useAbility()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { dispatchModal } = useModals()
+
+    const resourcesStore = useResourcesStore()
+    const { removeResources } = resourcesStore
+    const { ancestorMetaData } = storeToRefs(resourcesStore)
+
+    const spacesStore = useSpacesStore()
+    const { spaceMembers } = storeToRefs(spacesStore)
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
+    const sharesStore = useSharesStore()
+    const { addShare, deleteShare } = sharesStore
+    const { outgoingCollaborators } = storeToRefs(sharesStore)
 
     const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
 
-    const sharesListCollapsed = ref(
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    )
+    const sharesListCollapsed = ref(!configStore.options.sidebar.shares.showAllOnLoad)
     const toggleShareListCollapsed = () => {
       sharesListCollapsed.value = !unref(sharesListCollapsed)
     }
-    const memberListCollapsed = ref(
-      !store.getters.configuration.options.sidebar.shares.showAllOnLoad
-    )
+    const memberListCollapsed = ref(!configStore.options.sidebar.shares.showAllOnLoad)
     const toggleMemberListCollapsed = () => {
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
@@ -156,15 +162,10 @@ export default defineComponent({
       if (!username) {
         return false
       }
-      return store.getters['runtime/spaces/spaceMembers'].some(
-        (member) => member.collaborator?.name === username
-      )
+      return unref(spaceMembers).some((member) => member.collaborator?.name === username)
     })
 
-    const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-    )
-    const getSharedAncestor = (fileId) => {
+    const getSharedAncestor = (fileId: string) => {
       return Object.values(unref(ancestorMetaData)).find((a) => a.id === fileId)
     }
 
@@ -173,7 +174,9 @@ export default defineComponent({
     })
 
     return {
-      ...useShares(),
+      addShare,
+      deleteShare,
+      outgoingCollaborators,
       user,
       ability,
       resource,
@@ -184,26 +187,26 @@ export default defineComponent({
       memberListCollapsed,
       toggleMemberListCollapsed,
       currentUserIsMemberOfSpace,
-      hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
-      hasShareJail: useCapabilityShareJailEnabled(),
-      hasResharing: useCapabilityFilesSharingResharing(),
-      hasShareCanDenyAccess: useCapabilityFilesSharingCanDenyAccess(),
+      hasProjectSpaces: capabilityRefs.spacesProjects,
+      hasShareJail: capabilityRefs.spacesShareJail,
+      hasResharing: capabilityRefs.sharingResharing,
+      hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
       getSharedAncestor,
-      configurationManager,
+      configStore,
+      configOptions,
       dispatchModal,
+      spaceMembers,
+      removeResources,
       ...useMessages()
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapGetters('runtime/spaces', ['spaceMembers', 'spaces']),
-
     inviteCollaboratorHelp() {
-      const cernFeatures = !!this.configuration?.options?.cernFeatures
+      const cernFeatures = this.configOptions.cernFeatures
 
       if (cernFeatures) {
         const options = {
-          configurationManager: this.configurationManager
+          configStore: this.configStore
         }
         const mergedHelp = shareInviteCollaboratorHelp(options)
         mergedHelp.list = [...shareInviteCollaboratorHelpCern(options).list, ...mergedHelp.list]
@@ -211,12 +214,12 @@ export default defineComponent({
       }
 
       return shareInviteCollaboratorHelp({
-        configurationManager: this.configurationManager
+        configStore: this.configStore
       })
     },
 
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configOptions.contextHelpers
     },
 
     sharedWithLabel() {
@@ -305,10 +308,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['deleteShare', 'addShare']),
-    ...mapMutations('Files', ['REMOVE_FILES']),
-
-    getDeniedShare(collaborator: Share): Share {
+    getDeniedShare(collaborator: Share) {
       return this.collaborators.find(
         (c) =>
           c.permissions === peopleRoleDenyFolder.bitmask(false) &&
@@ -327,7 +327,7 @@ export default defineComponent({
       )
     },
 
-    getDeniedSpaceMember(collaborator: Share): Share {
+    getDeniedSpaceMember(collaborator: Share) {
       let shareType = null
 
       if (collaborator.shareType === ShareTypes.spaceUser.value) {
@@ -395,9 +395,9 @@ export default defineComponent({
       if (value === true) {
         try {
           await this.addShare({
-            client: this.$client,
+            clientService: this.$clientService,
+            resource: this.resource,
             shareWith: share.collaborator.name,
-            displayName: share.collaborator.displayName,
             shareType: share.shareType,
             role: peopleRoleDenyFolder,
             path: this.resource.path,
@@ -417,7 +417,7 @@ export default defineComponent({
       } else {
         try {
           await this.deleteShare({
-            client: this.$client,
+            clientService: this.$clientService,
             share:
               share.shareType === ShareTypes.spaceUser.value ||
               share.shareType === ShareTypes.spaceGroup.value
@@ -463,7 +463,7 @@ export default defineComponent({
 
       try {
         await this.deleteShare({
-          client: this.$client,
+          clientService: this.$clientService,
           share: share,
           path,
           loadIndicators
@@ -473,7 +473,7 @@ export default defineComponent({
           title: this.$gettext('Share was removed successfully')
         })
         if (lastShareId && isLocationSharesActive(this.$router, 'files-shares-with-others')) {
-          this.REMOVE_FILES([{ id: lastShareId }])
+          this.removeResources([{ id: lastShareId }] as Resource[])
         }
       } catch (error) {
         console.error(error)

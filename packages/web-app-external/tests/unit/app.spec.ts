@@ -1,11 +1,6 @@
-import { mock, mockDeep } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  shallowMount
-} from 'web-test-helpers'
-import { ConfigurationManager, useRequest, useRouteQuery } from '@ownclouders/web-pkg'
+import { mock } from 'jest-mock-extended'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
 import { Resource } from '@ownclouders/web-client'
@@ -14,15 +9,7 @@ import App from '../../src/App.vue'
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useRequest: jest.fn(),
-  useRouteQuery: jest.fn(),
-  useConfigurationManager: () =>
-    mockDeep<ConfigurationManager>({
-      options: {
-        editor: {
-          openAsPreview: false
-        }
-      }
-    })
+  useRouteQuery: jest.fn()
 }))
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
@@ -91,20 +78,11 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
 
   jest.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
 
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.getters.capabilities.mockImplementation(() => ({
+  const capabilities = {
     files: {
-      app_providers: [
-        {
-          apps_url: '/app/list',
-          enabled: true,
-          open_url: '/app/open'
-        }
-      ]
+      app_providers: [{ apps_url: '/app/list', enabled: true, open_url: '/app/open' }]
     }
-  }))
-
-  const store = createStore(storeOptions)
+  }
 
   return {
     wrapper: shallowMount(App, {
@@ -112,7 +90,14 @@ function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ s
         resource: mock<Resource>()
       },
       global: {
-        plugins: [...defaultPlugins(), store]
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              capabilityState: { capabilities },
+              configState: { options: { editor: { openAsPreview: true } } }
+            }
+          })
+        ]
       }
     })
   }

@@ -1,5 +1,4 @@
 import { unref } from 'vue'
-import { useStore } from '../store'
 import { useGettext } from 'vue3-gettext'
 import { useDefaultLinkPermissions } from './useDefaultLinkPermissions'
 import {
@@ -10,13 +9,14 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { useExpirationRules } from './useExpirationRules'
 import { useClientService } from '../clientService'
+import { useSharesStore } from '../piniaStores'
 
 export const useCreateLink = () => {
-  const store = useStore()
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { expirationRules } = useExpirationRules()
+  const { addLink } = useSharesStore()
 
   const getStorageId = ({ resource, space }: { resource: Resource; space?: SpaceResource }) => {
     if (isProjectSpaceResource(resource)) {
@@ -67,9 +67,9 @@ export const useCreateLink = () => {
       path = `/${resource.name}`
     }
 
-    return store.dispatch('Files/addLink', {
+    return addLink({
       path,
-      client: clientService.owncloudSdk,
+      clientService,
       params,
       storageId: resource.fileId || resource.id
     })

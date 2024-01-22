@@ -28,7 +28,11 @@ export class Account {
     return po.downloadGdprExport({ page: this.#page })
   }
 
-  changeLanguage(language): Promise<string> {
-    return po.changeLanguage({ page: this.#page, language })
+  changeLanguage(language, isAnonymousUser = false): Promise<string> {
+    return po.changeLanguage({ page: this.#page, language, isAnonymousUser })
+  }
+
+  getTitle(): Promise<string> {
+    return po.getTitle({ page: this.#page })
   }
 }

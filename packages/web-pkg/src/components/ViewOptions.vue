@@ -89,7 +89,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
-import { mapMutations, mapState } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import {
   queryItemAsString,
@@ -99,9 +98,11 @@ import {
   useRouter,
   PaginationConstants,
   ViewModeConstants,
-  useRouteName
+  useRouteName,
+  useResourcesStore
 } from '../composables'
 import { ViewMode } from '../ui/types'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   props: {
@@ -138,6 +139,10 @@ export default defineComponent({
     const router = useRouter()
     const currentRoute = useRoute()
     const { $gettext } = useGettext()
+
+    const resourcesStore = useResourcesStore()
+    const { setAreHiddenFilesShown, setAreFileExtensionsShown } = resourcesStore
+    const { areHiddenFilesShown, areFileExtensionsShown } = storeToRefs(resourcesStore)
 
     const queryParamsLoading = ref(false)
 
@@ -196,19 +201,21 @@ export default defineComponent({
       queryItemAsString,
       setItemsPerPage,
       setViewMode,
+      areHiddenFilesShown,
+      areFileExtensionsShown,
+      setAreHiddenFilesShown,
+      setAreFileExtensionsShown,
       viewOptionsButtonLabel: $gettext('Display customization options of the files list')
     }
   },
   computed: {
-    ...mapState('Files', ['areHiddenFilesShown', 'areFileExtensionsShown']),
-
     hiddenFilesShownModel: {
       get() {
         return this.areHiddenFilesShown
       },
 
       set(value) {
-        this.SET_HIDDEN_FILES_VISIBILITY(value)
+        this.setAreHiddenFilesShown(value)
       }
     },
     fileExtensionsShownModel: {
@@ -217,13 +224,11 @@ export default defineComponent({
       },
 
       set(value) {
-        this.SET_FILE_EXTENSIONS_VISIBILITY(value)
+        this.setAreFileExtensionsShown(value)
       }
     }
   },
   methods: {
-    ...mapMutations('Files', ['SET_HIDDEN_FILES_VISIBILITY', 'SET_FILE_EXTENSIONS_VISIBILITY']),
-
     updateHiddenFilesShownModel(event) {
       this.hiddenFilesShownModel = event
     },

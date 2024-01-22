@@ -5,14 +5,17 @@ import { useClientService } from '../../clientService'
 import { useRoute } from '../../router'
 import { eventBus } from '../../../services'
 import { useAbility } from '../../ability'
-import { useStore } from '../../store'
 import { SpaceAction, SpaceActionOptions } from '../types'
-import { Store } from 'vuex'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useResourcesStore,
+  useSpacesStore,
+  useUserStore
+} from '../../piniaStores'
 
-export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useSpaceActionsDelete = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext, $ngettext } = useGettext()
@@ -20,6 +23,8 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
   const clientService = useClientService()
   const route = useRoute()
   const { dispatchModal } = useModals()
+  const spacesStore = useSpacesStore()
+  const { removeResources } = useResourcesStore()
 
   const filterResourcesToDelete = (resources: SpaceResource[]) => {
     return resources.filter(
@@ -31,8 +36,8 @@ export const useSpaceActionsDelete = ({ store }: { store?: Store<any> } = {}) =>
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
       client.drives.deleteDrive(space.id.toString()).then(() => {
-        store.commit('Files/REMOVE_FILES', [{ id: space.id }])
-        store.commit('runtime/spaces/REMOVE_SPACE', { id: space.id })
+        removeResources([space])
+        spacesStore.removeSpace(space)
         return true
       })
     )

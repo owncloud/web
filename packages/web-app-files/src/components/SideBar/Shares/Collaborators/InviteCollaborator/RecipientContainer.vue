@@ -18,11 +18,12 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
 import { avatarUrl } from '../../../../../helpers/user'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defineComponent } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/OcRecipient.vue'
+import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   props: {
@@ -36,7 +37,18 @@ export default defineComponent({
       default: null
     }
   },
+  setup() {
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
 
+    const configStore = useConfigStore()
+    const { serverUrl } = storeToRefs(configStore)
+
+    return {
+      serverUrl,
+      userProfilePicture: capabilityRefs.sharingUserProfilePicture
+    }
+  },
   data(): { formattedRecipient: Recipient } {
     return {
       formattedRecipient: {
@@ -51,19 +63,17 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['configuration', 'capabilities']),
-
     btnDeselectRecipientLabel() {
       return this.$gettext('Deselect %{name}', { name: this.recipient.label })
     }
   },
 
   async created() {
-    if (this.capabilities.files_sharing.user.profile_picture && this.formattedRecipient.hasAvatar) {
+    if (this.userProfilePicture && this.formattedRecipient.hasAvatar) {
       try {
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,
-          server: this.configuration.server,
+          server: this.serverUrl,
           username: this.recipient.value.shareWith
         })
       } catch (error) {

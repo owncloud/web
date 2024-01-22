@@ -19,7 +19,7 @@
         <resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
       </div>
       <div
-        v-if="!isPublicLinkContext && shareIndicators.length"
+        v-if="!publicLinkContextReady && shareIndicators.length"
         key="file-shares"
         data-testid="sharingInfo"
         class="oc-flex oc-flex-middle oc-my-m"
@@ -42,8 +42,9 @@
               appearance="raw"
               :aria-label="seeVersionsLabel"
               @click="expandVersionsPanel"
-              v-text="capitalizedTimestamp"
-            />
+            >
+              {{ capitalizedTimestamp }}
+            </oc-button>
             <span v-else v-text="capitalizedTimestamp" />
           </td>
         </tr>
@@ -92,8 +93,9 @@
               appearance="raw"
               :aria-label="seeVersionsLabel"
               @click="expandVersionsPanel"
-              v-text="versions.length"
-            />
+            >
+              {{ versions.length }}
+            </oc-button>
           </td>
         </tr>
         <portal-target
@@ -122,18 +124,18 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
-import { mapGetters } from 'vuex'
-import { ImageDimension, useConfigurationManager, useUserStore } from '@ownclouders/web-pkg'
+import {
+  ImageDimension,
+  useAuthStore,
+  useUserStore,
+  useCapabilityStore,
+  useConfigStore,
+  useClientService,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import {
-  useCapabilityFilesTags,
-  useClientService,
-  usePublicLinkContext,
-  useStore,
-  usePreviewService,
-  useGetMatchingSpace
-} from '@ownclouders/web-pkg'
+import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
   formatDateFromHTTP,
@@ -146,11 +148,11 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
-import { AncestorMetaData, ResourceIcon } from '@ownclouders/web-pkg'
+import { ResourceIcon } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
-import WebDavDetails from '@ownclouders/web-pkg/src/components/SideBar/WebDavDetails.vue'
+import { WebDavDetails } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -168,32 +170,33 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const configurationManager = useConfigurationManager()
-    const store = useStore()
+    const configStore = useConfigStore()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
+
+    const resourcesStore = useResourcesStore()
+    const { ancestorMetaData } = storeToRefs(resourcesStore)
 
     const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
-    const isPublicLinkContext = usePublicLinkContext({ store })
     const previewService = usePreviewService()
     const preview = ref(undefined)
 
-    const loadData = async () => {
-      const calls = []
-      if (unref(resource).type === 'file' && !unref(isPublicLinkContext)) {
-        calls.push(
-          store.dispatch('Files/loadVersions', {
-            client: clientService.webdav,
-            fileId: unref(resource).id
-          })
-        )
+    const authStore = useAuthStore()
+    const { publicLinkContextReady } = storeToRefs(authStore)
+
+    const versions = ref<Resource[]>([])
+    const loadVersions = async (fileId: Resource['fileId']) => {
+      try {
+        versions.value = await clientService.webdav.listFileVersions(fileId)
+      } catch (e) {
+        console.error(e)
       }
-      await Promise.all(calls.map((p) => p.catch((e) => e)))
     }
 
     const isPreviewEnabled = computed(() => {
@@ -220,9 +223,6 @@ export default defineComponent({
       return loadPreviewTask.isRunning || !loadPreviewTask.last
     })
 
-    const ancestorMetaData: Ref<AncestorMetaData> = computed(
-      () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
-    )
     const sharedAncestor = computed(() => {
       return Object.values(unref(ancestorMetaData)).find(
         (a) =>
@@ -237,7 +237,11 @@ export default defineComponent({
       })
     })
     const showWebDavDetails = computed(() => {
-      return store.getters['Files/areWebDavDetailsShown']
+      /**
+       * webDavPath might not be set when user is navigating on public link,
+       * even if the user is authenticated and the file owner.
+       */
+      return resourcesStore.areWebDavDetailsShown && unref(resource).webDavPath
     })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
@@ -247,27 +251,29 @@ export default defineComponent({
       resource,
       () => {
         if (unref(resource)) {
-          loadData()
           loadPreviewTask.perform(unref(resource))
+
+          if (!unref(resource).isFolder && !unref(publicLinkContextReady)) {
+            loadVersions(unref(resource).fileId)
+          }
         }
       },
       { immediate: true }
     )
 
     const contextualHelper = {
-      isEnabled: configurationManager.options.contextHelpers,
-      data: tagsHelper({ configurationManager: configurationManager })
+      isEnabled: configStore.options.contextHelpers,
+      data: tagsHelper({ configStore })
     } as ContextualHelper
 
-    const capabilityFilesTags = useCapabilityFilesTags()
     const hasTags = computed(() => {
-      return props.tagsEnabled && unref(capabilityFilesTags)
+      return props.tagsEnabled && capabilityStore.filesTags
     })
 
     return {
       user,
       preview,
-      isPublicLinkContext,
+      publicLinkContextReady,
       space,
       resource,
       hasTags,
@@ -277,13 +283,11 @@ export default defineComponent({
       sharedAncestorRoute,
       formatDateRelative,
       contextualHelper,
-      showWebDavDetails
+      showWebDavDetails,
+      versions
     }
   },
   computed: {
-    ...mapGetters('Files', ['versions']),
-    ...mapGetters(['configuration']),
-
     hasContent() {
       return (
         this.hasTimestamp ||
@@ -307,7 +311,7 @@ export default defineComponent({
       return this.showShares && this.sharedAncestor
     },
     showShares() {
-      if (this.isPublicLinkContext) {
+      if (this.publicLinkContextReady) {
         return false
       }
       return this.hasAnyShares
@@ -338,7 +342,7 @@ export default defineComponent({
       return this.resourceSize !== '?'
     },
     showVersions() {
-      if (this.resource.type === 'folder' || this.isPublicLinkContext) {
+      if (this.resource.type === 'folder' || this.publicLinkContextReady) {
         return
       }
       return this.versions.length > 0
@@ -359,9 +363,9 @@ export default defineComponent({
     },
     ownedByCurrentUser() {
       return (
-        this.resource.ownerId === this.user.onPremisesSamAccountName ||
-        this.resource.owner?.[0].username === this.user.onPremisesSamAccountName ||
-        this.resource.shareOwner === this.user.onPremisesSamAccountName
+        this.resource.ownerId === this.user?.onPremisesSamAccountName ||
+        this.resource.owner?.[0].username === this.user?.onPremisesSamAccountName ||
+        this.resource.shareOwner === this.user?.onPremisesSamAccountName
       )
     },
     shareIndicators() {

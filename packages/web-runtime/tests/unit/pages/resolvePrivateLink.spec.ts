@@ -1,18 +1,7 @@
 import resolvePrivateLink from '../../../src/pages/resolvePrivateLink.vue'
-import {
-  defaultPlugins,
-  defaultComponentMocks,
-  createStore,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
-import {
-  ConfigurationManager,
-  queryItemAsString,
-  useConfigurationManager,
-  useGetResourceContext
-} from '@ownclouders/web-pkg'
+import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 
@@ -21,8 +10,7 @@ jest.mock('@ownclouders/web-pkg', () => ({
   useRouteQuery: jest.fn((str) => str),
   useRouteParam: jest.fn((str) => str),
   queryItemAsString: jest.fn(),
-  useGetResourceContext: jest.fn(),
-  useConfigurationManager: jest.fn()
+  useGetResourceContext: jest.fn()
 }))
 
 const selectors = {
@@ -146,23 +134,18 @@ function getWrapper({
   jest.mocked(useGetResourceContext).mockReturnValue({
     getResourceContext: jest.fn().mockResolvedValue({ space, resource, path })
   })
-  jest.mocked(useConfigurationManager).mockImplementation(() =>
-    mock<ConfigurationManager>({
-      options: {
-        openLinksWithDefaultApp
-      }
-    })
-  )
 
   const mocks = { ...defaultComponentMocks() }
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
 
   return {
     mocks,
     wrapper: shallowMount(resolvePrivateLink, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { configState: { options: { openLinksWithDefaultApp } } }
+          })
+        ],
         mocks,
         provide: mocks
       }

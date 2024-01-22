@@ -1,12 +1,6 @@
 import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
 import { LinkShareRoles } from '@ownclouders/web-client/src/helpers/share'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 
@@ -54,9 +48,7 @@ describe('DetailsAndEdit component', () => {
 })
 
 function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable = false) {
-  const storeOptions = defaultStoreMockOptions
   const mocks = defaultComponentMocks()
-  const store = createStore(storeOptions)
   return {
     wrapper: shallowMount(DetailsAndEdit, {
       props: {
@@ -77,7 +69,7 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
         mocks,
         renderStubDefaultSlot: true,
         stubs: { OcDatepicker: false, 'date-picker': true },
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         provide: mocks
       }
     })

@@ -41,8 +41,9 @@
           appearance="raw"
           class="oc-text-muted oc-text-small upload-info-toggle-details-btn"
           @click="toggleInfo"
-          v-text="infoExpanded ? $gettext('Hide details') : $gettext('Show details')"
-        ></oc-button>
+        >
+          {{ infoExpanded ? $gettext('Hide details') : $gettext('Show details') }}
+        </oc-button>
         <oc-button
           v-if="!runningUploads && Object.keys(errors).length && !disableActions"
           v-oc-tooltip="$gettext('Retry all failed uploads')"
@@ -155,13 +156,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
 import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager } from '@ownclouders/web-pkg'
-import { useCapabilityShareJailEnabled } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import {
   formatFileSize,
   UppyResource,
@@ -170,12 +169,19 @@ import {
   ResourceName
 } from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
   setup() {
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
+
     return {
-      hasShareJail: useCapabilityShareJailEnabled()
+      configOptions,
+      hasShareJail: capabilityRefs.spacesShareJail
     }
   },
   data: () => ({
@@ -200,8 +206,6 @@ export default defineComponent({
     disableActions: false // disables the following actions: pause, resume, retry
   }),
   computed: {
-    ...mapGetters(['configuration']),
-
     uploadDetails() {
       if (!this.uploadSpeed || !this.runningUploads) {
         return ''
@@ -258,7 +262,7 @@ export default defineComponent({
       )
     },
     displayThumbnails() {
-      return !this.configuration?.options?.disablePreviews
+      return !this.configOptions.disablePreviews
     },
     uploadsPausable() {
       return this.$uppyService.tusActive()
@@ -516,7 +520,7 @@ export default defineComponent({
         },
         query: {
           ...file.targetRoute.query,
-          ...(configurationManager.options.routing.idBased &&
+          ...(this.configOptions.routing.idBased &&
             !isUndefined(file.meta.fileId) && { fileId: file.meta.fileId })
         }
       }
@@ -526,7 +530,7 @@ export default defineComponent({
         ...file.targetRoute,
         query: {
           ...file.targetRoute.query,
-          ...(configurationManager.options.routing.idBased &&
+          ...(this.configOptions.routing.idBased &&
             !isUndefined(file.meta.currentFolderId) && { fileId: file.meta.currentFolderId })
         }
       }

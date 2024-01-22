@@ -2,10 +2,8 @@ import { useSpaceActionsRename } from '../../../../../src/composables/actions/sp
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultComponentMocks,
   mockAxiosResolve,
-  defaultStoreMockOptions,
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
@@ -16,7 +14,7 @@ describe('rename', () => {
   describe('handler', () => {
     it('should trigger the rename modal window', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [{ id: '1', name: 'renamed space' } as SpaceResource]
@@ -28,7 +26,7 @@ describe('rename', () => {
     })
     it('should not trigger the rename modal window without any resource', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({ resources: [] })
 
@@ -71,19 +69,12 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useSpaceActionsRename>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: { ...defaultStoreMockOptions.modules, user: { state: { id: 'alice', uuid: 1 } } }
-  }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
   })
@@ -91,11 +82,10 @@ function getWrapper({
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsRename({ store })
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        const instance = useSpaceActionsRename()
+        setup(instance, { clientService: mocks.$clientService })
       },
       {
-        store,
         mocks,
         provide: mocks
       }

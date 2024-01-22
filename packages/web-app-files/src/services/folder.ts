@@ -3,13 +3,18 @@ import { useTask } from 'vue-concurrency'
 import {
   useRouter,
   useClientService,
-  useStore,
-  useConfigurationManager,
   useUserStore,
-  UserStore
+  UserStore,
+  SpacesStore,
+  useSpacesStore,
+  CapabilityStore,
+  useCapabilityStore,
+  useConfigStore,
+  ConfigStore,
+  ResourcesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
-import { Store } from 'vuex'
 import { ClientService } from '@ownclouders/web-pkg'
 
 import {
@@ -20,7 +25,6 @@ import {
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
 } from './folder/index'
-import { ConfigurationManager } from '@ownclouders/web-pkg'
 
 export * from './folder/types'
 
@@ -28,14 +32,16 @@ export type FolderLoaderTask = any
 
 export type TaskContext = {
   clientService: ClientService
-  configurationManager: ConfigurationManager
-  store: Store<any>
+  configStore: ConfigStore
   userStore: UserStore
+  spacesStore: SpacesStore
   router: Router
+  capabilityStore: CapabilityStore
+  resourcesStore: ResourcesStore
 }
 
 export interface FolderLoader {
-  isEnabled(store: Store<any>): boolean
+  isEnabled(): boolean
   isActive(router: Router): boolean
   getTask(options: TaskContext): FolderLoaderTask
 }
@@ -55,12 +61,15 @@ export class FolderService {
   }
 
   public getTask(): FolderLoaderTask {
-    const store = useStore()
     const userStore = useUserStore()
+    const spacesStore = useSpacesStore()
+    const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const clientService = useClientService()
-    const configurationManager = useConfigurationManager()
-    const loader = this.loaders.find((l) => l.isEnabled(unref(store)) && l.isActive(unref(router)))
+    const configStore = useConfigStore()
+    const resourcesStore = useResourcesStore()
+
+    const loader = this.loaders.find((l) => l.isEnabled() && l.isActive(unref(router)))
     if (!loader) {
       console.error('No folder loader found for route')
       return
@@ -69,9 +78,11 @@ export class FolderService {
     return useTask(function* (...args) {
       const context = {
         clientService,
-        configurationManager,
-        store,
+        configStore,
         userStore,
+        spacesStore,
+        capabilityStore,
+        resourcesStore,
         router
       }
       try {

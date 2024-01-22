@@ -2,7 +2,6 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
-import { useCapabilityFilesSharingResharing } from '@ownclouders/web-pkg'
 import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
@@ -33,10 +32,10 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { store, userStore, router, clientService, configurationManager } = context
+    const { spacesStore, router, clientService, configStore, capabilityStore, resourcesStore } =
+      context
     const { owncloudSdk: client, webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
-    const hasResharing = useCapabilityFilesSharingResharing(store)
 
     return useTask(function* (
       signal1,
@@ -47,8 +46,9 @@ export class FolderLoaderSpace implements FolderLoader {
       options: FolderLoaderOptions = {}
     ) {
       try {
-        store.commit('Files/CLEAR_CURRENT_FILES_LIST')
+        resourcesStore.clearResourceList()
 
+        // eslint-disable-next-line prefer-const
         let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
           path,
           fileId
@@ -63,11 +63,11 @@ export class FolderLoaderSpace implements FolderLoader {
             const parentShare = yield client.shares.getShare(space.shareId)
             const aggregatedShares = aggregateResourceShares({
               shares: [parentShare.shareInfo],
-              spaces: store.getters['runtime/spaces/spaces'],
-              allowSharePermission: unref(hasResharing),
+              spaces: spacesStore.spaces,
+              allowSharePermission: capabilityStore.sharingResharing,
               hasShareJail: true,
               incomingShares: true,
-              fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })
             currentFolder = aggregatedShares[0]
           } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
@@ -76,15 +76,10 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        yield store.dispatch('runtime/ancestorMetaData/loadAncestorMetaData', {
-          folder: currentFolder,
-          space,
-          client: webdav,
-          userStore
-        })
+        yield resourcesStore.loadAncestorMetaData({ folder: currentFolder, space, client: webdav })
 
         if (options.loadShares) {
-          const ancestorMetaData = store.getters['runtime/ancestorMetaData/ancestorMetaData']
+          const ancestorMetaData = resourcesStore.ancestorMetaData
           for (const file of resources) {
             file.indicators = getIndicators({ resource: file, ancestorMetaData })
           }
@@ -95,12 +90,9 @@ export class FolderLoaderSpace implements FolderLoader {
           resources.forEach((r) => (r.shareId = space.shareId))
         }
 
-        store.commit('Files/LOAD_FILES', {
-          currentFolder,
-          files: resources
-        })
+        resourcesStore.initResourceList({ currentFolder, resources })
       } catch (error) {
-        store.commit('Files/SET_CURRENT_FOLDER', null)
+        resourcesStore.setCurrentFolder(null)
         console.error(error)
 
         if (error.statusCode === 401) {

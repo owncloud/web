@@ -4,14 +4,7 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { ref } from 'vue'
 import { mockDeep, mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import {
-  createStore,
-  defaultPlugins,
-  defaultStubs,
-  mount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+import { defaultPlugins, defaultStubs, mount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
 
 jest.mock('web-app-files/src/composables')
@@ -60,13 +53,11 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
+
   return {
-    storeOptions,
     wrapper: mount(Favorites, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: defaultStubs

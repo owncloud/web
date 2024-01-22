@@ -1,10 +1,8 @@
 import FileInfo from '../../../../../src/components/SideBar/Files/FileInfo.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
@@ -28,13 +26,11 @@ function createWrapper() {
     type: 'folder',
     extension: ''
   })
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({ files: { privateLinks: true } }))
-  const store = createStore(storeOptions)
+
   return {
     wrapper: shallowMount(FileInfo, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         provide: {
           resource: file
         },

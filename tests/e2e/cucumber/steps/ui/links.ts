@@ -1,19 +1,22 @@
-import { Then, When } from '@cucumber/cucumber'
+import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 
 When(
-  '{string} creates a public link for the resource {string} with password {string} using the sidebar panel',
-  async function (this: World, stepUser: string, resource: string, password: string) {
+  '{string} creates a public link creates a public link of following resource using the sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
-    password = password === '%public%' ? linkObject.securePassword : password
-    await linkObject.create({
-      resource,
-      name: 'Link',
-      password
-    })
+
+    for (const info of stepTable.hashes()) {
+      await linkObject.create({
+        resource: info.resource,
+        role: info.role,
+        password: info.password === '%public%' ? linkObject.securePassword : info.password,
+        name: 'Link'
+      })
+    }
   }
 )
 

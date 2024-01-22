@@ -19,7 +19,7 @@ export const request = async (args: {
   user?: User
   header?: object
 }): Promise<Response> => {
-  return httpRequest({ ...args, isKeycloakRequest: true })
+  return await httpRequest({ ...args, isKeycloakRequest: true })
 }
 
 export const getUserIdFromResponse = (response: Response): string => {

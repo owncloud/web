@@ -1,9 +1,7 @@
 import { registerClient } from '../services/clientRegistration'
-import { RuntimeConfiguration } from './types'
 import { buildApplication, NextApplication } from './application'
-import { Store } from 'vuex'
-import { Router } from 'vue-router'
-import { App, computed } from 'vue'
+import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
+import { App, computed, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
@@ -13,7 +11,22 @@ import {
   useThemeStore,
   useUserStore,
   UserStore,
-  useMessages
+  useMessages,
+  useSpacesStore,
+  useAuthStore,
+  AuthStore,
+  useCapabilityStore,
+  CapabilityStore,
+  useExtensionRegistry,
+  ExtensionRegistry,
+  useAppsStore,
+  AppsStore,
+  useConfigStore,
+  ConfigStore,
+  RawConfig,
+  useSharesStore,
+  useResourcesStore,
+  ResourcesStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -23,9 +36,7 @@ import {
   PreviewService,
   UppyService
 } from '@ownclouders/web-pkg'
-import { default as storeOptions } from '../store'
 import { init as sentryInit } from '@sentry/vue'
-import { configurationManager, RawConfig, ConfigurationManager } from '@ownclouders/web-pkg'
 import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
 import { merge } from 'lodash-es'
@@ -37,10 +48,14 @@ import {
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
 import { z } from 'zod'
-import { Resource } from '@ownclouders/web-client'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
+import { getExtensionNavItems } from '../helpers/navItems'
+import {
+  RawConfigSchema,
+  SentryConfig
+} from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -82,15 +97,23 @@ const getEmbedConfigFromQuery = (
  *
  * @param path - path to main configuration
  */
-export const announceConfiguration = async (path: string): Promise<RuntimeConfiguration> => {
+export const announceConfiguration = async ({
+  path,
+  configStore
+}: {
+  path: string
+  configStore: ConfigStore
+}) => {
   const request = await fetch(path, { headers: { 'X-Request-ID': uuidV4() } })
   if (request.status !== 200) {
     throw new Error(`config could not be loaded. HTTP status-code ${request.status}`)
   }
 
-  const rawConfig = (await request.json().catch((error) => {
+  const data = await request.json().catch((error) => {
     throw new Error(`config could not be parsed. ${error}`)
-  })) as RawConfig
+  })
+
+  const rawConfig = RawConfigSchema.parse(data)
 
   const embedConfigFromQuery = getEmbedConfigFromQuery(
     rawConfig.options?.embed &&
@@ -102,50 +125,19 @@ export const announceConfiguration = async (path: string): Promise<RuntimeConfig
     embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery }
   }
 
-  configurationManager.initialize(rawConfig)
-  // TODO: we might want to get rid of exposing the raw config. needs more refactoring though.
-  return rawConfig
-}
-
-/**
- * Announce and prepare vuex store with data that is needed before any application gets announced.
- *
- * @param vue
- * @param runtimeConfiguration
- * @param language
- */
-export const announceStore = async ({
-  runtimeConfiguration
-}: {
-  runtimeConfiguration: RuntimeConfiguration
-}): Promise<any> => {
-  const store = new Store({ ...storeOptions })
-  await store.dispatch('loadConfig', runtimeConfiguration)
-
-  /**
-   * TODO: Find a different way to access store from within JS files
-   * potential options are:
-   * - use the api which already is in place but deprecated
-   * - use a global object
-   *
-   * at the moment it is not clear if this api should be exposed or not.
-   * we need to decide if we extend the api more or just expose the store and de deprecate
-   * the apis for retrieving it.
-   */
-  ;(window as any).__$store = store
-  return store
+  configStore.loadConfig(rawConfig)
 }
 
 /**
  * announce auth client to the runtime, currently only openIdConnect is supported here
  *
  * @remarks
- * if runtimeConfiguration does not ship any options for openIdConnect this step get skipped
+ * if config does not ship any options for openIdConnect this step get skipped
  *
- * @param runtimeConfiguration
+ * @param configStore
  */
-export const announceClient = async (runtimeConfiguration: RuntimeConfiguration): Promise<void> => {
-  const { openIdConnect = {} } = runtimeConfiguration
+export const announceClient = async (configStore: ConfigStore): Promise<void> => {
+  const openIdConnect = configStore.openIdConnect || {}
 
   if (!openIdConnect.dynamic) {
     return
@@ -162,7 +154,7 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  * - bulk register all applications, no other application is guaranteed to be registered here, don't request one
  *
  * @param app
- * @param runtimeConfiguration
+ * @param configStore
  * @param store
  * @param router
  * @param translations
@@ -170,34 +162,27 @@ export const announceClient = async (runtimeConfiguration: RuntimeConfiguration)
  */
 export const initializeApplications = async ({
   app,
-  runtimeConfiguration,
-  configurationManager,
-  store,
+  configStore,
   router,
   gettext,
   supportedLanguages
 }: {
   app: App
-  runtimeConfiguration: RuntimeConfiguration
-  configurationManager: ConfigurationManager
-  store: Store<unknown>
+  configStore: ConfigStore
   router: Router
   gettext: Language
   supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication[]> => {
-  const { apps: internalApplications = [], external_apps: externalApplications = [] } =
-    rewriteDeprecatedAppNames(runtimeConfiguration)
-
   type RawApplication = {
-    path: string
+    path?: string
     config?: AppConfigObject
   }
 
   const rawApplications: RawApplication[] = [
-    ...internalApplications.map((application) => ({
+    ...rewriteDeprecatedAppNames(configStore).map((application) => ({
       path: `web-app-${application}`
     })),
-    ...externalApplications
+    ...configStore.externalApps
   ]
 
   const applicationResults = await Promise.allSettled(
@@ -206,11 +191,10 @@ export const initializeApplications = async ({
         app,
         applicationPath: rawApplication.path,
         applicationConfig: rawApplication.config,
-        store,
         supportedLanguages,
         router,
         gettext,
-        configurationManager
+        configStore
       })
     )
   )
@@ -238,23 +222,22 @@ export const initializeApplications = async ({
  */
 export const announceApplicationsReady = async ({
   app,
-  store,
+  appsStore,
   applications
 }: {
   app: App
-  store: Store<any>
+  appsStore: AppsStore
   applications: NextApplication[]
 }): Promise<void> => {
   await Promise.all(applications.map((application) => application.ready()))
-  const apps = store.state.apps
 
   const mapping: ResourceIconMapping = {
     mimeType: {},
     extension: {}
   }
 
-  ;(apps.fileEditors as any[]).forEach((editor) => {
-    const meta = apps.meta[editor.app]
+  appsStore.fileExtensions.forEach((editor) => {
+    const meta = appsStore.apps[editor.app]
 
     const getIconDefinition = () => {
       return {
@@ -283,26 +266,21 @@ export const announceApplicationsReady = async ({
 /**
  * Rewrites old names of renamed apps to their new name and prints a warning to adjust configuration to the respective new app name.
  *
- * @param {RuntimeConfiguration} runtimeConfiguration
+ * @param {ConfigStore} configStore
  */
-const rewriteDeprecatedAppNames = (
-  runtimeConfiguration: RuntimeConfiguration
-): RuntimeConfiguration => {
+const rewriteDeprecatedAppNames = (configStore: ConfigStore) => {
   const appAliases = [
     { name: 'preview', oldName: 'media-viewer' },
     { name: 'text-editor', oldName: 'markdown-editor' }
   ]
-  return {
-    ...runtimeConfiguration,
-    apps: runtimeConfiguration.apps.map((appName) => {
-      const appAlias = appAliases.find((appAlias) => appAlias.oldName === appName)
-      if (appAlias) {
-        console.warn(`app "${appAlias.oldName}" has been renamed, use "${appAlias.name}" instead.`)
-        return appAlias.name
-      }
-      return appName
-    })
-  }
+  return configStore.apps.map((appName) => {
+    const appAlias = appAliases.find((appAlias) => appAlias.oldName === appName)
+    if (appAlias) {
+      console.warn(`app "${appAlias.oldName}" has been renamed, use "${appAlias.name}" instead.`)
+      return appAlias.name
+    }
+    return appName
+  })
 }
 
 /**
@@ -310,24 +288,23 @@ const rewriteDeprecatedAppNames = (
  * and designSystem has all needed information to render the customized ui
  *
  * @param themeLocation
- * @param store
  * @param vue
  * @param designSystem
  */
 export const announceTheme = async ({
   app,
   designSystem,
-  runtimeConfiguration
+  configStore
 }: {
   app: App
   designSystem: any
-  runtimeConfiguration?: RuntimeConfiguration
+  configStore: ConfigStore
 }): Promise<void> => {
   const themeStore = useThemeStore()
   const { initializeThemes } = themeStore
   const { currentTheme } = storeToRefs(themeStore)
 
-  const webTheme = await loadTheme(runtimeConfiguration?.theme)
+  const webTheme = await loadTheme(configStore.theme)
 
   await initializeThemes(webTheme)
 
@@ -337,10 +314,31 @@ export const announceTheme = async ({
 }
 
 export const announcePiniaStores = () => {
+  const appsStore = useAppsStore()
+  const authStore = useAuthStore()
+  const capabilityStore = useCapabilityStore()
+  const extensionRegistry = useExtensionRegistry()
+  const configStore = useConfigStore()
   const messagesStore = useMessages()
   const modalStore = useModals()
+  const resourcesStore = useResourcesStore()
+  const sharesStore = useSharesStore()
+  const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  return { messagesStore, modalStore, userStore }
+
+  return {
+    appsStore,
+    authStore,
+    capabilityStore,
+    extensionRegistry,
+    configStore,
+    resourcesStore,
+    messagesStore,
+    modalStore,
+    sharesStore,
+    spacesStore,
+    userStore
+  }
 }
 
 /**
@@ -375,38 +373,36 @@ export const announceAdditionalTranslations = ({
  * announce clientService and owncloud SDK and inject it into vue
  *
  * @param vue
- * @param runtimeConfiguration
- * @param configurationManager
- * @param store
+ * @param configStore
  */
 export const announceClientService = ({
   app,
-  runtimeConfiguration,
-  configurationManager,
-  store,
-  userStore
+  configStore,
+  userStore,
+  authStore,
+  capabilityStore
 }: {
   app: App
-  runtimeConfiguration: RuntimeConfiguration
-  configurationManager: ConfigurationManager
-  store: Store<any>
+  configStore: ConfigStore
   userStore: UserStore
+  authStore: AuthStore
+  capabilityStore: CapabilityStore
 }): void => {
   const sdk = new OwnCloud()
-  sdk.init({ baseUrl: runtimeConfiguration.server || window.location.origin })
+  sdk.init({ baseUrl: configStore.serverUrl })
   const clientService = new ClientService({
-    configurationManager,
+    configStore,
     language: app.config.globalProperties.$language,
-    store
+    authStore
   })
   app.config.globalProperties.$client = sdk
   app.config.globalProperties.$clientService = clientService
   app.config.globalProperties.$clientService.owncloudSdk = sdk
   app.config.globalProperties.$clientService.webdav = webdav({
     sdk,
-    accessToken: computed(() => store.getters['runtime/auth/accessToken']),
-    baseUrl: runtimeConfiguration.server,
-    capabilities: computed(() => store.getters.capabilities),
+    accessToken: computed(() => authStore.accessToken),
+    baseUrl: configStore.serverUrl,
+    capabilities: computed(() => capabilityStore.capabilities),
     clientService: app.config.globalProperties.$clientService,
     language: computed(() => app.config.globalProperties.$language.current),
     user: computed(() => userStore.user)
@@ -440,25 +436,28 @@ export const announceUppyService = ({ app }: { app: App }): void => {
 /**
  * @param vue
  * @param store
- * @param configurationManager
+ * @param configStore
  */
 export const announcePreviewService = ({
   app,
-  store,
-  configurationManager,
-  userStore
+  configStore,
+  userStore,
+  authStore,
+  capabilityStore
 }: {
   app: App
-  store: Store<any>
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   userStore: UserStore
+  authStore: AuthStore
+  capabilityStore: CapabilityStore
 }): void => {
   const clientService = app.config.globalProperties.$clientService
   const previewService = new PreviewService({
-    store,
     clientService,
-    configurationManager,
-    userStore
+    userStore,
+    authStore,
+    capabilityStore,
+    configStore
   })
   app.config.globalProperties.$previewService = previewService
   app.provide('$previewService', previewService)
@@ -468,34 +467,37 @@ export const announcePreviewService = ({
  * announce authService and inject it into vue
  *
  * @param vue
- * @param configurationManager
+ * @param configStore
  * @param store
  * @param router
  */
 export const announceAuthService = ({
   app,
-  configurationManager,
-  store,
+  configStore,
   router,
-  userStore
+  userStore,
+  authStore,
+  capabilityStore
 }: {
   app: App
-  configurationManager: ConfigurationManager
-  store: Store<any>
+  configStore: ConfigStore
   router: Router
   userStore: UserStore
+  authStore: AuthStore
+  capabilityStore: CapabilityStore
 }): void => {
   const ability = app.config.globalProperties.$ability
   const language = app.config.globalProperties.$language
   const clientService = app.config.globalProperties.$clientService
   authService.initialize(
-    configurationManager,
+    configStore,
     clientService,
-    store,
     router,
     ability,
     language,
-    userStore
+    userStore,
+    authStore,
+    capabilityStore
   )
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)
@@ -515,28 +517,31 @@ export const announcePasswordPolicyService = ({ app }: { app: App }): void => {
  * announce runtime defaults, this is usual the last needed announcement before rendering the actual ui
  *
  * @param vue
- * @param store
  * @param router
  */
 export const announceDefaults = ({
-  store,
-  router
+  appsStore,
+  extensionRegistry,
+  router,
+  configStore
 }: {
-  store: Store<unknown>
+  appsStore: AppsStore
   router: Router
+  extensionRegistry: ExtensionRegistry
+  configStore: ConfigStore
 }): void => {
   // set home route
-  const appIds = store.getters.appIds
-  let defaultExtensionId = store.getters.configuration.options.defaultExtension
+  const appIds = appsStore.appIds
+  let defaultExtensionId = configStore.options.defaultExtension
   if (!defaultExtensionId || appIds.indexOf(defaultExtensionId) < 0) {
     defaultExtensionId = appIds[0]
   }
 
-  let route = router.getRoutes().find((r) => {
+  let route: RouteRecordNormalized | RouteLocationRaw = router.getRoutes().find((r) => {
     return r.path.startsWith(`/${defaultExtensionId}`) && r.meta?.entryPoint === true
   })
   if (!route) {
-    route = store.getters.getNavItemsByExtension(defaultExtensionId)[0]?.route
+    route = getExtensionNavItems({ extensionRegistry, appId: defaultExtensionId })[0]?.route
   }
   if (route) {
     router.addRoute({
@@ -549,10 +554,14 @@ export const announceDefaults = ({
 /**
  * announce some version numbers
  *
- * @param store
+ * @param capabilityStore
  */
-export const announceVersions = ({ store }: { store: Store<unknown> }): void => {
-  const versions = [getWebVersion(), getBackendVersion({ store })].filter(Boolean)
+export const announceVersions = ({
+  capabilityStore
+}: {
+  capabilityStore: CapabilityStore
+}): void => {
+  const versions = [getWebVersion(), getBackendVersion({ capabilityStore })].filter(Boolean)
   versions.forEach((version) => {
     console.log(
       `%c ${version} `,
@@ -565,13 +574,19 @@ export const announceVersions = ({ store }: { store: Store<unknown> }): void => 
  * starts the sentry monitor
  *
  * @remarks
- * if runtimeConfiguration does not contain dsn sentry will not be started
+ * if config does not contain dsn sentry will not be started
  *
- * @param runtimeConfiguration
+ * @param configStore
+ * @param app
  */
-export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App): void => {
-  if (runtimeConfiguration.sentry?.dsn) {
-    const { dsn, environment = 'production', ...moreSentryOptions } = runtimeConfiguration.sentry
+export const startSentry = (configStore: ConfigStore, app: App): void => {
+  if (configStore.sentry?.dsn) {
+    const {
+      dsn,
+      environment = 'production',
+      transportOptions,
+      ...moreSentryOptions
+    } = configStore.sentry
 
     sentryInit({
       app,
@@ -579,6 +594,7 @@ export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App
       environment,
       attachProps: true,
       logErrors: true,
+      transportOptions: transportOptions as SentryConfig['transportOptions'],
       ...moreSentryOptions
     })
   }
@@ -587,16 +603,10 @@ export const startSentry = (runtimeConfiguration: RuntimeConfiguration, app: App
 /**
  * announceCustomScripts injects custom header scripts.
  *
- * @param runtimeConfiguration
+ * @param configStore
  */
-export const announceCustomScripts = ({
-  runtimeConfiguration
-}: {
-  runtimeConfiguration?: RuntimeConfiguration
-}): void => {
-  const { scripts = [] } = runtimeConfiguration
-
-  scripts.forEach(({ src = '', async = false }) => {
+export const announceCustomScripts = ({ configStore }: { configStore?: ConfigStore }): void => {
+  configStore.scripts.forEach(({ src = '', async = false }) => {
     if (!src) {
       return
     }
@@ -611,16 +621,10 @@ export const announceCustomScripts = ({
 /**
  * announceCustomStyles injects custom header styles.
  *
- * @param runtimeConfiguration
+ * @param configStore
  */
-export const announceCustomStyles = ({
-  runtimeConfiguration
-}: {
-  runtimeConfiguration?: RuntimeConfiguration
-}): void => {
-  const { styles = [] } = runtimeConfiguration
-
-  styles.forEach(({ href = '' }) => {
+export const announceCustomStyles = ({ configStore }: { configStore?: ConfigStore }): void => {
+  configStore.styles.forEach(({ href = '' }) => {
     if (!href) {
       return
     }
@@ -639,19 +643,21 @@ const fileReadyEventSchema = z.object({
 })
 
 const onSSEProcessingFinishedEvent = ({
-  store,
+  resourcesStore,
   msg,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientService,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   resourceQueue
 }: {
-  store: Store<unknown>
+  resourcesStore: ResourcesStore
   msg: MessageEvent
   clientService: ClientService
   resourceQueue: PQueue
 }) => {
   try {
     const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-    const currentFolder = store.getters['Files/currentFolder']
+    const currentFolder = resourcesStore.currentFolder
     if (!currentFolder) {
       return
     }
@@ -668,11 +674,9 @@ const onSSEProcessingFinishedEvent = ({
       }
     }
 
-    const isFileLoaded = !!(store.getters['Files/files'] as Resource[]).find(
-      (f) => f.id === postProcessingData.itemid
-    )
+    const isFileLoaded = !!resourcesStore.resources.find((f) => f.id === postProcessingData.itemid)
     if (isFileLoaded) {
-      store.commit('Files/UPDATE_RESOURCE_FIELD', {
+      resourcesStore.updateResourceField({
         id: postProcessingData.itemid,
         field: 'processing',
         value: false
@@ -685,7 +689,7 @@ const onSSEProcessingFinishedEvent = ({
       //     fileId: postProcessingData.itemid
       //   })
       //   resource.path = urlJoin(currentFolder.path, resource.name)
-      //   store.commit('Files/UPSERT_RESOURCE', resource)
+      //   resourcesStore.upsertResource(resource)
       // })
     }
   } catch (e) {
@@ -694,50 +698,52 @@ const onSSEProcessingFinishedEvent = ({
 }
 
 export const registerSSEEventListeners = ({
-  store,
+  resourcesStore,
   clientService,
-  configurationManager
+  configStore
 }: {
-  store: Store<unknown>
+  resourcesStore: ResourcesStore
   clientService: ClientService
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
 }): void => {
   const resourceQueue = new PQueue({
-    concurrency: configurationManager.options.concurrentRequests.sse
+    concurrency: configStore.options.concurrentRequests.sse
   })
-  store.watch(
-    (state, getters) => getters['Files/currentFolder'],
+
+  watch(
+    () => resourcesStore.currentFolder,
     () => {
       resourceQueue.clear()
     }
   )
+
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
-    onSSEProcessingFinishedEvent({ store, msg, clientService, resourceQueue })
+    onSSEProcessingFinishedEvent({ resourcesStore, msg, clientService, resourceQueue })
   )
 }
 
-export const setViewOptions = ({ store }: { store: Store<unknown> }): void => {
+export const setViewOptions = ({ resourcesStore }: { resourcesStore: ResourcesStore }) => {
   /**
    *   Storage returns a string so we need to convert it into a boolean
    */
   const areHiddenFilesShown = window.localStorage.getItem('oc_hiddenFilesShown') || 'false'
   const areHiddenFilesShownBoolean = areHiddenFilesShown === 'true'
 
-  if (areHiddenFilesShownBoolean !== store.getters['Files/areHiddenFilesShown']) {
-    store.commit('Files/SET_HIDDEN_FILES_VISIBILITY', areHiddenFilesShownBoolean)
+  if (areHiddenFilesShownBoolean !== resourcesStore.areHiddenFilesShown) {
+    resourcesStore.setAreHiddenFilesShown(areHiddenFilesShownBoolean)
   }
 
   const areFileExtensionsShown = window.localStorage.getItem('oc_fileExtensionsShown') || 'true'
   const areFileExtensionsShownBoolean = areFileExtensionsShown === 'true'
 
-  if (areFileExtensionsShownBoolean !== store.getters['Files/areFileExtensionsShownBoolean']) {
-    store.commit('Files/SET_FILE_EXTENSIONS_VISIBILITY', areFileExtensionsShownBoolean)
+  if (areFileExtensionsShownBoolean !== resourcesStore.areFileExtensionsShown) {
+    resourcesStore.setAreFileExtensionsShown(areFileExtensionsShownBoolean)
   }
 
   const areWebDavDetailsShown = window.localStorage.getItem('oc_webDavDetailsShown') || 'false'
   const areWebDavDetailsShownBoolean = areWebDavDetailsShown === 'true'
 
-  if (areWebDavDetailsShownBoolean !== store.getters['Files/areWebDavDetailsShown']) {
-    store.commit('Files/SET_FILE_WEB_DAV_DETAILS_VISIBILITY', areWebDavDetailsShownBoolean)
+  if (areWebDavDetailsShownBoolean !== resourcesStore.areWebDavDetailsShown) {
+    resourcesStore.setAreWebDavDetailsShown(areWebDavDetailsShownBoolean)
   }
 }

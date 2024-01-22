@@ -25,7 +25,7 @@
 import { computed, defineComponent, ref, unref, watch } from 'vue'
 import {
   useClientService,
-  useConfigurationManager,
+  useConfigStore,
   useLoadingService,
   useRoute,
   useRouteMeta
@@ -37,7 +37,7 @@ import { useAuthService } from '@ownclouders/web-pkg'
 export default defineComponent({
   name: 'WebfingerResolve',
   setup() {
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const clientService = useClientService()
     const loadingService = useLoadingService()
     const authService = useAuthService()
@@ -51,7 +51,7 @@ export default defineComponent({
 
     const ownCloudServers = ref<OwnCloudServer[]>([])
     const hasError = ref(false)
-    const webfingerDiscovery = new WebfingerDiscovery(configurationManager.serverUrl, clientService)
+    const webfingerDiscovery = new WebfingerDiscovery(configStore.serverUrl, clientService)
     loadingService.addTask(async () => {
       try {
         const servers = await webfingerDiscovery.discoverOwnCloudServers()

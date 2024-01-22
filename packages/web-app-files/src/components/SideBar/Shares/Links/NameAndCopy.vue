@@ -21,8 +21,9 @@
         size="small"
         class="oc-files-public-link-copy-url oc-ml-xs"
         @click="copyLinkToClipboard"
-        v-text="copyBtnLabel"
-      />
+      >
+        {{ copyBtnLabel }}
+      </oc-button>
     </div>
   </div>
 </template>

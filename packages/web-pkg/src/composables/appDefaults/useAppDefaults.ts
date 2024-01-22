@@ -1,6 +1,5 @@
 import { computed, unref, Ref } from 'vue'
 import { useRouter, useRoute, useRouteParam } from '../router'
-import { useStore } from '../store'
 import { ClientService } from '../../services'
 import { basename } from 'path'
 
@@ -16,11 +15,13 @@ import { useAppConfig, AppConfigResult } from './useAppConfig'
 import { useAppFileHandling, AppFileHandlingResult } from './useAppFileHandling'
 import { useAppFolderHandling, AppFolderHandlingResult } from './useAppFolderHandling'
 import { useAppDocumentTitle } from './useAppDocumentTitle'
-import { RequestResult, usePublicLinkContext, useRequest } from '../authContext'
+import { RequestResult, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { useAppsStore, useAuthStore } from '../piniaStores'
+import { storeToRefs } from 'pinia'
 
 // TODO: this file/folder contains file/folder loading logic extracted from preview and drawio extensions
 // Discussion how to progress from here can be found in this issue:
@@ -43,23 +44,21 @@ export type AppDefaultsResult = AppConfigResult &
 
 export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   const router = useRouter()
-  const store = useStore()
+  const appsStore = useAppsStore()
   const currentRoute = useRoute()
   const clientService = options.clientService ?? useClientService()
   const applicationId = options.applicationId
 
-  const isPublicLinkContext = usePublicLinkContext({ store })
+  const authStore = useAuthStore()
+  const { publicLinkContextReady } = storeToRefs(authStore)
 
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
-  const { space, item, itemId, loading } = useDriveResolver({
-    store,
-    driveAliasAndItem
-  })
+  const { space, item, itemId, loading } = useDriveResolver({ driveAliasAndItem })
   const currentFileContext = computed((): FileContext => {
     if (unref(loading)) {
       return null
     }
-    let path
+    let path: string
     if (unref(space)) {
       path = urlJoin(unref(space).webDavPath, unref(item))
     } else {
@@ -80,7 +79,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   useAppDocumentTitle({
-    store,
+    appsStore,
     applicationId,
     applicationName: options.applicationName,
     currentFileContext,
@@ -88,9 +87,9 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
   })
 
   return {
-    isPublicLinkContext,
+    isPublicLinkContext: publicLinkContextReady,
     currentFileContext,
-    ...useAppConfig({ store, ...options }),
+    ...useAppConfig({ appsStore, ...options }),
     ...useAppNavigation({ router, currentFileContext }),
     ...useAppFileHandling({
       clientService
@@ -98,9 +97,8 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
     ...useAppFolderHandling({
       // FIXME: what's wrong here? mismatch in packages somehow...
       clientService: clientService as any,
-      store,
       currentRoute
     }),
-    ...useRequest({ clientService, store, currentRoute: unref(currentRoute) })
+    ...useRequest({ clientService, currentRoute: unref(currentRoute) })
   }
 }

@@ -5,14 +5,8 @@ import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
-import {
-  createStore,
-  defaultPlugins,
-  mount,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
-import { useDownloadFile } from '@ownclouders/web-pkg'
+import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { useDownloadFile, useResourcesStore } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
@@ -136,18 +130,17 @@ describe('FileVersions', () => {
               expect(revertVersionButton.length).toBe(0)
             })
             it('should call UPDATE_RESOURCE_FIELD mutation when revert button is clicked', async () => {
-              const { wrapper, storeOptions } = getMountedWrapper()
+              const { wrapper } = getMountedWrapper()
               await wrapper.vm.fetchVersionsTask.last
               const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
-              const updateResourceFieldMock =
-                storeOptions.modules.Files.mutations.UPDATE_RESOURCE_FIELD
+              const { updateResourceField } = useResourcesStore()
 
               expect(revertVersionButton.length).toBe(defaultVersions.length)
-              expect(updateResourceFieldMock).not.toHaveBeenCalled()
+              expect(updateResourceField).not.toHaveBeenCalled()
 
               await revertVersionButton.at(0).trigger('click')
 
-              expect(updateResourceFieldMock).toHaveBeenCalledTimes(2)
+              expect(updateResourceField).toHaveBeenCalledTimes(2)
             })
           })
 
@@ -176,14 +169,6 @@ function getMountedWrapper({
   resource = mock<Resource>({ id: '1', size: 0, mdate: '' }),
   loadingStateDelay = 0
 } = {}) {
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.versions.mockImplementation(() => versions)
-  storeOptions.modules.Files.actions.loadVersions.mockImplementation(() => {
-    if (loadingStateDelay > 0) {
-      return new Promise((res) => setTimeout(res, loadingStateDelay))
-    }
-  })
-  const store = createStore(storeOptions)
   const downloadFile = jest.fn()
   jest.mocked(useDownloadFile).mockReturnValue({ downloadFile })
   const mocks = {
@@ -191,6 +176,13 @@ function getMountedWrapper({
     downloadFile
   }
   mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mock<Resource>({ id: '1' }))
+  mocks.$clientService.webdav.listFileVersions.mockImplementation(() => {
+    if (loadingStateDelay > 0) {
+      return new Promise((res) => setTimeout(() => res(versions), loadingStateDelay))
+    }
+    return new Promise((res) => res(versions))
+  })
+
   return {
     wrapper: mountType(FileVersions, {
       global: {
@@ -206,10 +198,9 @@ function getMountedWrapper({
           'oc-resource-icon': true,
           OcButton: false
         },
-        plugins: [...defaultPlugins(), store]
+        plugins: [...defaultPlugins()]
       }
     }),
-    mocks,
-    storeOptions
+    mocks
   }
 }

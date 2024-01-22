@@ -2,15 +2,17 @@ import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload
 import { mock } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { FileAction, useFileActionsCreateNewFile, useRequest } from '@ownclouders/web-pkg'
-import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions,
-  defaultComponentMocks
-} from 'web-test-helpers'
+  FileAction,
+  useFileActionsCreateNewFile,
+  useRequest,
+  useSpacesStore,
+  CapabilityStore,
+  useClipboardStore,
+  useFileActionsPaste
+} from '@ownclouders/web-pkg'
+import { eventBus, UppyResource } from '@ownclouders/web-pkg'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
@@ -18,11 +20,11 @@ import { ref } from 'vue'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
-  useAccessToken: jest.fn(),
   useExtensionRegistry: jest.fn(),
   useRequest: jest.fn(),
   useFileActionsCreateNewFile: jest.fn(),
-  useFileActions: jest.fn()
+  useFileActions: jest.fn(),
+  useFileActionsPaste: jest.fn()
 }))
 
 const elSelector = {
@@ -36,34 +38,6 @@ const elSelector = {
   clearClipboardBtn: '.clear-clipboard-btn'
 }
 
-const fileHandlerMocks = [
-  {
-    ext: 'txt',
-    action: {
-      app: 'text-editor',
-      extension: 'txt'
-    },
-    menuTitle: () => 'Plain text file'
-  },
-  {
-    ext: 'md',
-    action: {
-      app: 'text-editor',
-      extension: 'md'
-    },
-    menuTitle: () => 'Mark-down file'
-  },
-  {
-    ext: 'drawio',
-    action: {
-      app: 'draw-io',
-      routeName: 'draw-io-edit',
-      extension: 'drawio'
-    },
-    menuTitle: () => 'Draw.io document'
-  }
-]
-
 describe('CreateAndUpload component', () => {
   describe('action buttons', () => {
     it('should show and be enabled if file creation is possible', () => {
@@ -74,7 +48,7 @@ describe('CreateAndUpload component', () => {
     })
     it('should be disabled if file creation is not possible', () => {
       const currentFolder = mock<Resource>({ canUpload: () => false })
-      const { wrapper } = getWrapper({ currentFolder })
+      const { wrapper } = getWrapper({ currentFolder, createActions: [] })
       expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeTruthy()
       expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeTruthy()
     })
@@ -89,15 +63,8 @@ describe('CreateAndUpload component', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.findAll(elSelector.resourceUpload).length).toBe(2)
     })
-    it('should show additional handlers', () => {
-      const { wrapper } = getWrapper({ newFileHandlers: fileHandlerMocks })
-      expect(wrapper.html()).toMatchSnapshot()
-    })
-    it('should show file extension if file extensions are enabled', () => {
-      const { wrapper } = getWrapper({
-        newFileHandlers: fileHandlerMocks,
-        areFileExtensionsShown: true
-      })
+    it('should show entries for all new file handlers', () => {
+      const { wrapper } = getWrapper()
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
@@ -113,7 +80,7 @@ describe('CreateAndUpload component', () => {
       expect(wrapper.findAll(`${elSelector.clipboardBtns} .oc-button`).length).toBe(2)
     })
     it('call the "paste files"-action', async () => {
-      const { wrapper, storeOptions } = getWrapper({
+      const { wrapper, mocks } = getWrapper({
         clipboardResources: [
           mock<Resource>({
             shareRoot: undefined
@@ -121,12 +88,13 @@ describe('CreateAndUpload component', () => {
         ]
       })
       await wrapper.find(elSelector.pasteFilesBtn).trigger('click')
-      expect(storeOptions.modules.Files.actions.pasteSelectedFiles).toHaveBeenCalled()
+      expect(mocks.pasteActionHandler).toHaveBeenCalled()
     })
     it('call "clear clipboard"-action', async () => {
-      const { wrapper, storeOptions } = getWrapper({ clipboardResources: [mock<Resource>()] })
+      const { wrapper } = getWrapper({ clipboardResources: [mock<Resource>()] })
       await wrapper.find(elSelector.clearClipboardBtn).trigger('click')
-      expect(storeOptions.modules.Files.actions.clearClipboardFiles).toHaveBeenCalled()
+      const clipboardStore = useClipboardStore()
+      expect(clipboardStore.clearClipboard).toHaveBeenCalled()
     })
   })
   describe('method "onUploadComplete"', () => {
@@ -140,13 +108,12 @@ describe('CreateAndUpload component', () => {
       const spaces = [
         mock<SpaceResource>({ id: file.meta.spaceId, isOwner: () => driveType === 'personal' })
       ]
-      const { wrapper, mocks, storeOptions } = getWrapper({ spaces })
+      const { wrapper, mocks } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
       await wrapper.vm.onUploadComplete({ successful: [file] })
-      expect(
-        storeOptions.modules.runtime.modules.spaces.mutations.UPDATE_SPACE_FIELD
-      ).toHaveBeenCalledTimes(updated)
+      const spacesStore = useSpacesStore()
+      expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
     })
     it('reloads the file list if files were uploaded to the current path', async () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
@@ -176,7 +143,6 @@ describe('CreateAndUpload component', () => {
 })
 
 function getWrapper({
-  newFileHandlers = [],
   clipboardResources = [],
   files = [],
   currentFolder = mock<Resource>({ canUpload: () => true }),
@@ -186,7 +152,12 @@ function getWrapper({
   item = undefined,
   itemId = undefined,
   newFileAction = false,
-  areFileExtensionsShown = false
+  areFileExtensionsShown = false,
+  createActions = [
+    mock<FileAction>({ label: () => 'Plain text file', ext: 'txt' }),
+    mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
+    mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
+  ]
 } = {}) {
   jest.mocked(useRequest).mockImplementation(() => ({
     makeRequest: jest.fn().mockResolvedValue({ status: 200 })
@@ -195,40 +166,27 @@ function getWrapper({
 
   jest.mocked(useFileActionsCreateNewFile).mockReturnValue(
     mock<ReturnType<typeof useFileActionsCreateNewFile>>({
-      actions: ref([
-        mock<FileAction>({ label: () => 'Plain text file', ext: 'txt' }),
-        mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
-        mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
-      ])
+      actions: ref(createActions)
     })
   )
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    getters: {
-      ...defaultStoreMockOptions.getters,
-      newFileHandlers: () => newFileHandlers,
-      user: () => ({ id: '1' }),
-      capabilities: () => ({
-        spaces: { enabled: true },
-        files: { app_providers: [{ new_url: '/' }] }
-      })
-    }
-  }
-  storeOptions.getters.apps.mockImplementation(() => ({
-    fileEditors: []
-  }))
-  storeOptions.modules.Files.state.areFileExtensionsShown = areFileExtensionsShown
-  storeOptions.modules.Files.getters.currentFolder.mockImplementation(() => currentFolder)
-  storeOptions.modules.Files.getters.clipboardResources.mockImplementation(() => clipboardResources)
-  storeOptions.modules.runtime.modules.spaces.getters.spaces.mockReturnValue(spaces)
-  storeOptions.modules.Files.getters.files.mockImplementation(() => files)
-  const store = createStore(storeOptions)
+  const pasteActionHandler = jest.fn()
+  jest.mocked(useFileActionsPaste).mockReturnValue(
+    mock<ReturnType<typeof useFileActionsPaste>>({
+      actions: ref([mock<FileAction>({ handler: pasteActionHandler })])
+    })
+  )
+
   const mocks = {
-    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) })
+    ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) }),
+    pasteActionHandler
   }
+  const capabilities = {
+    spaces: { enabled: true },
+    files: { app_providers: [{ new_url: '/' }] }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
-    storeOptions,
     mocks,
     wrapper: shallowMount(CreateAndUpload as any, {
       data: () => ({ newFileAction }),
@@ -238,7 +196,16 @@ function getWrapper({
         renderStubDefaultSlot: true,
         mocks,
         provide: mocks,
-        plugins: [...defaultPlugins(), store]
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              spacesState: { spaces: spaces as any },
+              capabilityState: { capabilities },
+              clipboardState: { resources: clipboardResources },
+              resourcesStore: { areFileExtensionsShown, currentFolder, resources: files }
+            }
+          })
+        ]
       }
     })
   }

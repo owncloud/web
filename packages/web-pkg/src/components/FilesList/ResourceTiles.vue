@@ -135,8 +135,8 @@ import {
   SortField,
   useMessages,
   useResourceRouteResolver,
-  useStore,
-  useTileSize
+  useTileSize,
+  useResourcesStore
 } from '../../composables'
 
 export default defineComponent({
@@ -195,11 +195,11 @@ export default defineComponent({
   },
   emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
-    const store = useStore()
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
+    const resourcesStore = useResourcesStore()
 
-    const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
+    const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
     const dragItem = ref()
     const ghostElementRef = ref()

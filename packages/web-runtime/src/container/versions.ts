@@ -1,11 +1,15 @@
-import { Store } from 'vuex'
+import { CapabilityStore } from '@ownclouders/web-pkg'
 
 export const getWebVersion = (): string => {
   return `ownCloud Web UI ${process.env.PACKAGE_VERSION}`
 }
 
-export const getBackendVersion = ({ store }: { store: Store<unknown> }): string => {
-  const backendStatus = store.getters.capabilities?.core?.status
+export const getBackendVersion = ({
+  capabilityStore
+}: {
+  capabilityStore: CapabilityStore
+}): string => {
+  const backendStatus = capabilityStore.status
   if (!backendStatus || !backendStatus.versionstring) {
     return undefined
   }

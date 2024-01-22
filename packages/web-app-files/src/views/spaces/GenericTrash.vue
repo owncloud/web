@@ -49,8 +49,8 @@
             <list-info
               v-if="paginatedResources.length > 0"
               class="oc-width-1-1 oc-my-s"
-              :files="totalFilesCount.files"
-              :folders="totalFilesCount.folders"
+              :files="totalResourcesCount.files"
+              :folders="totalResourcesCount.folders"
             />
           </template>
         </resource-table>
@@ -61,10 +61,16 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapState } from 'vuex'
 import { storeToRefs } from 'pinia'
 
-import { AppBar, ContextActions, FileSideBar, useUserStore } from '@ownclouders/web-pkg'
+import {
+  AppBar,
+  ContextActions,
+  FileSideBar,
+  useUserStore,
+  useCapabilityStore,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
@@ -76,7 +82,6 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { useCapabilityShareJailEnabled, useCapabilitySpacesEnabled } from '@ownclouders/web-pkg'
 import { createLocationTrash } from '@ownclouders/web-pkg'
 import { isProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useDocumentTitle } from '@ownclouders/web-pkg'
@@ -112,9 +117,13 @@ export default defineComponent({
 
   setup(props) {
     const { $gettext } = useGettext()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const userStore = useUserStore()
-
     const { user } = storeToRefs(userStore)
+
+    const resourcesStore = useResourcesStore()
+    const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     let loadResourcesEventToken: string
     const noContentMessage = computed(() => {
@@ -123,10 +132,9 @@ export default defineComponent({
         : $gettext('Space has no deleted files')
     })
 
-    const hasSpaces = useCapabilitySpacesEnabled()
     const titleSegments = computed(() => {
       const segments = [$gettext('Deleted files')]
-      if (unref(hasSpaces)) {
+      if (capabilityStore.spacesEnabled) {
         segments.unshift(props.space.name)
       }
       return segments
@@ -156,16 +164,14 @@ export default defineComponent({
 
     return {
       ...resourcesViewDefaults,
-      hasShareJail: useCapabilityShareJailEnabled(),
+      hasShareJail: capabilityRefs.spacesShareJail,
       user,
-      noContentMessage
+      noContentMessage,
+      totalResourcesCount
     }
   },
 
   computed: {
-    ...mapState('Files', ['files']),
-    ...mapGetters('Files', ['totalFilesCount']),
-
     isEmpty() {
       return this.paginatedResources.length < 1
     },

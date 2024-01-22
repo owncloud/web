@@ -1,25 +1,17 @@
 import { useFileActionsRestore } from '../../../../../src/composables/actions'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  getComposableWrapper,
-  RouteLocation
-} from 'web-test-helpers'
-import { useMessages, useStore } from '../../../../../src/composables'
+import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
+import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
 
 describe('restore', () => {
-  afterEach(() => jest.clearAllMocks())
-
   describe('isEnabled property', () => {
     it('should be false when no resource is given', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -31,7 +23,7 @@ describe('restore', () => {
       })
     })
     it('should be true when permission is sufficient', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -43,7 +35,7 @@ describe('restore', () => {
       })
     })
     it('should be false when permission is not sufficient', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         setup: ({ actions }, { space }) => {
           expect(
             unref(actions)[0].isEnabled({
@@ -55,7 +47,7 @@ describe('restore', () => {
       })
     })
     it('should be false when location is invalid', () => {
-      const { wrapper } = getWrapper({
+      getWrapper({
         invalidLocation: true,
         setup: ({ actions }, { space }) => {
           expect(unref(actions)[0].isEnabled({ space, resources: [{}] as Resource[] })).toBe(false)
@@ -63,7 +55,7 @@ describe('restore', () => {
       })
     })
     it('should be false in a space trash bin with insufficient permissions', () => {
-      const { wrapper, mocks } = getWrapper({
+      getWrapper({
         driveType: 'project',
         setup: ({ actions }, { space }) => {
           expect(
@@ -79,8 +71,8 @@ describe('restore', () => {
 
   describe('method "restoreResources"', () => {
     it('should show message on success', () => {
-      const { wrapper } = getWrapper({
-        setup: async ({ restoreResources }, { space, storeOptions }) => {
+      getWrapper({
+        setup: async ({ restoreResources }, { space }) => {
           await restoreResources(
             space,
             [{ id: '1', path: '/1' }],
@@ -90,19 +82,21 @@ describe('restore', () => {
 
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
-          expect(storeOptions.modules.Files.actions.removeFilesFromTrashbin).toHaveBeenCalledTimes(
-            1
-          )
+
+          const { removeResources, resetSelection } = useResourcesStore()
+          expect(removeResources).toHaveBeenCalledTimes(1)
+          expect(resetSelection).toHaveBeenCalledTimes(1)
         }
       })
     })
 
-    it.skip('should show message on error', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should show message on error', () => {
       jest.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper } = getWrapper({
         resolveClearTrashBin: false,
-        setup: async ({ actions }) => {
+        setup: async () => {
           const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
           const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
           await wrapper.vm.$_restore_restoreResources([{ id: '1', path: '/1' }], [])
@@ -112,9 +106,10 @@ describe('restore', () => {
         }
       })
     })
-    it.skip('should request parent folder on collecting restore conflicts', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should request parent folder on collecting restore conflicts', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
+        setup: async () => {
           await wrapper.vm.$_restore_collectConflicts([{ id: '1', path: '1', name: '1' }])
 
           expect(wrapper.vm.$clientService.webdav.listFiles).toHaveBeenCalledWith(
@@ -126,9 +121,10 @@ describe('restore', () => {
         }
       })
     })
-    it.skip('should find conflict within resources', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should find conflict within resources', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
+        setup: async () => {
           const resourceOne = { id: '1', path: '1', name: '1' }
           const resourceTwo = { id: '2', path: '1', name: '1' }
           const { conflicts } = await wrapper.vm.$_restore_collectConflicts([
@@ -140,9 +136,10 @@ describe('restore', () => {
         }
       })
     })
-    it.skip('should add files without conflict to resolved resources', async () => {
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('should add files without conflict to resolved resources', () => {
       const { wrapper } = getWrapper({
-        setup: async ({ actions }) => {
+        setup: async () => {
           const resource = { id: '1', path: '1', name: '1' }
           const { resolvedResources } = await wrapper.vm.$_restore_collectConflicts([resource])
 
@@ -165,11 +162,9 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useFileActionsRestore>,
     {
-      space,
-      storeOptions
+      space
     }: {
       space: SpaceResource
-      storeOptions: typeof defaultStoreMockOptions
       router: ReturnType<typeof defaultComponentMocks>['$router']
     }
   ) => void
@@ -196,28 +191,17 @@ function getWrapper({
   } else {
     mocks.$clientService.webdav.restoreFile.mockRejectedValue(new Error(''))
   }
-  mocks.$clientService.owncloudSdk.users.getUser.mockImplementation(() => ({ quota: {} }))
 
-  const storeOptions = {
-    ...defaultStoreMockOptions,
-    modules: {
-      ...defaultStoreMockOptions.modules,
-      user: { state: { uuid: 1 } }
-    }
-  }
-  const store = createStore(storeOptions)
   return {
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const store = useStore()
-        const instance = useFileActionsRestore({ store })
-        setup(instance, { space: mocks.space, storeOptions, router: mocks.$router })
+        const instance = useFileActionsRestore()
+        setup(instance, { space: mocks.space, router: mocks.$router })
       },
       {
         mocks,
-        provide: mocks,
-        store
+        provide: mocks
       }
     )
   }

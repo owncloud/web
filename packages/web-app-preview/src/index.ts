@@ -1,41 +1,45 @@
+import { defineWebApplication } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import * as app from './App.vue'
-const { default: App, mimeTypes, appId } = app as any
+import { useGettext } from 'vue3-gettext'
+import { getMimeTypes } from './mimeTypes'
 
-// just a dummy function to trick gettext tools
-function $gettext(msg) {
-  return msg
-}
+const { default: App, appId } = app as any
 
-const routes = [
-  {
-    path: '/:driveAliasAndItem(.*)?',
-    component: App,
-    name: 'media',
-    meta: {
-      authContext: 'hybrid',
-      title: $gettext('Preview'),
-      patchCleanPath: true
+export default defineWebApplication({
+  setup({ applicationConfig }) {
+    const { $gettext } = useGettext()
+
+    const routes = [
+      {
+        path: '/:driveAliasAndItem(.*)?',
+        component: App,
+        name: 'media',
+        meta: {
+          authContext: 'hybrid',
+          title: $gettext('Preview'),
+          patchCleanPath: true
+        }
+      }
+    ]
+
+    const routeName = 'preview-media'
+
+    const appInfo = {
+      name: $gettext('Preview'),
+      id: appId,
+      icon: 'eye',
+      extensions: getMimeTypes(applicationConfig?.mimeTypes).map((mimeType) => ({
+        mimeType,
+        routeName,
+        label: $gettext('Preview')
+      }))
+    }
+
+    return {
+      appInfo,
+      routes,
+      translations
     }
   }
-]
-
-const routeName = 'preview-media'
-
-const appInfo = {
-  name: $gettext('Preview'),
-  id: appId,
-  icon: 'eye',
-  extensions: mimeTypes().map((mimeType) => ({
-    mimeType,
-    routeName,
-    label: $gettext('Preview')
-  }))
-}
-
-export default {
-  appInfo,
-  routes,
-  translations,
-  mimeTypes
-}
+})

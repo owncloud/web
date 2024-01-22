@@ -10,7 +10,9 @@ import {
   UppyResource,
   locationSpacesGeneric,
   useUserStore,
-  useMessages
+  useMessages,
+  useSpacesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
@@ -41,7 +43,8 @@ describe('HandleUpload', () => {
     const fileToUpload = mock<UppyFile>({ name: 'name' })
     const processedFiles = instance.prepareFiles([fileToUpload])
 
-    const currentFolder = mocks.opts.store.getters['Files/currentFolder']
+    const resourcesStore = useResourcesStore()
+    const currentFolder = resourcesStore.currentFolder
     const route = unref(mocks.opts.route)
 
     expect(processedFiles[0].tus.endpoint).toEqual('/')
@@ -68,7 +71,8 @@ describe('HandleUpload', () => {
       mocks.opts.clientService.webdav.createFolder.mockResolvedValue(createdFolder)
 
       const result = await instance.createDirectoryTree([fileToUpload])
-      const currentFolder = mocks.opts.store.getters['Files/currentFolder']
+      const resourcesStore = useResourcesStore()
+      const currentFolder = resourcesStore.currentFolder
 
       expect(mocks.opts.uppyService.publish).toHaveBeenCalledWith(
         'uploadSuccess',
@@ -262,14 +266,6 @@ const getWrapper = ({
   resourceConflict.displayOverwriteDialog.mockResolvedValue(conflictHandlerResult)
   jest.mocked(ResourceConflict).mockImplementation(() => resourceConflict)
 
-  const store = {
-    getters: {
-      'Files/currentFolder': mock<Resource>({ path: '/' }),
-      'Files/files': [mock<Resource>()],
-      'runtime/spaces/spaces': spaces
-    },
-    dispatch: jest.fn()
-  } as any
   const route = mock<RouteLocationNormalizedLoaded>()
   route.params.driveAliasAndItem = '1'
   route.query.shareId = '1'
@@ -277,14 +273,22 @@ const getWrapper = ({
   const uppy = mockDeep<Uppy>()
   uppy.getState.mockReturnValue(mock<State>({ files: {} }))
 
+  createTestingPinia({
+    initialState: {
+      spaces: { spaces },
+      resources: { currentFolder: mock<Resource>({ path: '/' }), resources: [mock<Resource>()] }
+    }
+  })
+
   const opts = {
     clientService: mockDeep<ClientService>(),
     hasSpaces: ref(true),
     language: mock<Language>(),
     route: ref(route),
-    store,
-    userStore: useUserStore(createTestingPinia()),
-    messageStore: useMessages(createTestingPinia()),
+    userStore: useUserStore(),
+    messageStore: useMessages(),
+    spacesStore: useSpacesStore(),
+    resourcesStore: useResourcesStore(),
     space: mock<SpaceResource>(),
     uppyService: mock<UppyService>(),
     conflictHandlingEnabled,

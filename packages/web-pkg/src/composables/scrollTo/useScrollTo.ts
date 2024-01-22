@@ -1,10 +1,10 @@
 import { computed, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { queryItemAsString } from '../appDefaults/useAppNavigation'
-import { useStore } from '../store/useStore'
 import { eventBus } from '../../services'
 import { useRouteQuery } from '../router'
 import { SideBarEventTopics } from '../sideBar'
+import { useResourcesStore } from '../piniaStores'
 
 export interface ScrollToResult {
   scrollToResource(
@@ -15,9 +15,10 @@ export interface ScrollToResult {
 }
 
 export const useScrollTo = (): ScrollToResult => {
-  const store = useStore()
   const scrollToQuery = useRouteQuery('scrollTo')
   const detailsQuery = useRouteQuery('details')
+  const resourcesStore = useResourcesStore()
+
   const scrollTo = computed(() => {
     return queryItemAsString(unref(scrollToQuery))
   })
@@ -72,7 +73,7 @@ export const useScrollTo = (): ScrollToResult => {
 
     const resource = unref(resources).find((r) => r.id === unref(scrollTo))
     if (resource && resource.processing !== true) {
-      store.commit('Files/SET_FILE_SELECTION', [resource])
+      resourcesStore.setSelection([resource.id])
       scrollToResource(resource.id, { forceScroll: true, topbarElement })
 
       if (unref(details)) {

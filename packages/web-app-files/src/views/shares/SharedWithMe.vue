@@ -101,7 +101,9 @@ import {
   AppLoadingSpinner,
   FileSideBar,
   InlineFilterOption,
-  ItemFilter
+  ItemFilter,
+  useConfigStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
@@ -113,7 +115,7 @@ import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
-import { useStore, useOpenWithDefaultApp, defaultFuseOptions } from '@ownclouders/web-pkg'
+import { useOpenWithDefaultApp, defaultFuseOptions } from '@ownclouders/web-pkg'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { uniq } from 'lodash-es'
 
@@ -131,6 +133,8 @@ export default defineComponent({
 
   setup() {
     const { openWithDefaultApp } = useOpenWithDefaultApp()
+    const configStore = useConfigStore()
+    const resourcesStore = useResourcesStore()
 
     const {
       areResourcesLoading,
@@ -162,7 +166,7 @@ export default defineComponent({
 
     const setAreHiddenFilesShown = (value: InlineFilterOption) => {
       areHiddenFilesShown.value = value.name === 'hidden'
-      store.dispatch('Files/resetFileSelection')
+      resourcesStore.resetSelection()
     }
 
     const visibleShares = computed(() => unref(storeItems).filter((r) => !r.hidden))
@@ -219,9 +223,8 @@ export default defineComponent({
     })
 
     const { getMatchingSpace } = useGetMatchingSpace()
-    const store = useStore()
 
-    const displayThumbnails = computed(() => store.getters.configuration?.options?.disablePreviews)
+    const displayThumbnails = computed(() => configStore.options.disablePreviews)
 
     const selectedShareSpace = computed(() => {
       if (unref(selectedResources).length !== 1) {

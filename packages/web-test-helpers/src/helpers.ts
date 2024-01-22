@@ -1,4 +1,3 @@
-import { createStore as _createStore, StoreOptions } from 'vuex'
 import { mount } from '@vue/test-utils'
 import { defineComponent } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
@@ -9,22 +8,16 @@ export { mount, shallowMount } from '@vue/test-utils'
 
 jest.spyOn(console, 'warn').mockImplementation(() => undefined)
 
-export const createStore = <T>(storeOptions: StoreOptions<T>) => {
-  return _createStore(storeOptions)
-}
-
 export const getComposableWrapper = <T>(
   setup: any,
   {
     mocks = undefined,
     provide = undefined,
-    store = undefined,
     template = undefined,
     pluginOptions = undefined
   }: {
     mocks?: Record<string, unknown>
     provide?: Record<string, unknown>
-    store?: StoreOptions<T>
     template?: string
     pluginOptions?: DefaultPluginsOptions
   } = {}
@@ -36,16 +29,12 @@ export const getComposableWrapper = <T>(
     }),
     {
       global: {
-        plugins: [...defaultPlugins(pluginOptions), store],
+        plugins: [...defaultPlugins(pluginOptions)],
         ...(mocks && { mocks }),
         ...(provide && { provide })
       }
     }
   )
-}
-
-export const getStoreInstance = <T>(storeOptions: StoreOptions<T>) => {
-  return _createStore(storeOptions)
 }
 
 export type { RouteLocation } from 'vue-router'
@@ -57,3 +46,7 @@ export const createRouter = (options?: Partial<RouterOptions>) =>
     strict: false,
     ...options
   })
+
+export const writable = <T>(value: Readonly<T>): T => {
+  return value as T
+}

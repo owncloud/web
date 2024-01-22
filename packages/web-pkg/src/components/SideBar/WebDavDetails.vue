@@ -41,12 +41,13 @@
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { Resource } from '@ownclouders/web-client'
-import { useConfigurationManager } from '../../composables'
+import { useConfigStore } from '../../composables'
 
 export default defineComponent({
   name: 'WebDavDetails',
   setup() {
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
+
     const resource = inject<Ref<Resource>>('resource')
     const copiedIcon = 'check'
     const copyIcon = 'file-copy'
@@ -54,7 +55,7 @@ export default defineComponent({
     const copyWebDAVUrlIcon = ref(copyIcon)
 
     const webDavUrl = computed(() => {
-      return urlJoin(configurationManager.serverUrl, unref(resource).webDavPath)
+      return urlJoin(configStore.serverUrl, unref(resource).webDavPath)
     })
 
     const copyWebDAVPathToClipboard = () => {

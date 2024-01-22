@@ -149,13 +149,13 @@
 <script lang="ts">
 import { basename } from 'path'
 import { DateTime } from 'luxon'
-import { mapGetters } from 'vuex'
 import * as EmailValidator from 'email-validator'
 import {
   createLocationSpaces,
-  useConfigurationManager,
   LinkRoleDropdown,
-  useModals
+  useConfigStore,
+  useModals,
+  useSpacesStore
 } from '@ownclouders/web-pkg'
 import {
   linkRoleInternalFile,
@@ -172,6 +172,7 @@ import { OcDrop } from 'design-system/src/components'
 import { usePasswordPolicyService, ExpirationRules } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'DetailsAndEdit',
@@ -214,8 +215,10 @@ export default defineComponent({
   setup(props, { emit }) {
     const { dispatchModal } = useModals()
     const { $gettext, current } = useGettext()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const passwordPolicyService = usePasswordPolicyService()
+    const spacesStore = useSpacesStore()
+    const { spaces } = storeToRefs(spacesStore)
 
     const currentLinkRole = ref<ShareRole>(
       LinkShareRoles.getByBitmask(props.link.permissions, props.isFolderShare)
@@ -250,12 +253,13 @@ export default defineComponent({
     return {
       space: inject<Ref<SpaceResource>>('space'),
       resource: inject<Ref<Resource>>('resource'),
+      spaces,
       passwordPolicyService,
       dateExpire,
       updateLink,
       updateSelectedRole,
       currentLinkRole,
-      isRunningOnEos: computed(() => configurationManager.options.isRunningOnEos),
+      isRunningOnEos: computed(() => configStore.options.isRunningOnEos),
       showPasswordModal,
       dispatchModal
     }
@@ -266,8 +270,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters('runtime/spaces', ['spaces']),
-
     currentLinkRoleDescription() {
       return this.currentLinkRole?.description(false) || ''
     },

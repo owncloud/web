@@ -1,10 +1,5 @@
 import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
-import {
-  createStore,
-  defaultPlugins,
-  shallowMount,
-  defaultStoreMockOptions
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const ocLoaderStubSelector = 'oc-loader-stub'
 
@@ -27,13 +22,12 @@ describe('SharesPanel', () => {
   })
 
   function getWrapper({ sharesLoading = false } = {}) {
-    const storeOptions = defaultStoreMockOptions
-    storeOptions.modules.Files.getters.sharesLoading.mockImplementation(() => sharesLoading)
-    const store = createStore(storeOptions)
     return {
       wrapper: shallowMount(SharesPanel, {
         global: {
-          plugins: [...defaultPlugins(), store],
+          plugins: [
+            ...defaultPlugins({ piniaOptions: { sharesState: { loading: sharesLoading } } })
+          ],
           provide: {
             activePanel: null,
             displayedItem: {},

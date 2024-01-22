@@ -5,12 +5,17 @@ import { basename, dirname, join } from 'path'
 import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'
 import { Ref, unref } from 'vue'
-import { Store } from 'vuex'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { ResourceConflict } from './helpers/resource'
-import { MessageStore, UserStore, locationPublicLink } from '@ownclouders/web-pkg'
+import {
+  MessageStore,
+  ResourcesStore,
+  SpacesStore,
+  UserStore,
+  locationPublicLink
+} from '@ownclouders/web-pkg'
 import { locationSpacesGeneric, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
@@ -20,9 +25,10 @@ export interface HandleUploadOptions {
   hasSpaces: Ref<boolean>
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
-  store: Store<any>
   userStore: UserStore
   messageStore: MessageStore
+  spacesStore: SpacesStore
+  resourcesStore: ResourcesStore
   uppyService: UppyService
   id?: string
   space?: SpaceResource
@@ -50,9 +56,10 @@ export class HandleUpload extends BasePlugin {
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
   space: SpaceResource
-  store: Store<any>
   userStore: UserStore
   messageStore: MessageStore
+  spacesStore: SpacesStore
+  resourcesStore: ResourcesStore
   uppyService: UppyService
   quotaCheckEnabled: boolean
   directoryTreeCreateEnabled: boolean
@@ -69,9 +76,10 @@ export class HandleUpload extends BasePlugin {
     this.language = opts.language
     this.route = opts.route
     this.space = opts.space
-    this.store = opts.store
     this.userStore = opts.userStore
     this.messageStore = opts.messageStore
+    this.spacesStore = opts.spacesStore
+    this.resourcesStore = opts.resourcesStore
     this.uppyService = opts.uppyService
 
     this.quotaCheckEnabled = opts.quotaCheckEnabled ?? true
@@ -79,18 +87,6 @@ export class HandleUpload extends BasePlugin {
     this.conflictHandlingEnabled = opts.conflictHandlingEnabled ?? true
 
     this.handleUpload = this.handleUpload.bind(this)
-  }
-
-  get currentFolder(): Resource {
-    return this.store.getters['Files/currentFolder']
-  }
-
-  get files(): Resource[] {
-    return this.store.getters['Files/files']
-  }
-
-  get spaces(): SpaceResource[] {
-    return this.store.getters['runtime/spaces/spaces']
   }
 
   removeFilesFromUpload(filesToUpload: UppyResource[]) {
@@ -109,7 +105,7 @@ export class HandleUpload extends BasePlugin {
   prepareFiles(files: UppyFile[]): UppyResource[] {
     const filesToUpload: Record<string, UppyResource> = {}
 
-    if (!this.currentFolder && unref(this.route)?.params?.token) {
+    if (!this.resourcesStore.currentFolder && unref(this.route)?.params?.token) {
       // public file drop
       const publicLinkToken = queryItemAsString(unref(this.route).params.token)
       let endpoint = urlJoin(
@@ -134,7 +130,7 @@ export class HandleUpload extends BasePlugin {
       this.uppy.setState({ files: { ...this.uppy.getState().files, ...filesToUpload } })
       return Object.values(filesToUpload)
     }
-    const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
+    const { id: currentFolderId, path: currentFolderPath } = this.resourcesStore.currentFolder
 
     const { name, params, query } = unref(this.route)
     const topLevelFolderIds: Record<string, string> = {}
@@ -206,7 +202,9 @@ export class HandleUpload extends BasePlugin {
       }
 
       if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
-        targetUploadSpace = this.spaces.find((space) => space.id === uppyResource.meta.spaceId)
+        targetUploadSpace = this.spacesStore.spaces.find(
+          ({ id }) => id === uppyResource.meta.spaceId
+        )
       }
 
       if (
@@ -218,7 +216,7 @@ export class HandleUpload extends BasePlugin {
         return acc
       }
 
-      const existingFile = this.files.find(
+      const existingFile = this.resourcesStore.resources.find(
         (c) => !uppyResource.meta.relativeFolder && c.name === uppyResource.name
       )
       const existingFileSize = existingFile ? Number(existingFile.size) : 0
@@ -273,7 +271,7 @@ export class HandleUpload extends BasePlugin {
   async createDirectoryTree(filesToUpload: UppyResource[]): Promise<UppyResource[]> {
     const { webdav } = this.clientService
     const space = this.space
-    const { id: currentFolderId, path: currentFolderPath } = this.currentFolder
+    const { id: currentFolderId, path: currentFolderPath } = this.resourcesStore.currentFolder
 
     const routeName = filesToUpload[0].meta.routeName
     const routeDriveAliasAndItem = filesToUpload[0].meta.routeDriveAliasAndItem
@@ -393,7 +391,7 @@ export class HandleUpload extends BasePlugin {
 
     // name conflict handling
     if (this.conflictHandlingEnabled) {
-      const conflictHandler = new ResourceConflict(this.store, this.language)
+      const conflictHandler = new ResourceConflict(this.resourcesStore, this.language)
       const conflicts = conflictHandler.getConflicts(filesToUpload)
       if (conflicts.length) {
         const dashboard = document.getElementsByClassName('uppy-Dashboard')

@@ -16,7 +16,7 @@ export default class Preview implements SearchPreview {
     this.searchFunction = searchFunction
   }
 
-  public async search(term: string): Promise<SearchResult> {
+  public search(term: string): Promise<SearchResult> {
     return this.searchFunction(term, previewSearchLimit)
   }
 

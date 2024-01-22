@@ -1,13 +1,10 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
-import { fileActions, editors, meta } from 'web-app-files/tests/__fixtures__/fileActions'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultPlugins,
   defaultStubs,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
@@ -18,6 +15,37 @@ jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useFileActions: jest.fn()
 }))
+
+const fileActions = {
+  copy: {
+    handler: jest.fn(),
+    label: () => 'Copy',
+    componentType: 'button',
+    class: 'oc-files-actions-copy-trigger',
+    selector: '.oc-files-actions-copy-trigger'
+  },
+  move: {
+    handler: jest.fn(),
+    label: () => 'Move',
+    componentType: 'button',
+    class: 'oc-files-actions-move-trigger',
+    selector: '.oc-files-actions-move-trigger'
+  },
+  download: {
+    handler: jest.fn(),
+    label: () => 'Download',
+    componentType: 'button',
+    class: 'oc-files-actions-download-file-trigger',
+    selector: '.oc-files-actions-download-file-trigger'
+  },
+  'text-editor': {
+    handler: jest.fn(),
+    label: () => 'Open in Text Editor',
+    componentType: 'button',
+    class: 'oc-files-actions-text-editor-trigger',
+    selector: '.oc-files-actions-text-editor-trigger'
+  }
+}
 
 describe('FileActions', () => {
   describe('when user is on personal route', () => {
@@ -56,15 +84,10 @@ describe('FileActions', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.Files.state.currentFolder = { path: '' }
-  storeOptions.modules.apps.state.fileEditors = editors
-  storeOptions.modules.apps.state.meta = meta
-  const store = createStore(storeOptions)
   return {
     wrapper: mount(FileActions, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks: defaultComponentMocks({
           currentRoute: mock<RouteLocation>({
             name: 'files-spaces-generic',

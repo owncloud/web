@@ -4,37 +4,39 @@ import {
   isLocationSpacesActive,
   createLocationShares
 } from '../../../router'
-import { Store } from 'vuex'
 import PQueue from 'p-queue'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
-import { useCapabilityFilesSharingResharing, useCapabilityShareJailEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
-import { useConfigurationManager } from '../../configuration'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages } from '../../piniaStores'
+import {
+  useMessages,
+  useSpacesStore,
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsDeclineShare = () => {
   const { showMessage, showErrorMessage } = useMessages()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
 
-  const hasResharing = useCapabilityFilesSharingResharing()
-  const hasShareJail = useCapabilityShareJailEnabled()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const configurationManager = useConfigurationManager()
+  const configStore = useConfigStore()
+  const spacesStore = useSpacesStore()
+  const { upsertResource } = useResourcesStore()
 
   const handler = async ({ resources }: FileActionOptions) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
-      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+      concurrency: configStore.options.concurrentRequests.resourceBatchActions
     })
     resources.forEach((resource) => {
       triggerPromises.push(
@@ -43,14 +45,14 @@ export const useFileActionsDeclineShare = ({ store }: { store?: Store<any> } = {
             const share = await triggerShareAction({
               resource,
               status: ShareStatus.declined,
-              hasResharing: unref(hasResharing),
-              hasShareJail: unref(hasShareJail),
+              hasResharing: capabilityStore.sharingResharing,
+              hasShareJail: capabilityStore.spacesShareJail,
               client: clientService.owncloudSdk,
-              spaces: store.getters['runtime/spaces/spaces'],
-              fullShareOwnerPaths: configurationManager.options.routing.fullShareOwnerPaths
+              spaces: spacesStore.spaces,
+              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })
             if (share) {
-              store.commit('Files/UPDATE_RESOURCE', share)
+              upsertResource(share)
             }
           } catch (error) {
             console.error(error)

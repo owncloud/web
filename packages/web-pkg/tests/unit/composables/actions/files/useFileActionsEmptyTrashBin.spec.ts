@@ -2,14 +2,7 @@ import { useFileActionsEmptyTrashBin } from '../../../../../src/composables/acti
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'jest-mock-extended'
-import {
-  createStore,
-  defaultStoreMockOptions,
-  getComposableWrapper,
-  defaultComponentMocks,
-  RouteLocation
-} from 'web-test-helpers'
-import { useStore } from '../../../../../src/composables/store'
+import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
 import { ProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
 import { FileActionOptions } from '../../../../../src/composables/actions'
@@ -92,11 +85,9 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useFileActionsEmptyTrashBin>,
     {
-      space,
-      storeOptions
+      space
     }: {
       space: ProjectSpaceResource
-      storeOptions: typeof defaultStoreMockOptions
     }
   ) => void
 }) {
@@ -117,19 +108,15 @@ function getWrapper({
     mocks.$clientService.webdav.clearTrashBin.mockRejectedValue(new Error(''))
   }
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(
       () => {
-        const store = useStore()
-        const instance = useFileActionsEmptyTrashBin({ store })
-        setup(instance, { space: mocks.space, storeOptions })
+        const instance = useFileActionsEmptyTrashBin()
+        setup(instance, { space: mocks.space })
       },
       {
         mocks,
-        provide: mocks,
-        store
+        provide: mocks
       }
     )
   }

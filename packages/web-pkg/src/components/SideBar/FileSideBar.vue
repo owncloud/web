@@ -45,19 +45,20 @@ import {
   SideBarEventTopics,
   useClientService,
   useEventBus,
-  useStore,
   useRouter,
   useActiveLocation,
   useExtensionRegistry,
   useSelectedResources,
-  useConfigurationManager
+  useSpacesStore,
+  useSharesStore,
+  useResourcesStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
   SpaceResource,
   Resource
 } from '@ownclouders/web-client/src/helpers'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -79,20 +80,21 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const router = useRouter()
     const clientService = useClientService()
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
-    const configurationManager = useConfigurationManager()
+    const spacesStore = useSpacesStore()
+    const { loadShares } = useSharesStore()
+
+    const resourcesStore = useResourcesStore()
+    const { currentFolder, ancestorMetaData } = storeToRefs(resourcesStore)
 
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
 
-    const { selectedResources } = useSelectedResources({ store })
-    const currentFolder = computed(() => {
-      return store.getters['Files/currentFolder']
-    })
+    const { selectedResources } = useSelectedResources()
+
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
         return {
@@ -191,18 +193,19 @@ export default defineComponent({
 
         isLoading.value = true
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
-          store.dispatch('Files/loadShares', {
-            client: clientService.owncloudSdk,
-            configurationManager,
+          loadShares({
+            clientService,
+            resource,
             path: resource.path,
             storageId: resource.fileId,
+            ancestorMetaData: unref(ancestorMetaData),
             // cache must not be used on flat file lists that gather resources from various locations
             useCached: !unref(isFlatFileList) && !unref(isProjectsLocation)
           })
         }
 
         if (isProjectSpaceResource(resource)) {
-          store.dispatch('runtime/spaces/loadSpaceMembers', {
+          spacesStore.loadSpaceMembers({
             graphClient: clientService.graphAuthenticated,
             space: resource
           })
@@ -216,7 +219,7 @@ export default defineComponent({
 
         // shared resources look different, hence we need to fetch the actual resource here
         try {
-          let shareResource = await (clientService.webdav as WebDAV).getFileInfo(props.space, {
+          let shareResource = await clientService.webdav.getFileInfo(props.space, {
             path: resource.path
           })
           shareResource.share = resource.share

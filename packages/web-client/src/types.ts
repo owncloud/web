@@ -16,6 +16,7 @@ export type OwnCloudSdk = {
     copy(...args): any
     move(...args): any
     delete(...args): any
+    favorite(...args): any
   }
   /** @deprecated */
   fileTrash: {
@@ -58,6 +59,7 @@ export type OwnCloudSdk = {
     shareFileWithGroup(...args): any
     shareFileWithUser(...args): any
     shareFileWithLink(...args): any
+    shareSpace(...args): any
     deleteShare(...args): any
     updateShare(...args): any
     notifyShare(...args): any

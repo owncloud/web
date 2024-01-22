@@ -8,6 +8,7 @@ export const ListFileVersionsFactory = (dav: DAV, { accessToken }: WebDavOptions
   return {
     async listFileVersions(id: string) {
       const headers = buildAuthHeader(unref(accessToken))
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [currentFolder, ...versions] = await dav.propfind(
         urlJoin('meta', id, 'v', { leadingSlash: true }),
         { headers }

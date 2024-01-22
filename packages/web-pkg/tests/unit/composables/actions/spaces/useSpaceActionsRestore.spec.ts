@@ -2,10 +2,8 @@ import { useSpaceActionsRestore } from '../../../../../src/composables/actions/s
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
   defaultComponentMocks,
   mockAxiosResolve,
-  defaultStoreMockOptions,
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
@@ -17,7 +15,7 @@ describe('restore', () => {
   describe('isEnabled property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
         }
       })
@@ -32,7 +30,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -48,7 +46,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
@@ -64,7 +62,7 @@ describe('restore', () => {
         special: null
       })
       getWrapper({
-        setup: ({ actions }, { storeOptions }) => {
+        setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
@@ -74,7 +72,7 @@ describe('restore', () => {
   describe('handler', () => {
     it('should trigger the restore modal window', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [
@@ -88,7 +86,7 @@ describe('restore', () => {
     })
     it('should not trigger the restore modal window without any resource', () => {
       getWrapper({
-        setup: async ({ actions }, { storeOptions }) => {
+        setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           await unref(actions)[0].handler({
             resources: [mock<SpaceResource>({ id: '1', canRestore: () => false })]
@@ -134,18 +132,12 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useSpaceActionsRestore>,
     {
-      storeOptions,
       clientService
     }: {
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-  const store = createStore(storeOptions)
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
   })
@@ -153,13 +145,12 @@ function getWrapper({
     mocks,
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsRestore({ store })
-        setup(instance, { storeOptions, clientService: mocks.$clientService })
+        const instance = useSpaceActionsRestore()
+        setup(instance, { clientService: mocks.$clientService })
       },
       {
         mocks,
         provide: mocks,
-        store,
         pluginOptions: {
           piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
         }

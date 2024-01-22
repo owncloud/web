@@ -40,15 +40,16 @@ Summary
 * Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
 * Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
 * Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
 * Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
-* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
-* Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -106,7 +107,9 @@ Summary
 * Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
 
 Details
 -------
@@ -369,6 +372,15 @@ Details
    https://github.com/owncloud/web/issues/10227
    https://github.com/owncloud/web/pull/10230
 
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+
+   We've fixed a bug, where the user data was not updated when altering the own
+   user via the admin settings app, this effected for example the username and
+   email address in the top bar.
+
+   https://github.com/owncloud/web/issues/10373
+   https://github.com/owncloud/web/pull/10377
+
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
    The handling of themes has been throughoutly reworked. Themes now feature a
@@ -464,18 +476,68 @@ Details
 
    https://github.com/owncloud/web/pull/10122
 
-* Change - Creating modals: [#10212](https://github.com/owncloud/web/pull/10212)
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
 
-   BREAKING CHANGE for developers: The way how to work with modals has been
-   reworked. Modals can now be registered via the `dispatchModal` method provided
-   by the `useModals` composable, instead of calling `createModal` or `hideModal`
-   from the store.
+   BREAKING CHANGE for developers: The vuex store has been removed in favor of
+   pinia.
 
-   For more details on how to use the modal please see the linked PR down below.
+   All store modules have been migrated to a pinia store module. Please see the
+   linked issue down below for a list of all migrated stores and how to use them
+   now.
 
-   https://github.com/owncloud/web/issues/10095
+   There are a number of things that have been removed and/or moved into pinia
+   composables instead:
+
+   Globals:
+
+   - `store` and `$store` variables have been removed. - `ConfigurationManager` has
+   been removed. The config now sits inside the configuration store.
+
+   App framework:
+
+   - `announceStore` has been removed. There is no need for apps to announce stores
+   to the runtime. If you need to use a store in your app, simply create a pinia
+   store module and use it. - `announceExtensions` has been removed. The proper way
+   for an app to register file extensions is via the `extensions` property inside
+   the `appInfo` object. - `requestStore` has been removed. There is no need to
+   request specific stores. All stores that `web-pkg` provides can be imported and
+   accessed via their composables. - `enabled` callback as well as the `name`
+   callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
+   - `store` param of the `ClassicApplicationScript` has been removed.
+
+   Composables:
+
+   - `useStore` has been removed. Use the pinia for the store you want to use
+   instead. - `useAccessToken` has been removed. It now sits inside the auth store.
+   - `usePublicLinkContext` has been removed. It now sits inside the auth store. -
+   `usePublicLinkPassword` has been removed. It now sits inside the auth store. -
+   `usePublicLinkToken` has been removed. It now sits inside the auth store. -
+   `useUserContext` has been removed. It now sits inside the auth store. -
+   `useConfigurationManager` has been removed. The config now sits inside the
+   configuration store. - `use...Capability` composables have been removed.
+   Capablities now sit inside the capability store.
+
+   For store specific changes please see the linked issue and PRs down below.
+
+   https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10212
-   https://github.com/owncloud/web/pull/10239
+   https://github.com/owncloud/web/pull/10240
+   https://github.com/owncloud/web/pull/10307
+   https://github.com/owncloud/web/pull/10309
+   https://github.com/owncloud/web/pull/10316
+   https://github.com/owncloud/web/pull/10323
+   https://github.com/owncloud/web/pull/10326
+   https://github.com/owncloud/web/pull/10329
+   https://github.com/owncloud/web/pull/10331
+   https://github.com/owncloud/web/pull/10336
+   https://github.com/owncloud/web/pull/10338
+   https://github.com/owncloud/web/pull/10341
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10349
+   https://github.com/owncloud/web/pull/10362
+   https://github.com/owncloud/web/pull/10363
+   https://github.com/owncloud/web/pull/10368
+   https://github.com/owncloud/web/pull/10372
 
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 
@@ -489,16 +551,21 @@ Details
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10240
 
-* Change - Message handling to pinia: [#10309](https://github.com/owncloud/web/pull/10309)
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 
-   BREAKING CHANGE for developers: Messages are no longer stored in a vuex store
-   but in pinia instead. This means to display a message in the UI, you need to use
-   the new `useMessages` composable.
+   BREAKING CHANGE for developers: The `announceExtensions` method inside the app's
+   `ready` hook, which could be used to register file editors, has been removed.
+   Developers should use the `extensions` property inside the `appInfo` object
+   instead.
 
-   For more details please see the linked PR down below.
+   Note that the `handler` property of such an extension has been renamed to
+   `createFileHandler`.
 
    https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10309
+   https://github.com/owncloud/web/pull/10330
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10357
+   https://github.com/owncloud/web/pull/10361
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
@@ -1068,12 +1135,28 @@ Details
    https://github.com/owncloud/web/pull/10111
    https://github.com/owncloud/web/pull/10152
 
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
+
+   We've enabled user preferences in public links, so any user even without an
+   account can open preferences in a public link context and for example change the
+   current language.
+
+   https://github.com/owncloud/web/pull/10207
+
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 
    We've adjusted the AppSwitcher icon colors to be more inline with the design.
 
    https://github.com/owncloud/web/issues/10121
    https://github.com/owncloud/web/pull/10224
+
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+
+   We've moved the ThemeSwitcher to the account settings page.
+
+   https://github.com/owncloud/web/issues/10181
+   https://github.com/owncloud/web/pull/10334
+   https://github.com/owncloud/web/pull/10342
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================

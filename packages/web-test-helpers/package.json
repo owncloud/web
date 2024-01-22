@@ -8,8 +8,7 @@
     "axios": "1.6.5",
     "pinia": "2.1.7",
     "vue-router": "4.2.5",
-    "vue3-gettext": "2.4.0",
-    "vuex": "4.1.0"
+    "vue3-gettext": "2.4.0"
   },
   "devDependencies": {
     "@pinia/testing": "^0.1.3"

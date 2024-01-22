@@ -63,15 +63,16 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapGetters, mapActions } from 'vuex'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
+  useConfigStore,
   useMessages,
   useModals,
+  useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
@@ -80,7 +81,7 @@ import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { configurationManager, defaultFuseOptions } from '@ownclouders/web-pkg'
+import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -92,15 +93,24 @@ export default defineComponent({
     const userStore = useUserStore()
     const clientService = useClientService()
     const { dispatchModal } = useModals()
+    const spacesStore = useSpacesStore()
+    const { deleteSpaceMember } = spacesStore
+    const { spaceMembers } = storeToRefs(spacesStore)
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const { user } = storeToRefs(userStore)
 
     return {
       user,
       clientService,
-      configurationManager,
+      configStore,
+      configOptions,
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
       dispatchModal,
+      spaceMembers,
+      deleteSpaceMember,
       ...useMessages()
     }
   },
@@ -112,19 +122,14 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    ...mapGetters('runtime/spaces', ['spaceMembers']),
-
     filteredSpaceMembers() {
       return this.filter(this.spaceMembers, this.filterTerm)
     },
     helpersEnabled() {
-      return this.configuration?.options?.contextHelpers
+      return this.configStore.options.contextHelpers
     },
     spaceAddMemberHelp() {
-      return shareSpaceAddMemberHelp({
-        configurationManager: this.configurationManager
-      })
+      return shareSpaceAddMemberHelp({ configStore: this.configStore })
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0
@@ -154,8 +159,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('runtime/spaces', ['deleteSpaceMember']),
-
     filter(collection, term) {
       if (!(term || '').trim()) {
         return collection

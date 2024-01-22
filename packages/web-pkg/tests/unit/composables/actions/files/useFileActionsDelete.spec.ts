@@ -5,15 +5,8 @@ import {
   useFileActionsDelete
 } from '../../../../../src/composables/actions'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useStore } from '../../../../../src/composables/store'
-
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import { CapabilityStore } from '../../../../../src/composables/piniaStores'
 
 jest.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')
 
@@ -42,11 +35,10 @@ describe('delete', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({
+        getWrapper({
           invalidLocation: inputData.invalidLocation,
           setup: () => {
-            const store = useStore()
-            const { actions } = useFileActionsDelete({ store })
+            const { actions } = useFileActionsDelete()
 
             const resources = inputData.resources
             expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
@@ -77,12 +69,11 @@ describe('delete', () => {
           expectedStatus: false
         }
       ])('should be set correctly', (inputData) => {
-        const { wrapper } = getWrapper({
+        getWrapper({
           deletePermanent: true,
           invalidLocation: inputData.invalidLocation,
           setup: () => {
-            const store = useStore()
-            const { actions } = useFileActionsDelete({ store })
+            const { actions } = useFileActionsDelete()
 
             const resources = inputData.resources
             expect(unref(actions)[1].isEnabled({ space: mock<SpaceResource>(), resources })).toBe(
@@ -118,12 +109,11 @@ describe('delete', () => {
         ])('should filter non deletable resources', ({ resources, deletableResourceIds }) => {
           const filesListDeleteMock = jest.fn()
 
-          const { wrapper } = getWrapper({
+          getWrapper({
             searchLocation: true,
             filesListDeleteMock,
             setup: () => {
-              const store = useStore()
-              const { actions } = useFileActionsDelete({ store })
+              const { actions } = useFileActionsDelete()
 
               unref(actions)[0].handler({ space: null, resources })
 
@@ -159,14 +149,15 @@ function getWrapper({
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.getters.capabilities.mockImplementation(() => ({ spaces: { enabled: true } }))
-  const store = createStore(storeOptions)
+  const capabilities = {
+    spaces: { enabled: true }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
   return {
     wrapper: getComposableWrapper(setup, {
       mocks,
       provide: mocks,
-      store
+      pluginOptions: { piniaOptions: { capabilityState: { capabilities } } }
     })
   }
 }

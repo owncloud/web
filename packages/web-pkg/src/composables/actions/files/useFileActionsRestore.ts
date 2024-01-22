@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { dirname } from 'path'
 import { isLocationTrashActive } from '../../../router'
 
@@ -15,27 +14,31 @@ import {
   ConflictDialog
 } from '../../../helpers/resource'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { useCapabilitySpacesEnabled } from '../../capability'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
-import { useMessages, useUserStore } from '../../piniaStores'
+import {
+  useMessages,
+  useSpacesStore,
+  useUserStore,
+  useCapabilityStore,
+  useResourcesStore
+} from '../../piniaStores'
 
-export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsRestore = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-
-  const hasSpacesEnabled = useCapabilitySpacesEnabled()
+  const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   const collectConflicts = async (space: SpaceResource, sortedResources: Resource[]) => {
     const existingResourcesCache = {}
@@ -176,8 +179,9 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
 
     // success handler (for partial and full success)
     if (restoredResources.length) {
-      store.dispatch('Files/removeFilesFromTrashbin', restoredResources)
-      let title
+      resourcesStore.removeResources(restoredResources)
+      resourcesStore.resetSelection()
+      let title: string
       if (restoredResources.length === 1) {
         title = $gettext('%{resource} was restored successfully', {
           resource: restoredResources[0].name
@@ -205,10 +209,10 @@ export const useFileActionsRestore = ({ store }: { store?: Store<any> } = {}) =>
     }
 
     // Reload quota
-    if (unref(hasSpacesEnabled)) {
+    if (capabilityStore.spacesEnabled) {
       const graphClient = clientService.graphAuthenticated
       const driveResponse = await graphClient.drives.getDrive(space.id as string)
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+      spacesStore.updateSpaceField({
         id: driveResponse.data.id,
         field: 'spaceQuota',
         value: driveResponse.data.quota

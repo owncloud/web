@@ -89,7 +89,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { eventBus, useCapabilityCoreSSE } from '@ownclouders/web-pkg'
+import { eventBus, useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
@@ -97,8 +97,7 @@ import {
   formatDateFromISO,
   formatRelativeDateFromISO,
   useClientService,
-  useRoute,
-  useStore
+  useRoute
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
@@ -112,7 +111,8 @@ export default {
     NotificationBell
   },
   setup() {
-    const store = useStore()
+    const spacesStore = useSpacesStore()
+    const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const route = useRoute()
@@ -121,7 +121,6 @@ export default {
     const loading = ref(false)
     const notificationsInterval = ref()
     const dropdownOpened = ref(false)
-    const sseEnabled = useCapabilityCoreSSE()
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -172,7 +171,7 @@ export default {
         }
       }
       if (object_type === 'storagespace' && messageRichParameters?.space?.id) {
-        const space = store.getters['runtime/spaces/spaces'].find(
+        const space = spacesStore.spaces.find(
           (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
         )
         if (space) {
@@ -305,9 +304,9 @@ export default {
       setAdditionalData()
     }
 
-    onMounted(async () => {
+    onMounted(() => {
       fetchNotificationsTask.perform()
-      if (unref(sseEnabled)) {
+      if (unref(capabilityStore.supportSSE)) {
         clientService.sseAuthenticated.addEventListener(
           MESSAGE_TYPE.NOTIFICATION,
           onSSENotificationEvent
@@ -320,7 +319,7 @@ export default {
     })
 
     onUnmounted(() => {
-      if (unref(sseEnabled)) {
+      if (unref(capabilityStore.supportSSE)) {
         clientService.sseAuthenticated.removeEventListener(
           MESSAGE_TYPE.NOTIFICATION,
           onSSENotificationEvent

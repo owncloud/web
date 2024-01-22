@@ -83,14 +83,18 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, Ref } from 'vue'
-import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from '@ownclouders/web-client/src'
 import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { formatRelativeDateFromDateTime, useConfigurationManager } from '@ownclouders/web-pkg'
+import {
+  formatRelativeDateFromDateTime,
+  useCapabilityStore,
+  useConfigStore
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -129,8 +133,10 @@ export default defineComponent({
     'notifyShare'
   ],
   setup(props, { emit }) {
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const language = useGettext()
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
 
     const toggleShareDenied = (value) => {
       emit('setDenyShare', value)
@@ -144,10 +150,12 @@ export default defineComponent({
     )
 
     return {
-      configurationManager,
+      configStore,
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
-      dateExpire
+      dateExpire,
+      userExpirationDate: capabilityRefs.sharingUserExpireDate,
+      groupExpirationDate: capabilityRefs.sharingGroupExpireDate
     }
   },
   data: function () {
@@ -156,8 +164,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['capabilities']),
-
     options() {
       return [
         {
@@ -190,7 +196,7 @@ export default defineComponent({
         {
           title: this.$gettext('Notify via mail'),
           method: () => this.$emit('notifyShare'),
-          enabled: this.configurationManager.options.isRunningOnEos,
+          enabled: this.configStore.options.isRunningOnEos,
           icon: 'mail',
           class: 'notify-via-mail'
         }
@@ -239,14 +245,6 @@ export default defineComponent({
       }
 
       return this.userExpirationDate.enabled || this.groupExpirationDate.enabled
-    },
-
-    userExpirationDate() {
-      return this.capabilities.files_sharing.user.expire_date
-    },
-
-    groupExpirationDate() {
-      return this.capabilities.files_sharing.group?.expire_date
     },
 
     defaultExpirationDate() {

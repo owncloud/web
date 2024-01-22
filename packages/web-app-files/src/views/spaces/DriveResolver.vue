@@ -16,15 +16,14 @@ import GenericTrash from './GenericTrash.vue'
 import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import {
   queryItemAsString,
+  useAuthStore,
   useClientService,
-  useConfigurationManager,
+  useConfigStore,
   useDriveResolver,
   useGetMatchingSpace,
   useRouteParam,
   useRouteQuery,
-  useRouter,
-  useStore,
-  useUserContext
+  useRouter
 } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import { createLocationSpaces, isLocationTrashActive } from '@ownclouders/web-pkg'
@@ -49,15 +48,14 @@ export default defineComponent({
     AppLoadingSpinner
   },
   setup() {
-    const store = useStore()
-    const isUserContext = useUserContext({ store })
+    const authStore = useAuthStore()
+    const configStore = useConfigStore()
     const clientService = useClientService()
     const router = useRouter()
     const driveAliasAndItem = useRouteParam('driveAliasAndItem')
     const isTrashRoute = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
-    const resolvedDrive = useDriveResolver({ store, driveAliasAndItem })
+    const resolvedDrive = useDriveResolver({ driveAliasAndItem })
     const { getInternalSpace } = useGetMatchingSpace()
-    const configurationManager = useConfigurationManager()
 
     const loading = ref(true)
     const isLoading = computed(() => {
@@ -99,7 +97,7 @@ export default defineComponent({
             query: {
               ...query,
               scrollTo: unref(resource).fileId,
-              ...(configurationManager.options.openLinksWithDefaultApp && {
+              ...(configStore.options.openLinksWithDefaultApp && {
                 openWithDefaultApp: 'true'
               })
             }
@@ -112,7 +110,7 @@ export default defineComponent({
         name: 'resolvePrivateLink',
         params: { fileId: unref(fileId) },
         query: {
-          ...(configurationManager.options.openLinksWithDefaultApp && {
+          ...(configStore.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'
           })
         }
@@ -125,7 +123,7 @@ export default defineComponent({
           name: 'resolvePrivateLink',
           params: { fileId: unref(fileId) },
           query: {
-            ...(configurationManager.options.openLinksWithDefaultApp && {
+            ...(configStore.options.openLinksWithDefaultApp && {
               openWithDefaultApp: 'true'
             })
           }
@@ -134,8 +132,8 @@ export default defineComponent({
 
       const space = unref(resolvedDrive.space)
       if (space && isPublicSpaceResource(space)) {
-        const isRunningOnEos = store.getters.configuration?.options?.runningOnEos
-        if (unref(isUserContext) && unref(fileId) && !isRunningOnEos) {
+        const isRunningOnEos = configStore.options.runningOnEos
+        if (authStore.userContextReady && unref(fileId) && !isRunningOnEos) {
           try {
             const path = await clientService.webdav.getPathForFileId(unref(fileId))
             await resolveToInternalLocation(path)

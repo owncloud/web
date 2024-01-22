@@ -1,11 +1,10 @@
 import { Action } from '../actions'
 import { SearchProvider, SideBarPanel } from '../../components'
 import { defineStore } from 'pinia'
-import { Ref, hasInjectionContext, unref } from 'vue'
-import { useConfigurationManager } from '../configuration'
-import { ConfigurationManager } from '../../configuration'
+import { Ref, unref } from 'vue'
 import { AppNavigationItem } from '../../apps'
 import { Item } from '@ownclouders/web-client/src/helpers'
+import { useConfigStore } from './config'
 
 export type ExtensionScope = 'resource' | 'user' | 'group' | string
 
@@ -42,14 +41,8 @@ export type Extension =
   | SidebarNavExtension
   | SidebarPanelExtension<Item, Item, Item>
 
-export const useExtensionRegistry = ({
-  configurationManager
-}: { configurationManager?: ConfigurationManager } = {}) => {
-  if (!hasInjectionContext() && !configurationManager) {
-    throw new Error('no injection context, you need to pass configuration manager via options')
-  }
-
-  const { options } = configurationManager || useConfigurationManager()
+export const useExtensionRegistry = () => {
+  const configStore = useConfigStore()
 
   return defineStore('extensionRegistry', {
     state: () => ({ extensions: [] as Ref<Extension[]>[] }),
@@ -67,7 +60,7 @@ export const useExtensionRegistry = ({
               unref(e).filter(
                 (e) =>
                   e.type === type &&
-                  !options.disabledExtensions.includes(e.id) &&
+                  !configStore.options.disabledExtensions.includes(e.id) &&
                   (!scopes || e.scopes?.some((s) => scopes.includes(s)))
               )
             )

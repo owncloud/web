@@ -104,11 +104,14 @@
 import {
   createLocationCommon,
   isLocationCommonActive,
-  isLocationSpacesActive
+  isLocationSpacesActive,
+  useAuthStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
+import { storeToRefs } from 'pinia'
 import { debounce } from 'lodash-es'
-import { useRouteQuery, useRouter, useStore, useUserContext } from '@ownclouders/web-pkg'
+import { useRouteQuery, useRouter } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from '@ownclouders/web-pkg'
@@ -119,12 +122,18 @@ export default defineComponent({
   name: 'SearchBar',
   components: { SearchBarFilter },
   setup() {
-    const store = useStore()
     const router = useRouter()
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
     const availableProviders = useAvailableProviders()
+
+    const authStore = useAuthStore()
+    const { userContextReady } = storeToRefs(authStore)
+
+    const resourcesStore = useResourcesStore()
+    const { currentFolder } = storeToRefs(resourcesStore)
+
     const locationFilterId = ref(SearchLocationFilterConstants.everywhere)
     const optionsDropRef = ref(null)
     const activePreviewIndex = ref(null)
@@ -175,11 +184,10 @@ export default defineComponent({
         unref(currentFolderAvailable) &&
         unref(locationFilterId) === SearchLocationFilterConstants.inHere
       ) {
-        const currentFolder = store.getters['Files/currentFolder']
         let scope
 
-        if (currentFolder?.fileId) {
-          scope = currentFolder?.fileId
+        if (unref(currentFolder)?.fileId) {
+          scope = unref(currentFolder)?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
@@ -211,11 +219,10 @@ export default defineComponent({
 
       if (unref(activePreviewIndex) === null) {
         const currentQuery = unref(router.currentRoute).query
-        const currentFolder = store.getters['Files/currentFolder']
 
         let scope
-        if (unref(currentFolderAvailable) && currentFolder?.fileId) {
-          scope = currentFolder?.fileId
+        if (unref(currentFolderAvailable) && unref(currentFolder)?.fileId) {
+          scope = unref(currentFolder)?.fileId
         } else {
           scope = unref(scopeQueryValue)
         }
@@ -271,13 +278,12 @@ export default defineComponent({
     }
 
     return {
-      isUserContext: useUserContext({ store }),
+      userContextReady,
       showCancelButton,
       onLocationFilterChange,
       currentFolderAvailable,
       listProviderAvailable,
       locationFilterAvailable,
-      store,
       scopeQueryValue,
       optionsDrop,
       optionsDropRef,
@@ -308,7 +314,7 @@ export default defineComponent({
     },
 
     isSearchBarEnabled() {
-      return this.availableProviders.length && this.isUserContext
+      return this.availableProviders.length && this.userContextReady
     },
     displayProviders() {
       /**

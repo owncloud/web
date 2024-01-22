@@ -1,0 +1,7 @@
+Bugfix: User data not updated while altering own user
+
+We've fixed a bug, where the user data was not updated when altering the own user via the admin settings app,
+this effected for example the username and email address in the top bar.
+
+https://github.com/owncloud/web/pull/10377
+https://github.com/owncloud/web/issues/10373

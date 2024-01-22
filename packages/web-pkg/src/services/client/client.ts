@@ -5,11 +5,10 @@ import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
-import { ConfigurationManager } from '../../configuration'
-import { Store } from 'vuex'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
+import { AuthStore, ConfigStore } from '../../composables'
 
 interface OcClient {
   token: string
@@ -51,15 +50,15 @@ const createAxiosInstance = (authParams: AuthParameters, language: string): Axio
 }
 
 export interface ClientServiceOptions {
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   language: Language
-  store: Store<any>
+  authStore: AuthStore
 }
 
 export class ClientService {
-  private configurationManager: ConfigurationManager
+  private configStore: ConfigStore
   private language: Language
-  private store: Store<any>
+  private authStore: AuthStore
 
   private httpAuthenticatedClient: HttpClient
   private httpUnAuthenticatedClient: HttpClient
@@ -71,9 +70,9 @@ export class ClientService {
   private webdavClient: WebDAV
 
   constructor(options: ClientServiceOptions) {
-    this.configurationManager = options.configurationManager
+    this.configStore = options.configStore
     this.language = options.language
-    this.store = options.store
+    this.authStore = options.authStore
   }
 
   public get httpAuthenticated(): _HttpClient {
@@ -92,21 +91,21 @@ export class ClientService {
 
   public get graphAuthenticated(): Graph {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
+      this.ocUserContextClient = this.getOcsClient({ accessToken: this.authStore.accessToken })
     }
     return this.ocUserContextClient.graph
   }
 
   public get sseAuthenticated(): EventSource {
     return sse(
-      this.configurationManager.serverUrl,
-      createFetchOptions({ accessToken: this.token }, this.currentLanguage)
+      this.configStore.serverUrl,
+      createFetchOptions({ accessToken: this.authStore.accessToken }, this.currentLanguage)
     )
   }
 
   public get ocsUserContext(): OCS {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcsClient({ accessToken: this.token })
+      this.ocUserContextClient = this.getOcsClient({ accessToken: this.authStore.accessToken })
     }
     return this.ocUserContextClient.ocs
   }
@@ -114,7 +113,7 @@ export class ClientService {
   public ocsPublicLinkContext(password?: string): OCS {
     if (this.clientNeedsInit(this.ocPublicLinkContextClient)) {
       this.ocPublicLinkContextClient = this.getOcsClient({
-        publicLinkToken: this.token,
+        publicLinkToken: this.authStore.accessToken,
         publicLinkPassword: password
       })
     }
@@ -123,13 +122,13 @@ export class ClientService {
 
   private getHttpClient(authenticated = false): HttpClient {
     return {
-      ...(!!authenticated && { token: this.token }),
+      ...(!!authenticated && { token: this.authStore.accessToken }),
       language: this.currentLanguage,
       client: new _HttpClient({
-        baseURL: this.configurationManager.serverUrl,
+        baseURL: this.configStore.serverUrl,
         headers: {
           'Accept-Language': this.currentLanguage,
-          ...(!!authenticated && { Authorization: 'Bearer ' + this.token }),
+          ...(!!authenticated && { Authorization: 'Bearer ' + this.authStore.accessToken }),
           'X-Requested-With': 'XMLHttpRequest',
           'X-Request-ID': uuidV4()
         }
@@ -139,11 +138,11 @@ export class ClientService {
 
   private getOcsClient(authParams: AuthParameters): OcClient {
     const { graph, ocs } = client(
-      this.configurationManager.serverUrl,
+      this.configStore.serverUrl,
       createAxiosInstance(authParams, this.currentLanguage)
     )
     return {
-      token: this.token,
+      token: this.authStore.accessToken,
       language: this.currentLanguage,
       graph,
       ocs
@@ -153,7 +152,7 @@ export class ClientService {
   private clientNeedsInit(client, hasToken = true) {
     return (
       !client ||
-      (hasToken && client.token !== this.token) ||
+      (hasToken && client.token !== this.authStore.accessToken) ||
       client.language !== this.currentLanguage
     )
   }
@@ -172,10 +171,6 @@ export class ClientService {
 
   public set webdav(webdav: WebDAV) {
     this.webdavClient = webdav
-  }
-
-  get token(): string {
-    return this.store.getters['runtime/auth/accessToken']
   }
 
   get currentLanguage(): string {

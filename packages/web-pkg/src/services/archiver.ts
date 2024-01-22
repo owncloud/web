@@ -6,24 +6,10 @@ import { RuntimeError } from '../errors'
 import { HttpError } from '@ownclouders/web-client/src/errors'
 import { ClientService } from '../services'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { configurationManager } from '../configuration'
 import { triggerDownloadWithFilename } from '../../'
 
 import { Ref, ref, computed, unref } from 'vue'
-
-/**
- * Archiver struct within the capabilities as defined in reva
- * @see https://github.com/cs3org/reva/blob/41d5a6858c2200a61736d2c165e551b9785000d1/internal/http/services/owncloud/ocs/data/capabilities.go#L105
- */
-export interface ArchiverCapability {
-  enabled: boolean
-  version: string // version is just a major version, e.g. `v2`
-  formats: string[]
-  // eslint-disable-next-line camelcase
-  archiver_url: string
-  max_num_files: string
-  max_size: string
-}
+import { ArchiverCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 
 interface TriggerDownloadOptions {
   dir?: string
@@ -141,7 +127,7 @@ export class ArchiverService {
     if (/^https?:\/\//i.test(capability.archiver_url)) {
       return capability.archiver_url
     }
-    return urlJoin(configurationManager.serverUrl, capability.archiver_url)
+    return urlJoin(this.serverUrl, capability.archiver_url)
   }
 
   private getFileNameFromResponseHeaders(headers) {

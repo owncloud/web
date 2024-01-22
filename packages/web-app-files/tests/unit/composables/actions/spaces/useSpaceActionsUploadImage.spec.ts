@@ -1,15 +1,13 @@
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/actions/spaces/useSpaceActionsUploadImage'
 import { mock } from 'jest-mock-extended'
 import {
-  createStore,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   RouteLocation,
   getComposableWrapper,
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
-import { eventBus, useMessages, useStore } from '@ownclouders/web-pkg'
+import { eventBus, useMessages } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -83,11 +81,9 @@ function getWrapper({
   setup: (
     instance: ReturnType<typeof useSpaceActionsUploadImage>,
     {
-      spaceImageInput,
-      storeOptions
+      spaceImageInput
     }: {
       spaceImageInput: VNodeRef
-      storeOptions: typeof defaultStoreMockOptions
       clientService: ReturnType<typeof defaultComponentMocks>['$clientService']
     }
   ) => void
@@ -99,14 +95,11 @@ function getWrapper({
   }
   mocks.$previewService.isMimetypeSupported.mockReturnValue(true)
 
-  const storeOptions = defaultStoreMockOptions
-  const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(
       () => {
-        const store = useStore()
         const spaceImageInput = mock<VNodeRef>()
-        const instance = useSpaceActionsUploadImage({ store, spaceImageInput })
+        const instance = useSpaceActionsUploadImage({ spaceImageInput })
         unref(instance.actions)[0].handler({
           resources: [
             mock<SpaceResource>({
@@ -114,12 +107,11 @@ function getWrapper({
             })
           ]
         })
-        setup(instance, { spaceImageInput, storeOptions, clientService: mocks.$clientService })
+        setup(instance, { spaceImageInput, clientService: mocks.$clientService })
       },
       {
         mocks,
-        provide: mocks,
-        store
+        provide: mocks
       }
     )
   }

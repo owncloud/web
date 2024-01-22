@@ -1,10 +1,8 @@
 import { ref } from 'vue'
 import AppTemplate from '../../../src/components/AppTemplate.vue'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
-  defaultStoreMockOptions,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
@@ -24,8 +22,6 @@ const elSelectors = {
 }
 
 jest.mock('@ownclouders/web-pkg')
-
-afterEach(() => jest.clearAllMocks())
 
 describe('AppTemplate', () => {
   describe('loading is true', () => {
@@ -65,13 +61,13 @@ describe('AppTemplate', () => {
       const { wrapper } = getWrapper({ props: { isSideBarOpen: false } })
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
-    it('can be closed', async () => {
+    it('can be closed', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       const { wrapper } = getWrapper()
       ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('close')
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.close)
     })
-    it('panel can be selected', async () => {
+    it('panel can be selected', () => {
       const eventSpy = jest.spyOn(eventBus, 'publish')
       const panelName = 'SomePanel'
       const { wrapper } = getWrapper()
@@ -114,9 +110,6 @@ describe('AppTemplate', () => {
   })
 })
 
-const storeOptions = { ...defaultStoreMockOptions }
-const store = createStore(storeOptions)
-
 function getWrapper({ props = {}, isMobileWidth = false } = {}) {
   return {
     wrapper: shallowMount(AppTemplate, {
@@ -129,7 +122,7 @@ function getWrapper({ props = {}, isMobileWidth = false } = {}) {
         ...props
       },
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         provide: { isMobileWidth: ref(isMobileWidth) },
         stubs: {
           OcButton: false

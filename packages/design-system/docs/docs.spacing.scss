@@ -21,7 +21,7 @@ $spacing-ratio: 1.7;
 //
 // @param  {Number} inset-squish-space to set
 @mixin inset-squish-space($value) {
-  padding: round($value / $spacing-ratio - 1px) $value round($value / $spacing-ratio);
+  padding: round(calc($value / $spacing-ratio) - 1px) $value round(calc($value / $spacing-ratio));
 }
 
 // Create stack-space

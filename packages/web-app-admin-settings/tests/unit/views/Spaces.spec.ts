@@ -2,13 +2,7 @@ import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
 import { Graph } from '@ownclouders/web-client'
 import { mockDeep } from 'jest-mock-extended'
 import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStoreMockOptions,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 
@@ -122,13 +116,10 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
     $clientService
   }
 
-  const storeOptions = { ...defaultStoreMockOptions }
-  const store = createStore(storeOptions)
-
   return {
     wrapper: mount(Spaces, {
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks,
         stubs: {

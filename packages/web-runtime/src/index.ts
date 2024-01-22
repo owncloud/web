@@ -1,6 +1,6 @@
 import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { PortalTarget, configurationManager } from '@ownclouders/web-pkg'
+import { PortalTarget } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -13,7 +13,6 @@ import {
   announceClient,
   announceDefaults,
   announceClientService,
-  announceStore,
   announceTheme,
   announcePiniaStores,
   announceCustomStyles,
@@ -35,32 +34,36 @@ import {
   buildPublicSpaceResource,
   isPersonalSpaceResource,
   isPublicSpaceResource,
-  Resource
+  PublicSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
-import { computed, createApp } from 'vue'
+import { computed, createApp, watch } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
-import { get } from 'lodash-es'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()
   const app = createApp(pages.success)
   app.use(pinia)
 
-  const { userStore } = announcePiniaStores()
+  const {
+    appsStore,
+    authStore,
+    configStore,
+    capabilityStore,
+    extensionRegistry,
+    spacesStore,
+    userStore,
+    resourcesStore
+  } = announcePiniaStores()
 
   app.provide('$router', router)
 
-  const runtimeConfiguration = await announceConfiguration(configurationPath)
-  startSentry(runtimeConfiguration, app)
-
-  const store = await announceStore({ runtimeConfiguration })
-  app.provide('$store', store)
-  app.provide('store', store)
+  await announceConfiguration({ path: configurationPath, configStore })
+  startSentry(configStore, app)
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
@@ -71,27 +74,40 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceUppyService({ app })
 
-  announceClientService({ app, runtimeConfiguration, configurationManager, store, userStore })
+  announceClientService({
+    app,
+    configStore,
+    userStore,
+    authStore,
+    capabilityStore
+  })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
-    store.getters.configuration.server || window.location.origin,
-    computed(() =>
-      get(store, 'getters.capabilities.files.archivers', [
-        {
-          enabled: true,
-          version: '1.0.0',
-          formats: ['tar', 'zip'],
-          archiver_url: `${store.getters.configuration.server}index.php/apps/files/ajax/download.php`
-        }
-      ])
+    configStore.serverUrl,
+    computed(
+      () =>
+        capabilityStore.filesArchivers || [
+          {
+            enabled: true,
+            version: '1.0.0',
+            formats: ['tar', 'zip'],
+            archiver_url: `${configStore.serverUrl}index.php/apps/files/ajax/download.php`
+          }
+        ]
     )
   )
   app.provide('$archiverService', app.config.globalProperties.$archiverService)
   announceLoadingService({ app })
-  announcePreviewService({ app, store, configurationManager, userStore })
+  announcePreviewService({
+    app,
+    configStore,
+    userStore,
+    authStore,
+    capabilityStore
+  })
   announcePasswordPolicyService({ app })
-  await announceClient(runtimeConfiguration)
+  await announceClient(configStore)
 
   app.config.globalProperties.$wormhole = createWormhole()
   app.use(PortalVue, {
@@ -103,16 +119,14 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   const applicationsPromise = initializeApplications({
     app,
-    runtimeConfiguration,
-    configurationManager,
-    store,
+    configStore,
     supportedLanguages,
     router,
     gettext
   })
 
-  const customTranslationsPromise = loadCustomTranslations({ configurationManager })
-  const themePromise = announceTheme({ app, designSystem, runtimeConfiguration })
+  const customTranslationsPromise = loadCustomTranslations({ configStore })
+  const themePromise = announceTheme({ app, designSystem, configStore })
   const [customTranslations] = await Promise.all([
     customTranslationsPromise,
     applicationsPromise,
@@ -121,13 +135,19 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
 
-  announceAuthService({ app, configurationManager, store, router, userStore })
-  announceCustomStyles({ runtimeConfiguration })
-  announceCustomScripts({ runtimeConfiguration })
-  announceDefaults({ store, router })
+  announceAuthService({
+    app,
+    configStore,
+    router,
+    userStore,
+    authStore,
+    capabilityStore
+  })
+  announceCustomStyles({ configStore })
+  announceCustomScripts({ configStore })
+  announceDefaults({ appsStore, router, extensionRegistry, configStore })
 
   app.use(router)
-  app.use(store)
   app.use(createHead())
 
   app.component('AvatarImage', Avatar)
@@ -135,32 +155,28 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   app.mount('#owncloud')
 
-  setViewOptions({ store })
+  setViewOptions({ resourcesStore })
 
   const applications = Array.from(applicationStore.values())
   applications.forEach((application) => application.mounted(app))
 
-  store.watch(
-    (state, getters) =>
-      getters['runtime/auth/isUserContextReady'] ||
-      getters['runtime/auth/isIdpContextReady'] ||
-      getters['runtime/auth/isPublicLinkContextReady'],
+  watch(
+    () =>
+      authStore.userContextReady || authStore.idpContextReady || authStore.publicLinkContextReady,
     async (newValue, oldValue) => {
       if (!newValue || newValue === oldValue) {
         return
       }
-      announceVersions({ store })
-      await announceApplicationsReady({ app, store, applications })
+      announceVersions({ capabilityStore })
+      await announceApplicationsReady({ app, appsStore, applications })
     },
     {
       immediate: true
     }
   )
 
-  store.watch(
-    (state, getters) => {
-      return getters['runtime/auth/isUserContextReady']
-    },
+  watch(
+    () => authStore.userContextReady,
     async (userContextReady) => {
       if (!userContextReady) {
         return
@@ -168,25 +184,22 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
       const clientService = app.config.globalProperties.$clientService
       const passwordPolicyService = app.config.globalProperties.passwordPolicyService
-      passwordPolicyService.initialize(store)
+      passwordPolicyService.initialize(capabilityStore)
 
       // Register SSE event listeners
-      if (store.getters.capabilities?.core?.['support-sse']) {
-        registerSSEEventListeners({ store, clientService, configurationManager })
+      if (capabilityStore.supportSSE) {
+        registerSSEEventListeners({ resourcesStore, clientService, configStore })
       }
 
       // Load spaces to make them available across the application
-      const graphClient = clientService.graphAuthenticated
-      await store.dispatch('runtime/spaces/loadSpaces', { graphClient })
-      const personalSpace = store.getters['runtime/spaces/spaces'].find((space) =>
-        isPersonalSpaceResource(space)
-      )
+      await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
+      const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
 
       if (!personalSpace) {
         return
       }
 
-      store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
+      spacesStore.updateSpaceField({
         id: personalSpace.id,
         field: 'name',
         value: app.config.globalProperties.$gettext('Personal')
@@ -196,61 +209,56 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       immediate: true
     }
   )
-  store.watch(
-    (state, getters) => {
-      return getters['runtime/auth/isPublicLinkContextReady']
-    },
+  watch(
+    () => authStore.publicLinkContextReady,
     (publicLinkContextReady) => {
       if (!publicLinkContextReady) {
         return
       }
       // Create virtual space for public link
-      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
-      const publicLinkPassword = store.getters['runtime/auth/publicLinkPassword']
-      const publicLinkType = store.getters['runtime/auth/publicLinkType']
+      const publicLinkToken = authStore.publicLinkToken
+      const publicLinkPassword = authStore.publicLinkPassword
+      const publicLinkType = authStore.publicLinkType
 
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
         name: app.config.globalProperties.$gettext('Public files'),
         ...(publicLinkPassword && { publicLinkPassword }),
-        serverUrl: configurationManager.serverUrl,
+        serverUrl: configStore.serverUrl,
         publicLinkType: publicLinkType
       })
 
-      store.commit('runtime/spaces/ADD_SPACES', [space])
-      store.commit('runtime/spaces/SET_SPACES_INITIALIZED', true)
+      spacesStore.addSpaces([space])
+      spacesStore.setSpacesInitialized(true)
     },
     {
       immediate: true
     }
   )
-  store.watch(
+  watch(
     // only needed if a public link gets re-resolved with a changed password prop (changed or removed).
     // don't need to set { immediate: true } on the watcher.
-    (state, getters) => {
-      return getters['runtime/auth/publicLinkPassword']
-    },
+    () => authStore.publicLinkPassword,
     (publicLinkPassword: string | undefined) => {
-      const publicLinkToken = store.getters['runtime/auth/publicLinkToken']
-      const space = store.getters['runtime/spaces/spaces'].find((space: Resource) => {
+      const publicLinkToken = authStore.publicLinkToken
+      const space = spacesStore.spaces.find((space) => {
         return isPublicSpaceResource(space) && space.id === publicLinkToken
       })
       if (!space) {
         return
       }
-      space.publicLinkPassword = publicLinkPassword
+      ;(space as PublicSpaceResource).publicLinkPassword = publicLinkPassword
     }
   )
 }
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
-  const store = await announceStore({ runtimeConfiguration: {} })
-  announceVersions({ store })
+  const { capabilityStore, configStore } = announcePiniaStores()
+  announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
-  await announceTheme({ app, designSystem })
+  await announceTheme({ app, designSystem, configStore })
   console.error(err)
-  app.use(store)
-  await announceTranslations({
+  announceTranslations({
     app,
     availableLanguages: supportedLanguages,
     translations

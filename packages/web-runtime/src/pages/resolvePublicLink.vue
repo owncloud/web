@@ -64,15 +64,14 @@ import { authService } from '../services/auth'
 
 import {
   queryItemAsString,
+  useAuthStore,
   useClientService,
-  useConfigurationManager,
+  useConfigStore,
   useRoute,
   useRouteParam,
   useRouteQuery,
   useRouter,
-  useStore,
-  useThemeStore,
-  useUserContext
+  useThemeStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { ref, unref, computed, defineComponent, onMounted } from 'vue'
@@ -93,11 +92,11 @@ import { storeToRefs } from 'pinia'
 export default defineComponent({
   name: 'ResolvePublicLink',
   setup() {
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const clientService = useClientService()
     const router = useRouter()
     const route = useRoute()
-    const store = useStore()
+    const authStore = useAuthStore()
     const { $gettext } = useGettext()
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
@@ -128,15 +127,13 @@ export default defineComponent({
       return queryItemAsString(unref(route).params.driveAliasAndItem)
     })
 
-    const isUserContext = useUserContext({ store })
-
     const detailsQuery = useRouteQuery('details')
     const details = computed(() => {
       return queryItemAsString(unref(detailsQuery))
     })
 
     // token info
-    const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, isUserContext })
+    const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, authStore })
     const tokenInfo = ref(null)
 
     // generic public link loading
@@ -198,7 +195,7 @@ export default defineComponent({
       })
     }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
-      if (unref(isOcmLink) && !configurationManager.options.ocm.openRemotely) {
+      if (unref(isOcmLink) && !configStore.options.ocm.openRemotely) {
         throw new Error($gettext('Opening files from remote is disabled'))
       }
 
@@ -263,7 +260,7 @@ export default defineComponent({
       const targetLocation: RouteLocationNamedRaw = {
         name: 'files-public-link',
         query: {
-          ...(configurationManager.options.openLinksWithDefaultApp && {
+          ...(configStore.options.openLinksWithDefaultApp && {
             openWithDefaultApp: 'true'
           }),
           ...(!!fileId && { fileId }),

@@ -129,7 +129,6 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { mapActions } from 'vuex'
 import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
@@ -137,14 +136,15 @@ import RoleDropdown from './RoleDropdown.vue'
 import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   queryItemAsString,
-  useCapabilityFilesSharingResharing,
-  useCapabilityFilesSharingResharingDefault,
   useMessages,
   useModals,
-  useUserStore
+  useSpacesStore,
+  useUserStore,
+  useCapabilityStore,
+  useSharesStore
 } from '@ownclouders/web-pkg'
-import { extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
-import { computed, defineComponent, PropType } from 'vue'
+import { Resource, extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
+import { computed, defineComponent, inject, PropType, Ref } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
@@ -188,9 +188,14 @@ export default defineComponent({
   setup(props, { emit }) {
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
+    const capabilityStore = useCapabilityStore()
+    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { dispatchModal } = useModals()
+    const { changeSpaceMember } = useSpacesStore()
+
+    const { updateShare } = useSharesStore()
 
     const { user } = storeToRefs(userStore)
 
@@ -233,9 +238,12 @@ export default defineComponent({
     }
 
     return {
-      hasResharing: useCapabilityFilesSharingResharing(),
-      resharingDefault: useCapabilityFilesSharingResharingDefault(),
+      resource: inject<Ref<Resource>>('resource'),
+      changeSpaceMember,
+      updateShare,
       user,
+      hasResharing: capabilityRefs.sharingResharing,
+      resharingDefault: capabilityRefs.sharingResharingDefault,
       clientService,
       sharedParentDir,
       setDenyShare,
@@ -417,9 +425,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions('Files', ['changeShare']),
-    ...mapActions('runtime/spaces', ['changeSpaceMember']),
-
     removeShare() {
       this.$emit('onDelete', this.share)
     },
@@ -466,17 +471,28 @@ export default defineComponent({
               (this.hasResharing && this.resharingDefault) || this.isAnySpaceShareType
             )
           )
-      const changeMethod = this.isAnySpaceShareType ? this.changeSpaceMember : this.changeShare
 
       try {
-        changeMethod({
-          client: this.$client,
-          graphClient: this.clientService.graphAuthenticated,
-          share: this.share,
-          permissions: bitmask,
-          expirationDate: expirationDate || '',
-          role
-        })
+        if (this.isAnySpaceShareType) {
+          this.changeSpaceMember({
+            client: this.$client,
+            graphClient: this.clientService.graphAuthenticated,
+            share: this.share,
+            permissions: bitmask,
+            expirationDate: expirationDate || '',
+            role
+          })
+        } else {
+          this.updateShare({
+            clientService: this.$clientService,
+            resource: this.resource,
+            share: this.share,
+            permissions: bitmask,
+            expirationDate: expirationDate || '',
+            role
+          })
+        }
+
         this.showMessage({ title: this.$gettext('Share successfully changed') })
       } catch (e) {
         console.error(e)

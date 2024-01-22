@@ -10,7 +10,6 @@ import { computed, defineComponent, PropType, unref } from 'vue'
 import { ContextActionMenu } from '@ownclouders/web-pkg'
 import { GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGroupActionsEdit, useGroupActionsDelete } from '../../composables/actions/groups'
-import { useStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -22,7 +21,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
     const { actions: showDetailsActions } = useActionsShowDetails()
     const { actions: deleteActions } = useGroupActionsDelete()
     const { actions: editActions } = useGroupActionsEdit()

@@ -66,9 +66,7 @@ import {
   SpaceInfo,
   SpaceNoSelection,
   eventBus,
-  configurationManager,
   queryItemAsString,
-  useAccessToken,
   useClientService,
   useRouteQuery,
   useSideBar,
@@ -76,7 +74,7 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
-  useStore
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
@@ -98,12 +96,11 @@ export default defineComponent({
     }
   },
   setup() {
-    const store = useStore()
-    const accessToken = useAccessToken({ store })
     const spaces = ref([])
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
+    const configStore = useConfigStore()
 
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken: string
@@ -128,7 +125,7 @@ export default defineComponent({
         'driveType eq project'
       )
       const drives = drivesResponse.map((space) =>
-        buildSpace({ ...space, serverUrl: configurationManager.serverUrl })
+        buildSpace({ ...space, serverUrl: configStore.serverUrl })
       )
       spaces.value = drives
     })
@@ -162,10 +159,10 @@ export default defineComponent({
       selectedSpaces.value.splice(0, selectedSpaces.value.length)
     }
 
-    const { actions: deleteActions } = useSpaceActionsDelete({ store })
-    const { actions: disableActions } = useSpaceActionsDisable({ store })
+    const { actions: deleteActions } = useSpaceActionsDelete()
+    const { actions: disableActions } = useSpaceActionsDisable()
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: restoreActions } = useSpaceActionsRestore({ store })
+    const { actions: restoreActions } = useSpaceActionsRestore()
 
     const batchActions = computed((): SpaceAction[] => {
       return [
@@ -272,7 +269,6 @@ export default defineComponent({
       sideBarActivePanel,
       spaces,
       loadResourcesTask,
-      accessToken,
       breadcrumbs,
       batchActions,
       selectedSpaces,

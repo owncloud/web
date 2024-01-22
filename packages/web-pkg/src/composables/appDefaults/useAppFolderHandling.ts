@@ -1,5 +1,4 @@
-import { Store } from 'vuex'
-import { computed, Ref, ref, unref, MaybeRef } from 'vue'
+import { Ref, ref, unref, MaybeRef } from 'vue'
 import { dirname } from 'path'
 import { ClientService } from '../../services'
 import { useAppFileHandling } from './useAppFileHandling'
@@ -10,9 +9,10 @@ import { useFileRouteReplace } from '../router/useFileRouteReplace'
 import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 import { useAuthService } from '../authContext/useAuthService'
 import { isMountPointSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { useResourcesStore, useSpacesStore } from '../piniaStores'
+import { storeToRefs } from 'pinia'
 
 interface AppFolderHandlingOptions {
-  store: Store<any>
   currentRoute: Ref<RouteLocationNormalizedLoaded>
   clientService?: ClientService
 }
@@ -25,26 +25,22 @@ export interface AppFolderHandlingResult {
 }
 
 export function useAppFolderHandling({
-  store,
   currentRoute,
   clientService
 }: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
-  const activeFiles = computed(() => {
-    return store.getters['Files/activeFiles']
-  })
   const { webdav } = clientService
   const { replaceInvalidFileRoute } = useFileRouteReplace()
   const { getFileInfo } = useAppFileHandling({ clientService })
   const authService = useAuthService()
+  const spacesStore = useSpacesStore()
+
+  const resourcesStore = useResourcesStore()
+  const { activeResources } = storeToRefs(resourcesStore)
 
   const loadFolderForFileContext = async (context: MaybeRef<FileContext>) => {
-    if (store.getters.activeFile && store.getters.activeFile.path !== '') {
-      return
-    }
-
     isFolderLoading.value = true
-    store.commit('Files/CLEAR_CURRENT_FILES_LIST', null)
+    resourcesStore.clearResourceList()
     try {
       context = unref(context)
       const space = unref(context.space)
@@ -59,16 +55,13 @@ export function useAppFolderHandling({
         fileId: unref(context.itemId)
       })
 
-      const isSpaceRoot = store.getters['runtime/spaces/spaces'].some(
+      const isSpaceRoot = spacesStore.spaces.some(
         (s) => isMountPointSpaceResource(s) && s.root.remoteItem.id === pathResource.id
       )
 
       if (isSpaceRoot) {
         const resource = await getFileInfo(context)
-        store.commit('Files/LOAD_FILES', {
-          currentFolder: resource,
-          files: [resource]
-        })
+        resourcesStore.initResourceList({ currentFolder: resource, resources: [resource] })
         isFolderLoading.value = false
         return
       }
@@ -79,22 +72,19 @@ export function useAppFolderHandling({
       })
 
       if (resource.type === 'file') {
-        store.commit('Files/LOAD_FILES', {
+        resourcesStore.initResourceList({
           // FIXME: currentFolder should be null?!
           currentFolder: resource,
-          files: [resource]
+          resources: [resource]
         })
       } else {
-        store.commit('Files/LOAD_FILES', {
-          currentFolder: resource,
-          files: children
-        })
+        resourcesStore.initResourceList({ currentFolder: resource, resources: children })
       }
     } catch (error) {
       if (error.statusCode === 401) {
         return authService.handleAuthError(unref(currentRoute))
       }
-      store.commit('Files/SET_CURRENT_FOLDER', null)
+      resourcesStore.setCurrentFolder(null)
       console.error(error)
     }
     isFolderLoading.value = false
@@ -103,6 +93,6 @@ export function useAppFolderHandling({
   return {
     isFolderLoading,
     loadFolderForFileContext,
-    activeFiles
+    activeFiles: activeResources
   }
 }

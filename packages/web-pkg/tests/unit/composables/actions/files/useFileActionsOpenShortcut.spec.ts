@@ -1,26 +1,13 @@
 import { mock } from 'jest-mock-extended'
 import { ref, unref } from 'vue'
-import {
-  createStore,
-  defaultComponentMocks,
-  defaultStoreMockOptions,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
-import { ConfigurationManager, useFileActionsOpenShortcut, useRoute } from '../../../../../src'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import { useFileActionsOpenShortcut, useRoute } from '../../../../../src'
 import { Resource } from '@ownclouders/web-client'
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 
 jest.mock('../../../../../src/composables/router', () => ({
   ...jest.requireActual('../../../../../src/composables/router'),
   useRoute: jest.fn()
-}))
-
-jest.mock('../../../../../src/composables/configuration', () => ({
-  useConfigurationManager: () =>
-    mock<ConfigurationManager>({
-      serverUrl: 'https://demo.owncloud.com'
-    })
 }))
 
 window = Object.create(window)
@@ -126,12 +113,7 @@ function getWrapper({
   getFileContentsValue = null
 }: {
   getFileContentsValue?: string
-  setup: (
-    instance: ReturnType<typeof useFileActionsOpenShortcut>,
-    options: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useFileActionsOpenShortcut>) => void
 }) {
   const mocks = {
     ...defaultComponentMocks({
@@ -151,20 +133,13 @@ function getWrapper({
       ref(mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }) as any)
     )
 
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(storeOptions)
-
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useFileActionsOpenShortcut()
-        setup(instance, { storeOptions })
+        setup(instance)
       },
       {
-        store,
         mocks,
         provide: mocks
       }

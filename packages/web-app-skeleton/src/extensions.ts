@@ -1,8 +1,8 @@
-import { ApplicationSetupOptions, Extension } from '@ownclouders/web-pkg'
+import { Extension } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import { GitHubSearch } from './search/github'
 
-export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
+export const extensions = () => {
   return computed(
     () =>
       [

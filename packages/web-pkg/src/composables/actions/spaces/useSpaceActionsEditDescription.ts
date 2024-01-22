@@ -4,14 +4,11 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
-import { useStore } from '../../store'
 import { useGettext } from 'vue3-gettext'
-import { Store } from 'vuex'
 import { SpaceResource } from '@ownclouders/web-client/src'
-import { useMessages, useModals, useUserStore } from '../../piniaStores'
+import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 
-export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useSpaceActionsEditDescription = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const { $gettext } = useGettext()
@@ -19,17 +16,14 @@ export const useSpaceActionsEditDescription = ({ store }: { store?: Store<any> }
   const clientService = useClientService()
   const route = useRoute()
   const { dispatchModal } = useModals()
+  const spacesStore = useSpacesStore()
 
   const editDescriptionSpace = (space: SpaceResource, description: string) => {
     const graphClient = clientService.graphAuthenticated
     return graphClient.drives
       .updateDrive(space.id as string, { description } as Drive, {})
       .then(() => {
-        store.commit('runtime/spaces/UPDATE_SPACE_FIELD', {
-          id: space.id,
-          field: 'description',
-          value: description
-        })
+        spacesStore.updateSpaceField({ id: space.id, field: 'description', value: description })
         if (unref(route).name === 'admin-settings-spaces') {
           space.description = description
         }

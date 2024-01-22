@@ -9,13 +9,13 @@
         v-if="appMenuItems.length && !isEmbedModeEnabled"
         :applications-list="appMenuItems"
       />
-      <router-link
-        ref="navigationSidebarLogo"
-        v-oc-tooltip="$gettext('Back to home')"
-        to="/"
-        class="oc-width-1-1"
-      >
-        <oc-img :src="currentTheme.logo.topbar" :alt="sidebarLogoAlt" class="oc-logo-image" />
+      <router-link ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
+        <oc-img
+          v-oc-tooltip="$gettext('Back to home')"
+          :src="currentTheme.logo.topbar"
+          :alt="sidebarLogoAlt"
+          class="oc-logo-image"
+        />
       </router-link>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
@@ -26,7 +26,6 @@
     </div>
     <template v-if="!isEmbedModeEnabled">
       <portal to="app.runtime.header.right" :order="50">
-        <theme-switcher />
         <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
       </portal>
       <portal to="app.runtime.header.right" :order="100">
@@ -43,23 +42,20 @@
 import { storeToRefs } from 'pinia'
 import { computed, unref, PropType, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { mapGetters } from 'vuex'
 
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
-import ThemeSwitcher from './ThemeSwitcher.vue'
 import {
   useAbility,
-  useCapabilityNotifications,
+  useAuthStore,
+  useCapabilityStore,
+  useConfigStore,
   useEmbedMode,
-  usePublicLinkContext,
   useRouter,
-  useStore,
-  useThemeStore,
-  useUserContext
+  useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
 
@@ -69,7 +65,6 @@ export default {
     FeedbackLink,
     Notifications,
     SideBarToggle,
-    ThemeSwitcher,
     UserMenu
   },
   props: {
@@ -80,13 +75,13 @@ export default {
     }
   },
   setup(props) {
-    const store = useStore()
+    const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
-    const notificationsSupport = useCapabilityNotifications()
-    const isUserContext = useUserContext({ store })
-    const isPublicLinkContext = usePublicLinkContext({ store })
+    const authStore = useAuthStore()
     const language = useGettext()
     const router = useRouter()
     const ability = useAbility()
@@ -94,11 +89,24 @@ export default {
 
     const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
-      return unref(isUserContext) && unref(notificationsSupport).includes('list')
+      return (
+        authStore.userContextReady && capabilityStore.notificationsOcsEndpoints.includes('list')
+      )
+    })
+
+    const homeLink = computed(() => {
+      if (authStore.publicLinkContextReady && !authStore.userContextReady) {
+        return {
+          name: 'resolvePublicLink',
+          params: { token: authStore.publicLinkToken }
+        }
+      }
+
+      return '/'
     })
 
     const isSideBarToggleVisible = computed(() => {
-      return unref(isUserContext) || unref(isPublicLinkContext)
+      return authStore.userContextReady || authStore.publicLinkContextReady
     })
     const isSideBarToggleDisabled = computed(() => {
       return isRuntimeRoute(unref(router.currentRoute))
@@ -112,7 +120,7 @@ export default {
     }
 
     /**
-     * Returns well formed menuItem objects by a list of extensions.
+     * Returns well-formed menuItem objects by a list of extensions.
      * The following properties must be accessible in the wrapping code:
      * - applicationsList
      * - $language
@@ -125,14 +133,10 @@ export default {
       return props.applicationsList
         .filter((app) => {
           if (app.type === 'extension') {
-            // check if the extension has at least one navItem with a matching menuId
             return (
-              store.getters
-                .getNavItemsByExtension(app.id)
-                .filter((navItem) => isNavItemPermitted(permittedMenus, navItem)).length > 0 ||
-              (app.applicationMenu.enabled instanceof Function &&
-                app.applicationMenu.enabled(store, ability) &&
-                !permittedMenus.includes('user'))
+              app.applicationMenu.enabled instanceof Function &&
+              app.applicationMenu.enabled(ability) &&
+              !permittedMenus.includes('user')
             )
           }
           return isNavItemPermitted(permittedMenus, app)
@@ -197,6 +201,7 @@ export default {
     }
 
     return {
+      configOptions,
       contentOnLeftPortal,
       currentTheme,
       updateLeftPortal,
@@ -206,22 +211,21 @@ export default {
       logoWidth,
       isEmbedModeEnabled,
       isSideBarToggleVisible,
-      isSideBarToggleDisabled
+      isSideBarToggleDisabled,
+      homeLink
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-
     sidebarLogoAlt() {
       return this.$gettext('Navigate to personal files page')
     },
 
     isFeedbackLinkEnabled() {
-      return !this.configuration?.options?.disableFeedbackLink
+      return !this.configOptions.disableFeedbackLink
     },
 
     feedbackLinkOptions() {
-      const feedback = this.configuration?.options?.feedbackLink
+      const feedback = this.configOptions.feedbackLink
       if (!this.isFeedbackLinkEnabled || !feedback) {
         return {}
       }

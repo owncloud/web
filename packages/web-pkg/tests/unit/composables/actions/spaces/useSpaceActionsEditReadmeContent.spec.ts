@@ -1,7 +1,7 @@
 import { useSpaceActionsEditReadmeContent } from '../../../../../src/composables/actions'
 import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
-import { createStore, defaultStoreMockOptions, getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock } from 'jest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
@@ -89,28 +89,15 @@ describe('editReadmeContent', () => {
 function getWrapper({
   setup
 }: {
-  setup: (
-    instance: ReturnType<typeof useSpaceActionsEditReadmeContent>,
-    {
-      storeOptions
-    }: {
-      storeOptions: typeof defaultStoreMockOptions
-    }
-  ) => void
+  setup: (instance: ReturnType<typeof useSpaceActionsEditReadmeContent>) => void
 }) {
-  const storeOptions = {
-    ...defaultStoreMockOptions
-  }
-
-  const store = createStore(storeOptions)
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useSpaceActionsEditReadmeContent({ store })
-        setup(instance, { storeOptions })
+        const instance = useSpaceActionsEditReadmeContent()
+        setup(instance)
       },
       {
-        store,
         pluginOptions: {
           piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
         }

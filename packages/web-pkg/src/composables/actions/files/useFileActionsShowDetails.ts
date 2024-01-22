@@ -1,4 +1,3 @@
-import { Store } from 'vuex'
 import { isLocationTrashActive } from '../../../router'
 import { eventBus } from '../../../services/eventBus'
 import { SideBarEventTopics } from '../../sideBar'
@@ -6,12 +5,12 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useIsFilesAppActive } from '../helpers'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
 import { FileAction } from '../types'
+import { useResourcesStore } from '../../piniaStores'
 
-export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
+export const useFileActionsShowDetails = () => {
   const router = useRouter()
+  const resourcesStore = useResourcesStore()
 
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
@@ -37,7 +36,7 @@ export const useFileActionsShowDetails = ({ store }: { store?: Store<any> } = {}
         return resources.length > 0
       },
       handler({ resources }) {
-        store.commit('Files/SET_FILE_SELECTION', resources)
+        resourcesStore.setSelection(resources.map(({ id }) => id))
         eventBus.publish(SideBarEventTopics.open)
       }
     }

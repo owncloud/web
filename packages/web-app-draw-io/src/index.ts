@@ -7,7 +7,7 @@ import { useGettext } from 'vue3-gettext'
 const applicationId = 'draw-io'
 
 export default defineWebApplication({
-  setup(args) {
+  setup() {
     const { $gettext } = useGettext()
     const userStore = useUserStore()
 

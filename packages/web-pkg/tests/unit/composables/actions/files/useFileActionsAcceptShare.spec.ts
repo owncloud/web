@@ -3,7 +3,6 @@ import { unref } from 'vue'
 import { useFileActionsAcceptShare } from '../../../../../src/composables/actions/files/useFileActionsAcceptShare'
 import { Resource } from '@ownclouders/web-client'
 import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
-import { useStore } from '../../../../../src/composables'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const sharesWithMeLocation = 'files-shares-with-me'
@@ -19,10 +18,9 @@ describe('acceptShare', () => {
       ])(
         `should be set according to the resource share status if the route name is "${sharesWithMeLocation}"`,
         (inputData) => {
-          const { wrapper } = getWrapper({
+          getWrapper({
             setup: () => {
-              const store = useStore()
-              const { actions } = useFileActionsAcceptShare({ store })
+              const { actions } = useFileActionsAcceptShare()
 
               const resources = inputData.resources
               expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
@@ -39,11 +37,10 @@ describe('acceptShare', () => {
       ])(
         `should be set as false if the route name is other than "${sharesWithMeLocation}"`,
         (resource) => {
-          const { wrapper } = getWrapper({
+          getWrapper({
             routeName: sharesWithOthersLocation,
             setup: () => {
-              const store = useStore()
-              const { actions } = useFileActionsAcceptShare({ store })
+              const { actions } = useFileActionsAcceptShare()
 
               expect(
                 unref(actions)[0].isEnabled({ space: null, resources: [resource] })

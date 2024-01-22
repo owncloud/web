@@ -1,34 +1,23 @@
-import { useStore } from '../store'
-import { useAccessToken, usePublicLinkContext, usePublicLinkPassword } from '../authContext'
-import {
-  useCapabilityFilesTusExtension,
-  useCapabilityFilesTusSupportHttpMethodOverride,
-  useCapabilityFilesTusSupportMaxChunkSize
-} from '../capability'
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
+import { useAuthStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 
 interface UploadOptions {
   uppyService: UppyService
 }
 
 export function useUpload(options: UploadOptions) {
-  const store = useStore()
+  const configStore = useConfigStore()
+  const capabilityStore = useCapabilityStore()
   const { current: currentLanguage } = useGettext()
-  const publicLinkPassword = usePublicLinkPassword({ store })
-  const isPublicLinkContext = usePublicLinkContext({ store })
-  const accessToken = useAccessToken({ store })
-
-  const tusHttpMethodOverride = useCapabilityFilesTusSupportHttpMethodOverride()
-  const tusMaxChunkSize = useCapabilityFilesTusSupportMaxChunkSize()
-  const tusExtension = useCapabilityFilesTusExtension()
+  const authStore = useAuthStore()
 
   const headers = computed((): { [key: string]: string } => {
     const headers = { 'Accept-Language': currentLanguage }
-    if (unref(isPublicLinkContext)) {
-      const password = unref(publicLinkPassword)
+    if (authStore.publicLinkContextReady) {
+      const password = authStore.publicLinkPassword
       if (password) {
         return {
           ...headers,
@@ -40,12 +29,12 @@ export function useUpload(options: UploadOptions) {
     }
     return {
       ...headers,
-      Authorization: 'Bearer ' + unref(accessToken)
+      Authorization: 'Bearer ' + authStore.accessToken
     }
   })
 
   const uppyOptions = computed(() => {
-    const isTusSupported = unref(tusMaxChunkSize) > 0
+    const isTusSupported = capabilityStore.tusMaxChunkSize > 0
 
     return {
       isTusSupported,
@@ -63,12 +52,12 @@ export function useUpload(options: UploadOptions) {
             }
           : {},
       ...(isTusSupported && {
-        tusMaxChunkSize: unref(tusMaxChunkSize),
-        tusHttpMethodOverride: unref(tusHttpMethodOverride),
-        tusExtension: unref(tusExtension)
+        tusMaxChunkSize: capabilityStore.tusMaxChunkSize,
+        tusHttpMethodOverride: capabilityStore.tusHttpMethodOverride,
+        tusExtension: capabilityStore.tusExtension
       }),
       ...(!isTusSupported && {
-        xhrTimeout: store.getters.configuration?.options?.upload?.xhr?.timeout || 60000
+        xhrTimeout: configStore.options.upload?.xhr?.timeout || 60000
       })
     }
   })

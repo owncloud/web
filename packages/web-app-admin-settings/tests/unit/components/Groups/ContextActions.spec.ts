@@ -1,4 +1,4 @@
-import { defaultPlugins, defaultStoreMockOptions, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
@@ -39,6 +39,7 @@ const selectors = {
   actionMenuItemStub: 'action-menu-item-stub'
 }
 
+// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
@@ -62,9 +63,7 @@ describe.skip('ContextActions', () => {
 })
 
 function getWrapper() {
-  const storeOptions = { ...defaultStoreMockOptions }
   return {
-    storeOptions,
     wrapper: mount(ContextActions, {
       props: {
         items: [mock<Resource>()]

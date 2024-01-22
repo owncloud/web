@@ -1,44 +1,44 @@
-import get from 'lodash-es/get'
 import isEqual from 'lodash-es/isEqual'
 import { stringify } from 'qs'
-import { Store } from 'vuex'
 import { cacheService } from '../cache'
 import { ClientService } from '../client'
-import { ConfigurationManager } from '../../configuration'
 import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { BuildQueryStringOptions, LoadPreviewOptions, PreviewCapability } from '.'
-import { UserStore } from '../../composables'
+import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
+import { AuthStore, UserStore, CapabilityStore, ConfigStore } from '../../composables'
 
 export class PreviewService {
-  store: Store<unknown>
   clientService: ClientService
-  configurationManager: ConfigurationManager
+  configStore: ConfigStore
   userStore: UserStore
+  authStore: AuthStore
+  capabilityStore: CapabilityStore
 
-  capability?: PreviewCapability
+  capability?: CapabilityStore['capabilities']['files']['thumbnail']
 
   constructor({
-    store,
     clientService,
-    configurationManager,
-    userStore
+    userStore,
+    authStore,
+    capabilityStore,
+    configStore
   }: {
-    store: Store<unknown>
     clientService: ClientService
-    configurationManager: ConfigurationManager
     userStore: UserStore
+    authStore: AuthStore
+    capabilityStore: CapabilityStore
+    configStore: ConfigStore
   }) {
-    this.store = store
     this.clientService = clientService
-    this.configurationManager = configurationManager
     this.userStore = userStore
+    this.authStore = authStore
+    this.configStore = configStore
 
-    this.capability = get(store, 'getters.capabilities.files.thumbnail', {
+    this.capability = capabilityStore.filesThumbnail || {
       enabled: true,
       version: 'v0.1',
-      supportedMimeTypes: store.getters.configuration?.options?.previewFileMimeTypes || []
-    })
+      supportedMimeTypes: configStore.options.previewFileMimeTypes || []
+    }
   }
 
   private get available(): boolean {
@@ -51,14 +51,6 @@ export class PreviewService {
 
   private get user() {
     return this.userStore.user
-  }
-
-  private get token() {
-    return this.store.getters['runtime/auth/accessToken']
-  }
-
-  private get serverUrl() {
-    return this.configurationManager.serverUrl
   }
 
   public isMimetypeSupported(mimeType: string, onlyImages = false) {
@@ -85,7 +77,12 @@ export class PreviewService {
     }
 
     const isPublic = isPublicSpaceResource(space)
-    if (!isPublic && (!this.serverUrl || !this.user.onPremisesSamAccountName || !this.token)) {
+    if (
+      !isPublic &&
+      (!this.configStore.serverUrl ||
+        !this.user.onPremisesSamAccountName ||
+        !this.authStore.accessToken)
+    ) {
       return undefined
     }
 
@@ -131,7 +128,7 @@ export class PreviewService {
     }
 
     const url = [
-      this.serverUrl,
+      this.configStore.serverUrl,
       'remote.php/dav',
       encodePath(resource.webDavPath),
       '?',

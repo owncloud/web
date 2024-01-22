@@ -4,10 +4,8 @@ import { nextTick } from 'vue'
 import { queryItemAsString, useFileActionsDelete } from '@ownclouders/web-pkg'
 
 import {
-  createStore,
   defaultPlugins,
   mount,
-  defaultStoreMockOptions,
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
@@ -82,6 +80,7 @@ describe('Projects view', () => {
       expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
   })
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
       abilities: [{ action: 'create-all', subject: 'Drive' }],
@@ -100,15 +99,12 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
     }),
     ...(mocks && mocks)
   }
-  const storeOptions = { ...defaultStoreMockOptions }
-  storeOptions.modules.runtime.modules.spaces.getters.spaces = jest.fn(() => spaces)
-  const store = createStore(storeOptions)
+
   return {
     mocks: defaultMocks,
-    storeOptions,
     wrapper: mount(Projects, {
       global: {
-        plugins: [...defaultPlugins({ abilities }), store],
+        plugins: [...defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })],
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: {

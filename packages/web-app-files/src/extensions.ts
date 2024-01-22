@@ -1,18 +1,17 @@
 import {
-  ApplicationSetupOptions,
   Extension,
-  useStore,
   useRouter,
   useSearch,
   useFileActionsShowShares,
-  useFileActionsCopyQuickLink
+  useFileActionsCopyQuickLink,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
 import { sideBarPanels } from './fileSideBars'
 
-export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
-  const store = useStore()
+export const extensions = () => {
+  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { search: searchFunction } = useSearch()
 
@@ -28,7 +27,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
         {
           id: 'com.github.owncloud.web.files.search',
           type: 'search',
-          searchProvider: new SDKSearch(store, router, searchFunction)
+          searchProvider: new SDKSearch(capabilityStore, router, searchFunction)
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.collaborator',

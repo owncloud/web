@@ -27,8 +27,9 @@
       appearance="filled"
       variation="primary"
       v-bind="logoutButtonsAttrs"
-      v-text="navigateToLoginText"
-    />
+    >
+      {{ navigateToLoginText }}
+    </oc-button>
   </div>
 </template>
 
@@ -38,7 +39,7 @@ import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 import {
   queryItemAsString,
-  useConfigurationManager,
+  useConfigStore,
   useRouteQuery,
   useThemeStore
 } from '@ownclouders/web-pkg'
@@ -48,7 +49,7 @@ export default defineComponent({
   setup() {
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
-    const configurationManager = useConfigurationManager()
+    const configStore = useConfigStore()
     const redirectUrlQuery = useRouteQuery('redirectUrl')
 
     const { $gettext } = useGettext()
@@ -70,8 +71,8 @@ export default defineComponent({
     })
     const logoutButtonsAttrs = computed(() => {
       const redirectUrl = queryItemAsString(unref(redirectUrlQuery))
-      if (configurationManager.options.loginUrl) {
-        const configLoginURL = new URL(encodeURI(configurationManager.options.loginUrl))
+      if (configStore.options.loginUrl) {
+        const configLoginURL = new URL(encodeURI(configStore.options.loginUrl))
         if (redirectUrl) {
           configLoginURL.searchParams.append('redirectUrl', redirectUrl)
         }

@@ -4,20 +4,22 @@ import {
   isLocationPublicActive,
   isLocationSpacesActive
 } from '../../../router'
-import { Store } from 'vuex'
 import { useGettext } from 'vue3-gettext'
 import { ActionOptions, FileAction } from '../types'
 import { computed, unref } from 'vue'
 import { useRouter } from '../../router'
-import { useStore } from '../../store'
-import { useMessages } from '../../piniaStores'
+import { useClipboardStore, useResourcesStore } from '../../piniaStores'
+import { Resource } from '@ownclouders/web-client'
+import { storeToRefs } from 'pinia'
 
-export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
-  store = store || useStore()
-  const messageStore = useMessages()
+export const useFileActionsMove = () => {
   const router = useRouter()
+  const { cutResources } = useClipboardStore()
   const language = useGettext()
   const { $gettext } = language
+
+  const resourcesStore = useResourcesStore()
+  const { currentFolder } = storeToRefs(resourcesStore)
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -30,8 +32,8 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
     return $gettext('Ctrl + X')
   })
 
-  const handler = ({ space, resources }: ActionOptions) => {
-    store.dispatch('Files/cutSelectedFiles', { ...language, space, resources, messageStore })
+  const handler = ({ resources }: ActionOptions) => {
+    cutResources(resources as Resource[])
   }
   const actions = computed((): FileAction[] => [
     {
@@ -52,7 +54,7 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
           return false
         }
 
-        if (!store.getters['Files/currentFolder']) {
+        if (!unref(currentFolder)) {
           return false
         }
 
@@ -61,7 +63,7 @@ export const useFileActionsMove = ({ store }: { store?: Store<any> } = {}) => {
         }
 
         const moveDisabled = resources.some((resource) => {
-          return canBeMoved(resource, store.getters['Files/currentFolder'].path) === false
+          return canBeMoved(resource, unref(currentFolder).path) === false
         })
         return !moveDisabled
       },

@@ -3,11 +3,9 @@ import AppBar from '../../../../src/components/AppBar/AppBar.vue'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
-  createStore,
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions,
   RouteLocation
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
@@ -159,15 +157,19 @@ function getShallowWrapper(
     $archiverService: mock<ArchiverService>()
   }
   mocks.$route.meta.title = 'ExampleTitle'
-  const storeOptions = defaultStoreMockOptions
-  storeOptions.modules.Files.getters.selectedFiles.mockImplementation(() => selected)
-  const store = createStore(storeOptions)
+
   return {
     wrapper: shallowMount(AppBar, {
       props: { ...props, space: mock<SpaceResource>() },
       slots,
       global: {
-        plugins: [...defaultPlugins(), store],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              resourcesStore: { resources: selected, selectedIds: selected.map(({ id }) => id) }
+            }
+          })
+        ],
         provide: { ...mocks, isMobileWidth: ref(isMobileWidth) },
         mocks
       }

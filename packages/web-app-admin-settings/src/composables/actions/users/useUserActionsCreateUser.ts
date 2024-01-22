@@ -1,13 +1,12 @@
-import { useModals } from '@ownclouders/web-pkg'
-import { computed, unref } from 'vue'
+import { useModals, useCapabilityStore } from '@ownclouders/web-pkg'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { UserAction } from '@ownclouders/web-pkg'
-import { useCapabilityCreateUsersDisabled } from '@ownclouders/web-pkg'
 import CreateUserModal from '../../../components/Users/CreateUserModal.vue'
 
 export const useUserActionsCreateUser = () => {
   const { dispatchModal } = useModals()
-  const createUsersDisabled = useCapabilityCreateUsersDisabled()
+  const capabilityStore = useCapabilityStore()
   const { $gettext } = useGettext()
 
   const actions = computed((): UserAction[] => [
@@ -17,7 +16,7 @@ export const useUserActionsCreateUser = () => {
       componentType: 'button',
       class: 'oc-users-actions-create-user',
       label: () => $gettext('New user'),
-      isEnabled: () => !unref(createUsersDisabled),
+      isEnabled: () => !capabilityStore.graphUsersCreateDisabled,
       handler: () => {
         dispatchModal({
           title: $gettext('Create user'),

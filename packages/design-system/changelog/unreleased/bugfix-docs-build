@@ -1,0 +1,6 @@
+Bugfix: Migrate build process of documentation to the latest versions
+
+We've bumped build dependencies of the Design system to support Vue 3 and fix the build of documentation.
+
+https://github.com/owncloud/web/issues/10233
+https://github.com/owncloud/web/pull/10243
