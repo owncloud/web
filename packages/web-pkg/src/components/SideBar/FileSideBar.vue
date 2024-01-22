@@ -59,6 +59,7 @@ import {
   Resource
 } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
+import { useTask } from 'vue-concurrency'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -93,6 +94,9 @@ export default defineComponent({
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
 
+    const versions = ref<Resource[]>([])
+    provide('versions', versions)
+
     const { selectedResources } = useSelectedResources()
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
@@ -107,6 +111,16 @@ export default defineComponent({
         root: props.space,
         parent: unref(currentFolder),
         items: unref(selectedResources)
+      }
+    })
+
+    const fetchVersionsTask = useTask(function* () {
+      try {
+        if (unref(loadedResource).id) {
+          versions.value = yield clientService.webdav.listFileVersions(unref(loadedResource).id)
+        }
+      } catch (e) {
+        console.error(e)
       }
     })
 
@@ -236,6 +250,8 @@ export default defineComponent({
       },
       { deep: true }
     )
+
+    watch(loadedResource, () => fetchVersionsTask.perform())
 
     provide('resource', readonly(loadedResource))
     provide(

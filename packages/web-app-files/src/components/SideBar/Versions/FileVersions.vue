@@ -63,10 +63,9 @@ import {
   useDownloadFile,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
-import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -87,29 +86,9 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const versions = ref<Resource[]>([])
-    const fetchVersionsTask = useTask(function* () {
-      try {
-        versions.value = yield clientService.webdav.listFileVersions(unref(resource).fileId)
-      } catch (e) {
-        console.error(e)
-      }
-    })
-    const areVersionsLoading = computed(() => {
-      return !fetchVersionsTask.last || fetchVersionsTask.isRunning
-    })
-    watch(
-      [() => unref(resource)?.id, () => unref(resource)?.etag],
-      ([id, etag]) => {
-        if (!id || !etag) {
-          return
-        }
-        fetchVersionsTask.perform()
-      },
-      {
-        immediate: true
-      }
-    )
+    const versions: Ref<Resource[]> = inject('versions')
+
+    const areVersionsLoading = computed(() => versions.value.length === 0)
 
     const isRevertible = computed(() => {
       if (props.isReadOnly) {
@@ -142,8 +121,6 @@ export default defineComponent({
           })
         }
       }
-
-      fetchVersionsTask.perform()
     }
     const downloadVersion = (version: Resource) => {
       return downloadFile(unref(resource), version.name)
@@ -168,10 +145,7 @@ export default defineComponent({
       downloadVersion,
       formatVersionDateRelative,
       formatVersionDate,
-      formatVersionFileSize,
-
-      // HACK: exported for unit tests
-      fetchVersionsTask
+      formatVersionFileSize
     }
   }
 })

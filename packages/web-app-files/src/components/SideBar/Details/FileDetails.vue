@@ -130,7 +130,6 @@ import {
   useUserStore,
   useCapabilityStore,
   useConfigStore,
-  useClientService,
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
@@ -173,7 +172,6 @@ export default defineComponent({
     const configStore = useConfigStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
-    const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
     const language = useGettext()
 
@@ -190,14 +188,7 @@ export default defineComponent({
     const authStore = useAuthStore()
     const { publicLinkContextReady } = storeToRefs(authStore)
 
-    const versions = ref<Resource[]>([])
-    const loadVersions = async (fileId: Resource['fileId']) => {
-      try {
-        versions.value = await clientService.webdav.listFileVersions(fileId)
-      } catch (e) {
-        console.error(e)
-      }
-    }
+    const versions: Ref<Resource[]> = inject('versions')
 
     const isPreviewEnabled = computed(() => {
       if (unref(resource).isFolder) {
@@ -252,10 +243,6 @@ export default defineComponent({
       () => {
         if (unref(resource)) {
           loadPreviewTask.perform(unref(resource))
-
-          if (!unref(resource).isFolder && !unref(publicLinkContextReady)) {
-            loadVersions(unref(resource).fileId)
-          }
         }
       },
       { immediate: true }
