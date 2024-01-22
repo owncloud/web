@@ -55,6 +55,7 @@ Summary
 * Change - Auth store to pinia: [#10323](https://github.com/owncloud/web/pull/10323)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Change - Configuration store to pinia: [#10336](https://github.com/owncloud/web/pull/10336)
+* Change - Resources store to pinia: [#10368](https://github.com/owncloud/web/pull/10368)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
@@ -587,6 +588,22 @@ Details
 
    https://github.com/owncloud/web/issues/10210
    https://github.com/owncloud/web/pull/10336
+
+* Change - Resources store to pinia: [#10368](https://github.com/owncloud/web/pull/10368)
+
+   BREAKING CHANGE for developers: Resources are no longer stored in a vuex store
+   module but in pinia instead. You can access all the store functionality via the
+   new `useResourcesStore` composable.
+
+   Technically the former vuex store was only supposed to be used inside the files
+   app. However, it was reachable from the outside as well and was therefore quite
+   frequently used by other apps. So we decided to declare this as a breaking
+   change.
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10368
 
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
