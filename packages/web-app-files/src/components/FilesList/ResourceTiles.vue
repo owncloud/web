@@ -142,12 +142,13 @@ import {
   useTileSize,
   FolderViewModeConstants,
   ResourceGhostElement,
-  useResourcesStore
+  useResourcesStore,
+  ResourceTile
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'ResourceTiles',
-  components: { ContextMenuQuickAction, ResourceGhostElement },
+  components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles
