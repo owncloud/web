@@ -368,7 +368,7 @@ export default defineComponent({
       default: true
     },
     /**
-     * TODO
+     * Sets specific css classes for when the side bar is (not) open
      */
     isSideBarOpen: {
       type: Boolean,
@@ -458,7 +458,7 @@ export default defineComponent({
       default: null
     },
     resourceType: {
-      type: String,
+      type: String as PropType<'file' | 'space'>,
       default: 'file'
     },
     /**

@@ -1,5 +1,5 @@
 import { IconFillType } from '../helpers/resource'
-import { defineComponent } from 'vue'
+import { Component } from 'vue'
 
 export type FolderView = {
   name: string
@@ -9,6 +9,6 @@ export type FolderView = {
     fillType: IconFillType
   }
   isScrollable?: boolean
-  component: ReturnType<typeof defineComponent>
+  component: Component
   componentAttrs?: () => Record<string, unknown>
 }
