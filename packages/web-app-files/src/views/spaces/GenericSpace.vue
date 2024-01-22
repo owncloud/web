@@ -71,8 +71,8 @@
               :space="space"
             />
             <component
-              v-else
               :is="folderView.component"
+              v-else
               v-model:selectedIds="selectedResourcesIds"
               :resources="paginatedResources"
               :view-mode="viewMode"

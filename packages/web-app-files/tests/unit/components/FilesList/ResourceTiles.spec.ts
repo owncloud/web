@@ -135,9 +135,7 @@ describe('ResourceTiles component', () => {
     { viewSize: 6, expected: 'xxxlarge' }
   ])('passes the "viewSize" to the OcTile component', (data) => {
     const { wrapper } = getWrapper({ resources: spacesResources, viewSize: data.viewSize })
-    expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(
-      data.expected
-    )
+    expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(data.expected)
   })
 
   function getWrapper(props = {}, slots = {}) {
