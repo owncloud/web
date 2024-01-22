@@ -81,7 +81,7 @@ describe('ResourceTiles component', () => {
       selectedIds: [spacesResources[0].id]
     })
     wrapper.vm.toggleSelection(spacesResources[0])
-    expect(wrapper.find('resource-tile-stub').attributes('is-resource-selected')).toEqual('true')
+    expect(wrapper.find('resource-tile-stub').attributes('isresourceselected')).toEqual('true')
     expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
   })
 
@@ -135,7 +135,7 @@ describe('ResourceTiles component', () => {
     { viewSize: 6, expected: 'xxxlarge' }
   ])('passes the "viewSize" to the OcTile component', (data) => {
     const { wrapper } = getWrapper({ resources: spacesResources, viewSize: data.viewSize })
-    expect(wrapper.find('resource-tile-stub').attributes('resource-icon-size')).toEqual(
+    expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(
       data.expected
     )
   })
