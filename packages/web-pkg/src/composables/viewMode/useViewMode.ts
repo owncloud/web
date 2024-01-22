@@ -1,7 +1,7 @@
 import { computed, ComputedRef, unref } from 'vue'
 import { queryItemAsString } from '../appDefaults'
 import { useRouteQueryPersisted } from '../router'
-import { ViewModeConstants } from './constants'
+import { FolderViewModeConstants } from './constants'
 
 export function useViewMode(options: ComputedRef<string>): ComputedRef<string> {
   if (options) {
@@ -9,8 +9,8 @@ export function useViewMode(options: ComputedRef<string>): ComputedRef<string> {
   }
 
   const viewModeQuery = useRouteQueryPersisted({
-    name: ViewModeConstants.queryName,
-    defaultValue: ViewModeConstants.defaultModeName
+    name: FolderViewModeConstants.queryName,
+    defaultValue: FolderViewModeConstants.defaultModeName
   })
   return computed(() => queryItemAsString(unref(viewModeQuery)))
 }
@@ -21,8 +21,8 @@ export function useViewSize(options: ComputedRef<string>): ComputedRef<number> {
   }
 
   const viewModeSize = useRouteQueryPersisted({
-    name: ViewModeConstants.tilesSizeQueryName,
-    defaultValue: ViewModeConstants.tilesSizeDefault.toString()
+    name: FolderViewModeConstants.tilesSizeQueryName,
+    defaultValue: FolderViewModeConstants.tilesSizeDefault.toString()
   })
   return computed(() => parseInt(queryItemAsString(unref(viewModeSize))))
 }

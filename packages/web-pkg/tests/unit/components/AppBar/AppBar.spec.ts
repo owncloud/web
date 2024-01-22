@@ -9,7 +9,8 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
-import { ViewModeConstants, useFileActionsDelete } from '../../../../src/composables'
+import { useFileActionsDelete } from '../../../../src/composables'
+import { FolderView } from '../../../../src'
 
 jest.mock('../../../../src/composables/actions/files/useFileActionsDelete', () => ({
   useFileActionsDelete: jest.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
@@ -116,7 +117,7 @@ describe('AppBar component', () => {
         expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeFalsy()
       })
       it('passes viewModes array to ViewOptions', () => {
-        const viewModes = [ViewModeConstants.tilesView]
+        const viewModes = [mock<FolderView>]
         const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: true, viewModes })
         expect(wrapper.findComponent<any>(selectors.viewOptionsStub).props('viewModes')).toEqual(
           viewModes

@@ -1,7 +1,7 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { mock } from 'jest-mock-extended'
-import { nextTick } from 'vue'
-import { queryItemAsString, useFileActionsDelete } from '@ownclouders/web-pkg'
+import { h, nextTick, ref } from 'vue'
+import { queryItemAsString, useFileActionsDelete, useExtensionRegistry } from '@ownclouders/web-pkg'
 
 import {
   defaultPlugins,
@@ -10,12 +10,15 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   displayPositionedDropdown: jest.fn(),
   queryItemAsString: jest.fn(),
   appDefaults: jest.fn(),
+  useExtensionRegistry: jest.fn(),
+  useRouteQueryPersisted: jest.fn().mockImplementation(() => ref('resource-table')),
   useFileActions: jest.fn(),
   useFileActionsDelete: jest.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
 }))
@@ -93,6 +96,32 @@ describe('Projects view', () => {
 function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
   jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+
+  const extensions = [
+    {
+      id: 'com.github.owncloud.web.files.folder-view.resource-table',
+      type: 'folderView',
+      scopes: ['resource', 'space', 'favorite'],
+      folderView: {
+        name: 'resource-table',
+        label: 'Switch to default view',
+        icon: {
+          name: 'menu-line',
+          fillType: 'none'
+        },
+        component: h('div', { class: 'resource-table' })
+      }
+    }
+  ]
+
+  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+    useExtensionRegistryMock({
+      requestExtensions<ExtensionType>(type: string, scopes: string[]) {
+        return extensions as ExtensionType[]
+      }
+    })
+  )
+
   const defaultMocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })

@@ -10,7 +10,7 @@
         :has-pagination="false"
         :is-side-bar-open="isSideBarOpen"
         :view-modes="viewModes"
-        :view-mode-default="ViewModeConstants.tilesView.name"
+        :view-mode-default="FolderViewModeConstants.name.tiles"
       >
         <template #actions>
           <create-space v-if="hasCreatePermission" class="oc-mr-s" />
@@ -44,24 +44,40 @@
               autocomplete="off"
             />
           </div>
-          <resource-tiles
-            v-if="viewMode === ViewModeConstants.tilesView.name"
+          <component
+            :is="folderView.component"
             v-model:selectedIds="selectedResourcesIds"
-            class="oc-px-m"
-            :data="paginatedItems"
+            resource-type="space"
+            :are-thumbnails-displayed="true"
+            :resources="paginatedItems"
+            :fields-displayed="tableDisplayFields"
             :sort-fields="sortFields"
             :sort-by="sortBy"
             :sort-dir="sortDir"
+            v-bind="folderView.componentAttrs?.()"
             @sort="handleSort"
             @row-mounted="rowMounted"
           >
             <template #image="{ resource }">
-              <img
-                v-if="imageContentObject[resource.id]"
-                class="tile-preview"
-                :src="imageContentObject[resource.id]['data']"
-                alt=""
-              />
+              <template v-if="viewMode === FolderViewModeConstants.name.tiles">
+                <img
+                  v-if="imageContentObject[resource.id]"
+                  class="tile-preview"
+                  :src="imageContentObject[resource.id]['data']"
+                  alt=""
+                />
+              </template>
+              <template v-else>
+                <img
+                  v-if="imageContentObject[resource.id]"
+                  class="table-preview oc-mr-s"
+                  :src="imageContentObject[resource.id]['data']"
+                  alt=""
+                  width="33"
+                  height="33"
+                />
+                <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
+              </template>
             </template>
             <template #actions="{ resource }">
               <oc-button
@@ -73,7 +89,7 @@
                 <oc-icon name="group" fill-type="line" />
               </oc-button>
             </template>
-            <template #contextMenuActions="{ resource }">
+            <template #contextMenu="{ resource }">
               <space-context-actions
                 :action-options="{ resources: [resource] as SpaceResource[] }"
               />
@@ -85,27 +101,7 @@
                 <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
               </div>
             </template>
-          </resource-tiles>
-          <resource-table
-            v-else
-            v-model:selectedIds="selectedResourcesIds"
-            :resources="paginatedItems"
-            class="spaces-table"
-            :class="{ 'spaces-table-squashed': isSideBarOpen }"
-            :sticky="false"
-            :fields-displayed="tableDisplayFields"
-            :are-thumbnails-displayed="true"
-            :sort-fields="sortFields"
-            :sort-by="sortBy"
-            :sort-dir="sortDir"
-            @sort="handleSort"
-            @row-mounted="rowMounted"
-          >
-            <template #contextMenu="{ resource }">
-              <space-context-actions
-                :action-options="{ resources: [resource] as SpaceResource[] }"
-              />
-            </template>
+            <!--- table -->
             <template #status="{ resource }">
               <span v-if="resource.disabled" class="oc-flex oc-flex-middle">
                 <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
@@ -129,25 +125,7 @@
             </template>
             <template #usedQuota="{ resource }"> {{ getUsedQuota(resource) }}</template>
             <template #remainingQuota="{ resource }"> {{ getRemainingQuota(resource) }}</template>
-            <template #image="{ resource }">
-              <img
-                v-if="imageContentObject[resource.id]"
-                class="table-preview oc-mr-s"
-                :src="imageContentObject[resource.id]['data']"
-                alt=""
-                width="33"
-                height="33"
-              />
-              <resource-icon v-else class="oc-mr-s" :resource="resource" />
-            </template>
-            <template #footer>
-              <pagination :pages="totalPages" :current-page="currentPage" />
-              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-                <p class="oc-text-muted">{{ footerTextTotal }}</p>
-                <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
-              </div>
-            </template>
-          </resource-table>
+          </component>
         </div>
       </template>
     </files-view-wrapper>
@@ -178,7 +156,9 @@ import {
   AppLoadingSpinner,
   useConfigStore,
   useResourcesStore,
-  useSpacesStore
+  useSpacesStore,
+  FolderViewExtension,
+  useExtensionRegistry
 } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
@@ -186,7 +166,7 @@ import CreateSpace from '../../components/AppBar/CreateSpace.vue'
 import {
   useAbility,
   useClientService,
-  ViewModeConstants,
+  FolderViewModeConstants,
   useRouteQueryPersisted,
   useSort,
   useRouteName,
@@ -343,13 +323,21 @@ export default defineComponent({
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-    const viewModes = computed(() => [ViewModeConstants.default, ViewModeConstants.tilesView])
+
+    const extensionRegistry = useExtensionRegistry()
+    const viewModes = computed(() => {
+      return [
+        ...extensionRegistry
+          .requestExtensions<FolderViewExtension>('folderView', ['space'])
+          .map((e) => e.folderView)
+      ]
+    })
 
     const routeName = useRouteName()
 
     const viewMode = useRouteQueryPersisted({
-      name: `${unref(routeName)}-${ViewModeConstants.queryName}`,
-      defaultValue: ViewModeConstants.tilesView.name
+      name: `${unref(routeName)}-${FolderViewModeConstants.queryName}`,
+      defaultValue: FolderViewModeConstants.name.tiles
     })
 
     const keyActions = useKeyboardActions()
@@ -440,12 +428,12 @@ export default defineComponent({
       })
 
       const processor =
-        unref(viewMode) === ViewModeConstants.tilesView.name
+        unref(viewMode) === FolderViewModeConstants.name.tiles
           ? ProcessorType.enum.fit
           : ProcessorType.enum.thumbnail
 
       const dimensions =
-        unref(viewMode) === ViewModeConstants.tilesView.name
+        unref(viewMode) === FolderViewModeConstants.name.tiles
           ? ImageDimension.Tile
           : ImageDimension.Thumbnail
 
@@ -462,6 +450,10 @@ export default defineComponent({
       }
     }
 
+    const folderView = computed(() => {
+      return unref(viewModes).find((v) => v.name === unref(viewMode))
+    })
+
     return {
       ...useSideBar(),
       spaces,
@@ -477,8 +469,9 @@ export default defineComponent({
       hasCreatePermission,
       viewModes,
       viewMode,
+      folderView,
       tableDisplayFields,
-      ViewModeConstants,
+      FolderViewModeConstants,
       getManagerNames,
       getTotalQuota,
       getUsedQuota,

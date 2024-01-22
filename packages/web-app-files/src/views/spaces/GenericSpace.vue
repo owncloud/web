@@ -3,6 +3,7 @@
     <whitespace-context-menu ref="whitespaceContextMenu" :space="space" />
     <files-view-wrapper>
       <app-bar
+        ref="appBarRef"
         :breadcrumbs="breadcrumbs"
         :breadcrumbs-context-actions-items="[currentFolder]"
         :has-bulk-actions="displayFullAppBar"
@@ -63,87 +64,61 @@
               <span v-if="canUpload" class="file-empty-upload-hint" v-text="uploadHint" />
             </template>
           </no-content-message>
-          <resource-tiles
-            v-else-if="viewMode === ViewModeConstants.tilesView.name"
-            v-model:selectedIds="selectedResourcesIds"
-            :data="paginatedResources"
-            class="oc-px-m oc-pt-l"
-            :target-route-callback="resourceTargetRouteCallback"
-            :space="space"
-            :drag-drop="true"
-            :sort-fields="sortFields"
-            :sort-by="sortBy"
-            :sort-dir="sortDir"
-            :view-size="viewSize"
-            @row-mounted="rowMounted"
-            @file-click="triggerDefaultAction"
-            @file-dropped="fileDropped"
-            @sort="handleSort"
-          >
-            <template #contextMenuActions="{ resource }">
-              <context-actions :action-options="{ space, resources: [resource] }" />
-            </template>
-            <template #footer>
-              <pagination :pages="paginationPages" :current-page="paginationPage" />
-              <list-info
-                v-if="paginatedResources.length > 0"
-                class="oc-width-1-1 oc-my-s"
-                :files="totalResourcesCount.files"
-                :folders="totalResourcesCount.folders"
-                :size="totalResourcesSize"
-              />
-            </template>
-          </resource-tiles>
-          <resource-details
-            v-else-if="displayResourceAsSingleResource"
-            :single-resource="paginatedResources[0]"
-            :space="space"
-          />
-          <resource-table
-            v-else
-            id="files-space-table"
-            v-model:selectedIds="selectedResourcesIds"
-            class="files-table"
-            :class="{ 'files-table-squashed': isSideBarOpen }"
-            :view-mode="viewMode"
-            :are-thumbnails-displayed="displayThumbnails"
-            :resources="paginatedResources"
-            :target-route-callback="resourceTargetRouteCallback"
-            :header-position="fileListHeaderY"
-            :drag-drop="true"
-            :sort-by="sortBy"
-            :sort-dir="sortDir"
-            :space="space"
-            @file-dropped="fileDropped"
-            @file-click="triggerDefaultAction"
-            @row-mounted="rowMounted"
-            @sort="handleSort"
-          >
-            <template #quickActions="{ resource }">
-              <quick-actions
-                :class="resource.preview"
-                class="oc-visible@s"
-                :space="space"
-                :item="resource"
-              />
-            </template>
-            <template #contextMenu="{ resource }">
-              <context-actions
-                v-if="isResourceInSelection(resource)"
-                :action-options="{ space, resources: selectedResources }"
-              />
-            </template>
-            <template #footer>
-              <pagination :pages="paginationPages" :current-page="paginationPage" />
-              <list-info
-                v-if="paginatedResources.length > 0"
-                class="oc-width-1-1 oc-my-s"
-                :files="totalResourcesCount.files"
-                :folders="totalResourcesCount.folders"
-                :size="totalResourcesSize"
-              />
-            </template>
-          </resource-table>
+          <template v-else>
+            <resource-details
+              v-if="displayResourceAsSingleResource"
+              :single-resource="paginatedResources[0]"
+              :space="space"
+            />
+            <component
+              :is="folderView.component"
+              v-else
+              v-model:selectedIds="selectedResourcesIds"
+              :resources="paginatedResources"
+              :view-mode="viewMode"
+              :target-route-callback="resourceTargetRouteCallback"
+              :space="space"
+              :are-thumbnails-displayed="displayThumbnails"
+              :drag-drop="true"
+              :sort-by="sortBy"
+              :sort-dir="sortDir"
+              :header-position="fileListHeaderY /* table */"
+              :sort-fields="sortFields /* tiles */"
+              :view-size="viewSize /* tiles */"
+              :style="folderViewStyle"
+              v-bind="folderView.componentAttrs?.()"
+              @file-dropped="fileDropped"
+              @file-click="triggerDefaultAction"
+              @row-mounted="rowMounted"
+              @sort="handleSort"
+            >
+              <template #contextMenu="{ resource }">
+                <context-actions
+                  v-if="isResourceInSelection(resource)"
+                  :action-options="{ space, resources: selectedResources }"
+                />
+              </template>
+
+              <template #footer>
+                <pagination :pages="paginationPages" :current-page="paginationPage" />
+                <list-info
+                  v-if="paginatedResources.length > 0"
+                  class="oc-width-1-1 oc-my-s"
+                  :files="totalResourcesCount.files"
+                  :folders="totalResourcesCount.folders"
+                  :size="totalResourcesSize"
+                />
+              </template>
+              <template #quickActions="{ resource }">
+                <quick-actions
+                  :class="resource.preview"
+                  class="oc-visible@s"
+                  :space="space"
+                  :item="resource"
+                />
+              </template>
+            </component>
+          </template>
         </template>
       </template>
     </files-view-wrapper>
@@ -167,12 +142,14 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 
 import {
+  FolderViewExtension,
   ProcessorType,
   ResourceTransfer,
   TransferType,
   useCapabilityStore,
   useConfigStore,
   useEmbedMode,
+  useExtensionRegistry,
   useFileActions,
   useFileActionsCreateNewFolder,
   useResourcesStore,
@@ -188,7 +165,7 @@ import {
   Pagination,
   ResourceTable,
   CreateTargetRouteOptions,
-  ViewModeConstants,
+  FolderViewModeConstants,
   VisibilityObserver,
   createFileRouteOptions,
   createLocationPublic,
@@ -222,6 +199,7 @@ import {
   useKeyboardTableSpaceActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { storeToRefs } from 'pinia'
+import { ComponentPublicInstance } from 'vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -289,11 +267,14 @@ export default defineComponent({
       return unref(currentFolder)?.canUpload({ user: userStore.user })
     })
 
-    const viewModes = computed(() => [
-      ViewModeConstants.condensedTable,
-      ViewModeConstants.default,
-      ViewModeConstants.tilesView
-    ])
+    const extensionRegistry = useExtensionRegistry()
+    const viewModes = computed(() => {
+      return [
+        ...extensionRegistry
+          .requestExtensions<FolderViewExtension>('folderView', ['resource'])
+          .map((e) => e.folderView)
+      ]
+    })
 
     const resourceTargetRouteCallback = ({
       path,
@@ -446,6 +427,19 @@ export default defineComponent({
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
 
+    const folderView = computed(() => {
+      const viewMode = unref(resourcesViewDefaults.viewMode)
+      return unref(viewModes).find((v) => v.name === viewMode)
+    })
+    const appBarRef = ref<ComponentPublicInstance | null>()
+    const folderViewStyle = computed(() => {
+      return {
+        ...(unref(folderView)?.isScrollable === false && {
+          height: `calc(100% - ${unref(appBarRef)?.$el.getBoundingClientRect().height}px)`
+        })
+      }
+    })
+
     const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(
       keyActions,
@@ -535,8 +529,11 @@ export default defineComponent({
       isCurrentFolderEmpty,
       resourceTargetRouteCallback,
       performLoaderTask,
-      ViewModeConstants,
+      FolderViewModeConstants,
       viewModes,
+      appBarRef,
+      folderView,
+      folderViewStyle,
       uploadHint: $gettext(
         'Drag files and folders here or use the "New" or "Upload" buttons to add files'
       ),
@@ -668,7 +665,7 @@ export default defineComponent({
 
       const loadPreview = async () => {
         const processor =
-          this.viewMode === ViewModeConstants.tilesView.name
+          this.viewMode === FolderViewModeConstants.name.tiles
             ? ProcessorType.enum.fit
             : ProcessorType.enum.thumbnail
 

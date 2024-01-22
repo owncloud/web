@@ -22,10 +22,8 @@
         </no-content-message>
         <resource-table
           v-else
-          id="files-trashbin-table"
           v-model:selectedIds="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': isSideBarOpen }"
+          :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'ddate']"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="false"

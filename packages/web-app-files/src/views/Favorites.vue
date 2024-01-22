@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex">
     <files-view-wrapper>
-      <app-bar :view-modes="viewModes" :is-side-bar-open="isSideBarOpen" />
+      <app-bar ref="appBarRef" :view-modes="viewModes" :is-side-bar-open="isSideBarOpen" />
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -14,18 +14,19 @@
             <span v-translate>There are no resources marked as favorite</span>
           </template>
         </no-content-message>
-        <resource-table
+        <component
+          :is="folderView.component"
           v-else
-          id="files-favorites-table"
           v-model:selectedIds="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': isSideBarOpen }"
+          :is-side-bar-open="isSideBarOpen"
           :are-paths-displayed="true"
           :are-thumbnails-displayed="displayThumbnails"
           :resources="paginatedResources"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
+          :style="folderViewStyle"
+          v-bind="folderView.componentAttrs?.()"
           @file-click="triggerDefaultAction"
           @row-mounted="rowMounted"
           @sort="handleSort"
@@ -49,7 +50,7 @@
               :size="totalResourcesSize"
             />
           </template>
-        </resource-table>
+        </component>
       </template>
     </files-view-wrapper>
     <file-side-bar
@@ -65,13 +66,20 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { debounce } from 'lodash-es'
 
 import { Resource } from '@ownclouders/web-client'
-import { VisibilityObserver, useConfigStore, useResourcesStore } from '@ownclouders/web-pkg'
+import {
+  FolderViewExtension,
+  VisibilityObserver,
+  useExtensionRegistry,
+  useConfigStore,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
+
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { useGetMatchingSpace, ViewModeConstants } from '@ownclouders/web-pkg'
+import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
 import QuickActions from '../components/FilesList/QuickActions.vue'
@@ -82,6 +90,8 @@ import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
+import { unref } from 'vue'
+import { ComponentPublicInstance } from 'vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -108,12 +118,28 @@ export default defineComponent({
     const { updateResourceField } = resourcesStore
     const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
 
-    const viewModes = computed(() => [
-      ViewModeConstants.condensedTable,
-      ViewModeConstants.default,
-      ViewModeConstants.tilesView
-    ])
+    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
 
+    const extensionRegistry = useExtensionRegistry()
+    const viewModes = computed(() => {
+      return [
+        ...extensionRegistry
+          .requestExtensions<FolderViewExtension>('folderView', ['favorite'])
+          .map((e) => e.folderView)
+      ]
+    })
+    const folderView = computed(() => {
+      const viewMode = unref(resourcesViewDefaults.viewMode)
+      return unref(viewModes).find((v) => v.name === viewMode)
+    })
+    const appBarRef = ref<ComponentPublicInstance | null>()
+    const folderViewStyle = computed(() => {
+      return {
+        ...(unref(folderView)?.isScrollable === false && {
+          height: `calc(100% - ${unref(appBarRef)?.$el.getBoundingClientRect().height}px)`
+        })
+      }
+    })
     const loadResourcesEventToken = ref(null)
 
     onMounted(() => {
@@ -132,13 +158,16 @@ export default defineComponent({
 
     return {
       ...useFileActions(),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
+      ...resourcesViewDefaults,
       configOptions,
       getMatchingSpace,
       viewModes,
       updateResourceField,
       totalResourcesCount,
-      totalResourcesSize
+      totalResourcesSize,
+      appBarRef,
+      folderView,
+      folderViewStyle
     }
   },
 

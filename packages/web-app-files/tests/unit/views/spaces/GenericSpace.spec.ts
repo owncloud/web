@@ -11,8 +11,10 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { CapabilityStore, useBreadcrumbsFromPath } from '@ownclouders/web-pkg'
+import { CapabilityStore, useBreadcrumbsFromPath, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
+import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
+import { h } from 'vue'
 
 const mockCreateFolder = jest.fn()
 const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
@@ -22,6 +24,7 @@ jest.mock('web-app-files/src/composables/keyboardActions')
 jest.mock('@ownclouders/web-pkg', () => ({
   ...jest.requireActual('@ownclouders/web-pkg'),
   useBreadcrumbsFromPath: jest.fn(),
+  useExtensionRegistry: jest.fn(),
   useFileActionsCreateNewFolder: () => ({
     actions: [{ handler: mockCreateFolder }]
   }),
@@ -80,7 +83,7 @@ describe('GenericSpace view', () => {
     it('shows the files table when files are available', () => {
       const { wrapper } = getMountedWrapper({ files: [mock<Resource>()] })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
-      expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
+      expect(wrapper.find('.resource-table').exists()).toBeTruthy()
     })
   })
   describe('breadcrumbs', () => {
@@ -287,6 +290,32 @@ function getMountedWrapper({
     .mockImplementation(() =>
       useBreadcrumbsFromPathMock({ breadcrumbsFromPath: jest.fn(() => breadcrumbsFromPath) })
     )
+
+  const extensions = [
+    {
+      id: 'com.github.owncloud.web.files.folder-view.resource-table',
+      type: 'folderView',
+      scopes: ['resource', 'space', 'favorite'],
+      folderView: {
+        name: 'resource-table',
+        label: 'Switch to default view',
+        icon: {
+          name: 'menu-line',
+          fillType: 'none'
+        },
+        component: h('div', { class: 'resource-table' })
+      }
+    }
+  ]
+
+  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+    useExtensionRegistryMock({
+      requestExtensions<ExtensionType>(type: string, scopes: string[]) {
+        return extensions as ExtensionType[]
+      }
+    })
+  )
+
   const defaultMocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute) }),
     ...(mocks && mocks)

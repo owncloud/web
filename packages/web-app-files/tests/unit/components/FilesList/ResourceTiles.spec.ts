@@ -59,7 +59,7 @@ describe('ResourceTiles component', () => {
     })
   })
   it('renders an array of spaces correctly', async () => {
-    const { wrapper } = getWrapper({ data: spacesResources })
+    const { wrapper } = getWrapper({ resources: spacesResources })
     await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
@@ -70,13 +70,16 @@ describe('ResourceTiles component', () => {
   })
 
   it('emits fileClick event upon click on tile', async () => {
-    const { wrapper } = getWrapper({ data: spacesResources })
+    const { wrapper } = getWrapper({ resources: spacesResources })
     await wrapper.find('resource-tile-stub').trigger('click')
     expect(wrapper.emitted('click')).toBeTruthy()
   })
 
   it('emits update:selectedIds event on resource selection and sets the selection', () => {
-    const { wrapper } = getWrapper({ data: spacesResources, selectedIds: [spacesResources[0].id] })
+    const { wrapper } = getWrapper({
+      resources: spacesResources,
+      selectedIds: [spacesResources[0].id]
+    })
     wrapper.vm.toggleSelection(spacesResources[0])
     expect(wrapper.find('resource-tile-stub').attributes('isresourceselected')).toEqual('true')
     expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
@@ -131,7 +134,7 @@ describe('ResourceTiles component', () => {
     { viewSize: 5, expected: 'xxxlarge' },
     { viewSize: 6, expected: 'xxxlarge' }
   ])('passes the "viewSize" to the OcTile component', (data) => {
-    const { wrapper } = getWrapper({ data: spacesResources, viewSize: data.viewSize })
+    const { wrapper } = getWrapper({ resources: spacesResources, viewSize: data.viewSize })
     expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(data.expected)
   })
 

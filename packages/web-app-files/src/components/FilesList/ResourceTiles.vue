@@ -1,5 +1,5 @@
 <template>
-  <div id="tiles-view">
+  <div id="tiles-view" class="oc-px-m oc-pt-l">
     <div v-if="sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
       <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
       <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
@@ -35,7 +35,11 @@
       </oc-drop>
     </div>
     <oc-list class="oc-tiles oc-flex">
-      <li v-for="resource in data" :key="resource.id" class="oc-tiles-item has-item-context-menu">
+      <li
+        v-for="resource in resources"
+        :key="resource.id"
+        class="oc-tiles-item has-item-context-menu"
+      >
         <resource-tile
           :ref="(el) => (tileRefs.tiles[resource.id] = el)"
           :resource="resource"
@@ -47,7 +51,7 @@
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
-          @contextmenu="showContextMenu($event, resource.id, tileRefs.tiles[resource.id])"
+          @contextmenu="showContextMenu($event, resource, tileRefs.tiles[resource.id])"
           @click="emitTileClick(resource)"
           @dragstart="dragStart(resource, $event)"
           @dragenter.prevent="setDropStyling(resource, false, $event)"
@@ -79,7 +83,7 @@
               @quick-action-clicked="showContextMenuOnBtnClick($event, resource, resource.id)"
             >
               <template #contextMenu>
-                <slot name="contextMenuActions" :resource="resource" />
+                <slot name="contextMenu" :resource="resource" />
               </template>
             </context-menu-quick-action>
           </template>
@@ -120,6 +124,7 @@ import {
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
@@ -135,10 +140,10 @@ import {
   useMessages,
   useResourceRouteResolver,
   useTileSize,
-  ViewModeConstants,
+  FolderViewModeConstants,
   ResourceGhostElement,
-  ResourceTile,
-  useResourcesStore
+  useResourcesStore,
+  ResourceTile
 } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -148,7 +153,7 @@ export default defineComponent({
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles
      */
-    data: {
+    resources: {
       type: Array as PropType<Resource[]>,
       default: () => []
     },
@@ -188,7 +193,7 @@ export default defineComponent({
     viewSize: {
       type: Number,
       required: false,
-      default: () => ViewModeConstants.tilesSizeDefault
+      default: () => FolderViewModeConstants.tilesSizeDefault
     },
     dragDrop: {
       type: Boolean,
@@ -200,6 +205,7 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
+    const { emit } = context
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
@@ -261,20 +267,27 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
     }
 
-    const showContextMenu = (event, index, reference) => {
+    const isResourceSelected = (resource) => {
+      return props.selectedIds.includes(resource.id)
+    }
+
+    const emitSelect = (selectedIds) => {
+      emit('update:selectedIds', selectedIds)
+    }
+
+    const showContextMenu = (event, item: Resource, reference) => {
       event.preventDefault()
-      const drop = unref(tileRefs).tiles[index]?.$el.getElementsByClassName(
+      const drop = unref(tileRefs).tiles[item.id]?.$el.getElementsByClassName(
         'resource-tiles-btn-action-dropdown'
       )[0]
 
       if (drop === undefined) {
         return
       }
+      if (!isResourceSelected(item)) {
+        emitSelect([item.id])
+      }
       displayPositionedDropdown(drop._tippy, event, reference)
-    }
-
-    const isResourceSelected = (resource) => {
-      return props.selectedIds.includes(resource.id)
     }
 
     const toggleTile = (data) => {
@@ -407,7 +420,7 @@ export default defineComponent({
         : 0
     })
     const ghostTilesCount = computed(() => {
-      const remainder = unref(maxTiles) ? props.data.length % unref(maxTiles) : 0
+      const remainder = unref(maxTiles) ? props.resources.length % unref(maxTiles) : 0
       if (!remainder) {
         return 0
       }
