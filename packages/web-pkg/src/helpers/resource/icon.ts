@@ -155,7 +155,7 @@ const fileIcon = {
   },
   markdown: {
     icon: { name: 'resource-type-markdown', color: 'var(--oc-color-icon-markdown)' },
-    extensions: ['md']
+    extensions: ['md', 'markdown']
   },
   odg: {
     icon: { name: 'resource-type-graphic', color: 'var(--oc-color-icon-graphic)' },

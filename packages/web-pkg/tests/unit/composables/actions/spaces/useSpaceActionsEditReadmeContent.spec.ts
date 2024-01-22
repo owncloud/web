@@ -1,10 +1,17 @@
-import { useSpaceActionsEditReadmeContent } from '../../../../../src/composables/actions'
-import { useModals } from '../../../../../src/composables/piniaStores'
+import {
+  useOpenWithDefaultApp,
+  useSpaceActionsEditReadmeContent
+} from '../../../../../src/composables/actions'
 import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
 import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
-import { mock } from 'vitest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { ClientService } from '../../../../../src'
+
+jest.mock('../../../../../src/composables/actions/useOpenWithDefaultApp', () => ({
+  useOpenWithDefaultApp: jest.fn()
+}))
 
 describe('editReadmeContent', () => {
   describe('isEnabled property', () => {
@@ -74,12 +81,11 @@ describe('editReadmeContent', () => {
     })
   })
   describe('method "handler"', () => {
-    it('creates a modal', () => {
+    it('calls method "openWithDefaultApp"', () => {
       getWrapper({
-        setup: async ({ actions }) => {
-          const { dispatchModal } = useModals()
+        setup: async ({ actions }, { openWithDefaultApp }) => {
           await unref(actions)[0].handler({ resources: [mock<SpaceResource>()] })
-          expect(dispatchModal).toHaveBeenCalled()
+          expect(openWithDefaultApp).toHaveBeenCalled()
         }
       })
     })
@@ -87,17 +93,31 @@ describe('editReadmeContent', () => {
 })
 
 function getWrapper({
-  setup
+  setup,
+  openWithDefaultApp = jest.fn()
 }: {
-  setup: (instance: ReturnType<typeof useSpaceActionsEditReadmeContent>) => void
+  setup: (
+    instance: ReturnType<typeof useSpaceActionsEditReadmeContent>,
+    mocks: { openWithDefaultApp: any }
+  ) => void
+  openWithDefaultApp?: any
 }) {
+  jest.mocked(useOpenWithDefaultApp).mockReturnValue(
+    mock<ReturnType<typeof useOpenWithDefaultApp>>({
+      openWithDefaultApp
+    })
+  )
+
+  const mocks = { openWithDefaultApp }
+
   return {
     wrapper: getComposableWrapper(
       () => {
         const instance = useSpaceActionsEditReadmeContent()
-        setup(instance)
+        setup(instance, mocks)
       },
       {
+        provide: { $clientService: mockDeep<ClientService>() },
         pluginOptions: {
           piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
         }

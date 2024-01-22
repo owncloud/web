@@ -90,9 +90,11 @@ const assertNotEqualText = (expected, actual, type = 'file') => {
 
 const assertHasElementWithText = async (tagName, innerText) => {
   const previewPanel = textEditor.getPreviewPanelElement()
+  const previewPanelButtonElement = textEditor.getPreviewPanelButtonElement()
   const searchElement = previewPanel + ' > ' + tagName
   let hasElement = false
 
+  await client.waitForElementPresent(previewPanelButtonElement).click(previewPanelButtonElement)
   await client.waitForElementPresent(searchElement).getText(searchElement, (result) => {
     hasElement = _.isEqual(result.value, innerText)
   })

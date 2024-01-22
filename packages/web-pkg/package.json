@@ -15,7 +15,10 @@
   },
   "devDependencies": {
     "web-test-helpers": "workspace:*",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@toast-ui/editor": "^3.2.2",
+    "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
+    "prismjs": "^1.29.0"
   },
   "peerDependencies": {
     "@casl/ability": "^6.3.3",

@@ -35,7 +35,9 @@ const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()=
 const createNewShortcutButton = '#new-shortcut-btn'
 const shortcutResorceInput = '#create-shortcut-modal-url-input'
 const saveTextFileInEditorButton = '#app-save-action:visible'
-const textEditorInput = '#text-editor-input'
+const textEditor = '#text-editor #text-editor-container'
+const textEditorPlainTextInput = '#text-editor #text-editor-container .ww-mode .ProseMirror'
+const textEditorMarkdownInput = '#text-editor #text-editor-container .md-mode .ProseMirror'
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
@@ -105,7 +107,6 @@ const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
-const textEditorTextArea = '#text-editor-input'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 
@@ -342,7 +343,7 @@ export const fillContentOfDocument = async ({
 }): Promise<void> => {
   switch (editorToOpen) {
     case 'TextEditor':
-      await page.locator(textEditorTextArea).fill(text)
+      await page.locator(textEditorPlainTextInput).fill(text)
       break
     default:
       throw new Error("Editor should be 'TextEditor' but found " + editorToOpen)
@@ -433,7 +434,11 @@ export const editTextDocument = async ({
   name: string
   content: string
 }): Promise<void> => {
-  await page.locator(textEditorInput).fill(content)
+  const isMarkdownMode = await page.locator(textEditor).getAttribute('data-markdown-mode')
+  const inputLocator =
+    isMarkdownMode === 'true' ? textEditorMarkdownInput : textEditorPlainTextInput
+
+  await page.locator(inputLocator).fill(content)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),

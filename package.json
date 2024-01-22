@@ -131,6 +131,21 @@
       "@uppy/utils": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz",
       "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz",
       "@uppy/xhr-upload": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz"
+    },
+    "packageExtensions": {
+      "jest-serializer-vue-tjw": {
+        "dependencies": {
+          "@vue/compiler-sfc": "2.7.14"
+        }
+      },
+      "@toast-ui/editor": {
+        "dependencies": {
+          "prosemirror-transform": "1.8.0"
+        }
+      }
+    },
+    "patchedDependencies": {
+      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch"
     }
   }
 }

@@ -531,17 +531,21 @@ module.exports = {
     getExpirationDate: async function () {
       let expirationDate
       await this.waitForElementVisible('@expirationDateFieldWrapper')
-      await this.getAttribute('@expirationDateFieldWrapper', 'value', (result) => {
-        const date = new Date(result.value)
-        const dateString =
-          date.getFullYear() +
-          '-' +
-          String(date.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          String(date.getDate()).padStart(2, '0') +
-          ' 00:00:00'
-        expirationDate = dateString
-      })
+      await this.waitForElementVisible('@editor').getAttribute(
+        '@expirationDateFieldWrapper',
+        'value',
+        (result) => {
+          const date = new Date(result.value)
+          const dateString =
+            date.getFullYear() +
+            '-' +
+            String(date.getMonth() + 1).padStart(2, '0') +
+            '-' +
+            String(date.getDate()).padStart(2, '0') +
+            ' 00:00:00'
+          expirationDate = dateString
+        }
+      )
       return expirationDate
     }
   },
