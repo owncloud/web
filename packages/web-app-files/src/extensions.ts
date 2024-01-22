@@ -25,7 +25,7 @@ export const extensions = () => {
   return computed(
     () =>
       [
-        ...unref(folderViews),
+        ...folderViews,
         ...unref(panels),
         {
           id: 'com.github.owncloud.web.files.search',
