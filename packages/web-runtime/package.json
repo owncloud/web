@@ -17,7 +17,6 @@
     "@vueuse/head": "2.0.0",
     "axios": "1.6.8",
     "design-system": "workspace:@ownclouders/design-system@*",
-    "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz",
     "filesize": "^10.1.0",
     "focus-trap": "7.2.0",
     "focus-trap-vue": "^4.0.1",

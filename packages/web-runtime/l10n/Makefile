@@ -48,8 +48,7 @@ $(TEMPLATE_FILE):
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		mkdir -p $$OUT_DIR; \
-		export GETTEXT_APP_SOURCES=`find $$app/src -name '*.vue' -o -name '*.js' -o -name '*.ts'`; \
-		node $(NODE_MODULES)/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
+		(cd $$app && pnpm exec vue-gettext-extract --config ../../gettext.config.cjs); \
 	done;
 
 .PHONY: translations
@@ -66,7 +65,7 @@ $(OUTPUT_DIR)/translations.json:
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		mkdir -p $$OUT_DIR; \
-		gettext-compile --output $$OUT_DIR/translations.json $(patsubst %,$$OUT_DIR/locale/%/LC_MESSAGES/app.po,$(LOCALES)); \
+		(cd $$app && pnpm exec vue-gettext-compile && mv ./l10n/locale/translations.json ./l10n/translations.json); \
 	done; \
 
 .PHONY: push
