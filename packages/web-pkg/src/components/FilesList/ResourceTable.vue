@@ -249,7 +249,7 @@ import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue
 
 import { useResourceRouteResolver } from '../../composables/filesList/useResourceRouteResolver'
 import { ClipboardActions } from '../../helpers/clipboardActions'
-import { determineResourceTableSortFields } from '../../helpers'
+import { determineResourceTableSortFields } from '../../helpers/ui/resourceTable'
 import { useFileActionsRename } from '../../composables/actions'
 import { createLocationCommon } from '../../router'
 import get from 'lodash-es/get'
