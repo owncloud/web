@@ -1,8 +1,9 @@
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
+import { Component } from 'vue'
 
 export interface GenericSearchResultItem {
   id: string
-  displayName: string
+  name: string
   icon?: string
 }
 
@@ -18,7 +19,7 @@ export interface SearchResult {
 }
 
 export interface SearchList {
-  component: unknown // Component needs to match SearchResultValue
+  component: Component // Component props need to match SearchResultValue data type
 
   search(term: string): Promise<SearchResult>
 }

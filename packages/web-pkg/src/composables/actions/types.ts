@@ -1,17 +1,18 @@
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import { RouteLocationRaw } from 'vue-router'
+import { IconFillType } from '../../helpers'
 
 export type ActionOptions = Record<string, unknown | unknown[]>
 export interface Action<T = ActionOptions> {
   name: string
   icon: string
-  iconFillType?: string
+  iconFillType?: IconFillType
   variation?: string
   appearance?: string
   id?: string
   img?: string
-  componentType: 'button' | 'router-link'
+  componentType: 'button' | 'router-link' // FIXME: Should be determined by handler/route
   class?: string
   hasPriority?: boolean
   hideLabel?: boolean
@@ -22,7 +23,7 @@ export interface Action<T = ActionOptions> {
   ext?: string
 
   label(options?: T): string
-  isEnabled(options?: T): boolean
+  isEnabled(options?: T): boolean // FIXME: Should be isVisible
 
   // componentType: button
   handler?(options?: T): Promise<void> | void

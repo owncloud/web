@@ -7,11 +7,12 @@ import { Item } from '@ownclouders/web-client/src/helpers'
 import { useConfigStore } from './config'
 import { FolderView } from '../../ui'
 
+export type AvailableExtensions = 'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView'
 export type ExtensionScope = 'resource' | 'user' | 'group' | string
 
 export type BaseExtension = {
   id: string
-  type: string
+  type: AvailableExtensions
   scopes?: ExtensionScope[]
 }
 

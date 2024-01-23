@@ -2,13 +2,13 @@ import { defineComponent } from 'vue'
 import { IconFillType } from '../../helpers/resource'
 import { Item } from '@ownclouders/web-client/src/helpers'
 
-export interface SideBarPanelContext<R, P, T extends Item> {
+export interface SideBarPanelContext<R extends Item, P extends Item, T extends Item> {
   root?: R
   parent?: P
   items?: T[]
 }
 
-export interface SideBarPanel<R, P, T extends Item> {
+export interface SideBarPanel<R extends Item, P extends Item, T extends Item> {
   name: string
   icon: string
   iconFillType?: IconFillType
