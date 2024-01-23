@@ -1,6 +1,6 @@
 ---
 title: 'Left sidebar menu item extensions'
-date: 2023-11-26T00:00:00+00:00
+date: 2024-01-23T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
 geekdocEditPath: edit/master/docs/extension-system/extension-types
@@ -25,10 +25,20 @@ const leftSidebarMenuItemExtension = {
     type: 'sidebarNav',
     scopes?: ExtensionScope[],
     navItem: {
-        // See AppNavigationItem section below
+        // Please check the AppNavigationItem section below
     }
 }
 ```
 
 For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
 
+
+### AppNavigationItem
+
+The most important configuration options are:
+- `icon` - The icon to be displayed, can be picked from https://owncloud.design/#/Design%20Tokens/IconList
+- `name` - The text to be displayed
+- `route` - The string/route to navigate to, if the nav item should be a `<router-link>` (Mutually exclusive with `handler`)
+- `handler` - The action to perform upon click, if the nav item should be a `<button>` (Mutually exclusive with `route`)
+
+Please check the `AppNavigationItem` type for a full list of configuration options.
