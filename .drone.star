@@ -2115,7 +2115,7 @@ def wopiServer():
         {
             "name": "wopiserver",
             "type": "docker",
-            "image": "cs3org/wopiserver:v10.2.2",
+            "image": "cs3org/wopiserver:v10.3.0",
             "detach": True,
             "commands": [
                 "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
