@@ -18,21 +18,17 @@ One possible extension type is search. Registered search extensions are availabl
 
 An example of a search extension configuration can be found below:
 
-```js
-const exampleSearchExtension = {
-  id: string,
-  type: 'search',
-  scopes?: ExtensionScope[],
+```typescript
+interface SearchExtension {
+  id: string
+  type: 'search'
+  scopes?: ExtensionScope[]
   searchProvider: {
     id: string
     available: boolean
     displayName?: string
-    previewSearch?: {
-      // See SearchPreview section below
-    },
-    listSearch?: {
-      // See SearchList section below
-    }
+    previewSearch?: SearchPreview // See SearchPreview section below
+    listSearch?: SearchList // See SearchList section below
   }
 }
 ```

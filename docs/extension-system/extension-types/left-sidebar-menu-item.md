@@ -20,7 +20,7 @@ One possible extension type is left sidebar menu items. Registered left sidebar 
 To define a left sidebar menu item, you implement the SidebarNavExtension interface.
 It looks like this:
 
-```js
+```typescript
 interface SidebarNavExtension {
     id: string
     type: 'sidebarNav'

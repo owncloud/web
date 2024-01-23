@@ -18,7 +18,7 @@ Actions are one of the possible extension types. Registered actions get rendered
 
 This is what the ActionExtension interface looks like:
 
-```js
+```typescript
 interface ActionExtension {
     id: string
     type: 'action'

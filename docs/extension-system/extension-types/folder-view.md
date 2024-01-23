@@ -16,7 +16,7 @@ The folder view is one of the possible extension types. Registered folder view c
 
 This is what the FolderViewExtension interface looks like:
 
-```js
+```typescript
 interface FolderViewExtension {
     id: string
     scopes?: ExtensionScope[]
