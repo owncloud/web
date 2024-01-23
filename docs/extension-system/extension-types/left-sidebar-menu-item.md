@@ -17,15 +17,15 @@ One possible extension type is left sidebar menu items. Registered left sidebar 
 
 ## Configuration
 
-An example of a left sidebar menu item extension configuration can be found below:
+To define a left sidebar menu item, you implement the SidebarNavExtension interface.
+It looks like this:
 
 ```js
-const leftSidebarMenuItemExtension = {
-    id: string,
-    type: 'sidebarNav',
-    scopes?: ExtensionScope[],
-    navItem: {
-        // Please check the AppNavigationItem section below
+interface SidebarNavExtension {
+    id: string
+    type: 'sidebarNav'
+    scopes?: ExtensionScope[]
+    navItem: AppNavigationItem // Please check the AppNavigationItem section below
     }
 }
 ```
@@ -41,4 +41,4 @@ The most important configuration options are:
 - `route` - The string/route to navigate to, if the nav item should be a `<router-link>` (Mutually exclusive with `handler`)
 - `handler` - The action to perform upon click, if the nav item should be a `<button>` (Mutually exclusive with `route`)
 
-Please check the `AppNavigationItem` type for a full list of configuration options.
+Please check the [`AppNavigationItem` type](https://github.com/owncloud/web/blob/f069ce44919cde5d112c68a519d433e015a4a011/packages/web-pkg/src/apps/types.ts#L14) for a full list of configuration options.
