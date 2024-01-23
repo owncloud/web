@@ -34,7 +34,7 @@ no custom application code at all and only host extensions to be registered in t
 To get started, define a `src/index.ts`. Below is the most basic example of its content:
 
 ```ts
-// Install '@ownclouders/web-pkg' as a dependency first
+// Install '@ownclouders/web-pkg' as a devDependency first (only relevant for types and autocompletion, dependency is already provided by the ownCloud Web at runtime). 
 import {
   AppWrapperRoute,
   ApplicationFileExtension,
@@ -50,9 +50,14 @@ export default defineWebApplication({
     // Should be short, unique and expressive as it gets prefixed on all routes within your application
     const appId = 'your-extension' 
 
-    // See details below
+    // See extensions section below
     const extensions = [
         ...
+    ]
+
+    // See details below
+    const navItems = [
+      ...
     ]
 
     // See details below
@@ -67,17 +72,49 @@ export default defineWebApplication({
         icon: 'aliens', // See https://owncloud.design/#/Design%20Tokens/IconList for available options
       },
       extensions,
+      navItems,
       routes
     }
   }
 })
 ```
 
+By defining an application via `defineWebApplication` you can provide the following:
+- `appInfo` - the application metadata, which is used to make the application available via the app switcher and the app registry
+- `navItems` - the statically defined navigation items for the left side bar. Only gets rendered when more than 1 navigation item exists at runtime. 
+Additional dynamic navigation items can be registered via the extension registry.
+- `routes` - the routes to the different views of your application. May be referenced within the `navItems`. Authentication requirements can be defined per item.
+- `extensions` - the extensions to be registered in the extension registry. For more details see the `Extensions` section below.
+
 ### Extensions
 
+#### Abstract
+In contrast to applications, extensions usually have a rather small scope and dedicated functionality. Building an extension is limited to the extension types that are defined
+by the ownCloud Web extension system. See the full list of available extension types below.
+
+#### Extension Types
+
+1. `ActionExtension` - An extension that can be used to register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
+respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc).
+2. `SearchExtension` - An extension that can be used to add search results to the search results list in the files app.
+3. `SidebarNavExtension` - An extension that can be used to add navigation items to the left side bar in the files app.
+4. `SidebarPanelExtension` - An extension that can be used to add panels to the right side bar in the files app.
+5. `FolderViewExtension` - An extension that can be used to add views to the folder view in the files app.
+
+#### Extension Points
+There are standardized components and places where extensions are being used automatically. These are the ones that are currently provided:
+
+1. Left Sidebar for Navigation
+2. Right Sidebar in any file(s) context 
+3. Folder Views in the files app 
+4. Right click context menu in the files app 
+5. Batch actions in the files app
+
+
+
+
+
 - What is an extension?
-    - list of extension types
-        - 
     - extension points (extension.ts)
         - was wird erweitert - Funktionalität
         - Extensions werden an/in Extension Points eingebunden
