@@ -92,16 +92,36 @@ Additional dynamic navigation items can be registered via the extension registry
 
 In contrast to applications, extensions usually have a rather small scope and dedicated functionality.
 
+#### Extension Registry
+
+The globally available extension registry provided by the ownCloud Web runtime can be used to both register and query extensions. All extensions
+which are being made available via an `app` get registered in the extension registry automatically. In your custom application code you can
+then query any of the available extensions by providing a `type` string and optionally a list of `scopes`. Throughout the ownCloud Web platform
+and most prominently also in the `files` app we have defined some extension points which automatically use certain extensions, see the 
+`Extension Points` section below.
+
 #### Extension Types
 
 Building an extension is limited to the extension types that are defined by the ownCloud Web extension system. See the full list of available extension types below.
 
-1. `ActionExtension` - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
-respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc).
-2. `SearchExtension` - An extension that can register additional search providers. Please see the dedicated [documentation on search extensions]().
-3. `SidebarNavExtension` - An extension that can register additional navigation items to the left side bar. These can be scoped to specific apps, and programmatically enabled/disabled.
-4. `SidebarPanelExtension` - An extension that can register panels to the right side bar.
-5. `FolderViewExtension` - An extension that can register additional ways of displaying the content of a folder (resources, so spaces, folders or files) to the user.
+1. `ActionExtension` (type `action`) - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
+respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc.).
+2. `SearchExtension` (type `search`) - An extension that can register additional search providers. Please see the dedicated [documentation on search extensions]().
+3. `SidebarNavExtension` (type `sidebarNav`) - An extension that can register additional navigation items to the left sidebar. These can be scoped to specific apps, and programmatically enabled/disabled.
+4. `SidebarPanelExtension`, (type `sidebarPanel`) - An extension that can register panels to the right sidebar.
+5. `FolderViewExtension` (type `folderView`) - An extension that can register additional ways of displaying the content of a folder (resources, so spaces, folders or files) to the user.
+
+#### Extension Base Configuration
+
+Any extension is required to define at least an `id`, which is supposed to be unique throughout the ownCloud Web ecosystem, and a `type` out of the ones listed above.
+The `scopes` are optional and can be used to further limit the usage of an extension, see the `Scopes` section below.
+
+In order to keep `id`s readable for humans we didn't want to enforce uniqueness through e.g. uuids. Instead, we chose to use 
+dot-formatted namespaces like e.g. `com.github.owncloud.web.files.search`. 
+
+#### Scopes
+
+<!-- Where does an extension get used // where is it available -->
 
 #### Extension Points
 
@@ -114,26 +134,12 @@ There are standardized components and places where extensions are being used aut
 5. Batch actions in the files app
 6. Search results in the search app
 
-#### Extension Base Configuration
-
-<!-- Add best practices for id naming, explain types and scopes -->
-
-#### Scopes
-
-<!-- Where does an extension get used // where is it available -->
-
 
 ## Further information (digging deeper)
 
 AKA "under the hood"
 
-### Global Extension Registry
-
-- What is Global Extension Registry?
-
 ### - What can / can't I do with an extension?
-
-
 
 ### js-package / commonjs-file
 
