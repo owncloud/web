@@ -1,7 +1,6 @@
 import { FolderViewExtension } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { ResourceTable } from '@ownclouders/web-pkg'
-import ResourceTiles from '../../components/FilesList/ResourceTiles.vue'
+import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 
 export const useFolderViews = (): FolderViewExtension[] => {
   const { $gettext } = useGettext()

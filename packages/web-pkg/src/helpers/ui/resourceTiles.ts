@@ -1,4 +1,4 @@
-import { SortDir, SortField } from '@ownclouders/web-pkg'
+import { SortDir, SortField } from '../../composables/sort'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {
@@ -65,7 +65,7 @@ export const sortFields: SortField[] = [
   }
 ]
 
-export const determineSortFields = (firstResource): SortField[] => {
+export const determineResourceTilesSortFields = (firstResource): SortField[] => {
   if (!firstResource) {
     return []
   }

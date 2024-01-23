@@ -10,10 +10,11 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { useSideBar } from '@ownclouders/web-pkg'
-
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
-import { determineSortFields as determineResourceTableSortFields } from '@ownclouders/web-pkg'
-import { determineSortFields as determineResourceTilesSortFields } from '../../helpers/ui/resourceTiles'
+import {
+  determineResourceTableSortFields,
+  determineResourceTilesSortFields
+} from '@ownclouders/web-pkg'
 import { Task } from 'vue-concurrency'
 import { Resource } from '@ownclouders/web-client'
 import { useSelectedResources, SelectedResourcesResult } from '@ownclouders/web-pkg'

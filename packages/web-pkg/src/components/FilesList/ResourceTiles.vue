@@ -128,23 +128,21 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
+import { ContextMenuQuickAction } from '../ContextActions'
+import { createLocationSpaces } from '../../router'
+import { createFileRouteOptions, displayPositionedDropdown } from '../../helpers'
+import { eventBus } from '../../services'
+import { ImageDimension } from '../../constants'
+import { ResourceTile, ResourceGhostElement } from './index'
 import {
-  ContextMenuQuickAction,
-  createFileRouteOptions,
-  createLocationSpaces,
-  displayPositionedDropdown,
-  eventBus,
-  ImageDimension,
+  FolderViewModeConstants,
   SortDir,
   SortField,
   useMessages,
   useResourceRouteResolver,
   useTileSize,
-  FolderViewModeConstants,
-  ResourceGhostElement,
-  useResourcesStore,
-  ResourceTile
-} from '@ownclouders/web-pkg'
+  useResourcesStore
+} from '../../composables'
 
 export default defineComponent({
   name: 'ResourceTiles',
