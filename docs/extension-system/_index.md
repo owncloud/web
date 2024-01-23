@@ -1,6 +1,6 @@
 ---
 title: 'Extension system'
-date: 2023-11-26T00:00:00+00:00
+date: 2024-01-23T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
 geekdocEditPath: edit/master/docs/extension-system
@@ -31,13 +31,47 @@ no custom application code at all and only host extensions to be registered in t
 
 #### Technical Details
 
+To get started, define a `src/index.ts`. Below is the most basic example of its content:
 
-- What is an app?
-    - basic building block of oC web
-    - need to get registered in config in order to get loaded by oC web runtime
-    - can register 0-n extensions (see below)
+```ts
+// Install '@ownclouders/web-pkg' as a dependency first
+import {
+  AppWrapperRoute,
+  ApplicationFileExtension,
+  defineWebApplication
+} from '@ownclouders/web-pkg'
 
-<!-- TODO: Add minimum viable app via ClassicApplicationScript/ApplicationInformation interface -->
+
+export default defineWebApplication({
+  setup({ applicationConfig }) {
+    // Here, you have access to the full injection context, meaning you can use all composable that we provide via web-pkg
+
+    // Needs to be unique within all installed extensions in any ownCloud web instance
+    // Should be short, unique and expressive as it gets prefixed on all routes within your application
+    const appId = 'your-extension' 
+
+    // See details below
+    const extensions = [
+        ...
+    ]
+
+    // See details below
+    const routes = [
+        ...
+    ]
+
+    return {
+      appInfo: {
+        name: $gettext('Your extension'),
+        id: appId,
+        icon: 'aliens', // See https://owncloud.design/#/Design%20Tokens/IconList for available options
+      },
+      extensions,
+      routes
+    }
+  }
+})
+```
 
 ### Extensions
 
