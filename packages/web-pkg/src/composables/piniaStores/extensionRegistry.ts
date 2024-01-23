@@ -8,7 +8,7 @@ import { useConfigStore } from './config'
 import { FolderView } from '../../ui'
 import { StringUnionOrAnyString } from '../../utils/types'
 
-export type AvailableExtension = StringUnionOrAnyString<
+export type ExtensionType = StringUnionOrAnyString<
   'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView'
 >
 
@@ -16,7 +16,7 @@ export type ExtensionScope = StringUnionOrAnyString<'resource' | 'user' | 'group
 
 export type BaseExtension = {
   id: string
-  type: AvailableExtension
+  type: ExtensionType
   scopes?: ExtensionScope[]
 }
 
