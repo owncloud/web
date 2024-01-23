@@ -29,7 +29,8 @@
     "styleguide:build": "vue-styleguidist build --config ./config/docs.config.js",
     "tokens": "node build/build-tokens.js",
     "tokens:w": "onchange -i \"./src/tokens/**/*.json\" -- npm run tokens",
-    "test": "jest --config ./jest.conf.js --coverage"
+    "test": "jest --config ./jest.conf.js --coverage",
+    "test:e2e": "playwright test --config ./tests/e2e/playwright.config.ts"
   },
   "browserslist": [
     "> 1%",

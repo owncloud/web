@@ -17,7 +17,7 @@ export default {
     const tabs = document.createElement('div')
     tabs.className = 'vueds-tabs'
     tabs.innerHTML =
-      "<button class='vueds-tab vue vueds-tab--active'>VUE</button><button class='vueds-tab html'>HTML</button>"
+      "<button class='vueds-tab vue vueds-tab--active'>VUE</button><button data-testid='preview-tab-html' class='vueds-tab html'>HTML</button>"
     return tabs
   },
   init() {

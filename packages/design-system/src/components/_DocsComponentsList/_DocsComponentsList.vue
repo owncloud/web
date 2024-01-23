@@ -1,5 +1,5 @@
 <template>
-  <div class="component-status">
+  <div data-testid="components-list" class="component-status">
     <ul class="status-list">
       <li>
         <oc-icon name="checkbox-circle" variation="success" />
@@ -36,7 +36,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(component, index) in components" :key="index" class="component">
+        <tr
+          v-for="(component, index) in components"
+          :key="index"
+          class="component"
+          data-testid="component-list-row"
+        >
           <td v-if="component.name">
             <a :href="`/#/oC%20Components/${component.name}`">
               <code class="name">{{ component.name }}</code>

@@ -176,6 +176,7 @@ export default (previewComponent) => {
 
           elem.classList.add('vueds-html')
           elem.classList.add('vueds-hidden')
+          elem.setAttribute('data-testid', 'codemirror-html')
 
           CodeTabs.init()
         }, 300)

@@ -362,7 +362,7 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
+    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1022,7 +1022,7 @@ def installPlaywright():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm playwright install chromium",
+            "pnpm exec playwright install --with-deps",
         ],
     }]
 
@@ -2231,3 +2231,53 @@ def appProviderService(name):
             ],
         },
     ]
+
+def buildDesignSystemDocs():
+    return [{
+        "name": "build-design-system-docs",
+        "image": OC_CI_NODEJS,
+        "commands": [
+            "pnpm --filter @ownclouders/design-system build:docs",
+        ],
+    }]
+
+def runDesignSystemDocsE2eTests():
+    return [{
+        "name": "run-design-system-docs-e2e-tests",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
+        "commands": [
+            "pnpm --filter @ownclouders/design-system test:e2e",
+        ],
+    }]
+
+def buildAndTestDesignSystem(ctx):
+    design_system_trigger = {
+        "ref": [
+            "refs/heads/master",
+            "refs/heads/stable-*",
+            "refs/tags/**",
+            "refs/pull/**",
+        ],
+    }
+
+    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+            restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+            installPnpm() + \
+            installPlaywright() + \
+            buildDesignSystemDocs() + \
+            runDesignSystemDocsE2eTests()
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "design-system-build-and-test",
+        "workspace": {
+            "base": dir["base"],
+            "path": config["app"],
+        },
+        "steps": steps,
+        "trigger": design_system_trigger,
+    }]
