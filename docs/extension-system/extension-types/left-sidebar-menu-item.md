@@ -10,8 +10,25 @@ geekdocCollapseSection: true
 
 {{< toc >}}
 
-One possible extension type is left sidebar menu items.
 
-### 2. Left sidebar menu item
-- How to add items
-<!-- TODO: Add link to next extension type doc page -->
+# Left sidebar menu item extension type
+
+One possible extension type is left sidebar menu items. Registered left sidebar menu items get rendered in the left sidebar, as long as there is more than one available.
+
+## Configuration
+
+An example of a left sidebar menu item extension configuration can be found below:
+
+```js
+const leftSidebarMenuItemExtension = {
+    id: string,
+    type: 'sidebarNav',
+    scopes?: ExtensionScope[],
+    navItem: {
+        // See AppNavigationItem section below
+    }
+}
+```
+
+For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
+

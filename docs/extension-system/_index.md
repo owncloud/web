@@ -114,6 +114,10 @@ There are standardized components and places where extensions are being used aut
 5. Batch actions in the files app
 6. Search results in the search app
 
+#### Extension Base Configuration
+
+<!-- Add best practices for id naming, explain types and scopes -->
+
 #### Scopes
 
 <!-- Where does an extension get used // where is it available -->
