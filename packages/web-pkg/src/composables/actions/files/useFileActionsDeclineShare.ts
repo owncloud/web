@@ -5,7 +5,7 @@ import {
   createLocationShares
 } from '../../../router'
 import PQueue from 'p-queue'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
@@ -32,7 +32,7 @@ export const useFileActionsDeclineShare = () => {
   const spacesStore = useSpacesStore()
   const { upsertResource } = useResourcesStore()
 
-  const handler = async ({ resources }: FileActionOptions) => {
+  const handler = async ({ resources }: FileActionOptions<ShareResource>) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
@@ -88,7 +88,7 @@ export const useFileActionsDeclineShare = () => {
     })
   }
 
-  const actions = computed((): FileAction[] => [
+  const actions = computed((): FileAction<ShareResource>[] => [
     {
       name: 'decline-share',
       icon: 'spam-3',

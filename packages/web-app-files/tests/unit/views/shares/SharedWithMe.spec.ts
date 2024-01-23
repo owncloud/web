@@ -12,8 +12,7 @@ import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mock } from 'jest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
-import { Resource } from '@ownclouders/web-client'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { ShareTypes, ShareResource } from '@ownclouders/web-client/src/helpers'
 
 jest.mock('web-app-files/src/composables/resourcesViewDefaults')
 jest.mock('@ownclouders/web-pkg', () => ({
@@ -85,8 +84,8 @@ describe('SharedWithMe view', () => {
         const shareType2 = ShareTypes.group
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<Resource>({ share: { shareType: shareType1.value } }),
-            mock<Resource>({ share: { shareType: shareType2.value } })
+            mock<ShareResource>({ shareType: shareType1.value }),
+            mock<ShareResource>({ shareType: shareType2.value })
           ]
         })
         const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
@@ -96,17 +95,17 @@ describe('SharedWithMe view', () => {
     })
     describe('shared by', () => {
       it('shows all available collaborators as filter option', () => {
-        const collaborator1 = { username: 'user1', displayName: 'user1' }
-        const collaborator2 = { username: 'user2', displayName: 'user2' }
+        const collaborator1 = { id: 'user1', displayName: 'user1' }
+        const collaborator2 = { id: 'user2', displayName: 'user2' }
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<Resource>({
-              owner: [collaborator1],
-              share: { shareType: ShareTypes.user.value }
+            mock<ShareResource>({
+              sharedBy: collaborator1,
+              shareType: ShareTypes.user.value
             }),
-            mock<Resource>({
-              owner: [collaborator2],
-              share: { shareType: ShareTypes.user.value }
+            mock<ShareResource>({
+              sharedBy: collaborator2,
+              shareType: ShareTypes.user.value
             })
           ]
         })
@@ -123,15 +122,15 @@ describe('SharedWithMe view', () => {
       it('filters shares accordingly by name', async () => {
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<Resource>({
+            mock<ShareResource>({
               name: 'share1',
               hidden: false,
-              share: { shareType: ShareTypes.user.value }
+              shareType: ShareTypes.user.value
             }),
-            mock<Resource>({
+            mock<ShareResource>({
               name: 'share2',
               hidden: false,
-              share: { shareType: ShareTypes.user.value }
+              shareType: ShareTypes.user.value
             })
           ]
         })
@@ -153,7 +152,7 @@ function getMountedWrapper({
 } = {}) {
   jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
-      storeItems: ref(files),
+      paginatedResources: ref(files),
       areResourcesLoading: ref(loading)
     })
   )

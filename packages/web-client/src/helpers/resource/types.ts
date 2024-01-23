@@ -1,6 +1,5 @@
 import { DavFileInfoResponse } from '@ownclouders/web-client/src/webdav/constants'
-import { User } from '../../generated'
-import { User as LegacyUser } from '../user'
+import { Identity, User } from '../../generated'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
 import { DAVResultResponseProps, FileStat } from 'webdav'
 import { Audio, GeoCoordinates } from '../../generated'
@@ -58,7 +57,6 @@ export interface Resource {
   downloadURL?: string
   type?: string
   thumbnail?: string
-  status?: number
   processing?: boolean
   locked?: boolean
   lockOwnerName?: string
@@ -78,7 +76,6 @@ export interface Resource {
   permissions?: string
   starred?: boolean
   etag?: string
-  sharePermissions?: number | string // FIXME
   shareId?: string
   shareRoot?: string
   shareTypes?: number[]
@@ -86,6 +83,10 @@ export interface Resource {
   description?: string
   driveType?: 'mountpoint' | 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   driveAlias?: string
+  matchingSpace?: any
+  owner?: Identity
+  extension?: string
+  ddate?: string
 
   canCreate?(): boolean
   canUpload?({ user }: { user?: User }): boolean
@@ -106,27 +107,10 @@ export interface Resource {
   canEditTags?(): boolean
 
   isReceivedShare?(): boolean
-
   isShareRoot?(): boolean
-
   isMounted?(): boolean
 
   getDomSelector?(): string
-  matchingSpace?: any
-
-  resourceOwner?: LegacyUser
-  owner?: LegacyUser[]
-  ownerDisplayName?: string
-  ownerId?: string
-  sharedWith?: string
-  shareOwner?: string
-  shareOwnerDisplayname?: string
-  hidden?: boolean
-
-  extension?: string
-  share?: any
-
-  ddate?: string
 }
 
 // These interfaces have empty (unused) __${type}SpaceResource properties which are only

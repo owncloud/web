@@ -1,5 +1,5 @@
 import kebabCase from 'lodash-es/kebabCase'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareStatus, isShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { routeToContextQuery } from '../../appDefaults'
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
@@ -120,6 +120,7 @@ export const useFileActions = () => {
               !unref(isSearchActive) &&
               (isLocationTrashActive(router, 'files-trash-generic') ||
                 (isLocationSharesActive(router, 'files-shares-with-me') &&
+                  isShareResource(resources[0]) &&
                   resources[0].status !== ShareStatus.accepted))
             ) {
               return false

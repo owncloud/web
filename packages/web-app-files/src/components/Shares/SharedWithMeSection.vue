@@ -104,7 +104,7 @@ import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { SortDir, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { ContextActions } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
@@ -134,7 +134,7 @@ export default defineComponent({
       default: ''
     },
     items: {
-      type: Array as PropType<Resource[]>,
+      type: Array as PropType<ShareResource[]>,
       required: true
     },
     shareStatus: {
@@ -284,14 +284,8 @@ export default defineComponent({
         onExit: debounced.cancel
       })
     },
-    getShowSynchedIcon(resource: Resource) {
+    getShowSynchedIcon(resource: ShareResource) {
       return resource.status === ShareStatus.accepted
-    },
-    getShowAcceptButton(resource: Resource) {
-      return resource.status === ShareStatus.declined || resource.status === ShareStatus.pending
-    },
-    getShowDeclineButton(resource: Resource) {
-      return resource.status === ShareStatus.accepted || resource.status === ShareStatus.pending
     },
     toggleShowMore() {
       this.showMore = !this.showMore

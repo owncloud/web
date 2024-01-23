@@ -11,32 +11,24 @@ const selectors = {
 const folderA = {
   id: '1',
   type: 'folder',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 }
 const folderB = {
   id: '2',
   type: 'folder',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 }
 const fileA = {
   id: '3',
   type: 'file',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 }
 const fileB = {
   id: '4',
   type: 'file',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 }

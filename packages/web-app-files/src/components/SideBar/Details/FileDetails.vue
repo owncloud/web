@@ -74,9 +74,6 @@
             <p class="oc-m-rm">
               {{ ownerDisplayName }}
               <span v-if="ownedByCurrentUser" v-translate>(me)</span>
-              <span v-if="!ownedByCurrentUser && ownerAdditionalInfo"
-                >({{ ownerAdditionalInfo }})</span
-              >
             </p>
           </td>
         </tr>
@@ -134,7 +131,7 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { isShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
@@ -326,14 +323,7 @@ export default defineComponent({
       return this.resource.mdate?.length > 0
     },
     ownerDisplayName() {
-      return (
-        this.resource.ownerDisplayName ||
-        this.resource.shareOwnerDisplayname ||
-        this.resource.owner?.[0].displayName
-      )
-    },
-    ownerAdditionalInfo() {
-      return this.resource.owner?.[0].additionalInfo
+      return this.resource.owner?.displayName
     },
     resourceSize() {
       return formatFileSize(this.resource.size, this.$language.current)
@@ -362,17 +352,16 @@ export default defineComponent({
       )
     },
     ownedByCurrentUser() {
-      return (
-        this.resource.ownerId === this.user?.onPremisesSamAccountName ||
-        this.resource.owner?.[0].username === this.user?.onPremisesSamAccountName ||
-        this.resource.shareOwner === this.user?.onPremisesSamAccountName
-      )
+      return this.resource.owner?.id === this.user?.onPremisesSamAccountName
     },
     shareIndicators() {
       return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
     sharedByDisplayName() {
-      return this.resource.share?.fileOwner?.displayName
+      if (!isShareResource(this.resource)) {
+        return ''
+      }
+      return this.resource.sharedBy?.displayName
     }
   },
   methods: {

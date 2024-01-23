@@ -35,11 +35,11 @@ export interface Action<T = ActionOptions> {
   disabledTooltip?(options?: T): string
 }
 
-export type FileActionOptions = {
+export type FileActionOptions<T extends Resource = Resource> = {
   space: SpaceResource
-  resources?: Resource[]
+  resources?: T[]
 }
-export type FileAction = Action<FileActionOptions>
+export type FileAction<T extends Resource = Resource> = Action<FileActionOptions<T>>
 
 export type GroupActionOptions = {
   resources: Group[]

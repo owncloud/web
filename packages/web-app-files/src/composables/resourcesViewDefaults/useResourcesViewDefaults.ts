@@ -26,20 +26,19 @@ import {
 } from '@ownclouders/web-pkg'
 
 import { ScrollToResult, useScrollTo } from '@ownclouders/web-pkg'
-import { storeToRefs } from 'pinia'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
 }
 
-type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
+type ResourcesViewDefaultsResult<T extends Resource, TT, TU extends any[]> = {
   fileListHeaderY: Ref<any>
   refreshFileListHeaderPosition(): void
   loadResourcesTask: Task<TT, TU>
   areResourcesLoading: ReadOnlyRef<boolean>
-  storeItems: ReadOnlyRef<Resource[]>
+  storeItems: ReadOnlyRef<T[]>
   sortFields: ReadOnlyRef<SortField[]>
-  paginatedResources: Ref<Resource[]>
+  paginatedResources: Ref<T[]>
   paginationPages: ReadOnlyRef<number>
   paginationPage: ReadOnlyRef<number>
   handleSort({ sortBy, sortDir }: { sortBy: string; sortDir: SortDir }): void
@@ -56,7 +55,7 @@ type ResourcesViewDefaultsResult<T, TT, TU extends any[]> = {
 } & SelectedResourcesResult &
   ScrollToResult
 
-export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
+export const useResourcesViewDefaults = <T extends Resource, TT, TU extends any[]>(
   options: ResourcesViewDefaultsOptions<TT, TU> = {}
 ): ResourcesViewDefaultsResult<T, TT, TU> => {
   const loadResourcesTask = options.loadResourcesTask || folderService.getTask()
@@ -65,7 +64,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   })
 
   const resourcesStore = useResourcesStore()
-  const { activeResources: storeItems } = storeToRefs(resourcesStore)
+  const storeItems = computed(() => resourcesStore.activeResources) as unknown as Ref<T[]>
 
   const { refresh: refreshFileListHeaderPosition, y: fileListHeaderY } = useFileListHeaderPosition()
 
@@ -88,12 +87,15 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
     return determineResourceTableSortFields(unref(storeItems)[0])
   })
 
-  const { sortBy, sortDir, items, handleSort } = useSort({ items: storeItems, fields: sortFields })
+  const { sortBy, sortDir, items, handleSort } = useSort<T>({
+    items: storeItems,
+    fields: sortFields
+  })
   const {
     items: paginatedResources,
     total: paginationPages,
     page: paginationPage
-  } = usePagination({ items, perPageStoragePrefix: 'files' })
+  } = usePagination<T>({ items, perPageStoragePrefix: 'files' })
 
   const accentuateItem = async (id: string) => {
     await nextTick()

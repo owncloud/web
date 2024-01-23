@@ -1,8 +1,8 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createLocationSpaces, createLocationPublic } from '@ownclouders/web-pkg/'
 import { mount } from '@vue/test-utils'
 
@@ -12,28 +12,30 @@ const getResourceMock = ({
   tags = [],
   thumbnail = null,
   shareTypes = [],
-  share = null,
   path = '/somePath/someResource',
   locked = false,
-  canEditTags = true
+  canEditTags = true,
+  sharedBy = undefined
 } = {}) =>
-  mock<Resource>({
+  mock<ShareResource>({
     id: '1',
     type,
     isFolder: type === 'folder',
     mimeType,
-    ownerId: 'marie',
-    ownerDisplayName: 'Marie',
-    owner: null,
+    owner: {
+      id: 'marie',
+      displayName: 'Marie'
+    },
+    sharedBy,
     mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
     tags,
     size: '740',
     path,
     thumbnail,
     shareTypes,
-    share,
     locked,
-    canEditTags: jest.fn(() => canEditTags)
+    canEditTags: jest.fn(() => canEditTags),
+    ...(sharedBy && { shareType: 0 })
   })
 
 const selectors = {
@@ -111,8 +113,10 @@ describe('Details SideBar Panel', () => {
   })
   describe('shared by', () => {
     it('shows if the resource is a share from another user', () => {
-      const share = { fileOwner: { displayName: 'Marie' } }
-      const resource = getResourceMock({ shareTypes: [ShareTypes.user.value], share })
+      const resource = getResourceMock({
+        shareTypes: [ShareTypes.user.value],
+        sharedBy: { id: '1', displayName: 'Marie' }
+      })
       const { wrapper } = createWrapper({
         resource,
         user: { onPremisesSamAccountName: 'einstein' }

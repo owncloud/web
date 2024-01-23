@@ -6,7 +6,7 @@ import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { useSortMock } from '../../../mocks/useSortMock'
 
 jest.mock('web-app-files/src/composables')
@@ -52,15 +52,15 @@ describe('SharedWithOthers view', () => {
       it('shows filter if multiple share types are present', () => {
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<Resource>({ share: { shareType: ShareTypes.user.value } }),
-            mock<Resource>({ share: { shareType: ShareTypes.group.value } })
+            mock<ShareResource>({ share: { shareType: ShareTypes.user.value } }),
+            mock<ShareResource>({ share: { shareType: ShareTypes.group.value } })
           ]
         })
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
       })
       it('does not show filter if only one share type is present', () => {
         const { wrapper } = getMountedWrapper({
-          files: [mock<Resource>({ share: { shareType: ShareTypes.user.value } })]
+          files: [mock<ShareResource>({ share: { shareType: ShareTypes.user.value } })]
         })
         expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
       })

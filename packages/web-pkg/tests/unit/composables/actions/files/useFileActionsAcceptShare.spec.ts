@@ -1,8 +1,7 @@
 import { mock } from 'jest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsAcceptShare } from '../../../../../src/composables/actions/files/useFileActionsAcceptShare'
-import { Resource } from '@ownclouders/web-client'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const sharesWithMeLocation = 'files-shares-with-me'
@@ -12,9 +11,9 @@ describe('acceptShare', () => {
   describe('computed property "actions"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
-        { resources: [{ status: ShareStatus.pending }] as Resource[], expectedStatus: true },
-        { resources: [{ status: ShareStatus.declined }] as Resource[], expectedStatus: true },
-        { resources: [{ status: ShareStatus.accepted }] as Resource[], expectedStatus: false }
+        { resources: [{ status: ShareStatus.pending }] as ShareResource[], expectedStatus: true },
+        { resources: [{ status: ShareStatus.declined }] as ShareResource[], expectedStatus: true },
+        { resources: [{ status: ShareStatus.accepted }] as ShareResource[], expectedStatus: false }
       ])(
         `should be set according to the resource share status if the route name is "${sharesWithMeLocation}"`,
         (inputData) => {
@@ -31,9 +30,9 @@ describe('acceptShare', () => {
         }
       )
       it.each([
-        { status: ShareStatus.pending } as Resource,
-        { status: ShareStatus.declined } as Resource,
-        { status: ShareStatus.accepted } as Resource
+        { status: ShareStatus.pending } as ShareResource,
+        { status: ShareStatus.declined } as ShareResource,
+        { status: ShareStatus.accepted } as ShareResource
       ])(
         `should be set as false if the route name is other than "${sharesWithMeLocation}"`,
         (resource) => {

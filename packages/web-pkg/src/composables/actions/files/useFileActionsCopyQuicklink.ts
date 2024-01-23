@@ -2,7 +2,8 @@ import {
   Share,
   ShareStatus,
   ShareTypes,
-  buildShare
+  buildShare,
+  isShareResource
 } from '@ownclouders/web-client/src/helpers/share'
 import { isLocationSharesActive } from '../../../router'
 import { computed, unref } from 'vue'
@@ -89,7 +90,7 @@ export const useFileActionsCopyQuickLink = () => {
           return false
         }
         if (isLocationSharesActive(router, 'files-shares-with-me')) {
-          if (resources[0].status !== ShareStatus.accepted) {
+          if (isShareResource(resources[0]) && resources[0].status !== ShareStatus.accepted) {
             return false
           }
         }
