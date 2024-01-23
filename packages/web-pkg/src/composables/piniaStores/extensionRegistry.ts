@@ -6,13 +6,17 @@ import { AppNavigationItem } from '../../apps'
 import { Item } from '@ownclouders/web-client/src/helpers'
 import { useConfigStore } from './config'
 import { FolderView } from '../../ui'
+import { StringUnionOrAnyString } from '../../utils/types'
 
-export type AvailableExtensions = 'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView'
-export type ExtensionScope = 'resource' | 'user' | 'group' | string
+export type AvailableExtension = StringUnionOrAnyString<
+  'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView'
+>
+
+export type ExtensionScope = StringUnionOrAnyString<'resource' | 'user' | 'group'>
 
 export type BaseExtension = {
   id: string
-  type: AvailableExtensions
+  type: AvailableExtension
   scopes?: ExtensionScope[]
 }
 
