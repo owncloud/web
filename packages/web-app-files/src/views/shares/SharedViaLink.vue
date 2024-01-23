@@ -20,10 +20,8 @@
         </no-content-message>
         <resource-table
           v-else
-          id="files-shared-via-link-table"
           v-model:selectedIds="selectedResourcesIds"
-          class="files-table"
-          :class="{ 'files-table-squashed': isSideBarOpen }"
+          :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"

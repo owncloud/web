@@ -1,10 +1,10 @@
-import FileDetails from './components/SideBar/Details/FileDetails.vue'
-import FileDetailsMultiple from './components/SideBar/Details/FileDetailsMultiple.vue'
-import FileActions from './components/SideBar/Actions/FileActions.vue'
-import FileVersions from './components/SideBar/Versions/FileVersions.vue'
-import SharesPanel from './components/SideBar/Shares/SharesPanel.vue'
-import NoSelection from './components/SideBar/NoSelection.vue'
-import SpaceActions from './components/SideBar/Actions/SpaceActions.vue'
+import FileDetails from '../../components/SideBar/Details/FileDetails.vue'
+import FileDetailsMultiple from '../../components/SideBar/Details/FileDetailsMultiple.vue'
+import FileActions from '../../components/SideBar/Actions/FileActions.vue'
+import FileVersions from '../../components/SideBar/Versions/FileVersions.vue'
+import SharesPanel from '../../components/SideBar/Shares/SharesPanel.vue'
+import NoSelection from '../../components/SideBar/NoSelection.vue'
+import SpaceActions from '../../components/SideBar/Actions/SpaceActions.vue'
 import {
   SpaceDetails,
   SpaceDetailsMultiple,
@@ -30,7 +30,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { computed, unref } from 'vue'
 
-export const sideBarPanels = () => {
+export const useSideBarPanels = () => {
   const router = useRouter()
   const capabilityStore = useCapabilityStore()
   const { $gettext } = useGettext()

@@ -1,9 +1,17 @@
 <template>
   <oc-table
     v-bind="$attrs"
+    id="files-space-table"
     :class="[
       hoverableQuickActions && 'hoverable-quick-actions',
-      { condensed: viewMode === ViewModeConstants.condensedTable.name }
+      {
+        condensed: viewMode === FolderViewModeConstants.name.condensedTable,
+        'files-table': resourceType === 'file',
+        'files-table-squashed': resourceType === 'file' && isSideBarOpen,
+
+        'spaces-table': resourceType === 'space',
+        'spaces-table-squashed': resourceType === 'space' && isSideBarOpen
+      }
     ]"
     :data="resources"
     :fields="fields"
@@ -223,7 +231,7 @@ import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/sha
 
 import {
   SortDir,
-  ViewModeConstants,
+  FolderViewModeConstants,
   useGetMatchingSpace,
   useFolderLink,
   useEmbedMode,
@@ -360,6 +368,14 @@ export default defineComponent({
       default: true
     },
     /**
+     * Sets specific css classes for when the side bar is (not) open
+     */
+    isSideBarOpen: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    /**
      * Sets the padding size for x axis
      * @values xsmall, small, medium, large, xlarge
      */
@@ -381,10 +397,19 @@ export default defineComponent({
      * The active view mode.
      */
     viewMode: {
-      type: String,
-      default: () => ViewModeConstants.defaultModeName,
-      validator: (value: string) =>
-        [ViewModeConstants.condensedTable.name, ViewModeConstants.default.name].includes(value)
+      type: String as PropType<
+        | typeof FolderViewModeConstants.name.condensedTable
+        | typeof FolderViewModeConstants.name.table
+      >,
+      default: () => FolderViewModeConstants.defaultModeName,
+      validator: (
+        value:
+          | typeof FolderViewModeConstants.name.condensedTable
+          | typeof FolderViewModeConstants.name.table
+      ) =>
+        [FolderViewModeConstants.name.condensedTable, FolderViewModeConstants.name.table].includes(
+          value
+        )
     },
     /**
      * Enable hover effect
@@ -431,6 +456,10 @@ export default defineComponent({
       type: Object as PropType<SpaceResource>,
       required: false,
       default: null
+    },
+    resourceType: {
+      type: String as PropType<'file' | 'space'>,
+      default: 'file'
     },
     /**
      * This is only relevant for CERN and can be ignored in any other cases.
@@ -500,7 +529,7 @@ export default defineComponent({
       getTagToolTip,
       renameActions,
       renameHandler,
-      ViewModeConstants,
+      FolderViewModeConstants,
       hasTags,
       disabledResources,
       isResourceDisabled,

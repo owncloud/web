@@ -18,8 +18,7 @@
       v-else
       v-model:selectedIds="selectedResourcesIds"
       :data-test-share-status="shareStatus"
-      class="files-table"
-      :class="{ 'files-table-squashed': isSideBarOpen }"
+      :is-side-bar-open="isSideBarOpen"
       :fields-displayed="displayedFields"
       sidebar-closed
       :are-thumbnails-displayed="displayThumbnails"

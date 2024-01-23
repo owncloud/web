@@ -23,7 +23,7 @@ import {
   useFileListHeaderPosition,
   useViewMode,
   useViewSize,
-  ViewModeConstants
+  FolderViewModeConstants
 } from '@ownclouders/web-pkg'
 
 import { ScrollToResult, useScrollTo } from '@ownclouders/web-pkg'
@@ -73,7 +73,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const currentRoute = useRouteName()
   const currentViewModeQuery = useRouteQuery(
     `${unref(currentRoute)}-view-mode`,
-    ViewModeConstants.defaultModeName
+    FolderViewModeConstants.defaultModeName
   )
   const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))
   const viewMode = useViewMode(currentViewMode)
@@ -83,7 +83,7 @@ export const useResourcesViewDefaults = <T, TT, TU extends any[]>(
   const viewSize = useViewSize(currentTilesSize)
 
   const sortFields = computed((): SortField[] => {
-    if (unref(viewMode) === ViewModeConstants.tilesView.name) {
+    if (unref(viewMode) === FolderViewModeConstants.name.tiles) {
       return determineResourceTilesSortFields(unref(storeItems)[0])
     }
     return determineResourceTableSortFields(unref(storeItems)[0])

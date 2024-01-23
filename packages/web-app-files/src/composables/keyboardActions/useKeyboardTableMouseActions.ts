@@ -1,5 +1,5 @@
 import { onBeforeUnmount, onMounted, unref, Ref, watchEffect } from 'vue'
-import { QueryValue, useResourcesStore, ViewModeConstants } from '@ownclouders/web-pkg'
+import { QueryValue, FolderViewModeConstants, useResourcesStore } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { KeyboardActions } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -92,7 +92,7 @@ export const useKeyboardTableMouseActions = (
     eventBus.unsubscribe('app.files.list.clicked.shift', fileListClickedShiftEvent)
     fileListClickedShiftEvent = eventBus.subscribe(
       'app.files.list.clicked.shift',
-      ViewModeConstants.tilesView.name === viewMode.value
+      FolderViewModeConstants.name.tiles === viewMode.value
         ? handleTilesShiftClickAction
         : handleShiftClickAction
     )
