@@ -28,7 +28,7 @@ interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item> 
   id: string,
   type: 'sidebarPanel',
   scopes?: ExtensionScope[],
-  panel: SideBarPanel<R, P, T>
+  panel: SideBarPanel<R, P, T> // Please check the SideBarPanel section below
 }
 ```
 
@@ -37,7 +37,7 @@ For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "ext
 The `panel` object configures the actual sidebar panel. It consists of different properties and functions, where all the functions get called with a
 `SideBarPanelContext` entity from the integrating extension points.
 
-### Panel Context
+### SideBarPanelContext
 
 ```typescript
 interface SideBarPanelContext<R extends Item, P extends Item, T extends Item> {
@@ -54,7 +54,7 @@ or if being in a root of a space, the space itself. Can be `null` for non-hierar
 - `root` - The uppermost parent of the selected items. For example, if the user selects a file in a file listing, the root is always the space in which
 the selected files reside. Can be `null` for non-hierarchical contexts, e.g. a user listing.
 
-### Panel
+### SideBarPanel
 
 ```typescript
 interface SideBarPanel<R extends Item, P extends Item, T extends Item> {
