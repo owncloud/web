@@ -63,7 +63,7 @@ interface SideBarPanel<R extends Item, P extends Item, T extends Item> {
   iconFillType?: IconFillType
   title(context: SideBarPanelContext<R, P, T>): string
   isVisible(context: SideBarPanelContext<R, P, T>): boolean
-  component: ReturnType<typeof defineComponent>
+  component: Component
   componentAttrs?(context: SideBarPanelContext<R, P, T>): any
   isRoot?(context: SideBarPanelContext<R, P, T>): boolean
 }
