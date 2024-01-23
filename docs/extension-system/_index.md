@@ -89,19 +89,22 @@ Additional dynamic navigation items can be registered via the extension registry
 ### Extensions
 
 #### Abstract
-In contrast to applications, extensions usually have a rather small scope and dedicated functionality. Building an extension is limited to the extension types that are defined
-by the ownCloud Web extension system. See the full list of available extension types below.
+
+In contrast to applications, extensions usually have a rather small scope and dedicated functionality.
 
 #### Extension Types
 
-1. `ActionExtension` - An extension that can be used to register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
+Building an extension is limited to the extension types that are defined by the ownCloud Web extension system. See the full list of available extension types below.
+
+1. `ActionExtension` - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
 respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc).
-2. `SearchExtension` - An extension that can be used to add search results to the search results list in the files app.
-3. `SidebarNavExtension` - An extension that can be used to add navigation items to the left side bar in the files app.
-4. `SidebarPanelExtension` - An extension that can be used to add panels to the right side bar in the files app.
-5. `FolderViewExtension` - An extension that can be used to add views to the folder view in the files app.
+2. `SearchExtension` - An extension that can register additional search providers. Please see the dedicated [documentation on search extensions]().
+3. `SidebarNavExtension` - An extension that can register additional navigation items to the left side bar. These can be scoped to specific apps, and programmatically enabled/disabled.
+4. `SidebarPanelExtension` - An extension that can register panels to the right side bar.
+5. `FolderViewExtension` - An extension that can register additional ways of displaying the content of a folder (resources, so spaces, folders or files) to the user.
 
 #### Extension Points
+
 There are standardized components and places where extensions are being used automatically. These are the ones that are currently provided:
 
 1. Left Sidebar for Navigation
@@ -109,19 +112,11 @@ There are standardized components and places where extensions are being used aut
 3. Folder Views in the files app 
 4. Right click context menu in the files app 
 5. Batch actions in the files app
+6. Search results in the search app
 
+#### Scopes
 
-
-
-
-- What is an extension?
-    - extension points (extension.ts)
-        - was wird erweitert - Funktionalität
-        - Extensions werden an/in Extension Points eingebunden
-    - scopes - wo wird eine Extension verwendet? (e.g. wo wird eine `action` verwendet)
-<!-- See if extension point/scope differentiation is still necessary after formulating text -->
-
-- How do I create an extension => examples folder?
+<!-- Where does an extension get used // where is it available -->
 
 
 ## Further information (digging deeper)
