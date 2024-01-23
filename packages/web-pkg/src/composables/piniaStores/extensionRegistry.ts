@@ -66,7 +66,7 @@ export const useExtensionRegistry = () => {
     getters: {
       requestExtensions:
         (state) =>
-        <ExtensionType extends Extension>(type: string, scopes?: string[]) => {
+        <ExtensionType extends Extension>(type: string, scopes?: ExtensionScope[]) => {
           return state.extensions
             .map((e) =>
               unref(e).filter(

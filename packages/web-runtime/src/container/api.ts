@@ -73,6 +73,7 @@ const announceNavigationItems = (
   }
 
   const navExtensions = navigationItems.map((navItem) => ({
+    id: `app.${applicationId}.${navItem.name}`,
     type: 'sidebarNav',
     navItem,
     scopes: [`app.${applicationId}`]
