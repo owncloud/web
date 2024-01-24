@@ -10,24 +10,24 @@ geekdocCollapseSection: true
 
 {{< toc >}}
 
+## Concepts and Building Blocks
+
 The ownCloud Web can be extended through various entry points with custom **apps** and **extensions**.
 
-## Concepts and building blocks
-
-### Apps
-
-#### Abstract
+### Distinction between Apps and Extensions
 
 An Application in the context of ownCloud Web is an artifact which can be distributed to and installed by an ownCloud admin.
 It serves two main purposes:
-1. It makes the full app viewport (everything below the top bar) available to the application developer for any custom 
-application code. This includes the ability to define views with routes, navigation items for the left side bar, and more.
+1. It makes the full app viewport (everything below the top bar) available to the application developer for any custom
+   application code. This includes the ability to define views with routes, navigation items for the left side bar, and more.
 2. Through the `extensions` key in the application interface the developer can register extensions of any extension type.
-Those extensions will become available in standardized extension points and for being queried from the extension registry 
-for custom use.
+   Those extensions will become available in standardized extension points and for being queried from the extension registry
+   for custom use.
 
 Both parts are optional. This means that an application can be a file editor without any custom extensions, or even contain
 no custom application code at all and only host extensions to be registered in the extension registry, or a combination of both.
+
+### Apps
 
 #### Technical Details
 
@@ -88,8 +88,6 @@ Additional dynamic navigation items can be registered via the extension registry
 
 ### Extensions
 
-#### Abstract
-
 In contrast to applications, extensions usually have a rather small scope and dedicated functionality.
 
 #### Extension Registry
@@ -105,14 +103,16 @@ and most prominently also in the `files` app we have defined some extension poin
 Building an extension is limited to the extension types that are defined by the ownCloud Web extension system. See the full list of available extension types below.
 
 1. `ActionExtension` (type `action`) - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
-respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc.).
-2. `SearchExtension` (type `search`) - An extension that can register additional search providers. Please see the dedicated [documentation on search extensions]().
+respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc.). For details, please refer to the [action docs]({{< ref "extension-types/actions.md" >}})
+2. `SearchExtension` (type `search`) - An extension that can register additional search providers. For details, please refer to the [search docs]({{< ref "extension-types/search.md" >}})
 3. `SidebarNavExtension` (type `sidebarNav`) - An extension that can register additional navigation items to the left sidebar. These can be scoped to specific apps, and programmatically enabled/disabled.
-4. `SidebarPanelExtension`, (type `sidebarPanel`) - An extension that can register panels to the right sidebar.
+For details, please refer to the [sidebar nav docs]({{< ref "extension-types/left-sidebar-menu-item.md" >}})
+4. `SidebarPanelExtension`, (type `sidebarPanel`) - An extension that can register panels to the right sidebar. For details, please refer to the [sidebar panel docs]({{< ref "extension-types/right-sidebar-panels.md" >}})
 5. `FolderViewExtension` (type `folderView`) - An extension that can register additional ways of displaying the content of a folder (resources, so spaces, folders or files) to the user.
+For details, please refer to the [folder view docs]({{< ref "extension-types/folder-view.md" >}})
 
 You're free to introduce your own extension types within your application code and use the extension registry to query the available ones. However, if you have the impression
-that an important extension type is missing, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose). 
+that an important extension type is missing, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
 
 #### Extension Base Configuration
 
