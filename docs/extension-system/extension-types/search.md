@@ -10,11 +10,11 @@ geekdocCollapseSection: true
 
 {{< toc >}}
 
-# Search extensions
+## Search extensions
 
 One possible extension type is search. Registered search extensions are available when using the search field in the topbar.
 
-## Configuration
+### Configuration
 
 An example of a search extension configuration can be found below:
 
@@ -43,14 +43,14 @@ The `searchProvider` object configures the actual provider. It consist of the fo
 - `listSearch` - See below
 
 
-### ListSearch
+#### ListSearch
 
 The listSearch object consists of:
 
 - `component` - Vue component that can render the values from the SearchResult below
 - `search(term: string)` - Function that exectues the search, based on a given term. The term is formatted in [KQL](https://owncloud.dev/services/search/#query-language). Please note that the returned values needs to be formatted to fit either `SearchResource`  or `GenericSearchResultItem` type
 
-### PreviewSearch
+#### PreviewSearch
 
 The previewSearch object extends the listSearch with one additional attribute:
 

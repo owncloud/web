@@ -10,11 +10,11 @@ geekdocCollapseSection: true
 
 {{< toc >}}
 
-# Action extension type
+## Action extension type
 
 Actions are one of the possible extension types. Registered actions get rendered in various places across the UI, depending on their scope and targets.
 
-## Configuration
+### Configuration
 
 This is what the ActionExtension interface looks like:
 
@@ -29,7 +29,7 @@ interface ActionExtension {
 
 For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
 
-### Action
+#### Action
 
 The most important configuration options are:
 - `icon` - The icon to be displayed, can be picked from https://owncloud.design/#/Design%20Tokens/IconList

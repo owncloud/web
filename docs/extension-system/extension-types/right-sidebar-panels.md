@@ -10,7 +10,7 @@ geekdocCollapseSection: true
 
 {{< toc >}}
 
-# Extension Type SideBarPanel
+## Extension Type SideBarPanel
 
 The right sidebar is supposed to show information and make context specific actions available for single or multiple selected items.
 
@@ -19,7 +19,7 @@ It is structured in a hierarchical way:
 - Panels which are defined as non-`root` panels receive a navigation item below the `root` panels so that users can navigate into the respective
 sub panel.
 
-## Configuration
+### Configuration
 
 An example of a right sidebar panel extension configuration can be found below:
 
@@ -37,7 +37,7 @@ For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "ext
 The `panel` object configures the actual sidebar panel. It consists of different properties and functions, where all the functions get called with a
 `SideBarPanelContext` entity from the integrating extension points.
 
-### SideBarPanelContext
+#### SideBarPanelContext
 
 ```typescript
 interface SideBarPanelContext<R extends Item, P extends Item, T extends Item> {
@@ -54,7 +54,7 @@ or if being in a root of a space, the space itself. Can be `null` for non-hierar
 - `root` - The uppermost parent of the selected items. For example, if the user selects a file in a file listing, the root is always the space in which
 the selected files reside. Can be `null` for non-hierarchical contexts, e.g. a user listing.
 
-### SideBarPanel
+#### SideBarPanel
 
 ```typescript
 interface SideBarPanel<R extends Item, P extends Item, T extends Item> {
@@ -76,7 +76,7 @@ interface SideBarPanel<R extends Item, P extends Item, T extends Item> {
 - `componentAttrs` - Defines additional props for the component with the given panel context.
 - `isRoot` - Determines if the panel is a root panel for the given panel context.
 
-# Extension Point FileSideBar
+## Extension Point FileSideBar
 
 In the context of files (e.g. file listing, text editor for a single file, etc.) we have a dedicated component `FileSideBar` which can be
 toggled (shown/hidden) with a button in the top bar. The component queries all extensions of the type `sideBarPanel` from the extension 

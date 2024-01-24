@@ -8,11 +8,11 @@ geekdocFilePath: folder-view.md
 geekdocCollapseSection: true
 ---
 
-# Folder view extension type
+## Folder view extension type
 
 The folder view is one of the possible extension types. Registered folder view can be used to render multiple resources (folders, files, spaces) in the UI.
 
-## Configuration
+### Configuration
 
 This is what the FolderViewExtension interface looks like:
 
@@ -28,7 +28,7 @@ interface FolderViewExtension {
 
 For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
 
-### FolderView
+#### FolderView
 
 For the folderView object, you have the following configuration options:
 

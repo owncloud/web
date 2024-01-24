@@ -11,11 +11,11 @@ geekdocCollapseSection: true
 {{< toc >}}
 
 
-# Left sidebar menu item extension type
+## Left sidebar menu item extension type
 
 One possible extension type is left sidebar menu items. Registered left sidebar menu items get rendered in the left sidebar, as long as there is more than one available.
 
-## Configuration
+### Configuration
 
 To define a left sidebar menu item, you implement the SidebarNavExtension interface.
 It looks like this:
@@ -33,7 +33,7 @@ interface SidebarNavExtension {
 For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
 
 
-### AppNavigationItem
+#### AppNavigationItem
 
 The most important configuration options are:
 - `icon` - The icon to be displayed, can be picked from https://owncloud.design/#/Design%20Tokens/IconList
