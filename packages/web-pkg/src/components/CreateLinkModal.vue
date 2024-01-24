@@ -182,7 +182,7 @@ export default defineComponent({
     space: { type: Object as PropType<SpaceResource>, default: undefined },
     isQuickLink: { type: Boolean, default: false },
     callbackFn: {
-      type: Function as PropType<(result: PromiseSettledResult<Share>[]) => Promise<void> | void>,
+      type: Function as PropType<(promise: Promise<string | null>) => Promise<void> | void>,
       default: undefined
     }
   },
@@ -278,7 +278,7 @@ export default defineComponent({
       )
     }
 
-    const onConfirm = async () => {
+    const handleLinksCreation = async (): Promise<string | null> => {
       if (!unref(selectedRoleIsInternal)) {
         if (unref(passwordEnforced) && !unref(password).value) {
           password.error = $gettext('Password must not be empty')
@@ -292,11 +292,13 @@ export default defineComponent({
 
       const result = await createLinks()
 
-      const succeeded = result.filter(({ status }) => status === 'fulfilled')
+      const succeeded = result.filter(
+        ({ status }) => status === 'fulfilled'
+      ) as PromiseFulfilledResult<Share>[]
       if (succeeded.length && unref(isEmbedEnabled)) {
         postMessage<string[]>(
           'owncloud-embed:share',
-          (succeeded as PromiseFulfilledResult<Share>[]).map(({ value }) => value.url)
+          succeeded.map(({ value }) => value.url)
         )
       }
 
@@ -319,9 +321,17 @@ export default defineComponent({
         return Promise.reject()
       }
 
+      Promise.resolve(succeeded[0]?.value.url ?? null)
+    }
+
+    const onConfirm = async () => {
       if (props.callbackFn) {
-        props.callbackFn(result)
+        props.callbackFn(handleLinksCreation)
+
+        return
       }
+
+      await handleLinksCreation()
     }
 
     expose({ onConfirm })

@@ -43,7 +43,7 @@ export const useFileActionsCopyQuickLink = () => {
     unref(createLinkActions).find(({ name }) => name === 'create-quick-links')
   )
 
-  const copyQuickLinkToClipboard = async (url: string) => {
+  const copyQuickLinkToClipboard = async (url: string | (() => Promise<string>)) => {
     try {
       await copyToClipboard(url)
       showMessage({ title: $gettext('The link has been copied to your clipboard.') })
@@ -63,17 +63,18 @@ export const useFileActionsCopyQuickLink = () => {
       include_tags: false
     })
 
-    return linkSharesForResource
-      .map((share: any) => buildShare(share.shareInfo, null, null))
-      .find((share: Share) => share.quicklink === true)
+    return (
+      linkSharesForResource
+        .map((share: any) => buildShare(share.shareInfo, null, null))
+        .find((share: Share) => share.quicklink === true)?.url || null
+    )
   }
 
-  const handler = async ({ space, resources }: FileActionOptions) => {
+  const handler = ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
 
-    const existingQuickLink = await getExistingQuickLink(resource)
-    if (existingQuickLink) {
-      return copyQuickLinkToClipboard(existingQuickLink.url)
+    if (ShareTypes.containsAnyValue(ShareTypes.unauthenticated, resource.shareTypes ?? [])) {
+      return copyQuickLinkToClipboard(getExistingQuickLink.bind(this, resource))
     }
 
     return unref(createQuicklinkAction).handler({ space, resources })
