@@ -46,6 +46,10 @@ Depending on the backend you are using, there are sample config files provided i
 
 #### Options
 
+- `options.homeFolder` You can specify a folder that is used when the user navigates `home`. Navigating home gets triggered by clicking on the `All files`
+  menu item. The user will not be jailed in that directory. It simply serves as a default location. You can either provide a static location, or you can use
+  variables of the user object to come up with a user specific home path. This uses twig template variable style and allows you to pick a value or a
+  substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}}` and `/{{substr 0 3 .Id}}/{{.Id}`.
 - `options.openAppsInTab` Configures whether apps and extensions generally should open in a new tab. Defaults to false.
 - `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
   by this is the trash bin, as that doesn't allow showing previews at all.
@@ -69,20 +73,9 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
-- `options.editor.openAsPreview` Specifies if non-personal files i.e. files in shares, spaces or public links are being opened in read only mode so the user needs to manually switch to edit mode. Can be set to `true`, `false` or an array of web app/editor names.
 - `options.contextHelpersReadMore` Specifies whether the "Read more" link should be displayed or not.
 - `options.openLinksWithDefaultApp` Specifies whether single file link shares should be opened with default app or not.
 - `options.tokenStorageLocal` Specifies whether the access token will be stored in the local storage when set to `true` or in the session storage when set to `false`. If stored in the local storage, login state will be persisted across multiple browser tabs, means no additional logins are required. Defaults to `true`.
-- `options.loginUrl` Specifies the target URL to the login page. This is helpful when an external IdP is used. This option is disabled by default. Example URL like: 'https://www.myidp.com/login'.
-- `options.logoutUrl` Adds a link to the user's profile page to point him to an external page, where he can manage his session and devices. This is helpful when an external IdP is used. This option is disabled by default.
-- `options.ocm.openRemotely` Specifies whether opening files in remote shares in their original ocm instance should be enabled. Defaults to `false`.
-- `options.userListRequiresFilter` Defines whether one or more filters must be set in order to list users in the Web admin settings. Set this option to 'true' if running in an environment with a lot of users and listing all users could slow down performance. Defaults to `false`.
-- `options.concurrentRequests` This accepts an object with the following optional fields to customize the maximum number of concurrent requests in code paths where we limit concurrent requests 
-    - `resourceBatchActions` Concurrent number of file/folder/space batch actions like e.g. accepting shares. Defaults to 4.
-    - `sse` Concurrent number of SSE event handlers. Defaults to 4.
-    - `shares` Accepts an object regarding the following sharing related options:
-        - `create` Concurrent number of share invites. Defaults to 4. 
-        - `list` Concurrent number of individually loaded shares. Defaults to 2.
 
 #### Scripts and Styles
 
