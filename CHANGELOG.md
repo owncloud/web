@@ -53,6 +53,7 @@ Summary
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
+* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
@@ -590,6 +591,13 @@ Details
    https://github.com/owncloud/web/issues/7600
    https://github.com/owncloud/web/issues/7601
    https://github.com/owncloud/web/pulls/8145
+
+* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
+
+   We've added a custom icon for medical images of the file type dcm.
+
+   https://github.com/owncloud/web/issues/9215
+   https://github.com/owncloud/web/pull/10172
 
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 
