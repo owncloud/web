@@ -16,13 +16,13 @@ The ownCloud Web can be extended through various entry points with custom **apps
 
 ### Distinction between Apps and Extensions
 
-An Application in the context of ownCloud Web is an artifact which can be distributed to and installed by an ownCloud admin.
+An Application in the context of ownCloud Web is an artifact which can be installed in an ownCloud Infinite Scale instance.
 It serves two main purposes:
 1. It makes the full app viewport (everything below the top bar) available to the application developer for any custom
    application code. This includes the ability to define views with routes, navigation items for the left sidebar, and more.
-2. Through the `extensions` key in the application interface the developer can register extensions of any extension type.
-   Those extensions will become available in standardized extension points and for being queried from the extension registry
-   for custom use.
+2. Through the `extensions` key in the application interface you can register extensions of any extension type. Those extensions 
+   are then available in standardized extension points. Additionally, they can be queried from the extension registry for 
+   your own purposes.
 
 Both parts are optional. This means that an application can be a file editor without any custom extensions, or even contain
 no custom application code at all and only host extensions to be registered in the extension registry, or a combination of both.
@@ -32,7 +32,7 @@ no custom application code at all and only host extensions to be registered in t
 To get started, define a `src/index.ts`. Below is the most basic example of its content:
 
 ```typescript
-// Install '@ownclouders/web-pkg' as a devDependency first (only relevant for types and autocompletion, dependency is already provided by the ownCloud Web at runtime). 
+// Install '@ownclouders/web-pkg' as a devDependency first (only relevant for types and autocompletion, dependency is already provided by ownCloud Web at runtime). 
 import {
   AppWrapperRoute,
   ApplicationFileExtension,
@@ -42,10 +42,10 @@ import {
 
 export default defineWebApplication({
   setup({ applicationConfig }) {
-    // Here, you have access to the full injection context, meaning you can use all composable that we provide via web-pkg
+    // Here, you have access to the full injection context, meaning you can use all composables that we provide via web-pkg
 
-    // Needs to be unique within all installed extensions in any ownCloud web instance
-    // Should be short, unique and expressive as it gets prefixed on all routes within your application
+    // Needs to be unique within all installed applications in any ownCloud web instance
+    // Should be short, unique and expressive as it is used as prefix on all routes within your application
     const appId = 'your-extension' 
 
     // See extensions section below
@@ -65,7 +65,7 @@ export default defineWebApplication({
 
     return {
       appInfo: {
-        name: $gettext('Your extension'),
+        name: $gettext('Your application name'),
         id: appId,
         icon: 'aliens', // See https://owncloud.design/#/Design%20Tokens/IconList for available options
       },
@@ -98,7 +98,7 @@ and most prominently also in the `files` app we have defined some extension poin
 
 #### Extension Types
 
-Building an extension is limited to the extension types that are defined by the ownCloud Web extension system. See the full list of available extension types below.
+For building an extension you can choose from the types predefined by the ownCloud Web extension system. See the full list of available extension types below.
 
 1. `ActionExtension` (type `action`) - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
 respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc.). For details, please refer to the [action docs]({{< ref "extension-types/actions.md" >}})
@@ -110,7 +110,7 @@ For details, please refer to the [sidebar nav docs]({{< ref "extension-types/lef
 For details, please refer to the [folder view docs]({{< ref "extension-types/folder-view.md" >}})
 
 You're free to introduce your own extension types within your application code and use the extension registry to query the available ones. However, if you have the impression
-that an important extension type is missing, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
+that an important extension type is missing and would be beneficial for the platform, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
 
 #### Extension Base Configuration
 
@@ -128,7 +128,7 @@ points (see section below). Those include:
 - `group` - For extensions which are meant to work with a `group` as data context.
 
 Similar to the extension types, you are always free to define and handle custom scopes within your own application. If you have the impression
-that an important scope is missing, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
+that an important scope is missing and would be beneficial for the platform, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
 
 {{< hint info >}}
 Scopes are meant to be defined in singular form, e.g. `resource` instead of `resources`, even when the data context holds multiple items.
