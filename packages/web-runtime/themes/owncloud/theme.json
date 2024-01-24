@@ -122,7 +122,8 @@
               "icon-video": "#045459",
               "icon-audio": "#700460",
               "icon-presentation": "#ee6b3b",
-              "icon-pdf": "#ec0d47"
+              "icon-pdf": "#ec0d47",
+              "icon-medical": "#0984db"
             }
           }
         },
@@ -187,7 +188,8 @@
               "icon-video": "rgb(0, 187, 219)",
               "icon-audio": "rgb(208, 67, 236)",
               "icon-presentation": "rgb(255, 64, 6)",
-              "icon-pdf": "rgb(225, 5, 14)"
+              "icon-pdf": "rgb(225, 5, 14)",
+              "icon-medical": "rgb(9,132,219)"
             }
           }
         }

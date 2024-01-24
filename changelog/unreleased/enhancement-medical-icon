@@ -1,0 +1,6 @@
+Enhancement: icon for .dcm files
+
+We've added a custom icon for medical images of the file type dcm.
+
+https://github.com/owncloud/web/issues/9215
+https://github.com/owncloud/web/pull/10172
