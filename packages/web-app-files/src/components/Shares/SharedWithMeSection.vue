@@ -39,7 +39,7 @@
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
           <oc-icon
-            v-if="getShowSynchedIcon(resource)"
+            v-if="getShowSyncedIcon(resource)"
             v-oc-tooltip="$gettext('Synced with your devices')"
             name="loop-right"
             class="sync-enabled"
@@ -284,7 +284,7 @@ export default defineComponent({
         onExit: debounced.cancel
       })
     },
-    getShowSynchedIcon(resource: ShareResource) {
+    getShowSyncedIcon(resource: ShareResource) {
       return resource.status === ShareStatus.accepted
     },
     toggleShowMore() {

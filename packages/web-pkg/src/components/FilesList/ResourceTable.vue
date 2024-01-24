@@ -1005,7 +1005,7 @@ export default defineComponent({
       // TODO: remove as soon as pending & declined shares are accessible
       if (
         isShareResource(resource) &&
-        (resource.status === ShareStatus.pending || resource.status === ShareStatus.declined)
+        [ShareStatus.pending, ShareStatus.declined].includes(resource.status)
       ) {
         return false
       }

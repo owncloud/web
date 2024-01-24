@@ -18,7 +18,7 @@ import { LinkShareRoles, PeopleShareRoles } from './role'
 import { ShareResource } from './types'
 
 export const isShareResource = (resource: Resource): resource is ShareResource => {
-  return Object.prototype.hasOwnProperty.call(resource, 'shareType')
+  return Object.hasOwn(resource, 'shareType')
 }
 
 /**

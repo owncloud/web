@@ -52,7 +52,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     }
 
     const driveAliasPrefix =
-      (isShareResource(resource) && resource?.shareType === ShareTypes.remote.value) ||
+      (isShareResource(resource) && resource.shareType === ShareTypes.remote.value) ||
       resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
         ? 'ocm-share'
         : 'share'
