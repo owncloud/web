@@ -8,7 +8,8 @@ import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   ShareTypes,
-  OCM_PROVIDER_ID
+  OCM_PROVIDER_ID,
+  isShareResource
 } from '@ownclouders/web-client/src/helpers'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
@@ -51,7 +52,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
     }
 
     const driveAliasPrefix =
-      resource?.share?.shareType === ShareTypes.remote.value ||
+      (isShareResource(resource) && resource.shareType === ShareTypes.remote.value) ||
       resource?.id?.toString().startsWith(OCM_PROVIDER_ID)
         ? 'ocm-share'
         : 'share'

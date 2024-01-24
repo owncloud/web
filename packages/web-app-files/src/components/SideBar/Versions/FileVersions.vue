@@ -65,7 +65,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { SharePermissions } from '@ownclouders/web-client/src/helpers/share'
+import { SharePermissions, isShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
@@ -120,8 +120,9 @@ export default defineComponent({
         if (unref(resource).permissions !== undefined) {
           return unref(resource).permissions.includes(DavPermission.Updateable)
         }
-        if (unref(resource).share?.role) {
-          return unref(resource).share.role.hasPermission(SharePermissions.update)
+        const res = unref(resource)
+        if (isShareResource(res) && res.share?.role) {
+          return res.share.role.hasPermission(SharePermissions.update)
         }
       }
 

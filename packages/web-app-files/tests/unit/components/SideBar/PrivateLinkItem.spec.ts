@@ -8,8 +8,10 @@ jest.useFakeTimers()
 
 const folder = mock<Resource>({
   type: 'folder',
-  ownerId: 'marie',
-  ownerDisplayName: 'Marie',
+  owner: {
+    id: 'marie',
+    displayName: 'Marie'
+  },
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   name: 'lorem.txt',

@@ -204,14 +204,12 @@ export function buildSpace(
     starred: false,
     etag: '',
     shareId: data.shareId?.toString(),
-    sharePermissions: '',
     shareTypes: (function () {
       return []
     })(),
     privateLink: '',
     downloadURL: '',
-    ownerDisplayName: '',
-    ownerId: data.owner?.user?.id,
+    owner: data.owner?.user,
     disabled,
     root: data.root,
     spaceQuota: data.quota,
@@ -292,7 +290,7 @@ export function buildSpace(
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)
     },
     isOwner({ id }: User): boolean {
-      return id === this.ownerId
+      return id === this.owner?.id
     }
   }
   Object.defineProperty(s, 'nodeId', {

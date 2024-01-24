@@ -15,6 +15,7 @@ import {
   useConfigStore,
   useResourcesStore
 } from '../../piniaStores'
+import { ShareResource } from '@ownclouders/web-client/src/helpers'
 
 export const useFileActionsToggleHideShare = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -28,7 +29,7 @@ export const useFileActionsToggleHideShare = () => {
   const spacesStore = useSpacesStore()
   const { upsertResource, resetSelection } = useResourcesStore()
 
-  const handler = async ({ resources }: FileActionOptions) => {
+  const handler = async ({ resources }: FileActionOptions<ShareResource>) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
@@ -82,7 +83,7 @@ export const useFileActionsToggleHideShare = () => {
     })
   }
 
-  const actions = computed((): FileAction[] => [
+  const actions = computed((): FileAction<ShareResource>[] => [
     {
       name: 'toggle-hide-share',
       icon: 'eye-off', // FIXME: change icon based on hidden status

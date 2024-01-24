@@ -134,14 +134,15 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     permissions: resource.props[DavProperty.Permissions] || '',
     starred: resource.props[DavProperty.IsFavorite] !== 0,
     etag: resource.props[DavProperty.ETag],
-    sharePermissions: resource.props[DavProperty.SharePermissions],
     shareTypes,
     privateLink: resource.props[DavProperty.PrivateLink],
     downloadURL: resource.props[DavProperty.DownloadURL],
     shareId: resource.props[DavProperty.ShareId],
     shareRoot: resource.props[DavProperty.ShareRoot],
-    ownerId: resource.props[DavProperty.OwnerId],
-    ownerDisplayName: resource.props[DavProperty.OwnerDisplayName],
+    owner: {
+      id: resource.props[DavProperty.OwnerId],
+      displayName: resource.props[DavProperty.OwnerDisplayName]
+    },
     tags: (resource.props[DavProperty.Tags] || '').split(',').filter(Boolean),
     audio: resource.props[DavProperty.Audio],
     location: resource.props[DavProperty.Location],

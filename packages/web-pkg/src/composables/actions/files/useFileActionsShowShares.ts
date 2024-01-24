@@ -1,5 +1,5 @@
 import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { eventBus } from '../../../services'
 import { SideBarEventTopics } from '../../sideBar'
 import { computed, unref } from 'vue'
@@ -22,7 +22,7 @@ export const useFileActionsShowShares = () => {
     eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing#peopleShares')
   }
 
-  const actions = computed((): FileAction[] => [
+  const actions = computed((): FileAction<ShareResource>[] => [
     {
       name: 'show-shares',
       icon: 'user-add',

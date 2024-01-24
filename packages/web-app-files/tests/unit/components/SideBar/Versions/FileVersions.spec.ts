@@ -3,7 +3,7 @@ import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVers
 import { defaultComponentMocks, defaultStubs } from 'web-test-helpers'
 import { mock, mockDeep } from 'jest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { ShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { ShareResource, ShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { useDownloadFile, useResourcesStore } from '@ownclouders/web-pkg'
@@ -111,7 +111,7 @@ describe('FileVersions', () => {
               expect(revertVersionButton.length).toBe(defaultVersions.length)
             })
             it('should be possible for a share with write permissions', async () => {
-              const resource = mockDeep<Resource>({
+              const resource = mockDeep<ShareResource>({
                 permissions: DavPermission.Updateable,
                 share: undefined
               })
@@ -122,7 +122,7 @@ describe('FileVersions', () => {
               expect(revertVersionButton.length).toBe(defaultVersions.length)
             })
             it('should not be possible for a share with read-only permissions', async () => {
-              const resource = mockDeep<Resource>({ permissions: '', share: undefined })
+              const resource = mockDeep<ShareResource>({ permissions: '', share: undefined })
               const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
               const { wrapper } = getMountedWrapper({ resource, space })
               await wrapper.vm.fetchVersionsTask.last

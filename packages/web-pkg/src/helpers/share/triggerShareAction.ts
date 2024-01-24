@@ -1,5 +1,9 @@
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
-import { aggregateResourceShares, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { SpaceResource } from '@ownclouders/web-client/src'
+import {
+  aggregateResourceShares,
+  ShareResource,
+  ShareStatus
+} from '@ownclouders/web-client/src/helpers/share'
 import { HttpError } from '@ownclouders/web-client/src/errors'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 
@@ -13,7 +17,7 @@ export async function triggerShareAction({
   spaces = [],
   fullShareOwnerPaths = false
 }: {
-  resource: Resource
+  resource: ShareResource
   status: ShareStatus
   hasResharing: boolean
   hasShareJail: boolean

@@ -110,7 +110,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()
@@ -140,7 +140,7 @@ export default defineComponent({
     const { updateResourceField } = resourcesStore
     const { totalResourcesCount } = storeToRefs(resourcesStore)
 
-    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const resourcesViewDefaults = useResourcesViewDefaults<ShareResource, any, any[]>()
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
       resourcesViewDefaults
 

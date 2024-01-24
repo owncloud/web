@@ -177,7 +177,7 @@
       <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
-          :items="item.owner"
+          :items="getOwnerAvatarItems(item)"
           :is-tooltip-displayed="true"
           :accessible-description="getOwnerAvatarDescription(item)"
         />
@@ -187,7 +187,7 @@
       <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
-          :items="item.sharedWith"
+          :items="getSharedWithAvatarItems(item)"
           :stacked="true"
           :max-displayed="3"
           :is-tooltip-displayed="true"
@@ -227,7 +227,7 @@ import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vu
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { ShareStatus, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareStatus, ShareTypes, isShareResource } from '@ownclouders/web-client/src/helpers/share'
 
 import {
   SortDir,
@@ -669,6 +669,7 @@ export default defineComponent({
               }
             : {},
           {
+            // FIXME: confusing naming. what do we want here, file or share owner?
             name: 'owner',
             title: this.$gettext('Shared by'),
             type: 'slot',
@@ -827,7 +828,7 @@ export default defineComponent({
       let panelToOpen
       if (file.type === 'space') {
         panelToOpen = 'space-share'
-      } else if (file.share?.shareType === ShareTypes.link.value) {
+      } else if (isShareResource(file) && file.shareType === ShareTypes.link.value) {
         panelToOpen = 'sharing#linkShares'
       } else {
         panelToOpen = 'sharing#peopleShares'
@@ -987,7 +988,7 @@ export default defineComponent({
           .map((resource) => resource.id)
       )
     },
-    emitFileClick(resource) {
+    emitFileClick(resource: Resource) {
       const space = this.getMatchingSpace(resource)
 
       /**
@@ -996,59 +997,94 @@ export default defineComponent({
        */
       this.$emit('fileClick', { space, resources: [resource] })
     },
-    isResourceClickable({ id, status }: Resource) {
+    isResourceClickable(resource: Resource) {
       if (!this.areResourcesClickable) {
         return false
       }
 
       // TODO: remove as soon as pending & declined shares are accessible
-      if (status === ShareStatus.pending || status === ShareStatus.declined) {
+      if (
+        isShareResource(resource) &&
+        [ShareStatus.pending, ShareStatus.declined].includes(resource.status)
+      ) {
         return false
       }
 
-      return !this.disabledResources.includes(id)
+      return !this.disabledResources.includes(resource.id)
     },
-    getResourceCheckboxLabel(resource) {
+    getResourceCheckboxLabel(resource: Resource) {
       if (resource.type === 'folder') {
         return this.$gettext('Select folder')
       }
       return this.$gettext('Select file')
     },
-    getSharedWithAvatarDescription(resource) {
+    getSharedWithAvatarDescription(resource: Resource) {
+      if (!isShareResource(resource)) {
+        return
+      }
+
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      const shareCount = resource.sharedWith.filter((u) => !u.link).length
-      const linkCount = resource.sharedWith.filter((u) => !!u.link).length
-      const shareText =
-        shareCount > 0
-          ? this.$ngettext(
-              'This %{ resourceType } is shared via %{ shareCount } invite',
-              'This %{ resourceType } is shared via %{ shareCount } invites',
-              shareCount
-            )
-          : ''
-      const linkText =
-        linkCount > 0
-          ? this.$ngettext(
-              'This %{ resourceType } is shared via %{ linkCount } link',
-              'This %{ resourceType } is shared via %{ linkCount } links',
-              linkCount
-            )
-          : ''
-      const description = [shareText, linkText].join(' ')
-      return this.$gettext(description, {
-        resourceType,
-        shareCount,
-        linkCount
-      })
+
+      if (!resource.sharedWith.length) {
+        return ''
+      }
+
+      if (resource.shareType === ShareTypes.link.value) {
+        return this.$ngettext(
+          'This %{ resourceType } is shared via %{ count } link',
+          'This %{ resourceType } is shared via %{ count } links',
+          resource.sharedWith.length,
+          {
+            resourceType,
+            count: resource.sharedWith.length.toString()
+          }
+        )
+      }
+
+      return this.$ngettext(
+        'This %{ resourceType } is shared via %{ count } invite',
+        'This %{ resourceType } is shared via %{ count } invites',
+        resource.sharedWith.length,
+        {
+          resourceType,
+          count: resource.sharedWith.length.toString()
+        }
+      )
     },
     getOwnerAvatarDescription(resource: Resource) {
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
       return this.$gettext('This %{ resourceType } is owned by %{ ownerName }', {
         resourceType,
-        ownerName: resource.owner[0].displayName
+        ownerName: resource.owner.displayName
       })
+    },
+    getOwnerAvatarItems(resource: Resource) {
+      if (!isShareResource(resource)) {
+        return []
+      }
+
+      return [
+        {
+          displayName: resource.owner.displayName,
+          name: resource.owner.displayName,
+          shareType: ShareTypes.user.value,
+          username: resource.owner.id
+        }
+      ]
+    },
+    getSharedWithAvatarItems(resource: Resource) {
+      if (!isShareResource(resource)) {
+        return []
+      }
+
+      return resource.sharedWith.map((s) => ({
+        displayName: s.displayName,
+        name: s.displayName,
+        shareType: resource.shareType,
+        username: s.id
+      }))
     }
   }
 })

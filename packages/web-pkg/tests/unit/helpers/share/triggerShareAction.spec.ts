@@ -1,9 +1,8 @@
 import { triggerShareAction } from '../../../../src/helpers/share/triggerShareAction'
 
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { mock, mockDeep } from 'jest-mock-extended'
-import { Resource } from '@ownclouders/web-client/src'
 
 jest.unmock('axios')
 const client = mockDeep<OwnCloudSdk>()
@@ -42,7 +41,7 @@ describe('method triggerShareAction', () => {
     )
     await expect(
       triggerShareAction({
-        resource: mock<Resource>({ share: { id: 1 } }),
+        resource: mock<ShareResource>({ share: { id: 1 } }),
         status: ShareStatus.accepted,
         hasResharing: true,
         hasShareJail: false,
@@ -66,7 +65,7 @@ describe('method triggerShareAction', () => {
     )
     await expect(
       triggerShareAction({
-        resource: mock<Resource>({ share: { id: 1 } }),
+        resource: mock<ShareResource>({ share: { id: 1 } }),
         status: ShareStatus.accepted,
         hasResharing: true,
         hasShareJail: false,
@@ -91,7 +90,7 @@ describe('method triggerShareAction', () => {
 
     await expect(
       triggerShareAction({
-        resource: mock<Resource>({ share: { id: 1 } }),
+        resource: mock<ShareResource>({ share: { id: 1 } }),
         status: ShareStatus.accepted,
         hasResharing: true,
         hasShareJail: false,

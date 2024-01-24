@@ -11,8 +11,6 @@ import {
 const folderMock = {
   type: 'folder',
   isFolder: true,
-  ownerId: 'alice',
-  ownerDisplayName: 'alice',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
   isMounted: jest.fn(() => true),

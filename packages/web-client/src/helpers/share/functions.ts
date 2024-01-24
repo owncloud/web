@@ -15,6 +15,11 @@ import { SharePermissions } from './permission'
 import { Share } from './share'
 import { buildSpaceShare } from './space'
 import { LinkShareRoles, PeopleShareRoles } from './role'
+import { ShareResource } from './types'
+
+export const isShareResource = (resource: Resource): resource is ShareResource => {
+  return Object.hasOwn(resource, 'shareType')
+}
 
 /**
  * Transforms given shares into a resource format and returns only their unique occurences
@@ -80,17 +85,13 @@ function addSharedWithToShares(shares) {
           previousShare.stime = share.stime
         }
         previousShare.sharedWith.push({
-          username: share.share_with,
-          name: share.share_with_displayname,
-          displayName: share.share_with_displayname,
-          avatar: undefined,
-          shareType: parseInt(share.share_type)
+          id: share.share_with,
+          displayName: share.share_with_displayname
         })
       } else if (parseInt(share.share_type) === ShareTypes.link.value) {
         previousShare.sharedWith.push({
-          name: share.name || share.token,
-          link: true,
-          shareType: parseInt(share.share_type)
+          id: share.token,
+          displayName: share.name || share.token
         })
       }
 
@@ -100,19 +101,15 @@ function addSharedWithToShares(shares) {
     if (ShareTypes.containsAnyValue(ShareTypes.authenticated, [parseInt(share.share_type)])) {
       share.sharedWith = [
         {
-          username: share.share_with,
-          displayName: share.share_with_displayname,
-          name: share.share_with_displayname,
-          avatar: undefined,
-          shareType: parseInt(share.share_type)
+          id: share.share_with,
+          displayName: share.share_with_displayname
         }
       ]
     } else if (parseInt(share.share_type) === ShareTypes.link.value) {
       share.sharedWith = [
         {
-          name: share.name || share.token,
-          link: true,
-          shareType: parseInt(share.share_type)
+          id: share.token,
+          displayName: share.name || share.token
         }
       ]
     }
@@ -141,10 +138,10 @@ export function buildSharedResource(
   incomingShares = false,
   allowSharePermission = true,
   hasShareJail = false
-): Resource {
+): ShareResource {
   const isFolder = share.item_type === 'folder'
   const isRemoteShare = parseInt(share.share_type) === ShareTypes.remote.value
-  let resource: Resource = {
+  let resource: ShareResource = {
     id: share.id,
     fileId: share.item_source,
     storageId: extractStorageId(share.item_source),
@@ -157,23 +154,14 @@ export function buildSharedResource(
     tags: [],
     path: undefined,
     webDavPath: undefined,
-    processing: share.processing || false
+    processing: share.processing || false,
+    shareType: parseInt(share.share_type),
+    owner: { id: share.uid_owner, displayName: share.displayname_owner },
+    sharedBy: { id: share.uid_owner, displayName: share.displayname_owner },
+    sharedWith: share.sharedWith || []
   }
 
   if (incomingShares) {
-    resource.resourceOwner = {
-      username: share.uid_file_owner as string,
-      displayName: share.displayname_file_owner as string
-    }
-    resource.owner = [
-      {
-        username: share.uid_owner as string,
-        displayName: share.displayname_owner as string,
-        avatar: undefined,
-        shareType: ShareTypes.user.value
-      }
-    ]
-    resource.sharedWith = share.sharedWith || []
     resource.status = parseInt(share.state)
     resource.hidden = share.hidden === 'true' || share.hidden === true
     resource.name = isRemoteShare ? share.name : path.basename(share.file_target)
@@ -197,9 +185,6 @@ export function buildSharedResource(
       parseInt(share.state) === ShareStatus.accepted &&
       SharePermissions.update.enabled(share.permissions)
   } else {
-    resource.sharedWith = share.sharedWith || []
-    resource.shareOwner = share.uid_owner
-    resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = isRemoteShare ? share.name : path.basename(share.path)
     resource.path = share.path
     resource.webDavPath = hasShareJail

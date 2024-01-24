@@ -1,7 +1,7 @@
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 
 import PQueue from 'p-queue'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { isLocationSharesActive, isLocationSpacesActive } from '../../../router'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
@@ -31,7 +31,7 @@ export const useFileActionsAcceptShare = () => {
   const resourcesStore = useResourcesStore()
   const { upsertResource } = resourcesStore
 
-  const handler = async ({ resources }: FileActionOptions) => {
+  const handler = async ({ resources }: FileActionOptions<ShareResource>) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
@@ -88,7 +88,7 @@ export const useFileActionsAcceptShare = () => {
     })
   }
 
-  const actions = computed((): FileAction[] => [
+  const actions = computed((): FileAction<ShareResource>[] => [
     {
       name: 'accept-share',
       icon: 'check',
