@@ -111,17 +111,30 @@ respective scope. Most commonly used for file and folder actions (e.g. copy, ren
 4. `SidebarPanelExtension`, (type `sidebarPanel`) - An extension that can register panels to the right sidebar.
 5. `FolderViewExtension` (type `folderView`) - An extension that can register additional ways of displaying the content of a folder (resources, so spaces, folders or files) to the user.
 
+You're free to introduce your own extension types within your application code and use the extension registry to query the available ones. However, if you have the impression
+that an important extension type is missing, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose). 
+
 #### Extension Base Configuration
 
-Any extension is required to define at least an `id`, which is supposed to be unique throughout the ownCloud Web ecosystem, and a `type` out of the ones listed above.
-The `scopes` are optional and can be used to further limit the usage of an extension, see the `Scopes` section below.
+Any extension is required to define at least an `id` and a `type`.
 
-In order to keep `id`s readable for humans we didn't want to enforce uniqueness through e.g. uuids. Instead, we chose to use 
-dot-formatted namespaces like e.g. `com.github.owncloud.web.files.search`. 
+The `id` is supposed to be unique throughout the ownCloud Web ecosystem. In order to keep `id`s readable for humans we didn't want to enforce uniqueness through e.g. uuids. 
+Instead, we chose to use dot-formatted namespaces like e.g. `com.github.owncloud.web.files.search`. We'd like to encourage you to follow the same format for your own extensions.
 
-#### Scopes
+For the `type` you can choose from the ones listed above or define a custom one.
 
-<!-- Where does an extension get used // where is it available -->
+In addition, you can also pass optional `scopes` to further limit the usage of an extension. The extension system predefines some scopes which are then used in the default extension
+points (see section below). Those include:
+- `resource` - For extensions which are meant to work with a `file`, `folder` or `space` as data context.
+- `user` - For extensions which are meant to work with a `user` as data context.
+- `group` - For extensions which are meant to work with a `group` as data context.
+
+Similar to the extension types, you are always free to define and handle custom scopes within your own application. If you have the impression
+that an important scope is missing, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
+
+{{< hint info >}}
+Scopes are meant to be defined in singular form, e.g. `resource` instead of `resources`, even when the data context holds multiple items.
+{{< /hint >}}
 
 #### Extension Points
 
@@ -133,18 +146,3 @@ There are standardized components and places where extensions are being used aut
 4. Right click context menu in the files app 
 5. Batch actions in the files app
 6. Search results in the search app
-
-
-## Further information (digging deeper)
-
-AKA "under the hood"
-
-### - What can / can't I do with an extension?
-
-### js-package / commonjs-file
-
-- current limitations
-
-### extension-sdk
-
-- Rename to application-sdk?
