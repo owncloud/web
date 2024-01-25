@@ -67,7 +67,6 @@ The repository's `packages` also contains the following apps, which can be en-/d
 - **pdf-viewer:** An extension for opening PDF files without leaving the UI
 - **preview:** An extension for opening audio, video and image files
 - **search:** An extension for registering search providers, which then get rendered into the layout in the **runtime** using a portal
-- **skeleton:** Bare extension serving as a playground for prototyping new custom extensions
 - **text-editor:** An extension for creating, opening and editing plain text files, like e.g. `.md` or `.txt`
 - **user-management:** An extension for basic user and group management by the admin. Only works with the Infinite Scale platform, as it uses the graph API.
 
