@@ -12,7 +12,8 @@ geekdocCollapseSection: true
 
 ## Search extensions
 
-One possible extension type is search. Registered search extensions are available when using the search field in the topbar.
+One possible extension type is search. Registered search extensions are available when using the search field in the topbar. A search extension can consist of a 
+`list` and a `preview` search. The result of a `preview` search is shown below the search input field while the `list` search result is 
 
 ### Configuration
 
@@ -41,7 +42,6 @@ The `searchProvider` object configures the actual provider. It consist of the fo
 - `displayName` - Optional, used to add a small hint to indicate the connection between search providers and their corresponding results
 - `previewSearch` - See below
 - `listSearch` - See below
-
 
 #### ListSearch
 

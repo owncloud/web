@@ -78,7 +78,7 @@ export default defineWebApplication({
 ```
 
 By defining an application via `defineWebApplication` you can provide the following:
-- `appInfo` - the application metadata, which is used to make the application available via the app switcher and the app registry
+- `appInfo` - the application metadata, which is used to make the application available via the app switcher and the app registry.
 - `navItems` - the statically defined navigation items for the left sidebar. Only gets rendered when more than 1 navigation item exists at runtime. 
 Additional dynamic navigation items can be registered via the extension registry.
 - `routes` - the routes to the different views of your application. May be referenced within the `navItems`. Authentication requirements can be defined per item.
