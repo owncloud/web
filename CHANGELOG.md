@@ -45,6 +45,7 @@ Summary
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
+* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
 * Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
 * Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
@@ -459,6 +460,15 @@ Details
 
    https://github.com/owncloud/web/issues/9709
    https://github.com/owncloud/web/pull/9764
+
+* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
+
+   Due to improvements in the extension system in general, we have removed the
+   skeleton app. Documentation regarding the extension API and guides/examples can
+   be found in the dev docs.
+
+   https://github.com/owncloud/web/issues/9892
+   https://github.com/owncloud/web/pull/10067
 
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
 
