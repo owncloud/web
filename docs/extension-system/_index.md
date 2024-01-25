@@ -143,4 +143,6 @@ There are standardized components and places where extensions are being used aut
 3. Folder Views in the files app 
 4. Right click context menu in the files app 
 5. Batch actions in the files app
-6. Search results in the search app
+6. Upload menu in the files app 
+7. Quick actions in the files list of the files app
+8. Search results in the search app
