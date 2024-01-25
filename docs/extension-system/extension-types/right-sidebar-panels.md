@@ -32,7 +32,7 @@ interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item> 
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 The `panel` object configures the actual sidebar panel. It consists of different properties and functions, where all the functions get called with a
 `SideBarPanelContext` entity from the integrating extension points.

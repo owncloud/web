@@ -30,7 +30,7 @@ interface SidebarNavExtension {
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 
 #### AppNavigationItem

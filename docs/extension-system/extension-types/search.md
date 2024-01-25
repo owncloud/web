@@ -34,7 +34,7 @@ interface SearchExtension {
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "extension-system/_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 The `searchProvider` object configures the actual provider. It consist of the following:
 - `id` - Since your extension has an `id` and can only have one searchProvider, you can reuse the same value
