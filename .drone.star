@@ -1908,7 +1908,6 @@ def documentation(ctx):
             "trigger": {
                 "ref": [
                     "refs/heads/master",
-                    "refs/heads/stable-*",
                     "refs/pull/**",
                 ],
             },
