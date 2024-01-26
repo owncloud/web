@@ -1,0 +1,7 @@
+Enhancement: Custom component extension type
+
+We've introduced a new extension type `customComponent`. This allows to register a custom component via an extension which
+can then be rendered in a custom component render target. For the mapping to the render target, an extension point needs to be
+registered and a CustomComponentTarget for this extension point needs to be in place in a vue template.
+
+https://github.com/owncloud/web/pull/10443

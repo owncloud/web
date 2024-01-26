@@ -124,7 +124,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', ['favorite'])
+          .requestExtensions<FolderViewExtension>('folderView', { scopes: ['favorite'] })
           .map((e) => e.folderView)
       ]
     })

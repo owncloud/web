@@ -1,6 +1,8 @@
 <template>
   <div id="web-content">
-    <loading-indicator />
+    <div id="global-progress-bar">
+      <custom-component-target :extension-point="progressBarExtensionPoint" />
+    </div>
     <div id="web-content-header">
       <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
         <p class="oc-m-rm" v-text="ieDeprecationWarning" />
@@ -43,6 +45,10 @@
 import orderBy from 'lodash-es/orderBy'
 import {
   AppLoadingSpinner,
+  CustomComponentExtension,
+  CustomComponentTarget,
+  Extension,
+  ExtensionPoint,
   useAppsStore,
   useAuthStore,
   useExtensionRegistry,
@@ -56,7 +62,7 @@ import MobileNav from '../components/MobileNav.vue'
 import { NavItem, getExtensionNavItems } from '../helpers/navItems'
 import { LoadingIndicator } from '@ownclouders/web-pkg'
 import { useActiveApp, useRoute, useRouteMeta, useSpacesLoading } from '@ownclouders/web-pkg'
-import { computed, defineComponent, provide, ref, unref, watch } from 'vue'
+import { computed, defineComponent, h, provide, ref, toRef, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
@@ -69,12 +75,12 @@ export default defineComponent({
   name: 'ApplicationLayout',
   components: {
     AppLoadingSpinner,
+    CustomComponentTarget,
     MessageBar,
     MobileNav,
     TopBar,
     SidebarNav,
-    UploadInfo,
-    LoadingIndicator
+    UploadInfo
   },
   setup() {
     const router = useRouter()
@@ -169,8 +175,33 @@ export default defineComponent({
       navBarClosed.value = value
     }
 
+    const progressBarExtensionId = 'com.github.owncloud.web.runtime.default-progress-bar'
+    const progressBarExtensionPointId = 'app.runtime.global-progress-bar'
+    const defaultProgressBarExtension: CustomComponentExtension = {
+      id: progressBarExtensionId,
+      type: 'customComponent',
+      extensionPointIds: [progressBarExtensionPointId],
+      content: (slots) => [h(LoadingIndicator, slots)],
+      userPreference: {
+        optionLabel: $gettext('Default progress bar')
+      }
+    }
+    extensionRegistry.registerExtensions(toRef([defaultProgressBarExtension] satisfies Extension[]))
+    const progressBarExtensionPoint: ExtensionPoint = {
+      id: progressBarExtensionPointId,
+      type: 'customComponent',
+      multiple: false,
+      defaultExtensionId: defaultProgressBarExtension.id,
+      userPreference: {
+        label: $gettext('Global progress bar')
+      }
+    }
+    extensionRegistry.registerExtensionPoint(progressBarExtensionPoint)
+
     return {
       apps,
+      defaultProgressBarExtension,
+      progressBarExtensionPoint,
       isSidebarVisible,
       isLoading,
       navItems,
@@ -224,6 +255,13 @@ export default defineComponent({
   flex-flow: column;
   flex-wrap: nowrap;
   height: 100vh;
+
+  #global-progress-bar {
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 
   #web-content-header,
   #web-content-main {

@@ -318,7 +318,7 @@ export default defineComponent({
     const extensionActions = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<ActionExtension>('action', ['upload-menu'])
+          .requestExtensions<ActionExtension>('action', { scopes: ['upload-menu'] })
           .map((e) => e.action)
       ].filter((e) => e.isVisible())
     })

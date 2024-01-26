@@ -130,6 +130,25 @@
         </div>
       </dl>
     </div>
+    <div
+      v-if="extensionPointsWithUserPreferences.length"
+      class="account-page-extension-preferences oc-width-1-1"
+    >
+      <div class="oc-flex oc-width-1-1">
+        <h2 class="oc-text-bold" v-text="$gettext('Extensions')" />
+      </div>
+      <dl class="account-page-extensions oc-flex oc-flex-wrap">
+        <div
+          v-for="extensionPoint in extensionPointsWithUserPreferences"
+          :key="`extension-point-preference-${extensionPoint.id}`"
+        >
+          <dt class="oc-text-normal oc-text-muted" v-text="extensionPoint.userPreference.label" />
+          <dd>
+            <extension-preference :extension-point="extensionPoint" />
+          </dd>
+        </div>
+      </dl>
+    </div>
     <div v-if="showGdprExport" class="account-page-gdpr-export oc-width-1-1">
       <h2 class="oc-text-bold oc-mb" v-text="$gettext('GDPR')" />
       <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
@@ -146,10 +165,12 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
+  ExtensionPoint,
   useAuthStore,
   useCapabilityStore,
   useClientService,
   useConfigStore,
+  useExtensionRegistry,
   useMessages,
   useModals,
   useResourcesStore,
@@ -159,18 +180,20 @@ import {
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
-import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
+import GdprExport from '../components/Account/GdprExport.vue'
+import ThemeSwitcher from '../components/Account/ThemeSwitcher.vue'
+import ExtensionPreference from '../components/Account/ExtensionPreference.vue'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
 import { User } from '@ownclouders/web-client/src/generated'
-import ThemeSwitcher from 'web-runtime/src/components/ThemeSwitcher.vue'
 
 export default defineComponent({
   name: 'AccountPage',
   components: {
     AppLoadingSpinner,
     GdprExport,
+    ExtensionPreference,
     ThemeSwitcher
   },
   setup() {
@@ -406,6 +429,13 @@ export default defineComponent({
       }
     }
 
+    const extensionRegistry = useExtensionRegistry()
+    const extensionPointsWithUserPreferences = computed(() => {
+      return extensionRegistry
+        .getExtensionPoints<ExtensionPoint>()
+        .filter((extensionPoint: ExtensionPoint) => extensionPoint.userPreference)
+    })
+
     onMounted(async () => {
       await loadAccountBundleTask.perform()
       await loadValuesListTask.perform()
@@ -435,6 +465,7 @@ export default defineComponent({
     return {
       clientService,
       languageOptions,
+      extensionPointsWithUserPreferences,
       selectedLanguageValue,
       updateSelectedLanguage,
       updateDisableEmailNotifications,

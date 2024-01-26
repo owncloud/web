@@ -7,7 +7,9 @@ export const useExtensionRegistryMock = (
   return {
     ...mock<ReturnType<typeof useExtensionRegistry>>(),
     registerExtensions: () => undefined,
+    registerExtensionPoint: () => undefined,
     requestExtensions: () => [],
+    getExtensionPoints: () => [],
     ...options
   }
 }

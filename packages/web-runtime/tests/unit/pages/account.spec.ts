@@ -8,9 +8,20 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
-import { useMessages, useResourcesStore } from '@ownclouders/web-pkg'
+import {
+  ExtensionPoint,
+  useExtensionRegistry,
+  useMessages,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
+import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
+
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useExtensionRegistry: vi.fn()
+}))
 
 const $route = {
   meta: {
@@ -27,7 +38,8 @@ const selectors = {
   accountPageInfo: '.account-page-info',
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]',
-  gdprExport: '[data-testid="gdpr-export"]'
+  gdprExport: '[data-testid="gdpr-export"]',
+  extensionsSection: '.account-page-extension-preferences'
 }
 
 describe('account page', () => {
@@ -254,6 +266,27 @@ describe('account page', () => {
       expect(setAreWebDavDetailsShown).toHaveBeenCalled()
     })
   })
+
+  describe('Extensions section', () => {
+    it('should be hidden if no extension points offer preferences', () => {
+      const { wrapper } = getWrapper({})
+
+      expect(wrapper.find(selectors.extensionsSection).exists()).toBeFalsy()
+    })
+
+    it('should be visible if any extension points offer preferences', () => {
+      const extensionPointMock = mock<ExtensionPoint>({
+        userPreference: {
+          label: 'example-extension-point'
+        }
+      })
+      const { wrapper } = getWrapper({
+        extensionPoints: [extensionPointMock]
+      })
+
+      expect(wrapper.find(selectors.extensionsSection).exists()).toBeTruthy()
+    })
+  })
 })
 
 function getWrapper({
@@ -262,8 +295,21 @@ function getWrapper({
   accountEditLink = undefined,
   spaces = [],
   isPublicLinkContext = false,
-  isUserContext = true
+  isUserContext = true,
+  extensionPoints = [],
+  extensions = []
 } = {}) {
+  vi.mocked(useExtensionRegistry).mockImplementation(() =>
+    useExtensionRegistryMock({
+      getExtensionPoints<ExtensionPointType>(options?: { type?: string }) {
+        return extensionPoints as ExtensionPointType[]
+      },
+      requestExtensions<ExtensionType>(type: string) {
+        return extensions as ExtensionType[]
+      }
+    })
+  )
+
   const mocks = {
     ...defaultComponentMocks(),
     $route
