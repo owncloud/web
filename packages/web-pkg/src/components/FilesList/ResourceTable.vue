@@ -249,9 +249,9 @@ import { eventBus } from '../../services'
 import {
   displayPositionedDropdown,
   formatDateFromJSDate,
-  formatRelativeDateFromJSDate,
-  isResourceTxtFileAlmostEmpty
+  formatRelativeDateFromJSDate
 } from '../../helpers'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers/resource'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue'
 

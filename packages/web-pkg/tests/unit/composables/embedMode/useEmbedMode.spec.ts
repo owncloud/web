@@ -101,7 +101,7 @@ describe('useEmbedMode', () => {
 
   describe('postMessage', () => {
     it('when targetOrigin is not set should call postMessage without any origin', () => {
-      window.parent.postMessage = jest.fn()
+      ;(window as any).parent.postMessage = vi.fn()
 
       getComposableWrapper(
         () => {
@@ -122,7 +122,7 @@ describe('useEmbedMode', () => {
     })
 
     it('when targetOrigin is set should call postMessage with its value as origin', () => {
-      window.parent.postMessage = jest.fn()
+      ;(window as any).parent.postMessage = vi.fn()
 
       getComposableWrapper(
         () => {

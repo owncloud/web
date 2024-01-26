@@ -1,5 +1,5 @@
 import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Spaces/ContextActions.vue'
 import {
@@ -11,7 +11,6 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
@@ -28,7 +27,7 @@ describe.skip('ContextActions', () => {
       ]
 
       for (const composable of enabledComposables) {
-        jest.mocked(composable).mockImplementation(() => ({
+        vi.mocked(composable).mockImplementation(() => ({
           actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
           checkName: null,
           renameSpace: null,

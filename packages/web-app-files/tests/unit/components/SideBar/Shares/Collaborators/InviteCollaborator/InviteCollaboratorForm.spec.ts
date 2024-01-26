@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
@@ -13,10 +13,10 @@ const folderMock = {
   isFolder: true,
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740',
-  isMounted: jest.fn(() => true),
+  isMounted: vi.fn(() => true),
   name: 'lorem.txt',
   privateLink: 'some-link',
-  canShare: jest.fn(() => true),
+  canShare: vi.fn(() => true),
   path: '/documents',
   canDeny: () => false
 }
@@ -42,7 +42,7 @@ describe('InviteCollaboratorForm', () => {
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
       const { wrapper } = getWrapper({ selectedCollaborators })
-      const spyTriggerUpload = jest.spyOn(wrapper.vm as any, 'share')
+      const spyTriggerUpload = vi.spyOn(wrapper.vm as any, 'share')
       const shareBtn = wrapper.find('#new-collaborators-form-create-button')
       expect(shareBtn.exists()).toBeTruthy()
 
@@ -62,7 +62,7 @@ describe('InviteCollaboratorForm', () => {
         storageId: dataSet.storageId,
         resource: dataSet.resource as any
       })
-      const addShareSpy = jest.spyOn(wrapper.vm as any, dataSet.addMethod)
+      const addShareSpy = vi.spyOn(wrapper.vm as any, dataSet.addMethod)
       await (wrapper.vm as any).share()
       expect(addShareSpy).toHaveBeenCalled()
     })

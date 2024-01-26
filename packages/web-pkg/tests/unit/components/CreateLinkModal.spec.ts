@@ -1,6 +1,6 @@
 import CreateLinkModal from '../../../src/components/CreateLinkModal.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
 import { getDefaultLinkPermissions } from '../../../src/helpers/share/link'
@@ -25,15 +25,15 @@ import { useCreateLink } from '../../../src/composables/links'
 import { ref } from 'vue'
 import { CapabilityStore } from '../../../src/composables/piniaStores'
 
-jest.mock('../../../src/composables/embedMode')
-jest.mock('../../../src/composables/passwordPolicyService')
-jest.mock('../../../src/helpers/share/link', () => ({
-  ...jest.requireActual('../../../src/helpers/share/link'),
-  getDefaultLinkPermissions: jest.fn()
+vi.mock('../../../src/composables/embedMode')
+vi.mock('../../../src/composables/passwordPolicyService')
+vi.mock('../../../src/helpers/share/link', async (importOriginal) => ({
+  ...(await (importOriginal() as any)),
+  getDefaultLinkPermissions: vi.fn()
 }))
-jest.mock('../../../src/composables/links', () => ({
-  ...jest.requireActual('../../../src/composables/links'),
-  useCreateLink: jest.fn()
+vi.mock('../../../src/composables/links', async (importOriginal) => ({
+  ...(await (importOriginal() as any)),
+  useCreateLink: vi.fn()
 }))
 
 const selectors = {
@@ -121,7 +121,7 @@ describe('CreateLinkModal', () => {
   })
   describe('method "confirm"', () => {
     it('shows an error if a password is enforced but empty', async () => {
-      jest.spyOn(console, 'error').mockImplementation(undefined)
+      vi.spyOn(console, 'error').mockImplementation(undefined)
       const { wrapper } = getWrapper({ passwordEnforced: true })
       try {
         await wrapper.vm.onConfirm()
@@ -130,8 +130,8 @@ describe('CreateLinkModal', () => {
       expect(wrapper.vm.password.error).toBeDefined()
     })
     it('does not create links when the password policy is not fulfilled', async () => {
-      jest.spyOn(console, 'error').mockImplementation(undefined)
-      const callbackFn = jest.fn()
+      vi.spyOn(console, 'error').mockImplementation(undefined)
+      const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ passwordPolicyFulfilled: false, callbackFn })
       try {
         await wrapper.vm.onConfirm()
@@ -140,7 +140,7 @@ describe('CreateLinkModal', () => {
       expect(callbackFn).not.toHaveBeenCalled()
     })
     it('creates links for all resources', async () => {
-      const callbackFn = jest.fn()
+      const callbackFn = vi.fn()
       const resources = [mock<Resource>({ isFolder: false }), mock<Resource>({ isFolder: false })]
       const { wrapper, mocks } = getWrapper({ resources, callbackFn })
       await wrapper.vm.onConfirm()
@@ -156,8 +156,8 @@ describe('CreateLinkModal', () => {
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [share.url])
     })
     it('shows error messages for links that failed to be created', async () => {
-      const consoleMock = jest.fn(() => undefined)
-      jest.spyOn(console, 'error').mockImplementation(consoleMock)
+      const consoleMock = vi.fn(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(consoleMock)
       const resources = [mock<Resource>({ isFolder: false })]
       const { wrapper, mocks } = getWrapper({ resources })
       mocks.createLinkMock.mockRejectedValue(new Error(''))
@@ -166,7 +166,7 @@ describe('CreateLinkModal', () => {
     })
     it('calls the callback at the end if given', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
-      const callbackFn = jest.fn()
+      const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ resources, callbackFn })
       await wrapper.vm.onConfirm()
       expect(callbackFn).toHaveBeenCalledTimes(1)
@@ -195,17 +195,17 @@ function getWrapper({
   callbackFn = undefined,
   isQuickLink = false
 } = {}) {
-  jest.mocked(usePasswordPolicyService).mockReturnValue(
+  vi.mocked(usePasswordPolicyService).mockReturnValue(
     mock<PasswordPolicyService>({
       getPolicy: () => mock<PasswordPolicy>({ check: () => passwordPolicyFulfilled })
     })
   )
-  jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
-  const createLinkMock = jest.fn()
-  jest.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
+  vi.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
+  const createLinkMock = vi.fn()
+  vi.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
 
-  const postMessageMock = jest.fn()
-  jest.mocked(useEmbedMode).mockReturnValue(
+  const postMessageMock = vi.fn()
+  vi.mocked(useEmbedMode).mockReturnValue(
     mock<ReturnType<typeof useEmbedMode>>({
       isEnabled: ref(embedModeEnabled),
       postMessage: postMessageMock

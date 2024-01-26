@@ -2,18 +2,18 @@ import { triggerShareAction } from '../../../../src/helpers/share/triggerShareAc
 
 import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 
-jest.unmock('axios')
+vi.unmock('axios')
 const client = mockDeep<OwnCloudSdk>()
 
-jest.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
+vi.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
   aggregateResourceShares: ({ shares }) => shares
 }))
 
 describe('method triggerShareAction', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('throws error if invalid share status given', async () => {

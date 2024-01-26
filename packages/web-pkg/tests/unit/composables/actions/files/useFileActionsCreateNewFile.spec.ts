@@ -1,5 +1,5 @@
-import { mock } from 'jest-mock-extended'
-import { nextTick, unref } from 'vue'
+import { mock } from 'vitest-mock-extended'
+import { unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
 import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client/src'
@@ -10,8 +10,9 @@ import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-
 import { ApplicationFileExtension } from '../../../../../types'
 import { useResourcesStore } from '../../../../../src/composables/piniaStores'
 
-jest.mock('../../../../../src/composables/actions/files/useFileActions', () => ({
-  useFileActions: jest.fn(() => mock<ReturnType<typeof useFileActions>>())
+vi.mock('../../../../../src/composables/actions/files/useFileActions', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useFileActions: vi.fn(() => mock<ReturnType<typeof useFileActions>>())
 }))
 
 describe('useFileActionsCreateNewFile', () => {
@@ -56,8 +57,8 @@ describe('useFileActionsCreateNewFile', () => {
         setup: async ({ actions }) => {
           const { dispatchModal } = useModals()
           const fileActionOptions: FileActionOptions = { space, resources: [] } as FileActionOptions
-          unref(actions)[0].handler(fileActionOptions)
-          await nextTick()
+          await unref(actions)[0].handler(fileActionOptions)
+
           expect(dispatchModal).toHaveBeenCalled()
         }
       })
@@ -86,7 +87,7 @@ function getWrapper({
         id: '1',
         type: 'folder',
         path: '/',
-        isReceivedShare: jest.fn()
+        isReceivedShare: vi.fn()
       } as Resource)
     }
     return Promise.reject('error')
@@ -109,7 +110,7 @@ function getWrapper({
               fileExtensions: [
                 mock<ApplicationFileExtension>({
                   extension: '.txt',
-                  newFileMenu: { menuTitle: jest.fn() }
+                  newFileMenu: { menuTitle: vi.fn() }
                 })
               ]
             },

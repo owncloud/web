@@ -1,7 +1,7 @@
 import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
 import { LinkShareRoles } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 
 const availableRoleOptions = LinkShareRoles.list(false, true, true, true)

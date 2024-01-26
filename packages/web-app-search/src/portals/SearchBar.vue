@@ -277,6 +277,12 @@ export default defineComponent({
       return unref(optionsDrop).show()
     }
 
+    const debouncedSearch = debounce(search, 500)
+
+    watch(term, () => {
+      debouncedSearch()
+    })
+
     return {
       userContextReady,
       showCancelButton,
@@ -304,7 +310,6 @@ export default defineComponent({
       activeProvider: undefined,
       optionsVisible: false,
       markInstance: null,
-      debouncedSearch: undefined,
       clearTermEvent: null
     }
   },
@@ -331,9 +336,6 @@ export default defineComponent({
   },
 
   watch: {
-    term() {
-      this.debouncedSearch(this)
-    },
     searchResults: {
       handler() {
         this.activePreviewIndex = null
@@ -382,8 +384,6 @@ export default defineComponent({
     }
   },
   created() {
-    this.debouncedSearch = debounce(this.search, 500)
-
     this.clearTermEvent = eventBus.subscribe('app.search.term.clear', () => {
       this.term = ''
     })

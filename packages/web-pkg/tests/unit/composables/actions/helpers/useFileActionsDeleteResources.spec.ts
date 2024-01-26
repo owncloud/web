@@ -1,5 +1,5 @@
 import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import { FolderResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { nextTick } from 'vue'
@@ -29,6 +29,8 @@ describe('deleteResources', () => {
         setup: async ({ filesList_delete }, { router }) => {
           await filesList_delete(resourcesToDelete)
           // FIXME: well...
+          await nextTick()
+          await nextTick()
           await nextTick()
           await nextTick()
           await nextTick()

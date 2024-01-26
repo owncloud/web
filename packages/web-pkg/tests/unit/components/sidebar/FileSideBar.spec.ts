@@ -1,6 +1,6 @@
 import FileSideBar from '../../../../src/components/SideBar/FileSideBar.vue'
 import { Resource } from '@ownclouders/web-client/src/helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   defaultPlugins,
@@ -15,7 +15,7 @@ const InnerSideBarComponent = defineComponent({
   template: '<div id="foo"><slot name="header"></slot></div>'
 })
 
-jest.mock('../../../../src/composables/selection', () => ({ useSelectedResources: jest.fn() }))
+vi.mock('../../../../src/composables/selection', () => ({ useSelectedResources: vi.fn() }))
 
 const selectors = {
   sideBar: '.files-side-bar',
@@ -79,7 +79,7 @@ function createWrapper({
   item = undefined,
   isOpen = true
 }: { item?: Resource; isOpen?: boolean } = {}) {
-  jest.mocked(useSelectedResources).mockReturnValue(
+  vi.mocked(useSelectedResources).mockReturnValue(
     mock<ReturnType<typeof useSelectedResources>>({
       selectedResources: item ? ref([item]) : ref([])
     })

@@ -1,43 +1,36 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Details SideBar Panel displays the details side panel 1`] = `
-<div id="oc-space-details-sidebar">
-  <div class="oc-space-details-sidebar-image oc-text-center">
-    <oc-icon-stub accessiblelabel="" class="space-default-image oc-px-m oc-py-m" color="" filltype="fill" name="layout-grid" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
+exports[`Details SideBar Panel > displays the details side panel 1`] = `
+"<div data-v-c7ea2f9c="" id="oc-space-details-sidebar">
+  <div data-v-c7ea2f9c="" class="oc-space-details-sidebar-image oc-text-center">
+    <oc-icon-stub data-v-c7ea2f9c="" name="layout-grid" filltype="fill" accessiblelabel="" type="span" size="xxlarge" variation="passive" color="" class="space-default-image oc-px-m oc-py-m"></oc-icon-stub>
   </div>
-  <div class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-s oc-text-small" style="gap: 15px;">
-    <oc-button-stub appearance="raw" arialabel="Open member list in share panel" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive"></oc-button-stub>
+  <div data-v-c7ea2f9c="" class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-s oc-text-small" style="gap: 15px;">
+    <oc-button-stub data-v-c7ea2f9c="" type="button" disabled="false" size="medium" arialabel="Open member list in share panel" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false"></oc-button-stub>
     <!--v-if-->
-    <p>This space has 1 member.</p>
-    <oc-button-stub appearance="raw" arialabel="Open share panel" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="small" submit="button" type="button" variation="passive"></oc-button-stub>
+    <p data-v-c7ea2f9c="">This space has 1 member.</p>
+    <oc-button-stub data-v-c7ea2f9c="" type="button" disabled="false" size="small" arialabel="Open share panel" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false"></oc-button-stub>
   </div>
-  <portal-target multiple="true" name="app.files.sidebar.space.details.table" slot-props="[object Object]"></portal-target>
-  <table aria-label="Overview of the information about the selected space" class="details-table oc-width-1-1">
-    <colgroup>
-      <col class="oc-width-1-3">
-      <col class="oc-width-2-3">
-    </colgroup>
-    <tbody>
-      <tr>
-        <th class="oc-pr-s oc-font-semibold" scope="col">Last activity</th>
-        <td>Invalid DateTime</td>
-      </tr>
-      <!--v-if-->
-      <tr>
-        <th class="oc-pr-s oc-font-semibold" scope="col">Manager</th>
-        <td>
-          <span>alice (me)</span>
-        </td>
-      </tr>
-      <tr>
-        <th class="oc-pr-s oc-font-semibold" scope="col">Quota</th>
-        <td>
-          <space-quota-stub spacequota="[object Object]"></space-quota-stub>
-        </td>
-      </tr>
-      <!--v-if-->
-
-    </tbody>
+  <table data-v-c7ea2f9c="" class="details-table oc-width-1-1" aria-label="Overview of the information about the selected space">
+    <col data-v-c7ea2f9c="" class="oc-width-1-3">
+    <col data-v-c7ea2f9c="" class="oc-width-2-3">
+    <tr data-v-c7ea2f9c="">
+      <th data-v-c7ea2f9c="" scope="col" class="oc-pr-s oc-font-semibold">Last activity</th>
+      <td data-v-c7ea2f9c="">Invalid DateTime</td>
+    </tr>
+    <!--v-if-->
+    <tr data-v-c7ea2f9c="">
+      <th data-v-c7ea2f9c="" scope="col" class="oc-pr-s oc-font-semibold">Manager</th>
+      <td data-v-c7ea2f9c=""><span data-v-c7ea2f9c="">alice (me)</span></td>
+    </tr>
+    <tr data-v-c7ea2f9c="">
+      <th data-v-c7ea2f9c="" scope="col" class="oc-pr-s oc-font-semibold">Quota</th>
+      <td data-v-c7ea2f9c="">
+        <space-quota-stub data-v-c7ea2f9c="" spacequota="[object Object]"></space-quota-stub>
+      </td>
+    </tr>
+    <!--v-if-->
+    <portal-target data-v-c7ea2f9c="" name="app.files.sidebar.space.details.table" slot-props="[object Object]" multiple="true"></portal-target>
   </table>
-</div>
+</div>"
 `;

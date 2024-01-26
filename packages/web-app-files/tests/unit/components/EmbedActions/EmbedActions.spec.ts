@@ -1,14 +1,14 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
 import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useFileActionsCreateLink: jest.fn(),
-  useEmbedMode: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useFileActionsCreateLink: vi.fn(),
+  useEmbedMode: vi.fn()
 }))
 
 const selectors = Object.freeze({
@@ -111,16 +111,16 @@ function getWrapper(
     selectedIds: []
   }
 ) {
-  const postMessageMock = jest.fn()
-  jest.mocked(useEmbedMode).mockReturnValue(
+  const postMessageMock = vi.fn()
+  vi.mocked(useEmbedMode).mockReturnValue(
     mock<ReturnType<typeof useEmbedMode>>({
       isLocationPicker: ref(isLocationPicker),
       postMessage: postMessageMock
     })
   )
 
-  const createLinkHandlerMock = jest.fn()
-  jest.mocked(useFileActionsCreateLink).mockReturnValue(
+  const createLinkHandlerMock = vi.fn()
+  vi.mocked(useFileActionsCreateLink).mockReturnValue(
     mock<ReturnType<typeof useFileActionsCreateLink>>({
       actions: ref([
         mock<FileAction>({

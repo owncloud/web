@@ -5,7 +5,7 @@ import {
   shallowMount,
   RouteLocation
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 
 const selectors = {

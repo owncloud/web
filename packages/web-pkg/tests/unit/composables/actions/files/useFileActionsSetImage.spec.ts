@@ -1,7 +1,7 @@
 import { useFileActionsSetImage } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   RouteLocation,
@@ -125,7 +125,7 @@ describe('setImage', () => {
     })
 
     it('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         setup: async ({ actions }) => {
@@ -164,7 +164,7 @@ function getWrapper({
     })
   }
   mocks.$previewService.isMimetypeSupported.mockReturnValue(isMimetypeSupported)
-  mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>())
+  mocks.$clientService.webdav.getFileInfo.mockResolvedValue(mock<Resource>())
 
   return {
     wrapper: getComposableWrapper(

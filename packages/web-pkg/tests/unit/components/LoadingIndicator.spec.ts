@@ -1,6 +1,6 @@
 import LoadingIndicator from '../../../src/components/LoadingIndicator.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { LoadingService } from '../../../src/services'
 
 const selectors = {

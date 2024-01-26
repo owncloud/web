@@ -7,7 +7,7 @@ import {
   RouteLocation,
   getComposableWrapper
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -117,7 +117,7 @@ describe('delete', () => {
     })
 
     it('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ deleteSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.deleteDrive.mockRejectedValue(new Error())

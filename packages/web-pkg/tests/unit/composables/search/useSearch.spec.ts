@@ -42,7 +42,7 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
       id: '2',
       driveType: 'project',
       name: 'New space',
-      getDriveAliasAndItem: jest.fn()
+      getDriveAliasAndItem: vi.fn()
     }
   ] as unknown as SpaceResource[]
 

@@ -2,11 +2,11 @@ import { computed } from 'vue'
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
-const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
+const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 
 describe('Top Bar component', () => {

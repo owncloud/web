@@ -11,7 +11,7 @@ describe('showDetails', () => {
         () => {
           const { actions } = useFileActionsShowDetails()
 
-          const busStub = jest.spyOn(eventBus, 'publish')
+          const busStub = vi.spyOn(eventBus, 'publish')
           const resources = [{ id: '1', path: '/folder' }] as Resource[]
           unref(actions)[0].handler({ space: null, resources })
           expect(busStub).toHaveBeenCalledWith(SideBarEventTopics.open)

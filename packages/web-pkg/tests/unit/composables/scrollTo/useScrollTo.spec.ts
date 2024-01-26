@@ -1,4 +1,4 @@
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { useScrollTo } from '../../../../src/composables/scrollTo'
 import { Resource } from '@ownclouders/web-client/src'
 import { eventBus } from '../../../../src/services'
@@ -16,16 +16,16 @@ describe('useScrollTo', () => {
   })
   describe('method "scrollToResource"', () => {
     const getHTMLPageObject = () => ({
-      getBoundingClientRect: jest.fn(() => ({ bottom: 300, top: 0 })),
-      scrollIntoView: jest.fn(),
-      scrollBy: jest.fn(),
+      getBoundingClientRect: vi.fn(() => ({ bottom: 300, top: 0 })),
+      scrollIntoView: vi.fn(),
+      scrollBy: vi.fn(),
       offsetHeight: 100
     })
 
     it('does nothing when no element was found', () => {
       const htmlPageObject = getHTMLPageObject()
-      jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [] as any)
-      jest.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
+      vi.spyOn(document, 'querySelectorAll').mockImplementation(() => [] as any)
+      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
 
       const mocks = defaultComponentMocks()
 
@@ -40,8 +40,8 @@ describe('useScrollTo', () => {
     })
     it('calls "scrollIntoView" when the page bottom is reached', () => {
       const htmlPageObject = getHTMLPageObject()
-      jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
-      jest.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
+      vi.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
+      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
 
       window.innerHeight = 100
 
@@ -58,8 +58,8 @@ describe('useScrollTo', () => {
     })
     it('calls "scrollIntoView" when the page top is reached', () => {
       const htmlPageObject = getHTMLPageObject()
-      jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
-      jest.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
+      vi.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
+      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
 
       window.innerHeight = 500
 
@@ -83,9 +83,9 @@ describe('useScrollTo', () => {
 
       getComposableWrapper(
         () => {
-          const resource = mockDeep<Resource>({ id: resourceId })
+          const resource = mock<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
-          const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
+          const querySelectorAllSpy = vi.spyOn(document, 'querySelectorAll')
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
@@ -101,9 +101,9 @@ describe('useScrollTo', () => {
 
       getComposableWrapper(
         () => {
-          const resource = mockDeep<Resource>({ id: 'someOtherFileId' })
+          const resource = mock<Resource>({ id: 'someOtherFileId' })
           const { scrollToResourceFromRoute } = useScrollTo()
-          const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
+          const querySelectorAllSpy = vi.spyOn(document, 'querySelectorAll')
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
@@ -119,9 +119,9 @@ describe('useScrollTo', () => {
 
       getComposableWrapper(
         () => {
-          const resource = mockDeep<Resource>({ id: resourceId, processing: true })
+          const resource = mock<Resource>({ id: resourceId, processing: true })
           const { scrollToResourceFromRoute } = useScrollTo()
-          const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
+          const querySelectorAllSpy = vi.spyOn(document, 'querySelectorAll')
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).not.toHaveBeenCalled()
         },
@@ -129,7 +129,7 @@ describe('useScrollTo', () => {
       )
     })
     it('scrolls to the resource when the "scrollTo" param is given and a resource is found', () => {
-      const store = { commit: jest.fn() }
+      const store = { commit: vi.fn() }
       const mocks = {
         ...defaultComponentMocks({
           currentRoute: mock<RouteLocation>({ query: { scrollTo: resourceId } })
@@ -138,9 +138,9 @@ describe('useScrollTo', () => {
 
       getComposableWrapper(
         () => {
-          const resource = mockDeep<Resource>({ id: resourceId })
+          const resource = mock<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
-          const querySelectorAllSpy = jest.spyOn(document, 'querySelectorAll')
+          const querySelectorAllSpy = vi.spyOn(document, 'querySelectorAll')
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(querySelectorAllSpy).toHaveBeenCalled()
         },
@@ -154,7 +154,7 @@ describe('useScrollTo', () => {
       )
     })
     it('opens the sidebar when a resource is found and the "details" param is given', () => {
-      const store = { commit: jest.fn() }
+      const store = { commit: vi.fn() }
       const mocks = {
         ...defaultComponentMocks({
           currentRoute: mock<RouteLocation>({
@@ -165,8 +165,8 @@ describe('useScrollTo', () => {
 
       getComposableWrapper(
         () => {
-          const busStub = jest.spyOn(eventBus, 'publish')
-          const resource = mockDeep<Resource>({ id: resourceId })
+          const busStub = vi.spyOn(eventBus, 'publish')
+          const resource = mock<Resource>({ id: resourceId })
           const { scrollToResourceFromRoute } = useScrollTo()
           scrollToResourceFromRoute([resource], 'files-app-bar')
           expect(busStub).toHaveBeenCalled()

@@ -1,6 +1,6 @@
 import { useMessages } from '@ownclouders/web-pkg'
 import { useGeneralActionsUploadLogo } from '../../../../../src/composables/actions/general/useGeneralActionsUploadLogo'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { VNodeRef } from 'vue'
 import {
   defaultComponentMocks,
@@ -10,20 +10,20 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 
-jest.useFakeTimers()
+vi.useFakeTimers()
 
 describe('uploadImage', () => {
   describe('method "uploadImage"', () => {
     it('should show message on request success', () => {
       getWrapper({
         setup: async ({ uploadImage }, { clientService, router }) => {
-          clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosResolve())
+          clientService.httpAuthenticated.post.mockResolvedValue(mockAxiosResolve())
           await uploadImage({
             currentTarget: {
               files: [{ name: 'image.png', type: 'image/png' }]
             }
           } as unknown as InputEvent)
-          jest.runAllTimers()
+          vi.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(1)
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
@@ -32,7 +32,7 @@ describe('uploadImage', () => {
     })
 
     it('should show message on request error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ uploadImage }, { clientService, router }) => {
           clientService.httpAuthenticated.post.mockRejectedValue(() => mockAxiosReject())
@@ -41,7 +41,7 @@ describe('uploadImage', () => {
               files: [{ name: 'image.png', type: 'image/png' }]
             }
           } as unknown as InputEvent)
-          jest.runAllTimers()
+          vi.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(0)
           const { showErrorMessage } = useMessages()
           expect(showErrorMessage).toHaveBeenCalledTimes(1)
@@ -50,7 +50,7 @@ describe('uploadImage', () => {
     })
 
     it('should show message on invalid mimeType', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ uploadImage }, { clientService }) => {
           await uploadImage({

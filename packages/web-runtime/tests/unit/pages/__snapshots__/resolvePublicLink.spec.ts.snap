@@ -1,21 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`resolvePublicLink password required form should display if password is required 1`] = `
-<form>
+exports[`resolvePublicLink > password required form > should display if password is required 1`] = `
+"<form>
   <div class="oc-card-header">
-    <h2>
-      <span>This resource is password-protected</span>
-    </h2>
+    <h2><span>This resource is password-protected</span></h2>
   </div>
   <div class="oc-card-body">
-    <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="false" id="oc-textinput-2" label="Enter password for public link" modelvalue="" passwordpolicy="[object Object]" readonly="false" type="password"></oc-text-input-stub>
-    <oc-button-stub appearance="filled" class="oc-login-authorize-button" disabled="true" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="submit" type="button" variation="primary"></oc-button-stub>
+    <oc-text-input-stub id="oc-textinput-2" type="password" modelvalue="" clearbuttonenabled="false" clearbuttonaccessiblelabel="" disabled="false" label="Enter password for public link" fixmessageline="false" readonly="false" passwordpolicy="[object Object]" class="oc-mb-s"></oc-text-input-stub>
+    <oc-button-stub type="button" disabled="true" size="medium" submit="submit" variation="primary" appearance="filled" justifycontent="center" gapsize="medium" showspinner="false" class="oc-login-authorize-button"></oc-button-stub>
   </div>
-</form>
+</form>"
 `;
 
-exports[`resolvePublicLink should display the configuration theme general slogan as the login card footer 1`] = `
-<div class="oc-card-footer oc-pt-rm">
+exports[`resolvePublicLink > should display the configuration theme general slogan as the login card footer 1`] = `
+"<div class="oc-card-footer oc-pt-rm">
   <p>ownCloud – A safe home for all your data</p>
-</div>
+</div>"
 `;

@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { nextTick, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
 import {
@@ -12,7 +12,7 @@ import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-
 import { useScrollToMock } from '../../../../mocks/useScrollToMock'
 import { useScrollTo } from '../../../../../src/composables/scrollTo'
 
-jest.mock('../../../../../src/composables/scrollTo')
+vi.mock('../../../../../src/composables/scrollTo')
 
 describe('useFileActionsCreateNewFolder', () => {
   describe('checkFolderName', () => {
@@ -54,7 +54,7 @@ describe('useFileActionsCreateNewFolder', () => {
       })
     })
     it('show error message if createFolder fails', () => {
-      const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
+      const consoleErrorMock = vi.spyOn(console, 'error').mockReturnThis()
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         resolveCreateFolder: false,
@@ -98,7 +98,7 @@ function getWrapper({
   space?: SpaceResource
   setup: (instance: ReturnType<typeof useFileActionsCreateNewFolder>) => void
 }) {
-  jest.mocked(useScrollTo).mockImplementation(() => useScrollToMock())
+  vi.mocked(useScrollTo).mockImplementation(() => useScrollToMock())
 
   const mocks = {
     ...defaultComponentMocks({
@@ -111,7 +111,7 @@ function getWrapper({
       return Promise.resolve({
         id: '1',
         type: 'folder',
-        isReceivedShare: jest.fn(),
+        isReceivedShare: vi.fn(),
         path: '/'
       } as FolderResource)
     }

@@ -40,7 +40,7 @@ const items = [
 
 describe('OcAvatars', () => {
   it('displays tooltip', () => {
-    const OcTooltip = jest.fn()
+    const OcTooltip = vi.fn()
     const wrapper = shallowMount(Avatars, {
       props: {
         items,
@@ -60,7 +60,7 @@ describe('OcAvatars', () => {
   })
 
   it('prefers avatars over links when maxDisplayed is exceeded', () => {
-    const OcTooltip = jest.fn()
+    const OcTooltip = vi.fn()
     const wrapper = shallowMount(Avatars, {
       props: {
         items,
@@ -82,7 +82,7 @@ describe('OcAvatars', () => {
   })
 
   it('shows avatars first and links last', () => {
-    const OcTooltip = jest.fn()
+    const OcTooltip = vi.fn()
     const wrapper = shallowMount(Avatars, {
       props: {
         items,

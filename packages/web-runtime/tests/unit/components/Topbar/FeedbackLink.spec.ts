@@ -1,21 +1,19 @@
 import FeedbackLink from '../../../../src/components/Topbar/FeedbackLink.vue'
-import { axe, toHaveNoViolations } from 'jest-axe'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-expect.extend(toHaveNoViolations)
+// expect.extend(toHaveNoViolations)
 
 describe('FeedbackLink component', () => {
   // FIXME: skip flaky test, also see: https://github.com/owncloud/web/issues/8244
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('has no accessibility violations', async () => {
     const { wrapper } = getWrapper()
-    expect(
-      await axe(wrapper.html(), {
-        rules: {
-          region: { enabled: false }
-        }
-      })
-    ).toHaveNoViolations()
+    // expect(
+    //   await axe(wrapper.html(), {
+    //     rules: {
+    //       region: { enabled: false }
+    //     }
+    //   })
+    // ).toHaveNoViolations()
     expect(wrapper.html()).toMatchSnapshot()
   })
 

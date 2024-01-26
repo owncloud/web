@@ -1,5 +1,5 @@
 import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'
 import {
@@ -14,14 +14,15 @@ import { Action } from '@ownclouders/web-pkg'
 function createMockActionComposables(module) {
   const mockModule: Record<string, any> = {}
   for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+    mockModule[m] = vi.fn(() => ({ actions: ref([]) }))
   }
   return mockModule
 }
 
-jest.mock('@ownclouders/web-pkg', () =>
-  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
-)
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => {
+  const original = await importOriginal()
+  return createMockActionComposables(original)
+})
 
 describe('ActionsPanel', () => {
   describe('menu sections', () => {
@@ -39,7 +40,7 @@ describe('ActionsPanel', () => {
       ]
 
       for (const composable of enabledComposables) {
-        jest.mocked(composable).mockImplementation(() => ({
+        vi.mocked(composable).mockImplementation(() => ({
           actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
           checkName: null,
           renameSpace: null,

@@ -1,36 +1,31 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Collaborator ListItem component share inheritance indicators show when sharedParentRoute is given 1`] = `
-<div class="files-collaborators-collaborator oc-py-xs">
-  <div class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
-    <div class="oc-width-2-3 oc-flex oc-flex-middle">
-      <div>
-        <avatar-image-stub class="files-collaborators-collaborator-indicator" user-name="Brian Murphy" userid="brian" width="36"></avatar-image-stub>
+exports[`Collaborator ListItem component > share inheritance indicators > show when sharedParentRoute is given 1`] = `
+"<div data-v-ccf14be2="" data-testid="collaborator-user-item-brian" class="files-collaborators-collaborator oc-py-xs">
+  <div data-v-ccf14be2="" class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
+    <div data-v-ccf14be2="" class="oc-width-2-3 oc-flex oc-flex-middle">
+      <div data-v-ccf14be2="">
+        <avatar-image-stub data-v-ccf14be2="" userid="brian" user-name="Brian Murphy" width="36" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
       </div>
-      <div class="oc-pl-s oc-text-truncate">
-        <div class="oc-text-truncate">
-          <span aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span>
-          <span class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span>
-        </div>
-        <div>
-          <div class="oc-flex oc-flex-nowrap oc-flex-middle">
-            <role-dropdown-stub allowsharepermission="true" class="files-collaborators-collaborator-role" domselector="asdf" existingpermissions="" existingrole="[object Object]" mode="edit" showicon="false"></role-dropdown-stub>
+      <div data-v-ccf14be2="" class="oc-pl-s oc-text-truncate">
+        <div data-v-ccf14be2="" class="oc-text-truncate"><span data-v-ccf14be2="" aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span> <span data-v-ccf14be2="" class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span></div>
+        <div data-v-ccf14be2="">
+          <div data-v-ccf14be2="" class="oc-flex oc-flex-nowrap oc-flex-middle">
+            <role-dropdown-stub data-v-ccf14be2="" existingrole="[object Object]" existingpermissions="" domselector="asdf" allowsharepermission="true" mode="edit" showicon="false" class="files-collaborators-collaborator-role"></role-dropdown-stub>
           </div>
         </div>
       </div>
     </div>
-    <div class="oc-flex oc-flex-middle oc-width-1-3 files-collaborators-collaborator-navigation">
-      <div class="oc-resource-indicators oc-text-truncate">
-        <router-link-stub class="parent-folder oc-text-truncate" to="[object Object]">
-          <span class="text">via</span>
-          <oc-icon-stub class="oc-px-xs" fill-type="line" name="folder-2" size="small"></oc-icon-stub>
-          <span class="text oc-text-truncate">folder</span>
+    <div data-v-ccf14be2="" class="oc-flex oc-flex-middle oc-width-1-3 files-collaborators-collaborator-navigation">
+      <div data-v-ccf14be2="" class="oc-resource-indicators oc-text-truncate">
+        <router-link-stub data-v-ccf14be2="" class="parent-folder oc-text-truncate" to="[object Object]"><span data-v-ccf14be2="" class="text">via</span>
+          <oc-icon-stub data-v-ccf14be2="" name="folder-2" size="small" fill-type="line" class="oc-px-xs"></oc-icon-stub> <span data-v-ccf14be2="" class="text oc-text-truncate">folder</span>
         </router-link-stub>
       </div>
       <!--v-if-->
-      <edit-dropdown-stub caneditordelete="true" class="files-collaborators-collaborator-edit" deniable="false" id="edit-drop-down-00000000-0000-0000-0000-000000000000" issharedenied="false" sharecategory="user"></edit-dropdown-stub>
-      <oc-info-drop-stub class="share-access-details-drop" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" title="Access details"></oc-info-drop-stub>
+      <edit-dropdown-stub data-v-ccf14be2="" sharecategory="user" caneditordelete="true" issharedenied="false" deniable="false" id="edit-drop-down-00000000-0000-0000-0000-000000000000" class="files-collaborators-collaborator-edit" data-testid="collaborator-edit"></edit-dropdown-stub>
+      <oc-info-drop-stub data-v-ccf14be2="" class="share-access-details-drop" title="Access details" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000"></oc-info-drop-stub>
     </div>
   </div>
-</div>
+</div>"
 `;

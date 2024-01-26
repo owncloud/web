@@ -1,3 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Preview component should render preview component 1`] = `<resource-list-item-stub folderlink="[object Object]" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="true" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlink="[object Object]" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="New space" pathprefix="Spaces/New space" resource="[object Object]"></resource-list-item-stub>`;
+exports[`Preview component > should render preview component 1`] = `"<resource-list-item-stub resource="[object Object]" pathprefix="Spaces/New space" folderlink="[object Object]" ispathdisplayed="true" parentfoldername="New space" parentfolderlink="[object Object]" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true"></resource-list-item-stub>"`;

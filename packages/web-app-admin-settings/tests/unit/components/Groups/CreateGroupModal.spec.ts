@@ -6,7 +6,7 @@ import {
   mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
@@ -57,10 +57,10 @@ describe('CreateGroupModal', () => {
   })
   describe('method "onConfirm"', () => {
     it('should not create group if form is invalid', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = getWrapper()
 
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       try {
         await wrapper.vm.onConfirm()
       } catch (error) {}
@@ -80,7 +80,7 @@ describe('CreateGroupModal', () => {
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       await wrapper.vm.onConfirm()
 
       const { showMessage } = useMessages()
@@ -89,7 +89,7 @@ describe('CreateGroupModal', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.groups.getGroup.mockRejectedValue(new Error(''))
@@ -100,7 +100,7 @@ describe('CreateGroupModal', () => {
       mocks.$clientService.graphAuthenticated.groups.createGroup.mockRejectedValue(
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       await wrapper.vm.onConfirm()
 
       const { showErrorMessage } = useMessages()

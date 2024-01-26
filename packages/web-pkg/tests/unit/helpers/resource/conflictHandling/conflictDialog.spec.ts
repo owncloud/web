@@ -1,4 +1,4 @@
-import { mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ConflictDialog, ResolveConflict } from '../../../../../src/helpers/resource'
 import { useModals } from '../../../../../src/composables/piniaStores'
@@ -6,7 +6,7 @@ import { setActivePinia } from 'pinia'
 import { createMockStore } from 'web-test-helpers'
 
 const getConflictDialogInstance = () => {
-  return new ConflictDialog(jest.fn(), jest.fn())
+  return new ConflictDialog(vi.fn(), vi.fn())
 }
 
 describe('conflict dialog', () => {
@@ -14,13 +14,13 @@ describe('conflict dialog', () => {
     it('should return the resolved conflicts including the resource(s) and the strategy', async () => {
       const conflictDialog = getConflictDialogInstance()
       const strategy = mockDeep<ResolveConflict>()
-      conflictDialog.resolveFileExists = jest.fn().mockImplementation(() => ({
+      conflictDialog.resolveFileExists = vi.fn().mockImplementation(() => ({
         strategy,
         doForAllConflicts: false
       }))
-      const resource = mockDeep<Resource>({ name: 'someFile.txt' })
-      const targetFolder = mockDeep<Resource>({ path: '/' })
-      const targetFolderResources = [mockDeep<Resource>({ path: '/someFile.txt' })]
+      const resource = mock<Resource>({ name: 'someFile.txt' })
+      const targetFolder = mock<Resource>({ path: '/' })
+      const targetFolderResources = [mock<Resource>({ path: '/someFile.txt' })]
       const resolvedConflicts = await conflictDialog.resolveAllConflicts(
         [resource],
         targetFolder,
@@ -37,7 +37,7 @@ describe('conflict dialog', () => {
       setActivePinia(createMockStore())
       const { dispatchModal } = useModals()
       const conflictDialog = getConflictDialogInstance()
-      conflictDialog.resolveFileExists(mockDeep<Resource>(), 2, true)
+      conflictDialog.resolveFileExists(mock<Resource>(), 2, true)
       expect(dispatchModal).toHaveBeenCalledTimes(1)
     })
   })

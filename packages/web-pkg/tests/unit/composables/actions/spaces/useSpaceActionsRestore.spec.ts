@@ -1,6 +1,6 @@
 import { useSpaceActionsRestore } from '../../../../../src/composables/actions/spaces'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   mockAxiosResolve,
@@ -112,7 +112,7 @@ describe('restore', () => {
     })
 
     it('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ restoreSpaces }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())

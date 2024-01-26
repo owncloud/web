@@ -2,7 +2,7 @@ import GenericTrash from '../../../../src/views/spaces/GenericTrash.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
@@ -13,7 +13,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 
-jest.mock('web-app-files/src/composables')
+vi.mock('web-app-files/src/composables')
 
 describe('GenericTrash view', () => {
   it('appBar always present', () => {
@@ -31,7 +31,7 @@ describe('GenericTrash view', () => {
     )
   })
   it('shows the project space breadcrumb', () => {
-    const space = mockDeep<SpaceResource>({ driveType: 'project' })
+    const space = mock<SpaceResource>({ driveType: 'project' })
     const { wrapper } = getMountedWrapper({ props: { space } })
     expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
       space.name
@@ -48,7 +48,7 @@ describe('GenericTrash view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()] })
+      const { wrapper } = getMountedWrapper({ files: [mock<Resource>()] })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
     })
@@ -56,7 +56,7 @@ describe('GenericTrash view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
       areResourcesLoading: ref(loading)
@@ -69,7 +69,7 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
     ...(mocks && mocks)
   }
   const propsData = {
-    space: { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space' },
+    space: { id: 1, getDriveAliasAndItem: vi.fn(), name: 'Personal space' },
     ...props
   }
   return {

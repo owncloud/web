@@ -1,8 +1,8 @@
-const fetchEventSourceMock = jest.fn()
-jest.mock('@microsoft/fetch-event-source', () => ({
-  fetchEventSource: fetchEventSourceMock
+vi.mock('@microsoft/fetch-event-source', () => ({
+  fetchEventSource: vi.fn()
 }))
 
+import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source'
 import { SSEAdapter, sse, MESSAGE_TYPE, RetriableError } from '../../src/sse'
 
 const url = 'https://owncloud.test/'
@@ -10,7 +10,7 @@ describe('SSEAdapter', () => {
   let mockFetch
 
   beforeEach(() => {
-    mockFetch = jest.fn()
+    mockFetch = vi.fn()
 
     // Mock fetchEventSource and window.fetch
 
@@ -18,7 +18,7 @@ describe('SSEAdapter', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('it should initialize the SSEAdapter', () => {
@@ -35,10 +35,11 @@ describe('SSEAdapter', () => {
     const fetchOptions = { method: 'GET' }
     const sseAdapter = new SSEAdapter(url, fetchOptions)
 
+    const fetchEventSourceMock = vi.mocked(fetchEventSource)
     expect(fetchEventSourceMock).toHaveBeenCalledWith(url, expect.any(Object))
     expect(fetchEventSourceMock.mock.calls[0][1].onopen).toEqual(expect.any(Function))
 
-    fetchEventSourceMock.mock.calls[0][1].onopen()
+    fetchEventSourceMock.mock.calls[0][1].onopen(undefined)
 
     expect(sseAdapter.readyState).toBe(sseAdapter.OPEN)
   })
@@ -46,11 +47,11 @@ describe('SSEAdapter', () => {
   test('it should handle onmessage events', () => {
     const fetchOptions = { method: 'GET' }
     const sseAdapter = new SSEAdapter(url, fetchOptions)
-    const message = { data: 'Message data', event: MESSAGE_TYPE.NOTIFICATION }
+    const message = { data: 'Message data', event: MESSAGE_TYPE.NOTIFICATION } as EventSourceMessage
 
-    const messageListener = jest.fn()
+    const messageListener = vi.fn()
     sseAdapter.addEventListener(MESSAGE_TYPE.NOTIFICATION, messageListener)
-
+    const fetchEventSourceMock = vi.mocked(fetchEventSource)
     fetchEventSourceMock.mock.calls[0][1].onmessage(message)
 
     expect(messageListener).toHaveBeenCalledWith(expect.any(Object))
@@ -59,7 +60,7 @@ describe('SSEAdapter', () => {
   test('it should handle onclose events and throw RetriableError', () => {
     const fetchOptions = { method: 'GET' }
     new SSEAdapter(url, fetchOptions)
-
+    const fetchEventSourceMock = vi.mocked(fetchEventSource)
     expect(() => {
       // Simulate onclose
       fetchEventSourceMock.mock.calls[0][1].onclose()

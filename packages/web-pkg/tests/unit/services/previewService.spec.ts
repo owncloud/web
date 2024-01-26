@@ -1,5 +1,5 @@
 import { ClientService, PreviewService } from '../../../src/services'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { createTestingPinia } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { AxiosResponse } from 'axios'
@@ -76,7 +76,7 @@ describe('PreviewService', () => {
           supportedMimeTypes,
           version: '1'
         })
-        window.URL.createObjectURL = jest.fn().mockImplementation(() => objectUrl)
+        window.URL.createObjectURL = vi.fn().mockImplementation(() => objectUrl)
         const preview = await previewService.loadPreview({
           space: mock<SpaceResource>(),
           resource: mock<Resource>({ mimeType: supportedMimeTypes[0], webDavPath: '/', etag: '' })
@@ -96,7 +96,7 @@ describe('PreviewService', () => {
           webDavPath: '/',
           etag: ''
         })
-        window.URL.createObjectURL = jest.fn().mockImplementation(() => objectUrl)
+        window.URL.createObjectURL = vi.fn().mockImplementation(() => objectUrl)
         const preview = await previewService.loadPreview(
           { space: mock<SpaceResource>(), resource: resourceMock },
           true

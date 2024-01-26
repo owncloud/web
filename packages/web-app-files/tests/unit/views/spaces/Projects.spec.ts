@@ -1,5 +1,5 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { h, nextTick, ref } from 'vue'
 import { queryItemAsString, useFileActionsDelete, useExtensionRegistry } from '@ownclouders/web-pkg'
 
@@ -12,15 +12,15 @@ import {
 } from 'web-test-helpers'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  displayPositionedDropdown: jest.fn(),
-  queryItemAsString: jest.fn(),
-  appDefaults: jest.fn(),
-  useExtensionRegistry: jest.fn(),
-  useRouteQueryPersisted: jest.fn().mockImplementation(() => ref('resource-table')),
-  useFileActions: jest.fn(),
-  useFileActionsDelete: jest.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  displayPositionedDropdown: vi.fn(),
+  queryItemAsString: vi.fn(),
+  appDefaults: vi.fn(),
+  useExtensionRegistry: vi.fn(),
+  useRouteQueryPersisted: vi.fn().mockImplementation(() => ref('resource-table')),
+  useFileActions: vi.fn(),
+  useFileActionsDelete: vi.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
 }))
 
 const spacesResources = [
@@ -83,7 +83,6 @@ describe('Projects view', () => {
       expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
   })
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
       abilities: [{ action: 'create-all', subject: 'Drive' }],
@@ -94,8 +93,8 @@ describe('Projects view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
 
   const extensions = [
     {
@@ -114,7 +113,7 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
     }
   ]
 
-  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+  vi.mocked(useExtensionRegistry).mockImplementation(() =>
     useExtensionRegistryMock({
       requestExtensions<ExtensionType>(type: string, scopes: string[]) {
         return extensions as ExtensionType[]

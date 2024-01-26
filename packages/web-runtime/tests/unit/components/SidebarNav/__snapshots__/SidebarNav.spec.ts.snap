@@ -1,20 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OcSidebarNav renders navItems into a list 1`] = `
-<div class="oc-app-navigation-expanded" id="web-nav-sidebar">
-  <button aria-label="Toggle sidebar" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s toggle-sidebar-button oc-pb-s oc-pt-m" type="button">
+exports[`OcSidebarNav > renders navItems into a list 1`] = `
+"<div id="web-nav-sidebar" class="oc-app-navigation-expanded"><button type="button" aria-label="Toggle sidebar" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-sidebar-button-expanded oc-pr-s toggle-sidebar-button oc-pb-s oc-pt-m">
     <!--v-if-->
-    <!-- @slot Content of the button -->
-    <span class="oc-icon oc-icon-l oc-icon-passive"><!----></span>
+    <!-- @slot Content of the button --> <span class="oc-icon oc-icon-l oc-icon-passive"><!----></span>
   </button>
-  <nav aria-label="Sidebar navigation menu" class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs">
-    <div aria-hidden="true" class="oc-ml-s oc-background-primary-gradient" id="nav-highlighter"></div>
+  <nav class="oc-sidebar-nav oc-mb-m oc-mt-s oc-px-xs" aria-label="Sidebar navigation menu">
+    <div id="nav-highlighter" class="oc-ml-s oc-background-primary-gradient" aria-hidden="true"></div>
     <ul class="oc-list oc-my-rm oc-mx-rm">
-      <sidebar-nav-item-stub active="true" collapsed="false" filltype="fill" icon="folder" index="00000000000000000000000000000000" name="Personal" target="[object Object]"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="share-forward" index="00000000000000000000000000000000" name="Shares" target="[object Object]"></sidebar-nav-item-stub>
-      <sidebar-nav-item-stub active="false" collapsed="false" filltype="fill" icon="delete" index="00000000000000000000000000000000" name="Deleted files" target="[object Object]"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub index="00000000000000000000000000000000" icon="folder" name="Personal" active="true" target="[object Object]" filltype="fill" collapsed="false"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub index="00000000000000000000000000000000" icon="share-forward" name="Shares" active="false" target="[object Object]" filltype="fill" collapsed="false"></sidebar-nav-item-stub>
+      <sidebar-nav-item-stub index="00000000000000000000000000000000" icon="delete" name="Deleted files" active="false" target="[object Object]" filltype="fill" collapsed="false"></sidebar-nav-item-stub>
     </ul>
-  </nav> <!-- @slot bottom content of the sidebar -->
-  <span class="footer">Footer</span>
-</div>
+  </nav> <!-- @slot bottom content of the sidebar --> <span class="footer">Footer</span>
+</div>"
 `;

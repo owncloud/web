@@ -6,7 +6,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 

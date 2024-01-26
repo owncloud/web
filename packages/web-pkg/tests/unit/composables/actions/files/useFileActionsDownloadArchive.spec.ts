@@ -1,11 +1,11 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsDownloadArchive } from '../../../../../src/composables/actions'
 import { Resource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useArchiverService } from '../../../../../src/composables'
 
-jest.mock('../../../../../src/composables/archiverService/useArchiverService')
+vi.mock('../../../../../src/composables/archiverService/useArchiverService')
 
 describe('downloadArchive', () => {
   describe('search context', () => {
@@ -30,7 +30,7 @@ describe('downloadArchive', () => {
             downloadableResourceIds: ['1', '2', '3']
           }
         ])('should filter non downloadable resources', ({ resources, downloadableResourceIds }) => {
-          const triggerDownloadMock = jest.fn().mockResolvedValue(true)
+          const triggerDownloadMock = vi.fn().mockResolvedValue(true)
           getWrapper({
             searchLocation: true,
             triggerDownloadMock,
@@ -50,15 +50,14 @@ describe('downloadArchive', () => {
 
 function getWrapper({
   searchLocation = false,
-  triggerDownloadMock = jest.fn() as any,
+  triggerDownloadMock = vi.fn() as any,
   setup = () => undefined
 } = {}) {
   const routeName = searchLocation ? 'files-common-search' : 'files-spaces-generic'
 
-  jest.mocked(useArchiverService).mockImplementation(
+  vi.mocked(useArchiverService).mockImplementation(
     () =>
       ({
-        ...jest.requireActual('../../../../..//src/composables/archiverService/useArchiverService'),
         triggerDownload: triggerDownloadMock,
         fileIdsSupported: true
       }) as any

@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ResourcePreview } from '../../../../src/components'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { useGetMatchingSpace } from '../../../../src/composables/spaces/useGetMatchingSpace'
@@ -11,12 +11,12 @@ import {
 import { useFileActions } from '../../../../src/composables/actions'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 
-jest.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
-  useGetMatchingSpace: jest.fn()
+vi.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
+  useGetMatchingSpace: vi.fn()
 }))
 
-jest.mock('../../../../src/composables/actions', () => ({
-  useFileActions: jest.fn()
+vi.mock('../../../../src/composables/actions', () => ({
+  useFileActions: vi.fn()
 }))
 
 const selectors = {
@@ -25,7 +25,7 @@ const selectors = {
 
 describe('Preview component', () => {
   const driveAliasAndItem = '1'
-  jest.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
+  vi.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
   it('should render preview component', () => {
     const { wrapper } = getWrapper({
       space: mock<SpaceResource>({
@@ -70,7 +70,7 @@ function getWrapper({
   searchResult?: any
   areFileExtensionsShown?: boolean
 } = {}) {
-  jest.mocked(useGetMatchingSpace).mockImplementation(() =>
+  vi.mocked(useGetMatchingSpace).mockImplementation(() =>
     useGetMatchingSpaceMock({
       isResourceAccessible() {
         return true
@@ -80,7 +80,7 @@ function getWrapper({
       }
     })
   )
-  jest.mocked(useFileActions).mockReturnValue(mock<ReturnType<typeof useFileActions>>())
+  vi.mocked(useFileActions).mockReturnValue(mock<ReturnType<typeof useFileActions>>())
 
   const mocks = defaultComponentMocks()
   const capabilities = {

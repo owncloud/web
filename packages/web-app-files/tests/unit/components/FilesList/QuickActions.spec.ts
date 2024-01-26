@@ -2,19 +2,19 @@ import { ActionExtension, useEmbedMode } from '@ownclouders/web-pkg'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useEmbedMode: jest.fn(),
-  useExtensionRegistry: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useEmbedMode: vi.fn(),
+  useExtensionRegistry: vi.fn()
 }))
 
 const collaboratorAction = {
-  isEnabled: jest.fn(() => true),
-  handler: jest.fn(),
+  isEnabled: vi.fn(() => true),
+  handler: vi.fn(),
   icon: 'group-add',
   id: 'collaborators',
   name: 'show-shares',
@@ -22,8 +22,8 @@ const collaboratorAction = {
 }
 
 const quicklinkAction = {
-  isEnabled: jest.fn(() => false),
-  handler: jest.fn(),
+  isEnabled: vi.fn(() => false),
+  handler: vi.fn(),
   icon: 'link-add',
   id: 'quicklink',
   name: 'copy-quicklink',
@@ -66,7 +66,7 @@ describe('QuickActions', () => {
   describe('action handler', () => {
     it('should call action handler on click', async () => {
       const { wrapper } = getWrapper()
-      const handlerAction = collaboratorAction.handler.mockImplementation()
+      const handlerAction = collaboratorAction.handler.mockImplementation(() => undefined)
 
       const actionButton = wrapper.find('.oc-button')
       await actionButton.trigger('click')
@@ -81,11 +81,11 @@ describe('QuickActions', () => {
 })
 
 function getWrapper({ embedModeEnabled = false } = {}) {
-  jest
-    .mocked(useEmbedMode)
-    .mockReturnValue(mock<ReturnType<typeof useEmbedMode>>({ isEnabled: ref(embedModeEnabled) }))
+  vi.mocked(useEmbedMode).mockReturnValue(
+    mock<ReturnType<typeof useEmbedMode>>({ isEnabled: ref(embedModeEnabled) })
+  )
 
-  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+  vi.mocked(useExtensionRegistry).mockImplementation(() =>
     useExtensionRegistryMock({
       requestExtensions: () =>
         [

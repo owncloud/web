@@ -1,5 +1,5 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
 import {
@@ -12,34 +12,35 @@ import { Action } from '@ownclouders/web-pkg'
 function createMockActionComposables(module) {
   const mockModule: Record<string, any> = {}
   for (const m of Object.keys(module)) {
-    mockModule[m] = jest.fn(() => ({ actions: ref([]) }))
+    mockModule[m] = vi.fn(() => ({ actions: ref([]) }))
   }
   return mockModule
 }
 
-jest.mock('@ownclouders/web-pkg', () =>
-  createMockActionComposables(jest.requireActual('@ownclouders/web-pkg'))
-)
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => {
+  const original = await importOriginal()
+  return createMockActionComposables(original)
+})
 
-jest.mock('web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete', () =>
-  createMockActionComposables(
-    jest.requireActual(
-      'web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete'
-    )
-  )
+vi.mock(
+  'web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete',
+  async (importOriginal) => {
+    const original = await importOriginal()
+    return createMockActionComposables(original)
+  }
 )
-
-jest.mock('web-app-admin-settings/src/composables/actions/groups/useGroupActionsEdit', () =>
-  createMockActionComposables(
-    jest.requireActual('web-app-admin-settings/src/composables/actions/groups/useGroupActionsEdit')
-  )
+vi.mock(
+  'web-app-admin-settings/src/composables/actions/groups/useGroupActionsEdit',
+  async (importOriginal) => {
+    const original = await importOriginal()
+    return createMockActionComposables(original)
+  }
 )
 
 const selectors = {
   actionMenuItemStub: 'action-menu-item-stub'
 }
 
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
@@ -49,11 +50,11 @@ describe.skip('ContextActions', () => {
 
     it('render enabled actions', () => {
       const enabledComposables = [useGroupActionsDelete, useGroupActionsEdit]
-      jest.mocked(useGroupActionsDelete).mockImplementation(() => ({
+      vi.mocked(useGroupActionsDelete).mockImplementation(() => ({
         actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
         deleteGroups: null
       }))
-      jest.mocked(useGroupActionsEdit).mockImplementation(() => ({
+      vi.mocked(useGroupActionsEdit).mockImplementation(() => ({
         actions: computed(() => [mock<Action>({ isEnabled: () => true })])
       }))
       const { wrapper } = getWrapper()

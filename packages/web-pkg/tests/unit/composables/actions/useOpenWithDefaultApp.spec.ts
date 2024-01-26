@@ -1,11 +1,11 @@
 import { getComposableWrapper } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActions, Action, useOpenWithDefaultApp } from '../../../../src/composables'
 
-jest.mock('../../../../src/composables/actions/files', () => ({
-  ...jest.requireActual('../../../../src/composables/actions/files'),
-  useFileActions: jest.fn()
+vi.mock('../../../../src/composables/actions/files', async (importOriginal) => ({
+  ...(await (importOriginal() as any)),
+  useFileActions: vi.fn()
 }))
 
 describe('useOpenWithDefaultApp', () => {
@@ -40,7 +40,7 @@ describe('useOpenWithDefaultApp', () => {
 
 function getWrapper({
   setup,
-  defaultEditorAction = mock<Action>({ handler: jest.fn() })
+  defaultEditorAction = mock<Action>({ handler: vi.fn() })
 }: {
   setup: (
     instance: ReturnType<typeof useOpenWithDefaultApp>,
@@ -48,7 +48,7 @@ function getWrapper({
   ) => void
   defaultEditorAction?: any
 }) {
-  jest.mocked(useFileActions).mockReturnValue(
+  vi.mocked(useFileActions).mockReturnValue(
     mock<ReturnType<typeof useFileActions>>({
       getDefaultEditorAction: () => defaultEditorAction
     })

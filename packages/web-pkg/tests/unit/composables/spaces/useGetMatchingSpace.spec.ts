@@ -1,6 +1,6 @@
 import { useGetMatchingSpace } from '../../../../src/composables/spaces'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('useSpaceHelpers', () => {

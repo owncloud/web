@@ -1,4 +1,4 @@
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import ResourceUpload from 'web-app-files/src/components/AppBar/Upload/ResourceUpload.vue'
 import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { UppyService } from '@ownclouders/web-pkg'
@@ -24,11 +24,11 @@ describe('Resource Upload Component', () => {
     it('should call "triggerUpload"', async () => {
       const { wrapper } = getWrapper()
 
-      const spyTriggerUpload = jest.spyOn(wrapper.vm, 'triggerUpload')
+      const spyTriggerUpload = vi.spyOn(wrapper.vm, 'triggerUpload')
       const uploadButton = wrapper.find('button')
       const fileUploadInput = wrapper.find('#files-file-upload-input')
 
-      ;(fileUploadInput.element as HTMLElement).click = jest.fn()
+      ;(fileUploadInput.element as HTMLElement).click = vi.fn()
       await wrapper.vm.$forceUpdate()
 
       await uploadButton.trigger('click')

@@ -1,5 +1,5 @@
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/actions/spaces/useSpaceActionsUploadImage'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   RouteLocation,
@@ -16,7 +16,7 @@ describe('uploadImage', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ uploadImageSpace }, { clientService }) => {
-          const busStub = jest.spyOn(eventBus, 'publish')
+          const busStub = vi.spyOn(eventBus, 'publish')
           const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
           clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
             mockAxiosResolve(driveMock)
@@ -49,7 +49,7 @@ describe('uploadImage', () => {
     })
 
     it('should show showErrorMessage on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ uploadImageSpace }, { clientService }) => {
           clientService.webdav.putFileContents.mockRejectedValue(new Error(''))

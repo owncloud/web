@@ -1,6 +1,6 @@
 import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions/spaces'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   mockAxiosResolve,
@@ -95,7 +95,7 @@ describe('restore', () => {
   })
   describe('method "duplicateSpace"', () => {
     it('should show error message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ duplicateSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockRejectedValue(new Error())

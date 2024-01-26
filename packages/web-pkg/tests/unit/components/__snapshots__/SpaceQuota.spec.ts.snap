@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SpaceQuota component renders the space storage quota label 1`] = `
-<div class="space-quota">
+exports[`SpaceQuota component > renders the space storage quota label 1`] = `
+"<div class="space-quota">
   <p class="oc-mb-s oc-mt-rm">1 B of 10 B used (10% used)</p>
-  <oc-progress-stub indeterminate="false" max="100" size="small" value="10" variation="primary"></oc-progress-stub>
-</div>
+  <oc-progress-stub max="100" size="small" variation="primary" indeterminate="false" value="10"></oc-progress-stub>
+</div>"
 `;

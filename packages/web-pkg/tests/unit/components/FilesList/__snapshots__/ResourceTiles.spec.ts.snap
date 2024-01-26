@@ -1,41 +1,41 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ResourceTiles component renders a footer slot 1`] = `
-<div class="oc-px-m oc-pt-l" id="tiles-view">
+exports[`ResourceTiles component > renders a footer slot 1`] = `
+"<div data-v-67d39700="" id="tiles-view" class="oc-px-m oc-pt-l">
   <!--v-if-->
-  <oc-list class="oc-tiles oc-flex"> </oc-list>
+  <oc-list data-v-67d39700="" class="oc-tiles oc-flex"> </oc-list>
   <!--v-if-->
-  <div class="oc-tiles-footer">Hello, ResourceTiles footer!</div>
-</div>
+  <div data-v-67d39700="" class="oc-tiles-footer">Hello, ResourceTiles footer!</div>
+</div>"
 `;
 
-exports[`ResourceTiles component renders an array of spaces correctly 1`] = `
-<div class="oc-px-m oc-pt-l" id="tiles-view">
+exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
+"<div data-v-67d39700="" id="tiles-view" class="oc-px-m oc-pt-l">
   <!--v-if-->
-  <oc-list class="oc-tiles oc-flex">
-    <li class="oc-tiles-item has-item-context-menu">
-      <resource-tile-stub draggable="false" isextensiondisplayed="true" isresourceselected="false" resource="[object Object]" resourceiconsize="xlarge" resourceroute="[object Object]"></resource-tile-stub>
+  <oc-list data-v-67d39700="" class="oc-tiles oc-flex">
+    <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
+      <resource-tile-stub data-v-67d39700="" resource="[object Object]" resourceroute="[object Object]" isresourceselected="false" isextensiondisplayed="true" resourceiconsize="xlarge" draggable="false"></resource-tile-stub>
     </li>
-    <li class="oc-tiles-item has-item-context-menu">
-      <resource-tile-stub draggable="false" isextensiondisplayed="true" isresourceselected="false" resource="[object Object]" resourceiconsize="xlarge" resourceroute="[object Object]"></resource-tile-stub>
+    <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
+      <resource-tile-stub data-v-67d39700="" resource="[object Object]" resourceroute="[object Object]" isresourceselected="false" isextensiondisplayed="true" resourceiconsize="xlarge" draggable="false"></resource-tile-stub>
     </li>
-    <li aria-hidden="true" class="ghost-tile">
-      <div>1</div>
+    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true">
+      <div data-v-67d39700="">1</div>
     </li>
-    <li aria-hidden="true" class="ghost-tile">
-      <div>1</div>
+    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true">
+      <div data-v-67d39700="">1</div>
     </li>
-    <li aria-hidden="true" class="ghost-tile">
-      <div>1</div>
+    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true">
+      <div data-v-67d39700="">1</div>
     </li>
-    <li aria-hidden="true" class="ghost-tile">
-      <div>1</div>
+    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true">
+      <div data-v-67d39700="">1</div>
     </li>
-    <li aria-hidden="true" class="ghost-tile">
-      <div>1</div>
+    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true">
+      <div data-v-67d39700="">1</div>
     </li>
   </oc-list>
   <!--v-if-->
-  <div class="oc-tiles-footer"></div>
-</div>
+  <div data-v-67d39700="" class="oc-tiles-footer"></div>
+</div>"
 `;

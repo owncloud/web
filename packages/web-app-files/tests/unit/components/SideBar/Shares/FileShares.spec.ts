@@ -1,5 +1,5 @@
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
@@ -78,9 +78,9 @@ describe('FileShares', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('reacts on delete events', async () => {
-      const spyOnCollaboratorDeleteTrigger = jest
+      const spyOnCollaboratorDeleteTrigger = vi
         .spyOn((FileShares as any).methods, '$_ocCollaborators_deleteShare_trigger')
-        .mockImplementation()
+        .mockImplementation(() => undefined)
       const { wrapper } = getWrapper({ collaborators })
       ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
       await wrapper.vm.$nextTick()
@@ -121,7 +121,7 @@ describe('FileShares', () => {
     })
     it('share should not be modifiable if user is not manager', () => {
       const space = mock<SpaceResource>({ driveType: 'personal' })
-      ;(space as any).isManager = jest.fn(() => false)
+      ;(space as any).isManager = vi.fn(() => false)
       collaborators[0]['indirect'] = true
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
@@ -163,16 +163,16 @@ describe('FileShares', () => {
   describe('"$_ocCollaborators_deleteShare" method', () => {
     it('calls "deleteShare" when successful', async () => {
       const { wrapper } = getWrapper()
-      const deleteShareSpy = jest.spyOn(wrapper.vm, 'deleteShare')
+      const deleteShareSpy = vi.spyOn(wrapper.vm, 'deleteShare')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(deleteShareSpy).toHaveBeenCalled()
     })
     it('shows a message when an error occurs', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = getWrapper()
-      jest.spyOn(wrapper.vm, 'deleteShare').mockRejectedValue(new Error())
-      const showErrorMessageSpy = jest.spyOn(wrapper.vm, 'showErrorMessage')
+      vi.spyOn(wrapper.vm, 'deleteShare').mockRejectedValue(new Error())
+      const showErrorMessageSpy = vi.spyOn(wrapper.vm, 'showErrorMessage')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(showErrorMessageSpy).toHaveBeenCalled()

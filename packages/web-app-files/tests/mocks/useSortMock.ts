@@ -8,7 +8,7 @@ export const useSortMock = (
     items: ref([]),
     sortBy: ref('name'),
     sortDir: undefined,
-    handleSort: jest.fn(),
+    handleSort: vi.fn(),
     ...options
   }
 }

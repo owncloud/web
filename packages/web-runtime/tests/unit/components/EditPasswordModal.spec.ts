@@ -1,9 +1,7 @@
 import { Modal } from '@ownclouders/web-pkg'
 import EditPasswordModal from '../../../src/components/EditPasswordModal.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
-
-afterEach(() => jest.clearAllMocks())
+import { mock } from 'vitest-mock-extended'
 
 describe('EditPasswordModal', () => {
   describe('computed method "confirmButtonDisabled"', () => {

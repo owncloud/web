@@ -3,8 +3,8 @@ import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { CapabilityStore } from '@ownclouders/web-pkg'
 
-jest.mock('web-app-files/src/helpers/user/avatarUrl', () => ({
-  avatarUrl: jest.fn().mockReturnValue('avatarUrl')
+vi.mock('web-app-files/src/helpers/user/avatarUrl', () => ({
+  avatarUrl: vi.fn().mockReturnValue('avatarUrl')
 }))
 
 const getRecipient = (shareType: number | string = ShareTypes.user.value) => ({
@@ -54,7 +54,7 @@ function getMountedWrapper(recipient, avatarsEnabled = false) {
     wrapper: mount(RecipientContainer, {
       props: {
         recipient,
-        deselect: jest.fn()
+        deselect: vi.fn()
       },
       global: {
         plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })],

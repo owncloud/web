@@ -2,7 +2,7 @@ import SharedViaLink from '../../../../src/views/shares/SharedViaLink.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import {
   defaultPlugins,
@@ -12,10 +12,10 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 
-jest.mock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useFileActions: jest.fn()
+vi.mock('web-app-files/src/composables')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useFileActions: vi.fn()
 }))
 
 describe('SharedViaLink view', () => {
@@ -50,7 +50,7 @@ describe('SharedViaLink view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
       areResourcesLoading: ref(loading)

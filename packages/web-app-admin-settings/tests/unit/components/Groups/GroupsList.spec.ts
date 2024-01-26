@@ -8,10 +8,10 @@ const getGroupMocks = () => [
   { id: '2', members: [] }
 ]
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  queryItemAsString: jest.fn(),
-  displayPositionedDropdown: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  queryItemAsString: vi.fn(),
+  displayPositionedDropdown: vi.fn()
 }))
 
 describe('GroupsList', () => {
@@ -64,21 +64,21 @@ describe('GroupsList', () => {
   })
   it('should show the context menu on right click', async () => {
     const groups = getGroupMocks()
-    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
     const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
     await wrapper.find(`[data-item-id="${groups[0].id}"]`).trigger('contextmenu')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the context menu on context menu button click', async () => {
     const groups = getGroupMocks()
-    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
     const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
     await wrapper.find('.groups-table-btn-action-dropdown').trigger('click')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the group details on details button click', async () => {
     const groups = getGroupMocks()
-    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const eventBusSpy = vi.spyOn(eventBus, 'publish')
     const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
     await wrapper.find('.groups-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
@@ -86,8 +86,8 @@ describe('GroupsList', () => {
 })
 
 function getWrapper({ mountType = shallowMount, props = {} } = {}) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()
 
   return {

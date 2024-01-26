@@ -2,7 +2,9 @@ import { createTestingPinia, getComposableWrapper } from 'web-test-helpers'
 import { RawConfig, useAppsStore, useConfigStore } from '../../../../src/composables/piniaStores'
 
 describe('useConfigStore', () => {
-  beforeEach(() => createTestingPinia({ stubActions: false }))
+  beforeEach(() => {
+    createTestingPinia({ stubActions: false })
+  })
 
   it('has initial options as defaults', () => {
     getWrapper({

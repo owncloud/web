@@ -6,7 +6,7 @@ import { RuntimeError } from '../errors'
 import { HttpError } from '@ownclouders/web-client/src/errors'
 import { ClientService } from '../services'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { triggerDownloadWithFilename } from '../../'
+import { triggerDownloadWithFilename } from '../helpers/download'
 
 import { Ref, ref, computed, unref } from 'vue'
 import { ArchiverCapability } from '@ownclouders/web-client/src/ocs/capabilities'

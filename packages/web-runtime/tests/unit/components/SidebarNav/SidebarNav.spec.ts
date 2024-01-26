@@ -2,7 +2,7 @@ import SidebarNav from 'web-runtime/src/components/SidebarNav/SidebarNav.vue'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-jest.mock('uuid', () => ({
+vi.mock('uuid', () => ({
   v4: () => {
     return '00000000-0000-0000-0000-000000000000'
   }

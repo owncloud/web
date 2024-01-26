@@ -4,11 +4,11 @@ let callback
 let mockIntersectionObserver
 const reset = () => {
   mockIntersectionObserver = {
-    observe: jest.fn(),
-    disconnect: jest.fn(),
-    unobserve: jest.fn()
+    observe: vi.fn(),
+    disconnect: vi.fn(),
+    unobserve: vi.fn()
   }
-  window.IntersectionObserver = jest.fn().mockImplementation((cb) => {
+  window.IntersectionObserver = vi.fn().mockImplementation((cb) => {
     callback = cb
     return mockIntersectionObserver
   })
@@ -20,11 +20,11 @@ window.document.body.innerHTML = `<div id="target">foo</div>`
 
 describe('VisibilityObserver', () => {
   it.each([
-    { onEnter: jest.fn() },
-    { onExit: jest.fn() },
+    { onEnter: vi.fn() },
+    { onExit: vi.fn() },
     {
-      onEnter: jest.fn(),
-      onExit: jest.fn()
+      onEnter: vi.fn(),
+      onExit: vi.fn()
     },
     {}
   ])('observes %p', (cb) => {
@@ -34,8 +34,8 @@ describe('VisibilityObserver', () => {
   })
 
   it('handles entered and exited callbacks', () => {
-    const onEnter = jest.fn()
-    const onExit = jest.fn()
+    const onEnter = vi.fn()
+    const onExit = vi.fn()
     const observer = new VisibilityObserver()
     const target = document.getElementById('target')
     observer.observe(target, { onEnter, onExit })
@@ -57,8 +57,8 @@ describe('VisibilityObserver', () => {
   })
 
   it.each(['disconnect', 'unobserve'])('handles %p', (m) => {
-    const onEnter = jest.fn()
-    const onExit = jest.fn()
+    const onEnter = vi.fn()
+    const onExit = vi.fn()
     const observer = new VisibilityObserver()
     const target = document.getElementById('target')
     observer.observe(target, { onEnter, onExit })
@@ -75,8 +75,8 @@ describe('VisibilityObserver', () => {
   })
 
   it('unobserves in callback', () => {
-    const onEnter = jest.fn()
-    const onExit = jest.fn()
+    const onEnter = vi.fn()
+    const onExit = vi.fn()
     const observer = new VisibilityObserver()
     const target = document.getElementById('target')
     observer.observe(target, {

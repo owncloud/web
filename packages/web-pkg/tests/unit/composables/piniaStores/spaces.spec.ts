@@ -1,7 +1,7 @@
 import { getComposableWrapper, mockAxiosResolve } from 'web-test-helpers'
 import { useSpacesStore, sortSpaceMembers } from '../../../../src/composables/piniaStores'
 import { createPinia, setActivePinia } from 'pinia'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import {
   Share,
   ShareTypes,

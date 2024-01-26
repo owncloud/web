@@ -1,5 +1,5 @@
 import { useUserActionsDelete } from '../../../../../src/composables/actions/users/useUserActionsDelete'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
 import { eventBus, useCapabilityStore } from '@ownclouders/web-pkg'
@@ -27,7 +27,7 @@ describe('useUserActionsDelete', () => {
   })
   describe('method "deleteUsers"', () => {
     it('should successfully delete all given users and reload the users list', () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteUsers }, { clientService }) => {
           const user = mock<User>({ id: '1' })
@@ -38,8 +38,8 @@ describe('useUserActionsDelete', () => {
       })
     })
     it('should handle errors', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteUsers }, { clientService }) => {
           clientService.graphAuthenticated.users.deleteUser.mockRejectedValue({})

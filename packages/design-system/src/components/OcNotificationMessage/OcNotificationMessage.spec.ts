@@ -1,6 +1,6 @@
 import OcNotificationMessage from './OcNotificationMessage.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
-jest.useFakeTimers()
+vi.useFakeTimers()
 
 describe('OcNotificationMessage', () => {
   describe('title prop', () => {
@@ -92,7 +92,7 @@ describe('OcNotificationMessage', () => {
     const wrapper = getWrapper({ timeout: 1 })
 
     expect(wrapper.emitted('close')).toBeFalsy()
-    jest.advanceTimersByTime(1000)
+    vi.advanceTimersByTime(1000)
     expect(wrapper.emitted('close')).toBeTruthy()
   })
 

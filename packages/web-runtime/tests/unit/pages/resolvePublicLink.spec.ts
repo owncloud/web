@@ -1,11 +1,11 @@
 import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
 import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
 
-jest.mock('web-runtime/src/services/auth')
+vi.mock('web-runtime/src/services/auth')
 const selectors = {
   cardFooter: '.oc-card-footer',
   ocSpinnerStub: 'oc-spinner-stub',
@@ -49,7 +49,7 @@ describe('resolvePublicLink', () => {
         expect(wrapper.find(selectors.submitButton).attributes().disabled).toBe('false')
       })
       it('should resolve the public link on click', async () => {
-        const resolvePublicLinkSpy = jest.spyOn(authService, 'resolvePublicLink')
+        const resolvePublicLinkSpy = vi.spyOn(authService, 'resolvePublicLink')
         const { wrapper } = getWrapper({ passwordRequired: true })
         await wrapper.vm.loadTokenInfoTask.last
         await wrapper.vm.isPasswordRequiredTask.last

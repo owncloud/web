@@ -1,8 +1,6 @@
 import CompareSaveDialog from '../../../../src/components/SideBar/CompareSaveDialog.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
-afterEach(() => jest.clearAllMocks())
-
 describe('CompareSaveDialog', () => {
   describe('computed method "unsavedChanges"', () => {
     it('should be false if objects are equal', () => {

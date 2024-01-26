@@ -1,13 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SpacesList should render all spaces in a table 1`] = `
-<div headerposition="0" id="space-list">
+exports[`SpacesList > should render all spaces in a table 1`] = `
+"<div id="space-list" headerposition="0">
   <div class="space-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-    <div class="">
-      <label class="oc-label" for="spaces-filter">Search</label>
+    <div class=""><label class="oc-label" for="spaces-filter">Search</label>
       <div class="oc-position-relative">
-        <!--v-if-->
-        <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+        <!--v-if--> <input id="spaces-filter" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
         <!--v-if-->
       </div>
       <!--v-if-->
@@ -16,128 +14,80 @@ exports[`SpacesList should render all spaces in a table 1`] = `
   </div>
   <table class="oc-table oc-table-hover oc-table-sticky has-item-context-menu spaces-table">
     <thead class="oc-thead">
-      <tr class="oc-table-header-row" tabindex="-1">
-        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-select oc-pl-s" style="top: 0px;">
-          <span class="oc-table-thead-content"><oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-1" label="Select all spaces" modelvalue="false" outline="false" size="large"></oc-checkbox-stub></span>
+      <tr tabindex="-1" class="oc-table-header-row">
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-select oc-pl-s" style="top: 0px;"><span class="oc-table-thead-content"><oc-checkbox-stub id="oc-checkbox-1" disabled="false" modelvalue="false" label="Select all spaces" hidelabel="true" size="large" outline="false" class="oc-ml-s"></oc-checkbox-stub></span>
           <!--v-if-->
         </th>
-        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-icon" style="top: 0px;">
-          <span class="oc-table-thead-content header-text"></span>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-icon" style="top: 0px;"><span class="oc-table-thead-content header-text"></span>
           <!--v-if-->
         </th>
-        <th aria-sort="ascending" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-name" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Name</span>
-          <button aria-label="Sort by name" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-button-sort" type="button">
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-name" style="top: 0px;" aria-sort="ascending"><span class="oc-table-thead-content header-text">Name</span> <button type="button" aria-label="Sort by name" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-manager" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Manager</span>
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-manager" style="top: 0px;"><span class="oc-table-thead-content header-text">Manager</span>
           <!--v-if-->
         </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-members" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Members</span>
-          <button aria-label="Sort by members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-members" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Members</span> <button type="button" aria-label="Sort by members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-totalQuota" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Total quota</span>
-          <button aria-label="Sort by totalQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-totalQuota" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Total quota</span> <button type="button" aria-label="Sort by totalQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-usedQuota" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Used quota</span>
-          <button aria-label="Sort by usedQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-usedQuota" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Used quota</span> <button type="button" aria-label="Sort by usedQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-remainingQuota" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Remaining quota</span>
-          <button aria-label="Sort by remainingQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-remainingQuota" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Remaining quota</span> <button type="button" aria-label="Sort by remainingQuota" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-mdate" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Modified</span>
-          <button aria-label="Sort by mdate" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-mdate" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Modified</span> <button type="button" aria-label="Sort by mdate" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th aria-sort="none" class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Status</span>
-          <button aria-label="Sort by status" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort" type="button">
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Status</span> <button type="button" aria-label="Sort by status" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
             <!--v-if-->
-            <!-- @slot Content of the button -->
-            <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button>
-        </th>
-        <th class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-actions oc-pr-s" style="top: 0px;">
-          <span class="oc-table-thead-content header-text">Actions</span>
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
+        <th class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-actions oc-pr-s" style="top: 0px;"><span class="oc-table-thead-content header-text">Actions</span>
           <!--v-if-->
         </th>
       </tr>
     </thead>
     <tbody class="has-item-context-menu">
-      <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false" tabindex="-1">
+      <tr tabindex="-1" class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s">
-          <oc-checkbox-stub class="oc-ml-s" disabled="false" hidelabel="true" id="oc-checkbox-2" label="Select 1 Some space" modelvalue="false" option="[object Object]" outline="false" size="large"></oc-checkbox-stub>
+          <oc-checkbox-stub id="oc-checkbox-2" disabled="false" modelvalue="false" option="[object Object]" label="Select 1 Some space" hidelabel="true" size="large" outline="false" class="oc-ml-s"></oc-checkbox-stub>
         </td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon">
-          <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
-        </td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name mark-element">
-          <span class="spaces-table-space-name" data-test-space-name="1 Some space">1 Some space</span>
-        </td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name mark-element"><span class="spaces-table-space-name" data-test-space-name="1 Some space">1 Some space</span></td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-manager">user1, user2... +1</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-members">3</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-totalQuota">1 GB</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-usedQuota">0 B</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-remainingQuota">1 GB</td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-mdate">
-          <span tabindex="0"></span>
-        </td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status">
-          <span class="oc-flex oc-flex-middle">
-            <span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s"><!----></span>
-            <span>Enabled</span>
-          </span>
-        </td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-mdate"><span tabindex="0"></span></td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status"><span class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s"><!----></span><span>Enabled</span></span></td>
         <td class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
-          <div class="spaces-list-actions">
-            <button aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-details" type="button">
+          <div class="spaces-list-actions"><button type="button" aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-details">
               <!--v-if-->
-              <!-- @slot Content of the button -->
-              <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
-            </button>
-            <button aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-action-dropdown" id="context-menu-trigger-1" type="button">
+              <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
+            </button> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-action-dropdown" id="context-menu-trigger-1">
               <!--v-if-->
-              <!-- @slot Content of the button -->
-              <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
-              <div class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden" id="context-menu-drop-1">
+              <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
+              <div id="context-menu-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden">
                 <div class="oc-card oc-card-body oc-background-secondary oc-p-s"></div>
               </div>
-            </button>
-          </div>
+            </button></div>
         </td>
       </tr>
     </tbody>
     <tfoot class="oc-table-footer">
       <tr class="oc-table-footer-row">
-        <td class="oc-table-footer-cell" colspan="11">
+        <td colspan="11" class="oc-table-footer-cell">
           <!-- @slot Footer of the table -->
           <!--v-if-->
           <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
@@ -148,5 +98,5 @@ exports[`SpacesList should render all spaces in a table 1`] = `
       </tr>
     </tfoot>
   </table>
-</div>
+</div>"
 `;

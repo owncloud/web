@@ -1,10 +1,8 @@
 import { useRouter } from '../../../../src/composables/router'
 import { createRouter, getComposableWrapper } from 'web-test-helpers'
 
-// eslint-disable-next-line jest/no-disabled-tests
 describe.skip('useRouter', () => {
   // FIXME
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should be valid', () => {
     expect(useRouter).toBeDefined()
     const router = createRouter()

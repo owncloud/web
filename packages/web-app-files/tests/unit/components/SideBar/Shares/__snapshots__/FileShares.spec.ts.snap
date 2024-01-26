@@ -1,68 +1,66 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`FileShares collaborators list renders sharedWithLabel and sharee list 1`] = `
-<div class="oc-position-relative" id="oc-files-sharing-sidebar">
+exports[`FileShares > collaborators list > renders sharedWithLabel and sharee list 1`] = `
+"<div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Share with people">Share with people</h3>
-    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" text="Use the input field to search for users and groups. Select them to share the item." title="Share with people"></oc-contextual-helper-stub>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Share with people" data-current-language="en">Share with people</h3>
+    <oc-contextual-helper-stub title="Share with people" text="Use the input field to search for users and groups. Select them to share the item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
   </div>
-  <invite-collaborator-form-stub class="oc-my-s" invitelabel="" savebuttonlabel="Share"></invite-collaborator-form-stub>
+  <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
   </div>
-  <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]"></portal-target>
-  <ul aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
+  <portal-target name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
+  <ul id="files-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Share receivers">
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="true" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="true" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="true" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="true" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="true" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="true" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="true" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="true" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
-    <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]"></portal-target>
+    <portal-target name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]" multiple="true"></portal-target>
   </ul>
-  <div class="oc-flex oc-flex-center">
-    <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-shares-list-btn" type="button">
+  <div class="oc-flex oc-flex-center"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-shares-list-btn">
       <!--v-if-->
       <!-- @slot Content of the button --> Show less
-    </button>
-  </div>
+    </button></div>
   <!--v-if-->
-</div>
+</div>"
 `;
 
-exports[`FileShares current space loads space members if a space is given and the current user is member 1`] = `
-<div class="oc-position-relative" id="oc-files-sharing-sidebar">
+exports[`FileShares > current space > loads space members if a space is given and the current user is member 1`] = `
+"<div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex">
-    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Share with people">Share with people</h3>
-    <oc-contextual-helper-stub class="oc-pl-xs" endtext="" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" text="Use the input field to search for users and groups. Select them to share the item." title="Share with people"></oc-contextual-helper-stub>
+    <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Share with people" data-current-language="en">Share with people</h3>
+    <oc-contextual-helper-stub title="Share with people" text="Use the input field to search for users and groups. Select them to share the item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
   </div>
-  <invite-collaborator-form-stub class="oc-my-s" invitelabel="" savebuttonlabel="Share"></invite-collaborator-form-stub>
+  <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
   </div>
-  <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]"></portal-target>
-  <ul aria-label="Share receivers" class="oc-list oc-list-divider oc-overflow-hidden oc-mb-l" id="files-collaborators-list">
+  <portal-target name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
+  <ul id="files-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-mb-l" aria-label="Share receivers">
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
-    <portal-target multiple="true" name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]"></portal-target>
+    <portal-target name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]" multiple="true"></portal-target>
   </ul>
   <!--v-if-->
   <h4 class="oc-text-bold oc-my-s">Space members</h4>
-  <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="space-collaborators-list">
+  <ul id="space-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Space members">
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="[Function]" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="[Function]" deniable="false"></collaborator-list-item-stub>
     </li>
   </ul>
   <!--v-if-->
-</div>
+</div>"
 `;

@@ -19,7 +19,6 @@ export const useFileActionsSetReadme = () => {
     try {
       const { graphAuthenticated, webdav } = clientService
       const fileContent = (await webdav.getFileContents(space, { path: resources[0].path })).body
-
       try {
         await webdav.getFileInfo(space, { path: '.space' })
       } catch (_) {
@@ -31,7 +30,6 @@ export const useFileActionsSetReadme = () => {
         content: fileContent
       })
       const file = await webdav.getFileInfo(space, { path: '.space/readme.md' })
-
       const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
         space.id as string,
         {

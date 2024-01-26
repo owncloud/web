@@ -13,11 +13,6 @@
   },
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
-  "jest.autoRun": {
-    "watch": false,
-    "onStartup": true
-  },
-  "jest.jestCommandLine": "pnpm test:unit",
   "npm.packageManager": "pnpm",
   "typescript.format.enable": false,
   "editor.quickSuggestions": {

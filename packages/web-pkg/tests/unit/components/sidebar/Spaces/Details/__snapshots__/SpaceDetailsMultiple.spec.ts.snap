@@ -1,38 +1,36 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Multiple Details SideBar Panel displays the details side panel 1`] = `
-<div id="oc-spaces-details-multiple-sidebar">
+exports[`Multiple Details SideBar Panel > displays the details side panel 1`] = `
+"<div id="oc-spaces-details-multiple-sidebar">
   <div class="spaces-preview oc-mb">
     <div class="spaces-preview-body">
-      <oc-icon-stub accessiblelabel="" class="preview-icon" color="" filltype="fill" name="layout-grid" size="xxlarge" type="span" variation="passive"></oc-icon-stub>
+      <oc-icon-stub name="layout-grid" filltype="fill" accessiblelabel="" type="span" size="xxlarge" variation="passive" color="" class="preview-icon"></oc-icon-stub>
       <p class="preview-text">1 space selected</p>
     </div>
   </div>
   <div>
-    <table aria-label="Overview of the information about the selected spaces" class="details-table">
-      <tbody>
-        <tr>
-          <th class="oc-pr-s oc-font-semibold" scope="col">Total quota:</th>
-          <td>1 kB</td>
-        </tr>
-        <tr>
-          <th class="oc-pr-s oc-font-semibold" scope="col">Remaining quota:</th>
-          <td>900 B</td>
-        </tr>
-        <tr>
-          <th class="oc-pr-s oc-font-semibold" scope="col">Used quota:</th>
-          <td>100 B</td>
-        </tr>
-        <tr>
-          <th class="oc-pr-s oc-font-semibold" scope="col">Enabled:</th>
-          <td>1</td>
-        </tr>
-        <tr>
-          <th class="oc-pr-s oc-font-semibold" scope="col">Disabled:</th>
-          <td>0</td>
-        </tr>
-      </tbody>
+    <table class="details-table" aria-label="Overview of the information about the selected spaces">
+      <tr>
+        <th scope="col" class="oc-pr-s oc-font-semibold">Total quota:</th>
+        <td>1 kB</td>
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s oc-font-semibold">Remaining quota:</th>
+        <td>900 B</td>
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s oc-font-semibold">Used quota:</th>
+        <td>100 B</td>
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s oc-font-semibold">Enabled:</th>
+        <td>1</td>
+      </tr>
+      <tr>
+        <th scope="col" class="oc-pr-s oc-font-semibold">Disabled:</th>
+        <td>0</td>
+      </tr>
     </table>
   </div>
-</div>
+</div>"
 `;

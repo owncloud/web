@@ -1,10 +1,10 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src'
 import { AppConfigObject } from '@ownclouders/web-pkg'
 import { mount } from 'web-test-helpers'
 import App from '../../src/App.vue'
 
-jest.mock('@ownclouders/web-pkg')
+vi.mock('@ownclouders/web-pkg')
 
 describe('Text editor app', () => {
   it('shows the editor', () => {

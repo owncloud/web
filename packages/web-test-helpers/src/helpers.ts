@@ -6,7 +6,7 @@ import { createMemoryHistory, RouterOptions } from 'vue-router'
 
 export { mount, shallowMount } from '@vue/test-utils'
 
-jest.spyOn(console, 'warn').mockImplementation(() => undefined)
+vi.spyOn(console, 'warn').mockImplementation(() => undefined)
 
 export const getComposableWrapper = <T>(
   setup: any,
@@ -49,4 +49,8 @@ export const createRouter = (options?: Partial<RouterOptions>) =>
 
 export const writable = <T>(value: Readonly<T>): T => {
   return value as T
+}
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }

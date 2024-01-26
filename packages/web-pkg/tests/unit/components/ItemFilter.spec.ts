@@ -2,7 +2,7 @@ import ItemFilter from '../../../src/components/ItemFilter.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
 
-jest.mock('../../../src/composables/appDefaults')
+vi.mock('../../../src/composables/appDefaults')
 
 const filterItems = [
   { id: '1', name: 'Albert Einstein' },
@@ -140,7 +140,7 @@ describe('ItemFilter', () => {
 })
 
 function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
-  jest.mocked(queryItemAsString).mockImplementation(() => initialQuery)
+  vi.mocked(queryItemAsString).mockImplementation(() => initialQuery)
   const mocks = defaultComponentMocks()
   return {
     mocks,

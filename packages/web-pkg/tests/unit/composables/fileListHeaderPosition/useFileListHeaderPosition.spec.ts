@@ -21,7 +21,7 @@ describe('useFileListHeaderPosition', () => {
 
     for (const height of [50, 100, 150, 200, 201]) {
       appBar.resize(height)
-      window.dispatchEvent(new Event('resize'))
+      window.onresize(new UIEvent('resize'))
       await nextTick()
       expect((wrapper.vm as any).y).toBe(height)
     }

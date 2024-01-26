@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OcTag uses correct component when type is specified 1`] = `
-<button class="oc-tag oc-tag-m oc-tag-button">
+exports[`OcTag > uses correct component when type is specified 1`] = `
+"<button class="oc-tag oc-tag-m oc-tag-button">
   <!-- @slot Content of the tag -->
-</button>
+</button>"
 `;

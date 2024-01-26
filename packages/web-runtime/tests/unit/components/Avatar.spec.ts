@@ -1,6 +1,6 @@
 import Avatar from 'web-runtime/src/components/Avatar.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from 'vue'
@@ -15,10 +15,10 @@ const ocSpinner = 'oc-spinner-stub'
 const ocAvatar = 'oc-avatar-stub'
 
 describe('Avatar component', () => {
-  window.URL.createObjectURL = jest.fn()
+  window.URL.createObjectURL = vi.fn()
 
   it('should set user when the component is mounted', () => {
-    const spySetUser = jest.spyOn((Avatar as any).methods, 'setUser')
+    const spySetUser = vi.spyOn((Avatar as any).methods, 'setUser')
     getShallowWrapper()
     expect(spySetUser).toHaveBeenCalledTimes(1)
     expect(spySetUser).toHaveBeenCalledWith(propsData.userid)
@@ -66,7 +66,7 @@ describe('Avatar component', () => {
     describe('when an avatar is found', () => {
       const blob = 'blob:https://web.org/6fe8f675-6727'
       it('should set blob as src prop on oc-avatar component', async () => {
-        global.URL.createObjectURL = jest.fn(() => blob)
+        global.URL.createObjectURL = vi.fn(() => blob)
         const clientService = mockDeep<ClientService>()
         clientService.httpAuthenticated.get.mockResolvedValue(
           mock<AxiosResponse>({
@@ -75,6 +75,8 @@ describe('Avatar component', () => {
           })
         )
         const { wrapper } = getShallowWrapper(false, clientService)
+        await nextTick()
+        await nextTick()
         await nextTick()
         await nextTick()
         await nextTick()

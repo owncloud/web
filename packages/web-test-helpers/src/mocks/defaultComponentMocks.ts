@@ -1,4 +1,4 @@
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import {
   ClientService,
   LoadingService,

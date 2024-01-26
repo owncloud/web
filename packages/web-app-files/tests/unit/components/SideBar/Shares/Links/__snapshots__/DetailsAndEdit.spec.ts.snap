@@ -1,68 +1,63 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DetailsAndEdit component if user can edit renders dropdown and edit button 1`] = `
-<div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
-  <div>
-    <link-role-dropdown-stub availableroleoptions="[object Object],[object Object],[object Object]" dropoffset="0" modelvalue="[object Object]"></link-role-dropdown-stub>
+exports[`DetailsAndEdit component > if user can edit > renders dropdown and edit button 1`] = `
+"<div data-v-1d9b1e91="" class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
+  <div data-v-1d9b1e91="">
+    <link-role-dropdown-stub data-v-1d9b1e91="" modelvalue="[object Object]" availableroleoptions="[object Object],[object Object],[object Object]" dropoffset="0"></link-role-dropdown-stub>
   </div>
   <!--v-if-->
-  <div class="details-buttons">
+  <div data-v-1d9b1e91="" class="details-buttons">
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
-    <div>
-      <oc-button-stub appearance="raw" class="edit-drop-trigger" disabled="false" gapsize="medium" id="edit-public-link-dropdown-toggl-undefined" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-        <oc-icon-stub accessiblelabel="" color="" filltype="fill" name="more-2" size="medium" type="span" variation="passive"></oc-icon-stub>
+    <div data-v-1d9b1e91="">
+      <oc-button-stub data-v-1d9b1e91="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" id="edit-public-link-dropdown-toggl-undefined" class="edit-drop-trigger" data-testid="files-link-id-undefined-btn-edit">
+        <oc-icon-stub data-v-1d9b1e91="" name="more-2" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
       </oc-button-stub>
-      <oc-drop-stub closeonclick="false" dropid="edit-public-link-dropdown" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#edit-public-link-dropdown-toggl-undefined">
-        <oc-list-stub class="edit-public-link-dropdown-menu oc-pb-s oc-files-context-actions-border" raw="false">
-          <li class="oc-rounded oc-menu-item-hover">
-            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-              <oc-icon-stub accessiblelabel="" color="" filltype="line" name="pencil" size="medium" type="span" variation="passive"></oc-icon-stub>
-              <span>Rename</span>
+      <oc-drop-stub data-v-1d9b1e91="" dropid="edit-public-link-dropdown" popperoptions="[object Object]" toggle="#edit-public-link-dropdown-toggl-undefined" position="bottom-start" mode="click" closeonclick="false" isnested="false" paddingsize="small">
+        <oc-list-stub data-v-1d9b1e91="" raw="false" class="edit-public-link-dropdown-menu oc-pb-s oc-files-context-actions-border">
+          <li data-v-1d9b1e91="" class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub data-v-1d9b1e91="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" class="oc-p-s action-menu-item" data-testid="files-link-id-undefined-edit-rename">
+              <oc-icon-stub data-v-1d9b1e91="" name="pencil" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span data-v-1d9b1e91="">Rename</span>
             </oc-button-stub>
           </li>
-          <li class="oc-rounded oc-menu-item-hover">
-            <date-picker-stub class="oc-datepicker link-expiry-picker oc-flex oc-width-1-1 link-expiry-picker oc-flex oc-width-1-1" inputdebounce="1000" is24hr="false" isrange="false" isrequired="false" locale="en" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" mode="date" modelconfig="[object Object]" popover="[object Object]" updateoninput="true">
+          <li data-v-1d9b1e91="" class="oc-rounded oc-menu-item-hover">
+            <date-picker-stub data-v-1d9b1e91="" mode="date" modelconfig="[object Object]" is24hr="false" isrequired="false" isrange="false" updateoninput="true" inputdebounce="1000" popover="[object Object]" class="oc-datepicker link-expiry-picker oc-flex oc-width-1-1 link-expiry-picker oc-flex oc-width-1-1" min-date="Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)" locale="en">
               <!-- @slot Default slot to use as the popover anchor for datepicker -->
               <!-- args is undefined during initial render, hence we check it here -->
               <!--v-if-->
             </date-picker-stub>
           </li>
-          <li class="oc-rounded oc-menu-item-hover">
-            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-              <oc-icon-stub accessiblelabel="" color="" filltype="line" name="lock-password" size="medium" type="span" variation="passive"></oc-icon-stub>
-              <span>Add password</span>
+          <li data-v-1d9b1e91="" class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub data-v-1d9b1e91="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" class="oc-p-s action-menu-item" data-testid="files-link-id-undefined-edit-add-password">
+              <oc-icon-stub data-v-1d9b1e91="" name="lock-password" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span data-v-1d9b1e91="">Add password</span>
             </oc-button-stub>
           </li>
         </oc-list-stub>
-        <oc-list-stub class="edit-public-link-dropdown-menu oc-pt-s" raw="false">
-          <li class="oc-rounded oc-menu-item-hover">
-            <oc-button-stub appearance="raw" class="oc-p-s action-menu-item" disabled="false" gapsize="medium" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="passive">
-              <oc-icon-stub accessiblelabel="" color="" filltype="line" name="delete-bin-5" size="medium" type="span" variation="passive"></oc-icon-stub>
-              <span>Delete link</span>
+        <oc-list-stub data-v-1d9b1e91="" raw="false" class="edit-public-link-dropdown-menu oc-pt-s">
+          <li data-v-1d9b1e91="" class="oc-rounded oc-menu-item-hover">
+            <oc-button-stub data-v-1d9b1e91="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" class="oc-p-s action-menu-item" data-testid="files-link-id-undefined-edit-delete">
+              <oc-icon-stub data-v-1d9b1e91="" name="delete-bin-5" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span data-v-1d9b1e91="">Delete link</span>
             </oc-button-stub>
           </li>
         </oc-list-stub>
       </oc-drop-stub>
     </div>
   </div>
-</div>
+</div>"
 `;
 
-exports[`DetailsAndEdit component if user can not edit does not render dropdown or edit button 1`] = `
-<div class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
-  <p class="oc-my-rm">
-    <span class="link-current-role">Anyone with the link can view</span>
-  </p>
+exports[`DetailsAndEdit component > if user can not edit > does not render dropdown or edit button 1`] = `
+"<div data-v-1d9b1e91="" class="link-details oc-flex oc-flex-between oc-flex-middle" file="undefined">
+  <p data-v-1d9b1e91="" class="oc-my-rm"><span data-v-1d9b1e91="" class="link-current-role">Anyone with the link can view</span></p>
   <!--v-if-->
-  <div class="oc-pr-s details-buttons">
+  <div data-v-1d9b1e91="" class="oc-pr-s details-buttons">
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
   </div>
-</div>
+</div>"
 `;

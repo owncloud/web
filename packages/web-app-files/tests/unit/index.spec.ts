@@ -2,7 +2,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { navItems } from '../../src/index'
 import { useSpacesStore, useCapabilityStore } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
 describe('Web app files', () => {
   beforeEach(() => {

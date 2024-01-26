@@ -7,7 +7,7 @@ import {
   useMessages,
   useSpacesStore
 } from '@ownclouders/web-pkg'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
@@ -17,19 +17,13 @@ import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMoc
 import { useUserActionsCreateUser } from '../../../src/composables/actions/users/useUserActionsCreateUser'
 import { ref } from 'vue'
 
-jest.mock('mark.js', () => {
-  return jest.fn().mockImplementation(() => ({
-    mark: () => jest.fn(),
-    unmark: () => jest.fn()
-  }))
-})
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  queryItemAsString: jest.fn(),
-  useAppDefaults: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  queryItemAsString: vi.fn(),
+  useAppDefaults: vi.fn()
 }))
-jest.mock('../../../src/composables/actions/users/useUserActionsCreateUser')
-jest.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
+vi.mock('../../../src/composables/actions/users/useUserActionsCreateUser')
+vi.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
 
 const getDefaultUser = () => {
   return {
@@ -177,19 +171,19 @@ describe('Users view', () => {
       }
 
       const clientService = getClientService()
-      clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosResolve())
-      clientService.graphAuthenticated.users.createUserAppRoleAssignment.mockImplementation(() =>
+      clientService.graphAuthenticated.users.editUser.mockResolvedValue(mockAxiosResolve())
+      clientService.graphAuthenticated.users.createUserAppRoleAssignment.mockResolvedValue(
         mockAxiosResolve()
       )
-      clientService.graphAuthenticated.groups.addMember.mockImplementation(() => mockAxiosResolve())
-      clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
+      clientService.graphAuthenticated.groups.addMember.mockResolvedValue(mockAxiosResolve())
+      clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
         mockAxiosResolve({
           id: '1',
           name: 'admin',
           quota: { remaining: 1000000000, state: 'normal', total: 1000000000, used: 0 }
         })
       )
-      clientService.graphAuthenticated.users.getUser.mockImplementation(() =>
+      clientService.graphAuthenticated.users.getUser.mockResolvedValue(
         mockAxiosResolve({
           appRoleAssignments: [
             {
@@ -222,7 +216,7 @@ describe('Users view', () => {
 
       const { wrapper } = getMountedWrapper({ clientService })
 
-      const busStub = jest.spyOn(eventBus, 'publish')
+      const busStub = vi.spyOn(eventBus, 'publish')
 
       await wrapper.vm.loadResourcesTask.last
 
@@ -242,7 +236,7 @@ describe('Users view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientService()
       clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getMountedWrapper({ clientService })
@@ -409,11 +403,11 @@ function getMountedWrapper({
   options?: OptionsConfig
   createUserActionEnabled?: boolean
 } = {}) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
-  jest.mocked(useUserActionsCreateUser).mockReturnValue(
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => roleFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
+  vi.mocked(useUserActionsCreateUser).mockReturnValue(
     mock<ReturnType<typeof useUserActionsCreateUser>>({
       actions: ref([mock<UserAction>({ isEnabled: () => createUserActionEnabled })])
     })

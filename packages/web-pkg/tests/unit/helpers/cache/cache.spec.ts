@@ -42,12 +42,12 @@ describe('Cache', () => {
   })
 
   it('can handle ttl', () => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
     const cacheValues: number[] = []
     const cache = newCache(cacheValues, 50)
 
     cache.set(1, 1)
-    jest.setSystemTime(new Date().getTime() + 10)
+    vi.setSystemTime(new Date().getTime() + 10)
     cache.set(2, 2)
 
     expect(cache.get(1)).toBe(1)
@@ -56,7 +56,7 @@ describe('Cache', () => {
     expect(cache.keys().length).toBe(2)
     expect(cache.entries().length).toBe(2)
 
-    jest.setSystemTime(new Date().getTime() + 41)
+    vi.setSystemTime(new Date().getTime() + 41)
 
     expect(cache.get(1)).toBeFalsy()
     expect(cache.get(2)).toBe(2)
@@ -64,7 +64,7 @@ describe('Cache', () => {
     expect(cache.keys().length).toBe(1)
     expect(cache.entries().length).toBe(1)
 
-    jest.setSystemTime(new Date().getTime() + 10)
+    vi.setSystemTime(new Date().getTime() + 10)
 
     expect(cache.get(2)).toBeFalsy()
     expect(cache.values().length).toBe(0)
@@ -84,7 +84,7 @@ describe('Cache', () => {
     expect(cache.keys().length).toBe(4)
     expect(cache.entries().length).toBe(4)
 
-    jest.setSystemTime(new Date().getTime() + 11)
+    vi.setSystemTime(new Date().getTime() + 11)
 
     expect(cache.get(3)).toBeFalsy()
     expect(cache.get(4)).toBe(4)
@@ -94,7 +94,7 @@ describe('Cache', () => {
     expect(cache.keys().length).toBe(3)
     expect(cache.entries().length).toBe(3)
 
-    jest.setSystemTime(new Date().getTime() + 10)
+    vi.setSystemTime(new Date().getTime() + 10)
 
     expect(cache.get(4)).toBeFalsy()
     expect(cache.get(5)).toBe(5)
@@ -140,7 +140,7 @@ describe('cache', () => {
     let evictSpy
     beforeEach(() => {
       const options = { ttl: 0, opacity: 0 }
-      evictSpy = jest.spyOn(Cache.prototype, 'evict')
+      evictSpy = vi.spyOn(Cache.prototype, 'evict')
       cache = new Cache<string, string>(options)
       key = 'key'
       value = 'value'
@@ -198,7 +198,7 @@ describe('cache', () => {
     })
     it('should evict expired item', () => {
       const oldGetTime = Date.prototype.getTime
-      Date.prototype.getTime = jest.fn(() => 1487076708000)
+      Date.prototype.getTime = vi.fn(() => 1487076708000)
       cache.set(key, value, 1)
       Date.prototype.getTime = oldGetTime
       expect(cache.values().length).toBe(0)
@@ -209,7 +209,7 @@ describe('cache', () => {
     })
     it('should not evict item without ttl', () => {
       const oldGetTime = Date.prototype.getTime
-      Date.prototype.getTime = jest.fn(() => 1487076708000)
+      Date.prototype.getTime = vi.fn(() => 1487076708000)
       cache.set(key, value, 0)
       Date.prototype.getTime = oldGetTime
       expect(cache.values().length).toBe(1)

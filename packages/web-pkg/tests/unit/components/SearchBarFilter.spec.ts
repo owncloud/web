@@ -1,8 +1,8 @@
-import { useRouteQuery } from '../../../src/composables/router'
+import { useRouteQuery } from '../../../src/composables/router/useRouteQuery'
 import SearchBarFilter from '../../../src/components/SearchBarFilter.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 
-jest.mock('../../../src/composables/router')
+vi.mock('../../../src/composables/router/useRouteQuery')
 
 const selectors = {
   filterChipStub: 'oc-filter-chip-stub'
@@ -27,7 +27,7 @@ describe('SearchBarFilter', () => {
 })
 
 function getWrapper({ currentFolderAvailable = false, useScope = null } = {}) {
-  jest.mocked(useRouteQuery).mockImplementationOnce(() => useScope)
+  vi.mocked(useRouteQuery).mockImplementationOnce(() => useScope)
 
   const mocks = defaultComponentMocks()
   return {

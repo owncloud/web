@@ -1,9 +1,9 @@
 import { HttpClient } from '../../../src/http'
 import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
-import mockAxios from 'jest-mock-axios'
 import { client as _client } from '@ownclouders/web-client'
 import { createTestingPinia, writable } from 'web-test-helpers'
+import axios from 'axios'
 
 const getters = { 'runtime/auth/accessToken': 'token' }
 const language = { current: 'en' }
@@ -24,8 +24,8 @@ const getClientServiceMock = () => {
   }
 }
 const v4uuid = '00000000-0000-0000-0000-000000000000'
-jest.mock('uuid', () => ({ v4: () => v4uuid }))
-jest.mock('@ownclouders/web-client', () => ({ client: jest.fn(() => ({ graph: {}, ocs: {} })) }))
+vi.mock('uuid', () => ({ v4: () => v4uuid }))
+vi.mock('@ownclouders/web-client', () => ({ client: vi.fn(() => ({ graph: {}, ocs: {} })) }))
 
 describe('ClientService', () => {
   beforeEach(() => {
@@ -33,10 +33,11 @@ describe('ClientService', () => {
     language.current = 'en'
   })
   it('initializes a http authenticated client', () => {
+    const createSpy = vi.spyOn(axios, 'create')
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.httpAuthenticated
     expect(client).toBeInstanceOf(HttpClient)
-    expect(mockAxios.create).toHaveBeenCalledWith(
+    expect(createSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         headers: {
           'Accept-Language': language.current,
@@ -46,22 +47,23 @@ describe('ClientService', () => {
         }
       })
     )
-    expect(mockAxios.create).toHaveBeenCalledTimes(1)
+    expect(createSpy).toHaveBeenCalledTimes(1)
     // test re-instantiation on token and language change
     clientService.httpAuthenticated
-    expect(mockAxios.create).toHaveBeenCalledTimes(1)
+    expect(createSpy).toHaveBeenCalledTimes(1)
     authStore.accessToken = 'changedToken'
     clientService.httpAuthenticated
-    expect(mockAxios.create).toHaveBeenCalledTimes(2)
+    expect(createSpy).toHaveBeenCalledTimes(2)
     language.current = 'de'
     clientService.httpAuthenticated
-    expect(mockAxios.create).toHaveBeenCalledTimes(3)
+    expect(createSpy).toHaveBeenCalledTimes(3)
   })
   it('initializes a http unauthenticated client', () => {
+    const createSpy = vi.spyOn(axios, 'create')
     const { clientService } = getClientServiceMock()
     const client = clientService.httpUnAuthenticated
     expect(client).toBeInstanceOf(HttpClient)
-    expect(mockAxios.create).toHaveBeenCalledWith(
+    expect(createSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         headers: {
           'Accept-Language': language.current,
@@ -70,18 +72,18 @@ describe('ClientService', () => {
         }
       })
     )
-    expect(mockAxios.create).toHaveBeenCalledTimes(1)
+    expect(createSpy).toHaveBeenCalledTimes(1)
     // test re-instantiation on token and language change
     clientService.httpUnAuthenticated
-    expect(mockAxios.create).toHaveBeenCalledTimes(1)
+    expect(createSpy).toHaveBeenCalledTimes(1)
     clientService.httpUnAuthenticated
     language.current = 'de'
     clientService.httpUnAuthenticated
-    expect(mockAxios.create).toHaveBeenCalledTimes(2)
+    expect(createSpy).toHaveBeenCalledTimes(2)
   })
   it('initializes an graph client', () => {
     const graphClient = { id: 1 }
-    jest.mocked(_client).mockImplementation(() => {
+    vi.mocked(_client).mockImplementation(() => {
       return { graph: graphClient, ocs: {} } as any
     })
     const { clientService, authStore } = getClientServiceMock()
@@ -101,7 +103,7 @@ describe('ClientService', () => {
   })
   it('initializes an ocs user client', () => {
     const ocsClient = { id: 1 }
-    jest.mocked(_client).mockImplementation(() => {
+    vi.mocked(_client).mockImplementation(() => {
       return { graph: {}, ocs: ocsClient } as any
     })
     const { clientService, authStore } = getClientServiceMock()
@@ -121,7 +123,7 @@ describe('ClientService', () => {
   })
   it('initializes an ocs public link client', () => {
     const ocsClient = { id: 1 }
-    jest.mocked(_client).mockImplementation(() => {
+    vi.mocked(_client).mockImplementation(() => {
       return { graph: {}, ocs: ocsClient } as any
     })
     const { clientService, authStore } = getClientServiceMock()

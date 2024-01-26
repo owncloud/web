@@ -4,7 +4,7 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import { useSessionStorage } from '@vueuse/core'
 import { ref } from 'vue'
 
-jest.mock('@vueuse/core')
+vi.mock('@vueuse/core')
 
 describe('AppBanner', () => {
   it('generates app url with correct app scheme', () => {
@@ -48,7 +48,7 @@ function getWrapper({ fileId, sessionStorageReturnValue }) {
     history: ('/' && createWebHistory('/')) || createWebHashHistory()
   })
 
-  jest.mocked(useSessionStorage).mockImplementation(() => {
+  vi.mocked(useSessionStorage).mockImplementation(() => {
     return ref<string>(sessionStorageReturnValue)
   })
 

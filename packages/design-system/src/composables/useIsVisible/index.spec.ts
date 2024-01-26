@@ -3,22 +3,22 @@ import { useIsVisible } from './index'
 import { mount } from 'web-test-helpers'
 
 const mockIntersectionObserver = () => {
-  jest.useFakeTimers()
+  vi.useFakeTimers()
 
   const enable = () => {
     const mock = {
-      observe: jest.fn(),
-      disconnect: jest.fn(),
-      unobserve: jest.fn()
+      observe: vi.fn(),
+      disconnect: vi.fn(),
+      unobserve: vi.fn()
     }
 
-    window.IntersectionObserver = jest.fn().mockImplementation(() => mock)
+    window.IntersectionObserver = vi.fn().mockImplementation(() => mock)
 
     return {
       mock,
       callback: (args, fastForward = 0) => {
         ;(window.IntersectionObserver as any).mock.calls[0][0](args)
-        jest.advanceTimersByTime(fastForward)
+        vi.advanceTimersByTime(fastForward)
       }
     }
   }

@@ -1,7 +1,7 @@
 import { useFileActionsEmptyTrashBin } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
 import { ProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
@@ -58,7 +58,7 @@ describe('emptyTrashBin', () => {
     })
 
     it('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       getWrapper({
         resolveClearTrashBin: false,

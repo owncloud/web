@@ -8,7 +8,7 @@ import {
 import { defaultPlugins, mount, defaultStubs, defaultComponentMocks } from 'web-test-helpers'
 import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
 
-jest.mock('uuid', () => ({
+vi.mock('uuid', () => ({
   v4: () => {
     return '00000000-0000-0000-0000-000000000000'
   }
@@ -126,9 +126,9 @@ describe('Collaborator ListItem component', () => {
       expect(spacesStore.changeSpaceMember).toHaveBeenCalled()
     })
     it('shows a message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = createWrapper()
-      jest.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
+      vi.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
       ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
@@ -151,9 +151,9 @@ describe('Collaborator ListItem component', () => {
       expect(sharesStore.updateShare).toHaveBeenCalled()
     })
     it('shows a message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = createWrapper()
-      jest.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
+      vi.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
       ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {

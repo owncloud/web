@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { createApp, defineComponent, App } from 'vue'
 import { useAppsStore, useConfigStore } from '@ownclouders/web-pkg'
 import {
@@ -11,17 +11,19 @@ import {
 import { buildApplication } from '../../../src/container/application'
 import { createTestingPinia } from 'web-test-helpers/src'
 
-jest.mock('../../../src/container/application')
+vi.mock('../../../src/container/application')
 
 describe('initialize applications', () => {
-  beforeEach(() => createTestingPinia())
+  beforeEach(() => {
+    createTestingPinia()
+  })
 
   it('continues even if one or more applications are falsy', async () => {
     const fishyError = new Error('fishy')
-    const initialize = jest.fn()
-    const ready = jest.fn()
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn)
-    const buildApplicationMock = jest
+    const initialize = vi.fn()
+    const ready = vi.fn()
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const buildApplicationMock = vi
       .fn()
       .mockImplementation(({ applicationPath }: { applicationPath: string }) => {
         if (applicationPath.includes('Valid')) {
@@ -31,7 +33,7 @@ describe('initialize applications', () => {
         return Promise.reject(fishyError)
       })
 
-    jest.mocked(buildApplication).mockImplementation(buildApplicationMock)
+    vi.mocked(buildApplication).mockImplementation(buildApplicationMock)
 
     const configStore = useConfigStore()
     configStore.apps = ['internalFishy', 'internalValid']
@@ -62,7 +64,9 @@ describe('initialize applications', () => {
 })
 
 describe('announceCustomScripts', () => {
-  beforeEach(() => createTestingPinia())
+  beforeEach(() => {
+    createTestingPinia()
+  })
   afterEach(() => {
     document.getElementsByTagName('html')[0].innerHTML = ''
   })
@@ -101,7 +105,9 @@ describe('announceCustomScripts', () => {
 })
 
 describe('announceCustomStyles', () => {
-  beforeEach(() => createTestingPinia())
+  beforeEach(() => {
+    createTestingPinia()
+  })
   afterEach(() => {
     document.getElementsByTagName('html')[0].innerHTML = ''
   })
@@ -130,10 +136,12 @@ describe('announceCustomStyles', () => {
 })
 
 describe('announceConfiguration', () => {
-  beforeEach(() => createTestingPinia({ stubActions: false }))
+  beforeEach(() => {
+    createTestingPinia({ stubActions: false })
+  })
 
   it('should not enable embed mode when it is not set', async () => {
-    jest.spyOn(global, 'fetch').mockResolvedValue(
+    vi.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
         json: () => Promise.resolve({ theme: '', server: '', options: {} })
@@ -145,7 +153,7 @@ describe('announceConfiguration', () => {
   })
 
   it('should embed mode when it is set in config.json', async () => {
-    jest.spyOn(global, 'fetch').mockResolvedValue(
+    vi.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
         json: () =>
@@ -164,7 +172,7 @@ describe('announceConfiguration', () => {
       },
       writable: true
     })
-    jest.spyOn(global, 'fetch').mockResolvedValue(
+    vi.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
         json: () => Promise.resolve({ theme: '', server: '', options: {} })
@@ -182,7 +190,7 @@ describe('announceConfiguration', () => {
       },
       writable: true
     })
-    jest.spyOn(global, 'fetch').mockResolvedValue(
+    vi.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 200,
         json: () =>

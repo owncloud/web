@@ -1,6 +1,6 @@
 import { ref, unref } from 'vue'
 import { defaultPlugins, defaultComponentMocks, mount, RouteLocation } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import ViewOptions from '../../../src/components/ViewOptions.vue'
 import {
   FolderViewModeConstants,
@@ -10,10 +10,10 @@ import {
 } from '../../../src/composables'
 import { FolderView } from '../../../src'
 
-jest.mock('../../../src/composables/router', () => ({
-  ...jest.requireActual('../../../src/composables/router'),
-  useRouteQueryPersisted: jest.fn(),
-  useRouteQuery: jest.fn()
+vi.mock('../../../src/composables/router', async (importOriginal) => ({
+  ...(await (importOriginal() as any)),
+  useRouteQueryPersisted: vi.fn(),
+  useRouteQuery: vi.fn()
 }))
 
 const selectors = {
@@ -135,11 +135,11 @@ function getWrapper({
   props = {},
   currentPage = '1'
 } = {}) {
-  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(perPage))
-  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(viewMode))
+  vi.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(perPage))
+  vi.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(viewMode))
   const tileSizeQueryMock = ref(tileSize)
-  jest.mocked(useRouteQueryPersisted).mockImplementationOnce(() => tileSizeQueryMock)
-  jest.mocked(useRouteQuery).mockImplementationOnce(() => ref(currentPage))
+  vi.mocked(useRouteQueryPersisted).mockImplementationOnce(() => tileSizeQueryMock)
+  vi.mocked(useRouteQuery).mockImplementationOnce(() => ref(currentPage))
 
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) }),

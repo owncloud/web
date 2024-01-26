@@ -1,4 +1,3 @@
-import { describe, it } from '@jest/globals'
 import { textUtils } from '../../../src/helpers/textUtils'
 
 describe('textUtils', () => {

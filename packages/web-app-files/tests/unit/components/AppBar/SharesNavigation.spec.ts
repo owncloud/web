@@ -1,6 +1,6 @@
 import SharesNavigation from '../../../../src/components/AppBar/SharesNavigation.vue'
 import { locationSharesWithMe } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { RouteRecordNormalized } from 'vue-router'
 import {
   defaultPlugins,

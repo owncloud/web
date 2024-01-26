@@ -1,28 +1,26 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Projects view different files view states lists all available project spaces 1`] = `
-<div class="oc-flex oc-width-1-1">
-  <div class="files-view-wrapper oc-width-expand">
-    <div id="files-view">
-      <app-bar-stub breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" hasbulkactions="true" hasfileextensions="false" hashiddenfiles="false" haspagination="false" hasviewoptions="true" issidebaropen="false" showactionsonselection="true" viewmodedefault="resource-tiles" viewmodes="[object Object]"></app-bar-stub>
+exports[`Projects view > different files view states > lists all available project spaces 1`] = `
+"<div class="oc-flex oc-width-1-1">
+  <div data-v-39c970be="" class="files-view-wrapper oc-width-expand">
+    <div data-v-39c970be="" id="files-view">
+      <app-bar-stub viewmodedefault="resource-tiles" breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" viewmodes="[object Object]" hasbulkactions="true" hasviewoptions="true" hashiddenfiles="false" hasfileextensions="false" haspagination="false" showactionsonselection="true" issidebaropen="false"></app-bar-stub>
       <div class="spaces-list oc-mt-l">
         <div class="spaces-list-filters oc-flex oc-flex-right oc-px-m oc-mb-m">
-          <div class="">
-            <label class="oc-label" for="spaces-filter">Search</label>
+          <div class=""><label class="oc-label" for="spaces-filter">Search</label>
             <div class="oc-position-relative">
-              <!--v-if-->
-              <input aria-invalid="false" autocomplete="off" class="oc-text-input oc-input oc-rounded" id="spaces-filter" type="text">
+              <!--v-if--> <input id="spaces-filter" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
               <!--v-if-->
             </div>
             <!--v-if-->
             <!--v-if-->
           </div>
         </div>
-        <div are-thumbnails-displayed="true" class="resource-table" fields-displayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" resource-type="space" resources="[object Object],[object Object]" selectedids="" sort-by="undefined" sort-dir="desc" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"></div>
+        <div class="resource-table" selectedids="" resource-type="space" are-thumbnails-displayed="true" resources="[object Object],[object Object]" fields-displayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sort-by="undefined" sort-dir="desc"></div>
       </div>
     </div>
   </div>
   <!--v-if-->
   <file-side-bar-stub isopen="false"></file-side-bar-stub>
-</div>
+</div>"
 `;

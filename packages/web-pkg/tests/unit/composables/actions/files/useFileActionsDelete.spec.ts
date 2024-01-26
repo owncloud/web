@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import {
   useFileActionsDeleteResources,
@@ -8,7 +8,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { CapabilityStore } from '../../../../../src/composables/piniaStores'
 
-jest.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')
+vi.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')
 
 describe('delete', () => {
   describe('computed property "actions"', () => {
@@ -107,7 +107,7 @@ describe('delete', () => {
             deletableResourceIds: ['1', '2', '3']
           }
         ])('should filter non deletable resources', ({ resources, deletableResourceIds }) => {
-          const filesListDeleteMock = jest.fn()
+          const filesListDeleteMock = vi.fn()
 
           getWrapper({
             searchLocation: true,
@@ -132,7 +132,7 @@ function getWrapper({
   deletePermanent = false,
   invalidLocation = false,
   searchLocation = false,
-  filesListDeleteMock = jest.fn(),
+  filesListDeleteMock = vi.fn(),
   setup = () => undefined
 } = {}) {
   const routeName = invalidLocation
@@ -142,9 +142,10 @@ function getWrapper({
       : searchLocation
         ? 'files-common-search'
         : 'files-spaces-generic'
-  jest
-    .mocked(useFileActionsDeleteResources)
-    .mockImplementation(() => ({ filesList_delete: filesListDeleteMock, displayDialog: jest.fn() }))
+  vi.mocked(useFileActionsDeleteResources).mockImplementation(() => ({
+    filesList_delete: filesListDeleteMock,
+    displayDialog: vi.fn()
+  }))
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
     space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }

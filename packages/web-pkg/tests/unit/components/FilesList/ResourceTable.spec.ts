@@ -2,22 +2,23 @@ import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
 import { extractDomSelector, Resource } from '@ownclouders/web-client/src/helpers'
 import { defaultPlugins, mount } from 'web-test-helpers'
-import { CapabilityStore, displayPositionedDropdown } from '../../../../src'
+import { CapabilityStore } from '../../../../src/composables/piniaStores'
+import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
-import { mockDeep } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 
-const mockUseEmbedMode = jest.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
+const mockUseEmbedMode = vi.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
 
-jest.mock('../../../../src/helpers')
-jest.mock('../../../../src/composables/embedMode', () => ({
-  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode())
+vi.mock('../../../../src/helpers/contextMenuDropdown')
+vi.mock('../../../../src/composables/embedMode', () => ({
+  useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 
 const router = {
-  push: jest.fn(),
-  afterEach: jest.fn(),
+  push: vi.fn(),
+  afterEach: vi.fn(),
   currentRoute: {
     name: 'some-route-name',
     query: {},
@@ -102,7 +103,7 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     owner,
     sharedWith,
-    canRename: jest.fn,
+    canRename: vi.fn,
     getDomSelector: () => extractDomSelector('forest')
   },
   {
@@ -120,7 +121,7 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     sharedWith,
     owner,
-    canRename: jest.fn,
+    canRename: vi.fn,
     getDomSelector: () => extractDomSelector('notes')
   },
   {
@@ -137,7 +138,7 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     sharedWith,
     owner,
-    canRename: jest.fn,
+    canRename: vi.fn,
     getDomSelector: () => extractDomSelector('documents')
   },
   {
@@ -154,7 +155,7 @@ const resourcesWithAllFields = [
     sharedWith,
     tags: [],
     owner,
-    canRename: jest.fn,
+    canRename: vi.fn,
     getDomSelector: () => extractDomSelector('another-one==')
   }
 ]
@@ -176,7 +177,7 @@ const processingResourcesWithAllFields = [
     ddate: getCurrentDate(),
     owner,
     sharedWith,
-    canRename: jest.fn,
+    canRename: vi.fn,
     getDomSelector: () => extractDomSelector('forest'),
     processing: true
   },
@@ -195,7 +196,7 @@ const processingResourcesWithAllFields = [
     ddate: getCurrentDate(),
     sharedWith,
     owner,
-    canRename: jest.fn,
+    canRename: vi.fn,
     getDomSelector: () => extractDomSelector('notes'),
     processing: true
   }
@@ -327,7 +328,7 @@ describe('ResourceTable', () => {
 
   describe('context menu', () => {
     it('emits select event on contextmenu click', async () => {
-      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+      const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper()
       await wrapper.find('.oc-tbody-tr').trigger('contextmenu')
       expect(wrapper.emitted('update:selectedIds').length).toBe(1)
@@ -335,7 +336,7 @@ describe('ResourceTable', () => {
     })
 
     it('does not emit select event on contextmenu click of disabled resource', async () => {
-      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+      const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper({ addProcessingResources: true })
       await wrapper.find('.oc-tbody-tr-rainforest').trigger('contextmenu')
       expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
@@ -343,7 +344,7 @@ describe('ResourceTable', () => {
     })
 
     it('emits select event on clicking the three-dot icon in table row', async () => {
-      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+      const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper()
       await wrapper
         .find('.oc-table-data-cell-actions .resource-table-btn-action-dropdown')
@@ -353,7 +354,7 @@ describe('ResourceTable', () => {
     })
 
     it('does not emit select event on clicking the three-dot icon in table row of a disabled resource', async () => {
-      const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+      const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
       const { wrapper } = getMountedWrapper({ addProcessingResources: true })
       await wrapper
         .find(
@@ -397,13 +398,13 @@ describe('ResourceTable', () => {
         { tags: ['1', '2', '3', '4'], tagCount: 2 }
       ])('render 2 tags max', (data) => {
         const { tags, tagCount } = data
-        const resource = mockDeep<Resource>({ id: '1', tags })
+        const resource = mock<Resource>({ id: '1', tags })
         const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         expect(resourceRow.findAll('.resource-table-tag').length).toBe(tagCount)
       })
       it('render router link if user is authenticated', () => {
-        const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
+        const resource = mock<Resource>({ id: '1', tags: ['1'] })
         const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         expect(resourceRow.find('.resource-table-tag-wrapper').element.tagName).toEqual(
@@ -411,7 +412,7 @@ describe('ResourceTable', () => {
         )
       })
       it('do not render router link if user is not authenticated', () => {
-        const resource = mockDeep<Resource>({ id: '1', tags: ['1'] })
+        const resource = mock<Resource>({ id: '1', tags: ['1'] })
         const { wrapper } = getMountedWrapper({
           props: { resources: [resource] },
           userContextReady: false
@@ -429,14 +430,14 @@ describe('ResourceTable', () => {
         { tags: ['1', '2', '3', '4'], renderButton: true }
       ])('does only render when the resource has 3 tags or more', (data) => {
         const { tags, renderButton } = data
-        const resource = mockDeep<Resource>({ id: '1', tags })
+        const resource = mock<Resource>({ id: '1', tags })
         const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         expect(resourceRow.find('.resource-table-tag-more').exists()).toBe(renderButton)
       })
       it('opens sidebar on click', async () => {
-        const spyBus = jest.spyOn(eventBus, 'publish')
-        const resource = mockDeep<Resource>({ id: '1', tags: ['1', '2', '3'] })
+        const spyBus = vi.spyOn(eventBus, 'publish')
+        const resource = mock<Resource>({ id: '1', tags: ['1', '2', '3'] })
         const { wrapper } = getMountedWrapper({ props: { resources: [resource] } })
         const resourceRow = wrapper.find(`[data-item-id="${resource.id}"]`)
         await resourceRow.find('.resource-table-tag-more').trigger('click')
@@ -465,7 +466,7 @@ function getMountedWrapper({
         selection: [],
         hover: false,
         space: {
-          getDriveAliasAndItem: jest.fn()
+          getDriveAliasAndItem: vi.fn()
         },
         ...props
       },

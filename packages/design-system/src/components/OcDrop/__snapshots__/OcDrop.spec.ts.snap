@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OcDrop tippy renders tippy 1`] = `
+exports[`OcDrop > tippy > renders tippy 1`] = `
 <div>
   <p
     aria-describedby="tippy-10"
@@ -49,7 +49,7 @@ exports[`OcDrop tippy renders tippy 1`] = `
 </div>
 `;
 
-exports[`OcDrop tippy renders tippy 2`] = `
+exports[`OcDrop > tippy > renders tippy 2`] = `
 <div>
   <p
     aria-expanded="false"
@@ -97,7 +97,7 @@ exports[`OcDrop tippy renders tippy 2`] = `
 </div>
 `;
 
-exports[`OcDrop tippy renders tippy 3`] = `
+exports[`OcDrop > tippy > renders tippy 3`] = `
 <div>
   <p
     aria-describedby="tippy-10"

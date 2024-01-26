@@ -1,68 +1,62 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`account page account information section displays basic user information 1`] = `
-<dl class="account-page-info oc-flex oc-flex-wrap">
-  <div class="account-page-info-username oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Username</dt>
-    <dd>some-username</dd>
+exports[`account page > account information section > displays basic user information 1`] = `
+"<dl data-v-f2ac0579="" class="account-page-info oc-flex oc-flex-wrap">
+  <div data-v-f2ac0579="" class="account-page-info-username oc-mb oc-width-1-2@s">
+    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Username</dt>
+    <dd data-v-f2ac0579="">some-username</dd>
   </div>
-  <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">First and last name</dt>
-    <dd>some-displayname</dd>
+  <div data-v-f2ac0579="" class="account-page-info-displayname oc-mb oc-width-1-2@s">
+    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">First and last name</dt>
+    <dd data-v-f2ac0579="">some-displayname</dd>
   </div>
-  <div class="account-page-info-email oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Email</dt>
-    <dd>some-email</dd>
+  <div data-v-f2ac0579="" class="account-page-info-email oc-mb oc-width-1-2@s">
+    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Email</dt>
+    <dd data-v-f2ac0579="">some-email</dd>
   </div>
-  <div class="account-page-info-groups oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Group memberships</dt>
-    <dd>
-      <span>You are not part of any group</span>
+  <div data-v-f2ac0579="" class="account-page-info-groups oc-mb oc-width-1-2@s">
+    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Group memberships</dt>
+    <dd data-v-f2ac0579="" data-testid="group-names"><span data-v-f2ac0579="" data-testid="group-names-empty">You are not part of any group</span></dd>
+  </div>
+  <div data-v-f2ac0579="" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Logout from active devices</dt>
+    <dd data-v-f2ac0579="" data-testid="logout">
+      <oc-button-stub data-v-f2ac0579="" appearance="raw" type="a" href="https://account-manager/logout" target="_blank" data-testid="account-page-logout-url-btn"></oc-button-stub>
     </dd>
   </div>
-  <div class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
-    <dt class="oc-text-normal oc-text-muted">Logout from active devices</dt>
-    <dd>
-      <oc-button-stub appearance="raw" href="https://account-manager/logout" target="_blank" type="a"></oc-button-stub>
-    </dd>
-  </div>
   <!--v-if-->
   <!--v-if-->
-</dl>
+</dl>"
 `;
 
-exports[`account page account information section group membership displays group names 1`] = `
-<dd>
-  <span>one, two, three</span>
-</dd>
-`;
+exports[`account page > account information section > group membership > displays group names 1`] = `"<dd data-v-f2ac0579="" data-testid="group-names"><span data-v-f2ac0579="">one, two, three</span></dd>"`;
 
-exports[`account page header section edit url button should be displayed if defined via config 1`] = `<oc-button-stub href="/" target="_blank" type="a" variation="primary"></oc-button-stub>`;
+exports[`account page > header section > edit url button > should be displayed if defined via config 1`] = `"<oc-button-stub data-v-f2ac0579="" variation="primary" type="a" href="/" target="_blank" data-testid="account-page-edit-url-btn"></oc-button-stub>"`;
 
-exports[`account page public link context should render a limited view 1`] = `
-<main class="oc-height-1-1 oc-m" id="account">
-  <h1 class="oc-page-title oc-m-rm oc-invisible-sr" id="account-page-title">Some Title</h1>
+exports[`account page > public link context > should render a limited view 1`] = `
+"<main data-v-f2ac0579="" id="account" class="oc-height-1-1 oc-m">
+  <h1 data-v-f2ac0579="" id="account-page-title" class="oc-page-title oc-m-rm oc-invisible-sr">Some Title</h1>
   <!--v-if-->
-  <div>
-    <div class="oc-flex oc-width-1-1">
-      <h2 class="oc-text-bold">Preferences</h2>
+  <div data-v-f2ac0579="">
+    <div data-v-f2ac0579="" class="oc-flex oc-width-1-1">
+      <h2 data-v-f2ac0579="" class="oc-text-bold">Preferences</h2>
     </div>
-    <dl class="account-page-preferences oc-flex oc-flex-wrap">
-      <div class="account-page-info-language oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted">Language</dt>
-        <dd class="oc-width-1-3">
-          <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="oc-select-1" loading="false" multiple="false" optionlabel="label" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" placeholder="Please choose..." readonly="false" searchable="true"></oc-select-stub>
+    <dl data-v-f2ac0579="" class="account-page-preferences oc-flex oc-flex-wrap">
+      <div data-v-f2ac0579="" class="account-page-info-language oc-mb oc-width-1-2@s">
+        <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Language</dt>
+        <dd data-v-f2ac0579="" data-testid="language" class="oc-width-1-3">
+          <oc-select-stub data-v-f2ac0579="" id="oc-select-1" filter="[Function]" disabled="false" optionlabel="label" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="false" multiple="false" readonly="false" placeholder="Please choose..." options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"></oc-select-stub>
         </dd>
       </div>
-      <div class="account-page-info-theme oc-mb oc-width-1-2@s">
-        <dt class="oc-text-normal oc-text-muted">Theme</dt>
-        <dd class="oc-width-1-3">
-          <theme-switcher-stub></theme-switcher-stub>
+      <div data-v-f2ac0579="" class="account-page-info-theme oc-mb oc-width-1-2@s">
+        <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Theme</dt>
+        <dd data-v-f2ac0579="" data-testid="theme" class="oc-width-1-3">
+          <theme-switcher-stub data-v-f2ac0579=""></theme-switcher-stub>
         </dd>
       </div>
       <!--v-if-->
       <!--v-if-->
     </dl>
   </div>
-</main>
+</main>"
 `;

@@ -1,9 +1,9 @@
 import { AxiosPromise, AxiosResponse } from 'axios'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
-export const mockAxiosResolve = <T>(data: T = {} as any): AxiosPromise<T> => {
+export const mockAxiosResolve = <T>(data: T = {} as any): AxiosResponse<T> => {
   const response = mock<AxiosResponse>({ data })
-  return Promise.resolve(response)
+  return response
 }
 
 export const mockAxiosReject = <T>(message = ''): AxiosPromise<T> => {

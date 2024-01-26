@@ -2,20 +2,20 @@ import { loadTheme } from 'web-runtime/src/helpers/theme'
 import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 import merge from 'lodash-es/merge'
 import { ThemingConfig, WebThemeConfig } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
-jest.mock('@ownclouders/web-pkg', () => {
-  const actual = jest.requireActual('@ownclouders/web-pkg')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => {
+  const actual = await importOriginal()
   return {
-    ...actual,
+    ...(actual as any),
     ThemingConfig: {
-      parse: jest.fn((arg) => arg),
-      safeParse: (arg) => actual.ThemingConfig.safeParse(arg)
+      parse: vi.fn((arg) => arg),
+      safeParse: (arg) => (actual as any).ThemingConfig.safeParse(arg)
     }
   }
 })
 
-jest.spyOn(console, 'error').mockImplementation(() => undefined)
+vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
 const defaultOwnCloudTheme = {
   defaults: {
@@ -47,22 +47,22 @@ describe('theme loading and error reporting', () => {
   })
 
   it('should load the default theme if location is not found', async () => {
-    jest.spyOn(global, 'fetch').mockResolvedValue(mock<Response>({ status: 404 }))
+    vi.spyOn(global, 'fetch').mockResolvedValue(mock<Response>({ status: 404 }))
     const theme = await loadTheme('http://www.owncloud.com/unknown.json')
     expect(theme).toMatchObject(defaultOwnCloudTheme)
   })
 
   it('should load the default theme if location is not a valid json file', async () => {
     const customTheme = merge({}, defaultTheme, { default: { logo: { login: 'custom.svg' } } })
-    jest
-      .spyOn(global, 'fetch')
-      .mockResolvedValue(mock<Response>({ status: 404, json: () => Promise.resolve(customTheme) }))
+    vi.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({ status: 404, json: () => Promise.resolve(customTheme) })
+    )
     const theme = await loadTheme('http://www.owncloud.com/invalid.json')
     expect(theme).toMatchObject(defaultOwnCloudTheme)
   })
 
   it('should load the default theme if server errors', async () => {
-    jest.spyOn(global, 'fetch').mockRejectedValue(new Error())
+    vi.spyOn(global, 'fetch').mockRejectedValue(new Error())
     const theme = await loadTheme('http://www.owncloud.com')
     expect(theme).toMatchObject(defaultOwnCloudTheme)
   })
@@ -72,7 +72,7 @@ describe('theme loading and error reporting', () => {
       defaults: { logo: { login: 'custom.svg' } }
     })
 
-    jest.spyOn(global, 'fetch').mockResolvedValue(
+    vi.spyOn(global, 'fetch').mockResolvedValue(
       mock<Response>({
         status: 404,
         json: () =>

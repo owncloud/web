@@ -2,7 +2,7 @@ import { useMessages } from '@ownclouders/web-pkg'
 import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameAndCopy.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-jest.useFakeTimers()
+vi.useFakeTimers()
 
 const exampleLink = {
   name: 'Example link',
@@ -11,7 +11,7 @@ const exampleLink = {
 
 describe('NameAndCopy', () => {
   // ignore tippy warning
-  jest.spyOn(console, 'warn').mockImplementation(undefined)
+  vi.spyOn(console, 'warn').mockImplementation(undefined)
   it('should show link info component including a copy-to-clipboard button', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
@@ -19,7 +19,7 @@ describe('NameAndCopy', () => {
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
     Object.assign(window.navigator, {
       clipboard: {
-        writeText: jest.fn().mockImplementation(() => Promise.resolve())
+        writeText: vi.fn().mockImplementation(() => Promise.resolve())
       }
     })
 
@@ -32,7 +32,7 @@ describe('NameAndCopy', () => {
     expect(wrapper.html()).toMatchSnapshot()
     expect(showMessage).toHaveBeenCalledTimes(1)
 
-    jest.advanceTimersByTime(550)
+    vi.advanceTimersByTime(550)
 
     wrapper.vm.$nextTick(() => {
       expect(wrapper.html()).toMatchSnapshot()
@@ -49,7 +49,7 @@ function getWrapper() {
       global: {
         plugins: [...defaultPlugins()],
         directives: {
-          'oc-tooltip': jest.fn()
+          'oc-tooltip': vi.fn()
         }
       }
     })

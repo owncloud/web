@@ -3,7 +3,7 @@ import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
 import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('editReadmeContent', () => {

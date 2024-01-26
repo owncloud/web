@@ -2,11 +2,11 @@ import ItemFilterInline from '../../../../src/components/Filters/ItemFilterInlin
 import { InlineFilterOption } from '../../../../src/components/Filters/types'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { queryItemAsString } from '../../../../src/composables/appDefaults'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
-jest.mock('../../../../src/composables/appDefaults', () => ({
-  appDefaults: jest.fn(),
-  queryItemAsString: jest.fn()
+vi.mock('../../../../src/composables/appDefaults', () => ({
+  appDefaults: vi.fn(),
+  queryItemAsString: vi.fn()
 }))
 
 const selectors = {
@@ -51,7 +51,7 @@ describe('ItemFilterInline', () => {
 })
 
 function getWrapper({ props = {}, initialQuery = '' } = {}) {
-  jest.mocked(queryItemAsString).mockImplementation(() => initialQuery)
+  vi.mocked(queryItemAsString).mockImplementation(() => initialQuery)
   const mocks = defaultComponentMocks()
   return {
     mocks,

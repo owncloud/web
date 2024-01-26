@@ -2,7 +2,7 @@ import { LoadingService } from '../../../src/services/loadingService'
 
 describe('LoadingService', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
   it('adds a task and sets it inactive initially', () => {
     const service = new LoadingService()
@@ -20,7 +20,7 @@ describe('LoadingService', () => {
     })
 
     service.addTask(() => action)
-    jest.runAllTimers()
+    vi.runAllTimers()
     expect(service.isLoading).toBeTruthy()
   })
   it('removes a task after being finished', async () => {
@@ -30,7 +30,7 @@ describe('LoadingService', () => {
     })
 
     await service.addTask(() => action)
-    jest.runAllTimers()
+    vi.runAllTimers()
     expect(service.isLoading).toBeFalsy()
   })
   it('returns the current progress of a running task', () => {
@@ -60,6 +60,6 @@ describe('LoadingService', () => {
       },
       { indeterminate: false }
     )
-    jest.runAllTimers()
+    vi.runAllTimers()
   })
 })

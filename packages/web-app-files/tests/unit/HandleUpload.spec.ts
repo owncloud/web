@@ -1,6 +1,6 @@
 import Uppy, { UppyFile, State, UIPlugin } from '@uppy/core'
 import { HandleUpload } from '../../src/HandleUpload'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { ref, unref } from 'vue'
@@ -18,7 +18,7 @@ import { Language } from 'vue3-gettext'
 import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
 import { createTestingPinia } from 'web-test-helpers'
 
-jest.mock('web-app-files/src/helpers/resource/actions')
+vi.mock('web-app-files/src/helpers/resource/actions')
 
 describe('HandleUpload', () => {
   it('installs the handleUpload callback when files are being added', () => {
@@ -103,7 +103,7 @@ describe('HandleUpload', () => {
       expect(result.length).toBe(1)
     })
     it('filters out files whose folders could not be created', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { instance, mocks } = getWrapper()
       mocks.uppy.getPlugin.mockReturnValue(mock<UIPlugin>())
@@ -121,7 +121,7 @@ describe('HandleUpload', () => {
   describe('method handleUpload', () => {
     it('prepares files and eventually triggers the upload in uppy', async () => {
       const { instance, mocks } = getWrapper()
-      const prepareFilesSpy = jest.spyOn(instance, 'prepareFiles')
+      const prepareFilesSpy = vi.spyOn(instance, 'prepareFiles')
       await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
       expect(prepareFilesSpy).toHaveBeenCalledTimes(1)
       expect(mocks.opts.uppyService.publish).toHaveBeenCalledWith(
@@ -133,13 +133,13 @@ describe('HandleUpload', () => {
     describe('quota check', () => {
       it('checks quota if check enabled', async () => {
         const { instance } = getWrapper()
-        const checkQuotaExceededSpy = jest.spyOn(instance, 'checkQuotaExceeded')
+        const checkQuotaExceededSpy = vi.spyOn(instance, 'checkQuotaExceeded')
         await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
         expect(checkQuotaExceededSpy).toHaveBeenCalled()
       })
       it('does not check quota if check disabled', async () => {
         const { instance } = getWrapper({ quotaCheckEnabled: false })
-        const checkQuotaExceededSpy = jest.spyOn(instance, 'checkQuotaExceeded')
+        const checkQuotaExceededSpy = vi.spyOn(instance, 'checkQuotaExceeded')
         await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
         expect(checkQuotaExceededSpy).not.toHaveBeenCalled()
       })
@@ -219,7 +219,7 @@ describe('HandleUpload', () => {
       })
       it('does not start upload if all files were skipped in conflict handling', async () => {
         const { instance, mocks } = getWrapper({ conflicts: [{}], conflictHandlerResult: [] })
-        const removeFilesFromUploadSpy = jest.spyOn(instance, 'removeFilesFromUpload')
+        const removeFilesFromUploadSpy = vi.spyOn(instance, 'removeFilesFromUpload')
 
         await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
         expect(mocks.opts.uppyService.uploadFiles).not.toHaveBeenCalled()
@@ -239,13 +239,13 @@ describe('HandleUpload', () => {
     describe('create directory tree', () => {
       it('creates the directly tree if enabled', async () => {
         const { instance } = getWrapper()
-        const createDirectoryTreeSpy = jest.spyOn(instance, 'createDirectoryTree')
+        const createDirectoryTreeSpy = vi.spyOn(instance, 'createDirectoryTree')
         await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
         expect(createDirectoryTreeSpy).toHaveBeenCalled()
       })
       it('does not create the directly tree if disabled', async () => {
         const { instance } = getWrapper({ directoryTreeCreateEnabled: false })
-        const createDirectoryTreeSpy = jest.spyOn(instance, 'createDirectoryTree')
+        const createDirectoryTreeSpy = vi.spyOn(instance, 'createDirectoryTree')
         await instance.handleUpload([mock<UppyFile>({ name: 'name' })])
         expect(createDirectoryTreeSpy).not.toHaveBeenCalled()
       })
@@ -264,7 +264,7 @@ const getWrapper = ({
   const resourceConflict = mock<ResourceConflict>()
   resourceConflict.getConflicts.mockReturnValue(conflicts)
   resourceConflict.displayOverwriteDialog.mockResolvedValue(conflictHandlerResult)
-  jest.mocked(ResourceConflict).mockImplementation(() => resourceConflict)
+  vi.mocked(ResourceConflict).mockImplementation(() => resourceConflict)
 
   const route = mock<RouteLocationNormalizedLoaded>()
   route.params.driveAliasAndItem = '1'

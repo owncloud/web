@@ -1,5 +1,5 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import BatchActions from '../../../src/components/BatchActions.vue'
 

@@ -1,4 +1,4 @@
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsMove } from '../../../../../src/composables/actions'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src'

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
 import { defaultComponentMocks, defaultStubs } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ShareResource, ShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
@@ -9,9 +9,9 @@ import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { useDownloadFile, useResourcesStore } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useDownloadFile: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useDownloadFile: vi.fn()
 }))
 
 const yesterday = DateTime.now().minus({ days: 1 }).toHTTP()
@@ -139,6 +139,7 @@ describe('FileVersions', () => {
               expect(updateResourceField).not.toHaveBeenCalled()
 
               await revertVersionButton.at(0).trigger('click')
+              await wrapper.vm.$nextTick()
 
               expect(updateResourceField).toHaveBeenCalledTimes(2)
             })
@@ -169,8 +170,8 @@ function getMountedWrapper({
   resource = mock<Resource>({ id: '1', size: 0, mdate: '' }),
   loadingStateDelay = 0
 } = {}) {
-  const downloadFile = jest.fn()
-  jest.mocked(useDownloadFile).mockReturnValue({ downloadFile })
+  const downloadFile = vi.fn()
+  vi.mocked(useDownloadFile).mockReturnValue({ downloadFile })
   const mocks = {
     ...defaultComponentMocks(),
     downloadFile

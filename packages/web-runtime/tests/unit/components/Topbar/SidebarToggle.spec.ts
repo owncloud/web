@@ -17,7 +17,7 @@ describe('SidebarToggle component', () => {
   )
   it('publishes the toggle-event to the sidebar on click', async () => {
     const { wrapper } = getWrapper()
-    const eventSpy = jest.spyOn(eventBus, 'publish')
+    const eventSpy = vi.spyOn(eventBus, 'publish')
     await wrapper.find(selectors.toggleSidebarBtn).trigger('click')
     expect(eventSpy).toHaveBeenCalled()
   })

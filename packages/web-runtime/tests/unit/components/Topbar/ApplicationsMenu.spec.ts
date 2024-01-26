@@ -5,11 +5,11 @@ import {
   defaultPlugins,
   shallowMount
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useFileActions: jest.fn(() => ({ openEditor: jest.fn() }))
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...((await importOriginal()) as any),
+  useFileActions: vi.fn(() => ({ openEditor: vi.fn() }))
 }))
 
 const menuLinks = [

@@ -6,7 +6,7 @@ import {
   spaceRoleEditor,
   Share
 } from '@ownclouders/web-client/src/helpers/share'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   defaultPlugins,
@@ -98,7 +98,7 @@ describe('SpaceMembers', () => {
 
   describe('deleting members', () => {
     it('reacts on delete events by collaborator list items', async () => {
-      const spyOnCollaboratorDeleteTrigger = jest.spyOn(
+      const spyOnCollaboratorDeleteTrigger = vi.spyOn(
         (SpaceMembers as any).methods,
         '$_ocCollaborators_deleteShare_trigger'
       )
@@ -111,16 +111,16 @@ describe('SpaceMembers', () => {
     })
     it('calls "deleteSpaceMember" when successful', async () => {
       const wrapper = getWrapper()
-      const deleteSpaceMemberSpy = jest.spyOn(wrapper.vm, 'deleteSpaceMember')
+      const deleteSpaceMemberSpy = vi.spyOn(wrapper.vm, 'deleteSpaceMember')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(deleteSpaceMemberSpy).toHaveBeenCalled()
     })
     it('shows a message when an error occurs', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const wrapper = getWrapper()
-      jest.spyOn(wrapper.vm, 'deleteSpaceMember').mockRejectedValue(new Error())
-      const showErrorMessageSpy = jest.spyOn(wrapper.vm, 'showErrorMessage')
+      vi.spyOn(wrapper.vm, 'deleteSpaceMember').mockRejectedValue(new Error())
+      const showErrorMessageSpy = vi.spyOn(wrapper.vm, 'showErrorMessage')
       const share = mock<Share>()
       await wrapper.vm.$_ocCollaborators_deleteShare(share)
       expect(showErrorMessageSpy).toHaveBeenCalled()
@@ -128,14 +128,14 @@ describe('SpaceMembers', () => {
     it('redirects to the "files-spaces-projects"-page when the current user has been removed', async () => {
       const user = mock<User>({ onPremisesSamAccountName: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
-      jest.spyOn(wrapper.vm, 'deleteSpaceMember')
+      vi.spyOn(wrapper.vm, 'deleteSpaceMember')
       await wrapper.vm.$_ocCollaborators_deleteShare(memberMocks.manager)
       expect(wrapper.vm.$router.push).toHaveBeenCalled()
     })
     it('refreshes the page when the current user has been removed on the "files-spaces-projects"-page', async () => {
       const user = mock<User>({ onPremisesSamAccountName: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user, currentRouteName: 'files-spaces-projects' })
-      jest.spyOn(wrapper.vm, 'deleteSpaceMember')
+      vi.spyOn(wrapper.vm, 'deleteSpaceMember')
       await wrapper.vm.$_ocCollaborators_deleteShare(memberMocks.manager)
       expect(wrapper.vm.$router.go).toHaveBeenCalled()
     })

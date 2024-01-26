@@ -32,7 +32,7 @@ export const createAppBar = (): {
     document.body.appendChild(appBar)
   }
   const resize = (height = 0) => {
-    document.getElementById('files-app-bar').getBoundingClientRect = jest
+    document.getElementById('files-app-bar').getBoundingClientRect = vi
       .fn()
       .mockReturnValue({ height })
   }

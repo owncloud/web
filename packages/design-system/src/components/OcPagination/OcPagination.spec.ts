@@ -95,7 +95,7 @@ describe('OcPagination', () => {
   })
 
   it('logs error if maxDisplayed prop is not an even number', () => {
-    console.error = jest.fn()
+    console.error = vi.fn()
     expect((Pagination as any).props.maxDisplayed.validator(2)).toBeFalsy()
   })
 

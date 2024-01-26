@@ -1,7 +1,7 @@
 import { useFileActionsSetReadme } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
 import {
   defaultComponentMocks,
@@ -9,7 +9,7 @@ import {
   getComposableWrapper,
   mockAxiosResolve
 } from 'web-test-helpers'
-import { nextTick, unref } from 'vue'
+import { unref } from 'vue'
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -99,7 +99,7 @@ describe('setReadme', () => {
         resolveGetFileContents: true,
         space,
         setup: async ({ actions }) => {
-          unref(actions)[0].handler({
+          await unref(actions)[0].handler({
             space,
             resources: [
               {
@@ -109,11 +109,6 @@ describe('setReadme', () => {
             ] as SpaceResource[]
           })
 
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledWith(
             expect.not.objectContaining({ status: 'danger' })
@@ -123,14 +118,14 @@ describe('setReadme', () => {
     })
 
     it('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const space = mock<SpaceResource>({ id: '1' })
       getWrapper({
         resolveGetFileContents: false,
         space,
         setup: async ({ actions }) => {
-          unref(actions)[0].handler({
+          await unref(actions)[0].handler({
             space,
             resources: [
               {
@@ -140,7 +135,6 @@ describe('setReadme', () => {
             ] as SpaceResource[]
           })
 
-          await nextTick()
           const { showErrorMessage } = useMessages()
           expect(showErrorMessage).toHaveBeenCalled()
         }
@@ -178,7 +172,7 @@ function getWrapper({
     Promise.resolve({ id: '1', path: '/space.readme.md' })
   )
 
-  mocks.$clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
+  mocks.$clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
     mockAxiosResolve({
       id: '1',
       name: 'space',

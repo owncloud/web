@@ -1,7 +1,7 @@
 import { Resource } from '@ownclouders/web-client/src'
 import MediaControls from '../../../src/components/MediaControls.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
 const selectors = {
   controlsPrevious: '.preview-controls-previous',
