@@ -70,7 +70,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
 
   vi.mocked(useExtensionRegistry).mockImplementation(() =>
     useExtensionRegistryMock({
-      requestExtensions<ExtensionType>(type: string, scopes: string[]) {
+      requestExtensions<ExtensionType>(type: string) {
         return extensions as ExtensionType[]
       }
     })

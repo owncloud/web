@@ -39,7 +39,7 @@ export default defineComponent({
 
     const filteredActions = computed(() => {
       return unref(extensionRegistry)
-        .requestExtensions<ActionExtension>('action', ['resource.quick-action'])
+        .requestExtensions<ActionExtension>('action', { scopes: ['resource.quick-action'] })
         .map((e) => e.action)
         .filter(({ isVisible }) => isVisible({ space: props.space, resources: [props.item] }))
     })
