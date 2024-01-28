@@ -2,7 +2,7 @@
 host = https://www.transifex.com
 
 [o:owncloud-org:p:owncloud-web:r:files]
-file_filter = locale/<lang>/LC_MESSAGES/app.po
+file_filter = locale/<lang>/app.po
 minimum_perc = 0
 source_file = template.pot
 source_lang = en
