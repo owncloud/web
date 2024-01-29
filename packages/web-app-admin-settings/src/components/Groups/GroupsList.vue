@@ -29,7 +29,7 @@
           :model-value="allGroupsSelected"
           hide-label
           @update:model-value="
-            allGroupsSelected ? $emit('unSelectAllGroups') : $emit('selectGroups', paginatedItems)
+            allGroupsSelected ? unselectAllGroups() : selectGroups(paginatedItems)
           "
         />
       </template>
@@ -41,7 +41,7 @@
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
           hide-label
-          @update:model-value="toggleGroup(rowData.item)"
+          @update:model-value="selectGroup(rowData.item)"
           @click.stop="rowClicked([rowData.item, $event])"
         />
       </template>
@@ -106,13 +106,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, computed, watch } from 'vue'
+import { defineComponent, ref, unref, computed, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import {
   displayPositionedDropdown,
   eventBus,
   SortDir,
+  useKeyboardActions,
   useRoute,
   useRouter
 } from '@ownclouders/web-pkg'
@@ -124,28 +125,18 @@ import { defaultFuseOptions } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
-import { useKeyboardActions } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation
-} from 'web-app-admin-settings/src/composables/keyboardActions'
+} from '../../composables/keyboardActions'
+import { useGroupSettingsStore } from '../../composables'
+import { storeToRefs } from 'pinia'
 import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'GroupsList',
   components: { ContextMenuQuickAction, Pagination },
-  props: {
-    groups: {
-      type: Array as PropType<Group[]>,
-      required: true
-    },
-    selectedGroups: {
-      type: Array as PropType<Group[]>,
-      required: true
-    }
-  },
-  emits: ['selectGroups', 'unSelectAllGroups', 'toggleSelectGroup'],
-  setup(props, { emit }) {
+  setup(props) {
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
@@ -159,12 +150,33 @@ export default defineComponent({
     const lastSelectedGroupIndex = ref(0)
     const lastSelectedGroupId = ref(null)
 
+    const groupSettingsStore = useGroupSettingsStore()
+    const { groups, selectedGroups } = storeToRefs(groupSettingsStore)
+
     const isGroupSelected = (group) => {
-      return props.selectedGroups.some((s) => s.id === group.id)
+      return unref(selectedGroups).some((s) => s.id === group.id)
     }
-    const selectGroup = (group) => {
-      emit('unSelectAllGroups')
-      emit('toggleSelectGroup', group)
+    const selectGroup = (selectedGroup: Group) => {
+      lastSelectedGroupIndex.value = findIndex(unref(groups), (g) => g.id === selectedGroup.id)
+      lastSelectedGroupId.value = selectedGroup.id
+      keyActions.resetSelectionCursor()
+
+      const isGroupSelected = unref(selectedGroups).find((group) => group.id === selectedGroup.id)
+      if (!isGroupSelected) {
+        return groupSettingsStore.addSelectedGroup(selectedGroup)
+      }
+
+      groupSettingsStore.setSelectedGroups(
+        unref(selectedGroups).filter((group) => group.id !== selectedGroup.id)
+      )
+    }
+
+    const unselectAllGroups = () => {
+      groupSettingsStore.setSelectedGroups([])
+    }
+
+    const selectGroups = (groups: Group[]) => {
+      groupSettingsStore.setSelectedGroups(groups)
     }
 
     const showDetails = (group) => {
@@ -195,7 +207,9 @@ export default defineComponent({
       if (isCheckboxClicked) {
         return
       }
-      toggleGroup(resource, true)
+
+      unselectAllGroups()
+      selectGroup(resource)
     }
     const showContextMenuOnBtnClick = (data, group) => {
       const { dropdown, event } = data
@@ -246,7 +260,7 @@ export default defineComponent({
 
     const items = computed(() => {
       return orderBy(
-        filter(props.groups, unref(filterTerm)),
+        filter(unref(groups), unref(filterTerm)),
         unref(sortBy),
         unref(sortDir) === SortDir.Desc
       )
@@ -262,27 +276,20 @@ export default defineComponent({
     useKeyboardTableNavigation(
       keyActions,
       paginatedItems,
-      props.selectedGroups,
+      selectedGroups,
       lastSelectedGroupIndex,
       lastSelectedGroupId
     )
     useKeyboardTableMouseActions(
       keyActions,
       paginatedItems,
-      props.selectedGroups,
+      selectedGroups,
       lastSelectedGroupIndex,
       lastSelectedGroupId
     )
 
-    const toggleGroup = (group, deselect = false) => {
-      lastSelectedGroupIndex.value = findIndex(props.groups, (u) => u.id === group.id)
-      lastSelectedGroupId.value = group.id
-      keyActions.resetSelectionCursor()
-      emit('toggleSelectGroup', group, deselect)
-    }
-
     watch(currentPage, () => {
-      emit('unSelectAllGroups')
+      unselectAllGroups()
     })
 
     watch(filterTerm, async () => {
@@ -303,7 +310,6 @@ export default defineComponent({
       isGroupSelected,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
-      toggleGroup,
       fileListHeaderY,
       contextMenuButtonRef,
       showEditPanel,
@@ -317,7 +323,12 @@ export default defineComponent({
       totalPages,
       filter,
       orderBy,
-      markInstance
+      markInstance,
+      selectedGroups,
+      unselectAllGroups,
+      selectGroups,
+      selectGroup,
+      groups
     }
   },
   computed: {

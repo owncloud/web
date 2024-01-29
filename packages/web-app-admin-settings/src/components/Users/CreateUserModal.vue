@@ -48,6 +48,7 @@ import { useGettext } from 'vue3-gettext'
 import { computed, defineComponent, ref, unref, PropType, watch } from 'vue'
 import * as EmailValidator from 'email-validator'
 import { Modal, useClientService, useEventBus, useMessages } from '@ownclouders/web-pkg'
+import { useUserSettingsStore } from '../../composables/stores/userSettings'
 
 export default defineComponent({
   name: 'CreateUserModal',
@@ -58,6 +59,7 @@ export default defineComponent({
     const eventBus = useEventBus()
     const clientService = useClientService()
     const { $gettext } = useGettext()
+    const userSettingsStore = useUserSettingsStore()
 
     const formData = ref({
       userName: {
@@ -112,7 +114,7 @@ export default defineComponent({
         const { id: createdUserId } = data
         const { data: createdUser } = await client.users.getUser(createdUserId)
         showMessage({ title: $gettext('User was created successfully') })
-        eventBus.publish('app.admin-settings.users.add', createdUser)
+        userSettingsStore.upsertUser(createdUser)
       } catch (error) {
         console.error(error)
         showErrorMessage({

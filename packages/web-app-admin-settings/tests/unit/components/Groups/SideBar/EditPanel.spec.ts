@@ -1,7 +1,14 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
-import { defaultComponentMocks, defaultPlugins, mockAxiosReject, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mockAxiosReject,
+  mockAxiosResolve,
+  mount
+} from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
+import { eventBus, useMessages } from '@ownclouders/web-pkg'
 
 describe('EditPanel', () => {
   it('renders all available inputs', () => {
@@ -53,6 +60,41 @@ describe('EditPanel', () => {
       )
       expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
       expect(getGroupStub).toHaveBeenCalled()
+    })
+  })
+
+  describe('method "onEditGroup"', () => {
+    it('should emit event on success', async () => {
+      const { wrapper, mocks } = getWrapper()
+
+      const clientService = mocks.$clientService
+      clientService.graphAuthenticated.groups.editGroup.mockResolvedValue(mockAxiosResolve())
+      clientService.graphAuthenticated.groups.getGroup.mockResolvedValue(
+        mockAxiosResolve({ id: '1', displayName: 'administrators' })
+      )
+
+      const editGroup = {
+        id: '1',
+        name: 'administrators'
+      }
+
+      const busStub = vi.spyOn(eventBus, 'publish')
+      const updatedGroup = await wrapper.vm.onEditGroup(editGroup)
+
+      expect(updatedGroup.id).toEqual('1')
+      expect(updatedGroup.displayName).toEqual('administrators')
+      expect(busStub).toHaveBeenCalled()
+    })
+
+    it('should show message on error', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
+      const { wrapper, mocks } = getWrapper()
+      const clientService = mocks.$clientService
+      clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
+      await wrapper.vm.onEditGroup({})
+
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 

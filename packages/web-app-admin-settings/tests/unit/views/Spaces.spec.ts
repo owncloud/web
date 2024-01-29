@@ -1,6 +1,6 @@
 import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
-import { Graph } from '@ownclouders/web-client'
-import { mockDeep } from 'vitest-mock-extended'
+import { Graph, SpaceResource } from '@ownclouders/web-client'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
@@ -28,7 +28,8 @@ describe('Spaces view', () => {
       expect(wrapper.find(selectors.loadingSpinnerStub).exists()).toBeTruthy()
     })
     it('should render spaces list after loading has been finished', async () => {
-      const { wrapper } = getWrapper()
+      const spaces = [{ id: '1', name: 'Some Space' }]
+      const { wrapper } = getWrapper({ spaces })
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
       expect(wrapper.find(selectors.spacesListStub).exists()).toBeTruthy()
@@ -41,46 +42,6 @@ describe('Spaces view', () => {
     await wrapper.vm.loadResourcesTask.last
     expect(wrapper.find(selectors.noContentMessageStub).exists()).toBeTruthy()
   })
-  describe('toggle selection', () => {
-    describe('selectSpaces method', () => {
-      it('selects all spaces', async () => {
-        const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
-        const { wrapper } = getWrapper({ spaces })
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.selectSpaces(spaces)
-        expect(wrapper.vm.selectedSpaces.length).toBe(spaces.length)
-      })
-    })
-    describe('toggleSelectSpace method', () => {
-      it('selects a space', async () => {
-        const spaces = [{ name: 'Some Space' }]
-        const { wrapper } = getWrapper()
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.toggleSelectSpace(spaces[0])
-        expect(wrapper.vm.selectedSpaces).toEqual(
-          expect.arrayContaining([expect.objectContaining({ name: spaces[0].name })])
-        )
-      })
-      it('de-selects a selected space', async () => {
-        const spaces = [{ name: 'Some Space' }]
-        const { wrapper } = getWrapper()
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.selectedSpaces = spaces
-        wrapper.vm.toggleSelectSpace(spaces[0])
-        expect(wrapper.vm.selectedSpaces.length).toBe(0)
-      })
-    })
-    describe('unselectAllSpaces method', () => {
-      it('de-selects all selected spaces', async () => {
-        const spaces = [{ name: 'Some Space' }]
-        const { wrapper } = getWrapper({ spaces })
-        await wrapper.vm.loadResourcesTask.last
-        wrapper.vm.selectedSpaces = spaces
-        wrapper.vm.unselectAllSpaces()
-        expect(wrapper.vm.selectedSpaces.length).toBe(0)
-      })
-    })
-  })
   describe('batch actions', () => {
     it('do not display when no space selected', async () => {
       const { wrapper } = getWrapper()
@@ -88,25 +49,34 @@ describe('Spaces view', () => {
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
     })
     it('display when one space selected', async () => {
-      const spaces = [{ name: 'Some Space' }]
-      const { wrapper } = getWrapper({ spaces })
+      const spaces = [{ id: '1', name: 'Some Space' }]
+      const { wrapper } = getWrapper({ spaces, selectedSpaces: spaces })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.toggleSelectSpace(spaces[0])
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
     it('display when more than one space selected', async () => {
-      const spaces = [{ name: 'Some Space' }, { name: 'Some other Space' }]
-      const { wrapper } = getWrapper({ spaces })
+      const spaces = [
+        { id: '1', name: 'Some Space' },
+        { id: '1', name: 'Some other Space' }
+      ]
+      const { wrapper } = getWrapper({ spaces, selectedSpaces: spaces })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.selectSpaces(spaces)
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
   })
 })
 
-function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
+function getWrapper({
+  spaces = [
+    {
+      id: '1',
+      name: 'space'
+    }
+  ],
+  selectedSpaces = []
+} = {}) {
   const $clientService = mockDeep<ClientService>()
   $clientService.graphAuthenticated.drives.listAllDrives.mockResolvedValue(
     mockAxiosResolve({ value: spaces })
@@ -119,7 +89,16 @@ function getWrapper({ spaces = [{ name: 'Some Space' }] } = {}) {
   return {
     wrapper: mount(Spaces, {
       global: {
-        plugins: [...defaultPlugins()],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              spaceSettingsStore: {
+                spaces: spaces.map((s) => mock<SpaceResource>(s)),
+                selectedSpaces
+              }
+            }
+          })
+        ],
         mocks,
         provide: mocks,
         stubs: {

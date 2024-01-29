@@ -2,8 +2,9 @@ import { useUserActionsDelete } from '../../../../../src/composables/actions/use
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { eventBus, useCapabilityStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
+import { useUserSettingsStore } from '../../../../../src/composables/stores/userSettings'
 
 describe('useUserActionsDelete', () => {
   describe('method "isVisible"', () => {
@@ -27,26 +28,26 @@ describe('useUserActionsDelete', () => {
   })
   describe('method "deleteUsers"', () => {
     it('should successfully delete all given users and reload the users list', () => {
-      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteUsers }, { clientService }) => {
           const user = mock<User>({ id: '1' })
           await deleteUsers([user])
           expect(clientService.graphAuthenticated.users.deleteUser).toHaveBeenCalledWith(user.id)
-          expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
+          const { removeUsers } = useUserSettingsStore()
+          expect(removeUsers).toHaveBeenCalled()
         }
       })
     })
     it('should handle errors', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
-      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteUsers }, { clientService }) => {
           clientService.graphAuthenticated.users.deleteUser.mockRejectedValue({})
           const user = mock<User>({ id: '1' })
           await deleteUsers([user])
           expect(clientService.graphAuthenticated.users.deleteUser).toHaveBeenCalledWith(user.id)
-          expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
+          const { removeUsers } = useUserSettingsStore()
+          expect(removeUsers).toHaveBeenCalled()
         }
       })
     })

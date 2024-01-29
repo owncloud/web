@@ -17,13 +17,8 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { User } from '@ownclouders/web-client/src/generated'
-import {
-  useClientService,
-  useEventBus,
-  useUserStore,
-  Modal,
-  useMessages
-} from '@ownclouders/web-pkg'
+import { useClientService, useUserStore, Modal, useMessages } from '@ownclouders/web-pkg'
+import { useUserSettingsStore } from '../../composables/stores/userSettings'
 
 type LoginOption = {
   label: string
@@ -43,9 +38,9 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
     const userStore = useUserStore()
+    const userSettingsStore = useUserSettingsStore()
 
     const selectedOption = ref<LoginOption>()
     const options = ref([
@@ -141,10 +136,9 @@ export default defineComponent({
           })
         )
 
-        eventBus.publish(
-          'app.admin-settings.users.update',
-          usersResponse.map(({ data }) => data)
-        )
+        usersResponse.forEach(({ data }) => {
+          userSettingsStore.upsertUser(data)
+        })
       } catch (e) {
         console.error(e)
       }

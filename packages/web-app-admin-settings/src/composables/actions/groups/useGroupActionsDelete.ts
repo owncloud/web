@@ -1,15 +1,27 @@
-import { computed } from 'vue'
-import { eventBus, useMessages, useModals } from '@ownclouders/web-pkg'
+import { computed, unref } from 'vue'
+import { queryItemAsString, useMessages, useModals, useRouteQuery } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
 import { GroupAction, GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { Group } from '@ownclouders/web-client/src/generated'
+import { useGroupSettingsStore } from '../../stores'
 
 export const useGroupActionsDelete = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const { dispatchModal } = useModals()
+  const groupSettingsStore = useGroupSettingsStore()
+
+  const currentPageQuery = useRouteQuery('page', '1')
+  const currentPage = computed(() => {
+    return parseInt(queryItemAsString(unref(currentPageQuery)))
+  })
+
+  const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
+  const itemsPerPage = computed(() => {
+    return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+  })
 
   const deleteGroups = async (groups: Group[]) => {
     const graphClient = clientService.graphAuthenticated
@@ -51,7 +63,14 @@ export const useGroupActionsDelete = () => {
       })
     }
 
-    eventBus.publish('app.admin-settings.list.load')
+    groupSettingsStore.removeGroups(groups)
+    groupSettingsStore.setSelectedGroups([])
+
+    const pageCount = Math.ceil(groupSettingsStore.groups.length / unref(itemsPerPage))
+    if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+      // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+      currentPageQuery.value = pageCount.toString()
+    }
   }
 
   const handler = ({ resources }: GroupActionOptions) => {

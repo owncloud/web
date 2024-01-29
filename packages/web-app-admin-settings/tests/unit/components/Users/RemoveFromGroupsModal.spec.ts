@@ -8,6 +8,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 
 describe('RemoveFromGroupsModal', () => {
   it('renders the input', () => {
@@ -29,12 +30,12 @@ describe('RemoveFromGroupsModal', () => {
       )
 
       wrapper.vm.selectedOptions = groups
-      const eventSpy = vi.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
-      expect(eventSpy).toHaveBeenCalled()
+      const { upsertUser } = useUserSettingsStore()
+      expect(upsertUser).toHaveBeenCalledTimes(users.length)
     })
 
     it('should show message on error', async () => {
@@ -55,7 +56,8 @@ describe('RemoveFromGroupsModal', () => {
       await wrapper.vm.onConfirm()
       const { showErrorMessage } = useMessages()
       expect(showErrorMessage).toHaveBeenCalled()
-      expect(eventSpy).not.toHaveBeenCalled()
+      const { upsertUser } = useUserSettingsStore()
+      expect(upsertUser).not.toHaveBeenCalled()
     })
   })
 })

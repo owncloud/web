@@ -39,17 +39,11 @@
           </template>
         </no-content-message>
         <div v-else>
-          <GroupsList
-            :groups="groups"
-            :selected-groups="selectedGroups"
-            @toggle-select-group="toggleSelectGroup"
-            @select-groups="selectGroups"
-            @un-select-all-groups="unselectAllGroups"
-          >
+          <groups-list>
             <template #contextMenu>
               <context-actions :action-options="{ resources: selectedGroups }" />
             </template>
-          </GroupsList>
+          </groups-list>
         </div>
       </template>
     </app-template>
@@ -63,22 +57,21 @@ import DetailsPanel from '../components/Groups/SideBar/DetailsPanel.vue'
 import EditPanel from '../components/Groups/SideBar/EditPanel.vue'
 import GroupsList from '../components/Groups/GroupsList.vue'
 import MembersPanel from '../components/Groups/SideBar/MembersPanel.vue'
-import { useGroupActionsDelete, useGroupActionsCreateGroup } from '../composables'
+import { useGroupSettingsStore } from '../composables'
+import { useGroupActionsCreateGroup, useGroupActionsDelete } from '../composables/actions/groups'
 import {
   NoContentMessage,
   SideBarPanel,
   SideBarPanelContext,
-  eventBus,
-  queryItemAsString,
   useClientService,
-  useMessages,
-  useRouteQuery,
   useSideBar
 } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
+
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
@@ -93,35 +86,18 @@ export default defineComponent({
     }
   },
   setup() {
-    const { showErrorMessage } = useMessages()
-    const groups = ref([])
     const template = ref()
-    const selectedGroups = ref([])
+    const groupSettingsStore = useGroupSettingsStore()
+    const { selectedGroups, groups } = storeToRefs(groupSettingsStore)
     const clientService = useClientService()
     const { $gettext } = useGettext()
-
-    let loadResourcesEventToken: string
-    let addGroupEventToken: string
 
     const { actions: createGroupActions } = useGroupActionsCreateGroup()
     const createGroupAction = computed(() => unref(createGroupActions)[0])
 
-    const currentPageQuery = useRouteQuery('page', '1')
-    const currentPage = computed(() => {
-      return parseInt(queryItemAsString(unref(currentPageQuery)))
-    })
-
-    const itemsPerPageQuery = useRouteQuery('admin-settings-items-per-page', '1')
-    const itemsPerPage = computed(() => {
-      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
-    })
-
     const loadResourcesTask = useTask(function* (signal) {
       const response = yield clientService.graphAuthenticated.groups.listGroups('displayName')
-      groups.value = response.data.value || []
-      groups.value.forEach((group) => {
-        group.members = group.members || []
-      })
+      groupSettingsStore.setGroups(response.data.value || [])
     })
 
     const { actions: deleteActions } = useGroupActionsDelete()
@@ -131,39 +107,13 @@ export default defineComponent({
       )
     })
 
-    const onEditGroup = async (editGroup: Group) => {
-      try {
-        const client = clientService.graphAuthenticated
-        await client.groups.editGroup(editGroup.id, editGroup)
-        const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
-        const groupIndex = unref(groups).findIndex((group) => group.id === editGroup.id)
-        groups.value[groupIndex] = updatedGroup
-        const selectedGroupIndex = unref(selectedGroups).findIndex(
-          (group) => group.id === updatedGroup.id
-        )
-        if (selectedGroupIndex >= 0) {
-          // FIXME: why do we need to update selectedGroups?
-          selectedGroups.value[selectedGroupIndex] = updatedGroup
-        }
-
-        eventBus.publish('sidebar.entity.saved')
-
-        return updatedGroup
-      } catch (error) {
-        console.error(error)
-        showErrorMessage({
-          title: $gettext('Failed to edit group'),
-          errors: [error]
-        })
-      }
-    }
-
     const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, Group>>(() => {
       return {
         parent: null,
         items: unref(selectedGroups)
       }
     })
+
     const sideBarAvailablePanels = [
       {
         name: 'DetailsPanel',
@@ -181,8 +131,7 @@ export default defineComponent({
         component: EditPanel,
         componentAttrs: ({ items }) => {
           return {
-            group: items.length === 1 ? items[0] : null,
-            onConfirm: onEditGroup
+            group: items.length === 1 ? items[0] : null
           }
         },
         isVisible: ({ items }) => {
@@ -200,25 +149,10 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
-      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', async () => {
-        await loadResourcesTask.perform()
-        selectedGroups.value = []
-
-        const pageCount = Math.ceil(unref(groups).length / unref(itemsPerPage))
-        if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-          // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-          currentPageQuery.value = pageCount.toString()
-        }
-      })
-
-      addGroupEventToken = eventBus.subscribe('app.admin-settings.groups.add', (group: Group) => {
-        groups.value.push(group)
-      })
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-      eventBus.unsubscribe('app.admin-settings.groups.add', addGroupEventToken)
+      groupSettingsStore.reset()
     })
 
     return {
@@ -232,7 +166,7 @@ export default defineComponent({
       sideBarAvailablePanels,
       sideBarPanelContext,
       createGroupAction,
-      onEditGroup
+      groupSettingsStore
     }
   },
   computed: {
@@ -241,29 +175,12 @@ export default defineComponent({
         { text: this.$gettext('Administration Settings'), to: { path: '/admin-settings' } },
         {
           text: this.$gettext('Groups'),
-          onClick: () => eventBus.publish('app.admin-settings.list.load')
+          onClick: () => {
+            this.groupSettingsStore.setSelectedGroups([])
+            this.loadResourcesTask.perform()
+          }
         }
       ]
-    }
-  },
-
-  methods: {
-    selectGroups(groups) {
-      this.selectedGroups.splice(0, this.selectedGroups.length, ...groups)
-    },
-    toggleSelectGroup(toggledGroup, deselect = false) {
-      if (deselect) {
-        this.selectedGroups.splice(0, this.selectedGroups.length)
-      }
-      const isGroupSelected = this.selectedGroups.find((group) => group.id === toggledGroup.id)
-      if (!isGroupSelected) {
-        return this.selectedGroups.push(toggledGroup)
-      }
-      const index = this.selectedGroups.findIndex((group) => group.id === toggledGroup.id)
-      this.selectedGroups.splice(index, 1)
-    },
-    unselectAllGroups() {
-      this.selectedGroups.splice(0, this.selectedGroups.length)
     }
   }
 })

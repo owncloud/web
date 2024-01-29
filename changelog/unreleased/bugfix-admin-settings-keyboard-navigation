@@ -1,0 +1,7 @@
+Bugfix: Admin settings keyboard navigation
+
+We've fixed a bug where keyboard navigation stopped working after deleting a resource in the admin settings app.
+We also fixed a bug where initial keyboard navigation didn't work, when no resource was selected.
+
+https://github.com/owncloud/web/pull/10417
+https://github.com/owncloud/web/issues/10186

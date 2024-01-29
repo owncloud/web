@@ -2,8 +2,8 @@ import { useGroupActionsDelete } from '../../../../../src/composables/actions/gr
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Group } from '@ownclouders/web-client/src/generated'
-import { eventBus } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import { useGroupSettingsStore } from '../../../../../src/composables'
 
 describe('useGroupActionsDelete', () => {
   describe('method "isVisible"', () => {
@@ -32,26 +32,26 @@ describe('useGroupActionsDelete', () => {
   })
   describe('method "deleteGroups"', () => {
     it('should successfully delete all given gropups and reload the groups list', () => {
-      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteGroups }, { clientService }) => {
           const group = mock<Group>({ id: '1' })
           await deleteGroups([group])
           expect(clientService.graphAuthenticated.groups.deleteGroup).toHaveBeenCalledWith(group.id)
-          expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
+          const { removeGroups } = useGroupSettingsStore()
+          expect(removeGroups).toHaveBeenCalled()
         }
       })
     })
     it('should handle errors', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
-      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteGroups }, { clientService }) => {
           clientService.graphAuthenticated.groups.deleteGroup.mockRejectedValue({})
           const group = mock<Group>({ id: '1' })
           await deleteGroups([group])
           expect(clientService.graphAuthenticated.groups.deleteGroup).toHaveBeenCalledWith(group.id)
-          expect(eventSpy).toHaveBeenCalledWith('app.admin-settings.list.load')
+          const { removeGroups } = useGroupSettingsStore()
+          expect(removeGroups).toHaveBeenCalled()
         }
       })
     })

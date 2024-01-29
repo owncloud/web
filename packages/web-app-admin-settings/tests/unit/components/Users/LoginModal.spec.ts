@@ -7,8 +7,9 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { User } from '@ownclouders/web-client/src/generated'
-import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { Modal, useMessages } from '@ownclouders/web-pkg'
 import { OcSelect } from 'design-system/src/components'
+import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 
 describe('LoginModal', () => {
   it('renders the input including two options', () => {
@@ -32,12 +33,11 @@ describe('LoginModal', () => {
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
-      const eventSpy = vi.spyOn(eventBus, 'publish')
-
       await wrapper.vm.onConfirm()
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
-      expect(eventSpy).toHaveBeenCalled()
+      const { upsertUser } = useUserSettingsStore()
+      expect(upsertUser).toHaveBeenCalledTimes(users.length)
       expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(
         users.length
       )

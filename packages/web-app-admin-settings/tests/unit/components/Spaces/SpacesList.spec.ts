@@ -4,6 +4,8 @@ import { SortDir, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
+import { useSpaceSettingsStore } from '../../../../src/composables'
+import { mock } from 'vitest-mock-extended'
 import { OcTable } from 'design-system/src/components'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -60,7 +62,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 
 describe('SpacesList', () => {
   it('should render all spaces in a table', () => {
-    const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
+    const { wrapper } = getWrapper({ spaces: spaceMocks })
     expect(wrapper.html()).toMatchSnapshot()
   })
   it.each(['name', 'members', 'totalQuota', 'usedQuota', 'remainingQuota', 'status'])(
@@ -93,11 +95,6 @@ describe('SpacesList', () => {
     expect(wrapper.vm.sortBy).toEqual(sortBy)
     expect(wrapper.vm.sortDir).toEqual(sortDir)
   })
-  it('emits events on file click', () => {
-    const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
-    wrapper.vm.fileClicked([spaceMocks[0]])
-    expect(wrapper.emitted().toggleSelectSpace).toBeTruthy()
-  })
   it('shows only filtered spaces if filter applied', async () => {
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     wrapper.vm.filterTerm = 'Another'
@@ -123,6 +120,45 @@ describe('SpacesList', () => {
     await wrapper.find('.spaces-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
   })
+  describe('toggle selection', () => {
+    describe('selectSpaces method', () => {
+      it('selects all spaces', async () => {
+        const spaces = [
+          mock<SpaceResource>({ id: '1', name: 'Some Space' }),
+          mock<SpaceResource>({ id: '2', name: 'Some other Space' })
+        ]
+        const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
+        wrapper.vm.selectSpaces(spaces)
+        const { setSelectedSpaces } = useSpaceSettingsStore()
+        expect(setSelectedSpaces).toHaveBeenCalledWith(spaces)
+      })
+    })
+    describe('selectSpace method', () => {
+      it('selects a space', async () => {
+        const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
+        const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
+        wrapper.vm.selectSpace(spaces[0])
+        const { addSelectedSpace } = useSpaceSettingsStore()
+        expect(addSelectedSpace).toHaveBeenCalledWith(spaces[0])
+      })
+      it('de-selects a selected space', async () => {
+        const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
+        const { wrapper } = getWrapper({ mountType: shallowMount, spaces, selectedSpaces: spaces })
+        wrapper.vm.selectSpace(spaces[0])
+        const { setSelectedSpaces } = useSpaceSettingsStore()
+        expect(setSelectedSpaces).toHaveBeenCalledWith([])
+      })
+    })
+    describe('unselectAllSpaces method', () => {
+      it('de-selects all selected spaces', async () => {
+        const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
+        const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
+        wrapper.vm.unselectAllSpaces()
+        const { setSelectedSpaces } = useSpaceSettingsStore()
+        expect(setSelectedSpaces).toHaveBeenCalledWith([])
+      })
+    })
+  })
 })
 
 function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}) {
@@ -133,12 +169,16 @@ function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}
   return {
     wrapper: mountType(SpacesList, {
       props: {
-        spaces,
-        selectedSpaces,
         headerPosition: 0
       },
       global: {
-        plugins: [...defaultPlugins()],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              spaceSettingsStore: { spaces, selectedSpaces }
+            }
+          })
+        ],
         mocks,
         provide: mocks,
         stubs: {

@@ -32,18 +32,11 @@
           </template>
         </no-content-message>
         <div v-else>
-          <SpacesList
-            :spaces="spaces"
-            :class="{ 'spaces-table-squashed': isSideBarOpen }"
-            :selected-spaces="selectedSpaces"
-            @toggle-select-space="toggleSelectSpace"
-            @select-spaces="selectSpaces"
-            @un-select-all-spaces="unselectAllSpaces"
-          >
+          <spaces-list :class="{ 'spaces-table-squashed': isSideBarOpen }">
             <template #contextMenu>
               <context-actions :items="selectedSpaces" />
             </template>
-          </SpacesList>
+          </spaces-list>
         </div>
       </template>
     </app-template>
@@ -81,6 +74,9 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } fro
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
+import { useSpaceSettingsStore } from '../composables'
+import { storeToRefs } from 'pinia'
+
 export default defineComponent({
   name: 'SpacesView',
   components: {
@@ -96,7 +92,6 @@ export default defineComponent({
     }
   },
   setup() {
-    const spaces = ref([])
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
@@ -105,14 +100,15 @@ export default defineComponent({
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken: string
     const template = ref(null)
-    const selectedSpaces = ref([])
+    const spaceSettingsStore = useSpaceSettingsStore()
+    const { spaces, selectedSpaces } = storeToRefs(spaceSettingsStore)
 
     const currentPageQuery = useRouteQuery('page', '1')
     const currentPage = computed(() => {
       return parseInt(queryItemAsString(unref(currentPageQuery)))
     })
 
-    const itemsPerPageQuery = useRouteQuery('admin-settings-items-per-page', '1')
+    const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
     const itemsPerPage = computed(() => {
       return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
     })
@@ -127,37 +123,19 @@ export default defineComponent({
       const drives = drivesResponse.map((space) =>
         buildSpace({ ...space, serverUrl: configStore.serverUrl })
       )
-      spaces.value = drives
+      spaceSettingsStore.setSpaces(drives)
     })
 
     const breadcrumbs = computed(() => [
       { text: $gettext('Administration Settings'), to: { path: '/admin-settings' } },
       {
         text: $gettext('Spaces'),
-        onClick: () => eventBus.publish('app.admin-settings.list.load')
+        onClick: () => {
+          spaceSettingsStore.setSelectedSpaces([])
+          loadResourcesTask.perform()
+        }
       }
     ])
-
-    const selectSpaces = (paginatedSpaces) => {
-      selectedSpaces.value.splice(0, selectedSpaces.value.length, ...paginatedSpaces)
-    }
-
-    const toggleSelectSpace = (toggledSpace, deselect = false) => {
-      if (deselect) {
-        selectedSpaces.value.splice(0, selectedSpaces.value.length)
-      }
-      const isSpaceSelected = unref(selectedSpaces).find((s) => s.id === toggledSpace.id)
-      if (!isSpaceSelected) {
-        return selectedSpaces.value.push(toggledSpace)
-      }
-
-      const index = selectedSpaces.value.findIndex((s) => s.id === toggledSpace.id)
-      selectedSpaces.value.splice(index, 1)
-    }
-
-    const unselectAllSpaces = () => {
-      selectedSpaces.value.splice(0, selectedSpaces.value.length)
-    }
 
     const { actions: deleteActions } = useSpaceActionsDelete()
     const { actions: disableActions } = useSpaceActionsDisable()
@@ -231,6 +209,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await loadResourcesTask.perform()
+
       loadResourcesEventToken.value = eventBus.subscribe(
         'app.admin-settings.list.load',
         async () => {
@@ -257,6 +236,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
+      spaceSettingsStore.reset()
       eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
       eventBus.unsubscribe(
         'app.admin-settings.spaces.space.quota.updated',
@@ -274,10 +254,7 @@ export default defineComponent({
       selectedSpaces,
       sideBarAvailablePanels,
       sideBarPanelContext,
-      template,
-      selectSpaces,
-      toggleSelectSpace,
-      unselectAllSpaces
+      template
     }
   }
 })
