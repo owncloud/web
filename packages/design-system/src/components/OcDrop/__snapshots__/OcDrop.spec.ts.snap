@@ -12,7 +12,7 @@ exports[`OcDrop > tippy > renders tippy 1`] = `
   <div
     data-tippy-root=""
     id="tippy-10"
-    style="z-index: 9999; visibility: visible; position: absolute; left: 0px; top: 0px; margin: 0px; bottom: 0px; transform: translate(0px, 0px); max-height: -20px; overflow-y: auto; overflow-x: hidden;"
+    style="z-index: 9999; visibility: visible; position: absolute; left: 0px; top: auto; margin: 0px; right: auto; bottom: 0px; transform: translate(0px, 0px); max-height: -20px; overflow-y: auto; overflow-x: hidden;"
   >
     <div
       class="tippy-box"
@@ -60,7 +60,7 @@ exports[`OcDrop > tippy > renders tippy 2`] = `
   <div
     data-tippy-root=""
     id="tippy-10"
-    style="z-index: 9999; visibility: hidden; position: absolute; left: 0px; top: 0px; margin: 0px; bottom: 0px; transform: translate(0px, 0px); max-height: -20px; overflow-y: auto; overflow-x: hidden; pointer-events: none;"
+    style="z-index: 9999; visibility: hidden; position: absolute; left: 0px; top: auto; margin: 0px; right: auto; bottom: 0px; transform: translate(0px, 0px); max-height: -20px; overflow-y: auto; overflow-x: hidden; pointer-events: none;"
   >
     <div
       class="tippy-box"
@@ -109,7 +109,7 @@ exports[`OcDrop > tippy > renders tippy 3`] = `
   <div
     data-tippy-root=""
     id="tippy-10"
-    style="z-index: 9999; visibility: visible; position: absolute; left: 0px; top: 0px; margin: 0px; bottom: 0px; transform: translate(0px, 0px); max-height: -20px; overflow-y: auto; overflow-x: hidden;"
+    style="z-index: 9999; visibility: visible; position: absolute; left: 0px; top: auto; margin: 0px; right: auto; bottom: 0px; transform: translate(0px, 0px); max-height: -20px; overflow-y: auto; overflow-x: hidden;"
   >
     <div
       class="tippy-box"

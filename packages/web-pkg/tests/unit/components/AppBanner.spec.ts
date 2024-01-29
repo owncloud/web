@@ -6,6 +6,7 @@ import { ref } from 'vue'
 
 vi.mock('@vueuse/core')
 
+// @vitest-environment jsdom
 describe('AppBanner', () => {
   it('generates app url with correct app scheme', () => {
     const baseElement = document.createElement('base')

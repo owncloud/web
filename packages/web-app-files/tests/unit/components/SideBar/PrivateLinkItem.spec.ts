@@ -16,6 +16,7 @@ const folder = mock<Resource>({
   privateLink: 'https://example.com/fake-private-link'
 })
 
+// @vitest-environment jsdom
 describe('PrivateLinkItem', () => {
   beforeEach(() => {
     vi.useFakeTimers()

@@ -13,6 +13,7 @@ import { createTestingPinia } from 'web-test-helpers/src'
 
 vi.mock('../../../src/container/application')
 
+// @vitest-environment jsdom
 describe('initialize applications', () => {
   beforeEach(() => {
     createTestingPinia()
