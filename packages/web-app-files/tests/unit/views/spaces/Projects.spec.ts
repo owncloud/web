@@ -83,7 +83,7 @@ describe('Projects view', () => {
       expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
   })
-  it.skip('should display the "Create Space"-button when permission given', () => {
+  it('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
       abilities: [{ action: 'create-all', subject: 'Drive' }],
       stubAppBar: false
