@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { defineComponent } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 import { createRouter as _createRouter } from '../../web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
@@ -53,4 +53,10 @@ export const writable = <T>(value: Readonly<T>): T => {
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const nextTicks = async (amount: number) => {
+  for (let i = 0; i < amount - 1; i++) {
+    await nextTick()
+  }
 }
