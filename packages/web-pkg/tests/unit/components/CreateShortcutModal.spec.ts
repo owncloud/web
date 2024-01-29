@@ -7,7 +7,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { FileResource } from '@ownclouders/web-client/src/helpers'
 import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
 import { useMessages, useResourcesStore } from '../../../src/composables/piniaStores'
@@ -24,7 +24,7 @@ describe('CreateShortcutModal', () => {
       expect(showMessage).toHaveBeenCalled()
     })
     it('should show error message on fail', async () => {
-      console.error = jest.fn()
+      console.error = vi.fn()
       const { wrapper } = getWrapper({ rejectPutFileContents: true })
       await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
 
@@ -41,7 +41,7 @@ describe('CreateShortcutModal', () => {
       expect(wrapper.vm.searchResult.values.length).toBe(3)
     })
     it('should reset "searchResult" on error', async () => {
-      console.error = jest.fn()
+      console.error = vi.fn()
       const { wrapper } = getWrapper({ rejectSearch: true })
       await wrapper.vm.searchTask.perform('new folder')
       expect(wrapper.vm.searchResult).toBe(null)

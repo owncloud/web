@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
@@ -6,10 +6,10 @@ import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import App from '../../src/App.vue'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useRequest: jest.fn(),
-  useRouteQuery: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useRequest: vi.fn(),
+  useRouteQuery: vi.fn()
 }))
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
@@ -30,11 +30,11 @@ const providerSuccessResponseGet = {
 
 describe('The app provider extension', () => {
   beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
   })
 
   it('should fail for unauthenticated users', async () => {
-    const makeRequest = jest.fn().mockResolvedValue({
+    const makeRequest = vi.fn().mockResolvedValue({
       ok: true,
       status: 401,
       message: 'Login Required'
@@ -45,7 +45,7 @@ describe('The app provider extension', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('should be able to load an iFrame via get', async () => {
-    const makeRequest = jest.fn().mockResolvedValue({
+    const makeRequest = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
       data: providerSuccessResponseGet
@@ -58,7 +58,7 @@ describe('The app provider extension', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('should be able to load an iFrame via post', async () => {
-    const makeRequest = jest.fn().mockResolvedValue({
+    const makeRequest = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
       data: providerSuccessResponsePost
@@ -71,12 +71,12 @@ describe('The app provider extension', () => {
   })
 })
 
-function createShallowMountWrapper(makeRequest = jest.fn().mockResolvedValue({ status: 200 })) {
-  jest.mocked(useRequest).mockImplementation(() => ({
+function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ status: 200 })) {
+  vi.mocked(useRequest).mockImplementation(() => ({
     makeRequest
   }))
 
-  jest.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
+  vi.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
 
   const capabilities = {
     files: {

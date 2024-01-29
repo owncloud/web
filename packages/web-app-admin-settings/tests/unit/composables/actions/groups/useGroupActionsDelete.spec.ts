@@ -1,5 +1,5 @@
 import { useGroupActionsDelete } from '../../../../../src/composables/actions/groups/useGroupActionsDelete'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { eventBus } from '@ownclouders/web-pkg'
@@ -32,7 +32,7 @@ describe('useGroupActionsDelete', () => {
   })
   describe('method "deleteGroups"', () => {
     it('should successfully delete all given gropups and reload the groups list', () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteGroups }, { clientService }) => {
           const group = mock<Group>({ id: '1' })
@@ -43,8 +43,8 @@ describe('useGroupActionsDelete', () => {
       })
     })
     it('should handle errors', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       getWrapper({
         setup: async ({ deleteGroups }, { clientService }) => {
           clientService.graphAuthenticated.groups.deleteGroup.mockRejectedValue({})

@@ -1,5 +1,5 @@
 import { useUserActionsEditLogin } from '../../../../../src/composables/actions/users/useUserActionsEditLogin'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
 import { getComposableWrapper, writable } from 'web-test-helpers'

@@ -6,7 +6,7 @@ import {
   mount,
   RouteLocation
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { nextTick } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 

@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -21,7 +21,7 @@ const elSelectors = {
   adminSettingsWrapper: '#admin-settings-wrapper'
 }
 
-jest.mock('@ownclouders/web-pkg')
+vi.mock('@ownclouders/web-pkg')
 
 describe('AppTemplate', () => {
   describe('loading is true', () => {
@@ -62,13 +62,13 @@ describe('AppTemplate', () => {
       expect(wrapper.find(stubSelectors.sideBar).exists()).toBeFalsy()
     })
     it('can be closed', () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       const { wrapper } = getWrapper()
       ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('close')
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.close)
     })
     it('panel can be selected', () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       const panelName = 'SomePanel'
       const { wrapper } = getWrapper()
       ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('selectPanel', panelName)

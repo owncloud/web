@@ -1,5 +1,5 @@
 import { useUserActionsRemoveFromGroups } from '../../../../../src/composables/actions/users/useUserActionsRemoveFromGroups'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref, unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
 import { getComposableWrapper } from 'web-test-helpers'

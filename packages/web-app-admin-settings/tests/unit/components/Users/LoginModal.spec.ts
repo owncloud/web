@@ -5,7 +5,7 @@ import {
   mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { User } from '@ownclouders/web-client/src/generated'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
@@ -29,7 +29,7 @@ describe('LoginModal', () => {
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
       const { showMessage } = useMessages()
@@ -53,7 +53,7 @@ describe('LoginModal', () => {
       expect(mocks.$clientService.graphAuthenticated.users.editUser).toHaveBeenCalledTimes(1)
     })
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const users = [mock<User>(), mock<User>()]
       const { wrapper, mocks } = getWrapper(users)

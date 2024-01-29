@@ -47,6 +47,7 @@
     "uuid": "9.0.1",
     "vue-concurrency": "4.0.1",
     "vue-router": "4.2.5",
-    "vue3-gettext": "2.4.0"
+    "vue3-gettext": "2.4.0",
+    "vitest": "1.2.1"
   }
 }

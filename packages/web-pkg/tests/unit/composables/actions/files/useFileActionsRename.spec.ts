@@ -4,10 +4,10 @@ import {
   useModals,
   useResourcesStore
 } from '../../../../../src/composables/piniaStores'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
-import { nextTick, unref } from 'vue'
+import { unref } from 'vue'
 
 const currentFolder = {
   id: '1',
@@ -125,8 +125,7 @@ describe('rename', () => {
       getWrapper({
         setup: async ({ renameResource }, { space }) => {
           const resource = { id: '2', path: '/folder', webDavPath: '/files/admin/folder' }
-          renameResource(space, resource, 'new name')
-          await nextTick()
+          await renameResource(space, resource, 'new name')
 
           const { upsertResource } = useResourcesStore()
           expect(upsertResource).toHaveBeenCalledTimes(1)
@@ -137,8 +136,7 @@ describe('rename', () => {
     it('should call the rename action on the current folder', () => {
       getWrapper({
         setup: async ({ renameResource }, { space }) => {
-          renameResource(space, currentFolder, 'new name')
-          await nextTick()
+          await renameResource(space, currentFolder, 'new name')
 
           const { upsertResource } = useResourcesStore()
           expect(upsertResource).toHaveBeenCalledTimes(1)
@@ -147,15 +145,13 @@ describe('rename', () => {
     })
 
     it('should handle errors properly', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       getWrapper({
         setup: async ({ renameResource }, { space, clientService }) => {
           clientService.webdav.moveFiles.mockRejectedValueOnce(new Error())
 
-          renameResource(space, currentFolder, 'new name')
-          await nextTick()
-          await nextTick()
+          await renameResource(space, currentFolder, 'new name')
           const { showErrorMessage } = useMessages()
           expect(showErrorMessage).toHaveBeenCalledTimes(1)
         }

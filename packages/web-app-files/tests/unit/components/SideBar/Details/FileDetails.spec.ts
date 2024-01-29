@@ -1,7 +1,7 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
 import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createLocationSpaces, createLocationPublic } from '@ownclouders/web-pkg/'
 import { mount } from '@vue/test-utils'
@@ -34,7 +34,7 @@ const getResourceMock = ({
     thumbnail,
     shareTypes,
     locked,
-    canEditTags: jest.fn(() => canEditTags),
+    canEditTags: vi.fn(() => canEditTags),
     ...(sharedBy && { shareType: 0 })
   })
 
@@ -142,6 +142,8 @@ describe('Details SideBar Panel', () => {
     it('show if given for files on a private page', async () => {
       const resource = getResourceMock()
       const { wrapper } = createWrapper({ resource, versions: ['1'] })
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.versionsInfo).exists()).toBeTruthy()
     })

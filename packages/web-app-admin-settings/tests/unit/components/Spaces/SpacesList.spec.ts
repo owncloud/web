@@ -50,10 +50,10 @@ const selectors = {
   ocTableStub: 'oc-table-stub'
 }
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  displayPositionedDropdown: jest.fn(),
-  queryItemAsString: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  displayPositionedDropdown: vi.fn(),
+  queryItemAsString: vi.fn()
 }))
 
 describe('SpacesList', () => {
@@ -97,20 +97,20 @@ describe('SpacesList', () => {
     expect(wrapper.vm.items).toEqual([spaceMocks[1]])
   })
   it('should show the context menu on right click', async () => {
-    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
     // .mockImplementation(() => undefined)
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find(`[data-item-id="${spaceMocks[0].id}"]`).trigger('contextmenu')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the context menu on context menu button click', async () => {
-    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find('.spaces-table-btn-action-dropdown').trigger('click')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the space details on details button click', async () => {
-    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const eventBusSpy = vi.spyOn(eventBus, 'publish')
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find('.spaces-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
@@ -118,8 +118,8 @@ describe('SpacesList', () => {
 })
 
 function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()
 
   return {

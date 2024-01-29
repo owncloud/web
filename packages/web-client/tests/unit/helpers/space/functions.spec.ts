@@ -1,6 +1,6 @@
 import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Drive, User } from '@ownclouders/web-client/src/generated'
 

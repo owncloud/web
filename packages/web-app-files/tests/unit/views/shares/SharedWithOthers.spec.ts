@@ -3,19 +3,19 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { useSortMock } from '../../../mocks/useSortMock'
 
-jest.mock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useSort: jest.fn().mockImplementation(() => useSortMock()),
-  queryItemAsString: jest.fn(),
-  useRouteQuery: jest.fn(),
-  useFileActions: jest.fn()
+vi.mock('web-app-files/src/composables')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useSort: vi.fn().mockImplementation(() => useSortMock()),
+  queryItemAsString: vi.fn(),
+  useRouteQuery: vi.fn(),
+  useFileActions: vi.fn()
 }))
 
 describe('SharedWithOthers view', () => {
@@ -69,7 +69,7 @@ describe('SharedWithOthers view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
       areResourcesLoading: ref(loading)

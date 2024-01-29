@@ -1,6 +1,6 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
 import { defaultComponentMocks, defaultPlugins, mockAxiosReject, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 
 describe('EditPanel', () => {

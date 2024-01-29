@@ -1,0 +1,50 @@
+import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+import { compilerOptions } from '../../../vite.config.common'
+
+const root = path.resolve(__dirname, '../../../')
+
+export default defineConfig({
+  plugins: [
+    vue({ template: { compilerOptions } }),
+    {
+      name: '@ownclouders/vite-plugin-docs',
+      transform(src, id) {
+        if (id.includes('type=docs')) {
+          return {
+            code: 'export default {}',
+            map: null
+          }
+        }
+      }
+    }
+  ],
+  test: {
+    root,
+    globals: true,
+    environment: 'jsdom',
+    clearMocks: true,
+    include: ['**/*.spec.ts'],
+    setupFiles: ['tests/unit/config/vitest.init.ts', 'core-js'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
+      '.pnpm-store/*',
+      'packages/design-system/tests/e2e/**',
+      'packages/design-system/docs/**'
+    ],
+    alias: {
+      'vue-inline-svg': `${root}/tests/unit/stubs/empty.js`,
+      'owncloud-sdk': `${root}/tests/unit/stubs/empty.js`
+    },
+    coverage: {
+      provider: 'v8',
+      reportsDirectory: `${root}/coverage`,
+      reporter: 'lcov'
+    }
+  }
+})

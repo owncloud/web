@@ -1,16 +1,16 @@
 import resolvePrivateLink from '../../../src/pages/resolvePrivateLink.vue'
 import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useRouteQuery: jest.fn((str) => str),
-  useRouteParam: jest.fn((str) => str),
-  queryItemAsString: jest.fn(),
-  useGetResourceContext: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useRouteQuery: vi.fn((str) => str),
+  useRouteParam: vi.fn((str) => str),
+  queryItemAsString: vi.fn(),
+  useGetResourceContext: vi.fn()
 }))
 
 const selectors = {
@@ -118,7 +118,7 @@ function getWrapper({
   openWithDefaultAppQuery = 'true',
   openLinksWithDefaultApp = true
 } = {}) {
-  jest.mocked(queryItemAsString).mockImplementation((str: string) => {
+  vi.mocked(queryItemAsString).mockImplementation((str: string) => {
     if (str === 'fileId') {
       return fileId
     }
@@ -131,8 +131,8 @@ function getWrapper({
     return str
   })
 
-  jest.mocked(useGetResourceContext).mockReturnValue({
-    getResourceContext: jest.fn().mockResolvedValue({ space, resource, path })
+  vi.mocked(useGetResourceContext).mockReturnValue({
+    getResourceContext: vi.fn().mockResolvedValue({ space, resource, path })
   })
 
   const mocks = { ...defaultComponentMocks() }

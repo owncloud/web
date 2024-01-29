@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { Resource } from '../../../web-client/src'
 import { FileResource } from '../../../web-client/src/helpers'
@@ -12,19 +12,17 @@ export const useAppDefaultsMock = (
     isPublicLinkContext: ref(false),
     currentFileContext: ref(mock<FileContext>()),
     applicationConfig: ref(mock<AppConfigObject>()),
-    closeApp: jest.fn(),
-    replaceInvalidFileRoute: jest.fn(),
-    getUrlForResource: jest.fn(),
-    revokeUrl: jest.fn(),
-    getFileInfo: jest.fn().mockImplementation(() => mock<Resource>()),
-    getFileContents: jest
-      .fn()
-      .mockImplementation(() => mock<GetFileContentsResponse>({ body: '' })),
-    putFileContents: jest.fn().mockImplementation(() => mock<FileResource>()),
+    closeApp: vi.fn(),
+    replaceInvalidFileRoute: vi.fn(),
+    getUrlForResource: vi.fn(),
+    revokeUrl: vi.fn(),
+    getFileInfo: vi.fn().mockImplementation(() => mock<Resource>()),
+    getFileContents: vi.fn().mockImplementation(() => mock<GetFileContentsResponse>({ body: '' })),
+    putFileContents: vi.fn().mockImplementation(() => mock<FileResource>()),
     isFolderLoading: ref(false),
     activeFiles: ref([]),
-    loadFolderForFileContext: jest.fn(),
-    makeRequest: jest.fn().mockResolvedValue({ status: 200 }),
+    loadFolderForFileContext: vi.fn(),
+    makeRequest: vi.fn().mockResolvedValue({ status: 200 }),
     closed: ref(false),
     ...options
   }

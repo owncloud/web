@@ -4,7 +4,7 @@ import {
   TransferType,
   resolveFileNameDuplicate
 } from '../../../../../src/helpers/resource/conflictHandling'
-import { mock, mockDeep, mockReset } from 'jest-mock-extended'
+import { mock, mockDeep, mockReset } from 'vitest-mock-extended'
 import { buildSpace, Resource } from '@ownclouders/web-client/src/helpers'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 import { Drive } from '@ownclouders/web-client/src/generated'
@@ -74,8 +74,8 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       clientServiceMock,
       loadingServiceMock,
-      jest.fn(),
-      jest.fn()
+      vi.fn(),
+      vi.fn()
     )
     const result = await resourcesTransfer.perform(TransferType.COPY)
     expect(result.length).toBe(0)
@@ -99,8 +99,8 @@ describe('resourcesTransfer', () => {
           targetFolder,
           clientServiceMock,
           loadingServiceMock,
-          jest.fn(),
-          jest.fn()
+          vi.fn(),
+          vi.fn()
         )
         const movedResources = await resourcesTransfer.perform(action)
 
@@ -135,10 +135,10 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       clientServiceMock,
       loadingServiceMock,
-      jest.fn(),
-      jest.fn()
+      vi.fn(),
+      vi.fn()
     )
-    resourcesTransfer.resolveFileExists = jest
+    resourcesTransfer.resolveFileExists = vi
       .fn()
       .mockImplementation(() => Promise.resolve({ strategy: 0 } as ResolveConflict))
     await resourcesTransfer.resolveAllConflicts(resourcesToMove, targetFolder, targetFolderItems)
@@ -161,8 +161,8 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       clientServiceMock,
       loadingServiceMock,
-      jest.fn(),
-      jest.fn()
+      vi.fn(),
+      vi.fn()
     )
     const namingClash = await resourcesTransfer.isOverwritingParentFolder(
       resourcesToMove[0],

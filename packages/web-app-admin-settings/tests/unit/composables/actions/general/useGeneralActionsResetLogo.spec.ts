@@ -1,25 +1,30 @@
 import { useMessages } from '@ownclouders/web-pkg'
 import { useGeneralActionsResetLogo } from '../../../../../src/composables/actions/general/useGeneralActionsResetLogo'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import {
   defaultComponentMocks,
   RouteLocation,
   mockAxiosResolve,
-  mockAxiosReject,
   getComposableWrapper
 } from 'web-test-helpers'
 
-jest.useFakeTimers()
-
 describe('resetLogo', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   describe('handler', () => {
     it('should show message on request success', () => {
       getWrapper({
         setup: async ({ actions }, { clientService, router }) => {
-          clientService.httpAuthenticated.delete.mockImplementation(() => mockAxiosResolve())
+          clientService.httpAuthenticated.delete.mockResolvedValue(mockAxiosResolve())
           await unref(actions)[0].handler()
-          jest.runAllTimers()
+          vi.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(1)
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
@@ -28,12 +33,12 @@ describe('resetLogo', () => {
     })
 
     it('should show message on request error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ actions }, { clientService, router }) => {
-          clientService.httpAuthenticated.delete.mockRejectedValue(() => mockAxiosReject())
+          clientService.httpAuthenticated.delete.mockRejectedValue(new Error(''))
           await unref(actions)[0].handler()
-          jest.runAllTimers()
+          vi.runAllTimers()
           expect(router.go).toHaveBeenCalledTimes(0)
           const { showErrorMessage } = useMessages()
           expect(showErrorMessage).toHaveBeenCalledTimes(1)

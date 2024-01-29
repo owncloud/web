@@ -9,7 +9,7 @@ import {
   formatRelativeDateFromJSDate,
   formatRelativeDateFromISO,
   formatRelativeDateFromRFC
-} from '../../../src'
+} from '../../../src/helpers/datetime'
 
 describe('datetime helper', () => {
   const language = 'en'

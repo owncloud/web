@@ -1,25 +1,23 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SpaceMembers filter toggles the filter on click 1`] = `
-<div class="oc-position-relative" id="oc-files-sharing-sidebar">
+exports[`SpaceMembers > filter > toggles the filter on click 1`] = `
+"<div id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
     <div class="oc-flex oc-py-s">
-      <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-current-language="en" data-msgid="Members">Members</h3>
-      <div class="oc-contextual-helper oc-pl-xs">
-        <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-1-button" type="button">
+      <h3 class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Members" data-current-language="en">Members</h3>
+      <div class="oc-contextual-helper oc-pl-xs"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-1-button">
           <!--v-if-->
           <!-- @slot Content of the button -->
-          <oc-icon-stub accessiblelabel="" color="" filltype="line" name="question" size="small" type="span" variation="passive"></oc-icon-stub>
+          <oc-icon-stub name="question" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
         </button>
-        <div class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop" id="oc-contextual-helper-1">
+        <div id="oc-contextual-helper-1" class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop">
           <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
             <div class="info-drop-content">
               <div class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
-                <h4 class="oc-m-rm info-title">Add members to this Space</h4>
-                <button class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" type="button">
+                <h4 class="oc-m-rm info-title">Add members to this Space</h4> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
                   <!--v-if-->
                   <!-- @slot Content of the button -->
-                  <oc-icon-stub accessiblelabel="" color="" filltype="line" name="close" size="medium" type="span" variation="inherit"></oc-icon-stub>
+                  <oc-icon-stub name="close" filltype="line" accessiblelabel="" type="span" size="medium" variation="inherit" color=""></oc-icon-stub>
                 </button>
               </div>
               <p class="info-text">Enter a name to add people or groups as members to this Space.</p>
@@ -29,8 +27,7 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
                 <dt>Space manager capabilities</dt>
                 <dd>Members with the Manager role are able to edit all properties and content of a Space, such as adding or removing members, sharing subfolders with non-members, or creating links to share.</dd>
               </dl>
-              <!--v-if-->
-              <a class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link" href="https://doc.owncloud.com/go?to=webui-users-sharing" target="_blank">
+              <!--v-if--> <a href="https://doc.owncloud.com/go?to=webui-users-sharing" target="_blank" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw info-more-link">
                 <!--v-if-->
                 <!-- @slot Content of the button --> Read more
               </a>
@@ -41,35 +38,32 @@ exports[`SpaceMembers filter toggles the filter on click 1`] = `
     </div>
     <div class="oc-flex">
       <div class="oc-flex">
-        <div class="oc-text-truncate space-members-filter oc-mr-s">
-          <label class="oc-label" for="oc-textinput-2"></label>
+        <div class="oc-text-truncate space-members-filter oc-mr-s"><label class="oc-label" for="oc-textinput-2"></label>
           <div class="oc-position-relative">
-            <!--v-if-->
-            <input aria-invalid="false" class="oc-text-input oc-input oc-rounded" id="oc-textinput-2" placeholder="Filter members" type="text">
+            <!--v-if--> <input id="oc-textinput-2" placeholder="Filter members" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
             <!--v-if-->
           </div>
           <!--v-if-->
           <!--v-if-->
-        </div>
-        <button aria-label="Close filter" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw close-filter-btn" type="button">
+        </div> <button type="button" aria-label="Close filter" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw close-filter-btn">
           <!--v-if-->
           <!-- @slot Content of the button -->
-          <oc-icon-stub fill-type="line" name="close" size="small"></oc-icon-stub>
+          <oc-icon-stub name="close" fill-type="line" size="small"></oc-icon-stub>
         </button>
       </div>
     </div>
   </div>
   <!--v-if-->
-  <ul aria-label="Space members" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" id="files-collaborators-list">
+  <ul id="files-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Space members">
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub deniable="false" issharedenied="false" modifiable="false" resourcename="" share="[object Object]"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false"></collaborator-list-item-stub>
     </li>
   </ul>
-</div>
+</div>"
 `;

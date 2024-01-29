@@ -1,6 +1,6 @@
 import { useDriveResolver } from '../../../../src/composables/driveResolver'
 import { ref, unref } from 'vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   getComposableWrapper,

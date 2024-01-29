@@ -1,7 +1,7 @@
 import { avatarUrl } from '../../../../src/helpers/user'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 
 const getDefaultOptions = () => ({

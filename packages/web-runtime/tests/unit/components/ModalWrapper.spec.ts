@@ -1,5 +1,5 @@
 import { Modal, useModals } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { PropType, defineComponent } from 'vue'
 import ModalWrapper from 'web-runtime/src/components/ModalWrapper.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
@@ -10,7 +10,7 @@ const CustomModalComponent = defineComponent({
     modal: { type: Object as PropType<Modal>, required: true }
   },
   setup() {
-    return { onConfirm: jest.fn() }
+    return { onConfirm: vi.fn() }
   },
   template: '<div id="foo"></div>'
 })
@@ -28,7 +28,7 @@ describe('ModalWrapper', () => {
   it('renders a custom component if given', async () => {
     const modal = mock<Modal>({
       customComponent: CustomModalComponent,
-      customComponentAttrs: jest.fn()
+      customComponentAttrs: vi.fn()
     })
     const { wrapper } = getShallowWrapper({ modals: [modal] })
     const modalStore = useModals()
@@ -39,7 +39,7 @@ describe('ModalWrapper', () => {
   })
   describe('method "onModalConfirm"', () => {
     it('calls the modal "onConfirm" if given, disables the confirm button and removes the modal', async () => {
-      const modal = mock<Modal>({ onConfirm: jest.fn().mockResolvedValue(undefined) })
+      const modal = mock<Modal>({ onConfirm: vi.fn().mockResolvedValue(undefined) })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
       ;(modalStore.activeModal as any) = modal
@@ -52,7 +52,7 @@ describe('ModalWrapper', () => {
       expect(modalStore.removeModal).toHaveBeenCalled()
     })
     it('does not remove the modal if the promise has not been resolved', async () => {
-      const modal = mock<Modal>({ onConfirm: jest.fn().mockRejectedValue(new Error('')) })
+      const modal = mock<Modal>({ onConfirm: vi.fn().mockRejectedValue(new Error('')) })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
       ;(modalStore.activeModal as any) = modal
@@ -67,7 +67,7 @@ describe('ModalWrapper', () => {
       const modalStore = useModals()
       ;(modalStore.activeModal as any) = modal
       await wrapper.vm.$nextTick()
-      wrapper.vm.customComponentRef = { onConfirm: jest.fn() }
+      wrapper.vm.customComponentRef = { onConfirm: vi.fn() }
 
       await wrapper.vm.onModalConfirm()
 
@@ -76,7 +76,7 @@ describe('ModalWrapper', () => {
   })
   describe('method "onModalCancel"', () => {
     it('calls the modal "onCancel" if given and removes the modal', async () => {
-      const modal = mock<Modal>({ onCancel: jest.fn() })
+      const modal = mock<Modal>({ onCancel: vi.fn() })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
       ;(modalStore.activeModal as any) = modal
@@ -92,7 +92,7 @@ describe('ModalWrapper', () => {
       const modalStore = useModals()
       ;(modalStore.activeModal as any) = modal
       await wrapper.vm.$nextTick()
-      wrapper.vm.customComponentRef = { onCancel: jest.fn() }
+      wrapper.vm.customComponentRef = { onCancel: vi.fn() }
 
       await wrapper.vm.onModalCancel()
 
@@ -101,7 +101,7 @@ describe('ModalWrapper', () => {
   })
   describe('method "onModalInput"', () => {
     it('calls the modal "onInput" if given', async () => {
-      const modal = mock<Modal>({ onInput: jest.fn() })
+      const modal = mock<Modal>({ onInput: vi.fn() })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
       ;(modalStore.activeModal as any) = modal

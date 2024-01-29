@@ -1,22 +1,22 @@
 import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  getIndicators: jest.fn(() => []),
-  useRouteQuery: jest.fn(),
-  useFileActions: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  getIndicators: vi.fn(() => []),
+  useRouteQuery: vi.fn(),
+  useFileActions: vi.fn()
 }))
 
 describe('ResourceDetails component', () => {
-  jest.mocked(useFileActions).mockImplementation(() =>
+  vi.mocked(useFileActions).mockImplementation(() =>
     mock<ReturnType<typeof useFileActions>>({
-      getDefaultEditorAction: () => ({ handler: jest.fn() }) as any
+      getDefaultEditorAction: () => ({ handler: vi.fn() }) as any
     })
   )
 
@@ -31,7 +31,7 @@ describe('ResourceDetails component', () => {
       expect(wrapper.vm.defaultEditorAction.handler).not.toHaveBeenCalled()
     })
     it("opens default action if query param 'openWithDefaultApp' is set true", () => {
-      jest.mocked(useRouteQuery).mockImplementationOnce(() => ref('true'))
+      vi.mocked(useRouteQuery).mockImplementationOnce(() => ref('true'))
       const { wrapper } = getWrapper()
       expect(wrapper.vm.defaultEditorAction.handler).toHaveBeenCalled()
     })

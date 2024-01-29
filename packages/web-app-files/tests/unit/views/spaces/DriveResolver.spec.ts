@@ -1,7 +1,7 @@
 import DriveResolver from '../../../../src/views/spaces/DriveResolver.vue'
 import { queryItemAsString, useDriveResolver, useRouteParam } from '@ownclouders/web-pkg'
 import { computed, ref } from 'vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { locationPublicUpload } from '@ownclouders/web-pkg'
@@ -16,12 +16,12 @@ import {
   useGetMatchingSpaceMock
 } from 'web-test-helpers'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useGetMatchingSpace: jest.fn(),
-  useDriveResolver: jest.fn(),
-  useRouteParam: jest.fn(),
-  queryItemAsString: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useGetMatchingSpace: vi.fn(),
+  useDriveResolver: vi.fn(),
+  useRouteParam: vi.fn(),
+  queryItemAsString: vi.fn()
 }))
 
 describe('DriveResolver view', () => {
@@ -48,7 +48,7 @@ describe('DriveResolver view', () => {
     expect(wrapper.find('generic-space-stub').exists()).toBeTruthy()
   })
   it('redirects to the public drop page in a public context with "upload-only"-permissions', async () => {
-    const space = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'public' }
+    const space = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'public' }
     const clientService = mockDeep<ClientService>()
     clientService.webdav.getFileInfo.mockResolvedValue(
       mockDeep<PublicSpaceResource>({ publicLinkPermission: SharePermissionBit.Create })
@@ -61,14 +61,15 @@ describe('DriveResolver view', () => {
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
     expect(mocks.$router.push).toHaveBeenCalledWith({
       name: locationPublicUpload.name,
       params: { token: space.id }
     })
   })
   it('redirects to personal space if user has access to the resource via their personal space', async () => {
-    const space = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'public' }
-    const internalSpace = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'personal' }
+    const space = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'public' }
+    const internalSpace = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'personal' }
     const clientService = mockDeep<ClientService>()
     clientService.webdav.getPathForFileId.mockResolvedValue('/path')
     clientService.webdav.getFileInfo.mockResolvedValue(mock<Resource>())
@@ -81,12 +82,16 @@ describe('DriveResolver view', () => {
 
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
     expect(mocks.$router.push).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'files-spaces-generic' })
     )
   })
   it('redirects to private link if user has access to the resource via a share', async () => {
-    const space = { id: '1', getDriveAliasAndItem: jest.fn(), driveType: 'public' }
+    const space = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'public' }
     const clientService = mockDeep<ClientService>()
     clientService.webdav.getPathForFileId.mockResolvedValue('/path')
     const { wrapper, mocks } = getMountedWrapper({
@@ -95,6 +100,8 @@ describe('DriveResolver view', () => {
       userContextReady: true
     })
 
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
     expect(mocks.$router.push).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -123,15 +130,15 @@ function getMountedWrapper({
   driveAliasAndItem = 'personal/einstein/file',
   fileId = '1'
 } = {}) {
-  jest.mocked(useRouteParam).mockReturnValue(ref(driveAliasAndItem))
-  jest.mocked(queryItemAsString).mockReturnValue(fileId)
-  jest.mocked(useDriveResolver).mockImplementation(() => ({
+  vi.mocked(useRouteParam).mockReturnValue(ref(driveAliasAndItem))
+  vi.mocked(queryItemAsString).mockReturnValue(fileId)
+  vi.mocked(useDriveResolver).mockImplementation(() => ({
     space,
     item: ref('/'),
     itemId: computed(() => 'id'),
     loading: ref(false)
   }))
-  jest.mocked(useGetMatchingSpace).mockImplementation(() =>
+  vi.mocked(useGetMatchingSpace).mockImplementation(() =>
     useGetMatchingSpaceMock({
       getInternalSpace: () => internalSpace
     })

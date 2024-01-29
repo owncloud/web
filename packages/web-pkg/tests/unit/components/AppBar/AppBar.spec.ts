@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import AppBar from '../../../../src/components/AppBar/AppBar.vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   defaultComponentMocks,
@@ -9,12 +9,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
-import { useFileActionsDelete } from '../../../../src/composables'
-import { FolderView } from '../../../../src'
-
-jest.mock('../../../../src/composables/actions/files/useFileActionsDelete', () => ({
-  useFileActionsDelete: jest.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
-}))
+import { FolderView } from '../../../../src/ui/types'
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',
@@ -24,7 +19,7 @@ const selectors = {
   mobileNavPortal: 'portal-target[name="app.runtime.mobile.nav"]'
 }
 
-const selectedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
+const selectedFiles = [mock<Resource>(), mock<Resource>()]
 const actionSlot = "<button class='action-slot'>Click</button>"
 const contentSlot = "<div class='content-slot'>Foo</div>"
 

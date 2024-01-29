@@ -3,21 +3,21 @@ import { defaultComponentMocks, mount } from 'web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 import { ref } from 'vue'
 import { SearchProvider, queryItemAsString } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
 const mockProvider = mock<SearchProvider>({
   id: 'p1',
   available: true,
   listSearch: {
-    search: jest.fn()
+    search: vi.fn()
   }
 })
 
-jest.mock('../../../src/composables/useAvailableProviders')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useRouteQuery: jest.fn(),
-  queryItemAsString: jest.fn()
+vi.mock('../../../src/composables/useAvailableProviders')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useRouteQuery: vi.fn(),
+  queryItemAsString: vi.fn()
 }))
 
 describe('search result List view', () => {
@@ -37,8 +37,8 @@ describe('search result List view', () => {
 })
 
 const getWrapper = () => {
-  jest.mocked(useAvailableProviders).mockReturnValue(ref([mockProvider]))
-  jest.mocked(queryItemAsString).mockReturnValue('p1')
+  vi.mocked(useAvailableProviders).mockReturnValue(ref([mockProvider]))
+  vi.mocked(queryItemAsString).mockReturnValue('p1')
   const mocks = { ...defaultComponentMocks() }
   return {
     wrapper: mount(List, {

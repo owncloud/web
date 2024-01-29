@@ -3,22 +3,20 @@ import { useIsVisible } from './index'
 import { mount } from 'web-test-helpers'
 
 const mockIntersectionObserver = () => {
-  jest.useFakeTimers()
-
   const enable = () => {
     const mock = {
-      observe: jest.fn(),
-      disconnect: jest.fn(),
-      unobserve: jest.fn()
+      observe: vi.fn(),
+      disconnect: vi.fn(),
+      unobserve: vi.fn()
     }
 
-    window.IntersectionObserver = jest.fn().mockImplementation(() => mock)
+    window.IntersectionObserver = vi.fn().mockImplementation(() => mock)
 
     return {
       mock,
       callback: (args, fastForward = 0) => {
         ;(window.IntersectionObserver as any).mock.calls[0][0](args)
-        jest.advanceTimersByTime(fastForward)
+        vi.advanceTimersByTime(fastForward)
       }
     }
   }
@@ -48,6 +46,14 @@ const createWrapper = (options = {}) =>
   })
 
 describe('useIsVisible', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   const { enable: enableIntersectionObserver, disable: disableIntersectionObserver } =
     mockIntersectionObserver()
 

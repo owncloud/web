@@ -1,10 +1,5 @@
 {
   "extends": [
-    "@ownclouders",
-    "plugin:jest/recommended"
-  ],
-  "plugins": ["jest"],
-  "rules": {
-    "jest/no-standalone-expect": "off"
-  }
+    "@ownclouders"
+  ]
 }

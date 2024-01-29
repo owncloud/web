@@ -1,7 +1,7 @@
 import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { PeopleShareRoles, SharePermissions } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 
 const selectors = {
@@ -42,7 +42,7 @@ describe('RoleDropdown', () => {
   })
   it('emits "optionChange"-event on role click', async () => {
     const { wrapper } = getWrapper()
-    ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: jest.fn() }
+    ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: vi.fn() }
     await wrapper.find(selectors.roleButton).trigger('click')
     expect(wrapper.emitted('optionChange')).toBeTruthy()
   })
@@ -53,7 +53,7 @@ describe('RoleDropdown', () => {
         const isFolder = type === 'folder'
         const { wrapper } = getWrapper({ resourceType: type })
         const customPermissionsDrop = wrapper.findComponent<any>(selectors.customPermissionsDrop)
-        const showHideMock = jest.fn()
+        const showHideMock = vi.fn()
         ;(customPermissionsDrop.vm as any).show = showHideMock
         ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: showHideMock }
 
@@ -66,8 +66,8 @@ describe('RoleDropdown', () => {
     )
     it('can be cancelled and restored', async () => {
       const { wrapper } = getWrapper()
-      const showRoleDropMock = jest.fn()
-      const hideCustomPermissionsDropMock = jest.fn()
+      const showRoleDropMock = vi.fn()
+      const hideCustomPermissionsDropMock = vi.fn()
       ;(wrapper.vm.$refs.rolesDrop as any).show = showRoleDropMock
       ;(wrapper.vm.$refs.customPermissionsDrop as any).hide = hideCustomPermissionsDropMock
       await wrapper.find(selectors.cancelCustomPermissionsBtn).trigger('click')
@@ -78,7 +78,7 @@ describe('RoleDropdown', () => {
     })
     it('can be confirmed', async () => {
       const { wrapper } = getWrapper()
-      const hideCustomPermissionsDropMock = jest.fn()
+      const hideCustomPermissionsDropMock = vi.fn()
       ;(wrapper.vm.$refs.customPermissionsDrop as any).hide = hideCustomPermissionsDropMock
       await wrapper.find(selectors.confirmCustomPermissionsBtn).trigger('click')
 

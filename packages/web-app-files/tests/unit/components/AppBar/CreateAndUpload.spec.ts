@@ -1,5 +1,5 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import {
@@ -18,13 +18,13 @@ import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { ref } from 'vue'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useExtensionRegistry: jest.fn(),
-  useRequest: jest.fn(),
-  useFileActionsCreateNewFile: jest.fn(),
-  useFileActions: jest.fn(),
-  useFileActionsPaste: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useExtensionRegistry: vi.fn(),
+  useRequest: vi.fn(),
+  useFileActionsCreateNewFile: vi.fn(),
+  useFileActions: vi.fn(),
+  useFileActionsPaste: vi.fn()
 }))
 
 const elSelector = {
@@ -116,7 +116,7 @@ describe('CreateAndUpload component', () => {
       expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
     })
     it('reloads the file list if files were uploaded to the current path', async () => {
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
       const itemId = 'itemId'
       const space = mock<SpaceResource>({ id: '1' })
       const { wrapper, mocks } = getWrapper({ itemId, space })
@@ -159,19 +159,19 @@ function getWrapper({
     mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
   ]
 } = {}) {
-  jest.mocked(useRequest).mockImplementation(() => ({
-    makeRequest: jest.fn().mockResolvedValue({ status: 200 })
+  vi.mocked(useRequest).mockImplementation(() => ({
+    makeRequest: vi.fn().mockResolvedValue({ status: 200 })
   }))
-  jest.mocked(useExtensionRegistry).mockImplementation(() => useExtensionRegistryMock())
+  vi.mocked(useExtensionRegistry).mockImplementation(() => useExtensionRegistryMock())
 
-  jest.mocked(useFileActionsCreateNewFile).mockReturnValue(
+  vi.mocked(useFileActionsCreateNewFile).mockReturnValue(
     mock<ReturnType<typeof useFileActionsCreateNewFile>>({
       actions: ref(createActions)
     })
   )
 
-  const pasteActionHandler = jest.fn()
-  jest.mocked(useFileActionsPaste).mockReturnValue(
+  const pasteActionHandler = vi.fn()
+  vi.mocked(useFileActionsPaste).mockReturnValue(
     mock<ReturnType<typeof useFileActionsPaste>>({
       actions: ref([mock<FileAction>({ handler: pasteActionHandler })])
     })

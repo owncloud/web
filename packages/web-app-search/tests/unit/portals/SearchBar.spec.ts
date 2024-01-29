@@ -1,9 +1,15 @@
 import SearchBar from '../../../src/portals/SearchBar.vue'
 import flushPromises from 'flush-promises'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { defineComponent } from 'vue'
-import { defaultPlugins, mount, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  mount,
+  defaultComponentMocks,
+  RouteLocation,
+  sleep
+} from 'web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 
 const component = defineComponent({
@@ -23,7 +29,7 @@ const providerFiles = {
   available: true,
   previewSearch: {
     available: true,
-    search: jest.fn(),
+    search: vi.fn(),
     component
   },
   listSearch: {}
@@ -35,7 +41,7 @@ const providerContacts = {
   available: true,
   previewSearch: {
     available: true,
-    search: jest.fn(),
+    search: vi.fn(),
     component
   }
 }
@@ -52,8 +58,8 @@ const selectors = {
   optionsVisible: '.tippy-box[data-state="visible"]'
 }
 
-jest.mock('lodash-es/debounce', () => (fn) => fn)
-jest.mock('../../../src/composables/useAvailableProviders')
+vi.mock('lodash-es/debounce', () => (fn) => fn)
+vi.mock('../../../src/composables/useAvailableProviders')
 
 beforeEach(() => {
   providerFiles.previewSearch.search.mockImplementation(() => {
@@ -81,7 +87,7 @@ afterEach(() => {
 })
 
 describe('Search Bar portal component', () => {
-  jest.spyOn(console, 'warn').mockImplementation(undefined)
+  vi.spyOn(console, 'warn').mockImplementation(undefined)
   test('does not render a search field if no availableProviders given', () => {
     wrapper = getMountedWrapper({ providers: [] }).wrapper
     expect(wrapper.find(selectors.search).exists()).toBeFalsy()
@@ -114,7 +120,7 @@ describe('Search Bar portal component', () => {
   test('displays all available providers', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
+    await sleep(600)
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(2)
   })
   test('only displays provider list item if search results are attached', async () => {
@@ -125,13 +131,13 @@ describe('Search Bar portal component', () => {
       }
     })
     wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
+    await sleep(600)
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(1)
   })
   test('displays the provider name in the provider list item', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
+    await sleep(600)
     const providerDisplayNameItems = wrapper.findAll(selectors.providerDisplayName)
     expect(providerDisplayNameItems.at(0).text()).toEqual('Files')
     expect(providerDisplayNameItems.at(1).text()).toEqual('Contacts')
@@ -139,13 +145,13 @@ describe('Search Bar portal component', () => {
   test('The search provider only displays the more results link if a listSearch component is present', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
+    await sleep(600)
     expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(1)
   })
   test('hides options on preview item click', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await flushPromises()
+    await sleep(600)
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     wrapper.findAll('.preview-component').at(0).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
@@ -189,7 +195,6 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
-  // eslint-disable-next-line jest/expect-expect,jest/no-disabled-tests
   test.skip('sets active preview item via keyboard navigation', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
@@ -224,7 +229,7 @@ function getMountedWrapper({
   userContextReady = true,
   providers = [providerFiles, providerContacts]
 } = {}) {
-  jest.mocked(useAvailableProviders).mockReturnValue(ref(providers))
+  vi.mocked(useAvailableProviders).mockReturnValue(ref(providers))
 
   const currentRoute = mock<RouteLocation>({
     name: 'files-spaces-generic',

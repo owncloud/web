@@ -6,7 +6,7 @@ import {
   shallowMount,
   mockAxiosReject
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 import { useMessages, useResourcesStore } from '@ownclouders/web-pkg'
 import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
@@ -190,7 +190,7 @@ describe('account page', () => {
       expect(showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper, mocks } = getWrapper()
 
@@ -221,7 +221,7 @@ describe('account page', () => {
       expect(showMessage).toHaveBeenCalled()
     })
     it('should show a message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper, mocks } = getWrapper({})
 
@@ -279,7 +279,7 @@ function getWrapper({
       response = { values: [mock<SettingsValue>()] }
     }
 
-    return mockAxiosResolve(response)
+    return Promise.resolve(mockAxiosResolve(response))
   })
   mocks.$clientService.graphAuthenticated.users.getMe.mockResolvedValue(
     mock<AxiosResponse>({ data: { id: '1' } })

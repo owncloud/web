@@ -1,67 +1,37 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AppTopBar if a resource is present renders a resource and dropdownActions (if given) and a close button 1`] = `
-<portal to="app.runtime.header.left">
-  <div class="oc-app-top-bar oc-flex">
-    <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
-      <div class="open-file-bar oc-flex"><resource-list-item-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="test" pathprefix="Shares/test" resource="undefined"></resource-list-item-stub></div>
-      <div class="oc-flex main-actions"><!--v-if--> <oc-button-stub appearance="raw-inverse" arialabel="Show context menu" class="oc-p-xs" disabled="false" gapsize="medium" id="oc-openfile-contextmenu-trigger" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub> <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub> <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub></div>
-    </span>
-  </div>
-</portal>
+exports[`AppTopBar > if a resource is present > renders a resource and dropdownActions (if given) and a close button 1`] = `
+"<portal to="app.runtime.header.left">
+  <div class="oc-app-top-bar oc-flex"><span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between"><div class="open-file-bar oc-flex"><resource-list-item-stub resource="undefined" pathprefix="Shares/test" ispathdisplayed="false" parentfoldername="test" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true" id="app-top-bar-resource"></resource-list-item-stub></div> <div class="oc-flex main-actions"><!--v-if--> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Show context menu" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="oc-openfile-contextmenu-trigger" class="oc-p-xs"></oc-button-stub> <oc-drop-stub dropid="oc-openfile-contextmenu" popperoptions="[object Object]" toggle="#oc-openfile-contextmenu-trigger" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small"></oc-drop-stub> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Close" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="app-top-bar-close"></oc-button-stub></div></span></div>
+</portal>"
 `;
 
-exports[`AppTopBar if a resource is present renders a resource and dropdownActions as well as mainActions (if both are passed) and a close button 1`] = `
-<portal to="app.runtime.header.left">
-  <div class="oc-app-top-bar oc-flex">
-    <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
-      <div class="open-file-bar oc-flex"><resource-list-item-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="test" pathprefix="Shares/test" resource="undefined"></resource-list-item-stub></div>
-      <div class="oc-flex main-actions"><context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub> <oc-button-stub appearance="raw-inverse" arialabel="Show context menu" class="oc-p-xs" disabled="false" gapsize="medium" id="oc-openfile-contextmenu-trigger" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub> <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub> <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub></div>
-    </span>
-  </div>
-</portal>
+exports[`AppTopBar > if a resource is present > renders a resource and dropdownActions as well as mainActions (if both are passed) and a close button 1`] = `
+"<portal to="app.runtime.header.left">
+  <div class="oc-app-top-bar oc-flex"><span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between"><div class="open-file-bar oc-flex"><resource-list-item-stub resource="undefined" pathprefix="Shares/test" ispathdisplayed="false" parentfoldername="test" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true" id="app-top-bar-resource"></resource-list-item-stub></div> <div class="oc-flex main-actions"><context-action-menu-stub menusections="[object Object]" actionoptions="[object Object]" appearance="raw-inverse" variation="brand"></context-action-menu-stub> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Show context menu" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="oc-openfile-contextmenu-trigger" class="oc-p-xs"></oc-button-stub> <oc-drop-stub dropid="oc-openfile-contextmenu" popperoptions="[object Object]" toggle="#oc-openfile-contextmenu-trigger" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small"></oc-drop-stub> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Close" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="app-top-bar-close"></oc-button-stub></div></span></div>
+</portal>"
 `;
 
-exports[`AppTopBar if a resource is present renders a resource and mainActions (if given) and a close button 1`] = `
-<portal to="app.runtime.header.left">
-  <div class="oc-app-top-bar oc-flex">
-    <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
-      <div class="open-file-bar oc-flex"><resource-list-item-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="test" pathprefix="Shares/test" resource="undefined"></resource-list-item-stub></div>
-      <div class="oc-flex main-actions"><context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub> <!--v-if--> <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub></div>
-    </span>
-  </div>
-</portal>
+exports[`AppTopBar > if a resource is present > renders a resource and mainActions (if given) and a close button 1`] = `
+"<portal to="app.runtime.header.left">
+  <div class="oc-app-top-bar oc-flex"><span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between"><div class="open-file-bar oc-flex"><resource-list-item-stub resource="undefined" pathprefix="Shares/test" ispathdisplayed="false" parentfoldername="test" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true" id="app-top-bar-resource"></resource-list-item-stub></div> <div class="oc-flex main-actions"><context-action-menu-stub menusections="[object Object]" actionoptions="[object Object]" appearance="raw-inverse" variation="brand"></context-action-menu-stub> <!--v-if--> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Close" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="app-top-bar-close"></oc-button-stub></div></span></div>
+</portal>"
 `;
 
-exports[`AppTopBar if a resource is present renders a resource and no actions (if none given) and a close button 1`] = `
-<portal to="app.runtime.header.left">
-  <div class="oc-app-top-bar oc-flex">
-    <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
-      <div class="open-file-bar oc-flex"><resource-list-item-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="test" pathprefix="Shares/test" resource="undefined"></resource-list-item-stub></div>
-      <div class="oc-flex main-actions"><!--v-if--> <!--v-if--> <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub></div>
-    </span>
-  </div>
-</portal>
+exports[`AppTopBar > if a resource is present > renders a resource and no actions (if none given) and a close button 1`] = `
+"<portal to="app.runtime.header.left">
+  <div class="oc-app-top-bar oc-flex"><span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between"><div class="open-file-bar oc-flex"><resource-list-item-stub resource="undefined" pathprefix="Shares/test" ispathdisplayed="false" parentfoldername="test" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true" id="app-top-bar-resource"></resource-list-item-stub></div> <div class="oc-flex main-actions"><!--v-if--> <!--v-if--> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Close" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="app-top-bar-close"></oc-button-stub></div></span></div>
+</portal>"
 `;
 
-exports[`AppTopBar if a resource is present renders a resource without file extension if areFileExtensionsShown is set to false 1`] = `
-<portal to="app.runtime.header.left">
-  <div class="oc-app-top-bar oc-flex">
-    <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
-      <div class="open-file-bar oc-flex"><resource-list-item-stub id="app-top-bar-resource" isextensiondisplayed="false" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="test" pathprefix="Shares/test" resource="undefined"></resource-list-item-stub></div>
-      <div class="oc-flex main-actions"><context-action-menu-stub actionoptions="[object Object]" appearance="raw-inverse" menusections="[object Object]" variation="brand"></context-action-menu-stub> <oc-button-stub appearance="raw-inverse" arialabel="Show context menu" class="oc-p-xs" disabled="false" gapsize="medium" id="oc-openfile-contextmenu-trigger" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub> <oc-drop-stub closeonclick="true" dropid="oc-openfile-contextmenu" isnested="false" mode="click" paddingsize="small" popperoptions="[object Object]" position="bottom-start" toggle="#oc-openfile-contextmenu-trigger"></oc-drop-stub> <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub></div>
-    </span>
-  </div>
-</portal>
+exports[`AppTopBar > if a resource is present > renders a resource without file extension if areFileExtensionsShown is set to false 1`] = `
+"<portal to="app.runtime.header.left">
+  <div class="oc-app-top-bar oc-flex"><span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between"><div class="open-file-bar oc-flex"><resource-list-item-stub resource="undefined" pathprefix="Shares/test" ispathdisplayed="false" parentfoldername="test" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="false" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true" id="app-top-bar-resource"></resource-list-item-stub></div> <div class="oc-flex main-actions"><context-action-menu-stub menusections="[object Object]" actionoptions="[object Object]" appearance="raw-inverse" variation="brand"></context-action-menu-stub> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Show context menu" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="oc-openfile-contextmenu-trigger" class="oc-p-xs"></oc-button-stub> <oc-drop-stub dropid="oc-openfile-contextmenu" popperoptions="[object Object]" toggle="#oc-openfile-contextmenu-trigger" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small"></oc-drop-stub> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Close" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="app-top-bar-close"></oc-button-stub></div></span></div>
+</portal>"
 `;
 
-exports[`AppTopBar if no resource is present renders only a close button 1`] = `
-<portal to="app.runtime.header.left">
-  <div class="oc-app-top-bar oc-flex">
-    <span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between">
-      <div class="open-file-bar oc-flex"><resource-list-item-stub id="app-top-bar-resource" isextensiondisplayed="true" isicondisplayed="true" ispathdisplayed="false" isresourceclickable="true" isthumbnaildisplayed="false" parentfolderlinkiconadditionalattributes="[object Object]" parentfoldername="test" pathprefix="Shares/test" resource="undefined"></resource-list-item-stub></div>
-      <div class="oc-flex main-actions"><!--v-if--> <!--v-if--> <oc-button-stub appearance="raw-inverse" arialabel="Close" disabled="false" gapsize="medium" id="app-top-bar-close" justifycontent="center" showspinner="false" size="medium" submit="button" type="button" variation="brand"></oc-button-stub></div>
-    </span>
-  </div>
-</portal>
+exports[`AppTopBar > if no resource is present > renders only a close button 1`] = `
+"<portal to="app.runtime.header.left">
+  <div class="oc-app-top-bar oc-flex"><span class="oc-app-top-bar-inner oc-px-m oc-flex oc-flex-middle oc-flex-between"><div class="open-file-bar oc-flex"><resource-list-item-stub resource="undefined" pathprefix="Shares/test" ispathdisplayed="false" parentfoldername="test" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="false" isicondisplayed="true" isresourceclickable="true" id="app-top-bar-resource"></resource-list-item-stub></div> <div class="oc-flex main-actions"><!--v-if--> <!--v-if--> <oc-button-stub type="button" disabled="false" size="medium" arialabel="Close" submit="button" variation="brand" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" id="app-top-bar-close"></oc-button-stub></div></span></div>
+</portal>"
 `;

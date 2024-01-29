@@ -14,11 +14,11 @@ const indicator = {
   id: 'testid',
   label: 'testlabel',
   type: 'testtype',
-  handler: jest.fn()
+  handler: vi.fn()
 }
 describe('OcStatusIndicators', () => {
   it('does call indicator handler on click', () => {
-    const spyHandler = jest.spyOn(indicator, 'handler')
+    const spyHandler = vi.spyOn(indicator, 'handler')
     const wrapper = mount(StatusIndicators, {
       props: {
         resource: fileResource,

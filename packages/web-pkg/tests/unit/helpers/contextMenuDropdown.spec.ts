@@ -2,8 +2,8 @@ import { displayPositionedDropdown } from '../../../src/helpers'
 
 describe('displayPositionedDropdown', () => {
   it('shows the dropdown', () => {
-    const dropdown = { setProps: jest.fn(), show: jest.fn() }
-    const ctxMenuBtn = { $el: { getBoundingClientRect: jest.fn() } }
+    const dropdown = { setProps: vi.fn(), show: vi.fn() }
+    const ctxMenuBtn = { $el: { getBoundingClientRect: vi.fn() } }
     displayPositionedDropdown(dropdown, {}, ctxMenuBtn)
     expect(dropdown.show).toHaveBeenCalled()
   })
@@ -11,12 +11,12 @@ describe('displayPositionedDropdown', () => {
     const event = { type: 'contextmenu', clientX: 100 }
     let dropdownProps
     const dropdown = {
-      setProps: jest.fn((props) => {
+      setProps: vi.fn((props) => {
         dropdownProps = props
       }),
-      show: jest.fn()
+      show: vi.fn()
     }
-    const ctxMenuBtn = { $el: { getBoundingClientRect: jest.fn(() => ({})) } }
+    const ctxMenuBtn = { $el: { getBoundingClientRect: vi.fn(() => ({})) } }
     displayPositionedDropdown(dropdown, event, ctxMenuBtn)
     const data = dropdownProps.getReferenceClientRect()
     expect(data.left).toEqual(event.clientX)
@@ -26,13 +26,13 @@ describe('displayPositionedDropdown', () => {
     const event = { clientX: 100 }
     let dropdownProps
     const dropdown = {
-      setProps: jest.fn((props) => {
+      setProps: vi.fn((props) => {
         dropdownProps = props
       }),
-      show: jest.fn()
+      show: vi.fn()
     }
     const ctxMenuBtnX = 200
-    const ctxMenuBtn = { $el: { getBoundingClientRect: jest.fn(() => ({ x: ctxMenuBtnX })) } }
+    const ctxMenuBtn = { $el: { getBoundingClientRect: vi.fn(() => ({ x: ctxMenuBtnX })) } }
     displayPositionedDropdown(dropdown, event, ctxMenuBtn)
     const data = dropdownProps.getReferenceClientRect()
     expect(data.left).toEqual(ctxMenuBtnX)
@@ -42,12 +42,12 @@ describe('displayPositionedDropdown', () => {
     const event = { clientY: 100 }
     let dropdownProps
     const dropdown = {
-      setProps: jest.fn((props) => {
+      setProps: vi.fn((props) => {
         dropdownProps = props
       }),
-      show: jest.fn()
+      show: vi.fn()
     }
-    const ctxMenuBtn = { $el: { getBoundingClientRect: jest.fn(() => ({ x: 200 })) } }
+    const ctxMenuBtn = { $el: { getBoundingClientRect: vi.fn(() => ({ x: 200 })) } }
     displayPositionedDropdown(dropdown, event, ctxMenuBtn)
     const { top, bottom } = dropdownProps.getReferenceClientRect()
     expect(top).toEqual(event.clientY)
@@ -58,12 +58,12 @@ describe('displayPositionedDropdown', () => {
     const event = { clientY: 0, srcElement: { getBoundingClientRect: () => ({ top: yPos }) } }
     let dropdownProps
     const dropdown = {
-      setProps: jest.fn((props) => {
+      setProps: vi.fn((props) => {
         dropdownProps = props
       }),
-      show: jest.fn()
+      show: vi.fn()
     }
-    const ctxMenuBtn = { $el: { getBoundingClientRect: jest.fn(() => ({ x: 200 })) } }
+    const ctxMenuBtn = { $el: { getBoundingClientRect: vi.fn(() => ({ x: 200 })) } }
     displayPositionedDropdown(dropdown, event, ctxMenuBtn)
     const { top, bottom } = dropdownProps.getReferenceClientRect()
     expect(top).toEqual(yPos)

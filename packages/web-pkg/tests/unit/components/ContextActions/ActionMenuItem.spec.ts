@@ -14,7 +14,7 @@ const fileActions = {
   download: {
     name: 'download-file',
     icon: 'file-download',
-    handler: jest.fn(),
+    handler: vi.fn(),
     label: () => 'Download',
     componentType: 'button',
     class: 'oc-files-actions-download-file-trigger',

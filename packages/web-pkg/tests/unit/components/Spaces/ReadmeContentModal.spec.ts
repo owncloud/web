@@ -3,7 +3,7 @@ import ReadmeContentModal from '../../../../src/components/Spaces/ReadmeContentM
 import { defaultPlugins, mount, defaultComponentMocks, defaultStubs } from 'web-test-helpers'
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 import { Resource } from '@ownclouders/web-client/src'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { useMessages } from '../../../../src/composables/piniaStores'
 
 describe('ReadmeContentModal', () => {
@@ -16,7 +16,7 @@ describe('ReadmeContentModal', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = getWrapper(false)
       await wrapper.vm.onConfirm()
       const { showErrorMessage } = useMessages()
@@ -38,7 +38,7 @@ function getWrapper(resolvePutFileContents = true) {
   return {
     wrapper: mount(ReadmeContentModal, {
       props: {
-        cancel: jest.fn(),
+        cancel: vi.fn(),
         space: {
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
           spaceReadmeData: {

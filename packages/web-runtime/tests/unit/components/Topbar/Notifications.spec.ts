@@ -1,6 +1,6 @@
 import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
 import { Notification, NotificationAction } from 'web-runtime/src/helpers/notifications'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { SpaceResource } from '@ownclouders/web-client'
@@ -18,9 +18,9 @@ const selectors = {
   notificationActions: '.oc-notifications-actions'
 }
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useServerSentEvents: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useServerSentEvents: vi.fn()
 }))
 
 describe('Notification component', () => {
@@ -53,6 +53,7 @@ describe('Notification component', () => {
     await wrapper.vm.fetchNotificationsTask.perform()
     await wrapper.vm.fetchNotificationsTask.last
     await wrapper.find(selectors.markAll).trigger('click')
+    await wrapper.vm.$nextTick()
     expect(wrapper.find(selectors.notificationItem).exists()).toBeFalsy()
     expect(mocks.$clientService.owncloudSdk.requests.ocs).toHaveBeenCalledTimes(3)
   })
@@ -212,12 +213,18 @@ describe('Notification component', () => {
       await wrapper.vm.fetchNotificationsTask.last
       expect(wrapper.find(selectors.notificationItem).exists()).toBeTruthy()
       const jsonResponse = {
-        json: jest.fn().mockResolvedValue({ ocs: { data: {} } })
+        json: vi.fn().mockResolvedValue({ ocs: { data: {} } })
       }
       mocks.$clientService.owncloudSdk.requests.ocs.mockResolvedValue(
         mockDeep<Response>(jsonResponse)
       )
       await wrapper.find(`${selectors.notificationActions} button`).trigger('click')
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.notificationItem).exists()).toBeFalsy()
     })
@@ -228,7 +235,7 @@ function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
   const clientMock = mockDeep<OwnCloudSdk>()
   const jsonResponse = {
-    json: jest.fn().mockResolvedValue({ ocs: { data: notifications } }),
+    json: vi.fn().mockResolvedValue({ ocs: { data: notifications } }),
     headers: {}
   }
   clientMock.requests.ocs.mockResolvedValue(mockDeep<Response>(jsonResponse))

@@ -1,10 +1,8 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import PrivateLinkItem from 'web-app-files/src/components/SideBar/PrivateLinkItem.vue'
 import { useMessages } from '@ownclouders/web-pkg'
-
-jest.useFakeTimers()
 
 const folder = mock<Resource>({
   type: 'folder',
@@ -19,6 +17,14 @@ const folder = mock<Resource>({
 })
 
 describe('PrivateLinkItem', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('should render a button', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
@@ -26,7 +32,7 @@ describe('PrivateLinkItem', () => {
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
     Object.assign(window.navigator, {
       clipboard: {
-        writeText: jest.fn().mockImplementation(() => Promise.resolve())
+        writeText: vi.fn().mockImplementation(() => Promise.resolve())
       }
     })
 
@@ -39,7 +45,7 @@ describe('PrivateLinkItem', () => {
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(folder.privateLink)
     expect(showMessage).toHaveBeenCalledTimes(1)
 
-    jest.advanceTimersByTime(550)
+    vi.advanceTimersByTime(550)
 
     wrapper.vm.$nextTick(() => {
       expect(wrapper.html()).toMatchSnapshot()

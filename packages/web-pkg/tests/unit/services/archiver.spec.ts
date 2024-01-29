@@ -1,6 +1,6 @@
 import { ArchiverService } from '../../../src/services'
 import { RuntimeError } from '../../../src/errors'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '../../../src/services'
 import { unref, ref, Ref } from 'vue'
 import { AxiosResponse } from 'axios'
@@ -61,8 +61,7 @@ describe('archiver', () => {
     })
     it('returns a download url for a valid archive download trigger', async () => {
       const archiverService = getArchiverServiceInstance(capabilities)
-      window.URL.createObjectURL = jest.fn()
-
+      window.URL.createObjectURL = vi.fn(() => '')
       const fileId = 'asdf'
       const url = await archiverService.triggerDownload({ fileIds: [fileId] })
       expect(window.URL.createObjectURL).toHaveBeenCalled()
@@ -94,7 +93,7 @@ describe('archiver', () => {
     })
     it('returns a download url for a valid archive download trigger', async () => {
       const archiverService = getArchiverServiceInstance(capabilities)
-      window.URL.createObjectURL = jest.fn()
+      window.URL.createObjectURL = vi.fn(() => '')
       const dir = '/some/path'
       const fileName = 'qwer'
       const url = await archiverService.triggerDownload({ dir, files: [fileName] })

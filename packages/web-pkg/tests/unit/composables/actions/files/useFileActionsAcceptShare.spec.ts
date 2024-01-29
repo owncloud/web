@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsAcceptShare } from '../../../../../src/composables/actions/files/useFileActionsAcceptShare'
 import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'

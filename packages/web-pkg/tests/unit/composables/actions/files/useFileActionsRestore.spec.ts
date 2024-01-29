@@ -1,6 +1,6 @@
 import { useFileActionsRestore } from '../../../../../src/composables/actions'
 import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
 import { unref } from 'vue'
@@ -90,15 +90,14 @@ describe('restore', () => {
       })
     })
 
-    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper } = getWrapper({
         resolveClearTrashBin: false,
         setup: async () => {
-          const showErrorMessageStub = jest.spyOn(wrapper.vm, 'showErrorMessage')
-          const removeFilesFromTrashbinStub = jest.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
+          const showErrorMessageStub = vi.spyOn(wrapper.vm, 'showErrorMessage')
+          const removeFilesFromTrashbinStub = vi.spyOn(wrapper.vm, 'removeFilesFromTrashbin')
           await wrapper.vm.$_restore_restoreResources([{ id: '1', path: '/1' }], [])
 
           expect(showErrorMessageStub).toHaveBeenCalledTimes(1)
@@ -106,7 +105,7 @@ describe('restore', () => {
         }
       })
     })
-    // eslint-disable-next-line jest/no-disabled-tests
+
     it.skip('should request parent folder on collecting restore conflicts', () => {
       const { wrapper } = getWrapper({
         setup: async () => {
@@ -121,7 +120,7 @@ describe('restore', () => {
         }
       })
     })
-    // eslint-disable-next-line jest/no-disabled-tests
+
     it.skip('should find conflict within resources', () => {
       const { wrapper } = getWrapper({
         setup: async () => {
@@ -136,7 +135,7 @@ describe('restore', () => {
         }
       })
     })
-    // eslint-disable-next-line jest/no-disabled-tests
+
     it.skip('should add files without conflict to resolved resources', () => {
       const { wrapper } = getWrapper({
         setup: async () => {

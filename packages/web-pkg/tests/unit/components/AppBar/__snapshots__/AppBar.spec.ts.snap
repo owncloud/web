@@ -1,71 +1,70 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AppBar component renders by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
-<div class="" displayviewmodeswitch="false" hassidebartoggle="true" id="files-app-bar">
-  <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
-  <div class="files-topbar oc-py-s">
-    <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
+exports[`AppBar component > renders > by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
+"<div data-v-aba8ddeb="" id="files-app-bar" class="" displayviewmodeswitch="false" hassidebartoggle="true">
+  <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
+  <div data-v-aba8ddeb="" class="files-topbar oc-py-s">
+    <h1 data-v-aba8ddeb="" class="oc-invisible-sr">ExampleTitle</h1>
+    <div data-v-aba8ddeb="" class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
-      <portal-target name="app.runtime.mobile.nav"></portal-target>
+      <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
-      <div class="oc-flex" id="files-app-bar-controls-right">
-        <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+      <div data-v-aba8ddeb="" id="files-app-bar-controls-right" class="oc-flex">
+        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions oc-mt-xs">
-      <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
+    <div data-v-aba8ddeb="" class="files-app-bar-actions oc-mt-xs">
+      <div data-v-aba8ddeb="" class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
         <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
   </div>
-</div>
+</div>"
 `;
 
-exports[`AppBar component renders if given, with content in the actions slot 1`] = `
-<div class="" displayviewmodeswitch="false" hassidebartoggle="true" id="files-app-bar">
-  <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
-  <div class="files-topbar oc-py-s">
-    <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
+exports[`AppBar component > renders > if given, with content in the actions slot 1`] = `
+"<div data-v-aba8ddeb="" id="files-app-bar" class="" displayviewmodeswitch="false" hassidebartoggle="true">
+  <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
+  <div data-v-aba8ddeb="" class="files-topbar oc-py-s">
+    <h1 data-v-aba8ddeb="" class="oc-invisible-sr">ExampleTitle</h1>
+    <div data-v-aba8ddeb="" class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
-      <portal-target name="app.runtime.mobile.nav"></portal-target>
+      <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
-      <div class="oc-flex" id="files-app-bar-controls-right">
-        <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+      <div data-v-aba8ddeb="" id="files-app-bar-controls-right" class="oc-flex">
+        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions oc-mt-xs">
-      <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
-        <button class="action-slot">Click</button> <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
+    <div data-v-aba8ddeb="" class="files-app-bar-actions oc-mt-xs">
+      <div data-v-aba8ddeb="" class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle"><button class="action-slot">Click</button> <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
   </div>
-</div>
+</div>"
 `;
 
-exports[`AppBar component renders if given, with content in the content slot 1`] = `
-<div class="" displayviewmodeswitch="false" hassidebartoggle="true" id="files-app-bar">
-  <oc-hidden-announcer-stub announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
-  <div class="files-topbar oc-py-s">
-    <h1 class="oc-invisible-sr">ExampleTitle</h1>
-    <div class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
+exports[`AppBar component > renders > if given, with content in the content slot 1`] = `
+"<div data-v-aba8ddeb="" id="files-app-bar" class="" displayviewmodeswitch="false" hassidebartoggle="true">
+  <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
+  <div data-v-aba8ddeb="" class="files-topbar oc-py-s">
+    <h1 data-v-aba8ddeb="" class="oc-invisible-sr">ExampleTitle</h1>
+    <div data-v-aba8ddeb="" class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
-      <portal-target name="app.runtime.mobile.nav"></portal-target>
+      <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
-      <div class="oc-flex" id="files-app-bar-controls-right">
-        <view-options-stub hasfileextensions="true" hashiddenfiles="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagedefault="100" perpagequeryname="items-per-page" perpagestorageprefix="files" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+      <div data-v-aba8ddeb="" id="files-app-bar-controls-right" class="oc-flex">
+        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
       </div>
     </div>
-    <div class="files-app-bar-actions oc-mt-xs">
-      <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
+    <div data-v-aba8ddeb="" class="files-app-bar-actions oc-mt-xs">
+      <div data-v-aba8ddeb="" class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
         <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
         <!--v-if-->
       </div>
     </div>
     <div class="content-slot">Foo</div>
   </div>
-</div>
+</div>"
 `;

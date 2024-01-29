@@ -1,13 +1,13 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref, unref } from 'vue'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsOpenShortcut, useRoute } from '../../../../../src'
 import { Resource } from '@ownclouders/web-client'
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 
-jest.mock('../../../../../src/composables/router', () => ({
-  ...jest.requireActual('../../../../../src/composables/router'),
-  useRoute: jest.fn()
+vi.mock('../../../../../src/composables/router', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useRoute: vi.fn()
 }))
 
 window = Object.create(window)
@@ -18,7 +18,7 @@ Object.defineProperty(window, 'location', {
   writable: true
 })
 Object.defineProperty(window, 'open', { writable: true })
-window.open = jest.fn()
+window.open = vi.fn()
 
 describe('openShortcut', () => {
   describe('computed property "actions"', () => {
@@ -127,11 +127,9 @@ function getWrapper({
     })
   )
 
-  jest
-    .mocked(useRoute)
-    .mockImplementation(() =>
-      ref(mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }) as any)
-    )
+  vi.mocked(useRoute).mockImplementation(() =>
+    ref(mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }) as any)
+  )
 
   return {
     wrapper: getComposableWrapper(

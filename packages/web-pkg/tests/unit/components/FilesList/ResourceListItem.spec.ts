@@ -1,11 +1,6 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
-
-import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 import ResourceListItem from '../../../../src/components/FilesList/ResourceListItem.vue'
 
-const stubs = {
-  'oc-button': OcButton
-}
 const fileResource = {
   name: 'forest.jpg',
   path: 'nature/forest.jpg',
@@ -71,7 +66,7 @@ describe('OcResource', () => {
         resource: fileResource
       },
       global: {
-        stubs: { RouterLink: true, ...stubs },
+        stubs: { RouterLink: true },
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()]
       }
@@ -89,7 +84,7 @@ describe('OcResource', () => {
         parentFolderLink: {}
       },
       global: {
-        stubs: { RouterLink: true, ...stubs },
+        stubs: { RouterLink: true },
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()]
       }
@@ -106,7 +101,7 @@ describe('OcResource', () => {
         isPathDisplayed: true
       },
       global: {
-        stubs: { RouterLink: true, ...stubs },
+        stubs: { RouterLink: true },
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()]
       }
@@ -124,7 +119,7 @@ describe('OcResource', () => {
         parentFolderName: 'Example parent folder name'
       },
       global: {
-        stubs: { RouterLink: true, ...stubs },
+        stubs: { RouterLink: true },
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()]
       }
@@ -141,7 +136,7 @@ describe('OcResource', () => {
         parentFolderName: 'Example parent folder name'
       },
       global: {
-        stubs: { RouterLink: true, ...stubs },
+        stubs: { RouterLink: true },
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()]
       }

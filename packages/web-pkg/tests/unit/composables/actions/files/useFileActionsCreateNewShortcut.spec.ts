@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsCreateNewShortcut, useModals } from '../../../../../src/composables'

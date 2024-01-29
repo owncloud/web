@@ -1,6 +1,6 @@
 import { useSpaceActionsRename } from '../../../../../src/composables/actions/spaces'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   mockAxiosResolve,
@@ -49,7 +49,7 @@ describe('rename', () => {
     })
 
     it('should show message on error', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       getWrapper({
         setup: async ({ renameSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())

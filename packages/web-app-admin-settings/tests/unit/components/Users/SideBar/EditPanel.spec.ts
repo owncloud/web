@@ -5,7 +5,7 @@ import {
   mockAxiosReject,
   shallowMount
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { AxiosResponse } from 'axios'
 import { CapabilityStore } from '@ownclouders/web-pkg'

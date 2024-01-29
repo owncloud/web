@@ -2,11 +2,11 @@ import { defaultPlugins, mount } from 'web-test-helpers'
 import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vue'
 import { sortFields } from '../../../../src/helpers/ui/resourceTiles'
 import { Resource } from '@ownclouders/web-client'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 
-jest.mock('../../../../src/composables/viewMode', () => ({
-  ...jest.requireActual('../../../../src/composables/viewMode'),
-  useTileSize: jest.fn().mockReturnValue({
+vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useTileSize: vi.fn().mockReturnValue({
     tileSizePixels: 100
   })
 }))
@@ -37,13 +37,13 @@ describe('ResourceTiles component', () => {
     const mockElement = {
       clientWidth: 800
     }
-    ;(document as any).getElementById = jest.fn((id) => {
+    ;(document as any).getElementById = vi.fn((id) => {
       if (id === 'tiles-view') {
         return mockElement
       }
       return originalGetElementById.call(document, id)
     })
-    window.getComputedStyle = jest.fn().mockImplementation(() => {
+    window.getComputedStyle = vi.fn().mockImplementation(() => {
       return {
         getPropertyValue: (propName) => {
           switch (propName) {
@@ -116,7 +116,7 @@ describe('ResourceTiles component', () => {
         wrapper.vm.dragItem = mock<Resource>()
         await wrapper.vm.$nextTick()
         ;(wrapper.vm.$refs.ghostElementRef as any).$el = { style: {} }
-        wrapper.vm.dragStart(mock<Resource>(), { dataTransfer: { setDragImage: jest.fn() } })
+        wrapper.vm.dragStart(mock<Resource>(), { dataTransfer: { setDragImage: vi.fn() } })
         expect(wrapper.emitted('update:selectedIds')).toBeDefined()
       })
       it('emits the "fileDropped"-event on resource drop', () => {

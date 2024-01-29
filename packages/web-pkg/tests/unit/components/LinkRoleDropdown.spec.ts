@@ -1,6 +1,6 @@
 import LinkRoleDropdown from '../../../src/components/LinkRoleDropdown.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   ShareRole,
   linkRoleInternalFolder,

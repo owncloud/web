@@ -1,4 +1,3 @@
-import { describe } from '@jest/globals'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 describe('buildUrl', () => {
@@ -29,10 +28,10 @@ describe('buildUrl', () => {
     }
 
     const { buildUrl } = await import('@ownclouders/web-pkg/src/helpers/router/buildUrl')
-    jest.resetModules()
+    vi.resetModules()
 
     // hide warnings for non-existent routes
-    jest.spyOn(console, 'warn').mockImplementation(() => undefined)
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined)
 
     const router = createRouter({
       routes: [

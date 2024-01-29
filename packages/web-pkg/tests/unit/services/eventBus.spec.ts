@@ -26,7 +26,7 @@ describe('EventBus', () => {
 
   it('calls multiple subscriptions for the same topic', () => {
     const bus = new EventBus()
-    const fn = jest.fn()
+    const fn = vi.fn()
     const topic = 'evt.1'
 
     bus.subscribe(topic, fn)
@@ -38,7 +38,7 @@ describe('EventBus', () => {
 
   it('can unsubscribe a subscriber from a topic', () => {
     const bus = new EventBus()
-    const fn = jest.fn()
+    const fn = vi.fn()
     const topic = 'evt.1'
 
     const evt1Token = bus.subscribe(topic, fn)

@@ -147,10 +147,14 @@ export const useSharesStore = defineStore('shares', () => {
     })
     const shareQueriesPromises = []
 
-    const getShares = (subPath: string, indirect: boolean, options, outgoing: boolean) => {
+    const getShares = (
+      subPath: string,
+      indirect: boolean,
+      options,
+      outgoing: boolean
+    ): Promise<void> => {
       const buildMethod = outgoing ? buildShare : buildCollaboratorShare
       const res = indirect || !resource ? { type: 'folder' } : resource
-
       return clientService.owncloudSdk.shares
         .getShares(subPath, options)
         .then((data) => {

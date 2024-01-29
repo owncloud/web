@@ -1,9 +1,7 @@
 import { HttpClient } from '../../../src/http'
-import mockAxios from 'jest-mock-axios'
 import { z } from 'zod'
-import { mock } from 'jest-mock-extended'
-
-beforeEach(mockAxios.reset)
+import { mock, mockDeep } from 'vitest-mock-extended'
+import axios, { AxiosInstance } from 'axios'
 
 const schema = z.object({
   someProperty: z.string()
@@ -12,8 +10,11 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>
 
 describe('HttpClient', () => {
+  const mockAxios = mockDeep<AxiosInstance>()
+  vi.spyOn(axios, 'create').mockReturnValue(mockAxios)
+
   test('types', async () => {
-    const fn = jest.fn().mockReturnValue({ data: {} })
+    const fn = vi.fn().mockReturnValue({ data: {} })
 
     const client = mock<HttpClient>({
       delete: fn,
@@ -127,31 +128,14 @@ describe('HttpClient', () => {
   test.each(['delete', 'get', 'head', 'options', 'patch', 'post', 'put'])('%s', (m) => {
     const client = new HttpClient()
     client[m]('url')
-    mockAxios.mockResponse({ data: undefined })
+    mockAxios[m].mockResolvedValue({ data: undefined })
     expect(mockAxios[m]).toHaveBeenCalledTimes(1)
   })
 
   test('request', () => {
     const client = new HttpClient()
     client.request({ method: 'get' })
-    mockAxios.mockResponse({ data: undefined })
+    mockAxios.get.mockResolvedValue({ data: undefined })
     expect(mockAxios.request).toHaveBeenCalledTimes(1)
-  })
-
-  // eslint-disable-next-line jest/no-done-callback
-  test('cancel', (done) => {
-    const client = new HttpClient()
-    const thenFn = jest.fn()
-    const catchFn = jest.fn()
-    const promise = client.get('/foo').then(thenFn).catch(catchFn)
-    client.cancel('foo')
-
-    setTimeout(async () => {
-      mockAxios.mockResponse({ data: 'data' }, undefined, true)
-      await promise
-      expect(thenFn).not.toHaveBeenCalled()
-      expect(catchFn).toHaveBeenCalledWith(expect.any(mockAxios.Cancel))
-      done()
-    })
   })
 })

@@ -12,7 +12,7 @@ describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
     it('should show message on success', async () => {
       const { wrapper, mocks } = getWrapper()
-      mocks.$clientService.graphAuthenticated.drives.updateDrive.mockImplementation(() =>
+      mocks.$clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
         mockAxiosResolve({
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
           name: 'any',
@@ -33,7 +33,7 @@ describe('QuotaModal', () => {
     })
 
     it('should show message on server error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockRejectedValue(new Error())
       await wrapper.vm.onConfirm()

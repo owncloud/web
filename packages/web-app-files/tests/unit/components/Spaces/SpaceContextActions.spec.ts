@@ -1,7 +1,7 @@
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
 import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
 const spaceMock = mock<Drive>({

@@ -2,18 +2,18 @@ import Favorites from '../../../src/views/Favorites.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { h, ref } from 'vue'
-import { mockDeep, mock } from 'jest-mock-extended'
+import { mockDeep, mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, defaultStubs, mount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 
-jest.mock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useFileActions: jest.fn(),
-  useExtensionRegistry: jest.fn()
+vi.mock('web-app-files/src/composables')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useFileActions: vi.fn(),
+  useExtensionRegistry: vi.fn()
 }))
 
 describe('Favorites view', () => {
@@ -44,7 +44,7 @@ describe('Favorites view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() => {
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() => {
     return useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
       areResourcesLoading: ref(loading)
@@ -68,7 +68,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
     }
   ]
 
-  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+  vi.mocked(useExtensionRegistry).mockImplementation(() =>
     useExtensionRegistryMock({
       requestExtensions<ExtensionType>(type: string, scopes: string[]) {
         return extensions as ExtensionType[]

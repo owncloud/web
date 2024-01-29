@@ -1,5 +1,5 @@
 import DriveRedirect from '../../../../src/views/spaces/DriveRedirect.vue'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import {
   defaultPlugins,
   mount,

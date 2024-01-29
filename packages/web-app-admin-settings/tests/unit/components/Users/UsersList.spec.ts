@@ -4,10 +4,10 @@ import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclou
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 
 const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  displayPositionedDropdown: jest.fn(),
-  queryItemAsString: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  displayPositionedDropdown: vi.fn(),
+  queryItemAsString: vi.fn()
 }))
 
 describe('UsersList', () => {
@@ -95,28 +95,28 @@ describe('UsersList', () => {
   })
   it('should show the context menu on right click', async () => {
     const users = getUserMocks()
-    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
     const { wrapper } = getWrapper({ mountType: mount, props: { users } })
     await wrapper.find(`[data-item-id="${users[0].id}"]`).trigger('contextmenu')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the context menu on context menu button click', async () => {
     const users = getUserMocks()
-    const spyDisplayPositionedDropdown = jest.mocked(displayPositionedDropdown)
+    const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
     const { wrapper } = getWrapper({ mountType: mount, props: { users } })
     await wrapper.find('.users-table-btn-action-dropdown').trigger('click')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the user details on details button click', async () => {
     const users = getUserMocks()
-    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const eventBusSpy = vi.spyOn(eventBus, 'publish')
     const { wrapper } = getWrapper({ mountType: mount, props: { users } })
     await wrapper.find('.users-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
   })
   it('should show the user edit panel on edit button click', async () => {
     const users = getUserMocks()
-    const eventBusSpy = jest.spyOn(eventBus, 'publish')
+    const eventBusSpy = vi.spyOn(eventBus, 'publish')
     const { wrapper } = getWrapper({ mountType: mount, props: { users } })
     await wrapper.find('.users-table-btn-edit').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.openWithPanel, 'EditPanel')
@@ -124,8 +124,8 @@ describe('UsersList', () => {
 })
 
 function getWrapper({ mountType = shallowMount, props = {} } = {}) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '1')
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()
   return {
     wrapper: mountType(UsersList, {

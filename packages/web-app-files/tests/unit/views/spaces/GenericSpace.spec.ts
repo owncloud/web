@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import GenericSpace from 'web-app-files/src/views/spaces/GenericSpace.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables/resourcesViewDefaults'
@@ -16,21 +16,21 @@ import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPat
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { h } from 'vue'
 
-const mockCreateFolder = jest.fn()
-const mockUseEmbedMode = jest.fn().mockReturnValue({ isEnabled: computed(() => false) })
+const mockCreateFolder = vi.fn()
+const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
-jest.mock('web-app-files/src/composables/resourcesViewDefaults')
-jest.mock('web-app-files/src/composables/keyboardActions')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useBreadcrumbsFromPath: jest.fn(),
-  useExtensionRegistry: jest.fn(),
+vi.mock('web-app-files/src/composables/resourcesViewDefaults')
+vi.mock('web-app-files/src/composables/keyboardActions')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useBreadcrumbsFromPath: vi.fn(),
+  useExtensionRegistry: vi.fn(),
   useFileActionsCreateNewFolder: () => ({
     actions: [{ handler: mockCreateFolder }]
   }),
-  useEmbedMode: jest.fn().mockImplementation(() => mockUseEmbedMode()),
-  useFileActions: jest.fn(() => ({})),
-  useOpenWithDefaultApp: jest.fn(() => ({}))
+  useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode()),
+  useFileActions: vi.fn(() => ({})),
+  useOpenWithDefaultApp: vi.fn(() => ({}))
 }))
 
 const selectors = Object.freeze({
@@ -94,7 +94,7 @@ describe('GenericSpace view', () => {
     ])('include root item(s)', ({ driveType, expectedItems }) => {
       const space = {
         id: 1,
-        getDriveAliasAndItem: jest.fn(),
+        getDriveAliasAndItem: vi.fn(),
         driveType,
         isOwner: () => driveType === 'personal'
       }
@@ -199,7 +199,7 @@ describe('GenericSpace view', () => {
           files: [{ ...mock<Resource>(), isFolder: false }],
           space: {
             id: 1,
-            getDriveAliasAndItem: jest.fn(),
+            getDriveAliasAndItem: vi.fn(),
             name: 'Personal space',
             driveType: 'public'
           }
@@ -276,7 +276,7 @@ function getMountedWrapper({
   currentRoute = { name: 'files-spaces-generic', path: '/' },
   currentFolder = mock<Resource>(),
   runningOnEos = false,
-  space = { id: 1, getDriveAliasAndItem: jest.fn(), name: 'Personal space', driveType: '' },
+  space = { id: 1, getDriveAliasAndItem: vi.fn(), name: 'Personal space', driveType: '' },
   breadcrumbsFromPath = [],
   stubs = {}
 } = {}) {
@@ -284,12 +284,10 @@ function getMountedWrapper({
     paginatedResources: ref(files),
     areResourcesLoading: ref(loading)
   })
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
-  jest
-    .mocked(useBreadcrumbsFromPath)
-    .mockImplementation(() =>
-      useBreadcrumbsFromPathMock({ breadcrumbsFromPath: jest.fn(() => breadcrumbsFromPath) })
-    )
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
+  vi.mocked(useBreadcrumbsFromPath).mockImplementation(() =>
+    useBreadcrumbsFromPathMock({ breadcrumbsFromPath: vi.fn(() => breadcrumbsFromPath) })
+  )
 
   const extensions = [
     {
@@ -308,7 +306,7 @@ function getMountedWrapper({
     }
   ]
 
-  jest.mocked(useExtensionRegistry).mockImplementation(() =>
+  vi.mocked(useExtensionRegistry).mockImplementation(() =>
     useExtensionRegistryMock({
       requestExtensions<ExtensionType>(type: string, scopes: string[]) {
         return extensions as ExtensionType[]

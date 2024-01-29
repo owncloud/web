@@ -71,12 +71,14 @@ describe('OcTable', () => {
     expect(wrapper.findAll('.slot-header').length).toBe(1)
 
     // A11y tests
-    expect(
-      await axe(wrapper.html(), {
-        rules: {
-          region: { enabled: false }
-        }
-      })
+    ;(
+      expect(
+        await axe(wrapper.html(), {
+          rules: {
+            region: { enabled: false }
+          }
+        })
+      ) as any
     ).toHaveNoViolations()
   })
 

@@ -1,7 +1,7 @@
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { extensions } from '../../src/extensions'
 import { ApplicationSetupOptions, UppyService } from '@ownclouders/web-pkg'
 

@@ -1,12 +1,16 @@
 import { getDefaultLinkPermissions, getExpirationRules } from '../../../../src/helpers/share'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
 import { createTestingPinia } from 'web-test-helpers'
 import { useCapabilityStore } from '../../../../src/composables/piniaStores'
 
 describe('getDefaultLinkPermissions', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('returns internal if user is not allowed to create public links', () => {
     const permissions = getDefaultLinkPermissions({
       ability: mock<Ability>({ can: () => false }),
@@ -28,8 +32,7 @@ describe('getDefaultLinkPermissions', () => {
 
 describe('getExpirationRules', () => {
   it('correctly computes rules based on the "expire_date"-capability', () => {
-    jest.useFakeTimers().setSystemTime(new Date('2000-01-01'))
-
+    vi.useFakeTimers().setSystemTime(new Date('2000-01-01'))
     createTestingPinia()
     const capabilityStore = useCapabilityStore()
     const capabilities = mock<PublicExpirationCapability>({ enforced: true, days: '10' })

@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`GroupSelect renders the select input 1`] = `
-<div id="user-group-select-form">
-  <oc-select-stub class="oc-mb-s" clearable="false" disabled="false" filter="[Function]" fixmessageline="true" getoptionlabel="[Function]" id="oc-select-1" label="Groups" loading="false" model-value="[object Object]" multiple="true" optionlabel="displayName" options="undefined" readonly="false" searchable="true"></oc-select-stub>
-</div>
+exports[`GroupSelect > renders the select input 1`] = `
+"<div id="user-group-select-form">
+  <oc-select-stub id="oc-select-1" filter="[Function]" disabled="false" label="Groups" optionlabel="displayName" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="true" multiple="true" readonly="false" model-value="[object Object]" class="oc-mb-s" options="undefined"></oc-select-stub>
+</div>"
 `;

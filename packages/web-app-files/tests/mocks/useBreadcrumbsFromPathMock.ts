@@ -4,8 +4,8 @@ export const useBreadcrumbsFromPathMock = (
   options: Partial<ReturnType<typeof useBreadcrumbsFromPath>> = {}
 ): ReturnType<typeof useBreadcrumbsFromPath> => {
   return {
-    breadcrumbsFromPath: jest.fn(() => []),
-    concatBreadcrumbs: jest.fn((...args) => args),
+    breadcrumbsFromPath: vi.fn(() => []),
+    concatBreadcrumbs: vi.fn((...args) => args),
     ...options
   }
 }

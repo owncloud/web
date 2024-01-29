@@ -6,7 +6,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
 
 const totalQuota = 1000

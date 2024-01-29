@@ -1,5 +1,5 @@
 import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
-import { mockDeep } from 'jest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
@@ -39,7 +39,7 @@ describe('CreateSpace component', () => {
       expect(spacesStore.upsertSpace).toHaveBeenCalled()
     })
     it('shows a message when an error occurred', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks } = getWrapper()
       const { modals } = useModals()
       await wrapper.find(selectors.newSpaceBtn).trigger('click')

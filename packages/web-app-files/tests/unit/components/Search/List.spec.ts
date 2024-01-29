@@ -1,5 +1,4 @@
 import { merge } from 'lodash-es'
-import { describe } from '@jest/globals'
 import { shallowMount } from '@vue/test-utils'
 import List from 'web-app-files/src/components/Search/List.vue'
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
@@ -10,15 +9,15 @@ import { defaultComponentMocks, defaultPlugins, mockAxiosResolve } from 'web-tes
 import { queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Capabilities } from '@ownclouders/web-client/src/ocs'
 
-jest.mock('web-app-files/src/composables')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  queryItemAsString: jest.fn(),
-  useAppDefaults: jest.fn(),
-  useFileActions: jest.fn()
+vi.mock('web-app-files/src/composables')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  queryItemAsString: vi.fn(),
+  useAppDefaults: vi.fn(),
+  useFileActions: vi.fn()
 }))
 
 const selectors = {
@@ -212,21 +211,21 @@ function getWrapper({
   lastModifiedFilterQuery = null,
   mocks = {}
 } = {}) {
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => lastModifiedFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => lastModifiedFilterQuery)
 
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(resources)
   })
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() => resourcesViewDetailsMock)
 
   const localMocks = {
     ...defaultComponentMocks(),
     ...mocks
   }
-  localMocks.$clientService.graphAuthenticated.tags.getTags.mockReturnValue(
+  localMocks.$clientService.graphAuthenticated.tags.getTags.mockResolvedValue(
     mockAxiosResolve({ value: availableTags })
   )
 

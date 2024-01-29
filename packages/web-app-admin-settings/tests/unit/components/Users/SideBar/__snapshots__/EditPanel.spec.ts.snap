@@ -1,26 +1,26 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`EditPanel renders all available inputs 1`] = `
-<div class="oc-mt-xl" id="user-edit-panel">
+exports[`EditPanel > renders all available inputs 1`] = `
+"<div id="user-edit-panel" class="oc-mt-xl">
   <user-info-box-stub user="[object Object]"></user-info-box-stub>
-  <form autocomplete="off" class="oc-background-highlight oc-p-m" id="user-edit-form">
+  <form id="user-edit-form" class="oc-background-highlight oc-p-m" autocomplete="off">
     <div>
-      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="userName-input" label="User name" passwordpolicy="[object Object]" readonly="false" type="text"></oc-text-input-stub>
-      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="displayName-input" label="First and last name" modelvalue="jan" passwordpolicy="[object Object]" readonly="false" type="text"></oc-text-input-stub>
-      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" errormessage="" fixmessageline="true" id="email-input" label="Email" modelvalue="jan@owncloud.com" passwordpolicy="[object Object]" readonly="false" type="email"></oc-text-input-stub>
-      <oc-text-input-stub class="oc-mb-s" clearbuttonaccessiblelabel="" clearbuttonenabled="false" disabled="false" fixmessageline="true" id="password-input" label="Password" modelvalue="" passwordpolicy="[object Object]" placeholder="●●●●●●●●" readonly="false" type="password"></oc-text-input-stub>
+      <oc-text-input-stub id="userName-input" type="text" clearbuttonenabled="false" clearbuttonaccessiblelabel="" disabled="false" label="User name" errormessage="" fixmessageline="true" readonly="false" passwordpolicy="[object Object]" class="oc-mb-s"></oc-text-input-stub>
+      <oc-text-input-stub id="displayName-input" type="text" modelvalue="jan" clearbuttonenabled="false" clearbuttonaccessiblelabel="" disabled="false" label="First and last name" errormessage="" fixmessageline="true" readonly="false" passwordpolicy="[object Object]" class="oc-mb-s"></oc-text-input-stub>
+      <oc-text-input-stub id="email-input" type="email" modelvalue="jan@owncloud.com" clearbuttonenabled="false" clearbuttonaccessiblelabel="" disabled="false" label="Email" errormessage="" fixmessageline="true" readonly="false" passwordpolicy="[object Object]" class="oc-mb-s"></oc-text-input-stub>
+      <oc-text-input-stub id="password-input" type="password" modelvalue="" clearbuttonenabled="false" clearbuttonaccessiblelabel="" disabled="false" label="Password" fixmessageline="true" readonly="false" passwordpolicy="[object Object]" class="oc-mb-s" placeholder="●●●●●●●●"></oc-text-input-stub>
       <div class="oc-mb-s">
-        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="role-input" label="Role" loading="false" multiple="false" optionlabel="displayName" options="[object Object]" readonly="false" searchable="true"></oc-select-stub>
+        <oc-select-stub id="role-input" filter="[Function]" disabled="false" label="Role" optionlabel="displayName" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="false" multiple="false" readonly="false" options="[object Object]"></oc-select-stub>
         <div class="oc-text-input-message"></div>
       </div>
       <div class="oc-mb-s">
-        <oc-select-stub clearable="false" disabled="false" filter="[Function]" fixmessageline="false" getoptionlabel="[Function]" id="login-input" label="Login" loading="false" model-value="[object Object]" multiple="false" optionlabel="label" options="[object Object],[object Object]" readonly="false" searchable="true"></oc-select-stub>
+        <oc-select-stub id="login-input" filter="[Function]" disabled="false" label="Login" optionlabel="label" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="false" multiple="false" readonly="false" model-value="[object Object]" options="[object Object],[object Object]"></oc-select-stub>
         <div class="oc-text-input-message"></div>
       </div>
-      <quota-select-stub class="oc-mb-s" description-message="" disabled="false" fix-message-line="true" id="quota-select-form" label="Personal quota" maxquota="0" read-only="false" totalquota="0"></quota-select-stub>
-      <group-select-stub class="oc-mb-s" groupoptions="undefined,undefined" selectedgroups=""></group-select-stub>
+      <quota-select-stub totalquota="0" maxquota="0" id="quota-select-form" disabled="false" class="oc-mb-s" label="Personal quota" fix-message-line="true" description-message="" read-only="false"></quota-select-stub>
+      <group-select-stub selectedgroups="" groupoptions="undefined,undefined" class="oc-mb-s"></group-select-stub>
     </div>
-    <compare-save-dialog-stub class="edit-compare-save-dialog oc-mb-l" compareobject="[object Object]" confirmbuttondisabled="false" originalobject="[object Object]"></compare-save-dialog-stub>
+    <compare-save-dialog-stub originalobject="[object Object]" compareobject="[object Object]" confirmbuttondisabled="false" class="edit-compare-save-dialog oc-mb-l"></compare-save-dialog-stub>
   </form>
-</div>
+</div>"
 `;

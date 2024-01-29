@@ -4,7 +4,7 @@ import {
   createLocation
 } from '../../../src/router/utils'
 import { RouteLocation, Router } from 'vue-router'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 
 describe('utils', () => {

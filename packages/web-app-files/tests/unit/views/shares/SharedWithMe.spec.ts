@@ -10,17 +10,17 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { ShareTypes, ShareResource } from '@ownclouders/web-client/src/helpers'
 
-jest.mock('web-app-files/src/composables/resourcesViewDefaults')
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useSort: jest.fn().mockImplementation(() => useSortMock()),
-  queryItemAsString: jest.fn(),
-  useRouteQuery: jest.fn(),
-  useOpenWithDefaultApp: jest.fn()
+vi.mock('web-app-files/src/composables/resourcesViewDefaults')
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useSort: vi.fn().mockImplementation(() => useSortMock()),
+  queryItemAsString: vi.fn(),
+  useRouteQuery: vi.fn(),
+  useOpenWithDefaultApp: vi.fn()
 }))
 
 describe('SharedWithMe view', () => {
@@ -150,22 +150,22 @@ function getMountedWrapper({
   files = [],
   openWithDefaultAppQuery = ''
 } = {}) {
-  jest.mocked(useResourcesViewDefaults).mockImplementation(() =>
+  vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
       areResourcesLoading: ref(loading)
     })
   )
-  jest.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
+  vi.mocked(useSort).mockImplementation((options) => useSortMock({ items: ref(options.items) }))
   // selected share types
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
   // selected shared by
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => undefined)
   // openWithDefaultAppQuery
-  jest.mocked(queryItemAsString).mockImplementationOnce(() => openWithDefaultAppQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => openWithDefaultAppQuery)
 
-  const openWithDefaultApp = jest.fn()
-  jest.mocked(useOpenWithDefaultApp).mockReturnValue({ openWithDefaultApp })
+  const openWithDefaultApp = vi.fn()
+  vi.mocked(useOpenWithDefaultApp).mockReturnValue({ openWithDefaultApp })
 
   const defaultMocks = {
     ...defaultComponentMocks({

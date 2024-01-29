@@ -2,15 +2,15 @@ import { computed, unref } from 'vue'
 import { useFileActionsCreateLink } from '../../../../../src/composables/actions/files/useFileActionsCreateLink'
 import { useMessages, useModals, CapabilityStore } from '../../../../../src/composables/piniaStores'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { useCreateLink, useDefaultLinkPermissions } from '../../../../../src/composables/links'
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
-jest.mock('../../../../../src/composables/links', () => ({
-  ...jest.requireActual('../../../../../src/composables/links'),
-  useCreateLink: jest.fn(),
-  useDefaultLinkPermissions: jest.fn()
+vi.mock('../../../../../src/composables/links', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useCreateLink: vi.fn(),
+  useDefaultLinkPermissions: vi.fn()
 }))
 
 describe('useFileActionsCreateLink', () => {
@@ -97,7 +97,7 @@ describe('useFileActionsCreateLink', () => {
       })
     })
     it('calls the onLinkCreatedCallback if given', () => {
-      const onLinkCreatedCallback = jest.fn()
+      const onLinkCreatedCallback = vi.fn()
       getWrapper({
         onLinkCreatedCallback,
         setup: async ({ actions }) => {
@@ -127,11 +127,11 @@ function getWrapper({
   onLinkCreatedCallback = undefined,
   showMessages = true
 }) {
-  const createLinkMock = jest.fn()
-  jest.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
-  jest
-    .mocked(useDefaultLinkPermissions)
-    .mockReturnValue({ defaultLinkPermissions: computed(() => defaultLinkPermissions) })
+  const createLinkMock = vi.fn()
+  vi.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
+  vi.mocked(useDefaultLinkPermissions).mockReturnValue({
+    defaultLinkPermissions: computed(() => defaultLinkPermissions)
+  })
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }
   const capabilities = {

@@ -1,11 +1,13 @@
 import { useAuthStore, useConfigStore } from '@ownclouders/web-pkg'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { AuthService } from 'web-runtime/src/services/auth/authService'
 import { UserManager } from 'web-runtime/src/services/auth/userManager'
 import { RouteLocation, createRouter, createTestingPinia } from 'web-test-helpers/src'
 
-const mockUpdateContext = jest.fn()
-console.debug = jest.fn()
+const mockUpdateContext = vi.fn()
+console.debug = vi.fn()
+
+vi.mock('web-runtime/src/services/auth/userManager')
 
 const initAuthService = ({ authService, configStore = null, router = null }) => {
   createTestingPinia()
@@ -33,16 +35,17 @@ describe('AuthService', () => {
       async (url, path, query: any) => {
         const authService = new AuthService()
 
-        jest.replaceProperty(authService as any, 'userManager', {
-          signinRedirectCallback: jest.fn(),
-          getAndClearPostLoginRedirectUrl: () => url
+        Object.defineProperty(authService, 'userManager', {
+          value: {
+            signinRedirectCallback: vi.fn(),
+            getAndClearPostLoginRedirectUrl: () => url
+          }
         })
 
         const router = createRouter()
-        const replaceSpy = jest.spyOn(router, 'replace')
+        const replaceSpy = vi.spyOn(router, 'replace')
 
         initAuthService({ authService, router })
-
         await authService.signInCallback()
 
         expect(replaceSpy).toHaveBeenCalledWith({
@@ -57,14 +60,12 @@ describe('AuthService', () => {
     it('when embed mode is disabled and access_token is present, should call updateContext', async () => {
       const authService = new AuthService()
 
-      jest.replaceProperty(
-        authService as any,
-        'userManager',
-        mock<UserManager>({
-          getAccessToken: jest.fn().mockResolvedValue('access-token'),
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getAccessToken: vi.fn().mockResolvedValue('access-token'),
           updateContext: mockUpdateContext
         })
-      )
+      })
 
       initAuthService({ authService })
 
@@ -76,14 +77,12 @@ describe('AuthService', () => {
     it('when embed mode is disabled and access_token is not present, should not call updateContext', async () => {
       const authService = new AuthService()
 
-      jest.replaceProperty(
-        authService as any,
-        'userManager',
-        mock<UserManager>({
-          getAccessToken: jest.fn().mockResolvedValue(null),
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getAccessToken: vi.fn().mockResolvedValue(null),
           updateContext: mockUpdateContext
         })
-      )
+      })
 
       initAuthService({ authService })
 
@@ -95,14 +94,12 @@ describe('AuthService', () => {
     it('when embed mode is enabled, access_token is present but auth is not delegated, should call updateContext', async () => {
       const authService = new AuthService()
 
-      jest.replaceProperty(
-        authService as any,
-        'userManager',
-        mock<UserManager>({
-          getAccessToken: jest.fn().mockResolvedValue('access-token'),
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getAccessToken: vi.fn().mockResolvedValue('access-token'),
           updateContext: mockUpdateContext
         })
-      )
+      })
 
       initAuthService({ authService })
 
@@ -114,14 +111,12 @@ describe('AuthService', () => {
     it('when embed mode is enabled, access_token is present and auth is delegated, should not call updateContext', async () => {
       const authService = new AuthService()
 
-      jest.replaceProperty(
-        authService as any,
-        'userManager',
-        mock<UserManager>({
-          getAccessToken: jest.fn().mockResolvedValue('access-token'),
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getAccessToken: vi.fn().mockResolvedValue('access-token'),
           updateContext: mockUpdateContext
         })
-      )
+      })
 
       const configStore = useConfigStore()
       configStore.options = { embed: { enabled: true, delegateAuthentication: true } }
@@ -135,14 +130,12 @@ describe('AuthService', () => {
     it('when embed mode is disabled, access_token is present and auth is delegated, should call updateContext', async () => {
       const authService = new AuthService()
 
-      jest.replaceProperty(
-        authService as any,
-        'userManager',
-        mock<UserManager>({
-          getAccessToken: jest.fn().mockResolvedValue('access-token'),
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getAccessToken: vi.fn().mockResolvedValue('access-token'),
           updateContext: mockUpdateContext
         })
-      )
+      })
 
       initAuthService({ authService })
 

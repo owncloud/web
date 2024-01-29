@@ -1,6 +1,6 @@
 import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
@@ -44,10 +44,10 @@ const selectors = {
 const linkListItemNameAndCopy = 'name-and-copy-stub'
 const linkListItemDetailsAndEdit = 'details-and-edit-stub'
 
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  getDefaultLinkPermissions: jest.fn(),
-  useFileActionsCreateLink: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  getDefaultLinkPermissions: vi.fn(),
+  useFileActionsCreateLink: vi.fn()
 }))
 
 describe('FileLinks', () => {
@@ -107,9 +107,9 @@ describe('FileLinks', () => {
       const resource = mockDeep<Resource>({
         path: '/lorem.txt',
         type: 'file',
-        canShare: jest.fn(() => false),
+        canShare: vi.fn(() => false),
         isFolder: false,
-        isReceivedShare: jest.fn()
+        isReceivedShare: vi.fn()
       })
       const { wrapper } = getWrapper({ resource })
       expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
@@ -120,7 +120,7 @@ describe('FileLinks', () => {
       path: '/lorem.txt',
       type: 'file',
       isFolder: false,
-      isReceivedShare: jest.fn(),
+      isReceivedShare: vi.fn(),
       canShare: () => true
     })
 
@@ -173,9 +173,9 @@ function getWrapper({
   abilities?: AbilityRule[]
   defaultLinkPermissions?: number
 } = {}) {
-  const createLinkMock = jest.fn()
-  jest.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
-  jest.mocked(useFileActionsCreateLink).mockReturnValue({
+  const createLinkMock = vi.fn()
+  vi.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
+  vi.mocked(useFileActionsCreateLink).mockReturnValue({
     actions: computed(() => [mock<FileAction>({ name: 'create-links', handler: createLinkMock })])
   })
 

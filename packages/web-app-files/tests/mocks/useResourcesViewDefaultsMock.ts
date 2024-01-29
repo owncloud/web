@@ -1,6 +1,6 @@
 import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { readonly, ref } from 'vue'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { Task } from 'vue-concurrency'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 
@@ -9,7 +9,7 @@ export const useResourcesViewDefaultsMock = (
 ): ReturnType<typeof useResourcesViewDefaults> => {
   return {
     fileListHeaderY: ref(0),
-    refreshFileListHeaderPosition: jest.fn(),
+    refreshFileListHeaderPosition: vi.fn(),
     loadResourcesTask: mockDeep<Task<any, any>>({
       isRunning: false
     }),
@@ -19,17 +19,17 @@ export const useResourcesViewDefaultsMock = (
     paginatedResources: ref([]),
     paginationPages: readonly(ref(0)),
     paginationPage: readonly(ref(0)),
-    handleSort: jest.fn(),
+    handleSort: vi.fn(),
     sortBy: readonly(ref('name')),
     sortDir: undefined,
     selectedResources: ref([]),
     selectedResourcesIds: ref([]),
     selectedResourceSpace: ref(mock<SpaceResource>()),
-    isResourceInSelection: jest.fn(() => false),
+    isResourceInSelection: vi.fn(() => false),
     isSideBarOpen: ref(false),
     sideBarActivePanel: ref(''),
-    scrollToResource: jest.fn(),
-    scrollToResourceFromRoute: jest.fn(),
+    scrollToResource: vi.fn(),
+    scrollToResourceFromRoute: vi.fn(),
     viewMode: ref('resource-table'),
     viewSize: ref(1),
     ...options

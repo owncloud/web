@@ -5,7 +5,7 @@ import {
   mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 
@@ -26,7 +26,7 @@ describe('AddToGroupsModal', () => {
       )
 
       wrapper.vm.selectedOptions = groups
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
       const { showMessage } = useMessages()
@@ -35,7 +35,7 @@ describe('AddToGroupsModal', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const users = [mock<User>({ memberOf: [] }), mock<User>({ memberOf: [] })]
       const groups = [mock<Group>(), mock<Group>()]
@@ -44,7 +44,7 @@ describe('AddToGroupsModal', () => {
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
 
       wrapper.vm.selectedOptions = groups
-      const eventSpy = jest.spyOn(eventBus, 'publish')
+      const eventSpy = vi.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
       const { showErrorMessage } = useMessages()

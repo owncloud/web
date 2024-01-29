@@ -1,6 +1,6 @@
 import MobileNav from '../../../src/components/MobileNav.vue'
 import { defaultPlugins, defaultComponentMocks, mount } from 'web-test-helpers'
-import { mock } from 'jest-mock-extended'
+import { mock } from 'vitest-mock-extended'
 import { NavItem } from 'web-runtime/src/helpers/navItems'
 
 const selectors = {

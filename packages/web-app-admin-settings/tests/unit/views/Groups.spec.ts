@@ -1,6 +1,6 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { Group } from '@ownclouders/web-client/src/generated'
@@ -8,22 +8,22 @@ import { Group } from '@ownclouders/web-client/src/generated'
 const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
   const clientService = mockDeep<ClientService>()
-  clientService.graphAuthenticated.groups.listGroups.mockImplementation(() =>
+  clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
     mockAxiosResolve({ value: [{ id: '1', name: 'users', groupTypes: [] }] })
   )
   return clientService
 }
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useAppDefaults: jest.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useAppDefaults: vi.fn()
 }))
 
 describe('Groups view', () => {
   describe('method "onEditGroup"', () => {
     it('should emit event on success', async () => {
       const clientService = getClientServiceMock()
-      clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosResolve())
-      clientService.graphAuthenticated.groups.getGroup.mockImplementation(() =>
+      clientService.graphAuthenticated.groups.editGroup.mockResolvedValue(mockAxiosResolve())
+      clientService.graphAuthenticated.groups.getGroup.mockResolvedValue(
         mockAxiosResolve({ id: '1', displayName: 'administrators' })
       )
       const { wrapper } = getWrapper({ clientService })
@@ -33,7 +33,7 @@ describe('Groups view', () => {
         name: 'administrators'
       }
 
-      const busStub = jest.spyOn(eventBus, 'publish')
+      const busStub = vi.spyOn(eventBus, 'publish')
       await wrapper.vm.loadResourcesTask.last
 
       const updatedGroup = await wrapper.vm.onEditGroup(editGroup)
@@ -44,7 +44,7 @@ describe('Groups view', () => {
     })
 
     it('should show message on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const clientService = getClientServiceMock()
       clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
       const { wrapper } = getWrapper({ clientService })

@@ -1,6 +1,6 @@
 import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { mock, mockDeep } from 'jest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client/src'
 
@@ -11,10 +11,10 @@ const selectors = {
   exportInProgress: '[data-testid="export-in-process"]'
 }
 
-const downloadFile = jest.fn()
-jest.mock('@ownclouders/web-pkg', () => ({
-  ...jest.requireActual('@ownclouders/web-pkg'),
-  useDownloadFile: jest.fn(() => ({ downloadFile }))
+const downloadFile = vi.fn()
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useDownloadFile: vi.fn(() => ({ downloadFile }))
 }))
 
 describe('GdprExport component', () => {
