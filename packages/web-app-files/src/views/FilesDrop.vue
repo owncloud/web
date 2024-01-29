@@ -27,7 +27,7 @@
         </div>
         <div class="oc-flex oc-flex-center" v-else>
           <p
-            class="oc-rm-m oc-py-l oc-text-small oc-width-2-3@m oc-width-2-3@l"
+            class="oc-m-rm oc-pt-xl oc-text-small oc-width-2-3@m oc-width-2-3@l"
             v-text="
               $gettext(
                 'Note: Transfer of nested folder structures is not possible. Instead, all files from the subfolders will be uploaded individually.'
