@@ -17,6 +17,7 @@ export interface openResourceViaUrlArgs {
   resource?: string
   user: User
   space?: string
+  editorName?: string
 }
 
 export const navigateToDetailsPanelOfResource = async (
@@ -29,9 +30,12 @@ export const navigateToDetailsPanelOfResource = async (
 }
 
 export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
-  const { page, resource, user, space } = args
+  const { page, resource, user, space, editorName } = args
   const fileId = await getTheFileIdOfSpaceFile(user, space, resource)
-  const fullUrl = `${config.backendUrl}/f/${fileId}`
+
+  const fullUrl = editorName
+    ? `${config.backendUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`
+    : `${config.backendUrl}/f/${fileId}`
   await page.goto(fullUrl)
 }
 
