@@ -23,7 +23,17 @@
           <h2>
             <span v-text="$gettext('An error occurred while loading the public link')" />
           </h2>
-          <p class="oc-m-rm" v-text="errorMessage" />
+          <p class="oc-rm-m oc-m-rm" v-text="errorMessage" />
+        </div>
+        <div v-else>
+          <p
+            class="oc-rm-m oc-py-l"
+            v-text="
+              $gettext(
+                'Note: Transfer of nested folder structures is not possible. Instead, all files from the subfolders will be uploaded individually.'
+              )
+            "
+          />
         </div>
       </div>
 
@@ -243,6 +253,7 @@ export default defineComponent({
   border: 1px dashed var(--oc-color-input-border);
   margin: var(--oc-space-xlarge);
 }
+
 .dragarea {
   background-color: rgba(60, 130, 225, 0.21);
   pointer-events: none;
