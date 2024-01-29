@@ -1,7 +1,7 @@
 x-ocis-server: &ocis-service
   image: ${OCIS_IMAGE:-owncloud/ocis:latest}
   entrypoint: /bin/sh
-  command: ['-c', 'ocis init || true && ocis server']
+  command: [ '-c', 'ocis init || true && ocis server' ]
   environment: &ocis-environment
     OCIS_INSECURE: '${OCIS_INSECURE:-true}'
     OCIS_LOG_LEVEL: '${OCIS_LOG_LEVEL:-error}'
@@ -300,7 +300,7 @@ services:
       - traefik
 
   wopiserver:
-    image: cs3org/wopiserver:v10.2.2
+    image: cs3org/wopiserver:v10.3.0
     environment:
       WOPISERVER_INSECURE: true
       WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
@@ -393,6 +393,7 @@ volumes:
   uppy_companion_datadir:
   ocis-config:
   ocis-federated-config:
+
 
 networks:
   traefik:
