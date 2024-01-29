@@ -7,7 +7,7 @@ import { Resource } from '@ownclouders/web-client'
 import App from '../../src/App.vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useRequest: vi.fn(),
   useRouteQuery: vi.fn()
 }))

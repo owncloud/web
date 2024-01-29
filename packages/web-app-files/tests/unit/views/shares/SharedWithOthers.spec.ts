@@ -11,7 +11,7 @@ import { useSortMock } from '../../../mocks/useSortMock'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useSort: vi.fn().mockImplementation(() => useSortMock()),
   queryItemAsString: vi.fn(),
   useRouteQuery: vi.fn(),

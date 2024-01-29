@@ -51,7 +51,7 @@ const selectors = {
 }
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   displayPositionedDropdown: vi.fn(),
   queryItemAsString: vi.fn()
 }))

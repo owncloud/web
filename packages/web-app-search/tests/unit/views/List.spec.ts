@@ -15,7 +15,7 @@ const mockProvider = mock<SearchProvider>({
 
 vi.mock('../../../src/composables/useAvailableProviders')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useRouteQuery: vi.fn(),
   queryItemAsString: vi.fn()
 }))

@@ -12,7 +12,7 @@ import { computed } from 'vue'
 const mockUseEmbedMode = vi.fn()
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useRoute: vi.fn().mockReturnValue({ query: {} }),
   useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
 }))

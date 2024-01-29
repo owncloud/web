@@ -9,7 +9,7 @@ const getGroupMocks = () => [
 ]
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   queryItemAsString: vi.fn(),
   displayPositionedDropdown: vi.fn()
 }))

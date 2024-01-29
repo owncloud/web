@@ -12,7 +12,7 @@ import { useFileActions } from '@ownclouders/web-pkg'
 import { Action } from '@ownclouders/web-pkg'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useFileActions: vi.fn()
 }))
 

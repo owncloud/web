@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useFileActionsCreateLink: vi.fn(),
   useEmbedMode: vi.fn()
 }))

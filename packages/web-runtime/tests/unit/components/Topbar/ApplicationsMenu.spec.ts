@@ -8,7 +8,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useFileActions: vi.fn(() => ({ openEditor: vi.fn() }))
 }))
 

@@ -16,7 +16,7 @@ import { ShareTypes, ShareResource } from '@ownclouders/web-client/src/helpers'
 
 vi.mock('web-app-files/src/composables/resourcesViewDefaults')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useSort: vi.fn().mockImplementation(() => useSortMock()),
   queryItemAsString: vi.fn(),
   useRouteQuery: vi.fn(),

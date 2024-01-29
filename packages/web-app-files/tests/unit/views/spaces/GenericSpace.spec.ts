@@ -22,7 +22,7 @@ const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => fal
 vi.mock('web-app-files/src/composables/resourcesViewDefaults')
 vi.mock('web-app-files/src/composables/keyboardActions')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useBreadcrumbsFromPath: vi.fn(),
   useExtensionRegistry: vi.fn(),
   useFileActionsCreateNewFolder: () => ({

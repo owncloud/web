@@ -7,7 +7,7 @@ import { useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   getIndicators: vi.fn(() => []),
   useRouteQuery: vi.fn(),
   useFileActions: vi.fn()

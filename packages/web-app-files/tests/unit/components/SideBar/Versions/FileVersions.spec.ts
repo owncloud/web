@@ -10,7 +10,7 @@ import { useDownloadFile, useResourcesStore } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useDownloadFile: vi.fn()
 }))
 

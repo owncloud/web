@@ -5,7 +5,7 @@ import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-he
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 

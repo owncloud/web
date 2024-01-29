@@ -17,7 +17,7 @@ import {
 } from 'web-test-helpers'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useGetMatchingSpace: vi.fn(),
   useDriveResolver: vi.fn(),
   useRouteParam: vi.fn(),

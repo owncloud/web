@@ -11,7 +11,7 @@ import { useExtensionRegistry } from '@ownclouders/web-pkg'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useFileActions: vi.fn(),
   useExtensionRegistry: vi.fn()
 }))

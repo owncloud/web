@@ -45,7 +45,7 @@ const linkListItemNameAndCopy = 'name-and-copy-stub'
 const linkListItemDetailsAndEdit = 'details-and-edit-stub'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   getDefaultLinkPermissions: vi.fn(),
   useFileActionsCreateLink: vi.fn()
 }))

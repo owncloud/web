@@ -13,7 +13,7 @@ const selectors = {
 
 const downloadFile = vi.fn()
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useDownloadFile: vi.fn(() => ({ downloadFile }))
 }))
 

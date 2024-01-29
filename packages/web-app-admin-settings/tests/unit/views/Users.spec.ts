@@ -18,7 +18,7 @@ import { useUserActionsCreateUser } from '../../../src/composables/actions/users
 import { ref } from 'vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   queryItemAsString: vi.fn(),
   useAppDefaults: vi.fn()
 }))

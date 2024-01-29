@@ -11,7 +11,7 @@ import { ApplicationFileExtension } from '../../../../../types'
 import { useResourcesStore } from '../../../../../src/composables/piniaStores'
 
 vi.mock('../../../../../src/composables/actions/files/useFileActions', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useFileActions: vi.fn(() => mock<ReturnType<typeof useFileActions>>())
 }))
 

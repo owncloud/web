@@ -14,7 +14,7 @@ import { Capabilities } from '@ownclouders/web-client/src/ocs'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   queryItemAsString: vi.fn(),
   useAppDefaults: vi.fn(),
   useFileActions: vi.fn()

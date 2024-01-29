@@ -5,7 +5,7 @@ import { SideBarEventTopics } from '@ownclouders/web-pkg'
 
 const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   displayPositionedDropdown: vi.fn(),
   queryItemAsString: vi.fn()
 }))

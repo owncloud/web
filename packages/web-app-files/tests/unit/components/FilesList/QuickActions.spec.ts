@@ -7,7 +7,7 @@ import { ref } from 'vue'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useEmbedMode: vi.fn(),
   useExtensionRegistry: vi.fn()
 }))

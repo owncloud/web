@@ -6,7 +6,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useRouteQuery: vi.fn((str) => str),
   useRouteParam: vi.fn((str) => str),
   queryItemAsString: vi.fn(),

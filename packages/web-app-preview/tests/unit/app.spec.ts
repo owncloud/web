@@ -6,7 +6,7 @@ import { FileContext, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useAppDefaults: vi.fn(),
   useAppFileHandling: vi.fn()
 }))

@@ -19,7 +19,7 @@ import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensio
 import { ref } from 'vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...((await importOriginal()) as any),
+  ...(await importOriginal<any>()),
   useExtensionRegistry: vi.fn(),
   useRequest: vi.fn(),
   useFileActionsCreateNewFile: vi.fn(),
