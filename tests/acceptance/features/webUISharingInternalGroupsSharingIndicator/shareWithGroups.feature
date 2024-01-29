@@ -36,65 +36,6 @@ Feature: Sharing files and folders with internal groups
       | fileName   | expectedIndicators |
       | inside.txt | user-indirect      |
 
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060 @issue-6894
-  Scenario: sharing indicator of items inside a re-shared folder
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has shared folder "Shares/simple-folder" with group "grp1" in the server
-    When user "Brian" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-direct        |
-    And the user opens folder "simple-folder" using the webUI
-    And the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-empty-folder | user-indirect      |
-      | lorem.txt           | user-indirect      |
-
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060
-  Scenario: sharing indicator of items inside a re-shared subfolder
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has shared folder "/Shares/simple-folder/simple-empty-folder" with group "grp1" in the server
-    When user "Brian" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-empty-folder | user-direct        |
-      | lorem.txt           | user-indirect      |
-
-  # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060
-  Scenario: sharing indicator of items inside an incoming shared folder
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has created file "simple-folder/lorem.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    When user "Brian" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-empty-folder | user-indirect      |
-      | lorem.txt           | user-indirect      |
-
   @issue-2060
   Scenario: no sharing indicator of items inside a not shared folder
     Given user "Brian" has created folder "simple-folder" in the server

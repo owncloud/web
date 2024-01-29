@@ -96,7 +96,6 @@ config = {
             ],
             "suites": {
                 "oCISBasic": [
-                    "webUIPrivateLinks",
                     "webUIPreview",
                     "webUILogin",
                 ],
@@ -121,7 +120,6 @@ config = {
                 ],
                 "oCISFiles5": [
                     "webUIFilesCopy",
-                    "webUIFilesActionMenu",
                     "webUITextEditor",
                 ],
                 "oCISSharingInternal1": [
@@ -138,8 +136,6 @@ config = {
                 ],
                 "oCISSharingAutocompletionResharing": [
                     "webUISharingAutocompletion",
-                    "webUIResharing1",
-                    "webUIResharing2",
                 ],
                 "oCISSharingPerm1": [
                     "webUISharingPermissionsUsers",
@@ -156,7 +152,6 @@ config = {
                     "webUISharingPublicBasic",
                 ],
                 "oCISSharingPublic2": [
-                    "webUISharingPublicExpire",
                     "webUISharingPublicManagement",
                 ],
                 "oCISSharingPublic3": [
@@ -189,40 +184,18 @@ config = {
     "build": True,
 }
 
-# UI Test Suites
-# These list contains all the test suites that are present
-# When adding new test suites, make sure to update these lists
-rootSharingTestSuites = [
-    "webUIResharingToRoot",
-    "webUISharingAcceptSharesToRoot",
-    "webUISharingInternalGroupsToRoot",
-    "webUISharingInternalGroupsToRootEdgeCases",
-    "webUISharingInternalGroupsToRootSharingIndicator",
-    "webUISharingInternalUsersToRoot",
-    "webUISharingInternalUsersToRootBlacklisted",
-    "webUISharingInternalUsersToRootCollaborator",
-    "webUISharingInternalUsersToRootPreviews",
-    "webUISharingInternalUsersToRootShareWithPage",
-    "webUISharingInternalUsersToRootSharingIndicator",
-    "webUISharingPermissionToRoot",
-]
-
 basicTestSuites = [
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
     "webUIFiles",
-    "webUIFilesActionMenu",
     "webUIFilesCopy",
     "webUIFilesDetails",
     "webUIFilesList",
     "webUILogin",
     "webUIMoveFilesFolders",
     "webUIPreview",
-    "webUIPrivateLinks",
     "webUIRenameFiles",
     "webUIRenameFolders",
-    "webUIResharing1",
-    "webUIResharing2",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
     "webUISharingFilePermissionMultipleUsers",
@@ -240,7 +213,6 @@ basicTestSuites = [
     "webUISharingPermissionsUsers",
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
-    "webUISharingPublicExpire",
     "webUISharingPublicManagement",
     "webUITextEditor",
     "webUITrashbinDelete",

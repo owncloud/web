@@ -171,22 +171,3 @@ Feature: Sharing files and folders with internal users with different permission
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
       | permissions | delete, read, update  |
-
-   # this scenario is skipped on ocis because it opens share folder which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS
-  Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
-    Given user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions in the server
-    And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions in the server
-    And user "Alice" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
-    And the user opens folder "simple-folder" using the webUI
-    And the user shares folder "simple-empty-folder" with user "Carol King" as "Custom permissions" with permissions "share, delete, create, update" using the webUI
-    Then user "Carol" should have received a share with these details in the server:
-      | field       | value                       |
-      | uid_owner   | Alice                       |
-      | share_with  | Carol                       |
-      | file_target | /Shares/simple-empty-folder |
-      | item_type   | folder                      |
-      | permissions | all                         |

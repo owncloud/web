@@ -60,58 +60,6 @@ Feature: Public link share indicator
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  # this scenario is skipped on ocis because it makes request to shared folder in root (All Files) which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060
-  Scenario: sharing indicators public link from reshare
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "/simple-folder/sub-folder" in the server
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has shared folder "simple-folder" with link with "read" permissions in the server
-    When user "Brian" has logged in using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators        |
-      | simple-folder | link-direct,user-indirect |
-    When the user opens folder "simple-folder" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName     | expectedIndicators          |
-      | sub-folder   | link-indirect,user-indirect |
-      | textfile.txt | link-indirect,user-indirect |
-
-  # this scenario is skipped on ocis because it makes request to shared folder in root (All Files) which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060
-  Scenario: sharing indicators public link from child of reshare
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "/simple-folder/sub-folder" in the server
-    And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has shared folder "simple-folder/sub-folder" with link with "read" permissions in the server
-    When user "Brian" has logged in using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
-    Then the following resources should have share indicators on the webUI
-      | fileName     | expectedIndicators        |
-      | sub-folder   | link-direct,user-indirect |
-      | textfile.txt | user-indirect             |
-
-  # this scenario is skipped on ocis because it makes request to shared folder in root (All Files) which in not possible in OCIS
-  # but it works for OC10 see issue https://github.com/owncloud/web/issues/6896 for more detail
-  @skipOnOCIS @issue-2060
-  Scenario: no sharing indicator visible in file list from public link
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has created folder "simple-folder/simple-empty-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol" in the server
-    And user "Brian" has shared folder "simple-folder" with link with "read" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Brian" in a new session
-    Then the following resources should not have share indicators on the webUI
-      | simple-empty-folder |
-
   @issue-2939
   Scenario: sharing indicator for link shares stays up to date
     Given user "Brian" has been created with default attributes and without skeleton files in the server
