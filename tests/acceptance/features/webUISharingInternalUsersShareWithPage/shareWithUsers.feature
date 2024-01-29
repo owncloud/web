@@ -87,17 +87,6 @@ Feature: Shares in share-with pages
     And the user browses to the files page
     Then folder "Shares" should not be listed on the webUI
 
-  @skipOnOCIS
-  Scenario: unsharing an entry on the shared-with-me page unshares from self
-    Given user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    And user "Brian" has logged in using the webUI
-    When the user browses to the shared-with-me page
-    And the user unshares folder "simple-folder" using the webUI
-    And the user browses to the files page
-    And the user opens folder "Shares" using the webUI
-    Then folder "simple-folder" should not be listed on the webUI
-
   @issue-4582 @issue-ocis-2266
   Scenario: unsharing multiple entries on the shared-with-me page
     Given user "Alice" has created folder "simple-folder" in the server

@@ -54,8 +54,7 @@ Feature: Share by public link with different roles
       | Editor      | Anyone with the link can edit   | read, update, create, delete |
       | Contributor | Anyone with the link can upload | read, create                 |
 
-  @skipOnOC10 @issue-ocis-reva-383
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link with different roles (ocis bug demonstration)
     Given user "Alice" has created file "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
@@ -91,8 +90,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
 
-  @skipOnOC10 @issue-ocis-reva-383
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role (ocis bug demonstration)
     Given user "Alice" has logged in using the webUI
     And the user creates a new public link for folder "simple-folder" using the webUI
@@ -289,18 +287,3 @@ Feature: Share by public link with different roles
       | new-lorem.txt |
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
-
-  @issue-ocis-1328 @skipOnOCIS
-  Scenario: user tries to create a public link with Viewer role without entering share password while enforce password on read only public share is enforced
-    Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes" in the server
-    And user "Alice" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI
-    Then user "Alice" should not have created any shares in the server
-    When the user sets a password "#Passw0rd" for the public link in the modal
-    Then user "Alice" should have a share with these details in the server:
-      | field       | value          |
-      | share_type  | public_link    |
-      | uid_owner   | Alice          |
-      | permissions | read           |
-      | path        | /simple-folder |
-      | name        | Link           |

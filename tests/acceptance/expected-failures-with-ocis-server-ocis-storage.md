@@ -14,7 +14,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUILogin/openidLogin.feature:60](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L60)
 
 ### [Share additional info](https://github.com/owncloud/ocis/issues/1253)
--   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:126](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L126)
+-   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:115](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L115)
 
 ### [Different path for shares inside folder](https://github.com/owncloud/ocis/issues/1231)
 
@@ -32,7 +32,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicManagement/shareByPublicLink.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L24)
 
 ### [Uploading folders does not work in files-drop](https://github.com/owncloud/web/issues/2443)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:265](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L265)
+-   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:263](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L263)
 
 ### [Resources cannot be locked under ocis](https://github.com/owncloud/ocis/issues/1284)
 -   [webUIWebdavLockProtection/delete.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIWebdavLockProtection/delete.feature#L33)
@@ -52,4 +52,4 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIUpload/upload.feature:43](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L43)
 
 ### [PROPFIND to sub-folder of a shared resources with same name gives 404](https://github.com/owncloud/ocis/issues/3859)
--   [webUISharingAcceptShares/acceptShares.feature:105](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L105)
+-   [webUISharingAcceptShares/acceptShares.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L88)

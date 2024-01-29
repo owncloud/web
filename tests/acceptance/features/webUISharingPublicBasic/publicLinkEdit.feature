@@ -7,57 +7,6 @@ Feature: Edit public link shares
   Background:
     Given user "Alice" has been created with default attributes and without skeleton files in the server
 
-  @issue-ocis-1328 @skipOnOCIS
-  Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
-    Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings in the server
-      | path        | simple-folder         |
-      | name        | Public-link           |
-      | permissions | <initial-permissions> |
-    And user "Alice" has logged in using the webUI
-    When the user tries to edit the public link named "Public-link" of folder "simple-folder" changing the role to "<role>"
-    Then the user should see a password modal dialog with message "Passwords for links are required." on the webUI
-    # Doesn't check settings the password
-    And user "Alice" should have a share with these details in the server:
-      | field       | value                 |
-      | share_type  | public_link           |
-      | uid_owner   | Alice                 |
-      | permissions | <initial-permissions> |
-      | path        | /simple-folder        |
-    Examples:
-      | initial-permissions | role        | setting-name                                      |
-      | read, create        | Viewer      | shareapi_enforce_links_password_read_only         |
-      | read                | Contributor | shareapi_enforce_links_password_read_write        |
-      | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
-      | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
-
-  @issue-ocis-1328 @skipOnOCIS
-  Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
-    Given the setting "<setting-name>" of app "core" has been set to "yes" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has created a public link with following settings in the server
-      | path        | simple-folder         |
-      | name        | Public-link           |
-      | permissions | <initial-permissions> |
-      | password    | 123                   |
-    And user "Alice" has logged in using the webUI
-    When the user opens the link edit dialog of folder "simple-folder" with name "Public-link" using the webUI
-    Then it should not be possible to remove password for the link with name "Public-link"
-    And user "Alice" should have a share with these details in the server:
-      | field       | value                 |
-      | share_type  | public_link           |
-      | uid_owner   | Alice                 |
-      | permissions | <initial-permissions> |
-      | path        | /simple-folder        |
-    Examples:
-      | initial-permissions          | setting-name                                      |
-      | read                         | shareapi_enforce_links_password_read_only         |
-      | read, create                 | shareapi_enforce_links_password_read_write        |
-      | read, update, create, delete | shareapi_enforce_links_password_read_write_delete |
-      | create                       | shareapi_enforce_links_password_write_only        |
-
-
   Scenario: user edits a name of an already existing public link
     Given user "Alice" has created folder "simple-folder" in the server
     And user "Alice" has created file "simple-folder/lorem.txt" in the server
