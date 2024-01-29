@@ -25,9 +25,10 @@
           </h2>
           <p class="oc-rm-m oc-m-rm" v-text="errorMessage" />
         </div>
-        <div class="oc-flex oc-flex-center" v-else>
+        <div class="oc-flex oc-flex-center oc-width-1-1" v-else>
           <p
-            class="oc-m-rm oc-pt-xl oc-text-small oc-width-2-3@m oc-width-2-3@l"
+            id="files-drop-info-message"
+            class="oc-m-rm oc-pt-xl oc-text-small"
             v-text="
               $gettext(
                 'Note: Transfer of nested folder structures is not possible. Instead, all files from the subfolders will be uploaded individually.'
@@ -247,11 +248,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#files-drop-container {
-  position: relative;
-  background: transparent;
-  border: 1px dashed var(--oc-color-input-border);
-  margin: var(--oc-space-xlarge);
+#files-drop {
+  &-container {
+    position: relative;
+    background: transparent;
+    border: 1px dashed var(--oc-color-input-border);
+    margin: var(--oc-space-xlarge);
+  }
+
+  &-info-message {
+    @media only screen and (min-width: 1200px) {
+      width: 360px;
+    }
+  }
 }
 
 .dragarea {
