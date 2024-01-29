@@ -4,7 +4,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActions, Action, useOpenWithDefaultApp } from '../../../../src/composables'
 
 vi.mock('../../../../src/composables/actions/files', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   useFileActions: vi.fn()
 }))
 

@@ -25,7 +25,7 @@ vi.mock('../../../../../src/composables/clipboard', () => ({
 }))
 
 vi.mock('@ownclouders/web-client/src/helpers/share', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   buildShare: vi.fn()
 }))
 

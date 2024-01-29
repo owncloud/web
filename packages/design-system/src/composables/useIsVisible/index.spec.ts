@@ -3,8 +3,6 @@ import { useIsVisible } from './index'
 import { mount } from 'web-test-helpers'
 
 const mockIntersectionObserver = () => {
-  vi.useFakeTimers()
-
   const enable = () => {
     const mock = {
       observe: vi.fn(),
@@ -48,6 +46,14 @@ const createWrapper = (options = {}) =>
   })
 
 describe('useIsVisible', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   const { enable: enableIntersectionObserver, disable: disableIntersectionObserver } =
     mockIntersectionObserver()
 

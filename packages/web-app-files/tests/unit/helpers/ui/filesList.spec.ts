@@ -1,8 +1,15 @@
 import { accentuateItem } from '../../../../src/helpers/ui/filesList'
 
 describe('accentuateItem', () => {
-  it('highlights given data-item-id', () => {
+  beforeEach(() => {
     vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('highlights given data-item-id', () => {
     document.body.innerHTML =
       '<table><tbody><tr data-item-id="1"><td>1</td></tr><tr data-item-id="2"><td>2</td></tr></tbody></table>'
     const trs = document.getElementsByTagName('tr')

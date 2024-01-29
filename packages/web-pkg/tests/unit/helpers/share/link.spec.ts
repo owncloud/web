@@ -7,6 +7,10 @@ import { createTestingPinia } from 'web-test-helpers'
 import { useCapabilityStore } from '../../../../src/composables/piniaStores'
 
 describe('getDefaultLinkPermissions', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('returns internal if user is not allowed to create public links', () => {
     const permissions = getDefaultLinkPermissions({
       ability: mock<Ability>({ can: () => false }),
@@ -29,7 +33,6 @@ describe('getDefaultLinkPermissions', () => {
 describe('getExpirationRules', () => {
   it('correctly computes rules based on the "expire_date"-capability', () => {
     vi.useFakeTimers().setSystemTime(new Date('2000-01-01'))
-
     createTestingPinia()
     const capabilityStore = useCapabilityStore()
     const capabilities = mock<PublicExpirationCapability>({ enforced: true, days: '10' })

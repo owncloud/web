@@ -7,6 +7,14 @@ const newCache = <T>(vs: T[], ttl?: number, capacity?: number): Cache<number, T>
 }
 
 describe('Cache', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('can set and get entries', () => {
     const cacheValues: number[] = [1, 2, 3, 4]
     const cache = newCache(cacheValues)
@@ -42,7 +50,6 @@ describe('Cache', () => {
   })
 
   it('can handle ttl', () => {
-    vi.useFakeTimers()
     const cacheValues: number[] = []
     const cache = newCache(cacheValues, 50)
 

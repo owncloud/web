@@ -8,7 +8,7 @@ import { useCreateLink, useDefaultLinkPermissions } from '../../../../../src/com
 import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 vi.mock('../../../../../src/composables/links', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   useCreateLink: vi.fn(),
   useDefaultLinkPermissions: vi.fn()
 }))

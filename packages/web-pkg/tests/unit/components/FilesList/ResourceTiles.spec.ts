@@ -5,7 +5,7 @@ import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   useTileSize: vi.fn().mockReturnValue({
     tileSizePixels: 100
   })

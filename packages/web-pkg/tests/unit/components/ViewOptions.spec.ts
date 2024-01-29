@@ -11,7 +11,7 @@ import {
 import { FolderView } from '../../../src'
 
 vi.mock('../../../src/composables/router', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   useRouteQueryPersisted: vi.fn(),
   useRouteQuery: vi.fn()
 }))

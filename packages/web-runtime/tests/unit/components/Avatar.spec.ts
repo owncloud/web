@@ -18,7 +18,7 @@ describe('Avatar component', () => {
   window.URL.createObjectURL = vi.fn()
 
   it('should set user when the component is mounted', () => {
-    const spySetUser = vi.spyOn((Avatar as any).methods, 'setUser')
+    const spySetUser = vi.spyOn(Avatar.methods, 'setUser')
     getShallowWrapper()
     expect(spySetUser).toHaveBeenCalledTimes(1)
     expect(spySetUser).toHaveBeenCalledWith(propsData.userid)

@@ -10,9 +10,15 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 
-vi.useFakeTimers()
-
 describe('uploadImage', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   describe('method "uploadImage"', () => {
     it('should show message on request success', () => {
       getWrapper({

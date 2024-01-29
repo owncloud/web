@@ -6,7 +6,7 @@ import { Resource } from '@ownclouders/web-client'
 import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
 
 vi.mock('../../../../../src/composables/router', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   useRoute: vi.fn()
 }))
 

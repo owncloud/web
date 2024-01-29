@@ -4,6 +4,11 @@ describe('LoadingService', () => {
   beforeEach(() => {
     vi.useFakeTimers()
   })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('adds a task and sets it inactive initially', () => {
     const service = new LoadingService()
     const action = new Promise((resolve) => {

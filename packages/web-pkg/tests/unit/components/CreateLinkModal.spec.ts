@@ -28,11 +28,11 @@ import { CapabilityStore } from '../../../src/composables/piniaStores'
 vi.mock('../../../src/composables/embedMode')
 vi.mock('../../../src/composables/passwordPolicyService')
 vi.mock('../../../src/helpers/share/link', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   getDefaultLinkPermissions: vi.fn()
 }))
 vi.mock('../../../src/composables/links', async (importOriginal) => ({
-  ...(await (importOriginal() as any)),
+  ...(await importOriginal<any>()),
   useCreateLink: vi.fn()
 }))
 

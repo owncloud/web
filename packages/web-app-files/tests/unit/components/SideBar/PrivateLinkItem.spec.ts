@@ -4,8 +4,6 @@ import { defaultPlugins, mount } from 'web-test-helpers'
 import PrivateLinkItem from 'web-app-files/src/components/SideBar/PrivateLinkItem.vue'
 import { useMessages } from '@ownclouders/web-pkg'
 
-vi.useFakeTimers()
-
 const folder = mock<Resource>({
   type: 'folder',
   owner: {
@@ -19,6 +17,14 @@ const folder = mock<Resource>({
 })
 
 describe('PrivateLinkItem', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('should render a button', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()

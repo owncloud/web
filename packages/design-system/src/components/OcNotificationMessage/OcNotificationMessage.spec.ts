@@ -1,8 +1,15 @@
 import OcNotificationMessage from './OcNotificationMessage.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
-vi.useFakeTimers()
 
 describe('OcNotificationMessage', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   describe('title prop', () => {
     it('should set notification message title', () => {
       const wrapper = getWrapper()

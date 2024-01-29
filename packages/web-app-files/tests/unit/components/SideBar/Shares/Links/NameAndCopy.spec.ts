@@ -2,14 +2,20 @@ import { useMessages } from '@ownclouders/web-pkg'
 import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameAndCopy.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-vi.useFakeTimers()
-
 const exampleLink = {
   name: 'Example link',
   url: 'https://some-url.com/abc'
 }
 
 describe('NameAndCopy', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   // ignore tippy warning
   vi.spyOn(console, 'warn').mockImplementation(undefined)
   it('should show link info component including a copy-to-clipboard button', () => {

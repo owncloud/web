@@ -9,9 +9,15 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 
-vi.useFakeTimers()
-
 describe('resetLogo', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   describe('handler', () => {
     it('should show message on request success', () => {
       getWrapper({
