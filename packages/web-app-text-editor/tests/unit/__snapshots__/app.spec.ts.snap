@@ -1,8 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Text editor app > shows the editor 1`] = `
-"<div class="oc-text-editor--no-preview oc-text-editor oc-width-1-1 oc-height-1-1">
-  <oc-textarea id="text-editor-input" name="input" label="" class="oc-height-1-1" rows="20" disabled="false"></oc-textarea> <!-- eslint-disable-next-line vue/no-v-html -->
-  <!--v-if-->
+"<div class="oc-text-editor oc-width-1-1 oc-height-1-1">
+  <!---->
 </div>"
 `;

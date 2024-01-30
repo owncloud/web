@@ -143,9 +143,6 @@
           "prosemirror-transform": "1.8.0"
         }
       }
-    },
-    "patchedDependencies": {
-      "jest-serializer-vue-tjw@3.19.0": "patches/jest-serializer-vue-tjw@3.19.0.patch"
     }
   }
 }
