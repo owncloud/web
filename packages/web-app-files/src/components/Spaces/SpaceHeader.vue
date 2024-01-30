@@ -134,7 +134,6 @@ export default defineComponent({
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
     const markdownResource = ref(null)
-
     const markdownCollapsed = ref(true)
     const showMarkdownCollapse = ref(false)
     const toggleMarkdownCollapsedIcon = computed(() => {
