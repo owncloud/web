@@ -9,8 +9,8 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { ClientService } from '../../../../../src'
 
-jest.mock('../../../../../src/composables/actions/useOpenWithDefaultApp', () => ({
-  useOpenWithDefaultApp: jest.fn()
+vi.mock('../../../../../src/composables/actions/useOpenWithDefaultApp', () => ({
+  useOpenWithDefaultApp: vi.fn()
 }))
 
 describe('editReadmeContent', () => {
@@ -94,7 +94,7 @@ describe('editReadmeContent', () => {
 
 function getWrapper({
   setup,
-  openWithDefaultApp = jest.fn()
+  openWithDefaultApp = vi.fn()
 }: {
   setup: (
     instance: ReturnType<typeof useSpaceActionsEditReadmeContent>,
@@ -102,7 +102,7 @@ function getWrapper({
   ) => void
   openWithDefaultApp?: any
 }) {
-  jest.mocked(useOpenWithDefaultApp).mockReturnValue(
+  vi.mocked(useOpenWithDefaultApp).mockReturnValue(
     mock<ReturnType<typeof useOpenWithDefaultApp>>({
       openWithDefaultApp
     })
