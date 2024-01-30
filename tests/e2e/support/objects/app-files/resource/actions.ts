@@ -356,12 +356,18 @@ export const openAndGetContentOfDocument = async ({
   editorToOpen: string
 }): Promise<string> => {
   await page.waitForLoadState()
-  await page.waitForURL('**/external/public/**')
+  await page.waitForURL('**/external/**')
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'Collabora':
-      await editorMainFrame.locator(collaboraWelcomeModalIframe).waitFor()
-      await page.keyboard.press('Escape')
+      try {
+        await editorMainFrame
+          .locator(collaboraWelcomeModalIframe)
+          .waitFor({ timeout: config.minTimeout * 1000 })
+        await page.keyboard.press('Escape')
+      } catch (e) {
+        console.log('No welcome modal found. Continue...')
+      }
       await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
       break
     case 'OnlyOffice':

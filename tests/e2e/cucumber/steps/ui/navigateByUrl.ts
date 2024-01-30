@@ -29,6 +29,22 @@ When(
 )
 
 When(
+  /^"([^"]*)" opens the file "([^"]*)" of space "([^"]*)" in (collabora|OnlyOffice) through the URL$/,
+  async function (
+    this: World,
+    stepUser: string,
+    resource: string,
+    space: string,
+    editorName: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
+    await urlNavObject.openResourceViaUrl({ resource, user, space, editorName })
+  }
+)
+
+When(
   '{string} opens space {string} through the URL',
   async function (this: World, stepUser: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
