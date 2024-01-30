@@ -7,9 +7,9 @@
   >
     <div v-if="dragareaEnabled" class="dragarea" />
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-p oc-height-1-1">
-      <div key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle">
-        <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
+    <div class="oc-p oc-height-1-1 oc-text-center">
+      <div key="loaded-drop" class="oc-flex oc-flex-column">
+        <div class="oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
           <resource-upload
             id="files-drop-zone"
@@ -19,15 +19,26 @@
           />
           <div id="previews" hidden />
         </div>
-        <div v-if="errorMessage" class="oc-text-center">
+        <div v-if="errorMessage">
           <h2>
             <span v-text="$gettext('An error occurred while loading the public link')" />
           </h2>
-          <p class="oc-m-rm" v-text="errorMessage" />
+          <p class="oc-rm-m oc-m-rm" v-text="errorMessage" />
+        </div>
+        <div class="oc-flex oc-flex-center oc-width-1-1" v-else>
+          <p
+            id="files-drop-info-message"
+            class="oc-m-rm oc-pt-xl oc-text-small"
+            v-text="
+              $gettext(
+                'Note: Transfer of nested folder structures is not possible. Instead, all files from the subfolders will be uploaded individually.'
+              )
+            "
+          />
         </div>
       </div>
 
-      <div class="oc-text-center oc-mt-xxl">
+      <div class="oc-mt-xxl">
         <p v-text="themeSlogan" />
       </div>
     </div>
@@ -237,12 +248,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#files-drop-container {
-  position: relative;
-  background: transparent;
-  border: 1px dashed var(--oc-color-input-border);
-  margin: var(--oc-space-xlarge);
+#files-drop {
+  &-container {
+    position: relative;
+    background: transparent;
+    border: 1px dashed var(--oc-color-input-border);
+    margin: var(--oc-space-xlarge);
+  }
+
+  &-info-message {
+    @media only screen and (min-width: 1200px) {
+      width: 400px;
+    }
+  }
 }
+
 .dragarea {
   background-color: rgba(60, 130, 225, 0.21);
   pointer-events: none;
