@@ -6,7 +6,7 @@ import {
   isLocationSharesActive,
   isLocationTrashActive
 } from '../../../router'
-import { ShareStatus, isShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { isIncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import merge from 'lodash-es/merge'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { createFileRouteOptions } from '../../../helpers/router'
@@ -59,11 +59,7 @@ export const useFileActionsNavigate = () => {
           return false
         }
 
-        if (
-          isLocationSharesActive(router, 'files-shares-with-me') &&
-          isShareResource(resources[0]) &&
-          resources[0].status !== ShareStatus.accepted
-        ) {
+        if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
           return false
         }
 

@@ -18,9 +18,9 @@ import {
   useFileActionsPaste,
   useFileActionsShowDetails,
   useFileActionsShowShares,
-  useFileActionsAcceptShare,
+  useFileActionsEnableSync,
   useFileActionsCopy,
-  useFileActionsDeclineShare,
+  useFileActionsDisableSync,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsEmptyTrashBin,
@@ -50,11 +50,11 @@ export default defineComponent({
   setup(props) {
     const { editorActions } = useFileActions()
 
-    const { actions: acceptShareActions } = useFileActionsAcceptShare()
+    const { actions: enableSyncActions } = useFileActionsEnableSync()
     const { actions: hideShareActions } = useFileActionsToggleHideShare()
     const { actions: copyActions } = useFileActionsCopy()
     const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
-    const { actions: declineShareActions } = useFileActionsDeclineShare()
+    const { actions: disableSyncActions } = useFileActionsDisableSync()
     const { actions: deleteActions } = useFileActionsDelete()
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
@@ -83,8 +83,8 @@ export default defineComponent({
     const actionOptions = toRef(props, 'actionOptions') as Ref<FileActionOptions>
     const menuItemsBatchActions = computed(() =>
       [
-        ...unref(acceptShareActions),
-        ...unref(declineShareActions),
+        ...unref(enableSyncActions),
+        ...unref(disableSyncActions),
         ...unref(downloadArchiveActions),
         ...unref(moveActions),
         ...unref(copyActions),
@@ -120,8 +120,8 @@ export default defineComponent({
         ...unref(renameActions),
         ...unref(createSpaceFromResourceActions),
         ...unref(restoreActions),
-        ...unref(acceptShareActions),
-        ...unref(declineShareActions),
+        ...unref(enableSyncActions),
+        ...unref(disableSyncActions),
         ...unref(hideShareActions),
         ...unref(setSpaceImageActions),
         ...unref(setSpaceReadmeActions),

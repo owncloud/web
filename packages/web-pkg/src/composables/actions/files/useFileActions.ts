@@ -1,7 +1,7 @@
 import kebabCase from 'lodash-es/kebabCase'
-import { ShareStatus, isShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { isIncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { routeToContextQuery } from '../../appDefaults'
-import { isLocationSharesActive, isLocationTrashActive } from '../../../router'
+import { isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
 import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
@@ -15,10 +15,10 @@ import {
 } from '../../actions'
 
 import {
-  useFileActionsAcceptShare,
+  useFileActionsEnableSync,
   useFileActionsToggleHideShare,
   useFileActionsCopy,
-  useFileActionsDeclineShare,
+  useFileActionsDisableSync,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsDownloadFile,
@@ -53,11 +53,11 @@ export const useFileActions = () => {
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
 
-  const { actions: acceptShareActions } = useFileActionsAcceptShare()
+  const { actions: enableSyncActions } = useFileActionsEnableSync()
   const { actions: hideShareActions } = useFileActionsToggleHideShare()
   const { actions: copyActions } = useFileActionsCopy()
   const { actions: deleteActions } = useFileActionsDelete()
-  const { actions: declineShareActions } = useFileActionsDeclineShare()
+  const { actions: disableSyncActions } = useFileActionsDisableSync()
   const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
   const { actions: downloadFileActions } = useFileActionsDownloadFile()
   const { actions: favoriteActions } = useFileActionsFavorite()
@@ -78,9 +78,9 @@ export const useFileActions = () => {
     ...unref(renameActions),
     ...unref(createSpaceFromResource),
     ...unref(restoreActions),
-    ...unref(acceptShareActions),
+    ...unref(enableSyncActions),
     ...unref(hideShareActions),
-    ...unref(declineShareActions),
+    ...unref(disableSyncActions),
     ...unref(favoriteActions),
     ...unref(navigateActions)
   ])
@@ -119,9 +119,7 @@ export const useFileActions = () => {
             if (
               !unref(isSearchActive) &&
               (isLocationTrashActive(router, 'files-trash-generic') ||
-                (isLocationSharesActive(router, 'files-shares-with-me') &&
-                  isShareResource(resources[0]) &&
-                  resources[0].status !== ShareStatus.accepted))
+                (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled))
             ) {
               return false
             }

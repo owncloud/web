@@ -10,14 +10,21 @@ import {
 import { ShareTypes } from './type'
 import path from 'path'
 import { SHARE_JAIL_ID, SpaceResource, buildWebDavSpacesPath } from '../space'
-import { ShareStatus } from './status'
 import { SharePermissions } from './permission'
 import { buildSpaceShare } from './space'
 import { LinkShareRoles, PeopleShareRoles } from './role'
-import { ShareResource, Share } from './types'
+import { ShareResource, Share, OutgoingShareResource, IncomingShareResource } from './types'
 
 export const isShareResource = (resource: Resource): resource is ShareResource => {
   return Object.hasOwn(resource, 'sharedWith')
+}
+
+export const isOutgoingShareResource = (resource: Resource): resource is OutgoingShareResource => {
+  return isShareResource(resource) && resource.outgoing
+}
+
+export const isIncomingShareResource = (resource: Resource): resource is IncomingShareResource => {
+  return isShareResource(resource) && !resource.outgoing
 }
 
 /**
@@ -160,12 +167,13 @@ export function buildSharedResource(
     shareTypes: [parseInt(share.share_type)],
     owner: { id: share.uid_owner, displayName: share.displayname_owner },
     sharedBy: { id: share.uid_owner, displayName: share.displayname_owner },
-    sharedWith: share.sharedWith || []
+    sharedWith: share.sharedWith || [],
+    outgoing: !incomingShares
   }
 
   if (incomingShares) {
-    resource.status = parseInt(share.state)
-    resource.hidden = share.hidden === 'true' || share.hidden === true
+    ;(resource as IncomingShareResource).syncEnabled = parseInt(share.state) === 0
+    ;(resource as IncomingShareResource).hidden = share.hidden === 'true' || share.hidden === true
     resource.name = isRemoteShare ? share.name : path.basename(share.file_target)
     if (isRemoteShare) {
       resource.path = '/'
@@ -179,13 +187,12 @@ export function buildSharedResource(
       resource.path = share.file_target
       resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
     }
-    resource.canDownload = () => parseInt(share.state) === ShareStatus.accepted
+    resource.canDownload = () => parseInt(share.state) === 0
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
-    resource.canRename = () => parseInt(share.state) === ShareStatus.accepted
+    resource.canRename = () => parseInt(share.state) === 0
     resource.canBeDeleted = () => SharePermissions.delete.enabled(share.permissions)
     resource.canEditTags = () =>
-      parseInt(share.state) === ShareStatus.accepted &&
-      SharePermissions.update.enabled(share.permissions)
+      parseInt(share.state) === 0 && SharePermissions.update.enabled(share.permissions)
   } else {
     resource.name = isRemoteShare ? share.name : path.basename(share.path)
     resource.path = share.path

@@ -96,9 +96,9 @@
       </div>
       <slot name="additionalResourceContent" :resource="item" />
     </template>
-    <template #status="{ item }">
-      <!-- @slot Status column -->
-      <slot name="status" :resource="item" />
+    <template #syncEnabled="{ item }">
+      <!-- @slot syncEnabled column -->
+      <slot name="syncEnabled" :resource="item" />
     </template>
     <template #size="{ item }">
       <resource-size :size="item.size || Number.NaN" />
@@ -227,7 +227,11 @@ import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vu
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { ShareStatus, ShareTypes, isShareResource } from '@ownclouders/web-client/src/helpers/share'
+import {
+  ShareTypes,
+  isIncomingShareResource,
+  isShareResource
+} from '@ownclouders/web-client/src/helpers/share'
 
 import {
   SortDir,
@@ -289,7 +293,7 @@ export default defineComponent({
      * - modificationDate: The date of the last modification of the resource
      * - shareDate: The date when the share was created
      * - deletionDate: The date when the resource has been deleted
-     * - status: The status of the share. Contains also actions to accept/decline the share
+     * - status: The sync status of the share
      * - opensInNewWindow: Open the link in a new window
      */
     resources: {
@@ -642,7 +646,7 @@ export default defineComponent({
             width: 'shrink'
           },
           {
-            name: 'status',
+            name: 'syncEnabled',
             title: this.$gettext('Status'),
             type: 'slot',
             alignH: 'right',
@@ -1000,11 +1004,8 @@ export default defineComponent({
         return false
       }
 
-      // TODO: remove as soon as pending & declined shares are accessible
-      if (
-        isShareResource(resource) &&
-        [ShareStatus.pending, ShareStatus.declined].includes(resource.status)
-      ) {
+      // TODO: remove as soon as unsynced shares are accessible
+      if (isIncomingShareResource(resource) && !resource.syncEnabled) {
         return false
       }
 

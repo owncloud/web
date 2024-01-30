@@ -104,6 +104,7 @@ const resourcesWithAllFields = [
     owner,
     sharedWith,
     shareTypes: [],
+    syncEnabled: true,
     canRename: vi.fn,
     getDomSelector: () => extractDomSelector('forest')
   },
