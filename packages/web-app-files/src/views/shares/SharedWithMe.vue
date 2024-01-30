@@ -246,11 +246,7 @@ export default defineComponent({
     }
 
     const shareTypes = computed(() => {
-      const uniqueShareTypes = uniq(
-        unref(paginatedResources)
-          .map((i) => i.shareTypes)
-          .flat()
-      )
+      const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
       return ShareTypes.getByValues(uniqueShareTypes)
     })
 

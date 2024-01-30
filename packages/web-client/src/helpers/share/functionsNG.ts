@@ -4,6 +4,7 @@ import { SHARE_JAIL_ID, buildWebDavSpacesPath } from '../space'
 import { ShareStatus } from './status'
 import { DriveItem, UnifiedRoleDefinition, User } from '../../generated'
 import { GraphSharePermission, ShareResource } from './types'
+import { urlJoin } from '../../utils'
 
 export const getShareResourceRoles = ({
   driveItem,
@@ -128,11 +129,12 @@ export function buildOutgoingShareResource({
   user: User
 }): ShareResource {
   const storageId = extractStorageId(driveItem.id)
+  const path = urlJoin(driveItem.parentReference.path, driveItem.name)
 
   const resource: ShareResource = {
     id: driveItem.permissions[0].id,
     shareId: driveItem.permissions[0].id,
-    path: driveItem.parentReference.path,
+    path,
     name: driveItem.name,
     fileId: driveItem.id,
     storageId,
@@ -140,7 +142,7 @@ export function buildOutgoingShareResource({
     sdate: driveItem.lastModifiedDateTime, // FIXME: share date is missing in API
     indicators: [],
     tags: [],
-    webDavPath: buildWebDavSpacesPath(storageId, driveItem.parentReference.path),
+    webDavPath: buildWebDavSpacesPath(storageId, path),
     sharedBy: { id: user.id, displayName: user.displayName },
     owner: { id: user.id, displayName: user.displayName },
     sharedWith: driveItem.permissions.map((p) => {
