@@ -7,9 +7,9 @@
   >
     <div v-if="dragareaEnabled" class="dragarea" />
     <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-p oc-height-1-1">
-      <div key="loaded-drop" class="oc-flex oc-flex-column oc-flex-middle">
-        <div class="oc-text-center oc-width-1-1 oc-width-xxlarge@m">
+    <div class="oc-p oc-height-1-1 oc-text-center">
+      <div key="loaded-drop" class="oc-flex oc-flex-column">
+        <div class="oc-width-1-1 oc-width-xxlarge@m">
           <h2 v-text="title" />
           <resource-upload
             id="files-drop-zone"
@@ -19,7 +19,7 @@
           />
           <div id="previews" hidden />
         </div>
-        <div v-if="errorMessage" class="oc-text-center">
+        <div v-if="errorMessage">
           <h2>
             <span v-text="$gettext('An error occurred while loading the public link')" />
           </h2>
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="oc-text-center oc-mt-xxl">
+      <div class="oc-mt-xxl">
         <p v-text="themeSlogan" />
       </div>
     </div>
@@ -258,7 +258,7 @@ export default defineComponent({
 
   &-info-message {
     @media only screen and (min-width: 1200px) {
-      width: 360px;
+      width: 400px;
     }
   }
 }
