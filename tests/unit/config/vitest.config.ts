@@ -23,7 +23,7 @@ export default defineConfig({
   test: {
     root,
     globals: true,
-    environment: 'jsdom',
+    environment: 'happy-dom',
     clearMocks: true,
     include: ['**/*.spec.ts'],
     setupFiles: ['tests/unit/config/vitest.init.ts', 'core-js'],
@@ -38,8 +38,9 @@ export default defineConfig({
       'packages/design-system/docs/**'
     ],
     alias: {
-      'vue-inline-svg': `${root}/tests/unit/stubs/empty.js`,
-      'owncloud-sdk': `${root}/tests/unit/stubs/empty.js`
+      'vue-inline-svg': `${root}/tests/unit/stubs/empty.ts`,
+      'owncloud-sdk': `${root}/tests/unit/stubs/empty.ts`,
+      webfontloader: `${root}/tests/unit/stubs/webfontloader.ts`
     },
     coverage: {
       provider: 'v8',

@@ -7,6 +7,7 @@ const exampleLink = {
   url: 'https://some-url.com/abc'
 }
 
+// @vitest-environment jsdom
 describe('NameAndCopy', () => {
   beforeEach(() => {
     vi.useFakeTimers()

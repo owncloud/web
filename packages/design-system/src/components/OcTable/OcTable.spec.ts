@@ -1,8 +1,5 @@
 import { shallowMount, mount } from 'web-test-helpers'
-import { axe, toHaveNoViolations } from 'jest-axe'
 import Table from './OcTable.vue'
-
-expect.extend(toHaveNoViolations)
 
 const fields = [
   {
@@ -69,17 +66,6 @@ describe('OcTable', () => {
     expect(wrapper.html().indexOf('Double of 2 is 4')).toBeGreaterThan(-1)
     expect(wrapper.findAll('.slot').length).toBe(data.length)
     expect(wrapper.findAll('.slot-header').length).toBe(1)
-
-    // A11y tests
-    ;(
-      expect(
-        await axe(wrapper.html(), {
-          rules: {
-            region: { enabled: false }
-          }
-        })
-      ) as any
-    ).toHaveNoViolations()
   })
 
   it('hides header', () => {

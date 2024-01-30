@@ -8,7 +8,7 @@ import {
   mount,
   defaultComponentMocks,
   RouteLocation,
-  sleep
+  nextTicks
 } from 'web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 
@@ -58,7 +58,7 @@ const selectors = {
   optionsVisible: '.tippy-box[data-state="visible"]'
 }
 
-vi.mock('lodash-es/debounce', () => (fn) => fn)
+vi.mock('lodash-es', () => ({ debounce: (fn) => fn }))
 vi.mock('../../../src/composables/useAvailableProviders')
 
 beforeEach(() => {
@@ -120,7 +120,7 @@ describe('Search Bar portal component', () => {
   test('displays all available providers', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await sleep(600)
+    await nextTicks(3)
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(2)
   })
   test('only displays provider list item if search results are attached', async () => {
@@ -131,13 +131,13 @@ describe('Search Bar portal component', () => {
       }
     })
     wrapper.find(selectors.searchInput).setValue('albert')
-    await sleep(600)
+    await nextTicks(3)
     expect(wrapper.findAll(selectors.providerListItem).length).toEqual(1)
   })
   test('displays the provider name in the provider list item', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await sleep(600)
+    await nextTicks(3)
     const providerDisplayNameItems = wrapper.findAll(selectors.providerDisplayName)
     expect(providerDisplayNameItems.at(0).text()).toEqual('Files')
     expect(providerDisplayNameItems.at(1).text()).toEqual('Contacts')
@@ -145,13 +145,13 @@ describe('Search Bar portal component', () => {
   test('The search provider only displays the more results link if a listSearch component is present', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await sleep(600)
+    await nextTicks(3)
     expect(wrapper.findAll(selectors.providerMoreResultsLink).length).toEqual(1)
   })
   test('hides options on preview item click', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
-    await sleep(600)
+    await nextTicks(3)
     expect(wrapper.findAll(selectors.optionsVisible).length).toEqual(1)
     wrapper.findAll('.preview-component').at(0).trigger('click')
     expect(wrapper.findAll(selectors.optionsHidden).length).toEqual(1)
@@ -195,7 +195,7 @@ describe('Search Bar portal component', () => {
     expect(wrapper.vm.term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
-  test.skip('sets active preview item via keyboard navigation', async () => {
+  test('sets active preview item via keyboard navigation', async () => {
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('albert')
     await flushPromises()

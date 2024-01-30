@@ -142,7 +142,7 @@ exports[`Users view > list view > renders list initially 1`] = `
                   }
                   let x = [c, o];
                   if (b(o)) {
-                  let s = o.then((l) =&gt; x[1] = l).catch((l) =&gt; {
+                  let s = o.then((l) => x[1] = l).catch((l) => {
                   throw x[0] = "error", x[1] = l, l;
                   });
                   Object.assign(s, o), o = s;

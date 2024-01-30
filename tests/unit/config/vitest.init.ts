@@ -1,13 +1,17 @@
-;(window as any).define = vi.fn()
-;(window as any).IntersectionObserver = vi.fn(() => ({
+const IntersectionObserverMock = vi.fn(() => ({
+  disconnect: vi.fn(),
+  observe: vi.fn(),
+  takeRecords: vi.fn(),
+  unobserve: vi.fn()
+}))
+
+vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
+
+const ResizeObserverMock = vi.fn(() => ({
   observe: vi.fn(),
   unobserve: vi.fn()
 }))
-;(window as any).ResizeObserver =
-  (window as any).ResizeObserver ||
-  vi.fn().mockImplementation(() => ({
-    disconnect: vi.fn(),
-    observe: vi.fn(),
-    unobserve: vi.fn()
-  }))
-global.fetchMock = global.fetch = vi.fn()
+
+vi.stubGlobal('ResizeObserver', ResizeObserverMock)
+
+vi.stubGlobal('define', vi.fn())

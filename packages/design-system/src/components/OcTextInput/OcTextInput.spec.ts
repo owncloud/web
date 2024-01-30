@@ -13,6 +13,8 @@ Object.assign(navigator, {
     readText: vi.fn()
   }
 })
+
+// @vitest-environment jsdom
 describe('OcTextInput', () => {
   function getShallowWrapper(props = {}) {
     return shallowMount(OcTextInput, {

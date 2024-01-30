@@ -1,22 +1,7 @@
 import FeedbackLink from '../../../../src/components/Topbar/FeedbackLink.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-// expect.extend(toHaveNoViolations)
-
 describe('FeedbackLink component', () => {
-  // FIXME: skip flaky test, also see: https://github.com/owncloud/web/issues/8244
-  it.skip('has no accessibility violations', async () => {
-    const { wrapper } = getWrapper()
-    // expect(
-    //   await axe(wrapper.html(), {
-    //     rules: {
-    //       region: { enabled: false }
-    //     }
-    //   })
-    // ).toHaveNoViolations()
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-
   describe('properties', () => {
     it('allows to overwrite the link href', async () => {
       const { wrapper } = getWrapper()

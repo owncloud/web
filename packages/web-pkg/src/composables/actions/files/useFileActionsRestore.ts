@@ -294,6 +294,7 @@ export const useFileActionsRestore = () => {
   return {
     actions,
     // HACK: exported for unit tests:
-    restoreResources
+    restoreResources,
+    collectConflicts
   }
 }
