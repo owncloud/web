@@ -21,11 +21,10 @@ exports[`SpaceHeader > should add the "squashed"-class when the sidebar is opene
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div>
-      <!-- eslint-disable vue/no-v-html -->
-      <div class="markdown-container"></div> <!-- eslint-enable -->
+    <div class="markdown-container">
       <!--v-if-->
     </div>
+    <!--v-if-->
   </div>
 </div>"
 `;
@@ -51,11 +50,10 @@ exports[`SpaceHeader > space image > should show the default image if no other i
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div>
-      <!-- eslint-disable vue/no-v-html -->
-      <div class="markdown-container"></div> <!-- eslint-enable -->
+    <div class="markdown-container">
       <!--v-if-->
     </div>
+    <!--v-if-->
   </div>
 </div>"
 `;
@@ -79,11 +77,10 @@ exports[`SpaceHeader > space image > should show the set image 1`] = `
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div>
-      <!-- eslint-disable vue/no-v-html -->
-      <div class="markdown-container"></div> <!-- eslint-enable -->
+    <div class="markdown-container">
       <!--v-if-->
     </div>
+    <!--v-if-->
   </div>
 </div>"
 `;

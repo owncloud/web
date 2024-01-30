@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 
-import { sidebar } from '../utils'
+import { sidebar, editor } from '../utils'
 import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
 import { File } from '../../../types'
@@ -19,7 +19,8 @@ const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
-const spacesDescriptionInputArea = '#description-input-area'
+const spacesDescriptionInputArea = '.md-mode .ProseMirror'
+const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 
@@ -155,9 +156,14 @@ export const changeSpaceDescription = async (args: {
         resp.request().method() === 'GET'
     )
   await Promise.all([waitForUpdate(), page.locator(editSpacesDescription).click()])
+
   await page.locator(spacesDescriptionInputArea).fill(value)
-  await Promise.all([waitForUpdate(), page.locator(actionConfirmButton).click()])
-  await sidebar.close({ page: page })
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
+    page.locator(spacesDescriptionSaveTextFileInEditorButton).click()
+  ])
+  await editor.close(page)
 }
 
 /**/
@@ -206,6 +212,7 @@ export interface canUserEditSpaceResourceArgs {
   resource: string
   page: Page
 }
+
 export const canUserEditSpaceResource = async (
   args: canUserEditSpaceResourceArgs
 ): Promise<boolean> => {
@@ -264,10 +271,12 @@ export const changeSpaceImage = async (args: {
 
   await sidebar.close({ page: page })
 }
+
 export interface removeAccessMembersArgs extends Omit<SpaceMembersArgs, 'users'> {
   users: Omit<ICollaborator, 'role'>[]
   removeOwnSpaceAccess?: boolean
 }
+
 export const removeAccessSpaceMembers = async (args: removeAccessMembersArgs): Promise<void> => {
   const { page, users, removeOwnSpaceAccess } = args
   await openSharingPanel(page)

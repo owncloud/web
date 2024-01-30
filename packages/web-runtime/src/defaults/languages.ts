@@ -1,3 +1,5 @@
+//Please also make language adjustments in packages/web-pkg/src/components/TextEditor.vue
+
 export const supportedLanguages = {
   bg: 'български - Bulgarian',
   cs: 'Čeština - Czech',

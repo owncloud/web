@@ -26,6 +26,10 @@ export default defineWebApplication({
           label: $gettext('Markdown file')
         },
         {
+          extension: 'markdown',
+          label: $gettext('Markdown file')
+        },
+        {
           extension: 'js',
           label: $gettext('JavaScript file')
         },

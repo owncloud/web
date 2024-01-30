@@ -10,8 +10,6 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "marked": "^4.0.12",
-    "sanitize-html": "^2.7.0",
     "vue-concurrency": "4.0.1",
     "vue3-gettext": "2.4.0"
   }

@@ -9,7 +9,7 @@ module.exports = {
   commands: {
     /**
      * gets inner text from given html element
-     * @param {string} element - css selector
+     * @param {string} element - css selectoreditorTextarea
      *
      * @returns {Promise<string>}
      */
@@ -42,14 +42,22 @@ module.exports = {
       )
       return fileName
     },
-    getContentFromEditor: function () {
-      return this.getInputValue('@editorTextarea')
+    getContentFromEditor: async function () {
+      const selector = await this.getEditorInputSelector()
+
+      return this.getInputValue(selector)
     },
     getContentFromPanel: function () {
-      return this.getInnerText('@previewPanel')
+      return this.waitForElementVisible('@editorPreviewButton')
+        .click('@editorPreviewButton')
+        .waitForElementVisible('@editorPreviewPanel')
+        .getInnerText('@editorPreviewPanel')
     },
     getPreviewPanelElement: function () {
-      return this.elements.previewPanel.selector
+      return this.elements.editorPreviewPanel.selector
+    },
+    getPreviewPanelButtonElement: function () {
+      return this.elements.editorPreviewButton.selector
     },
     saveFileEdit: function () {
       return this.waitForElementVisible('@saveButton')
@@ -64,20 +72,26 @@ module.exports = {
      * @param {string} content
      */
     updateFileContent: async function (content) {
-      await this.waitForElementVisible('@editorTextarea')
-        .click('@editorTextarea')
-        .clearValueWithEvent('@editorTextarea')
-        .setValue('@editorTextarea', content)
+      const selector = await this.getEditorInputSelector()
+
+      await this.waitForElementVisible(selector)
+        .click(selector)
+        .clearValue(selector)
+        .setValue(selector, content)
     },
     waitForPageLoaded: function () {
-      return this.waitForElementVisible('@editorTextarea')
+      return this.waitForElementVisible('@editor')
     },
     /**
      * appends new content to the existing content
      * @param {string} content
      */
     appendContentToFile: async function (content) {
-      await this.waitForElementVisible('@editorTextarea').setValue('@editorTextarea', content)
+      const selector = await this.getEditorInputSelector()
+
+      await this.waitForElementVisible(selector)
+        .sendKeys(selector, client.Keys.END)
+        .setValue(selector, content)
     },
     /**
      * @param {string} fileName
@@ -86,11 +100,36 @@ module.exports = {
       await filesList.openFileActionsMenu(fileName)
       await filesActionsMenu.textEditor()
       return this
+    },
+    getEditorInputSelector: async function () {
+      let selector = null
+      await this.waitForElementVisible('@editor').getAttribute(
+        '@editor',
+        'data-markdown-mode',
+        (result) => {
+          selector =
+            result.value === 'true' ? '@editorMarkdownInputArea' : '@editorPlainTextInputArea'
+        }
+      )
+      return selector
     }
   },
   elements: {
-    editorTextarea: {
-      selector: '#text-editor-input'
+    editor: {
+      selector: '#text-editor #text-editor-container'
+    },
+    editorPlainTextInputArea: {
+      selector: '#text-editor #text-editor-container .ww-mode .ProseMirror'
+    },
+    editorMarkdownInputArea: {
+      selector: '#text-editor #text-editor-container .md-mode .ProseMirror'
+    },
+    editorPreviewButton: {
+      selector: '#text-editor #text-editor-container .tab-item:nth-child(2)'
+    },
+    editorPreviewPanel: {
+      selector:
+        '#text-editor #text-editor-container .toastui-editor-md-preview .toastui-editor-contents'
     },
     saveButton: {
       selector: saveButtonSelector
@@ -100,9 +139,6 @@ module.exports = {
     },
     fileName: {
       selector: '.oc-resource-name'
-    },
-    previewPanel: {
-      selector: '#text-editor-preview'
     },
     saveButtonDisabled: {
       selector: `${saveButtonSelector}:disabled`

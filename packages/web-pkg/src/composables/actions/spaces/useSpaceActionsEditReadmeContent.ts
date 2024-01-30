@@ -1,22 +1,24 @@
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { ReadmeContentModal } from '../../../components'
-import { useModals, useUserStore } from '../../piniaStores'
+
+import { useOpenWithDefaultApp } from '../useOpenWithDefaultApp'
+import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
+import { useClientService } from '../../clientService'
+import { useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsEditReadmeContent = () => {
-  const { dispatchModal } = useModals()
+  const clientService = useClientService()
+  const { openWithDefaultApp } = useOpenWithDefaultApp()
   const userStore = useUserStore()
   const { $gettext } = useGettext()
 
-  const handler = ({ resources }: SpaceActionOptions) => {
-    dispatchModal({
-      title: $gettext('Edit description for space %{name}', {
-        name: resources[0].name
-      }),
-      customComponent: ReadmeContentModal,
-      customComponentAttrs: () => ({ space: resources[0] })
+  const handler = async ({ resources }: SpaceActionOptions) => {
+    const markdownResource = await clientService.webdav.getFileInfo(resources[0], {
+      path: getRelativeSpecialFolderSpacePath(resources[0], 'readme')
     })
+
+    openWithDefaultApp({ space: resources[0], resource: markdownResource })
   }
 
   const actions = computed((): SpaceAction[] => [
