@@ -112,6 +112,7 @@ Summary
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 * Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 
 Details
 -------
@@ -1175,6 +1176,16 @@ Details
    https://github.com/owncloud/web/issues/10181
    https://github.com/owncloud/web/pull/10334
    https://github.com/owncloud/web/pull/10342
+
+* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
+
+   We've integrated the ToastUI editor in our text editor app. This makes writing
+   markdown much easier, since the users will have access to a markdown compatible
+   toolbar. Code syntax highlighting is also supported.
+
+   https://github.com/owncloud/web/issues/9495
+   https://github.com/owncloud/web/issues/10385
+   https://github.com/owncloud/web/pull/10390
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
