@@ -133,11 +133,6 @@
       "@uppy/xhr-upload": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz"
     },
     "packageExtensions": {
-      "jest-serializer-vue-tjw": {
-        "dependencies": {
-          "@vue/compiler-sfc": "2.7.14"
-        }
-      },
       "@toast-ui/editor": {
         "dependencies": {
           "prosemirror-transform": "1.8.0"

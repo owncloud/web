@@ -21,7 +21,7 @@ overrides:
   '@uppy/webdav': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
   '@uppy/xhr-upload': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz
 
-packageExtensionsChecksum: d583143f976b905187cf7903c49c8adf
+packageExtensionsChecksum: 3ef0ab2b0f9b90185dab73258f7cc8d5
 
 importers:
 
