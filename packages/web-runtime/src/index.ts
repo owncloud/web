@@ -43,6 +43,7 @@ import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
+import { UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()
@@ -57,7 +58,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     extensionRegistry,
     spacesStore,
     userStore,
-    resourcesStore
+    resourcesStore,
+    sharesStore
   } = announcePiniaStores()
 
   app.provide('$router', router)
@@ -204,6 +206,13 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
         field: 'name',
         value: app.config.globalProperties.$gettext('Personal')
       })
+
+      // load sharing roles from graph API
+      const { data } =
+        await clientService.graphAuthenticated.roleManagement.listPermissionRoleDefinitions()
+
+      // FIXME: graph type is wrong
+      sharesStore.setGraphRoles(data as UnifiedRoleDefinition[])
     },
     {
       immediate: true

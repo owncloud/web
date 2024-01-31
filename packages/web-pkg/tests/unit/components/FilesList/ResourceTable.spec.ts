@@ -103,6 +103,7 @@ const resourcesWithAllFields = [
     ddate: getCurrentDate(),
     owner,
     sharedWith,
+    shareTypes: [],
     canRename: vi.fn,
     getDomSelector: () => extractDomSelector('forest')
   },
@@ -120,6 +121,7 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
+    shareTypes: [],
     owner,
     canRename: vi.fn,
     getDomSelector: () => extractDomSelector('notes')
@@ -137,6 +139,7 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
+    shareTypes: [],
     owner,
     canRename: vi.fn,
     getDomSelector: () => extractDomSelector('documents')
@@ -153,6 +156,7 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     sharedWith,
+    shareTypes: [],
     tags: [],
     owner,
     canRename: vi.fn,

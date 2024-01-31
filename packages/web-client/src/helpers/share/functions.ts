@@ -12,17 +12,18 @@ import path from 'path'
 import { SHARE_JAIL_ID, SpaceResource, buildWebDavSpacesPath } from '../space'
 import { ShareStatus } from './status'
 import { SharePermissions } from './permission'
-import { Share } from './share'
 import { buildSpaceShare } from './space'
 import { LinkShareRoles, PeopleShareRoles } from './role'
-import { ShareResource } from './types'
+import { ShareResource, Share } from './types'
 
 export const isShareResource = (resource: Resource): resource is ShareResource => {
-  return Object.hasOwn(resource, 'shareType')
+  return Object.hasOwn(resource, 'sharedWith')
 }
 
 /**
  * Transforms given shares into a resource format and returns only their unique occurences
+ *
+ * @deprecated
  */
 export function aggregateResourceShares({
   shares,
@@ -133,6 +134,7 @@ function addMatchingSpaceToShares(shares, spaces) {
   return resources
 }
 
+/** @deprecated */
 export function buildSharedResource(
   share,
   incomingShares = false,
@@ -155,7 +157,7 @@ export function buildSharedResource(
     path: undefined,
     webDavPath: undefined,
     processing: share.processing || false,
-    shareType: parseInt(share.share_type),
+    shareTypes: [parseInt(share.share_type)],
     owner: { id: share.uid_owner, displayName: share.displayname_owner },
     sharedBy: { id: share.uid_owner, displayName: share.displayname_owner },
     sharedWith: share.sharedWith || []

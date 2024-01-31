@@ -31,7 +31,7 @@ export async function triggerShareAction({
     throw new Error('invalid new share status')
   }
 
-  let action = `api/v1/shares/pending/${resource.share.id}`
+  let action = `api/v1/shares/pending/${resource.shareId}`
   if (hidden !== undefined) {
     action += `?hidden=${hidden ? 'true' : 'false'}`
   }

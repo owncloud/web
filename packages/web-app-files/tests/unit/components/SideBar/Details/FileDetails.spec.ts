@@ -35,7 +35,7 @@ const getResourceMock = ({
     shareTypes,
     locked,
     canEditTags: vi.fn(() => canEditTags),
-    ...(sharedBy && { shareType: 0 })
+    ...(sharedBy && { sharedWith: [] })
   })
 
 const selectors = {

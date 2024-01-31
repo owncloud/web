@@ -1,5 +1,5 @@
 import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from './role'
-import { Share } from './share'
+import { Share } from './types'
 import { ShareTypes } from './type'
 
 export function buildSpaceShare(s, storageId): Share {

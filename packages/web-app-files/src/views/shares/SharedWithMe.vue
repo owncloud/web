@@ -181,8 +181,10 @@ export default defineComponent({
 
       const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
       if (selectedShareTypes?.length) {
-        result = result.filter(({ shareType }) => {
-          return selectedShareTypes.map((t) => ShareTypes[t].value).includes(shareType)
+        result = result.filter(({ shareTypes }) => {
+          return selectedShareTypes
+            .map((t) => ShareTypes[t].value)
+            .some((t) => shareTypes.includes(t))
         })
       }
 
@@ -244,7 +246,7 @@ export default defineComponent({
     }
 
     const shareTypes = computed(() => {
-      const uniqueShareTypes = uniq(unref(paginatedResources).map((i) => i.shareType))
+      const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
       return ShareTypes.getByValues(uniqueShareTypes)
     })
 
