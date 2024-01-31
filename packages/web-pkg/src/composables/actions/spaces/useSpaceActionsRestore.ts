@@ -28,15 +28,11 @@ export const useSpaceActionsRestore = ({ store }: { store?: Store<any> } = {}) =
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
       client.drives
-        .updateDrive(
-          space.id.toString(),
-          { name: space.name },
-          {
-            headers: {
-              Restore: true
-            }
+        .updateDrive(space.id.toString(), {} as any, {
+          headers: {
+            Restore: true
           }
-        )
+        })
         .then((updatedSpace) => {
           if (unref(route).name === 'admin-settings-spaces') {
             space.disabled = false
