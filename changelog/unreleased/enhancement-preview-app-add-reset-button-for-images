@@ -1,0 +1,6 @@
+Enhancement: Preview app add reset button for images
+
+We've added a reset button in the preview app for images to reset rotation, zoom and position.
+
+https://github.com/owncloud/web/pull/10356
+https://github.com/owncloud/web/issues/9840

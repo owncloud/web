@@ -23,14 +23,14 @@ Feature: Search in the project space
     And "Alice" navigates to the personal space page
 
     # search for project space objects
-    When "Alice" searches "-'s" using the global search and the "everywhere" filter
+    When "Alice" searches "-'s" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource               |
       | new-'single'quotes.txt |
     But following resources should not be displayed in the search list for user "Alice"
       | resource                   |
       | folder(WithSymbols:!;_+-&) |
-    When "Alice" searches "!;_+-&)" using the global search and the "everywhere" filter
+    When "Alice" searches "!;_+-&)" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
       | resource                   |
       | folder(WithSymbols:!;_+-&) |

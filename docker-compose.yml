@@ -1,7 +1,7 @@
 x-ocis-server: &ocis-service
   image: ${OCIS_IMAGE:-owncloud/ocis:latest}
   entrypoint: /bin/sh
-  command: [ '-c', 'ocis init || true && ocis server' ]
+  command: ['-c', 'ocis init || true && ocis server']
   environment: &ocis-environment
     OCIS_INSECURE: '${OCIS_INSECURE:-true}'
     OCIS_LOG_LEVEL: '${OCIS_LOG_LEVEL:-error}'

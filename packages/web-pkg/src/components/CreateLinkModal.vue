@@ -130,7 +130,7 @@
       appearance="filled"
       variation="primary"
       @click="$emit('confirm')"
-      >{{ $gettext('Share') }}
+      >{{ $gettext('Copy link') }}
     </oc-button>
   </div>
 </template>

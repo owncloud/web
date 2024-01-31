@@ -1,0 +1,6 @@
+Bugfix: Private link error messages
+
+Private links not showing proper error messages has been fixed.
+
+https://github.com/owncloud/web/pull/10321
+https://github.com/owncloud/web/issues/10315

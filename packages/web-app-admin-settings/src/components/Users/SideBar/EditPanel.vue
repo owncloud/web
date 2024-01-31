@@ -91,6 +91,7 @@
         />
         <group-select
           class="oc-mb-s"
+          :read-only="isInputFieldReadOnly('user.memberOf')"
           :selected-groups="editUser.memberOf"
           :group-options="groupOptions"
           @selected-option-change="changeSelectedGroupOption"
