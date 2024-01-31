@@ -4,7 +4,7 @@
       :max="100"
       :indeterminate="currentProgress === null"
       :value="currentProgress"
-      size="medium"
+      size="small"
     />
   </div>
 </template>
