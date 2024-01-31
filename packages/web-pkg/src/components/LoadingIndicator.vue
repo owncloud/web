@@ -58,10 +58,10 @@ export default defineComponent({
 
   .oc-progress {
     background-color: transparent;
-    height: 2px;
+    height: 4px;
 
     &-primary div {
-      background-color: var(--oc-color-swatch-primary-contrast);
+      background-color: var(--oc-color-swatch-primary-gradient);
     }
 
     &-indeterminate-first {
