@@ -1,10 +1,10 @@
 <template>
-  <div v-if="isLoading" id="oc-loading-indicator">
+  <div v-if="true" id="oc-loading-indicator">
     <oc-progress
       :max="100"
       :indeterminate="currentProgress === null"
       :value="currentProgress"
-      size="small"
+      size="medium"
     />
   </div>
 </template>
@@ -58,10 +58,10 @@ export default defineComponent({
 
   .oc-progress {
     background-color: transparent;
-    height: 2px;
+    height: 3px;
 
     &-primary div {
-      background-color: var(--oc-color-swatch-primary-contrast);
+      background-color: var(--oc-color-swatch-primary-gradient);
     }
 
     &-indeterminate-first {
