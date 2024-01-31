@@ -14,12 +14,12 @@ export interface AppReadyHookArgs {
 export interface AppNavigationItem {
   isActive?: () => boolean
   activeFor?: { name?: string; path?: string }[]
-  enabled?: () => boolean
+  enabled?: () => boolean // FIXME: Should be "isVisible"
   fillType?: string
   icon?: string
-  name?: string | (() => string)
+  name: string | (() => string)
   route?: RouteLocationRaw
-  tag?: string
+  tag?: string // FIXME: Deprecated, should be removed
   handler?: () => void
   priority?: number
 }
@@ -33,7 +33,7 @@ export interface ApplicationQuickAction {
   id?: string
   label?: (...args) => string | string
   icon?: string
-  iconFillType?: string
+  iconFillType?: IconFillType
   handler?: (...args) => Promise<void> | void
   displayed?: (...args) => boolean | boolean
 }

@@ -6,12 +6,17 @@ import { AppNavigationItem } from '../../apps'
 import { Item } from '@ownclouders/web-client/src/helpers'
 import { useConfigStore } from './config'
 import { FolderView } from '../../ui'
+import { StringUnionOrAnyString } from '../../utils/types'
 
-export type ExtensionScope = 'resource' | 'user' | 'group' | string
+export type ExtensionType = StringUnionOrAnyString<
+  'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView'
+>
+
+export type ExtensionScope = StringUnionOrAnyString<'resource' | 'user' | 'group'>
 
 export type BaseExtension = {
   id: string
-  type: string
+  type: ExtensionType
   scopes?: ExtensionScope[]
 }
 
@@ -61,7 +66,7 @@ export const useExtensionRegistry = () => {
     getters: {
       requestExtensions:
         (state) =>
-        <ExtensionType extends Extension>(type: string, scopes?: string[]) => {
+        <ExtensionType extends Extension>(type: string, scopes?: ExtensionScope[]) => {
           return state.extensions
             .map((e) =>
               unref(e).filter(
