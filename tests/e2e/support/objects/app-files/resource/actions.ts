@@ -42,6 +42,7 @@ const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
+const uploadErrorCloseButton = '.oc-notification-message-danger button[aria-label="Close"]'
 const filesBatchAction = '.files-app-bar-actions .oc-files-actions-%s-trigger'
 const pasteButton = '.paste-files-btn'
 const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]'
@@ -455,10 +456,12 @@ export interface uploadResourceArgs {
   resources: File[]
   to?: string
   option?: string
+  error?: string
+  expectToFail?: boolean
 }
 
 const performUpload = async (args: uploadResourceArgs): Promise<void> => {
-  const { page, resources, to, option } = args
+  const { page, resources, to, option, error, expectToFail } = args
   if (to) {
     await clickResource({ page, path: to })
   }
@@ -488,6 +491,12 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
       }
     }
   }
+
+  if (expectToFail) {
+    expect(await page.locator(notificationMessageDialog).textContent()).toBe(error)
+    return
+  }
+
   await Promise.all([
     page.waitForResponse(
       (resp) =>
@@ -520,6 +529,12 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
     page,
     names: resources.map((file) => path.basename(file.name))
   })
+}
+
+export const tryToUploadResource = async (args: uploadResourceArgs): Promise<void> => {
+  const { page } = args
+  await performUpload({ ...args, expectToFail: true })
+  await page.locator(uploadErrorCloseButton).click()
 }
 
 export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> => {
