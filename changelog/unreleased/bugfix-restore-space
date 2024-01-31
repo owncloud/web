@@ -1,5 +1,5 @@
-Bugfix: restore space
+Bugfix: Restore space
 
-We've fixed a bug where restoring a space was not able in some constellations for (space) admins
+We've fixed a bug where restoring a space was not able in some constellations for (space) admins.
 
 https://github.com/owncloud/web/pull/10424
