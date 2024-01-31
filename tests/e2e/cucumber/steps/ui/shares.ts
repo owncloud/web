@@ -50,13 +50,13 @@ When(
 )
 
 When(
-  '{string} accepts the following share(s)',
+  '{string} enables the sync for the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const info of stepTable.hashes()) {
-      await shareObject.accept({ resource: info.name })
+      await shareObject.enableSync({ resource: info.name })
     }
   }
 )
@@ -136,46 +136,46 @@ When(
 )
 
 When(
-  '{string} declines the following share(s)',
+  '{string} disables the sync for the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.declineShare({ resource: resource.name })
+      await shareObject.disableSync({ resource: resource.name })
     }
   }
 )
 
 When(
-  '{string} accepts the following share(s) from the context menu',
+  '{string} enables the sync for the following share(s) from the context menu',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.accept({ resource: resource.name, via: 'CONTEXT_MENU' })
+      await shareObject.enableSync({ resource: resource.name, via: 'CONTEXT_MENU' })
     }
   }
 )
 
 When(
-  '{string} accepts all pending shares using the batch actions',
+  '{string} enables the sync for all shares using the batch actions',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
-    await shareObject.acceptAll()
+    await shareObject.syncAll()
   }
 )
 
 When(
-  '{string} declines the following share from the context menu',
+  '{string} disables the sync for all shares using the context menu',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.declineShare({ resource: resource.name, via: 'CONTEXT_MENU' })
+      await shareObject.disableSync({ resource: resource.name, via: 'CONTEXT_MENU' })
     }
   }
 )

@@ -5,34 +5,26 @@ import {
   createLocationShares
 } from '../../../router'
 import PQueue from 'p-queue'
-import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import {
-  useMessages,
-  useSpacesStore,
-  useCapabilityStore,
-  useConfigStore,
-  useResourcesStore
-} from '../../piniaStores'
+import { useMessages, useConfigStore, useResourcesStore } from '../../piniaStores'
 
-export const useFileActionsDeclineShare = () => {
+export const useFileActionsDisableSync = () => {
   const { showMessage, showErrorMessage } = useMessages()
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
 
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const configStore = useConfigStore()
-  const spacesStore = useSpacesStore()
-  const { upsertResource } = useResourcesStore()
+  const { updateResourceField } = useResourcesStore()
 
-  const handler = async ({ resources }: FileActionOptions<ShareResource>) => {
+  const handler = async ({ resources }: FileActionOptions<IncomingShareResource>) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
@@ -42,18 +34,17 @@ export const useFileActionsDeclineShare = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            const share = await triggerShareAction({
+            await triggerShareAction({
               resource,
-              status: ShareStatus.declined,
-              hasResharing: capabilityStore.sharingResharing,
-              hasShareJail: capabilityStore.spacesShareJail,
-              client: clientService.owncloudSdk,
-              spaces: spacesStore.spaces,
-              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
+              status: 2,
+              client: clientService.owncloudSdk
             })
-            if (share) {
-              upsertResource(share)
-            }
+
+            updateResourceField<IncomingShareResource, any>({
+              id: resource.id,
+              field: 'syncEnabled',
+              value: false
+            })
           } catch (error) {
             console.error(error)
             errors.push(error)
@@ -88,9 +79,9 @@ export const useFileActionsDeclineShare = () => {
     })
   }
 
-  const actions = computed((): FileAction<ShareResource>[] => [
+  const actions = computed((): FileAction<IncomingShareResource>[] => [
     {
-      name: 'decline-share',
+      name: 'disable-sync',
       icon: 'spam-3',
       handler: (args) => loadingService.addTask(() => handler(args)),
       label: () => $gettext('Disable sync'),
@@ -112,14 +103,10 @@ export const useFileActionsDeclineShare = () => {
           return false
         }
 
-        // decline (= unsync) is only available for accepted (= synced) shares
-        const declineDisabled = resources.some((resource) => {
-          return resource.status !== ShareStatus.accepted
-        })
-        return !declineDisabled
+        return resources.some((resource) => resource.syncEnabled)
       },
       componentType: 'button',
-      class: 'oc-files-actions-decline-share-trigger'
+      class: 'oc-files-actions-disable-sync-trigger'
     }
   ])
 

@@ -76,9 +76,9 @@ import ViewOptions from '../ViewOptions.vue'
 import { isLocationCommonActive, isLocationTrashActive } from '../../router'
 import { FolderView } from '../../ui/types'
 import {
-  useFileActionsAcceptShare,
+  useFileActionsEnableSync,
   useFileActionsCopy,
-  useFileActionsDeclineShare,
+  useFileActionsDisableSync,
   useFileActionsDelete,
   useFileActionsDownloadArchive,
   useFileActionsDownloadFile,
@@ -155,11 +155,11 @@ export default defineComponent({
     const resourcesStore = useResourcesStore()
     const { selectedResources } = storeToRefs(resourcesStore)
 
-    const { actions: acceptShareActions } = useFileActionsAcceptShare()
+    const { actions: enableSyncActions } = useFileActionsEnableSync()
     const { actions: hideShareActions } = useFileActionsToggleHideShare()
     const { actions: copyActions } = useFileActionsCopy()
     const { actions: duplicateActions } = useSpaceActionsDuplicate()
-    const { actions: declineShareActions } = useFileActionsDeclineShare()
+    const { actions: disableSyncActions } = useFileActionsDisableSync()
     const { actions: deleteActions } = useFileActionsDelete()
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
@@ -181,8 +181,8 @@ export default defineComponent({
     const batchActions = computed(() => {
       let actions = [
         ...unref(hideShareActions),
-        ...unref(acceptShareActions),
-        ...unref(declineShareActions),
+        ...unref(enableSyncActions),
+        ...unref(disableSyncActions),
         ...unref(downloadArchiveActions),
         ...unref(downloadFileActions),
         ...unref(moveActions),

@@ -1,14 +1,11 @@
 import {
   Share,
-  ShareStatus,
   ShareTypes,
   buildShare,
-  isShareResource
+  isIncomingShareResource
 } from '@ownclouders/web-client/src/helpers/share'
-import { isLocationSharesActive } from '../../../router'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
-import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { useCanShare } from '../../shares'
@@ -19,7 +16,6 @@ import { useMessages } from '../../piniaStores'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
-  const router = useRouter()
   const language = useGettext()
   const { $gettext } = language
   const clientService = useClientService()
@@ -89,11 +85,10 @@ export const useFileActionsCopyQuickLink = () => {
         if (resources.length !== 1) {
           return false
         }
-        if (isLocationSharesActive(router, 'files-shares-with-me')) {
-          if (isShareResource(resources[0]) && resources[0].status !== ShareStatus.accepted) {
-            return false
-          }
+        if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
+          return false
         }
+
         return canShare(resources[0])
       },
       componentType: 'button',

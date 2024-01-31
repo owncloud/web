@@ -17,7 +17,6 @@
     <resource-table
       v-else
       v-model:selectedIds="selectedResourcesIds"
-      :data-test-share-status="shareStatus"
       :is-side-bar-open="isSideBarOpen"
       :fields-displayed="displayedFields"
       sidebar-closed
@@ -33,13 +32,13 @@
       @row-mounted="rowMounted"
       @sort="sortHandler"
     >
-      <template #status="{ resource }">
+      <template #syncEnabled="{ resource }">
         <div
-          :key="resource.getDomSelector() + resource.status"
+          :key="resource.getDomSelector()"
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
           <oc-icon
-            v-if="getShowSyncedIcon(resource)"
+            v-if="resource.syncEnabled"
             v-oc-tooltip="$gettext('Synced with your devices')"
             name="loop-right"
             class="sync-enabled"
@@ -104,12 +103,11 @@ import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { SortDir, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { ContextActions } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
 import { RouteLocationNamedRaw } from 'vue-router'
-import { Resource } from '@ownclouders/web-client/src/helpers'
 import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 
@@ -134,12 +132,8 @@ export default defineComponent({
       default: ''
     },
     items: {
-      type: Array as PropType<ShareResource[]>,
+      type: Array as PropType<IncomingShareResource[]>,
       required: true
-    },
-    shareStatus: {
-      type: Number,
-      default: ShareStatus.accepted
     },
     sortBy: {
       type: String,
@@ -228,13 +222,12 @@ export default defineComponent({
   },
 
   data: () => ({
-    ShareStatus,
     showMore: false
   }),
 
   computed: {
     displayedFields() {
-      return ['name', 'status', 'owner', 'sdate', 'sharedWith']
+      return ['name', 'syncEnabled', 'owner', 'sdate', 'sharedWith']
     },
     countFiles() {
       return this.items.filter((s) => s.type !== 'folder').length
@@ -259,7 +252,7 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    rowMounted(resource: Resource, component) {
+    rowMounted(resource: IncomingShareResource, component) {
       const loadPreview = async () => {
         const preview = await this.$previewService.loadPreview(
           {
@@ -283,9 +276,6 @@ export default defineComponent({
         onEnter: debounced,
         onExit: debounced.cancel
       })
-    },
-    getShowSyncedIcon(resource: ShareResource) {
-      return resource.status === ShareStatus.accepted
     },
     toggleShowMore() {
       this.showMore = !this.showMore

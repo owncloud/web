@@ -88,7 +88,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { storeToRefs } from 'pinia'
-import { ShareResource } from '@ownclouders/web-client/src/helpers'
+import { OutgoingShareResource } from '@ownclouders/web-client/src/helpers'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -118,7 +118,7 @@ export default defineComponent({
     const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const { loadResourcesTask, selectedResourcesIds, paginatedResources } =
-      useResourcesViewDefaults<ShareResource, any, any[]>()
+      useResourcesViewDefaults<OutgoingShareResource, any, any[]>()
 
     resourcesStore.$onAction((action) => {
       if (action.name !== 'updateResourceField') {

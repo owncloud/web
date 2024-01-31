@@ -22,14 +22,17 @@ export enum GraphSharePermission {
 export interface ShareResource extends Resource {
   sharedWith: Array<{ shareType: number } & Identity>
   sharedBy: Identity
+  outgoing: boolean
 
-  syncEnabled?: boolean
-  shareRoles?: UnifiedRoleDefinition[]
-  sharePermissions?: GraphSharePermission[]
-  hidden?: boolean
-
-  status?: number // FIXME: remove in favour of syncEnabled
   share?: any // FIXME: type DriveItem OR remove? do we want to expose the share on each resource?
+}
+export interface OutgoingShareResource extends ShareResource {}
+
+export interface IncomingShareResource extends ShareResource {
+  hidden: boolean
+  syncEnabled: boolean
+  shareRoles: UnifiedRoleDefinition[]
+  sharePermissions: GraphSharePermission[]
 }
 
 /** @deprecated */

@@ -29,16 +29,15 @@ Feature: share
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
+    And "Brian" enables the sync for the following share
       | name                   |
       | folder_to_shared       |
       | folder_to_customShared |
     Then "Brian" should not see a sync status for the folder "shared_folder"
-    When "Brian" accepts the following share from the context menu
+    When "Brian" enables the sync for the following share from the context menu
       | name          |
       | shared_folder |
-    And "Brian" creates quick link of the resource "shared_folder" with password "%public%" from the context menu
-    And "Brian" declines the following share from the context menu
+    And "Brian" disables the sync for all shares using the context menu
       | name          |
       | shared_folder |
     And "Brian" renames the following resource
@@ -97,18 +96,17 @@ Feature: share
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     Then "Brian" should not see a sync status for the file "shareToBrian.txt"
-    When "Brian" accepts the following share
+    When "Brian" enables the sync for the following share
       | name             |
       | shareToBrian.txt |
       | shareToBrian.md  |
       | testavatar.jpeg  |
       | simple.pdf       |
     Then "Brian" should not see a sync status for the file "sharedFile.txt"
-    When "Brian" accepts the following share from the context menu
+    When "Brian" enables the sync for the following share from the context menu
       | name           |
       | sharedFile.txt |
-    And "Brian" creates quick link of the resource "sharedFile.txt" with password "%public%" from the context menu
-    And "Brian" declines the following share from the context menu
+    And "Brian" disables the sync for all shares using the context menu
       | name           |
       | sharedFile.txt |
     And "Brian" edits the following resources
@@ -163,7 +161,7 @@ Feature: share
     And  "Alice" logs out
 
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
+    And "Brian" enables the sync for the following share
       | name       |
       | new.txt    |
       | myfolder   |

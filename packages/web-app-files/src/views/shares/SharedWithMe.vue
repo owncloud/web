@@ -115,7 +115,7 @@ import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
 import { useOpenWithDefaultApp, defaultFuseOptions } from '@ownclouders/web-pkg'
-import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { IncomingShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { uniq } from 'lodash-es'
 
 export default defineComponent({
@@ -146,7 +146,7 @@ export default defineComponent({
       isSideBarOpen,
       paginatedResources,
       scrollToResourceFromRoute
-    } = useResourcesViewDefaults<ShareResource, any, any>()
+    } = useResourcesViewDefaults<IncomingShareResource, any, any>()
 
     const { $gettext } = useGettext()
 

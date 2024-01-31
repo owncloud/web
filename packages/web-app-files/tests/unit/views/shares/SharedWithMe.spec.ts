@@ -12,7 +12,7 @@ import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
-import { ShareTypes, ShareResource } from '@ownclouders/web-client/src/helpers'
+import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client/src/helpers'
 
 vi.mock('web-app-files/src/composables/resourcesViewDefaults')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -84,8 +84,8 @@ describe('SharedWithMe view', () => {
         const shareType2 = ShareTypes.group
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<ShareResource>({ shareTypes: [shareType1.value] }),
-            mock<ShareResource>({ shareTypes: [shareType2.value] })
+            mock<IncomingShareResource>({ shareTypes: [shareType1.value] }),
+            mock<IncomingShareResource>({ shareTypes: [shareType2.value] })
           ]
         })
         const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
@@ -99,11 +99,11 @@ describe('SharedWithMe view', () => {
         const collaborator2 = { id: 'user2', displayName: 'user2' }
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<ShareResource>({
+            mock<IncomingShareResource>({
               sharedBy: collaborator1,
               shareTypes: [ShareTypes.user.value]
             }),
-            mock<ShareResource>({
+            mock<IncomingShareResource>({
               sharedBy: collaborator2,
               shareTypes: [ShareTypes.user.value]
             })
@@ -122,12 +122,12 @@ describe('SharedWithMe view', () => {
       it('filters shares accordingly by name', async () => {
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<ShareResource>({
+            mock<IncomingShareResource>({
               name: 'share1',
               hidden: false,
               shareTypes: [ShareTypes.user.value]
             }),
-            mock<ShareResource>({
+            mock<IncomingShareResource>({
               name: 'share2',
               hidden: false,
               shareTypes: [ShareTypes.user.value]

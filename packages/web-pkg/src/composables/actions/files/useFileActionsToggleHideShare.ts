@@ -8,28 +8,20 @@ import { useRouter } from '../../router'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import {
-  useMessages,
-  useSpacesStore,
-  useCapabilityStore,
-  useConfigStore,
-  useResourcesStore
-} from '../../piniaStores'
-import { ShareResource } from '@ownclouders/web-client/src/helpers'
+import { useMessages, useConfigStore, useResourcesStore } from '../../piniaStores'
+import { IncomingShareResource } from '@ownclouders/web-client/src/helpers'
 
 export const useFileActionsToggleHideShare = () => {
   const { showMessage, showErrorMessage } = useMessages()
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext } = useGettext()
 
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const configStore = useConfigStore()
-  const spacesStore = useSpacesStore()
-  const { upsertResource, resetSelection } = useResourcesStore()
+  const { updateResourceField, resetSelection } = useResourcesStore()
 
-  const handler = async ({ resources }: FileActionOptions<ShareResource>) => {
+  const handler = async ({ resources }: FileActionOptions<IncomingShareResource>) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
@@ -41,19 +33,17 @@ export const useFileActionsToggleHideShare = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            const share = await triggerShareAction({
+            await triggerShareAction({
               resource,
-              status: resource.status,
+              status: resource.syncEnabled ? 0 : 2,
               hidden,
-              hasResharing: capabilityStore.sharingResharing,
-              hasShareJail: capabilityStore.spacesShareJail,
-              client: clientService.owncloudSdk,
-              spaces: spacesStore.spaces,
-              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
+              client: clientService.owncloudSdk
             })
-            if (share) {
-              upsertResource(share)
-            }
+            updateResourceField<IncomingShareResource, any>({
+              id: resource.id,
+              field: 'hidden',
+              value: hidden
+            })
           } catch (error) {
             console.error(error)
             errors.push(error)
@@ -83,7 +73,7 @@ export const useFileActionsToggleHideShare = () => {
     })
   }
 
-  const actions = computed((): FileAction<ShareResource>[] => [
+  const actions = computed((): FileAction<IncomingShareResource>[] => [
     {
       name: 'toggle-hide-share',
       icon: 'eye-off', // FIXME: change icon based on hidden status

@@ -90,7 +90,6 @@
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
 import { eventBus, useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
-import { ShareStatus } from '@ownclouders/web-client/src/helpers/share'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import {
@@ -269,7 +268,7 @@ export default {
           const { state, path, file_target: fileTarget } = item as any
 
           // accepted federated share
-          if (state === ShareStatus.accepted && fileTarget) {
+          if (state === 0 && fileTarget) {
             eventBus.publish('app.files.list.load')
             return
           }

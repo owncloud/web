@@ -1,9 +1,8 @@
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
 import { SHARE_JAIL_ID, buildWebDavSpacesPath } from '../space'
-import { ShareStatus } from './status'
 import { DriveItem, UnifiedRoleDefinition, User } from '../../generated'
-import { GraphSharePermission, ShareResource } from './types'
+import { GraphSharePermission, IncomingShareResource, OutgoingShareResource } from './types'
 import { urlJoin } from '../../utils'
 
 export const getShareResourceRoles = ({
@@ -64,7 +63,7 @@ export function buildIncomingShareResource({
 }: {
   driveItem: DriveItem
   graphRoles: UnifiedRoleDefinition[]
-}): ShareResource {
+}): IncomingShareResource {
   const resourceName = driveItem.name || driveItem.remoteItem.name
   const storageId = extractStorageId(driveItem.remoteItem.id)
   const permission = driveItem.remoteItem?.permissions[0]
@@ -74,7 +73,7 @@ export function buildIncomingShareResource({
   const shareRoles = getShareResourceRoles({ driveItem, graphRoles })
   const sharePermissions = getShareResourcePermissions({ driveItem, shareRoles })
 
-  const resource: ShareResource = {
+  const resource: IncomingShareResource = {
     id,
     shareId: id,
     path: '/',
@@ -98,11 +97,11 @@ export function buildIncomingShareResource({
     isFolder: !!driveItem.remoteItem.folder,
     type: !!driveItem.remoteItem.folder ? 'folder' : 'file',
     mimeType: driveItem.remoteItem.file?.mimeType || 'httpd/unix-directory',
-    status: permission?.['@client.synchronize'] ? ShareStatus.accepted : ShareStatus.declined,
     syncEnabled: permission?.['@client.synchronize'],
     hidden: permission?.['@ui.hidden'],
     shareRoles,
     sharePermissions,
+    outgoing: false,
     canRename: () => !!permission?.['@client.synchronize'],
     canDownload: () => sharePermissions.includes(GraphSharePermission.readBasic),
     canUpload: () => sharePermissions.includes(GraphSharePermission.createUpload),
@@ -127,11 +126,11 @@ export function buildOutgoingShareResource({
 }: {
   driveItem: DriveItem
   user: User
-}): ShareResource {
+}): OutgoingShareResource {
   const storageId = extractStorageId(driveItem.id)
   const path = urlJoin(driveItem.parentReference.path, driveItem.name)
 
-  const resource: ShareResource = {
+  const resource: OutgoingShareResource = {
     id: driveItem.permissions[0].id,
     shareId: driveItem.permissions[0].id,
     path,
@@ -171,6 +170,7 @@ export function buildOutgoingShareResource({
     isFolder: !!driveItem.folder,
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
+    outgoing: true,
     canRename: () => true,
     canDownload: () => true,
     canUpload: () => true,

@@ -1,7 +1,7 @@
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { useFileActionsAcceptShare } from '../../../../../src/composables/actions/files/useFileActionsAcceptShare'
-import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { useFileActionsEnableSync } from '../../../../../src/composables/actions/files/useFileActionsEnableSync'
+import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 
 const sharesWithMeLocation = 'files-shares-with-me'
@@ -11,15 +11,14 @@ describe('acceptShare', () => {
   describe('computed property "actions"', () => {
     describe('isEnabled property of returned element', () => {
       it.each([
-        { resources: [{ status: ShareStatus.pending }] as ShareResource[], expectedStatus: true },
-        { resources: [{ status: ShareStatus.declined }] as ShareResource[], expectedStatus: true },
-        { resources: [{ status: ShareStatus.accepted }] as ShareResource[], expectedStatus: false }
+        { resources: [{ syncEnabled: false }] as IncomingShareResource[], expectedStatus: true },
+        { resources: [{ syncEnabled: true }] as IncomingShareResource[], expectedStatus: false }
       ])(
-        `should be set according to the resource share status if the route name is "${sharesWithMeLocation}"`,
+        `should be set according to the resource syncEnabled state if the route name is "${sharesWithMeLocation}"`,
         (inputData) => {
           getWrapper({
             setup: () => {
-              const { actions } = useFileActionsAcceptShare()
+              const { actions } = useFileActionsEnableSync()
 
               const resources = inputData.resources
               expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
@@ -30,16 +29,15 @@ describe('acceptShare', () => {
         }
       )
       it.each([
-        { status: ShareStatus.pending } as ShareResource,
-        { status: ShareStatus.declined } as ShareResource,
-        { status: ShareStatus.accepted } as ShareResource
+        { syncEnabled: false } as IncomingShareResource,
+        { syncEnabled: true } as IncomingShareResource
       ])(
         `should be set as false if the route name is other than "${sharesWithMeLocation}"`,
         (resource) => {
           getWrapper({
             routeName: sharesWithOthersLocation,
             setup: () => {
-              const { actions } = useFileActionsAcceptShare()
+              const { actions } = useFileActionsEnableSync()
 
               expect(
                 unref(actions)[0].isEnabled({ space: null, resources: [resource] })

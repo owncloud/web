@@ -1,7 +1,7 @@
 import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 
 import PQueue from 'p-queue'
-import { ShareResource, ShareStatus } from '@ownclouders/web-client/src/helpers/share'
+import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { isLocationSharesActive, isLocationSpacesActive } from '../../../router'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
@@ -9,29 +9,21 @@ import { useRouter } from '../../router'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import {
-  useMessages,
-  useSpacesStore,
-  useCapabilityStore,
-  useConfigStore,
-  useResourcesStore
-} from '../../piniaStores'
+import { useMessages, useConfigStore, useResourcesStore } from '../../piniaStores'
 
-export const useFileActionsAcceptShare = () => {
+export const useFileActionsEnableSync = () => {
   const { showMessage, showErrorMessage } = useMessages()
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
 
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const configStore = useConfigStore()
-  const spacesStore = useSpacesStore()
 
   const resourcesStore = useResourcesStore()
-  const { upsertResource } = resourcesStore
+  const { updateResourceField } = resourcesStore
 
-  const handler = async ({ resources }: FileActionOptions<ShareResource>) => {
+  const handler = async ({ resources }: FileActionOptions<IncomingShareResource>) => {
     const errors = []
     const triggerPromises = []
     const triggerQueue = new PQueue({
@@ -41,18 +33,16 @@ export const useFileActionsAcceptShare = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            const share = await triggerShareAction({
+            await triggerShareAction({
               resource,
-              status: ShareStatus.accepted,
-              hasResharing: capabilityStore.sharingResharing,
-              hasShareJail: capabilityStore.spacesShareJail,
-              client: clientService.owncloudSdk,
-              spaces: spacesStore.spaces,
-              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
+              status: 0,
+              client: clientService.owncloudSdk
             })
-            if (share) {
-              upsertResource(share)
-            }
+            updateResourceField<IncomingShareResource, any>({
+              id: resource.id,
+              field: 'syncEnabled',
+              value: true
+            })
           } catch (error) {
             console.error(error)
             errors.push(error)
@@ -88,9 +78,9 @@ export const useFileActionsAcceptShare = () => {
     })
   }
 
-  const actions = computed((): FileAction<ShareResource>[] => [
+  const actions = computed((): FileAction<IncomingShareResource>[] => [
     {
-      name: 'accept-share',
+      name: 'enable-sync',
       icon: 'check',
       handler: (args) => loadingService.addTask(() => handler(args)),
       label: () => $gettext('Enable sync'),
@@ -112,13 +102,10 @@ export const useFileActionsAcceptShare = () => {
           return false
         }
 
-        const acceptDisabled = resources.some((resource) => {
-          return resource.status === ShareStatus.accepted
-        })
-        return !acceptDisabled
+        return resources.some((resource) => !resource.syncEnabled)
       },
       componentType: 'button',
-      class: 'oc-files-actions-accept-share-trigger'
+      class: 'oc-files-actions-enable-sync-trigger'
     }
   ])
 
