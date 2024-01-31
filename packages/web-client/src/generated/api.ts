@@ -834,6 +834,18 @@ export interface DriveItem {
      * @memberof DriveItem
      */
     'video'?: Video;
+    /**
+     * Indicates if the item is synchronized with the underlying storage provider. Read-only.
+     * @type {boolean}
+     * @memberof DriveItem
+     */
+    '@client.synchronize'?: boolean;
+    /**
+     * Properties or facets (see UI.Facet) annotated with this term will not be rendered if the annotation evaluates to true. Users can set this to hide permissons.
+     * @type {boolean}
+     * @memberof DriveItem
+     */
+    '@UI.Hidden'?: boolean;
 }
 /**
  * 
@@ -1629,17 +1641,11 @@ export interface Permission {
      */
     '@libre.graph.permissions.actions'?: Array<string>;
     /**
-     * Indicates if the item is synchronized with the underlying storage provider. Read-only.
-     * @type {boolean}
+     * 
+     * @type {SharingInvitation}
      * @memberof Permission
      */
-    '@client.synchronize'?: boolean;
-    /**
-     * Properties or facets (see UI.Facet) annotated with this term will not be rendered if the annotation evaluates to true. Users can set this to hide permissons.
-     * @type {boolean}
-     * @memberof Permission
-     */
-    '@ui.hidden'?: boolean;
+    'invitation'?: SharingInvitation;
 }
 /**
  * The photo resource provides photo and camera properties, for example, EXIF metadata, on a driveItem. 
@@ -1842,12 +1848,6 @@ export interface RemoteItem {
      */
     'parentReference'?: ItemReference;
     /**
-     * 
-     * @type {Shared}
-     * @memberof RemoteItem
-     */
-    'shared'?: Shared;
-    /**
      * The set of permissions for the item. Read-only. Nullable.
      * @type {Array<Permission>}
      * @memberof RemoteItem
@@ -1898,35 +1898,17 @@ export interface SharePointIdentitySet {
     'group'?: Identity;
 }
 /**
- * 
+ * invitation-related data items 
  * @export
- * @interface Shared
+ * @interface SharingInvitation
  */
-export interface Shared {
+export interface SharingInvitation {
     /**
      * 
      * @type {IdentitySet}
-     * @memberof Shared
+     * @memberof SharingInvitation
      */
-    'owner'?: IdentitySet;
-    /**
-     * Indicates the scope of how the item is shared: anonymous, organization, or users. Read-only.
-     * @type {string}
-     * @memberof Shared
-     */
-    'scope'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof Shared
-     */
-    'sharedBy'?: IdentitySet;
-    /**
-     * The UTC date and time when the item was shared. Read-only.
-     * @type {string}
-     * @memberof Shared
-     */
-    'sharedDateTime'?: string;
+    'invitedBy'?: IdentitySet;
 }
 /**
  * The `SharingLink` resource groups link-related data items into a single structure.  If a `permission` resource has a non-null `sharingLink` facet, the permission represents a sharing link (as opposed to permissions granted to a person or group). 
@@ -2461,7 +2443,7 @@ export class ApplicationsApi extends BaseAPI {
 export const DriveItemApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
+         * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
          * @summary Delete a DriveItem.
          * @param {string} driveId key: id of drive
          * @param {string} itemId key: id of item
@@ -2509,7 +2491,7 @@ export const DriveItemApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DriveItemApiAxiosParamCreator(configuration)
     return {
         /**
-         * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
+         * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
          * @summary Delete a DriveItem.
          * @param {string} driveId key: id of drive
          * @param {string} itemId key: id of item
@@ -2531,7 +2513,7 @@ export const DriveItemApiFactory = function (configuration?: Configuration, base
     const localVarFp = DriveItemApiFp(configuration)
     return {
         /**
-         * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
+         * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
          * @summary Delete a DriveItem.
          * @param {string} driveId key: id of drive
          * @param {string} itemId key: id of item
@@ -2552,7 +2534,7 @@ export const DriveItemApiFactory = function (configuration?: Configuration, base
  */
 export class DriveItemApi extends BaseAPI {
     /**
-     * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
+     * Delete a DriveItem by using its ID.  Deleting items using this method moves the items to the recycle bin instead of permanently deleting the item.  Mounted shares in the share jail are unmounted. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to false. 
      * @summary Delete a DriveItem.
      * @param {string} driveId key: id of drive
      * @param {string} itemId key: id of item
@@ -3704,7 +3686,7 @@ export class DrivesPermissionsApi extends BaseAPI {
 export const DrivesRootApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
+         * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
          * @summary Create a drive item
          * @param {string} driveId key: id of drive
          * @param {DriveItem} [driveItem] In the request body, provide a JSON object with the following parameters. For mounting a share the necessary remoteItem id and permission id can be taken from the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint.
@@ -3786,7 +3768,7 @@ export const DrivesRootApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DrivesRootApiAxiosParamCreator(configuration)
     return {
         /**
-         * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
+         * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
          * @summary Create a drive item
          * @param {string} driveId key: id of drive
          * @param {DriveItem} [driveItem] In the request body, provide a JSON object with the following parameters. For mounting a share the necessary remoteItem id and permission id can be taken from the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint.
@@ -3819,7 +3801,7 @@ export const DrivesRootApiFactory = function (configuration?: Configuration, bas
     const localVarFp = DrivesRootApiFp(configuration)
     return {
         /**
-         * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
+         * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
          * @summary Create a drive item
          * @param {string} driveId key: id of drive
          * @param {DriveItem} [driveItem] In the request body, provide a JSON object with the following parameters. For mounting a share the necessary remoteItem id and permission id can be taken from the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint.
@@ -3850,7 +3832,7 @@ export const DrivesRootApiFactory = function (configuration?: Configuration, bas
  */
 export class DrivesRootApi extends BaseAPI {
     /**
-     * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `remoteItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
+     * You can use the root childrens endpoint to mount a remoteItem in the share jail. The `@client.synchronize` property of the `driveItem` in the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint will change to true. 
      * @summary Create a drive item
      * @param {string} driveId key: id of drive
      * @param {DriveItem} [driveItem] In the request body, provide a JSON object with the following parameters. For mounting a share the necessary remoteItem id and permission id can be taken from the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint.
