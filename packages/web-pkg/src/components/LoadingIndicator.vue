@@ -1,5 +1,5 @@
 <template>
-  <div v-if="true" id="oc-loading-indicator">
+  <div v-if="isLoading" id="oc-loading-indicator">
     <oc-progress
       :max="100"
       :indeterminate="currentProgress === null"
