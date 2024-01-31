@@ -293,7 +293,7 @@ export default defineComponent({
      * - modificationDate: The date of the last modification of the resource
      * - shareDate: The date when the share was created
      * - deletionDate: The date when the resource has been deleted
-     * - status: The sync status of the share
+     * - syncEnabled: The sync status of the share
      * - opensInNewWindow: Open the link in a new window
      */
     resources: {
