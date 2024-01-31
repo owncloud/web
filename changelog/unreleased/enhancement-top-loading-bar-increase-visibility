@@ -1,0 +1,5 @@
+Enhancement: Top loading bar increase visibility
+
+We've increased the visibility in the top loading bar, the height has been increased along with the color contrast.
+
+https://github.com/owncloud/web/issues/10383
