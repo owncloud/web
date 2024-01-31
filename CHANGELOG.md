@@ -40,6 +40,10 @@ Summary
 * Bugfix - Make versions panel readonly in viewers and editors: [#10182](https://github.com/owncloud/web/pull/10182)
 * Bugfix - Loading indicator during conflict dialog: [#10220](https://github.com/owncloud/web/pull/10220)
 * Bugfix - Configurable concurrent requests: [#10227](https://github.com/owncloud/web/issues/10227)
+* Bugfix - Skip searchbar preview fetch on reload: [#10232](https://github.com/owncloud/web/pull/10232)
+* Bugfix - Scrollable account page: [#10318](https://github.com/owncloud/web/pull/10318)
+* Bugfix - Private link error messages: [#10321](https://github.com/owncloud/web/pull/10321)
+* Bugfix - Readonly user attributes have no effect on group memberships: [#10347](https://github.com/owncloud/web/pull/10347)
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
@@ -112,6 +116,7 @@ Summary
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 * Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+* Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 
 Details
@@ -374,6 +379,35 @@ Details
 
    https://github.com/owncloud/web/issues/10227
    https://github.com/owncloud/web/pull/10230
+
+* Bugfix - Skip searchbar preview fetch on reload: [#10232](https://github.com/owncloud/web/pull/10232)
+
+   We've fixed a bug, where search result page on reload would fetch unnecessarily
+   the preview of the searchbar.
+
+   https://github.com/owncloud/web/issues/10200
+   https://github.com/owncloud/web/pull/10232
+
+* Bugfix - Scrollable account page: [#10318](https://github.com/owncloud/web/pull/10318)
+
+   Vertically scrolling the account page has been fixed and works now.
+
+   https://github.com/owncloud/web/issues/10313
+   https://github.com/owncloud/web/pull/10318
+
+* Bugfix - Private link error messages: [#10321](https://github.com/owncloud/web/pull/10321)
+
+   Private links not showing proper error messages has been fixed.
+
+   https://github.com/owncloud/web/issues/10315
+   https://github.com/owncloud/web/pull/10321
+
+* Bugfix - Readonly user attributes have no effect on group memberships: [#10347](https://github.com/owncloud/web/pull/10347)
+
+   We've fixed a bug where the entity 'user.memberOf' set via env var
+   `FRONTEND_READONLY_USER_ATTRIBUTES` had no effect.
+
+   https://github.com/owncloud/web/pull/10347
 
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 
@@ -695,6 +729,7 @@ Details
    https://github.com/owncloud/web/issues/9531
    https://github.com/owncloud/web/pull/9718
    https://github.com/owncloud/web/pull/10097
+   https://github.com/owncloud/web/pull/10321
 
 * Enhancement - Upload preparation time: [#9552](https://github.com/owncloud/web/pull/9552)
 
@@ -1153,6 +1188,7 @@ Details
 
    https://github.com/owncloud/web/pull/10111
    https://github.com/owncloud/web/pull/10152
+   https://github.com/owncloud/web/pull/10344
 
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 
@@ -1176,6 +1212,14 @@ Details
    https://github.com/owncloud/web/issues/10181
    https://github.com/owncloud/web/pull/10334
    https://github.com/owncloud/web/pull/10342
+
+* Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
+
+   We've added a reset button in the preview app for images to reset rotation, zoom
+   and position.
+
+   https://github.com/owncloud/web/issues/9840
+   https://github.com/owncloud/web/pull/10356
 
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 
