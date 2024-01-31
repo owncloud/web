@@ -117,6 +117,7 @@ Summary
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 * Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
 * Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
+* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 
 Details
@@ -1220,6 +1221,13 @@ Details
 
    https://github.com/owncloud/web/issues/9840
    https://github.com/owncloud/web/pull/10356
+
+* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
+
+   We've improved the visibility in the top loading bar, the height has been
+   increased along with the color contrast.
+
+   https://github.com/owncloud/web/issues/10383
 
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 
