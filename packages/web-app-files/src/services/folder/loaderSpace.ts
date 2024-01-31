@@ -12,7 +12,7 @@ import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from '@ownclouders/web-pkg'
-import { aggregateResourceShares } from '@ownclouders/web-client/src/helpers/share'
+import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { getIndicators } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSpace implements FolderLoader {
@@ -32,9 +32,8 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { spacesStore, router, clientService, configStore, capabilityStore, resourcesStore } =
-      context
-    const { owncloudSdk: client, webdav } = clientService
+    const { router, clientService, resourcesStore } = context
+    const { webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
 
     return useTask(function* (
@@ -60,15 +59,13 @@ export class FolderLoaderSpace implements FolderLoader {
 
         if (path === '/') {
           if (isShareSpaceResource(space)) {
-            const parentShare = yield client.shares.getShare(space.shareId)
-            const aggregatedShares = aggregateResourceShares({
-              shares: [parentShare.shareInfo],
-              spaces: spacesStore.spaces,
-              allowSharePermission: capabilityStore.sharingResharing,
-              incomingShares: true,
-              fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
-            })
-            currentFolder = aggregatedShares[0]
+            // FIXME: it would be cleaner to fetch the driveItem as soon as graph api is capable of it
+            currentFolder = {
+              ...currentFolder,
+              id: space.shareId,
+              syncEnabled: true,
+              canShare: () => false
+            } as IncomingShareResource
           } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
             // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
             currentFolder = space
