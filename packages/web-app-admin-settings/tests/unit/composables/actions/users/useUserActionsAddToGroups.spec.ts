@@ -2,8 +2,8 @@ import { useUserActionsAddToGroups } from '../../../../../src/composables/action
 import { mock } from 'vitest-mock-extended'
 import { ref, unref } from 'vue'
 import { User } from '@ownclouders/web-client/src/generated'
-import { getComposableWrapper } from 'web-test-helpers'
-import { useModals } from '@ownclouders/web-pkg'
+import { getComposableWrapper, writable } from 'web-test-helpers'
+import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsAddToGroups', () => {
   describe('method "isEnabled"', () => {
@@ -15,6 +15,16 @@ describe('useUserActionsAddToGroups', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+        }
+      })
+    })
+    it('returns false if included in capability readOnlyUserAttributes list', () => {
+      getWrapper({
+        setup: ({ actions }) => {
+          const capabilityStore = useCapabilityStore()
+          writable(capabilityStore).graphUsersReadOnlyAttributes = ['user.memberOf']
+
+          expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
         }
       })
     })

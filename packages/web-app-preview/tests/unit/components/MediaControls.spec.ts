@@ -11,7 +11,8 @@ const selectors = {
   controlsImageOriginalSize: '.preview-controls-image-original-size',
   controlsImageZoom: '.preview-controls-image-zoom',
   controlsRotateLeft: '.preview-controls-rotate-left',
-  controlsRotateRight: '.preview-controls-rotate-right'
+  controlsRotateRight: '.preview-controls-rotate-right',
+  controlsImageReset: '.preview-controls-image-reset'
 }
 
 describe('MediaControls component', () => {
@@ -104,6 +105,19 @@ describe('MediaControls component', () => {
         const { wrapper } = getWrapper({ isImage: true })
         await wrapper.find(selectors.controlsRotateRight).trigger('click')
         expect(wrapper.emitted('setRotation').length).toBeDefined()
+      })
+    })
+  })
+  describe('reset', () => {
+    describe('reset button', () => {
+      it('exists if file is an image', () => {
+        const { wrapper } = getWrapper({ isImage: true })
+        expect(wrapper.find(selectors.controlsImageReset).exists()).toBeTruthy()
+      })
+      it('emits "resetImage"-event on click', async () => {
+        const { wrapper } = getWrapper({ isImage: true })
+        await wrapper.find(selectors.controlsImageReset).trigger('click')
+        expect(wrapper.emitted('resetImage').length).toBeDefined()
       })
     })
   })

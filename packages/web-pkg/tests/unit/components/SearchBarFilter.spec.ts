@@ -9,20 +9,20 @@ const selectors = {
 }
 
 describe('SearchBarFilter', () => {
-  it('shows "Everywhere" as default option', () => {
+  it('shows "All files" as default option', () => {
     const { wrapper } = getWrapper({ currentFolderAvailable: true })
     const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
-    expect(filterLabel).toBe('Everywhere')
+    expect(filterLabel).toBe('All files')
   })
-  it('shows "Everywhere" as current option if no In here available', () => {
+  it('shows "All files" as current option if no Current folder available', () => {
     const { wrapper } = getWrapper()
     const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
-    expect(filterLabel).toBe('Everywhere')
+    expect(filterLabel).toBe('All files')
   })
-  it('shows "In here" as current option if given via scope', () => {
+  it('shows "Current folder" as current option if given via scope', () => {
     const { wrapper } = getWrapper({ useScope: 'true' })
     const filterLabel = wrapper.findComponent<any>(selectors.filterChipStub).props('filterLabel')
-    expect(filterLabel).toBe('In here')
+    expect(filterLabel).toBe('Current folder')
   })
 })
 

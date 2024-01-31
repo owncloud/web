@@ -163,7 +163,7 @@ export default defineComponent({
       return panelName
     },
     activePanelName() {
-      return this.activeAvailablePanelName || this.rootPanel.name
+      return this.activeAvailablePanelName || this.rootPanel?.name
     },
     rootPanel() {
       return this.panels.find((panel) => panel.isRoot?.(this.panelContext))

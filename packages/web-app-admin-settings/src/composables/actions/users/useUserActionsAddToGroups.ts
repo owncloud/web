@@ -1,12 +1,13 @@
 import { computed, Ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction, useModals } from '@ownclouders/web-pkg'
+import { UserAction, useModals, useCapabilityStore } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/src/generated'
 import AddToGroupsModal from '../../../components/Users/AddToGroupsModal.vue'
 
 export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) => {
   const { dispatchModal } = useModals()
   const { $gettext, $ngettext } = useGettext()
+  const capabilityStore = useCapabilityStore()
 
   const handler = ({ resources }) => {
     dispatchModal({
@@ -34,7 +35,13 @@ export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) 
       componentType: 'button',
       class: 'oc-users-actions-add-to-groups-trigger',
       label: () => $gettext('Add to groups'),
-      isEnabled: ({ resources }) => resources.length > 0,
+      isEnabled: ({ resources }) => {
+        if (capabilityStore.graphUsersReadOnlyAttributes.includes('user.memberOf')) {
+          return false
+        }
+
+        return resources.length > 0
+      },
       handler
     }
   ])

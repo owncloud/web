@@ -1,4 +1,4 @@
 export abstract class SearchLocationFilterConstants {
-  static readonly everywhere: string = 'everywhere'
-  static readonly inHere: string = 'in-here'
+  static readonly allFiles: string = 'all-files'
+  static readonly currentFolder: string = 'current-folder'
 }

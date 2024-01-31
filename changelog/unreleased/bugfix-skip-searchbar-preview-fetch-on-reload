@@ -1,0 +1,6 @@
+Bugfix: Skip searchbar preview fetch on reload
+
+We've fixed a bug, where search result page on reload would fetch unnecessarily the preview of the searchbar.
+
+https://github.com/owncloud/web/pull/10232
+https://github.com/owncloud/web/issues/10200

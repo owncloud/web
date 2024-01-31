@@ -1,0 +1,6 @@
+Bugfix: Scrollable account page
+
+Vertically scrolling the account page has been fixed and works now.
+
+https://github.com/owncloud/web/pull/10318
+https://github.com/owncloud/web/issues/10313

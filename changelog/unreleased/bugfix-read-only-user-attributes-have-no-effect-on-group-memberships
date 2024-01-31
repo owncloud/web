@@ -1,0 +1,6 @@
+Bugfix: Readonly user attributes have no effect on group memberships
+
+We've fixed a bug where the entity 'user.memberOf' set via env var `FRONTEND_READONLY_USER_ATTRIBUTES`
+had no effect.
+
+https://github.com/owncloud/web/pull/10347
