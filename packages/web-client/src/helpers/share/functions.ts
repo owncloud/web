@@ -196,7 +196,6 @@ export function buildSharedResource(
   resource.canUpload = () => SharePermissions.create.enabled(share.permissions)
   resource.canCreate = () => SharePermissions.create.enabled(share.permissions)
   resource.isMounted = () => false
-  resource.share = buildShare(share, resource, allowSharePermission)
   resource.canDeny = () => SharePermissions.denied.enabled(share.permissions)
   resource.getDomSelector = () => extractDomSelector(share.id)
 

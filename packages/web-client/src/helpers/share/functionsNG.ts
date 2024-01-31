@@ -93,7 +93,6 @@ export function buildIncomingShareResource({
         : { ...permission?.grantedToV2.user, shareType }
     ],
     shareTypes: [shareType],
-    share: driveItem,
     isFolder: !!driveItem.remoteItem.folder,
     type: !!driveItem.remoteItem.folder ? 'folder' : 'file',
     mimeType: driveItem.remoteItem.file?.mimeType || 'httpd/unix-directory',
@@ -166,7 +165,6 @@ export function buildOutgoingShareResource({
       }
       return ShareTypes.user.value
     }),
-    share: driveItem,
     isFolder: !!driveItem.folder,
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',

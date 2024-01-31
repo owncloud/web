@@ -52,15 +52,15 @@ describe('SharedWithOthers view', () => {
       it('shows filter if multiple share types are present', () => {
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<ShareResource>({ share: { shareType: ShareTypes.user.value } }),
-            mock<ShareResource>({ share: { shareType: ShareTypes.group.value } })
+            mock<ShareResource>({ shareTypes: [ShareTypes.user.value] }),
+            mock<ShareResource>({ shareTypes: [ShareTypes.group.value] })
           ]
         })
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
       })
       it('does not show filter if only one share type is present', () => {
         const { wrapper } = getMountedWrapper({
-          files: [mock<ShareResource>({ share: { shareType: ShareTypes.user.value } })]
+          files: [mock<ShareResource>({ shareTypes: [ShareTypes.user.value] })]
         })
         expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
       })
