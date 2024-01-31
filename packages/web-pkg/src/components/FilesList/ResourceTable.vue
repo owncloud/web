@@ -1056,7 +1056,7 @@ export default defineComponent({
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
       return this.$gettext('This %{ resourceType } is owned by %{ ownerName }', {
         resourceType,
-        ownerName: resource.owner.displayName
+        ownerName: resource.owner?.displayName || ''
       })
     },
     getOwnerAvatarItems(resource: Resource) {
@@ -1066,10 +1066,10 @@ export default defineComponent({
 
       return [
         {
-          displayName: resource.owner.displayName,
-          name: resource.owner.displayName,
+          displayName: resource.owner?.displayName,
+          name: resource.owner?.displayName,
           shareType: ShareTypes.user.value,
-          username: resource.owner.id
+          username: resource.owner?.id
         }
       ]
     },
