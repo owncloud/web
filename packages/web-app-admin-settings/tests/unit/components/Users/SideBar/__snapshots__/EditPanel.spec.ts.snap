@@ -18,7 +18,7 @@ exports[`EditPanel > renders all available inputs 1`] = `
         <div class="oc-text-input-message"></div>
       </div>
       <quota-select-stub totalquota="0" maxquota="0" id="quota-select-form" disabled="false" class="oc-mb-s" label="Personal quota" fix-message-line="true" description-message="" read-only="false"></quota-select-stub>
-      <group-select-stub selectedgroups="" groupoptions="undefined,undefined" class="oc-mb-s"></group-select-stub>
+      <group-select-stub selectedgroups="" groupoptions="undefined,undefined" class="oc-mb-s" read-only="false"></group-select-stub>
     </div>
     <compare-save-dialog-stub originalobject="[object Object]" compareobject="[object Object]" confirmbuttondisabled="false" class="edit-compare-save-dialog oc-mb-l"></compare-save-dialog-stub>
   </form>

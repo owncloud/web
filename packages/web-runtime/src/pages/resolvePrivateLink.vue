@@ -143,7 +143,7 @@ export default defineComponent({
 
       const { params, query } = createFileRouteOptions(space, { fileId, path })
       const openWithDefault =
-        configurationManager.options.openLinksWithDefaultApp &&
+        configStore.options.openLinksWithDefaultApp &&
         unref(openWithDefaultApp) !== 'false' &&
         !unref(details)
 
