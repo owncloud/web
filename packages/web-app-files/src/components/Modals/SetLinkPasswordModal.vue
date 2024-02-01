@@ -6,7 +6,7 @@
     :password-policy="inputPasswordPolicy"
     :generate-password-method="inputGeneratePasswordMethod"
     :fix-message-line="true"
-    :placeholder="link.password ? '●●●●●●●●' : null"
+    :placeholder="link.hasPassword ? '●●●●●●●●' : null"
     :error-message="errorMessage"
     class="oc-modal-body-input"
     @password-challenge-completed="$emit('update:confirmDisabled', false)"
@@ -26,13 +26,15 @@ import {
   usePasswordPolicyService,
   useSharesStore
 } from '@ownclouders/web-pkg'
-import { Share } from '@ownclouders/web-client/src/helpers'
+import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'SetLinkPasswordModal',
   props: {
     modal: { type: Object as PropType<Modal>, required: true },
-    link: { type: Object as PropType<Share>, required: true }
+    space: { type: Object as PropType<SpaceResource>, required: true },
+    resource: { type: Object as PropType<Resource>, required: true },
+    link: { type: Object as PropType<LinkShare>, required: true }
   },
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { expose }) {
@@ -53,15 +55,17 @@ export default defineComponent({
     const onConfirm = async () => {
       try {
         await updateLink({
-          id: props.link.id,
           clientService,
-          params: { ...props.link, password: unref(password) }
+          space: props.space,
+          resource: props.resource,
+          linkShare: props.link,
+          options: { password: unref(password) }
         })
         showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
         // Human-readable error message is provided, for example when password is on banned list
-        if (e.statusCode === 400) {
-          errorMessage.value = $gettext(e.message)
+        if (e.response?.status === 400) {
+          errorMessage.value = $gettext(e.response.data.error.message)
           return Promise.reject()
         }
 

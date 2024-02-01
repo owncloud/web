@@ -23,6 +23,8 @@ import {
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
+  isShareResource,
+  isShareSpaceResource,
   SpaceResource,
   spaceRoleEditor,
   spaceRoleManager
@@ -177,7 +179,7 @@ export const useSideBarPanels = () => {
                 return capabilityStore.sharingPublicEnabled
               }
             }),
-            isVisible: ({ items }) => {
+            isVisible: ({ items, root }) => {
               if (items?.length !== 1) {
                 return false
               }
@@ -187,6 +189,12 @@ export const useSideBarPanels = () => {
               }
               if (isPersonalSpaceRoot(items[0])) {
                 // sharing panel is not available on the personal space root
+                return false
+              }
+              if (isShareResource(items[0])) {
+                return false
+              }
+              if (isShareSpaceResource(root)) {
                 return false
               }
               if (

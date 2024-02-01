@@ -28,34 +28,24 @@ describe('AutocompleteItem component', () => {
     it('sets the userId', () => {
       const { wrapper } = createWrapper({
         shareType: ShareTypes.user.value,
-        shareWith: 'the-user-id'
+        id: 'the-user-id'
       })
       expect(wrapper.find('avatar-image-stub').attributes('userid')).toEqual('the-user-id')
     })
     it('sets the user-name', () => {
       const { wrapper } = createWrapper({
         shareType: ShareTypes.user.value,
-        label: 'the-user-name'
+        displayName: 'the-user-name'
       })
       expect(wrapper.find('avatar-image-stub').attributes('user-name')).toEqual('the-user-name')
     })
   })
   describe('autocomplete text', () => {
     it('shows the user name', () => {
-      const { wrapper } = createWrapper({ label: 'Alice Hansen' })
+      const { wrapper } = createWrapper({ displayName: 'Alice Hansen' })
       expect(wrapper.find('.files-collaborators-autocomplete-username').text()).toEqual(
         'Alice Hansen'
       )
-    })
-    it('shows additional information when set', () => {
-      const { wrapper } = createWrapper({ shareWithAdditionalInfo: 'some text' })
-      expect(wrapper.find('.files-collaborators-autocomplete-additional-info').text()).toEqual(
-        'some text'
-      )
-    })
-    it('does not show additional information when not set', () => {
-      const { wrapper } = createWrapper({ shareWithAdditionalInfo: undefined })
-      expect(wrapper.find('.files-collaborators-autocomplete-additional-info').exists()).toBeFalsy()
     })
     it.each([
       ShareTypes.user.value,
@@ -73,23 +63,11 @@ describe('AutocompleteItem component', () => {
   })
 })
 
-function createWrapper({
-  shareType = ShareTypes.user.value,
-  shareWithAdditionalInfo = undefined,
-  shareWith = undefined,
-  label = undefined
-} = {}) {
+function createWrapper({ shareType = ShareTypes.user.value, id = '', displayName = '' } = {}) {
   return {
     wrapper: shallowMount(AutocompleteItem, {
       props: {
-        item: {
-          value: {
-            shareType,
-            shareWith,
-            shareWithAdditionalInfo
-          },
-          label
-        }
+        item: { shareType, id, displayName }
       },
       global: {
         renderStubDefaultSlot: true,

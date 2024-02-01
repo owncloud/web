@@ -1,17 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Collaborator ListItem component > share inheritance indicators > show when sharedParentRoute is given 1`] = `
-"<div data-v-ccf14be2="" data-testid="collaborator-user-item-brian" class="files-collaborators-collaborator oc-py-xs">
+"<div data-v-ccf14be2="" data-testid="collaborator-user-item-einstein" class="files-collaborators-collaborator oc-py-xs">
   <div data-v-ccf14be2="" class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
     <div data-v-ccf14be2="" class="oc-width-2-3 oc-flex oc-flex-middle">
       <div data-v-ccf14be2="">
-        <avatar-image-stub data-v-ccf14be2="" userid="brian" user-name="Brian Murphy" width="36" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
+        <avatar-image-stub data-v-ccf14be2="" userid="3" user-name="einstein" width="36" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
       </div>
       <div data-v-ccf14be2="" class="oc-pl-s oc-text-truncate">
-        <div data-v-ccf14be2="" class="oc-text-truncate"><span data-v-ccf14be2="" aria-hidden="true" class="files-collaborators-collaborator-name">Brian Murphy</span> <span data-v-ccf14be2="" class="oc-invisible-sr">Share receiver name: Brian Murphy (brian@owncloud.com)</span></div>
+        <div data-v-ccf14be2="" class="oc-text-truncate"><span data-v-ccf14be2="" aria-hidden="true" class="files-collaborators-collaborator-name">einstein</span> <span data-v-ccf14be2="" class="oc-invisible-sr">Share receiver name: einstein</span></div>
         <div data-v-ccf14be2="">
           <div data-v-ccf14be2="" class="oc-flex oc-flex-nowrap oc-flex-middle">
-            <role-dropdown-stub data-v-ccf14be2="" existingrole="[object Object]" existingpermissions="" domselector="asdf" allowsharepermission="true" mode="edit" showicon="false" islocked="false" class="files-collaborators-collaborator-role"></role-dropdown-stub>
+            <role-dropdown-stub data-v-ccf14be2="" existingrole="undefined" domselector="1" mode="edit" showicon="false" islocked="false" class="files-collaborators-collaborator-role"></role-dropdown-stub>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@ exports[`Collaborator ListItem component > share inheritance indicators > show w
       </div>
       <!--v-if-->
       <edit-dropdown-stub data-v-ccf14be2="" sharecategory="user" caneditordelete="true" issharedenied="false" deniable="false" islocked="false" id="edit-drop-down-00000000-0000-0000-0000-000000000000" class="files-collaborators-collaborator-edit" data-testid="collaborator-edit"></edit-dropdown-stub>
-      <oc-info-drop-stub data-v-ccf14be2="" class="share-access-details-drop" title="Access details" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000"></oc-info-drop-stub>
+      <oc-info-drop-stub data-v-ccf14be2="" class="share-access-details-drop" title="Access details" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000"></oc-info-drop-stub>
     </div>
   </div>
 </div>"

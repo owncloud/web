@@ -144,6 +144,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       if (!s || ['public', 'share', 'personal', 'mountpoint'].includes(s.driveType)) {
         return
       }
+      // FIXME: move loading to FileSideBar.vue
       spacesStore.loadSpaceMembers({ graphClient: clientService.graphAuthenticated, space: s })
     },
     { immediate: true }

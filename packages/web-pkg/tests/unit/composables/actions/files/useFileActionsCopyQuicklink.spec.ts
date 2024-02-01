@@ -7,10 +7,12 @@ import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { FileAction } from '../../../../../src/composables/actions'
 import { useCanShare } from '../../../../../src/composables/shares'
-import { Resource } from '@ownclouders/web-client'
-import { Share, buildShare } from '@ownclouders/web-client/src/helpers/share'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { LinkShare } from '@ownclouders/web-client/src/helpers/share'
+import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
 import { useClipboard } from '../../../../../src/composables/clipboard'
 import { useMessages } from '../../../../../src/composables/piniaStores'
+import { Permission } from '@ownclouders/web-client/src/generated'
 
 vi.mock('../../../../../src/composables/shares', () => ({
   useCanShare: vi.fn()
@@ -24,9 +26,8 @@ vi.mock('../../../../../src/composables/clipboard', () => ({
   useClipboard: vi.fn()
 }))
 
-vi.mock('@ownclouders/web-client/src/helpers/share', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  buildShare: vi.fn()
+vi.mock('@ownclouders/web-client/src/helpers/share/functionsNG', () => ({
+  buildLinkShare: vi.fn()
 }))
 
 describe('useFileActionsCopyQuickLink', () => {
@@ -58,7 +59,10 @@ describe('useFileActionsCopyQuickLink', () => {
     it('should create a new link if quick link does not yet exist', () => {
       getWrapper({
         setup: async ({ actions }, { mocks }) => {
-          await unref(actions)[0].handler({ resources: [mock<Resource>()] })
+          await unref(actions)[0].handler({
+            resources: [mock<Resource>()],
+            space: mock<SpaceResource>()
+          })
           expect(mocks.createLinkMock).toHaveBeenCalledTimes(1)
         }
       })
@@ -67,7 +71,10 @@ describe('useFileActionsCopyQuickLink', () => {
       getWrapper({
         quickLinkExists: true,
         setup: async ({ actions }, { mocks }) => {
-          await unref(actions)[0].handler({ resources: [mock<Resource>()] })
+          await unref(actions)[0].handler({
+            resources: [mock<Resource>()],
+            space: mock<SpaceResource>()
+          })
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
@@ -85,11 +92,17 @@ function getWrapper({ setup, canShare = true, quickLinkExists = false }) {
     ])
   })
   vi.mocked(useCanShare).mockReturnValue({ canShare: vi.fn(() => canShare) })
-  vi.mocked(buildShare).mockReturnValue(mock<Share>({ quicklink: quickLinkExists }))
+  vi.mocked(buildLinkShare).mockReturnValue(
+    mock<LinkShare>({ link: { '@libre.graph.quickLink': quickLinkExists } })
+  )
   vi.mocked(useClipboard).mockReturnValue({ copyToClipboard: vi.fn() })
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }
-  mocks.$clientService.owncloudSdk.shares.getShares.mockResolvedValue([{}])
+  mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+    data: {
+      value: [mock<Permission>({ link: { '@libre.graph.quickLink': quickLinkExists } })]
+    }
+  } as any)
 
   return {
     wrapper: getComposableWrapper(

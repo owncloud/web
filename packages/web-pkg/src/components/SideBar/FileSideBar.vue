@@ -30,6 +30,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, readonly, ref, unref, watch } from 'vue'
+import PQueue from 'p-queue'
 import { SideBarPanelContext, SideBar as InnerSideBar } from '../SideBar'
 import { SpaceInfo } from './Spaces'
 import { FileInfo } from './Files'
@@ -51,14 +52,26 @@ import {
   useSelectedResources,
   useSpacesStore,
   useSharesStore,
-  useResourcesStore
+  useResourcesStore,
+  useUserStore,
+  useConfigStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
   SpaceResource,
-  Resource
+  Resource,
+  CollaboratorShare,
+  LinkShare,
+  ShareRoleNG,
+  getGraphItemId
 } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
+import { useTask } from 'vue-concurrency'
+import {
+  buildCollaboratorShare,
+  buildLinkShare
+} from '@ownclouders/web-client/src/helpers/share/functionsNG'
+import { Permission } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -85,13 +98,17 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
     const spacesStore = useSpacesStore()
-    const { loadShares } = useSharesStore()
+    const sharesStore = useSharesStore()
+    const userStore = useUserStore()
+    const configStore = useConfigStore()
 
     const resourcesStore = useResourcesStore()
-    const { currentFolder, ancestorMetaData } = storeToRefs(resourcesStore)
+    const { currentFolder } = storeToRefs(resourcesStore)
 
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
+
+    const availableShareRoles = ref<ShareRoleNG[]>([])
 
     const { selectedResources } = useSelectedResources()
 
@@ -175,10 +192,142 @@ export default defineComponent({
         .map((e) => e.panel)
     )
 
+    const loadSharesTask = useTask(function* (signal, resource: Resource) {
+      sharesStore.setLoading(true)
+
+      sharesStore.removeOrphanedShares()
+      const { collaboratorShares: collaboratorCache, linkShares: linkCache } = sharesStore
+
+      const resourceId = getGraphItemId(resource)
+      const { data } = yield clientService.graphAuthenticated.permissions.listPermissions(
+        props.space.id,
+        resourceId
+      )
+
+      let availableRoles =
+        sharesStore.graphRoles.filter(
+          (r) =>
+            data['@libre.graph.permissions.roles.allowedValues']?.map(({ id }) => id).includes(r.id)
+        ) || []
+
+      // FIXME server bug, remove when https://github.com/owncloud/ocis/issues/8331 is resolved
+      if (resource.isFolder) {
+        availableRoles = availableRoles.filter(
+          ({ id }) => id !== '2d00ce52-1fc2-4dbc-8b95-a73b73395f5a'
+        )
+      } else {
+        availableRoles = availableRoles.filter(
+          ({ id }) =>
+            id !== 'fb6c3e19-e378-47e5-b277-9732f9de6e21' &&
+            id !== '1c996275-f1c9-4e71-abdf-a42f6495e960'
+        )
+      }
+
+      availableShareRoles.value = availableRoles
+
+      const permissions = ((data as any).value || []) as Permission[]
+
+      const loadedCollaboratorShares: CollaboratorShare[] = []
+      const loadedLinkShares: LinkShare[] = []
+
+      const buildShares = ({
+        p,
+        resourceId,
+        indirect = false
+      }: {
+        p: Permission[]
+        resourceId: string
+        indirect?: boolean
+      }) => {
+        p.forEach((graphPermission) => {
+          if (!!graphPermission.link) {
+            loadedLinkShares.push(
+              buildLinkShare({ graphPermission, user: userStore.user, resourceId, indirect })
+            )
+            return
+          }
+          loadedCollaboratorShares.push(
+            buildCollaboratorShare({
+              graphPermission,
+              graphRoles: sharesStore.graphRoles,
+              resourceId,
+              user: userStore.user,
+              indirect
+            })
+          )
+        })
+      }
+
+      // load direct shares
+      buildShares({ p: permissions, resourceId })
+
+      // use cache for indirect shares
+      const useCache = !unref(isFlatFileList) && !unref(isProjectsLocation)
+      if (useCache) {
+        collaboratorCache.forEach((share) => {
+          if (loadedCollaboratorShares.some((s) => s.id === share.id)) {
+            return
+          }
+
+          loadedCollaboratorShares.push({ ...share, indirect: true })
+        })
+
+        linkCache.forEach((share) => {
+          if (loadedLinkShares.some((s) => s.id === share.id)) {
+            return
+          }
+
+          loadedLinkShares.push({ ...share, indirect: true })
+        })
+      }
+
+      // load uncached indirect shares
+      const ancestorDataWithoutRoot = resourcesStore.ancestorMetaData
+      if (Object.keys(resourcesStore.ancestorMetaData).includes('/')) {
+        // filter out space roots because they don't have shares
+        // (expect for project spaces, but they are loaded separately)
+        delete ancestorDataWithoutRoot['/']
+      }
+
+      const chachedIds = [...collaboratorCache, ...linkCache].map(({ resourceId }) => resourceId)
+      const ancestorIds = Object.values(ancestorDataWithoutRoot)
+        .map(({ id }) => id)
+        .filter((id) => id !== resourceId && !chachedIds.includes(id))
+
+      const queue = new PQueue({
+        concurrency: configStore.options.concurrentRequests.shares.list
+      })
+
+      const promises = ancestorIds.map((id) => {
+        return queue.add(() =>
+          clientService.graphAuthenticated.permissions
+            .listPermissions(props.space.id, id)
+            .then((value) => {
+              const data = value.data
+              const permissions = ((data as any).value || []) as Permission[]
+              buildShares({ p: permissions, resourceId: id, indirect: true })
+            })
+        )
+      })
+
+      yield Promise.allSettled(promises)
+      sharesStore.setCollaboratorShares(loadedCollaboratorShares)
+      sharesStore.setLinkShares(loadedLinkShares)
+
+      if (isProjectSpaceResource(resource)) {
+        // FIXME: do we need this?
+        spacesStore.setSpaceMembers(sharesStore.collaboratorShares)
+      }
+
+      sharesStore.setLoading(false)
+    }).restartable()
+
     watch(
       () => [...unref(panelContext).items, props.isOpen],
       async () => {
         if (!props.isOpen) {
+          sharesStore.pruneShares()
+          loadedResource.value = null
           return
         }
         if (unref(panelContext).items?.length !== 1) {
@@ -193,22 +342,15 @@ export default defineComponent({
 
         isLoading.value = true
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
-          loadShares({
-            clientService,
-            resource,
-            path: resource.path,
-            storageId: resource.fileId,
-            ancestorMetaData: unref(ancestorMetaData),
-            // cache must not be used on flat file lists that gather resources from various locations
-            useCached: !unref(isFlatFileList) && !unref(isProjectsLocation)
-          })
-        }
+          try {
+            if (loadSharesTask.isRunning) {
+              loadSharesTask.cancelAll()
+            }
 
-        if (isProjectSpaceResource(resource)) {
-          spacesStore.loadSpaceMembers({
-            graphClient: clientService.graphAuthenticated,
-            space: resource
-          })
+            loadSharesTask.perform(resource)
+          } catch (e) {
+            console.error(e)
+          }
         }
 
         if (!unref(isShareLocation)) {
@@ -244,6 +386,7 @@ export default defineComponent({
       'activePanel',
       computed(() => props.activePanel)
     )
+    provide('availableShareRoles', readonly(availableShareRoles))
 
     return {
       loadedResource,

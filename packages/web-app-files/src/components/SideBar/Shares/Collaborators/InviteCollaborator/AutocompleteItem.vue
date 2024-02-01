@@ -1,6 +1,6 @@
 <template>
   <div
-    :data-testid="`recipient-autocomplete-item-${item.label}`"
+    :data-testid="`recipient-autocomplete-item-${item.displayName}`"
     class="oc-flex oc-flex-middle oc-py-xs"
     :class="collaboratorClass"
   >
@@ -8,8 +8,8 @@
       v-if="isAnyUserShareType"
       class="oc-mr-s"
       :width="36"
-      :userid="item.value.shareWith"
-      :user-name="item.label"
+      :userid="item.id"
+      :user-name="item.displayName"
     />
     <oc-avatar-item
       v-else
@@ -22,38 +22,35 @@
       class="oc-mr-s"
     />
     <div class="files-collaborators-autocomplete-user-text oc-text-truncate">
-      <span class="files-collaborators-autocomplete-username" v-text="item.label" />
+      <span class="files-collaborators-autocomplete-username" v-text="item.displayName" />
       <template v-if="!isAnyPrimaryShareType">
         <span
           class="files-collaborators-autocomplete-share-type"
           v-text="`(${$gettext(shareType.label)})`"
         />
       </template>
-      <div
-        v-if="item.value.shareWithAdditionalInfo"
-        class="files-collaborators-autocomplete-additional-info"
-        v-text="`${item.value.shareWithAdditionalInfo}`"
-      />
+      <div v-if="item.mail" class="files-collaborators-autocomplete-mail" v-text="`${item.mail}`" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { PropType } from 'vue'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 export default {
   name: 'AutocompleteItem',
 
   props: {
     item: {
-      type: Object,
+      type: Object as PropType<CollaboratorAutoCompleteItem>,
       required: true
     }
   },
 
   computed: {
     shareType() {
-      return ShareTypes.getByValue(this.item.value.shareType)
+      return ShareTypes.getByValue(this.item.shareType)
     },
 
     shareTypeIcon() {
@@ -85,7 +82,7 @@ export default {
 </script>
 
 <style lang="scss">
-.files-collaborators-autocomplete-additional-info {
+.files-collaborators-autocomplete-mail {
   font-size: var(--oc-font-size-small);
 }
 </style>

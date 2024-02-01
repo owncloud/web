@@ -158,9 +158,9 @@ export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
     await Promise.all([
       page.waitForResponse(
         (resp) =>
-          resp.url().includes('shares') &&
+          resp.url().includes('permissions') &&
           resp.status() === 200 &&
-          resp.request().method() === 'PUT'
+          resp.request().method() === 'PATCH'
       ),
       Collaborator.changeCollaboratorRole({ page, collaborator })
     ])
@@ -215,7 +215,7 @@ export const createQuickLink = async (args: createLinkArgs): Promise<string> => 
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('api/v1/shares') &&
+        res.url().includes('createLink') &&
         res.request().method() === 'POST' &&
         res.status() === 200
     ),
@@ -269,7 +269,9 @@ export const addExpirationDate = async (args: {
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().includes('shares') && resp.status() === 200 && resp.request().method() === 'PUT'
+        resp.url().includes('drives') &&
+        resp.status() === 200 &&
+        resp.request().method() === 'PATCH'
     ),
     Collaborator.setExpirationDateForCollaborator({ page, collaborator, expirationDate })
   ])

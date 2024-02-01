@@ -1,8 +1,14 @@
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
 import { buildWebDavSpacesPath } from '../space'
-import { DriveItem, Identity, UnifiedRoleDefinition, User } from '../../generated'
-import { GraphSharePermission, IncomingShareResource, OutgoingShareResource } from './types'
+import { DriveItem, Identity, Permission, UnifiedRoleDefinition, User } from '../../generated'
+import {
+  CollaboratorShare,
+  GraphSharePermission,
+  IncomingShareResource,
+  LinkShare,
+  OutgoingShareResource
+} from './types'
 import { urlJoin } from '../../utils'
 import { uniq } from 'lodash-es'
 
@@ -203,4 +209,58 @@ export function buildOutgoingShareResource({
   resource.extension = extractExtensionFromFile(resource)
 
   return resource
+}
+
+export function buildCollaboratorShare({
+  graphPermission,
+  graphRoles,
+  resourceId,
+  user,
+  indirect = false
+}: {
+  graphPermission: Permission
+  graphRoles: UnifiedRoleDefinition[]
+  resourceId: string
+  user: User
+  indirect?: boolean
+}): CollaboratorShare {
+  const role = graphRoles.find(({ id }) => id === graphPermission.roles?.[0])
+
+  return {
+    id: graphPermission.id,
+    resourceId,
+    indirect,
+    // FIXME: space roles
+    shareType: graphPermission.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value,
+    role,
+    sharedBy: { id: user.id, displayName: user.displayName },
+    sharedWith: graphPermission.grantedToV2.user || graphPermission.grantedToV2.group,
+    permissions: (graphPermission['@libre.graph.permissions.actions']
+      ? graphPermission['@libre.graph.permissions.actions']
+      : role.rolePermissions.flatMap((p) => p.allowedResourceActions)) as GraphSharePermission[],
+    expirationDateTime: graphPermission.expirationDateTime
+  }
+}
+
+export function buildLinkShare({
+  graphPermission,
+  user,
+  resourceId,
+  indirect = false
+}: {
+  graphPermission: Permission
+  user: User
+  resourceId: string
+  indirect?: boolean
+}): LinkShare {
+  return {
+    id: graphPermission.id,
+    resourceId,
+    indirect,
+    shareType: ShareTypes.link.value,
+    sharedBy: { id: user.id, displayName: user.displayName },
+    hasPassword: graphPermission.hasPassword,
+    link: graphPermission.link,
+    expirationDateTime: graphPermission.expirationDateTime
+  }
 }

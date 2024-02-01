@@ -9,9 +9,9 @@
       <div v-else class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon name="link" fill-type="line" />
         <p
-          v-oc-tooltip="link.url"
+          v-oc-tooltip="linkShare.link.webUrl"
           class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm"
-          v-text="link.url"
+          v-text="linkShare.link.webUrl"
         />
       </div>
       <oc-button
@@ -33,12 +33,14 @@ import { defineComponent } from 'vue'
 import { useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
+import { LinkShare } from '@ownclouders/web-client/src/helpers'
+import { PropType } from 'vue'
 
 export default defineComponent({
   name: 'NameAndCopy',
   props: {
-    link: {
-      type: Object,
+    linkShare: {
+      type: Object as PropType<LinkShare>,
       required: true
     }
   },
@@ -53,12 +55,12 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
-      copy(props.link.url)
+      copy(props.linkShare.link.webUrl)
       showMessage({
-        title: props.link.quicklink
+        title: props.linkShare.link['@libre.graph.quickLink']
           ? $gettext('The link has been copied to your clipboard.')
           : $gettext('The link "%{linkName}" has been copied to your clipboard.', {
-              linkName: props.link.name
+              linkName: props.linkShare.link['@libre.graph.displayName']
             })
       })
     }
@@ -71,7 +73,7 @@ export default defineComponent({
   },
   computed: {
     linkName() {
-      return this.link.name
+      return this.linkShare.link['@libre.graph.displayName']
     },
     copyBtnLabel() {
       return this.$gettext('Copy')

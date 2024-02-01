@@ -1,14 +1,27 @@
 import ListItem from '../../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import {
-  peopleRoleViewerFile,
-  peopleRoleViewerFolder,
-  SharePermissions,
+  CollaboratorShare,
+  GraphSharePermission,
+  ShareRoleNG,
   ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
-import { defaultPlugins, mount, defaultStubs, defaultComponentMocks } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  mount,
+  defaultStubs,
+  defaultComponentMocks,
+  nextTicks,
+  mockAxiosResolve
+} from 'web-test-helpers'
 import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
 import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
 import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
+import { mock } from 'vitest-mock-extended'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+
+vi.mock('@ownclouders/web-client/src/helpers/space/functions', () => ({
+  buildSpace: vi.fn((space) => space)
+}))
 
 vi.mock('uuid', () => ({
   v4: () => {
@@ -28,22 +41,41 @@ const selectors = {
   expirationDateIcon: '[data-testid="recipient-info-expiration-date"]'
 }
 
+const getShareMock = ({
+  sharedWith,
+  shareType,
+  expirationDateTime
+}: Partial<CollaboratorShare> = {}): CollaboratorShare => ({
+  id: '1',
+  sharedWith: sharedWith || { id: '3', displayName: 'einstein' },
+  sharedBy: { id: '2', displayName: 'marie' },
+  permissions: [],
+  shareType: shareType || ShareTypes.user.value,
+  role: mock<ShareRoleNG>({ description: '', displayName: '' }),
+  resourceId: '1',
+  indirect: false,
+  expirationDateTime: expirationDateTime || ''
+})
+
 describe('Collaborator ListItem component', () => {
   describe('displays the correct image/icon according to the shareType', () => {
     describe('user and spaceUser share type', () => {
       it.each([ShareTypes.user.value, ShareTypes.spaceUser.value])(
         'should display a users avatar',
         (shareType) => {
-          const { wrapper } = createWrapper({ shareType })
+          const { wrapper } = createWrapper({ share: getShareMock({ shareType }) })
           expect(wrapper.find(selectors.userAvatarImage).exists()).toBeTruthy()
           expect(wrapper.find(selectors.notUserAvatar).exists()).toBeFalsy()
         }
       )
       it('sets user info on the avatar', () => {
-        const { wrapper } = createWrapper()
-        expect(wrapper.find(selectors.userAvatarImage).attributes('userid')).toEqual('brian')
+        const share = getShareMock()
+        const { wrapper } = createWrapper({ share })
+        expect(wrapper.find(selectors.userAvatarImage).attributes('userid')).toEqual(
+          share.sharedWith.id
+        )
         expect(wrapper.find(selectors.userAvatarImage).attributes('user-name')).toEqual(
-          'Brian Murphy'
+          share.sharedWith.displayName
         )
       })
     })
@@ -53,15 +85,17 @@ describe('Collaborator ListItem component', () => {
           (shareType) => ![ShareTypes.user, ShareTypes.spaceUser].includes(shareType)
         )
       )('should display an oc-avatar-item for any non-user share types', (shareType) => {
-        const { wrapper } = createWrapper({ shareType: shareType.value })
+        const { wrapper } = createWrapper({ share: getShareMock({ shareType: shareType.value }) })
         expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
         expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
         expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
       })
       it('should display an oc-avatar-item for space group shares', () => {
         const { wrapper } = createWrapper({
-          shareType: ShareTypes.spaceGroup.value,
-          collaborator: { name: undefined, displayName: 'someGroup', additionalInfo: undefined }
+          share: getShareMock({
+            shareType: ShareTypes.spaceGroup.value,
+            sharedWith: { id: '1', displayName: 'someGroup' }
+          })
         })
         expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
         expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
@@ -70,11 +104,14 @@ describe('Collaborator ListItem component', () => {
   })
   describe('share info', () => {
     it('shows the collaborator display name', () => {
-      const { wrapper } = createWrapper()
-      expect(wrapper.find(selectors.collaboratorName).text()).toEqual('Brian Murphy')
+      const share = getShareMock()
+      const { wrapper } = createWrapper({ share })
+      expect(wrapper.find(selectors.collaboratorName).text()).toEqual(share.sharedWith.displayName)
     })
     it('shows the share expiration date if given', () => {
-      const { wrapper } = createWrapper({ expires: new Date() })
+      const { wrapper } = createWrapper({
+        share: getShareMock({ expirationDateTime: '2000-01-01' })
+      })
       expect(wrapper.find(selectors.expirationDateIcon).exists()).toBeTruthy()
     })
   })
@@ -112,31 +149,40 @@ describe('Collaborator ListItem component', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
       wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
-        role: peopleRoleViewerFile,
-        permissions: [SharePermissions.read]
+        permissions: [GraphSharePermission.readBasic]
       })
       const sharesStore = useSharesStore()
       expect(sharesStore.updateShare).toHaveBeenCalled()
     })
-    it('calls "changeSpaceMember" for space resources', () => {
-      const { wrapper } = createWrapper({ shareType: ShareTypes.spaceUser.value })
-      wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
-        role: peopleRoleViewerFile,
-        permissions: [SharePermissions.read]
+    it('calls "upsertSpaceMember" for space resources', async () => {
+      const resource = mock<SpaceResource>({ driveType: 'project' })
+      const { wrapper } = createWrapper({
+        share: getShareMock({ shareType: ShareTypes.spaceUser.value }),
+        resource
       })
+      wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
+        permissions: [GraphSharePermission.readBasic]
+      })
+
+      await nextTicks(4)
+
       const spacesStore = useSpacesStore()
-      expect(spacesStore.changeSpaceMember).toHaveBeenCalled()
+      expect(spacesStore.upsertSpaceMember).toHaveBeenCalled()
     })
-    it('shows a message on error', () => {
+    it('shows a message on error', async () => {
+      const resource = mock<SpaceResource>({ driveType: 'project' })
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper } = createWrapper()
       vi.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
       wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
-        role: peopleRoleViewerFile,
-        permissions: [SharePermissions.read]
+        share: getShareMock({ shareType: ShareTypes.spaceUser.value }),
+        resource
       })
+
+      await nextTicks(4)
+
       const sharesStore = useSharesStore()
       expect(sharesStore.updateShare).not.toHaveBeenCalled()
       const messagesStore = useMessages()
@@ -174,41 +220,27 @@ describe('Collaborator ListItem component', () => {
 })
 
 function createWrapper({
-  shareType = ShareTypes.user.value,
-  collaborator = {
-    name: 'brian',
-    displayName: 'Brian Murphy',
-    additionalInfo: 'brian@owncloud.com'
-  },
-  owner = {
-    name: 'marie',
-    displayName: 'Marie Curie',
-    additionalInfo: 'marie@owncloud.com'
-  },
-  role = peopleRoleViewerFolder,
+  share = getShareMock(),
   modifiable = true,
-  expires = undefined,
-  sharedParentRoute = null
+  sharedParentRoute = null,
+  resource = mock<Resource>()
 } = {}) {
   const mocks = defaultComponentMocks()
+  mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
+    mockAxiosResolve(undefined)
+  )
+
   return {
     wrapper: mount(ListItem, {
       props: {
-        share: {
-          id: 'asdf',
-          collaborator,
-          owner,
-          shareType,
-          expires,
-          role
-        },
+        share,
         modifiable,
         sharedParentRoute
       },
       global: {
         plugins: [...defaultPlugins()],
         mocks,
-        provide: mocks,
+        provide: { ...mocks, resource },
         renderStubDefaultSlot: true,
         stubs: {
           ...defaultStubs,

@@ -32,8 +32,8 @@ Feature: Autocompletion of share-with names
     Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
     Examples:
       | displayName | search |
-      | -_.ocusr    | -_     |
-      | _ocusr@     | _u     |
+      | -_.ocusr    | -_.    |
+      | _ocusr@     | _oc    |
 
   @issue-ocis-1317 @issue-ocis-1675
   Scenario Outline: autocompletion of groups having special characters in their names
@@ -48,6 +48,6 @@ Feature: Autocompletion of share-with names
     Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
     Examples:
       | group    | search |
-      | @-_.     | @-     |
-      | _ocgrp@  | _u     |
-      | -_.ocgrp | -_     |
+      | @-_.     | @-_    |
+      | _ocgrp@  | _oc    |
+      | -_.ocgrp | -_.    |

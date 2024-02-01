@@ -1,5 +1,10 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import { spaceRoleManager, ShareTypes, Share } from '@ownclouders/web-client/src/helpers/share'
+import {
+  CollaboratorShare,
+  ShareRoleNG,
+  GraphShareRoleIdMap
+} from '@ownclouders/web-client/src/helpers/share'
+import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const spaceMock = {
@@ -20,16 +25,12 @@ const spaceMock = {
 
 const spaceShare = {
   id: '1',
-  shareType: ShareTypes.spaceUser.value,
-  outgoing: true,
-  collaborator: {
-    onPremisesSamAccountName: 'Alice',
+  sharedWith: {
+    id: 'Alice',
     displayName: 'alice'
   },
-  role: {
-    name: spaceRoleManager.name
-  }
-} as unknown as Share
+  role: mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceManager })
+} as CollaboratorShare
 
 const selectors = {
   spaceDefaultImage: '.space-default-image',
@@ -64,7 +65,7 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
             piniaOptions: {
               userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } },
               spacesState: { spaceMembers: [spaceShare] },
-              sharesState: { shares: [spaceShare] }
+              sharesState: { collaboratorShares: [spaceShare] }
             }
           })
         ],

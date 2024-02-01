@@ -1,18 +1,15 @@
-import {
-  Share,
-  ShareTypes,
-  buildShare,
-  isIncomingShareResource
-} from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare, isIncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { useCanShare } from '../../shares'
 import { useClipboard } from '../../clipboard'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
-import { useMessages } from '../../piniaStores'
+import { useMessages, useUserStore } from '../../piniaStores'
+import { Permission } from '@ownclouders/web-client/src/generated'
+import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -21,13 +18,14 @@ export const useFileActionsCopyQuickLink = () => {
   const clientService = useClientService()
   const { canShare } = useCanShare()
   const { copyToClipboard } = useClipboard()
+  const userStore = useUserStore()
 
-  const onLinkCreatedCallback = async (result: PromiseSettledResult<Share>[]) => {
+  const onLinkCreatedCallback = async (result: PromiseSettledResult<LinkShare>[]) => {
     const link = result.find(
-      (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
+      (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
     )
     if (link?.value) {
-      await copyQuickLinkToClipboard(link.value.url)
+      await copyQuickLinkToClipboard(link.value.link.webUrl)
     }
   }
 
@@ -52,24 +50,32 @@ export const useFileActionsCopyQuickLink = () => {
     }
   }
 
-  const getExistingQuickLink = async ({ fileId, path }: Resource): Promise<Share> => {
-    const linkSharesForResource = await clientService.owncloudSdk.shares.getShares(path, {
-      share_types: ShareTypes?.link?.value?.toString(),
-      spaceRef: fileId,
-      include_tags: false
-    })
+  const getExistingQuickLink = async ({
+    space,
+    resource
+  }: {
+    space: SpaceResource
+    resource: Resource
+  }): Promise<LinkShare> => {
+    // FIXME: care for project space id separately?
+    const { data } = await clientService.graphAuthenticated.permissions.listPermissions(
+      space.id,
+      resource.id
+    )
 
-    return linkSharesForResource
-      .map((share: any) => buildShare(share.shareInfo, null, null))
-      .find((share: Share) => share.quicklink === true)
+    const permissions = ((data as any).value || []) as Permission[]
+    const graphPermission = permissions.find((p) => p.link?.['@libre.graph.quickLink'])
+    return graphPermission
+      ? buildLinkShare({ graphPermission, user: userStore.user, resourceId: resource.id })
+      : null
   }
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const [resource] = resources
 
-    const existingQuickLink = await getExistingQuickLink(resource)
+    const existingQuickLink = await getExistingQuickLink({ space, resource })
     if (existingQuickLink) {
-      return copyQuickLinkToClipboard(existingQuickLink.url)
+      return copyQuickLinkToClipboard(existingQuickLink.link.webUrl)
     }
 
     return unref(createQuicklinkAction).handler({ space, resources })
@@ -81,7 +87,7 @@ export const useFileActionsCopyQuickLink = () => {
       icon: 'link',
       label: () => $gettext('Copy link'),
       handler,
-      isVisible: ({ resources }) => {
+      isVisible: ({ space, resources }) => {
         if (resources.length !== 1) {
           return false
         }
@@ -89,7 +95,7 @@ export const useFileActionsCopyQuickLink = () => {
           return false
         }
 
-        return canShare(resources[0])
+        return canShare({ space, resource: resources[0] })
       },
       componentType: 'button',
       class: 'oc-files-actions-copy-quicklink-trigger'

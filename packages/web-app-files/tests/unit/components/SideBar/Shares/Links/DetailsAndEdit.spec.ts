@@ -1,29 +1,37 @@
 import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShareRoles } from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare, ShareRoleNG } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
-import { mockDeep } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
+import { mock } from 'vitest-mock-extended'
+import { useLinkTypes } from '@ownclouders/web-pkg'
+import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 
-const availableRoleOptions = LinkShareRoles.list(false, true, true, true)
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useLinkTypes: vi.fn()
+}))
 
 const exampleLink = {
-  name: 'Example link',
-  url: 'https://some-url.com/abc',
-  permissions: 1
-}
+  link: {
+    '@libre.graph.displayName': 'Example link',
+    webUrl: 'https://some-url.com/abc',
+    type: SharingLinkType.View
+  }
+} as LinkShare
 
 describe('DetailsAndEdit component', () => {
   describe('if user can not edit', () => {
     it('does not render dropdown or edit button', () => {
       const { wrapper } = getShallowMountedWrapper(exampleLink)
-      expect(wrapper.html()).toMatchSnapshot()
+      expect(wrapper.find('link-role-dropdown-stub').exists()).toBeFalsy()
+      expect(wrapper.find('.edit-drop-trigger').exists()).toBeFalsy()
     })
   })
 
   describe('if user can edit', () => {
     it('renders dropdown and edit button', () => {
       const { wrapper } = getShallowMountedWrapper(exampleLink, false, true)
-      expect(wrapper.html()).toMatchSnapshot()
+      expect(wrapper.find('link-role-dropdown-stub').exists()).toBeTruthy()
+      expect(wrapper.find('.edit-drop-trigger').exists()).toBeTruthy()
     })
 
     it.todo('test edit options, button clicks and event handling/propagation')
@@ -31,11 +39,8 @@ describe('DetailsAndEdit component', () => {
 
   describe('editOptions computed property', () => {
     it('does not add "add-expiration" option if isAliasLink is true', () => {
-      const exampleLinkInternal = {
-        name: 'Example link',
-        url: 'https://some-url.com/abc',
-        permissions: 0
-      }
+      const exampleLinkInternal = { ...exampleLink, link: { ...exampleLink.link } }
+      exampleLinkInternal.link.type = SharingLinkType.Internal
       const { wrapper } = getShallowMountedWrapper(exampleLinkInternal, false, true)
       expect(wrapper.vm.editOptions.some((option) => option.id === 'add-expiration')).toBe(false)
     })
@@ -47,12 +52,22 @@ describe('DetailsAndEdit component', () => {
   })
 })
 
-function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable = false) {
+function getShallowMountedWrapper(
+  linkShare: LinkShare,
+  expireDateEnforced = false,
+  isModifiable = false
+) {
+  vi.mocked(useLinkTypes).mockReturnValue(
+    mock<ReturnType<typeof useLinkTypes>>({
+      getAvailableLinkTypes: () => [SharingLinkType.View],
+      getLinkRoleByType: () => mock<ShareRoleNG>({ displayName: '', description: '', label: '' })
+    })
+  )
+
   const mocks = defaultComponentMocks()
   return {
     wrapper: shallowMount(DetailsAndEdit, {
       props: {
-        availableRoleOptions,
         canRename: true,
         expirationRules: {
           enforced: expireDateEnforced,
@@ -60,10 +75,9 @@ function getShallowMountedWrapper(link, expireDateEnforced = false, isModifiable
           min: 'Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)',
           max: null
         },
-        link,
+        linkShare,
         isModifiable,
-        isPasswordEnforced: false,
-        file: mockDeep<Resource>()
+        isPasswordEnforced: false
       },
       global: {
         mocks,

@@ -133,7 +133,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('api/v1/shares') &&
+        res.url().includes('createLink') &&
         res.request().method() === 'POST' &&
         res.status() === 200
     ),
@@ -166,8 +166,8 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('api/v1/shares/') &&
-        res.request().method() === 'PUT' &&
+        res.url().includes('permissions') &&
+        res.request().method() === 'PATCH' &&
         res.status() === 200
     ),
     page.locator(util.format(publicLinkSetRoleButton, shareRoles[role])).click()
@@ -254,8 +254,8 @@ export const setPassword = async (page: Page): Promise<void> => {
   await Promise.all([
     page.waitForResponse(
       (res) =>
-        res.url().includes('api/v1/shares/') &&
-        res.request().method() === 'PUT' &&
+        res.url().includes('permissions') &&
+        res.request().method() === 'PATCH' &&
         res.status() === 200
     ),
     page.locator(editPublicLinkRenameConfirm).click()

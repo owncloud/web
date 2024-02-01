@@ -43,11 +43,7 @@
           <span v-text="$gettext('No users or groups found.')" />
         </template>
         <template #selected-option-container="{ option, deselect }">
-          <recipient-container
-            :key="option.value.shareWith"
-            :recipient="option"
-            :deselect="deselect"
-          />
+          <recipient-container :key="option.id" :recipient="option" :deselect="deselect" />
         </template>
         <template #open-indicator>
           <!-- Empty to hide the caret -->
@@ -57,7 +53,6 @@
     </div>
     <div class="oc-flex oc-flex-between oc-flex-wrap oc-mb-l oc-mt-s">
       <role-dropdown
-        :allow-share-permission="hasResharing || resourceIsSpace"
         mode="create"
         :show-icon="isRunningOnEos"
         class="role-selection-dropdown"
@@ -96,7 +91,7 @@
               <li class="oc-rounded oc-menu-item-hover">
                 <expiration-datepicker
                   v-if="!saving"
-                  :share-types="selectedCollaborators.map((c) => c.value.shareType)"
+                  :share-types="selectedCollaborators.map(({ shareType }) => shareType)"
                   @option-change="collaboratorExpiryChanged"
                 />
               </li>
@@ -140,30 +135,30 @@ import RoleDropdown from '../RoleDropdown.vue'
 import RecipientContainer from './RecipientContainer.vue'
 import ExpirationDatepicker from './ExpirationDatepicker.vue'
 import {
-  PeopleShareRoles,
-  SharePermissions,
-  ShareTypes,
-  SpacePeopleShareRoles
+  CollaboratorAutoCompleteItem,
+  CollaboratorShare,
+  GraphShareRoleIdMap,
+  ShareRoleNG,
+  ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
 import {
   useCapabilityStore,
   useClientService,
-  useUserStore,
   useMessages,
   useSpacesStore,
   useConfigStore,
-  useSharesStore
+  useSharesStore,
+  useUserStore
 } from '@ownclouders/web-pkg'
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted, nextTick } from 'vue'
-import { Resource } from '@ownclouders/web-client'
-import {
-  displayPositionedDropdown,
-  formatDateFromDateTime,
-  formatRelativeDateFromDateTime
-} from '@ownclouders/web-pkg'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
+import { useTask } from 'vue-concurrency'
+import { useGettext } from 'vue3-gettext'
+import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {
@@ -192,30 +187,36 @@ export default defineComponent({
   },
 
   setup() {
-    const userStore = useUserStore()
+    const { $gettext } = useGettext()
     const clientService = useClientService()
+    const { showMessage, showErrorMessage } = useMessages()
     const spacesStore = useSpacesStore()
-    const { addSpaceMember } = spacesStore
-    const { spaceMembers } = storeToRefs(spacesStore)
+    const { upsertSpace, upsertSpaceMember } = spacesStore
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
-
-    const { user } = storeToRefs(userStore)
-
     const configStore = useConfigStore()
-    const { options: configOptions } = storeToRefs(configStore)
+    const userStore = useUserStore()
 
     const sharesStore = useSharesStore()
     const { addShare } = sharesStore
-    const { outgoingCollaborators } = storeToRefs(sharesStore)
+    const { collaboratorShares, graphRoles } = storeToRefs(sharesStore)
 
     const searchQuery = ref('')
     const searchInProgress = ref(false)
-    const autocompleteResults = ref([])
+    const autocompleteResults = ref<CollaboratorAutoCompleteItem[]>([])
 
     const saving = ref(false)
     const savingDelayed = ref(false)
     const notifyEnabled = ref(false)
+    const expirationDate = ref<string>()
+    const selectedCollaborators = ref<CollaboratorAutoCompleteItem[]>([])
+    const announcement = ref<string>()
+    const selectedRole = ref<ShareRoleNG>()
+
+    const resource = inject<Resource>('resource')
+    const space = inject<SpaceResource>('space')
+
+    const resourceIsSpace = computed(() => unref(resource).type === 'space')
 
     const markInstance = ref(null)
 
@@ -256,16 +257,11 @@ export default defineComponent({
       })
     })
 
-    const contextMenuButtonRef = ref(undefined)
-
-    const showContextMenuOnBtnClick = ({ dropdown, event }) => {
-      if (dropdown?.tippy === undefined) {
-        return
-      }
-      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
-    }
-
     onMounted(async () => {
+      selectedRole.value = unref(resourceIsSpace)
+        ? unref(graphRoles).find(({ id }) => id === GraphShareRoleIdMap.SpaceViewer)
+        : unref(graphRoles).find(({ id }) => id === GraphShareRoleIdMap.Viewer)
+
       await nextTick()
       markInstance.value = new Mark('.mark-element')
     })
@@ -283,53 +279,158 @@ export default defineComponent({
       return configStore.options.concurrentRequests.shares.create
     })
 
+    const fetchRecipientsTask = useTask(function* (signal, query: string) {
+      const client = clientService.graphAuthenticated
+      const { data: userData } = yield client.users.listUsers(
+        'displayName',
+        null,
+        null,
+        `"${query}"`
+      )
+      const { data: groupData } = yield client.groups.listGroups('displayName', null, `"${query}"`)
+
+      const users = (userData.value || []).map((u) => ({
+        ...u,
+        shareType: ShareTypes.user.value
+      })) as CollaboratorAutoCompleteItem[]
+
+      const groups = (groupData.value || []).map((u) => ({
+        ...u,
+        shareType: ShareTypes.group.value
+      })) as CollaboratorAutoCompleteItem[]
+
+      autocompleteResults.value = [...users, ...groups]
+        .filter((collaborator: CollaboratorAutoCompleteItem) => {
+          if (collaborator.id === userStore.user.id) {
+            // filter current user
+            return false
+          }
+
+          const selected = unref(selectedCollaborators).some(({ id }) => collaborator.id === id)
+          const existingShares = unref(collaboratorShares).filter((c) => !c.indirect)
+          const exists = existingShares.some((s) => s.sharedWith.id === collaborator.id)
+
+          if (selected || exists) {
+            return false
+          }
+
+          announcement.value = $gettext('Person was added')
+
+          return true
+        })
+        .map((collaborator) => ({
+          id: collaborator.id,
+          displayName: collaborator.displayName,
+          shareType: collaborator.shareType,
+          mail: collaborator.mail
+        })) satisfies CollaboratorAutoCompleteItem[]
+      searchInProgress.value = false
+    }).restartable()
+
+    const fetchRecipients = async (query: string) => {
+      await fetchRecipientsTask.perform(query)
+    }
+
+    const share = async () => {
+      saving.value = true
+
+      const saveQueue = new PQueue({ concurrency: unref(createSharesConcurrentRequests) })
+      const savePromises = []
+      const errors: { displayName: string; error: Error }[] = []
+      const addedShares: CollaboratorShare[] = []
+
+      unref(selectedCollaborators).forEach(({ id, shareType, displayName }) => {
+        savePromises.push(
+          saveQueue.add(async () => {
+            try {
+              const shares = await addShare({
+                clientService,
+                space: unref(space),
+                resource: unref(resource),
+                options: {
+                  roles: [unref(selectedRole).id],
+                  expirationDateTime: unref(expirationDate),
+                  recipients: [
+                    {
+                      objectId: id,
+                      '@libre.graph.recipient.type':
+                        shareType === ShareTypes.group.value ? 'group' : 'user'
+                    }
+                  ]
+                }
+              })
+
+              addedShares.push(...shares)
+            } catch (error) {
+              console.error(error)
+              errors.push({ displayName, error })
+              throw error
+            }
+          })
+        )
+      })
+
+      if (isProjectSpaceResource(unref(resource))) {
+        const graphResponse = await clientService.graphAuthenticated.drives.getDrive(
+          unref(resource).id
+        )
+
+        upsertSpace(buildSpace(graphResponse.data))
+
+        addedShares.forEach((member) => {
+          upsertSpaceMember({ member })
+        })
+      }
+
+      const results = await Promise.allSettled(savePromises)
+
+      if (results.length !== errors.length) {
+        showMessage({ title: $gettext('Share was added successfully') })
+      }
+
+      errors.forEach((e) => {
+        showErrorMessage({
+          title: $gettext('Failed to add share for "%{displayName}"', {
+            displayName: e.displayName
+          }),
+          errors: [e.error]
+        })
+      })
+
+      expirationDate.value = null
+      selectedCollaborators.value = []
+      saving.value = false
+    }
+
     return {
-      resource: inject<Resource>('resource'),
-      hasResharing: capabilityRefs.sharingResharing,
-      resharingDefault: capabilityRefs.sharingResharingDefault,
-      hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
       minSearchLength: capabilityRefs.sharingSearchMinLength,
       isRunningOnEos: computed(() => configStore.options.runningOnEos),
-      configOptions,
-      spaceMembers,
-      addSpaceMember,
-      user,
-      clientService,
       saving,
       savingDelayed,
-      outgoingCollaborators,
-      addShare,
-      showContextMenuOnBtnClick,
-      contextMenuButtonRef,
-      notifyEnabled,
-      createSharesConcurrentRequests,
       ...useMessages(),
       searchInProgress,
       searchQuery,
       autocompleteResults,
       onOpen,
       onClose,
+      expirationDate,
+      selectedRole,
+      announcement,
+      selectedCollaborators,
+      fetchRecipients,
+      share,
 
       // CERN
       accountType,
-      accountTypes
+      accountTypes,
+      notifyEnabled,
+
+      // unit tests
+      fetchRecipientsTask
     }
   },
 
-  data() {
-    return {
-      announcement: '',
-      selectedCollaborators: [],
-      selectedRole: null,
-      customPermissions: null,
-      expirationDate: null
-    }
-  },
   computed: {
-    $_announcementWhenCollaboratorAdded() {
-      return this.$gettext('Person was added')
-    },
-
     $_isValid() {
       return this.selectedCollaborators.length > 0
     },
@@ -338,9 +439,6 @@ export default defineComponent({
       return this.inviteLabel || this.$gettext('Search')
     },
 
-    resourceIsSpace() {
-      return this.resource.type === 'space'
-    },
     formattedExpirationDate() {
       return this.expirationDate === null
         ? null
@@ -366,80 +464,10 @@ export default defineComponent({
   },
   mounted() {
     this.fetchRecipients = debounce(this.fetchRecipients, 500)
-
-    if (this.resourceIsSpace) {
-      this.selectedRole = SpacePeopleShareRoles.list()[0]
-    } else {
-      this.selectedRole = PeopleShareRoles.list(
-        this.resource.isFolder,
-        this.hasRoleCustomPermissions
-      )[0]
-    }
   },
 
   methods: {
-    async fetchRecipients(query) {
-      try {
-        const recipients = await this.$client.shares.getRecipients(
-          query,
-          'folder',
-          1,
-          this.configOptions.sharingRecipientsPerPage
-        )
-
-        const users = recipients.exact.users
-          .concat(recipients.users)
-          .filter((user) => user.value.shareWith !== this.user.onPremisesSamAccountName)
-          .map((result) => {
-            if (this.resourceIsSpace) {
-              result.value.shareType = ShareTypes.spaceUser.value
-            }
-            return result
-          })
-        const groups = recipients.exact.groups.concat(recipients.groups).map((result) => {
-          if (this.resourceIsSpace) {
-            result.value.shareType = ShareTypes.spaceGroup.value
-          }
-          return result
-        })
-        const remotes = recipients.exact.remotes.concat(recipients.remotes)
-
-        this.autocompleteResults = [...users, ...groups, ...remotes].filter((collaborator) => {
-          const selected = this.selectedCollaborators.find((selectedCollaborator) => {
-            return (
-              collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
-              parseInt(collaborator.value.shareType) ===
-                parseInt(selectedCollaborator.value.shareType)
-            )
-          })
-
-          const existingShares = this.resourceIsSpace
-            ? this.spaceMembers
-            : this.outgoingCollaborators.filter((c) => !c.indirect)
-          const exists = existingShares.find((share) => {
-            const shareCollaboratorIdentifier =
-              share.collaborator.name || share.collaborator.displayName
-            const isSameByIdentifier = collaborator.value.shareWith === shareCollaboratorIdentifier
-            const isSameByType = parseInt(collaborator.value.shareType) === share.shareType
-            return isSameByIdentifier && isSameByType
-          })
-
-          if (selected || exists) {
-            return false
-          }
-
-          this.announcement = this.$_announcementWhenCollaboratorAdded
-
-          return true
-        })
-      } catch (error) {
-        console.error(error)
-      }
-
-      this.searchInProgress = false
-    },
-
-    onSearch(query) {
+    onSearch(query: string) {
       this.autocompleteResults = []
       this.searchQuery = query
 
@@ -461,7 +489,7 @@ export default defineComponent({
       this.fetchRecipients(query)
     },
 
-    filterRecipients(recipients, query) {
+    filterRecipients(recipients: CollaboratorAutoCompleteItem[], query: string) {
       if (recipients.length < 1) {
         return []
       }
@@ -471,113 +499,21 @@ export default defineComponent({
 
       return recipients.filter(
         (recipient) =>
-          recipient.value.shareType === ShareTypes.remote.value ||
-          recipient.label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
-          recipient.value.shareWith.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
-          (recipient.value.shareWithAdditionalInfo || '')
-            .toLocaleLowerCase()
-            .indexOf(query.toLocaleLowerCase()) > -1
+          recipient.shareType === ShareTypes.remote.value ||
+          recipient.displayName.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1
       )
     },
 
-    collaboratorRoleChanged({ role, permissions }) {
+    collaboratorRoleChanged(role: ShareRoleNG) {
       this.selectedRole = role
-      this.customPermissions = permissions
     },
 
-    collaboratorExpiryChanged({ expirationDate }) {
+    collaboratorExpiryChanged({ expirationDate }: { expirationDate: string }) {
       this.expirationDate = expirationDate
       ;(this.$refs.showMoreShareOptionsDropRef as InstanceType<typeof OcDrop>).hide()
     },
 
-    async share() {
-      this.saving = true
-      const errors = []
-
-      const saveQueue = new PQueue({
-        concurrency: this.createSharesConcurrentRequests
-      })
-
-      const bitmask = this.selectedRole.hasCustomPermissions
-        ? SharePermissions.permissionsToBitmask(this.customPermissions)
-        : SharePermissions.permissionsToBitmask(
-            this.selectedRole.permissions(
-              (this.hasResharing && this.resharingDefault) || this.resourceIsSpace
-            )
-          )
-
-      let path = this.resource.path
-      // sharing a share root from the share jail -> use resource name as path
-      if (path === '/') {
-        path = `/${this.resource.name}`
-      }
-
-      const savePromises = []
-      this.selectedCollaborators.forEach((collaborator) => {
-        savePromises.push(
-          saveQueue.add(async () => {
-            try {
-              if (this.resourceIsSpace) {
-                await this.addSpaceMember({
-                  client: this.$client,
-                  graphClient: this.clientService.graphAuthenticated,
-                  path,
-                  shareWith: collaborator.value.shareWith,
-                  displayName: collaborator.label,
-                  shareType: collaborator.value.shareType,
-                  permissions: bitmask,
-                  role: this.selectedRole,
-                  expirationDate: this.expirationDate,
-                  storageId: this.resource.fileId || this.resource.id
-                })
-              } else {
-                await this.addShare({
-                  clientService: this.$clientService,
-                  resource: this.resource,
-                  path,
-                  shareWith: collaborator.value.shareWith,
-                  shareType: collaborator.value.shareType,
-                  shareWithUser: collaborator.value.shareWithUser,
-                  shareWithProvider: collaborator.value.shareWithProvider,
-                  permissions: bitmask,
-                  role: this.selectedRole,
-                  expirationDate: this.expirationDate,
-                  storageId: this.resource.fileId || this.resource.id,
-                  notify: this.notifyEnabled
-                })
-              }
-            } catch (e) {
-              console.error(e)
-              errors.push({
-                displayName: collaborator.label,
-                error: e
-              })
-              throw e
-            }
-          })
-        )
-      })
-
-      const results = await Promise.allSettled(savePromises)
-
-      if (results.length !== errors.length) {
-        this.showMessage({ title: this.$gettext('Share was added successfully') })
-      }
-      errors.forEach((e) => {
-        this.showErrorMessage({
-          title: this.$gettext('Failed to add share for "%{displayName}"', {
-            displayName: e.displayName
-          }),
-          errors: [e.error]
-        })
-      })
-
-      this.expirationDate = null
-      this.selectedCollaborators = []
-      this.saving = false
-    },
-
-    resetFocusOnInvite(event) {
+    resetFocusOnInvite(event: CollaboratorAutoCompleteItem[]) {
       this.selectedCollaborators = event
       this.autocompleteResults = []
       this.$nextTick(() => {

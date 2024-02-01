@@ -1,29 +1,6 @@
 import { DateTime } from 'luxon'
-import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
-import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { getLocaleFromLanguage } from '../locale'
 import { CapabilityStore } from '../../composables'
-
-// TODO: move to useDefaultLinkPermissions composable
-export const getDefaultLinkPermissions = ({
-  ability,
-  defaultPermissionsCapability
-}: {
-  ability: Ability
-  defaultPermissionsCapability: number
-}) => {
-  const canCreatePublicLink = ability.can('create-all', 'PublicLink')
-  if (!canCreatePublicLink) {
-    return SharePermissionBit.Internal
-  }
-
-  let defaultPermissions = defaultPermissionsCapability
-  if (defaultPermissions === undefined) {
-    defaultPermissions = SharePermissionBit.Read
-  }
-
-  return defaultPermissions
-}
 
 // TODO: move to useExpirationRules composable
 export type ExpirationRules = { enforced: boolean; default: DateTime; min: DateTime; max: DateTime }

@@ -22,10 +22,10 @@ Feature: share
       | lorem.txt     | folder_to_shared       |
       | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
-      | resource               | recipient | type | role                                  | resourceType |
-      | folder_to_shared       | Brian     | user | Can edit                              | folder       |
-      | shared_folder          | Brian     | user | Can edit                              | folder       |
-      | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
+      | resource               | recipient | type | role       | resourceType |
+      | folder_to_shared       | Brian     | user | Can edit   | folder       |
+      | shared_folder          | Brian     | user | Can edit   | folder       |
+      | folder_to_customShared | Brian     | user | Can edit   | folder       |
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
@@ -86,12 +86,12 @@ Feature: share
       | testavatar.jpeg |
       | simple.pdf      |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role                           | resourceType |
-      | shareToBrian.txt | Brian     | user | Can edit                       | file         |
-      | shareToBrian.md  | Brian     | user | Can edit                       | file         |
-      | testavatar.jpeg  | Brian     | user | Can view                       | file         |
-      | simple.pdf       | Brian     | user | custom_permissions:read,update | file         |
-      | sharedFile.txt   | Brian     | user | Can edit                       | file         |
+      | resource         | recipient | type | role     | resourceType |
+      | shareToBrian.txt | Brian     | user | Can edit | file         |
+      | shareToBrian.md  | Brian     | user | Can edit | file         |
+      | testavatar.jpeg  | Brian     | user | Can view | file         |
+      | simple.pdf       | Brian     | user | Can edit | file         |
+      | sharedFile.txt   | Brian     | user | Can edit | file         |
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
@@ -148,7 +148,6 @@ Feature: share
     And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
     And "Alice" checks the following access details of share "mainFolder" for user "Brian"
       | Name            | Brian Murphy      |
-      | Additional info | brian@example.org |
       | Type            | User              |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And "Alice" checks the following access details of share "myfolder" for group "sales"

@@ -1,11 +1,14 @@
+import { LinkShare } from '@ownclouders/web-client/src/helpers'
 import { useMessages } from '@ownclouders/web-pkg'
 import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameAndCopy.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
-const exampleLink = {
-  name: 'Example link',
-  url: 'https://some-url.com/abc'
-}
+const linkShare = {
+  link: {
+    '@libre.graph.displayName': 'Example link',
+    webUrl: 'https://some-url.com/abc'
+  }
+} as LinkShare
 
 // @vitest-environment jsdom
 describe('NameAndCopy', () => {
@@ -35,7 +38,7 @@ describe('NameAndCopy', () => {
     expect(showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
-    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(exampleLink.url)
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(linkShare.link.webUrl)
     expect(wrapper.html()).toMatchSnapshot()
     expect(showMessage).toHaveBeenCalledTimes(1)
 
@@ -51,7 +54,7 @@ function getWrapper() {
   return {
     wrapper: mount(NameAndCopy, {
       props: {
-        link: exampleLink
+        linkShare
       },
       global: {
         plugins: [...defaultPlugins()],
