@@ -102,28 +102,6 @@ Feature: Shares in share-with pages
     And the user browses to the shared-with-me page in declined shares view
     Then the unshared elements should be in declined state on the webUI
 
-  @issue-ocis-1328
-  Scenario Outline: collaborators list contains additional info when enabled
-    Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    When user "Alice" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
-    Examples:
-      | additional-info-field | additional-info-result |
-      | id                    | Brian                  |
-      | email                 | brian@example.org      |
-
-  @issue-ocis-1328
-  Scenario: collaborators list does not contain additional info when disabled
-    Given the setting "user_additional_info_field" of app "core" has been set to "" in the server
-    And user "Alice" has created folder "simple-folder" in the server
-    And user "Alice" has shared folder "simple-folder" with user "Brian" in the server
-    When user "Alice" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed without additional info in the collaborators list on the webUI
-
 
   Scenario: share a file with another internal user via collaborators quick action
     Given user "Alice" has created folder "simple-folder" in the server

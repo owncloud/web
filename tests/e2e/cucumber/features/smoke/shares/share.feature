@@ -6,11 +6,11 @@ Feature: share
       | Alice |
       | Brian |
     And "Brian" logs in
-    # disabling auto accepting to check accepting share
-    And "Brian" disables auto-accepting using API
 
   Scenario: folder
-    Given "Alice" logs in
+    # disabling auto accepting to check accepting share
+    Given "Brian" disables auto-accepting using API
+    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name                   |
       | folder_to_shared       |
@@ -37,7 +37,6 @@ Feature: share
     When "Brian" accepts the following share from the context menu
       | name          |
       | shared_folder |
-    And "Brian" creates quick link of the resource "shared_folder" with password "%public%" from the context menu
     And "Brian" declines the following share from the context menu
       | name          |
       | shared_folder |
@@ -96,18 +95,6 @@ Feature: share
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
-    Then "Brian" should not see a sync status for the file "shareToBrian.txt"
-    When "Brian" accepts the following share
-      | name             |
-      | shareToBrian.txt |
-      | shareToBrian.md  |
-      | testavatar.jpeg  |
-      | simple.pdf       |
-    Then "Brian" should not see a sync status for the file "sharedFile.txt"
-    When "Brian" accepts the following share from the context menu
-      | name           |
-      | sharedFile.txt |
-    And "Brian" creates quick link of the resource "sharedFile.txt" with password "%public%" from the context menu
     And "Brian" declines the following share from the context menu
       | name           |
       | sharedFile.txt |
@@ -159,13 +146,15 @@ Feature: share
 
     # set expirationDate to existing share
     And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
+    And "Alice" checks the following access details of share "mainFolder" for user "Brian"
+      | Name            | Brian Murphy      |
+      | Additional info | brian@example.org |
+      | Type            | User              |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
+    And "Alice" checks the following access details of share "myfolder" for group "sales"
+      | Name            | sales department |
+      | Type            | Group            |
     And  "Alice" logs out
 
     And "Brian" navigates to the shared with me page
-    And "Brian" accepts the following share
-      | name       |
-      | new.txt    |
-      | myfolder   |
-      | mainFolder |
     And "Brian" logs out
