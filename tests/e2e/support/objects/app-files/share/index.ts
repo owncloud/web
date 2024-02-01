@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
 import { createLinkArgs } from '../link/actions'
-import { ICollaborator } from './collaborator'
+import { ICollaborator, IAccessDetails } from './collaborator'
 export class Share {
   #page: Page
 
@@ -85,5 +85,18 @@ export class Share {
     const startUrl = this.#page.url()
     await po.addExpirationDate({ resource, collaborator, expirationDate, page: this.#page })
     await this.#page.goto(startUrl)
+  }
+
+  async getAccessDetails({
+    resource,
+    collaborator
+  }: {
+    resource: string
+    collaborator: Omit<ICollaborator, 'role'>
+  }): Promise<IAccessDetails> {
+    const startUrl = this.#page.url()
+    const accessDetails = await po.getAccessDetails({ resource, collaborator, page: this.#page })
+    await this.#page.goto(startUrl)
+    return accessDetails
   }
 }
