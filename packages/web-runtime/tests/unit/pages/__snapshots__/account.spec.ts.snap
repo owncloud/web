@@ -25,7 +25,6 @@ exports[`account page > account information section > displays basic user inform
     </dd>
   </div>
   <!--v-if-->
-  <!--v-if-->
 </dl>"
 `;
 
@@ -36,6 +35,7 @@ exports[`account page > header section > edit url button > should be displayed i
 exports[`account page > public link context > should render a limited view 1`] = `
 "<main data-v-f2ac0579="" id="account" class="oc-height-1-1 oc-m">
   <h1 data-v-f2ac0579="" id="account-page-title" class="oc-page-title oc-m-rm oc-invisible-sr">Some Title</h1>
+  <!--v-if-->
   <!--v-if-->
   <div data-v-f2ac0579="">
     <div data-v-f2ac0579="" class="oc-flex oc-width-1-1">

@@ -65,12 +65,6 @@
             </oc-button>
           </dd>
         </div>
-        <div v-if="showGdprExport" class="account-page-gdpr-export oc-mb oc-width-1-2@s">
-          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
-          <dd data-testid="gdpr-export">
-            <gdpr-export />
-          </dd>
-        </div>
         <div v-if="showChangePassword" class="account-page-password oc-mb oc-width-1-2@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Password')" />
           <dd data-testid="password">
@@ -85,6 +79,13 @@
           </dd>
         </div>
       </dl>
+    </div>
+    <div v-if="showGdprExport" class="account-page-gdpr-export oc-width-1-1">
+      <h2 class="oc-text-bold oc-mb" v-text="$gettext('GDPR')" />
+      <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
+      <dd data-testid="gdpr-export">
+        <gdpr-export />
+      </dd>
     </div>
     <div>
       <div class="oc-flex oc-width-1-1">
