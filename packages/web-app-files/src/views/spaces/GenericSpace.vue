@@ -539,7 +539,6 @@ export default defineComponent({
       ),
       whitespaceContextMenu,
       clientService,
-      hasShareJail: capabilityRefs.spacesShareJail,
       createNewFolderAction,
       isEmbedModeEnabled,
       currentFolder,
@@ -557,10 +556,6 @@ export default defineComponent({
     },
 
     displayResourceAsSingleResource() {
-      if (!unref(this.hasShareJail)) {
-        return false
-      }
-
       if (this.paginatedResources.length !== 1) {
         return false
       }

@@ -87,10 +87,6 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
       }
     }
 
-    if (!capabilityStore.spacesShareJail) {
-      return $gettext('All files and folders')
-    }
-
     return $gettext('Personal')
   }
 

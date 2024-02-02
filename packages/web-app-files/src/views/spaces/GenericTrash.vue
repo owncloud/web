@@ -162,7 +162,6 @@ export default defineComponent({
 
     return {
       ...resourcesViewDefaults,
-      hasShareJail: capabilityRefs.spacesShareJail,
       user,
       noContentMessage,
       totalResourcesCount
@@ -177,7 +176,7 @@ export default defineComponent({
     breadcrumbs() {
       let currentNodeName = this.space?.name
       if (this.space.driveType === 'personal') {
-        currentNodeName = this.hasShareJail ? this.$gettext('Personal') : this.$gettext('All files')
+        currentNodeName = this.$gettext('Personal')
       }
       return [
         {

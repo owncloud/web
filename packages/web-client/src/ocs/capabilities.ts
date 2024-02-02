@@ -184,7 +184,6 @@ export interface Capabilities {
       enabled?: boolean
       max_quota?: number
       projects?: boolean
-      share_jail?: boolean
       version?: string
     }
     graph?: {

@@ -84,7 +84,7 @@ function getWrapper({
 
   const mocks = defaultComponentMocks()
   const capabilities = {
-    spaces: { share_jail: true, projects: true }
+    spaces: { projects: true }
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {

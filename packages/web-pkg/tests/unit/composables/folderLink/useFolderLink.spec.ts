@@ -49,16 +49,6 @@ describe('useFolderLink', () => {
       const parentFolderName = wrapper.vm.getParentFolderName(resource)
       expect(parentFolderName).toEqual('Personal')
     })
-    it('should equal "All files and folders" if share jail disabled', () => {
-      const resource = {
-        path: '/my-folder',
-        storageId: '1'
-      }
-
-      const wrapper = createWrapper({ hasShareJail: false })
-      const parentFolderName = wrapper.vm.getParentFolderName(resource)
-      expect(parentFolderName).toEqual('All files and folders')
-    })
     it('should equal the space name if resource storage is representing a project space', () => {
       const resource = {
         path: '/my-folder',
@@ -95,7 +85,7 @@ describe('useFolderLink', () => {
   })
 })
 
-const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {}) => {
+const createWrapper = () => {
   const spaces = [
     {
       id: '1',
@@ -113,7 +103,7 @@ const createWrapper = ({ hasShareJail = true }: { hasShareJail?: boolean } = {})
 
   const mocks = defaultComponentMocks({})
   const capabilities = {
-    spaces: { projects: true, share_jail: hasShareJail }
+    spaces: { projects: true }
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return getComposableWrapper(

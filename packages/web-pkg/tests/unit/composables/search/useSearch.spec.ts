@@ -48,7 +48,7 @@ const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
 
   const mocks = defaultComponentMocks({})
   const capabilities = {
-    spaces: { projects: true, share_jail: true }
+    spaces: { projects: true }
   } satisfies Partial<CapabilityStore['capabilities']>
 
   mocks.$clientService.webdav.search.mockResolvedValue({
