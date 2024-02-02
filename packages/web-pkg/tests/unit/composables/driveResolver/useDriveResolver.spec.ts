@@ -2,13 +2,8 @@ import { useDriveResolver } from '../../../../src/composables/driveResolver'
 import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import {
-  getComposableWrapper,
-  defaultComponentMocks,
-  RouteLocation,
-  writable
-} from 'web-test-helpers'
-import { useSpacesStore, useCapabilityStore } from '../../../../src/composables/piniaStores'
+import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
+import { useSpacesStore } from '../../../../src/composables/piniaStores'
 
 describe('useDriveResolver', () => {
   it('should be valid', () => {
@@ -65,7 +60,6 @@ describe('useDriveResolver', () => {
     )
   })
   it('returns a space by fileId if given', () => {
-    const hasSpaces = true
     const fileId = 'someFileId'
     const resourcePath = '/someFolder'
     const spaceMock = mockDeep<SpaceResource>({ fileId, driveAlias: 'driveAlias' })
@@ -79,9 +73,6 @@ describe('useDriveResolver', () => {
 
     getComposableWrapper(
       () => {
-        const capabilityStore = useCapabilityStore()
-        writable(capabilityStore).spacesEnabled = hasSpaces
-
         const { space, item, itemId } = useDriveResolver({
           driveAliasAndItem: ref(`/personal${resourcePath}`)
         })
@@ -97,7 +88,6 @@ describe('useDriveResolver', () => {
     )
   })
   it('returns a space by driveAlias if no fileId given', () => {
-    const hasSpaces = true
     const driveAlias = '/personal'
     const resourcePath = '/someFolder'
     const spaceMock = mockDeep<SpaceResource>({ driveAlias })
@@ -111,9 +101,6 @@ describe('useDriveResolver', () => {
 
     getComposableWrapper(
       () => {
-        const capabilityStore = useCapabilityStore()
-        writable(capabilityStore).spacesEnabled = hasSpaces
-
         const { space, item } = useDriveResolver({
           driveAliasAndItem: ref(`${driveAlias}${resourcePath}`)
         })

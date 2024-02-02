@@ -484,7 +484,6 @@ export default defineComponent({
   ],
   setup(props, context) {
     const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
     const { isLocationPicker } = useEmbedMode()
 
@@ -537,7 +536,6 @@ export default defineComponent({
       hasTags,
       disabledResources,
       isResourceDisabled,
-      hasProjectSpaces: capabilityRefs.spacesEnabled,
       userContextReady,
       getMatchingSpace,
       clipboardResources,

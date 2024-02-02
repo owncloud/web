@@ -55,7 +55,6 @@ import {
   useSpacesStore,
   useThemeStore,
   useUserStore,
-  useCapabilityStore,
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
@@ -97,7 +96,6 @@ export default defineComponent({
     const messageStore = useMessages()
     const themeStore = useThemeStore()
     const spacesStore = useSpacesStore()
-    const capabilityStore = useCapabilityStore()
     const router = useRouter()
     const route = useRoute()
     const language = useGettext()
@@ -120,7 +118,6 @@ export default defineComponent({
     if (!uppyService.getPlugin('HandleUpload')) {
       uppyService.addPlugin(HandleUpload, {
         clientService,
-        hasSpaces: capabilityStore.spacesEnabled,
         language,
         route,
         userStore,

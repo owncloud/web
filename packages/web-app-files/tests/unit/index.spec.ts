@@ -1,14 +1,14 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { navItems } from '../../src/index'
-import { useSpacesStore, useCapabilityStore } from '@ownclouders/web-pkg'
+import { useSpacesStore } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 
 describe('Web app files', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
-    const capabilityStore = useCapabilityStore()
-    capabilityStore.capabilities.spaces.enabled = true
+    const spacesStore = useSpacesStore()
+    spacesStore.spacesInitialized = true
   })
 
   describe('navItems', () => {

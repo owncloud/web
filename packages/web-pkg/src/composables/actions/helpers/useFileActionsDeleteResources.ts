@@ -18,7 +18,6 @@ import {
   useMessages,
   useModals,
   useSpacesStore,
-  useCapabilityStore,
   useConfigStore,
   useSharesStore,
   useResourcesStore
@@ -30,7 +29,6 @@ export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()
   const messageStore = useMessages()
   const { showMessage, showErrorMessage } = messageStore
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
@@ -258,17 +256,15 @@ export const useFileActionsDeleteResources = () => {
                 isLocationSpacesActive(router, 'files-spaces-generic') &&
                 !['public', 'share'].includes(spaceForDeletion?.driveType)
               ) {
-                if (capabilityStore.spacesEnabled) {
-                  const graphClient = clientService.graphAuthenticated
-                  const driveResponse = await graphClient.drives.getDrive(
-                    unref(resources)[0].storageId
-                  )
-                  spacesStore.updateSpaceField({
-                    id: driveResponse.data.id,
-                    field: 'spaceQuota',
-                    value: driveResponse.data.quota
-                  })
-                }
+                const graphClient = clientService.graphAuthenticated
+                const driveResponse = await graphClient.drives.getDrive(
+                  unref(resources)[0].storageId
+                )
+                spacesStore.updateSpaceField({
+                  id: driveResponse.data.id,
+                  field: 'spaceQuota',
+                  value: driveResponse.data.quota
+                })
               }
 
               if (

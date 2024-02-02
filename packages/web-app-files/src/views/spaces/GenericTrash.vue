@@ -132,9 +132,8 @@ export default defineComponent({
 
     const titleSegments = computed(() => {
       const segments = [$gettext('Deleted files')]
-      if (capabilityStore.spacesEnabled) {
-        segments.unshift(props.space.name)
-      }
+      segments.unshift(props.space.name)
+
       return segments
     })
     useDocumentTitle({ titleSegments })

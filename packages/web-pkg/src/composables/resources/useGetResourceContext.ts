@@ -8,10 +8,9 @@ import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useLoadFileInfoById } from './useLoadFileInfoById'
-import { useSpacesStore, useCapabilityStore, useConfigStore } from '../piniaStores'
+import { useSpacesStore, useConfigStore } from '../piniaStores'
 
 export const useGetResourceContext = () => {
-  const capabilityStore = useCapabilityStore()
   const clientService = useClientService()
   const configStore = useConfigStore()
   const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
@@ -20,9 +19,6 @@ export const useGetResourceContext = () => {
   const spaces = computed(() => spacesStore.spaces)
 
   const getMatchingSpaceByFileId = (id: Resource['id']) => {
-    if (!capabilityStore.spacesEnabled) {
-      return spacesStore.personalSpace
-    }
     return unref(spaces).find((space) => id.toString().startsWith(space.id.toString()))
   }
   const getMatchingMountPoint = (id: Resource['id']) => {

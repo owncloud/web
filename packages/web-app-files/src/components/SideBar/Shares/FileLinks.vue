@@ -273,7 +273,6 @@ export default defineComponent({
       space,
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
-      hasSpaces: capabilityRefs.spacesEnabled,
       hasPublicLinkEditing: capabilityRefs.sharingPublicCanEdit,
       hasPublicLinkContribute: capabilityRefs.sharingPublicCanContribute,
       hasPublicLinkAliasSupport: capabilityRefs.sharingPublicAlias,
@@ -334,10 +333,7 @@ export default defineComponent({
     },
 
     linksHeading() {
-      if (this.hasSpaces) {
-        return this.$gettext('Share via link')
-      }
-      return this.$gettext('Share via public link')
+      return this.$gettext('Share via link')
     },
 
     indirectLinksHeading() {

@@ -22,7 +22,6 @@ import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 
 export interface HandleUploadOptions {
   clientService: ClientService
-  hasSpaces: Ref<boolean>
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
   userStore: UserStore
@@ -52,7 +51,6 @@ export class HandleUpload extends BasePlugin {
   uppy: Uppy
 
   clientService: ClientService
-  hasSpaces: Ref<boolean>
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
   space: SpaceResource
@@ -72,7 +70,6 @@ export class HandleUpload extends BasePlugin {
     this.uppy = uppy
 
     this.clientService = opts.clientService
-    this.hasSpaces = opts.hasSpaces
     this.language = opts.language
     this.route = opts.route
     this.space = opts.space
@@ -381,7 +378,7 @@ export class HandleUpload extends BasePlugin {
     let filesToUpload = this.prepareFiles(files)
 
     // quota check
-    if (this.quotaCheckEnabled && unref(this.hasSpaces)) {
+    if (this.quotaCheckEnabled) {
       const quotaExceeded = this.checkQuotaExceeded(filesToUpload)
       if (quotaExceeded) {
         this.removeFilesFromUpload(filesToUpload)

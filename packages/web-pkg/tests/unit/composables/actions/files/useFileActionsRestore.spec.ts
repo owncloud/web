@@ -7,6 +7,8 @@ import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
+import { Drive } from '@ownclouders/web-client/src/generated'
+import { AxiosResponse } from 'axios'
 
 describe('restore', () => {
   describe('isEnabled property', () => {
@@ -192,6 +194,9 @@ function getWrapper({
   } else {
     mocks.$clientService.webdav.restoreFile.mockRejectedValue(new Error(''))
   }
+  mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
+    mock<AxiosResponse>({ data: { value: mock<Drive>() } })
+  )
 
   return {
     mocks,
