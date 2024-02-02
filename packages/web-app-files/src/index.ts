@@ -54,7 +54,7 @@ export const navItems = (context): AppNavigationItem[] => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
       enabled() {
-        if (!spacesStores.spaces.length) {
+        if (!spacesStores.spacesInitialized) {
           return true
         }
 
