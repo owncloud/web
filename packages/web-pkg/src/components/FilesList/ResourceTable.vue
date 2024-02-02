@@ -537,7 +537,6 @@ export default defineComponent({
       hasTags,
       disabledResources,
       isResourceDisabled,
-      hasShareJail: capabilityRefs.spacesShareJail,
       hasProjectSpaces: capabilityRefs.spacesEnabled,
       userContextReady,
       getMatchingSpace,

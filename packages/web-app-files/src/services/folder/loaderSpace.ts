@@ -65,7 +65,6 @@ export class FolderLoaderSpace implements FolderLoader {
               shares: [parentShare.shareInfo],
               spaces: spacesStore.spaces,
               allowSharePermission: capabilityStore.sharingResharing,
-              hasShareJail: true,
               incomingShares: true,
               fullShareOwnerPaths: configStore.options.routing.fullShareOwnerPaths
             })

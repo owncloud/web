@@ -11,7 +11,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { CapabilityStore, useBreadcrumbsFromPath, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { useBreadcrumbsFromPath, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { h } from 'vue'
@@ -324,9 +324,6 @@ function getMountedWrapper({
     item: '/',
     ...props
   }
-  const capabilities = {
-    spaces: { share_jail: true }
-  } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
     mocks: { ...defaultMocks, ...resourcesViewDetailsMock },
@@ -336,7 +333,6 @@ function getMountedWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              capabilityState: { capabilities },
               configState: { options: { runningOnEos } },
               resourcesStore: { currentFolder }
             }

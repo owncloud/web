@@ -7,14 +7,6 @@ const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
 }
 
-export function buildWebDavFilesPath(userId: string, path: string) {
-  return '/' + `files/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
-export function buildWebDavFilesTrashPath(userId: string, path = '') {
-  return '/' + `trash-bin/${userId}/${path}`.split('/').filter(Boolean).join('/')
-}
-
 export const extractDomSelector = (str: string): string => {
   return str.replace(/[^A-Za-z0-9\-_]/g, '')
 }

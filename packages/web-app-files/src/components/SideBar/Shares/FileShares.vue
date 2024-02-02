@@ -111,6 +111,7 @@ import {
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import {
   isProjectSpaceResource,
+  isShareSpaceResource,
   Resource,
   SpaceResource,
   User
@@ -188,7 +189,6 @@ export default defineComponent({
       toggleMemberListCollapsed,
       currentUserIsMemberOfSpace,
       hasProjectSpaces: capabilityRefs.spacesProjects,
-      hasShareJail: capabilityRefs.spacesShareJail,
       hasResharing: capabilityRefs.sharingResharing,
       hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
       getSharedAncestor,
@@ -282,8 +282,8 @@ export default defineComponent({
       if (this.resource.isReceivedShare() && !this.hasResharing) {
         return false
       }
-      const isShareJail = this.space?.driveType === 'share'
-      if (isShareJail && !this.hasResharing) {
+      const isSharedResource = isShareSpaceResource(this.space)
+      if (isSharedResource && !this.hasResharing) {
         return false
       }
       return this.resource.canShare({ user: this.user, ability: this.ability })
@@ -453,7 +453,7 @@ export default defineComponent({
     async $_ocCollaborators_deleteShare(share) {
       let path = this.resource.path
       // sharing a share root from the share jail -> use resource name as path
-      if (this.hasShareJail && path === '/') {
+      if (path === '/') {
         path = `/${this.resource.name}`
       }
 

@@ -422,7 +422,6 @@ export default defineComponent({
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
-      hasShareJail: capabilityRefs.spacesShareJail,
       hasSpaces: capabilityRefs.spacesEnabled,
       canUpload,
       currentFolder,

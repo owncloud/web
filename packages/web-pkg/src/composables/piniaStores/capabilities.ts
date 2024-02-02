@@ -62,8 +62,7 @@ const defaultValues = {
   spaces: {
     enabled: false,
     max_quota: 0,
-    projects: false,
-    share_jail: false
+    projects: false
   }
 } satisfies Partial<Capabilities['capabilities']>
 
@@ -87,7 +86,6 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const spacesEnabled = computed(() => unref(capabilities).spaces.enabled)
   const spacesMaxQuota = computed(() => unref(capabilities).spaces.max_quota)
   const spacesProjects = computed(() => unref(capabilities).spaces.projects)
-  const spacesShareJail = computed(() => unref(capabilities).spaces.share_jail)
 
   const graphUsersCreateDisabled = computed(() => unref(capabilities).graph.users.create_disabled)
   const graphUsersDeleteDisabled = computed(() => unref(capabilities).graph.users.delete_disabled)
@@ -170,7 +168,6 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     spacesEnabled,
     spacesMaxQuota,
     spacesProjects,
-    spacesShareJail,
     graphUsersCreateDisabled,
     graphUsersDeleteDisabled,
     graphUsersChangeSelfPasswordDisabled,

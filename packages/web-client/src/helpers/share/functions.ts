@@ -2,7 +2,6 @@ import { orderBy } from 'lodash-es'
 import { DateTime } from 'luxon'
 import {
   Resource,
-  buildWebDavFilesPath,
   extractDomSelector,
   extractExtensionFromFile,
   extractStorageId
@@ -36,14 +35,12 @@ export function aggregateResourceShares({
   shares,
   spaces,
   allowSharePermission = true,
-  hasShareJail = true,
   incomingShares = false,
   fullShareOwnerPaths = false
 }: {
   shares: Share[]
   spaces: SpaceResource[]
   allowSharePermission?: boolean
-  hasShareJail?: boolean
   incomingShares?: boolean
   fullShareOwnerPaths?: boolean
 }): Resource[] {
@@ -54,12 +51,7 @@ export function aggregateResourceShares({
   if (incomingShares) {
     shares = addSharedWithToShares(shares)
     return orderBy(shares, ['file_source', 'permissions'], ['asc', 'desc']).map((share) => {
-      const resource = buildSharedResource(
-        share,
-        incomingShares,
-        allowSharePermission,
-        hasShareJail
-      )
+      const resource = buildSharedResource(share, incomingShares, allowSharePermission)
       resource.shareId = share.id
 
       if (fullShareOwnerPaths) {
@@ -75,9 +67,7 @@ export function aggregateResourceShares({
   }
 
   const resources = addSharedWithToShares(shares)
-  return resources.map((share) =>
-    buildSharedResource(share, incomingShares, allowSharePermission, hasShareJail)
-  )
+  return resources.map((share) => buildSharedResource(share, incomingShares, allowSharePermission))
 }
 
 function addSharedWithToShares(shares) {
@@ -145,8 +135,7 @@ function addMatchingSpaceToShares(shares, spaces) {
 export function buildSharedResource(
   share,
   incomingShares = false,
-  allowSharePermission = true,
-  hasShareJail = false
+  allowSharePermission = true
 ): ShareResource {
   const isFolder = share.item_type === 'folder'
   const isRemoteShare = parseInt(share.share_type) === ShareTypes.remote.value
@@ -178,14 +167,11 @@ export function buildSharedResource(
     if (isRemoteShare) {
       resource.path = '/'
       resource.webDavPath = buildWebDavSpacesPath(share.space_id, '/')
-    } else if (hasShareJail) {
+    } else {
       // FIXME, HACK 1: path needs to be '/' because the share has it's own webdav endpoint (we access it's root). should ideally be removed backend side.
       // FIXME, HACK 2: webDavPath points to `files/<user>/Shares/xyz` but now needs to point to a shares webdav root. should ideally be changed backend side.
       resource.path = '/'
       resource.webDavPath = buildWebDavSpacesPath([SHARE_JAIL_ID, resource.id].join('!'), '/')
-    } else {
-      resource.path = share.file_target
-      resource.webDavPath = buildWebDavFilesPath(share.share_with, share.file_target)
     }
     resource.canDownload = () => parseInt(share.state) === 0
     resource.canShare = () => SharePermissions.share.enabled(share.permissions)
@@ -196,9 +182,8 @@ export function buildSharedResource(
   } else {
     resource.name = isRemoteShare ? share.name : path.basename(share.path)
     resource.path = share.path
-    resource.webDavPath = hasShareJail
-      ? buildWebDavSpacesPath(resource.storageId, share.path)
-      : buildWebDavFilesPath(share.uid_owner, share.path)
+    resource.webDavPath = buildWebDavSpacesPath(resource.storageId, share.path)
+
     resource.canDownload = () => true
     resource.canShare = () => true
     resource.canRename = () => true

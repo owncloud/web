@@ -1,7 +1,6 @@
 import {
   buildDeletedResource,
   buildResource,
-  buildWebDavFilesTrashPath,
   Resource,
   WebDavResponseResource
 } from '../helpers/resource'
@@ -105,9 +104,7 @@ export const ListFilesFactory = (
       try {
         let webDavPath = urlJoin(space.webDavPath, path)
         if (isTrash) {
-          webDavPath = unref(capabilities).spaces?.share_jail
-            ? buildWebDavSpacesTrashPath(space.id.toString())
-            : buildWebDavFilesTrashPath(space.id.toString())
+          webDavPath = buildWebDavSpacesTrashPath(space.id.toString())
         }
 
         webDavResources = await dav.propfind(webDavPath, {

@@ -180,8 +180,7 @@ export default defineComponent({
     const { options: configOptions } = storeToRefs(configStore)
 
     return {
-      configOptions,
-      hasShareJail: capabilityRefs.spacesShareJail
+      configOptions
     }
   },
   data: () => ({
@@ -553,10 +552,6 @@ export default defineComponent({
       const {
         meta: { spaceName, driveType }
       } = file
-
-      if (!this.hasShareJail) {
-        return this.$gettext('All files and folders')
-      }
 
       const parentFolder = extractParentFolderName(file)
       if (parentFolder) {

@@ -220,8 +220,8 @@ export default defineComponent({
         return false
       }
 
-      const isShareJail = isShareSpaceResource(unref(space))
-      if (isShareJail && !capabilityStore.sharingResharing) {
+      const isSharedResource = isShareSpaceResource(unref(space))
+      if (isSharedResource && !capabilityStore.sharingResharing) {
         return false
       }
 
@@ -274,7 +274,6 @@ export default defineComponent({
       resource,
       incomingParentShare: inject<Share>('incomingParentShare'),
       hasSpaces: capabilityRefs.spacesEnabled,
-      hasShareJail: capabilityRefs.spacesShareJail,
       hasPublicLinkEditing: capabilityRefs.sharingPublicCanEdit,
       hasPublicLinkContribute: capabilityRefs.sharingPublicCanContribute,
       hasPublicLinkAliasSupport: capabilityRefs.sharingPublicAlias,
@@ -511,7 +510,7 @@ export default defineComponent({
     async removeLink({ clientService, share, resource }) {
       let path = resource.path
       // sharing a share root from the share jail -> use resource name as path
-      if (this.hasShareJail && path === '/') {
+      if (path === '/') {
         path = `/${resource.name}`
       }
 

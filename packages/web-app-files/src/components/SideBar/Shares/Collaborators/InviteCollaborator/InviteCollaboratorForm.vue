@@ -266,7 +266,6 @@ export default defineComponent({
       resource: inject<Resource>('resource'),
       hasResharing: capabilityRefs.sharingResharing,
       resharingDefault: capabilityRefs.sharingResharingDefault,
-      hasShareJail: capabilityRefs.spacesShareJail,
       hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,
       minSearchLength: capabilityRefs.sharingSearchMinLength,
       isRunningOnEos: computed(() => configStore.options.runningOnEos),
@@ -505,7 +504,7 @@ export default defineComponent({
 
       let path = this.resource.path
       // sharing a share root from the share jail -> use resource name as path
-      if (this.hasShareJail && path === '/') {
+      if (path === '/') {
         path = `/${this.resource.name}`
       }
 
