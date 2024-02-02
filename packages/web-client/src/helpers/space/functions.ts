@@ -49,6 +49,7 @@ export function buildPublicSpaceResource(
   const publicLinkExpiration = data.props?.[DavProperty.PublicLinkExpiration]
   const publicLinkShareDate = data.props?.[DavProperty.PublicLinkShareDate]
   const publicLinkShareOwner = data.props?.[DavProperty.PublicLinkShareOwner]
+  const publicLinkShareOwnerDisplayName = data.props?.[DavProperty.OwnerDisplayName]
 
   let driveAlias
   let webDavPath
@@ -74,7 +75,8 @@ export function buildPublicSpaceResource(
       ...(publicLinkPermission && { publicLinkPermission: parseInt(publicLinkPermission) }),
       ...(publicLinkExpiration && { publicLinkExpiration }),
       ...(publicLinkShareDate && { publicLinkShareDate }),
-      ...(publicLinkShareOwner && { publicLinkShareOwner })
+      ...(publicLinkShareOwner && { publicLinkShareOwner }),
+      ...(publicLinkShareOwnerDisplayName && { publicLinkShareOwnerDisplayName })
     }
   )
 }
