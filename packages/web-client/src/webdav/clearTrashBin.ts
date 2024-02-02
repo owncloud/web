@@ -8,10 +8,7 @@ interface ClearTrashBinOptions {
   id?: Resource['id']
 }
 
-export const ClearTrashBinFactory = (
-  dav: DAV,
-  { accessToken, capabilities, user }: WebDavOptions
-) => {
+export const ClearTrashBinFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
     clearTrashBin(space: SpaceResource, { id }: ClearTrashBinOptions = {}) {
       let path = buildWebDavSpacesTrashPath(space.id.toString())

@@ -484,7 +484,6 @@ export default defineComponent({
   ],
   setup(props, context) {
     const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
     const { isLocationPicker } = useEmbedMode()
 

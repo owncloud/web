@@ -8,10 +8,9 @@ import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useLoadFileInfoById } from './useLoadFileInfoById'
-import { useSpacesStore, useCapabilityStore, useConfigStore } from '../piniaStores'
+import { useSpacesStore, useConfigStore } from '../piniaStores'
 
 export const useGetResourceContext = () => {
-  const capabilityStore = useCapabilityStore()
   const clientService = useClientService()
   const configStore = useConfigStore()
   const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })

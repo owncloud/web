@@ -18,7 +18,6 @@ import {
   useMessages,
   useModals,
   useSpacesStore,
-  useCapabilityStore,
   useConfigStore,
   useSharesStore,
   useResourcesStore
@@ -30,7 +29,6 @@ export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()
   const messageStore = useMessages()
   const { showMessage, showErrorMessage } = messageStore
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()

@@ -5,7 +5,7 @@ import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useClientService } from '../clientService'
-import { useSpacesStore, useCapabilityStore, useConfigStore } from '../piniaStores'
+import { useSpacesStore, useConfigStore } from '../piniaStores'
 
 interface DriveResolverOptions {
   driveAliasAndItem?: Ref<string>
@@ -20,7 +20,6 @@ interface DriveResolverResult {
 
 export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResolverResult => {
   const spacesStore = useSpacesStore()
-  const capabilityStore = useCapabilityStore()
   const { areSpacesLoading } = useSpacesLoading()
   const shareId = useRouteQuery('shareId')
   const fileIdQueryItem = useRouteQuery('fileId')

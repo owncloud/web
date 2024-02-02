@@ -21,18 +21,11 @@ import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
 import { LoadingTaskCallbackArguments } from '../../../services'
-import {
-  useMessages,
-  useSpacesStore,
-  useUserStore,
-  useCapabilityStore,
-  useResourcesStore
-} from '../../piniaStores'
+import { useMessages, useSpacesStore, useUserStore, useResourcesStore } from '../../piniaStores'
 
 export const useFileActionsRestore = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
-  const capabilityStore = useCapabilityStore()
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()

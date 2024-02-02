@@ -26,7 +26,7 @@ export type ListFilesOptions = {
 export const ListFilesFactory = (
   dav: DAV,
   pathForFileIdFactory: ReturnType<typeof GetPathForFileIdFactory>,
-  { accessToken, capabilities }: WebDavOptions
+  { accessToken }: WebDavOptions
 ) => {
   return {
     async listFiles(

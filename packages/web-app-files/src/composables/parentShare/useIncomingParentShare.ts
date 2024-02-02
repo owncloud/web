@@ -1,10 +1,5 @@
 import { buildShare } from '@ownclouders/web-client/src/helpers/share'
-import {
-  useClientService,
-  useSpacesStore,
-  useCapabilityStore,
-  useSharesStore
-} from '@ownclouders/web-pkg'
+import { useClientService, useSpacesStore, useSharesStore } from '@ownclouders/web-pkg'
 import { computed, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import {
@@ -18,7 +13,6 @@ import { DavProperty } from '@ownclouders/web-client/src/webdav/constants'
 
 export function useIncomingParentShare() {
   const spacesStore = useSpacesStore()
-  const capabilityStore = useCapabilityStore()
   const clientService = useClientService()
   const sharesStore = useSharesStore()
 

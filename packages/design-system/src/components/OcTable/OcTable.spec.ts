@@ -44,7 +44,7 @@ const data = [
 ]
 
 describe('OcTable', () => {
-  it('displays all field types', async () => {
+  it('displays all field types', () => {
     const wrapper = mount(Table, {
       props: {
         fields,

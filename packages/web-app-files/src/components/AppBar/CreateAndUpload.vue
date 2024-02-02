@@ -183,7 +183,6 @@
 import {
   isLocationPublicActive,
   isLocationSpacesActive,
-  useCapabilityStore,
   useClipboardStore,
   useFileActions,
   useFileActionsCreateNewShortcut,
@@ -261,8 +260,6 @@ export default defineComponent({
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
     const messageStore = useMessages()
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const route = useRoute()
     const language = useGettext()
 
