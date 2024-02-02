@@ -7,8 +7,8 @@ import { mock } from 'vitest-mock-extended'
 describe('Web app files', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
-    const capabilityStore = useCapabilityStore()
-    capabilityStore.capabilities.spaces.enabled = true
+    const spacesStore = useSpacesStore()
+    spacesStore.spacesInitialized = true
   })
 
   describe('navItems', () => {
