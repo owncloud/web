@@ -111,6 +111,7 @@ import {
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import {
   isProjectSpaceResource,
+  isShareSpaceResource,
   Resource,
   SpaceResource,
   User
@@ -281,8 +282,8 @@ export default defineComponent({
       if (this.resource.isReceivedShare() && !this.hasResharing) {
         return false
       }
-
-      if (!this.hasResharing) {
+      const isSharedResource = isShareSpaceResource(this.space)
+      if (isSharedResource && !this.hasResharing) {
         return false
       }
       return this.resource.canShare({ user: this.user, ability: this.ability })

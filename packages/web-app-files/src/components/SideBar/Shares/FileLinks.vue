@@ -144,7 +144,8 @@ import { getLocaleFromLanguage } from '@ownclouders/web-pkg'
 import {
   Resource,
   SpaceResource,
-  isProjectSpaceResource
+  isProjectSpaceResource,
+  isShareSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { isLocationSharesActive, useSharesStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -219,7 +220,8 @@ export default defineComponent({
         return false
       }
 
-      if (!capabilityStore.sharingResharing) {
+      const isSharedResource = isShareSpaceResource(unref(space))
+      if (isSharedResource && !capabilityStore.sharingResharing) {
         return false
       }
 
