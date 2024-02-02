@@ -11,7 +11,6 @@ import {
   buildSpace,
   buildWebDavSpacesPath,
   isMountPointSpaceResource,
-  isPersonalSpaceResource,
   Resource,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
@@ -77,9 +76,6 @@ export function useIncomingParentShare() {
   }
 
   const getMatchingSpace = (id: string) => {
-    if (!capabilityStore.spacesEnabled) {
-      return spacesStore.spaces.find(isPersonalSpaceResource)
-    }
     return spacesStore.spaces.find((space) => id.startsWith(space.id))
   }
 

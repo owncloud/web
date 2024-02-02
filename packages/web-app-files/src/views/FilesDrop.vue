@@ -120,7 +120,6 @@ export default defineComponent({
     if (!uppyService.getPlugin('HandleUpload')) {
       uppyService.addPlugin(HandleUpload, {
         clientService,
-        hasSpaces: capabilityStore.spacesEnabled,
         language,
         route,
         userStore,

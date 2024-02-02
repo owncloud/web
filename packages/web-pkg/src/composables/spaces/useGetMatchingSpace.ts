@@ -5,7 +5,6 @@ import {
   buildShareSpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
-  isPersonalSpaceResource,
   isProjectSpaceResource,
   ShareTypes,
   OCM_PROVIDER_ID,
@@ -28,11 +27,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
   const driveAliasAndItem = useRouteParam('driveAliasAndItem')
 
   const getInternalSpace = (storageId: string): SpaceResource => {
-    return (
-      unref(options?.space) ||
-      unref(spaces).find((space) => space.id === storageId) ||
-      (!capabilityStore.spacesEnabled && unref(spaces).find((s) => isPersonalSpaceResource(s)))
-    )
+    return unref(options?.space) || unref(spaces).find((space) => space.id === storageId)
   }
 
   const getMatchingSpace = (resource: Resource): SpaceResource => {

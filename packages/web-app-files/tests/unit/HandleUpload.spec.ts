@@ -282,7 +282,6 @@ const getWrapper = ({
 
   const opts = {
     clientService: mockDeep<ClientService>(),
-    hasSpaces: ref(true),
     language: mock<Language>(),
     route: ref(route),
     userStore: useUserStore(),

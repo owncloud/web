@@ -44,7 +44,7 @@ export const navItems = (context): AppNavigationItem[] => {
   return [
     {
       name() {
-        return capabilityStore.spacesEnabled ? $gettext('Personal') : $gettext('All files')
+        return $gettext('All files')
       },
       icon: appInfo.icon,
       route: {
@@ -54,9 +54,6 @@ export const navItems = (context): AppNavigationItem[] => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
       enabled() {
-        if (!capabilityStore.spacesEnabled) {
-          return true
-        }
         return !!spacesStores.spaces.find(
           (drive) => isPersonalSpaceResource(drive) && drive.isOwner(userStore.user)
         )

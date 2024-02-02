@@ -27,10 +27,7 @@ export const useFileActionsDelete = () => {
   }: FileActionOptions & { deletePermanent: boolean }) => {
     if (isLocationCommonActive(router, 'files-common-search')) {
       resources = resources.filter(
-        (r) =>
-          r.canBeDeleted() &&
-          (!capabilityStore.spacesEnabled || !r.isShareRoot()) &&
-          !isProjectSpaceResource(r)
+        (r) => r.canBeDeleted() && !r.isShareRoot() && !isProjectSpaceResource(r)
       )
     }
     if (deletePermanent) {
@@ -74,10 +71,7 @@ export const useFileActionsDelete = () => {
 
         if (isLocationCommonActive(router, 'files-common-search')) {
           return resources.some(
-            (r) =>
-              r.canBeDeleted() &&
-              (!capabilityStore.spacesEnabled || !r.isShareRoot()) &&
-              !isProjectSpaceResource(r)
+            (r) => r.canBeDeleted() && !r.isShareRoot() && !isProjectSpaceResource(r)
           )
         }
 

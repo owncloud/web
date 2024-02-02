@@ -83,7 +83,6 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const davReports = computed(() => unref(capabilities).dav.reports)
   const davTrashbin = computed(() => unref(capabilities).dav.trashbin)
 
-  const spacesEnabled = computed(() => unref(capabilities).spaces.enabled)
   const spacesMaxQuota = computed(() => unref(capabilities).spaces.max_quota)
   const spacesProjects = computed(() => unref(capabilities).spaces.projects)
 
@@ -165,7 +164,6 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     personalDataExport,
     davReports,
     davTrashbin,
-    spacesEnabled,
     spacesMaxQuota,
     spacesProjects,
     graphUsersCreateDisabled,

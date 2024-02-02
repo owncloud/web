@@ -280,7 +280,6 @@ export default defineComponent({
     if (!uppyService.getPlugin('HandleUpload')) {
       uppyService.addPlugin(HandleUpload, {
         clientService,
-        hasSpaces: capabilityStore.spacesEnabled,
         language,
         route,
         space: props.space,
@@ -365,7 +364,7 @@ export default defineComponent({
         }
 
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (capabilityStore.spacesEnabled && !isPublicSpaceResource(props.space)) {
+        if (!isPublicSpaceResource(props.space)) {
           const isOwnSpace = spacesStore.spaces
             .find(({ id }) => id === spaceId)
             ?.isOwner(userStore.user)
@@ -422,7 +421,6 @@ export default defineComponent({
       clientService,
       isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
       isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
-      hasSpaces: capabilityRefs.spacesEnabled,
       canUpload,
       currentFolder,
       createNewFolder,

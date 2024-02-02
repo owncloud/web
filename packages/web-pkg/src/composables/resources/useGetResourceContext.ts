@@ -20,9 +20,6 @@ export const useGetResourceContext = () => {
   const spaces = computed(() => spacesStore.spaces)
 
   const getMatchingSpaceByFileId = (id: Resource['id']) => {
-    if (!capabilityStore.spacesEnabled) {
-      return spacesStore.personalSpace
-    }
     return unref(spaces).find((space) => id.toString().startsWith(space.id.toString()))
   }
   const getMatchingMountPoint = (id: Resource['id']) => {

@@ -537,7 +537,6 @@ export default defineComponent({
       hasTags,
       disabledResources,
       isResourceDisabled,
-      hasProjectSpaces: capabilityRefs.spacesEnabled,
       userContextReady,
       getMatchingSpace,
       clipboardResources,

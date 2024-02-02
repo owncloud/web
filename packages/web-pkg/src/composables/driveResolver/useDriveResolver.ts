@@ -97,7 +97,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         })
         path = item.join('/')
       } else {
-        if (capabilityStore.spacesEnabled && unref(fileId)) {
+        if (unref(fileId)) {
           matchingSpace = unref(spaces).find((s) => {
             return unref(fileId).startsWith(`${s.fileId}`)
           })
