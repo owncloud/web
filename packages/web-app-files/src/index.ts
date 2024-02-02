@@ -44,7 +44,7 @@ export const navItems = (context): AppNavigationItem[] => {
   return [
     {
       name() {
-        return $gettext('All files')
+        return $gettext('Personal')
       },
       icon: appInfo.icon,
       route: {
