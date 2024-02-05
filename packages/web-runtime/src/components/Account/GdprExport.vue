@@ -1,31 +1,38 @@
 <template>
-  <span v-if="loading">
-    <oc-spinner />
-  </span>
-  <span v-else-if="exportInProgress" class="oc-flex oc-flex-middle" data-testid="export-in-process">
-    <oc-icon name="time" fill-type="line" size="small" class="oc-mr-s" />
-    <span v-text="$gettext('Export is being processed. This can take up to 24 hours.')" />
-  </span>
-  <div v-else>
-    <oc-button
-      appearance="raw"
-      variation="primary"
-      data-testid="request-export-btn"
-      @click="requestExport"
+  <div class="oc-mb-l">
+    <p v-text="$gettext('Request a personal data export according to §20 GDPR.')" />
+    <span v-if="loading">
+      <oc-spinner />
+    </span>
+    <span
+      v-else-if="exportInProgress"
+      class="oc-flex oc-flex-middle"
+      data-testid="export-in-process"
     >
-      <span v-text="$gettext('Request new export')" />
-    </oc-button>
-    <div v-if="exportFile" class="oc-flex oc-flex-middle">
+      <oc-icon name="time" fill-type="line" size="small" class="oc-mr-s" />
+      <span v-text="$gettext('Export is being processed. This can take up to 24 hours.')" />
+    </span>
+    <div v-else class="oc-flex">
       <oc-button
-        appearance="raw"
+        appearance="outline"
+        variation="primary"
+        data-testid="request-export-btn"
+        class="oc-mr-s"
+        @click="requestExport"
+      >
+        <span v-text="$gettext('Request new export')" />
+      </oc-button>
+      <oc-button
+        v-if="exportFile"
+        appearance="outline"
         variation="primary"
         data-testid="download-export-btn"
         @click="downloadExport"
       >
         <oc-icon name="download" fill-type="line" size="small" />
-        <span v-text="$gettext('Download export')" />
+        <span v-text="$gettext('Download latest export')" />
+        <span v-text="`(${exportDate})`" />
       </oc-button>
-      <span class="oc-ml-s" v-text="`(${exportDate})`" />
     </div>
   </div>
 </template>
