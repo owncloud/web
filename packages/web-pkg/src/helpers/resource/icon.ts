@@ -192,20 +192,7 @@ const fileIcon = {
   },
   text: {
     icon: { name: 'resource-type-text', color: 'var(--oc-color-text-default)' },
-    extensions: [
-      'cb7',
-      'cba',
-      'cbr',
-      'cbt',
-      'cbtc',
-      'cbz',
-      'cvbdl',
-      'eml',
-      'epub',
-      'mdb',
-      'tex',
-      'txt'
-    ]
+    extensions: ['cb7', 'cba', 'cbr', 'cbt', 'cbtc', 'cbz', 'cvbdl', 'eml', 'mdb', 'tex', 'txt']
   },
   url: {
     icon: { name: 'resource-type-url', color: 'var(--oc-color-text-default)' },
@@ -217,6 +204,10 @@ const fileIcon = {
       color: 'var(--oc-color-icon-video)'
     },
     extensions: ['mov', 'mp4', 'webm', 'wmv']
+  },
+  epub: {
+    icon: { name: 'resource-type-epub', color: 'var(--oc-color-text-default)' },
+    extensions: ['epub']
   }
 }
 
