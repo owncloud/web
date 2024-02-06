@@ -21,6 +21,7 @@ Feature: Upload
       | new-lorem-big.txt | txtFile | new lorem big file  |
       | lorem.txt         | txtFile | lorem file          |
       | textfile.txt      | txtFile | some random content |
+      | comma,.txt        | txtFile | comma               |
     When "Alice" uploads the following resources
       | resource          | option    |
       | new-lorem-big.txt | replace   |
@@ -37,6 +38,10 @@ Feature: Upload
     And "Alice" tries to upload the following resource
       | resource      | error            |
       | lorem-big.txt | Not enough quota |
+    And "Alice" downloads the following public link resources using the sidebar panel
+      | resource   | type   |
+      | comma,.txt | file   |
+      | PARENT     | folder |
   #  currently upload folder feature is not available in playwright
   #  And "Alice" uploads the following resources
   #    | resource |
