@@ -26,7 +26,7 @@ Feature: url stability for mobile and desktop client
     When "Alice" opens the file "MicrosoftWord.docx" of space "personal" in OnlyOffice through the URL for desktop client
     Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
 
-    # # mobile feature
+    # mobile feature
     When "Alice" opens the file "OpenDocument.odt" of space "personal" in Collabora through the URL for mobile client
     Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     When "Alice" opens the file "MicrosoftWord.docx" of space "personal" in OnlyOffice through the URL for mobile client
