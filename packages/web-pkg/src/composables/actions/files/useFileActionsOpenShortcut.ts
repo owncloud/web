@@ -1,6 +1,5 @@
 import {
   isLocationCommonActive,
-  isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive
 } from '../../../router'

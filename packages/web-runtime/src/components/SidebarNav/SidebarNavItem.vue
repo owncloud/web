@@ -14,7 +14,6 @@
         <oc-icon :name="icon" :fill-type="fillType" variation="inherit" />
         <span class="oc-ml-m text" :class="{ 'text-invisible': collapsed }" v-text="name" />
       </span>
-      <oc-tag v-if="tag" class="oc-py-rm" size="small">{{ tag }}</oc-tag>
     </oc-button>
   </li>
 </template>
@@ -55,11 +54,6 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
-    },
-    tag: {
-      type: String,
-      required: false,
-      default: null
     },
     handler: {
       type: Function as PropType<() => void>,
