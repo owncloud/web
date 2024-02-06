@@ -29,18 +29,19 @@ When(
 )
 
 When(
-  /^"([^"]*)" opens the file "([^"]*)" of space "([^"]*)" in (collabora|OnlyOffice) through the URL$/,
+  /^"([^"]*)" opens the file "([^"]*)" of space "([^"]*)" in (Collabora|OnlyOffice) through the URL for (mobile|desktop) client$/,
   async function (
     this: World,
     stepUser: string,
     resource: string,
     space: string,
-    editorName: string
+    editorName: string,
+    client: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
     const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
-    await urlNavObject.openResourceViaUrl({ resource, user, space, editorName })
+    await urlNavObject.openResourceViaUrl({ resource, user, space, editorName, client })
   }
 )
 
