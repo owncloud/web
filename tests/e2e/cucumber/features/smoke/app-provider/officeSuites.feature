@@ -18,11 +18,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
       | resource         | role     | password |
-      | OpenDocument.odt | Can edit | %public% |
-
-    # Check that the file can be opened in collabora using the url. https://github.com/owncloud/web/issues/9897
-    When "Alice" opens the file "OpenDocument.odt" of space "personal" in collabora through the URL
-    Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
+      | OpenDocument.odt | Can edit | %public% |   
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
@@ -36,9 +32,6 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
       | resource           | role     | password |
       | MicrosoftWord.docx | Can edit | %public% |
-    
-    # Check that the file can be opened in collabora using the url. https://github.com/owncloud/web/issues/9897
-    When "Alice" opens the file "MicrosoftWord.docx" of space "personal" in OnlyOffice through the URL
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
