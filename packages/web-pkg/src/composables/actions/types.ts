@@ -23,7 +23,7 @@ export interface Action<T = ActionOptions> {
   ext?: string
 
   label(options?: T): string
-  isEnabled(options?: T): boolean // FIXME: Should be isVisible
+  isVisible(options?: T): boolean
 
   // componentType: button
   handler?(options?: T): Promise<void> | void

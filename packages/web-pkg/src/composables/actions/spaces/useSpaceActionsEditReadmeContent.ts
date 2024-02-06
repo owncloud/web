@@ -29,7 +29,7 @@ export const useSpaceActionsEditReadmeContent = () => {
         return $gettext('Edit description')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length !== 1) {
           return false
         }

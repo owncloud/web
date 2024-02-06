@@ -27,12 +27,12 @@ export default defineComponent({
 
     const menuItemsPrimaryActions = computed(() =>
       [...unref(editActions), ...unref(deleteActions)].filter((item) =>
-        item.isEnabled(props.actionOptions)
+        item.isVisible(props.actionOptions)
       )
     )
 
     const menuItemsSidebar = computed(() =>
-      [...unref(showDetailsActions)].filter((item) => item.isEnabled(props.actionOptions))
+      [...unref(showDetailsActions)].filter((item) => item.isVisible(props.actionOptions))
     )
 
     const menuSections = computed(() => {

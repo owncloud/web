@@ -16,7 +16,7 @@ export const useUserActionsCreateUser = () => {
       componentType: 'button',
       class: 'oc-users-actions-create-user',
       label: () => $gettext('New user'),
-      isEnabled: () => !capabilityStore.graphUsersCreateDisabled,
+      isVisible: () => !capabilityStore.graphUsersCreateDisabled,
       handler: () => {
         dispatchModal({
           title: $gettext('Create user'),

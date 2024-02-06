@@ -9,7 +9,7 @@ const sharesWithOthersLocation = 'files-shares-with-others'
 
 describe('acceptShare', () => {
   describe('computed property "actions"', () => {
-    describe('isEnabled property of returned element', () => {
+    describe('isVisible property of returned element', () => {
       it.each([
         { resources: [{ syncEnabled: false }] as IncomingShareResource[], expectedStatus: true },
         { resources: [{ syncEnabled: true }] as IncomingShareResource[], expectedStatus: false }
@@ -21,7 +21,7 @@ describe('acceptShare', () => {
               const { actions } = useFileActionsEnableSync()
 
               const resources = inputData.resources
-              expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
+              expect(unref(actions)[0].isVisible({ space: null, resources })).toBe(
                 inputData.expectedStatus
               )
             }
@@ -40,7 +40,7 @@ describe('acceptShare', () => {
               const { actions } = useFileActionsEnableSync()
 
               expect(
-                unref(actions)[0].isEnabled({ space: null, resources: [resource] })
+                unref(actions)[0].isVisible({ space: null, resources: [resource] })
               ).toBeFalsy()
             }
           })

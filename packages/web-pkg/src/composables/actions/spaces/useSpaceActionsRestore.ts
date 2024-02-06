@@ -124,7 +124,7 @@ export const useSpaceActionsRestore = () => {
       icon: 'play-circle',
       label: () => $gettext('Enable'),
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return !!filterResourcesToRestore(resources).length
       },
       componentType: 'button',

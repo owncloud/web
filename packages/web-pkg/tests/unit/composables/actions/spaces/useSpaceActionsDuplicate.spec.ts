@@ -26,11 +26,11 @@ const spaces = [
   })
 ]
 describe('restore', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [] })).toBe(false)
         }
       })
     })
@@ -38,7 +38,7 @@ describe('restore', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [
                 mock<SpaceResource>({
                   disabled: true,
@@ -54,7 +54,7 @@ describe('restore', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [
                 mock<SpaceResource>({
                   disabled: false,
@@ -71,7 +71,7 @@ describe('restore', () => {
         abilities: [],
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [mock<SpaceResource>({ disabled: false, driveType: 'project' })]
             })
           ).toBe(false)
@@ -82,7 +82,7 @@ describe('restore', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [
                 mock<SpaceResource>({ name: 'Moon', disabled: false, driveType: 'project' }),
                 mock<SpaceResource>({ name: 'Sun', disabled: false, driveType: 'project' })

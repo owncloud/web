@@ -320,7 +320,7 @@ export default defineComponent({
         ...extensionRegistry
           .requestExtensions<ActionExtension>('action', ['upload-menu'])
           .map((e) => e.action)
-      ].filter((e) => e.isEnabled())
+      ].filter((e) => e.isVisible())
     })
 
     const canUpload = computed(() => {

@@ -10,7 +10,7 @@
       variation="inverse"
       appearance="filled"
       :disabled="
-        areSelectActionsDisabled || !createLinkAction.isEnabled({ resources: selectedFiles, space })
+        areSelectActionsDisabled || !createLinkAction.isVisible({ resources: selectedFiles, space })
       "
       @click="createLinkAction.handler({ resources: selectedFiles, space })"
       >{{ $gettext('Share links') }}</oc-button

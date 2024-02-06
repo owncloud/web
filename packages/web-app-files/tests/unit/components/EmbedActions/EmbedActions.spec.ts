@@ -124,7 +124,7 @@ function getWrapper(
     mock<ReturnType<typeof useFileActionsCreateLink>>({
       actions: ref([
         mock<FileAction>({
-          isEnabled: () => createLinksActionEnabled,
+          isVisible: () => createLinksActionEnabled,
           handler: createLinkHandlerMock
         })
       ])

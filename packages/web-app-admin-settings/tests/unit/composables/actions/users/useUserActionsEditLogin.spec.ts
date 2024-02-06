@@ -6,15 +6,15 @@ import { getComposableWrapper, writable } from 'web-test-helpers'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditLogin', () => {
-  describe('method "isEnabled"', () => {
+  describe('method "isVisible"', () => {
     it.each([
-      { resources: [], isEnabled: false },
-      { resources: [mock<User>()], isEnabled: true },
-      { resources: [mock<User>(), mock<User>()], isEnabled: true }
-    ])('requires at least one user to be enabled', ({ resources, isEnabled }) => {
+      { resources: [], isVisible: false },
+      { resources: [mock<User>()], isVisible: true },
+      { resources: [mock<User>(), mock<User>()], isVisible: true }
+    ])('requires at least one user to be enabled', ({ resources, isVisible }) => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+          expect(unref(actions)[0].isVisible({ resources })).toEqual(isVisible)
         }
       })
     })
@@ -24,7 +24,7 @@ describe('useUserActionsEditLogin', () => {
           const capabilityStore = useCapabilityStore()
           writable(capabilityStore).graphUsersReadOnlyAttributes = ['user.accountEnabled']
 
-          expect(unref(actions)[0].isEnabled({ resources: [mock<User>()] })).toEqual(false)
+          expect(unref(actions)[0].isVisible({ resources: [mock<User>()] })).toEqual(false)
         }
       })
     })

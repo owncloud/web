@@ -49,7 +49,7 @@ export const useFileActionsCopy = () => {
         handler,
         shortcut: unref(copyShortcutString),
         label: () => $gettext('Copy'),
-        isEnabled: ({ resources }) => {
+        isVisible: ({ resources }) => {
           if (
             !isLocationSpacesActive(router, 'files-spaces-generic') &&
             !isLocationPublicActive(router, 'files-public-link') &&

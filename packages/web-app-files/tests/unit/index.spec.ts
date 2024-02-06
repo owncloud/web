@@ -19,7 +19,7 @@ describe('Web app files', () => {
           mock<SpaceResource>({ id: '1', driveType: 'personal', isOwner: () => true })
         ]
         const items = navItems(undefined)
-        expect(items[0].enabled()).toBeTruthy()
+        expect(items[0].isVisible()).toBeTruthy()
       })
       it('should be disabled if user has no a personal space', () => {
         const spacesStore = useSpacesStore()
@@ -27,7 +27,7 @@ describe('Web app files', () => {
           mock<SpaceResource>({ id: '1', driveType: 'project', isOwner: () => false })
         ]
         const items = navItems(undefined)
-        expect(items[0].enabled()).toBeFalsy()
+        expect(items[0].isVisible()).toBeFalsy()
       })
     })
   })

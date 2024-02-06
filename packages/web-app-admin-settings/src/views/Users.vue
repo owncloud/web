@@ -16,7 +16,7 @@
       <template #topbarActions>
         <div>
           <oc-button
-            v-if="createUserAction.isEnabled()"
+            v-if="createUserAction.isVisible()"
             id="create-user-btn"
             class="oc-mr-s"
             variation="primary"
@@ -395,7 +395,7 @@ export default defineComponent({
         ...unref(addToGroupsActions),
         ...unref(removeFromGroupsActions),
         ...unref(editLoginActions)
-      ].filter((item) => item.isEnabled({ resources: unref(selectedUsers) }))
+      ].filter((item) => item.isVisible({ resources: unref(selectedUsers) }))
     })
 
     const updateSpaceQuota = ({ spaceId, quota }) => {

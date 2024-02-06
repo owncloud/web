@@ -105,7 +105,7 @@ export const useFileActionsCreateSpaceFromResource = () => {
         label: () => {
           return $gettext('Create Space from selection')
         },
-        isEnabled: ({ resources, space }) => {
+        isVisible: ({ resources, space }) => {
           if (!resources.length) {
             return false
           }

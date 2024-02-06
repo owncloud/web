@@ -409,7 +409,7 @@ function getMountedWrapper({
   vi.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   vi.mocked(useUserActionsCreateUser).mockReturnValue(
     mock<ReturnType<typeof useUserActionsCreateUser>>({
-      actions: ref([mock<UserAction>({ isEnabled: () => createUserActionEnabled })])
+      actions: ref([mock<UserAction>({ isVisible: () => createUserActionEnabled })])
     })
   )
 

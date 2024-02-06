@@ -206,7 +206,7 @@ export const useFileActionsRename = () => {
         return $gettext('Rename')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

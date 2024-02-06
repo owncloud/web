@@ -24,7 +24,7 @@ export const useFileActionsShowDetails = () => {
       label: () => $gettext('Details'),
       // we don't have details in the trashbin, yet.
       // remove trashbin route rule once we have them.
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         // sidebar is currently only available inside files app
         if (!unref(isFilesAppActive)) {
           return false

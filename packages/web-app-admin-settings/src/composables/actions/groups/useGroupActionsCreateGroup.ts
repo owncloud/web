@@ -14,7 +14,7 @@ export const useGroupActionsCreateGroup = () => {
       componentType: 'button',
       class: 'oc-groups-actions-create-group',
       label: () => $gettext('New group'),
-      isEnabled: () => true,
+      isVisible: () => true,
       handler: () => {
         dispatchModal({
           title: $gettext('Create group'),

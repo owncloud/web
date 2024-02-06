@@ -14,11 +14,11 @@ import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getF
 import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('setReadme', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ space: null, resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ space: null, resources: [] })).toBe(false)
         }
       })
     })
@@ -37,7 +37,7 @@ describe('setReadme', () => {
         space,
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ id: '1', mimeType: 'image/png' }] as SpaceResource[]
             })
@@ -60,7 +60,7 @@ describe('setReadme', () => {
         space,
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ id: '1', mimeType: 'text/plain' }] as SpaceResource[]
             })
@@ -83,7 +83,7 @@ describe('setReadme', () => {
         space,
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ id: '1', mimeType: 'text' }] as SpaceResource[]
             })

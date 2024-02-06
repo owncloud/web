@@ -13,7 +13,7 @@ export const useUserActionsEdit = () => {
       icon: 'pencil',
       label: () => $gettext('Edit'),
       handler: () => eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel'),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return resources.length === 1
       },
       componentType: 'button',

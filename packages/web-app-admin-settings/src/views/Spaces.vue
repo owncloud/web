@@ -170,7 +170,7 @@ export default defineComponent({
         ...unref(restoreActions),
         ...unref(deleteActions),
         ...unref(disableActions)
-      ].filter((item) => item.isEnabled({ resources: unref(selectedSpaces) }))
+      ].filter((item) => item.isVisible({ resources: unref(selectedSpaces) }))
     })
 
     const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, SpaceResource>>(

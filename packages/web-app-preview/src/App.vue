@@ -245,7 +245,7 @@ export default defineComponent({
     const fileActions: Action<ActionOptions>[] = [
       {
         name: 'download-file',
-        isEnabled: () => true,
+        isVisible: () => true,
         componentType: 'button',
         icon: 'file-download',
         id: 'preview-download',

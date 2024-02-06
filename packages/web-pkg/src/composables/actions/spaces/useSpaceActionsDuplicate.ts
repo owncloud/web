@@ -133,7 +133,7 @@ export const useSpaceActionsDuplicate = () => {
       icon: 'folders',
       label: () => $gettext('Duplicate'),
       handler: (args) => loadingService.addTask(() => handler(args)),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (!resources?.length) {
           return false
         }

@@ -67,7 +67,7 @@ export const useFileActionsSetReadme = () => {
       label: () => {
         return $gettext('Set as space description')
       },
-      isEnabled: ({ space, resources }) => {
+      isVisible: ({ space, resources }) => {
         if (resources.length !== 1) {
           return false
         }

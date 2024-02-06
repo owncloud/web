@@ -6,20 +6,20 @@ import { eventBus, useCapabilityStore } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
 
 describe('useUserActionsDelete', () => {
-  describe('method "isEnabled"', () => {
+  describe('method "isVisible"', () => {
     it.each([
-      { resources: [], disabledViaCapability: false, isEnabled: false },
-      { resources: [mock<User>()], disabledViaCapability: false, isEnabled: true },
-      { resources: [mock<User>(), mock<User>()], disabledViaCapability: false, isEnabled: true },
-      { resources: [mock<User>(), mock<User>()], disabledViaCapability: true, isEnabled: false }
+      { resources: [], disabledViaCapability: false, isVisible: false },
+      { resources: [mock<User>()], disabledViaCapability: false, isVisible: true },
+      { resources: [mock<User>(), mock<User>()], disabledViaCapability: false, isVisible: true },
+      { resources: [mock<User>(), mock<User>()], disabledViaCapability: true, isVisible: false }
     ])(
       'should only return true if 1 or more users are selected and not disabled via capability',
-      ({ resources, disabledViaCapability, isEnabled }) => {
+      ({ resources, disabledViaCapability, isVisible }) => {
         getWrapper({
           setup: ({ actions }) => {
             const capabilityStore = useCapabilityStore()
             writable(capabilityStore).graphUsersDeleteDisabled = !!disabledViaCapability
-            expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+            expect(unref(actions)[0].isVisible({ resources })).toEqual(isVisible)
           }
         })
       }

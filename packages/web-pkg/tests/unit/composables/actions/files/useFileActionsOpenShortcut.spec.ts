@@ -23,7 +23,7 @@ window.open = vi.fn()
 // @vitest-environment jsdom
 describe('openShortcut', () => {
   describe('computed property "actions"', () => {
-    describe('method "isEnabled"', () => {
+    describe('method "isVisible"', () => {
       it.each([
         {
           resources: [],
@@ -44,7 +44,7 @@ describe('openShortcut', () => {
       ])('should be set correctly', ({ resources, expectedStatus }) => {
         getWrapper({
           setup: ({ actions }) => {
-            expect(unref(actions)[0].isEnabled({ resources, space: null })).toBe(expectedStatus)
+            expect(unref(actions)[0].isVisible({ resources, space: null })).toBe(expectedStatus)
           }
         })
       })

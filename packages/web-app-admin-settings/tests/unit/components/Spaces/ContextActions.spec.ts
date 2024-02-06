@@ -28,7 +28,7 @@ describe.skip('ContextActions', () => {
 
       for (const composable of enabledComposables) {
         vi.mocked(composable).mockImplementation(() => ({
-          actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
+          actions: computed(() => [mock<Action>({ isVisible: () => true })]),
           checkName: null,
           renameSpace: null,
           editDescriptionSpace: null,

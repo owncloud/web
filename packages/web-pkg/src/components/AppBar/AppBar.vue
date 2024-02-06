@@ -208,7 +208,7 @@ export default defineComponent({
       }
 
       return actions.filter((item) =>
-        item.isEnabled({ space: props.space, resources: resourcesStore.selectedResources })
+        item.isVisible({ space: props.space, resources: resourcesStore.selectedResources })
       )
     })
 

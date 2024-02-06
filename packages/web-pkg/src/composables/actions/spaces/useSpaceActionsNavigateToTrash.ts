@@ -25,7 +25,7 @@ export const useSpaceActionsNavigateToTrash = () => {
       handler: ({ resources }) => {
         router.push(getTrashLink(resources[0]))
       },
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length !== 1) {
           return false
         }

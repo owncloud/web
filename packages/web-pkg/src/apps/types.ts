@@ -14,12 +14,11 @@ export interface AppReadyHookArgs {
 export interface AppNavigationItem {
   isActive?: () => boolean
   activeFor?: { name?: string; path?: string }[]
-  enabled?: () => boolean // FIXME: Should be "isVisible"
-  fillType?: string
+  isVisible?: () => boolean
+  fillType?: IconFillType
   icon?: string
   name: string | (() => string)
   route?: RouteLocationRaw
-  tag?: string // FIXME: Deprecated, should be removed
   handler?: () => void
   priority?: number
 }

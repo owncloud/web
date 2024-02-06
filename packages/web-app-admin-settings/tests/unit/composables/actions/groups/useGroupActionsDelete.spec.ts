@@ -6,18 +6,18 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 
 describe('useGroupActionsDelete', () => {
-  describe('method "isEnabled"', () => {
+  describe('method "isVisible"', () => {
     it.each([
-      { resources: [], isEnabled: false },
-      { resources: [mock<Group>({ groupTypes: [] })], isEnabled: true },
+      { resources: [], isVisible: false },
+      { resources: [mock<Group>({ groupTypes: [] })], isVisible: true },
       {
         resources: [mock<Group>({ groupTypes: [] }), mock<Group>({ groupTypes: [] })],
-        isEnabled: true
+        isVisible: true
       }
-    ])('should only return true if 1 or more groups are selected', ({ resources, isEnabled }) => {
+    ])('should only return true if 1 or more groups are selected', ({ resources, isVisible }) => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+          expect(unref(actions)[0].isVisible({ resources })).toEqual(isVisible)
         }
       })
     })
@@ -25,7 +25,7 @@ describe('useGroupActionsDelete', () => {
       getWrapper({
         setup: ({ actions }) => {
           const resources = [mock<Group>({ groupTypes: ['ReadOnly'] })]
-          expect(unref(actions)[0].isEnabled({ resources })).toBeFalsy()
+          expect(unref(actions)[0].isVisible({ resources })).toBeFalsy()
         }
       })
     })

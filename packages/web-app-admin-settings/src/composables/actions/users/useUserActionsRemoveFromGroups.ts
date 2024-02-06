@@ -35,7 +35,7 @@ export const useUserActionsRemoveFromGroups = ({ groups }: { groups: Ref<Group[]
       componentType: 'button',
       class: 'oc-users-actions-remove-from-groups-trigger',
       label: () => $gettext('Remove from groups'),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (capabilityStore.graphUsersReadOnlyAttributes.includes('user.memberOf')) {
           return false
         }

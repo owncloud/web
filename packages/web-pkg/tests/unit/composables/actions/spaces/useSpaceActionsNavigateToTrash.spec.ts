@@ -5,11 +5,11 @@ import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src'
 
 describe('navigateToSpace', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [] })).toBe(false)
         }
       })
     })
@@ -17,7 +17,7 @@ describe('navigateToSpace', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [
                 mock<SpaceResource>({
                   disabled: true,
@@ -33,7 +33,7 @@ describe('navigateToSpace', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [
                 mock<SpaceResource>({
                   disabled: false,

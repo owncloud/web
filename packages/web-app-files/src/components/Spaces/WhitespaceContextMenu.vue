@@ -67,7 +67,7 @@ export default defineComponent({
         ...unref(createNewFolderAction),
         ...unref(pasteAction),
         ...unref(showDetailsAction)
-      ].filter((item) => item.isEnabled(unref(actionOptions)))
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     return { contextMenuLabel, actionOptions, currentFolder, menuItemsActions }

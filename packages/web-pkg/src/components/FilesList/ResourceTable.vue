@@ -813,7 +813,7 @@ export default defineComponent({
     },
     hasRenameAction(item: Resource) {
       return this.renameActions.filter((menuItem) =>
-        menuItem.isEnabled({ space: this.space, resources: [item] })
+        menuItem.isVisible({ space: this.space, resources: [item] })
       ).length
     },
     openRenameDialog(item: Resource) {

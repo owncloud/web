@@ -13,7 +13,7 @@ export const useActionsShowDetails = () => {
       icon: 'information',
       label: () => $gettext('Details'),
       handler: () => eventBus.publish(SideBarEventTopics.open),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return (resources as unknown[]).length > 0
       },
       componentType: 'button',

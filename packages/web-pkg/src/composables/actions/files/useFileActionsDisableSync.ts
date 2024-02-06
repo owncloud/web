@@ -85,7 +85,7 @@ export const useFileActionsDisableSync = () => {
       icon: 'spam-3',
       handler: (args) => loadingService.addTask(() => handler(args)),
       label: () => $gettext('Disable sync'),
-      isEnabled: ({ space, resources }) => {
+      isVisible: ({ space, resources }) => {
         if (
           !isLocationSharesActive(router, 'files-shares-with-me') &&
           !isLocationSpacesActive(router, 'files-spaces-generic')

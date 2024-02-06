@@ -38,7 +38,6 @@
           :fill-type="link.fillType"
           :name="link.name"
           :collapsed="closed"
-          :tag="link.tag"
           :handler="link.handler"
         />
       </oc-list>

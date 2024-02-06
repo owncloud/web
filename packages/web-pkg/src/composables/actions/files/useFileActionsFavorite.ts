@@ -49,7 +49,7 @@ export const useFileActionsFavorite = () => {
         }
         return $gettext('Add to favorites')
       },
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (
           unref(isFilesAppActive) &&
           !isLocationSpacesActive(router, 'files-spaces-generic') &&

@@ -111,7 +111,7 @@ export const useFileActions = () => {
               EDITOR_MODE_EDIT,
               options.space.shareId
             ),
-          isEnabled: ({ resources }) => {
+          isVisible: ({ resources }) => {
             if (resources.length !== 1) {
               return false
             }
@@ -219,7 +219,7 @@ export const useFileActions = () => {
 
   const getDefaultAction = (options: GetFileActionsOptions): Action | null => {
     const filterCallback = (action) =>
-      action.isEnabled({
+      action.isVisible({
         ...options,
         parent: unref(currentFolder)
       })
@@ -242,7 +242,7 @@ export const useFileActions = () => {
 
   const getAllAvailableActions = (options: FileActionOptions) => {
     return [...unref(editorActions), ...unref(systemActions)].filter((action) => {
-      return action.isEnabled(options)
+      return action.isVisible(options)
     })
   }
 

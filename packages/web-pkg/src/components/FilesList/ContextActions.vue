@@ -92,20 +92,20 @@ export default defineComponent({
         ...unref(deleteActions),
         ...unref(restoreActions),
         ...unref(createSpaceFromResourceActions)
-      ].filter((item) => item.isEnabled(unref(actionOptions)))
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     )
 
     const menuItemsContext = computed(() => {
       const fileHandlers = [...unref(openShortcutActions), ...unref(editorActions)]
 
       return [...fileHandlers]
-        .filter((item) => item.isEnabled(unref(actionOptions)))
+        .filter((item) => item.isVisible(unref(actionOptions)))
         .sort((x, y) => Number(y.hasPriority) - Number(x.hasPriority))
     })
 
     const menuItemsShare = computed(() => {
       return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>
-        item.isEnabled(unref(actionOptions))
+        item.isVisible(unref(actionOptions))
       )
     })
 
@@ -126,7 +126,7 @@ export default defineComponent({
         ...unref(setSpaceImageActions),
         ...unref(setSpaceReadmeActions),
         ...unref(extensionContextActions)
-      ].filter((item) => item.isEnabled(unref(actionOptions)))
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     const menuItemsSidebar = computed(() => {
@@ -138,7 +138,7 @@ export default defineComponent({
         }),
         ...fileHandlers,
         ...unref(showDetailsActions)
-      ].filter((item) => item.isEnabled(unref(actionOptions)))
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     const menuSections = computed(() => {

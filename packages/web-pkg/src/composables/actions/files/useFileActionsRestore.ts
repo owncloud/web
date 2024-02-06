@@ -259,7 +259,7 @@ export const useFileActionsRestore = () => {
       icon: 'arrow-go-back',
       label: () => $gettext('Restore'),
       handler,
-      isEnabled: ({ space, resources }) => {
+      isVisible: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

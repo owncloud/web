@@ -14,7 +14,7 @@ vi.mock('../../../../../src/composables/actions/useOpenWithDefaultApp', () => ({
 }))
 
 describe('editReadmeContent', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be true for space managers', () => {
       const spaceMock = mock<Drive>({
         id: '1',
@@ -27,7 +27,7 @@ describe('editReadmeContent', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [buildSpace(spaceMock)]
             })
           ).toBe(true)
@@ -37,7 +37,7 @@ describe('editReadmeContent', () => {
     it('should be false when not resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [] })).toBe(false)
         }
       })
     })
@@ -53,7 +53,7 @@ describe('editReadmeContent', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [buildSpace(spaceMock)]
             })
           ).toBe(false)
@@ -72,7 +72,7 @@ describe('editReadmeContent', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               resources: [buildSpace(spaceMock)]
             })
           ).toBe(false)

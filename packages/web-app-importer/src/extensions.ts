@@ -127,7 +127,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
             icon: 'cloud',
             handler,
             label: () => $gettext('Import'),
-            isEnabled: () => {
+            isVisible: () => {
               if (!companionUrl) {
                 return false
               }

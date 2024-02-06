@@ -42,7 +42,7 @@ export const useFileActionsMove = () => {
       handler,
       shortcut: unref(cutShortcutString),
       label: () => $gettext('Cut'),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
           !isLocationPublicActive(router, 'files-public-link') &&

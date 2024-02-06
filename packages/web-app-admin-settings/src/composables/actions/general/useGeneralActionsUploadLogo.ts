@@ -51,7 +51,7 @@ export const useGeneralActionsUploadLogo = ({ imageInput }: { imageInput: VNodeR
       label: () => {
         return $gettext('Upload logo')
       },
-      isEnabled: () => {
+      isVisible: () => {
         return ability.can('update-all', 'Logo')
       },
       handler: () => {

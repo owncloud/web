@@ -88,7 +88,7 @@ export const useUserActionsDelete = () => {
         return $gettext('Delete')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return !!resources.length && !capabilityStore.graphUsersDeleteDisabled
       },
       componentType: 'button',

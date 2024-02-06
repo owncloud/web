@@ -11,13 +11,13 @@ const getAction = (opts: ApplicationSetupOptions) => {
 }
 
 describe('useFileActionsImport', () => {
-  describe('isEnabled', () => {
+  describe('isVisible', () => {
     it('is false when no companion url is given', () => {
       getWrapper({
         currentFolder: mock<Resource>({ canUpload: () => true }),
         setup: () => {
           const action = unref(extensions({ applicationConfig: {} }))[0].action
-          expect(action.isEnabled()).toBeFalsy()
+          expect(action.isVisible()).toBeFalsy()
         }
       })
     })
@@ -31,7 +31,7 @@ describe('useFileActionsImport', () => {
             }
           })
 
-          expect(action.isEnabled()).toBeFalsy()
+          expect(action.isVisible()).toBeFalsy()
         }
       })
     })
@@ -44,7 +44,7 @@ describe('useFileActionsImport', () => {
               companionUrl: 'companionUrl'
             }
           })
-          expect(action.isEnabled()).toBeFalsy()
+          expect(action.isVisible()).toBeFalsy()
         }
       })
     })
@@ -60,7 +60,7 @@ describe('useFileActionsImport', () => {
               }
             })
           )[0].action
-          expect(action.isEnabled()).toBeFalsy()
+          expect(action.isVisible()).toBeFalsy()
         }
       })
     })
@@ -73,7 +73,7 @@ describe('useFileActionsImport', () => {
               companionUrl: 'companionUrl'
             }
           })
-          expect(action.isEnabled()).toBeTruthy()
+          expect(action.isVisible()).toBeTruthy()
         }
       })
     })

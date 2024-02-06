@@ -75,7 +75,7 @@ export default defineComponent({
     const menuItemsMembers = computed(() => {
       const fileHandlers = [...unref(showMembersActions), ...unref(downloadArchiveActions)]
       // HACK: downloadArchiveActions requires FileActionOptions but we have SpaceActionOptions
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions) as any))
+      return [...fileHandlers].filter((item) => item.isVisible(unref(actionOptions) as any))
     })
 
     const menuItemsPrimaryActions = computed(() => {
@@ -89,7 +89,7 @@ export default defineComponent({
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {
         fileHandlers.splice(2, 0, ...unref(editReadmeContentActions))
       }
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
+      return [...fileHandlers].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     const menuItemsSecondaryActions = computed(() => {
@@ -101,14 +101,14 @@ export default defineComponent({
         ...unref(deleteActions)
       ]
 
-      return [...fileHandlers].filter((item) => item.isEnabled(unref(actionOptions)))
+      return [...fileHandlers].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     const menuItemsSidebar = computed(() => {
       const fileHandlers = [...unref(showDetailsActions)]
       return [...fileHandlers].filter((item) =>
         // HACK: showDetails provides FileAction[] but we have SpaceActionOptions, so we need to cast them to FileActionOptions
-        item.isEnabled(unref(actionOptions) as unknown as FileActionOptions)
+        item.isVisible(unref(actionOptions) as unknown as FileActionOptions)
       )
     })
 

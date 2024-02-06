@@ -41,7 +41,7 @@ export default defineComponent({
       return unref(extensionRegistry)
         .requestExtensions<ActionExtension>('action', ['resource.quick-action'])
         .map((e) => e.action)
-        .filter(({ isEnabled }) => isEnabled({ space: props.space, resources: [props.item] }))
+        .filter(({ isVisible }) => isVisible({ space: props.space, resources: [props.item] }))
     })
 
     return {

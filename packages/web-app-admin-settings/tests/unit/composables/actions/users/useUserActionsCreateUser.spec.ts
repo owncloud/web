@@ -4,7 +4,7 @@ import { unref } from 'vue'
 import { getComposableWrapper, writable } from 'web-test-helpers'
 
 describe('useUserActionsCreateUser', () => {
-  describe('method "isEnabled"', () => {
+  describe('method "isVisible"', () => {
     it.each([true, false])(
       'is enabled based on the capability',
       (capabilityCreateUsersDisabled) => {
@@ -12,7 +12,7 @@ describe('useUserActionsCreateUser', () => {
           setup: ({ actions }) => {
             const capabilityStore = useCapabilityStore()
             writable(capabilityStore).graphUsersCreateDisabled = capabilityCreateUsersDisabled
-            expect(unref(actions)[0].isEnabled()).toEqual(!capabilityCreateUsersDisabled)
+            expect(unref(actions)[0].isVisible()).toEqual(!capabilityCreateUsersDisabled)
           }
         })
       }

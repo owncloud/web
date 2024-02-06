@@ -6,7 +6,7 @@ import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-
 
 describe('move', () => {
   describe('computed property "actions"', () => {
-    describe('move isEnabled property of returned element', () => {
+    describe('move isVisible property of returned element', () => {
       it.each([
         {
           resources: [{ isReceivedShare: () => true, canBeDeleted: () => true }] as Resource[],
@@ -24,7 +24,7 @@ describe('move', () => {
             const { actions } = useFileActionsMove()
 
             const resources = inputData.resources
-            expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
+            expect(unref(actions)[0].isVisible({ space: null, resources })).toBe(
               inputData.expectedStatus
             )
           }

@@ -51,11 +51,11 @@ describe.skip('ContextActions', () => {
     it('render enabled actions', () => {
       const enabledComposables = [useGroupActionsDelete, useGroupActionsEdit]
       vi.mocked(useGroupActionsDelete).mockImplementation(() => ({
-        actions: computed(() => [mock<Action>({ isEnabled: () => true })]),
+        actions: computed(() => [mock<Action>({ isVisible: () => true })]),
         deleteGroups: null
       }))
       vi.mocked(useGroupActionsEdit).mockImplementation(() => ({
-        actions: computed(() => [mock<Action>({ isEnabled: () => true })])
+        actions: computed(() => [mock<Action>({ isVisible: () => true })])
       }))
       const { wrapper } = getWrapper()
       expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(enabledComposables.length)

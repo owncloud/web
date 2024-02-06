@@ -28,7 +28,7 @@ export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResourc
         label: () => {
           return $gettext('New Shortcut')
         },
-        isEnabled: () => {
+        isVisible: () => {
           return unref(currentFolder)?.canCreate()
         },
         componentType: 'button',

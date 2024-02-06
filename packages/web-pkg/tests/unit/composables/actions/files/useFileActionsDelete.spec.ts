@@ -12,7 +12,7 @@ vi.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteReso
 
 describe('delete', () => {
   describe('computed property "actions"', () => {
-    describe('delete isEnabled property of returned element', () => {
+    describe('delete isVisible property of returned element', () => {
       it.each([
         {
           resources: [{ canBeDeleted: () => true }] as Resource[],
@@ -41,14 +41,14 @@ describe('delete', () => {
             const { actions } = useFileActionsDelete()
 
             const resources = inputData.resources
-            expect(unref(actions)[0].isEnabled({ space: null, resources })).toBe(
+            expect(unref(actions)[0].isVisible({ space: null, resources })).toBe(
               inputData.expectedStatus
             )
           }
         })
       })
     })
-    describe('delete-permanent isEnabled property of returned element', () => {
+    describe('delete-permanent isVisible property of returned element', () => {
       it.each([
         {
           resources: [{}] as Resource[],
@@ -76,7 +76,7 @@ describe('delete', () => {
             const { actions } = useFileActionsDelete()
 
             const resources = inputData.resources
-            expect(unref(actions)[1].isEnabled({ space: mock<SpaceResource>(), resources })).toBe(
+            expect(unref(actions)[1].isVisible({ space: mock<SpaceResource>(), resources })).toBe(
               inputData.expectedStatus
             )
           }

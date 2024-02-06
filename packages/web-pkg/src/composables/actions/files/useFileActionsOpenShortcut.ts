@@ -67,12 +67,11 @@ export const useFileActionsOpenShortcut = () => {
       label: () => {
         return $gettext('Open shortcut')
       },
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (
           unref(isFilesAppActive) &&
           !unref(isSearchActive) &&
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
-          !isLocationPublicActive(router, 'files-public-link') &&
           !isLocationCommonActive(router, 'files-common-favorites') &&
           !isLocationCommonActive(router, 'files-common-search') &&
           !isLocationSharesActive(router, 'files-shares-with-me') &&

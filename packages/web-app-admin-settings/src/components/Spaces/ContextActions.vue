@@ -41,7 +41,7 @@ export default defineComponent({
 
     const menuItemsPrimaryActions = computed(() =>
       [...unref(renameActions), ...unref(editDescriptionActions)].filter((item) =>
-        item.isEnabled(unref(filterParams))
+        item.isVisible(unref(filterParams))
       )
     )
     const menuItemsSecondaryActions = computed(() =>
@@ -50,10 +50,10 @@ export default defineComponent({
         ...unref(disableActions),
         ...unref(restoreActions),
         ...unref(deleteActions)
-      ].filter((item) => item.isEnabled(unref(filterParams)))
+      ].filter((item) => item.isVisible(unref(filterParams)))
     )
     const menuItemsSidebar = computed(() =>
-      [...unref(showDetailsActions)].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(showDetailsActions)].filter((item) => item.isVisible(unref(filterParams)))
     )
 
     const menuSections = computed(() => {

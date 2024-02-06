@@ -69,7 +69,7 @@ export default defineComponent({
     })
 
     const menuItems = computed(() =>
-      [...unref(uploadLogoActions), ...unref(resetLogoActions)].filter((i) => i.isEnabled())
+      [...unref(uploadLogoActions), ...unref(resetLogoActions)].filter((i) => i.isVisible())
     )
 
     const actionOptions = computed(() => ({

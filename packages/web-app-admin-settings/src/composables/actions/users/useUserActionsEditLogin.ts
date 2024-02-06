@@ -33,7 +33,7 @@ export const useUserActionsEditLogin = () => {
       componentType: 'button',
       class: 'oc-users-actions-edit-login-trigger',
       label: () => $gettext('Edit login'),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (capabilityStore.graphUsersReadOnlyAttributes.includes('user.accountEnabled')) {
           return false
         }

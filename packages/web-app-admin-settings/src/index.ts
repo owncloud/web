@@ -107,7 +107,7 @@ export const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem
     route: {
       path: `/${appId}/general?`
     },
-    enabled: () => {
+    isVisible: () => {
       return $ability.can('read-all', 'Setting')
     },
     priority: 10
@@ -118,7 +118,7 @@ export const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem
     route: {
       path: `/${appId}/users?`
     },
-    enabled: () => {
+    isVisible: () => {
       return $ability.can('read-all', 'Account')
     },
     priority: 20
@@ -129,7 +129,7 @@ export const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem
     route: {
       path: `/${appId}/groups?`
     },
-    enabled: () => {
+    isVisible: () => {
       return $ability.can('read-all', 'Group')
     },
     priority: 30
@@ -140,7 +140,7 @@ export const navItems = ({ $ability }: { $ability: Ability }): AppNavigationItem
     route: {
       path: `/${appId}/spaces?`
     },
-    enabled: () => {
+    isVisible: () => {
       return $ability.can('read-all', 'Drive')
     },
     priority: 40
