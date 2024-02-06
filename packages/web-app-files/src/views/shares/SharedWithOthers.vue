@@ -145,7 +145,7 @@ export default defineComponent({
       resourcesViewDefaults
 
     const shareTypes = computed(() => {
-      const uniqueShareTypes = uniq(unref(paginatedResources).map((i) => i.share?.shareType))
+      const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
       return ShareTypes.getByValues(uniqueShareTypes)
     })
     const selectedShareTypesQuery = useRouteQuery('q_shareType')
@@ -155,7 +155,9 @@ export default defineComponent({
         return unref(paginatedResources)
       }
       return unref(paginatedResources).filter((item) => {
-        return selectedShareTypes.map((t) => ShareTypes[t].value).includes(item.share.shareType)
+        return selectedShareTypes
+          .map((t) => ShareTypes[t].value)
+          .some((t) => item.shareTypes.includes(t))
       })
     })
 

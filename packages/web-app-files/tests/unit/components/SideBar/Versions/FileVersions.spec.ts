@@ -111,10 +111,7 @@ describe('FileVersions', () => {
               expect(revertVersionButton.length).toBe(defaultVersions.length)
             })
             it('should be possible for a share with write permissions', async () => {
-              const resource = mockDeep<ShareResource>({
-                permissions: DavPermission.Updateable,
-                share: undefined
-              })
+              const resource = mockDeep<ShareResource>({ permissions: DavPermission.Updateable })
               const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
               const { wrapper } = getMountedWrapper({ resource, space })
               await wrapper.vm.fetchVersionsTask.last
@@ -122,7 +119,7 @@ describe('FileVersions', () => {
               expect(revertVersionButton.length).toBe(defaultVersions.length)
             })
             it('should not be possible for a share with read-only permissions', async () => {
-              const resource = mockDeep<ShareResource>({ permissions: '', share: undefined })
+              const resource = mockDeep<ShareResource>({ permissions: '' })
               const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
               const { wrapper } = getMountedWrapper({ resource, space })
               await wrapper.vm.fetchVersionsTask.last

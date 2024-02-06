@@ -23,8 +23,6 @@ export interface ShareResource extends Resource {
   sharedWith: Array<{ shareType: number } & Identity>
   sharedBy: Identity
   outgoing: boolean
-
-  share?: any // FIXME: type DriveItem OR remove? do we want to expose the share on each resource?
 }
 export interface OutgoingShareResource extends ShareResource {}
 
