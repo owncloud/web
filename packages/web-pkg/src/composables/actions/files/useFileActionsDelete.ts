@@ -44,7 +44,7 @@ export const useFileActionsDelete = () => {
       icon: 'delete-bin-5',
       label: () => $gettext('Delete'),
       handler: ({ space, resources }) => handler({ space, resources, deletePermanent: false }),
-      isEnabled: ({ space, resources }) => {
+      isVisible: ({ space, resources }) => {
         if (
           !isLocationSpacesActive(router, 'files-spaces-generic') &&
           !isLocationPublicActive(router, 'files-public-link') &&
@@ -89,7 +89,7 @@ export const useFileActionsDelete = () => {
       icon: 'delete-bin-5',
       label: () => $gettext('Delete'),
       handler: ({ space, resources }) => handler({ space, resources, deletePermanent: true }),
-      isEnabled: ({ space, resources }) => {
+      isVisible: ({ space, resources }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

@@ -85,7 +85,7 @@ export const useFileActionsSetImage = () => {
       label: () => {
         return $gettext('Set as space image')
       },
-      isEnabled: ({ space, resources }) => {
+      isVisible: ({ space, resources }) => {
         if (resources.length !== 1) {
           return false
         }

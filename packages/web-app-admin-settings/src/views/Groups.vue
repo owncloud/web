@@ -127,7 +127,7 @@ export default defineComponent({
     const { actions: deleteActions } = useGroupActionsDelete()
     const batchActions = computed(() => {
       return [...unref(deleteActions)].filter((item) =>
-        item.isEnabled({ resources: unref(selectedGroups) })
+        item.isVisible({ resources: unref(selectedGroups) })
       )
     })
 

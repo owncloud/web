@@ -62,7 +62,7 @@ export const useSpaceActionsEditDescription = () => {
         return $gettext('Edit subtitle')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length !== 1) {
           return false
         }

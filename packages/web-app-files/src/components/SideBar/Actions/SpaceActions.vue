@@ -79,7 +79,7 @@ export default defineComponent({
         ...unref(restoreActions),
         ...unref(deleteActions),
         ...unref(disableActions)
-      ].filter((item) => item.isEnabled(unref(actionOptions) as any))
+      ].filter((item) => item.isVisible(unref(actionOptions) as any))
     )
 
     return {

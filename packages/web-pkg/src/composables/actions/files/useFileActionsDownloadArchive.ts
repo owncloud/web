@@ -99,7 +99,7 @@ export const useFileActionsDownloadArchive = () => {
             : ''
         },
         isDisabled: ({ resources }) => areArchiverLimitsExceeded(resources),
-        isEnabled: ({ resources }) => {
+        isVisible: ({ resources }) => {
           if (
             unref(isFilesAppActive) &&
             !isLocationSpacesActive(router, 'files-spaces-generic') &&

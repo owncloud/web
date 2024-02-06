@@ -116,7 +116,7 @@ export const useFileActionsPaste = () => {
       handler,
       label: () => $gettext('Paste'),
       shortcut: unref(pasteShortcutString),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (clipboardStore.resources.length === 0) {
           return false
         }

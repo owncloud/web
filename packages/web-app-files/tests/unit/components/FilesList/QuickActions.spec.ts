@@ -13,7 +13,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 }))
 
 const collaboratorAction = {
-  isEnabled: vi.fn(() => true),
+  isVisible: vi.fn(() => true),
   handler: vi.fn(),
   icon: 'group-add',
   id: 'collaborators',
@@ -22,7 +22,7 @@ const collaboratorAction = {
 }
 
 const quicklinkAction = {
-  isEnabled: vi.fn(() => false),
+  isVisible: vi.fn(() => false),
   handler: vi.fn(),
   icon: 'link-add',
   id: 'quicklink',

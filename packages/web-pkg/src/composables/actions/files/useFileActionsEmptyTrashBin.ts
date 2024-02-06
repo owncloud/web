@@ -60,7 +60,7 @@ export const useFileActionsEmptyTrashBin = () => {
       icon: 'delete-bin-5',
       label: () => $gettext('Empty trash bin'),
       handler,
-      isEnabled: ({ space }) => {
+      isVisible: ({ space }) => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

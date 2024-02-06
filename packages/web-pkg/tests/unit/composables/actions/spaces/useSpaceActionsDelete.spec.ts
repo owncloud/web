@@ -12,11 +12,11 @@ import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('delete', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [] })).toBe(false)
         }
       })
     })
@@ -31,7 +31,7 @@ describe('delete', () => {
       })
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
     })
@@ -47,7 +47,7 @@ describe('delete', () => {
       })
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(true)
+          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(true)
         }
       })
     })
@@ -63,7 +63,7 @@ describe('delete', () => {
       })
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [buildSpace(spaceMock)] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(false)
         }
       })
     })

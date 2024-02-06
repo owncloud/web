@@ -12,7 +12,7 @@ import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
 describe('setImage', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when no resource given', () => {
       const space = buildSpace(
         mock<Drive>({
@@ -26,7 +26,7 @@ describe('setImage', () => {
       )
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ space, resources: [] as Resource[] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ space, resources: [] as Resource[] })).toBe(false)
         }
       })
     })
@@ -44,7 +44,7 @@ describe('setImage', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ id: '1', mimeType: 'text/plain' }] as Resource[]
             })
@@ -67,7 +67,7 @@ describe('setImage', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ id: '1', mimeType: 'image/png' }] as Resource[]
             })
@@ -89,7 +89,7 @@ describe('setImage', () => {
       getWrapper({
         setup: ({ actions }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ id: '1', mimeType: 'image/png' }] as Resource[]
             })

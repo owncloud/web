@@ -4,18 +4,18 @@ import { useSpaceActionsShowMembers } from '../../../../../src/composables/actio
 import { getComposableWrapper } from 'web-test-helpers'
 
 describe('showMembers', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when no resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [] })).toBe(false)
         }
       })
     })
     it('should be true when a resource is given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [{ id: '1' } as SpaceResource] })).toBe(
+          expect(unref(actions)[0].isVisible({ resources: [{ id: '1' } as SpaceResource] })).toBe(
             true
           )
         }

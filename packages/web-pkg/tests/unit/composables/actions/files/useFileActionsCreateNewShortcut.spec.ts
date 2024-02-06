@@ -6,7 +6,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('createNewShortcut', () => {
   describe('computed property "actions"', () => {
-    describe('method "isEnabled"', () => {
+    describe('method "isVisible"', () => {
       it.each([
         {
           currentFolderCanCreate: true,
@@ -20,7 +20,7 @@ describe('createNewShortcut', () => {
         getWrapper({
           currentFolder: mock<Resource>({ canCreate: () => currentFolderCanCreate }),
           setup: ({ actions }) => {
-            expect(unref(actions)[0].isEnabled()).toBe(expectedStatus)
+            expect(unref(actions)[0].isVisible()).toBe(expectedStatus)
           }
         })
       })

@@ -94,7 +94,7 @@ export const useFileActionsCreateLink = ({
     proceedResult(result)
   }
 
-  const isEnabled = ({ resources }: FileActionOptions) => {
+  const isVisible = ({ resources }: FileActionOptions) => {
     if (!resources.length) {
       return false
     }
@@ -121,7 +121,7 @@ export const useFileActionsCreateLink = ({
         label: () => {
           return $gettext('Create links')
         },
-        isEnabled,
+        isVisible,
         componentType: 'button',
         class: 'oc-files-actions-create-links'
       },
@@ -132,7 +132,7 @@ export const useFileActionsCreateLink = ({
         label: () => {
           return $gettext('Create links')
         },
-        isEnabled,
+        isVisible,
         componentType: 'button',
         class: 'oc-files-actions-create-quick-links'
       }

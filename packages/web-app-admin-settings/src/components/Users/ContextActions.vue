@@ -34,15 +34,15 @@ export default defineComponent({
 
     const menuItemsPrimaryActions = computed(() =>
       [...unref(userEditActions), ...unref(userDeleteActions)].filter((item) =>
-        item.isEnabled(unref(filterParams))
+        item.isVisible(unref(filterParams))
       )
     )
     const menuItemsSecondaryActions = computed(() =>
-      [...unref(editQuotaActions)].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(editQuotaActions)].filter((item) => item.isVisible(unref(filterParams)))
     )
 
     const menuItemsSidebar = computed(() =>
-      [...unref(showDetailsActions)].filter((item) => item.isEnabled(unref(filterParams)))
+      [...unref(showDetailsActions)].filter((item) => item.isVisible(unref(filterParams)))
     )
 
     const menuSections = computed(() => {

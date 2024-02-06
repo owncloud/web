@@ -4,11 +4,11 @@ import { unref } from 'vue'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 
 describe('useUserActionsEditQuota', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when not resource given', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [] })).toBe(false)
         }
       })
     })
@@ -23,7 +23,7 @@ describe('useUserActionsEditQuota', () => {
       getWrapper({
         canEditSpaceQuota: true,
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toBe(true)
+          expect(unref(actions)[0].isVisible({ resources: [userMock] })).toBe(true)
         }
       })
     })
@@ -38,7 +38,7 @@ describe('useUserActionsEditQuota', () => {
       getWrapper({
         canEditSpaceQuota: false,
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [userMock] })).toBe(false)
         }
       })
     })
@@ -56,7 +56,7 @@ describe('useUserActionsEditQuota', () => {
           const capabilityStore = useCapabilityStore()
           writable(capabilityStore).graphUsersReadOnlyAttributes = ['drive.quota']
 
-          expect(unref(actions)[0].isEnabled({ resources: [userMock] })).toEqual(false)
+          expect(unref(actions)[0].isVisible({ resources: [userMock] })).toEqual(false)
         }
       })
     })

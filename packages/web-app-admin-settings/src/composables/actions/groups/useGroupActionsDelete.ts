@@ -92,7 +92,7 @@ export const useGroupActionsDelete = () => {
         return $gettext('Delete')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return !!resources.length && !resources.some((r) => r.groupTypes?.includes('ReadOnly'))
       },
       componentType: 'button',

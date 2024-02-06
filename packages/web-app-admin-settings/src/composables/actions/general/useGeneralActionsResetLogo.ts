@@ -34,7 +34,7 @@ export const useGeneralActionsResetLogo = () => {
       label: () => {
         return $gettext('Reset logo')
       },
-      isEnabled: () => {
+      isVisible: () => {
         return ability.can('update-all', 'Logo')
       },
       handler,

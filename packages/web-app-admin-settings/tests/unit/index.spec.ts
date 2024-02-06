@@ -11,7 +11,7 @@ describe('admin settings index', () => {
         expect(
           navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'General')
-            .enabled()
+            .isVisible()
         ).toBe(enabled)
       })
     })
@@ -20,7 +20,7 @@ describe('admin settings index', () => {
         expect(
           navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'Users')
-            .enabled()
+            .isVisible()
         ).toBe(enabled)
       })
     })
@@ -29,7 +29,7 @@ describe('admin settings index', () => {
         expect(
           navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'Groups')
-            .enabled()
+            .isVisible()
         ).toBe(enabled)
       })
     })
@@ -38,7 +38,7 @@ describe('admin settings index', () => {
         expect(
           navItems({ $ability: getAbilityMock(enabled) })
             .find((n) => n.name === 'Spaces')
-            .enabled()
+            .isVisible()
         ).toBe(enabled)
       })
     })

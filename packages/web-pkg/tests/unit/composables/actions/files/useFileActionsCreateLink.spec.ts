@@ -14,11 +14,11 @@ vi.mock('../../../../../src/composables/links', async (importOriginal) => ({
 }))
 
 describe('useFileActionsCreateLink', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should return false if no resource selected', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ space: null, resources: [] })).toBeFalsy()
+          expect(unref(actions)[0].isVisible({ space: null, resources: [] })).toBeFalsy()
         }
       })
     })
@@ -26,7 +26,7 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         setup: ({ actions }) => {
           const resources = [mock<Resource>({ canShare: () => false })]
-          expect(unref(actions)[0].isEnabled({ space: null, resources })).toBeFalsy()
+          expect(unref(actions)[0].isVisible({ space: null, resources })).toBeFalsy()
         }
       })
     })
@@ -36,7 +36,7 @@ describe('useFileActionsCreateLink', () => {
           const resources = [
             mock<Resource>({ canShare: () => true, disabled: true, driveType: 'project' })
           ]
-          expect(unref(actions)[0].isEnabled({ space: null, resources })).toBeFalsy()
+          expect(unref(actions)[0].isVisible({ space: null, resources })).toBeFalsy()
         }
       })
     })
@@ -47,7 +47,7 @@ describe('useFileActionsCreateLink', () => {
             mock<Resource>({ canShare: () => true }),
             mock<Resource>({ canShare: () => true })
           ]
-          expect(unref(actions)[0].isEnabled({ space: null, resources })).toBeTruthy()
+          expect(unref(actions)[0].isVisible({ space: null, resources })).toBeTruthy()
         }
       })
     })

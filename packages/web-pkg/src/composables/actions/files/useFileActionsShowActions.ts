@@ -27,7 +27,7 @@ export const useFileActionsShowActions = () => {
       icon: 'slideshow-3',
       label: () => $gettext('All Actions'),
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         // sidebar is currently only available inside files app
         if (!unref(isFilesAppActive)) {
           return false

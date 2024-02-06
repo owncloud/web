@@ -30,11 +30,11 @@ vi.mock('@ownclouders/web-client/src/helpers/share', async (importOriginal) => (
 }))
 
 describe('useFileActionsCopyQuickLink', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should return false if no resource selected', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ space: null, resources: [] })).toBeFalsy()
+          expect(unref(actions)[0].isVisible({ space: null, resources: [] })).toBeFalsy()
         }
       })
     })
@@ -42,14 +42,14 @@ describe('useFileActionsCopyQuickLink', () => {
       getWrapper({
         canShare: false,
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [mock<Resource>()] })).toBeFalsy()
+          expect(unref(actions)[0].isVisible({ resources: [mock<Resource>()] })).toBeFalsy()
         }
       })
     })
     it('should return true if resource can be shared', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources: [mock<Resource>()] })).toBeTruthy()
+          expect(unref(actions)[0].isVisible({ resources: [mock<Resource>()] })).toBeTruthy()
         }
       })
     })

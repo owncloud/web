@@ -35,7 +35,7 @@ export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) 
       componentType: 'button',
       class: 'oc-users-actions-add-to-groups-trigger',
       label: () => $gettext('Add to groups'),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (capabilityStore.graphUsersReadOnlyAttributes.includes('user.memberOf')) {
           return false
         }

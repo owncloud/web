@@ -5,15 +5,15 @@ import { User } from '@ownclouders/web-client/src/generated'
 import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useUserActionsEdit', () => {
-  describe('method "isEnabled"', () => {
+  describe('method "isVisible"', () => {
     it.each([
-      { resources: [mock<User>()], isEnabled: true },
-      { resources: [], isEnabled: false },
-      { resources: [mock<User>(), mock<User>()], isEnabled: false }
-    ])('should only return true for one user', ({ resources, isEnabled }) => {
+      { resources: [mock<User>()], isVisible: true },
+      { resources: [], isVisible: false },
+      { resources: [mock<User>(), mock<User>()], isVisible: false }
+    ])('should only return true for one user', ({ resources, isVisible }) => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isEnabled({ resources })).toEqual(isEnabled)
+          expect(unref(actions)[0].isVisible({ resources })).toEqual(isVisible)
         }
       })
     })

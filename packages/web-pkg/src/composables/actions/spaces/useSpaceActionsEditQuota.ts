@@ -41,7 +41,7 @@ export const useSpaceActionsEditQuota = () => {
         return $gettext('Edit quota')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (!resources || !resources.length) {
           return false
         }

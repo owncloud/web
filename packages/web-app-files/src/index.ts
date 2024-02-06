@@ -53,7 +53,7 @@ export const navItems = (context): AppNavigationItem[] => {
       isActive: () => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
-      enabled() {
+      isVisible() {
         if (!spacesStores.spacesInitialized) {
           return true
         }
@@ -70,7 +70,7 @@ export const navItems = (context): AppNavigationItem[] => {
       route: {
         path: `/${appInfo.id}/favorites`
       },
-      enabled() {
+      isVisible() {
         return capabilityStore.filesFavorites && context.$ability.can('read', 'Favorite')
       },
       priority: 20
@@ -90,7 +90,7 @@ export const navItems = (context): AppNavigationItem[] => {
         { path: `/${appInfo.id}/spaces/share` },
         { path: `/${appInfo.id}/spaces/personal` }
       ],
-      enabled() {
+      isVisible() {
         return capabilityStore.sharingApiEnabled !== false
       },
       priority: 30
@@ -102,7 +102,7 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/spaces/projects`
       },
       activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
-      enabled() {
+      isVisible() {
         return capabilityStore.spacesProjects
       },
       priority: 40
@@ -114,7 +114,7 @@ export const navItems = (context): AppNavigationItem[] => {
         path: `/${appInfo.id}/trash/overview`
       },
       activeFor: [{ path: `/${appInfo.id}/trash` }],
-      enabled() {
+      isVisible() {
         return capabilityStore.davTrashbin === '1.0' && capabilityStore.filesUndelete
       },
       priority: 50

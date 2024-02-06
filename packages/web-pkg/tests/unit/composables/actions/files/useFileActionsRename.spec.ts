@@ -16,7 +16,7 @@ const currentFolder = {
 
 describe('rename', () => {
   describe('computed property "actions"', () => {
-    describe('isEnabled property of returned element', () => {
+    describe('isVisible property of returned element', () => {
       it.each([
         { resources: [{ canRename: () => true }] as Resource[], expectedStatus: true },
         { resources: [{ canRename: () => false }] as Resource[], expectedStatus: false },
@@ -32,7 +32,7 @@ describe('rename', () => {
         getWrapper({
           setup: ({ actions }, { space }) => {
             const resources = inputData.resources
-            expect(unref(actions)[0].isEnabled({ space, resources })).toBe(inputData.expectedStatus)
+            expect(unref(actions)[0].isVisible({ space, resources })).toBe(inputData.expectedStatus)
           }
         })
       })

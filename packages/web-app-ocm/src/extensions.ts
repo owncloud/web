@@ -58,7 +58,7 @@ export const extensions = () => {
             icon: 'remote-control',
             handler,
             label: () => $gettext('Open remotely'),
-            isEnabled: ({ resources }: FileActionOptions) => {
+            isVisible: ({ resources }: FileActionOptions) => {
               return (
                 configStore.options.ocm.openRemotely &&
                 resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)

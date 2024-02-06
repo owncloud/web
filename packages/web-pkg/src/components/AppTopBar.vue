@@ -24,7 +24,7 @@
                 {
                   name: 'main-actions',
                   items: mainActions
-                    .filter((action) => action.isEnabled())
+                    .filter((action) => action.isVisible())
                     .map((action) => {
                       return { ...action, class: 'oc-p-xs', hideLabel: true }
                     })

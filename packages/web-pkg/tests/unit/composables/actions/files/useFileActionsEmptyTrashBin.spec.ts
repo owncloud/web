@@ -8,12 +8,12 @@ import { ProjectSpaceResource, Resource } from '@ownclouders/web-client/src/help
 import { FileActionOptions } from '../../../../../src/composables/actions'
 
 describe('emptyTrashBin', () => {
-  describe('isEnabled property', () => {
+  describe('isVisible property', () => {
     it('should be false when location is invalid', () => {
       getWrapper({
         invalidLocation: true,
         setup: ({ actions }, { space }) => {
-          expect(unref(actions)[0].isEnabled({ space, resources: [] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ space, resources: [] })).toBe(false)
         }
       })
     })
@@ -22,7 +22,7 @@ describe('emptyTrashBin', () => {
         driveType: 'project',
         setup: ({ actions }, { space }) => {
           expect(
-            unref(actions)[0].isEnabled({
+            unref(actions)[0].isVisible({
               space,
               resources: [{ canBeRestored: () => true }] as Resource[]
             })

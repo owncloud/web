@@ -406,7 +406,7 @@ export default defineComponent({
       {
         name: 'save-file',
         disabledTooltip: () => '',
-        isEnabled: () => unref(isEditor),
+        isVisible: () => unref(isEditor),
         isDisabled: () => isReadOnly.value || !isDirty.value,
         componentType: 'button',
         icon: 'save',

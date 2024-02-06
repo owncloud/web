@@ -28,7 +28,7 @@ export const useFileActionsShowShares = () => {
       icon: 'user-add',
       label: () => $gettext('Share'),
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         // sidebar is currently only available inside files app
         if (!unref(isFilesAppActive)) {
           return false

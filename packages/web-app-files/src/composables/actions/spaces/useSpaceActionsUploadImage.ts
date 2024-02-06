@@ -121,7 +121,7 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
       label: () => {
         return $gettext('Edit image')
       },
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length !== 1) {
           return false
         }

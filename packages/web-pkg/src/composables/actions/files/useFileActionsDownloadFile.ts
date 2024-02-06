@@ -30,7 +30,7 @@ export const useFileActionsDownloadFile = () => {
       label: () => {
         return $gettext('Download')
       },
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (
           unref(isFilesAppActive) &&
           !unref(isSearchActive) &&

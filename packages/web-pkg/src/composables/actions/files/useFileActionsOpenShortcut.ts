@@ -67,7 +67,7 @@ export const useFileActionsOpenShortcut = () => {
       label: () => {
         return $gettext('Open shortcut')
       },
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (
           unref(isFilesAppActive) &&
           !unref(isSearchActive) &&

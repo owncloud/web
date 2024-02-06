@@ -79,7 +79,7 @@ export const useFileActionsToggleHideShare = () => {
       icon: 'eye-off', // FIXME: change icon based on hidden status
       handler: (args) => loadingService.addTask(() => handler(args)),
       label: ({ resources }) => (resources[0].hidden ? $gettext('Unhide') : $gettext('Hide')),
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length === 0) {
           return false
         }

@@ -116,7 +116,7 @@ export const useSpaceActionsDisable = () => {
       icon: 'stop-circle',
       label: () => $gettext('Disable'),
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return !!filterResourcesToDisable(resources).length
       },
       componentType: 'button',

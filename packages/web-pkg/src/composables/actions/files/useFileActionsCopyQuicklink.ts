@@ -81,7 +81,7 @@ export const useFileActionsCopyQuickLink = () => {
       icon: 'link',
       label: () => $gettext('Copy link'),
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length !== 1) {
           return false
         }

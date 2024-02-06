@@ -118,7 +118,7 @@ export const useSpaceActionsDelete = () => {
       icon: 'delete-bin',
       label: () => $gettext('Delete'),
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         return !!filterResourcesToDelete(resources).length
       },
       componentType: 'button',

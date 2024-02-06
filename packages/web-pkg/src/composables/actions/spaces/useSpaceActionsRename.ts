@@ -63,7 +63,7 @@ export const useSpaceActionsRename = () => {
         return $gettext('Rename')
       },
       handler,
-      isEnabled: ({ resources }) => {
+      isVisible: ({ resources }) => {
         if (resources.length !== 1) {
           return false
         }

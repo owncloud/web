@@ -110,7 +110,7 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
         label: () => {
           return $gettext('New Folder')
         },
-        isEnabled: () => {
+        isVisible: () => {
           return unref(currentFolder)?.canCreate()
         },
         componentType: 'button',
