@@ -3,6 +3,7 @@ import { config } from '../../../config'
 import { getIdOfFileInsideSpace } from '../../api/davSpaces'
 import { User } from '../../types'
 import { getSpaceIdBySpaceName } from '../../api/graph'
+import { getOpenWithWebUrl } from '../../api/external'
 
 export interface navigateToDetailsPanelOfResourceArgs {
   page: Page
@@ -18,6 +19,7 @@ export interface openResourceViaUrlArgs {
   user: User
   space?: string
   editorName?: string
+  client?: string
 }
 
 export const navigateToDetailsPanelOfResource = async (
@@ -30,12 +32,20 @@ export const navigateToDetailsPanelOfResource = async (
 }
 
 export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
-  const { page, resource, user, space, editorName } = args
+  const { page, resource, user, space, editorName, client = '' } = args
   const fileId = await getTheFileIdOfSpaceFile(user, space, resource)
+  let fullUrl
 
-  const fullUrl = editorName
-    ? `${config.backendUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`
-    : `${config.backendUrl}/f/${fileId}`
+  switch (client) {
+    case 'desktop':
+      fullUrl = `${config.backendUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`
+      break
+    case 'mobile':
+      fullUrl = await getOpenWithWebUrl({ user, fileId, editorName })
+      break
+    default:
+      fullUrl = `${config.backendUrl}/f/${fileId}`
+  }
   await page.goto(fullUrl)
 }
 
