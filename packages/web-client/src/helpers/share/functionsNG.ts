@@ -1,9 +1,10 @@
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
 import { SHARE_JAIL_ID, buildWebDavSpacesPath } from '../space'
-import { DriveItem, UnifiedRoleDefinition, User } from '../../generated'
+import { DriveItem, Identity, UnifiedRoleDefinition, User } from '../../generated'
 import { GraphSharePermission, IncomingShareResource, OutgoingShareResource } from './types'
 import { urlJoin } from '../../utils'
+import { uniq } from 'lodash-es'
 
 export const getShareResourceRoles = ({
   driveItem,
@@ -66,42 +67,57 @@ export function buildIncomingShareResource({
 }): IncomingShareResource {
   const resourceName = driveItem.name || driveItem.remoteItem.name
   const storageId = extractStorageId(driveItem.remoteItem.id)
-  const permission = driveItem.remoteItem?.permissions[0]
-  const id = permission?.id || driveItem.id
-  const shareType = permission?.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value
+
+  const shareTypes = uniq(
+    driveItem.remoteItem.permissions.map((p) =>
+      p.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value
+    )
+  )
+
+  const sharedWith = driveItem.remoteItem.permissions.map(({ grantedToV2 }) => {
+    const identity = grantedToV2.group || grantedToV2.user
+    return {
+      ...identity,
+      shareType: grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value
+    }
+  })
+
+  const sharedBy = driveItem.remoteItem.permissions.reduce<Identity[]>((acc, permission) => {
+    const sharedBy = permission.invitation.invitedBy.user
+    if (!acc.some(({ id }) => id === sharedBy.id)) {
+      acc.push(sharedBy)
+    }
+    return acc
+  }, [])
 
   const shareRoles = getShareResourceRoles({ driveItem, graphRoles })
   const sharePermissions = getShareResourcePermissions({ driveItem, shareRoles })
 
   const resource: IncomingShareResource = {
-    id,
-    shareId: id,
+    id: driveItem.remoteItem.permissions[0].id,
+    shareId: driveItem.remoteItem.permissions[0].id,
     path: '/',
     name: resourceName,
     fileId: driveItem.remoteItem.id,
     storageId,
     parentFolderId: driveItem.parentReference?.id,
-    sdate: driveItem.remoteItem.shared.sharedDateTime,
+    sdate: driveItem.lastModifiedDateTime, // FIXME: share date is missing in API
     indicators: [],
     tags: [],
-    webDavPath: buildWebDavSpacesPath([SHARE_JAIL_ID, id].join('!'), '/'),
-    sharedBy: driveItem.remoteItem.createdBy.user,
-    owner: driveItem.remoteItem.shared.owner.user,
-    sharedWith: [
-      permission?.grantedToV2.group
-        ? { ...permission.grantedToV2.group, shareType }
-        : { ...permission?.grantedToV2.user, shareType }
-    ],
-    shareTypes: [shareType],
-    isFolder: !!driveItem.remoteItem.folder,
-    type: !!driveItem.remoteItem.folder ? 'folder' : 'file',
-    mimeType: driveItem.remoteItem.file?.mimeType || 'httpd/unix-directory',
-    syncEnabled: permission?.['@client.synchronize'],
-    hidden: permission?.['@ui.hidden'],
+    webDavPath: buildWebDavSpacesPath([SHARE_JAIL_ID, driveItem.id].join('!'), '/'),
+    sharedBy,
+    owner: driveItem.remoteItem.createdBy?.user,
+    sharedWith,
+    shareTypes,
+    isFolder: !!driveItem.folder,
+    type: !!driveItem.folder ? 'folder' : 'file',
+    mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
+    syncEnabled: driveItem['@client.synchronize'],
+    hidden: driveItem['@ui.hidden'],
     shareRoles,
     sharePermissions,
     outgoing: false,
-    canRename: () => !!permission?.['@client.synchronize'],
+    canRename: () => driveItem['@client.synchronize'],
     canDownload: () => sharePermissions.includes(GraphSharePermission.readBasic),
     canUpload: () => sharePermissions.includes(GraphSharePermission.createUpload),
     canCreate: () => sharePermissions.includes(GraphSharePermission.createChildren),
@@ -110,8 +126,8 @@ export function buildIncomingShareResource({
     isMounted: () => false,
     isReceivedShare: () => true,
     canShare: () => false,
-    canDeny: () => false, // currently not possible with sharing NG (?)
-    getDomSelector: () => extractDomSelector(id)
+    canDeny: () => false,
+    getDomSelector: () => extractDomSelector(driveItem.id)
   }
 
   resource.extension = extractExtensionFromFile(resource)
@@ -141,7 +157,7 @@ export function buildOutgoingShareResource({
     indicators: [],
     tags: [],
     webDavPath: buildWebDavSpacesPath(storageId, path),
-    sharedBy: { id: user.id, displayName: user.displayName },
+    sharedBy: [{ id: user.id, displayName: user.displayName }],
     owner: { id: user.id, displayName: user.displayName },
     sharedWith: driveItem.permissions.map((p) => {
       if (p.link) {

@@ -173,13 +173,13 @@
         v-text="formatDateRelative(item.ddate)"
       />
     </template>
-    <template #owner="{ item }">
+    <template #sharedBy="{ item }">
       <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
         <oc-avatars
           class="resource-table-people"
-          :items="getOwnerAvatarItems(item)"
+          :items="getSharedByAvatarItems(item)"
           :is-tooltip-displayed="true"
-          :accessible-description="getOwnerAvatarDescription(item)"
+          :accessible-description="getSharedByAvatarDescription(item)"
         />
       </oc-button>
     </template>
@@ -670,8 +670,7 @@ export default defineComponent({
               }
             : {},
           {
-            // FIXME: confusing naming. what do we want here, file or share owner?
-            name: 'owner',
+            name: 'sharedBy',
             title: this.$gettext('Shared by'),
             type: 'slot',
             alignH: 'right',
@@ -1051,27 +1050,29 @@ export default defineComponent({
         linkCount: linkCount.toString()
       })
     },
-    getOwnerAvatarDescription(resource: Resource) {
+    getSharedByAvatarDescription(resource: Resource) {
+      if (!isShareResource(resource)) {
+        return ''
+      }
+
       const resourceType =
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      return this.$gettext('This %{ resourceType } is owned by %{ ownerName }', {
+      return this.$gettext('This %{ resourceType } is shared by %{ user }', {
         resourceType,
-        ownerName: resource.owner.displayName
+        user: resource.sharedBy.map(({ displayName }) => displayName).join(', ')
       })
     },
-    getOwnerAvatarItems(resource: Resource) {
+    getSharedByAvatarItems(resource: Resource) {
       if (!isShareResource(resource)) {
         return []
       }
 
-      return [
-        {
-          displayName: resource.owner.displayName,
-          name: resource.owner.displayName,
-          shareType: ShareTypes.user.value,
-          username: resource.owner.id
-        }
-      ]
+      return resource.sharedBy.map((s) => ({
+        displayName: s.displayName,
+        name: s.displayName,
+        shareType: ShareTypes.user.value,
+        username: s.id
+      }))
     },
     getSharedWithAvatarItems(resource: Resource) {
       if (!isShareResource(resource)) {
@@ -1238,8 +1239,8 @@ export default defineComponent({
   .oc-table-data-cell-size,
   .oc-table-header-cell-sharedWith,
   .oc-table-data-cell-sharedWith,
-  .oc-table-header-cell-owner,
-  .oc-table-data-cell-owner,
+  .oc-table-header-cell-sharedBy,
+  .oc-table-data-cell-sharedBy,
   .oc-table-header-cell-status,
   .oc-table-data-cell-status {
     display: none;
@@ -1262,8 +1263,8 @@ export default defineComponent({
     }
   }
 
-  .oc-table-header-cell-owner,
-  .oc-table-data-cell-owner,
+  .oc-table-header-cell-sharedBy,
+  .oc-table-data-cell-sharedBy,
   .oc-table-header-cell-tags,
   .oc-table-data-cell-tags,
   .oc-table-header-cell-indicators,
@@ -1285,8 +1286,8 @@ export default defineComponent({
     .oc-table-data-cell-size,
     .oc-table-header-cell-sharedWith,
     .oc-table-data-cell-sharedWith,
-    .oc-table-header-cell-owner,
-    .oc-table-data-cell-owner,
+    .oc-table-header-cell-sharedBy,
+    .oc-table-data-cell-sharedBy,
     .oc-table-header-cell-status,
     .oc-table-data-cell-status {
       display: none;
@@ -1309,8 +1310,8 @@ export default defineComponent({
       }
     }
 
-    .oc-table-header-cell-owner,
-    .oc-table-data-cell-owner,
+    .oc-table-header-cell-sharedBy,
+    .oc-table-data-cell-sharedBy,
     .oc-table-header-cell-tags,
     .oc-table-data-cell-tags,
     .oc-table-header-cell-indicators,
@@ -1324,9 +1325,9 @@ export default defineComponent({
   }
 }
 
-// shared with me: on tablets hide shared with column and display owner column instead
-#files-shared-with-me-view .files-table .oc-table-header-cell-owner,
-#files-shared-with-me-view .files-table .oc-table-data-cell-owner {
+// shared with me: on tablets hide shared with column and display sharedBy column instead
+#files-shared-with-me-view .files-table .oc-table-header-cell-sharedBy,
+#files-shared-with-me-view .files-table .oc-table-data-cell-sharedBy {
   @media only screen and (min-width: 640px) {
     display: table-cell;
   }

@@ -69,15 +69,15 @@ export interface Resource {
   spaceReadmeData?: any
   mimeType?: string
   isFolder?: boolean
-  sdate?: string
+  sdate?: string // FIXME: move to `ShareResource`
   mdate?: string
   indicators?: any[]
   size?: number | string // FIXME
   permissions?: string
   starred?: boolean
   etag?: string
-  shareId?: string
-  shareRoot?: string
+  shareId?: string // FIXME: this originates from the old OCS api, should be removed in the future
+  shareRoot?: string // FIXME: this originates from the old OCS api, should be removed in the future
   shareTypes?: number[]
   privateLink?: string
   description?: string

@@ -190,7 +190,9 @@ export default defineComponent({
 
       const selectedSharedBy = queryItemAsString(unref(selectedSharedByQuery))?.split('+')
       if (selectedSharedBy?.length) {
-        result = result.filter(({ owner }) => selectedSharedBy.includes(owner.id))
+        result = result.filter(({ sharedBy }) =>
+          sharedBy.some(({ id }) => selectedSharedBy.includes(id))
+        )
       }
 
       if (unref(filterTerm).trim()) {

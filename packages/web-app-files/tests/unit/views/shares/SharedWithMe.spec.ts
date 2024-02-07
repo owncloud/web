@@ -100,11 +100,11 @@ describe('SharedWithMe view', () => {
         const { wrapper } = getMountedWrapper({
           files: [
             mock<IncomingShareResource>({
-              sharedBy: collaborator1,
+              sharedBy: [collaborator1],
               shareTypes: [ShareTypes.user.value]
             }),
             mock<IncomingShareResource>({
-              sharedBy: collaborator2,
+              sharedBy: [collaborator2],
               shareTypes: [ShareTypes.user.value]
             })
           ]

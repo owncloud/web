@@ -65,10 +65,13 @@
         <tr v-if="showSharedBy" data-testid="shared-by">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
           <td>
-            <span v-text="sharedByDisplayName" />
+            <span v-text="sharedByDisplayNames" />
           </td>
         </tr>
-        <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
+        <tr
+          v-if="ownerDisplayName && ownerDisplayName !== sharedByDisplayNames"
+          data-testid="ownerDisplayName"
+        >
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Owner')" />
           <td>
             <p class="oc-m-rm">
@@ -302,7 +305,7 @@ export default defineComponent({
       )
     },
     showSharedBy() {
-      return this.showShares && !this.ownedByCurrentUser && this.sharedByDisplayName
+      return this.showShares && !this.ownedByCurrentUser && this.sharedByDisplayNames
     },
     showSharedVia() {
       return this.showShares && this.sharedAncestor
@@ -352,16 +355,16 @@ export default defineComponent({
       )
     },
     ownedByCurrentUser() {
-      return this.resource.owner?.id === this.user?.onPremisesSamAccountName
+      return this.resource.owner?.id === this.user?.id
     },
     shareIndicators() {
       return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
-    sharedByDisplayName() {
+    sharedByDisplayNames() {
       if (!isShareResource(this.resource)) {
         return ''
       }
-      return this.resource.sharedBy?.displayName
+      return this.resource.sharedBy?.map(({ displayName }) => displayName).join(', ')
     }
   },
   methods: {
