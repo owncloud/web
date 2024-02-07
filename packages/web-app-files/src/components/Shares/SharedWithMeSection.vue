@@ -227,7 +227,7 @@ export default defineComponent({
 
   computed: {
     displayedFields() {
-      return ['name', 'syncEnabled', 'owner', 'sdate', 'sharedWith']
+      return ['name', 'syncEnabled', 'sharedBy', 'sdate', 'sharedWith']
     },
     countFiles() {
       return this.items.filter((s) => s.type !== 'folder').length

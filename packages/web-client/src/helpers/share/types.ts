@@ -21,7 +21,7 @@ export enum GraphSharePermission {
 
 export interface ShareResource extends Resource {
   sharedWith: Array<{ shareType: number } & Identity>
-  sharedBy: Identity
+  sharedBy: Identity[]
   outgoing: boolean
 }
 export interface OutgoingShareResource extends ShareResource {}

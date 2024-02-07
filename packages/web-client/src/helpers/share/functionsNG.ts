@@ -1,7 +1,7 @@
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
 import { SHARE_JAIL_ID, buildWebDavSpacesPath } from '../space'
-import { DriveItem, UnifiedRoleDefinition, User } from '../../generated'
+import { DriveItem, Identity, UnifiedRoleDefinition, User } from '../../generated'
 import { GraphSharePermission, IncomingShareResource, OutgoingShareResource } from './types'
 import { urlJoin } from '../../utils'
 import { uniq } from 'lodash-es'
@@ -82,6 +82,14 @@ export function buildIncomingShareResource({
     }
   })
 
+  const sharedBy = driveItem.remoteItem.permissions.reduce<Identity[]>((acc, permission) => {
+    const sharedBy = permission.invitation.invitedBy.user
+    if (!acc.some(({ id }) => id === sharedBy.id)) {
+      acc.push(sharedBy)
+    }
+    return acc
+  }, [])
+
   const shareRoles = getShareResourceRoles({ driveItem, graphRoles })
   const sharePermissions = getShareResourcePermissions({ driveItem, shareRoles })
 
@@ -97,9 +105,7 @@ export function buildIncomingShareResource({
     indicators: [],
     tags: [],
     webDavPath: buildWebDavSpacesPath([SHARE_JAIL_ID, driveItem.id].join('!'), '/'),
-    sharedBy:
-      driveItem.remoteItem.permissions[0].invitation?.invitedBy.user ||
-      driveItem.remoteItem.permissions[0].invitation?.invitedBy.group,
+    sharedBy,
     owner: driveItem.remoteItem.createdBy?.user,
     sharedWith,
     shareTypes,
@@ -151,7 +157,7 @@ export function buildOutgoingShareResource({
     indicators: [],
     tags: [],
     webDavPath: buildWebDavSpacesPath(storageId, path),
-    sharedBy: { id: user.id, displayName: user.displayName },
+    sharedBy: [{ id: user.id, displayName: user.displayName }],
     owner: { id: user.id, displayName: user.displayName },
     sharedWith: driveItem.permissions.map((p) => {
       if (p.link) {

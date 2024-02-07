@@ -115,7 +115,7 @@ describe('Details SideBar Panel', () => {
     it('shows if the resource is a share from another user', () => {
       const resource = getResourceMock({
         shareTypes: [ShareTypes.user.value],
-        sharedBy: { id: '1', displayName: 'Marie' }
+        sharedBy: [{ id: '1', displayName: 'Marie' }]
       })
       const { wrapper } = createWrapper({
         resource,

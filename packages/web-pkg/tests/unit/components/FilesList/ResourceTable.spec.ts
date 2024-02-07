@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
-import { extractDomSelector, Resource } from '@ownclouders/web-client/src/helpers'
+import { extractDomSelector, Resource, ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
@@ -8,6 +8,7 @@ import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
+import { Identity } from '@ownclouders/web-client/src/generated'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
 
@@ -35,39 +36,37 @@ const getCurrentDate = () => {
   return DateTime.fromJSDate(new Date()).minus({ days: 1 }).toFormat('EEE, dd MMM yyyy HH:mm:ss')
 }
 
-const fields = ['name', 'size', 'mdate', 'sdate', 'ddate', 'actions', 'owner', 'sharedWith']
+const fields = ['name', 'size', 'mdate', 'sdate', 'ddate', 'actions', 'sharedBy', 'sharedWith']
 
 const sharedWith = [
   {
     id: 'bob',
-    username: 'bob',
     displayName: 'Bob',
-    avatar:
-      'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHwyfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+    shareType: ShareTypes.user.value
   },
   {
     id: 'marie',
-    username: 'marie',
     displayName: 'Marie',
-    avatar:
-      'https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mzh8fGZhY2V8ZW58MHwyfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+    shareType: ShareTypes.user.value
   },
   {
     id: 'john',
-    username: 'john',
-    displayName: 'John Richards Emperor of long names'
+    displayName: 'John Richards Emperor of long names',
+    shareType: ShareTypes.user.value
   }
-]
+] as Array<{ shareType: number } & Identity>
 
-const owner = [
+const owner = {
+  id: 'bob',
+  displayName: 'Bob'
+} as Resource['owner']
+
+const sharedBy = [
   {
     id: 'bob',
-    username: 'bob',
-    displayName: 'Bob',
-    avatar:
-      'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHwyfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+    displayName: 'Bob'
   }
-]
+] as Identity[]
 
 const indicators = [
   {
@@ -102,6 +101,7 @@ const resourcesWithAllFields = [
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
     owner,
+    sharedBy,
     sharedWith,
     shareTypes: [],
     syncEnabled: true,
@@ -121,6 +121,7 @@ const resourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    sharedBy,
     sharedWith,
     shareTypes: [],
     owner,
@@ -139,6 +140,7 @@ const resourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    sharedBy,
     sharedWith,
     shareTypes: [],
     owner,
@@ -156,6 +158,7 @@ const resourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    sharedBy,
     sharedWith,
     shareTypes: [],
     tags: [],
@@ -180,6 +183,7 @@ const processingResourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    sharedBy,
     owner,
     sharedWith,
     canRename: vi.fn,
@@ -199,6 +203,7 @@ const processingResourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    sharedBy,
     sharedWith,
     owner,
     canRename: vi.fn,
