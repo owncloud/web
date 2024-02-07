@@ -8,6 +8,7 @@ import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
 import { useSortMock } from '../../../mocks/useSortMock'
+import { ResourceTable } from '@ownclouders/web-pkg'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -42,9 +43,9 @@ describe('SharedWithOthers view', () => {
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
-      expect(wrapper.findComponent<any>('resource-table-stub').props().resources.length).toEqual(
-        mockedFiles.length
-      )
+      expect(
+        wrapper.findComponent<typeof ResourceTable>('resource-table-stub').props().resources.length
+      ).toEqual(mockedFiles.length)
     })
   })
   describe('filter', () => {

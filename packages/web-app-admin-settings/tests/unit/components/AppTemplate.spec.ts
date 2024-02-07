@@ -6,9 +6,10 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
-import { eventBus } from '@ownclouders/web-pkg'
+import { eventBus, SideBar } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
+import { OcBreadcrumb } from 'design-system/src/components'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',
@@ -81,10 +82,9 @@ describe('AppTemplate', () => {
         const { wrapper } = getWrapper({
           props: { breadcrumbs: [{ text: 'Administration Settings' }, { text: 'Users' }] }
         })
-        expect(wrapper.findComponent<any>(stubSelectors.ocBreadcrumb).props().items).toEqual([
-          { text: 'Administration Settings' },
-          { text: 'Users' }
-        ])
+        expect(
+          wrapper.findComponent<typeof OcBreadcrumb>(stubSelectors.ocBreadcrumb).props().items
+        ).toEqual([{ text: 'Administration Settings' }, { text: 'Users' }])
       })
       it('does not show in mobile view', () => {
         const { wrapper } = getWrapper({ isMobileWidth: true })
@@ -99,12 +99,12 @@ describe('AppTemplate', () => {
             sideBarAvailablePanels: [{ app: 'DetailsPanel' }]
           }
         })
-        expect(wrapper.findComponent<any>(stubSelectors.sideBar).props().activePanel).toEqual(
-          'DetailsPanel'
-        )
-        expect(wrapper.findComponent<any>(stubSelectors.sideBar).props().availablePanels).toEqual([
-          { app: 'DetailsPanel' }
-        ])
+        expect(
+          wrapper.findComponent<typeof SideBar>(stubSelectors.sideBar).props().activePanel
+        ).toEqual('DetailsPanel')
+        expect(
+          wrapper.findComponent<typeof SideBar>(stubSelectors.sideBar).props().availablePanels
+        ).toEqual([{ app: 'DetailsPanel' }])
       })
     })
   })

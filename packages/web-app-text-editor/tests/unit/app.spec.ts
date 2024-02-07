@@ -1,6 +1,4 @@
-import { Resource } from '@ownclouders/web-client/src'
-import { AppConfigObject } from '@ownclouders/web-pkg'
-import { mount } from 'web-test-helpers'
+import { PartialComponentProps, mount } from 'web-test-helpers'
 import App from '../../src/App.vue'
 
 vi.mock('@ownclouders/web-pkg')
@@ -14,10 +12,16 @@ describe('Text editor app', () => {
   })
 })
 
-function getWrapper(props: { applicationConfig: AppConfigObject; resource?: Resource }) {
+function getWrapper(props: PartialComponentProps<typeof App>) {
   return {
     wrapper: mount(App, {
-      props
+      props: {
+        applicationConfig: {},
+        currentContent: '',
+        isReadOnly: false,
+        resource: undefined,
+        ...props
+      }
     })
   }
 }

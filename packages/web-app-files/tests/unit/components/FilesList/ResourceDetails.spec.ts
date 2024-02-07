@@ -2,7 +2,7 @@ import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'vitest-mock-extended'
 import { useFileActions } from '@ownclouders/web-pkg'
-import { SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
@@ -49,18 +49,18 @@ describe('ResourceDetails component', () => {
     mocks.$clientService.webdav.listFileVersions.mockResolvedValue([])
 
     const file = {
-      id: 0,
+      id: '0',
       name: 'image.jpg',
+      path: '/',
       size: 24064,
       mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
       mimeType: 'image/jpg',
       isFolder,
-      owner: [
-        {
-          username: 'admin'
-        }
-      ]
-    }
+      owner: {
+        id: '1',
+        displayName: 'admin'
+      }
+    } as Resource
     const space = mock<SpaceResource>()
 
     return {

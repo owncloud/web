@@ -4,6 +4,7 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { SpaceResource } from '@ownclouders/web-client'
+import { RouterLink, RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',
@@ -155,11 +156,13 @@ describe('Notification component', () => {
         await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.$nextTick()
-        const routerLink = wrapper.findComponent<any>(
+        const routerLink = wrapper.findComponent<typeof RouterLink>(
           `${selectors.notificationItem} router-link-stub`
         )
-        expect(routerLink.props('to').name).toEqual('files-shares-with-me')
-        expect(routerLink.props('to').query).toEqual({
+        expect((routerLink.props('to') as RouteLocationNamedRaw).name).toEqual(
+          'files-shares-with-me'
+        )
+        expect((routerLink.props('to') as RouteLocationNamedRaw).query).toEqual({
           scrollTo: notification.messageRichParameters.share.id
         })
       })
@@ -182,10 +185,10 @@ describe('Notification component', () => {
         await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.$nextTick()
-        const routerLink = wrapper.findComponent<any>(
+        const routerLink = wrapper.findComponent<typeof RouterLink>(
           `${selectors.notificationItem} router-link-stub`
         )
-        expect(routerLink.props('to').params).toEqual({
+        expect((routerLink.props('to') as RouteLocationNormalizedLoaded).params).toEqual({
           driveAliasAndItem: 'driveAlias'
         })
       })

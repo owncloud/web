@@ -1,5 +1,6 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
 import ResourceListItem from '../../../../src/components/FilesList/ResourceListItem.vue'
+import { Resource } from '@ownclouders/web-client'
 
 const fileResource = {
   name: 'forest.jpg',
@@ -8,20 +9,20 @@ const fileResource = {
   type: 'file',
   isFolder: false,
   extension: 'jpg'
-}
+} as Resource
 const folderResource = {
   name: 'Documents',
   path: '',
   type: 'folder',
   isFolder: true
-}
+} as Resource
 const fileResourceWithoutParentFoldername = {
   name: 'example.pdf',
   path: 'example.pdf',
   type: 'file',
   isFolder: false,
   extension: 'pdf'
-}
+} as Resource
 
 describe('OcResource', () => {
   it("doesn't emit a click if the resource is a folder", () => {

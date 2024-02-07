@@ -29,7 +29,14 @@ exports[`ResourceDetails component > renders resource details correctly 1`] = `
           <!--v-if-->
           <!--v-if-->
           <!--v-if-->
-          <!--v-if-->
+          <tr data-v-5080a6a4="" data-testid="ownerDisplayName">
+            <th data-v-5080a6a4="" scope="col" class="oc-pr-s oc-font-semibold">Owner</th>
+            <td data-v-5080a6a4="">
+              <p data-v-5080a6a4="" class="oc-m-rm">admin
+                <!--v-if-->
+              </p>
+            </td>
+          </tr>
           <tr data-v-5080a6a4="" data-testid="sizeInfo">
             <th data-v-5080a6a4="" scope="col" class="oc-pr-s oc-font-semibold">Size</th>
             <td data-v-5080a6a4="">24 kB</td>

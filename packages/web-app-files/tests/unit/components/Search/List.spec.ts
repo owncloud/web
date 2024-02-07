@@ -6,7 +6,7 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { createRouter, createMemoryHistory } from 'vue-router'
 
 import { defaultComponentMocks, defaultPlugins, mockAxiosResolve } from 'web-test-helpers/src'
-import { queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
+import { AppBar, ItemFilter, queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client/src'
 import { mock } from 'vitest-mock-extended'
@@ -85,13 +85,13 @@ describe('List component', () => {
   describe('breadcrumbs', () => {
     it('show "Search" when no search term given', () => {
       const { wrapper } = getWrapper()
-      const appBar = wrapper.findComponent<any>('app-bar-stub')
+      const appBar = wrapper.findComponent<typeof AppBar>('app-bar-stub')
       expect(appBar.props('breadcrumbs')[0].text).toEqual('Search')
     })
     it('include the search term if given', () => {
       const searchTerm = 'term'
       const { wrapper } = getWrapper({ searchTerm })
-      const appBar = wrapper.findComponent<any>('app-bar-stub')
+      const appBar = wrapper.findComponent<typeof AppBar>('app-bar-stub')
       expect(appBar.props('breadcrumbs')[0].text).toEqual(`Search results for "${searchTerm}"`)
     })
   })
@@ -109,9 +109,9 @@ describe('List component', () => {
         const { wrapper } = getWrapper({ availableTags: [tag] })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.find(selectors.tagFilter).exists()).toBeTruthy()
-        expect(wrapper.findComponent<any>(selectors.tagFilter).props('items')).toEqual([
-          { label: tag, id: tag }
-        ])
+        expect(
+          wrapper.findComponent<typeof ItemFilter>(selectors.tagFilter).props('items')
+        ).toEqual([{ label: tag, id: tag }])
       })
       it('should set initial filter when tags are given via query param', async () => {
         const searchTerm = 'term'
@@ -163,9 +163,9 @@ describe('List component', () => {
         await wrapper.vm.loadAvailableTagsTask.last
 
         expect(wrapper.find(selectors.lastModifiedFilter).exists()).toBeTruthy()
-        expect(wrapper.findComponent<any>(selectors.lastModifiedFilter).props('items')).toEqual(
-          expectation
-        )
+        expect(
+          wrapper.findComponent<typeof ItemFilter>(selectors.lastModifiedFilter).props('items')
+        ).toEqual(expectation)
       })
       it('should set initial filter when last modified is given via query param', async () => {
         const searchTerm = 'Screenshot'

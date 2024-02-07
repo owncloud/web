@@ -1,6 +1,6 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
-import Recipient from './OcRecipient.vue'
+import Recipient, { Recipient as RecipientType } from './OcRecipient.vue'
 
 describe('OcRecipient', () => {
   /**
@@ -91,7 +91,7 @@ describe('OcRecipient', () => {
       { name: 'Alice', icon: { name: 'person', label: { long: 'Long label' } } }
     ],
     ['icon label is empty', { name: 'Alice', icon: { name: 'Alice', label: '' } }]
-  ])('throws an error if %s', (def, prop) => {
+  ])('throws an error if %s', (def, prop: RecipientType) => {
     expect(() => shallowMount(Recipient, { props: { recipient: prop } })).toThrow(
       `Recipient ${def}`
     )

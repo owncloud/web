@@ -9,6 +9,7 @@ import { mock } from 'vitest-mock-extended'
 import { Group } from '@ownclouders/web-client/src/generated'
 import { AxiosResponse } from 'axios'
 import { CapabilityStore } from '@ownclouders/web-pkg'
+import GroupSelect from '../../../../../src/components/Users/GroupSelect.vue'
 
 const availableGroupOptions = [
   mock<Group>({ id: '1', displayName: 'group1', groupTypes: [] }),
@@ -26,9 +27,11 @@ describe('EditPanel', () => {
   it('filters selected groups when passing the options to the GroupSelect component', () => {
     const { wrapper } = getWrapper({ selectedGroups: [availableGroupOptions[0]] })
     const selectedGroups = wrapper
-      .findComponent<any>(selectors.groupSelectStub)
+      .findComponent<typeof GroupSelect>(selectors.groupSelectStub)
       .props('selectedGroups')
-    const groupOptions = wrapper.findComponent<any>(selectors.groupSelectStub).props('groupOptions')
+    const groupOptions = wrapper
+      .findComponent<typeof GroupSelect>(selectors.groupSelectStub)
+      .props('groupOptions')
     expect(selectedGroups.length).toBe(1)
     expect(selectedGroups[0].id).toEqual(availableGroupOptions[0].id)
     expect(groupOptions.length).toBe(1)
@@ -157,15 +160,17 @@ describe('EditPanel', () => {
   describe('group select', () => {
     it('takes all available groups', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.findComponent<any>('group-select-stub').props('groupOptions').length).toBe(
-        availableGroupOptions.length
-      )
+      expect(
+        wrapper.findComponent<typeof GroupSelect>('group-select-stub').props('groupOptions').length
+      ).toBe(availableGroupOptions.length)
     })
     it('filters out read-only groups', () => {
       const { wrapper } = getWrapper({
         groups: [mock<Group>({ id: '1', displayName: 'group1', groupTypes: ['ReadOnly'] })]
       })
-      expect(wrapper.findComponent<any>('group-select-stub').props('groupOptions').length).toBe(0)
+      expect(
+        wrapper.findComponent<typeof GroupSelect>('group-select-stub').props('groupOptions').length
+      ).toBe(0)
     })
   })
 })

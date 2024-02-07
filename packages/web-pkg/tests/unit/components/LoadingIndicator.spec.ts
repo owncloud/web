@@ -2,6 +2,7 @@ import LoadingIndicator from '../../../src/components/LoadingIndicator.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { LoadingService } from '../../../src/services'
+import { OcProgress } from 'design-system/src/components'
 
 const selectors = {
   loadingIndicator: '#oc-loading-indicator',
@@ -20,11 +21,15 @@ describe('LoadingIndicator', () => {
   describe('indeterminate', () => {
     it('progress bar should be in indeterminate when no progress given', () => {
       const { wrapper } = getWrapper({ isLoading: true })
-      expect(wrapper.findComponent<any>(selectors.progressStub).props('indeterminate')).toBeTruthy()
+      expect(
+        wrapper.findComponent<typeof OcProgress>(selectors.progressStub).props('indeterminate')
+      ).toBeTruthy()
     })
     it('progress bar should not be in indeterminate when progress given', () => {
       const { wrapper } = getWrapper({ isLoading: true, currentProgress: 50 })
-      expect(wrapper.findComponent<any>(selectors.progressStub).props('indeterminate')).toBeFalsy()
+      expect(
+        wrapper.findComponent<typeof OcProgress>(selectors.progressStub).props('indeterminate')
+      ).toBeFalsy()
     })
   })
 })

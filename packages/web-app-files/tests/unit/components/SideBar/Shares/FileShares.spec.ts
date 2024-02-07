@@ -13,6 +13,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { CapabilityStore, useResourcesStore, useSharesStore } from '@ownclouders/web-pkg'
+import CollaboratorListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 
 const getCollaborator = () => ({
   shareType: 0,
@@ -82,7 +83,9 @@ describe('FileShares', () => {
         .spyOn((FileShares as any).methods, '$_ocCollaborators_deleteShare_trigger')
         .mockImplementation(() => undefined)
       const { wrapper } = getWrapper({ collaborators })
-      ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
+      ;(
+        wrapper.findComponent<typeof CollaboratorListItem>('collaborator-list-item-stub').vm as any
+      ).$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
@@ -92,7 +95,9 @@ describe('FileShares', () => {
         '/somePath': { id: indirectCollaborator.itemSource }
       }
       const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], ancestorMetaData })
-      const listItemStub = wrapper.findComponent<any>('collaborator-list-item-stub')
+      const listItemStub = wrapper.findComponent<typeof CollaboratorListItem>(
+        'collaborator-list-item-stub'
+      )
       expect(listItemStub.props('sharedParentRoute')).toBeTruthy()
       expect(listItemStub.props('modifiable')).toBeFalsy()
     })

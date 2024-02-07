@@ -87,7 +87,9 @@ function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ sta
   return {
     wrapper: shallowMount(App, {
       props: {
-        resource: mock<Resource>()
+        space: null,
+        resource: mock<Resource>(),
+        isReadOnly: false
       },
       global: {
         plugins: [

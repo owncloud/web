@@ -10,8 +10,11 @@ import {
   mount,
   defaultComponentMocks,
   defaultStubs,
-  RouteLocation
+  RouteLocation,
+  PartialComponentProps,
+  ComponentProps
 } from 'web-test-helpers'
+import { AppBar } from '@ownclouders/web-pkg'
 
 vi.mock('web-app-files/src/composables')
 
@@ -26,16 +29,16 @@ describe('GenericTrash view', () => {
   })
   it('shows the personal space breadcrumb', () => {
     const { wrapper } = getMountedWrapper()
-    expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
-      'Personal space'
-    )
+    expect(
+      wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[1].text
+    ).toEqual('Personal space')
   })
   it('shows the project space breadcrumb', () => {
     const space = mock<SpaceResource>({ driveType: 'project' })
     const { wrapper } = getMountedWrapper({ props: { space } })
-    expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
-      space.name
-    )
+    expect(
+      wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[1].text
+    ).toEqual(space.name)
   })
   describe('different files view states', () => {
     it('shows the loading spinner during loading', () => {
@@ -55,7 +58,12 @@ describe('GenericTrash view', () => {
   })
 })
 
-function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  props = {} as PartialComponentProps<typeof GenericTrash>,
+  files = [],
+  loading = false
+} = {}) {
   vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
@@ -68,8 +76,8 @@ function getMountedWrapper({ mocks = {}, props = {}, files = [], loading = false
     }),
     ...(mocks && mocks)
   }
-  const propsData = {
-    space: { id: 1, getDriveAliasAndItem: vi.fn(), name: 'Personal space' },
+  const propsData: ComponentProps<typeof GenericTrash> = {
+    space: mock<SpaceResource>({ id: '1', getDriveAliasAndItem: vi.fn(), name: 'Personal space' }),
     ...props
   }
   return {

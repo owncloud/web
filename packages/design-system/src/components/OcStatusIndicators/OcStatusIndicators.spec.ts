@@ -14,6 +14,7 @@ const indicator = {
   id: 'testid',
   label: 'testlabel',
   type: 'testtype',
+  icon: 'icon',
   handler: vi.fn()
 }
 describe('OcStatusIndicators', () => {

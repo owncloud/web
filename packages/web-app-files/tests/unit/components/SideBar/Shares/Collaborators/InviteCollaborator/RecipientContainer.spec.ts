@@ -33,7 +33,7 @@ describe('InviteCollaborator RecipientContainer', () => {
   it('emits an event if deselect button is clicked', async () => {
     const recipient = getRecipient()
     const { wrapper } = getMountedWrapper(recipient, true)
-    const spyOnDeselect = wrapper.vm.deselect.mockImplementation()
+    const spyOnDeselect = (wrapper.vm.deselect as any).mockImplementation()
     const button = wrapper.find('.files-share-invite-recipient-btn-remove')
     await button.trigger('click')
     expect(spyOnDeselect).toHaveBeenCalledTimes(1)

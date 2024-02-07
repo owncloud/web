@@ -10,6 +10,8 @@ import {
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
 import { FolderView } from '../../../../src/ui/types'
+import { ViewOptions } from '../../../../src'
+import { OcBreadcrumb } from 'design-system/src/components'
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',
@@ -43,9 +45,9 @@ describe('AppBar component', () => {
       it('if given, by default without breadcrumbsContextActionsItems', () => {
         const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: breadcrumbItems })
         expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeTruthy()
-        expect(wrapper.findComponent<any>(selectors.ocBreadcrumbStub).props('items')).toEqual(
-          breadcrumbItems
-        )
+        expect(
+          wrapper.findComponent<typeof OcBreadcrumb>(selectors.ocBreadcrumbStub).props('items')
+        ).toEqual(breadcrumbItems)
       })
       it('if given, with breadcrumbsContextActionsItems if allowed on last breadcrumb item', () => {
         const { wrapper } = getShallowWrapper(
@@ -54,10 +56,9 @@ describe('AppBar component', () => {
           { breadcrumbs: [...breadcrumbItems, breadCrumbItemWithContextActionAllowed] }
         )
         expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeTruthy()
-        expect(wrapper.findComponent<any>(selectors.ocBreadcrumbStub).props('items')).toEqual([
-          ...breadcrumbItems,
-          breadCrumbItemWithContextActionAllowed
-        ])
+        expect(
+          wrapper.findComponent<typeof OcBreadcrumb>(selectors.ocBreadcrumbStub).props('items')
+        ).toEqual([...breadcrumbItems, breadCrumbItemWithContextActionAllowed])
       })
       it('not if no breadcrumb items given', () => {
         const { wrapper } = getShallowWrapper([], {}, { breadcrumbs: [] })
@@ -114,9 +115,9 @@ describe('AppBar component', () => {
       it('passes viewModes array to ViewOptions', () => {
         const viewModes = [mock<FolderView>]
         const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: true, viewModes })
-        expect(wrapper.findComponent<any>(selectors.viewOptionsStub).props('viewModes')).toEqual(
-          viewModes
-        )
+        expect(
+          wrapper.findComponent<typeof ViewOptions>(selectors.viewOptionsStub).props('viewModes')
+        ).toEqual(viewModes)
       })
     })
     it('if given, with content in the actions slot', () => {

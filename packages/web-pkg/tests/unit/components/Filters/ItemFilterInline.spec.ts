@@ -1,6 +1,11 @@
 import ItemFilterInline from '../../../../src/components/Filters/ItemFilterInline.vue'
 import { InlineFilterOption } from '../../../../src/components/Filters/types'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  PartialComponentProps
+} from 'web-test-helpers'
 import { queryItemAsString } from '../../../../src/composables/appDefaults'
 import { mock } from 'vitest-mock-extended'
 
@@ -50,7 +55,13 @@ describe('ItemFilterInline', () => {
   })
 })
 
-function getWrapper({ props = {}, initialQuery = '' } = {}) {
+function getWrapper({
+  props = {},
+  initialQuery = ''
+}: {
+  props?: PartialComponentProps<typeof ItemFilterInline>
+  initialQuery?: string
+} = {}) {
   vi.mocked(queryItemAsString).mockImplementation(() => initialQuery)
   const mocks = defaultComponentMocks()
   return {
@@ -58,6 +69,7 @@ function getWrapper({ props = {}, initialQuery = '' } = {}) {
     wrapper: mount(ItemFilterInline, {
       props: {
         filterName: 'InlineFilter',
+        filterOptions: [],
         ...props
       },
       global: {

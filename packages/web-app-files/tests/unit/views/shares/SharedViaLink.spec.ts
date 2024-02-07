@@ -11,6 +11,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { ResourceTable } from '@ownclouders/web-pkg'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -42,9 +43,9 @@ describe('SharedViaLink view', () => {
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
-      expect(wrapper.findComponent<any>('resource-table-stub').props().resources.length).toEqual(
-        mockedFiles.length
-      )
+      expect(
+        wrapper.findComponent<typeof ResourceTable>('resource-table-stub').props().resources.length
+      ).toEqual(mockedFiles.length)
     })
   })
 })

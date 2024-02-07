@@ -1,9 +1,11 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { eventBus, queryItemAsString } from '@ownclouders/web-pkg'
+import { SortDir, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
+import { OcTable } from 'design-system/src/components'
+import { SpaceResource } from '@ownclouders/web-client'
 
 const spaceMocks = [
   {
@@ -67,14 +69,20 @@ describe('SpacesList', () => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
       wrapper.vm.sortBy = prop
       await wrapper.vm.$nextTick()
-      expect(wrapper.findComponent<any>(selectors.ocTableStub).props().data[0].id).toBe(
-        spaceMocks[0].id
-      )
-      wrapper.vm.sortDir = 'desc'
+      expect(
+        (
+          wrapper.findComponent<typeof OcTable>(selectors.ocTableStub).props()
+            .data[0] as SpaceResource
+        ).id
+      ).toBe(spaceMocks[0].id)
+      wrapper.vm.sortDir = SortDir.Desc
       await wrapper.vm.$nextTick()
-      expect(wrapper.findComponent<any>(selectors.ocTableStub).props().data[0].id).toBe(
-        spaceMocks[1].id
-      )
+      expect(
+        (
+          wrapper.findComponent<typeof OcTable>(selectors.ocTableStub).props()
+            .data[0] as SpaceResource
+        ).id
+      ).toBe(spaceMocks[1].id)
     }
   )
   it('should set the sort parameters accordingly when calling "handleSort"', () => {

@@ -1,7 +1,8 @@
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { PartialComponentProps, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client/src/helpers'
 import BatchActions from '../../../src/components/BatchActions.vue'
+import { Action, ActionMenuItem } from '../../../src'
 
 const selectors = {
   actionMenuItemStub: 'action-menu-item-stub',
@@ -16,7 +17,7 @@ describe('BatchActions', () => {
     })
 
     it('render enabled actions', () => {
-      const actions = [{}]
+      const actions = [{} as Action]
       const { wrapper } = getWrapper({ props: { actions } })
       expect(wrapper.findAll(selectors.actionMenuItemStub).length).toBe(actions.length)
     })
@@ -27,19 +28,26 @@ describe('BatchActions', () => {
       expect(wrapper.find(selectors.batchActionsSquashed).exists()).toBeTruthy()
     })
     it('correctly tells the action item component to show tooltips when limited screen space is available', () => {
-      const { wrapper } = getWrapper({ props: { actions: [{}], limitedScreenSpace: true } })
+      const { wrapper } = getWrapper({
+        props: { actions: [{} as Action], limitedScreenSpace: true }
+      })
       expect(
-        wrapper.findComponent<any>(selectors.actionMenuItemStub).props().showTooltip
+        wrapper.findComponent<typeof ActionMenuItem>(selectors.actionMenuItemStub).props()
+          .showTooltip
       ).toBeTruthy()
     })
   })
 })
 
-function getWrapper({ props = {} } = {}) {
+function getWrapper(
+  { props }: { props?: PartialComponentProps<typeof BatchActions> } = { props: {} }
+) {
   return {
     wrapper: mount(BatchActions, {
       props: {
         items: [mock<Resource>()],
+        actions: [],
+        actionOptions: {},
         ...props
       },
       global: {

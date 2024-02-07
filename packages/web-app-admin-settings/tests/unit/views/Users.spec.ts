@@ -243,6 +243,7 @@ describe('Users view', () => {
 
       await wrapper.vm.loadResourcesTask.last
       await wrapper.vm.onEditUser({
+        user: {},
         editUser: {}
       })
 

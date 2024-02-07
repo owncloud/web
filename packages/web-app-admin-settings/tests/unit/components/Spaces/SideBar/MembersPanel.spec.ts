@@ -2,6 +2,7 @@ import MembersPanel from '../../../../../src/components/Spaces/SideBar/MembersPa
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import MembersRoleSection from '../../../../../src/components/Spaces/SideBar/MembersRoleSection.vue'
 
 const spaceMock = mock<SpaceResource>({
   spaceRoles: {
@@ -30,7 +31,8 @@ describe('MembersPanel', () => {
     await wrapper.vm.$nextTick
     expect(wrapper.findAll(selectors.membersRolePanelStub).length).toBe(1)
     expect(
-      wrapper.findComponent<any>(selectors.membersRolePanelStub).props().members[0].displayName
+      wrapper.findComponent<typeof MembersRoleSection>(selectors.membersRolePanelStub).props()
+        .members[0].displayName
     ).toEqual(userToFilterFor.displayName)
   })
   it('should display an empty result if no matching members found', async () => {
