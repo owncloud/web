@@ -1,6 +1,7 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
-import Recipient, { Recipient as RecipientType } from './OcRecipient.vue'
+import Recipient from './OcRecipient.vue'
+import { Recipient as RecipientType } from './types'
 
 describe('OcRecipient', () => {
   /**

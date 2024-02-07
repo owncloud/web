@@ -38,17 +38,7 @@ import { defineComponent, PropType } from 'vue'
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
-
-export type Recipient = {
-  name: string
-  icon?: {
-    name: string
-    label: string
-  }
-  isLoadingAvatar?: boolean
-  hasAvatar?: boolean
-  avatar?: string
-}
+import { Recipient } from './types'
 
 export default defineComponent({
   name: 'OcRecipient',
