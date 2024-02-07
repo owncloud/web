@@ -32,9 +32,7 @@ exports[`ResourceDetails component > renders resource details correctly 1`] = `
           <tr data-v-5080a6a4="" data-testid="ownerDisplayName">
             <th data-v-5080a6a4="" scope="col" class="oc-pr-s oc-font-semibold">Owner</th>
             <td data-v-5080a6a4="">
-              <p data-v-5080a6a4="" class="oc-m-rm">admin
-                <!--v-if-->
-              </p>
+              <p data-v-5080a6a4="" class="oc-m-rm">admin <span data-v-5080a6a4="" data-msgid="(me)" data-current-language="en">(me)</span></p>
             </td>
           </tr>
           <tr data-v-5080a6a4="" data-testid="sizeInfo">
