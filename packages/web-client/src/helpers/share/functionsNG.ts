@@ -81,12 +81,12 @@ export function buildIncomingShareResource({
     fileId: driveItem.remoteItem.id,
     storageId,
     parentFolderId: driveItem.parentReference?.id,
-    sdate: driveItem.remoteItem.shared.sharedDateTime,
+    sdate: driveItem.remoteItem.lastModifiedDateTime,
     indicators: [],
     tags: [],
     webDavPath: buildWebDavSpacesPath([SHARE_JAIL_ID, id].join('!'), '/'),
     sharedBy: driveItem.remoteItem.createdBy.user,
-    owner: driveItem.remoteItem.shared.owner.user,
+    owner: driveItem.remoteItem.createdBy.user,
     sharedWith: [
       permission?.grantedToV2.group
         ? { ...permission.grantedToV2.group, shareType }
