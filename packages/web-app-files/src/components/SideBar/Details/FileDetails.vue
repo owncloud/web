@@ -68,7 +68,10 @@
             <span v-text="sharedByDisplayNames" />
           </td>
         </tr>
-        <tr v-if="ownerDisplayName" data-testid="ownerDisplayName">
+        <tr
+          v-if="ownerDisplayName && ownerDisplayName !== sharedByDisplayNames"
+          data-testid="ownerDisplayName"
+        >
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Owner')" />
           <td>
             <p class="oc-m-rm">
