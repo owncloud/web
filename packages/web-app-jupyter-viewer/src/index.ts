@@ -1,6 +1,6 @@
 import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
-import TextEditor from './App.vue'
+import JupyterViewer from './App.vue'
 import {
   AppWrapperRoute,
   ApplicationFileExtension,
@@ -38,7 +38,7 @@ export default defineWebApplication({
     const routes = [
       {
         path: '/:driveAliasAndItem(.*)?',
-        component: AppWrapperRoute(TextEditor, {
+        component: AppWrapperRoute(JupyterViewer, {
           applicationId: appId
         }),
         name: 'jupyter-viewer',

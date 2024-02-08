@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[o:owncloud-org:p:owncloud-web:r:text-editor]
+[o:owncloud-org:p:owncloud-web:r:jupyter-viewer]
 file_filter = locale/<lang>/LC_MESSAGES/app.po
 minimum_perc = 0
 source_file = template.pot

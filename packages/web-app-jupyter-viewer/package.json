@@ -2,7 +2,7 @@
   "name": "jupyter-viewer",
   "version": "0.0.0",
   "private": true,
-  "description": "ownCloud Web simple text editor",
+  "description": "ownCloud Web simple jupyter viewer",
   "license": "AGPL-3.0",
   "dependencies": {
     "notebookjs": "0.8.0"

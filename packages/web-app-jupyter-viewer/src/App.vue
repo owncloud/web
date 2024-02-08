@@ -1,6 +1,6 @@
 <template>
   <div class="oc-jupyter-viewer oc-width-1-1 oc-height-1-1">
-    <div id="" class="notebook-container" v-html="content"></div>
+    <div class="notebook-container" v-html="content"></div>
   </div>
 </template>
 
