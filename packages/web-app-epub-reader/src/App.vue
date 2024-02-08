@@ -1,10 +1,10 @@
 <template>
   <div class="epub-reader oc-flex oc-p-s">
-    <oc-list class="epub-reader-chapters-list oc-width-1-4">
+    <oc-list class="epub-reader-chapters-list oc-visible@l">
       <li
         v-for="chapter in chapters"
         :key="chapter.id"
-        class="epub-reader-chapters-list-item"
+        class="epub-reader-chapters-list-item oc-ml-m"
         :class="{ active: currentChapter.id === chapter.id }"
       >
         <oc-button appearance="raw" @click="showChapter(chapter)">
@@ -12,16 +12,18 @@
         </oc-button>
       </li>
     </oc-list>
-    <div class="oc-flex oc-flex-middle oc-mx-l">
-      <oc-button :disabled="navigateLeftDisabled" appearance="raw" @click="navigateLeft">
-        <oc-icon name="arrow-left-s" fill-type="line" size="xlarge" />
-      </oc-button>
-    </div>
-    <div id="reader" ref="bookContainer" class="oc-flex oc-flex-center" />
-    <div class="oc-flex oc-flex-middle oc-mx-l">
-      <oc-button :disabled="navigateRightDisabled" appearance="raw" @click="navigateRight">
-        <oc-icon name="arrow-right-s" fill-type="line" size="xlarge" />
-      </oc-button>
+    <div class="oc-flex oc-flex-center oc-width-1-1">
+      <div class="oc-flex oc-flex-middle oc-mx-l">
+        <oc-button :disabled="navigateLeftDisabled" appearance="raw" @click="navigateLeft">
+          <oc-icon name="arrow-left-s" fill-type="line" size="xlarge" />
+        </oc-button>
+      </div>
+      <div id="reader" ref="bookContainer" class="oc-flex oc-flex-center" />
+      <div class="oc-flex oc-flex-middle oc-mx-l">
+        <oc-button :disabled="navigateRightDisabled" appearance="raw" @click="navigateRight">
+          <oc-icon name="arrow-right-s" fill-type="line" size="xlarge" />
+        </oc-button>
+      </div>
     </div>
   </div>
 </template>
@@ -86,7 +88,7 @@ export default defineComponent({
 
         rendition = book.renderTo(unref(bookContainer), {
           flow: 'paginated',
-          width: 700,
+          width: 650,
           height: '100%'
         })
         rendition.display()
@@ -138,7 +140,12 @@ export default defineComponent({
   }
 
   &-chapters-list {
+    position: absolute;
+    left: var(--oc-space-small);
     overflow-y: auto;
+    max-width: 210px;
+    height: calc(100% - 52px - (2 * var(--oc-space-small)));
+    max-height: calc(100% - 52px - (2 * var(--oc-space-small)));
 
     &-item {
       padding-top: var(--oc-space-small);
@@ -151,7 +158,6 @@ export default defineComponent({
     }
 
     &-item:not(:last-child) {
-      border-bottom: 1px solid var(--oc-color-border);
       padding-bottom: var(--oc-space-small);
     }
   }
