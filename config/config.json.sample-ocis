@@ -16,7 +16,8 @@
     "text-editor",
     "draw-io",
     "external",
-    "admin-settings"
+    "admin-settings",
+    "epub-reader"
   ],
   "options": {
     "previewFileMimeTypes": [

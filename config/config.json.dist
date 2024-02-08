@@ -12,7 +12,8 @@
     "pdf-viewer",
     "preview",
     "search",
-    "text-editor"
+    "text-editor",
+    "epub-reader"
   ],
   "applications" : []
 }

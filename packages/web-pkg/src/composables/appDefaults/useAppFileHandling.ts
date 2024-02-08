@@ -13,6 +13,10 @@ interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
+export type FileContentOptions = { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<
+  string,
+  any
+>
 export type UrlForResourceOptions = Omit<Parameters<WebDAV['getFileUrl']>[2], 'isUrlSigningEnabled'>
 
 export interface AppFileHandlingResult {
@@ -23,10 +27,7 @@ export interface AppFileHandlingResult {
   ): Promise<string>
   revokeUrl(url: string): void
   getFileInfo(fileContext: MaybeRef<FileContext>, options?: ListFilesOptions): Promise<Resource>
-  getFileContents(
-    fileContext: MaybeRef<FileContext>,
-    options?: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
-  ): Promise<any>
+  getFileContents(fileContext: MaybeRef<FileContext>, options?: FileContentOptions): Promise<any>
   putFileContents(
     fileContext: MaybeRef<FileContext>,
     putFileOptions: { content?: string } & Record<string, any>

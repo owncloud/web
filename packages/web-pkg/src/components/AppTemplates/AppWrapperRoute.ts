@@ -1,7 +1,7 @@
 import { defineComponent, h } from 'vue'
 import AppWrapper from './AppWrapper.vue'
 import { AppWrapperSlotArgs } from './types'
-import { UrlForResourceOptions } from '../../composables'
+import { FileContentOptions, UrlForResourceOptions } from '../../composables'
 import { Resource } from '@ownclouders/web-client/src'
 
 export function AppWrapperRoute(
@@ -9,6 +9,7 @@ export function AppWrapperRoute(
   options: {
     applicationId: string
     urlForResourceOptions?: UrlForResourceOptions
+    fileContentOptions?: FileContentOptions
     importResourceWithExtension?: (resource: Resource) => string
   }
 ) {

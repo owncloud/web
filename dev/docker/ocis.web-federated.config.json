@@ -36,7 +36,8 @@
     "external",
     "admin-settings",
     "ocm",
-    "webfinger"
+    "webfinger",
+    "epub-reader"
   ],
   "external_apps": [
     {
