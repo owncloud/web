@@ -206,7 +206,7 @@ const fileIcon = {
     extensions: ['mov', 'mp4', 'webm', 'wmv']
   },
   epub: {
-    icon: { name: 'resource-type-book', color: 'var(--oc-color-text-default)' },
+    icon: { name: 'resource-type-book', color: 'var(--oc-color-icon-epub)' },
     extensions: ['epub']
   }
 }

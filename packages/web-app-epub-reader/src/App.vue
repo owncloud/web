@@ -7,7 +7,7 @@
         class="epub-reader-chapters-list-item oc-ml-m"
         :class="{ active: currentChapter.id === chapter.id }"
       >
-        <oc-button appearance="raw" @click="showChapter(chapter)">
+        <oc-button class="oc-mr-s" appearance="raw" @click="showChapter(chapter)">
           <span v-text="chapter.label" />
         </oc-button>
       </li>
