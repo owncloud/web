@@ -46,7 +46,7 @@ describe('PasswordPolicyService', () => {
       ])('capability "%s"', (capability: PasswordPolicyCapability, expected: Array<string>) => {
         const { passwordPolicyService, store } = getWrapper(capability)
         passwordPolicyService.initialize(store)
-        expect(Object.keys((passwordPolicyService.getPolicy() as any).rules)).toEqual(expected)
+        expect(Object.keys(passwordPolicyService.getPolicy().rules)).toEqual(expected)
       })
     })
     describe('method "check"', () => {
@@ -106,7 +106,7 @@ describe('PasswordPolicyService', () => {
             passwordPolicyService.initialize(store)
             const policy = passwordPolicyService.getPolicy()
             for (let i = 0; i < passwords.length; i++) {
-              expect((policy as any).check(passwords[i])).toEqual(expected[i])
+              expect(policy.check(passwords[i])).toEqual(expected[i])
             }
           }
         )

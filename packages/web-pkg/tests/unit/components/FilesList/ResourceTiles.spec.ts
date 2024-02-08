@@ -37,7 +37,7 @@ describe('ResourceTiles component', () => {
     const mockElement = {
       clientWidth: 800
     }
-    ;(document as any).getElementById = vi.fn((id) => {
+    document.getElementById = vi.fn((id) => {
       if (id === 'tiles-view') {
         return mockElement
       }

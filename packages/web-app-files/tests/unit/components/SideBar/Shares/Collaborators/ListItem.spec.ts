@@ -1,4 +1,4 @@
-import ListItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
+import ListItem from '../../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import {
   peopleRoleViewerFile,
   peopleRoleViewerFolder,
@@ -7,6 +7,8 @@ import {
 } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, mount, defaultStubs, defaultComponentMocks } from 'web-test-helpers'
 import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
+import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
+import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 
 vi.mock('uuid', () => ({
   v4: () => {
@@ -102,14 +104,14 @@ describe('Collaborator ListItem component', () => {
   describe('remove share', () => {
     it('emits the "removeShare" event', () => {
       const { wrapper } = createWrapper()
-      ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('removeShare')
+      wrapper.findComponent<typeof EditDropdown>('edit-dropdown-stub').vm.$emit('removeShare')
       expect(wrapper.emitted().onDelete).toBeTruthy()
     })
   })
   describe('change share role', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
-      ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
+      wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
@@ -118,7 +120,7 @@ describe('Collaborator ListItem component', () => {
     })
     it('calls "changeSpaceMember" for space resources', () => {
       const { wrapper } = createWrapper({ shareType: ShareTypes.spaceUser.value })
-      ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
+      wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
@@ -131,7 +133,7 @@ describe('Collaborator ListItem component', () => {
       vi.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
-      ;(wrapper.findComponent<any>('role-dropdown-stub').vm as any).$emit('optionChange', {
+      wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
         role: peopleRoleViewerFile,
         permissions: [SharePermissions.read]
       })
@@ -144,9 +146,11 @@ describe('Collaborator ListItem component', () => {
   describe('change expiration date', () => {
     it('calls "changeShare" for regular resources', () => {
       const { wrapper } = createWrapper()
-      ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
-        shareExpirationChanged: new Date()
-      })
+      wrapper
+        .findComponent<typeof EditDropdown>('edit-dropdown-stub')
+        .vm.$emit('expirationDateChanged', {
+          shareExpirationChanged: new Date()
+        })
       const sharesStore = useSharesStore()
       expect(sharesStore.updateShare).toHaveBeenCalled()
     })
@@ -156,9 +160,11 @@ describe('Collaborator ListItem component', () => {
       vi.spyOn(wrapper.vm, 'saveShareChanges').mockImplementation(() => {
         throw new Error()
       })
-      ;(wrapper.findComponent<any>('edit-dropdown-stub').vm as any).$emit('expirationDateChanged', {
-        shareExpirationChanged: new Date()
-      })
+      wrapper
+        .findComponent<typeof EditDropdown>('edit-dropdown-stub')
+        .vm.$emit('expirationDateChanged', {
+          shareExpirationChanged: new Date()
+        })
       const sharesStore = useSharesStore()
       expect(sharesStore.updateShare).not.toHaveBeenCalled()
       const messagesStore = useMessages()

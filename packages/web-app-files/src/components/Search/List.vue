@@ -166,17 +166,7 @@ import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
-import {
-  computed,
-  defineComponent,
-  nextTick,
-  onMounted,
-  Ref,
-  ref,
-  unref,
-  VNodeRef,
-  watch
-} from 'vue'
+import { computed, defineComponent, nextTick, onMounted, Ref, ref, unref, watch } from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import { Pagination } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
@@ -277,8 +267,8 @@ export default defineComponent({
     })
 
     const availableTags = ref<Tag[]>([])
-    const tagFilter = ref<VNodeRef>()
-    const mediaTypeFilter = ref<VNodeRef>()
+    const tagFilter = ref<InstanceType<typeof ItemFilter> | null>(null)
+    const mediaTypeFilter = ref<InstanceType<typeof ItemFilter> | null>()
     const tagParam = useRouteQuery('q_tags')
     const lastModifiedParam = useRouteQuery('q_lastModified')
     const mediaTypeParam = useRouteQuery('q_mediaType')
@@ -317,7 +307,7 @@ export default defineComponent({
       'last year': $gettext('last year')
     }
 
-    const lastModifiedFilter = ref<VNodeRef>()
+    const lastModifiedFilter = ref<InstanceType<typeof ItemFilter> | null>()
     const availableLastModifiedValues = ref<LastModifiedKeyword[]>(
       capabilityStore.searchLastMofifiedDate.keywords?.map((k: string) => ({
         id: k,
@@ -366,7 +356,7 @@ export default defineComponent({
         query['scope'] = `${humanScopeQuery}`
       }
 
-      const updateFilter = (v: Ref) => {
+      const updateFilter = (v: Ref<InstanceType<typeof ItemFilter>>) => {
         if (manuallyUpdateFilterChip && unref(v)) {
           /**
            * Handles edge cases where a filter is not being applied via the filter directly,
@@ -374,7 +364,7 @@ export default defineComponent({
            * We need to manually update the selected items in the ItemFilter component because normally
            * it only does this on mount or when interacting with the filter directly.
            */
-          ;(unref(v) as any).setSelectedItemsBasedOnQuery()
+          unref(v).setSelectedItemsBasedOnQuery()
         }
       }
 

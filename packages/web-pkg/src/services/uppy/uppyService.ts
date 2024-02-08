@@ -106,8 +106,8 @@ export class UppyService {
     tusMaxChunkSize: number
     tusHttpMethodOverride: boolean
     tusExtension: string
-    onBeforeRequest: () => void
-    headers: () => uppyHeaders
+    onBeforeRequest?: (req: any) => void
+    headers: (file) => uppyHeaders
   }) {
     const chunkSize = tusMaxChunkSize || Infinity
     const uploadDataDuringCreation = tusExtension.includes('creation-with-upload')
@@ -147,7 +147,7 @@ export class UppyService {
     this.uppy.use(Tus, tusPluginOptions as unknown as TusOptions)
   }
 
-  useXhr({ headers, xhrTimeout }: { headers: () => uppyHeaders; xhrTimeout: number }) {
+  useXhr({ headers, xhrTimeout }: { headers: (file) => uppyHeaders; xhrTimeout: number }) {
     const xhrPluginOptions: XHRUploadOptions = {
       endpoint: '',
       method: 'put',

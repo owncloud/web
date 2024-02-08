@@ -4,7 +4,7 @@ import * as app from './App.vue'
 import { useGettext } from 'vue3-gettext'
 import { getMimeTypes } from './mimeTypes'
 
-const { default: App, appId } = app as any
+const { default: App, appId } = app
 
 export default defineWebApplication({
   setup({ applicationConfig }) {

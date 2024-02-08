@@ -48,7 +48,7 @@ describe('OcCheckbox', () => {
       { size: 'large', class: 'oc-checkbox-l' }
     ])('valid size options', (item) => {
       const wrapper = getWrapperWithProps({ size: item.size })
-      const checkboxElement = wrapper.find(checkboxSelector)
+      const checkboxElement = wrapper.find<HTMLInputElement>(checkboxSelector)
       expect(checkboxElement.exists()).toBeTruthy()
       expect(checkboxElement.attributes('class')).toContain(item.class)
     })
@@ -56,11 +56,11 @@ describe('OcCheckbox', () => {
   describe('set checked', () => {
     it('should set check on input change', async () => {
       const wrapper = await getWrapperWithProps({})
-      const checkbox = wrapper.find(checkboxSelector)
-      expect((checkbox.element as any).checked).toBeFalsy()
+      const checkbox = wrapper.find<HTMLInputElement>(checkboxSelector)
+      expect(checkbox.element.checked).toBeFalsy()
       await checkbox.setValue(true)
       expect(wrapper.emitted('update:modelValue')).toBeTruthy()
-      expect((checkbox.element as any).checked).toBeTruthy()
+      expect(checkbox.element.checked).toBeTruthy()
     })
   })
   describe('set outline', () => {

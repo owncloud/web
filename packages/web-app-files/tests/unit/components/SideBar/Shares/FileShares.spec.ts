@@ -80,12 +80,12 @@ describe('FileShares', () => {
     })
     it('reacts on delete events', async () => {
       const spyOnCollaboratorDeleteTrigger = vi
-        .spyOn((FileShares as any).methods, '$_ocCollaborators_deleteShare_trigger')
+        .spyOn(FileShares.methods, '$_ocCollaborators_deleteShare_trigger')
         .mockImplementation(() => undefined)
       const { wrapper } = getWrapper({ collaborators })
-      ;(
-        wrapper.findComponent<typeof CollaboratorListItem>('collaborator-list-item-stub').vm as any
-      ).$emit('onDelete')
+      wrapper
+        .findComponent<typeof CollaboratorListItem>('collaborator-list-item-stub')
+        .vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })

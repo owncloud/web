@@ -10,7 +10,7 @@
 </template>
 <script lang="ts">
 import { CachedFile } from '../../helpers/types'
-import { defineComponent, PropType, onMounted, ref, VNodeRef, watch, unref, nextTick } from 'vue'
+import { defineComponent, PropType, onMounted, ref, watch, unref, nextTick } from 'vue'
 import type { PanzoomObject } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
 
@@ -40,7 +40,7 @@ export default defineComponent({
   },
   emits: ['panZoomChange'],
   setup(props, { emit }) {
-    const img = ref<VNodeRef>()
+    const img = ref<HTMLElement | null>()
     const panzoom = ref<PanzoomObject>()
 
     const onPanZoomChange = (event) => {
@@ -59,7 +59,7 @@ export default defineComponent({
       // wait for next tick until image is rendered
       await nextTick()
 
-      panzoom.value = Panzoom(unref(img) as any, {
+      panzoom.value = Panzoom(unref(img), {
         animate: false,
         duration: 300,
         overflow: 'auto',

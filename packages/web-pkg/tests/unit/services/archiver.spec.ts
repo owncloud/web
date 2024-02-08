@@ -12,7 +12,7 @@ const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => 
   clientServiceMock.httpUnAuthenticated.get.mockResolvedValue({
     data: new ArrayBuffer(8),
     headers: { 'content-disposition': 'filename="download.tar"' }
-  } as any as AxiosResponse)
+  } as unknown as AxiosResponse)
   clientServiceMock.owncloudSdk.signUrl.mockImplementation((url) => url)
 
   return new ArchiverService(clientServiceMock, serverUrl, capabilities)

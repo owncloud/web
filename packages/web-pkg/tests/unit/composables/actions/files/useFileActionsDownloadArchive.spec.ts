@@ -4,6 +4,8 @@ import { useFileActionsDownloadArchive } from '../../../../../src/composables/ac
 import { Resource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useArchiverService } from '../../../../../src/composables'
+import { ArchiverService } from '../../../../../src'
+import { ref } from 'vue'
 
 vi.mock('../../../../../src/composables/archiverService/useArchiverService')
 
@@ -50,18 +52,17 @@ describe('downloadArchive', () => {
 
 function getWrapper({
   searchLocation = false,
-  triggerDownloadMock = vi.fn() as any,
+  triggerDownloadMock = vi.fn() as (...args) => unknown,
   setup = () => undefined
 } = {}) {
   const routeName = searchLocation ? 'files-common-search' : 'files-spaces-generic'
 
-  vi.mocked(useArchiverService).mockImplementation(
-    () =>
-      ({
-        triggerDownload: triggerDownloadMock,
-        fileIdsSupported: true
-      }) as any
-  )
+  vi.mocked(useArchiverService).mockImplementation(() => {
+    return {
+      triggerDownload: triggerDownloadMock,
+      fileIdsSupported: ref(true)
+    } as ArchiverService
+  })
 
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),

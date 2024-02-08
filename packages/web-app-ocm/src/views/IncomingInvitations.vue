@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, unref, VNodeRef } from 'vue'
+import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import {
   queryItemAsString,
   useClientService,
@@ -72,6 +72,7 @@ import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
 import { providerListSchema } from '../schemas'
+import { OcTextInput } from '@ownclouders/design-system/src/components'
 
 export default defineComponent({
   emits: ['highlightNewConnections'],
@@ -87,7 +88,7 @@ export default defineComponent({
     const providers = ref([])
     const loading = ref(true)
     const providerError = ref(false)
-    const tokenInput = ref<VNodeRef>()
+    const tokenInput = ref<InstanceType<typeof OcTextInput>>()
 
     const helperContent = computed(() => {
       return {
@@ -158,7 +159,7 @@ export default defineComponent({
       const tokenQuery = to.query.token
       if (tokenQuery) {
         token.value = queryItemAsString(tokenQuery)
-        ;(unref(tokenInput) as any).focus()
+        unref(tokenInput).focus()
         scrollToForm()
       }
       const providerDomainQuery = to.query.providerDomain

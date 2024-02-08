@@ -2,7 +2,7 @@ import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import { mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks, mockAxiosResolve } from 'web-test-helpers'
 import { useMessages, useModals, useSpacesStore } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 
@@ -30,8 +30,8 @@ describe('CreateSpace component', () => {
 
       const graphMock = mocks.$clientService.graphAuthenticated
       const drive = mockDeep<Drive>()
-      graphMock.drives.createDrive.mockResolvedValue(drive as any)
-      graphMock.drives.updateDrive.mockResolvedValue(drive as any)
+      graphMock.drives.createDrive.mockResolvedValue(mockAxiosResolve(drive))
+      graphMock.drives.updateDrive.mockResolvedValue(mockAxiosResolve(drive))
       mocks.$clientService.webdav.putFileContents.mockResolvedValue(mockDeep<Resource>())
       await unref(modals)[0].onConfirm('New Space')
 

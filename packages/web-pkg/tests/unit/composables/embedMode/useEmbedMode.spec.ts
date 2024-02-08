@@ -101,7 +101,7 @@ describe('useEmbedMode', () => {
 
   describe('postMessage', () => {
     it('when targetOrigin is not set should call postMessage without any origin', () => {
-      ;(window as any).parent.postMessage = vi.fn()
+      window.parent.postMessage = vi.fn() as (...args) => unknown
 
       getComposableWrapper(
         () => {
@@ -122,7 +122,7 @@ describe('useEmbedMode', () => {
     })
 
     it('when targetOrigin is set should call postMessage with its value as origin', () => {
-      ;(window as any).parent.postMessage = vi.fn()
+      window.parent.postMessage = vi.fn() as (...args) => unknown
 
       getComposableWrapper(
         () => {

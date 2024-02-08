@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
+import { PropType, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import omit from 'lodash-es/omit'
@@ -111,7 +111,7 @@ export default defineComponent({
       default: 'name'
     },
     filterableAttributes: {
-      type: Array,
+      type: Array as PropType<Fuse.FuseOptionKey<unknown>[]>,
       required: false,
       default: () => []
     },
@@ -177,7 +177,7 @@ export default defineComponent({
       }
       const fuse = new Fuse(items, {
         ...defaultFuseOptions,
-        keys: props.filterableAttributes as any
+        keys: props.filterableAttributes
       })
 
       const results = fuse.search(filterTerm).map((r) => r.item)
@@ -236,7 +236,9 @@ export default defineComponent({
       selectedItems,
       setDisplayedItems,
       showDrop,
-      toggleItemSelection
+      toggleItemSelection,
+      // expose to type
+      setSelectedItemsBasedOnQuery
     }
   }
 })

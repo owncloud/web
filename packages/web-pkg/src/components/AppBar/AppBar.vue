@@ -45,10 +45,8 @@
       <div class="files-app-bar-actions oc-mt-xs">
         <div class="oc-flex-1 oc-flex oc-flex-start oc-flex-middle">
           <slot name="actions" :limited-screen-space="limitedScreenSpace" />
-          <!-- HACK: vue-tsc thinks BatchActions is of type FileAction[], the empty bind (currently) workarounds the resulting error -->
           <batch-actions
             v-if="showBatchActions"
-            v-bind="{} as any"
             :actions="batchActions"
             :action-options="{ space, resources: selectedResources }"
             :limited-screen-space="limitedScreenSpace"

@@ -29,7 +29,7 @@
       <oc-list>
         <sidebar-nav-item
           v-for="(link, index) in navItems"
-          :ref="(el: ComponentPublicInstance) => (navItemRefs[index] = el)"
+          :ref="(el: any) => (navItemRefs[index] = el)"
           :key="index"
           :index="getUuid()"
           :target="link.route"
@@ -49,7 +49,6 @@
 
 <script lang="ts">
 import {
-  ComponentPublicInstance,
   defineComponent,
   nextTick,
   onBeforeUnmount,
@@ -77,7 +76,7 @@ export default defineComponent({
   emits: ['update:nav-bar-closed'],
   setup(props) {
     let resizeObserver
-    const navItemRefs = ref<Record<string, ComponentPublicInstance>>({})
+    const navItemRefs = ref<Record<string, InstanceType<typeof SidebarNavItem>>>({})
     const highlighterAttrs = ref<Record<string, any>>({})
 
     onMounted(() => {
@@ -110,7 +109,7 @@ export default defineComponent({
       if (activeEl) {
         highlighterAttrs.value = {
           style: {
-            transform: `translateY(${(activeEl as any).$el.offsetTop}px)`,
+            transform: `translateY(${activeEl.$el.offsetTop}px)`,
             'transition-duration': '0.2s'
           }
         }

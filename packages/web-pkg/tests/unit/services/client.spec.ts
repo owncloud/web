@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../src/http'
 import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
-import { client as _client } from '@ownclouders/web-client'
+import { Graph, OCS, client as _client } from '@ownclouders/web-client'
 import { createTestingPinia, writable } from 'web-test-helpers'
 import axios from 'axios'
 
@@ -82,9 +82,9 @@ describe('ClientService', () => {
     expect(createSpy).toHaveBeenCalledTimes(2)
   })
   it('initializes an graph client', () => {
-    const graphClient = { id: 1 }
+    const graphClient = {} as Graph
     vi.mocked(_client).mockImplementation(() => {
-      return { graph: graphClient, ocs: {} } as any
+      return { graph: graphClient, ocs: {} } as ReturnType<typeof _client>
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.graphAuthenticated
@@ -102,9 +102,9 @@ describe('ClientService', () => {
     expect(_client).toHaveBeenCalledTimes(3)
   })
   it('initializes an ocs user client', () => {
-    const ocsClient = { id: 1 }
+    const ocsClient = {} as OCS
     vi.mocked(_client).mockImplementation(() => {
-      return { graph: {}, ocs: ocsClient } as any
+      return { graph: {}, ocs: ocsClient } as ReturnType<typeof _client>
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsUserContext
@@ -122,9 +122,9 @@ describe('ClientService', () => {
     expect(_client).toHaveBeenCalledTimes(3)
   })
   it('initializes an ocs public link client', () => {
-    const ocsClient = { id: 1 }
+    const ocsClient = {} as OCS
     vi.mocked(_client).mockImplementation(() => {
-      return { graph: {}, ocs: ocsClient } as any
+      return { graph: {}, ocs: ocsClient } as ReturnType<typeof _client>
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsPublicLinkContext()

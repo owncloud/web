@@ -1,5 +1,6 @@
 import Users from '../../../src/views/Users.vue'
 import {
+  ItemFilter,
   OptionsConfig,
   UserAction,
   eventBus,
@@ -308,10 +309,9 @@ describe('Users view', () => {
         const { wrapper } = getMountedWrapper({ mountType: mount, clientService })
         await wrapper.vm.loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
-        ;(wrapper.findComponent<any>(selectors.itemFilterGroupsStub).vm as any).$emit(
-          'selectionChange',
-          [{ id: '1' }]
-        )
+        wrapper
+          .findComponent<typeof ItemFilter>(selectors.itemFilterGroupsStub)
+          .vm.$emit('selectionChange', [{ id: '1' }])
         await wrapper.vm.$nextTick()
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
@@ -341,10 +341,9 @@ describe('Users view', () => {
         const { wrapper } = getMountedWrapper({ mountType: mount, clientService })
         await wrapper.vm.loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
-        ;(wrapper.findComponent<any>(selectors.itemFilterRolesStub).vm as any).$emit(
-          'selectionChange',
-          [{ id: '1' }]
-        )
+        wrapper
+          .findComponent<typeof ItemFilter>(selectors.itemFilterRolesStub)
+          .vm.$emit('selectionChange', [{ id: '1' }])
         await wrapper.vm.$nextTick()
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(

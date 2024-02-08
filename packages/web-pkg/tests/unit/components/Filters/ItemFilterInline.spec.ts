@@ -8,6 +8,7 @@ import {
 } from 'web-test-helpers'
 import { queryItemAsString } from '../../../../src/composables/appDefaults'
 import { mock } from 'vitest-mock-extended'
+import { unref } from 'vue'
 
 vi.mock('../../../../src/composables/appDefaults', () => ({
   appDefaults: vi.fn(),
@@ -40,7 +41,7 @@ describe('ItemFilterInline', () => {
   describe('route query', () => {
     it('sets the active option as query param', async () => {
       const { wrapper, mocks } = getWrapper({ props: { filterOptions } })
-      const currentRouteQuery = (mocks.$router.currentRoute as any).query
+      const currentRouteQuery = unref(mocks.$router.currentRoute).query
       expect(mocks.$router.push).not.toHaveBeenCalled()
       await wrapper.find(selectors.filterOption).trigger('click')
       expect(currentRouteQuery[wrapper.vm.queryParam]).toBeDefined()

@@ -43,7 +43,9 @@ export class PublicLinkManager {
   }
 
   getType(token: string): PublicLinkType {
-    return sessionStorage.getItem(PublicLinkManager.buildStorageKey(token, 'type')) as any
+    return sessionStorage.getItem(
+      PublicLinkManager.buildStorageKey(token, 'type')
+    ) as PublicLinkType
   }
 
   isPasswordRequired(token: string): boolean {

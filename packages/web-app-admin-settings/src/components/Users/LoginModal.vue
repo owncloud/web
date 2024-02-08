@@ -85,7 +85,7 @@ export default defineComponent({
       )
       const results = await Promise.allSettled(promises)
 
-      const succeeded = results.filter((r) => r.status === 'fulfilled') as any
+      const succeeded = results.filter((r) => r.status === 'fulfilled')
       if (succeeded.length) {
         const title =
           succeeded.length === 1 && affectedUsers.length === 1
@@ -126,7 +126,7 @@ export default defineComponent({
 
       try {
         const usersResponse = await Promise.all(
-          succeeded.map(({ value }) => client.users.getUser(value.data.id))
+          (succeeded as any[]).map(({ value }) => client.users.getUser(value.data.id))
         )
 
         eventBus.publish(

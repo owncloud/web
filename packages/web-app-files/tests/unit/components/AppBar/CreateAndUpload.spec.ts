@@ -12,7 +12,12 @@ import {
   useFileActionsPaste
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  shallowMount,
+  defaultComponentMocks,
+  mockAxiosResolve
+} from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
@@ -119,7 +124,7 @@ describe('CreateAndUpload component', () => {
       ]
       const { wrapper, mocks } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
-      graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
+      graphMock.drives.getDrive.mockResolvedValue(mockAxiosResolve<Drive>())
       await wrapper.vm.onUploadComplete({ successful: [file] })
       const spacesStore = useSpacesStore()
       expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
@@ -133,7 +138,7 @@ describe('CreateAndUpload component', () => {
         meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
       })
       const graphMock = mocks.$clientService.graphAuthenticated
-      graphMock.drives.getDrive.mockResolvedValue(mock<Drive>() as any)
+      graphMock.drives.getDrive.mockResolvedValue(mockAxiosResolve<Drive>())
       await wrapper.vm.onUploadComplete({ successful: [file] })
       expect(eventSpy).toHaveBeenCalled()
     })
@@ -199,7 +204,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(CreateAndUpload, {
       data: () => ({ newFileAction }),
-      props: { space: space as any, item, itemId },
+      props: { space: space, item, itemId },
       global: {
         stubs: { OcButton: false },
         renderStubDefaultSlot: true,
@@ -208,7 +213,7 @@ function getWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              spacesState: { spaces: spaces as any },
+              spacesState: { spaces },
               capabilityState: { capabilities },
               clipboardState: { resources: clipboardResources },
               resourcesStore: { areFileExtensionsShown, currentFolder, resources: files }

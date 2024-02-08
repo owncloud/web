@@ -12,5 +12,5 @@ export const filterResources = <T extends Resource>(
     keys: ['name', 'type', 'icon', 'extension', 'tags']
   })
 
-  return (engine.search(term, { limit }) as any[]).map((result: any) => result.item)
+  return engine.search(term, { limit }).map((result) => result.item)
 }

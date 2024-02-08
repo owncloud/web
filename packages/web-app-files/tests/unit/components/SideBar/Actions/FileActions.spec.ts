@@ -16,35 +16,36 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   useFileActions: vi.fn()
 }))
 
+type ActionWithSelector = Action & { selector: string }
 const fileActions = {
-  copy: {
+  copy: mock<ActionWithSelector>({
     handler: vi.fn(),
     label: () => 'Copy',
     componentType: 'button',
     class: 'oc-files-actions-copy-trigger',
     selector: '.oc-files-actions-copy-trigger'
-  },
-  move: {
+  }),
+  move: mock<ActionWithSelector>({
     handler: vi.fn(),
     label: () => 'Move',
     componentType: 'button',
     class: 'oc-files-actions-move-trigger',
     selector: '.oc-files-actions-move-trigger'
-  },
-  download: {
+  }),
+  download: mock<ActionWithSelector>({
     handler: vi.fn(),
     label: () => 'Download',
     componentType: 'button',
     class: 'oc-files-actions-download-file-trigger',
     selector: '.oc-files-actions-download-file-trigger'
-  },
-  'text-editor': {
+  }),
+  'text-editor': mock<ActionWithSelector>({
     handler: vi.fn(),
     label: () => 'Open in Text Editor',
     componentType: 'button',
     class: 'oc-files-actions-text-editor-trigger',
     selector: '.oc-files-actions-text-editor-trigger'
-  }
+  })
 }
 
 describe('FileActions', () => {
@@ -53,7 +54,7 @@ describe('FileActions', () => {
       it('renders action handlers as clickable elements', async () => {
         vi.mocked(useFileActions).mockImplementation(() =>
           mock<ReturnType<typeof useFileActions>>({
-            getAllAvailableActions: () => Object.values(fileActions) as any as Action[]
+            getAllAvailableActions: () => Object.values(fileActions)
           })
         )
 

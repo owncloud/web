@@ -95,8 +95,7 @@ export function useAppDefaults(options: AppDefaultsOptions): AppDefaultsResult {
       clientService
     }),
     ...useAppFolderHandling({
-      // FIXME: what's wrong here? mismatch in packages somehow...
-      clientService: clientService as any,
+      clientService,
       currentRoute
     }),
     ...useRequest({ clientService, currentRoute: unref(currentRoute) })

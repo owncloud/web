@@ -93,7 +93,7 @@ function getWrapper({ embedModeEnabled = false } = {}) {
         [
           mock<ActionExtension>({ scopes: ['resource.quick-action'], action: collaboratorAction }),
           mock<ActionExtension>({ scopes: ['resource.quick-action'], action: quicklinkAction })
-        ] as any
+        ] as any[]
     })
   )
 

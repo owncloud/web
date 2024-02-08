@@ -65,14 +65,14 @@ describe('AppTemplate', () => {
     it('can be closed', () => {
       const eventSpy = vi.spyOn(eventBus, 'publish')
       const { wrapper } = getWrapper()
-      ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('close')
+      wrapper.findComponent<any>(stubSelectors.sideBar).vm.$emit('close')
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.close)
     })
     it('panel can be selected', () => {
       const eventSpy = vi.spyOn(eventBus, 'publish')
       const panelName = 'SomePanel'
       const { wrapper } = getWrapper()
-      ;(wrapper.findComponent<any>(stubSelectors.sideBar).vm as any).$emit('selectPanel', panelName)
+      wrapper.findComponent<any>(stubSelectors.sideBar).vm.$emit('selectPanel', panelName)
       expect(eventSpy).toHaveBeenCalledWith(SideBarEventTopics.setActivePanel, panelName)
     })
   })

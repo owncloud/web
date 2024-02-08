@@ -9,9 +9,9 @@ describe('useKeyboardActions', () => {
 
   it('should bind keys', () => {
     const wrapper = getWrapper()
-    const { keyboardActions } = wrapper.vm as any
+    const { keyboardActions } = wrapper.vm
 
-    keyboardActions.bindKeyAction({ primary: Key.A })
+    keyboardActions.bindKeyAction({ primary: Key.A }, () => undefined)
     expect(keyboardActions.actions.value.length).toBe(1)
 
     wrapper.unmount()
@@ -19,9 +19,9 @@ describe('useKeyboardActions', () => {
 
   it('should be possible remove keys', () => {
     const wrapper = getWrapper()
-    const { keyboardActions } = wrapper.vm as any
+    const { keyboardActions } = wrapper.vm
 
-    const keyActionIndex = keyboardActions.bindKeyAction({ primary: Key.A })
+    const keyActionIndex = keyboardActions.bindKeyAction({ primary: Key.A }, () => undefined)
 
     expect(keyboardActions.actions.value.length).toBe(1)
 
@@ -33,7 +33,7 @@ describe('useKeyboardActions', () => {
 
   it('should be possible execute callback on key event', () => {
     const wrapper = getWrapper()
-    const { keyboardActions } = wrapper.vm as any
+    const { keyboardActions } = wrapper.vm
     const counter = ref(0)
 
     const increment = () => {

@@ -66,10 +66,10 @@ export function useUpload(options: UploadOptions) {
     uppyOptions,
     () => {
       if (unref(uppyOptions).isTusSupported) {
-        options.uppyService.useTus(unref(uppyOptions) as any)
+        options.uppyService.useTus(unref(uppyOptions))
         return
       }
-      options.uppyService.useXhr(unref(uppyOptions) as any)
+      options.uppyService.useXhr(unref(uppyOptions))
     },
     { immediate: true }
   )

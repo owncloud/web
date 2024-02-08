@@ -1,4 +1,5 @@
 import { useMessages } from '@ownclouders/web-pkg'
+import { OcNotificationMessage } from 'design-system/src/components'
 import MessageBar from 'web-runtime/src/components/MessageBar.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
@@ -49,7 +50,9 @@ describe('MessageBar component', () => {
   describe('when there is an active message', () => {
     it('should set props in oc-notification-message component', () => {
       const { wrapper } = getShallowWrapper([messages[0]])
-      const notificationMessage = wrapper.findComponent<any>(selectors.notificationMessage)
+      const notificationMessage = wrapper.findComponent<typeof OcNotificationMessage>(
+        selectors.notificationMessage
+      )
 
       expect(notificationMessage.attributes().title).toEqual(messages[0].title)
       expect(notificationMessage.attributes().status).toEqual(messages[0].status)
@@ -58,8 +61,10 @@ describe('MessageBar component', () => {
     it('should call "removeMessage" method on close event', () => {
       const { wrapper } = getShallowWrapper([messages[0]])
       const messageStore = useMessages()
-      const notificationMessage = wrapper.findComponent<any>(selectors.notificationMessage)
-      ;(notificationMessage.vm as any).$emit('close')
+      const notificationMessage = wrapper.findComponent<typeof OcNotificationMessage>(
+        selectors.notificationMessage
+      )
+      notificationMessage.vm.$emit('close')
 
       expect(messageStore.removeMessage).toHaveBeenCalledTimes(1)
     })

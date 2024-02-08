@@ -23,8 +23,8 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, ref, unref, VNodeRef } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client'
-import { ActionMenuItem } from '@ownclouders/web-pkg'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { ActionMenuItem, FileActionOptions, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { usePreviewService } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
@@ -45,7 +45,8 @@ export default defineComponent({
   setup() {
     const previewService = usePreviewService()
     const resource = inject<Ref<SpaceResource>>('resource')
-    const actionOptions = computed(() => ({
+    const actionOptions = computed((): SpaceActionOptions & FileActionOptions<Resource> => ({
+      space: undefined,
       resources: [unref(resource)]
     }))
 
@@ -79,7 +80,7 @@ export default defineComponent({
         ...unref(restoreActions),
         ...unref(deleteActions),
         ...unref(disableActions)
-      ].filter((item) => item.isVisible(unref(actionOptions) as any))
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     )
 
     return {
