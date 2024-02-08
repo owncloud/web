@@ -68,7 +68,7 @@ function getWrapper({ props = {} } = {}) {
     wrapper: shallowMount(ResourceConflictModal, {
       props: {
         modal: mock<Modal>(),
-        resource: mock<Resource>,
+        resource: mock<Resource>(),
         conflictCount: 1,
         callbackFn: () => ({}),
         ...props

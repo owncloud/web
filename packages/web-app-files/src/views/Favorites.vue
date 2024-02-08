@@ -153,7 +153,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       visibilityObserver.disconnect()
-      eventBus.unsubscribe('app.files.list.removeFromFavorites', loadResourcesEventToken)
+      eventBus.unsubscribe('app.files.list.removeFromFavorites', unref(loadResourcesEventToken))
     })
 
     return {

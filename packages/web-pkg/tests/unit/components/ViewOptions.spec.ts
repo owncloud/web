@@ -1,5 +1,11 @@
 import { ref, unref } from 'vue'
-import { defaultPlugins, defaultComponentMocks, mount, RouteLocation } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  defaultComponentMocks,
+  mount,
+  RouteLocation,
+  PartialComponentProps
+} from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import ViewOptions from '../../../src/components/ViewOptions.vue'
 import {
@@ -9,6 +15,7 @@ import {
   useRouteQueryPersisted
 } from '../../../src/composables'
 import { FolderView } from '../../../src'
+import { OcPageSize, OcSwitch } from 'design-system/src/components'
 
 vi.mock('../../../src/composables/router', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -33,7 +40,9 @@ describe('ViewOptions component', () => {
     it('sets the correct initial files page limit', () => {
       const perPage = '100'
       const { wrapper } = getWrapper({ perPage })
-      expect(wrapper.findComponent<any>(selectors.pageSizeSelect).props().selected).toBe(perPage)
+      expect(
+        wrapper.findComponent<typeof OcPageSize>(selectors.pageSizeSelect).props().selected
+      ).toBe(perPage)
     })
     it('sets the correct files page limit', () => {
       const perPage = '100'
@@ -65,10 +74,9 @@ describe('ViewOptions component', () => {
     })
     it('toggles the setting to show/hide hidden files', () => {
       const { wrapper } = getWrapper()
-      ;(wrapper.findComponent<any>(selectors.hiddenFilesSwitch).vm as any).$emit(
-        'update:checked',
-        false
-      )
+      wrapper
+        .findComponent<typeof OcSwitch>(selectors.hiddenFilesSwitch)
+        .vm.$emit('update:checked', false)
 
       const { setAreHiddenFilesShown } = useResourcesStore()
       expect(setAreHiddenFilesShown).toHaveBeenCalled()
@@ -81,10 +89,9 @@ describe('ViewOptions component', () => {
     })
     it('toggles the setting to show/hide file extensions', () => {
       const { wrapper } = getWrapper()
-      ;(wrapper.findComponent<any>(selectors.fileExtensionsSwitch).vm as any).$emit(
-        'update:checked',
-        false
-      )
+      wrapper
+        .findComponent<typeof OcSwitch>(selectors.fileExtensionsSwitch)
+        .vm.$emit('update:checked', false)
 
       const { setAreFileExtensionsShown } = useResourcesStore()
       expect(setAreFileExtensionsShown).toHaveBeenCalled()
@@ -134,6 +141,12 @@ function getWrapper({
   tileSize = '1',
   props = {},
   currentPage = '1'
+}: {
+  perPage?: string
+  viewMode?: string
+  tileSize?: string
+  props?: PartialComponentProps<typeof ViewOptions>
+  currentPage?: string
 } = {}) {
   vi.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(perPage))
   vi.mocked(useRouteQueryPersisted).mockImplementationOnce(() => ref(viewMode))
@@ -148,7 +161,10 @@ function getWrapper({
   return {
     mocks,
     wrapper: mount(ViewOptions, {
-      props: { ...props },
+      props: {
+        perPageStoragePrefix: '',
+        ...props
+      },
       global: {
         mocks,
         provide: mocks,

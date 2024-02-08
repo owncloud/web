@@ -9,7 +9,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 import { useMessages, useResourcesStore } from '@ownclouders/web-pkg'
-import { SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
+import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
 
 const $route = {
@@ -216,7 +216,7 @@ describe('account page', () => {
       mocks.$clientService.graphAuthenticated.users.editMe.mockResolvedValueOnce(
         mockAxiosResolve({})
       )
-      await wrapper.vm.updateSelectedLanguage('en')
+      await wrapper.vm.updateSelectedLanguage({ value: 'en' } as LanguageOption)
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
     })
@@ -232,7 +232,7 @@ describe('account page', () => {
       mocks.$clientService.graphAuthenticated.users.editMe.mockImplementation(() =>
         mockAxiosReject('err')
       )
-      await wrapper.vm.updateSelectedLanguage('en')
+      await wrapper.vm.updateSelectedLanguage({ value: 'en' } as LanguageOption)
       const { showErrorMessage } = useMessages()
       expect(showErrorMessage).toHaveBeenCalled()
     })

@@ -91,6 +91,7 @@ function getWrapper(action, items = [], appearance = null, mountType = shallowMo
     wrapper: mountType(ActionMenuItem, {
       props: {
         action,
+        actionOptions: {},
         items,
         ...(appearance && { appearance })
       },

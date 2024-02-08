@@ -205,7 +205,9 @@ module.exports = {
     '**/*.test.js',
     '**/*.test.jsx',
     '**/*.spec.js',
-    '**/*.spec.jsx'
+    '**/*.spec.jsx',
+    '**/*.spec.ts',
+    '**/*.spec.tsx'
   ],
   styleguideDir: '../dist/docs',
   printServerInstructions() {},

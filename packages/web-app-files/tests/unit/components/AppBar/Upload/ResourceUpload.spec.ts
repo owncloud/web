@@ -2,6 +2,7 @@ import { mockDeep } from 'vitest-mock-extended'
 import ResourceUpload from 'web-app-files/src/components/AppBar/Upload/ResourceUpload.vue'
 import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { UppyService } from '@ownclouders/web-pkg'
+import { OcButton } from 'design-system/src/components'
 
 describe('Resource Upload Component', () => {
   describe('file upload', () => {
@@ -42,7 +43,7 @@ describe('Resource Upload Component', () => {
     const uppyService = mockDeep<UppyService>()
     uppyService.isRemoteUploadInProgress.mockReturnValue(true)
     const { wrapper } = getWrapper({ isFolder: true }, uppyService)
-    expect(wrapper.findComponent<any>('button').props('disabled')).toBeTruthy()
+    expect(wrapper.findComponent<typeof OcButton>('button').props('disabled')).toBeTruthy()
   })
 })
 

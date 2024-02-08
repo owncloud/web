@@ -21,7 +21,7 @@ describe('Tag Select', () => {
 
     const { wrapper } = createWrapper(resource, clientService)
     await wrapper.vm.loadAvailableTagsTask.last
-    expect(wrapper.findComponent<any>('vue-select-stub').props('options')).toEqual([
+    expect((wrapper.findComponent<any>('vue-select-stub').props() as any).options).toEqual([
       { label: 'a' },
       { label: 'b' },
       { label: 'c' }
@@ -108,7 +108,7 @@ describe('Tag Select', () => {
     const resource = mock<Resource>({ tags: ['a'] })
     const eventStub = vi.spyOn(eventBus, 'publish')
     const { wrapper } = createWrapper(resource, clientService)
-    wrapper.vm.selectedTags.push('b')
+    wrapper.vm.selectedTags.push({ label: 'b' })
     await wrapper.vm.save(wrapper.vm.selectedTags)
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()

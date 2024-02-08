@@ -237,7 +237,8 @@ function getWrapper({
       props: {
         resources,
         isQuickLink,
-        callbackFn
+        callbackFn,
+        modal: undefined
       },
       global: {
         plugins: [

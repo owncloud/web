@@ -67,7 +67,9 @@ function getWrapper() {
   return {
     wrapper: mount(ContextActions, {
       props: {
-        items: [mock<Resource>()]
+        actionOptions: {
+          resources: [mock<Resource>()]
+        }
       },
       global: {
         stubs: { 'action-menu-item': true },

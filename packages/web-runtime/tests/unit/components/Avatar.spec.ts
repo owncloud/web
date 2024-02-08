@@ -4,6 +4,7 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from 'vue'
+import { OcAvatar } from 'design-system/src/components'
 
 const propsData = {
   userName: 'admin',
@@ -49,7 +50,7 @@ describe('Avatar component', () => {
     })
     it('should set props on oc-avatar component', () => {
       const { wrapper } = getShallowWrapper()
-      const avatar = wrapper.findComponent<any>(ocAvatar)
+      const avatar = wrapper.findComponent<typeof OcAvatar>(ocAvatar)
 
       expect(avatar.props().width).toEqual(propsData.width)
       expect(avatar.props().userName).toEqual(propsData.userName)
@@ -58,7 +59,7 @@ describe('Avatar component', () => {
     describe('when an avatar is not found', () => {
       it('should set empty string to src prop on oc-avatar component', () => {
         const { wrapper } = getShallowWrapper()
-        const avatar = wrapper.findComponent<any>(ocAvatar)
+        const avatar = wrapper.findComponent<typeof OcAvatar>(ocAvatar)
         expect(avatar.props().src).toEqual('')
       })
     })
@@ -80,7 +81,7 @@ describe('Avatar component', () => {
         await nextTick()
         await nextTick()
         await nextTick()
-        const avatar = wrapper.findComponent<any>(ocAvatar)
+        const avatar = wrapper.findComponent<typeof OcAvatar>(ocAvatar)
         expect(avatar.props().src).toEqual(blob)
       })
     })

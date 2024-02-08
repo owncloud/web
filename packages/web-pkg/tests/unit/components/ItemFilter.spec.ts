@@ -1,6 +1,7 @@
 import ItemFilter from '../../../src/components/ItemFilter.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
+import { OcCheckbox } from 'design-system/src/components'
 
 vi.mock('../../../src/composables/appDefaults')
 
@@ -57,11 +58,15 @@ describe('ItemFilter', () => {
       expect(wrapper.emitted('selectionChange')).toBeFalsy()
       let selectionChangeEmits = 0
       for (const item of wrapper.findAll(selectors.filterListItem)) {
-        expect(item.findComponent<any>(selectors.checkboxStub).props('modelValue')).toBeFalsy()
+        expect(
+          item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
+        ).toBeFalsy()
         await item.trigger('click')
         selectionChangeEmits += 1
         expect(wrapper.emitted('selectionChange').length).toBe(selectionChangeEmits)
-        expect(item.findComponent<any>(selectors.checkboxStub).props('modelValue')).toBeTruthy()
+        expect(
+          item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
+        ).toBeTruthy()
       }
       expect(wrapper.vm.selectedItems.length).toBe(wrapper.findAll(selectors.filterListItem).length)
     })
@@ -83,7 +88,9 @@ describe('ItemFilter', () => {
       await item.trigger('click')
       await item.trigger('click')
       expect(wrapper.emitted('selectionChange').length).toBe(2)
-      expect(item.findComponent<any>(selectors.checkboxStub).props('modelValue')).toBeFalsy()
+      expect(
+        item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
+      ).toBeFalsy()
       expect(wrapper.vm.selectedItems.length).toBe(0)
     })
     it('clears the selection when the clear-button is being clicked', async () => {
@@ -92,7 +99,9 @@ describe('ItemFilter', () => {
       await item.trigger('click')
       await wrapper.find(selectors.clearBtn).trigger('click')
       expect(wrapper.emitted('selectionChange').length).toBe(2)
-      expect(item.findComponent<any>(selectors.checkboxStub).props('modelValue')).toBeFalsy()
+      expect(
+        item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
+      ).toBeFalsy()
       expect(wrapper.vm.selectedItems.length).toBe(0)
     })
   })

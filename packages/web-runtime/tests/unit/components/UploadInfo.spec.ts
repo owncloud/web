@@ -1,5 +1,6 @@
 import UploadInfo from '../../../src/components/UploadInfo.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { ResourceListItem } from '@ownclouders/web-pkg'
 
 const selectors = {
   overlay: '#upload-info',
@@ -190,7 +191,7 @@ describe('UploadInfo component', () => {
 
       const info = wrapper.find(selectors.info.items)
       expect(info.exists()).toBeTruthy()
-      const resourceStub = wrapper.findComponent<any>(
+      const resourceStub = wrapper.findComponent<typeof ResourceListItem>(
         `${selectors.info.item} resource-list-item-stub`
       )
       expect(resourceStub.props().isResourceClickable).toBeTruthy()

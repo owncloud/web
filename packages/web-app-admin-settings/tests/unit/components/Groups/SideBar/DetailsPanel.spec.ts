@@ -67,6 +67,7 @@ function getWrapper({ propsData = {} } = {}) {
   return {
     wrapper: mount(DetailsPanel, {
       props: {
+        groups: [],
         ...propsData
       },
       global: {

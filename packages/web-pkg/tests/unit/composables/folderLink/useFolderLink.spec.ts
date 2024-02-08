@@ -1,6 +1,6 @@
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { CapabilityStore, useFolderLink } from '../../../../src/composables'
-import { SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 describe('useFolderLink', () => {
   it('getFolderLink should return the correct folder link', () => {
@@ -43,7 +43,7 @@ describe('useFolderLink', () => {
       const resource = {
         path: '/my-folder',
         storageId: '1'
-      }
+      } as Resource
 
       const wrapper = createWrapper()
       const parentFolderName = wrapper.vm.getParentFolderName(resource)
@@ -53,7 +53,7 @@ describe('useFolderLink', () => {
       const resource = {
         path: '/my-folder',
         storageId: '2'
-      }
+      } as Resource
 
       const wrapper = createWrapper()
       const parentFolderName = wrapper.vm.getParentFolderName(resource)
@@ -65,7 +65,7 @@ describe('useFolderLink', () => {
         shareRoot: '/My share',
         shareId: '1',
         isShareRoot: () => true
-      }
+      } as Resource
 
       const wrapper = createWrapper()
       const parentFolderName = wrapper.vm.getParentFolderName(resource)
@@ -76,7 +76,7 @@ describe('useFolderLink', () => {
         path: '/My share/test.txt',
         shareRoot: '/My share',
         shareId: '1'
-      }
+      } as Resource
 
       const wrapper = createWrapper()
       const parentFolderName = wrapper.vm.getParentFolderName(resource)

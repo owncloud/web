@@ -35,7 +35,7 @@ const createWrapper = (options = {}) =>
       <div ref="target">{{ isVisible }}</div>
       </div>`,
     setup: () => {
-      const target = ref()
+      const target = ref<HTMLElement>()
       const { isVisible } = useIsVisible({ ...options, target })
 
       return {
@@ -60,7 +60,7 @@ describe('useIsVisible', () => {
   it('is visible by default if browser does not support IntersectionObserver', () => {
     disableIntersectionObserver()
     const wrapper = createWrapper()
-    expect(wrapper.vm.$refs.target.innerHTML).toBe('true')
+    expect((wrapper.vm.$refs.target as any).innerHTML).toBe('true')
   })
 
   it('observes the target', async () => {
@@ -76,11 +76,11 @@ describe('useIsVisible', () => {
     const wrapper = createWrapper()
 
     await nextTick()
-    expect(wrapper.vm.$refs.target.innerHTML).toBe('false')
+    expect((wrapper.vm.$refs.target as any).innerHTML).toBe('false')
 
     observerCallback([{ isIntersecting: true }])
     await nextTick()
-    expect(wrapper.vm.$refs.target.innerHTML).toBe('true')
+    expect((wrapper.vm.$refs.target as any).innerHTML).toBe('true')
     expect(observerMock.unobserve).toHaveBeenCalledTimes(1)
   })
 
@@ -89,11 +89,11 @@ describe('useIsVisible', () => {
     const wrapper = createWrapper({ mode: 'showHide' })
 
     await nextTick()
-    expect(wrapper.vm.$refs.target.innerHTML).toBe('false')
+    expect((wrapper.vm.$refs.target as any).innerHTML).toBe('false')
 
     observerCallback([{ isIntersecting: true }])
     await nextTick()
-    expect(wrapper.vm.$refs.target.innerHTML).toBe('true')
+    expect((wrapper.vm.$refs.target as any).innerHTML).toBe('true')
     expect(observerMock.unobserve).toHaveBeenCalledTimes(0)
   })
 

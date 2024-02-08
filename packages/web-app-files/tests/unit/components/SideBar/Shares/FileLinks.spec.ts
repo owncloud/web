@@ -11,6 +11,7 @@ import {
   useFileActionsCreateLink
 } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
+import DetailsAndEdit from '../../../../../src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
 
 const defaultLinksList = [
   {
@@ -136,7 +137,9 @@ describe('FileLinks', () => {
         shareType: ShareTypes.link.value
       }
       const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
-      const detailsAndEdit = wrapper.findComponent<any>(linkListItemDetailsAndEdit)
+      const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
+        linkListItemDetailsAndEdit
+      )
       const isModifiable = detailsAndEdit.props('isModifiable')
       expect(isModifiable).toBeFalsy()
     })
@@ -152,11 +155,13 @@ describe('FileLinks', () => {
         shareType: ShareTypes.link.value
       }
       const { wrapper } = getWrapper({ resource, abilities: [], links: [internalLink] })
-      const detailsAndEdit = wrapper.findComponent<any>(linkListItemDetailsAndEdit)
+      const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
+        linkListItemDetailsAndEdit
+      )
       const availableRoleOptions = detailsAndEdit.props('availableRoleOptions')
       const isModifiable = detailsAndEdit.props('isModifiable')
       expect(availableRoleOptions.length).toBe(1)
-      expect(availableRoleOptions[0].permissions()).toEqual([SharePermissions.internal])
+      expect(availableRoleOptions[0].permissions(false)).toEqual([SharePermissions.internal])
       expect(isModifiable).toBeTruthy()
     })
   })

@@ -9,9 +9,10 @@ import {
   mount,
   defaultComponentMocks,
   defaultStubs,
-  RouteLocation
+  RouteLocation,
+  ComponentProps
 } from 'web-test-helpers'
-import { useBreadcrumbsFromPath, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { AppBar, useBreadcrumbsFromPath, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { h } from 'vue'
@@ -99,7 +100,7 @@ describe('GenericSpace view', () => {
         isOwner: () => driveType === 'personal'
       }
       const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()], props: { space } })
-      expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs.length).toBe(
+      expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs.length).toBe(
         expectedItems
       )
     })
@@ -110,10 +111,12 @@ describe('GenericSpace view', () => {
         props: { item: `/${folderName}` },
         breadcrumbsFromPath: [{ text: folderName }]
       })
-      expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs.length).toBe(2)
-      expect(wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[1].text).toEqual(
-        folderName
+      expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs.length).toBe(
+        2
       )
+      expect(
+        wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[1].text
+      ).toEqual(folderName)
     })
     it('omit the "page"-query of the current route', () => {
       const currentRoute = { name: 'files-spaces-generic', path: '/', query: { page: '2' } }
@@ -122,8 +125,9 @@ describe('GenericSpace view', () => {
         props: { item: 'someFolder' },
         currentRoute
       })
-      const breadCrumbItem = wrapper.findComponent<any>('app-bar-stub').props().breadcrumbs[0]
-      expect(breadCrumbItem.to.query.page).toBeUndefined()
+      const breadCrumbItem = wrapper.findComponent<typeof AppBar>('app-bar-stub').props()
+        .breadcrumbs[0]
+      expect((breadCrumbItem.to as RouteLocation).query.page).toBeUndefined()
     })
   })
   describe('loader task', () => {
@@ -197,12 +201,12 @@ describe('GenericSpace view', () => {
             ...mock<Resource>()
           },
           files: [{ ...mock<Resource>(), isFolder: false }],
-          space: {
-            id: 1,
+          space: mock<SpaceResource>({
+            id: '1',
             getDriveAliasAndItem: vi.fn(),
             name: 'Personal space',
             driveType: 'public'
-          }
+          })
         })
         expect(wrapper.find('resource-details-stub').exists()).toBeTruthy()
       })
@@ -276,7 +280,12 @@ function getMountedWrapper({
   currentRoute = { name: 'files-spaces-generic', path: '/' },
   currentFolder = mock<Resource>(),
   runningOnEos = false,
-  space = { id: 1, getDriveAliasAndItem: vi.fn(), name: 'Personal space', driveType: '' },
+  space = mock<SpaceResource>({
+    id: '1',
+    getDriveAliasAndItem: vi.fn(),
+    name: 'Personal space',
+    driveType: ''
+  }),
   breadcrumbsFromPath = [],
   stubs = {}
 } = {}) {
@@ -319,9 +328,10 @@ function getMountedWrapper({
     ...(mocks && mocks)
   }
 
-  const propsData = {
+  const propsData: ComponentProps<typeof GenericSpace> = {
     space,
     item: '/',
+    itemId: undefined,
     ...props
   }
 

@@ -16,7 +16,7 @@ describe('CreateShortcutModal', () => {
   describe('method "onConfirm"', () => {
     it('should show message on success', async () => {
       const { wrapper } = getWrapper()
-      await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
+      await wrapper.vm.onConfirm()
 
       const { upsertResource } = useResourcesStore()
       expect(upsertResource).toHaveBeenCalled()
@@ -26,7 +26,7 @@ describe('CreateShortcutModal', () => {
     it('should show error message on fail', async () => {
       console.error = vi.fn()
       const { wrapper } = getWrapper({ rejectPutFileContents: true })
-      await wrapper.vm.onConfirm('https://owncloud.com', 'owncloud.url')
+      await wrapper.vm.onConfirm()
 
       const { upsertResource } = useResourcesStore()
       expect(upsertResource).not.toHaveBeenCalled()
@@ -79,7 +79,8 @@ function getWrapper({ rejectPutFileContents = false, rejectSearch = false } = {}
     mocks,
     wrapper: shallowMount(CreateShortcutModal, {
       props: {
-        space: mock<SpaceResource>()
+        space: mock<SpaceResource>(),
+        modal: undefined
       },
       global: {
         plugins: [

@@ -11,7 +11,7 @@ describe('EditPanel', () => {
   describe('method "revertChanges"', () => {
     it('should revert changes on property editGroup', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editGroup.dispayName = 'users'
+      wrapper.vm.editGroup.displayName = 'users'
       wrapper.vm.revertChanges()
       expect(wrapper.vm.editGroup.displayName).toEqual('group')
     })

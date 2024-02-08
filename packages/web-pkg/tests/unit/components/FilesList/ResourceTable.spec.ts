@@ -1,6 +1,12 @@
 import { DateTime } from 'luxon'
 import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vue'
-import { extractDomSelector, Resource, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import {
+  extractDomSelector,
+  IncomingShareResource,
+  Resource,
+  ShareTypes,
+  SpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
@@ -103,9 +109,13 @@ const resourcesWithAllFields = [
     owner,
     sharedBy,
     sharedWith,
-    shareTypes: [],
+    hidden: false,
     syncEnabled: true,
-    canRename: vi.fn,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
+    shareTypes: [],
+    canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest')
   },
   {
@@ -121,11 +131,16 @@ const resourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    owner,
     sharedBy,
     sharedWith,
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
     shareTypes: [],
-    owner,
-    canRename: vi.fn,
+    canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('notes')
   },
   {
@@ -140,11 +155,16 @@ const resourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    owner,
     sharedBy,
     sharedWith,
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
     shareTypes: [],
-    owner,
-    canRename: vi.fn,
+    canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('documents')
   },
   {
@@ -158,15 +178,20 @@ const resourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    owner,
     sharedBy,
     sharedWith,
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
     shareTypes: [],
     tags: [],
-    owner,
-    canRename: vi.fn,
+    canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('another-one==')
   }
-]
+] as IncomingShareResource[]
 
 const processingResourcesWithAllFields = [
   {
@@ -183,10 +208,16 @@ const processingResourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
-    sharedBy,
     owner,
+    sharedBy,
     sharedWith,
-    canRename: vi.fn,
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
+    shareTypes: [],
+    canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest'),
     processing: true
   },
@@ -203,14 +234,20 @@ const processingResourcesWithAllFields = [
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
+    owner,
     sharedBy,
     sharedWith,
-    owner,
-    canRename: vi.fn,
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
+    shareTypes: [],
+    canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('notes'),
     processing: true
   }
-]
+] as IncomingShareResource[]
 
 describe('ResourceTable', () => {
   it('displays all known fields of the resources', () => {
@@ -475,9 +512,9 @@ function getMountedWrapper({
         ],
         selection: [],
         hover: false,
-        space: {
+        space: mock<SpaceResource>({
           getDriveAliasAndItem: vi.fn()
-        },
+        }),
         ...props
       },
       global: {

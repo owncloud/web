@@ -59,14 +59,14 @@ function match(resource: Partial<Resource>, additionalText?: string) {
 
 function getWrapper({ resource, size }: { resource: Partial<Resource>; size: string }) {
   return {
-    wrapper: shallowMount(ResourceIcon as any, {
+    wrapper: shallowMount(ResourceIcon, {
       global: {
         provide: {
           [resourceIconMappingInjectionKey]: resourceIconMapping
         }
       },
       props: {
-        resource,
+        resource: resource as Resource,
         size
       }
     })

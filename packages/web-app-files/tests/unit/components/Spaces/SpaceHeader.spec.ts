@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 
 describe('SpaceHeader', () => {
@@ -41,7 +41,7 @@ describe('SpaceHeader', () => {
   })
 })
 
-function getWrapper({ space = {}, isSideBarOpen = false, isMobileWidth = false }) {
+function getWrapper({ space = {} as SpaceResource, isSideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('blob:image')
   return mount(SpaceHeader, {

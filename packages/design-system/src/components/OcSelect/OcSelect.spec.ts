@@ -18,7 +18,10 @@ describe('OcSelect', () => {
   it('passes the options to the vue-select component', () => {
     const options = [{ label: 'label1' }, { label: 'label2' }]
     const wrapper = getWrapper({ options })
-    expect(wrapper.findComponent<any>(selectors.ocSelect).props('options')).toEqual(options)
+    expect(
+      // options is just passed through, so it does not exist as prop on OcSelect, hence we need the any cast
+      wrapper.findComponent<typeof OcSelect>(selectors.ocSelect).props('options' as any)
+    ).toEqual(options)
   })
   it('shows ocSpinner component when loading', () => {
     const wrapper = getWrapper({ loading: true })

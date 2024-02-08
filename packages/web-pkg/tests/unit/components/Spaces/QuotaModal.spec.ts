@@ -7,6 +7,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { useMessages, useSpacesStore } from '../../../../src/composables/piniaStores'
+import { SpaceResource } from '@ownclouders/web-client'
 
 describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
@@ -52,6 +53,7 @@ function getWrapper() {
     mocks,
     wrapper: mount(QuotaModal, {
       props: {
+        modal: undefined,
         spaces: [
           {
             id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
@@ -61,7 +63,7 @@ function getWrapper() {
               total: 10000000000,
               used: 164
             }
-          }
+          } as SpaceResource
         ]
       },
       global: {

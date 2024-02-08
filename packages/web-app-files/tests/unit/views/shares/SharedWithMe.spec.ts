@@ -4,7 +4,8 @@ import {
   queryItemAsString,
   InlineFilterOption,
   useSort,
-  useOpenWithDefaultApp
+  useOpenWithDefaultApp,
+  ItemFilter
 } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
@@ -13,6 +14,7 @@ import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client/src/helpers'
+import SharedWithMeSection from '../../../../src/components/Shares/SharedWithMeSection.vue'
 
 vi.mock('web-app-files/src/composables/resourcesViewDefaults')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -64,18 +66,22 @@ describe('SharedWithMe view', () => {
       it('shows all visible shares', () => {
         const { wrapper } = getMountedWrapper()
         expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
-        expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
-          'Shares'
-        )
+        expect(
+          wrapper
+            .findComponent<typeof SharedWithMeSection>('shared-with-me-section-stub')
+            .props('title')
+        ).toEqual('Shares')
       })
       it('shows all hidden shares', async () => {
         const { wrapper } = getMountedWrapper()
         wrapper.vm.setAreHiddenFilesShown(mock<InlineFilterOption>({ name: 'hidden' }))
         await wrapper.vm.$nextTick()
         expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
-        expect(wrapper.findComponent<any>('shared-with-me-section-stub').props('title')).toEqual(
-          'Hidden Shares'
-        )
+        expect(
+          wrapper
+            .findComponent<typeof SharedWithMeSection>('shared-with-me-section-stub')
+            .props('title')
+        ).toEqual('Hidden Shares')
       })
     })
     describe('share type', () => {
@@ -88,7 +94,9 @@ describe('SharedWithMe view', () => {
             mock<IncomingShareResource>({ shareTypes: [shareType2.value] })
           ]
         })
-        const filterItems = wrapper.findComponent<any>('.share-type-filter').props('items')
+        const filterItems = wrapper
+          .findComponent<typeof ItemFilter>('.share-type-filter')
+          .props('items')
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
         expect(filterItems).toEqual([shareType1, shareType2])
       })
@@ -109,7 +117,9 @@ describe('SharedWithMe view', () => {
             })
           ]
         })
-        const filterItems = wrapper.findComponent<any>('.shared-by-filter').props('items')
+        const filterItems = wrapper
+          .findComponent<typeof ItemFilter>('.shared-by-filter')
+          .props('items')
         expect(wrapper.find('.shared-by-filter').exists()).toBeTruthy()
         expect(filterItems).toEqual([collaborator1, collaborator2])
       })

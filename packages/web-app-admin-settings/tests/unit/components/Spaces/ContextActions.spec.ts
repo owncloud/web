@@ -1,6 +1,6 @@
 import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import ContextActions from '../../../../src/components/Spaces/ContextActions.vue'
 import {
   Action,
@@ -54,7 +54,7 @@ function getWrapper() {
     mocks,
     wrapper: mount(ContextActions, {
       props: {
-        items: [mock<Resource>()]
+        items: [mock<SpaceResource>()]
       },
       global: {
         mocks,

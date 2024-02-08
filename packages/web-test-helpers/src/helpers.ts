@@ -3,13 +3,14 @@ import { defineComponent, nextTick } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 import { createRouter as _createRouter } from '../../web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
+import { DefinedComponent } from '@vue/test-utils/dist/types'
 
 export { mount, shallowMount } from '@vue/test-utils'
 
 vi.spyOn(console, 'warn').mockImplementation(() => undefined)
 
 export const getComposableWrapper = <T>(
-  setup: any,
+  setup: (...args: any[]) => T,
   {
     mocks = undefined,
     provide = undefined,
@@ -60,3 +61,6 @@ export const nextTicks = async (amount: number) => {
     await nextTick()
   }
 }
+
+export type ComponentProps<T extends DefinedComponent> = InstanceType<T>['$props']
+export type PartialComponentProps<T extends DefinedComponent> = Partial<ComponentProps<T>>

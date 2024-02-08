@@ -17,6 +17,7 @@ import { RouteLocation } from 'vue-router'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { ref } from 'vue'
+import { OcButton } from 'design-system/src/components'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -42,15 +43,23 @@ describe('CreateAndUpload component', () => {
   describe('action buttons', () => {
     it('should show and be enabled if file creation is possible', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeFalsy()
-      expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeFalsy()
+      expect(
+        wrapper.findComponent<typeof OcButton>(elSelector.uploadBtn).props().disabled
+      ).toBeFalsy()
+      expect(
+        wrapper.findComponent<typeof OcButton>(elSelector.newFolderBtn).props().disabled
+      ).toBeFalsy()
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('should be disabled if file creation is not possible', () => {
       const currentFolder = mock<Resource>({ canUpload: () => false })
       const { wrapper } = getWrapper({ currentFolder, createActions: [] })
-      expect(wrapper.findComponent<any>(elSelector.uploadBtn).props().disabled).toBeTruthy()
-      expect(wrapper.findComponent<any>(elSelector.newFolderBtn).props().disabled).toBeTruthy()
+      expect(
+        wrapper.findComponent<typeof OcButton>(elSelector.uploadBtn).props().disabled
+      ).toBeTruthy()
+      expect(
+        wrapper.findComponent<typeof OcButton>(elSelector.newFolderBtn).props().disabled
+      ).toBeTruthy()
     })
     it('should not be visible if file creation is not possible on a public page', () => {
       const currentFolder = mock<Resource>({ canUpload: () => false })
@@ -188,7 +197,7 @@ function getWrapper({
 
   return {
     mocks,
-    wrapper: shallowMount(CreateAndUpload as any, {
+    wrapper: shallowMount(CreateAndUpload, {
       data: () => ({ newFileAction }),
       props: { space: space as any, item, itemId },
       global: {

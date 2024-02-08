@@ -8,6 +8,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { User } from '@ownclouders/web-client/src/generated'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { OcSelect } from 'design-system/src/components'
 
 describe('LoginModal', () => {
   it('renders the input including two options', () => {
@@ -16,7 +17,9 @@ describe('LoginModal', () => {
   })
   it('shows a warning when the current user is being selected', () => {
     const { wrapper } = getWrapper([mock<User>({ id: '1' })])
-    expect(wrapper.findComponent<any>('oc-select-stub').props('warningMessage')).toBeDefined()
+    expect(
+      wrapper.findComponent<typeof OcSelect>('oc-select-stub').props('warningMessage')
+    ).toBeDefined()
   })
   describe('method "onConfirm"', () => {
     it('updates the login for all given users', async () => {

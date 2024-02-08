@@ -4,6 +4,7 @@ import { PublicSpaceResource, SpaceResource, Resource } from '@ownclouders/web-c
 import { MockProxy, mock } from 'vitest-mock-extended'
 import { join } from 'path'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { OcButton } from 'design-system/src/components'
 
 const selectors = {
   homeButton: '#files-list-not-found-button-go-home',
@@ -40,7 +41,7 @@ describe('NotFoundMessage', () => {
 
     it('should have property route to personal space', () => {
       const { wrapper } = getWrapper(space, spacesLocation)
-      const homeButton = wrapper.findComponent<any>(selectors.homeButton)
+      const homeButton = wrapper.findComponent<typeof OcButton>(selectors.homeButton)
 
       expect(homeButton.props().to.name).toBe(spacesLocation.name)
       expect(homeButton.props().to.params.driveAliasAndItem).toBe('personal')
@@ -76,7 +77,7 @@ describe('NotFoundMessage', () => {
 
     it('should have property route to files public list', () => {
       const { wrapper } = getWrapper(space, publicLocation)
-      const reloadLinkButton = wrapper.findComponent<any>(selectors.reloadLinkButton)
+      const reloadLinkButton = wrapper.findComponent<typeof OcButton>(selectors.reloadLinkButton)
 
       expect(reloadLinkButton.props().to.name).toBe(publicLocation.name)
       expect(reloadLinkButton.props().to.params.driveAliasAndItem).toBe(
