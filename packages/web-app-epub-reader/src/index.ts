@@ -66,8 +66,7 @@ export default defineWebApplication({
       appInfo: {
         name: $gettext('Epub Reader'),
         id: appId,
-        icon: 'file-text',
-        color: '#0D856F',
+        icon: 'book-read',
         isFileEditor: true,
         defaultExtension: 'epub',
         extensions: fileExtensions().map((extensionItem) => {
