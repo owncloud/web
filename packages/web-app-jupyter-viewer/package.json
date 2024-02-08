@@ -1,0 +1,20 @@
+{
+  "name": "jupyter-viewer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ownCloud Web simple text editor",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "notebookjs": "0.8.0"
+  },
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
+  "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
+    "prismjs": "^1.29.0",
+    "vue-concurrency": "4.0.1",
+    "vue3-gettext": "2.4.0"
+  }
+}

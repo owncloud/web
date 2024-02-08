@@ -37,7 +37,8 @@
     "admin-settings",
     "ocm",
     "webfinger",
-    "epub-reader"
+    "epub-reader",
+    "jupyter-viewer"
   ],
   "external_apps": [
     {
