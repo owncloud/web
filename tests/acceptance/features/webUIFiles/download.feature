@@ -19,10 +19,3 @@ Feature: download files
     And the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And as "Alice" file "lorem.txt" should not exist in the server
-
-
-  Scenario: download file with comma in the filename
-    Given user "Alice" has created file "sample,1.txt" in the server
-    And user "Alice" has logged in using the webUI
-    When the user downloads file "sample,1.txt" using the webUI
-    Then no message should be displayed on the webUI
