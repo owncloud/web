@@ -154,13 +154,15 @@ When(
 )
 
 When(
-  '{string} navigates to the trashbin of the project space {string}',
+  /^"([^"]*)" navigates to the trashbin(| of the project space "([^"]*)")$/,
   async function (this: World, stepUser: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
     await pageObject.navigate()
-    const trashbinObject = new objects.applicationFiles.Trashbin({ page })
-    await trashbinObject.open(key)
+    if (key) {
+      const trashbinObject = new objects.applicationFiles.Trashbin({ page })
+      await trashbinObject.open(key)
+    }
   }
 )
 
