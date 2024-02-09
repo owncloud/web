@@ -230,6 +230,25 @@ When(
   }
 )
 
+When(
+  '{string} deletes the following resources from trashbin using the batch action',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const resources = [].concat(...stepTable.rows())
+    await resourceObject.deleteTrashbinMultipleResources({ resources })
+  }
+)
+
+When(
+  '{string} empties the trashbin',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.emptyTrashbin({ page })
+  }
+)
+
 Then(
   /^"([^"]*)" (should|should not) be able to delete following resource(?:s)? from the trashbin?$/,
   async function (

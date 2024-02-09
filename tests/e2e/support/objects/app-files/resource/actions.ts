@@ -20,6 +20,7 @@ const deleteButtonBatchAction = '.oc-files-actions-delete-trigger'
 const createSpaceFromResourceAction = '.oc-files-actions-create-space-from-resource-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`
+const filesSelector = '//*[@data-test-resource-name="%s"]'
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector =
@@ -109,6 +110,7 @@ const collaboraCanvasEditorSelector = '.leaflet-layer'
 const textEditorTextArea = '#text-editor-input'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
+const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
 
 export const clickResource = async ({
   page,
@@ -1079,6 +1081,11 @@ export interface deleteResourceTrashbinArgs {
   resource: string
 }
 
+export interface deleteTrashbinMultipleResourcesArgs
+  extends Omit<deleteResourceTrashbinArgs, 'resource'> {
+  resources: string[]
+}
+
 export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): Promise<string> => {
   const { page, resource } = args
   const resourceCheckbox = page.locator(
@@ -1096,6 +1103,35 @@ export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): 
   ])
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
+}
+
+export const deleteTrashbinMultipleResources = async (
+  args: deleteTrashbinMultipleResourcesArgs
+): Promise<void> => {
+  const { page, resources } = args
+  for (const resource of resources) {
+    await page.locator(util.format(checkBox, resource)).click()
+  }
+
+  await page.locator(permanentDeleteButton).first().click()
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
+  ])
+
+  for (const resource of resources) {
+    await expect(page.locator(util.format(filesSelector, resource))).not.toBeVisible()
+  }
+}
+
+export const emptyTrashbin = async ({ page }): Promise<void> => {
+  await page.locator(emptyTrashbinButtonSelector).click()
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
+    page.locator(util.format(actionConfirmationButton, 'Delete')).click()
+  ])
+  const message = await page.locator(notificationMessageDialog).textContent()
+  expect(message).toBe('All deleted files were removed')
 }
 
 export const expectThatDeleteButtonIsNotVisible = async (
