@@ -31,8 +31,23 @@
 <script lang="ts">
 import { defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client/src/helpers/resource/types'
-import { AppConfigObject, Key, useKeyboardActions } from '@ownclouders/web-pkg'
+import { AppConfigObject, Key, useKeyboardActions, useThemeStore } from '@ownclouders/web-pkg'
 import ePub, { Book, NavItem, Rendition } from 'epubjs'
+
+const DARK_THEME_CONFIG = {
+  html: {
+    '-webkit-filter': 'invert(1) hue-rotate(180deg)',
+    filter: 'invert(1) hue-rotate(180deg)'
+  },
+  img: {
+    '-webkit-filter': 'invert(1) hue-rotate(180deg)',
+    filter: 'invert(1) hue-rotate(180deg)'
+  }
+}
+
+const LIGHT_THEME_CONFIG = {
+  html: { background: 'white' }
+}
 
 export default defineComponent({
   name: 'EpubReader',
@@ -53,6 +68,7 @@ export default defineComponent({
     const currentChapter = ref<NavItem>()
     const navigateLeftDisabled = ref(true)
     const navigateRightDisabled = ref(false)
+    const themeStore = useThemeStore()
     let book: Book
     let rendition: Rendition
 
@@ -91,7 +107,12 @@ export default defineComponent({
           width: 650,
           height: '100%'
         })
+
+        rendition.themes.register('dark', DARK_THEME_CONFIG)
+        rendition.themes.register('light', LIGHT_THEME_CONFIG)
+        rendition.themes.select(themeStore.currentTheme.isDark ? 'dark' : 'light')
         rendition.display()
+
         rendition.on('keydown', (event: KeyboardEvent) => {
           if (event.key === Key.ArrowLeft) {
             navigateLeft()
@@ -100,6 +121,7 @@ export default defineComponent({
             navigateRight()
           }
         })
+
         rendition.on('relocated', () => {
           const currentLocation = rendition.currentLocation() as any
           const locationCfi = currentLocation.start.cfi
@@ -135,10 +157,6 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .epub-reader {
-  .epub-container {
-    background: white;
-  }
-
   &-chapters-list {
     position: absolute;
     left: var(--oc-space-small);
