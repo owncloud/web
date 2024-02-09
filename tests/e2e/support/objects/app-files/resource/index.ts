@@ -130,6 +130,20 @@ export class Resource {
     return message
   }
 
+  async deleteTrashbinMultipleResources(
+    args: Omit<po.deleteTrashbinMultipleResourcesArgs, 'page'>
+  ): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.deleteTrashbinMultipleResources({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
+  async emptyTrashbin({ page }): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.emptyTrashbin({ page })
+    await this.#page.goto(startUrl)
+  }
+
   async expectThatDeleteTrashBinButtonIsNotVisible(
     args: Omit<po.deleteResourceTrashbinArgs, 'page'>
   ): Promise<void> {

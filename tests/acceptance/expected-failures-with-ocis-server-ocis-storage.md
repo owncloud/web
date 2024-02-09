@@ -17,11 +17,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 - [webUITrashbinRestore/trashbinRestore.feature:176](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L176)
 
-### [Deletion of a recursive folder from trashbin is not possible](https://github.com/owncloud/product/issues/188)
-
-- [webUITrashbinDelete/trashbinDelete.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L51)
-- [webUITrashbinDelete/trashbinDelete.feature:65](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinDelete/trashbinDelete.feature#L65)
-
 ### [Saving public share is not possible](https://github.com/owncloud/web/issues/5321)
 
 - [webUISharingPublicManagement/shareByPublicLink.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L24)
