@@ -38,6 +38,10 @@ export default defineComponent({
 .oc-text-editor-readonly {
   //Toastui Editor doesn't have margins in view mode, adjusted for uniformity
   padding: 18px 25px;
+
+  // Fixes readonly mode scrolling not available
+  height: calc(100vh - 52px);
+  overflow: auto;
 }
 
 .toastui-editor-defaultUI {
