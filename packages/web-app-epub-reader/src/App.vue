@@ -31,8 +31,15 @@
 <script lang="ts">
 import { defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client/src/helpers/resource/types'
-import { AppConfigObject, Key, useKeyboardActions, useThemeStore } from '@ownclouders/web-pkg'
-import ePub, { Book, NavItem, Rendition } from 'epubjs'
+import {
+  AppConfigObject,
+  Key,
+  useKeyboardActions,
+  useLocalStorage,
+  useThemeStore
+} from '@ownclouders/web-pkg'
+import ePub, { Book, NavItem, Rendition, Location } from 'epubjs'
+import { DisplayedLocation } from 'epubjs/types/rendition'
 
 const DARK_THEME_CONFIG = {
   html: {
@@ -96,6 +103,8 @@ export default defineComponent({
           book.destroy()
         }
 
+        const localStorageData = useLocalStorage(`oc_epubReader__${props.resource.id}`, {})
+
         book = ePub(props.currentContent)
         book.loaded.navigation.then(({ toc }) => {
           chapters.value = toc
@@ -111,7 +120,7 @@ export default defineComponent({
         rendition.themes.register('dark', DARK_THEME_CONFIG)
         rendition.themes.register('light', LIGHT_THEME_CONFIG)
         rendition.themes.select(themeStore.currentTheme.isDark ? 'dark' : 'light')
-        rendition.display()
+        rendition.display(unref(localStorageData)?.currentLocation?.start?.cfi)
 
         rendition.on('keydown', (event: KeyboardEvent) => {
           if (event.key === Key.ArrowLeft) {
@@ -123,18 +132,18 @@ export default defineComponent({
         })
 
         rendition.on('relocated', () => {
-          const currentLocation = rendition.currentLocation() as any
+          const currentLocation = rendition.currentLocation() as DisplayedLocation & Location
+          localStorageData.value = { currentLocation }
+          navigateLeftDisabled.value = currentLocation.atStart === true
+          navigateRightDisabled.value = currentLocation.atEnd === true
+
           const locationCfi = currentLocation.start.cfi
           const spineItem = book.spine.get(locationCfi)
           const navItem = book.navigation.get(spineItem.href)
-
           // Might be sub nav item and therefore undefined
           if (navItem) {
             currentChapter.value = navItem
           }
-
-          navigateLeftDisabled.value = currentLocation.atStart === true
-          navigateRightDisabled.value = currentLocation.atEnd === true
         })
       },
       {
