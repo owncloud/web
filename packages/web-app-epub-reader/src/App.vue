@@ -1,10 +1,10 @@
 <template>
   <div class="epub-reader oc-flex">
-    <oc-list class="epub-reader-chapters-list oc-pl-s oc-pt-xs">
+    <oc-list class="epub-reader-chapters-list oc-pl-s">
       <li
         v-for="chapter in chapters"
         :key="chapter.id"
-        class="epub-reader-chapters-list-item"
+        class="epub-reader-chapters-list-item oc-mt-xs"
         :class="{ active: currentChapter.id === chapter.id }"
       >
         <oc-button class="oc-text-truncate" appearance="raw" @click="showChapter(chapter)">
@@ -166,10 +166,6 @@ export default defineComponent({
     border-right: 1px solid var(--oc-color-border);
     width: 240px;
     overflow-y: auto;
-
-    &-item:not(:first-child) {
-      padding-top: var(--oc-space-xsmall);
-    }
 
     &-item:not(:last-child) {
       border-bottom: 1px solid var(--oc-color-border);
