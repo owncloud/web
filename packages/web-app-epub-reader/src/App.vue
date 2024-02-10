@@ -164,7 +164,7 @@ export default defineComponent({
   &-chapters-list {
     background: var(--oc-color-background-muted);
     border-right: 1px solid var(--oc-color-border);
-    max-width: 210px;
+    width: 240px;
     overflow-y: auto;
 
     &-item:not(:first-child) {
