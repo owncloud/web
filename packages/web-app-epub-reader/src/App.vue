@@ -167,19 +167,19 @@ export default defineComponent({
     max-width: 210px;
     overflow-y: auto;
 
-    &-item {
+    &-item:not(:first-child) {
       padding-top: var(--oc-space-xsmall);
+    }
+
+    &-item:not(:last-child) {
+      border-bottom: 1px solid var(--oc-color-border);
+      padding-bottom: var(--oc-space-xsmall);
     }
 
     &-item.active {
       .oc-button {
         color: var(--oc-color-swatch-primary-default);
       }
-    }
-
-    &-item:not(:last-child) {
-      border-bottom: 1px solid var(--oc-color-border);
-      padding-bottom: var(--oc-space-small);
     }
   }
 }
