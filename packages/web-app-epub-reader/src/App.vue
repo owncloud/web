@@ -103,7 +103,7 @@ export default defineComponent({
           book.destroy()
         }
 
-        const localStorageData = useLocalStorage(`oc_epubReader__${props.resource.id}`, {})
+        const localStorageData = useLocalStorage(`oc_epubReader_resource_${props.resource.id}`, {})
 
         book = ePub(props.currentContent)
         book.loaded.navigation.then(({ toc }) => {
