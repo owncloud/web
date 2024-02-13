@@ -1238,6 +1238,8 @@ Details
    https://github.com/owncloud/web/issues/9495
    https://github.com/owncloud/web/issues/10385
    https://github.com/owncloud/web/pull/10390
+   https://github.com/owncloud/web/pull/10467
+   https://github.com/owncloud/web/pull/10465
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
