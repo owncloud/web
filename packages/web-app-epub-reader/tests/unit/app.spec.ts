@@ -1,4 +1,10 @@
-import { defaultPlugins, getOcSelectOptions, mount, nextTicks } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  getOcSelectOptions,
+  mount,
+  nextTicks,
+  PartialComponentProps
+} from 'web-test-helpers'
 import App from '../../src/App.vue'
 import { useLocalStorage } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
