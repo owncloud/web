@@ -44,6 +44,13 @@ export default defineComponent({
   overflow: auto;
 }
 
+// Make url links limited in height and scrollable since base64 encoded images might be very long
+.toastui-editor-md-link-url {
+  display: block;
+  max-height: 100px;
+  overflow: auto;
+}
+
 .toastui-editor-defaultUI {
   border: none;
 }
