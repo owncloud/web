@@ -1,4 +1,4 @@
-import { Download, Page, expect } from '@playwright/test'
+import { Download, Locator, Page, expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
@@ -112,6 +112,8 @@ const collaboraCanvasEditorSelector = '.leaflet-layer'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
+const resourceLockIcon =
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[contains(@class, "oc-resource-icon-status-badge-inner")]'
 
 export const clickResource = async ({
   page,
@@ -560,12 +562,12 @@ export const startResourceUpload = (args: uploadResourceArgs): Promise<void> => 
   return performUpload(args)
 }
 
-const puaseResumeUpload = (page: Page): Promise<void> => {
+const pauseResumeUpload = (page: Page): Promise<void> => {
   return page.locator(pauseResumeUploadButton).click()
 }
 
 export const pauseResourceUpload = async (page: Page): Promise<void> => {
-  await puaseResumeUpload(page)
+  await pauseResumeUpload(page)
   await Promise.all([
     page.locator(uploadResumeTooltip).waitFor(),
     page.locator(pauseResumeUploadButton).hover()
@@ -573,7 +575,7 @@ export const pauseResourceUpload = async (page: Page): Promise<void> => {
 }
 
 export const resumeResourceUpload = async (page: Page): Promise<void> => {
-  await puaseResumeUpload(page)
+  await pauseResumeUpload(page)
   await Promise.all([
     page.locator(uploadPauseTooltip).waitFor(),
     page.locator(pauseResumeUploadButton).hover()
@@ -1454,32 +1456,50 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
 export interface openFileInViewerArgs {
   page: Page
   name: string
-  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor'
+  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
 }
 
 export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void> => {
   const { page, name, actionType } = args
 
-  if (actionType === 'mediaviewer') {
-    await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().includes('preview') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'GET'
-      ),
-      page.locator(util.format(resourceNameSelector, name)).click()
-    ])
+  switch (actionType) {
+    case 'OnlyOffice':
+    case 'Collabora':
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes(`app_name=${actionType}`) &&
+            resp.status() === 200 &&
+            resp.request().method() === 'POST'
+        ),
+        page.locator(util.format(resourceNameSelector, name)).click()
+      ])
+      break
+    case 'mediaviewer': {
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes('preview') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
+        ),
+        page.locator(util.format(resourceNameSelector, name)).click()
+      ])
 
-    // in case of error <img> doesn't contain src="blob:https://url"
-    expect(await page.locator(previewImage).getAttribute('src')).toContain('blob')
-  } else {
-    await Promise.all([
-      page.waitForResponse(
-        (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
-      ),
-      page.locator(util.format(resourceNameSelector, name)).click()
-    ])
+      // in case of error <img> doesn't contain src="blob:https://url"
+      expect(await page.locator(previewImage).getAttribute('src')).toContain('blob')
+      break
+    }
+    case 'pdfviewer':
+    case 'texteditor': {
+      await Promise.all([
+        page.waitForResponse(
+          (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
+        ),
+        page.locator(util.format(resourceNameSelector, name)).click()
+      ])
+      break
+    }
   }
 }
 
@@ -1644,4 +1664,14 @@ export const openShotcut = async ({
       resource.click()
     ])
   }
+}
+
+export interface expectFileToBeLockedArgs {
+  page: Page
+  resource: string
+}
+
+export const getLockLocator = async (args: expectFileToBeLockedArgs): Promise<Locator> => {
+  const { page, resource } = args
+  return await page.locator(util.format(resourceLockIcon, resource))
 }

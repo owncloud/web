@@ -99,7 +99,6 @@ config = {
                     "webUIPreview",
                     "webUILogin",
                 ],
-                "webUIWebdavLockProtection": "oCISWebdavLockProtection",
                 "oCISSharingBasic": [
                     "webUISharingAcceptShares",
                 ],
@@ -219,7 +218,6 @@ basicTestSuites = [
     "webUITrashbinFilesFolders",
     "webUITrashbinRestore",
     "webUIUpload",
-    "webUIWebdavLockProtection",
 ]
 
 ocisSpecificTestSuites = [
