@@ -45,6 +45,10 @@ Feature: link
       | lorem.txt     | lorem_new.txt    |
       | textfile.txt  | textfile_new.txt |
       | new-lorem.txt | test.txt         |
+#    currently upload folder feature is not available in playwright
+#    And "Anonymous" uploads the following resources in public link page
+#      | resource              |
+#      | filesForUpload/PARENT |
     And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     And "Anonymous" should not be able to open the old link "myPublicLink"
     And "Alice" logs out
