@@ -202,12 +202,12 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-    const userIds = []
+    const users = []
     for (const { id: user } of stepTable.hashes()) {
-      userIds.push(usersObject.getUUID({ key: user }))
+      users.push(user)
       await usersObject.selectUser({ key: user })
     }
-    await usersObject.changeQuotaUsingBatchAction({ value, userIds })
+    await usersObject.changeQuotaUsingBatchAction({ value, users })
   }
 )
 
@@ -225,10 +225,10 @@ Then(
     for (const { user } of stepTable.hashes()) {
       switch (action) {
         case 'should':
-          expect(users).toContain(usersObject.getUUID({ key: user }))
+          expect(users).toContain(await usersObject.getUUID({ key: user }))
           break
         case 'should not':
-          expect(users).not.toContain(usersObject.getUUID({ key: user }))
+          expect(users).not.toContain(await usersObject.getUUID({ key: user }))
           break
         default:
           throw new Error(`'${action}' not implemented`)
@@ -263,7 +263,7 @@ When(
     const userIds = []
 
     for (const { user } of stepTable.hashes()) {
-      userIds.push(usersObject.getUUID({ key: user }))
+      userIds.push(await usersObject.getUUID({ key: user }))
       await usersObject.select({ key: user })
     }
 
@@ -347,7 +347,7 @@ When(
     switch (actionType) {
       case 'batch actions':
         for (const { id: user } of stepTable.hashes()) {
-          userIds.push(usersObject.getUUID({ key: user }))
+          userIds.push(await usersObject.getUUID({ key: user }))
           await usersObject.selectUser({ key: user })
         }
         await usersObject.deleteUserUsingBatchAction({ userIds })
