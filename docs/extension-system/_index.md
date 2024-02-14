@@ -112,6 +112,8 @@ For details, please refer to the [sidebar nav docs]({{< ref "extension-types/lef
 4. `SidebarPanelExtension`, (type `sidebarPanel`) - An extension that can register panels to the right sidebar. For details, please refer to the [sidebar panel docs]({{< ref "extension-types/right-sidebar-panels.md" >}})
 5. `FolderViewExtension` (type `folderView`) - An extension that can register additional ways of displaying the content of a folder (resources, so spaces, folders or files) to the user.
 For details, please refer to the [folder view docs]({{< ref "extension-types/folder-view.md" >}})
+6. `CustomComponentExtension` (type `customComponent`) - An extension that can register a custom component for a render target. For details, please refer to the
+[custom component docs]({{< ref "extension-types/custom-components.md" >}})
 
 You're free to introduce your own extension types within your application code and use the extension registry to query the available ones. However, if you have the impression
 that an important extension type is missing and would be beneficial for the platform, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
@@ -125,22 +127,14 @@ Instead, we chose to use dot-formatted namespaces like e.g. `com.github.owncloud
 
 For the `type` you can choose from the ones listed above or define a custom one.
 
-In addition, you can also pass optional `scopes` to further limit the usage of an extension. The extension system predefines some scopes which are then used in the default extension
-points (see section below). Those include:
-- `resource` - For extensions which are meant to work with a `file`, `folder` or `space` as data context.
-- `user` - For extensions which are meant to work with a `user` as data context.
-- `group` - For extensions which are meant to work with a `group` as data context.
-
-Similar to the extension types, you are always free to define and handle custom scopes within your own application. If you have the impression
-that an important scope is missing and would be beneficial for the platform, please reach out to us by opening a [GitHub issue](https://github.com/owncloud/web/issues/new/choose).
-
-{{< hint info >}}
-Scopes are meant to be defined in singular form, e.g. `resource` instead of `resources`, even when the data context holds multiple items.
-{{< /hint >}}
+In addition, you can also pass optional `extensionPointIds` to further limit the usage of an extension. With the right click context menu and the batch actions being
+two different extension points, this could mean that a file action extension is only allowed in the context menu, but not in the batch actions.
+You can find predefined extension point ids in the extension points section below.
 
 #### Extension Points
 
-There are standardized components and places where extensions are being used automatically. These are the ones that are currently provided:
+There are standardized components and places where extensions are being used automatically. The following are the ones that are currently provided
+by the ownCloud Web runtime or the `files` app.
 
 1. Left Sidebar for Navigation
 2. Right Sidebar in any file(s) context 
@@ -150,3 +144,10 @@ There are standardized components and places where extensions are being used aut
 6. Upload menu in the files app 
 7. Quick actions in the files list of the files app
 8. Search results in the search app
+9. Global progress bar for the global loading state. Extension point id `app.runtime.global-progress-bar`. Allows to render a single custom component.
+
+#### User Preferences for Extensions
+
+To allow users to configure extensions, extension points can define user preferences. User preferences are defined as an object on the extension point configuration.
+Whenever an extension point declares to accept user preferences, it will get listed with a dropdown on the Preferences page (reachable via top right user menu).
+The user can then select one out of all the extensions which have been registered for this extension point. 
