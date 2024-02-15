@@ -35,7 +35,7 @@
         @update:model-value="resetFocusOnInvite"
       >
         <template #option="option">
-          <autocomplete-item :item="option" />
+          <autocomplete-item class="mark-element" :item="option" />
         </template>
         <template #no-options>
           <span v-text="$gettext('No users or groups found.')" />
@@ -131,6 +131,7 @@
 <script lang="ts">
 import { debounce } from 'lodash-es'
 import PQueue from 'p-queue'
+import Mark from 'mark.js'
 import { storeToRefs } from 'pinia'
 import AutocompleteItem from './AutocompleteItem.vue'
 import RoleDropdown from '../RoleDropdown.vue'
@@ -154,7 +155,7 @@ import {
   useSharesStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch, onMounted } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted, nextTick } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import {
   displayPositionedDropdown,
@@ -208,9 +209,15 @@ export default defineComponent({
     const { addShare } = sharesStore
     const { outgoingCollaborators } = storeToRefs(sharesStore)
 
+    const searchQuery = ref('')
+    const searchInProgress = ref(null)
+    const autocompleteResults = ref([])
+
     const saving = ref(false)
     const savingDelayed = ref(false)
     const notifyEnabled = ref(false)
+
+    const markInstance = ref(null)
 
     watch(saving, (newValue) => {
       if (!newValue) {
@@ -226,6 +233,15 @@ export default defineComponent({
       }, 700)
     })
 
+    watch(autocompleteResults, async () => {
+      await nextTick()
+      unref(markInstance)?.unmark()
+      unref(markInstance)?.mark(unref(searchQuery), {
+        element: 'span',
+        className: 'mark-highlight'
+      })
+    })
+
     const contextMenuButtonRef = ref(undefined)
 
     const showContextMenuOnBtnClick = ({ dropdown, event }) => {
@@ -237,6 +253,8 @@ export default defineComponent({
 
     const federatedUsers = ref([] as FederatedUser[])
     onMounted(async () => {
+      await nextTick()
+      markInstance.value = new Mark('.mark-element')
       // HACK: remove when federated users are returned from search
       // try {
       //   const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
@@ -284,6 +302,9 @@ export default defineComponent({
       federatedUsers,
       createSharesConcurrentRequests,
       ...useMessages(),
+      searchInProgress,
+      searchQuery,
+      autocompleteResults,
 
       // CERN
       accountType,
@@ -293,14 +314,11 @@ export default defineComponent({
 
   data() {
     return {
-      autocompleteResults: [],
       announcement: '',
-      searchInProgress: false,
       selectedCollaborators: [],
       selectedRole: null,
       customPermissions: null,
-      expirationDate: null,
-      searchQuery: ''
+      expirationDate: null
     }
   },
   computed: {
