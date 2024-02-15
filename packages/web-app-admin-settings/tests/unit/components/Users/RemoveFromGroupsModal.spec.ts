@@ -7,7 +7,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/src/generated'
-import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { Modal, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 
 describe('RemoveFromGroupsModal', () => {
@@ -51,7 +51,6 @@ describe('RemoveFromGroupsModal', () => {
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
 
       wrapper.vm.selectedOptions = groups
-      const eventSpy = vi.spyOn(eventBus, 'publish')
 
       await wrapper.vm.onConfirm()
       const { showErrorMessage } = useMessages()

@@ -80,7 +80,7 @@ describe('GroupsList', () => {
   })
   describe('toggle selection', () => {
     describe('selectGroups method', () => {
-      it('selects all groups', async () => {
+      it('selects all groups', () => {
         const groups = getGroupMocks()
         const { wrapper } = getWrapper({ mountType: shallowMount, groups })
         wrapper.vm.selectGroups(groups)
@@ -89,14 +89,14 @@ describe('GroupsList', () => {
       })
     })
     describe('selectGroup method', () => {
-      it('selects a group', async () => {
+      it('selects a group', () => {
         const groups = getGroupMocks()
         const { wrapper } = getWrapper({ mountType: shallowMount, groups: [groups[0]] })
         wrapper.vm.selectGroup(groups[0])
         const { addSelectedGroup } = useGroupSettingsStore()
         expect(addSelectedGroup).toHaveBeenCalledWith(groups[0])
       })
-      it('de-selects a selected group', async () => {
+      it('de-selects a selected group', () => {
         const groups = getGroupMocks()
         const { wrapper } = getWrapper({
           mountType: shallowMount,
@@ -109,7 +109,7 @@ describe('GroupsList', () => {
       })
     })
     describe('unselectAllGroups method', () => {
-      it('de-selects all selected groups', async () => {
+      it('de-selects all selected groups', () => {
         const groups = getGroupMocks()
         const { wrapper } = getWrapper({
           mountType: shallowMount,

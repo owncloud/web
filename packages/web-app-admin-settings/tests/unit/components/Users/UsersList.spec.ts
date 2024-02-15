@@ -114,7 +114,7 @@ describe('UsersList', () => {
   })
   describe('toggle selection', () => {
     describe('selectUsers method', () => {
-      it('selects all users', async () => {
+      it('selects all users', () => {
         const users = getUserMocks()
         const { wrapper } = getWrapper({ mountType: shallowMount, users })
         wrapper.vm.selectUsers(users)
@@ -123,14 +123,14 @@ describe('UsersList', () => {
       })
     })
     describe('selectUsers method', () => {
-      it('selects a user', async () => {
+      it('selects a user', () => {
         const users = getUserMocks()
         const { wrapper } = getWrapper({ mountType: shallowMount, users: [users[0]] })
         wrapper.vm.selectUser(users[0])
         const { addSelectedUser } = useUserSettingsStore()
         expect(addSelectedUser).toHaveBeenCalledWith(users[0])
       })
-      it('de-selects a selected user', async () => {
+      it('de-selects a selected user', () => {
         const users = getUserMocks()
         const { wrapper } = getWrapper({
           mountType: shallowMount,
@@ -143,7 +143,7 @@ describe('UsersList', () => {
       })
     })
     describe('unselectAllUsers method', () => {
-      it('de-selects all selected users', async () => {
+      it('de-selects all selected users', () => {
         const users = getUserMocks()
         const { wrapper } = getWrapper({
           mountType: shallowMount,

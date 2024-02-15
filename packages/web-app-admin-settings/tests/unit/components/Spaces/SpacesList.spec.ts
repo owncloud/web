@@ -122,7 +122,7 @@ describe('SpacesList', () => {
   })
   describe('toggle selection', () => {
     describe('selectSpaces method', () => {
-      it('selects all spaces', async () => {
+      it('selects all spaces', () => {
         const spaces = [
           mock<SpaceResource>({ id: '1', name: 'Some Space' }),
           mock<SpaceResource>({ id: '2', name: 'Some other Space' })
@@ -133,7 +133,7 @@ describe('SpacesList', () => {
         expect(setSelectedSpaces).toHaveBeenCalledWith(spaces)
       })
     })
-    describe('selectSpace method', () => {
+    describe('selectSpace ', () => {
       it('selects a space', async () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
@@ -141,7 +141,7 @@ describe('SpacesList', () => {
         const { addSelectedSpace } = useSpaceSettingsStore()
         expect(addSelectedSpace).toHaveBeenCalledWith(spaces[0])
       })
-      it('de-selects a selected space', async () => {
+      it('de-selects a selected space', () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces, selectedSpaces: spaces })
         wrapper.vm.selectSpace(spaces[0])
@@ -150,7 +150,7 @@ describe('SpacesList', () => {
       })
     })
     describe('unselectAllSpaces method', () => {
-      it('de-selects all selected spaces', async () => {
+      it('de-selects all selected spaces', () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
         wrapper.vm.unselectAllSpaces()
