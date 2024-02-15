@@ -33,6 +33,8 @@
         "
         @search:input="onSearch"
         @update:model-value="resetFocusOnInvite"
+        @open="onOpen"
+        @close="onClose"
       >
         <template #option="option">
           <autocomplete-item class="mark-element" :item="option" />
@@ -219,6 +221,16 @@ export default defineComponent({
 
     const markInstance = ref(null)
 
+    const isOpen = ref(false)
+
+    const onOpen = () => {
+      isOpen.value = true
+    }
+
+    const onClose = () => {
+      isOpen.value = false
+    }
+
     watch(saving, (newValue) => {
       if (!newValue) {
         savingDelayed.value = false
@@ -233,14 +245,22 @@ export default defineComponent({
       }, 700)
     })
 
-    watch(autocompleteResults, async () => {
-      await nextTick()
-      unref(markInstance)?.unmark()
-      unref(markInstance)?.mark(unref(searchQuery), {
-        element: 'span',
-        className: 'mark-highlight'
-      })
-    })
+    watch(
+      [autocompleteResults, isOpen],
+      async () => {
+        if (!unref(isOpen)) {
+          return
+        }
+
+        await nextTick()
+        unref(markInstance)?.unmark()
+        unref(markInstance)?.mark(unref(searchQuery), {
+          element: 'span',
+          className: 'mark-highlight'
+        })
+      },
+      { immediate: true }
+    )
 
     const contextMenuButtonRef = ref(undefined)
 
@@ -305,6 +325,8 @@ export default defineComponent({
       searchInProgress,
       searchQuery,
       autocompleteResults,
+      onOpen,
+      onClose,
 
       // CERN
       accountType,
