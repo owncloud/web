@@ -1,6 +1,6 @@
 <template>
   <div class="epub-reader oc-flex">
-    <oc-list class="epub-reader-chapters-list oc-pl-s">
+    <oc-list class="epub-reader-chapters-list oc-pl-s oc-visible@l">
       <li
         v-for="chapter in chapters"
         :key="chapter.id"
