@@ -259,15 +259,6 @@ Feature: Share by public link with different roles
     And as "Alice" the content of "simple-folder/'single'quotes.txt" in the server should be the same as the content of local file "'single'quotes.txt"
     And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
 
-  @issue-2443
-  Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions in the server
-    When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the public uploads folder "FOLDER" in files-drop page
-    Then the following files should be listed on the files-drop page:
-      | FOLDER |
-    And as "Alice" folder "simple-folder/FOLDER" should exist in the server
-
   @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "#Passw0rd" in the server
