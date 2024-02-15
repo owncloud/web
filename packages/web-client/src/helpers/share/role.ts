@@ -66,7 +66,7 @@ export abstract class ShareRole {
 
   public permissions(allowSharing: boolean): SharePermission[] {
     return this._permissions.filter((p: SharePermission) => {
-      if (p === SharePermissions.share) {
+      if (p.key === SharePermissions.share.key) {
         return allowSharing
       }
       return true
