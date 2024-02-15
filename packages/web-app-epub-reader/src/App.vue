@@ -1,14 +1,18 @@
 <template>
-  <div class="epub-reader oc-flex oc-p-s">
-    <oc-list class="epub-reader-chapters-list oc-visible@l">
+  <div class="epub-reader oc-flex">
+    <oc-list class="epub-reader-chapters-list oc-pl-s oc-visible@l">
       <li
         v-for="chapter in chapters"
         :key="chapter.id"
-        class="epub-reader-chapters-list-item oc-ml-m"
+        class="epub-reader-chapters-list-item oc-mt-xs"
         :class="{ active: currentChapter.id === chapter.id }"
       >
-        <oc-button class="oc-mr-s" appearance="raw" @click="showChapter(chapter)">
-          <span v-text="chapter.label" />
+        <oc-button class="oc-text-truncate" appearance="raw" @click="showChapter(chapter)">
+          <span
+            v-oc-tooltip="chapter.label"
+            class="oc-text-truncate oc-text-small oc-mr-s"
+            v-text="chapter.label"
+          />
         </oc-button>
       </li>
     </oc-list>
@@ -167,25 +171,20 @@ export default defineComponent({
 <style lang="scss">
 .epub-reader {
   &-chapters-list {
-    position: absolute;
-    left: var(--oc-space-small);
+    background: var(--oc-color-background-muted);
+    border-right: 1px solid var(--oc-color-border);
+    width: 240px;
     overflow-y: auto;
-    max-width: 210px;
-    height: calc(100% - 52px - (2 * var(--oc-space-small)));
-    max-height: calc(100% - 52px - (2 * var(--oc-space-small)));
 
-    &-item {
-      padding-top: var(--oc-space-small);
+    &-item:not(:last-child) {
+      border-bottom: 1px solid var(--oc-color-border);
+      padding-bottom: var(--oc-space-xsmall);
     }
 
     &-item.active {
       .oc-button {
         color: var(--oc-color-swatch-primary-default);
       }
-    }
-
-    &-item:not(:last-child) {
-      padding-bottom: var(--oc-space-small);
     }
   }
 }
