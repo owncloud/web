@@ -158,3 +158,33 @@ Feature: share
 
     And "Brian" navigates to the shared with me page
     And "Brian" logs out
+
+
+  Scenario: receive two shares with same name
+    Given "Admin" creates following users using API
+      | id    |
+      | Carol |
+    And "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
+      | name        |
+      | test-folder |
+    And "Alice" opens the "files" app
+    And "Alice" shares the following resource using the sidebar panel
+      | resource     | recipient | type  | role     |
+      | test-folder  | Brian     | user  | Can view |
+    And "Alice" logs out
+    And "Carol" logs in
+    And "Carol" creates the following folder in personal space using API
+      | name        |
+      | test-folder |
+    And "Carol" opens the "files" app
+    And "Carol" shares the following resource using the sidebar panel
+      | resource    | recipient | type | role     |
+      | test-folder | Brian     | user | Can view |
+    And "Carol" logs out
+    When "Brian" navigates to the shared with me page
+    Then following resources should be displayed in the Shares for user "Brian"
+      | resource        |
+      | test-folder     |
+      | test-folder (1) |
+    And "Brian" logs out
