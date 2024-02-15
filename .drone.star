@@ -99,9 +99,6 @@ config = {
                     "webUIPreview",
                     "webUILogin",
                 ],
-                "oCISSharingBasic": [
-                    "webUISharingAcceptShares",
-                ],
                 "oCISFiles1": [
                     "webUICreateFilesFolders",
                     "webUIDeleteFilesFolders",
