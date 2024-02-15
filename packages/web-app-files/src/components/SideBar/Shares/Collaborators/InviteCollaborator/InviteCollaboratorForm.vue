@@ -212,7 +212,7 @@ export default defineComponent({
     const { outgoingCollaborators } = storeToRefs(sharesStore)
 
     const searchQuery = ref('')
-    const searchInProgress = ref(null)
+    const searchInProgress = ref(false)
     const autocompleteResults = ref([])
 
     const saving = ref(false)
