@@ -245,22 +245,18 @@ export default defineComponent({
       }, 700)
     })
 
-    watch(
-      [autocompleteResults, isOpen],
-      async () => {
-        if (!unref(isOpen)) {
-          return
-        }
+    watch([autocompleteResults, isOpen], async () => {
+      if (!unref(isOpen)) {
+        return
+      }
 
-        await nextTick()
-        unref(markInstance)?.unmark()
-        unref(markInstance)?.mark(unref(searchQuery), {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      },
-      { immediate: true }
-    )
+      await nextTick()
+      unref(markInstance)?.unmark()
+      unref(markInstance)?.mark(unref(searchQuery), {
+        element: 'span',
+        className: 'mark-highlight'
+      })
+    })
 
     const contextMenuButtonRef = ref(undefined)
 
