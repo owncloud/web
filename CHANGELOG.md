@@ -119,6 +119,7 @@ Summary
 * Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
 * Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
+* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 
 Details
 -------
@@ -1240,6 +1241,14 @@ Details
    https://github.com/owncloud/web/pull/10390
    https://github.com/owncloud/web/pull/10467
    https://github.com/owncloud/web/pull/10465
+
+* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
+
+   We've adjusted the sharing autosuggest list, so the entered search term will be
+   highlighted in the respective name and mail of the found users.
+
+   https://github.com/owncloud/web/issues/10453
+   https://github.com/owncloud/web/pull/10485
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
