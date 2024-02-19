@@ -4,36 +4,67 @@
       <li
         v-for="chapter in chapters"
         :key="chapter.id"
-        class="epub-reader-chapters-list-item oc-mt-xs"
+        class="epub-reader-chapters-list-item oc-py-s"
         :class="{ active: currentChapter.id === chapter.id }"
       >
         <oc-button class="oc-text-truncate" appearance="raw" @click="showChapter(chapter)">
           <span
             v-oc-tooltip="chapter.label"
-            class="oc-text-truncate oc-text-small oc-mr-s"
+            class="oc-text-truncate oc-mr-s"
             v-text="chapter.label"
           />
         </oc-button>
       </li>
     </oc-list>
-    <div class="oc-flex oc-flex-center oc-width-1-1">
-      <div class="oc-flex oc-flex-middle oc-mx-l">
-        <oc-button :disabled="navigateLeftDisabled" appearance="raw" @click="navigateLeft">
-          <oc-icon name="arrow-left-s" fill-type="line" size="xlarge" />
-        </oc-button>
+    <div class="oc-width-1-1 oc-height-1-1">
+      <div class="epub-reader-controls oc-flex oc-flex-middle oc-flex-between oc-m-s">
+        <div>
+          <oc-button
+            v-oc-tooltip="`${fontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
+            :disabled="decreaseFontSizeDisabled"
+            gap-size="none"
+            @click="decreaseFontSize"
+          >
+            <oc-icon name="font-family" size="small" />
+            <oc-icon name="subtract" size="xsmall" />
+          </oc-button>
+          <oc-button
+            v-oc-tooltip="`${fontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
+            :disabled="increaseFontSizeDisabled"
+            gap-size="none"
+            @click="increaseFontSize"
+          >
+            <oc-icon name="font-family" size="small" />
+            <oc-icon name="add" size="xsmall" />
+          </oc-button>
+        </div>
+        <oc-select
+          v-model="currentChapter"
+          class="epub-reader-controls-chapters-select"
+          :options="chapters"
+          @update:model-value="showChapter"
+        />
       </div>
-      <div id="reader" ref="bookContainer" class="oc-flex oc-flex-center" />
-      <div class="oc-flex oc-flex-middle oc-mx-l">
-        <oc-button :disabled="navigateRightDisabled" appearance="raw" @click="navigateRight">
-          <oc-icon name="arrow-right-s" fill-type="line" size="xlarge" />
-        </oc-button>
+      <div class="oc-flex oc-flex-center oc-width-1-1 oc-height-1-1">
+        <div class="oc-flex oc-flex-middle oc-mx-l">
+          <oc-button :disabled="navigateLeftDisabled" appearance="raw" @click="navigateLeft">
+            <oc-icon name="arrow-left-s" fill-type="line" size="xlarge" />
+          </oc-button>
+        </div>
+        <div id="reader" ref="bookContainer" class="oc-flex oc-flex-center" />
+
+        <div class="oc-flex oc-flex-middle oc-mx-l">
+          <oc-button :disabled="navigateRightDisabled" appearance="raw" @click="navigateRight">
+            <oc-icon name="arrow-right-s" fill-type="line" size="xlarge" />
+          </oc-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client/src/helpers/resource/types'
 import {
   AppConfigObject,
@@ -55,10 +86,12 @@ const DARK_THEME_CONFIG = {
     filter: 'invert(1) hue-rotate(180deg)'
   }
 }
-
 const LIGHT_THEME_CONFIG = {
   html: { background: 'white' }
 }
+const MAX_FONT_SIZE_PERCENTAGE = 150
+const MIN_FONT_SIZE_PERCENTAGE = 50
+const FONT_SIZE_PERCENTAGE_STEP = 10
 
 export default defineComponent({
   name: 'EpubReader',
@@ -79,6 +112,7 @@ export default defineComponent({
     const currentChapter = ref<NavItem>()
     const navigateLeftDisabled = ref(true)
     const navigateRightDisabled = ref(false)
+    const fontSizePercentage = ref(100)
     const themeStore = useThemeStore()
     let book: Book
     let rendition: Rendition
@@ -94,6 +128,30 @@ export default defineComponent({
     const showChapter = (chapter: NavItem) => {
       rendition.display(chapter.href)
     }
+
+    const increaseFontSize = () => {
+      fontSizePercentage.value = Math.min(
+        unref(fontSizePercentage) + FONT_SIZE_PERCENTAGE_STEP,
+        MAX_FONT_SIZE_PERCENTAGE
+      )
+      rendition.themes.fontSize(`${unref(fontSizePercentage)}%`)
+    }
+
+    const decreaseFontSize = () => {
+      fontSizePercentage.value = Math.max(
+        unref(fontSizePercentage) - FONT_SIZE_PERCENTAGE_STEP,
+        MIN_FONT_SIZE_PERCENTAGE
+      )
+      rendition.themes.fontSize(`${unref(fontSizePercentage)}%`)
+    }
+
+    const increaseFontSizeDisabled = computed(() => {
+      return unref(fontSizePercentage) >= MAX_FONT_SIZE_PERCENTAGE
+    })
+
+    const decreaseFontSizeDisabled = computed(() => {
+      return unref(fontSizePercentage) <= MIN_FONT_SIZE_PERCENTAGE
+    })
 
     keyboardActions.bindKeyAction({ primary: Key.ArrowLeft }, () => navigateLeft())
     keyboardActions.bindKeyAction({ primary: Key.ArrowRight }, () => navigateRight())
@@ -163,13 +221,28 @@ export default defineComponent({
       navigateRightDisabled,
       currentChapter,
       chapters,
-      showChapter
+      showChapter,
+      increaseFontSize,
+      decreaseFontSize,
+      increaseFontSizeDisabled,
+      decreaseFontSizeDisabled,
+      fontSizePercentage,
+      FONT_SIZE_PERCENTAGE_STEP
     }
   }
 })
 </script>
 <style lang="scss">
 .epub-reader {
+  &-controls {
+    &-chapters-select {
+      width: 320px;
+      @media (min-width: $oc-breakpoint-large-default) {
+        display: none;
+      }
+    }
+  }
+
   &-chapters-list {
     background: var(--oc-color-background-muted);
     border-right: 1px solid var(--oc-color-border);
@@ -178,7 +251,6 @@ export default defineComponent({
 
     &-item:not(:last-child) {
       border-bottom: 1px solid var(--oc-color-border);
-      padding-bottom: var(--oc-space-xsmall);
     }
 
     &-item.active {
