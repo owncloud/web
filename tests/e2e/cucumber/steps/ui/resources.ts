@@ -493,7 +493,7 @@ When(
 )
 
 When(
-  /^"([^"].*)" opens the following file(?:s)? in (mediaviewer|pdfviewer|texteditor)$/,
+  /^"([^"].*)" opens the following file(?:s)? in (mediaviewer|pdfviewer|texteditor|Collabora|OnlyOffice)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -501,7 +501,12 @@ When(
     for (const info of stepTable.hashes()) {
       await resourceObject.openFileInViewer({
         name: info.resource,
-        actionType: actionType as 'mediaviewer' | 'pdfviewer' | 'texteditor'
+        actionType: actionType as
+          | 'mediaviewer'
+          | 'pdfviewer'
+          | 'texteditor'
+          | 'Collabora'
+          | 'OnlyOffice'
       })
     }
   }
@@ -730,5 +735,18 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.openShotcut({ name: name, url: url })
+  }
+)
+
+Then(
+  /^for "([^"]*)" file "([^"]*)" (should|should not) be locked$/,
+  async function (this: World, stepUser: string, file: string, actionType: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const lockLocator = await resourceObject.getLockLocator({ resource: file })
+
+    actionType === 'should'
+      ? expect(lockLocator).toBeVisible()
+      : expect(lockLocator).not.toBeVisible()
   }
 )
