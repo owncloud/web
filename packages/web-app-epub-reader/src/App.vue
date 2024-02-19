@@ -18,19 +18,27 @@
     </oc-list>
     <div class="oc-width-1-1 oc-height-1-1">
       <div class="epub-reader-controls oc-flex oc-flex-middle oc-m-s">
-        <div class="oc-flex">
+        <div class="oc-flex oc-button-group">
           <oc-button
             v-oc-tooltip="`${fontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
+            class="epub-reader-controls-font-size-decrease"
             :disabled="decreaseFontSizeDisabled"
             gap-size="none"
-            class="oc-mr-s"
             @click="decreaseFontSize"
           >
             <oc-icon name="font-family" size="small" />
             <oc-icon name="subtract" size="xsmall" />
           </oc-button>
           <oc-button
+            v-oc-tooltip="$gettext('Reset font size')"
+            class="epub-reader-controls-font-size-reset"
+            gap-size="none"
+            @click="resetFontSize"
+            v-text="`${fontSizePercentage}%`"
+          />
+          <oc-button
             v-oc-tooltip="`${fontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
+            class="epub-reader-controls-font-size-increare"
             :disabled="increaseFontSizeDisabled"
             gap-size="none"
             @click="increaseFontSize"
@@ -41,7 +49,7 @@
         </div>
         <oc-select
           v-model="currentChapter"
-          class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s"
+          class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l"
           :options="chapters"
           @update:model-value="showChapter"
         />
@@ -76,6 +84,7 @@ import {
 } from '@ownclouders/web-pkg'
 import ePub, { Book, NavItem, Rendition, Location } from 'epubjs'
 import { DisplayedLocation } from 'epubjs/types/rendition'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 const DARK_THEME_CONFIG = {
   html: {
@@ -135,7 +144,10 @@ export default defineComponent({
         unref(fontSizePercentage) + FONT_SIZE_PERCENTAGE_STEP,
         MAX_FONT_SIZE_PERCENTAGE
       )
-      rendition.themes.fontSize(`${unref(fontSizePercentage)}%`)
+    }
+
+    const resetFontSize = () => {
+      fontSizePercentage.value = 100
     }
 
     const decreaseFontSize = () => {
@@ -143,7 +155,6 @@ export default defineComponent({
         unref(fontSizePercentage) - FONT_SIZE_PERCENTAGE_STEP,
         MIN_FONT_SIZE_PERCENTAGE
       )
-      rendition.themes.fontSize(`${unref(fontSizePercentage)}%`)
     }
 
     const increaseFontSizeDisabled = computed(() => {
@@ -177,7 +188,7 @@ export default defineComponent({
         rendition = book.renderTo(unref(bookContainer), {
           flow: 'paginated',
           width: 650,
-          height: '100%'
+          height: '90%' // Don't use full height to avoid cut-off text
         })
 
         rendition.themes.register('dark', DARK_THEME_CONFIG)
@@ -214,6 +225,10 @@ export default defineComponent({
       }
     )
 
+    watch(fontSizePercentage, () => {
+      rendition.themes.fontSize(`${unref(fontSizePercentage)}%`)
+    })
+
     return {
       bookContainer,
       navigateLeft,
@@ -223,6 +238,7 @@ export default defineComponent({
       currentChapter,
       chapters,
       showChapter,
+      resetFontSize,
       increaseFontSize,
       decreaseFontSize,
       increaseFontSizeDisabled,
@@ -230,19 +246,12 @@ export default defineComponent({
       fontSizePercentage,
       FONT_SIZE_PERCENTAGE_STEP
     }
-  }
+  },
+  methods: { $gettext }
 })
 </script>
 <style lang="scss">
 .epub-reader {
-  &-controls {
-    &-chapters-select {
-      @media (min-width: $oc-breakpoint-large-default) {
-        display: none;
-      }
-    }
-  }
-
   &-chapters-list {
     background: var(--oc-color-background-muted);
     border-right: 1px solid var(--oc-color-border);
@@ -258,6 +267,10 @@ export default defineComponent({
         color: var(--oc-color-swatch-primary-default);
       }
     }
+  }
+
+  &-controls-font-size-reset {
+    width: 58px; //prevent jumpy behaviour
   }
 }
 </style>
