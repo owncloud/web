@@ -17,12 +17,13 @@
       </li>
     </oc-list>
     <div class="oc-width-1-1 oc-height-1-1">
-      <div class="epub-reader-controls oc-flex oc-flex-middle oc-flex-between oc-m-s">
-        <div>
+      <div class="epub-reader-controls oc-flex oc-flex-middle oc-m-s">
+        <div class="oc-flex">
           <oc-button
             v-oc-tooltip="`${fontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
             :disabled="decreaseFontSizeDisabled"
             gap-size="none"
+            class="oc-mr-s"
             @click="decreaseFontSize"
           >
             <oc-icon name="font-family" size="small" />
@@ -40,7 +41,7 @@
         </div>
         <oc-select
           v-model="currentChapter"
-          class="epub-reader-controls-chapters-select"
+          class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s"
           :options="chapters"
           @update:model-value="showChapter"
         />
@@ -236,7 +237,6 @@ export default defineComponent({
 .epub-reader {
   &-controls {
     &-chapters-select {
-      width: 320px;
       @media (min-width: $oc-breakpoint-large-default) {
         display: none;
       }
