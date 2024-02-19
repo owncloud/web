@@ -745,6 +745,8 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const lockLocator = await resourceObject.getLockLocator({ resource: file })
 
-    actionType === 'should' ? expect(lockLocator).toBeVisible() : expect(lockLocator).not.toBeVisible()
+    actionType === 'should'
+      ? expect(lockLocator).toBeVisible()
+      : expect(lockLocator).not.toBeVisible()
   }
 )
