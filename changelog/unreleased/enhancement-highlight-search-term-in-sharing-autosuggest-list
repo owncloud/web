@@ -1,0 +1,8 @@
+Enhancement: Highlight search term in sharing autosuggest list
+
+We've adjusted the sharing autosuggest list, so the entered search term will be highlighted in the respective
+name and mail of the found users.
+
+https://github.com/owncloud/web/pull/10485
+https://github.com/owncloud/web/issues/10453
+
