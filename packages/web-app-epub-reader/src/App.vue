@@ -26,7 +26,7 @@
             gap-size="none"
             @click="decreaseFontSize"
           >
-            <oc-icon name="font-family" size="small" />
+            <oc-icon name="font-family" fill-type="none" size="small" />
             <oc-icon name="subtract" size="xsmall" />
           </oc-button>
           <oc-button
@@ -43,7 +43,7 @@
             gap-size="none"
             @click="increaseFontSize"
           >
-            <oc-icon name="font-family" size="small" />
+            <oc-icon name="font-family" fill-type="none" size="small" />
             <oc-icon name="add" size="xsmall" />
           </oc-button>
         </div>
