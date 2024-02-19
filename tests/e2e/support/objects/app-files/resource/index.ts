@@ -1,4 +1,4 @@
-import { Download, Page } from '@playwright/test'
+import { Download, Locator, Page } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 
@@ -280,5 +280,9 @@ export class Resource {
 
   async openShotcut({ name, url }: { name: string; url?: string }): Promise<void> {
     await po.openShotcut({ page: this.#page, name: name, url: url })
+  }
+
+  async getLockLocator(args: Omit<po.expectFileToBeLockedArgs, 'page'>): Promise<Locator> {
+    return po.getLockLocator({ ...args, page: this.#page })
   }
 }
