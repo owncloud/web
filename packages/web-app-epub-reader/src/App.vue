@@ -52,6 +52,7 @@
           class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l"
           :options="chapters"
           @update:model-value="showChapter"
+          :searchable="false"
         />
       </div>
       <div class="oc-flex oc-flex-center oc-width-1-1 oc-height-1-1">
