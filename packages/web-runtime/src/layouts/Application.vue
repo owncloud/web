@@ -62,7 +62,7 @@ import MobileNav from '../components/MobileNav.vue'
 import { NavItem, getExtensionNavItems } from '../helpers/navItems'
 import { LoadingIndicator } from '@ownclouders/web-pkg'
 import { useActiveApp, useRoute, useRouteMeta, useSpacesLoading } from '@ownclouders/web-pkg'
-import { computed, defineComponent, h, provide, ref, toRef, unref, watch } from 'vue'
+import { computed, defineComponent, provide, ref, toRef, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
@@ -181,7 +181,7 @@ export default defineComponent({
       id: progressBarExtensionId,
       type: 'customComponent',
       extensionPointIds: [progressBarExtensionPointId],
-      content: (slots) => [h(LoadingIndicator, slots)],
+      content: LoadingIndicator,
       userPreference: {
         optionLabel: $gettext('Default progress bar')
       }

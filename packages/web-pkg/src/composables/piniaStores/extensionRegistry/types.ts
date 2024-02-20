@@ -3,7 +3,7 @@ import { SearchProvider, SideBarPanel } from '../../../components'
 import { AppNavigationItem } from '../../../apps'
 import { Item } from '@ownclouders/web-client/src/helpers'
 import { FolderView } from '../../../ui'
-import { Slot } from 'vue'
+import { Component, Slot } from 'vue'
 import { StringUnionOrAnyString } from '../../../utils'
 
 export type ExtensionType = StringUnionOrAnyString<
@@ -50,7 +50,7 @@ export interface FolderViewExtension extends BaseExtension {
 
 export interface CustomComponentExtension extends BaseExtension {
   type: 'customComponent'
-  content: Slot
+  content: Slot | Component
 }
 
 export type Extension =
