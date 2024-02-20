@@ -48,7 +48,7 @@ export const useExtensionRegistry = () => {
           } = {}
         ) => {
           return state.extensionPoints.filter((e) => {
-            if (Object.prototype.hasOwnProperty.call(options, 'type') && e.type !== options.type) {
+            if (Object.hasOwn(options, 'type') && e.type !== options.type) {
               return false
             }
             return true

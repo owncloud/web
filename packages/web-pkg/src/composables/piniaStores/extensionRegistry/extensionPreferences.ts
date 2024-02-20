@@ -41,7 +41,7 @@ export const useExtensionPreferencesStore = defineStore('extensionPreferences', 
     return []
   }
   const setSelectedExtensionIds = (extensionPointId: string, extensionIds: string[]) => {
-    if (!Object.prototype.hasOwnProperty.call(unref(extensionPreferences), extensionPointId)) {
+    if (!Object.hasOwn(unref(extensionPreferences), extensionPointId)) {
       extensionPreferences.value[extensionPointId] = {
         extensionPointId,
         selectedExtensionIds: extensionIds
