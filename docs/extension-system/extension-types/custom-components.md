@@ -18,7 +18,7 @@ extension point needs to be mounted in the current view.
 ### Configuration
 
 To define a custom component extension, you implement the `CustomComponentExtension` interface.
-Here's how it looks like:
+Here's what it looks like:
 
 ```typescript
 interface CustomComponentExtension {
@@ -31,15 +31,15 @@ interface CustomComponentExtension {
 
 For `id`, `type`, and `extensionPointIds`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in the top level docs.
 
-The `content` object configures the actual custom component to render in the target extension point.
+The `content` property specifies a render function for the target extension point.
 
 ### Example
 
-A simple example for a custom component extension would be the `NyanCat` progress bar component, being
+A simple example for a custom component extension could be a `NyanCat` progress bar component, being
 targeted at the `global-progress-bar` extension point as render target.
 
 ```typescript
-({
+const extension = {
     id: 'com.github.owncloud.web.app.progress-bars.nyan-cat',
     type: 'customComponent',
     extensionPointIds: ['app.runtime.global-progress-bar'],
@@ -47,5 +47,5 @@ targeted at the `global-progress-bar` extension point as render target.
     userPreference: {
       optionLabel: $gettext('Nyan Cat progress bar')
     }
-})
+}
 ```
