@@ -18,7 +18,7 @@
     </oc-list>
     <div class="oc-width-1-1 oc-height-1-1">
       <div class="epub-reader-controls oc-flex oc-flex-middle oc-m-s">
-        <div class="oc-flex oc-button-group epub-reader-controls-font-size">
+        <div class="epub-reader-controls-font-size oc-flex oc-button-group">
           <oc-button
             v-oc-tooltip="`${currentFontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
             class="epub-reader-controls-font-size-decrease"
@@ -38,7 +38,7 @@
           />
           <oc-button
             v-oc-tooltip="`${currentFontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
-            class="epub-reader-controls-font-size-increare"
+            class="epub-reader-controls-font-size-increase"
             :disabled="increaseFontSizeDisabled"
             gap-size="none"
             @click="increaseFontSize"
@@ -51,8 +51,8 @@
           v-model="currentChapter"
           class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l"
           :options="chapters"
-          @update:model-value="showChapter"
           :searchable="false"
+          @update:model-value="showChapter"
         />
       </div>
       <div class="oc-flex oc-flex-center oc-width-1-1 oc-height-1-1">
@@ -122,7 +122,8 @@ export default defineComponent({
     const currentChapter = ref<NavItem>()
     const navigateLeftDisabled = ref(true)
     const navigateRightDisabled = ref(false)
-    const currentFontSizePercentage = ref(100)
+    const localStorageData = useLocalStorage(`oc_epubReader`, {})
+    const currentFontSizePercentage = ref(unref(localStorageData).fontSizePercentage || 100)
     const themeStore = useThemeStore()
     let book: Book
     let rendition: Rendition
@@ -177,7 +178,10 @@ export default defineComponent({
           book.destroy()
         }
 
-        const localStorageData = useLocalStorage(`oc_epubReader_resource_${props.resource.id}`, {})
+        const localStorageResourceData = useLocalStorage(
+          `oc_epubReader_resource_${props.resource.id}`,
+          {}
+        )
 
         book = ePub(props.currentContent)
         book.loaded.navigation.then(({ toc }) => {
@@ -194,7 +198,8 @@ export default defineComponent({
         rendition.themes.register('dark', DARK_THEME_CONFIG)
         rendition.themes.register('light', LIGHT_THEME_CONFIG)
         rendition.themes.select(themeStore.currentTheme.isDark ? 'dark' : 'light')
-        rendition.display(unref(localStorageData)?.currentLocation?.start?.cfi)
+        rendition.themes.fontSize(`${unref(currentFontSizePercentage)}%`)
+        rendition.display(unref(localStorageResourceData)?.currentLocation?.start?.cfi)
 
         rendition.on('keydown', (event: KeyboardEvent) => {
           if (event.key === Key.ArrowLeft) {
@@ -207,7 +212,7 @@ export default defineComponent({
 
         rendition.on('relocated', () => {
           const currentLocation = rendition.currentLocation() as DisplayedLocation & Location
-          localStorageData.value = { currentLocation }
+          localStorageResourceData.value = { currentLocation }
           navigateLeftDisabled.value = currentLocation.atStart === true
           navigateRightDisabled.value = currentLocation.atEnd === true
 
@@ -227,6 +232,10 @@ export default defineComponent({
 
     watch(currentFontSizePercentage, () => {
       rendition.themes.fontSize(`${unref(currentFontSizePercentage)}%`)
+      localStorageData.value = {
+        ...localStorageData,
+        fontSizePercentage: unref(currentFontSizePercentage)
+      }
     })
 
     return {
