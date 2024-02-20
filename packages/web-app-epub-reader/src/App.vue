@@ -84,7 +84,6 @@ import {
 } from '@ownclouders/web-pkg'
 import ePub, { Book, NavItem, Rendition, Location } from 'epubjs'
 import { DisplayedLocation } from 'epubjs/types/rendition'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 const DARK_THEME_CONFIG = {
   html: {
@@ -246,8 +245,7 @@ export default defineComponent({
       fontSizePercentage,
       FONT_SIZE_PERCENTAGE_STEP
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 <style lang="scss">
