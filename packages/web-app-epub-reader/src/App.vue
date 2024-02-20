@@ -57,14 +57,24 @@
       </div>
       <div class="oc-flex oc-flex-center oc-width-1-1 oc-height-1-1">
         <div class="oc-flex oc-flex-middle oc-mx-l">
-          <oc-button :disabled="navigateLeftDisabled" appearance="raw" @click="navigateLeft">
+          <oc-button
+            class="epub-reader-navigate-left"
+            :disabled="navigateLeftDisabled"
+            appearance="raw"
+            @click="navigateLeft"
+          >
             <oc-icon name="arrow-left-s" fill-type="line" size="xlarge" />
           </oc-button>
         </div>
         <div id="reader" ref="bookContainer" class="oc-flex oc-flex-center" />
 
         <div class="oc-flex oc-flex-middle oc-mx-l">
-          <oc-button :disabled="navigateRightDisabled" appearance="raw" @click="navigateRight">
+          <oc-button
+            class="epub-reader-navigate-right"
+            :disabled="navigateRightDisabled"
+            appearance="raw"
+            @click="navigateRight"
+          >
             <oc-icon name="arrow-right-s" fill-type="line" size="xlarge" />
           </oc-button>
         </div>
@@ -120,24 +130,24 @@ export default defineComponent({
     const bookContainer = ref<Element>()
     const chapters = ref<NavItem[]>([])
     const currentChapter = ref<NavItem>()
-    const navigateLeftDisabled = ref(true)
+    const navigateLeftDisabled = ref(false)
     const navigateRightDisabled = ref(false)
     const localStorageData = useLocalStorage(`oc_epubReader`, {})
     const currentFontSizePercentage = ref(unref(localStorageData).fontSizePercentage || 100)
     const themeStore = useThemeStore()
-    let book: Book
-    let rendition: Rendition
+    let book = ref<Book>()
+    let rendition = ref<Rendition>()
 
     const navigateLeft = () => {
-      rendition.prev()
+      unref(rendition).prev()
     }
 
     const navigateRight = () => {
-      rendition.next()
+      unref(rendition).next()
     }
 
     const showChapter = (chapter: NavItem) => {
-      rendition.display(chapter.href)
+      unref(rendition).display(chapter.href)
     }
 
     const increaseFontSize = () => {
@@ -174,8 +184,8 @@ export default defineComponent({
       async () => {
         await nextTick()
 
-        if (book) {
-          book.destroy()
+        if (unref(book)) {
+          unref(book).destroy()
         }
 
         const localStorageResourceData = useLocalStorage(
@@ -183,25 +193,26 @@ export default defineComponent({
           {}
         )
 
-        book = ePub(props.currentContent)
-        book.loaded.navigation.then(({ toc }) => {
+        book.value = ePub(props.currentContent)
+
+        unref(book).loaded.navigation.then(({ toc }) => {
           chapters.value = toc
-          currentChapter.value = toc[0]
+          currentChapter.value = toc?.[0]
         })
 
-        rendition = book.renderTo(unref(bookContainer), {
+        rendition.value = unref(book).renderTo(unref(bookContainer), {
           flow: 'paginated',
           width: 650,
           height: '90%' // Don't use full height to avoid cut-off text
         })
 
-        rendition.themes.register('dark', DARK_THEME_CONFIG)
-        rendition.themes.register('light', LIGHT_THEME_CONFIG)
-        rendition.themes.select(themeStore.currentTheme.isDark ? 'dark' : 'light')
-        rendition.themes.fontSize(`${unref(currentFontSizePercentage)}%`)
-        rendition.display(unref(localStorageResourceData)?.currentLocation?.start?.cfi)
+        unref(rendition).themes.register('dark', DARK_THEME_CONFIG)
+        unref(rendition).themes.register('light', LIGHT_THEME_CONFIG)
+        unref(rendition).themes.select(themeStore.currentTheme.isDark ? 'dark' : 'light')
+        unref(rendition).themes.fontSize(`${unref(currentFontSizePercentage)}%`)
+        unref(rendition).display(unref(localStorageResourceData)?.currentLocation?.start?.cfi)
 
-        rendition.on('keydown', (event: KeyboardEvent) => {
+        unref(rendition).on('keydown', (event: KeyboardEvent) => {
           if (event.key === Key.ArrowLeft) {
             navigateLeft()
           }
@@ -210,15 +221,15 @@ export default defineComponent({
           }
         })
 
-        rendition.on('relocated', () => {
-          const currentLocation = rendition.currentLocation() as DisplayedLocation & Location
+        unref(rendition).on('relocated', () => {
+          const currentLocation = unref(rendition).currentLocation() as DisplayedLocation & Location
           localStorageResourceData.value = { currentLocation }
           navigateLeftDisabled.value = currentLocation.atStart === true
           navigateRightDisabled.value = currentLocation.atEnd === true
 
           const locationCfi = currentLocation.start.cfi
-          const spineItem = book.spine.get(locationCfi)
-          const navItem = book.navigation.get(spineItem.href)
+          const spineItem = unref(book).spine.get(locationCfi)
+          const navItem = unref(book).navigation.get(spineItem.href)
           // Might be sub nav item and therefore undefined
           if (navItem) {
             currentChapter.value = navItem
@@ -231,7 +242,7 @@ export default defineComponent({
     )
 
     watch(currentFontSizePercentage, () => {
-      rendition.themes.fontSize(`${unref(currentFontSizePercentage)}%`)
+      unref(rendition).themes.fontSize(`${unref(currentFontSizePercentage)}%`)
       localStorageData.value = {
         ...unref(localStorageData),
         fontSizePercentage: unref(currentFontSizePercentage)
@@ -253,7 +264,9 @@ export default defineComponent({
       increaseFontSizeDisabled,
       decreaseFontSizeDisabled,
       currentFontSizePercentage,
-      FONT_SIZE_PERCENTAGE_STEP
+      FONT_SIZE_PERCENTAGE_STEP,
+      rendition,
+      book
     }
   }
 })

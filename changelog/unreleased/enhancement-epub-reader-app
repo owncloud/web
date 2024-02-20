@@ -1,0 +1,13 @@
+Enhancement: Epub reader app
+
+We've added a epub reader app to open ebooks in web.
+This includes a variety of functionalities such as a comprehensive chapter list, font size adjustment options,
+and the ability to remember the user's last reading position even after the app is closed.
+
+https://github.com/owncloud/web/pull/10448
+https://github.com/owncloud/web/pull/10462
+https://github.com/owncloud/web/pull/10468
+https://github.com/owncloud/web/pull/10469
+https://github.com/owncloud/web/pull/10470
+https://github.com/owncloud/web/pull/10503
+https://github.com/owncloud/web/issues/10464
