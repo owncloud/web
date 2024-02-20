@@ -25,13 +25,13 @@ interface CustomComponentExtension {
   id: string,
   type: 'customComponent',
   extensionPointIds: string[],
-  content: Slot
+  content: Slot | Component
 }
 ```
 
 For `id`, `type`, and `extensionPointIds`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in the top level docs.
 
-The `content` property specifies a render function for the target extension point.
+The `content` property specifies a render function or a Component for the target extension point.
 
 ### Example
 
@@ -49,3 +49,5 @@ const extension = {
     }
 }
 ```
+
+The `content` property in this example can also be defined as `content: NyanCat`.
