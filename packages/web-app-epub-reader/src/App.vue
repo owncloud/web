@@ -233,7 +233,7 @@ export default defineComponent({
     watch(currentFontSizePercentage, () => {
       rendition.themes.fontSize(`${unref(currentFontSizePercentage)}%`)
       localStorageData.value = {
-        ...localStorageData,
+        ...unref(localStorageData),
         fontSizePercentage: unref(currentFontSizePercentage)
       }
     })
