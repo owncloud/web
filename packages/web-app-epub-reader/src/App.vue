@@ -18,9 +18,9 @@
     </oc-list>
     <div class="oc-width-1-1 oc-height-1-1">
       <div class="epub-reader-controls oc-flex oc-flex-middle oc-m-s">
-        <div class="oc-flex oc-button-group">
+        <div class="oc-flex oc-button-group epub-reader-controls-font-size">
           <oc-button
-            v-oc-tooltip="`${fontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
+            v-oc-tooltip="`${currentFontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
             class="epub-reader-controls-font-size-decrease"
             :disabled="decreaseFontSizeDisabled"
             gap-size="none"
@@ -34,10 +34,10 @@
             class="epub-reader-controls-font-size-reset"
             gap-size="none"
             @click="resetFontSize"
-            v-text="`${fontSizePercentage}%`"
+            v-text="`${currentFontSizePercentage}%`"
           />
           <oc-button
-            v-oc-tooltip="`${fontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
+            v-oc-tooltip="`${currentFontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
             class="epub-reader-controls-font-size-increare"
             :disabled="increaseFontSizeDisabled"
             gap-size="none"
@@ -121,7 +121,7 @@ export default defineComponent({
     const currentChapter = ref<NavItem>()
     const navigateLeftDisabled = ref(true)
     const navigateRightDisabled = ref(false)
-    const fontSizePercentage = ref(100)
+    const currentFontSizePercentage = ref(100)
     const themeStore = useThemeStore()
     let book: Book
     let rendition: Rendition
@@ -139,29 +139,29 @@ export default defineComponent({
     }
 
     const increaseFontSize = () => {
-      fontSizePercentage.value = Math.min(
-        unref(fontSizePercentage) + FONT_SIZE_PERCENTAGE_STEP,
+      currentFontSizePercentage.value = Math.min(
+        unref(currentFontSizePercentage) + FONT_SIZE_PERCENTAGE_STEP,
         MAX_FONT_SIZE_PERCENTAGE
       )
     }
 
     const resetFontSize = () => {
-      fontSizePercentage.value = 100
+      currentFontSizePercentage.value = 100
     }
 
     const decreaseFontSize = () => {
-      fontSizePercentage.value = Math.max(
-        unref(fontSizePercentage) - FONT_SIZE_PERCENTAGE_STEP,
+      currentFontSizePercentage.value = Math.max(
+        unref(currentFontSizePercentage) - FONT_SIZE_PERCENTAGE_STEP,
         MIN_FONT_SIZE_PERCENTAGE
       )
     }
 
     const increaseFontSizeDisabled = computed(() => {
-      return unref(fontSizePercentage) >= MAX_FONT_SIZE_PERCENTAGE
+      return unref(currentFontSizePercentage) >= MAX_FONT_SIZE_PERCENTAGE
     })
 
     const decreaseFontSizeDisabled = computed(() => {
-      return unref(fontSizePercentage) <= MIN_FONT_SIZE_PERCENTAGE
+      return unref(currentFontSizePercentage) <= MIN_FONT_SIZE_PERCENTAGE
     })
 
     keyboardActions.bindKeyAction({ primary: Key.ArrowLeft }, () => navigateLeft())
@@ -224,8 +224,8 @@ export default defineComponent({
       }
     )
 
-    watch(fontSizePercentage, () => {
-      rendition.themes.fontSize(`${unref(fontSizePercentage)}%`)
+    watch(currentFontSizePercentage, () => {
+      rendition.themes.fontSize(`${unref(currentFontSizePercentage)}%`)
     })
 
     return {
@@ -242,7 +242,7 @@ export default defineComponent({
       decreaseFontSize,
       increaseFontSizeDisabled,
       decreaseFontSizeDisabled,
-      fontSizePercentage,
+      currentFontSizePercentage,
       FONT_SIZE_PERCENTAGE_STEP
     }
   }
@@ -267,8 +267,12 @@ export default defineComponent({
     }
   }
 
-  &-controls-font-size-reset {
-    width: 58px; //prevent jumpy behaviour
+  &-controls-font-size {
+    flex-wrap: nowrap;
+
+    &-reset {
+      width: 58px; //prevent jumpy behaviour
+    }
   }
 }
 </style>
