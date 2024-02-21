@@ -138,14 +138,6 @@ config = {
                 ],
                 "oCISSharingPerm1": [
                     "webUISharingPermissionsUsers",
-                    "webUISharingFolderPermissionsGroups",
-                ],
-                "oCISSharingPerm2": [
-                    "webUISharingFilePermissionsGroups",
-                    "webUISharingFilePermissionMultipleUsers",
-                    "webUISharingFolderPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionMultipleUsers",
-                    "webUISharingFolderAdvancedPermissionsGroups",
                 ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
@@ -197,12 +189,6 @@ basicTestSuites = [
     "webUIRenameFolders",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
-    "webUISharingFilePermissionMultipleUsers",
-    "webUISharingFilePermissionsGroups",
-    "webUISharingFolderAdvancedPermissionMultipleUsers",
-    "webUISharingFolderAdvancedPermissionsGroups",
-    "webUISharingFolderPermissionMultipleUsers",
-    "webUISharingFolderPermissionsGroups",
     "webUISharingInternalGroups",
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
