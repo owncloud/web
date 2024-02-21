@@ -158,3 +158,44 @@ Feature: share
 
     And "Brian" navigates to the shared with me page
     And "Brian" logs out
+
+
+  Scenario: receive two shares with same name
+    Given "Admin" creates following users using API
+      | id    |
+      | Carol |
+    And "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
+      | name        |
+      | test-folder |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile   | content      |
+      | testfile.txt | example text |
+    And "Alice" opens the "files" app
+    And "Alice" shares the following resource using the sidebar panel
+      | resource     | recipient | type  | role     |
+      | testfile.txt | Brian     | user  | Can view |
+      | test-folder  | Brian     | user  | Can view |
+    And "Alice" logs out
+    And "Carol" logs in
+    And "Carol" creates the following folder in personal space using API
+      | name        |
+      | test-folder |
+    And "Carol" creates the following files into personal space using API
+      | pathToFile   | content      |
+      | testfile.txt | example text |
+    And "Carol" opens the "files" app
+    And "Carol" shares the following resource using the sidebar panel
+      | resource     | recipient | type | role     |
+      | testfile.txt | Brian     | user | Can view |
+      | test-folder  | Brian     | user | Can view |
+    And "Carol" logs out
+    When "Brian" navigates to the shared with me page
+    Then following resources should be displayed in the Shares for user "Brian"
+      | resource     |
+      | testfile.txt |
+      | test-folder  |
+    # https://github.com/owncloud/ocis/issues/8471
+    # | testfile (1).txt |
+    # | test-folder (1)  |
+    And "Brian" logs out
