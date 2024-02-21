@@ -10,6 +10,13 @@ Feature: Kindergarten can use web to organize a day
       | Alice |
       | Brian |
       | Carol |
+    And "Admin" creates following group using API
+      | id       |
+      | sales    |
+      | security |
+    And "Admin" adds user to the group using API
+      | user  | group |
+      | Brian | sales |
 
   Scenario: Alice can share this weeks meal plan with all parents
     When "Alice" logs in
@@ -34,9 +41,19 @@ Feature: Kindergarten can use web to organize a day
     # Implementation of sharing with different roles is currently broken
     # since we switched to bulk creating of shares with a single dropdown
     And "Alice" shares the following resources using the sidebar panel
-      | resource                             | recipient | type | role     |
-      | groups/Pre-Schools Pirates/meal plan | Brian     | user | Can edit |
-      | groups/Pre-Schools Pirates/meal plan | Carol     | user | Can view |
+      | resource                                           | recipient | type  | role                                  | resourceType |
+      | groups/Pre-Schools Pirates/meal plan               | Brian     | user  | Can edit                              | folder       |
+      | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can edit                              | folder       |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Brian     | user  | Can view                              | file         |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Carol     | user  | Can view                              | file         |
+      | groups/Kindergarten Koalas/meal plan               | sales     | group | custom_permissions:read,update,delete | folder       |
+      | groups/Kindergarten Koalas/meal plan               | security  | group | custom_permissions:read,update,delete | folder       |
+      | groups/Kindergarten Koalas/meal plan/lorem.txt     | sales     | group | custom_permissions:read               | file         |
+      | groups/Kindergarten Koalas/meal plan/lorem.txt     | security  | group | custom_permissions:read               | file         |
+      | groups/Teddy Bear Daycare/meal plan                | Brian     | user  | custom_permissions:read,update,create | folder       |
+      | groups/Teddy Bear Daycare/meal plan                | Carol     | user  | custom_permissions:read,update,create | folder       |
+      | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | custom_permissions:read,update        | file         |
+      | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | custom_permissions:read,update        | file         |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     When "Brian" logs in
     And "Brian" opens the "files" app
