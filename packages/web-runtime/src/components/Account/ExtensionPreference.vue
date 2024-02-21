@@ -1,6 +1,7 @@
 <template>
   <oc-select
     v-model="model"
+    class="extension-preference"
     :multiple="extensionPoint.multiple"
     :options="extensions"
     option-label="displayName"
