@@ -187,6 +187,8 @@ export class Resource {
       return po.getDisplayedResourcesFromFilesList(this.#page)
     } else if (args.keyword === 'search list') {
       return po.getDisplayedResourcesFromSearch(this.#page)
+    } else if (args.keyword === 'Shares') {
+      return po.getDisplayedResourcesFromShares(this.#page)
     } else {
       throw new Error('Unknown keyword')
     }
