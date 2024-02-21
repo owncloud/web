@@ -113,6 +113,7 @@ const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
 const resourceLockIcon =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[contains(@class, "oc-resource-icon-status-badge-inner")]'
+const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
 
 export const clickResource = async ({
   page,
@@ -1345,6 +1346,19 @@ export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]
   await page.locator('[data-test-resource-path]').first().waitFor()
   // wait for tika indexing
   await new Promise((resolve) => setTimeout(resolve, 1000))
+  const result = await page.locator('[data-test-resource-path]')
+
+  const count = await result.count()
+  for (let i = 0; i < count; i++) {
+    files.push(await result.nth(i).getAttribute('data-test-resource-name'))
+  }
+
+  return files
+}
+
+export const getDisplayedResourcesFromShares = async (page): Promise<string[]> => {
+  const files = []
+  await page.locator(sharesNavigationButtonSelector).click()
   const result = await page.locator('[data-test-resource-path]')
 
   const count = await result.count()

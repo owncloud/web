@@ -319,7 +319,7 @@ When(
 )
 
 Then(
-  /^following resources (should|should not) be displayed in the (search list|files list) for user "([^"]*)"$/,
+  /^following resources (should|should not) be displayed in the (search list|files list|Shares) for user "([^"]*)"$/,
   async function (
     this: World,
     actionType: string,
