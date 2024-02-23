@@ -1,7 +1,6 @@
 import { defaultPlugins, getOcSelectOptions, mount, nextTicks } from 'web-test-helpers'
 import App from '../../src/App.vue'
 import { useLocalStorage } from '@ownclouders/web-pkg'
-import { expect } from '@playwright/test'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -78,7 +77,7 @@ describe('Epub reader app', () => {
       it('is disabled when "MAX_FONT_SIZE_PERCENTAGE" is reached', () => {
         const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 150 } })
         expect(
-          wrapper.find<HTMLButtonElement>(selectors.decreaseFontSize).element.disabled
+          wrapper.find<HTMLButtonElement>(selectors.increaseFontSize).element.disabled
         ).toBeTruthy()
       })
     })
