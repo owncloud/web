@@ -17,10 +17,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 - [webUITrashbinRestore/trashbinRestore.feature:176](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUITrashbinRestore/trashbinRestore.feature#L176)
 
-### [Saving public share is not possible](https://github.com/owncloud/web/issues/5321)
-
-- [webUISharingPublicManagement/shareByPublicLink.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicManagement/shareByPublicLink.feature#L24)
-
 ### [empty subfolder inside a folder to be uploaded is not created on the server](https://github.com/owncloud/web/issues/6348)
 
-- [webUIUpload/upload.feature:43](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L43)
+- [webUIUpload/upload.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/upload.feature#L36)
