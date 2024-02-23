@@ -1,6 +1,8 @@
 import { defaultPlugins, getOcSelectOptions, mount, nextTicks } from 'web-test-helpers'
 import App from '../../src/App.vue'
 import { useLocalStorage } from '@ownclouders/web-pkg'
+import { Resource } from '@ownclouders/web-client'
+import { mock } from 'vitest-mock-extended'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -197,17 +199,28 @@ describe('Epub reader app', () => {
   })
 })
 
-function getWrapper({ propsData = {}, localStorageGeneral = {}, localStorageResource = {} } = {}) {
+function getWrapper({
+  propsData = {},
+  localStorageGeneral = {},
+  localStorageResource = {}
+}: {
+  propsData?: Record<string, unknown>
+  localStorageGeneral?: ReturnType<typeof useLocalStorage>
+  localStorageResource?: ReturnType<typeof useLocalStorage>
+} = {}) {
   vi.mocked(useLocalStorage).mockImplementationOnce(() => localStorageGeneral)
   vi.mocked(useLocalStorage).mockImplementationOnce(() => localStorageResource)
 
   return {
     wrapper: mount(App, {
       props: {
-        ...propsData,
-        resource: {
+        applicationConfig: {},
+        currentContent: '',
+        isReadOnly: false,
+        resource: mock<Resource>({
           id: '1'
-        }
+        }),
+        ...propsData
       },
       global: {
         plugins: [...defaultPlugins()]
