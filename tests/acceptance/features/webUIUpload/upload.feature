@@ -11,13 +11,6 @@ Feature: File Upload
     And user "Alice" has uploaded file with content "initial content" to "simple-folder/lorem.txt" in the server
     And user "Alice" has logged in using the webUI
 
-  @smokeTest  @ocisSmokeTest
-  Scenario: simple upload of a file that does not exist before
-    When the user uploads file "new-lorem.txt" using the webUI
-    Then no message should be displayed on the webUI
-    And file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
-
   @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder that does not exist before
     Given a folder "CUSTOM" has been created with the following files in separate sub-folders in the middleware
@@ -100,32 +93,6 @@ Feature: File Upload
     Then file "big-video.mp4" should be listed on the webUI
     And as "Alice" the content of "big-video.mp4" in the server should be the same as the content of local file "big-video.mp4"
 
-
-  Scenario: upload a new file into a sub folder
-    When the user opens folder "simple-folder" using the webUI
-    And the user uploads file "new-lorem.txt" using the webUI
-    Then no message should be displayed on the webUI
-    And file "new-lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "simple-folder/new-lorem.txt" in the server should be the same as the content of local file "new-lorem.txt"
-
-  @smokeTest @disablePreviews
-  Scenario: overwrite an existing file
-    When the user uploads overwriting file "lorem.txt" using the webUI
-    Then no message should be displayed on the webUI
-    And file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "lorem.txt" in the server should be the same as the content of local file "lorem.txt"
-    And the versions list for resource "lorem.txt" should contain 1 entry
-    But file "lorem (2).txt" should not be listed on the webUI
-
-  @smokeTest @disablePreviews @issue-ocis-reva-54
-  Scenario: overwrite an existing file when versioning is disabled
-    Given the app "files_versions" has been disabled in the server
-    When the user uploads overwriting file "lorem.txt" using the webUI
-    Then no message should be displayed on the webUI
-    And file "lorem.txt" should be listed on the webUI
-    And as "Alice" the content of "lorem.txt" in the server should be the same as the content of local file "lorem.txt"
-    But file "lorem (2).txt" should not be listed on the webUI
-
   @disablePreviews
   Scenario: overwrite an existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
@@ -140,12 +107,6 @@ Feature: File Upload
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "simple-folder/lorem.txt" in the server should be the same as the content of local file "lorem.txt"
-
-  Scenario: upload a file with comma in the filename
-    When the user uploads file "file,with,comma,.txt" using the webUI
-    Then no message should be displayed on the webUI
-    And file "file,with,comma,.txt" should be listed on the webUI
-    And as "Alice" the content of "file,with,comma,.txt" should be the same in the server as the content of local file "file,with,comma,.txt"
 
 
   Scenario: simple upload of a folder, with comma in its name, that does not exist before

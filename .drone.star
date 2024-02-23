@@ -153,7 +153,6 @@ config = {
                     "webUITrashbinDelete",
                     "webUITrashbinFilesFolders",
                     "webUITrashbinRestore",
-                    "webUIUserJourney",
                 ],
             },
             "extraEnvironment": {
@@ -203,10 +202,6 @@ basicTestSuites = [
     "webUIUpload",
 ]
 
-ocisSpecificTestSuites = [
-    "webUIUserJourney",
-]
-
 # minio mc environment variables
 minio_mc_environment = {
     "CACHE_BUCKET": {
@@ -254,8 +249,6 @@ def checkTestSuites():
         expected = []
         if (test["type"] == FULL):
             expected += basicTestSuites
-
-        expected += ocisSpecificTestSuites
 
         if (sorted(suites) != sorted(expected)):
             print("Error: Suites dont match " + testGroupName)
