@@ -84,27 +84,6 @@ Feature: copy files and folders
     And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist in the server
     And as "Alice" file "simple-folder/data.zip" should exist in the server
 
-  @issue-6892 @issue-6896 @notToImplementOnOCIS
-  Scenario: copy a file into another folder with no change permission
-    Given user "Alice" has created file "lorem.txt" in the server
-    And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
-    And user "Alice" has logged in using the webUI
-    When the user tries to copy file "lorem.txt" into folder "Shares/simple-folder" using the webUI
-    Then as "Alice" file "Shares/simple-folder/lorem.txt" should not exist in the server
-
-
-  @issue-6892 @issue-ocis-1328 @issue-6896 @notToImplementOnOCIS
-  Scenario: copy a folder into another folder with no change permission
-    Given user "Alice" has created folder "simple-empty-folder" in the server
-    And user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Brian" has created folder "simple-folder" in the server
-    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions in the server
-    And user "Alice" has logged in using the webUI
-    When the user tries to copy folder "simple-empty-folder" into folder "Shares/simple-folder" using the webUI
-    Then as "Alice" file "Shares/simple-folder/simple-empty-folder" should not exist in the server
-
 
   Scenario: copy a folder into the same folder
     Given user "Alice" has created folder "simple-empty-folder" in the server

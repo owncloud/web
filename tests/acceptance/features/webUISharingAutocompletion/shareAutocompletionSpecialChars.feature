@@ -30,15 +30,9 @@ Feature: Autocompletion of share-with names
     And the user has opened the share dialog for file "data.zip"
     When the user types "<search>" in the share-with-field
     Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
-
-    @skipOnOCIS
     Examples:
       | displayName | search |
       | -_.ocusr    | -_     |
-      | ocusr-_.    | oc     |
-
-    Examples:
-      | displayName | search |
       | _ocusr@     | _u     |
 
   @issue-ocis-1317 @issue-ocis-1675
@@ -57,8 +51,3 @@ Feature: Autocompletion of share-with names
       | @-_.     | @-     |
       | _ocgrp@  | _u     |
       | -_.ocgrp | -_     |
-
-    @skipOnOCIS
-    Examples:
-      | group    | search |
-      | ocgrp-_. | oc     |
