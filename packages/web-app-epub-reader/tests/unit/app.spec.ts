@@ -1,6 +1,7 @@
 import { defaultPlugins, getOcSelectOptions, mount, nextTicks } from 'web-test-helpers'
 import App from '../../src/App.vue'
 import { useLocalStorage } from '@ownclouders/web-pkg'
+import { expect } from '@playwright/test'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -76,7 +77,9 @@ describe('Epub reader app', () => {
       })
       it('is disabled when "MAX_FONT_SIZE_PERCENTAGE" is reached', () => {
         const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 150 } })
-        expect(wrapper.find(selectors.increaseFontSize).attributes('disabled')).not.toBeUndefined()
+        expect(
+          wrapper.find<HTMLButtonElement>(selectors.decreaseFontSize).element.disabled
+        ).toBeTruthy()
       })
     })
     describe('decrease font size button', () => {
@@ -88,7 +91,9 @@ describe('Epub reader app', () => {
       })
       it('is disabled when "MIN_FONT_SIZE_PERCENTAGE" is reached', () => {
         const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 50 } })
-        expect(wrapper.find(selectors.decreaseFontSize).attributes('disabled')).not.toBeUndefined()
+        expect(
+          wrapper.find<HTMLButtonElement>(selectors.decreaseFontSize).element.disabled
+        ).toBeTruthy()
       })
     })
     describe('reset font size button', () => {
