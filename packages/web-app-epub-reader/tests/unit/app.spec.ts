@@ -202,8 +202,7 @@ function getWrapper({ propsData = {}, localStorageGeneral = {}, localStorageReso
       props: {
         ...propsData,
         resource: {
-          id: '1',
-          currentContent: 'Moby Dick'
+          id: '1'
         }
       },
       global: {
