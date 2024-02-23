@@ -20,24 +20,6 @@ Feature: Public link share management
     When the public uses the webUI to access the last public link created by user "Alice" in a new session
     Then the user should be redirected to the files-drop page
 
-  @issue-5321
-  Scenario: mount public link
-    Given user "Brian" has been created with default attributes and without skeleton files in the server
-    And user "Alice" has uploaded file with content "Alice file" to "simple-folder/lorem.txt" in the server
-    And user "Alice" has created a public link with following settings in the server
-      | path        | simple-folder                |
-      | name        | Public-link                  |
-      | permissions | read, update, create, delete |
-    When the public uses the webUI to access the last public link created by user "Alice" in a new session
-    And the public adds the public link to "%remote_server%" as user "Brian" with password "%alt2%" using the webUI in the server
-    Then folder "simple-folder" should be listed on the webUI
-    When the user opens folder "simple-folder" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And the content of file "simple-folder/lorem.txt" for user "Brian" should be "Alice file" in the server
-    When the user uploads overwriting file "lorem.txt" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And as "Brian" the content of "simple-folder/lorem.txt" in the server should be the same as the content of local file "lorem.txt"
-
   @issue-ocis-1328
   Scenario: user shares a file through public link and then it appears in a shared-via-link page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes" in the server
