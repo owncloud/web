@@ -7,7 +7,7 @@ exports[`Epub reader app > renders correctly 1`] = `
         <!--v-if-->
         <!-- @slot Content of the button --> <span class="oc-text-truncate oc-mr-s">Chapter 1</span>
       </button></li>
-    <li class="epub-reader-chapters-list-item oc-py-s active"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-truncate">
+    <li class="epub-reader-chapters-list-item oc-py-s"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-truncate">
         <!--v-if-->
         <!-- @slot Content of the button --> <span class="oc-text-truncate oc-mr-s">Chapter 2</span>
       </button></li>
