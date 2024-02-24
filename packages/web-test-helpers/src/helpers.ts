@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount, VueWrapper } from '@vue/test-utils'
 import { defineComponent, nextTick } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 import { createRouter as _createRouter } from '../../web-runtime/src/router'
@@ -36,6 +36,24 @@ export const getComposableWrapper = <T>(
       }
     }
   )
+}
+
+export const getOcSelectOptions = async (
+  wrapper: VueWrapper<unknown>,
+  selector: string,
+  options = { close: true }
+) => {
+  const selectElement = await wrapper.find(selector)
+  await selectElement.find('input').trigger('click')
+  await selectElement.find('.vs__dropdown-toggle').trigger('mousedown')
+
+  const optionElements = selectElement.findAll<HTMLOptionElement>('.vs__dropdown-option')
+
+  if (options.close) {
+    await selectElement.find('.vs__search').trigger('blur')
+  }
+
+  return optionElements
 }
 
 export type { RouteLocation } from 'vue-router'
