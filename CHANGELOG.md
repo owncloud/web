@@ -119,6 +119,7 @@ Summary
 * Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
 * Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
+* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 
 Details
@@ -1241,6 +1242,21 @@ Details
    https://github.com/owncloud/web/pull/10390
    https://github.com/owncloud/web/pull/10467
    https://github.com/owncloud/web/pull/10465
+
+* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
+
+   We've added a epub reader app to open ebooks in web. This includes a variety of
+   functionalities such as a comprehensive chapter list, font size adjustment
+   options, and the ability to remember the user's last reading position even after
+   the app is closed.
+
+   https://github.com/owncloud/web/issues/10464
+   https://github.com/owncloud/web/pull/10448
+   https://github.com/owncloud/web/pull/10462
+   https://github.com/owncloud/web/pull/10468
+   https://github.com/owncloud/web/pull/10469
+   https://github.com/owncloud/web/pull/10470
+   https://github.com/owncloud/web/pull/10503
 
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 
