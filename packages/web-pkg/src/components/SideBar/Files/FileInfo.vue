@@ -8,7 +8,8 @@
         class="file_info__icon oc-mr-s"
       />
       <div class="file_info__body oc-text-overflow">
-        <h3 data-testid="files-info-name" class="oc-font-semibold">
+        <h3 data-testid="files-info-name" class="oc-font-semibold oc-flex oc-flex-center">
+          <oc-icon v-if="resource.locked" class="oc-mr-xs" name="lock" size="small" />
           <oc-resource-name
             :name="resource.name"
             :extension="resource.extension"

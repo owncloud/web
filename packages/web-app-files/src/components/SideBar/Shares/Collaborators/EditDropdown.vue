@@ -1,8 +1,15 @@
 <template>
   <span class="oc-flex oc-flex-middle">
-    <oc-button :id="editShareBtnId" class="collaborator-edit-dropdown-options-btn" appearance="raw">
-      <oc-icon name="more-2" />
-    </oc-button>
+    <div v-oc-tooltip="dropButtonTooltip">
+      <oc-button
+        :id="editShareBtnId"
+        class="collaborator-edit-dropdown-options-btn"
+        appearance="raw"
+        :disabled="isLocked"
+      >
+        <oc-icon name="more-2" />
+      </oc-button>
+    </div>
     <oc-drop
       ref="expirationDateDrop"
       :toggle="'#' + editShareBtnId"
@@ -119,6 +126,10 @@ export default defineComponent({
     deniable: {
       type: Boolean,
       default: false
+    },
+    isLocked: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [
@@ -136,6 +147,14 @@ export default defineComponent({
       emit('setDenyShare', value)
     }
 
+    const dropButtonTooltip = computed(() => {
+      if (props.isLocked) {
+        return language.$gettext('Resource is temporarily locked, unable to manage share')
+      }
+
+      return ''
+    })
+
     const dateExpire = computed(() =>
       formatRelativeDateFromDateTime(
         DateTime.fromJSDate(props.expirationDate).endOf('day'),
@@ -147,7 +166,8 @@ export default defineComponent({
       configurationManager,
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
-      dateExpire
+      dateExpire,
+      dropButtonTooltip
     }
   },
   data: function () {

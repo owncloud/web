@@ -25,7 +25,7 @@
           </h2>
           <p class="oc-rm-m oc-m-rm" v-text="errorMessage" />
         </div>
-        <div class="oc-flex oc-flex-center oc-width-1-1" v-else>
+        <div v-else class="oc-flex oc-flex-center oc-width-1-1">
           <p
             id="files-drop-info-message"
             class="oc-m-rm oc-pt-xl oc-text-small"
