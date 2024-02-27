@@ -1,7 +1,7 @@
 x-ocis-server: &ocis-service
   image: ${OCIS_IMAGE:-owncloud/ocis:latest}
   entrypoint: /bin/sh
-  command: ['-c', 'ocis init || true && ocis server']
+  command: [ '-c', 'ocis init || true && ocis server' ]
   environment: &ocis-environment
     OCIS_INSECURE: '${OCIS_INSECURE:-true}'
     OCIS_LOG_LEVEL: '${OCIS_LOG_LEVEL:-error}'
@@ -71,6 +71,9 @@ x-ocis-server: &ocis-service
     OCM_DEBUG_ADDR: '127.0.0.1:10281'
     OCM_HTTP_ADDR: '127.0.0.1:10280'
     OCM_GRPC_ADDR: '127.0.0.1:10282'
+
+    OCIS_ASYNC_UPLOADS: 'true'
+    POSTPROCESSING_DELAY: '10s'
 
   extra_hosts:
     - host.docker.internal:${DOCKER_HOST:-host-gateway}

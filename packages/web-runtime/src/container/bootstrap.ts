@@ -26,7 +26,9 @@ import {
   RawConfig,
   useSharesStore,
   useResourcesStore,
-  ResourcesStore
+  ResourcesStore,
+  SpacesStore,
+  ImageDimension
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -365,7 +367,9 @@ export const announceTranslations = ({
 export const announceAdditionalTranslations = ({
   gettext,
   translations
-}: { gettext: Language } & Pick<GetTextOptions, 'translations'>): void => {
+}: {
+  gettext: Language
+} & Pick<GetTextOptions, 'translations'>): void => {
   gettext.translations = merge(gettext.translations, translations)
 }
 
@@ -642,18 +646,22 @@ const fileReadyEventSchema = z.object({
   parentitemid: z.string()
 })
 
-const onSSEProcessingFinishedEvent = ({
+const onSSEProcessingFinishedEvent = async ({
   resourcesStore,
+  spacesStore,
   msg,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientService,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resourceQueue
+  resourceQueue,
+  previewService
 }: {
   resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
   msg: MessageEvent
   clientService: ClientService
   resourceQueue: PQueue
+  previewService: PreviewService
 }) => {
   try {
     const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
@@ -674,13 +682,30 @@ const onSSEProcessingFinishedEvent = ({
       }
     }
 
-    const isFileLoaded = !!resourcesStore.resources.find((f) => f.id === postProcessingData.itemid)
+    const resource = resourcesStore.resources.find((f) => f.id === postProcessingData.itemid)
+    const matchingSpace = spacesStore.spaces.find((s) => s.id === resource.storageId)
+    const isFileLoaded = !!resource
     if (isFileLoaded) {
       resourcesStore.updateResourceField({
         id: postProcessingData.itemid,
         field: 'processing',
         value: false
       })
+      try {
+        const preview = await previewService.loadPreview({
+          resource,
+          space: matchingSpace,
+          dimensions: ImageDimension.Thumbnail
+        })
+
+        if (preview) {
+          resourcesStore.updateResourceField({
+            id: postProcessingData.itemid,
+            field: 'thumbnail',
+            value: preview
+          })
+        }
+      } catch (_) {}
     } else {
       // FIXME: we currently cannot do this, we need to block this for ongoing uploads and copy operations
       // when fixing revert the changelog removal
@@ -699,11 +724,15 @@ const onSSEProcessingFinishedEvent = ({
 
 export const registerSSEEventListeners = ({
   resourcesStore,
+  spacesStore,
   clientService,
+  previewService,
   configStore
 }: {
   resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
   clientService: ClientService
+  previewService: PreviewService
   configStore: ConfigStore
 }): void => {
   const resourceQueue = new PQueue({
@@ -718,7 +747,14 @@ export const registerSSEEventListeners = ({
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
-    onSSEProcessingFinishedEvent({ resourcesStore, msg, clientService, resourceQueue })
+    onSSEProcessingFinishedEvent({
+      resourcesStore,
+      spacesStore,
+      msg,
+      clientService,
+      previewService,
+      resourceQueue
+    })
   )
 }
 

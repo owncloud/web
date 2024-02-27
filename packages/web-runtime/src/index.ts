@@ -185,12 +185,19 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       }
 
       const clientService = app.config.globalProperties.$clientService
+      const previewService = app.config.globalProperties.$previewService
       const passwordPolicyService = app.config.globalProperties.passwordPolicyService
       passwordPolicyService.initialize(capabilityStore)
 
       // Register SSE event listeners
       if (capabilityStore.supportSSE) {
-        registerSSEEventListeners({ resourcesStore, clientService, configStore })
+        registerSSEEventListeners({
+          resourcesStore,
+          spacesStore,
+          clientService,
+          previewService,
+          configStore
+        })
       }
 
       // Load spaces to make them available across the application
