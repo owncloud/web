@@ -693,21 +693,19 @@ const onSSEProcessingFinishedEvent = async ({
       })
 
       if (matchingSpace) {
-        try {
-          const preview = await previewService.loadPreview({
-            resource,
-            space: matchingSpace,
-            dimensions: ImageDimension.Thumbnail
-          })
+        const preview = await previewService.loadPreview({
+          resource,
+          space: matchingSpace,
+          dimensions: ImageDimension.Thumbnail
+        })
 
-          if (preview) {
-            resourcesStore.updateResourceField({
-              id: postProcessingData.itemid,
-              field: 'thumbnail',
-              value: preview
-            })
-          }
-        } catch (_) {}
+        if (preview) {
+          resourcesStore.updateResourceField({
+            id: postProcessingData.itemid,
+            field: 'thumbnail',
+            value: preview
+          })
+        }
       }
     } else {
       // FIXME: we currently cannot do this, we need to block this for ongoing uploads and copy operations
