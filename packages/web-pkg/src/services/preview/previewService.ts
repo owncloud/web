@@ -108,7 +108,6 @@ export class PreviewService {
     }
     try {
       const src = await this.privatePreviewBlob(options)
-
       return cacheService.filePreview.set(
         resource.id.toString(),
         { src, etag: resource.etag, dimensions },
