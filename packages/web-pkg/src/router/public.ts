@@ -47,6 +47,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
         component: components.FilesDrop,
         meta: {
           authContext: 'publicLink',
+          isUploadSnackbarHidden: true,
           title: $gettext('Public file upload')
         }
       }
