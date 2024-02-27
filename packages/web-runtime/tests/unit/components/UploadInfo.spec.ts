@@ -33,6 +33,7 @@ describe('UploadInfo component', () => {
     it('should show that an upload is in progress', async () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
+      wrapper.vm.inPreparation = false
       wrapper.vm.filesInProgressCount = 1
       wrapper.vm.runningUploads = 1
       await nextTick()
