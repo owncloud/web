@@ -45,6 +45,7 @@ Summary
 * Bugfix - Private link error messages: [#10321](https://github.com/owncloud/web/pull/10321)
 * Bugfix - Readonly user attributes have no effect on group memberships: [#10347](https://github.com/owncloud/web/pull/10347)
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
@@ -420,6 +421,14 @@ Details
 
    https://github.com/owncloud/web/issues/10373
    https://github.com/owncloud/web/pull/10377
+
+* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+
+   We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
+   is active on server and the file was updated, e.G text files.
+
+   https://github.com/owncloud/web/issues/10486
+   https://github.com/owncloud/web/pull/10517
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
