@@ -175,7 +175,7 @@ export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
   setup() {
     const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
+
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
@@ -282,6 +282,12 @@ export default defineComponent({
 
       return requestIds.map((item) => `X-Request-Id: ${item}`).join('\r\n')
     }
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.onBeforeUnload)
+  },
+  unmounted() {
+    window.removeEventListener('beforeunload', this.onBeforeUnload)
   },
   created() {
     this.$uppyService.subscribe('uploadStarted', () => {
@@ -649,6 +655,11 @@ export default defineComponent({
     },
     getUploadItemClass(item) {
       return this.errors[item.meta.uploadId] ? 'upload-info-danger' : 'upload-info-success'
+    },
+    onBeforeUnload(e: BeforeUnloadEvent) {
+      if (this.runningUploads) {
+        e.preventDefault()
+      }
     }
   }
 })
@@ -693,6 +704,7 @@ export default defineComponent({
   .upload-info-danger {
     color: var(--oc-color-swatch-danger-default);
   }
+
   .upload-info-success {
     color: var(--oc-color-swatch-success-default);
   }
