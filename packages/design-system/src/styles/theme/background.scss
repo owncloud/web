@@ -48,6 +48,11 @@
   background-color: var(--oc-color-background-highlight) !important;
 }
 
+.oc-background-warning {
+  background-color: var(--oc-color-swatch-warning-default) !important;
+  color: var(--oc-color-text-inverse) !important;
+}
+
 .oc-background-contain {
   background-size: contain;
 }
