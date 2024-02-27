@@ -68,7 +68,7 @@ export class PreviewService {
     return this.supportedMimeTypes.filter((mimeType) => mimeType.startsWith(filter))
   }
 
-  public loadPreview(options: LoadPreviewOptions, cached = false): Promise<string> {
+  public loadPreview(options: LoadPreviewOptions, cached = false): Promise<string | undefined> {
     const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
     const resourceSupportsPreview = resource.type !== 'folder' && resource.extension
@@ -89,7 +89,11 @@ export class PreviewService {
     if (isPublic) {
       return this.publicPreviewUrl(options)
     }
-    return this.privatePreviewBlob(options, cached)
+    try {
+      return this.privatePreviewBlob(options, cached)
+    } catch (_) {
+      return undefined
+    }
   }
 
   private async cacheFactory(options: LoadPreviewOptions): Promise<string> {
@@ -101,6 +105,7 @@ export class PreviewService {
     }
     try {
       const src = await this.privatePreviewBlob(options)
+
       return cacheService.filePreview.set(
         resource.id.toString(),
         { src, etag: resource.etag, dimensions },
@@ -134,12 +139,10 @@ export class PreviewService {
       '?',
       this.buildQueryString({ etag: resource.etag, dimensions, processor })
     ].join('')
-    try {
-      const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
-        responseType: 'blob'
-      })
-      return window.URL.createObjectURL(data)
-    } catch (ignored) {}
+    const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
+      responseType: 'blob'
+    })
+    return window.URL.createObjectURL(data)
   }
 
   private async publicPreviewUrl(options: LoadPreviewOptions): Promise<string> {
