@@ -155,7 +155,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, watch, unref } from 'vue'
 import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
@@ -177,31 +177,62 @@ export default defineComponent({
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
+    const showInfo = ref(false) // show the overlay?
+    const infoExpanded = ref(false) // show the info including all uploads?
+    const uploads = ref<Record<any, any>>({}) // uploads that are being displayed via "infoExpanded"
+    const errors = ref({}) // all failed files
+    const successful = ref([]) // all successful files
+    const filesInProgressCount = ref(0) // files (not folders!) that are being processed currently
+    const totalProgress = ref(0) // current uploads progress (0-100)
+    const uploadsPaused = ref(false) // all uploads paused?
+    const uploadsCancelled = ref(false) // all uploads cancelled?
+    const inFinalization = ref(false) // uploads transferred but still need to be finalized
+    const inPreparation = ref(true) // preparation before upload
+    const runningUploads = ref(0) // all uploads (not files!) that are in progress currently
+    const bytesTotal = ref(0)
+    const bytesUploaded = ref(0)
+    const uploadSpeed = ref(0)
+    const filesInEstimation = ref({})
+    const timeStarted = ref(null)
+    const remainingTime = ref(undefined)
+    const disableActions = ref(false) // disables the following actions: pause, resume, retry
+
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (unref(runningUploads)) {
+        e.preventDefault()
+      }
+    }
+
+    watch(runningUploads, (val) => {
+      if (val === 0) {
+        return window.removeEventListener('beforeunload', onBeforeUnload)
+      }
+      return window.addEventListener('beforeunload', onBeforeUnload)
+    })
+
     return {
-      configOptions
+      configOptions,
+      showInfo,
+      infoExpanded,
+      uploads,
+      errors,
+      successful,
+      filesInProgressCount,
+      totalProgress,
+      uploadsPaused,
+      uploadsCancelled,
+      inFinalization,
+      inPreparation,
+      runningUploads,
+      bytesTotal,
+      bytesUploaded,
+      uploadSpeed,
+      filesInEstimation,
+      timeStarted,
+      remainingTime,
+      disableActions
     }
   },
-  data: () => ({
-    showInfo: false, // show the overlay?
-    infoExpanded: false, // show the info including all uploads?
-    uploads: {} as Record<any, any>, // uploads that are being displayed via "infoExpanded"
-    errors: {}, // all failed files
-    successful: [], // all successful files
-    filesInProgressCount: 0, // files (not folders!) that are being processed currently
-    totalProgress: 0, // current uploads progress (0-100)
-    uploadsPaused: false, // all uploads paused?
-    uploadsCancelled: false, // all uploads cancelled?
-    inFinalization: false, // uploads transferred but still need to be finalized
-    inPreparation: true, // preparation before upload
-    runningUploads: 0, // all uploads (not files!) that are in progress currently
-    bytesTotal: 0,
-    bytesUploaded: 0,
-    uploadSpeed: 0,
-    filesInEstimation: {},
-    timeStarted: null,
-    remainingTime: undefined,
-    disableActions: false // disables the following actions: pause, resume, retry
-  }),
   computed: {
     uploadDetails() {
       if (!this.uploadSpeed || !this.runningUploads) {
@@ -279,15 +310,6 @@ export default defineComponent({
       }, []) as Array<any>
 
       return requestIds.map((item) => `X-Request-Id: ${item}`).join('\r\n')
-    }
-  },
-  watch: {
-    runningUploads(val) {
-      if (val === 0) {
-        return window.removeEventListener('beforeunload', (this as any).onBeforeUnload)
-      }
-
-      return window.addEventListener('beforeunload', (this as any).onBeforeUnload)
     }
   },
   created() {
@@ -656,11 +678,6 @@ export default defineComponent({
     },
     getUploadItemClass(item) {
       return this.errors[item.meta.uploadId] ? 'upload-info-danger' : 'upload-info-success'
-    },
-    onBeforeUnload(e: BeforeUnloadEvent) {
-      if (this.runningUploads) {
-        e.preventDefault()
-      }
     }
   }
 })
