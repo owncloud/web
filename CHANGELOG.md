@@ -122,6 +122,7 @@ Summary
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 * Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
+* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
 
 Details
 -------
@@ -1274,6 +1275,14 @@ Details
 
    https://github.com/owncloud/web/issues/10453
    https://github.com/owncloud/web/pull/10485
+
+* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+
+   We've added a warning message for the user, if they try to close the browser
+   while upload is in progress.
+
+   https://github.com/owncloud/web/issues/10500
+   https://github.com/owncloud/web/pull/10519
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
