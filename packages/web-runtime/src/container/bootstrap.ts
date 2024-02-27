@@ -691,21 +691,24 @@ const onSSEProcessingFinishedEvent = async ({
         field: 'processing',
         value: false
       })
-      try {
-        const preview = await previewService.loadPreview({
-          resource,
-          space: matchingSpace,
-          dimensions: ImageDimension.Thumbnail
-        })
 
-        if (preview) {
-          resourcesStore.updateResourceField({
-            id: postProcessingData.itemid,
-            field: 'thumbnail',
-            value: preview
+      if (matchingSpace) {
+        try {
+          const preview = await previewService.loadPreview({
+            resource,
+            space: matchingSpace,
+            dimensions: ImageDimension.Thumbnail
           })
-        }
-      } catch (_) {}
+
+          if (preview) {
+            resourcesStore.updateResourceField({
+              id: postProcessingData.itemid,
+              field: 'thumbnail',
+              value: preview
+            })
+          }
+        } catch (_) {}
+      }
     } else {
       // FIXME: we currently cannot do this, we need to block this for ongoing uploads and copy operations
       // when fixing revert the changelog removal
