@@ -5,7 +5,7 @@ import { ClientService } from '../client'
 import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
 import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
-import { AuthStore, UserStore, CapabilityStore, ConfigStore } from '../../composables'
+import { AuthStore, CapabilityStore, ConfigStore, UserStore } from '../../composables'
 
 export class PreviewService {
   clientService: ClientService
@@ -68,7 +68,10 @@ export class PreviewService {
     return this.supportedMimeTypes.filter((mimeType) => mimeType.startsWith(filter))
   }
 
-  public loadPreview(options: LoadPreviewOptions, cached = false): Promise<string> {
+  public async loadPreview(
+    options: LoadPreviewOptions,
+    cached = false
+  ): Promise<string | undefined> {
     const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
     const resourceSupportsPreview = resource.type !== 'folder' && resource.extension
@@ -89,7 +92,11 @@ export class PreviewService {
     if (isPublic) {
       return this.publicPreviewUrl(options)
     }
-    return this.privatePreviewBlob(options, cached)
+    try {
+      return await this.privatePreviewBlob(options, cached)
+    } catch (_) {
+      return undefined
+    }
   }
 
   private async cacheFactory(options: LoadPreviewOptions): Promise<string> {
@@ -134,12 +141,10 @@ export class PreviewService {
       '?',
       this.buildQueryString({ etag: resource.etag, dimensions, processor })
     ].join('')
-    try {
-      const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
-        responseType: 'blob'
-      })
-      return window.URL.createObjectURL(data)
-    } catch (ignored) {}
+    const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
+      responseType: 'blob'
+    })
+    return window.URL.createObjectURL(data)
   }
 
   private async publicPreviewUrl(options: LoadPreviewOptions): Promise<string> {

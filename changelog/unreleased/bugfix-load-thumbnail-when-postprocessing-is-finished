@@ -1,0 +1,7 @@
+Bugfix: Load thumbnail when postprocessing is finished
+
+We've fixed a bug when thumbnails weren't properly refreshed when postprocessing is active on server and the file was
+updated, e.G text files.
+
+https://github.com/owncloud/web/pull/10517
+https://github.com/owncloud/web/issues/10486
