@@ -1,0 +1,6 @@
+Enhancement: Warn user before closing browser when upload is in progress
+
+We've added a warning message for the user, if they try to close the browser while upload is in progress.
+
+https://github.com/owncloud/web/pull/10519
+https://github.com/owncloud/web/issues/10500
