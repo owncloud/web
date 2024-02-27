@@ -160,7 +160,7 @@ import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
+import { useConfigStore } from '@ownclouders/web-pkg'
 import {
   formatFileSize,
   UppyResource,
@@ -174,8 +174,6 @@ import { storeToRefs } from 'pinia'
 export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
   setup() {
-    const capabilityStore = useCapabilityStore()
-
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
@@ -283,11 +281,14 @@ export default defineComponent({
       return requestIds.map((item) => `X-Request-Id: ${item}`).join('\r\n')
     }
   },
-  mounted() {
-    window.addEventListener('beforeunload', this.onBeforeUnload)
-  },
-  unmounted() {
-    window.removeEventListener('beforeunload', this.onBeforeUnload)
+  watch: {
+    runningUploads(val) {
+      if (val === 0) {
+        return window.removeEventListener('beforeunload', (this as any).onBeforeUnload)
+      }
+
+      return window.addEventListener('beforeunload', (this as any).onBeforeUnload)
+    }
   },
   created() {
     this.$uppyService.subscribe('uploadStarted', () => {
