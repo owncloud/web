@@ -36,7 +36,7 @@
     "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
     "dompurify": "^3.0.6",
-    "filesize": "^9.0.11",
+    "filesize": "^10.1.0",
     "fuse.js": "6.6.2",
     "js-generate-password": "^0.1.9",
     "lodash-es": "^4.17.21",

@@ -142,7 +142,7 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
-import filesize from 'filesize'
+import { filesize } from 'filesize'
 import { authService } from '../../services/auth'
 import {
   useRoute,

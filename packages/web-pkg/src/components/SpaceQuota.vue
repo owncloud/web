@@ -12,8 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
-import filesize from 'filesize'
+import { filesize } from 'filesize'
 
 export default defineComponent({
   name: 'SpaceQuota',
