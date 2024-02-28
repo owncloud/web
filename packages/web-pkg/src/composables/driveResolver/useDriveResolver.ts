@@ -6,6 +6,7 @@ import { queryItemAsString } from '../appDefaults'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { useClientService } from '../clientService'
 import { useSpacesStore, useConfigStore } from '../piniaStores'
+import { onUnmounted } from 'vue'
 
 interface DriveResolverOptions {
   driveAliasAndItem?: Ref<string>
@@ -53,6 +54,11 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       return s
     })
   }
+
+  // clean up global state as the watchers aren't triggered anymore when navigating away
+  onUnmounted(() => {
+    spacesStore.setCurrentSpace(null)
+  })
 
   watch(
     [options.driveAliasAndItem, areSpacesLoading],
