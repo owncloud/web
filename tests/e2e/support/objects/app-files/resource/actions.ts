@@ -115,6 +115,7 @@ const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
 const resourceLockIcon =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[contains(@class, "oc-resource-icon-status-badge-inner")]'
 const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
+const keepBothButton = '.oc-modal-body-actions-confirm'
 
 export const clickResource = async ({
   page,
@@ -707,16 +708,15 @@ export interface moveOrCopyResourceArgs {
   newLocation: string
   action: 'copy' | 'move'
   method: string
+  option?: string
 }
 
 export interface moveOrCopyMultipleResourceArgs extends Omit<moveOrCopyResourceArgs, 'resource'> {
   resources: string[]
 }
 
-export const pasteResource = async (
-  args: Omit<moveOrCopyResourceArgs, 'action'>
-): Promise<void> => {
-  const { page, resource, newLocation, method } = args
+export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
+  const { page, resource, newLocation, action, method, option } = args
 
   await page.locator(breadcrumbRoot).click()
   const newLocationPath = newLocation.split('/')
@@ -733,11 +733,24 @@ export const pasteResource = async (
   } else {
     await page.locator(pasteButton).click()
   }
-
-  await waitForResources({
-    page,
-    names: [resource]
-  })
+  if (option) {
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith(resource) &&
+          resp.status() === 201 &&
+          resp.request().method() === action.toUpperCase()
+      ),
+      option === 'replace'
+        ? page.locator(actionSecondaryConfirmationButton).click()
+        : page.locator(keepBothButton).click()
+    ])
+  } else {
+    await waitForResources({
+      page,
+      names: [resource]
+    })
+  }
 }
 
 export const moveOrCopyMultipleResources = async (
@@ -832,7 +845,7 @@ export const moveOrCopyMultipleResources = async (
 }
 
 export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
-  const { page, resource, newLocation, action, method } = args
+  const { page, resource, newLocation, action, method, option } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (resourceDir) {
@@ -843,13 +856,13 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
       await page.locator(util.format(filesContextMenuAction, action)).click()
-      await pasteResource({ page, resource: resourceBase, newLocation, method })
+      await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
     case 'batch-action': {
       await page.locator(util.format(checkBox, resourceBase)).click()
       await page.locator(util.format(filesBatchAction, action)).click()
-      await pasteResource({ page, resource: resourceBase, newLocation, method })
+      await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
     case 'sidebar-panel': {
@@ -858,7 +871,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
       const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
       await page.locator(util.format(sideBarActionButton, actionButtonType)).click()
-      await pasteResource({ page, resource: resourceBase, newLocation, method })
+      await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
     case 'keyboard': {
@@ -878,7 +891,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
           (resp) =>
             resp.url().endsWith(resource) &&
             resp.status() === 201 &&
-            resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
+            resp.request().method() === action.toUpperCase()
         ),
         page.keyboard.press('Control+v')
       ])

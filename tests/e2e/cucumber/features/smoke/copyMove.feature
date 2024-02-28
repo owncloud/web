@@ -150,3 +150,49 @@ Feature: Copy
       | Sub1            |
       | Sub2            |
     And "Alice" logs out
+
+
+  Scenario: Copy and move resources with same name in personal space
+    Given "Admin" creates following user using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name         |
+      | sub          |
+      | folder1      |
+      | sub/folder1  |
+      | sub1/folder1 |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile                | content                 |
+      | example1.txt              | personal space location |
+      | folder1/example1.txt      | folder1 location        |
+      | sub/folder1/example1.txt  | sub/folder1 location    |
+      | sub1/folder1/example1.txt | sub1/folder1 location   |
+    And "Alice" opens the "files" app
+
+    # copy and move file
+    When "Alice" copies the following resource using sidebar-panel
+      | resource     | to      | option    |
+      | example1.txt | folder1 | keep both |
+    # issue https://github.com/owncloud/web/issues/10515
+    # | example1.txt | folder1 | replace   |
+    And "Alice" moves the following resource using sidebar-panel
+      | resource     | to          | option    |
+      | example1.txt | sub/folder1 | keep both |
+    # issue https://github.com/owncloud/web/issues/10515
+    # | folder1/example1.txt | sub/folder1 | replace   |
+
+    # copy and move folder
+    And "Alice" copies the following resource using sidebar-panel
+      | resource | to  | option    |
+      | folder1  | sub | keep both |
+    # issue https://github.com/owncloud/web/issues/10515
+    # | folder1  | sub | replace |
+    And "Alice" moves the following resource using sidebar-panel
+      | resource | to  | option    |
+      | folder1  | sub | keep both |
+    # issue https://github.com/owncloud/web/issues/10515
+    # | sub1/folder1  | sub | replace |
+    And "Alice" logs out
+    
