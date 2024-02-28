@@ -142,11 +142,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    for (const { resource, to } of stepTable.hashes()) {
+    for (const { resource, to, option } of stepTable.hashes()) {
       await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
         resource,
         newLocation: to,
-        method
+        method,
+        option: option
       })
     }
   }
