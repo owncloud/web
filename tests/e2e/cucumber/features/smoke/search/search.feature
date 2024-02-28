@@ -116,29 +116,6 @@ Feature: Search
       | resource          |
       | strängéनेपालीName |
 
-    And "Alice" navigates to the shared with me page
-    When "Alice" reshares the following resource
-      | resource             | recipient | type | role     | resourceType |
-      | new_share_from_brian | Carol     | user | Can view | folder       |
-      | new-lorem-big.txt    | Carol     | user | Can view | file         |
-    And "Alice" logs out
-
-    # search re-shared resources
-    When "Carol" logs in
-    And "Carol" opens the "files" app
-    And "Carol" creates the following resources
-      | resource | type   |
-      | folder   | folder |
-    And "Carol" searches "NEW" using the global search and the "all files" filter
-    Then following resources should be displayed in the search list for user "Carol"
-      | resource             |
-      | new_share_from_brian |
-      | new-lorem-big.txt    |
-    But following resources should not be displayed in the search list for user "Carol"
-      | resource |
-      | folder   |
-    And "Carol" logs out
-
 
   Scenario: Search using "current folder" filter
     Given "Admin" creates following users using API
