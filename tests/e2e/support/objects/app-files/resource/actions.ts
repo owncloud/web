@@ -739,7 +739,7 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
         (resp) =>
           resp.url().endsWith(resource) &&
           resp.status() === 201 &&
-          resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
+          resp.request().method() === action.toUpperCase()
       ),
       option === 'replace'
         ? page.locator(actionSecondaryConfirmationButton).click()
@@ -891,7 +891,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
           (resp) =>
             resp.url().endsWith(resource) &&
             resp.status() === 201 &&
-            resp.request().method() === (action === 'copy' ? 'COPY' : 'MOVE')
+            resp.request().method() === action.toUpperCase()
         ),
         page.keyboard.press('Control+v')
       ])
