@@ -10,7 +10,7 @@
     "email-validator": "^2.0.4",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
-    "vue-concurrency": "4.0.1",
+    "vue-concurrency": "5.0.0",
     "uuid": "9.0.1",
     "zod": "3.22.4"
   }
