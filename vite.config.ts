@@ -175,7 +175,6 @@ export default defineConfig(({ mode, command }) => {
           crypto: join(projectRootDir, 'polyfills/crypto.js'),
           buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
           path: 'rollup-plugin-node-polyfills/polyfills/path',
-          caf: 'caf/caf',
 
           // owncloud-sdk // sax
           stream: 'rollup-plugin-node-polyfills/polyfills/stream',
