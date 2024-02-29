@@ -8,29 +8,24 @@
       class="oc-resource-link"
       @click="emitClick"
     >
-      <oc-img
-        v-if="hasThumbnail"
-        :key="thumbnail"
-        v-oc-tooltip="tooltipLabelIcon"
-        :src="thumbnail"
-        class="oc-resource-thumbnail"
-        width="40"
-        height="40"
-        :aria-label="tooltipLabelIcon"
-      />
+      <span v-if="hasThumbnail" v-oc-tooltip="tooltipLabelIcon" :aria-label="tooltipLabelIcon">
+        <oc-img
+          :key="thumbnail"
+          :src="thumbnail"
+          class="oc-resource-thumbnail"
+          width="40"
+          height="40"
+        />
+        <span v-if="showStatusIcon" class="oc-resource-thumbnail-status-badge">
+          <oc-icon v-bind="statusIconAttrs" size="xsmall" />
+        </span>
+      </span>
       <oc-resource-icon
         v-else
         v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
         :resource="resource"
-      >
-        <template v-if="showStatusIcon" #status>
-          <oc-icon v-bind="statusIconAttrs" size="xsmall" />
-        </template>
-      </oc-resource-icon>
-      <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
-        <oc-icon v-bind="statusIconAttrs" size="xsmall" />
-      </span>
+      />
     </oc-resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <oc-resource-link
@@ -285,16 +280,22 @@ export default defineComponent({
     max-width: $oc-size-icon-default * 1.5;
 
     &-status-badge {
-      position: absolute;
-      bottom: 0px;
-      right: 0px;
-      width: var(--oc-space-small);
-      height: var(--oc-space-small);
-      padding: var(--oc-space-xsmall);
-      line-height: var(--oc-space-small);
-      border-radius: 30px;
       background: rgba(155, 155, 155, 0.8);
-      color: white;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      bottom: 0px;
+      right: -7px;
+      border: 2px solid var(--oc-color-background-default);
+      border-radius: 30px;
+      padding: 3px;
+
+      .oc-icon {
+        svg {
+          fill: var(--oc-color-background-default) !important;
+        }
+      }
     }
   }
 

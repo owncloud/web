@@ -16,7 +16,11 @@
         v-else
         class="details-icon-wrapper oc-width-1-1 oc-flex oc-flex-middle oc-flex-center oc-mb"
       >
-        <oc-resource-icon class="details-icon" :resource="resource" size="xxxlarge" />
+        <oc-resource-icon
+          class="details-icon oc-position-relative"
+          :resource="resource"
+          size="xxxlarge"
+        />
       </div>
       <div
         v-if="!isPublicLinkContext && shareIndicators.length"
