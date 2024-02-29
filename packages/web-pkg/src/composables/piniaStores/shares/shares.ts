@@ -286,7 +286,7 @@ export const useSharesStore = defineStore('shares', () => {
     path,
     loadIndicators = false
   }: DeleteShareOptions) => {
-    await clientService.owncloudSdk.shares.deleteShare(share.id, {} as any)
+    await clientService.owncloudSdk.shares.deleteShare(share.id, {})
     await awaitLoading()
     removeShare(share)
     updateFileShareTypes(path)

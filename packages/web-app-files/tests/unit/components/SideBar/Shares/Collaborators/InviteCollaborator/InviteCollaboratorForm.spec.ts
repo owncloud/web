@@ -7,6 +7,7 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 const folderMock = {
   type: 'folder',
@@ -22,7 +23,7 @@ const folderMock = {
 }
 
 const spaceMock = {
-  id: 1,
+  id: '1',
   type: 'space'
 }
 
@@ -42,7 +43,7 @@ describe('InviteCollaboratorForm', () => {
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
       const { wrapper } = getWrapper({ selectedCollaborators })
-      const spyTriggerUpload = vi.spyOn(wrapper.vm as any, 'share')
+      const spyTriggerUpload = vi.spyOn(wrapper.vm, 'share')
       const shareBtn = wrapper.find('#new-collaborators-form-create-button')
       expect(shareBtn.exists()).toBeTruthy()
 
@@ -50,20 +51,24 @@ describe('InviteCollaboratorForm', () => {
       expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
     })
     it.each([
-      { storageId: undefined, resource: folderMock, addMethod: 'addShare' },
-      { storageId: undefined, resource: spaceMock, addMethod: 'addSpaceMember' },
-      { storageId: 1, resource: folderMock, addMethod: 'addShare' }
-    ])('calls the "addShare" action', async (dataSet) => {
+      { storageId: undefined, resource: mock<Resource>(folderMock), addMethod: 'addShare' },
+      {
+        storageId: undefined,
+        resource: mock<SpaceResource>(spaceMock),
+        addMethod: 'addSpaceMember'
+      },
+      { storageId: '1', resource: mock<Resource>(folderMock), addMethod: 'addShare' }
+    ] as const)('calls the "addShare" action', async (dataSet) => {
       const selectedCollaborators = [
         { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
       ]
       const { wrapper } = getWrapper({
         selectedCollaborators,
         storageId: dataSet.storageId,
-        resource: dataSet.resource as any
+        resource: dataSet.resource
       })
-      const addShareSpy = vi.spyOn(wrapper.vm as any, dataSet.addMethod)
-      await (wrapper.vm as any).share()
+      const addShareSpy = vi.spyOn(wrapper.vm, dataSet.addMethod)
+      await wrapper.vm.share()
       expect(addShareSpy).toHaveBeenCalled()
     })
     it.todo('resets focus upon selecting an invitee')
@@ -73,7 +78,11 @@ describe('InviteCollaboratorForm', () => {
 function getWrapper({
   selectedCollaborators = [],
   storageId = 'fake-storage-id',
-  resource = folderMock
+  resource = mock<Resource>(folderMock)
+}: {
+  selectedCollaborators?: any[]
+  storageId?: string
+  resource?: Resource
 } = {}) {
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ params: { storageId } })

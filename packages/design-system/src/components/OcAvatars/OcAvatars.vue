@@ -129,7 +129,7 @@ export default defineComponent({
       if (!this.isOverlapping) {
         return a
       }
-      return a.slice(0, this.maxDisplayed) as any[]
+      return a.slice(0, this.maxDisplayed)
     },
 
     otherItems() {
@@ -140,7 +140,7 @@ export default defineComponent({
       if (this.maxDisplayed <= this.avatars.length) {
         return []
       }
-      return a.slice(0, this.maxDisplayed - this.avatars.length) as any[]
+      return a.slice(0, this.maxDisplayed - this.avatars.length)
     }
   },
   methods: {

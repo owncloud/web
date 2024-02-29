@@ -89,7 +89,7 @@ export class PasswordPolicyService {
       mustContain: new MustContainRule({ ...this.language }),
       atMostCharacters: new AtMostCharactersRule({ ...this.language })
     }
-    const rules = {} as any
+    const rules = {} as Record<string, unknown>
 
     if (this.useDefaultRules()) {
       rules.mustNotBeEmpty = {}

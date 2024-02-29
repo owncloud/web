@@ -7,6 +7,12 @@ import { Route, Router } from 'vue-router'
 // This file must have at least one export or import on top-level
 export {}
 
+declare global {
+  interface Window {
+    WEB_APPS_MAP: Record<string, string>
+  }
+}
+
 declare module 'vue' {
   interface ComponentCustomProperties {
     // TODO: get rid of direct OwnCloudSdk usage

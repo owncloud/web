@@ -10,7 +10,7 @@ describe('CompareSaveDialog', () => {
           compareObject: { id: '1', displayName: 'jan' }
         }
       })
-      expect((wrapper.vm as any).unsavedChanges).toBeFalsy()
+      expect(wrapper.vm.unsavedChanges).toBeFalsy()
     })
 
     it('should be true if objects are not equal', () => {
@@ -20,7 +20,7 @@ describe('CompareSaveDialog', () => {
           compareObject: { id: '1', displayName: 'janina' }
         }
       })
-      expect((wrapper.vm as any).unsavedChanges).toBeTruthy()
+      expect(wrapper.vm.unsavedChanges).toBeTruthy()
     })
   })
 })

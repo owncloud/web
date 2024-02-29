@@ -18,7 +18,7 @@ describe('OcGrid', () => {
       }
     )
     it('should not accept invalid values', () => {
-      expect((OcGrid as any).props.gutter.validator('invalid')).toBeFalsy()
+      expect(OcGrid.props.gutter.validator('invalid')).toBeFalsy()
     })
   })
   describe('when flex prop is true', () => {

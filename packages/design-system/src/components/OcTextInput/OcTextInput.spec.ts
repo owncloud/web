@@ -26,7 +26,10 @@ describe('OcTextInput', () => {
     })
   }
 
-  function getMountedWrapper(options = {} as any, passwordPolicy = { active: false, pass: false }) {
+  function getMountedWrapper(
+    options: { props?: Record<string, unknown>; attachTo?: HTMLElement } = { props: {} },
+    passwordPolicy = { active: false, pass: false }
+  ) {
     const passwordPolicyMock = mock<PasswordPolicy>()
     passwordPolicyMock.missing.mockReturnValueOnce({
       rules: [
@@ -280,7 +283,7 @@ describe('OcTextInput', () => {
 
   describe('type prop', () => {
     it('should only allow text, number, email and password as type', () => {
-      expect((OcTextInput as any).props.type.validator('binary')).toBeFalsy()
+      expect(OcTextInput.props.type.validator('binary')).toBeFalsy()
     })
     it.each(['text', 'number', 'email', 'password'])(
       'should set the provided type for the input',

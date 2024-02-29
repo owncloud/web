@@ -50,13 +50,13 @@ describe('OcResourceSize', () => {
     it('returns size if language is undefined', () => {
       const localThis = { $language: undefined, size: 100 }
 
-      expect((Size as any).computed.formattedSize.call(localThis)).toBe('100 B')
+      expect(Size.computed.formattedSize.call(localThis)).toBe('100 B')
     })
 
     it('returns size if current language is missing', () => {
       const localThis = { $language: {}, size: 100 }
 
-      expect((Size as any).computed.formattedSize.call(localThis)).toBe('100 B')
+      expect(Size.computed.formattedSize.call(localThis)).toBe('100 B')
     })
   })
 })

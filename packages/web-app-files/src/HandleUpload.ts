@@ -177,8 +177,8 @@ export class HandleUpload extends BasePlugin {
         topLevelFolderId,
         // route data
         routeName: name as string,
-        routeDriveAliasAndItem: (params as any)?.driveAliasAndItem || '',
-        routeShareId: (query as any)?.shareId || ''
+        routeDriveAliasAndItem: queryItemAsString(params?.driveAliasAndItem) || '',
+        routeShareId: queryItemAsString(query?.shareId) || ''
       }
 
       filesToUpload[file.id] = file as unknown as UppyResource

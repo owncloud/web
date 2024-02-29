@@ -37,7 +37,7 @@
     "tippy.js": "^6.3.7",
     "utf8": "^3.0.0",
     "uuid": "9.0.1",
-    "vue": "3.3.8",
+    "vue": "3.4.21",
     "vue-concurrency": "5.0.0",
     "vue-inline-svg": "3.1.2",
     "vue-router": "4.2.5",

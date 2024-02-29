@@ -99,7 +99,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
     }
 
     if (!areFileExtensionsShown.value) {
-      defaultName = extractNameWithoutExtension({ name: defaultName, extension } as any)
+      defaultName = extractNameWithoutExtension({ name: defaultName, extension } as Resource)
     }
 
     const inputSelectionRange = !areFileExtensionsShown.value

@@ -7,7 +7,7 @@
       >
         <oc-button
           :id="`files-role-${roleOption.name}`"
-          :ref="(el: ComponentPublicInstance) => (roleRefs[index] = el)"
+          :ref="(el: any) => (roleRefs[index] = el)"
           :class="{
             selected: isSelectedRole(roleOption),
             'oc-background-primary-gradient': isSelectedRole(roleOption)
@@ -139,17 +139,7 @@
 import { DateTime } from 'luxon'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import {
-  computed,
-  defineComponent,
-  PropType,
-  ref,
-  Ref,
-  reactive,
-  unref,
-  onMounted,
-  ComponentPublicInstance
-} from 'vue'
+import { computed, defineComponent, PropType, ref, Ref, reactive, unref, onMounted } from 'vue'
 import {
   useAbility,
   usePasswordPolicyService,
@@ -173,6 +163,7 @@ import {
 } from '@ownclouders/web-client/src/helpers'
 import { Resource } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime } from '../helpers'
+import { OcButton } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'CreateLinkModal',
@@ -203,7 +194,7 @@ export default defineComponent({
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
 
     const passwordInputKey = ref(uuidV4())
-    const roleRefs = ref<Record<string, ComponentPublicInstance>>({})
+    const roleRefs = ref<Record<string, InstanceType<typeof OcButton>>>({})
 
     const password = reactive({ value: '', error: undefined })
     const selectedRole = ref<ShareRole>(
@@ -353,7 +344,7 @@ export default defineComponent({
 
       const activeRoleOption = unref(roleRefs)[activeRoleOptionIdx]
       if (activeRoleOption) {
-        ;(activeRoleOption as any).$el.focus()
+        activeRoleOption.$el.focus()
       }
     })
 

@@ -3,6 +3,7 @@ import { PeopleShareRoles, SharePermissions } from '@ownclouders/web-client/src/
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
+import { OcDrop } from 'design-system/src/components'
 
 const selectors = {
   recipientRoleBtn: '.files-recipient-role-select-btn',
@@ -52,9 +53,11 @@ describe('RoleDropdown', () => {
       async (type) => {
         const isFolder = type === 'folder'
         const { wrapper } = getWrapper({ resourceType: type })
-        const customPermissionsDrop = wrapper.findComponent<any>(selectors.customPermissionsDrop)
+        const customPermissionsDrop = wrapper.findComponent<typeof OcDrop>(
+          selectors.customPermissionsDrop
+        )
         const showHideMock = vi.fn()
-        ;(customPermissionsDrop.vm as any).show = showHideMock
+        customPermissionsDrop.vm.show = showHideMock
         ;(wrapper.vm.$refs.rolesDrop as any).tippy = { hide: showHideMock }
 
         await wrapper

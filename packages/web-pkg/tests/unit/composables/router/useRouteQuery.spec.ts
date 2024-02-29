@@ -42,7 +42,7 @@ describe('useRouteQuery', () => {
 
     // FIXME: why do we have to wait for so many ticks?
     // Why don't we have to do that for any other expectation in the whole file?!
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 33; i++) {
       await nextTick()
     }
 

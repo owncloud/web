@@ -309,7 +309,7 @@ describe('ResourceTable', () => {
         })
 
         await wrapper.find('.resource-table-select-all .oc-checkbox').setValue(false)
-        expect((wrapper.emitted('update:selectedIds')[0][0] as any).length).toBe(0)
+        expect(wrapper.emitted<string>('update:selectedIds')[0][0].length).toBe(0)
       })
     })
 

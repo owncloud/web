@@ -2,6 +2,8 @@ import { computed, Ref, unref } from 'vue'
 import { useRouter } from './useRouter'
 import { QueryValue } from './types'
 
+let lastNavigation = Promise.resolve()
+
 export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<QueryValue> => {
   const router = useRouter()
 
@@ -9,19 +11,24 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
     get() {
       return unref(router.currentRoute).query[name] || defaultValue
     },
-    async set(v) {
+    set(v) {
       if (unref(router.currentRoute).query[name] === v) {
         return
       }
 
-      await router.replace({
-        // FIXME: passing the path does not seem to be required at runtime, but somehow is required in tests
-        path: unref(router.currentRoute).path,
-        query: {
-          ...unref(router.currentRoute).query,
-          [name]: v
-        }
+      const navigation = lastNavigation.then(async () => {
+        try {
+          await router.replace({
+            // FIXME: passing the path does not seem to be required at runtime, but somehow is required in tests
+            path: unref(router.currentRoute).path,
+            query: {
+              ...unref(router.currentRoute).query,
+              [name]: v
+            }
+          })
+        } catch (e) {}
       })
+      lastNavigation = navigation
     }
   })
 }

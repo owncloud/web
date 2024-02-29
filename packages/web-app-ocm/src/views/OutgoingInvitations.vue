@@ -104,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, unref, VNodeRef } from 'vue'
+import { computed, defineComponent, onMounted, ref, unref } from 'vue'
 import * as EmailValidator from 'email-validator'
 import {
   NoContentMessage,
@@ -144,8 +144,7 @@ export default defineComponent({
     const loading = ref(true)
     const emailErrorMessage = ref(null)
     const descriptionErrorMessage = ref<string>()
-    const inputForFocusEmail = ref<VNodeRef>()
-
+    const inputForFocusEmail = ref<HTMLInputElement>()
     const fields = computed(() => {
       const haveLinks = unref(sortedTokens)[0]?.link
 
@@ -189,7 +188,7 @@ export default defineComponent({
       const { description, recipient } = unref(formInput)
       if (recipient.length > 0 && !EmailValidator.validate(recipient)) {
         emailErrorMessage.value = $gettext('Please enter a valid email address!')
-        ;(unref(inputForFocusEmail) as any).focus()
+        unref(inputForFocusEmail).focus()
         return
       }
 

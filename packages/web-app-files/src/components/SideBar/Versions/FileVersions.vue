@@ -128,12 +128,12 @@ export default defineComponent({
       await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name)
       const restoredResource = await clientService.webdav.getFileInfo(unref(space), unref(resource))
 
-      const fieldsToUpdate = ['size', 'mdate']
+      const fieldsToUpdate = ['size', 'mdate'] as const
       for (const field of fieldsToUpdate) {
         if (Object.prototype.hasOwnProperty.call(unref(resource), field)) {
           updateResourceField({
             id: unref(resource).id,
-            field: field as any,
+            field: field,
             value: restoredResource[field]
           })
         }

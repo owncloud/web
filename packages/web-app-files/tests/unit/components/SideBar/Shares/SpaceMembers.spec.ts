@@ -99,13 +99,13 @@ describe('SpaceMembers', () => {
   describe('deleting members', () => {
     it('reacts on delete events by collaborator list items', async () => {
       const spyOnCollaboratorDeleteTrigger = vi.spyOn(
-        (SpaceMembers as any).methods,
+        SpaceMembers.methods,
         '$_ocCollaborators_deleteShare_trigger'
       )
 
       const user = mock<User>({ id: memberMocks.manager.collaborator.name })
       const wrapper = getWrapper({ user })
-      ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
+      wrapper.findComponent<any>('collaborator-list-item-stub').vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
     })
@@ -156,7 +156,7 @@ describe('SpaceMembers', () => {
 function getWrapper({
   mountType = shallowMount,
   space = mock<SpaceResource>(),
-  spaceMembers = [memberMocks.manager, memberMocks.editor, memberMocks.viewer],
+  spaceMembers = [memberMocks.manager, memberMocks.editor, memberMocks.viewer] as Share[],
   user = mock<User>(),
   currentRouteName = 'files-spaces-generic'
 } = {}) {
@@ -169,7 +169,7 @@ function getWrapper({
         ...defaultPlugins({
           piniaOptions: {
             userState: { user },
-            spacesState: { spaceMembers: spaceMembers as any },
+            spacesState: { spaceMembers },
             configState: {
               options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
             }

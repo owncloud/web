@@ -15,7 +15,7 @@ describe('SkipTo component', () => {
     vi.clearAllMocks()
   })
 
-  const spySkipToTarget = vi.spyOn((SkipTo as any).methods, 'skipToTarget')
+  const spySkipToTarget = vi.spyOn(SkipTo.methods, 'skipToTarget')
 
   let wrapper
   let skipButton

@@ -85,7 +85,13 @@ export default defineComponent({
       )
       const results = await Promise.allSettled(promises)
 
-      const succeeded = results.filter((r) => r.status === 'fulfilled') as any
+      function isFulfilled<T>(
+        result: PromiseSettledResult<T>
+      ): result is PromiseFulfilledResult<T> {
+        return result.status === 'fulfilled'
+      }
+
+      const succeeded = results.filter(isFulfilled)
       if (succeeded.length) {
         const title =
           succeeded.length === 1 && affectedUsers.length === 1
@@ -102,7 +108,11 @@ export default defineComponent({
         showMessage({ title })
       }
 
-      const failed = results.filter((r) => r.status === 'rejected')
+      function isRejected<T>(result: PromiseSettledResult<T>): result is PromiseRejectedResult {
+        return result.status === 'rejected'
+      }
+
+      const failed = results.filter(isRejected)
       if (failed.length) {
         failed.forEach(console.error)
 
@@ -126,7 +136,9 @@ export default defineComponent({
 
       try {
         const usersResponse = await Promise.all(
-          succeeded.map(({ value }) => client.users.getUser(value.data.id))
+          succeeded.map(({ value }) => {
+            return client.users.getUser(value.data.id)
+          })
         )
 
         eventBus.publish(

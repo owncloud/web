@@ -96,21 +96,21 @@ describe('OcPagination', () => {
 
   it('logs error if maxDisplayed prop is not an even number', () => {
     console.error = vi.fn()
-    expect((Pagination as any).props.maxDisplayed.validator(2)).toBeFalsy()
+    expect(Pagination.props.maxDisplayed.validator(2)).toBeFalsy()
   })
 
   it('builds correct prev and next links', () => {
     const localThis = {
       ...defaultProps,
-      bindPageLink: (Pagination as any).methods.bindPageLink,
+      bindPageLink: Pagination.methods.bindPageLink,
       $_currentPage: 3
     }
 
-    expect((Pagination as any).computed.previousPageLink.call(localThis)).toMatchObject({
+    expect(Pagination.computed.previousPageLink.call(localThis)).toMatchObject({
       name: 'files',
       query: { page: 2 }
     })
-    expect((Pagination as any).computed.nextPageLink.call(localThis)).toMatchObject({
+    expect(Pagination.computed.nextPageLink.call(localThis)).toMatchObject({
       name: 'files',
       query: { page: 4 }
     })

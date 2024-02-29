@@ -71,7 +71,7 @@ export const useResourcesViewDefaults = <T extends Resource, TT, TU extends any[
 
   const currentRoute = useRouteName()
   const currentViewModeQuery = useRouteQuery(
-    `${unref(currentRoute)}-view-mode`,
+    `${unref(currentRoute)}-${FolderViewModeConstants.queryName}`,
     FolderViewModeConstants.defaultModeName
   )
   const currentViewMode = computed((): string => queryItemAsString(currentViewModeQuery.value))

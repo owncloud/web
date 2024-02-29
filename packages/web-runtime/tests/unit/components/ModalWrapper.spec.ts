@@ -26,10 +26,11 @@ describe('ModalWrapper', () => {
     expect(wrapper.find('.oc-modal').exists()).toBeTruthy()
   })
   it('renders a custom component if given', async () => {
-    const modal = mock<Modal>({
-      customComponent: CustomModalComponent,
-      customComponentAttrs: vi.fn()
-    })
+    const modal = {
+      id: 'some-id',
+      title: 'some-title',
+      customComponent: CustomModalComponent
+    } as Modal
     const { wrapper } = getShallowWrapper({ modals: [modal] })
     const modalStore = useModals()
     ;(modalStore.activeModal as any) = modal

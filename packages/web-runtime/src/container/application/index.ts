@@ -96,7 +96,7 @@ export const buildApplication = async ({
         applicationScript = await loadScriptRequireJS<ClassicApplicationScript>(applicationPath)
       }
     } else {
-      const productionModule = (window as any).WEB_APPS_MAP?.[applicationPath]
+      const productionModule = window.WEB_APPS_MAP?.[applicationPath]
       if (productionModule) {
         applicationScript =
           await loadScriptDynamicImport<ClassicApplicationScript>(productionModule)

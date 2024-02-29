@@ -180,7 +180,7 @@ export class UserManager extends OidcUserManager {
   }
 
   private initializeOwnCloudSdk(accessToken: string): void {
-    const options = {
+    const options: Record<string, unknown> = {
       baseUrl: this.configStore.serverUrl,
       auth: {
         bearer: accessToken
@@ -190,7 +190,7 @@ export class UserManager extends OidcUserManager {
       }
     }
     if (this.userStore.user) {
-      ;(options as any).userInfo = {
+      options.userInfo = {
         id: this.userStore.user.onPremisesSamAccountName,
         'display-name': this.userStore.user.displayName,
         email: this.userStore.user.mail
@@ -260,7 +260,7 @@ export class UserManager extends OidcUserManager {
   }
 
   // copied from upstream oidc-client-ts UserManager with CERN customization
-  protected async _signinEnd(url: string, verifySub?: string, ...args): Promise<User> {
+  protected async _signinEnd(url: string, verifySub?: string, ...args: any[]): Promise<User> {
     if (!this.configStore.options.isRunningOnEos) {
       return (super._signinEnd as any)(url, verifySub, ...args)
     }

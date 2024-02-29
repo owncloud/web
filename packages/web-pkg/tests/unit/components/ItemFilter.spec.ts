@@ -2,6 +2,7 @@ import ItemFilter from '../../../src/components/ItemFilter.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
 import { OcCheckbox } from 'design-system/src/components'
+import { unref } from 'vue'
 
 vi.mock('../../../src/composables/appDefaults')
 
@@ -109,7 +110,7 @@ describe('ItemFilter', () => {
     it('sets the selected item as route query param', async () => {
       const { wrapper, mocks } = getWrapper()
       const item = wrapper.findAll(selectors.filterListItem).at(0)
-      const currentRouteQuery = (mocks.$router.currentRoute as any).query
+      const currentRouteQuery = unref(mocks.$router.currentRoute).query
       expect(mocks.$router.push).not.toHaveBeenCalled()
       await item.trigger('click')
       expect(currentRouteQuery[wrapper.vm.queryParam]).toBeDefined()

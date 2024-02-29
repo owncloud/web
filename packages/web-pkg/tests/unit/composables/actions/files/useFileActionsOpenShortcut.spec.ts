@@ -129,7 +129,7 @@ function getWrapper({
   )
 
   vi.mocked(useRoute).mockImplementation(() =>
-    ref(mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }) as any)
+    ref(mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }))
   )
 
   return {

@@ -256,7 +256,7 @@ export default defineComponent({
       }
     ]
 
-    const instance = getCurrentInstance() as any
+    const instance = getCurrentInstance()
     watch(
       currentFileContext,
       async () => {
@@ -269,7 +269,7 @@ export default defineComponent({
           folderLoaded.value = true
         }
 
-        instance.proxy.setActiveFile(unref(unref(currentFileContext).driveAliasAndItem))
+        ;(instance.proxy as any).setActiveFile(unref(unref(currentFileContext).driveAliasAndItem))
       },
       { immediate: true }
     )

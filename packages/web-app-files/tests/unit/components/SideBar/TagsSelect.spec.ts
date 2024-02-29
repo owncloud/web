@@ -3,6 +3,7 @@ import TagsSelect from 'web-app-files/src/components/SideBar/Details/TagsSelect.
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { OcSelect } from 'design-system/src/components'
 
 describe('Tag Select', () => {
   it('show tags input form if loaded successfully', () => {
@@ -21,11 +22,9 @@ describe('Tag Select', () => {
 
     const { wrapper } = createWrapper(resource, clientService)
     await wrapper.vm.loadAvailableTagsTask.last
-    expect((wrapper.findComponent<any>('vue-select-stub').props() as any).options).toEqual([
-      { label: 'a' },
-      { label: 'b' },
-      { label: 'c' }
-    ])
+    expect(
+      (wrapper.findComponent<typeof OcSelect>('vue-select-stub').props() as any).options
+    ).toEqual([{ label: 'a' }, { label: 'b' }, { label: 'c' }])
   })
 
   describe('save method', () => {

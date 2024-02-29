@@ -87,7 +87,7 @@ describe('OcButton', () => {
     it.each(['appearance', 'size', 'submit', 'justifyContent', 'variation', 'gapSize', 'type'])(
       'when prop "%s" is set to an invalid value"',
       (prop) => {
-        expect((OcButton as any).props[prop].validator('not-valid')).toBeFalsy()
+        expect(OcButton.props[prop].validator('not-valid')).toBeFalsy()
       }
     )
   })
