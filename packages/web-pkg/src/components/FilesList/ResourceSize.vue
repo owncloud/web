@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import filesize from 'filesize'
+import { filesize } from 'filesize'
 
 /**
  * Displays a formatted resource size

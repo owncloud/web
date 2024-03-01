@@ -18,7 +18,7 @@
     "axios": "1.6.5",
     "design-system": "workspace:@ownclouders/design-system@*",
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz",
-    "filesize": "^9.0.11",
+    "filesize": "^10.1.0",
     "focus-trap": "7.2.0",
     "focus-trap-vue": "^4.0.1",
     "fuse.js": "6.6.2",

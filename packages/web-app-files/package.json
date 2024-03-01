@@ -21,7 +21,7 @@
     "axios": "1.6.5",
     "design-system": "workspace:@ownclouders/design-system@*",
     "email-validator": "^2.0.4",
-    "filesize": "^9.0.11",
+    "filesize": "^10.1.0",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
     "luxon": "3.2.1",

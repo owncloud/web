@@ -1,6 +1,6 @@
 import Uppy, { UppyFile } from '@uppy/core'
 import BasePlugin from '@uppy/core/lib/BasePlugin.js'
-import filesize from 'filesize'
+import { filesize } from 'filesize'
 import { basename, dirname, join } from 'path'
 import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'

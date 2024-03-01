@@ -1,4 +1,4 @@
-import filesize from 'filesize'
+import { filesize } from 'filesize'
 import { getLocaleFromLanguage } from './locale'
 
 const mb = 1048576
