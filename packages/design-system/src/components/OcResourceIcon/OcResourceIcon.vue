@@ -142,8 +142,8 @@ export default defineComponent({
         return
       }
 
-      const badgeBottom = iconOffsetHeight - badgeBoundingClientRect.height / 4
-      const badgeRight = iconOffsetWidth - badgeBoundingClientRect.width / 3
+      const badgeBottom = iconOffsetHeight - badgeBoundingClientRect.height / 3
+      const badgeRight = iconOffsetWidth - badgeBoundingClientRect.width / 1.8
 
       badgeStyle.value = {
         right: `${badgeRight}px`,
@@ -220,7 +220,7 @@ export default defineComponent({
   align-items: center;
   border: 2px solid var(--oc-color-background-default);
   border-radius: 30px;
-  padding: 3px;
+  padding: 2px;
 
   .oc-icon {
     svg {
