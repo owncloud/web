@@ -119,7 +119,6 @@ config = {
                     "webUITextEditor",
                 ],
                 "oCISSharingInternal1": [
-                    "webUISharingInternalGroups",
                     "webUISharingInternalGroupsEdgeCases",
                 ],
                 "oCISSharingInternal2": [
@@ -185,7 +184,6 @@ basicTestSuites = [
     "webUIRenameFolders",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
-    "webUISharingInternalGroups",
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",

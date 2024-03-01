@@ -152,8 +152,12 @@ Feature: share
       | Type            | User              |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And "Alice" checks the following access details of share "myfolder" for group "sales"
-      | Name            | sales department |
-      | Type            | Group            |
+      | Name | sales department |
+      | Type | Group            |
+    # remove share with group
+    When "Alice" removes following sharee
+      | resource         | recipient | type  |
+      | folder_to_shared | sales     | group |
     And  "Alice" logs out
 
     And "Brian" navigates to the shared with me page
@@ -173,9 +177,9 @@ Feature: share
       | testfile.txt | example text |
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type  | role     |
-      | testfile.txt | Brian     | user  | Can view |
-      | test-folder  | Brian     | user  | Can view |
+      | resource     | recipient | type | role     |
+      | testfile.txt | Brian     | user | Can view |
+      | test-folder  | Brian     | user | Can view |
     And "Alice" logs out
     And "Carol" logs in
     And "Carol" creates the following folder in personal space using API
