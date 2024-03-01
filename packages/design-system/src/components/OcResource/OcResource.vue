@@ -289,7 +289,7 @@ export default defineComponent({
       right: -7px;
       border: 2px solid var(--oc-color-background-default);
       border-radius: 30px;
-      padding: 3px;
+      padding: 2px;
 
       .oc-icon {
         svg {
