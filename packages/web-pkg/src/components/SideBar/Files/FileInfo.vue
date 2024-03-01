@@ -12,11 +12,7 @@
           data-testid="files-info-name"
           class="oc-font-semibold oc-flex oc-flex-center oc-flex-middle"
         >
-          <oc-icon
-            v-if="Object.keys(headlineIconAttrs).length"
-            v-bind="headlineIconAttrs"
-            class="oc-mr-xs"
-          />
+          <oc-icon v-if="showLockIcon" name="lock" fill-type="fill" class="oc-mr-xs" />
           <oc-resource-name
             :name="resource.name"
             :extension="resource.extension"
@@ -45,27 +41,19 @@ export default defineComponent({
       default: true
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore()
     const resource = inject<Resource>('resource')
     const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
-    const headlineIconAttrs = computed(() => {
-      if (unref(resource).locked) {
-        return {
-          name: 'lock',
-          fillType: 'fill'
-        }
-      }
-      if (unref(resource).processing) {
-        return {
-          name: 'loop-right',
-          fillType: 'line'
-        }
-      }
-      return {}
+    const showLockIcon = computed(() => {
+      return !props.isSubPanelActive && unref(resource).locked
     })
 
-    return { resource, areFileExtensionsShown, headlineIconAttrs }
+    return {
+      resource,
+      areFileExtensionsShown,
+      showLockIcon
+    }
   }
 })
 </script>
