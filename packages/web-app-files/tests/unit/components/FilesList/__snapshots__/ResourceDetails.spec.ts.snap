@@ -12,7 +12,8 @@ exports[`ResourceDetails component renders resource details correctly 1`] = `
           <!--v-if-->
         </span>
         <div class="file_info__body oc-text-overflow">
-          <h3 class="oc-font-semibold oc-flex oc-flex-center">
+          <h3 class="oc-font-semibold oc-flex oc-flex-center oc-flex-middle">
+            <!--v-if-->
             <span class="oc-resource-name oc-display-inline-block" data-test-resource-name="image.jpg" title="image.jpg">
               <span class="oc-resource-basename oc-text-break">image.jpg</span>
               <!--v-if-->

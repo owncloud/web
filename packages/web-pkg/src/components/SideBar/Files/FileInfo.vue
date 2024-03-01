@@ -8,7 +8,15 @@
         class="file_info__icon oc-mr-s oc-position-relative"
       />
       <div class="file_info__body oc-text-overflow">
-        <h3 data-testid="files-info-name" class="oc-font-semibold oc-flex oc-flex-center">
+        <h3
+          data-testid="files-info-name"
+          class="oc-font-semibold oc-flex oc-flex-center oc-flex-middle"
+        >
+          <oc-icon
+            v-if="Object.keys(headlineIconAttrs).length"
+            v-bind="headlineIconAttrs"
+            class="oc-mr-xs"
+          />
           <oc-resource-name
             :name="resource.name"
             :extension="resource.extension"
@@ -25,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useStore } from '../../../composables'
 
@@ -41,8 +49,23 @@ export default defineComponent({
     const store = useStore()
     const resource = inject<Resource>('resource')
     const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
+    const headlineIconAttrs = computed(() => {
+      if (unref(resource).locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill'
+        }
+      }
+      if (unref(resource).processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line'
+        }
+      }
+      return {}
+    })
 
-    return { resource, areFileExtensionsShown }
+    return { resource, areFileExtensionsShown, headlineIconAttrs }
   }
 })
 </script>
