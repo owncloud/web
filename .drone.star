@@ -127,13 +127,9 @@ config = {
                 "oCISSharingInternal3": [
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersShareWithPage",
                 ],
                 "oCISSharingAutocompletionResharing": [
                     "webUISharingAutocompletion",
-                ],
-                "oCISSharingPerm1": [
-                    "webUISharingPermissionsUsers",
                 ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
@@ -187,9 +183,7 @@ basicTestSuites = [
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",
-    "webUISharingInternalUsersShareWithPage",
     "webUISharingInternalUsersSharingIndicator",
-    "webUISharingPermissionsUsers",
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",

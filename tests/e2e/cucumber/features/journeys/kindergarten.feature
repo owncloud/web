@@ -44,15 +44,22 @@ Feature: Kindergarten can use web to organize a day
       | resource                                           | recipient | type  | role                                  | resourceType |
       | groups/Pre-Schools Pirates/meal plan               | Brian     | user  | Can edit                              | folder       |
       | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can edit                              | folder       |
-      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Brian     | user  | Can view                              | file         |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can view                              | file         |
       | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Carol     | user  | Can view                              | file         |
-      | groups/Kindergarten Koalas/meal plan               | sales     | group | custom_permissions:read,update,delete | folder       |
+      | groups/Kindergarten Koalas/meal plan               | sales     | group | custom_permissions:read               | folder       |
       | groups/Kindergarten Koalas/meal plan               | security  | group | custom_permissions:read,update,delete | folder       |
       | groups/Kindergarten Koalas/meal plan/lorem.txt     | sales     | group | custom_permissions:read               | file         |
       | groups/Kindergarten Koalas/meal plan/lorem.txt     | security  | group | custom_permissions:read               | file         |
       | groups/Teddy Bear Daycare/meal plan                | Brian     | user  | custom_permissions:read,update,create | folder       |
       | groups/Teddy Bear Daycare/meal plan                | Carol     | user  | custom_permissions:read,update,create | folder       |
       | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | custom_permissions:read,update        | file         |
+      | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | custom_permissions:read,update        | file         |
+    # update share
+    And "Alice" updates following sharee role
+      | resource                                           | recipient | type  | role                                  | resourceType |
+      | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can view                              | folder       |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can edit                              | file         |
+      | groups/Kindergarten Koalas/meal plan               | sales     | group | custom_permissions:read,update,delete | folder       |
       | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | custom_permissions:read,update        | file         |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     When "Brian" logs in
