@@ -108,7 +108,7 @@ export const changeLanguage = async (args: {
   return (await page.locator(languageValue).textContent()).trim()
 }
 
-export const getTitle = async (args: { page: Page }): Promise<string> => {
+export const getTitle = (args: { page: Page }): Promise<string> => {
   const { page } = args
   return page.locator(accountPageTitle).textContent()
 }
