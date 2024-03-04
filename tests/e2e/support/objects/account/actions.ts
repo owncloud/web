@@ -10,6 +10,7 @@ const downloadExportButton = '[data-testid="download-export-btn"]'
 const languageInput = '[data-testid="language"] .vs__search'
 const languageValueDropDown = `.vs__dropdown-menu :text-is("%s")`
 const languageValue = '[data-testid="language"] .vs__selected'
+const accountPageTitle = '#account-page-title'
 
 export const getQuotaValue = async (args: { page: Page }): Promise<string> => {
   const { page } = args
@@ -79,18 +80,35 @@ export const downloadGdprExport = async (args: { page: Page }): Promise<string> 
   return download.suggestedFilename()
 }
 
-export const changeLanguage = async (args: { page: Page; language: string }): Promise<string> => {
-  const { page, language } = args
+export const changeLanguage = async (args: {
+  page: Page
+  language: string
+  isAnonymousUser: boolean
+}): Promise<string> => {
+  const { page, language, isAnonymousUser } = args
   await page.locator(languageInput).waitFor()
+  await page.locator(languageInput).click()
   await page.locator(languageInput).pressSequentially(language)
-  await Promise.all([
-    page.waitForResponse(
-      (res) =>
-        res.url().includes('graph/v1.0/me') &&
-        res.request().method() === 'PATCH' &&
-        res.status() === 200
-    ),
-    page.locator(util.format(languageValueDropDown, language)).press('Enter')
-  ])
+  const promises = []
+
+  if (!isAnonymousUser) {
+    promises.push(
+      page.waitForResponse(
+        (res) =>
+          res.url().includes('graph/v1.0/me') &&
+          res.request().method() === 'PATCH' &&
+          res.status() === 200
+      )
+    )
+  }
+
+  promises.push(page.locator(util.format(languageValueDropDown, language)).press('Enter'))
+  await Promise.all(promises)
+
   return (await page.locator(languageValue).textContent()).trim()
+}
+
+export const getTitle = async (args: { page: Page }): Promise<string> => {
+  const { page } = args
+  return page.locator(accountPageTitle).textContent()
 }

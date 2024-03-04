@@ -18,10 +18,10 @@ Feature: language settings
       | resource      | recipient | type | role     |
       | check_message | Alice     | user | Can edit |
     And "Brian" logs out
-
     And "Alice" logs in
     And "Alice" opens the user menu
     And "Alice" changes the language to "Deutsch - German"
+    Then "Alice" should see the following account page title "Konto"
     When "Alice" logs out
     And "Alice" logs in
     Then "Alice" should see the following notifications
