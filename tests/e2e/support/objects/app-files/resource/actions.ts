@@ -122,7 +122,10 @@ export const clickResource = async ({
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
       page.waitForResponse(
-        (resp) => resp.url().endsWith(encodeURIComponent(name)) || resp.url().endsWith(itemId)
+        (resp) =>
+          resp.url().endsWith(encodeURIComponent(name)) ||
+          resp.url().endsWith(itemId) ||
+          resp.url().endsWith(encodeURIComponent(itemId))
       ),
       resource.click()
     ])
