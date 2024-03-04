@@ -127,8 +127,8 @@ export default defineComponent({
       }
 
       const innerIconBoundingClientRect = unref(iconRef)
-        ?.$el?.getElementsByTagName('path')
-        ?.[unref(iconRef)?.$el?.getElementsByTagName('path')?.length - 1]?.getBoundingClientRect()
+        ?.$el?.getElementsByTagName('g')?.[0]
+        ?.getBoundingClientRect()
       if (!innerIconBoundingClientRect) {
         return
       }
