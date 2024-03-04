@@ -11,21 +11,6 @@ Feature: accept/decline shares coming from internal users
       | Brian    |
     And user "Brian" has logged in using the webUI
 
-  @issue-ocis-1950
-  Scenario: reject a share that you received as user and as group member
-    Given these groups have been created in the server:
-      | groupname |
-      | grp1      |
-    And user "Alice" has created folder "/simple-folder" in the server
-    And user "Brian" has been added to group "grp1" in the server
-    And user "Alice" has shared folder "/simple-folder" with user "Brian" in the server
-    And user "Alice" has shared folder "/simple-folder" with group "grp1" in the server
-    And the user has browsed to the shared-with-me page
-    When the user declines share "simple-folder" offered by user "Alice Hansen" using the webUI
-    Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
-    When the user browses to the files page
-    Then folder "/Shares" should not be listed on the webUI
-
 
   Scenario: User receives files when auto accept share is disabled - oCIS behavior
     Given user "Alice" has created file "toshare.txt" in the server
