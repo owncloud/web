@@ -14,7 +14,7 @@
       v-if="Object.keys(badgeIconAttrs).length"
       ref="badgeRef"
       class="oc-resource-icon-status-badge"
-      :style="{ background: `${icon.color}`, ...badgeStyle }"
+      :style="badgeStyle"
     >
       <oc-icon v-bind="badgeIconAttrs" />
     </span>
@@ -214,6 +214,8 @@ export default defineComponent({
 }
 
 .oc-resource-icon-status-badge {
+  background: var(--oc-color-swatch-passive-hover);
+  opacity: 0.9;
   position: absolute;
   display: flex;
   justify-content: center;

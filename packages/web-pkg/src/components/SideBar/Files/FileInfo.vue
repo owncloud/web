@@ -12,7 +12,6 @@
           data-testid="files-info-name"
           class="oc-font-semibold oc-flex oc-flex-center oc-flex-middle"
         >
-          <oc-icon v-if="showLockIcon" name="lock" fill-type="fill" class="oc-mr-xs" />
           <oc-resource-name
             :name="resource.name"
             :extension="resource.extension"
@@ -29,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, unref } from 'vue'
+import { computed, defineComponent, inject } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useStore } from '../../../composables'
 
@@ -41,18 +40,14 @@ export default defineComponent({
       default: true
     }
   },
-  setup(props) {
+  setup() {
     const store = useStore()
     const resource = inject<Resource>('resource')
     const areFileExtensionsShown = computed(() => store.state.Files.areFileExtensionsShown)
-    const showLockIcon = computed(() => {
-      return !props.isSubPanelActive && unref(resource).locked
-    })
 
     return {
       resource,
-      areFileExtensionsShown,
-      showLockIcon
+      areFileExtensionsShown
     }
   }
 })

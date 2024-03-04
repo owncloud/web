@@ -122,7 +122,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     webDavPath: resource.filename,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
-    locked: true,
+    locked: activeLock ? true : false,
     lockOwnerName,
     lockTime,
     processing: resource.processing || false,

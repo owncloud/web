@@ -280,7 +280,8 @@ export default defineComponent({
     max-width: $oc-size-icon-default * 1.5;
 
     &-status-badge {
-      background: rgba(155, 155, 155, 0.8);
+      background: var(--oc-color-swatch-passive-hover);
+      opacity: 0.9;
       position: absolute;
       display: flex;
       justify-content: center;
