@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v7.1.3...master
+[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
 
 Summary
 -------
@@ -47,14 +47,8 @@ Summary
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
-* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
-* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
-* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
-* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
-* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
-* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
@@ -454,15 +448,6 @@ Details
    https://github.com/owncloud/web/pull/9698
    https://github.com/owncloud/web/pull/10151
 
-* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
-
-   We have removed the `getToken` getter from our vuex store and support for the
-   deprecated `user-management` name for the `admin-settings` app. See linked
-   "Deprecations" issue for more information.
-
-   https://github.com/owncloud/web/issues/7338
-   https://github.com/owncloud/web/pull/9959
-
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 
    We've introduced
@@ -508,107 +493,6 @@ Details
 
    https://github.com/owncloud/web/issues/9709
    https://github.com/owncloud/web/pull/9764
-
-* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
-
-   Due to improvements in the extension system in general, we have removed the
-   skeleton app. Documentation regarding the extension API and guides/examples can
-   be found in the dev docs.
-
-   https://github.com/owncloud/web/issues/9892
-   https://github.com/owncloud/web/pull/10067
-
-* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
-
-   BREAKING CHANGE for developers: The old way of registering quick actions via the
-   `quickaction` property of an app has been removed. Quick actions should be
-   registered as extension via our extension registry. They need to be of type
-   `action` and have the `files.quick-action` scope.
-
-   https://github.com/owncloud/web/pull/10102
-   https://github.com/owncloud/web/pull/10223
-
-* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
-
-   We have removed the `homeFolder` option as it was originally implemented and
-   used by CERN but isn't needed anymore.
-
-   https://github.com/owncloud/web/pull/10122
-
-* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
-
-   BREAKING CHANGE for developers: The vuex store has been removed in favor of
-   pinia.
-
-   All store modules have been migrated to a pinia store module. Please see the
-   linked issue down below for a list of all migrated stores and how to use them
-   now.
-
-   There are a number of things that have been removed and/or moved into pinia
-   composables instead:
-
-   Globals:
-
-   - `store` and `$store` variables have been removed. - `ConfigurationManager` has
-   been removed. The config now sits inside the configuration store.
-
-   App framework:
-
-   - `announceStore` has been removed. There is no need for apps to announce stores
-   to the runtime. If you need to use a store in your app, simply create a pinia
-   store module and use it. - `announceExtensions` has been removed. The proper way
-   for an app to register file extensions is via the `extensions` property inside
-   the `appInfo` object. - `requestStore` has been removed. There is no need to
-   request specific stores. All stores that `web-pkg` provides can be imported and
-   accessed via their composables. - `enabled` callback as well as the `name`
-   callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
-   - `store` param of the `ClassicApplicationScript` has been removed.
-
-   Composables:
-
-   - `useStore` has been removed. Use the pinia for the store you want to use
-   instead. - `useAccessToken` has been removed. It now sits inside the auth store.
-   - `usePublicLinkContext` has been removed. It now sits inside the auth store. -
-   `usePublicLinkPassword` has been removed. It now sits inside the auth store. -
-   `usePublicLinkToken` has been removed. It now sits inside the auth store. -
-   `useUserContext` has been removed. It now sits inside the auth store. -
-   `useConfigurationManager` has been removed. The config now sits inside the
-   configuration store. - `use...Capability` composables have been removed.
-   Capablities now sit inside the capability store.
-
-   For store specific changes please see the linked issue and PRs down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10212
-   https://github.com/owncloud/web/pull/10240
-   https://github.com/owncloud/web/pull/10307
-   https://github.com/owncloud/web/pull/10309
-   https://github.com/owncloud/web/pull/10316
-   https://github.com/owncloud/web/pull/10323
-   https://github.com/owncloud/web/pull/10326
-   https://github.com/owncloud/web/pull/10329
-   https://github.com/owncloud/web/pull/10331
-   https://github.com/owncloud/web/pull/10336
-   https://github.com/owncloud/web/pull/10338
-   https://github.com/owncloud/web/pull/10341
-   https://github.com/owncloud/web/pull/10346
-   https://github.com/owncloud/web/pull/10349
-   https://github.com/owncloud/web/pull/10362
-   https://github.com/owncloud/web/pull/10363
-   https://github.com/owncloud/web/pull/10368
-   https://github.com/owncloud/web/pull/10372
-
-* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
-
-   BREAKING CHANGE for developers: The user from the ocs api has been removed in
-   favor of the graph user. That means the user that can be retrieved from the
-   store looks slightly different than the OCS user (though it still holds the same
-   information).
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10240
 
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 
@@ -1283,6 +1167,136 @@ Details
 
    https://github.com/owncloud/web/issues/10500
    https://github.com/owncloud/web/pull/10519
+
+Changelog for ownCloud Web [9.0.0] (2024-02-26)
+=======================================
+The following sections list the changes in ownCloud web 9.0.0 relevant to
+ownCloud admins and users.
+
+[9.0.0]: https://github.com/owncloud/web/compare/v7.1.3...v9.0.0
+
+Summary
+-------
+
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+
+Details
+-------
+
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+
+   We have removed the `getToken` getter from our vuex store and support for the
+   deprecated `user-management` name for the `admin-settings` app. See linked
+   "Deprecations" issue for more information.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/9959
+
+* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
+
+   Due to improvements in the extension system in general, we have removed the
+   skeleton app. Documentation regarding the extension API and guides/examples can
+   be found in the dev docs.
+
+   https://github.com/owncloud/web/issues/9892
+   https://github.com/owncloud/web/pull/10067
+
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+
+   BREAKING CHANGE for developers: The old way of registering quick actions via the
+   `quickaction` property of an app has been removed. Quick actions should be
+   registered as extension via our extension registry. They need to be of type
+   `action` and have the `files.quick-action` scope.
+
+   https://github.com/owncloud/web/pull/10102
+   https://github.com/owncloud/web/pull/10223
+
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+
+   We have removed the `homeFolder` option as it was originally implemented and
+   used by CERN but isn't needed anymore.
+
+   https://github.com/owncloud/web/pull/10122
+
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
+
+   BREAKING CHANGE for developers: The vuex store has been removed in favor of
+   pinia.
+
+   All store modules have been migrated to a pinia store module. Please see the
+   linked issue down below for a list of all migrated stores and how to use them
+   now.
+
+   There are a number of things that have been removed and/or moved into pinia
+   composables instead:
+
+   Globals:
+
+   - `store` and `$store` variables have been removed. - `ConfigurationManager` has
+   been removed. The config now sits inside the configuration store.
+
+   App framework:
+
+   - `announceStore` has been removed. There is no need for apps to announce stores
+   to the runtime. If you need to use a store in your app, simply create a pinia
+   store module and use it. - `announceExtensions` has been removed. The proper way
+   for an app to register file extensions is via the `extensions` property inside
+   the `appInfo` object. - `requestStore` has been removed. There is no need to
+   request specific stores. All stores that `web-pkg` provides can be imported and
+   accessed via their composables. - `enabled` callback as well as the `name`
+   callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
+   - `store` param of the `ClassicApplicationScript` has been removed.
+
+   Composables:
+
+   - `useStore` has been removed. Use the pinia for the store you want to use
+   instead. - `useAccessToken` has been removed. It now sits inside the auth store.
+   - `usePublicLinkContext` has been removed. It now sits inside the auth store. -
+   `usePublicLinkPassword` has been removed. It now sits inside the auth store. -
+   `usePublicLinkToken` has been removed. It now sits inside the auth store. -
+   `useUserContext` has been removed. It now sits inside the auth store. -
+   `useConfigurationManager` has been removed. The config now sits inside the
+   configuration store. - `use...Capability` composables have been removed.
+   Capablities now sit inside the capability store.
+
+   For store specific changes please see the linked issue and PRs down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10212
+   https://github.com/owncloud/web/pull/10240
+   https://github.com/owncloud/web/pull/10307
+   https://github.com/owncloud/web/pull/10309
+   https://github.com/owncloud/web/pull/10316
+   https://github.com/owncloud/web/pull/10323
+   https://github.com/owncloud/web/pull/10326
+   https://github.com/owncloud/web/pull/10329
+   https://github.com/owncloud/web/pull/10331
+   https://github.com/owncloud/web/pull/10336
+   https://github.com/owncloud/web/pull/10338
+   https://github.com/owncloud/web/pull/10341
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10349
+   https://github.com/owncloud/web/pull/10362
+   https://github.com/owncloud/web/pull/10363
+   https://github.com/owncloud/web/pull/10368
+   https://github.com/owncloud/web/pull/10372
+
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+
+   BREAKING CHANGE for developers: The user from the ocs api has been removed in
+   favor of the graph user. That means the user that can be retrieved from the
+   store looks slightly different than the OCS user (though it still holds the same
+   information).
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10240
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
