@@ -22,7 +22,7 @@ geekdocFilePath: backend-ocis.md
 ## Setting up oCIS
 
 - Setup oCIS by following the [setup instructions](https://owncloud.dev/ocis/getting-started/)
-- Start oCIS with local links to your bundled web frontend and config by running `WEB_ASSET_PATH=../../web/dist WEB_UI_CONFIG_FILE=../../web/dist/config.json OCIS_INSECURE=true IDM_CREATE_DEMO_USERS=true ./bin/ocis server` (and make sure to adjust paths as necessary)
+- Start oCIS with local links to your bundled web frontend and config by running `WEB_ASSET_CORE_PATH=../../web/dist WEB_UI_CONFIG_FILE=../../web/dist/config.json OCIS_INSECURE=true IDM_CREATE_DEMO_USERS=true ./bin/ocis server` (and make sure to adjust paths as necessary)
 
 ## Start oCIS
 
