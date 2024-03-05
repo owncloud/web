@@ -152,8 +152,12 @@ Feature: share
       | Type            | User              |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And "Alice" checks the following access details of share "myfolder" for group "sales"
-      | Name            | sales department |
-      | Type            | Group            |
+      | Name | sales department |
+      | Type | Group            |
+    # remove share with group
+    When "Alice" removes following sharee
+      | resource | recipient | type  |
+      | myfolder | sales     | group |
     And  "Alice" logs out
 
     And "Brian" navigates to the shared with me page
@@ -173,9 +177,9 @@ Feature: share
       | testfile.txt | example text |
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type  | role     |
-      | testfile.txt | Brian     | user  | Can view |
-      | test-folder  | Brian     | user  | Can view |
+      | resource     | recipient | type | role     |
+      | testfile.txt | Brian     | user | Can view |
+      | test-folder  | Brian     | user | Can view |
     And "Alice" logs out
     And "Carol" logs in
     And "Carol" creates the following folder in personal space using API
@@ -199,3 +203,28 @@ Feature: share
     # | testfile (1).txt |
     # | test-folder (1)  |
     And "Brian" logs out
+
+
+  Scenario: check file with same name but different paths are displayed correctly in shared with others page
+    Given "Admin" creates following users using API
+      | id    |
+      | Carol |
+    And "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
+      | name        |
+      | test-folder |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile               | content      |
+      | testfile.txt             | example text |
+      | test-folder/testfile.txt | some text    |
+    And "Alice" opens the "files" app
+    And "Alice" shares the following resource using API
+      | resource                 | recipient | type | role     |
+      | testfile.txt             | Brian     | user | Can edit |
+      | test-folder/testfile.txt | Brian     | user | Can edit |
+    And "Alice" navigates to the shared with others page
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource                 |
+      | testfile.txt             |
+      | test-folder/testfile.txt |
+    And "Alice" logs out

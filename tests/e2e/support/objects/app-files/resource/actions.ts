@@ -733,7 +733,7 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
       page.waitForResponse(
         (resp) =>
           resp.url().endsWith(resource) &&
-          resp.status() === 201 &&
+          resp.ok &&
           resp.request().method() === action.toUpperCase()
       ),
       option === 'replace'

@@ -175,13 +175,11 @@ Feature: Copy
     When "Alice" copies the following resource using sidebar-panel
       | resource     | to      | option    |
       | example1.txt | folder1 | keep both |
-    # issue https://github.com/owncloud/web/issues/10515
-    # | example1.txt | folder1 | replace   |
+      | example1.txt | folder1 | replace   |
     And "Alice" moves the following resource using sidebar-panel
-      | resource     | to          | option    |
-      | example1.txt | sub/folder1 | keep both |
-    # issue https://github.com/owncloud/web/issues/10515
-    # | folder1/example1.txt | sub/folder1 | replace   |
+      | resource             | to          | option    |
+      | example1.txt         | sub/folder1 | keep both |
+      | folder1/example1.txt | sub/folder1 | replace   |
 
     # copy and move folder
     And "Alice" copies the following resource using sidebar-panel
@@ -195,4 +193,3 @@ Feature: Copy
     # issue https://github.com/owncloud/web/issues/10515
     # | sub1/folder1  | sub | replace |
     And "Alice" logs out
-    
