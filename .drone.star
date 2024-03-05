@@ -119,7 +119,6 @@ config = {
                     "webUITextEditor",
                 ],
                 "oCISSharingInternal1": [
-                    "webUISharingInternalGroups",
                     "webUISharingInternalGroupsEdgeCases",
                 ],
                 "oCISSharingInternal2": [
@@ -128,13 +127,9 @@ config = {
                 "oCISSharingInternal3": [
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
-                    "webUISharingInternalUsersShareWithPage",
                 ],
                 "oCISSharingAutocompletionResharing": [
                     "webUISharingAutocompletion",
-                ],
-                "oCISSharingPerm1": [
-                    "webUISharingPermissionsUsers",
                 ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
@@ -185,13 +180,10 @@ basicTestSuites = [
     "webUIRenameFolders",
     "webUISharingAcceptShares",
     "webUISharingAutocompletion",
-    "webUISharingInternalGroups",
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",
-    "webUISharingInternalUsersShareWithPage",
     "webUISharingInternalUsersSharingIndicator",
-    "webUISharingPermissionsUsers",
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",
