@@ -1210,7 +1210,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
         "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
         "PROXY_ENABLE_BASIC_AUTH": True,
-        "WEB_ASSET_PATH": "%s/dist" % dir["web"],
+        "WEB_ASSET_CORE_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
