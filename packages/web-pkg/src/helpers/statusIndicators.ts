@@ -62,6 +62,26 @@ const getLinkIndicator = ({ resource, isDirect }) => {
   }
 }
 
+const getLockedIndicator = ({ resource }) => {
+  return {
+    id: `resource-locked-${resource.getDomSelector()}`,
+    accessibleDescription: $gettext('Item locked'),
+    label: $gettext('This item is locked'),
+    icon: 'lock',
+    type: 'resource-locked'
+  }
+}
+
+const getProcessingIndicator = ({ resource }) => {
+  return {
+    id: `resource-processing-${resource.getDomSelector()}`,
+    accessibleDescription: $gettext('Item in processing'),
+    label: $gettext('This item is in processing'),
+    icon: 'loop-right',
+    type: 'resource-processing'
+  }
+}
+
 export const getIndicators = ({
   resource,
   ancestorMetaData
@@ -70,6 +90,15 @@ export const getIndicators = ({
   ancestorMetaData: AncestorMetaData
 }) => {
   const indicators = []
+
+  if (resource.locked) {
+    indicators.push(getLockedIndicator({ resource }))
+  }
+
+  if (resource.processing) {
+    indicators.push(getProcessingIndicator({ resource }))
+  }
+
   const parentShareTypes = Object.values(ancestorMetaData).reduce((acc: any, data: any) => {
     acc.push(...(data.shareTypes || []))
     return acc
@@ -84,5 +113,6 @@ export const getIndicators = ({
   if (isDirectLinkShare || isLinkShare(parentShareTypes)) {
     indicators.push(getLinkIndicator({ resource, isDirect: isDirectLinkShare }))
   }
+
   return indicators
 }

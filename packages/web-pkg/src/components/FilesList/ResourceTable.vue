@@ -628,7 +628,7 @@ export default defineComponent({
           },
           {
             name: 'indicators',
-            title: this.$gettext('Shares'),
+            title: this.$gettext('Status'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
@@ -1337,6 +1337,13 @@ export default defineComponent({
 #files-shared-with-me-view .files-table .oc-table-data-cell-sharedWith {
   @media only screen and (max-width: 1199px) {
     display: none;
+  }
+}
+
+// Show tooltip on status indicators without handler
+.oc-table-data-cell-indicators {
+  span.oc-status-indicators-indicator {
+    pointer-events: all;
   }
 }
 </style>
