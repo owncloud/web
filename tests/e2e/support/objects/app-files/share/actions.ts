@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test'
 import util from 'util'
-import Collaborator, { ICollaborator } from './collaborator'
+import Collaborator, { ICollaborator, IAccessDetails } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { clearCurrentPopup, createLinkArgs } from '../link/actions'
@@ -274,4 +274,15 @@ export const addExpirationDate = async (args: {
     ),
     Collaborator.setExpirationDateForCollaborator({ page, collaborator, expirationDate })
   ])
+}
+
+export const getAccessDetails = async (args: {
+  page: Page
+  resource: string
+  collaborator: Omit<ICollaborator, 'role'>
+}): Promise<IAccessDetails> => {
+  const { page, resource, collaborator } = args
+  await openSharingPanel(page, resource)
+
+  return Collaborator.getAccessDetails(page, collaborator)
 }

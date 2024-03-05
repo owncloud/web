@@ -225,12 +225,11 @@ When(
 )
 
 When(
-  /"([^"]*)" (should|should not) see a sync status for the (folder|file) "([^"]*)"?$/,
+  /"([^"]*)" (should|should not) see a sync status for the (?:folder|file) "([^"]*)"?$/,
   async function (
     this: World,
     stepUser: string,
     condition: string,
-    _: string,
     resource: string
   ): Promise<void> {
     const shouldSee = condition === 'should'
@@ -261,12 +260,11 @@ Then(
 )
 
 When(
-  /^"([^"]*)" (grants|denies) access to the following resources(s)? for (group|user) "([^"]*)" using the sidebar panel?$/,
+  /^"([^"]*)" (grants|denies) access to the following resources(?:s)? for (group|user) "([^"]*)" using the sidebar panel?$/,
   async function (
     this: World,
     stepUser: string,
     actionType: string,
-    _: unknown,
     collaboratorType: 'user' | 'group',
     collaborator: string,
     stepTable: DataTable
@@ -313,5 +311,33 @@ When(
       } as ICollaborator,
       expirationDate
     })
+  }
+)
+
+When(
+  /^"([^"]*)" checks the following access details of share "([^"]*)" for (user|group) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    resource: string,
+    collaboratorType: string,
+    collaboratorName: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const expectedDetails = stepTable.rowsHash()
+    const actualDetails = await shareObject.getAccessDetails({
+      resource,
+      collaborator: {
+        collaborator:
+          collaboratorType === 'group'
+            ? this.usersEnvironment.getGroup({ key: collaboratorName })
+            : this.usersEnvironment.getUser({ key: collaboratorName }),
+        type: collaboratorType
+      } as ICollaborator
+    })
+
+    expect(actualDetails).toMatchObject(expectedDetails)
   }
 )

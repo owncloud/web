@@ -44,6 +44,15 @@ export interface SetDenyShareForCollaboratorArgs extends Omit<CollaboratorArgs, 
   deny: boolean
 }
 
+export interface IAccessDetails {
+  Name?: string
+  'Additional info'?: string
+  Type?: string
+  'Access expires'?: string
+  'Shared on'?: string
+  'Invited by'?: string
+}
+
 export type CollaboratorType = 'user' | 'group'
 export type CustomPermissionType = 'read' | 'update' | 'create' | 'delete' | 'share'
 
@@ -89,6 +98,8 @@ export default class Collaborator {
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"files-collaborators-expiration-button")]'
   private static readonly removeExpirationDateCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-expiration-date")]'
+  private static readonly showAccessDetailsButton =
+    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"show-access-details")]'
   private static readonly removeCollaboratorConfirmationButton = '.oc-modal-body-actions-confirm'
   private static readonly customPermissionCheckbox = '//*[@id="files-collaborators-permission-%s"]'
   private static readonly customPermissionApplyButton =
@@ -406,5 +417,28 @@ export default class Collaborator {
         )
         .click()
     ])
+  }
+
+  static async getAccessDetails(
+    page: Page,
+    recipient: Omit<ICollaborator, 'role'>
+  ): Promise<IAccessDetails> {
+    const { collaborator, type } = recipient
+    const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
+    await page
+      .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
+      .click()
+    await page.locator(util.format(Collaborator.showAccessDetailsButton, collaboratorRow)).click()
+
+    return page.locator('.share-access-details-drop dl').evaluate((el) => {
+      const nodes = el.childNodes
+      const details = {}
+      nodes.forEach((node) => {
+        if (node.nodeName === 'DT') {
+          details[node.textContent] = node.nextSibling.textContent
+        }
+      })
+      return details
+    })
   }
 }
