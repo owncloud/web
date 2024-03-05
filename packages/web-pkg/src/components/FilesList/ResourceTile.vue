@@ -164,10 +164,6 @@ export default defineComponent({
   flex-flow: column;
   outline: 1px solid var(--oc-color-border);
 
-  .oc-status-indicators {
-    margin-left: var(--oc-space-small);
-  }
-
   &-disabled {
     pointer-events: none;
     background-color: var(--oc-color-background-muted) !important;
