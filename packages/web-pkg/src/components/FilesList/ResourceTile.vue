@@ -59,6 +59,8 @@
           />
         </div>
         <div class="oc-flex oc-flex-middle">
+          <!-- Slot for indicators !-->
+          <slot name="indicators" :item="resource" />
           <!-- Slot for individual actions -->
           <slot name="actions" :item="resource" />
           <!-- Slot for contextmenu -->
@@ -224,6 +226,7 @@ export default defineComponent({
       .oc-tile-card-hover {
         border-radius: 5px !important;
       }
+
       .oc-tile-card-hover {
         opacity: 10%;
       }
@@ -239,6 +242,7 @@ export default defineComponent({
     input {
       background-color: var(--oc-color-background-muted);
     }
+
     input.oc-checkbox-checked {
       background-color: var(--oc-color-swatch-inverse-default);
     }

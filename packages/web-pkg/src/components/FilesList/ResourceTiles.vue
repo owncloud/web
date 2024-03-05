@@ -72,6 +72,9 @@
           <template #imageField>
             <slot name="image" :resource="resource" />
           </template>
+          <template #indicators>
+            <slot name="indicators" :resource="resource" />
+          </template>
           <template #actions>
             <slot name="actions" :resource="resource" />
           </template>
