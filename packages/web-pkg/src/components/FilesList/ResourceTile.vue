@@ -166,11 +166,6 @@ export default defineComponent({
 
   .oc-status-indicators {
     margin-left: var(--oc-space-small);
-
-    // Show tooltip on status indicators without handler
-    span.oc-status-indicators-indicator {
-      pointer-events: all;
-    }
   }
 
   &-disabled {
@@ -178,6 +173,11 @@ export default defineComponent({
     background-color: var(--oc-color-background-muted) !important;
     opacity: 0.7;
     filter: grayscale(0.6);
+
+    // Show tooltip on status indicators without handler
+    span.oc-status-indicators-indicator {
+      pointer-events: all;
+    }
   }
 
   &.state-trashed {

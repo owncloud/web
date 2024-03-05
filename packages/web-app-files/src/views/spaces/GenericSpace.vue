@@ -523,7 +523,7 @@ export default defineComponent({
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
     const getIndicators = (resource: Resource) => {
-      if (unref(folderView).name !== 'resource-tiles') {
+      if (unref(folderView).name !== FolderViewModeConstants.name.tiles) {
         return resource.indicators
       }
 
