@@ -47,6 +47,21 @@ When(
 )
 
 When(
+  '{string} tries to upload the following resource',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      await resourceObject.tryToUpload({
+        to: info.to,
+        resources: [this.filesEnvironment.getFile({ name: info.resource })],
+        error: info.error
+      })
+    }
+  }
+)
+
+When(
   '{string} starts uploading the following large resource(s) from the temp upload directory',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

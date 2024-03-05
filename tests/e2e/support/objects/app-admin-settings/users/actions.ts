@@ -22,7 +22,7 @@ const userFilter = '.item-filter-%s'
 const userFilterOption = '//ul[contains(@class, "item-filter-list")]//button[@data-test-value="%s"]'
 const usersTable = '.users-table'
 const quotaInput = '#quota-select-form .vs__search'
-const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
+const quotaValueDropDown = 'ul.vs__dropdown-menu'
 const userCheckboxSelector = `[data-item-id="%s"] input[type=checkbox]`
 const editQuotaBtn = '.oc-users-actions-edit-quota-trigger'
 const quotaInputBatchAction = '#quota-select-batch-action-form .vs__search'
@@ -102,7 +102,7 @@ export const changeQuota = async (args: {
 }): Promise<void> => {
   const { page, value, uuid } = args
   await page.locator(quotaInput).pressSequentially(value)
-  await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
+  await page.locator(quotaValueDropDown).first().click()
 
   await Promise.all([
     page.waitForResponse(

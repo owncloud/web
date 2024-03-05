@@ -22,6 +22,12 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
+  async tryToUpload(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.tryToUploadResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
   async uploadLargeNumberOfResources(args: Omit<po.uploadResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.uploadLargeNumberOfResources({ ...args, page: this.#page })
