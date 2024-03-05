@@ -23,14 +23,7 @@
         v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
         :resource="resource"
-      >
-        <template v-if="showStatusIcon" #status>
-          <oc-icon v-bind="statusIconAttrs" size="xsmall" />
-        </template>
-      </resource-icon>
-      <span v-if="showStatusIcon && hasThumbnail" class="oc-resource-thumbnail-status-badge">
-        <oc-icon v-bind="statusIconAttrs" size="xsmall" />
-      </span>
+      />
     </resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <resource-link
@@ -212,32 +205,11 @@ export default defineComponent({
       return this.resource.thumbnail
     },
 
-    showStatusIcon() {
-      return this.resource.locked || this.resource.processing
-    },
-
     tooltipLabelIcon() {
       if (this.resource.locked) {
         return this.$gettext('This item is locked')
       }
       return null
-    },
-
-    statusIconAttrs() {
-      if (this.resource.locked) {
-        return {
-          name: 'lock',
-          fillType: 'fill'
-        }
-      }
-      if (this.resource.processing) {
-        return {
-          name: 'loop-right',
-          fillType: 'line'
-        }
-      }
-
-      return {}
     }
   },
 
@@ -270,19 +242,6 @@ export default defineComponent({
     max-height: $oc-size-icon-default * 1.5;
     width: $oc-size-icon-default * 1.5;
     max-width: $oc-size-icon-default * 1.5;
-
-    &-status-badge {
-      position: absolute;
-      bottom: 0px;
-      right: 0px;
-      width: var(--oc-space-small);
-      height: var(--oc-space-small);
-      padding: var(--oc-space-xsmall);
-      line-height: var(--oc-space-small);
-      border-radius: 30px;
-      background: rgba(155, 155, 155, 0.8);
-      color: white;
-    }
   }
 
   &-details {
