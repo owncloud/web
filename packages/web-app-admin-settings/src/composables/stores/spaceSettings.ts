@@ -11,7 +11,7 @@ export const useSpaceSettingsStore = defineStore('spaceSettings', () => {
   }
 
   const upsertSpace = (space: SpaceResource) => {
-    const existing = unref(spaces).find(({ id }) => id === space.id)
+    const existing = unref(spaces).some(({ id }) => id === space.id)
     if (existing) {
       Object.assign(existing, space)
       return
