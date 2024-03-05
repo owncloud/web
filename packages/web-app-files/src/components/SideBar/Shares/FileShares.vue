@@ -38,6 +38,7 @@
             :modifiable="isShareModifiable(collaborator)"
             :is-share-denied="isShareDenied(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
+            :is-locked="resource.locked"
             @on-delete="$_ocCollaborators_deleteShare_trigger"
             @on-set-deny="setDenyShare"
           />

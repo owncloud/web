@@ -14,7 +14,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
         </div>
         <div>
           <div class="oc-flex oc-flex-nowrap oc-flex-middle">
-            <role-dropdown-stub allowsharepermission="true" class="files-collaborators-collaborator-role" domselector="asdf" existingpermissions="" existingrole="[object Object]" mode="edit" showicon="false"></role-dropdown-stub>
+            <role-dropdown-stub allowsharepermission="true" class="files-collaborators-collaborator-role" domselector="asdf" existingpermissions="" existingrole="[object Object]" islocked="false" mode="edit" showicon="false"></role-dropdown-stub>
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@ exports[`Collaborator ListItem component share inheritance indicators show when 
         </router-link-stub>
       </div>
       <!--v-if-->
-      <edit-dropdown-stub caneditordelete="true" class="files-collaborators-collaborator-edit" deniable="false" id="edit-drop-down-00000000-0000-0000-0000-000000000000" issharedenied="false" sharecategory="user"></edit-dropdown-stub>
+      <edit-dropdown-stub caneditordelete="true" class="files-collaborators-collaborator-edit" deniable="false" id="edit-drop-down-00000000-0000-0000-0000-000000000000" islocked="false" issharedenied="false" sharecategory="user"></edit-dropdown-stub>
       <oc-info-drop-stub class="share-access-details-drop" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000" title="Access details"></oc-info-drop-stub>
     </div>
   </div>

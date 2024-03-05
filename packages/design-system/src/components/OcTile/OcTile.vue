@@ -260,18 +260,6 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     text-align: center;
-
-    .oc-resource-icon-status-badge {
-      background: var(--oc-color-background-highlight) !important;
-      .oc-icon {
-        svg {
-          fill: var(--oc-color-background-highlight) !important;
-        }
-      }
-      .oc-spinner {
-        color: var(--oc-color-background-highlight) !important;
-      }
-    }
   }
 
   &-hover {

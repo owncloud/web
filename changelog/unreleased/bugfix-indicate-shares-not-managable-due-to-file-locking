@@ -1,0 +1,7 @@
+Bugfix: Indicate shares that are not manageable due to file locking
+
+We indicate shares that are not manageable when a resource is locked, so the user doesn't run into errors,
+while trying to delete or update a share.
+
+https://github.com/owncloud/web/pull/10514
+https://github.com/owncloud/web/issues/10507

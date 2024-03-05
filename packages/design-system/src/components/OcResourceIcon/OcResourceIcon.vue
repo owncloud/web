@@ -1,22 +1,28 @@
 <template>
   <span>
     <oc-icon
+      ref="iconRef"
       :key="`resource-icon-${icon.name}`"
       :name="icon.name"
       :color="icon.color"
       :size="size"
       :class="['oc-resource-icon', iconTypeClass]"
-    />
-    <span v-if="$slots.status" class="oc-resource-icon-status-badge">
-      <span class="oc-resource-icon-status-badge-inner" :style="{ background: icon.color }">
-        <slot name="status" />
-      </span>
+      @loaded="iconLoaded = true"
+    >
+    </oc-icon>
+    <span
+      v-if="Object.keys(badgeIconAttrs).length"
+      ref="badgeRef"
+      class="oc-resource-icon-status-badge"
+      :style="badgeStyle"
+    >
+      <oc-icon v-bind="badgeIconAttrs" />
     </span>
   </span>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, PropType, unref } from 'vue'
+import { computed, defineComponent, inject, nextTick, PropType, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
 import OcIcon from '../OcIcon/OcIcon.vue'
@@ -66,6 +72,10 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const iconRef = ref()
+    const iconLoaded = ref(false)
+    const badgeRef = ref()
+    const badgeStyle = ref({})
     const iconMappingInjection = inject<OcResourceIconMapping>(ocResourceIconMappingInjectionKey)
 
     const isFolder = computed(() => {
@@ -104,6 +114,43 @@ export default defineComponent({
       }
     })
 
+    watch([() => props.size, iconLoaded], async () => {
+      await nextTick()
+
+      if (!unref(iconLoaded)) {
+        return false
+      }
+
+      const iconBoundingClientRect = unref(iconRef)?.$el?.getBoundingClientRect()
+      if (!iconBoundingClientRect) {
+        return
+      }
+
+      const innerIconBoundingClientRect = unref(iconRef)
+        ?.$el?.getElementsByTagName('g')?.[0]
+        ?.getBoundingClientRect()
+      if (!innerIconBoundingClientRect) {
+        return
+      }
+
+      const iconOffsetHeight =
+        (iconBoundingClientRect.height - innerIconBoundingClientRect.height) / 2
+      const iconOffsetWidth = (iconBoundingClientRect.width - innerIconBoundingClientRect.width) / 2
+
+      const badgeBoundingClientRect = unref(badgeRef)?.getBoundingClientRect()
+      if (!badgeBoundingClientRect) {
+        return
+      }
+
+      const badgeBottom = iconOffsetHeight - badgeBoundingClientRect.height / 3
+      const badgeRight = iconOffsetWidth - badgeBoundingClientRect.width / 1.8
+
+      badgeStyle.value = {
+        right: `${badgeRight}px`,
+        bottom: `${badgeBottom}px`
+      }
+    })
+
     const iconTypeClass = computed(() => {
       if (unref(isSpace)) {
         return 'oc-resource-icon-space'
@@ -114,9 +161,42 @@ export default defineComponent({
       return 'oc-resource-icon-file'
     })
 
+    const badgeIconSize = computed(() => {
+      if (['xxxlarge', 'xxlarge'].includes(props.size)) {
+        return 'medium'
+      }
+
+      return 'xsmall'
+    })
+
+    const badgeIconAttrs = computed(() => {
+      if (props.resource.locked) {
+        return {
+          name: 'lock',
+          fillType: 'fill',
+          size: unref(badgeIconSize)
+        }
+      }
+      if (props.resource.processing) {
+        return {
+          name: 'loop-right',
+          fillType: 'line',
+          size: unref(badgeIconSize)
+        }
+      }
+
+      return {}
+    })
+
     return {
       icon,
-      iconTypeClass
+      iconRef,
+      badgeRef,
+      badgeStyle,
+      iconTypeClass,
+      badgeIconAttrs,
+      badgeIconSize,
+      iconLoaded
     }
   }
 })
@@ -127,30 +207,27 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
+
   &-file svg {
     height: 70%;
   }
 }
-.oc-resource-icon-status-badge {
-  position: absolute;
-  bottom: -3px;
-  right: -2px;
-  width: 12px;
-  height: 12px;
-  padding: var(--oc-space-xsmall);
-  border-radius: 30px;
-  transition: background-color 200ms ease-in-out;
-  background: var(--oc-color-background-default);
 
-  &-inner {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: var(--oc-space-small);
-    height: var(--oc-space-small);
-    padding: var(--oc-space-xsmall);
-    line-height: var(--oc-space-small);
-    border-radius: 30px;
+.oc-resource-icon-status-badge {
+  background: var(--oc-color-swatch-passive-hover);
+  opacity: 0.9;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--oc-color-background-default);
+  border-radius: 30px;
+  padding: 2px;
+
+  .oc-icon {
+    svg {
+      fill: var(--oc-color-background-default) !important;
+    }
   }
 }
 </style>
