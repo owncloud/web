@@ -38,6 +38,7 @@ const getUserIndicator = ({ resource, isDirect, isIncoming = false }) => {
     icon: 'group',
     target: 'sharing',
     type: isDirect ? 'user-direct' : 'user-indirect',
+    fillType: 'line',
     handler: (resource, panel, $router) => {
       if (isIncoming) {
         $router.push(createLocationShares('files-shares-with-me'))
@@ -56,6 +57,7 @@ const getLinkIndicator = ({ resource, isDirect }) => {
     icon: 'link',
     target: 'sharing',
     type: isDirect ? 'link-direct' : 'link-indirect',
+    fillType: 'line',
     handler: (resource, panel) => {
       eventBus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
     }
@@ -68,7 +70,8 @@ const getLockedIndicator = ({ resource }) => {
     accessibleDescription: $gettext('Item locked'),
     label: $gettext('This item is locked'),
     icon: 'lock',
-    type: 'resource-locked'
+    type: 'resource-locked',
+    fillType: 'line'
   }
 }
 
@@ -78,7 +81,8 @@ const getProcessingIndicator = ({ resource }) => {
     accessibleDescription: $gettext('Item in processing'),
     label: $gettext('This item is in processing'),
     icon: 'loop-right',
-    type: 'resource-processing'
+    type: 'resource-processing',
+    fillType: 'line'
   }
 }
 
