@@ -27,7 +27,8 @@ import {
   useSpaceActionsEditReadmeContent,
   useSpaceActionsRename,
   useSpaceActionsRestore,
-  useSpaceActionsShowMembers
+  useSpaceActionsShowMembers,
+  useSpaceActionsSetIcon
 } from '@ownclouders/web-pkg'
 import { isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { computed, defineComponent, PropType, Ref, ref, toRef, unref, VNodeRef } from 'vue'
@@ -60,6 +61,7 @@ export default defineComponent({
     const { actions: editQuotaActions } = useSpaceActionsEditQuota()
     const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
     const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
+    const { actions: setSpaceIconActions } = useSpaceActionsSetIcon()
     const { actions: renameActions } = useSpaceActionsRename()
     const { actions: restoreActions } = useSpaceActionsRestore()
     const { actions: showDetailsActions } = useFileActionsShowDetails()
@@ -83,7 +85,8 @@ export default defineComponent({
         ...unref(renameActions),
         ...unref(duplicateActions),
         ...unref(editDescriptionActions),
-        ...unref(uploadImageActions)
+        ...unref(uploadImageActions),
+        ...unref(setSpaceIconActions)
       ]
 
       if (isLocationSpacesActive(router, 'files-spaces-generic')) {

@@ -23,7 +23,7 @@ export const PutFileContentsFactory = (
         onUploadProgress = null
       }: {
         path?: string
-        content?: string
+        content?: string | ArrayBuffer
         previousEntityTag?: string
         headers?: Record<string, string>
         overwrite?: boolean
