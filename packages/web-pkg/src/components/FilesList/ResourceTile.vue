@@ -60,7 +60,7 @@
         </div>
         <div class="oc-flex oc-flex-middle">
           <!-- Slot for indicators !-->
-          <slot name="indicators" :item="resource" />
+          <slot name="indicators" :item="resource" class="resource-indicators" />
           <!-- Slot for individual actions -->
           <slot name="actions" :item="resource" />
           <!-- Slot for contextmenu -->
@@ -163,6 +163,15 @@ export default defineComponent({
   display: flex;
   flex-flow: column;
   outline: 1px solid var(--oc-color-border);
+
+  .oc-status-indicators {
+    margin-left: var(--oc-space-small);
+
+    // Show tooltip on status indicators without handler
+    span.oc-status-indicators-indicator {
+      pointer-events: all;
+    }
+  }
 
   &-disabled {
     pointer-events: none;

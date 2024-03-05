@@ -16,6 +16,7 @@ exports[`OcTile component > renders default space correctly 1`] = `
         <resource-list-item-stub resource="[object Object]" pathprefix="" folderlink="[object Object]" ispathdisplayed="false" parentfoldername="" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="false" isresourceclickable="true"></resource-list-item-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
+        <!-- Slot for indicators !-->
         <!-- Slot for individual actions -->
         <!-- Slot for contextmenu -->
       </div>
@@ -41,6 +42,7 @@ exports[`OcTile component > renders disabled space correctly 1`] = `
         <resource-list-item-stub resource="[object Object]" pathprefix="" folderlink="[object Object]" ispathdisplayed="false" parentfoldername="" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="false" isresourceclickable="true"></resource-list-item-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
+        <!-- Slot for indicators !-->
         <!-- Slot for individual actions -->
         <!-- Slot for contextmenu -->
       </div>

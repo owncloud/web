@@ -92,13 +92,11 @@
               @row-mounted="rowMounted"
               @sort="handleSort"
             >
-              <!-- tiles view slot -->
               <template #indicators="{ resource }">
                 <oc-status-indicators
-                  v-if="getTilesViewIndicators(resource).length"
-                  class="oc-ml-s"
+                  v-if="getIndicators(resource).length"
                   :resource="resource"
-                  :indicators="getTilesViewIndicators(resource)"
+                  :indicators="getIndicators(resource)"
                 />
               </template>
               <template #contextMenu="{ resource }">
@@ -524,16 +522,15 @@ export default defineComponent({
 
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
-    const getTilesViewIndicators = (resource: Resource) => {
-      const allowedIndicatorTypes = ['resource-locked', 'resource-processing']
-      const indicators = []
-
-      for (const indicator of resource.indicators) {
-        if (allowedIndicatorTypes.includes(indicator.type)) {
-          indicators.push(indicator)
-        }
+    const getIndicators = (resource: Resource) => {
+      if (unref(folderView).name !== 'resource-tiles') {
+        return resource.indicators
       }
-      return indicators
+
+      const visibleTilesViewIndicators = ['resource-locked', 'resource-processing']
+      return resource.indicators.filter((indicator) =>
+        visibleTilesViewIndicators.includes(indicator.type)
+      )
     }
 
     return {
@@ -565,7 +562,7 @@ export default defineComponent({
       removeResources,
       resetSelection,
       updateResourceField,
-      getTilesViewIndicators
+      getIndicators
     }
   },
 
