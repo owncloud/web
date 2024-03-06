@@ -1346,7 +1346,7 @@ export const searchResourceGlobalSearch = async (
   }
 }
 
-export type displayedResourceType = 'search list' | 'files list'
+export type displayedResourceType = 'search list' | 'files list' | 'Shares' | 'trashbin'
 
 export interface getDisplayedResourcesArgs {
   keyword: displayedResourceType
@@ -1377,6 +1377,18 @@ export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]
 export const getDisplayedResourcesFromShares = async (page): Promise<string[]> => {
   const files = []
   await page.locator(sharesNavigationButtonSelector).click()
+  const result = await page.locator('[data-test-resource-path]')
+
+  const count = await result.count()
+  for (let i = 0; i < count; i++) {
+    files.push(await result.nth(i).getAttribute('data-test-resource-name'))
+  }
+
+  return files
+}
+
+export const getDisplayedResourcesFromTrashbin = async (page): Promise<string[]> => {
+  const files = []
   const result = await page.locator('[data-test-resource-path]')
 
   const count = await result.count()

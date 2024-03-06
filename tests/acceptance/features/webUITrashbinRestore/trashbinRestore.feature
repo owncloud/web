@@ -172,23 +172,6 @@ Feature: Restore deleted files/folders
     Then folder "lorem.txt" should be listed on the webUI
     And file "lorem.txt" should not be listed on the webUI
 
-  @issue-ocis-1124
-  Scenario: delete and restore a file inside a received shared folder
-    Given the administrator has set the default folder for received shares to "Shares" in the server
-    And user "Carol" has been created with default attributes and without skeleton files in the server
-    And user "Carol" has created folder "folder-to-share" in the server
-    And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt" in the server
-    And user "Carol" has shared folder "folder-to-share" with user "Alice" in the server
-    And the user has reloaded the current page of the webUI
-    When the user opens folder "Shares" using the webUI
-    And the user opens folder "folder-to-share" using the webUI
-    And the user deletes file "fileToShare.txt" using the webUI
-    And the user browses to the trashbin page
-    Then as "Alice" file "fileToShare.txt" should exist in the trashbin in the server
-    When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
-    Then the "success" message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
-    And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist in the server
-
   @issue-1502
   Scenario: Delete and restore folders with dot in the name
     Given user "Alice" has created the following folders in the server
