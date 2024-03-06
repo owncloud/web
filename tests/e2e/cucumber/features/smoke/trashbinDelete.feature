@@ -3,14 +3,16 @@ Feature: Trashbin delete
   I want to delete files and folders from the trashbin
   So that I can control my trashbin space and which files are kept in that space
 
-
-  Scenario: delete files and folders from trashbin
-    Given "Admin" logs in
-    And "Admin" creates following user using API
+  Background:
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
+      | Brian |
     And "Alice" logs in
-    And "Alice" creates the following resources
+
+
+  Scenario: delete files and folders from trashbin
+    Given "Alice" creates the following resources
       | resource     | type   |
       | FOLDER       | folder |
       | PARENT/CHILD | folder |
@@ -37,4 +39,45 @@ Feature: Trashbin delete
       | lorem.txt |
       | PARENT    |
     And "Alice" empties the trashbin
+    And "Alice" logs out
+
+
+  Scenario: delete and restore a file inside a received shared folder
+    Given "Alice" creates the following resources
+      | resource      | type   |
+      | folderToShare | folder |
+    And "Alice" uploads the following resource
+      | resource  | to            |
+      | lorem.txt | folderToShare |
+    And "Alice" shares the following resource using the sidebar panel
+      | resource      | recipient | type | role     | resourceType |
+      | folderToShare | Brian     | user | Can edit | folder       |
+    And "Brian" logs in
+    And "Brian" navigates to the shared with me page
+    And "Brian" opens folder "folderToShare"
+    When "Brian" deletes the following resources using the sidebar panel
+      | resource  |
+      | lorem.txt |
+    And "Brian" navigates to the trashbin
+    Then following resources should not be displayed in the trashbin for user "Brian"
+      | resource                |
+      | folderToShare/lorem.txt |
+    And "Alice" navigates to the trashbin
+    And following resources should be displayed in the trashbin for user "Alice"
+      | resource                |
+      | folderToShare/lorem.txt |
+    And "Alice" restores the following resource from trashbin
+      | resource                |
+      | folderToShare/lorem.txt |
+    And "Alice" opens the "files" app
+    And "Alice" opens folder "folderToShare"
+    And following resources should be displayed in the files list for user "Alice"
+      | resource  |
+      | lorem.txt |
+    And "Brian" navigates to the shared with me page
+    And "Brian" opens folder "folderToShare"
+    And following resources should be displayed in the files list for user "Brian"
+      | resource  |
+      | lorem.txt |
+    And "Brian" logs out
     And "Alice" logs out
