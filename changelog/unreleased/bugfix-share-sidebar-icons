@@ -1,0 +1,5 @@
+Bugfix: Share sidebar icons
+
+We've fixed a bug where the share invite search dropdown didn't have icons in some cases.
+
+https://github.com/owncloud/web/pull/10551

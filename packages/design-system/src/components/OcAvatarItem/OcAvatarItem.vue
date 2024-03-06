@@ -9,7 +9,7 @@
     <span
       class="oc-avatar-item"
       :style="{
-        backgroundColor: backgroundColor,
+        backgroundColor,
         '--icon-color': iconColor,
         '--width': avatarWidth
       }"
@@ -63,6 +63,14 @@ export default defineComponent({
       default: 'fill'
     },
     /**
+     * Describes the size of the avatar icon e.g.(small)
+     */
+    iconSize: {
+      type: String,
+      required: false,
+      default: 'small'
+    },
+    /**
      * Background color that should be used for the avatar. If empty
      * a random color will be picked
      */
@@ -89,15 +97,6 @@ export default defineComponent({
       type: Number,
       required: false,
       default: 30
-    },
-
-    /**
-     * Describes the size of the avatar icon e.g.(small)
-     */
-    iconSize: {
-      type: String,
-      required: false,
-      default: 'small'
     }
   },
 

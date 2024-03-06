@@ -7,34 +7,23 @@ describe('AutocompleteItem component', () => {
     const { wrapper } = createWrapper({ shareType: shareType.value })
     expect(wrapper.find('div').classes()).toContain(`files-collaborators-search-${shareType.key}`)
   })
-  describe('displays the correct image/icon according to the shareType', () => {
-    it('should display users avatar for user shares', () => {
-      const { wrapper } = createWrapper({ shareType: ShareTypes.user.value })
-      expect(wrapper.find('avatar-image-stub').exists()).toBeTruthy()
-      expect(wrapper.find('oc-icon-stub').exists()).toBeFalsy()
-    })
-    it('should display a group icon for group shares', () => {
-      const { wrapper } = createWrapper({ shareType: ShareTypes.group.value })
-      expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
-      expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
-      expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('group')
-    })
-    it('should display a guest icon for guest shares', () => {
-      const { wrapper } = createWrapper({ shareType: ShareTypes.guest.value })
-      expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
-      expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
-      expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('global')
-    })
-    it.each([ShareTypes.link.value, ShareTypes.remote.value])(
-      'should display a generic-person icon for any other share types',
-      (shareType) => {
-        const { wrapper } = createWrapper({ shareType: shareType })
+  it.each(ShareTypes.all)(
+    'displays the correct image/icon according to the shareType',
+    (shareType) => {
+      const { wrapper } = createWrapper({ shareType: shareType.value })
+      const isUserShareType = [ShareTypes.user.key, ShareTypes.spaceUser.key].includes(
+        shareType.key
+      )
+      if (isUserShareType) {
+        expect(wrapper.find('avatar-image-stub').exists()).toBeTruthy()
+        expect(wrapper.find('oc-avatar-item-stub').exists()).toBeFalsy()
+      } else {
         expect(wrapper.find('avatar-image-stub').exists()).toBeFalsy()
-        expect(wrapper.find('oc-icon-stub').exists()).toBeTruthy()
-        expect(wrapper.find('oc-icon-stub').attributes().name).toEqual('person')
+        expect(wrapper.find('oc-avatar-item-stub').exists()).toBeTruthy()
+        expect(wrapper.find('oc-avatar-item-stub').attributes().icon).toEqual(shareType.icon)
       }
-    )
-  })
+    }
+  )
   describe('avatar image', () => {
     it('sets the userId', () => {
       const { wrapper } = createWrapper({
