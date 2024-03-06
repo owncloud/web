@@ -183,14 +183,17 @@ export class Resource {
   }
 
   getDisplayedResources(args: Omit<po.getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
-    if (args.keyword === 'files list') {
-      return po.getDisplayedResourcesFromFilesList(this.#page)
-    } else if (args.keyword === 'search list') {
-      return po.getDisplayedResourcesFromSearch(this.#page)
-    } else if (args.keyword === 'Shares') {
-      return po.getDisplayedResourcesFromShares(this.#page)
-    } else {
-      throw new Error('Unknown keyword')
+    switch (args.keyword) {
+      case 'files list':
+        return po.getDisplayedResourcesFromFilesList(this.#page)
+      case 'search list':
+        return po.getDisplayedResourcesFromSearch(this.#page)
+      case 'Shares':
+        return po.getDisplayedResourcesFromShares(this.#page)
+      case 'trashbin':
+        return po.getDisplayedResourcesFromTrashbin(this.#page)
+      default:
+        throw new Error('Unknown keyword')
     }
   }
 
