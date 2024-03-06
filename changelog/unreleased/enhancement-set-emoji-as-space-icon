@@ -1,3 +1,8 @@
 Enhancement: Set emoji as space icon
 
-We've added a new feature to set emojis as space icon 
+We've added a new feature to set emojis as space icon, to do so,
+the user needs to click on the 'Set icon' button in the context menu of the respective space
+and has to select an emoji from the emoji picker.
+
+https://github.com/owncloud/web/pull/10546
+https://github.com/owncloud/web/issues/10471
