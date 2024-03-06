@@ -82,3 +82,23 @@ export default defineComponent({
   }
 })
 </script>
+
+<docs>
+```js
+<template>
+  <h3>Light mode OcEmojiPicker</h3>
+  <oc-emoji-picker theme="light" @emoji-select="alert"/>
+  <h3>Dark mode OcEmojiPicker</h3>
+  <oc-emoji-picker theme="dark" @emoji-select="alert"/>
+</template>
+<script>
+  export default {
+    methods: {
+      alert(val) {
+        alert(val)
+      }
+    }
+  }
+</script>
+```
+</docs>
