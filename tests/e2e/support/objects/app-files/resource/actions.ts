@@ -1695,5 +1695,5 @@ export interface expectFileToBeLockedArgs {
 
 export const getLockLocator = async (args: expectFileToBeLockedArgs): Promise<Locator> => {
   const { page, resource } = args
-  return await page.locator(util.format(resourceLockIcon, resource))
+  return page.locator(util.format(resourceLockIcon, resource))
 }
