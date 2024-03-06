@@ -15,7 +15,7 @@ x-ocis-server: &ocis-service
     OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: '/etc/ocis/password-policy-banned-passwords.txt'
 
     # WEB
-    WEB_ASSET_CORE_PATH: ${WEB_ASSET_CORE_PATH:-/web/dist}
+    WEB_ASSET_PATH: ${WEB_ASSET_PATH:-/web/dist}
     WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
     WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
 
