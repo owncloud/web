@@ -139,7 +139,7 @@ fi
 # exclude suites from running
 if [[ -n $EXCLUDE_SUITES ]]; then
     for exclude_suite in $EXCLUDE_SUITES; do
-        ALL_SUITES=${ALL_SUITES/$exclude_suite/}
+        ALL_SUITES=$(echo "${ALL_SUITES/$exclude_suite/}" | sed -E "/^( )*$/d") # remove suite and trim empty lines
     done
 fi
 
