@@ -45,6 +45,7 @@ Summary
 * Bugfix - Private link error messages: [#10321](https://github.com/owncloud/web/pull/10321)
 * Bugfix - Readonly user attributes have no effect on group memberships: [#10347](https://github.com/owncloud/web/pull/10347)
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 * Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
@@ -418,6 +419,15 @@ Details
 
    https://github.com/owncloud/web/issues/10373
    https://github.com/owncloud/web/pull/10377
+
+* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+
+   We've fixed a bug where keyboard navigation stopped working after deleting a
+   resource in the admin settings app. We also fixed a bug where initial keyboard
+   navigation didn't work, when no resource was selected.
+
+   https://github.com/owncloud/web/issues/10186
+   https://github.com/owncloud/web/pull/10417
 
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 
