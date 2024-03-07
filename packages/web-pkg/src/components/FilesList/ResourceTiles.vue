@@ -75,7 +75,7 @@
           <template #indicators>
             <oc-status-indicators
               v-if="getIndicators(resource).length"
-              :resource="item"
+              :resource="resource"
               :indicators="getIndicators(resource)"
             />
           </template>
