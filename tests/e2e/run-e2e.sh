@@ -91,6 +91,11 @@ function checkSuites() {
     done
 }
 
+function buildSuitesPattern() {
+    suites=$(echo "$1" | xargs | sed -E "s/( )+/,/g")
+    E2E_COMMAND+=" $FEATURES_DIR/{$suites}/**/*.feature"
+}
+
 # [RUN E2E]
 # run only provided feature file
 if [[ -n $FEATURE_FILE ]]; then
@@ -115,8 +120,7 @@ if [[ -n $EXCLUDE_SUITES ]]; then
 fi
 
 if [[ "$SKIP_RUN_PARTS" == true ]]; then
-    suites=$(echo "$ALL_SUITES" | xargs | sed -E "s/( )+/,/g")
-    E2E_COMMAND+=" $FEATURES_DIR/{$suites}/*.feature"
+    buildSuitesPattern "$ALL_SUITES"
 else
     if [[ -z $RUN_PART ]]; then
         echo "ERR: Missing '--run-part'"
@@ -145,9 +149,7 @@ else
     GRAB_SUITES_UPTO=$((PREVIOUS_SUITES_COUNT + SUITES_PER_RUN))
     # shellcheck disable=SC2207
     SUITES_TO_RUN+=$(echo "${ALL_SUITES}" | head -n "$GRAB_SUITES_UPTO" | tail -n "$SUITES_PER_RUN")
-
-    suites=$(echo "$SUITES_TO_RUN" | xargs | sed -E "s/( )+/,/g")
-    E2E_COMMAND+=" $FEATURES_DIR/{$suites}/*.feature"
+    buildSuitesPattern "$SUITES_TO_RUN"
 fi
 
 # [RUN E2E]
