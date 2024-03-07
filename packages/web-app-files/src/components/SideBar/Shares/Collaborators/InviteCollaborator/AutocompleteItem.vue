@@ -5,40 +5,25 @@
     :class="collaboratorClass"
   >
     <avatar-image
-      v-if="isUser || isSpaceUser"
+      v-if="isAnyUserShareType"
       class="oc-mr-s"
       :width="36"
       :userid="item.value.shareWith"
       :user-name="item.label"
     />
-    <oc-icon
-      v-else-if="isGuest"
-      key="avatar-guest"
-      class="oc-mr-s files-recipient-suggestion-avatar"
-      name="global"
-      size="large"
-      :accessible-label="$gettext('Guest')"
-    >
-    </oc-icon>
-    <oc-icon
-      v-else-if="isGroup || isSpaceGroup"
-      key="avatar-group"
-      class="oc-mr-s files-recipient-suggestion-avatar"
-      name="group"
-      size="large"
-      :accessible-label="$gettext('Group')"
-    />
-    <oc-icon
+    <oc-avatar-item
       v-else
-      key="avatar-generic-person"
-      class="oc-mr-s files-recipient-suggestion-avatar"
-      name="person"
-      size="large"
-      :accessible-label="$gettext('User')"
+      :width="36"
+      :name="shareTypeKey"
+      :icon="shareTypeIcon"
+      icon-size="large"
+      icon-color="var(--oc-color-text)"
+      background="transparent"
+      class="oc-mr-s"
     />
     <div class="files-collaborators-autocomplete-user-text oc-text-truncate">
       <span class="files-collaborators-autocomplete-username" v-text="item.label" />
-      <template v-if="!isUser && !isSpaceUser && !isGroup && !isSpaceGroup">
+      <template v-if="!isAnyPrimaryShareType">
         <span
           class="files-collaborators-autocomplete-share-type"
           v-text="`(${$gettext(shareType.label)})`"
@@ -66,35 +51,30 @@ export default {
     }
   },
 
-  data() {
-    return {
-      loading: false
-    }
-  },
-
   computed: {
     shareType() {
       return ShareTypes.getByValue(this.item.value.shareType)
     },
 
-    isUser() {
-      return this.shareType === ShareTypes.user
+    shareTypeIcon() {
+      return this.shareType.icon
     },
 
-    isSpaceUser() {
-      return this.shareType === ShareTypes.spaceUser
+    shareTypeKey() {
+      return this.shareType.key
     },
 
-    isGuest() {
-      return this.shareType === ShareTypes.guest
+    isAnyUserShareType() {
+      return [ShareTypes.user.key, ShareTypes.spaceUser.key].includes(this.shareType.key)
     },
 
-    isGroup() {
-      return this.shareType === ShareTypes.group
-    },
-
-    isSpaceGroup() {
-      return this.shareType === ShareTypes.spaceGroup
+    isAnyPrimaryShareType() {
+      return [
+        ShareTypes.user.key,
+        ShareTypes.spaceUser.key,
+        ShareTypes.group.key,
+        ShareTypes.spaceGroup.key
+      ].includes(this.shareType.key)
     },
 
     collaboratorClass() {
@@ -105,9 +85,6 @@ export default {
 </script>
 
 <style lang="scss">
-.vs__dropdown-option--highlight .files-recipient-suggestion-avatar svg {
-  fill: white !important;
-}
 .files-collaborators-autocomplete-additional-info {
   font-size: var(--oc-font-size-small);
 }
