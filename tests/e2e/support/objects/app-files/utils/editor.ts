@@ -20,13 +20,13 @@ export const save = async (page: Page): Promise<unknown> => {
   ])
 }
 
-export const fileViewerLocator = async ({
+export const fileViewerLocator = ({
   page,
   fileViewerType
 }: {
   page: Page
   fileViewerType: string
-}): Promise<Locator> => {
+}): Locator => {
   switch (fileViewerType) {
     case 'text-editor':
       return page.locator(texEditor)

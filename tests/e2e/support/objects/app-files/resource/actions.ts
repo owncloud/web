@@ -193,7 +193,7 @@ export const createSpaceFromSelection = async ({
 }): Promise<Space> => {
   await selectOrDeselectResources({
     page,
-    resources: resources.map((r) => ({ name: r }) as resourceArgs),
+    resources: resources.map((r) => ({ name: r }) as resourceArgs), // prettier-ignore
     select: true
   })
   await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
@@ -594,11 +594,13 @@ interface resourceArgs {
   type?: string
 }
 
+export type ActionViaType = 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
+
 export interface downloadResourcesArgs {
   page: Page
   resources: resourceArgs[]
   folder?: string
-  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
+  via: ActionViaType
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
@@ -1008,7 +1010,7 @@ export interface deleteResourceArgs {
   page: Page
   resourcesWithInfo: resourceArgs[]
   folder?: string
-  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  via: ActionViaType
 }
 
 export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
@@ -1705,7 +1707,7 @@ export interface expectFileToBeLockedArgs {
   resource: string
 }
 
-export const getLockLocator = async (args: expectFileToBeLockedArgs): Promise<Locator> => {
+export const getLockLocator = (args: expectFileToBeLockedArgs): Locator => {
   const { page, resource } = args
   return page.locator(util.format(resourceLockIcon, resource))
 }

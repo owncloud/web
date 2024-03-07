@@ -233,8 +233,8 @@ export const showOrHidePassword = async (args): Promise<void> => {
   const { page, showOrHide } = args
   await page.locator(showOrHidePasswordButton).click()
   showOrHide === 'reveals'
-    ? expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'text')
-    : expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'password')
+    ? await expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'text')
+    : await expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'password')
 }
 
 export const copyEnteredPassword = async (page: Page): Promise<void> => {
