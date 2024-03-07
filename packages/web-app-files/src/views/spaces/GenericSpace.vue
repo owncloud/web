@@ -92,13 +92,6 @@
               @row-mounted="rowMounted"
               @sort="handleSort"
             >
-              <template #indicators="{ resource }">
-                <oc-status-indicators
-                  v-if="getIndicators(resource).length"
-                  :resource="resource"
-                  :indicators="getIndicators(resource)"
-                />
-              </template>
               <template #contextMenu="{ resource }">
                 <context-actions
                   v-if="isResourceInSelection(resource)"
@@ -522,17 +515,6 @@ export default defineComponent({
 
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
-    const getIndicators = (resource: Resource) => {
-      if (unref(folderView).name !== FolderViewModeConstants.name.tiles) {
-        return resource.indicators
-      }
-
-      const visibleTilesViewIndicators = ['resource-locked', 'resource-processing']
-      return resource.indicators.filter((indicator) =>
-        visibleTilesViewIndicators.includes(indicator.type)
-      )
-    }
-
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
@@ -561,8 +543,7 @@ export default defineComponent({
       totalResourcesSize,
       removeResources,
       resetSelection,
-      updateResourceField,
-      getIndicators
+      updateResourceField
     }
   },
 

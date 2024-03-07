@@ -153,7 +153,11 @@
       />
     </template>
     <template #indicators="{ item }">
-      <slot name="indicators" :resource="item" />
+      <oc-status-indicators
+        v-if="item.indicators.length"
+        :resource="item"
+        :indicators="item.indicators"
+      />
     </template>
     <template #sdate="{ item }">
       <span

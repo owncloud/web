@@ -37,6 +37,7 @@ const getUserIndicator = ({ resource, isDirect, isIncoming = false }) => {
     label: isIncoming ? $gettext('Shared with you') : $gettext('Show invited people'),
     icon: 'group',
     target: 'sharing',
+    category: 'sharing',
     type: isDirect ? 'user-direct' : 'user-indirect',
     fillType: 'line',
     handler: (resource, panel, $router) => {
@@ -56,6 +57,7 @@ const getLinkIndicator = ({ resource, isDirect }) => {
     label: $gettext('Show links'),
     icon: 'link',
     target: 'sharing',
+    category: 'sharing',
     type: isDirect ? 'link-direct' : 'link-indirect',
     fillType: 'line',
     handler: (resource, panel) => {
@@ -70,6 +72,7 @@ const getLockedIndicator = ({ resource }) => {
     accessibleDescription: $gettext('Item locked'),
     label: $gettext('This item is locked'),
     icon: 'lock',
+    category: 'system',
     type: 'resource-locked',
     fillType: 'line'
   }
@@ -81,6 +84,7 @@ const getProcessingIndicator = ({ resource }) => {
     accessibleDescription: $gettext('Item in processing'),
     label: $gettext('This item is in processing'),
     icon: 'loop-right',
+    category: 'system',
     type: 'resource-processing',
     fillType: 'line'
   }
