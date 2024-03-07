@@ -176,7 +176,6 @@ describe('Users view', () => {
         selectedUsers: [{ id: '1' }, { id: '2' }]
       })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.selectUsers([mock<User>(), mock<User>()])
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
