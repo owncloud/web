@@ -118,6 +118,7 @@ Summary
 * Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 * Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
 
 Details
 -------
@@ -1175,6 +1176,15 @@ Details
 
    https://github.com/owncloud/web/issues/10500
    https://github.com/owncloud/web/pull/10519
+
+* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
+
+   We've moved the processing and lock indicators to the status table column so all
+   indicators are easy accessible at the same spot. We also show the respective
+   lock and processing states in the tiles view.
+
+   https://github.com/owncloud/web/issues/10538
+   https://github.com/owncloud/web/pull/10544
 
 Changelog for ownCloud Web [9.0.0] (2024-02-26)
 =======================================
