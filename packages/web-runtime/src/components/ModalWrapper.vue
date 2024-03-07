@@ -1,6 +1,8 @@
 <template>
   <oc-modal
     v-if="modal"
+    :element-id="modal.elementId"
+    :element-class="modal.elementClass"
     :title="modal.title"
     :variation="modal.variation"
     :icon="modal.icon"

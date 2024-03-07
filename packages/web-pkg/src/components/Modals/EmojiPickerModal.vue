@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { Modal, useThemeStore } from '../../composables'
 import { storeToRefs } from 'pinia'
 
@@ -25,11 +25,6 @@ export default defineComponent({
     const onEmojiSelect = (emoji: string) => {
       emit('confirm', emoji)
     }
-
-    onMounted(() => {
-      const modalEl = document.querySelector<HTMLElement>('.oc-modal')
-      modalEl.style.width = 'auto'
-    })
 
     return {
       onEmojiSelect,

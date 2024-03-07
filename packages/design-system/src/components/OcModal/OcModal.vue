@@ -2,6 +2,7 @@
   <div class="oc-modal-background" aria-labelledby="oc-modal-title">
     <focus-trap :active="true" :initial-focus="initialFocusRef">
       <div
+        :id="elementId"
         ref="ocModal"
         :class="classes"
         tabindex="0"
@@ -112,6 +113,22 @@ export default defineComponent({
   },
 
   props: {
+    /**
+     * Optional modal id
+     */
+    elementId: {
+      type: String,
+      required: false,
+      default: null
+    },
+    /**
+     * Optional modal class
+     */
+    elementClass: {
+      type: String,
+      required: false,
+      default: null
+    },
     /**
      * Modal variation
      * Defaults to `passive`.
@@ -287,7 +304,7 @@ export default defineComponent({
       }
     },
     classes() {
-      return ['oc-modal', `oc-modal-${this.variation}`]
+      return ['oc-modal', `oc-modal-${this.variation}`, this.elementClass]
     },
     iconName() {
       if (this.icon) {

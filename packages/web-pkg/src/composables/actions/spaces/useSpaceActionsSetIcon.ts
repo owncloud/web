@@ -27,6 +27,7 @@ export const useSpaceActionsSetIcon = () => {
     }
 
     dispatchModal({
+      elementClass: 'oc-width-auto',
       title: $gettext('Set icon for %{space}', { space: resources[0].name }),
       hideConfirmButton: true,
       customComponent: EmojiPickerModal,
