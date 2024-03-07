@@ -1,18 +1,11 @@
 <template>
-  <span>
-    <oc-icon
-      :key="`resource-icon-${icon.name}`"
-      :name="icon.name"
-      :color="icon.color"
-      :size="size"
-      :class="['oc-resource-icon', iconTypeClass]"
-    />
-    <span v-if="$slots.status" class="oc-resource-icon-status-badge">
-      <span class="oc-resource-icon-status-badge-inner" :style="{ background: icon.color }">
-        <slot name="status" />
-      </span>
-    </span>
-  </span>
+  <oc-icon
+    :key="`resource-icon-${icon.name}`"
+    :name="icon.name"
+    :color="icon.color"
+    :size="size"
+    :class="['oc-resource-icon', iconTypeClass]"
+  />
 </template>
 
 <script lang="ts">
@@ -126,30 +119,9 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
+
   &-file svg {
     height: 70%;
-  }
-}
-.oc-resource-icon-status-badge {
-  position: absolute;
-  bottom: -3px;
-  right: -2px;
-  width: 12px;
-  height: 12px;
-  padding: var(--oc-space-xsmall);
-  border-radius: 30px;
-  transition: background-color 200ms ease-in-out;
-  background: var(--oc-color-background-default);
-
-  &-inner {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: var(--oc-space-small);
-    height: var(--oc-space-small);
-    padding: var(--oc-space-xsmall);
-    line-height: var(--oc-space-small);
-    border-radius: 30px;
   }
 }
 </style>

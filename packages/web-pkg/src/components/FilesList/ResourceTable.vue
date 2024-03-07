@@ -628,7 +628,7 @@ export default defineComponent({
           },
           {
             name: 'indicators',
-            title: this.$gettext('Shares'),
+            title: this.$gettext('Status'),
             type: 'slot',
             alignH: 'right',
             wrap: 'nowrap',
@@ -1340,58 +1340,10 @@ export default defineComponent({
   }
 }
 
-.oc-resource-icon-status-badge,
-.oc-resource-thumbnail-status-badge {
-  .oc-icon {
-    margin-top: -2px;
-    margin-left: -1.5px;
-
-    svg {
-      fill: var(--oc-color-background-default) !important;
-    }
-  }
-
-  .oc-spinner {
-    margin-left: -2px;
-    margin-top: -2px;
-    color: var(--oc-color-background-default) !important;
-  }
-}
-
-// reduce the bottom spacing of the status badge in condensed mode
-.condensed {
-  .oc-resource-icon-status-badge {
-    bottom: 2px !important;
-  }
-}
-
-// on table row hover change the status badge background color
-.oc-tbody-tr:hover .oc-resource-icon-status-badge {
-  background: var(--oc-color-background-hover) !important;
-
-  .oc-icon {
-    svg {
-      fill: var(--oc-color-background-hover) !important;
-    }
-  }
-
-  .oc-spinner {
-    color: var(--oc-color-background-hover) !important;
-  }
-}
-
-// on table row highlight change the status badge background color
-.oc-table-highlighted .oc-resource-icon-status-badge {
-  background: var(--oc-color-background-highlight) !important;
-
-  .oc-icon {
-    svg {
-      fill: var(--oc-color-background-highlight) !important;
-    }
-  }
-
-  .oc-spinner {
-    color: var(--oc-color-background-highlight) !important;
+// Show tooltip on status indicators without handler
+.oc-table-data-cell-indicators {
+  span.oc-status-indicators-indicator {
+    pointer-events: all;
   }
 }
 </style>

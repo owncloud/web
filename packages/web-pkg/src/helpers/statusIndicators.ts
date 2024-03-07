@@ -37,7 +37,9 @@ const getUserIndicator = ({ resource, isDirect, isIncoming = false }) => {
     label: isIncoming ? $gettext('Shared with you') : $gettext('Show invited people'),
     icon: 'group',
     target: 'sharing',
+    category: 'sharing',
     type: isDirect ? 'user-direct' : 'user-indirect',
+    fillType: 'line',
     handler: (resource, panel, $router) => {
       if (isIncoming) {
         $router.push(createLocationShares('files-shares-with-me'))
@@ -55,10 +57,36 @@ const getLinkIndicator = ({ resource, isDirect }) => {
     label: $gettext('Show links'),
     icon: 'link',
     target: 'sharing',
+    category: 'sharing',
     type: isDirect ? 'link-direct' : 'link-indirect',
+    fillType: 'line',
     handler: (resource, panel) => {
       eventBus.publish(SideBarEventTopics.openWithPanel, `${panel}#linkShares`)
     }
+  }
+}
+
+const getLockedIndicator = ({ resource }) => {
+  return {
+    id: `resource-locked-${resource.getDomSelector()}`,
+    accessibleDescription: $gettext('Item locked'),
+    label: $gettext('This item is locked'),
+    icon: 'lock',
+    category: 'system',
+    type: 'resource-locked',
+    fillType: 'line'
+  }
+}
+
+const getProcessingIndicator = ({ resource }) => {
+  return {
+    id: `resource-processing-${resource.getDomSelector()}`,
+    accessibleDescription: $gettext('Item in processing'),
+    label: $gettext('This item is in processing'),
+    icon: 'loop-right',
+    category: 'system',
+    type: 'resource-processing',
+    fillType: 'line'
   }
 }
 
@@ -70,6 +98,15 @@ export const getIndicators = ({
   ancestorMetaData: AncestorMetaData
 }) => {
   const indicators = []
+
+  if (resource.locked) {
+    indicators.push(getLockedIndicator({ resource }))
+  }
+
+  if (resource.processing) {
+    indicators.push(getProcessingIndicator({ resource }))
+  }
+
   const parentShareTypes = Object.values(ancestorMetaData).reduce((acc: any, data: any) => {
     acc.push(...(data.shareTypes || []))
     return acc
@@ -84,5 +121,6 @@ export const getIndicators = ({
   if (isDirectLinkShare || isLinkShare(parentShareTypes)) {
     indicators.push(getLinkIndicator({ resource, isDirect: isDirectLinkShare }))
   }
+
   return indicators
 }

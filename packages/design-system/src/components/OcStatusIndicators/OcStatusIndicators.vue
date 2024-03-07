@@ -6,16 +6,20 @@
         :id="indicator.id"
         :key="indicator.id"
         v-oc-tooltip="$gettext(indicator.label)"
-        class="oc-status-indicators-indicator oc-background-primary-gradient oc-p-xs oc-ml-xs"
+        class="oc-status-indicators-indicator oc-ml-xs"
         :aria-label="$gettext(indicator.label)"
         :aria-describedby="getIndicatorDescriptionId(indicator)"
-        appearance="raw-inverse"
-        variation="primary"
+        appearance="raw"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
         @click="indicator.handler(resource, indicator.target, $router)"
       >
-        <oc-icon :name="indicator.icon" size="small" fill-type="line" variation="inherit" />
+        <oc-icon
+          :name="indicator.icon"
+          size="small"
+          :fill-type="indicator.fillType"
+          variation="inherit"
+        />
       </oc-button>
       <oc-icon
         v-else
@@ -24,7 +28,7 @@
         v-oc-tooltip="$gettext(indicator.label)"
         tabindex="-1"
         size="small"
-        class="oc-status-indicators-indicator"
+        class="oc-status-indicators-indicator oc-ml-xs"
         :name="indicator.icon"
         :fill-type="indicator.fillType"
         :accessible-label="$gettext(indicator.label)"
@@ -135,9 +139,6 @@ export default defineComponent({
   align-items: center;
   display: flex;
   justify-content: flex-end;
-  &-indicator {
-    border-radius: 50% !important;
-  }
 }
 </style>
 

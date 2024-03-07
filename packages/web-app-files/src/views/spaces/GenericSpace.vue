@@ -146,7 +146,6 @@ import {
   ProcessorType,
   ResourceTransfer,
   TransferType,
-  useCapabilityStore,
   useConfigStore,
   useEmbedMode,
   useExtensionRegistry,
@@ -244,8 +243,6 @@ export default defineComponent({
 
   setup(props) {
     const userStore = useUserStore()
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const { $gettext, $ngettext } = useGettext()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()

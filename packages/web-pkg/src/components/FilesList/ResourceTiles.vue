@@ -72,6 +72,13 @@
           <template #imageField>
             <slot name="image" :resource="resource" />
           </template>
+          <template #indicators>
+            <oc-status-indicators
+              v-if="getIndicators(resource).length"
+              :resource="resource"
+              :indicators="getIndicators(resource)"
+            />
+          </template>
           <template #actions>
             <slot name="actions" :resource="resource" />
           </template>
@@ -400,6 +407,10 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
+    const getIndicators = (resource: Resource) => {
+      return resource.indicators.filter((indicator) => indicator.category === 'system')
+    }
+
     const viewWidth = ref(0)
     const updateViewWidth = () => {
       const element = document.getElementById('tiles-view')
@@ -428,6 +439,7 @@ export default defineComponent({
     const tileSizePixels = computed(() => {
       return unref(viewWidth) / unref(maxTiles) - unref(gapSizePixels)
     })
+
     watch(
       tileSizePixels,
       (px: number) => {
@@ -465,7 +477,8 @@ export default defineComponent({
       dragSelection,
       fileDropped,
       setDropStyling,
-      ghostTilesCount
+      ghostTilesCount,
+      getIndicators
     }
   },
   data() {

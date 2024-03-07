@@ -59,6 +59,8 @@
           />
         </div>
         <div class="oc-flex oc-flex-middle">
+          <!-- Slot for indicators !-->
+          <slot name="indicators" :item="resource" class="resource-indicators" />
           <!-- Slot for individual actions -->
           <slot name="actions" :item="resource" />
           <!-- Slot for contextmenu -->
@@ -167,6 +169,11 @@ export default defineComponent({
     background-color: var(--oc-color-background-muted) !important;
     opacity: 0.7;
     filter: grayscale(0.6);
+
+    // Show tooltip on status indicators without handler
+    span.oc-status-indicators-indicator {
+      pointer-events: all;
+    }
   }
 
   &.state-trashed {
@@ -224,6 +231,7 @@ export default defineComponent({
       .oc-tile-card-hover {
         border-radius: 5px !important;
       }
+
       .oc-tile-card-hover {
         opacity: 10%;
       }
@@ -239,6 +247,7 @@ export default defineComponent({
     input {
       background-color: var(--oc-color-background-muted);
     }
+
     input.oc-checkbox-checked {
       background-color: var(--oc-color-swatch-inverse-default);
     }
@@ -249,18 +258,6 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     text-align: center;
-
-    .oc-resource-icon-status-badge {
-      background: var(--oc-color-background-highlight) !important;
-      .oc-icon {
-        svg {
-          fill: var(--oc-color-background-highlight) !important;
-        }
-      }
-      .oc-spinner {
-        color: var(--oc-color-background-highlight) !important;
-      }
-    }
   }
 
   &-hover {
