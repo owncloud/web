@@ -1,24 +1,29 @@
 #!/usr/bin/env bash
 
 SCRIPT_PATH=$(dirname "$0")
-SCRIPT_PATH=$(cd "${SCRIPT_PATH}" && pwd) # normalized and made absolute
+SCRIPT_PATH=$(cd "${SCRIPT_PATH_REL}" && pwd) # absolute path
 FEATURES_DIR="${SCRIPT_PATH}/cucumber/features"
 PROJECT_ROOT=$(cd "$SCRIPT_PATH/../../" && pwd)
-E2E_COMMAND="pnpm test:e2e:cucumber"
+SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
+
+E2E_COMMAND="pnpm test:e2e:cucumber" # run command defined in package.json
 
 ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
 FEATURE_FILE=""
 FILTER_SUITES=""
 EXCLUDE_SUITES=""
+SUITE_FEATURE_PATHS=""
 
 SKIP_RUN_PARTS=true
 RUN_PART=""
 TOTAL_PARTS=""
 
 HELP_COMMAND="
+COMMAND [options] [paths]
+
 Available options:
-    --feature       - feature file to run
-                      e.g.: --feature tests/e2e/cucumber/features/journeys/kindergarten.feature
+    --feature       - feature file to run. Pattern: '<suite-name>/<filename>.feature'
+                      e.g.: --feature journeys/kindergarten.feature
     --suites        - suites to run. Comma separated values (folder names)
                       e.g.: --suites smoke,shares
     --exclude       - exclude suites from running. Comma separated values
@@ -59,17 +64,35 @@ while [[ $# -gt 0 ]]; do
         exit 0
         ;;
     *)
-        echo "ERR: Unknown option '$1'"
-        echo "$HELP_COMMAND"
-        exit 1
+        if [[ $1 =~ ^-.* ]]; then
+            echo "ERR: Unknown option: '$1'"
+            echo "$HELP_COMMAND"
+            exit 1
+        fi
+        SUITE_FEATURE_PATHS+=" $1" # maintain the white space
+        shift
         ;;
     esac
 done
-# TODO: treat remaining args as feature paths
+
+function getFeaturePaths() {
+    # $1    - paths to suite or feature file
+    paths=$(echo "$1" | xargs)
+    real_paths=""
+    for path in $paths; do
+        real_paths+=" $SCRIPT_PATH/$path"
+        if [[ ! -f $path && ! -d $path ]]; then
+            echo "ERR: File or folder doesn't exist: '$path'"
+            echo "INFO: Path must be relative to '$SCRIPT_PATH_REL'"
+            exit 1
+        fi
+    done
+    SUITE_FEATURE_PATHS=$real_paths
+}
 
 function runE2E() {
     if [[ ! -d "$PROJECT_ROOT" ]]; then
-        echo "ERR: Project root '$PROJECT_ROOT' doesn't exist"
+        echo "ERR: Project root doesn't exist: '$PROJECT_ROOT'"
     fi
     cd "$PROJECT_ROOT" || exit 1
     $E2E_COMMAND # run e2e test
@@ -93,20 +116,24 @@ function checkSuites() {
 }
 
 function buildSuitesPattern() {
-    # count words
-    CURRENT_SUITES_COUNT=$(echo "$1" | wc -w)
+    CURRENT_SUITES_COUNT=$(echo "$1" | wc -w) # count words
     suites=$(echo "$1" | xargs | sed -E "s/( )+/,/g")
     if [[ $CURRENT_SUITES_COUNT -gt 1 ]]; then
-        echo "multiple"
         suites="{$suites}"
     fi
-    E2E_COMMAND+=" $FEATURES_DIR/$suites/**/*.feature"
+    E2E_COMMAND+=" $FEATURES_DIR/$suites/**/*.feature" # maintain the white space
 }
 
-# [RUN E2E]
-# run only provided feature file
+# 1. [RUN E2E] run features from provided paths
+if [[ -n $SUITE_FEATURE_PATHS ]]; then
+    getFeaturePaths "$SUITE_FEATURE_PATHS"
+    E2E_COMMAND+=" $SUITE_FEATURE_PATHS" # maintain the white space
+    echo "INFO: Running e2e using paths. All cli options will be discarded"
+    runE2E
+fi
+# 2. [RUN E2E] run only provided feature file
 if [[ -n $FEATURE_FILE ]]; then
-    E2E_COMMAND+=" $FEATURE_FILE"
+    E2E_COMMAND+=" $FEATURES_DIR/$FEATURE_FILE" # maintain the white space
     runE2E
 fi
 
@@ -156,6 +183,5 @@ if [[ "$SKIP_RUN_PARTS" != true ]]; then
 fi
 
 buildSuitesPattern "$ALL_SUITES"
-# [RUN E2E]
-# run the suites
+# 3. [RUN E2E] run the suites
 runE2E
