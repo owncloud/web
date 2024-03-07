@@ -18,15 +18,15 @@ TOTAL_PARTS=""
 HELP_COMMAND="
 Available options:
     --feature       - feature file to run
-                    e.g.: --feature tests/e2e/cucumber/features/journeys/kindergarten.feature
+                      e.g.: --feature tests/e2e/cucumber/features/journeys/kindergarten.feature
     --suites        - suites to run. Comma separated values (folder names)
-                    e.g.: --suites smoke,shares
+                      e.g.: --suites smoke,shares
     --exclude       - exclude suites from running. Comma separated values
-                    e.g.: --exclude spaces,search
+                      e.g.: --exclude spaces,search
     --run-part      - part to run out of total parts (groups)
-                    e.g.: --run-part 2 (runs part 2 out of 4)
+                      e.g.: --run-part 2 (runs part 2 out of 4)
     --total-parts   - total number of groups to divide into
-                    e.g.: --total-parts 4 (suites will be divided into 4 groups)
+                      e.g.: --total-parts 4 (suites will be divided into 4 groups)
 "
 
 while [[ $# -gt 0 ]]; do
@@ -65,6 +65,7 @@ while [[ $# -gt 0 ]]; do
         ;;
     esac
 done
+# TODO: treat remaining args as feature paths
 
 function runE2E() {
     if [[ ! -d "$PROJECT_ROOT" ]]; then
@@ -92,8 +93,14 @@ function checkSuites() {
 }
 
 function buildSuitesPattern() {
+    # count words
+    CURRENT_SUITES_COUNT=$(echo "$1" | wc -w)
     suites=$(echo "$1" | xargs | sed -E "s/( )+/,/g")
-    E2E_COMMAND+=" $FEATURES_DIR/{$suites}/**/*.feature"
+    if [[ $CURRENT_SUITES_COUNT -gt 1 ]]; then
+        echo "multiple"
+        suites="{$suites}"
+    fi
+    E2E_COMMAND+=" $FEATURES_DIR/$suites/**/*.feature"
 }
 
 # [RUN E2E]
@@ -119,9 +126,7 @@ if [[ -n $EXCLUDE_SUITES ]]; then
     done
 fi
 
-if [[ "$SKIP_RUN_PARTS" == true ]]; then
-    buildSuitesPattern "$ALL_SUITES"
-else
+if [[ "$SKIP_RUN_PARTS" != true ]]; then
     if [[ -z $RUN_PART ]]; then
         echo "ERR: Missing '--run-part'"
         echo "USAGE: --run-part <number>"
@@ -147,11 +152,10 @@ else
     fi
 
     GRAB_SUITES_UPTO=$((PREVIOUS_SUITES_COUNT + SUITES_PER_RUN))
-    # shellcheck disable=SC2207
-    SUITES_TO_RUN+=$(echo "${ALL_SUITES}" | head -n "$GRAB_SUITES_UPTO" | tail -n "$SUITES_PER_RUN")
-    buildSuitesPattern "$SUITES_TO_RUN"
+    ALL_SUITES=$(echo "${ALL_SUITES}" | head -n "$GRAB_SUITES_UPTO" | tail -n "$SUITES_PER_RUN")
 fi
 
+buildSuitesPattern "$ALL_SUITES"
 # [RUN E2E]
 # run the suites
 runE2E
