@@ -52,7 +52,10 @@ export const useSpaceActionsSetIcon = () => {
     context.textBaseline = 'middle'
     context.textAlign = 'center'
 
-    context.fillText(emoji, canvas.width / 2, canvas.height / 2)
+    // FIXME: This offset center the emoji vertical, try to do it programmatically
+    const heightOffset = 15
+
+    context.fillText(emoji, canvas.width / 2, canvas.height / 2 + heightOffset)
 
     const blob = await canvasToBlob(canvas)
     return blobToArrayBuffer(blob)
