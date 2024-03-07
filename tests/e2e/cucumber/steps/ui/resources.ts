@@ -298,6 +298,19 @@ Then(
   }
 )
 
+Then(
+  '{string} restores the following resource from trashbin',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      const message = await resourceObject.restoreTrashBin({ resource: info.resource })
+      const paths = info.resource.split('/')
+      expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+    }
+  }
+)
+
 When(
   /^"([^"]*)" searches "([^"]*)" using the global search(?: and the "([^"]*)" filter)?( and presses enter)?$/,
   async function (
@@ -320,7 +333,7 @@ When(
 )
 
 Then(
-  /^following resources (should|should not) be displayed in the (search list|files list|Shares) for user "([^"]*)"$/,
+  /^following resources (should|should not) be displayed in the (search list|files list|Shares|trashbin) for user "([^"]*)"$/,
   async function (
     this: World,
     actionType: string,
