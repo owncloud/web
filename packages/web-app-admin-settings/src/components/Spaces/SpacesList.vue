@@ -30,7 +30,7 @@
           :model-value="allSpacesSelected"
           hide-label
           @update:model-value="
-            allSpacesSelected ? $emit('unSelectAllSpaces') : $emit('selectSpaces', paginatedItems)
+            allSpacesSelected ? unselectAllSpaces() : selectSpaces(paginatedItems)
           "
         />
       </template>
@@ -42,7 +42,7 @@
           :option="item"
           :label="getSelectSpaceLabel(item)"
           hide-label
-          @update:model-value="toggleSpace(item)"
+          @update:model-value="selectSpace(item)"
           @click.stop="fileClicked([item, $event])"
         />
       </template>
@@ -124,9 +124,10 @@ import {
   formatRelativeDateFromJSDate,
   displayPositionedDropdown,
   formatFileSize,
-  defaultFuseOptions
+  defaultFuseOptions,
+  useKeyboardActions
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, nextTick, onMounted, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import {
   spaceRoleEditor,
@@ -142,28 +143,18 @@ import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, useRoute, useRouter, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
-import { useKeyboardActions } from '@ownclouders/web-pkg'
+import { findIndex } from 'lodash-es'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation
-} from 'web-app-admin-settings/src/composables/keyboardActions'
-import { findIndex } from 'lodash-es'
+} from '../../composables/keyboardActions'
+import { useSpaceSettingsStore } from '../../composables'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'SpacesList',
   components: { ContextMenuQuickAction, Pagination },
-  props: {
-    spaces: {
-      type: Array as PropType<SpaceResource[]>,
-      required: true
-    },
-    selectedSpaces: {
-      type: Array as PropType<SpaceResource[]>,
-      required: true
-    }
-  },
-  emits: ['toggleSelectSpace', 'selectSpaces', 'unSelectAllSpaces'],
-  setup: function (props, { emit }) {
+  setup() {
     const router = useRouter()
     const route = useRoute()
     const { $gettext, current: currentLanguage } = useGettext()
@@ -178,10 +169,13 @@ export default defineComponent({
     const lastSelectedSpaceIndex = ref(0)
     const lastSelectedSpaceId = ref(null)
 
-    const highlighted = computed(() => props.selectedSpaces.map((s) => s.id))
+    const spaceSettingsStore = useSpaceSettingsStore()
+    const { spaces, selectedSpaces } = storeToRefs(spaceSettingsStore)
+
+    const highlighted = computed(() => unref(selectedSpaces).map((s) => s.id))
     const footerTextTotal = computed(() => {
       return $gettext('%{spaceCount} spaces in total', {
-        spaceCount: props.spaces.length.toString()
+        spaceCount: unref(spaces).length.toString()
       })
     })
     const footerTextFilter = computed(() => {
@@ -228,7 +222,7 @@ export default defineComponent({
     }
     const items = computed(() =>
       orderBy(
-        filter(props.spaces, unref(filterTerm)),
+        filter(unref(spaces), unref(filterTerm)),
         unref(sortBy),
         unref(sortDir) === SortDir.Desc
       )
@@ -239,12 +233,28 @@ export default defineComponent({
       total: totalPages
     } = usePagination({ items, perPageDefault, perPageStoragePrefix })
 
+    const keyActions = useKeyboardActions()
+    useKeyboardTableNavigation(
+      keyActions,
+      paginatedItems,
+      selectedSpaces,
+      lastSelectedSpaceIndex,
+      lastSelectedSpaceId
+    )
+    useKeyboardTableMouseActions(
+      keyActions,
+      paginatedItems,
+      selectedSpaces,
+      lastSelectedSpaceIndex,
+      lastSelectedSpaceId
+    )
+
     watch(currentPage, () => {
-      emit('unSelectAllSpaces')
+      unselectAllSpaces()
     })
 
     const allSpacesSelected = computed(() => {
-      return unref(paginatedItems).length === props.selectedSpaces.length
+      return unref(paginatedItems).length === unref(selectedSpaces).length
     })
 
     const handleSort = (event) => {
@@ -259,7 +269,7 @@ export default defineComponent({
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
     const isSpaceSelected = (space: SpaceResource) => {
-      return props.selectedSpaces.some((s) => s.id === space.id)
+      return unref(selectedSpaces).some((s) => s.id === space.id)
     }
 
     const fields = computed(() => [
@@ -379,11 +389,6 @@ export default defineComponent({
       return $gettext('Select %{ space }', { space: space.name }, true)
     }
 
-    const selectSpace = (space) => {
-      emit('unSelectAllSpaces')
-      emit('toggleSelectSpace', space)
-    }
-
     onMounted(() => {
       nextTick(() => {
         markInstance.value = new Mark('.mark-element')
@@ -424,7 +429,9 @@ export default defineComponent({
       if (isCheckboxClicked) {
         return
       }
-      toggleSpace(resource, true)
+
+      unselectAllSpaces()
+      selectSpace(resource)
     }
 
     const showContextMenuOnBtnClick = (data, space) => {
@@ -457,27 +464,27 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.open)
     }
 
-    const keyActions = useKeyboardActions()
-    useKeyboardTableNavigation(
-      keyActions,
-      paginatedItems,
-      props.selectedSpaces,
-      lastSelectedSpaceIndex,
-      lastSelectedSpaceId
-    )
-    useKeyboardTableMouseActions(
-      keyActions,
-      paginatedItems,
-      props.selectedSpaces,
-      lastSelectedSpaceIndex,
-      lastSelectedSpaceId
-    )
-
-    const toggleSpace = (space, deselect = false) => {
-      lastSelectedSpaceIndex.value = findIndex(props.spaces, (u) => u.id === space.id)
-      lastSelectedSpaceId.value = space.id
+    const selectSpace = (selectedSpace: SpaceResource) => {
+      lastSelectedSpaceIndex.value = findIndex(unref(spaces), (g) => g.id === selectedSpace.id)
+      lastSelectedSpaceId.value = selectedSpace.id
       keyActions.resetSelectionCursor()
-      emit('toggleSelectSpace', space, deselect)
+
+      const isSpaceSelected = unref(selectedSpaces).find((space) => space.id === selectedSpace.id)
+      if (!isSpaceSelected) {
+        return spaceSettingsStore.addSelectedSpace(selectedSpace)
+      }
+
+      spaceSettingsStore.setSelectedSpaces(
+        unref(selectedSpaces).filter((space) => space.id !== selectedSpace.id)
+      )
+    }
+
+    const unselectAllSpaces = () => {
+      spaceSettingsStore.setSelectedSpaces([])
+    }
+
+    const selectSpaces = (spaces: SpaceResource[]) => {
+      spaceSettingsStore.setSelectedSpaces(spaces)
     }
 
     return {
@@ -499,7 +506,6 @@ export default defineComponent({
       getMemberCount,
       getSelectSpaceLabel,
       handleSort,
-      toggleSpace,
       fileClicked,
       isSpaceSelected,
       contextMenuButtonRef,
@@ -511,7 +517,10 @@ export default defineComponent({
       items,
       paginatedItems,
       currentPage,
-      totalPages
+      totalPages,
+      selectSpace,
+      selectSpaces,
+      unselectAllSpaces
     }
   }
 })

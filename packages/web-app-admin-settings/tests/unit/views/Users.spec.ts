@@ -1,15 +1,6 @@
 import Users from '../../../src/views/Users.vue'
-import {
-  ItemFilter,
-  OptionsConfig,
-  UserAction,
-  eventBus,
-  useAppDefaults,
-  useMessages,
-  useSpacesStore
-} from '@ownclouders/web-pkg'
+import { ItemFilter, OptionsConfig, UserAction, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { mockAxiosResolve, mockAxiosReject } from 'web-test-helpers/src/mocks'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
@@ -108,7 +99,7 @@ const selectors = {
 describe('Users view', () => {
   describe('list view', () => {
     it('renders list initially', async () => {
-      const { wrapper } = getMountedWrapper({ mountType: mount })
+      const { wrapper } = getMountedWrapper({ mountType: mount, users: [getDefaultUser()] })
       await wrapper.vm.loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
     })
@@ -137,119 +128,6 @@ describe('Users view', () => {
       })
       const createUserButton = wrapper.find(selectors.createUserButton)
       expect(createUserButton.exists()).toBeFalsy()
-    })
-  })
-
-  describe('method "onEditUser"', () => {
-    it('should emit event on success', async () => {
-      const editUser = {
-        appRoleAssignments: [
-          {
-            appRoleId: '2',
-            resourceId: 'some-graph-app-id',
-            principalId: '1'
-          }
-        ],
-        displayName: 'administrator',
-        id: '1',
-        mail: 'administrator@example.org',
-        memberOf: [
-          {
-            displayName: 'admins',
-            id: '1'
-          }
-        ],
-        drive: {
-          id: '1',
-          name: 'admin',
-          quota: {
-            total: 1000000000
-          }
-        },
-        passwordProfile: {
-          password: 'administrator'
-        }
-      }
-
-      const clientService = getClientService()
-      clientService.graphAuthenticated.users.editUser.mockResolvedValue(mockAxiosResolve())
-      clientService.graphAuthenticated.users.createUserAppRoleAssignment.mockResolvedValue(
-        mockAxiosResolve()
-      )
-      clientService.graphAuthenticated.groups.addMember.mockResolvedValue(mockAxiosResolve())
-      clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
-        mockAxiosResolve({
-          id: '1',
-          name: 'admin',
-          quota: { remaining: 1000000000, state: 'normal', total: 1000000000, used: 0 }
-        })
-      )
-      clientService.graphAuthenticated.users.getUser.mockResolvedValue(
-        mockAxiosResolve({
-          appRoleAssignments: [
-            {
-              appRoleId: '2',
-              id: '1',
-              principalId: '1',
-              principalType: 'User',
-              resourceDisplayName: 'ownCloud Infinite Scale',
-              resourceId: 'some-graph-app-id'
-            }
-          ],
-          displayName: 'administrator',
-          drive: {
-            id: '1',
-            name: 'admin',
-            quota: { remaining: 1000000000, state: 'normal', total: 1000000000, used: 0 }
-          },
-          id: '1',
-          mail: 'administrator@example.org',
-          memberOf: [
-            {
-              displayName: 'admins',
-              id: '1'
-            }
-          ],
-          onPremisesSamAccountName: 'admin',
-          surname: 'Admin'
-        })
-      )
-
-      const { wrapper } = getMountedWrapper({ clientService })
-
-      const busStub = vi.spyOn(eventBus, 'publish')
-
-      await wrapper.vm.loadResourcesTask.last
-
-      const userToUpDate = wrapper.vm.users.find((user) => user.id === '1')
-      const updatedUser = await wrapper.vm.onEditUser({ user: userToUpDate, editUser })
-
-      expect(updatedUser.id).toEqual('1')
-      expect(updatedUser.displayName).toEqual('administrator')
-      expect(updatedUser.mail).toEqual('administrator@example.org')
-      expect(updatedUser.appRoleAssignments[0].appRoleId).toEqual('2')
-      expect(updatedUser.drive.quota.total).toEqual(1000000000)
-      expect(updatedUser.memberOf[0].id).toEqual('1')
-
-      expect(busStub).toHaveBeenCalled()
-      const spacesStore = useSpacesStore()
-      expect(spacesStore.updateSpaceField).toHaveBeenCalled()
-    })
-
-    it('should show message on error', async () => {
-      vi.spyOn(console, 'error').mockImplementation(() => undefined)
-      const clientService = getClientService()
-      clientService.graphAuthenticated.users.editUser.mockImplementation(() => mockAxiosReject())
-      const { wrapper } = getMountedWrapper({ clientService })
-
-      await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.onEditUser({
-        user: {},
-        editUser: {}
-      })
-
-      const { showErrorMessage } = useMessages()
-      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 
@@ -287,16 +165,17 @@ describe('Users view', () => {
       expect(wrapper.find('batch-actions-stub').exists()).toBeFalsy()
     })
     it('display when one user selected', async () => {
-      const { wrapper } = getMountedWrapper({ mountType: mount })
+      const { wrapper } = getMountedWrapper({ mountType: mount, selectedUsers: [{ id: '1' }] })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.toggleSelectUser(getDefaultUser())
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
     it('display when more than one users selected', async () => {
-      const { wrapper } = getMountedWrapper({ mountType: mount })
+      const { wrapper } = getMountedWrapper({
+        mountType: mount,
+        selectedUsers: [{ id: '1' }, { id: '2' }]
+      })
       await wrapper.vm.loadResourcesTask.last
-      wrapper.vm.selectUsers([mock<User>(), mock<User>()])
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
@@ -393,7 +272,9 @@ function getMountedWrapper({
   groupFilterQuery = null,
   roleFilterQuery = null,
   options = {},
-  createUserActionEnabled = true
+  createUserActionEnabled = true,
+  users = [],
+  selectedUsers = []
 }: {
   mountType?: typeof shallowMount | typeof mount
   clientService?: ReturnType<typeof mockDeep<ClientService>>
@@ -402,6 +283,8 @@ function getMountedWrapper({
   roleFilterQuery?: string
   options?: OptionsConfig
   createUserActionEnabled?: boolean
+  users?: User[]
+  selectedUsers?: User[]
 } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => displayNameFilterQuery)
   vi.mocked(queryItemAsString).mockImplementationOnce(() => groupFilterQuery)
@@ -427,7 +310,11 @@ function getMountedWrapper({
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { userState: { user }, configState: { options } }
+            piniaOptions: {
+              userState: { user },
+              configState: { options },
+              userSettingsStore: { users, selectedUsers }
+            }
           })
         ],
         mocks,

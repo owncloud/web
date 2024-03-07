@@ -198,7 +198,8 @@ function getWrapper({
           memberOf: selectedGroups
         },
         roles: [{ id: '1', displayName: 'admin' }],
-        groups
+        groups,
+        applicationId: '1'
       },
       global: {
         mocks,

@@ -31,15 +31,7 @@
       <template #mainContent>
         <app-loading-spinner v-if="loadResourcesTask.isRunning || !loadResourcesTask.last" />
         <div v-else>
-          <UsersList
-            :users="users"
-            :roles="roles"
-            :class="{ 'users-table-squashed': isSideBarOpen }"
-            :selected-users="selectedUsers"
-            @toggle-select-user="toggleSelectUser"
-            @select-users="selectUsers"
-            @un-select-all-users="unselectAllUsers"
-          >
+          <users-list :roles="roles" :class="{ 'users-table-squashed': isSideBarOpen }">
             <template #contextMenu>
               <context-actions :items="selectedUsers" />
             </template>
@@ -124,7 +116,7 @@
                 </template>
               </no-content-message>
             </template>
-          </UsersList>
+          </users-list>
         </div>
       </template>
     </app-template>
@@ -145,7 +137,7 @@ import {
   useUserActionsEditQuota,
   useUserActionsCreateUser
 } from '../composables'
-import { Drive, User, Group } from '@ownclouders/web-client/src/generated'
+import { User, Group } from '@ownclouders/web-client/src/generated'
 import {
   AppLoadingSpinner,
   ItemFilter,
@@ -159,9 +151,6 @@ import {
   useSideBar,
   SideBarPanel,
   SideBarPanelContext,
-  useUserStore,
-  useMessages,
-  useSpacesStore,
   useCapabilityStore,
   useConfigStore
 } from '@ownclouders/web-pkg'
@@ -177,11 +166,12 @@ import {
 } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { diff } from 'deep-object-diff'
 import Mark from 'mark.js'
 import { format } from 'util'
-import { isEqual, isEmpty, omit } from 'lodash-es'
+import { omit } from 'lodash-es'
 import { storeToRefs } from 'pinia'
+
+import { useUserSettingsStore } from '../composables/stores/userSettings'
 
 export default defineComponent({
   name: 'UsersView',
@@ -197,23 +187,13 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const router = useRouter()
     const route = useRoute()
-    const { showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const configStore = useConfigStore()
-    const userStore = useUserStore()
-    const spacesStore = useSpacesStore()
 
-    const currentPageQuery = useRouteQuery('page', '1')
-    const currentPage = computed(() => {
-      return parseInt(queryItemAsString(unref(currentPageQuery)))
-    })
-
-    const itemsPerPageQuery = useRouteQuery('admin-settings-items-per-page', '1')
-    const itemsPerPage = computed(() => {
-      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
-    })
+    const userSettingsStore = useUserSettingsStore()
+    const { users, selectedUsers } = storeToRefs(userSettingsStore)
 
     const writableGroups = computed<Group[]>(() => {
       return unref(groups).filter((g) => !g.groupTypes?.includes('ReadOnly'))
@@ -232,26 +212,22 @@ export default defineComponent({
     const { actions: editLoginActions } = useUserActionsEditLogin()
     const { actions: editQuotaActions } = useUserActionsEditQuota()
 
-    const users = ref([])
     const groups = ref([])
     const roles = ref([])
-    const selectedUsers = ref<User[]>([])
     const additionalUserDataLoadedForUserIds = ref([])
     const applicationId = ref()
     const selectedUserIds = computed(() =>
       unref(selectedUsers).map((selectedUser) => selectedUser.id)
     )
     const isFilteringMandatory = ref(configStore.options.userListRequiresFilter)
+
     const sideBarLoading = ref(false)
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
     const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
     const markInstance = ref(null)
 
-    let loadResourcesEventToken: string
     let editQuotaActionEventToken: string
-    let addUserEventToken: string
-    let updateUsersEventToken: string
 
     const loadGroupsTask = useTask(function* (signal) {
       const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups('displayName')
@@ -267,7 +243,7 @@ export default defineComponent({
 
     const loadUsersTask = useTask(function* (signal) {
       if (unref(isFilteringMandatory) && !unref(isFilteringActive)) {
-        return (users.value = [])
+        return userSettingsStore.setUsers([])
       }
 
       const filter = Object.values(filters)
@@ -294,7 +270,7 @@ export default defineComponent({
         'displayName',
         filter
       )
-      users.value = usersResponse.data.value || []
+      userSettingsStore.setUsers(usersResponse.data.value || [])
     })
 
     const loadResourcesTask = useTask(function* (signal) {
@@ -354,14 +330,14 @@ export default defineComponent({
     const filterGroups = (groups) => {
       filters.groups.ids.value = groups.map((g) => g.id)
       loadUsersTask.perform()
-      selectedUsers.value = []
+      userSettingsStore.setSelectedUsers([])
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
     const filterRoles = (roles) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
-      selectedUsers.value = []
+      userSettingsStore.setSelectedUsers([])
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
@@ -375,7 +351,7 @@ export default defineComponent({
       })
       filters.displayName.value.value = unref(filterTermDisplayName)
       loadUsersTask.perform()
-      selectedUsers.value = []
+      userSettingsStore.setSelectedUsers([])
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
@@ -399,15 +375,9 @@ export default defineComponent({
     })
 
     const updateSpaceQuota = ({ spaceId, quota }) => {
-      const userIndex = unref(users).findIndex((u) => u.drive?.id === spaceId)
-      if (userIndex >= 0) {
-        unref(users)[userIndex].drive.quota = quota
-      }
-
-      const selectedIndex = unref(selectedUsers).findIndex((u) => u.drive?.id === spaceId)
-      if (selectedIndex >= 0) {
-        unref(selectedUsers)[selectedIndex].drive.quota = quota
-      }
+      const user = unref(users).find((u) => u.drive?.id === spaceId)
+      user.drive.quota = quota
+      userSettingsStore.upsertUser(user)
     }
 
     onMounted(async () => {
@@ -421,16 +391,6 @@ export default defineComponent({
       }
 
       await loadResourcesTask.perform()
-      loadResourcesEventToken = eventBus.subscribe('app.admin-settings.list.load', async () => {
-        await loadResourcesTask.perform()
-        selectedUsers.value = []
-
-        const pageCount = Math.ceil(unref(users).length / unref(itemsPerPage))
-        if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-          // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-          currentPageQuery.value = pageCount.toString()
-        }
-      })
 
       watch(
         [users, displayNameQuery],
@@ -448,14 +408,6 @@ export default defineComponent({
         }
       )
 
-      addUserEventToken = eventBus.subscribe('app.admin-settings.users.add', (user) => {
-        users.value.push(user)
-      })
-      updateUsersEventToken = eventBus.subscribe(
-        'app.admin-settings.users.update',
-        updateLocalUsers
-      )
-
       editQuotaActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.quota.updated',
         updateSpaceQuota
@@ -463,124 +415,10 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.admin-settings.list.load', loadResourcesEventToken)
-      eventBus.unsubscribe('app.admin-settings.users.add', addUserEventToken)
-      eventBus.unsubscribe('app.admin-settings.users.update', updateUsersEventToken)
+      userSettingsStore.reset()
 
       eventBus.unsubscribe('app.admin-settings.users.user.quota.updated', editQuotaActionEventToken)
     })
-
-    const updateLocalUsers = (usersToUpdate: User[]) => {
-      for (const _user of usersToUpdate) {
-        const userIndex = unref(users).findIndex((user) => user.id === _user.id)
-        unref(users)[userIndex] = _user
-        const selectedUserIndex = unref(selectedUsers).findIndex((user) => user.id === _user.id)
-        if (selectedUserIndex >= 0) {
-          selectedUsers.value = [...unref(selectedUsers).filter(({ id }) => id !== _user.id), _user]
-        }
-      }
-    }
-
-    const onEditUser = async ({ user, editUser }) => {
-      try {
-        const client = clientService.graphAuthenticated
-        const graphEditUserPayloadExtractor = (user) => {
-          return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
-        }
-        const graphEditUserPayload = diff(
-          graphEditUserPayloadExtractor(user),
-          graphEditUserPayloadExtractor(editUser)
-        )
-
-        if (!isEmpty(graphEditUserPayload)) {
-          await client.users.editUser(editUser.id, graphEditUserPayload)
-        }
-
-        if (!isEqual(user.drive?.quota?.total, editUser.drive?.quota?.total)) {
-          await onUpdateUserDrive(editUser)
-        }
-
-        if (!isEqual(user.memberOf, editUser.memberOf)) {
-          await onUpdateUserGroupAssignments(user, editUser)
-        }
-
-        if (
-          !isEqual(user.appRoleAssignments[0]?.appRoleId, editUser.appRoleAssignments[0]?.appRoleId)
-        ) {
-          await onUpdateUserAppRoleAssignments(user, editUser)
-        }
-
-        const { data: updatedUser } = await client.users.getUser(user.id)
-        const userIndex = unref(users).findIndex((user) => user.id === updatedUser.id)
-        users.value[userIndex] = updatedUser
-        const selectedUserIndex = unref(selectedUsers).findIndex(
-          (user) => user.id === updatedUser.id
-        )
-        if (selectedUserIndex >= 0) {
-          // FIXME: why do we need to update selectedUsers?
-          selectedUsers.value[selectedUserIndex] = updatedUser
-        }
-
-        eventBus.publish('sidebar.entity.saved')
-
-        if (userStore.user.id === updatedUser.id) {
-          userStore.setUser(updatedUser)
-        }
-
-        return updatedUser
-      } catch (error) {
-        console.error(error)
-        showErrorMessage({
-          title: $gettext('Failed to edit user'),
-          errors: [error]
-        })
-      }
-    }
-
-    const onUpdateUserDrive = async (editUser: User) => {
-      const client = clientService.graphAuthenticated
-      const updateDriveResponse = await client.drives.updateDrive(
-        editUser.drive.id,
-        { quota: { total: editUser.drive.quota.total } } as Drive,
-        {}
-      )
-
-      if (editUser.id === userStore.user.id) {
-        // Load current user quota
-        spacesStore.updateSpaceField({
-          id: editUser.drive.id,
-          field: 'spaceQuota',
-          value: updateDriveResponse.data.quota
-        })
-      }
-    }
-    const onUpdateUserAppRoleAssignments = (user: User, editUser: User) => {
-      const client = clientService.graphAuthenticated
-      return client.users.createUserAppRoleAssignment(user.id, {
-        appRoleId: editUser.appRoleAssignments[0].appRoleId,
-        resourceId: unref(applicationId),
-        principalId: editUser.id
-      })
-    }
-    const onUpdateUserGroupAssignments = (user: User, editUser: User) => {
-      const client = clientService.graphAuthenticated
-      const groupsToAdd = editUser.memberOf.filter(
-        (editUserGroup) => !user.memberOf.some((g) => g.id === editUserGroup.id)
-      )
-      const groupsToDelete = user.memberOf.filter(
-        (editUserGroup) => !editUser.memberOf.some((g) => g.id === editUserGroup.id)
-      )
-      const requests = []
-
-      for (const groupToAdd of groupsToAdd) {
-        requests.push(client.groups.addMember(groupToAdd.id, user.id, configStore.serverUrl))
-      }
-      for (const groupToDelete of groupsToDelete) {
-        requests.push(client.groups.deleteMember(groupToDelete.id, user.id))
-      }
-
-      return Promise.all(requests)
-    }
 
     const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, User>>(() => {
       return {
@@ -612,7 +450,7 @@ export default defineComponent({
           user: items.length === 1 ? items[0] : null,
           roles: unref(roles),
           groups: unref(groups),
-          onConfirm: onEditUser
+          applicationId: unref(applicationId)
         })
       }
     ] satisfies SideBarPanel<unknown, unknown, User>[]
@@ -626,7 +464,6 @@ export default defineComponent({
       users,
       roles,
       groups,
-      applicationId,
       loadResourcesTask,
       loadAdditionalUserDataTask,
       clientService,
@@ -640,8 +477,8 @@ export default defineComponent({
       isFilteringMandatory,
       sideBarPanelContext,
       sideBarAvailablePanels,
-      onEditUser,
-      createUserAction
+      createUserAction,
+      userSettingsStore
     }
   },
   computed: {
@@ -650,30 +487,12 @@ export default defineComponent({
         { text: this.$gettext('Administration Settings'), to: { path: '/admin-settings' } },
         {
           text: this.$gettext('Users'),
-          onClick: () => eventBus.publish('app.admin-settings.list.load')
+          onClick: () => {
+            this.userSettingsStore.setSelectedUsers([])
+            this.loadResourcesTask.perform()
+          }
         }
       ]
-    }
-  },
-  methods: {
-    selectUsers(users) {
-      this.selectedUsers.splice(0, this.selectedUsers.length, ...users)
-    },
-    toggleSelectUser(toggledUser, deselect = false) {
-      if (deselect) {
-        this.selectedUsers.splice(0, this.selectedUsers.length)
-      }
-      const isUserSelected = this.selectedUsers.find((user) => user.id === toggledUser.id)
-
-      if (!isUserSelected) {
-        return this.selectedUsers.push(this.users.find((u) => u.id === toggledUser.id))
-      }
-
-      const index = this.selectedUsers.findIndex((user) => user.id === toggledUser.id)
-      this.selectedUsers.splice(index, 1)
-    },
-    unselectAllUsers() {
-      this.selectedUsers.splice(0, this.selectedUsers.length)
     }
   }
 })

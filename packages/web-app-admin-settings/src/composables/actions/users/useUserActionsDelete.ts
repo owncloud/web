@@ -1,9 +1,16 @@
-import { computed } from 'vue'
-import { eventBus, useCapabilityStore, useMessages, useModals } from '@ownclouders/web-pkg'
+import { computed, unref } from 'vue'
+import {
+  queryItemAsString,
+  useCapabilityStore,
+  useMessages,
+  useModals,
+  useRouteQuery
+} from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
 import { UserAction, UserActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { User } from '@ownclouders/web-client/src/generated'
+import { useUserSettingsStore } from '../../stores/userSettings'
 
 export const useUserActionsDelete = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -11,6 +18,17 @@ export const useUserActionsDelete = () => {
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const { dispatchModal } = useModals()
+  const userSettingsStore = useUserSettingsStore()
+
+  const currentPageQuery = useRouteQuery('page', '1')
+  const currentPage = computed(() => {
+    return parseInt(queryItemAsString(unref(currentPageQuery)))
+  })
+
+  const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
+  const itemsPerPage = computed(() => {
+    return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+  })
 
   const deleteUsers = async (users: User[]) => {
     const graphClient = clientService.graphAuthenticated
@@ -52,7 +70,14 @@ export const useUserActionsDelete = () => {
       })
     }
 
-    eventBus.publish('app.admin-settings.list.load')
+    userSettingsStore.removeUsers(users)
+    userSettingsStore.setSelectedUsers([])
+
+    const pageCount = Math.ceil(userSettingsStore.users.length / unref(itemsPerPage))
+    if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+      // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+      currentPageQuery.value = pageCount.toString()
+    }
   }
 
   const handler = ({ resources }: UserActionOptions) => {

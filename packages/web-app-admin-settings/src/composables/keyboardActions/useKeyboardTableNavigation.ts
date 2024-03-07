@@ -2,11 +2,12 @@ import { useScrollTo } from '@ownclouders/web-pkg'
 import { Ref, unref } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
 import { find, findIndex } from 'lodash-es'
+import { Item } from '@ownclouders/web-client/src/helpers'
 
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,
   paginatedResources: Ref<{ id: string }[]>,
-  selectedRows: any,
+  selectedRows: Ref<Item[]>,
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>
 ) => {
@@ -31,19 +32,19 @@ export const useKeyboardTableNavigation = (
   keyActions.bindKeyAction({ primary: Key.Space }, () => {
     const { lastSelectedRow, lastSelectedRowIndex } = getLastSelectedRow()
     if (lastSelectedRowIndex === -1) {
-      selectedRows.push(lastSelectedRow)
+      selectedRows.value.push(lastSelectedRow)
     } else {
-      selectedRows.splice(lastSelectedRowIndex, 1)
+      selectedRows.value = unref(selectedRows).filter((item) => item.id !== lastSelectedRow.id)
     }
   })
 
   keyActions.bindKeyAction({ primary: Key.Esc }, () => {
     keyActions.resetSelectionCursor()
-    selectedRows.splice(0, selectedRows.length)
+    selectedRows.value = []
   })
 
   const handleNavigateAction = (up = false) => {
-    const nextResource = !lastSelectedRowId ? getFirstResource() : getNextResource(up)
+    const nextResource = !unref(lastSelectedRowId) ? getFirstResource() : getNextResource(up)
 
     if (nextResource === -1) {
       return
@@ -55,7 +56,7 @@ export const useKeyboardTableNavigation = (
     )
 
     keyActions.resetSelectionCursor()
-    selectedRows.splice(0, selectedRows.length, nextResource)
+    selectedRows.value = [nextResource]
     lastSelectedRowIndex.value = nextResourceIndex
     lastSelectedRowId.value = String(nextResource.id)
 
@@ -77,10 +78,12 @@ export const useKeyboardTableNavigation = (
       const { lastSelectedRow, lastSelectedRowIndex } = getLastSelectedRow()
 
       lastSelectedRowIndex === -1
-        ? selectedRows.push(lastSelectedRow)
-        : selectedRows.splice(lastSelectedRowIndex, 1)
+        ? selectedRows.value.push(lastSelectedRow)
+        : (selectedRows.value = unref(selectedRows).filter(
+            (item) => item.id !== lastSelectedRow.id
+          ))
     } else {
-      selectedRows.push(nextResource)
+      selectedRows.value.push(nextResource)
     }
 
     lastSelectedRowIndex.value = nextResourceIndex
@@ -105,17 +108,17 @@ export const useKeyboardTableNavigation = (
         (resource) => resource.id === lastSelectedRowId.value
       )
       const lastSelectedRowIndex = findIndex(
-        selectedRows,
+        unref(selectedRows),
         (resource: any) => resource.id === lastSelectedRowId.value
       )
 
       if (lastSelectedRowIndex === -1) {
-        selectedRows.push(lastSelectedRow)
+        selectedRows.value.push(lastSelectedRow)
       } else {
-        selectedRows.splice(lastSelectedRowIndex, 1)
+        selectedRows.value = unref(selectedRows).filter((item) => item.id !== lastSelectedRow.id)
       }
     } else {
-      selectedRows.push(nextResource)
+      selectedRows.value.push(nextResource)
     }
 
     lastSelectedRowIndex.value = nextResourceIndex
@@ -126,7 +129,7 @@ export const useKeyboardTableNavigation = (
 
   const handleSelectAllAction = () => {
     keyActions.resetSelectionCursor()
-    selectedRows.splice(0, selectedRows.length, ...paginatedResources.value)
+    selectedRows.value = [...unref(paginatedResources)]
   }
 
   const getNextResource = (previous = false) => {
@@ -153,7 +156,7 @@ export const useKeyboardTableNavigation = (
       (resource) => resource.id === lastSelectedRowId.value
     )
     const lastSelectedRowIndex = findIndex(
-      selectedRows,
+      unref(selectedRows),
       (resource: any) => resource.id === lastSelectedRowId.value
     )
     return {

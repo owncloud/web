@@ -2,6 +2,7 @@ import GroupsList from '../../../../src/components/Groups/GroupsList.vue'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
+import { useGroupSettingsStore } from '../../../../src/composables'
 
 const getGroupMocks = () => [
   { id: '1', members: [] },
@@ -56,36 +57,74 @@ describe('GroupsList', () => {
       ).toEqual([])
     })
   })
-  it('emits events on row click', () => {
-    const groups = getGroupMocks()
-    const { wrapper } = getWrapper({ props: { groups } })
-    wrapper.vm.rowClicked([groups[0]])
-    expect(wrapper.emitted('toggleSelectGroup')).toBeTruthy()
-  })
   it('should show the context menu on right click', async () => {
     const groups = getGroupMocks()
     const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
-    const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
+    const { wrapper } = getWrapper({ mountType: mount, groups })
     await wrapper.find(`[data-item-id="${groups[0].id}"]`).trigger('contextmenu')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the context menu on context menu button click', async () => {
     const groups = getGroupMocks()
     const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
-    const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
+    const { wrapper } = getWrapper({ mountType: mount, groups })
     await wrapper.find('.groups-table-btn-action-dropdown').trigger('click')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
   })
   it('should show the group details on details button click', async () => {
     const groups = getGroupMocks()
     const eventBusSpy = vi.spyOn(eventBus, 'publish')
-    const { wrapper } = getWrapper({ mountType: mount, props: { groups } })
+    const { wrapper } = getWrapper({ mountType: mount, groups })
     await wrapper.find('.groups-table-btn-details').trigger('click')
     expect(eventBusSpy).toHaveBeenCalledWith(SideBarEventTopics.open)
   })
+  describe('toggle selection', () => {
+    describe('selectGroups method', () => {
+      it('selects all groups', () => {
+        const groups = getGroupMocks()
+        const { wrapper } = getWrapper({ mountType: shallowMount, groups })
+        wrapper.vm.selectGroups(groups)
+        const { setSelectedGroups } = useGroupSettingsStore()
+        expect(setSelectedGroups).toHaveBeenCalledWith(groups)
+      })
+    })
+    describe('selectGroup method', () => {
+      it('selects a group', () => {
+        const groups = getGroupMocks()
+        const { wrapper } = getWrapper({ mountType: shallowMount, groups: [groups[0]] })
+        wrapper.vm.selectGroup(groups[0])
+        const { addSelectedGroup } = useGroupSettingsStore()
+        expect(addSelectedGroup).toHaveBeenCalledWith(groups[0])
+      })
+      it('de-selects a selected group', () => {
+        const groups = getGroupMocks()
+        const { wrapper } = getWrapper({
+          mountType: shallowMount,
+          groups: [groups[0]],
+          selectedGroups: [groups[0]]
+        })
+        wrapper.vm.selectGroup(groups[0])
+        const { setSelectedGroups } = useGroupSettingsStore()
+        expect(setSelectedGroups).toHaveBeenCalledWith([])
+      })
+    })
+    describe('unselectAllGroups method', () => {
+      it('de-selects all selected groups', () => {
+        const groups = getGroupMocks()
+        const { wrapper } = getWrapper({
+          mountType: shallowMount,
+          groups: [groups[0]],
+          selectedGroups: [groups[0]]
+        })
+        wrapper.vm.unselectAllGroups()
+        const { setSelectedGroups } = useGroupSettingsStore()
+        expect(setSelectedGroups).toHaveBeenCalledWith([])
+      })
+    })
+  })
 })
 
-function getWrapper({ mountType = shallowMount, props = {} } = {}) {
+function getWrapper({ mountType = shallowMount, groups = [], selectedGroups = [] } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()
@@ -93,13 +132,16 @@ function getWrapper({ mountType = shallowMount, props = {} } = {}) {
   return {
     wrapper: mountType(GroupsList, {
       props: {
-        groups: [],
-        selectedGroups: [],
-        headerPosition: 0,
-        ...props
+        headerPosition: 0
       },
       global: {
-        plugins: [...defaultPlugins()],
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              groupSettingsStore: { groups, selectedGroups }
+            }
+          })
+        ],
         mocks,
         provide: mocks,
         stubs: {

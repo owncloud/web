@@ -26,9 +26,7 @@
           :label="$gettext('Select all users')"
           :model-value="allUsersSelected"
           hide-label
-          @update:model-value="
-            allUsersSelected ? $emit('unSelectAllUsers') : $emit('selectUsers', paginatedItems)
-          "
+          @update:model-value="allUsersSelected ? unselectAllUsers() : selectUsers(paginatedItems)"
         />
       </template>
       <template #select="{ item }">
@@ -39,7 +37,7 @@
           :option="item"
           :label="getSelectUserLabel(item)"
           hide-label
-          @update:model-value="toggleUser(item)"
+          @update:model-value="selectUser(item)"
           @click.stop="rowClicked([item, $event])"
         />
       </template>
@@ -102,39 +100,36 @@
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
 import { defineComponent, PropType, ref, unref, computed } from 'vue'
-import { displayPositionedDropdown, eventBus, SortDir } from '@ownclouders/web-pkg'
+import {
+  displayPositionedDropdown,
+  eventBus,
+  SortDir,
+  useKeyboardActions
+} from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { AppRole, User } from '@ownclouders/web-client/src/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { storeToRefs } from 'pinia'
+import { useUserSettingsStore } from '../../composables/stores/userSettings'
 import {
-  useKeyboardTableNavigation,
-  useKeyboardTableMouseActions
-} from 'web-app-admin-settings/src/composables/keyboardActions'
-import { useKeyboardActions } from '@ownclouders/web-pkg'
+  useKeyboardTableMouseActions,
+  useKeyboardTableNavigation
+} from '../../composables/keyboardActions'
 import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersList',
   components: { ContextMenuQuickAction, Pagination },
   props: {
-    users: {
-      type: Array as PropType<User[]>,
-      required: true
-    },
     roles: {
       type: Array as PropType<AppRole[]>,
       required: true
-    },
-    selectedUsers: {
-      type: Array as PropType<User[]>,
-      required: true
     }
   },
-  emits: ['unSelectAllUsers', 'selectUsers', 'toggleSelectUser'],
-  setup(props, { emit }) {
+  setup(props) {
     const { $gettext } = useGettext()
 
     const contextMenuButtonRef = ref(undefined)
@@ -145,12 +140,33 @@ export default defineComponent({
     const lastSelectedUserIndex = ref(0)
     const lastSelectedUserId = ref(null)
 
+    const userSettingsStore = useUserSettingsStore()
+    const { users, selectedUsers } = storeToRefs(userSettingsStore)
+
     const isUserSelected = (user) => {
-      return props.selectedUsers.some((s) => s.id === user.id)
+      return unref(selectedUsers).some((s) => s.id === user.id)
     }
-    const selectUser = (user) => {
-      emit('unSelectAllUsers')
-      emit('toggleSelectUser', user)
+    const selectUser = (selectedUser: User) => {
+      lastSelectedUserIndex.value = findIndex(unref(users), (u) => u.id === selectedUser.id)
+      lastSelectedUserId.value = selectedUser.id
+      keyActions.resetSelectionCursor()
+
+      const isUserSelected = unref(selectedUsers).find((user) => user.id === selectedUser.id)
+      if (!isUserSelected) {
+        return userSettingsStore.addSelectedUser(selectedUser)
+      }
+
+      userSettingsStore.setSelectedUsers(
+        unref(selectedUsers).filter((user) => user.id !== selectedUser.id)
+      )
+    }
+
+    const unselectAllUsers = () => {
+      userSettingsStore.setSelectedUsers([])
+    }
+
+    const selectUsers = (users: User[]) => {
+      userSettingsStore.setSelectedUsers(users)
     }
 
     const showDetails = (user) => {
@@ -167,11 +183,11 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
     }
 
-    const showGroupAssigmentPanel = (user) => {
+    const showUserAssigmentPanel = (user) => {
       if (!isUserSelected(user)) {
         selectUser(user)
       }
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'GroupAssignmentsPanel')
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'UserAssignmentsPanel')
     }
 
     const rowClicked = (data) => {
@@ -196,7 +212,8 @@ export default defineComponent({
       if (isCheckboxClicked) {
         return
       }
-      toggleUser(resource, true)
+      unselectAllUsers()
+      selectUser(resource)
     }
     const showContextMenuOnBtnClick = (data, user) => {
       const { dropdown, event } = data
@@ -253,7 +270,7 @@ export default defineComponent({
     }
 
     const items = computed(() => {
-      return orderBy(props.users, unref(sortBy), unref(sortDir) === SortDir.Desc)
+      return orderBy(unref(users), unref(sortBy), unref(sortDir) === SortDir.Desc)
     })
 
     const {
@@ -266,32 +283,24 @@ export default defineComponent({
     useKeyboardTableNavigation(
       keyActions,
       paginatedItems,
-      props.selectedUsers,
+      selectedUsers,
       lastSelectedUserIndex,
       lastSelectedUserId
     )
     useKeyboardTableMouseActions(
       keyActions,
       paginatedItems,
-      props.selectedUsers,
+      selectedUsers,
       lastSelectedUserIndex,
       lastSelectedUserId
     )
 
-    const toggleUser = (user, deselect = false) => {
-      lastSelectedUserIndex.value = findIndex(props.users, (u) => u.id === user.id)
-      lastSelectedUserId.value = user.id
-      keyActions.resetSelectionCursor()
-      emit('toggleSelectUser', user, deselect)
-    }
-
     return {
       showDetails,
       showEditPanel,
-      showGroupAssigmentPanel,
+      showUserAssigmentPanel,
       isUserSelected,
       rowClicked,
-      toggleUser,
       contextMenuButtonRef,
       showContextMenuOnBtnClick,
       showContextMenuOnRightClick,
@@ -303,7 +312,12 @@ export default defineComponent({
       paginatedItems,
       currentPage,
       totalPages,
-      orderBy
+      orderBy,
+      selectedUsers,
+      selectUser,
+      selectUsers,
+      unselectAllUsers,
+      users
     }
   },
   data() {

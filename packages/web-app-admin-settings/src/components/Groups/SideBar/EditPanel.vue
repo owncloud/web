@@ -17,7 +17,7 @@
         :compare-object="editGroup"
         :confirm-button-disabled="invalidFormData"
         @revert="revertChanges"
-        @confirm="$emit('confirm', editGroup)"
+        @confirm="onEditGroup(editGroup)"
       ></compare-save-dialog>
     </form>
   </div>
@@ -25,9 +25,11 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
 import { Group } from '@ownclouders/web-client/src/generated'
-import { CompareSaveDialog } from '@ownclouders/web-pkg'
+import { CompareSaveDialog, eventBus, useMessages } from '@ownclouders/web-pkg'
 import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
 import GroupInfoBox from './GroupInfoBox.vue'
+import { useGroupSettingsStore } from '../../../composables'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'EditPanel',
@@ -45,6 +47,9 @@ export default defineComponent({
   emits: ['confirm'],
   setup() {
     const clientService = useClientService()
+    const { showErrorMessage } = useMessages()
+    const groupSettingsStore = useGroupSettingsStore()
+    const { $gettext } = useGettext()
 
     const editGroup: MaybeRef<Group> = ref({})
     const formData = ref({
@@ -54,10 +59,30 @@ export default defineComponent({
       }
     })
 
+    const onEditGroup = async (editGroup: Group) => {
+      try {
+        const client = clientService.graphAuthenticated
+        await client.groups.editGroup(editGroup.id, editGroup)
+        const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
+        groupSettingsStore.upsertGroup(updatedGroup)
+
+        eventBus.publish('sidebar.entity.saved')
+
+        return updatedGroup
+      } catch (error) {
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Failed to edit group'),
+          errors: [error]
+        })
+      }
+    }
+
     return {
       clientService,
       editGroup,
-      formData
+      formData,
+      onEditGroup
     }
   },
   computed: {
@@ -126,14 +151,17 @@ export default defineComponent({
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
+
   .edit-compare-save-dialog {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
+
   .group-info {
     align-items: center;
     flex-direction: column;
   }
+
   .group-info-display-name {
     font-size: 1.5rem;
   }

@@ -9,6 +9,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 
 describe('CreateUserModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -146,12 +147,12 @@ describe('CreateUserModal', () => {
         mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
-      const eventSpy = vi.spyOn(eventBus, 'publish')
       await wrapper.vm.onConfirm()
 
+      const { upsertUser } = useUserSettingsStore()
+      expect(upsertUser).toHaveBeenCalled()
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
-      expect(eventSpy).toHaveBeenCalled()
     })
 
     it('should show message on error', async () => {

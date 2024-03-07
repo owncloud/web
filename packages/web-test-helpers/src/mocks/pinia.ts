@@ -1,6 +1,6 @@
 import { createTestingPinia } from '@pinia/testing'
 import defaultTheme from '../../../web-runtime/themes/owncloud/theme.json'
-import { User } from '../../../web-client/src/generated'
+import { User, Group } from '../../../web-client/src/generated'
 import { Message, Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
 import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'vitest-mock-extended'
@@ -32,6 +32,18 @@ export type PiniaMockOptions = {
   }
   messagesState?: { messages?: Message[] }
   modalsState?: { modals?: Modal[] }
+  spaceSettingsStore?: {
+    spaces?: SpaceResource[]
+    selectedSpaces?: SpaceResource[]
+  }
+  groupSettingsStore?: {
+    groups?: Group[]
+    selectedGroups?: Group[]
+  }
+  userSettingsStore?: {
+    users?: User[]
+    selectedUsers?: User[]
+  }
   resourcesStore?: {
     resources?: Resource[]
     currentFolder?: Resource
@@ -58,6 +70,9 @@ export function createMockStore({
   messagesState = {},
   modalsState = {},
   resourcesStore = {},
+  userSettingsStore = {},
+  groupSettingsStore = {},
+  spaceSettingsStore = {},
   sharesState = {},
   spacesState = {},
   userState = {},
@@ -105,7 +120,10 @@ export function createMockStore({
       },
       resources: { resources: [], ...resourcesStore },
       shares: { shares: [], ...sharesState },
-      spaces: { spaces: [], spaceMembers: [], ...spacesState },
+      spaces: { spaces: [], spaceMembers: [], ...spacesState, ...spaceSettingsStore },
+      userSettings: { users: [], selectedUsers: [], ...userSettingsStore },
+      groupSettings: { groups: [], selectedGroups: [], ...groupSettingsStore },
+      spaceSettings: { spaces: [], selectedSpaces: [], ...spaceSettingsStore },
       user: { user: { ...mock<User>({ id: '1' }), ...(userState?.user && { ...userState.user }) } },
       capabilities: {
         isInitialized: capabilityState?.isInitialized ? capabilityState.isInitialized : true,

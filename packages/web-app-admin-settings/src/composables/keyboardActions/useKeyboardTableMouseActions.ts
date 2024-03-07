@@ -3,11 +3,12 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { KeyboardActions } from '@ownclouders/web-pkg'
 import { findIndex, find } from 'lodash-es'
 import { Resource } from '@ownclouders/web-client'
+import { Item } from '@ownclouders/web-client/src/helpers'
 
 export const useKeyboardTableMouseActions = (
   keyActions: KeyboardActions,
   paginatedResources: Ref<{ id: string }[]>,
-  selectedRows: any,
+  selectedRows: Ref<Item[]>,
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>
 ) => {
@@ -15,15 +16,15 @@ export const useKeyboardTableMouseActions = (
   let resourceListClickedShiftEvent
 
   const handleCtrlClickAction = (resource: Resource) => {
-    const rowIndex = findIndex(selectedRows, { id: resource.id })
+    const rowIndex = findIndex(unref(selectedRows), { id: resource.id })
     if (rowIndex >= 0) {
-      selectedRows.splice(rowIndex, 1)
+      selectedRows.value = unref(selectedRows).filter((item) => item.id != resource.id)
     } else {
-      selectedRows.push(resource)
+      unref(selectedRows).push(resource)
     }
     keyActions.resetSelectionCursor()
 
-    lastSelectedRowIndex.value = rowIndex >= 0 ? rowIndex : selectedRows.length - 1
+    lastSelectedRowIndex.value = rowIndex >= 0 ? rowIndex : unref(selectedRows).length - 1
     lastSelectedRowId.value = String(resource.id)
   }
 
@@ -47,10 +48,10 @@ export const useKeyboardTableMouseActions = (
       if (skipTargetSelection && nodeId === resource.id) {
         continue
       }
-      const selectedRowIndex = findIndex(selectedRows, { id: nodeId })
+      const selectedRowIndex = findIndex(unref(selectedRows), { id: nodeId })
       if (selectedRowIndex === -1) {
         const selectedRow = find(paginatedResources.value, { id: nodeId })
-        selectedRows.push(selectedRow)
+        unref(selectedRows).push(selectedRow)
       }
     }
 

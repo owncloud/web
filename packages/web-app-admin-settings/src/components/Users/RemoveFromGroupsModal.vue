@@ -11,7 +11,8 @@ import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Group, User } from '@ownclouders/web-client/src/generated'
 import GroupSelect from './GroupSelect.vue'
-import { useEventBus, useClientService, Modal, useMessages } from '@ownclouders/web-pkg'
+import { useClientService, Modal, useMessages } from '@ownclouders/web-pkg'
+import { useUserSettingsStore } from '../../composables/stores/userSettings'
 
 export default defineComponent({
   name: 'RemoveFromGroupsModal',
@@ -31,8 +32,8 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const eventBus = useEventBus()
     const { $gettext, $ngettext } = useGettext()
+    const userSettingsStore = useUserSettingsStore()
 
     const selectedOptions = ref<Group[]>([])
     const changeSelectedGroupOption = (options: Group[]) => {
@@ -117,10 +118,10 @@ export default defineComponent({
         const usersResponse = await Promise.all(
           usersToFetch.map((userId) => client.users.getUser(userId))
         )
-        eventBus.publish(
-          'app.admin-settings.users.update',
-          usersResponse.map(({ data }) => data)
-        )
+
+        usersResponse.forEach(({ data }) => {
+          userSettingsStore.upsertUser(data)
+        })
       } catch (e) {
         console.error(e)
       }
