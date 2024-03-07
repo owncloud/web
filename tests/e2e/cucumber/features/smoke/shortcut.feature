@@ -14,13 +14,12 @@ Feature: Users can create shortcuts for resources and sites
     And "Alice" creates the following files into personal space using API
       | pathToFile      | content           |
       | docs/notice.txt | important content |
-    And "Alice" uploads the following local file into personal space using API
-      | localFile                     | to       |
-      | filesForUpload/testavatar.jpg | logo.jpg |
+    And "Alice" uploads the following resource
+      | resource       |
+      | testavatar.jpg |
     And "Alice" shares the following resource using API
-      | resource | recipient | type | role     |
-      | logo.jpg | Brian     | user | Can view |
-    And "Alice" opens the "files" app
+      | resource       | recipient | type | role     |
+      | testavatar.jpg | Brian     | user | Can view |
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
       | resource        | password |
       | docs/notice.txt | %public% |
@@ -44,8 +43,8 @@ Feature: Users can create shortcuts for resources and sites
     # create a shortcut to the shared file
     When "Brian" logs in
     And "Brian" creates a shortcut for the following resources
-      | resource | name | type |
-      | logo.jpg | logo | file |
+      | resource       | name | type |
+      | testavatar.jpg | logo | file |
     And "Brian" opens a shortcut "logo.url"
     Then "Brian" is in a image-viewer
     And "Brian" closes the file viewer
