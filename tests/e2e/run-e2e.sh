@@ -32,6 +32,7 @@ Available options:
                       e.g.: --run-part 2 (runs part 2 out of 4)
     --total-parts   - total number of groups to divide into
                       e.g.: --total-parts 4 (suites will be divided into 4 groups)
+    --help, -h      - show cli options
 "
 
 while [[ $# -gt 0 ]]; do
