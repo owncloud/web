@@ -82,8 +82,9 @@ function getFeaturePaths() {
     real_paths=""
     for path in $paths; do
         real_paths+=" $SCRIPT_PATH/$path"
-        if [[ ! -f $path && ! -d $path ]]; then
-            echo "ERR: File or folder doesn't exist: '$path'"
+        a_path=$(echo "$path" | cut -d ":" -f1)
+        if [[ ! -f $a_path && ! -d $a_path ]]; then
+            echo "ERR: File or folder doesn't exist: '$a_path'"
             echo "INFO: Path must be relative to '$SCRIPT_PATH_REL'"
             exit 1
         fi
