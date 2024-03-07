@@ -9,7 +9,6 @@ SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
 E2E_COMMAND="pnpm test:e2e:cucumber" # run command defined in package.json
 
 ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
-FEATURE_FILE=""
 FILTER_SUITES=""
 EXCLUDE_SUITES=""
 SUITE_FEATURE_PATHS=""
@@ -22,8 +21,6 @@ HELP_COMMAND="
 COMMAND [options] [paths]
 
 Available options:
-    --feature       - feature file to run. Pattern: '<suite-name>/<filename>.feature'
-                      e.g.: --feature journeys/kindergarten.feature
     --suites        - suites to run. Comma separated values (folder names)
                       e.g.: --suites smoke,shares
     --exclude       - exclude suites from running. Comma separated values
@@ -38,10 +35,6 @@ Available options:
 while [[ $# -gt 0 ]]; do
     key="$1"
     case ${key} in
-    --feature)
-        FEATURE_FILE=$2
-        shift 2
-        ;;
     --exclude)
         EXCLUDE_SUITES=$(echo "$2" | sed -E "s/,/\n/g")
         shift 2
@@ -127,15 +120,10 @@ function buildSuitesPattern() {
 }
 
 # 1. [RUN E2E] run features from provided paths
-if [[ -n $SUITE_FEATURE_PATHS ]]; then
+if [[ -n $SUITE_FEATURE_PATHS && "$SKIP_RUN_PARTS" == true ]]; then
     getFeaturePaths "$SUITE_FEATURE_PATHS"
     E2E_COMMAND+=" $SUITE_FEATURE_PATHS" # maintain the white space
     echo "INFO: Running e2e using paths. All cli options will be discarded"
-    runE2E
-fi
-# 2. [RUN E2E] run only provided feature file
-if [[ -n $FEATURE_FILE ]]; then
-    E2E_COMMAND+=" $FEATURES_DIR/$FEATURE_FILE" # maintain the white space
     runE2E
 fi
 
@@ -185,5 +173,5 @@ if [[ "$SKIP_RUN_PARTS" != true ]]; then
 fi
 
 buildSuitesPattern "$ALL_SUITES"
-# 3. [RUN E2E] run the suites
+# 2. [RUN E2E] run the suites
 runE2E
