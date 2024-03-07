@@ -7,6 +7,6 @@ export const FolderViewModeConstants = {
   },
   defaultModeName: 'resource-table',
   queryName: 'view-mode',
-  tilesSizeDefault: 1,
+  tilesSizeDefault: 2,
   tilesSizeQueryName: 'tiles-size'
 } as const
