@@ -46,6 +46,7 @@ Summary
 * Bugfix - Readonly user attributes have no effect on group memberships: [#10347](https://github.com/owncloud/web/pull/10347)
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
@@ -424,6 +425,13 @@ Details
 
    https://github.com/owncloud/web/issues/10486
    https://github.com/owncloud/web/pull/10517
+
+* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+
+   We've fixed a bug where the share invite search dropdown didn't have icons in
+   some cases.
+
+   https://github.com/owncloud/web/pull/10551
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
