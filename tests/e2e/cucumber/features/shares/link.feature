@@ -45,10 +45,10 @@ Feature: link
       | lorem.txt     | lorem_new.txt    |
       | textfile.txt  | textfile_new.txt |
       | new-lorem.txt | test.txt         |
-#    currently upload folder feature is not available in playwright
-#    And "Anonymous" uploads the following resources in public link page
-#      | resource              |
-#      | filesForUpload/PARENT |
+    #    currently upload folder feature is not available in playwright
+    #    And "Anonymous" uploads the following resources in public link page
+    #      | resource              |
+    #      | filesForUpload/PARENT |
     And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     And "Anonymous" should not be able to open the old link "myPublicLink"
     And "Alice" logs out
@@ -149,6 +149,7 @@ Feature: link
       | simple.pdf | file |
     When "Brian" opens the public link "imageLink"
     And "Brian" unlocks the public link with password "%public%"
+    # https://github.com/owncloud/ocis/issues/8602
     Then "Brian" is in a image-viewer
     And "Brian" closes the file viewer
     And "Brian" downloads the following public link resources using the single share view
@@ -184,6 +185,7 @@ Feature: link
       | simple.pdf | file |
     When "Carol" opens the public link "imageLink"
     And "Carol" unlocks the public link with password "%public%"
+    # https://github.com/owncloud/ocis/issues/8602
     Then "Carol" is in a image-viewer
     And "Carol" closes the file viewer
     And "Carol" downloads the following public link resources using the single share view
