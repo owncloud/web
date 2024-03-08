@@ -12,6 +12,7 @@ import {
 import { useCapabilityFilesSharingPublicPasswordEnforcedFor } from '../../capability'
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
+import { useClipboard } from '../../clipboard'
 
 export const useFileActionsCreateLink = ({
   store,
@@ -30,19 +31,31 @@ export const useFileActionsCreateLink = ({
   const passwordEnforcedCapabilities = useCapabilityFilesSharingPublicPasswordEnforcedFor()
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { createLink } = useCreateLink()
+  const { copyToClipboard } = useClipboard()
 
-  const proceedResult = (result: PromiseSettledResult<Share>[]) => {
+  const proceedResult = async (result: PromiseSettledResult<Share>[]) => {
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
     )
-    if (succeeded.length && showMessages) {
-      store.dispatch('showMessage', {
-        title: $ngettext(
-          'Link has been created successfully',
-          'Links have been created successfully',
-          succeeded.length
-        )
-      })
+
+    if (succeeded.length) {
+      let successMessage = $gettext('Link has been created successfully')
+
+      if (result.length === 1) {
+        // Only copy to clipboard if the user tries to create one single link
+        successMessage = $gettext('The link has been copied to your clipboard.')
+        await copyToClipboard(succeeded[0].value.url)
+      }
+
+      if (showMessages) {
+        store.dispatch('showMessage', {
+          title: $ngettext(
+            successMessage,
+            'Links have been created successfully.',
+            succeeded.length
+          )
+        })
+      }
     }
 
     const failed = result.filter(({ status }) => status === 'rejected')
@@ -52,6 +65,9 @@ export const useFileActionsCreateLink = ({
         title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })
     }
+
+    console.log(result)
+    console.log(onLinkCreatedCallback)
 
     if (onLinkCreatedCallback) {
       onLinkCreatedCallback(result)
