@@ -113,7 +113,7 @@ export function buildIncomingShareResource({
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
     syncEnabled: driveItem['@client.synchronize'],
-    hidden: driveItem['@ui.hidden'],
+    hidden: driveItem['@UI.Hidden'],
     shareRoles,
     sharePermissions,
     outgoing: false,
