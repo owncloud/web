@@ -13,7 +13,7 @@
         areSelectActionsDisabled || !createLinkAction.isVisible({ resources: selectedFiles, space })
       "
       @click="createLinkAction.handler({ resources: selectedFiles, space })"
-      >{{ $gettext('Share links') }}</oc-button
+      >{{ $gettext('Share link(s)') }}</oc-button
     >
     <oc-button
       data-testid="button-select"
