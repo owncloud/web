@@ -66,9 +66,6 @@ export const useFileActionsCreateLink = ({
       })
     }
 
-    console.log(result)
-    console.log(onLinkCreatedCallback)
-
     if (onLinkCreatedCallback) {
       onLinkCreatedCallback(result)
     }
