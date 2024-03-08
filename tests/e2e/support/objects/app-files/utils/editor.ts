@@ -4,7 +4,7 @@ const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const saveTextEditorOrViewerButton = '#app-save-action'
 const texEditor = '#text-editor'
 const pdfViewer = '#pdf-viewer'
-const imageViewer = '.preview-controls-action-bar'
+const imageViewer = '.stage'
 
 export const close = (page: Page): Promise<unknown> => {
   return Promise.all([
