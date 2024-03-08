@@ -44,8 +44,8 @@ export const useFileActionsCreateLink = ({
       if (result.length === 1) {
         // Only copy to clipboard if the user tries to create one single link
         try {
-          successMessage = $gettext('The link has been copied to your clipboard.')
           await copyToClipboard(succeeded[0].value.url)
+          successMessage = $gettext('The link has been copied to your clipboard.')
         } catch (_) {}
       }
 
