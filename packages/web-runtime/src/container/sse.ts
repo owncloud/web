@@ -110,7 +110,7 @@ export const onSSEItemRenamedEvent = async ({
   }
 }
 
-export const onSSEFileLockedEvent = async ({
+export const onSSEFileLockedEvent = ({
   resourcesStore,
   msg
 }: {
@@ -140,7 +140,7 @@ export const onSSEFileLockedEvent = async ({
   }
 }
 
-export const onSSEFileUnlockedEvent = async ({
+export const onSSEFileUnlockedEvent = ({
   resourcesStore,
   msg
 }: {
@@ -166,7 +166,7 @@ export const onSSEFileUnlockedEvent = async ({
       value: false
     })
   } catch (e) {
-    console.error('Unable to parse sse event file locked data', e)
+    console.error('Unable to parse sse event file unlocked data', e)
   }
 }
 
