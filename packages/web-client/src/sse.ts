@@ -2,7 +2,8 @@ import { fetchEventSource, FetchEventSourceInit } from '@microsoft/fetch-event-s
 
 export enum MESSAGE_TYPE {
   NOTIFICATION = 'userlog-notification',
-  POSTPROCESSING_FINISHED = 'postprocessing-finished'
+  POSTPROCESSING_FINISHED = 'postprocessing-finished',
+  ITEM_RENAMED = 'item-renamed'
 }
 
 export class RetriableError extends Error {
