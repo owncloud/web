@@ -196,7 +196,8 @@ describe('Users view', () => {
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
           2,
           'displayName',
-          "(memberOf/any(m:m/id eq '1'))"
+          "(memberOf/any(m:m/id eq '1'))",
+          ['appRoleAssignments']
         )
       })
       it('does filter initially if group ids are given via query param', async () => {
@@ -210,7 +211,8 @@ describe('Users view', () => {
         await wrapper.vm.loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           'displayName',
-          "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))"
+          "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))",
+          ['appRoleAssignments']
         )
       })
     })
@@ -228,7 +230,8 @@ describe('Users view', () => {
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
           2,
           'displayName',
-          "(appRoleAssignments/any(m:m/appRoleId eq '1'))"
+          "(appRoleAssignments/any(m:m/appRoleId eq '1'))",
+          ['appRoleAssignments']
         )
       })
       it('does filter initially if role ids are given via query param', async () => {
@@ -242,7 +245,8 @@ describe('Users view', () => {
         await wrapper.vm.loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           'displayName',
-          "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))"
+          "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))",
+          ['appRoleAssignments']
         )
       })
     })
@@ -258,7 +262,8 @@ describe('Users view', () => {
         await wrapper.vm.loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           'displayName',
-          "contains(displayName,'Albert')"
+          "contains(displayName,'Albert')",
+          ['appRoleAssignments']
         )
       })
     })

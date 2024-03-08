@@ -59,7 +59,12 @@ export interface Graph {
     changeOwnPassword: (currentPassword: string, newPassword: string) => AxiosPromise<void>
     editUser: (userId: string, user: User) => AxiosPromise<User>
     deleteUser: (userId: string) => AxiosPromise<void>
-    listUsers: (orderBy?: string, filter?: string) => AxiosPromise<CollectionOfUser>
+    listUsers: (
+      orderBy?: string,
+      filter?: string,
+      expand?: Array<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>,
+      search?: string
+    ) => AxiosPromise<CollectionOfUser>
     createUserAppRoleAssignment: (
       userId: string,
       appRoleAssignment: AppRoleAssignment
@@ -70,7 +75,11 @@ export interface Graph {
     ) => AxiosPromise<void>
   }
   groups: {
-    listGroups: (orderBy?: string) => AxiosPromise<CollectionOfGroup>
+    listGroups: (
+      orderBy?: string,
+      expand?: Array<'members'>,
+      search?: string
+    ) => AxiosPromise<CollectionOfGroup>
     createGroup: (group: Group) => AxiosPromise<Group>
     getGroup: (groupId: string) => AxiosPromise<Group>
     editGroup: (groupId: string, group: Group) => AxiosPromise<void>
@@ -157,13 +166,18 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
       editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
       deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
-      listUsers: (orderBy?: any, filter?: string) =>
+      listUsers: (
+        orderBy?: any,
+        filter?: string,
+        expand?: Array<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>,
+        search: string = ''
+      ) =>
         usersApiFactory.listUsers(
-          '',
+          search,
           filter,
-          new Set<any>([orderBy]),
-          new Set<any>([]),
-          new Set<any>(['appRoleAssignments'])
+          orderBy ? new Set<any>([orderBy]) : null,
+          null,
+          expand ? new Set<any>(expand) : null
         ),
       createUserAppRoleAssignment: (userId: string, appRoleAssignment: AppRoleAssignment) =>
         userAppRoleAssignmentApiFactory.userCreateAppRoleAssignments(userId, appRoleAssignment),
@@ -176,12 +190,12 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       getGroup: (groupId: string) =>
         groupApiFactory.getGroup(groupId, new Set<any>([]), new Set<any>(['members'])),
       deleteGroup: (groupId: string) => groupApiFactory.deleteGroup(groupId),
-      listGroups: (orderBy?: any) =>
+      listGroups: (orderBy?: any, expand?: Array<'members'>, search: string = '') =>
         groupsApiFactory.listGroups(
-          '',
-          new Set<any>([orderBy]),
-          new Set<any>([]),
-          new Set<any>(['members'])
+          search,
+          orderBy ? new Set<any>([orderBy]) : null,
+          null,
+          expand ? new Set<any>(expand) : null
         ),
       addMember: (groupId: string, userId: string, server: string) =>
         groupApiFactory.addMember(groupId, { '@odata.id': `${server}graph/v1.0/users/${userId}` }),
