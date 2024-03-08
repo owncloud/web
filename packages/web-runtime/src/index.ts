@@ -196,7 +196,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
           spacesStore,
           clientService,
           previewService,
-          configStore
+          configStore,
+          router
         })
       }
 

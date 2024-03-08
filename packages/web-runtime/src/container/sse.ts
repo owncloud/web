@@ -1,5 +1,6 @@
 import {
   ClientService,
+  createFileRouteOptions,
   ImageDimension,
   PreviewService,
   ResourcesStore,
@@ -8,6 +9,7 @@ import {
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { z } from 'zod'
+import { Router } from 'vue-router'
 
 const fileReadyEventSchema = z.object({
   itemid: z.string(),
@@ -49,22 +51,31 @@ export const onSSEItemRenamedEvent = async ({
   resourcesStore,
   spacesStore,
   msg,
-  clientService
+  clientService,
+  router
 }: {
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
   clientService: ClientService
+  router: Router
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
 
-    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
+    const currentFolder = resourcesStore.currentFolder
+    const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
+
+    if (!resourceIsCurrentFolder && !itemInCurrentFolder({ resourcesStore, sseData })) {
       return false
     }
 
-    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+    const resource = resourceIsCurrentFolder
+      ? currentFolder
+      : resourcesStore.resources.find((f) => f.id === sseData.itemid)
+
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
+
     if (!resource || !space) {
       return
     }
@@ -72,6 +83,16 @@ export const onSSEItemRenamedEvent = async ({
     const updatedResource = await clientService.webdav.getFileInfo(space, {
       fileId: sseData.itemid
     })
+
+    if (resourceIsCurrentFolder) {
+      resourcesStore.setCurrentFolder(updatedResource)
+      return router.push(
+        createFileRouteOptions(space, {
+          path: updatedResource.path,
+          fileId: updatedResource.fileId
+        })
+      )
+    }
 
     resourcesStore.updateResourceField({
       id: sseData.itemid,
@@ -84,8 +105,6 @@ export const onSSEItemRenamedEvent = async ({
       field: 'path',
       value: updatedResource.path
     })
-
-    console.log(updatedResource)
   } catch (e) {
     console.error('Unable to parse sse event item renamed data', e)
   }

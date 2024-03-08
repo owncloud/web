@@ -644,13 +644,15 @@ export const registerSSEEventListeners = ({
   spacesStore,
   clientService,
   previewService,
-  configStore
+  configStore,
+  router
 }: {
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   clientService: ClientService
   previewService: PreviewService
   configStore: ConfigStore
+  router: Router
 }): void => {
   const resourceQueue = new PQueue({
     concurrency: configStore.options.concurrentRequests.sse
@@ -668,7 +670,8 @@ export const registerSSEEventListeners = ({
       resourcesStore,
       spacesStore,
       msg,
-      clientService
+      clientService,
+      router
     })
   )
 
