@@ -27,8 +27,7 @@ import {
   useSharesStore,
   useResourcesStore,
   ResourcesStore,
-  SpacesStore,
-  ImageDimension
+  SpacesStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -49,15 +48,14 @@ import {
 } from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 import { getQueryParam } from '../helpers/url'
-import { z } from 'zod'
 import PQueue from 'p-queue'
-import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { getExtensionNavItems } from '../helpers/navItems'
 import {
   RawConfigSchema,
   SentryConfig
 } from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
+import { onSSEItemRenamedEvent, onSSEProcessingFinishedEvent } from './sse'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -641,100 +639,20 @@ export const announceCustomStyles = ({ configStore }: { configStore?: ConfigStor
   })
 }
 
-const fileReadyEventSchema = z.object({
-  itemid: z.string(),
-  parentitemid: z.string()
-})
-
-const onSSEProcessingFinishedEvent = async ({
-  resourcesStore,
-  spacesStore,
-  msg,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  clientService,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resourceQueue,
-  previewService
-}: {
-  resourcesStore: ResourcesStore
-  spacesStore: SpacesStore
-  msg: MessageEvent
-  clientService: ClientService
-  resourceQueue: PQueue
-  previewService: PreviewService
-}) => {
-  try {
-    const postProcessingData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-    const currentFolder = resourcesStore.currentFolder
-    if (!currentFolder) {
-      return
-    }
-
-    // UPDATE_RESOURCE_FIELD only handles files in the currentFolder, so we can shortcut here for now
-    if (!extractNodeId(currentFolder.id)) {
-      // if we don't have a nodeId here, we have a space (root) as current folder and can only check against the storageId
-      if (currentFolder.id !== extractStorageId(postProcessingData.parentitemid)) {
-        return
-      }
-    } else {
-      if (currentFolder.id !== postProcessingData.parentitemid) {
-        return
-      }
-    }
-
-    const resource = resourcesStore.resources.find((f) => f.id === postProcessingData.itemid)
-    const matchingSpace = spacesStore.spaces.find((s) => s.id === resource.storageId)
-    const isFileLoaded = !!resource
-    if (isFileLoaded) {
-      resourcesStore.updateResourceField({
-        id: postProcessingData.itemid,
-        field: 'processing',
-        value: false
-      })
-
-      if (matchingSpace) {
-        const preview = await previewService.loadPreview({
-          resource,
-          space: matchingSpace,
-          dimensions: ImageDimension.Thumbnail
-        })
-
-        if (preview) {
-          resourcesStore.updateResourceField({
-            id: postProcessingData.itemid,
-            field: 'thumbnail',
-            value: preview
-          })
-        }
-      }
-    } else {
-      // FIXME: we currently cannot do this, we need to block this for ongoing uploads and copy operations
-      // when fixing revert the changelog removal
-      // resourceQueue.add(async () => {
-      //   const { resource } = await clientService.webdav.listFilesById({
-      //     fileId: postProcessingData.itemid
-      //   })
-      //   resource.path = urlJoin(currentFolder.path, resource.name)
-      //   resourcesStore.upsertResource(resource)
-      // })
-    }
-  } catch (e) {
-    console.error('Unable to parse sse postprocessing data', e)
-  }
-}
-
 export const registerSSEEventListeners = ({
   resourcesStore,
   spacesStore,
   clientService,
   previewService,
-  configStore
+  configStore,
+  router
 }: {
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   clientService: ClientService
   previewService: PreviewService
   configStore: ConfigStore
+  router: Router
 }): void => {
   const resourceQueue = new PQueue({
     concurrency: configStore.options.concurrentRequests.sse
@@ -745,6 +663,16 @@ export const registerSSEEventListeners = ({
     () => {
       resourceQueue.clear()
     }
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RENAMED, (msg) =>
+    onSSEItemRenamedEvent({
+      resourcesStore,
+      spacesStore,
+      msg,
+      clientService,
+      router
+    })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
