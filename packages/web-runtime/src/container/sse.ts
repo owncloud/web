@@ -109,6 +109,67 @@ export const onSSEItemRenamedEvent = async ({
     console.error('Unable to parse sse event item renamed data', e)
   }
 }
+
+export const onSSEFileLockedEvent = async ({
+  resourcesStore,
+  msg
+}: {
+  resourcesStore: ResourcesStore
+  msg: MessageEvent
+}) => {
+  try {
+    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+
+    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
+      return false
+    }
+
+    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+
+    if (!resource) {
+      return
+    }
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'locked',
+      value: true
+    })
+  } catch (e) {
+    console.error('Unable to parse sse event file locked data', e)
+  }
+}
+
+export const onSSEFileUnlockedEvent = async ({
+  resourcesStore,
+  msg
+}: {
+  resourcesStore: ResourcesStore
+  msg: MessageEvent
+}) => {
+  try {
+    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+
+    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
+      return false
+    }
+
+    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+
+    if (!resource) {
+      return
+    }
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'locked',
+      value: false
+    })
+  } catch (e) {
+    console.error('Unable to parse sse event file locked data', e)
+  }
+}
+
 export const onSSEProcessingFinishedEvent = async ({
   resourcesStore,
   spacesStore,

@@ -55,7 +55,12 @@ import {
   RawConfigSchema,
   SentryConfig
 } from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
-import { onSSEItemRenamedEvent, onSSEProcessingFinishedEvent } from './sse'
+import {
+  onSSEFileLockedEvent,
+  onSSEFileUnlockedEvent,
+  onSSEItemRenamedEvent,
+  onSSEProcessingFinishedEvent
+} from './sse'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -683,6 +688,20 @@ export const registerSSEEventListeners = ({
       clientService,
       previewService,
       resourceQueue
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_LOCKED, (msg) =>
+    onSSEFileLockedEvent({
+      resourcesStore,
+      msg
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
+    onSSEFileUnlockedEvent({
+      resourcesStore,
+      msg
     })
   )
 }
