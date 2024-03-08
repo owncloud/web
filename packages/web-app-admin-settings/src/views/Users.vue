@@ -230,7 +230,10 @@ export default defineComponent({
     let editQuotaActionEventToken: string
 
     const loadGroupsTask = useTask(function* (signal) {
-      const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups('displayName')
+      const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups(
+        'displayName',
+        ['members']
+      )
       groups.value = groupsResponse.data.value
     })
 
@@ -268,7 +271,8 @@ export default defineComponent({
 
       const usersResponse = yield clientService.graphAuthenticated.users.listUsers(
         'displayName',
-        filter
+        filter,
+        ['appRoleAssignments']
       )
       userSettingsStore.setUsers(usersResponse.data.value || [])
     })

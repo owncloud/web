@@ -96,7 +96,9 @@ export default defineComponent({
     const createGroupAction = computed(() => unref(createGroupActions)[0])
 
     const loadResourcesTask = useTask(function* (signal) {
-      const response = yield clientService.graphAuthenticated.groups.listGroups('displayName')
+      const response = yield clientService.graphAuthenticated.groups.listGroups('displayName', [
+        'members'
+      ])
       groupSettingsStore.setGroups(response.data.value || [])
     })
 
