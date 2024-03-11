@@ -1,0 +1,5 @@
+Bugfix: Wrong share permissions when resharing off
+
+We've fixed a bug where a share with custom permissions always sent the resharing bit although resharing was disabled.
+
+https://github.com/owncloud/web/pull/10489

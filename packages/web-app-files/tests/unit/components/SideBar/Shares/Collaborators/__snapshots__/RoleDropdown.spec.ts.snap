@@ -1,9 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`RoleDropdown > renders a button with existing role if given for resource type file 1`] = `
-"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
+"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><div data-v-0719089c=""><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
 <oc-icon-stub data-v-0719089c="" name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
+</div>
 <oc-drop-stub data-v-0719089c="" dropid="oc-drop-7" popperoptions="[object Object]" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub data-v-0719089c="" raw="false" class="files-recipient-role-drop-list" aria-label="Select role for the invitation">
     <li data-v-0719089c="">
@@ -44,9 +45,10 @@ exports[`RoleDropdown > renders a button with existing role if given for resourc
 `;
 
 exports[`RoleDropdown > renders a button with existing role if given for resource type folder 1`] = `
-"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
+"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><div data-v-0719089c=""><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
 <oc-icon-stub data-v-0719089c="" name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
+</div>
 <oc-drop-stub data-v-0719089c="" dropid="oc-drop-5" popperoptions="[object Object]" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub data-v-0719089c="" raw="false" class="files-recipient-role-drop-list" aria-label="Select role for the invitation">
     <li data-v-0719089c="">
@@ -87,9 +89,10 @@ exports[`RoleDropdown > renders a button with existing role if given for resourc
 `;
 
 exports[`RoleDropdown > renders a button with invite text if no existing role given for resource type file 1`] = `
-"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
+"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><div data-v-0719089c=""><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
 <oc-icon-stub data-v-0719089c="" name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
+</div>
 <oc-drop-stub data-v-0719089c="" dropid="oc-drop-3" popperoptions="[object Object]" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub data-v-0719089c="" raw="false" class="files-recipient-role-drop-list" aria-label="Select role for the invitation">
     <li data-v-0719089c="">
@@ -124,9 +127,10 @@ exports[`RoleDropdown > renders a button with invite text if no existing role gi
 `;
 
 exports[`RoleDropdown > renders a button with invite text if no existing role given for resource type folder 1`] = `
-"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
+"<span data-v-0719089c="" class="oc-flex oc-flex-middle"><div data-v-0719089c=""><oc-button-stub data-v-0719089c="" type="button" disabled="false" size="medium" arialabel="Select permission" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="none" showspinner="false" id="files-collaborators-role-button-new" class="files-recipient-role-select-btn"><!--v-if--> <span data-v-0719089c="" class="oc-text-truncate">Can view</span>
 <oc-icon-stub data-v-0719089c="" name="arrow-down-s" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
 </oc-button-stub>
+</div>
 <oc-drop-stub data-v-0719089c="" dropid="oc-drop-1" popperoptions="[object Object]" toggle="#files-collaborators-role-button-new" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" offset="0" class="files-recipient-role-drop">
   <oc-list-stub data-v-0719089c="" raw="false" class="files-recipient-role-drop-list" aria-label="Select role for the invitation">
     <li data-v-0719089c="">

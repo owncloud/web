@@ -56,13 +56,13 @@ exports[`SpaceMembers > filter > toggles the filter on click 1`] = `
   <!--v-if-->
   <ul id="files-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Space members">
     <li>
-      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false" islocked="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false" islocked="false"></collaborator-list-item-stub>
     </li>
     <li>
-      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false"></collaborator-list-item-stub>
+      <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="" deniable="false" islocked="false"></collaborator-list-item-stub>
     </li>
   </ul>
 </div>"

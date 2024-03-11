@@ -18,17 +18,26 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
   const downloadFile = async (file, version = null) => {
     const { owncloudSdk: client } = clientService
 
-    // construct the url and headers
-    let url
-    if (authStore.publicLinkContextReady) {
-      url = file.downloadURL
-    } else {
-      if (version === null) {
-        url = `${client.helpers._davPath}${file.webDavPath}`
-      } else {
-        url = client.fileVersions.getFileVersionUrl(file.fileId, version)
+    // public links have a pre-signed download url
+    if (file.downloadURL) {
+      try {
+        triggerDownloadWithFilename(file.downloadURL, file.name)
+      } catch (e) {
+        console.error(e)
+        store.dispatch('showErrorMessage', {
+          title: $gettext('Download failed'),
+          desc: $gettext('File could not be located'),
+          errors: [e]
+        })
       }
+      return
     }
+
+    // construct the download url
+    const url =
+      version === null
+        ? `${client.helpers._davPath}${file.webDavPath}`
+        : client.fileVersions.getFileVersionUrl(file.fileId, version)
 
     // download with signing enabled
     if (authStore.userContextReady && capabilityStore.supportUrlSigning) {
