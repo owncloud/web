@@ -47,7 +47,7 @@ export const useFileActionsCreateLink = ({
           await copyToClipboard(succeeded[0].value.url)
           successMessage = $gettext('The link has been copied to your clipboard.')
         } catch (e) {
-          console.warn('Unable to copy link to clipboard')
+          console.warn('Unable to copy link to clipboard', e)
         }
       }
 
