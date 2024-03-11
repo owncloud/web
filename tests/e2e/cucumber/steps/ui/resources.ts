@@ -7,7 +7,8 @@ import { config } from '../../../config'
 import {
   createResourceTypes,
   displayedResourceType,
-  shortcutType
+  shortcutType,
+  ActionViaType
 } from '../../../support/objects/app-files/resource/actions'
 import { Public } from '../../../support/objects/app-files/page/public'
 import { Resource } from '../../../support/objects/app-files'
@@ -442,15 +443,23 @@ export const processDownload = async (
   for (const folder of Object.keys(downloadInfo)) {
     files = downloadInfo[folder]
     parentFolder = folder !== 'undefined' ? folder : null
+
+    let via: ActionViaType = 'SINGLE_SHARE_VIEW'
+    switch (actionType) {
+      case 'batch action':
+        via = 'BATCH_ACTION'
+        break
+      case 'sidebar panel':
+        via = 'SIDEBAR_PANEL'
+        break
+      default:
+        break
+    }
+
     downloads = await pageObject.download({
       folder: parentFolder,
       resources: files,
-      via:
-        actionType === 'batch action'
-          ? 'BATCH_ACTION'
-          : actionType === 'sidebar panel'
-            ? 'SIDEBAR_PANEL'
-            : 'SINGLE_SHARE_VIEW'
+      via
     })
 
     downloads.forEach((download) => {
@@ -757,7 +766,7 @@ Then(
   async function (this: World, stepUser: string, file: string, actionType: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const lockLocator = await resourceObject.getLockLocator({ resource: file })
+    const lockLocator = resourceObject.getLockLocator({ resource: file })
 
     actionType === 'should'
       ? await expect(lockLocator).toBeVisible()
